@@ -344,6 +344,9 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
     @Override
     public void deposit(boolean force_nucleation) {
 
+        
+        
+        System.out.println("deposito"); 
         occupied = true;
         if (force_nucleation) {
             type = 4;
@@ -354,6 +357,8 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
         for (int i = 0; i < 6; i++) {
             neighbors[i].add_Vecino_Ocupado_procesa(tipo_original, force_nucleation);
         }
+        
+        System.out.println(n_mobile+" "+n_immobile);
 
         modified.addAtomPropio(this);
         if (n_mobile > 0) {
@@ -362,6 +367,7 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
         total_probability = 0;
 
 
+        System.out.println(type);
     }
 
     @Override

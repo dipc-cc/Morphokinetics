@@ -30,18 +30,17 @@ public class Graphene_KMC extends Abstract_2D_diffusion_KMC {
     }
 
 
-
     @Override
     protected void depositSeed() {
         if (justCentralFlake) {
             this.perimeter = new Round_perimeter("Graphene_CVD_growth");
             this.perimeter.setAtomPerimeter(lattice.setInside(perimeter.getCurrentRadius()));
 
-            int Xcenter = lattice.getSizeY() / 2;
-            int Ycenter = (lattice.getSizeX() / 2);
+            int Ycenter = lattice.getSizeY() / 2;
+            int Xcenter = (lattice.getSizeX() / 2);
             for (int j = -1; j < 2; j++) {
                 for (int i = -1; i < 1; i++) {
-                    this.depositAtom(Ycenter + i, Xcenter + j);
+                    this.depositAtom(Xcenter + i, Ycenter + j);
                 }
             }
         } else {
@@ -79,5 +78,4 @@ public class Graphene_KMC extends Abstract_2D_diffusion_KMC {
                 .setMin_distance_hops(1)
                 .setMax_distance_hops(5));
     }
-
 }

@@ -2,13 +2,13 @@ package Kinetic_Monte_Carlo.atom.diffusion.Ag_Ag_growth;
 
 public class AgAg_types_table {
 
-    private byte[][] table;
+    private final byte[][] table;
 
     public byte getType(int immobile, int mobile) {
         return table[immobile][mobile];
     }
 
-    public void AgAg_types_table() {
+    public AgAg_types_table() {
 
         table = new byte[7][7];
 
