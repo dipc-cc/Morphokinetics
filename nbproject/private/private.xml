@@ -2,6 +2,17 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/atom/diffusion/Abstract_2D_diffusion_atom.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/atom/diffusion/Ag_Ag_growth/AgAg_types_table.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Samples/AgAg_growth/SimpleAgAgGrowthKMCSimulation.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/atom/diffusion/Ag_Ag_growth/AgAg_Atom.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Graphic_interfaces/Difussion2D_Growth/AgAg_growth/AgAgKMC_canvas.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/KMC_core/diffusion/Graphene_CVD_growth/Graphene_KMC.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/lattice/diffusion/Ag_Ag_growth/Ag_Ag_Growth_lattice.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/KMC_core/diffusion/Abstract_2D_diffusion_KMC.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/atom/diffusion/Modified_Buffer.java</file>
+            <file>file:/C:/Users/Nestor/Dropbox/EKMC_project_bitbucket/ekmc-project/src/Kinetic_Monte_Carlo/KMC_core/diffusion/Ag_Ag_Growth/Ag_Ag_KMC.java</file>
+        </group>
     </open-files>
 </project-private>

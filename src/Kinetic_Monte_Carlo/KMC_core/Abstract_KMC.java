@@ -67,9 +67,7 @@ public abstract class Abstract_KMC implements IKMC {
         } 
         
         list.cleanup();
-        System.out.println(list.getSize());
-        System.out.println(list.getTotalProbability());
-        System.out.println(list.getTotalProbability_from_list());
+
     }
 
     

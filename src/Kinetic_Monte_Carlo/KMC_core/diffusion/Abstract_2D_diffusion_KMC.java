@@ -61,7 +61,6 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         }
         lattice.configure(processProbs2D);
         depositSeed();
-
     }
 
     @Override
@@ -85,7 +84,6 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
                 destinationAtom = this.perimeter.getPerimeterReentrance(originAtom);
             }
             this.diffuseAtom(originAtom, destinationAtom);
-
         }
 
         if (PerimeterMustBeEnlarged(destinationAtom)) {

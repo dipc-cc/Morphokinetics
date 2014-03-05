@@ -26,7 +26,6 @@ public abstract class Abstract_2D_diffusion_atom extends Abstract_atom {
     protected Modified_Buffer modified;
     protected Hops_per_step distance_per_step;
     
-    
 
     public abstract byte get_type_without_neighbor(int neigh_pos);
 
@@ -91,6 +90,8 @@ public abstract class Abstract_2D_diffusion_atom extends Abstract_atom {
     public void unOccupy(){
     occupied=false;}*/
 
+    
+    
     public double getProbability(int pos) {
         if (bonds_probability != null) {
             return bonds_probability[pos];

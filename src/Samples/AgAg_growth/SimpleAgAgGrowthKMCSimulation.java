@@ -32,6 +32,9 @@ public class SimpleAgAgGrowthKMCSimulation {
         frame.setVisible(true);
         
         initializeRates(ratesFactory,kmc);
+        
+        kmc.simulate(2);
+        
          
      }     
      

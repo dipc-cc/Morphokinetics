@@ -136,6 +136,8 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
     @Override
     public Abstract_2D_diffusion_atom choose_random_hop() {
 
+       
+        
         double linearSearch = StaticRandom.raw() * total_probability;
 
         double sum = 0;
@@ -151,9 +153,13 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
         }
         cont--;
 
+        System.out.println(neighbors[cont]);
+        
         if (type == 2 && neighbors[cont].getType() == 1) {
             return ahead_corner_Atom(cont);
         }
+        
+        System.out.println(neighbors[cont]);
         return neighbors[cont];
     }
 
@@ -162,33 +168,33 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
             switch (corner_position) {
                 case 0:
-                    return neighbors[5];
+                    return neighbors[5].getNeighbor(0);
                 case 1:
-                    return neighbors[2];
+                    return neighbors[2].getNeighbor(1);
                 case 2:
-                    return neighbors[1];
+                    return neighbors[1].getNeighbor(2);
                 case 3:
-                    return neighbors[4];
+                    return neighbors[4].getNeighbor(3);
                 case 4:
-                    return neighbors[3];
+                    return neighbors[3].getNeighbor(4);
                 case 5:
-                    return neighbors[0];
+                    return neighbors[0].getNeighbor(5);
             }
         } else {
 
             switch (corner_position) {
                 case 0:
-                    return neighbors[1];
+                    return neighbors[1].getNeighbor(0);
                 case 1:
-                    return neighbors[0];
+                    return neighbors[0].getNeighbor(1);
                 case 2:
-                    return neighbors[3];
+                    return neighbors[3].getNeighbor(2);
                 case 3:
-                    return neighbors[2];
+                    return neighbors[2].getNeighbor(3);
                 case 4:
-                    return neighbors[5];
+                    return neighbors[5].getNeighbor(4);
                 case 5:
-                    return neighbors[4];
+                    return neighbors[4].getNeighbor(5);
             }
         }
         return null;
@@ -344,30 +350,21 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
     @Override
     public void deposit(boolean force_nucleation) {
 
-        
-        
-        System.out.println("deposito"); 
         occupied = true;
         if (force_nucleation) {
             type = 4;
         }
 
         byte tipo_original = type;
-
         for (int i = 0; i < 6; i++) {
             neighbors[i].add_Vecino_Ocupado_procesa(tipo_original, force_nucleation);
         }
         
-        System.out.println(n_mobile+" "+n_immobile);
-
         modified.addAtomPropio(this);
         if (n_mobile > 0) {
             modified.addAtomLigaduras(this);
         }
         total_probability = 0;
-
-
-        System.out.println(type);
     }
 
     @Override
@@ -453,11 +450,12 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
         } else {
 
-            destination = (byte) Math.max(destination, 2);
+            destination = (byte) Math.min(destination, 2);
 
             if (destination == 2 && (neighbors[position].getOrientation() & 1) == 0) {
                 destination = 5;
             }
+                       
             return probabilities[origin_type][destination];
         }
     }
