@@ -114,13 +114,14 @@ public class Round_perimeter {
         int actualCount = 0;
         int i = 0;
         
-        
-        for (; i < 180; i++) {
+        for (; i < 179; i++) {
             actualCount += perimeter_statistics.getAtomsCount(currentPerimeterRadius, i);
             if (linearSearch <= actualCount) {
                 break;
             }
         }
+        
+        
         return i;
     }
    

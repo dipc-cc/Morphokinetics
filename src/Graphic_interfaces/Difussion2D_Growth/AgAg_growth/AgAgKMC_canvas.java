@@ -36,7 +36,6 @@ public class AgAgKMC_canvas extends AbstractKMC_canvas {
             while (true) {
 
                 int X = (int)((cont * escalado) +(j)/2.0f * escalado);
-                X-=lattice.getSizeY() /4.0f * escalado;
                 
                 if (X>=lattice.getSizeX() * escalado) X-=lattice.getSizeX() * escalado;
                 if (X<0) X+=lattice.getSizeX() * escalado;
@@ -82,7 +81,7 @@ public class AgAgKMC_canvas extends AbstractKMC_canvas {
                 if (escalado < 3) {
                     if ( lattice.getAtom(i, j).isOccupied()) {
                         g.fillRect(X, Y, escalado, escalado);
-                    } else if (!lattice.getAtom(i, j).is_outside()) {
+                    } else if (!lattice.getAtom(i, j).is_outside() && type>0) {
                       g.drawRect(X, Y, escalado, escalado);
                     }
 
@@ -90,7 +89,7 @@ public class AgAgKMC_canvas extends AbstractKMC_canvas {
 
                     if ( lattice.getAtom(i, j).isOccupied()) {
                         g.fillOval(X, Y, escalado, escalado);
-                    } else if (!lattice.getAtom(i, j).is_outside()) {
+                    } else if (!lattice.getAtom(i, j).is_outside() && type>0) {
                        g.drawOval(X, Y, escalado, escalado);
                     }
                 }

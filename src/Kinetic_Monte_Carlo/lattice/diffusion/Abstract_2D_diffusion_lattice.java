@@ -26,6 +26,8 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
 
     //obtains the spatial location of certain atom, the distance between atoms is considered as 1
     public abstract Point2D getSpatialLocation(int X, int Y);
+    
+    public abstract Point2D getCentralLatticeLocation();
 
     @Override
     public void reset() {
@@ -34,14 +36,14 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
             for (int j = 0; j < atoms.length; j++) { //Y   
 
                 atoms[j][i].clear();
-
             }
         }
     }
     
+
     protected void setAngles() {
 
-        Point2D middle = getSpatialLocation(sizeX / 2, sizeY / 2);
+        Point2D middle = getCentralLatticeLocation();
 
         for (int Y = 0; Y < sizeY; Y++) {
             for (int X = 0; X < sizeX; X++) {
@@ -67,9 +69,9 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
         }
     }
 
-    public double getDistanciaToCenter(int X, int Y) {
+    public double getDistanceToCenter(int X, int Y) {
 
-        Point2D middle = getSpatialLocation(sizeX / 2, sizeY / 2);
+        Point2D middle =getCentralLatticeLocation();
         Point2D position = getSpatialLocation(X, Y);
 
         return position.distance(middle);
@@ -83,7 +85,7 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
 
         for (int Y = 0; Y < sizeY; Y++) {
             for (int X = 0; X < sizeX; X++) {
-                double distance = getDistanciaToCenter(X, Y);
+                double distance = getDistanceToCenter(X, Y);
                 if (radius <= distance) {
                     atoms[X][Y].setOutside(true);
                 } else {

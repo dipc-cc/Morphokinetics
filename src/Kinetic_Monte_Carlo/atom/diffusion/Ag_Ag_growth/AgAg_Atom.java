@@ -152,14 +152,11 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
             }
         }
         cont--;
-
-        System.out.println(neighbors[cont]);
         
         if (type == 2 && neighbors[cont].getType() == 1) {
             return ahead_corner_Atom(cont);
         }
         
-        System.out.println(neighbors[cont]);
         return neighbors[cont];
     }
 

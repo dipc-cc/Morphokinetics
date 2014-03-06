@@ -33,7 +33,7 @@ public class SimpleAgAgGrowthKMCSimulation {
         
         initializeRates(ratesFactory,kmc);
         
-        kmc.simulate(2);
+        kmc.simulate(20000000);
         
          
      }     

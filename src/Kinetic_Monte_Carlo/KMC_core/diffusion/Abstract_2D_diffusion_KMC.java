@@ -164,7 +164,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
     }
 
     protected boolean PerimeterMustBeEnlarged(Abstract_2D_diffusion_atom destinationAtom) {
-        return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanciaToCenter(destinationAtom.getX(), destinationAtom.getY()) >= (this.perimeter.getCurrentRadius() - 2);
+        return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getX(), destinationAtom.getY()) >= (this.perimeter.getCurrentRadius() - 2);
     }
 
     @Override

@@ -26,6 +26,7 @@ public abstract class Abstract_perimeter_statistics {
     }
 
     public int getHopsCount(int radius, int offsetDegree) {
+        
         return hopsCountMap.get(radius).get(offsetDegree);
     }
 

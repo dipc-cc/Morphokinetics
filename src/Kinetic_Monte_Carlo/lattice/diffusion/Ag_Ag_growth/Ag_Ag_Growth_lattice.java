@@ -31,7 +31,6 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
         atoms = new AgAg_Atom[sizeX][sizeY];
         this.modified = modified;
 
-
         create_atoms(distance_per_step);
         setAngles();
     }
@@ -123,14 +122,18 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
             default:
                 return null;
         }
-    }
-    
+    }  
     
     @Override
     public Abstract_2D_diffusion_atom getAtom(int X, int Y) {
         return atoms[X][Y];
-
     }
+
+    @Override
+    public Point2D getCentralLatticeLocation() {
+       return new Point2D.Float(sizeX/2.0f,(float)(sizeY*Y_ratio/2.0));
+    }
+    
     
     @Override
     public Point2D getSpatialLocation(int Xpos, int Ypos) {

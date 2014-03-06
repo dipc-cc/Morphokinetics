@@ -28,6 +28,7 @@ public class Ag_Ag_perimeter_statistics extends Abstract_perimeter_statistics {
       
       this.atomsCountMap.put(radius, currentRadiusCountMap);
       this.hopsCountMap.put(radius, currentRadiusHopMap);
+      
       for (int j=0;j<180;j++){
           currentRadiusCountMap.put(j, Raw_statisticData_atomCount_1Million.data[i][j]);
           currentRadiusHopMap.put(j, Raw_statisticData_hopsCount_1Million.data[i][j]);

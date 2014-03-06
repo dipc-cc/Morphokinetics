@@ -634,7 +634,13 @@ public class Graphene_CVD_Growth_lattice extends Abstract_2D_diffusion_lattice {
 
     }
 
+    @Override
+    public Point2D getCentralLatticeLocation() {
+        return getSpatialLocation(sizeX/2,sizeY/2);
+    }
 
+
+    
     @Override
     public Point2D getSpatialLocation(int Xpos, int Ypos) {
 
