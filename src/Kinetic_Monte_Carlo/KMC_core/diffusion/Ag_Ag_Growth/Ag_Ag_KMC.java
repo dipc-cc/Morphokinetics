@@ -40,8 +40,8 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
      
             this.perimeter.setAtomPerimeter(lattice.setInside(perimeter.getCurrentRadius()));
 
-            int Xcenter = lattice.getSizeX() / 2;
             int Ycenter = (lattice.getSizeY() / 2);
+            int Xcenter = (lattice.getSizeX() / 2)-(lattice.getSizeY() / 4);
             
             this.depositAtom(Xcenter , Ycenter);
             this.depositAtom(Xcenter+1 , Ycenter);
@@ -62,8 +62,7 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
                 int Y = (int) (StaticRandom.raw() * lattice.getSizeY());
                 depositAtom(X, Y);
             }
-        }
-        System.out.println(this.list.getTotalProbability());       
+        }   
     }
 
     private void configureDevitaAccelerator(Hops_per_step distance_per_step) {
