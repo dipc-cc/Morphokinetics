@@ -31,8 +31,6 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
         configureDevitaAccelerator(distance_per_step);
     }
 
-
-
     @Override
     protected void depositSeed() {
         
@@ -83,8 +81,7 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
                 .setMax_accumulated_steps(100)
                 .setMin_distance_hops(1)
                 .setMax_distance_hops(5));
-        
-         
+
     }
 
 }
