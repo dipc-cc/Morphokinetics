@@ -31,10 +31,10 @@ public class SimpleAgAgGrowthKMCSimulation {
         DifussionKMC_frame frame = create_graphics_frame(kmc);
         frame.setVisible(true);
         
-        initializeRates(ratesFactory,kmc);
-        
-        kmc.simulate(20000000);
-        
+        for (int simulations=0;simulations<10;simulations++){
+        initializeRates(ratesFactory,kmc); 
+        kmc.simulate();
+        }
          
      }     
      

@@ -10,6 +10,7 @@ import Kinetic_Monte_Carlo.atom.diffusion.DevitaAccelerator.DevitaAccelerator;
 import Kinetic_Monte_Carlo.atom.diffusion.Modified_Buffer;
 import Kinetic_Monte_Carlo.lattice.Abstract_lattice;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
+import Kinetic_Monte_Carlo.list.Linear_list;
 import Kinetic_Monte_Carlo.list.List_configuration;
 import java.awt.geom.Point2D;
 import utils.MathUtils;
@@ -34,16 +35,15 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         this.modified_buffer = new Modified_Buffer();
         this.list.autoCleanup(true);
     }
-    
-    public void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite){
-        
-                if (justCentralFlake) {
+
+    public void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
+
+        if (justCentralFlake) {
             list.set_deposition_probability(depositionRateML / islandDensitySite);
         } else {
             list.set_deposition_probability(depositionRateML * lattice.getSizeX() * lattice.getSizeY());
         }
     }
-    
 
     @Override
     public void initializeRates(double[] rates) {
@@ -71,10 +71,9 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
     @Override
     protected boolean perform_simulation_step() {
 
-
         Abstract_2D_diffusion_atom originAtom = ((Abstract_2D_diffusion_atom) list.next_event(RNG));
         Abstract_2D_diffusion_atom destinationAtom;
-
+        
         if (originAtom == null) {
             destinationAtom = depositNewAtom();
 
@@ -87,15 +86,13 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         }
 
         if (PerimeterMustBeEnlarged(destinationAtom)) {
-
-            this.perimeter.setAtomPerimeter(lattice.setInside(this.perimeter.goToNextRadius()));
-            if (this.perimeter.getCurrentRadius() >= 195) {
-
+            int nextRadius = this.perimeter.goToNextRadius();
+            if (nextRadius > 0) {
+                this.perimeter.setAtomPerimeter(lattice.setInside(nextRadius));
+            } else {
                 return true;
             }
-        }
-
-        // utils.Wait.manySec(1);   
+        }  
         return false;
     }
 
@@ -135,7 +132,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
 
     protected boolean diffuseAtom(Abstract_2D_diffusion_atom origin, Abstract_2D_diffusion_atom destination) {
 
-        if ((!origin.isOccupied() || destination.isOccupied()) && (origin != destination)) {
+        if ((!origin.isEligible() || destination.isOccupied()) && (origin != destination)) {
             return false;
         }
         origin.extract();
@@ -199,5 +196,6 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         }
         MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
     }
+
     protected abstract void depositSeed();
 }

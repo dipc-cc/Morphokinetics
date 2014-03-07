@@ -90,7 +90,7 @@ public class Linear_list extends Abstract_list {
         for (int i=0;i<surface.size();i++){
             AC = surface.get(i);
             prob_current += AC.getProbability();
-            if (prob_current > position) {
+            if (prob_current >= position) {
                 surface.remove(i);
                 totalAtoms--;
                 return AC;
@@ -108,7 +108,7 @@ public class Linear_list extends Abstract_list {
     public int getSize() {
         return surface.size();
     }
-
+        
     @Override
     public double getTotalProbability() {
         return totalProbability;

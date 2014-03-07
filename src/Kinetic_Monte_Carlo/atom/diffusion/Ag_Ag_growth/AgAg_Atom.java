@@ -17,7 +17,7 @@ import utils.StaticRandom;
 public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
     private static AgAg_types_table types_table;
-    private AgAg_Atom[] neighbors = new AgAg_Atom[6];
+    private final AgAg_Atom[] neighbors = new AgAg_Atom[6];
     private byte n_immobile;
     private byte n_mobile;
 

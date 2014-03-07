@@ -33,6 +33,8 @@ public class Round_perimeter {
         this.currentPerimeterRadius = perimeter_statistics.getNextRadiusInSize(currentPerimeterRadius);
         return this.currentPerimeterRadius;
     }
+    
+    
 
     public void setAtomPerimeter(Abstract_2D_diffusion_atom[] perimeter) {
         this.currentPerimeter = perimeter;
