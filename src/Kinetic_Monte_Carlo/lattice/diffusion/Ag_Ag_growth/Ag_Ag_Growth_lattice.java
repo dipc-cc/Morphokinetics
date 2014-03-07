@@ -10,6 +10,7 @@ import Kinetic_Monte_Carlo.atom.diffusion.DevitaAccelerator.Hops_per_step;
 import Kinetic_Monte_Carlo.atom.diffusion.Modified_Buffer;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import java.awt.geom.Point2D;
+import utils.StaticRandom;
 
 /**
  *
@@ -107,8 +108,11 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
     @Override
     public int getAvailableDistance(int atomType, short Xpos, short Ypos, int thresholdDistance) {
 
-        int[] point = new int[2];
         switch (atomType) {
+                case 0:
+                return getClearArea_terrace(Xpos, Ypos, thresholdDistance);
+                case 2:
+                return getClearArea_step(Xpos, Ypos, thresholdDistance);  
             default:
                 return 0;
         }
@@ -117,8 +121,12 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
     @Override
     public Abstract_2D_diffusion_atom getFarAtom(int originType, short Xpos, short Ypos, int distance) {
 
-        int[] point = new int[2];
+        
         switch (originType) {
+            case 0:
+                return chooseClearArea_terrace(Xpos, Ypos, distance, StaticRandom.raw());
+            case 2:
+                 return chooseClearArea_step(Xpos, Ypos, distance, StaticRandom.raw());
             default:
                 return null;
         }
@@ -143,4 +151,105 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
            float YLocation=Ypos*Y_ratio;
            return new Point2D.Double(XLocation, YLocation);
     } 
+    
+    
+public int getClearArea_terrace(short X, short Y,int m){
+
+int s=1;
+
+int X_v,Y_v;X_v=X; Y_v=Y-1;
+byte error_code=0;
+if (Y_v<0) Y_v=sizeY-1;
+
+   
+out: while(true){
+    for (int i=0;i<s;i++){if (atoms[X_v][Y_v].is_outside()) error_code|=1;  if (atoms[X_v][Y_v].isOccupied()) {error_code|=2; break out;}  X_v++;        if (X_v==sizeX) X_v=0; }
+    for (int i=0;i<s;i++){if (atoms[X_v][Y_v].is_outside()) error_code|=1;  if (atoms[X_v][Y_v].isOccupied()) {error_code|=2; break out;}  Y_v++;        if (Y_v==sizeY) Y_v=0;}
+    for (int i=0;i<s;i++){if (atoms[X_v][Y_v].is_outside()) error_code|=1;  if (atoms[X_v][Y_v].isOccupied()) {error_code|=2; break out;}  Y_v++;X_v--;  if (Y_v==sizeY) Y_v=0;if (X_v<0) X_v=sizeX-1;}
+    for (int i=0;i<s;i++){if (atoms[X_v][Y_v].is_outside()) error_code|=1;  if (atoms[X_v][Y_v].isOccupied()) {error_code|=2; break out;}  X_v--;        if (X_v<0) X_v=sizeX-1;}
+    for (int i=0;i<s;i++){if (atoms[X_v][Y_v].is_outside()) error_code|=1;  if (atoms[X_v][Y_v].isOccupied()) {error_code|=2; break out;}  Y_v--;        if (Y_v<0) Y_v=sizeY-1;}
+    for (int i=0;i<s;i++){if (atoms[X_v][Y_v].is_outside()) error_code|=1;  if (atoms[X_v][Y_v].isOccupied()) {error_code|=2; break out;}  Y_v--;X_v++;  if (Y_v<0) Y_v=sizeY-1; if (X_v==sizeX) X_v=0;}
+    
+if (error_code!=0) break;
+if (s>=m) return s;
+s++;
+Y_v--;
+if (Y_v<0) Y_v=sizeY-1;
+}
+
+if ((error_code&2)!=0) return s-1;
+if ((error_code&1)!=0) return s;
+                       return -1;
+}
+
+
+public Abstract_2D_diffusion_atom chooseClearArea_terrace(short X, short Y, int s,double raw){
+  
+int temp=(int)(raw*(s*6));
+ 
+int X_v,Y_v;X_v=X; Y_v=Y-s;
+ if (Y_v<0) Y_v=sizeY-1;
+
+int contador=0;
+
+    for (int i=0;i<s;i++){contador++; if (contador>temp) return atoms[X_v][Y_v]; X_v++;        if (X_v==sizeX) X_v=0; }
+    for (int i=0;i<s;i++){contador++; if (contador>temp) return atoms[X_v][Y_v]; Y_v++;        if (Y_v==sizeY) Y_v=0;}
+    for (int i=0;i<s;i++){contador++; if (contador>temp) return atoms[X_v][Y_v]; Y_v++;X_v--;  if (Y_v==sizeY) Y_v=0;if (X_v<0) X_v=sizeX-1;}
+    for (int i=0;i<s;i++){contador++; if (contador>temp) return atoms[X_v][Y_v]; X_v--;        if (X_v<0) X_v=sizeX-1;}
+    for (int i=0;i<s;i++){contador++; if (contador>temp) return atoms[X_v][Y_v]; Y_v--;        if (Y_v<0) Y_v=sizeY-1;}
+    for (int i=0;i<s;i++){contador++; if (contador>temp) return atoms[X_v][Y_v]; Y_v--;X_v++;  if (Y_v<0) Y_v=sizeY-1; if (X_v==sizeX) X_v=0;}
+
+return null;
+
+}
+
+public int getClearArea_step(short X, short Y,int m){
+   
+    
+int s=1;
+int X_v,Y_v;
+
+switch(atoms[X][Y].getOrientation()){
+    case 0:
+    case 3:while(true){
+            X_v=X+s; if (X_v>=sizeX) X_v=0;       if (atoms[X_v][Y].isOccupied() || atoms[X_v][Y].getType()<2)  {return s-1;}  
+            X_v=X-s; if (X_v<0)      X_v=sizeX-1; if (atoms[X_v][Y].isOccupied() || atoms[X_v][Y].getType()<2)  {return s-1;}  
+            if (s==m) return s;
+            s++;}
+            
+    case 1:
+    case 4: while(true){
+            Y_v=Y+s; if (Y_v>=sizeY) Y_v=0;       if (atoms[X][Y_v].isOccupied() || atoms[X][Y_v].getType()<2) {return s-1;}  
+            Y_v=Y-s; if (Y_v<0)      Y_v=sizeY-1; if (atoms[X][Y_v].isOccupied() || atoms[X][Y_v].getType()<2) {return s-1;}  
+            if (s==m) return s;
+            s++;}
+        
+        
+    case 2:
+    case 5: while(true){
+            X_v=X-s; if (X_v<0)      X_v=sizeX-1; Y_v=Y+s; if (Y_v>=sizeY) Y_v=0;       if (atoms[X_v][Y_v].isOccupied() || atoms[X_v][Y_v].getType()<2) {return s-1;}  
+            X_v=X+s; if (X_v>=sizeX) X_v=0;       Y_v=Y-s; if (Y_v<0)      Y_v=sizeY-1; if (atoms[X_v][Y_v].isOccupied() || atoms[X_v][Y_v].getType()<2) {return s-1;}  
+            if (s==m) return s;
+            s++;}
+    
+   default: return -1;    
+}}
+
+public Abstract_2D_diffusion_atom chooseClearArea_step(short X, short Y, int s,double raw){
+
+    int X_v,Y_v;
+
+switch(atoms[X][Y].getOrientation()){
+    case 0:
+    case 3: if (raw>0.5) {X_v=X+s; if (X_v>=sizeX) X_v=0;       return atoms[X_v][Y];}              
+            else         {X_v=X-s; if (X_v<0)      X_v=sizeX-1; return atoms[X_v][Y];}
+    case 1:
+    case 4: if (raw>0.5) {Y_v=Y+s; if (Y_v>=sizeY) Y_v=0;       return atoms[X][Y_v];} 
+            else         {Y_v=Y-s; if (Y_v<0)      Y_v=sizeY-1; return atoms[X][Y_v];}
+    case 2:
+    case 5: if (raw>0.5) {X_v=X-s; if (X_v<0)      X_v=sizeX-1; Y_v=Y+s; if (Y_v>=sizeY) Y_v=0;         return atoms[X_v][Y_v];}
+            else         {X_v=X+s; if (X_v>=sizeX) X_v=0;       Y_v=Y-s; if (Y_v<0)      Y_v=sizeY-1;   return atoms[X_v][Y_v];}}
+return null;
+}
+    
 }
