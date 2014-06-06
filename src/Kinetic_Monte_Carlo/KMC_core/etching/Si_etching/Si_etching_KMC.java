@@ -17,7 +17,7 @@ import utils.MathUtils;
  */
 public class Si_etching_KMC extends Abstract_etching_KMC {
 
-    private double minHeight;
+    private final double minHeight;
 
     public Si_etching_KMC(Si_etching_KMC_config config) {
         super(config.listConfig);
@@ -67,8 +67,7 @@ public class Si_etching_KMC extends Abstract_etching_KMC {
                 list.add_Atom(neighbor);
             }
         }
-        if (atom.getZ() < minHeight)    return true;
-        else                            return false;
+        return atom.getZ() < minHeight*2;
     }
     
     @Override
