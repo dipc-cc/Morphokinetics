@@ -52,9 +52,11 @@ public class Basic_KMC extends Abstract_etching_KMC {
     protected boolean perform_simulation_step() {
 
                 Basic_atom atom = (Basic_atom) list.next_event(RNG);
-        if (atom.getY() < minHeight) {
+        if (atom.getY() > lattice.getSizeY()-minHeight) {
+
             return true;
         }
+      
         atom.remove();
         atom.setOnList(null);
       for (int k = 0; k < 4; k++) {
