@@ -52,6 +52,7 @@ public class Basic_panel extends javax.swing.JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (this.kmc==null) return;
         int sizeX=kmc.getLattice().getSizeX();
         int sizeY=kmc.getLattice().getSizeY();
         

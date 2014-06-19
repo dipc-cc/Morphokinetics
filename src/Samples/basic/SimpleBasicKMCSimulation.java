@@ -28,7 +28,7 @@ public class SimpleBasicKMCSimulation {
               .setBins_per_level(100)
               .set_extra_levels(0);
               
-      Basic_KMC KMC=new Basic_KMC(config,1024,256);
+      Basic_KMC KMC=new Basic_KMC(config,512,128);
       
       Basic_frame panel=new Basic_frame(1);  
       

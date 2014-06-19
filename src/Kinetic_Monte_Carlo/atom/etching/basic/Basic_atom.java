@@ -14,7 +14,7 @@ public class Basic_atom extends Abstract_etching_atom {
 
 
 
-    protected double[] probs;
+
     protected Basic_atom[] neighs = new Basic_atom[4];
     protected byte type;
     protected boolean removed = false;
@@ -61,14 +61,14 @@ public class Basic_atom extends Abstract_etching_atom {
         
     type--; 
     if (type<3 && !removed && list!=null) 
-        list.addTotalProbability(probs[type]-probs[type+1]); 
+        list.addTotalProbability(probabilities[type]-probabilities[type+1]); 
     }
 
     
     public void remove(){
 
     if (!removed) {
-       if (list!=null)  list.addTotalProbability  (-probs[type]);
+       if (list!=null)  list.addTotalProbability  (-probabilities[type]);
         removed=true;
         for (int i=0;i<4;i++){
             if (neighs[i]!=null) neighs[i].remove1st();}
@@ -77,12 +77,12 @@ public class Basic_atom extends Abstract_etching_atom {
 
     @Override
     public double getProbability() {
-         return probs[type];
+         return probabilities[type];
     }
 
     @Override
     public boolean isEligible() {
-        return (type>0 && type<4);
+        return (type>=0 && type<4);
     }
 
     @Override
