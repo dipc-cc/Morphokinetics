@@ -9,7 +9,7 @@ import Graphic_interfaces.Difussion2D_Growth.graphene_cvd_growth.GrapheneKMC_can
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Graphene_CVD_growth.Graphene_KMC;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.Graphene_CVD_Growth.Graphene_CVD_deposition_rates_factory;
+import Rates_library.diffusion.Graphene_CVD_Growth.Graphene_CVD_deposition_rates_factory;
 
 /**
  *

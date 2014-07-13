@@ -2,8 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.Ag_Ag_Growth;
+package Rates_library.diffusion.Ag_Ag_Growth;
 
+import Rates_library.diffusion.IDiffusionRates;
 import Rates_library.IRatesFactory;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public class Ag_Ag_growth_rates_factory implements IRatesFactory {
 
-    private static Map<String, IRates> experiments;
+    private static Map<String, IDiffusionRates> experiments;
 
     public Ag_Ag_growth_rates_factory() {
 
@@ -26,7 +27,7 @@ public class Ag_Ag_growth_rates_factory implements IRatesFactory {
     @Override
     public double[] getRates(String experimentName, double temperature) {
 
-        IRates experiment = experiments.get(experimentName);
+        IDiffusionRates experiment = experiments.get(experimentName);
         double[] rates = new double[49];
 
         for (int i = 0; i < 7; i++) {
@@ -37,11 +38,13 @@ public class Ag_Ag_growth_rates_factory implements IRatesFactory {
         return rates;
     }
 
+    @Override
     public double getDepositionRate(String experimentName, double temperature) {
 
         return experiments.get(experimentName).getDepositionRate();
     }
 
+    @Override
     public double getIslandDensity(String experimentName, double temperature) {
 
         return experiments.get(experimentName).getIslandsDensityML(temperature);

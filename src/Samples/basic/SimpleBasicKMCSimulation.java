@@ -30,16 +30,16 @@ public class SimpleBasicKMCSimulation {
               
       Basic_KMC KMC=new Basic_KMC(config,512,128);
       
-      Basic_frame panel=new Basic_frame(1);  
+      Basic_frame panel=new Basic_frame(3);  
       
       KMC.initializeRates(new Basic_etch_rates_factory().getRates("Basic_OTHER", 350));
       
       
-      for (int i=0;i<100;i++){
+      for (int i=0;i<1000;i++){
       
-      KMC.simulate(1000);
+      KMC.simulate(500);
       panel.drawKMC(KMC);
-      Wait.manymsec(100);
+      Wait.manymsec(300);
       }
            
     }

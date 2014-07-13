@@ -9,7 +9,7 @@ import Graphic_interfaces.Difussion2D_Growth.DifussionKMC_frame;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
+import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
 
 /**
  *

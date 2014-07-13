@@ -13,7 +13,7 @@ import Rates_library.Si_etching.*;
  * Etch rates datas obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
  * 
  */
-public class Rates_case_OHTER implements IRates {
+public class Rates_case_OHTER implements IBasicRates {
  
       private  double E0=0.0;
       private  double E1=0.0;

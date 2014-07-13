@@ -6,7 +6,6 @@ package Kinetic_Monte_Carlo.KMC_core;
 
 import Kinetic_Monte_Carlo.lattice.Abstract_lattice;
 import Kinetic_Monte_Carlo.list.Abstract_list;
-import Rates_library.KMCRatesConfig;
 
 /**
  *

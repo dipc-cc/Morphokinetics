@@ -31,11 +31,11 @@ public class SiEtchingKMCConvergence {
     public void performConvergence() {
 
 
-        Genetic_algorithm_configuration Genconfig = new genetic_algorithm_config_factory()
+        Genetic_algorithm_configuration geneticConfiguration = new genetic_algorithm_config_factory()
                 .create_silicon_convergence_configuration();
-        Genetic_algorithm GA = new Genetic_algorithm(Genconfig);
+        Genetic_algorithm GA = new Genetic_algorithm(geneticConfiguration);
         new GA_progress_frame(GA).setVisible(true);
-        AbstractPSDEvaluation evaluator=Genconfig.mainEvaluator;
+        AbstractPSDEvaluation evaluator=geneticConfiguration.mainEvaluator;
         
         for (int i = 0; i < totalConvergences; i++) {
 
@@ -45,8 +45,8 @@ public class SiEtchingKMCConvergence {
           double simulationTime=individual.getSimulationTime();
           evaluator.setRepeats(evaluator.getRepeats()/20);
            
-          Genconfig.setExperimentalPSD(experimentalPSD);
-          Genconfig.expected_simulation_time=simulationTime;
+          geneticConfiguration.setExperimentalPSD(experimentalPSD);
+          geneticConfiguration.expected_simulation_time=simulationTime;
           
             GA.initialize();
             GA.iterate(100);

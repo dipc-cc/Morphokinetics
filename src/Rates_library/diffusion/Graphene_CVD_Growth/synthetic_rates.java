@@ -2,13 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.Graphene_CVD_Growth;
+package Rates_library.diffusion.Graphene_CVD_Growth;
+
+import Rates_library.diffusion.IDiffusionRates;
 
 /**
  *
  * @author Nestor
  */
-public class synthetic_rates implements IRates {
+public class synthetic_rates implements IDiffusionRates {
 
  private double[][] rates;
  private double depositionRateInML_second=0.000035;
@@ -16,7 +18,7 @@ public class synthetic_rates implements IRates {
     
     
     @Override
-    public double getRate(int sourceType, int destinationType) {
+    public double getRate(int sourceType, int destinationType, double temperature) {
         if (rates==null){
             rates=new double[8][8];
             initializeRates();
@@ -30,7 +32,7 @@ public class synthetic_rates implements IRates {
     }
     
  @Override
-    public double getIslandsDensity() {
+    public double getIslandsDensityML(double temperature) {
         return islandDensity_per_site;
     }
     

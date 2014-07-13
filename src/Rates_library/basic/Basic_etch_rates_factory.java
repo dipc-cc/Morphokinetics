@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class Basic_etch_rates_factory implements IRatesFactory {
     
-    private static Map<String,IRates> experiments;
+    private static Map<String,IBasicRates> experiments;
     private static double kB=8.617332e-5;
    
     
@@ -31,7 +31,7 @@ public class Basic_etch_rates_factory implements IRatesFactory {
     @Override
  public double[] getRates(String experimentName, double temperature){
     
-   IRates experiment=experiments.get(experimentName);
+   IBasicRates experiment=experiments.get(experimentName);
    double[] rates=new double[4];
         
      for(int i=0;i<4;i++){
@@ -39,5 +39,17 @@ public class Basic_etch_rates_factory implements IRatesFactory {
       }
      return rates;       
     }
+
+    @Override
+    public double getDepositionRate(String experimentName, double temperature) {
+        throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms."); 
+    }
+
+    @Override
+    public double getIslandDensity(String experimentName, double temperature) {
+        throw new UnsupportedOperationException("This KMC does does not form islands."); 
+    }
+ 
+ 
       
 }

@@ -2,7 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.Ag_Ag_Growth;
+package Rates_library.diffusion.Ag_Ag_Growth;
+
+import Rates_library.diffusion.IDiffusionRates;
 
 /**
  *
@@ -12,7 +14,7 @@ package Rates_library.Ag_Ag_Growth;
  * 031604
  *
  */
-public class Rates_from_PRB_Cox implements IRates {
+public class Rates_from_PRB_Cox implements IDiffusionRates {
 
     private double kB = 8.617332e-5;
     private double difusion_ML = 0.0035;
@@ -149,15 +151,18 @@ public class Rates_from_PRB_Cox implements IRates {
         prefactors[6][6] = P;
     }
 
+    @Override
     public double getRate(int i, int j, double temperature) {
         return (prefactors[i][j] * Math.exp(-energies[i][j] / (kB * temperature)));
     }
 
+    @Override
     public double getDepositionRate() {
         return difusion_ML;
 
     }
 
+    @Override
     public double getIslandsDensityML(double temperature) {
 
         if (temperature < 135) {//120 degrees

@@ -7,7 +7,6 @@ package Kinetic_Monte_Carlo.KMC_core.worker;
 import Kinetic_Monte_Carlo.KMC_core.Abstract_KMC;
 import Kinetic_Monte_Carlo.lattice.Abstract_lattice;
 import Kinetic_Monte_Carlo.list.Abstract_list;
-import Rates_library.KMCRatesConfig;
 import java.util.concurrent.Semaphore;
 
 /**
