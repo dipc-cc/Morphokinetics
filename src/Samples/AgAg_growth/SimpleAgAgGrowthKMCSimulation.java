@@ -35,7 +35,6 @@ public class SimpleAgAgGrowthKMCSimulation {
         initializeRates(ratesFactory,kmc); 
         kmc.simulate();
         }
-         
      }     
      
      private static DifussionKMC_frame create_graphics_frame(Ag_Ag_KMC kmc) {

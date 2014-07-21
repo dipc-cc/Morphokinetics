@@ -64,7 +64,8 @@ public class Si_atom extends Abstract_etching_atom {
 
     
 
-//public byte getType(){return atom_type;}
+    @Override
+    public byte getType(){return (byte)((n1<<4)+n2) ;}
 
     public byte getn1() {
         return n1;

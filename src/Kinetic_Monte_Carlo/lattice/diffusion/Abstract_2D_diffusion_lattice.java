@@ -4,6 +4,7 @@
  */
 package Kinetic_Monte_Carlo.lattice.diffusion;
 
+import Kinetic_Monte_Carlo.atom.Abstract_atom;
 import Kinetic_Monte_Carlo.atom.diffusion.Abstract_2D_diffusion_atom;
 import Kinetic_Monte_Carlo.lattice.Abstract_lattice;
 import java.awt.geom.Point2D;
@@ -24,9 +25,17 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
 
     public abstract Abstract_2D_diffusion_atom getAtom(int X, int Y);
 
+    @Override
+    public Abstract_atom getAtom(int X, int Y, int Z, int Unit_cell_pos) {
+        if (Z != 0 || Unit_cell_pos != 0) {
+            throw new UnsupportedOperationException("Z position or position inside unit cell cannot be different than 0, not supported"); //To change body of generated methods, choose Tools | Templates.
+        }
+        return getAtom(X, Y);
+    }
+
     //obtains the spatial location of certain atom, the distance between atoms is considered as 1
     public abstract Point2D getSpatialLocation(int X, int Y);
-    
+
     public abstract Point2D getCentralLatticeLocation();
 
     @Override
@@ -39,7 +48,6 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
             }
         }
     }
-    
 
     protected void setAngles() {
 
@@ -71,7 +79,7 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
 
     public double getDistanceToCenter(int X, int Y) {
 
-        Point2D middle =getCentralLatticeLocation();
+        Point2D middle = getCentralLatticeLocation();
         Point2D position = getSpatialLocation(X, Y);
 
         return position.distance(middle);
@@ -80,7 +88,7 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
     //define como átomos inside a los átomos dentro de dicho rádio
     //devuelve un array de átomos que es el perimetro de dicha circunferencia.
     public Abstract_2D_diffusion_atom[] setInside(int radius) {
-       
+
         ArrayList<Abstract_2D_diffusion_atom> perimeterList = new ArrayList();
 
         for (int Y = 0; Y < sizeY; Y++) {

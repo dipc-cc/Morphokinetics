@@ -24,5 +24,8 @@ public abstract double getProbability();
 public abstract boolean isEligible();
 
 public abstract boolean isRemoved();
+
+public abstract byte getType();
+
     
 }

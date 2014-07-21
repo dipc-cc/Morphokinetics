@@ -16,7 +16,7 @@ public abstract class Abstract_etching_lattice extends Abstract_lattice {
     
     public abstract void setProbabilities(double[] probabilities);
     
-    public abstract Abstract_atom getAtom(int X,int Y,int Z,int Unit_cell_pos);
+    
         
         
 }

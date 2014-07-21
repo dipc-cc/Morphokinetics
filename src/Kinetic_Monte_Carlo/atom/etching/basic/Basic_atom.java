@@ -41,6 +41,7 @@ public class Basic_atom extends Abstract_etching_atom {
         return neighs[pos];
     }
         
+    @Override
     public byte getType() {
         return type;
     }

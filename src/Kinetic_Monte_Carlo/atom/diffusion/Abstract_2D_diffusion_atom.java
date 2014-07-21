@@ -85,12 +85,7 @@ public abstract class Abstract_2D_diffusion_atom extends Abstract_atom {
     public boolean isOccupied() {
         return occupied;
     }
-    
-    /*
-    public void unOccupy(){
-    occupied=false;}*/
-
-    
+       
     
     public double getProbability(int pos) {
         if (bonds_probability != null) {
@@ -100,6 +95,7 @@ public abstract class Abstract_2D_diffusion_atom extends Abstract_atom {
         }
     }
 
+    @Override
     public byte getType() {
         return type;
     }

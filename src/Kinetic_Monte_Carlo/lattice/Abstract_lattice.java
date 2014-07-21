@@ -4,6 +4,8 @@
  */
 package Kinetic_Monte_Carlo.lattice;
 
+import Kinetic_Monte_Carlo.atom.Abstract_atom;
+
 /**
  *
  * @author Nestor
@@ -23,7 +25,7 @@ public abstract class Abstract_lattice {
     public int getSizeZ(){return sizeZ;}
     public int getSizeUC(){return unit_cell_size;}
     
-    
+    public abstract Abstract_atom getAtom(int X,int Y,int Z,int Unit_cell_pos);
         
     public abstract void reset();
         
