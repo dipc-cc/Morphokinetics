@@ -36,8 +36,17 @@ public class Rates_from_PRB_Cox implements IDiffusionRates {
     private double[][] prefactors = new double[7][7];
     private double[][] energies = new double[7][7];
 
+    
+        //0: terrace
+        //1: corner
+        //2: A side
+        //3:kink
+        //4:bulk
+        //5: B side
+    
     public Rates_from_PRB_Cox() {
 
+        //[source type][destination type]
         energies[0][0] = Ed;
         energies[0][1] = Ed;
         energies[0][2] = Ed;

@@ -13,7 +13,9 @@ public class AgAg_types_table {
         table = new byte[7][7];
 
         //[inmovil][movil]
-        //0: terraza, 1: corner, 2: edge, 3: kink, 4: bulk
+        //0: terrace, 1: corner, 2: edge, 3: kink, 4: bulk
+        //we don't differenciate here between A edge and B edge, this table is just for obtaining the atom type without orientation differences.
+        
         table[0][0] = 0;
         table[0][1] = 0; //nucleación!!, intocable, algoritmos óptimos de difustion pensados para que no cambie el tipo de los vecinos al difundirse
         table[0][2] = 0;
