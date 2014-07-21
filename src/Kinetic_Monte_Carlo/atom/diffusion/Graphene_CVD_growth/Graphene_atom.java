@@ -159,7 +159,7 @@ public class Graphene_atom extends Abstract_2D_diffusion_atom {
 
     @Override
     public boolean two_terrace_together() {
-        return n1 == 1 && n2 == 0 && n3 == 0;
+        return n1 == 2 && n2 == 0 && n3 == 0;
     }
 
     @Override

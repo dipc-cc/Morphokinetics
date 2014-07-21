@@ -26,7 +26,7 @@ public class Graphene_KMC extends Abstract_2D_diffusion_KMC {
 
         this.lattice = new Graphene_CVD_Growth_lattice(sizeX, sizeY, modified_buffer, distance_per_step);
         
-        configureDevitaAccelerator(distance_per_step);
+        if (justCentralFlake) configureDevitaAccelerator(distance_per_step);
     }
 
 

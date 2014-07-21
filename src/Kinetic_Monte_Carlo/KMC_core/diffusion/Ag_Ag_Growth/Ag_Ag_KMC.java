@@ -28,7 +28,7 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
 
         this.lattice = new Ag_Ag_Growth_lattice(sizeX, sizeY, modified_buffer, distance_per_step);
         
-        configureDevitaAccelerator(distance_per_step);
+       if (justCentralFlake) configureDevitaAccelerator(distance_per_step);
     }
 
     @Override

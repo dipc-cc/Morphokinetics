@@ -123,7 +123,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
             return false;
         }
 
-        boolean force_nucleation = false;//(origen.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
+        boolean force_nucleation = (!justCentralFlake && origin.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
         origin.deposit(force_nucleation);
         modified_buffer.updateAtoms(list, lattice);
         return true;
@@ -135,8 +135,9 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         if ((!origin.isEligible() || destination.isOccupied()) && (origin != destination)) {
             return false;
         }
+        
+        boolean force_nucleation = (!justCentralFlake && destination.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
         origin.extract();
-        boolean force_nucleation = false;//( destino.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
         destination.deposit(force_nucleation);
         modified_buffer.updateAtoms(list, lattice);
 

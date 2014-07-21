@@ -51,6 +51,10 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
         return occupied && (type < 3);
     }
 
+    private boolean isPartOfInamovibleSubstrate() {
+        return occupied && (type == 4);
+    }
+
     public byte getN_immobile() {
         return n_immobile;
     }
@@ -136,8 +140,6 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
     @Override
     public Abstract_2D_diffusion_atom choose_random_hop() {
 
-       
-        
         double linearSearch = StaticRandom.raw() * total_probability;
 
         double sum = 0;
@@ -152,11 +154,11 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
             }
         }
         cont--;
-        
+
         if (type == 2 && neighbors[cont].getType() == 1) {
             return ahead_corner_Atom(cont);
         }
-        
+
         return neighbors[cont];
     }
 
@@ -247,7 +249,9 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
             if (inmov_to_mov && occupied) {
                 for (int i = 0; i < 6; i++) {
-                    neighbors[i].rem_Inmovil_add_Movil_procesa();
+                    if (!neighbors[i].isPartOfInamovibleSubstrate()) {
+                        neighbors[i].rem_Inmovil_add_Movil_procesa();
+                    }
                 }
             }
         }
@@ -277,15 +281,15 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
             if (mov_to_inmov && occupied) {
 
                 for (int i = 0; i < 6; i++) {
-
-                    neighbors[i].rem_Movil_add_Inmovil_procesa(forceNucleation);
+                    if (!neighbors[i].isPartOfInamovibleSubstrate()) {
+                        neighbors[i].rem_Movil_add_Inmovil_procesa(forceNucleation);
+                    }
                 }
             }
         }
     }
 
     public void add_Vecino_Ocupado_procesa(byte tipo_origen, boolean force_nucleation) { //este lo ejecutan los primeros vecinos
-
 
         byte new_type;
 
@@ -312,15 +316,15 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
             if (mov_to_inmov && occupied) {
                 for (int i = 0; i < 6; i++) {
-
-                    neighbors[i].rem_Movil_add_Inmovil_procesa(force_nucleation);
+                    if (!neighbors[i].isPartOfInamovibleSubstrate()) {
+                        neighbors[i].rem_Movil_add_Inmovil_procesa(force_nucleation);
+                    }
                 }
             }
         }
     }
 
     public void remove_Movil_Ocupado() {
-
 
         byte new_type = types_table.getType(n_immobile, --n_mobile);
 
@@ -337,7 +341,9 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
             if (inmov_to_mov && occupied) {
                 for (int i = 0; i < 6; i++) {
-                    neighbors[i].rem_Inmovil_add_Movil_procesa();
+                    if (!neighbors[i].isPartOfInamovibleSubstrate()) {
+                        neighbors[i].rem_Inmovil_add_Movil_procesa();
+                    }
                 }
             }
         }
@@ -354,9 +360,11 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
 
         byte tipo_original = type;
         for (int i = 0; i < 6; i++) {
-            neighbors[i].add_Vecino_Ocupado_procesa(tipo_original, force_nucleation);
+            if (!neighbors[i].isPartOfInamovibleSubstrate()) {
+                neighbors[i].add_Vecino_Ocupado_procesa(tipo_original, force_nucleation);
+            }
         }
-        
+
         modified.addAtomPropio(this);
         if (n_mobile > 0) {
             modified.addAtomLigaduras(this);
@@ -369,7 +377,9 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
         occupied = false;
 
         for (int i = 0; i < 6; i++) {
-            neighbors[i].remove_Movil_Ocupado();
+            if (!neighbors[i].isPartOfInamovibleSubstrate()) {
+                neighbors[i].remove_Movil_Ocupado();
+            }
         }
 
         if (n_mobile > 0) {
@@ -452,7 +462,7 @@ public class AgAg_Atom extends Abstract_2D_diffusion_atom {
             if (destination == 2 && (neighbors[position].getOrientation() & 1) == 0) {
                 destination = 5;
             }
-                       
+
             return probabilities[origin_type][destination];
         }
     }
