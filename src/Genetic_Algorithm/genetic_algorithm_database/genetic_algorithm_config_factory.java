@@ -52,8 +52,8 @@ public class genetic_algorithm_config_factory {
         
         
         Si_etching_Threaded_PSD_Evaluation evaluator=new Si_etching_Threaded_PSD_Evaluation(SiEtchConfigKMC(), 30, 10000, 8);
-        evaluator.setWheight(1.0f)
-                 .setShowGraphics(true);
+        evaluator.setWheight(1.0f);
+        evaluator.setShowGraphics(true);
           
         /*
         Si_etching_Basic_PSD_Evaluation  evaluator=new Si_etching_Basic_PSD_Evaluation(SiEtchConfigKMC(), 1, 1000);

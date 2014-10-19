@@ -8,8 +8,6 @@ import Genetic_Algorithm.Genetic_Operators.Restrictions.Bounded_gene_restriction
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Fixed_gene_restriction;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Replicated_gene_restriction;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.RestrictionOperator;
-import Genetic_Algorithm.Individual;
-import Genetic_Algorithm.Population;
 
 /**
  *

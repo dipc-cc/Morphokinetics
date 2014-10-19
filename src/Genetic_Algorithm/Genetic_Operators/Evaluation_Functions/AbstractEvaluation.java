@@ -18,13 +18,15 @@ public abstract class AbstractEvaluation implements IEvaluation {
         this.wheight=1.0;
         this.showGraphics=false;}
     
+    @Override
     public double getWheight()                  {return wheight;}
           
     public AbstractEvaluation setShowGraphics(boolean showGraphics){
         this.showGraphics=showGraphics; 
         return this;}
     
-    public AbstractEvaluation setWheight(float wheight) {
+    @Override
+    public IEvaluation setWheight(float wheight) {
         this.wheight=wheight;
         return this;}
     
