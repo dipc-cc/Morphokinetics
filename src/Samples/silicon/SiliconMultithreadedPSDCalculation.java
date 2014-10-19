@@ -25,9 +25,9 @@ public class SiliconMultithreadedPSDCalculation {
         
         Si_etching_KMC_config config = configKMC();
         
-        AbstractEvaluation evaluation = new Si_etching_Threaded_PSD_Evaluation(config, 20, 10000, 4)
-                .setWheight(1.0f)
-                .setShowGraphics(false);
+        AbstractEvaluation evaluation = new Si_etching_Threaded_PSD_Evaluation(config, 20, 10000, 4);
+                evaluation.setWheight(1.0f);
+                evaluation.setShowGraphics(false);
         
         float[][] PSD = ((AbstractPSDEvaluation)evaluation).calculate_PSD_from_individual(
                 new Individual(
