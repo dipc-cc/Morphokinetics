@@ -4,7 +4,10 @@
  */
 package Genetic_Algorithm.Genetic_Operators.Restrictions.ag_ag;
 
-import Genetic_Algorithm.Genetic_Operators.Restrictions.IRestriction;
+import Genetic_Algorithm.Genetic_Operators.Restrictions.Bounded_gene_restriction;
+import Genetic_Algorithm.Genetic_Operators.Restrictions.Fixed_gene_restriction;
+import Genetic_Algorithm.Genetic_Operators.Restrictions.Replicated_gene_restriction;
+import Genetic_Algorithm.Genetic_Operators.Restrictions.RestrictionOperator;
 import Genetic_Algorithm.Individual;
 import Genetic_Algorithm.Population;
 
@@ -12,23 +15,64 @@ import Genetic_Algorithm.Population;
  *
  * @author Nestor
  */
-public abstract class Ag_Ag_restriction implements IRestriction {
+public abstract class Ag_Ag_restriction extends RestrictionOperator {
     
-    
-    
-    private final double Pd=10e11; //proposed adatom diffusion prefactor
-    private final double Ed=0.1;   //proposed adatom diffusion activation energy
-    
-    private double diffusion_rate;
-    
+        
     public void initialize(double temperature){
+        
+    }
+
+    public Ag_Ag_restriction(double diffusion_rate) {
+        
+        
+        //negative values are not valid
+    for (int currentGene=0;currentGene<7*7;currentGene++){
+         genesRestriction.add(new Bounded_gene_restriction(0, 1e20, currentGene));
+    }
     
-  //  diffusion_rate=(Pd*Math.exp(-Ed/(kB*temperature)));
+  //Diffusion rate
+    for (int i=0;i<7;i++){
     
+    genesRestriction.add(new Fixed_gene_restriction(diffusion_rate, 0*7+i));
     }
     
     
-        public void apply(Population p) {
+   //non-mobile dimers
+   genesRestriction.add(new Fixed_gene_restriction(0, 1*7+0)); 
+    
+   genesRestriction.add(new Fixed_gene_restriction(0, 2*7+0)); 
+   genesRestriction.add(new Fixed_gene_restriction(0, 2*7+1)); 
+   
+   genesRestriction.add(new Fixed_gene_restriction(0, 5*7+0)); 
+   genesRestriction.add(new Fixed_gene_restriction(0, 5*7+1)); 
+   
+   
+for (int j=0;j<7;j++){ 
+                        genesRestriction.add(new Fixed_gene_restriction(0, 3*7+j)); 
+                        genesRestriction.add(new Fixed_gene_restriction(0, 4*7+j)); 
+                        genesRestriction.add(new Fixed_gene_restriction(0, 6*7+j));}
+   
+     
+//We set the following atomistic configurations to the same rate (according to the Ag/Ag diffuion paper):
+//(2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
+
+
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,2*7+4));
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,2*7+5));
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,2*7+6));
+
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,5*7+2));
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,5*7+3));
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,5*7+4));
+genesRestriction.add(new Replicated_gene_restriction(2*7+3,5*7+6));
+
+}
+    
+    
+    
+    /*
+    @Override
+    public void apply(Population p) {
         
             
 for (int ind=0;ind<p.size();ind++){
@@ -80,6 +124,6 @@ i.setGene(5*7+6,value);
         }
         
         }
-    
+  */  
     
 }

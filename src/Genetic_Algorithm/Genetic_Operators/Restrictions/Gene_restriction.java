@@ -14,10 +14,10 @@ public abstract class Gene_restriction {
     
     
     
-    public static int NO_RESTRICTION=0;
-    public static int BOUNDED_VALUES=1;
-    public static int REPLICATE_GENE=2;
-    public static int FIXED_VALUE=3;
+    public static final int NO_RESTRICTION=0;
+    public static final int BOUNDED_VALUES=1;
+    public static final int REPLICATE_GENE=2;
+    public static final int FIXED_VALUE=3;
     
     protected int genePosition;    
     

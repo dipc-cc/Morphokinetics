@@ -7,11 +7,8 @@ package Genetic_Algorithm.Genetic_Operators.Restrictions.Si_etching;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Bounded_gene_restriction;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Fixed_gene_restriction;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Gene_restriction;
-import Genetic_Algorithm.Genetic_Operators.Restrictions.IRestriction;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Replicated_gene_restriction;
-import Genetic_Algorithm.Individual;
-import Genetic_Algorithm.Population;
-import Rates_library.Si_etching.Si_etch_rates_factory;
+import Genetic_Algorithm.Genetic_Operators.Restrictions.RestrictionOperator;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +16,9 @@ import java.util.List;
  *
  * @author Nestor
  */
-public class Si_etching_restriction implements IRestriction {
+public class Si_etching_restriction extends RestrictionOperator {
 
-    private List<Gene_restriction> genesRestriction;
+   
 
  
     public Si_etching_restriction() {
@@ -53,38 +50,10 @@ public class Si_etching_restriction implements IRestriction {
             }
         }
     }
+    
+    
+    
 
-    //we set "known" restrictions (or restrictions we want to add for restrict the search space) 
-    @Override
-    public void apply(Population p) {
-
-
-        for (int ind = 0; ind < p.size(); ind++) {
-
-            Individual individual = p.getIndividual(ind);
-
-            for (int i = 0; i < genesRestriction.size(); i++) { 
-                if (genesRestriction.get(i).getRestrictionType()==Gene_restriction.REPLICATE_GENE)
-                genesRestriction.get(i).restrictGene(individual);
-            }
-            
-            for (int i = 0; i < genesRestriction.size(); i++) { 
-                if (genesRestriction.get(i).getRestrictionType()==Gene_restriction.BOUNDED_VALUES)
-                genesRestriction.get(i).restrictGene(individual);
-            }
-            
-            for (int i = 0; i < genesRestriction.size(); i++) { 
-                if (genesRestriction.get(i).getRestrictionType()==Gene_restriction.FIXED_VALUE)
-                genesRestriction.get(i).restrictGene(individual);
-            }
-            
-             // Just for debug, delete!
-            /*
-             double[] rates = new Si_etch_rates_factory().getRates("Gosalvez_PRE", 340);
-             for(int it=0;it<64;it++){
-             individual.setGene(it, rates[it]);
-             } */
-            
   /*        
 double[] rates ={1.0
 ,1.0
@@ -158,33 +127,14 @@ for(int it=0;it<64;it++)  individual.setGene(it, rates[it]);
 double[] ratesBad={1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,0.00218210390261232,1,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,0.150378557818612,0.208070792237219,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,0.362206502188478,1,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,7.74898197837514e-05,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482,0.000375270668236482}; 
 for(int it=0;it<64;it++)   individual.setGene(it, ratesBad[it]);
 */
-      
-        }
-    }
-
-    @Override
-    public List getNonFixedGenes(int geneSize) {
-        List<Integer> result = new ArrayList();
-
-        for (int i = 0; i < geneSize; i++) {
-            boolean restricted = false;
-            for (int j = 0; j < genesRestriction.size(); j++) {
-
-                if (genesRestriction.get(j).getGenePosition() == i && genesRestriction.get(j).getRestrictionType() > 1) {
-                    restricted = true;
-                    break;
-                }
-            }
-            if (!restricted) result.add(i);
-        }
-        return result;
-    }
 
     @Override
     public void initialize() {
+      
     }
+        
+        
     
-    
-    
+
     
 }

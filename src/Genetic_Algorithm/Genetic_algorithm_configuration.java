@@ -10,7 +10,7 @@ import Genetic_Algorithm.Genetic_Operators.Mutation.IMutation;
 import Genetic_Algorithm.Genetic_Operators.Population_Initialization.IInitializator;
 import Genetic_Algorithm.Genetic_Operators.Recombination.IRecombination;
 import Genetic_Algorithm.Genetic_Operators.Reinsertion.IReinsertion;
-import Genetic_Algorithm.Genetic_Operators.Restrictions.IRestriction;
+import Genetic_Algorithm.Genetic_Operators.Restrictions.RestrictionOperator;
 import Genetic_Algorithm.Genetic_Operators.Selection.ISelection;
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class Genetic_algorithm_configuration {
     public IInitializator initialization;
     public IRecombination recombination;
     public IReinsertion reinsertion;
-    public IRestriction restriction;
+    public RestrictionOperator restriction;
     public ISelection selection;
     public int population_size;
     public int offspring_size;
