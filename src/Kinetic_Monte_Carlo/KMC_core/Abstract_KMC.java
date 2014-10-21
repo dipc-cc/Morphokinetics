@@ -17,7 +17,7 @@ public abstract class Abstract_KMC implements IKMC {
     
     protected Abstract_list list;
     protected static Ranecu RNG;
-    protected int iterations_last_simulation;
+    protected int iterations_for_last_simulation;
     
 
     public Abstract_KMC(List_configuration config) {
@@ -35,33 +35,33 @@ public abstract class Abstract_KMC implements IKMC {
     
     @Override
     public int getIterations() {
-       return iterations_last_simulation;
+       return iterations_for_last_simulation;
     } 
     
     @Override
     public void simulate() {
-        iterations_last_simulation=0;
-        while (!perform_simulation_step()) iterations_last_simulation++;
+        iterations_for_last_simulation=0;
+        while (!perform_simulation_step()) iterations_for_last_simulation++;
             
         
     }
 
     @Override
     public void simulate(double endtime) {
-        iterations_last_simulation=0;
+        iterations_for_last_simulation=0;
         while (list.getTime() < endtime) {
             if (perform_simulation_step()) break;
-            iterations_last_simulation++;
+            iterations_for_last_simulation++;
         }
     }
 
     @Override
     public void simulate(int iterations) {
       
-        iterations_last_simulation=0;
+        iterations_for_last_simulation=0;
         for (int i = 0; i < iterations; i++) {
             if (perform_simulation_step()) break;
-            iterations_last_simulation++;      
+            iterations_for_last_simulation++;      
         } 
         
         list.cleanup();

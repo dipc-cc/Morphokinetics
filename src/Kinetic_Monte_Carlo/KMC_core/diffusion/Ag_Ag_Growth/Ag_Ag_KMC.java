@@ -25,11 +25,22 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
         super(config, justCentralFlake);
 
         Hops_per_step distance_per_step = new Hops_per_step();
-
         this.lattice = new Ag_Ag_Growth_lattice(sizeX, sizeY, modified_buffer, distance_per_step);
-        
-       if (justCentralFlake) configureDevitaAccelerator(distance_per_step);
+        if (justCentralFlake) configureDevitaAccelerator(distance_per_step);
     }
+    
+    public Ag_Ag_KMC(Ag_Ag_KMC_config config, boolean justCentralFlake){
+        
+        super(config.getListConfig(),justCentralFlake);
+      
+      
+        Hops_per_step distance_per_step = new Hops_per_step();
+        this.lattice = new Ag_Ag_Growth_lattice(config.getXsize(), config.getYsize(), modified_buffer, distance_per_step);
+        if (justCentralFlake) configureDevitaAccelerator(distance_per_step);  
+          this.setIslandDensityAndDepositionRate( config.getDeposition_rate(),config.getIsland_density());
+    }
+    
+    
 
     @Override
     protected void depositSeed() {

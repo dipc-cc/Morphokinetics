@@ -8,18 +8,9 @@ package Samples.convergences.Ag_Ag_growth;
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Ag_ag_growth.Ag_ag_growth_Threaded_PSD_Evaluation;
 import Genetic_Algorithm.Individual;
 import Genetic_Algorithm.Population;
-import Graphic_interfaces.Difussion2D_Growth.AgAg_growth.AgAgKMC_canvas;
-import Graphic_interfaces.Difussion2D_Growth.DifussionKMC_frame;
-import Graphic_interfaces.surface_viewer_2D.Frame_2D;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
-import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.Si_etching.Si_etch_rates_factory;
 import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
-import static Samples.AgAg_growth.AgAgPSDTest.constant_Y;
-import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
 
 ;
 
@@ -49,7 +40,7 @@ public class AgAgMulthreadedEvaluatorTest {
 
         evaluation.setPSD(experimentalPSD);
 
-        Individual newIndividual = new Individual(new Ag_Ag_growth_rates_factory().getRates("COX_PRB", 135));
+        Individual newIndividual = new Individual(new Ag_Ag_growth_rates_factory().getRates("COX_PRB", 125));
         Population population = new Population(1);
         population.setIndividual(newIndividual, 0);
         double[] populationErrors = evaluation.evaluate(population);

@@ -171,10 +171,8 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         int binX = surface[0].length;
 
         Point2D corner1 = lattice.getSpatialLocation(0, 0);
-        Point2D corner2 = lattice.getSpatialLocation(lattice.getSizeX() - 1, lattice.getSizeY() - 1);
-
-        double scaleX = Math.abs(binX / (corner2.getX() - corner1.getX()));
-        double scaleY = Math.abs(binY / (corner2.getY() - corner1.getY()));
+        double scaleX = Math.abs(binX / (lattice.getSpatialSizeX()));
+        double scaleY = Math.abs(binY / (lattice.getSpatialSizeY()));
 
         if (scaleX > 1 || scaleY > 1) {
             System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
@@ -191,7 +189,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
             for (int j = 0; j < lattice.getSizeX(); j++) {
                 if (lattice.getAtom(j, i).isOccupied()) {
                     Point2D position = lattice.getSpatialLocation(j, i);
-                    surface[(int) ((position.getX() - corner1.getX()) * scaleX)][(int) ((position.getY() - corner1.getY()) * scaleY)] = 0;
+                    surface[(int) ((position.getY() - corner1.getY()) * scaleY)][(int) ((position.getX() - corner1.getX()) * scaleX)] = 0;
                 }
             }
         }

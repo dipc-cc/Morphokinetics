@@ -23,12 +23,12 @@ public class SimpleBasicKMCSimulation {
     
       System.out.println("Simple simulation of the Basic KMC");  
         
-      List_configuration config=  new List_configuration()
+      List_configuration listConfig=  new List_configuration()
               .setList_type(List_configuration.BINNED_LIST)
               .setBins_per_level(100)
               .set_extra_levels(0);
               
-      Basic_KMC KMC=new Basic_KMC(config,512,128);
+      Basic_KMC KMC=new Basic_KMC(listConfig,512,128);
       
       Basic_frame panel=new Basic_frame(3);  
       

@@ -46,10 +46,6 @@ public abstract class Multithreaded_PSD_Evaluation extends AbstractPSDEvaluation
     protected void assignNewWork(int workerID) {
                
         int individual = currentSimulation / repeats;
-        if (individual > currentPopulation.size()) {
-            return;
-        } 
-        
         
         workers[workerID].initialize(currentPopulation.getIndividual(individual).getGenes());
         workers[workerID].simulate(this, this, measureInterval, individual);

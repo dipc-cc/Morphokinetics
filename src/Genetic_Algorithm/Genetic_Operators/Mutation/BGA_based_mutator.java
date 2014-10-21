@@ -16,7 +16,7 @@ public class BGA_based_mutator implements IMutation {
 
     private float r = /*0.1f*/ 1f;           //mutation range
     private float k = 7;                     //mutation precission  
-    private float mutRate = 3.0f;            //max mutations per individual 
+    private float mutRate = 0.5f;            //mutation rate as percentage
 
     public void mutate(Population p,List nonFixedGenes) {
 

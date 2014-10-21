@@ -13,7 +13,7 @@ import Genetic_Algorithm.Genetic_Operators.Restrictions.RestrictionOperator;
  *
  * @author Nestor
  */
-public abstract class Ag_Ag_restriction extends RestrictionOperator {
+public class Ag_Ag_restriction extends RestrictionOperator {
     
         
     public void initialize(double temperature){
@@ -123,5 +123,10 @@ i.setGene(5*7+6,value);
         
         }
   */  
+
+    @Override
+    public void initialize() {
+    
+    }
     
 }

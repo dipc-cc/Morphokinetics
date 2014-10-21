@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.convergences;
+package Samples.convergences.Si_etching;
 
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.AbstractPSDEvaluation;
 import Genetic_Algorithm.Genetic_algorithm;

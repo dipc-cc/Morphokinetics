@@ -15,8 +15,10 @@ import java.util.List;
  */
 public abstract class RestrictionOperator {
 
-    protected List<Gene_restriction> genesRestriction;
+    protected List<Gene_restriction> genesRestriction= new ArrayList();
 
+
+    
     public abstract void initialize();
 
     public void apply(Population p) {

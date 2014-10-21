@@ -139,6 +139,7 @@ public class KMC_worker extends Thread {
         this.simulation_type = "by_steps";
         this.finishListener = toAdd;
         this.workID=workID;
+        this.iterations=iterations;
         this.performSimulationLock.release();
     }
 

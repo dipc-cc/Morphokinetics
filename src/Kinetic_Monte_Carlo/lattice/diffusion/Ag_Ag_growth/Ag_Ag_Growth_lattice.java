@@ -141,6 +141,16 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
     public Point2D getCentralLatticeLocation() {
        return new Point2D.Float(sizeX/2.0f,(float)(sizeY*Y_ratio/2.0));
     }
+
+    @Override
+    public float getSpatialSizeX() {
+            return sizeX;
+    }
+
+    @Override
+    public float getSpatialSizeY() {
+        return sizeY*Y_ratio;}
+    
     
     
     @Override

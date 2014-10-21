@@ -37,6 +37,10 @@ public abstract class Abstract_2D_diffusion_lattice extends Abstract_lattice imp
     public abstract Point2D getSpatialLocation(int X, int Y);
 
     public abstract Point2D getCentralLatticeLocation();
+    
+    public abstract float getSpatialSizeX();
+    
+    public abstract float getSpatialSizeY();
 
     @Override
     public void reset() {

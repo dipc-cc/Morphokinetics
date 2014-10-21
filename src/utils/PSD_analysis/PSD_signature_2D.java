@@ -22,7 +22,7 @@ public class PSD_signature_2D {
     public static final int HORIZONTAL_SIMMETRY = 0;
     public static final int VERTICAL_SIMMETRY = 1;
 
-    public PSD_signature_2D(int binsX, int binsY) {
+    public PSD_signature_2D(int binsY,int binsX) {
 
         FFT_Core = new FloatFFT_2D(binsY, binsX);
         PSD = new float[binsY][binsX];
@@ -31,7 +31,7 @@ public class PSD_signature_2D {
         semaphore=new Semaphore(1);
     }
 
-    public void addSurfaceSample(float[][] surface) {
+    public void addSurfaceSample(float[][] sampledSurface) {
 
         if (averaged) {
             throw new RuntimeException("PSD measures averaged, new samples cannot be added without signature reset.");
@@ -39,8 +39,8 @@ public class PSD_signature_2D {
 
         try{semaphore.acquire();}catch(InterruptedException e){System.err.println("Thread interrupted while writting PSD signature");}
         
-        for (int i = 0; i < surface.length; i++) {
-            System.arraycopy(surface[i], 0, buffer[i], 0, surface[0].length);
+        for (int i = 0; i < sampledSurface.length; i++) {
+            System.arraycopy(sampledSurface[i], 0, buffer[i], 0, sampledSurface[0].length);
         }
 
         FFT_Core.realForwardFull(buffer);

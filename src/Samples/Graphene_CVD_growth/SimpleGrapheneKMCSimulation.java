@@ -53,7 +53,7 @@ public class SimpleGrapheneKMCSimulation {
         if ((sizeY & 1) != 0) {
             sizeY++;
         }
-        Graphene_KMC kmc = new Graphene_KMC(config, sizeX, sizeY, true);
+        Graphene_KMC kmc = new Graphene_KMC(config, sizeX, sizeY, false);
         return kmc;
     }
 

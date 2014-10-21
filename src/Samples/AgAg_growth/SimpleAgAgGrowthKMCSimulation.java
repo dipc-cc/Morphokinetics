@@ -51,7 +51,9 @@ public class SimpleAgAgGrowthKMCSimulation {
         int sizeX = 256;
         int sizeY = (int) (sizeX /constant_Y);
 
-        Ag_Ag_KMC kmc = new Ag_Ag_KMC(config, sizeX, sizeY, true);
+        Ag_Ag_KMC kmc = new Ag_Ag_KMC(config, (int)(sizeX*1.71), (int)(sizeY*1.71), true);
+        
+       
         return kmc;
     }
     
