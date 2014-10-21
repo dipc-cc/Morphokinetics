@@ -119,7 +119,7 @@ public static final float Y_ratio=(float)Math.sqrt(3)/2.0f;
     }
 
     @Override
-    public Abstract_2D_diffusion_atom getFarAtom(int originType, short Xpos, short Ypos, int distance) {
+    public Abstract_2D_diffusion_atom getFarSite(int originType, short Xpos, short Ypos, int distance) {
 
         
         switch (originType) {

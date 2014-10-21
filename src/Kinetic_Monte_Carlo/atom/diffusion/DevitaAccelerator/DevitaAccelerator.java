@@ -60,7 +60,7 @@ public class DevitaAccelerator {
             possible_distance = 1;
         } else {
 
-            destination = lattice.getFarAtom(sourceAtomType, source.getX(), source.getY(), possible_distance);
+            destination = lattice.getFarSite(sourceAtomType, source.getX(), source.getY(), possible_distance);
         }
 
         remaining_hops -= possible_distance * possible_distance;

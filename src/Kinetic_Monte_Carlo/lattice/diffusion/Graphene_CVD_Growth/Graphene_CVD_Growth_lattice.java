@@ -168,7 +168,7 @@ public class Graphene_CVD_Growth_lattice extends Abstract_2D_diffusion_lattice {
     }
 
     @Override
-    public Abstract_2D_diffusion_atom getFarAtom(int originType, short Xpos, short Ypos, int distance) {
+    public Abstract_2D_diffusion_atom getFarSite(int originType, short Xpos, short Ypos, int distance) {
 
         int[] point = new int[2];
         switch (originType) {

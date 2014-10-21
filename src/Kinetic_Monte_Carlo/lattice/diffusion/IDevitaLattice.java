@@ -16,6 +16,6 @@ public interface IDevitaLattice {
     
     
     public int getAvailableDistance(int atomType,short Xpos, short Ypos,int thresholdDistance);
-    public Abstract_2D_diffusion_atom getFarAtom(int originType,short Xpos, short Ypos,int distance);
+    public Abstract_2D_diffusion_atom getFarSite(int originType,short Xpos, short Ypos,int distance);
     
 }

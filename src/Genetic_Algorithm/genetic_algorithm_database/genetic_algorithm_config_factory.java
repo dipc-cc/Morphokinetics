@@ -21,7 +21,7 @@ import Genetic_Algorithm.Genetic_algorithm_configuration;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import static Samples.convergences.Ag_Ag_growth.AgAgMulthreadedEvaluatorTest.constant_Y;
+import static Samples.AgAg_growth.AgAgMulthreadedEvaluatorTest.constant_Y;
 import java.util.ArrayList;
 import java.util.List;
 
