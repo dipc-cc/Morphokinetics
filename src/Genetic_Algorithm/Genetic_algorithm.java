@@ -31,7 +31,7 @@ public class Genetic_algorithm implements IGenetic_algorithm {
         this.evaluator.evaluate_and_order(this.population, this.config.mainEvaluator, this.config.otherEvaluators);
         
          System.out.println("=============");
-         for (int i = 0; i < 50; i++) {
+         for (int i = 0; i < this.population.size(); i++) {
         System.out.print(population.getIndividual(i).getTotalError()+"| \t");
         for (int a=0;a<population.getIndividual(i).getGeneSize();a++) System.out.print(population.getIndividual(i).getGene(a)+" \t");
          System.out.println();

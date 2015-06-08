@@ -97,6 +97,7 @@ public class Ag_Ag_Basic_PSD_Evaluation extends AbstractPSDEvaluation {
 
     private void _calculate_PSD_from_individual(Individual ind) {
         PSD.reset();
+        double time = 0.0;
         for (int i = 0; i < repeats; i++) {
             KMC.initializeRates(ind.getGenes());
             while (true) {
@@ -104,12 +105,13 @@ public class Ag_Ag_Basic_PSD_Evaluation extends AbstractPSDEvaluation {
                 KMC.getSampledSurface(sampledSurface);
                 PSD.addSurfaceSample(sampledSurface);
                 if (KMC.getIterations() < measureInterval) {
+                	time += KMC.getTime();
                     break;
                 }
             }
             currentSimulation++;
         }
-
+        ind.setSimulationTime(time / repeats);
         PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
         PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
     }
