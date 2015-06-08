@@ -6,6 +6,7 @@ package Genetic_Algorithm.genetic_algorithm_database;
 
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.IEvaluation;
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.AbstractPSDEvaluation;
+import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Ag_ag_growth.Ag_Ag_Basic_PSD_Evaluation;
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Ag_ag_growth.Ag_ag_growth_Threaded_PSD_Evaluation;
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Si_etching.Si_etching_Basic_PSD_Evaluation;
 import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Si_etching.Si_etching_Threaded_PSD_Evaluation;
@@ -80,7 +81,9 @@ public class genetic_algorithm_config_factory {
 
     private AbstractPSDEvaluation get_Ag_Ag_growth_main_evaluator(double deposition_rate, double island_density) {
 
-        Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new Ag_ag_growth_Threaded_PSD_Evaluation(AgAgConfigKMC(deposition_rate,island_density), 30, Integer.MAX_VALUE, 2);
+        //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new Ag_ag_growth_Threaded_PSD_Evaluation(AgAgConfigKMC(deposition_rate,island_density), 30, Integer.MAX_VALUE, 2);
+    	Ag_Ag_Basic_PSD_Evaluation evaluator = new Ag_Ag_Basic_PSD_Evaluation(AgAgConfigKMC(deposition_rate,island_density), 18, Integer.MAX_VALUE);
+
         evaluator.setWheight(1.0f);
         evaluator.setShowGraphics(true);
 
