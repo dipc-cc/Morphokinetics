@@ -53,7 +53,16 @@ public class Si_etching_KMC extends Abstract_etching_KMC {
             }
         }
     }
-
+    public void simulate(int iterations) {
+        
+        iterations_for_last_simulation=0;
+        for (int i = 0; i < iterations; i++) {
+            if (perform_simulation_step()) break;
+            iterations_for_last_simulation++;      
+        } 
+        
+        list.cleanup();
+    }
 
 
     @Override

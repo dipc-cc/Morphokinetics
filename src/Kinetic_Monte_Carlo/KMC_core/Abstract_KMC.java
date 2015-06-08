@@ -55,7 +55,7 @@ public abstract class Abstract_KMC implements IKMC {
         }
     }
 
-    @Override
+    /* @Override
     public void simulate(int iterations) {
       
         iterations_for_last_simulation=0;
@@ -65,7 +65,7 @@ public abstract class Abstract_KMC implements IKMC {
         } 
         
         list.cleanup();
-    }
+    }*/
 
     
     @Override
