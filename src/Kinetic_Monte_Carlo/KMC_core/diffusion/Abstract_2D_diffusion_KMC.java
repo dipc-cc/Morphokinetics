@@ -160,8 +160,11 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
     }
 
     protected boolean diffuseAtom(Abstract_2D_diffusion_atom origin, Abstract_2D_diffusion_atom destination) {
-
-        if ((!origin.isEligible() || destination.isOccupied()) && (origin != destination)) {
+        try{
+        
+        if (!origin.isEligible())
+        	return false;
+        if ( destination.isOccupied() && origin!=destination) {
             return false;
         }
         
