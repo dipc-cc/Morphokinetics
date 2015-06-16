@@ -160,13 +160,13 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
     }
 
     protected boolean diffuseAtom(Abstract_2D_diffusion_atom origin, Abstract_2D_diffusion_atom destination) {
-        try{
+        
         
         if (!origin.isEligible())
         	return false;
         if ( destination.isOccupied() && origin!=destination) {
             return false;
-        }
+        
         
         boolean force_nucleation = (!justCentralFlake && destination.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
         origin.extract();
