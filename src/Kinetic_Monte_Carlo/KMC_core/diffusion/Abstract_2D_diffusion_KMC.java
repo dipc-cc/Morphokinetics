@@ -164,7 +164,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
         
         if (!origin.isEligible())
         	return false;
-        if ( destination.isOccupied() && origin!=destination) {
+        if ( destination.isOccupied() && origin!=destination) 
             return false;
         
         
