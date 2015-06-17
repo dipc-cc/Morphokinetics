@@ -17,6 +17,7 @@ import Genetic_Algorithm.Genetic_Operators.Recombination.RealRecombination;
 import Genetic_Algorithm.Genetic_Operators.Reinsertion.ElitistReinsertion;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.Si_etching.Si_etching_restriction;
 import Genetic_Algorithm.Genetic_Operators.Restrictions.ag_ag.Ag_Ag_restriction;
+import Genetic_Algorithm.Genetic_Operators.Selection.RandomSelection;
 import Genetic_Algorithm.Genetic_Operators.Selection.RankingSelection;
 import Genetic_Algorithm.Genetic_algorithm_configuration;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
@@ -69,6 +70,26 @@ public class genetic_algorithm_config_factory {
 
         return config;
     }
+    
+    public Genetic_algorithm_configuration create_Ag_Ag_dcma_es_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+
+        Genetic_algorithm_configuration config = new Genetic_algorithm_configuration();
+
+        //config.population_size = 100;
+        config.population_size = 5;
+        config.offspring_size = 32;
+        config.population_replacements = 5;
+        config.initialization = new Ag_Ag_initialization();
+        //config.mutation = new BGA_based_mutator();
+        //config.recombination = new RealRecombination();
+        //config.reinsertion = new ElitistReinsertion();
+        config.restriction = new Ag_Ag_restriction(diffusion_rate);
+        config.selection = new RandomSelection();
+        config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate,island_density);
+        config.otherEvaluators = add_no_more_evaluators();
+
+        return config;
+    }
 
     private AbstractPSDEvaluation get_silicon_etching_main_evaluators() {
 
@@ -82,8 +103,8 @@ public class genetic_algorithm_config_factory {
     private AbstractPSDEvaluation get_Ag_Ag_growth_main_evaluator(double deposition_rate, double island_density) {
 
         //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new Ag_ag_growth_Threaded_PSD_Evaluation(AgAgConfigKMC(deposition_rate,island_density), 30, Integer.MAX_VALUE, 2);
-    	Ag_Ag_Basic_PSD_Evaluation evaluator = new Ag_Ag_Basic_PSD_Evaluation(AgAgConfigKMC(deposition_rate,island_density), 18, Integer.MAX_VALUE);
-
+    	Ag_Ag_Basic_PSD_Evaluation evaluator = new Ag_Ag_Basic_PSD_Evaluation(AgAgConfigKMC(deposition_rate,island_density), 1, Integer.MAX_VALUE);
+    	
         evaluator.setWheight(1.0f);
         evaluator.setShowGraphics(true);
 

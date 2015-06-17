@@ -12,46 +12,47 @@ import Genetic_Algorithm.Population;
  * @author Nestor
  */
 public class RankingSelection implements ISelection {
- 
-    
-  private  float   SP = 2f; //selective pressure, choose in interval [1, 2]  
-    
-  
-   public Couple[] Select(Population p, int couples){
-    
-    float[] Fitness=new float[p.size()];
-    for(int i=0;i<p.size();i++){Fitness[p.size()-i-1]=2.0f - SP + 2.0f*(SP - 1.0f)*(i)/(p.size() - 1.0f); }
 
-    Couple[] Couples=new Couple[couples];
-   
-    for(int i=0;i<couples;i++){
-        Couples[i]=new Couple();
-        Couples[i].individual1=p.getIndividual(linearSearch(Fitness));
-        
-        do{ Couples[i].individual2=p.getIndividual(linearSearch(Fitness));}  
-        while(Couples[i].individual1==Couples[i].individual2);
-   }
-   return Couples;
-   }
-    
-   
-   
-   
-    private int linearSearch(float[] probs){
+	private float SP = 2f; // selective pressure, choose in interval [1, 2]
 
-float total=0;
-for(int i=0;i<probs.length;i++){total+=probs[i];}
+	public IndividualGroup[] Select(Population p, int groupCount) {
 
-float selected=((float)utils.StaticRandom.raw())*total;
+		float[] Fitness = new float[p.size()];
+		for (int i = 0; i < p.size(); i++) {
+			Fitness[p.size() - i - 1] = 2.0f - SP + 2.0f * (SP - 1.0f) * (i)
+					/ (p.size() - 1.0f);
+		}
 
-float acc=0;
-int i;
-for(i=0;i<probs.length;i++){
-acc+=probs[i];
-if (acc>selected) return i;
-}
-return i;
-}
-   
-   
+		IndividualGroup[] groups = new IndividualGroup[groupCount];
+
+		for (int i = 0; i < groupCount; i++) {
+			groups[i] = new IndividualGroup(2);
+			groups[i].set(0, p.getIndividual(linearSearch(Fitness)));
+
+			do {
+				groups[i].set(1, p.getIndividual(linearSearch(Fitness)));
+			} while (groups[i].get(0) == groups[i].get(1));
+		}
+		return groups;
+	}
+
+	private int linearSearch(float[] probs) {
+
+		float total = 0;
+		for (int i = 0; i < probs.length; i++) {
+			total += probs[i];
+		}
+
+		float selected = ((float) utils.StaticRandom.raw()) * total;
+
+		float acc = 0;
+		int i;
+		for (i = 0; i < probs.length; i++) {
+			acc += probs[i];
+			if (acc > selected)
+				return i;
+		}
+		return i;
+	}
+
 }

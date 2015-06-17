@@ -34,6 +34,15 @@ public class Ag_Ag_initialization implements IInitializator {
             }
 
             p.setIndividual(i, ind);
+        	
+        	/*Individual i = new Individual(2, 4);
+        	
+        	for (int a = 0; a < 2; a++) {
+        		//i.setGene(a, Math.max(0.1, 1000 * Math.pow(150000, StaticRandom.raw())));
+        		i.setGene(a, -500 + 1000 * StaticRandom.raw());
+        	}
+        	
+        	p.setIndividual(i, ind);*/
         }
         return p;
     }

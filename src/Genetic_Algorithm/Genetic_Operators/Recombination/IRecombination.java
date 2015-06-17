@@ -4,7 +4,7 @@
  */
 package Genetic_Algorithm.Genetic_Operators.Recombination;
 
-import Genetic_Algorithm.Couple;
+import Genetic_Algorithm.IndividualGroup;
 import Genetic_Algorithm.Population;
 
 /**
@@ -13,7 +13,7 @@ import Genetic_Algorithm.Population;
  */
 public interface IRecombination {
     
-public Population recombinate(Couple[] couples);    
+public Population recombinate(IndividualGroup[] groups);    
     
     
 }

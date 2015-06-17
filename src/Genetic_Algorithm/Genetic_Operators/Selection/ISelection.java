@@ -4,7 +4,7 @@
  */
 package Genetic_Algorithm.Genetic_Operators.Selection;
 
-import Genetic_Algorithm.Couple;
+import Genetic_Algorithm.IndividualGroup;
 import Genetic_Algorithm.Population;
 
 /**
@@ -13,7 +13,5 @@ import Genetic_Algorithm.Population;
  */
 public interface ISelection {
     
-    public Couple[]  Select(Population p, int couples);
-    
-    
+    public IndividualGroup[] Select(Population p, int groups);
 }
