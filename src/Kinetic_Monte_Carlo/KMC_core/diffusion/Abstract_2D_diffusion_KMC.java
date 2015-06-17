@@ -97,6 +97,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
     }
     
     public void simulate(int iterations) {
+    	
 		int radius = perimeter.getCurrentRadius();
 		int num_events = 0;// contador de eventos desde el ultimo cambio de radio
 	
@@ -116,7 +117,7 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
 				radius = perimeter.getCurrentRadius();
 				num_events = 0;
 			} else {
-				if ((iterations_for_last_simulation - num_events) * 1.7 <= num_events) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
+				if ((iterations_for_last_simulation - num_events) * 2 <= num_events) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
 					break;
 				
 			}
