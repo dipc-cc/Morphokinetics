@@ -53,7 +53,7 @@ public class Genetic_algorithm implements IGenetic_algorithm {
     
 
     private void iterateOneStep() {
-        Couple[] couples = this.config.selection.Select(this.population, this.config.offspring_size);
+        IndividualGroup[] couples = this.config.selection.Select(this.population, this.config.offspring_size);
         Population offspring = this.config.recombination.recombinate(couples);
 
         int geneSize = population.getIndividual(0).getGeneSize();
