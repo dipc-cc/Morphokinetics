@@ -4,7 +4,7 @@
  */
 package Genetic_Algorithm.Genetic_Operators.Selection;
 
-import Genetic_Algorithm.Couple;
+import Genetic_Algorithm.IndividualGroup;
 import Genetic_Algorithm.Population;
 
 /**
