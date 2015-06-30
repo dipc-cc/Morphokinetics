@@ -14,7 +14,27 @@ import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
  */
 public abstract class Abstract_2D_diffusion_atom extends Abstract_atom {
 
-    protected byte type;
+    @Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + X;
+		result = prime * result + Y;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		
+		Abstract_2D_diffusion_atom other = (Abstract_2D_diffusion_atom) obj;
+		if (X != other.X)
+			return false;
+		if (Y != other.Y)
+			return false;
+		return true;
+	}
+
+	protected byte type;
     protected double[][] probabilities;
     protected double total_probability;
     protected double[] bonds_probability;
@@ -25,7 +45,7 @@ public abstract class Abstract_2D_diffusion_atom extends Abstract_atom {
     protected int multiplier = 1;
     protected Modified_Buffer modified;
     protected Hops_per_step distance_per_step;
-    
+   
 
     public abstract byte get_type_without_neighbor(int neigh_pos);
 

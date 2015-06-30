@@ -78,7 +78,7 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
     private void configureDevitaAccelerator(Hops_per_step distance_per_step) {
         this.accelerator = new DevitaAccelerator(this.lattice, distance_per_step);
        
-        
+        if(accelerator!=null){
         this.accelerator.tryToSpeedUp(0,
                 new DevitaHopsConfig()
                 .setMin_accumulated_steps(100)
@@ -92,7 +92,7 @@ public class Ag_Ag_KMC extends Abstract_2D_diffusion_KMC {
                 .setMax_accumulated_steps(100)
                 .setMin_distance_hops(1)
                 .setMax_distance_hops(5));
-
+        }
     }
 
 }

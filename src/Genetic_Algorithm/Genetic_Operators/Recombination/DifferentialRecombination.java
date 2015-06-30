@@ -82,7 +82,8 @@ public class DifferentialRecombination implements IRecombination {
 			).sum(artmp.multiply(RichMatrix.diag(config.weights)).multiply(artmp.transpose()).apply(OperationFactory.multiply(cmu))));
 		
 		// Adapt step size sigma.
-		config.sigma = config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1));
+		//config.sigma = config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1));
+		config.sigma = Math.max(0.1, config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1)));
 		
 		// Update B and D from C.
 		if (config.counteval - config.eigeneval > config.offSize / (c1 + cmu) / config.n / 10) {
@@ -111,12 +112,15 @@ public class DifferentialRecombination implements IRecombination {
 		// Crossover standard deviation.
 		config.crs = 0.1;
 		
-		if (config.performCmaEs && ( config.offFitness.avg() - Collections.min(config.offFitness) < 10)) {
+		boolean cond1 = (config.offFitness.avg() - Collections.min(config.offFitness) < 10) && (Collections.max(config.D)/Collections.min(config.D)<10) ;
+		boolean cond2 = ((config.sigma * Math.sqrt(Collections.max(config.C.diag())))<10) && (Collections.max(config.D)/Collections.min(config.D)>10) ;
+		boolean cond = (cond1 || cond2);
+		if (config.performCmaEs && cond) {
 			config.p = 0.5;
 			// Crossover mean.
-			config.crm = 1.0;
+			config.crm = 0.85;
 			// Crossover standard deviation.
-			config.crs = 0.1;
+			//config.crs = 0.1;
 		}
 		
 		RichArray f = RichArray.rand(Double.valueOf(groups.length).intValue()).apply(new Operation() {

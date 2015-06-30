@@ -49,9 +49,9 @@ public class DcmaEsConfig {
 	public DcmaEsConfig(Genetic_algorithm_configuration configuration, int dimension) {
 		n = dimension;
 		
-		stopFitness = 1e-8;
+		stopFitness = 1e-12;
 		stopEval =  1e8;
-		gMax = 1e4;
+		gMax = 1e6;
 		
 		offSize = configuration.population_size; //offSize = n * Math.round(28 / Math.sqrt(n));
 		

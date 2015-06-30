@@ -161,11 +161,12 @@ public abstract class Abstract_2D_diffusion_KMC extends Abstract_KMC {
     }
 
     protected boolean diffuseAtom(Abstract_2D_diffusion_atom origin, Abstract_2D_diffusion_atom destination) {
-        
-        
+    	
+        //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
         if (!origin.isEligible())
         	return false;
-        if ( destination.isOccupied() && origin!=destination) 
+        
+        if ( destination.isOccupied() && !origin.equals(destination)) 
             return false;
         
         

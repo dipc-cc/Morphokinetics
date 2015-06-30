@@ -41,7 +41,7 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
 		config.mutation = new Crossover_mutator(dcmaEsConfig);
 		config.reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
         
-		//config.restriction.apply(this.population);
+		config.restriction.apply(this.population);
         
 		//evaluator.evaluate_and_order(this.population, config.mainEvaluator, config.otherEvaluators);
 		double[] fitness = config.mainEvaluator.evaluate(population);
@@ -58,13 +58,14 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
 		dcmaEsConfig.xmean = dcmaEsConfig.offX.recombinate(reducedIndex).multiply(dcmaEsConfig.weights);
 		dcmaEsConfig.sigma = dcmaEsConfig.offX.recombinate(reducedIndex).transpose().std().std();
 		
-		
+		Population p= population;
+		p.order();
         System.out.println("=============");
-        for (int i = 0; i < population.size(); i++) {
-        	System.out.print(population.getIndividual(i).getTotalError()+"| \t");
+        for (int i = 0; i < p.size(); i++) {
+        	System.out.print(p.getIndividual(i).getTotalError()+"| \t");
         
-        	for (int a=0;a<population.getIndividual(i).getGeneSize();a++) {
-        		System.out.print(population.getIndividual(i).getGene(a)+" \t");
+        	for (int a=0;a<p.getIndividual(i).getGeneSize();a++) {
+        		System.out.print(p.getIndividual(i).getGene(a)+" \t");
         	}
         	
         	System.out.println();
@@ -100,7 +101,7 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
 		}
 
         //sometimes it is good to reevaluate the whole population
-        if (currentIteration > 0 && currentIteration % 25 == 0) {
+       // if (currentIteration > 0 && currentIteration % 25 == 0) {
             config.restriction.apply(population);
         	/*for (int i = 0; i < population.size(); i++) {
             	Individual ind = population.getIndividual(i);
@@ -110,14 +111,18 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
             	}
             }*/
             //this.evaluator.evaluate_and_order(this.population, this.config.mainEvaluator, this.config.otherEvaluators);;
-            fitness = config.mainEvaluator.evaluate(population);
-            //fitness = myEvaluate(population);
-            for (int i = 0; i < fitness.length; i++) {
+        
+		//fitness = config.mainEvaluator.evaluate(population);
+           
+		//fitness = myEvaluate(population);
+           
+	/*	
+		 for (int i = 0; i < fitness.length; i++) {
     			dcmaEsConfig.offFitness.set(i, fitness[i]);
     			population.getIndividual(i).setError(0, fitness[i]);
     			dcmaEsConfig.counteval++;
     		}
-        }
+        }*/
                    
        population = config.reinsertion.Reinsert(population, offspring, 0);
        
@@ -140,6 +145,8 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
 					|| dcmaEsConfig.D.max() > 1e7 * dcmaEsConfig.D.min()) {
 				break;
 			}
+		     if(this.getBestError()<180)
+		    	 break;
 		}
 		
 		offIndex = dcmaEsConfig.offFitness.sortedIndexes();
@@ -196,12 +203,16 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
     }
 	
 	public Individual getBestIndividual() {
-		return population.getIndividual(offIndex[0]);
+		Population p =  new Population(population.getIndividuals());
+		p.order();
+		return p.getIndividual(0);
     }
 
 	@Override
 	public double getBestError() {
-		return population.getIndividual(offIndex[0]).getTotalError();
+		Population p =  new Population(population.getIndividuals());
+		p.order();
+		return p.getIndividual(0).getTotalError();
 	}
 
 	@Override

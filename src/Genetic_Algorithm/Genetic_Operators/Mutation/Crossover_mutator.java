@@ -23,12 +23,15 @@ public class Crossover_mutator implements IMutation {
 			
 			// Crossover.
 			RichArray jr = new RichArray(config.n, 1);
-			Random random = new Random();				
+			Random random = new Random();
+			double jr = Math.ceil(config.n * random.nextDouble());
+		
+			
 			for (int j = 0; j < config.n; j++) {
 				// Normal distribution with mean Crm and standard deviation Crs.
 				double cr = config.crm + config.crs * random.nextGaussian();
 				
-				if (random.nextDouble() > cr && j != jr.get(j)) {
+				if (random.nextDouble() > cr && j != jr) {
 					child.setGene(j, config.offX.get(k).get(j));
 				}
 			}

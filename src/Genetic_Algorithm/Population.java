@@ -15,12 +15,21 @@ package Genetic_Algorithm;
  */
 public class Population {
 
-    private Individual[] Individuals;
+    public Individual[] getIndividuals() {
+		return Individuals;
+	}
+
+	private Individual[] Individuals;
 
     public Population(int size) {
         Individuals = new Individual[size];
     }
-
+    public Population(Individual[] p) {
+        Individuals = new Individual[p.length];
+        for ( int i =0; i< p.length; i++)
+        	Individuals[i]= p[i];
+        
+    }
     public Individual getIndividual(int pos) {
         return Individuals[pos];
     }
