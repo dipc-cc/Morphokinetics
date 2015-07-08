@@ -6,9 +6,9 @@
 package Samples.convergences.Ag_Ag_growth;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
-import geneticAlgorithm.Genetic_algorithm;
-import geneticAlgorithm.Genetic_algorithm_configuration;
-import geneticAlgorithm.IGenetic_algorithm;
+import geneticAlgorithm.GeneticAlgorithm;
+import geneticAlgorithm.GeneticAlgorithmConfiguration;
+import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
 import Graphic_interfaces.GA_convergence.GA_progress_frame;
@@ -28,10 +28,10 @@ public class AgAgKMCConvergence {
         double island_density = new Ag_Ag_growth_rates_factory().getIslandDensity("COX_PRB", experitental_temp);
         double diffusion_rate = new Ag_Ag_growth_rates_factory().getRates("COX_PRB", experitental_temp)[0];
 
-        Genetic_algorithm_configuration geneticConfiguration = new genetic_algorithm_config_factory()
+        GeneticAlgorithmConfiguration geneticConfiguration = new genetic_algorithm_config_factory()
                 .create_Ag_Ag_convergence_configuration(diffusion_rate, island_density, deposition_rate);
 
-        Genetic_algorithm GA = new Genetic_algorithm(geneticConfiguration);
+        GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
 
         new GA_progress_frame(GA).setVisible(true);
         AbstractPSDEvaluation evaluator = geneticConfiguration.mainEvaluator;
@@ -53,7 +53,7 @@ public class AgAgKMCConvergence {
 
     }
     
-        private static void printResult(IGenetic_algorithm GA) {
+        private static void printResult(IGeneticAlgorithm GA) {
         Individual individual = GA.getIndividual(0);
         System.out.print(individual.getTotalError() + " ");
         for (int gene = 0; gene < individual.getGeneSize(); gene++) {

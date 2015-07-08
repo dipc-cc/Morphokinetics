@@ -10,7 +10,7 @@ import geneticAlgorithm.Individual;
  *
  * @author Nestor
  */
-public abstract class Gene_restriction {
+public abstract class GeneRestriction {
     
     
     
@@ -22,7 +22,7 @@ public abstract class Gene_restriction {
     protected int genePosition;    
     
     
-    public Gene_restriction(int genePosition){this.genePosition=genePosition;}
+    public GeneRestriction(int genePosition){this.genePosition=genePosition;}
     
     public abstract void restrictGene(Individual i);
     

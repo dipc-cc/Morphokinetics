@@ -15,7 +15,7 @@ import java.util.List;
  */
 public abstract class RestrictionOperator {
 
-    protected List<Gene_restriction> genesRestriction= new ArrayList();
+    protected List<GeneRestriction> genesRestriction= new ArrayList();
 
 
     
@@ -39,7 +39,7 @@ public abstract class RestrictionOperator {
             boolean restricted = false;
             for (int j = 0; j < genesRestriction.size(); j++) {
 
-                if (genesRestriction.get(j).getGenePosition() == i && genesRestriction.get(j).getRestrictionType() > Gene_restriction.BOUNDED_VALUES) {
+                if (genesRestriction.get(j).getGenePosition() == i && genesRestriction.get(j).getRestrictionType() > GeneRestriction.BOUNDED_VALUES) {
                     restricted = true;
                     break;
                 }

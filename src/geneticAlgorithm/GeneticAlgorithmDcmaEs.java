@@ -12,10 +12,10 @@ import geneticAlgorithm.geneticOperators.recombination.DifferentialRecombination
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistAllReinsertion;
 import Graphic_interfaces.GA_convergence.IGA_progress_frame;
 
-public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
+public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
 	
 	private Population population;
-    private Genetic_algorithm_configuration config;
+    private GeneticAlgorithmConfiguration config;
     private BasicEvaluator evaluator;
     private int currentIteration = 0;
     private int totalIterations = 1;
@@ -26,13 +26,13 @@ public class Genetic_algorithm_dcma_es implements IGenetic_algorithm {
     Integer[] offIndex;
     Integer[] reducedIndex;
     
-    public Genetic_algorithm_dcma_es(Genetic_algorithm_configuration configuration) {
+    public GeneticAlgorithmDcmaEs(GeneticAlgorithmConfiguration configuration) {
     	config = configuration;
     	evaluator = new BasicEvaluator();
     }
 
 	@Override
-	public IGenetic_algorithm initialize() {
+	public IGeneticAlgorithm initialize() {
 		population = config.initialization.createRandomPopulation(config.population_size);
 		
 		// Inicializamos la clase que contiene variables globales del algoritmo.

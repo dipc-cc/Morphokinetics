@@ -11,15 +11,15 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGr
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingBasicPsdEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingThreadedPsdEvaluation;
 import geneticAlgorithm.geneticOperators.mutation.BGA_based_mutator;
-import geneticAlgorithm.geneticOperators.populationInitialization.Si_etching.Si_etching_initialization;
-import geneticAlgorithm.geneticOperators.populationInitialization.ag_ag.Ag_Ag_initialization;
+import geneticAlgorithm.geneticOperators.populationInitialization.siEtching.SiEtchingInitialization;
+import geneticAlgorithm.geneticOperators.populationInitialization.agAg.AgAgInitialization;
 import geneticAlgorithm.geneticOperators.recombination.RealRecombination;
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistReinsertion;
-import geneticAlgorithm.geneticOperators.restrictions.Si_etching.Si_etching_restriction;
-import geneticAlgorithm.geneticOperators.restrictions.ag_ag.Ag_Ag_restriction;
+import geneticAlgorithm.geneticOperators.restrictions.siEtching.SiEtchingRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.agAg.AgAgRestriction;
 import geneticAlgorithm.geneticOperators.selection.RandomSelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
-import geneticAlgorithm.Genetic_algorithm_configuration;
+import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
@@ -33,18 +33,18 @@ import java.util.List;
  */
 public class genetic_algorithm_config_factory {
 
-    public Genetic_algorithm_configuration create_silicon_convergence_configuration() {
+    public GeneticAlgorithmConfiguration create_silicon_convergence_configuration() {
 
-        Genetic_algorithm_configuration config = new Genetic_algorithm_configuration();
+        GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
         config.population_size = 100;
         config.offspring_size = 32;
         config.population_replacements = 5;
-        config.initialization = new Si_etching_initialization();
+        config.initialization = new SiEtchingInitialization();
         config.mutation = new BGA_based_mutator();
         config.recombination = new RealRecombination();
         config.reinsertion = new ElitistReinsertion();
-        config.restriction = new Si_etching_restriction();
+        config.restriction = new SiEtchingRestriction();
         config.selection = new RankingSelection();
         config.mainEvaluator = get_silicon_etching_main_evaluators();
         config.otherEvaluators = add_no_more_evaluators();
@@ -52,18 +52,18 @@ public class genetic_algorithm_config_factory {
         return config;
     }
 
-    public Genetic_algorithm_configuration create_Ag_Ag_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+    public GeneticAlgorithmConfiguration create_Ag_Ag_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
 
-        Genetic_algorithm_configuration config = new Genetic_algorithm_configuration();
+        GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
         config.population_size = 100;
         config.offspring_size = 32;
         config.population_replacements = 5;
-        config.initialization = new Ag_Ag_initialization();
+        config.initialization = new AgAgInitialization();
         config.mutation = new BGA_based_mutator();
         config.recombination = new RealRecombination();
         config.reinsertion = new ElitistReinsertion();
-        config.restriction = new Ag_Ag_restriction(diffusion_rate);
+        config.restriction = new AgAgRestriction(diffusion_rate);
         config.selection = new RankingSelection();
         config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate,island_density);
         config.otherEvaluators = add_no_more_evaluators();
@@ -71,19 +71,19 @@ public class genetic_algorithm_config_factory {
         return config;
     }
     
-    public Genetic_algorithm_configuration create_Ag_Ag_dcma_es_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+    public GeneticAlgorithmConfiguration create_Ag_Ag_dcma_es_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
 
-        Genetic_algorithm_configuration config = new Genetic_algorithm_configuration();
+        GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
         //config.population_size = 100;
         config.population_size = 5;
         config.offspring_size = 32;
         config.population_replacements = 5;
-        config.initialization = new Ag_Ag_initialization();
+        config.initialization = new AgAgInitialization();
         //config.mutation = new BGA_based_mutator();
         //config.recombination = new RealRecombination();
         //config.reinsertion = new ElitistReinsertion();
-        config.restriction = new Ag_Ag_restriction(diffusion_rate);
+        config.restriction = new AgAgRestriction(diffusion_rate);
         config.selection = new RandomSelection();
         config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate,island_density);
         config.otherEvaluators = add_no_more_evaluators();

@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.populationInitialization.Si_etching;
+package geneticAlgorithm.geneticOperators.populationInitialization.siEtching;
 
 import geneticAlgorithm.geneticOperators.populationInitialization.IInitializator;
 import geneticAlgorithm.Individual;
@@ -13,7 +13,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class Si_etching_initialization implements IInitializator {
+public class SiEtchingInitialization implements IInitializator {
 
     //simplest way of initialization, a pure random value. Ag_ag initialization has a more robuts initialization method, recommended.
     @Override

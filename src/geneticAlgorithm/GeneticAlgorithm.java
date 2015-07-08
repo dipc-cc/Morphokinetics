@@ -11,21 +11,21 @@ import Graphic_interfaces.GA_convergence.IGA_progress_frame;
  *
  * @author Nestor
  */
-public class Genetic_algorithm implements IGenetic_algorithm {
+public class GeneticAlgorithm implements IGeneticAlgorithm {
 
     private Population population;
-    private Genetic_algorithm_configuration config;
+    private GeneticAlgorithmConfiguration config;
     private BasicEvaluator evaluator;
     private int currentIteration = 0;
     private int totalIterations = 1;
     private IGA_progress_frame graphics;
 
-    public Genetic_algorithm(Genetic_algorithm_configuration configuration) {
+    public GeneticAlgorithm(GeneticAlgorithmConfiguration configuration) {
         this.config = configuration;
         this.evaluator = new BasicEvaluator();
     }
 
-    public IGenetic_algorithm initialize() {
+    public IGeneticAlgorithm initialize() {
         this.population = config.initialization.createRandomPopulation(config.population_size);
         this.config.restriction.apply(this.population);
         this.evaluator.evaluate_and_order(this.population, this.config.mainEvaluator, this.config.otherEvaluators);

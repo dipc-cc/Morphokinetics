@@ -10,11 +10,11 @@ import geneticAlgorithm.Individual;
  *
  * @author Nestor
  */
-public class Replicated_gene_restriction extends Gene_restriction {
+public class ReplicatedGeneRestriction extends GeneRestriction {
 
     private int genePositionToReplicate;
 
-    public Replicated_gene_restriction(int genePositionToReplicate, int genePosition) {
+    public ReplicatedGeneRestriction(int genePositionToReplicate, int genePosition) {
         super(genePosition);
         this.genePositionToReplicate = genePositionToReplicate;
     }
@@ -27,9 +27,9 @@ public class Replicated_gene_restriction extends Gene_restriction {
     @Override
     public int getRestrictionType() {
         if (genePosition == genePositionToReplicate) {
-            return Gene_restriction.NO_RESTRICTION;
+            return GeneRestriction.NO_RESTRICTION;
         } else {
-            return Gene_restriction.REPLICATE_GENE;
+            return GeneRestriction.REPLICATE_GENE;
         }
     }
 }

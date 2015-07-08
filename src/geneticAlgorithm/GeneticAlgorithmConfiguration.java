@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author Nestor
  */
-public class Genetic_algorithm_configuration {
+public class GeneticAlgorithmConfiguration {
 
     public AbstractPSDEvaluation mainEvaluator;
     public List<IEvaluation> otherEvaluators;
@@ -33,7 +33,7 @@ public class Genetic_algorithm_configuration {
     public int population_replacements;
     public double expected_simulation_time;
 
-    public Genetic_algorithm_configuration setExperimentalPSD(float[][] PSD_experimental) {
+    public GeneticAlgorithmConfiguration setExperimentalPSD(float[][] PSD_experimental) {
         mainEvaluator.setPSD(PSD_experimental);
         return this;
     }

@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.restrictions.Si_etching;
+package geneticAlgorithm.geneticOperators.restrictions.siEtching;
 
-import geneticAlgorithm.geneticOperators.restrictions.Bounded_gene_restriction;
-import geneticAlgorithm.geneticOperators.restrictions.Fixed_gene_restriction;
-import geneticAlgorithm.geneticOperators.restrictions.Gene_restriction;
-import geneticAlgorithm.geneticOperators.restrictions.Replicated_gene_restriction;
+import geneticAlgorithm.geneticOperators.restrictions.BoundedGeneRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.FixedGeneRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.GeneRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.ReplicatedGeneRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,35 +16,35 @@ import java.util.List;
  *
  * @author Nestor
  */
-public class Si_etching_restriction extends RestrictionOperator {
+public class SiEtchingRestriction extends RestrictionOperator {
 
    
 
  
-    public Si_etching_restriction() {
+    public SiEtchingRestriction() {
 
         genesRestriction = new ArrayList();
 
         for (int n1 = 0; n1 < 4; n1++) {
             for (int n2 = 0; n2 < 16; n2++) {
                 int currentGene = n1 * 16 + n2;
-                genesRestriction.add(new Bounded_gene_restriction(1e-8, 1.0, currentGene));
+                genesRestriction.add(new BoundedGeneRestriction(1e-8, 1.0, currentGene));
 
                
                 if (n1 == 0 || n2==0) {
-                    genesRestriction.add(new Fixed_gene_restriction(1.0, currentGene));
+                    genesRestriction.add(new FixedGeneRestriction(1.0, currentGene));
                 }
                 if (n1 == 4) {
-                    genesRestriction.add(new Fixed_gene_restriction(1e-8, currentGene));
+                    genesRestriction.add(new FixedGeneRestriction(1e-8, currentGene));
                 }
                 if (n1 == 1) {
-                    genesRestriction.add(new Replicated_gene_restriction(1 * 16+1, currentGene));
+                    genesRestriction.add(new ReplicatedGeneRestriction(1 * 16+1, currentGene));
                 }
                 if (n1 == 2 && n2 != 8 && n2 != 7) {
-                    genesRestriction.add(new Replicated_gene_restriction(2 * 16+1, currentGene));
+                    genesRestriction.add(new ReplicatedGeneRestriction(2 * 16+1, currentGene));
                 }
                 if (n1 == 3 && n2 != 9) {
-                    genesRestriction.add(new Replicated_gene_restriction(3 * 16+1, currentGene));
+                    genesRestriction.add(new ReplicatedGeneRestriction(3 * 16+1, currentGene));
                 }
 
             }

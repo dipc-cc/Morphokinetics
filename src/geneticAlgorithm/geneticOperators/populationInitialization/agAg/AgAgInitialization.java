@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.populationInitialization.ag_ag;
+package geneticAlgorithm.geneticOperators.populationInitialization.agAg;
 
 import geneticAlgorithm.geneticOperators.populationInitialization.IInitializator;
 import geneticAlgorithm.Individual;
@@ -13,7 +13,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class Ag_Ag_initialization implements IInitializator {
+public class AgAgInitialization implements IInitializator {
 
     //robust initialization methods, it uses a logarithmic distribution of process rates, more similar to what is expected from a real system.
     @Override

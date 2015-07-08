@@ -10,9 +10,9 @@ import Graphic_interfaces.GA_convergence.IGA_progress_frame;
  *
  * @author Nestor
  */
-public interface IGenetic_algorithm extends IProgressable {
+public interface IGeneticAlgorithm extends IProgressable {
     
-    public IGenetic_algorithm initialize();
+    public IGeneticAlgorithm initialize();
     public int getCurrentIteration();
     public int getTotalIterations();
     public void setGraphics(IGA_progress_frame graphics);

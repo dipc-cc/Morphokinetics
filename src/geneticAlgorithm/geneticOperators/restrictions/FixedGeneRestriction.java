@@ -10,11 +10,11 @@ import geneticAlgorithm.Individual;
  *
  * @author Nestor
  */
-public class Fixed_gene_restriction extends Gene_restriction {
+public class FixedGeneRestriction extends GeneRestriction {
     
         private double fixedValue;
 
-    public Fixed_gene_restriction(double fixedValue, int genePosition) {
+    public FixedGeneRestriction(double fixedValue, int genePosition) {
         super(genePosition);
         this.fixedValue = fixedValue;
     }
@@ -26,7 +26,7 @@ public class Fixed_gene_restriction extends Gene_restriction {
 
     @Override
     public int getRestrictionType() {
-        return Gene_restriction.FIXED_VALUE;
+        return GeneRestriction.FIXED_VALUE;
     }
 
 

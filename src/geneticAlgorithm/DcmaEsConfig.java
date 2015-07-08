@@ -46,7 +46,7 @@ public class DcmaEsConfig {
 	//public ArrayList<List<Double>> dat = new ArrayList<List<Double>>();
 	//public ArrayList<List<Double>> datx = new ArrayList<List<Double>>();
 	
-	public DcmaEsConfig(Genetic_algorithm_configuration configuration, int dimension) {
+	public DcmaEsConfig(GeneticAlgorithmConfiguration configuration, int dimension) {
 		n = dimension;
 		
 		stopFitness = 1e-12;

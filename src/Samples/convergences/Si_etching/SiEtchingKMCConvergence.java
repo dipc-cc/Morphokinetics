@@ -5,9 +5,9 @@
 package Samples.convergences.Si_etching;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
-import geneticAlgorithm.Genetic_algorithm;
-import geneticAlgorithm.Genetic_algorithm_configuration;
-import geneticAlgorithm.IGenetic_algorithm;
+import geneticAlgorithm.GeneticAlgorithm;
+import geneticAlgorithm.GeneticAlgorithmConfiguration;
+import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
 import Graphic_interfaces.GA_convergence.GA_progress_frame;
@@ -31,9 +31,9 @@ public class SiEtchingKMCConvergence {
     public void performConvergence() {
 
 
-        Genetic_algorithm_configuration geneticConfiguration = new genetic_algorithm_config_factory()
+        GeneticAlgorithmConfiguration geneticConfiguration = new genetic_algorithm_config_factory()
                 .create_silicon_convergence_configuration();
-        Genetic_algorithm GA = new Genetic_algorithm(geneticConfiguration);
+        GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
         new GA_progress_frame(GA).setVisible(true);
         AbstractPSDEvaluation evaluator=geneticConfiguration.mainEvaluator;
         
@@ -54,7 +54,7 @@ public class SiEtchingKMCConvergence {
         }
     }
 
-    private void printResult(IGenetic_algorithm GA) {
+    private void printResult(IGeneticAlgorithm GA) {
         Individual individual = GA.getIndividual(0);
         System.out.print(individual.getTotalError() + " ");
         for (int gene = 0; gene < individual.getGeneSize(); gene++) {

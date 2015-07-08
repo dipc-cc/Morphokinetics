@@ -10,11 +10,11 @@ import geneticAlgorithm.Individual;
  *
  * @author Nestor
  */
-public class Bounded_gene_restriction extends Gene_restriction {
+public class BoundedGeneRestriction extends GeneRestriction {
     
         private double minValue,maxValue;
 
-    public Bounded_gene_restriction(double minValue,double maxValue, int genePosition) {
+    public BoundedGeneRestriction(double minValue,double maxValue, int genePosition) {
         super(genePosition);
         this.minValue = minValue;
         this.maxValue = maxValue;
@@ -28,7 +28,7 @@ public class Bounded_gene_restriction extends Gene_restriction {
 
     @Override
     public int getRestrictionType() {
-        return Gene_restriction.BOUNDED_VALUES;
+        return GeneRestriction.BOUNDED_VALUES;
     }
 
 

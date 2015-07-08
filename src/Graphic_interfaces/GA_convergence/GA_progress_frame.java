@@ -4,7 +4,7 @@
  */
 package Graphic_interfaces.GA_convergence;
 
-import geneticAlgorithm.IGenetic_algorithm;
+import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import java.awt.Color;
 import javax.swing.UIManager;
@@ -19,12 +19,12 @@ public class GA_progress_frame extends javax.swing.JFrame implements IGA_progres
     /**
      * Creates new form NewJFrame
      */
-    private IGenetic_algorithm geenticAlgorithm;
+    private IGeneticAlgorithm geenticAlgorithm;
     private Error_panel panel;
     private ProgressUpdater updater;
     private int totalIterations;
 
-    public GA_progress_frame(IGenetic_algorithm geenticAlgorithm) {
+    public GA_progress_frame(IGeneticAlgorithm geenticAlgorithm) {
 
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
