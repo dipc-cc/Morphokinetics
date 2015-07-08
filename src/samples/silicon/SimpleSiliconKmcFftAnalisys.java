@@ -1,10 +1,10 @@
 package samples.silicon;
 
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.list.ListConfiguration;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -22,9 +22,9 @@ public class SimpleSiliconKmcFftAnalisys {
 
         System.out.println("Simple 2D FFT analisys of an etched silicon surface");
         
-            Si_etching_KMC_config config = configKMC();
+            SiEtchingKmcConfig config = configKMC();
         
-        Si_etching_KMC KMC = new Si_etching_KMC(config);
+        SiEtchingKmc KMC = new SiEtchingKmc(config);
 
         KMC.initializeRates(new SiEtchRatesFactory()
                 .getRates("Gosalvez_PRE", 350));
@@ -46,12 +46,12 @@ public class SimpleSiliconKmcFftAnalisys {
                  .setMesh(MathUtils.avg_Filter(PSD.getPSD(),1));
     }
 
-    private static Si_etching_KMC_config configKMC() {
-        List_configuration listConfig=  new List_configuration()
-          .setList_type(List_configuration.BINNED_LIST)
+    private static SiEtchingKmcConfig configKMC() {
+        ListConfiguration listConfig=  new ListConfiguration()
+          .setList_type(ListConfiguration.BINNED_LIST)
           .setBins_per_level(16)
           .set_extra_levels(0);
-        Si_etching_KMC_config config = new Si_etching_KMC_config()
+        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                                     .setMillerX(1)
                                     .setMillerY(1)
                                     .setMillerZ(0)

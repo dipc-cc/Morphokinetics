@@ -2,8 +2,8 @@ package samples.basic;
 
 
 import graphicInterfaces.basic.BasicFrame;
-import Kinetic_Monte_Carlo.KMC_core.etching.basic_KMC.Basic_KMC;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
+import kineticMonteCarlo.list.ListConfiguration;
 import ratesLibrary.basic.BasicEtchRatesFactory;
 import utils.Wait;
 
@@ -23,12 +23,12 @@ public class SimpleBasicKmcSimulation {
     
       System.out.println("Simple simulation of the Basic KMC");  
         
-      List_configuration listConfig=  new List_configuration()
-              .setList_type(List_configuration.BINNED_LIST)
+      ListConfiguration listConfig=  new ListConfiguration()
+              .setList_type(ListConfiguration.BINNED_LIST)
               .setBins_per_level(100)
               .set_extra_levels(0);
               
-      Basic_KMC KMC=new Basic_KMC(listConfig,512,128);
+      BasicKmc KMC=new BasicKmc(listConfig,512,128);
       
       BasicFrame panel=new BasicFrame(3);  
       

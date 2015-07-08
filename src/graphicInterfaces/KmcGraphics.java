@@ -4,7 +4,7 @@
  */
 package graphicInterfaces;
 
-import Kinetic_Monte_Carlo.KMC_core.Abstract_KMC;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
 
 /**
  *
@@ -12,6 +12,6 @@ import Kinetic_Monte_Carlo.KMC_core.Abstract_KMC;
  */
 public interface KmcGraphics {
     
-    public void drawKMC(Abstract_KMC KMC);
+    public void drawKMC(AbstractKmc KMC);
     
 }

@@ -9,8 +9,8 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGr
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgGrowthThreadedPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
+import kineticMonteCarlo.list.ListConfiguration;
 import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 
 ;
@@ -25,14 +25,14 @@ public class AgAgMultithreadedEvaluatorTest {
 
     public static void main(String[] args) {
 
-        List_configuration listConfig = new List_configuration()
-                .setList_type(List_configuration.LINEAR_LIST);
+        ListConfiguration listConfig = new ListConfiguration()
+                .setList_type(ListConfiguration.LINEAR_LIST);
 
         float experitental_temp = 135;
         double deposition_rate = new AgAgGrowthRatesFactory().getDepositionRate("COX_PRB", experitental_temp);
         double island_density = new AgAgGrowthRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
 
-        Ag_Ag_KMC_config config = new Ag_Ag_KMC_config(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
+        AgAgKmcConfig config = new AgAgKmcConfig(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 
         //Ag_ag_growth_Threaded_PSD_Evaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
         AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);

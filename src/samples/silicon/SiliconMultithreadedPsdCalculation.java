@@ -9,8 +9,8 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.Abstra
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingThreadedPsdEvaluation;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.list.ListConfiguration;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**
@@ -23,7 +23,7 @@ public class SiliconMultithreadedPsdCalculation {
         
         System.out.println("Multithreaded PSD calculation from a KMC configuration");
         
-        Si_etching_KMC_config config = configKMC();
+        SiEtchingKmcConfig config = configKMC();
         
         AbstractEvaluation evaluation = new SiEtchingThreadedPsdEvaluation(config, 20, 10000, 4);
                 evaluation.setWheight(1.0f);
@@ -42,13 +42,13 @@ public class SiliconMultithreadedPsdCalculation {
                 .setMesh(PSD);
     }
 
-    private static Si_etching_KMC_config configKMC() {
-        List_configuration listConfig=  new List_configuration()
-              .setList_type(List_configuration.BINNED_LIST)
+    private static SiEtchingKmcConfig configKMC() {
+        ListConfiguration listConfig=  new ListConfiguration()
+              .setList_type(ListConfiguration.BINNED_LIST)
               .setBins_per_level(12)
               .set_extra_levels(1);
         
-        Si_etching_KMC_config config = new Si_etching_KMC_config()
+        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                 .setMillerX(1)
                 .setMillerY(0)
                 .setMillerZ(0)

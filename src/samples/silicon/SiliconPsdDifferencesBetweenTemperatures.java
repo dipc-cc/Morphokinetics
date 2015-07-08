@@ -1,10 +1,10 @@
 package samples.silicon;
 
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.list.ListConfiguration;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -22,9 +22,9 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
           System.out.println("Showing PSD differences between two temperatures ");
         
-            Si_etching_KMC_config config = configKMC();
+            SiEtchingKmcConfig config = configKMC();
         
-        Si_etching_KMC KMC = new Si_etching_KMC(config);
+        SiEtchingKmc KMC = new SiEtchingKmc(config);
 
         float[][] PSD300_1 = 
                 getPSDfromSimulation(KMC, 300);
@@ -66,7 +66,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
             .setMesh(MathUtils.avg_Filter(Relative_error_2, 1));
     }
 
-    private static float[][] getPSDfromSimulation(Si_etching_KMC KMC, int temperature) {
+    private static float[][] getPSDfromSimulation(SiEtchingKmc KMC, int temperature) {
 
         PSD_signature_2D PSD = new PSD_signature_2D(KMC.getLattice().getSizeY()*2 , KMC.getLattice().getSizeX()*2 );
         float[][] surface = new float[KMC.getLattice().getSizeY()*2][KMC.getLattice().getSizeX()*2 ];
@@ -90,12 +90,12 @@ public class SiliconPsdDifferencesBetweenTemperatures {
         return PSD.getPSD();
     }
 
-    private static Si_etching_KMC_config configKMC() {
-        List_configuration listConfig=  new List_configuration()
-           .setList_type(List_configuration.BINNED_LIST)
+    private static SiEtchingKmcConfig configKMC() {
+        ListConfiguration listConfig=  new ListConfiguration()
+           .setList_type(ListConfiguration.BINNED_LIST)
            .setBins_per_level(100)
            .set_extra_levels(0);
-        Si_etching_KMC_config config = new Si_etching_KMC_config()
+        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                                     .setMillerX(1)
                                     .setMillerY(0)
                                     .setMillerZ(0)

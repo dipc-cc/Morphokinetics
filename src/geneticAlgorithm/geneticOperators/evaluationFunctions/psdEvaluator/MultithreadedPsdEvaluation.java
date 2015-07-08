@@ -4,18 +4,18 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator;
 
-import Kinetic_Monte_Carlo.KMC_core.worker.IFinish_listener;
-import Kinetic_Monte_Carlo.KMC_core.worker.IInterval_listener;
-import Kinetic_Monte_Carlo.KMC_core.worker.KMC_worker;
+import kineticMonteCarlo.kmcCore.worker.IFinishListener;
+import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
+import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import java.util.concurrent.Semaphore;
 
 /**
  *
  * @author Nestor
  */
-public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation implements IFinish_listener, IInterval_listener {
+public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation implements IFinishListener, IIntervalListener {
 
-    protected KMC_worker[] workers;
+    protected KmcWorker[] workers;
     protected int num_threads;
     protected int finishedSimulation;
     protected Semaphore evalation_complete;
@@ -24,7 +24,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation i
     public MultithreadedPsdEvaluation(int repeats, int measureInterval,int num_threads) {
         super(repeats, measureInterval);
         
-        this.workers=new KMC_worker[num_threads];
+        this.workers=new KmcWorker[num_threads];
         this.num_threads=num_threads;
         evalation_complete = new Semaphore(0);
     }

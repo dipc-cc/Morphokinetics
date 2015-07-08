@@ -1,8 +1,8 @@
 package graphicInterfaces.basic;
 
 import graphicInterfaces.KmcGraphics;
-import Kinetic_Monte_Carlo.KMC_core.Abstract_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.basic_KMC.Basic_KMC;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
+import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
 
 public class BasicFrame extends javax.swing.JFrame implements KmcGraphics {
 
@@ -14,9 +14,9 @@ public class BasicFrame extends javax.swing.JFrame implements KmcGraphics {
         this.setVisible(true);
     }
     
-    public void drawKMC(Abstract_KMC kmc) {
+    public void drawKMC(AbstractKmc kmc) {
         this.setSize(kmc.getLattice().getSizeX()*zoom+4, kmc.getLattice().getSizeY()*zoom+16);
-        ((BasicPanel)jPanel1).setKMC((Basic_KMC)kmc);
+        ((BasicPanel)jPanel1).setKMC((BasicKmc)kmc);
         ((BasicPanel)jPanel1).repaint();
     }
 

@@ -10,9 +10,9 @@ import graphicInterfaces.siliconEtching.mouseBehaviors.MouseZoom;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseTranslate;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRotate;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRocking;
-import Kinetic_Monte_Carlo.list.Abstract_list;
-import Kinetic_Monte_Carlo.atom.etching.Si_etching.Si_atom;
-import Kinetic_Monte_Carlo.KMC_core.Abstract_KMC;
+import kineticMonteCarlo.list.AbstractList;
+import kineticMonteCarlo.atom.etching.siEtching.SiAtom;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
 import java.awt.GraphicsConfiguration;
 import com.sun.j3d.utils.universe.*;
 import javax.media.j3d.*;
@@ -31,7 +31,7 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
         this.setVisible(true);
     }
 
-    public void drawKMC(Abstract_KMC KMC) {
+    public void drawKMC(AbstractKmc KMC) {
 
         if (sil == null) {
             sil = new SiliconPointArray(new float[]{});
@@ -154,9 +154,9 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
         return materialAppear;
     }
 
-    private float update(Abstract_KMC KMC) {
+    private float update(AbstractKmc KMC) {
 
-        Abstract_list surface = KMC.getSurfaceList();
+        AbstractList surface = KMC.getSurfaceList();
         float sizeX = 0;
         float sizeY = 0;
 
@@ -164,7 +164,7 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
 
         float max_Z = 0;
         for (int i = 0; i < surface.getSize(); i++) {
-            Si_atom atom = (Si_atom) surface.getAtomAt(i);
+            SiAtom atom = (SiAtom) surface.getAtomAt(i);
             surface_points[i * 3] = atom.getX();
             sizeX = Math.max(atom.getX(), sizeX);
             surface_points[i * 3 + 1] = atom.getY();

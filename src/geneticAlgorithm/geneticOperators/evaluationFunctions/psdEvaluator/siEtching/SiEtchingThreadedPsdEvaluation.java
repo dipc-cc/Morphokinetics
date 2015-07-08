@@ -9,11 +9,11 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.Multit
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import graphicInterfaces.siliconEtching.SiliconFrame;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.KMC_core.worker.IFinish_listener;
-import Kinetic_Monte_Carlo.KMC_core.worker.IInterval_listener;
-import Kinetic_Monte_Carlo.KMC_core.worker.KMC_worker;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.worker.IFinishListener;
+import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
+import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -21,7 +21,7 @@ import utils.PSD_analysis.PSD_signature_2D;
  *
  * @author Nestor
  */
-public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinish_listener, IInterval_listener {
+public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinishListener, IIntervalListener {
 
     private static final int FPS_GRAPHICS = 2;
     
@@ -32,12 +32,12 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     private SiliconFrame frame;
     private long time_last_render;
 
-    public SiEtchingThreadedPsdEvaluation(Si_etching_KMC_config config, int repeats, int measureInterval, int num_threads) {
+    public SiEtchingThreadedPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval, int num_threads) {
 
         super(repeats, measureInterval, num_threads);
 
         for (int i = 0; i < num_threads; i++) {
-            workers[i] = new KMC_worker(new Si_etching_KMC(config), i);
+            workers[i] = new KmcWorker(new SiEtchingKmc(config), i);
             workers[i].start();
         }
         PSD_size_X = config.sizeX_UC * 2;

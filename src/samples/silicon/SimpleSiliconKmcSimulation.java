@@ -1,9 +1,9 @@
 package samples.silicon;
 
 import graphicInterfaces.siliconEtching.SiliconFrame;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.list.ListConfiguration;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /*
@@ -20,9 +20,9 @@ public class SimpleSiliconKmcSimulation {
 
         System.out.println("Simple simulation of the Silicon etching KMC");
 
-        Si_etching_KMC_config config = configKMC();
+        SiEtchingKmcConfig config = configKMC();
 
-        Si_etching_KMC KMC = new Si_etching_KMC(config);
+        SiEtchingKmc KMC = new SiEtchingKmc(config);
 
         long start = System.nanoTime();
 
@@ -36,13 +36,13 @@ public class SimpleSiliconKmcSimulation {
         new SiliconFrame().drawKMC(KMC);
     }
 
-    private static Si_etching_KMC_config configKMC() {
-        List_configuration listConfig = new List_configuration()
-                .setList_type(List_configuration.BINNED_LIST)
+    private static SiEtchingKmcConfig configKMC() {
+        ListConfiguration listConfig = new ListConfiguration()
+                .setList_type(ListConfiguration.BINNED_LIST)
                 .setBins_per_level(20)
                 .set_extra_levels(1);
         
-        Si_etching_KMC_config config = new Si_etching_KMC_config()
+        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                 .setMillerX(0)
                 .setMillerY(1)
                 .setMillerZ(1)

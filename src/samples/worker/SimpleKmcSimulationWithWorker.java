@@ -5,21 +5,21 @@
 package samples.worker;
 
 import graphicInterfaces.siliconEtching.SiliconFrame;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.KMC_core.worker.KMC_worker;
-import Kinetic_Monte_Carlo.KMC_core.worker.IFinish_listener;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.worker.KmcWorker;
+import kineticMonteCarlo.kmcCore.worker.IFinishListener;
+import kineticMonteCarlo.list.ListConfiguration;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**
  *
  * @author Nestor
  */
-public class SimpleKmcSimulationWithWorker implements IFinish_listener {
+public class SimpleKmcSimulationWithWorker implements IFinishListener {
 
     
-    private static KMC_worker worker;
+    private static KmcWorker worker;
     
     
     public static void main(String args[]){
@@ -30,9 +30,9 @@ public class SimpleKmcSimulationWithWorker implements IFinish_listener {
         int work_ID=0;
         
         
-        Si_etching_KMC_config config = configKMC();
+        SiEtchingKmcConfig config = configKMC();
         
-        worker=new KMC_worker(new Si_etching_KMC(config),
+        worker=new KmcWorker(new SiEtchingKmc(config),
                                          worker_ID); 
         worker.start();
                 
@@ -43,12 +43,12 @@ public class SimpleKmcSimulationWithWorker implements IFinish_listener {
         System.out.println("Continuing execution.");  
     }
 
-    private static Si_etching_KMC_config configKMC() {
-        List_configuration listConfig=  new List_configuration()
-          .setList_type(List_configuration.BINNED_LIST)
+    private static SiEtchingKmcConfig configKMC() {
+        ListConfiguration listConfig=  new ListConfiguration()
+          .setList_type(ListConfiguration.BINNED_LIST)
           .setBins_per_level(16)
           .set_extra_levels(1);
-        Si_etching_KMC_config config = new Si_etching_KMC_config()
+        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                                     .setMillerX(1)
                                     .setMillerY(0)
                                     .setMillerZ(0)

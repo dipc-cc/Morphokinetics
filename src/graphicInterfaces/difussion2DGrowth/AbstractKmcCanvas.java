@@ -4,7 +4,7 @@
  */
 package graphicInterfaces.difussion2DGrowth;
 
-import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
+import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,10 +20,10 @@ public abstract class AbstractKmcCanvas extends Canvas {
     protected int baseY = 0;
     protected BufferStrategy strategy;  //BufferStratrgy
     protected boolean initialized = false;
-    protected Abstract_2D_diffusion_lattice lattice;
+    protected Abstract2DDiffusionLattice lattice;
     public int escalado = 2;
 
-    public AbstractKmcCanvas(Abstract_2D_diffusion_lattice lattice) {
+    public AbstractKmcCanvas(Abstract2DDiffusionLattice lattice) {
         this.lattice = lattice;
     }
 

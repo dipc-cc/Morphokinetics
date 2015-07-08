@@ -10,9 +10,9 @@
  */
 package graphicInterfaces.basic;
 
-import Kinetic_Monte_Carlo.atom.etching.basic.Basic_atom;
-import Kinetic_Monte_Carlo.KMC_core.Abstract_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.basic_KMC.Basic_KMC;
+import kineticMonteCarlo.atom.etching.basic.BasicAtom;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
+import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
@@ -27,7 +27,7 @@ import java.awt.Point;
 public class BasicPanel extends javax.swing.JPanel {
 
     
-    private Basic_KMC kmc;
+    private BasicKmc kmc;
     
     private GradientPaint gradientPaint_bulk; 
     private GradientPaint gradientPaint_etched;
@@ -41,7 +41,7 @@ public class BasicPanel extends javax.swing.JPanel {
     }
 
     
-    public void setKMC(Basic_KMC kmc){
+    public void setKMC(BasicKmc kmc){
         this.kmc=kmc;
         
          gradientPaint_etched= new GradientPaint(new Point (0,0), Color.black, new Point (0,kmc.getLattice().getSizeY()), Color.gray.darker(), false);
@@ -61,7 +61,7 @@ public class BasicPanel extends javax.swing.JPanel {
         for (int i=0;i<sizeX;i++){             
             for (int j=0;j<sizeY;j++){         
       
-            Basic_atom atom=(Basic_atom)kmc.getLattice().getAtom(i, j, 0, 0);
+            BasicAtom atom=(BasicAtom)kmc.getLattice().getAtom(i, j, 0, 0);
              byte type=atom.getType();  
              
             if (atom.isRemoved()) {

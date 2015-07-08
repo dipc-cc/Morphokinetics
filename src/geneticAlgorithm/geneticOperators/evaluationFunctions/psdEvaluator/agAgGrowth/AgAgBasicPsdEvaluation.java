@@ -9,11 +9,11 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
+import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -23,16 +23,16 @@ import utils.PSD_analysis.PSD_signature_2D;
  */
 public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
 
-    private Ag_Ag_KMC KMC;
+    private AgAgKmc KMC;
     private PSD_signature_2D PSD ;
     private float[][] sampledSurface ;
     private float[][] difference;
 
-    public AgAgBasicPsdEvaluation(Ag_Ag_KMC_config config, int repeats, int measureInterval) {
+    public AgAgBasicPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval) {
 
         super(repeats, measureInterval);
 
-        KMC = new Ag_Ag_KMC(config,true);
+        KMC = new AgAgKmc(config,true);
         PSD = new PSD_signature_2D(64,64);
         sampledSurface = new float[64][64];
         difference = new float[64][64];
@@ -41,8 +41,8 @@ public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
         frame.setVisible(true);   
     }
     
-        private static DifussionKmcFrame create_graphics_frame(Ag_Ag_KMC kmc) {
-        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
+        private static DifussionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
         return frame;
     }
 

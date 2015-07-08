@@ -7,7 +7,7 @@ package graphicInterfaces.difussion2DGrowth.agAgGrowth;
 
 
 import graphicInterfaces.difussion2DGrowth.AbstractKmcCanvas;
-import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
+import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.*;
 
 
@@ -16,7 +16,7 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
     public static float constant_Y = (float)Math.sqrt(3)/2.0f;
 
-    public AgAgKmcCanvas(Abstract_2D_diffusion_lattice lattice) {
+    public AgAgKmcCanvas(Abstract2DDiffusionLattice lattice) {
         super(lattice);
     }
 

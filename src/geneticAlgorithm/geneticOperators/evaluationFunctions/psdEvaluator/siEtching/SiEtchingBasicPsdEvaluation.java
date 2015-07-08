@@ -7,8 +7,8 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtc
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -18,18 +18,18 @@ import utils.PSD_analysis.PSD_signature_2D;
  */
 public class SiEtchingBasicPsdEvaluation extends AbstractPSDEvaluation {
 
-    private Si_etching_KMC KMC;
+    private SiEtchingKmc KMC;
     private PSD_signature_2D PSD = new PSD_signature_2D(128, 128);
     private float[][] surface = new float[128][128];
     private float[][] difference = new float[128][128];
     private int PSD_size_X;
     private int PSD_size_Y;
 
-    public SiEtchingBasicPsdEvaluation(Si_etching_KMC_config config, int repeats, int measureInterval) {
+    public SiEtchingBasicPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval) {
 
         super(repeats, measureInterval);
 
-        KMC = new Si_etching_KMC(config);
+        KMC = new SiEtchingKmc(config);
         PSD = new PSD_signature_2D(config.sizeY_UC * 2, config.sizeX_UC * 2);
         surface = new float[config.sizeY_UC * 2][config.sizeX_UC * 2];
         difference = new float[config.sizeY_UC * 2][config.sizeX_UC * 2];

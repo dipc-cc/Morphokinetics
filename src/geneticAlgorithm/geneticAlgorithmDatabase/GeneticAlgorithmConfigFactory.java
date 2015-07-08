@@ -20,9 +20,9 @@ import geneticAlgorithm.geneticOperators.restrictions.agAg.AgAgRestriction;
 import geneticAlgorithm.geneticOperators.selection.RandomSelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.list.List_configuration;
+import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.list.ListConfiguration;
 import static samples.agAgGrowth.AgAgMultithreadedEvaluatorTest.constant_Y;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,13 +117,13 @@ public class GeneticAlgorithmConfigFactory {
         return evaluation;
     }
 
-    private static Si_etching_KMC_config SiEtchConfigKMC() {
-        List_configuration listConfig = new List_configuration()
-                .setList_type(List_configuration.BINNED_LIST)
+    private static SiEtchingKmcConfig SiEtchConfigKMC() {
+        ListConfiguration listConfig = new ListConfiguration()
+                .setList_type(ListConfiguration.BINNED_LIST)
                 .setBins_per_level(20)
                 .set_extra_levels(1);
 
-        Si_etching_KMC_config config = new Si_etching_KMC_config()
+        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                 .setMillerX(1)
                 .setMillerY(0)
                 .setMillerZ(0)
@@ -134,13 +134,13 @@ public class GeneticAlgorithmConfigFactory {
         return config;
     }
 
-    private Ag_Ag_KMC_config AgAgConfigKMC(double deposition_rate, double island_density) {
+    private AgAgKmcConfig AgAgConfigKMC(double deposition_rate, double island_density) {
 
-        List_configuration listConfig = new List_configuration()
-                .setList_type(List_configuration.BINNED_LIST)
+        ListConfiguration listConfig = new ListConfiguration()
+                .setList_type(ListConfiguration.BINNED_LIST)
                 .setBins_per_level(20);
 
-        return new Ag_Ag_KMC_config(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
+        return new AgAgKmcConfig(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 
     }
 

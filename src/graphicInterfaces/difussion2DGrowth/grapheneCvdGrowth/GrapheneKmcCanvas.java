@@ -5,14 +5,14 @@
 package graphicInterfaces.difussion2DGrowth.grapheneCvdGrowth;
 
 import graphicInterfaces.difussion2DGrowth.AbstractKmcCanvas;
-import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
+import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.*;
 
 public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
     public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
 
-    public GrapheneKmcCanvas(Abstract_2D_diffusion_lattice lattice) {
+    public GrapheneKmcCanvas(Abstract2DDiffusionLattice lattice) {
         super(lattice);
     }
     

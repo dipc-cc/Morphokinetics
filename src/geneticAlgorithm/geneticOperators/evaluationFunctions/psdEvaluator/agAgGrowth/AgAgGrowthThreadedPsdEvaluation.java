@@ -11,14 +11,14 @@ import geneticAlgorithm.Population;
 import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
 import graphicInterfaces.siliconEtching.SiliconFrame;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
-import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
-import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
-import Kinetic_Monte_Carlo.KMC_core.worker.IFinish_listener;
-import Kinetic_Monte_Carlo.KMC_core.worker.IInterval_listener;
-import Kinetic_Monte_Carlo.KMC_core.worker.KMC_worker;
-import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
+import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.worker.IFinishListener;
+import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
+import kineticMonteCarlo.kmcCore.worker.KmcWorker;
+import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -26,7 +26,7 @@ import utils.PSD_analysis.PSD_signature_2D;
  *
  * @author Nestor
  */
-public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinish_listener, IInterval_listener {
+public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinishListener, IIntervalListener {
 
     private static final int FPS_GRAPHICS = 2;
 
@@ -37,16 +37,16 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
 
     private long time_last_render;
 
-    public AgAgGrowthThreadedPsdEvaluation(Ag_Ag_KMC_config config, int repeats, int measureInterval, int num_threads) {
+    public AgAgGrowthThreadedPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval, int num_threads) {
 
         super(repeats, measureInterval, num_threads);
 
         for (int i = 0; i < num_threads; i++) {
-            Ag_Ag_KMC kmc = new Ag_Ag_KMC(config, true);
+            AgAgKmc kmc = new AgAgKmc(config, true);
             DifussionKmcFrame frame = create_graphics_frame(kmc);
             frame.setVisible(true);
 
-            workers[i] = new KMC_worker(kmc, i);
+            workers[i] = new KmcWorker(kmc, i);
             workers[i].start();
         }
 
@@ -54,8 +54,8 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
         PSD_size_Y = 64;
     }
 
-    private static DifussionKmcFrame create_graphics_frame(Ag_Ag_KMC kmc) {
-        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
+    private static DifussionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
         return frame;
     }
 
