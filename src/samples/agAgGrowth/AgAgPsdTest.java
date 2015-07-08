@@ -15,7 +15,7 @@ import kineticMonteCarlo.list.ListConfiguration;
 import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 import static samples.agAgGrowth.SimpleAgAgGrowthKmcSimulation.constant_Y;
 import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -35,7 +35,7 @@ public class AgAgPsdTest {
         AgAgKmc kmc = initialize_kmc();
         
         //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
-        PSD_signature_2D PSD = new PSD_signature_2D(128, 128);
+        PsdSignature2D PSD = new PsdSignature2D(128, 128);
         float[][] sampledSurface=new float[128][128];
          
          for (int i=0;i<30;i++){
@@ -50,8 +50,8 @@ public class AgAgPsdTest {
         PSD.addSurfaceSample(sampledSurface);
         System.out.println("flake "+i);
          }
-        PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-       PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+       PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
        
         new Frame2D("PSD analysis")
         .setMesh(MathUtils.avg_Filter(PSD.getPSD(),1)  );

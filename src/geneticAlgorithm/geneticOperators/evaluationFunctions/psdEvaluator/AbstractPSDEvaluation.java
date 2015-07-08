@@ -7,7 +7,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -35,7 +35,7 @@ public abstract class AbstractPSDEvaluation extends AbstractEvaluation {
 
     public abstract float[][] calculate_PSD_from_individual(Individual i);
 
-    protected void calculateRelativeDifference(float[][] difference, PSD_signature_2D PSD) {
+    protected void calculateRelativeDifference(float[][] difference, PsdSignature2D PSD) {
 
 
         for (int a = 0; a < difference.length; a++) {

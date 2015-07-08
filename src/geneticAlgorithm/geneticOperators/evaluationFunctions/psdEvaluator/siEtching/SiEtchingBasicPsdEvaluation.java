@@ -10,7 +10,7 @@ import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -19,7 +19,7 @@ import utils.PSD_analysis.PSD_signature_2D;
 public class SiEtchingBasicPsdEvaluation extends AbstractPSDEvaluation {
 
     private SiEtchingKmc KMC;
-    private PSD_signature_2D PSD = new PSD_signature_2D(128, 128);
+    private PsdSignature2D PSD = new PsdSignature2D(128, 128);
     private float[][] surface = new float[128][128];
     private float[][] difference = new float[128][128];
     private int PSD_size_X;
@@ -30,7 +30,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPSDEvaluation {
         super(repeats, measureInterval);
 
         KMC = new SiEtchingKmc(config);
-        PSD = new PSD_signature_2D(config.sizeY_UC * 2, config.sizeX_UC * 2);
+        PSD = new PsdSignature2D(config.sizeY_UC * 2, config.sizeX_UC * 2);
         surface = new float[config.sizeY_UC * 2][config.sizeX_UC * 2];
         difference = new float[config.sizeY_UC * 2][config.sizeX_UC * 2];
         PSD_size_X = config.sizeX_UC * 2;
@@ -100,8 +100,8 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPSDEvaluation {
             currentSimulation++;
         }
 
-        PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-        PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
     }
     
     

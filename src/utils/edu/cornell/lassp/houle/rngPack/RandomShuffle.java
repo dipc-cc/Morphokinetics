@@ -1,4 +1,4 @@
-package utils.edu.cornell.lassp.houle.RngPack;
+package utils.edu.cornell.lassp.houle.rngPack;
 
 //
 // RngPack 1.1a by Paul Houle

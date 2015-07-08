@@ -6,7 +6,7 @@ package kineticMonteCarlo.kmcCore;
 
 import kineticMonteCarlo.list.AbstractList;
 import kineticMonteCarlo.list.ListConfiguration;
-import utils.edu.cornell.lassp.houle.RngPack.Ranecu;
+import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
 
 /**
  *

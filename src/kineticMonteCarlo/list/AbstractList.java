@@ -2,7 +2,7 @@ package kineticMonteCarlo.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
-import utils.edu.cornell.lassp.houle.RngPack.RandomSeedable;
+import utils.edu.cornell.lassp.houle.rngPack.RandomSeedable;
 
 public abstract class AbstractList implements IProbabilityHolder {
 

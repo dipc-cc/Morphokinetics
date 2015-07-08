@@ -1,4 +1,4 @@
-package utils.edu.cornell.lassp.houle.RngPack;
+package utils.edu.cornell.lassp.houle.rngPack;
 import java.util.*;
 import java.io.Serializable;
 

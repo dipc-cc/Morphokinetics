@@ -15,7 +15,7 @@ import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -24,7 +24,7 @@ import utils.PSD_analysis.PSD_signature_2D;
 public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
 
     private AgAgKmc KMC;
-    private PSD_signature_2D PSD ;
+    private PsdSignature2D PSD ;
     private float[][] sampledSurface ;
     private float[][] difference;
 
@@ -33,7 +33,7 @@ public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
         super(repeats, measureInterval);
 
         KMC = new AgAgKmc(config,true);
-        PSD = new PSD_signature_2D(64,64);
+        PSD = new PsdSignature2D(64,64);
         sampledSurface = new float[64][64];
         difference = new float[64][64];
         
@@ -111,8 +111,8 @@ public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
             currentSimulation++;
         }
         ind.setSimulationTime(time / repeats);
-        PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-        PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
     }
     
     

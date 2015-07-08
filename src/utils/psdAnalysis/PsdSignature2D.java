@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package utils.PSD_analysis;
+package utils.psdAnalysis;
 
 import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
 import java.util.concurrent.Semaphore;
@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
  *
  * @author Nestor
  */
-public class PSD_signature_2D {
+public class PsdSignature2D {
 
     private FloatFFT_2D FFT_Core;
     private float[][] PSD;
@@ -22,7 +22,7 @@ public class PSD_signature_2D {
     public static final int HORIZONTAL_SIMMETRY = 0;
     public static final int VERTICAL_SIMMETRY = 1;
 
-    public PSD_signature_2D(int binsY,int binsX) {
+    public PsdSignature2D(int binsY,int binsX) {
 
         FFT_Core = new FloatFFT_2D(binsY, binsX);
         PSD = new float[binsY][binsX];

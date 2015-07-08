@@ -6,7 +6,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import kineticMonteCarlo.list.ListConfiguration;
 import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /*
  * To change this template, choose Tools | Templates
@@ -68,7 +68,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     private static float[][] getPSDfromSimulation(SiEtchingKmc KMC, int temperature) {
 
-        PSD_signature_2D PSD = new PSD_signature_2D(KMC.getLattice().getSizeY()*2 , KMC.getLattice().getSizeX()*2 );
+        PsdSignature2D PSD = new PsdSignature2D(KMC.getLattice().getSizeY()*2 , KMC.getLattice().getSizeX()*2 );
         float[][] surface = new float[KMC.getLattice().getSizeY()*2][KMC.getLattice().getSizeX()*2 ];
 
         for (int a = 0; a < 30; a++) {
@@ -84,8 +84,8 @@ public class SiliconPsdDifferencesBetweenTemperatures {
             }
         }
 
-        PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-        PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
 
         return PSD.getPSD();
     }

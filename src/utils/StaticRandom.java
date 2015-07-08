@@ -4,7 +4,7 @@
  */
 package utils;
 
-import utils.edu.cornell.lassp.houle.RngPack.Ranecu;
+import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
 
 /**
  *

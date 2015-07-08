@@ -20,7 +20,7 @@ import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -30,7 +30,7 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
 
     private static final int FPS_GRAPHICS = 2;
 
-    private PSD_signature_2D[] PSDs;
+    private PsdSignature2D[] PSDs;
     private double[] times;
     private int PSD_size_X;
     private int PSD_size_Y;
@@ -73,8 +73,8 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
         p.setIndividual(i, 0);
         this.calculate_PSD_of_population(p);
 
-        PSDs[0].apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-        PSDs[0].apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSDs[0].apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSDs[0].apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
 
         return PSDs[0].getPSD();
     }
@@ -84,8 +84,8 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
         double error = 0;
         float[][] difference = new float[PSD_size_Y][PSD_size_X];
 
-        PSDs[individual_pos].apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-        PSDs[individual_pos].apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSDs[individual_pos].apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSDs[individual_pos].apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
 
         calculateRelativeDifference(difference, PSDs[individual_pos]);
 
@@ -115,11 +115,11 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
     }
 
     private void calculate_PSD_of_population(Population p) {
-        PSDs = new PSD_signature_2D[p.size()];
+        PSDs = new PsdSignature2D[p.size()];
 
         times = new double[p.size()];
         for (int i = 0; i < p.size(); i++) {
-            PSDs[i] = new PSD_signature_2D(PSD_size_Y, PSD_size_X);
+            PSDs[i] = new PsdSignature2D(PSD_size_Y, PSD_size_X);
         }
 
         currentPopulation = p;

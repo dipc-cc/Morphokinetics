@@ -6,7 +6,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import kineticMonteCarlo.list.ListConfiguration;
 import utils.MathUtils;
-import utils.PSD_analysis.PSD_signature_2D;
+import utils.psdAnalysis.PsdSignature2D;
 
 /*
  * To change this template, choose Tools | Templates
@@ -30,7 +30,7 @@ public class SimpleSiliconKmcFftAnalisys {
                 .getRates("Gosalvez_PRE", 350));
 
         float[][] surface = new float[128][128];
-        PSD_signature_2D PSD = new PSD_signature_2D(128, 128);
+        PsdSignature2D PSD = new PsdSignature2D(128, 128);
 
         KMC.simulate(5000);
         for (int i = 0; i < 100; i++) {
@@ -39,8 +39,8 @@ public class SimpleSiliconKmcFftAnalisys {
             PSD.addSurfaceSample(surface);
         }
 
-        PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
-        PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
 
          new Frame2D("PSD analysis")
                  .setMesh(MathUtils.avg_Filter(PSD.getPSD(),1));
