@@ -10,7 +10,7 @@ import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
-import Graphic_interfaces.GA_convergence.GA_progress_frame;
+import graphicInterfaces.gaConvergence.GaProgressFrame;
 import Rates_library.Si_etching.Si_etch_rates_factory;
 
 /**
@@ -34,7 +34,7 @@ public class SiEtchingKMCConvergence {
         GeneticAlgorithmConfiguration geneticConfiguration = new genetic_algorithm_config_factory()
                 .create_silicon_convergence_configuration();
         GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
-        new GA_progress_frame(GA).setVisible(true);
+        new GaProgressFrame(GA).setVisible(true);
         AbstractPSDEvaluation evaluator=geneticConfiguration.mainEvaluator;
         
         for (int i = 0; i < totalConvergences; i++) {

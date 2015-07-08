@@ -8,7 +8,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingThreadedPsdEvaluation;
 import geneticAlgorithm.Individual;
-import Graphic_interfaces.surface_viewer_2D.Frame_2D;
+import graphicInterfaces.surfaceViewer2D.Frame2D;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
 import Rates_library.Si_etching.Si_etch_rates_factory;
@@ -37,7 +37,7 @@ public class SiliconMultithreadedPSDCalculation {
      
 
         
-        new Frame_2D("Multi-threaded calculated PSD")
+        new Frame2D("Multi-threaded calculated PSD")
                 .setLogScale(true)
                 .setShift(true)
                 .setMesh(PSD);

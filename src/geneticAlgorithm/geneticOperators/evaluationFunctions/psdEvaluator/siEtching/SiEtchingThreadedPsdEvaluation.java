@@ -8,7 +8,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import Graphic_interfaces.Silicon_etching.Silicon_frame;
+import graphicInterfaces.siliconEtching.SiliconFrame;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.worker.IFinish_listener;
@@ -29,7 +29,7 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     private double[] times;
     private int PSD_size_X;
     private int PSD_size_Y;
-    private Silicon_frame frame;
+    private SiliconFrame frame;
     private long time_last_render;
 
     public SiEtchingThreadedPsdEvaluation(Si_etching_KMC_config config, int repeats, int measureInterval, int num_threads) {
@@ -136,7 +136,7 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     public AbstractEvaluation setShowGraphics(boolean showGraphics) {
         super.setShowGraphics(showGraphics);
         if (showGraphics && frame == null) {
-            frame = new Silicon_frame();
+            frame = new SiliconFrame();
         }
         if (!showGraphics && frame != null) {
             frame.dispose();

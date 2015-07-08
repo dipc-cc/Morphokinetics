@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Graphic_interfaces.Difussion2D_Growth;
+package graphicInterfaces.difussion2DGrowth;
 
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import java.awt.Canvas;
@@ -14,7 +14,7 @@ import java.awt.image.BufferStrategy;
  *
  * @author Nestor
  */
-public abstract class AbstractKMC_canvas extends Canvas {
+public abstract class AbstractKmcCanvas extends Canvas {
 
     protected int baseX = 0;
     protected int baseY = 0;
@@ -23,7 +23,7 @@ public abstract class AbstractKMC_canvas extends Canvas {
     protected Abstract_2D_diffusion_lattice lattice;
     public int escalado = 2;
 
-    public AbstractKMC_canvas(Abstract_2D_diffusion_lattice lattice) {
+    public AbstractKmcCanvas(Abstract_2D_diffusion_lattice lattice) {
         this.lattice = lattice;
     }
 
@@ -40,7 +40,7 @@ public abstract class AbstractKMC_canvas extends Canvas {
         this.escalado = escalado;
     }
 
-    public AbstractKMC_canvas() {   //constructor
+    public AbstractKmcCanvas() {   //constructor
         this.setIgnoreRepaint(true); //we repaint manually
         this.setFocusable(false);
     }

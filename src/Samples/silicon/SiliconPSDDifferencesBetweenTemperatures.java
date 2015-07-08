@@ -2,7 +2,7 @@ package Samples.silicon;
 
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
 import Rates_library.Si_etching.Si_etch_rates_factory;
-import Graphic_interfaces.surface_viewer_2D.Frame_2D;
+import graphicInterfaces.surfaceViewer2D.Frame2D;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
 import utils.MathUtils;
@@ -45,7 +45,7 @@ public class SiliconPSDDifferencesBetweenTemperatures {
             }
         }
 
-        Frame_2D frame = new Frame_2D("Relative difference between PSDs 400K vs 300K")
+        Frame2D frame = new Frame2D("Relative difference between PSDs 400K vs 300K")
             .setLogScale(false)
             .setShift(true)
             .setMesh(MathUtils.avg_Filter(Relative_error_1, 1));
@@ -58,7 +58,7 @@ public class SiliconPSDDifferencesBetweenTemperatures {
             frame.setMax(-frame.getMin());
         }
 
-        new Frame_2D("Relative difference between PSDs 300K vs 300K")
+        new Frame2D("Relative difference between PSDs 300K vs 300K")
             .setLogScale(false)
             .setShift(true)
             .setMax(frame.getMax())

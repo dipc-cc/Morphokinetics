@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Graphic_interfaces.GA_convergence;
+package graphicInterfaces.gaConvergence;
 
 import java.awt.Color;
 import java.awt.*;
@@ -13,7 +13,7 @@ import java.util.*;
  *
  * @author nesferjo
  */
-public class Error_panel extends JPanel {
+public class ErrorPanel extends JPanel {
 
     private ArrayList<Float> Xs;
     private ArrayList<Float> Ys;
@@ -22,7 +22,7 @@ public class Error_panel extends JPanel {
     private float minY = 9999999999f;
     private Color c;
 
-    public Error_panel(Color c) {
+    public ErrorPanel(Color c) {
 
         maxX = (float) Math.log10(maxX);
         Xs = new ArrayList();

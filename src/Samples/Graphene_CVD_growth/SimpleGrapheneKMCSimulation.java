@@ -4,8 +4,8 @@
  */
 package Samples.Graphene_CVD_growth;
 
-import Graphic_interfaces.Difussion2D_Growth.DifussionKMC_frame;
-import Graphic_interfaces.Difussion2D_Growth.graphene_cvd_growth.GrapheneKMC_canvas;
+import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
+import graphicInterfaces.difussion2DGrowth.grapheneCvdGrowth.GrapheneKmcCanvas;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Graphene_CVD_growth.Graphene_KMC;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
@@ -25,7 +25,7 @@ public class SimpleGrapheneKMCSimulation {
 
         Graphene_CVD_deposition_rates_factory ratesFactory = new Graphene_CVD_deposition_rates_factory();
         Graphene_KMC kmc = initialize_kmc();
-        DifussionKMC_frame frame = create_graphics_frame(kmc);
+        DifussionKmcFrame frame = create_graphics_frame(kmc);
         frame.setVisible(true);
 
         for (int i = 0; i < 10; i++) {
@@ -38,8 +38,8 @@ public class SimpleGrapheneKMCSimulation {
 
     }
 
-    private static DifussionKMC_frame create_graphics_frame(Graphene_KMC kmc) {
-        DifussionKMC_frame frame = new DifussionKMC_frame(new GrapheneKMC_canvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
+    private static DifussionKmcFrame create_graphics_frame(Graphene_KMC kmc) {
+        DifussionKmcFrame frame = new DifussionKmcFrame(new GrapheneKmcCanvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
         return frame;
     }
 

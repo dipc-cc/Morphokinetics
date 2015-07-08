@@ -2,21 +2,21 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Graphic_interfaces.Difussion2D_Growth.AgAg_growth;
+package graphicInterfaces.difussion2DGrowth.agAgGrowth;
 
 
 
-import Graphic_interfaces.Difussion2D_Growth.AbstractKMC_canvas;
+import graphicInterfaces.difussion2DGrowth.AbstractKmcCanvas;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import java.awt.*;
 
 
 
-public class AgAgKMC_canvas extends AbstractKMC_canvas {
+public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
     public static float constant_Y = (float)Math.sqrt(3)/2.0f;
 
-    public AgAgKMC_canvas(Abstract_2D_diffusion_lattice lattice) {
+    public AgAgKmcCanvas(Abstract_2D_diffusion_lattice lattice) {
         super(lattice);
     }
 

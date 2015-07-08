@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Graphic_interfaces.Silicon_etching;
+package graphicInterfaces.siliconEtching;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -15,7 +15,7 @@ import javax.media.j3d.*;
  *
  * @author nesferjo
  */
-public class Silicon_PointArray extends PointArray {
+public class SiliconPointArray extends PointArray {
 
     private static final int MAX_POINTS=500000;
     
@@ -27,7 +27,7 @@ public class Silicon_PointArray extends PointArray {
     
     
 
-    public Silicon_PointArray(float[] surface){
+    public SiliconPointArray(float[] surface){
 
         super(MAX_POINTS,GeometryArray.COORDINATES|  GeometryArray.BY_REFERENCE | GeometryArray.USE_NIO_BUFFER);
 
@@ -42,7 +42,7 @@ public class Silicon_PointArray extends PointArray {
 
     this.updateData(new GeometryUpdater(){
         public void updateData(Geometry geometry){ 
-            ((Silicon_PointArray)geometry).updateBuffers(coords);}});
+            ((SiliconPointArray)geometry).updateBuffers(coords);}});
  }
   
  public void updateBuffers(float[] coords){ 

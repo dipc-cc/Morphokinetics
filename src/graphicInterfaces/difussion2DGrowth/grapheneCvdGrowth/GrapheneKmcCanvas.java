@@ -2,17 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Graphic_interfaces.Difussion2D_Growth.graphene_cvd_growth;
+package graphicInterfaces.difussion2DGrowth.grapheneCvdGrowth;
 
-import Graphic_interfaces.Difussion2D_Growth.AbstractKMC_canvas;
+import graphicInterfaces.difussion2DGrowth.AbstractKmcCanvas;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import java.awt.*;
 
-public class GrapheneKMC_canvas extends AbstractKMC_canvas {
+public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
     public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
 
-    public GrapheneKMC_canvas(Abstract_2D_diffusion_lattice lattice) {
+    public GrapheneKmcCanvas(Abstract_2D_diffusion_lattice lattice) {
         super(lattice);
     }
     

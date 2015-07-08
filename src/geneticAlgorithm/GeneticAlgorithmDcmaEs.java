@@ -10,7 +10,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.BasicEvaluator;
 import geneticAlgorithm.geneticOperators.mutation.Crossover_mutator;
 import geneticAlgorithm.geneticOperators.recombination.DifferentialRecombination;
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistAllReinsertion;
-import Graphic_interfaces.GA_convergence.IGA_progress_frame;
+import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
 	
@@ -19,7 +19,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
     private BasicEvaluator evaluator;
     private int currentIteration = 0;
     private int totalIterations = 1;
-    private IGA_progress_frame graphics;
+    private IgaProgressFrame graphics;
     
     private DcmaEsConfig dcmaEsConfig;
     
@@ -192,7 +192,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
 	}
 
 	@Override
-	public void setGraphics(IGA_progress_frame graphics) {
+	public void setGraphics(IgaProgressFrame graphics) {
 		this.graphics = graphics;
 	}
 	

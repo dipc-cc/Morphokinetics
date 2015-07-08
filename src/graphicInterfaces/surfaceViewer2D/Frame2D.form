@@ -62,7 +62,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new Graphic_interfaces.surface_viewer_2D.Panel_2D()"/>
+        <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new graphicInterfaces.surfaceViewer2D.Panel2D()"/>
       </AuxValues>
 
       <Layout>

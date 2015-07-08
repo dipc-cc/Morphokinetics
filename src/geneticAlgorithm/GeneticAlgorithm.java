@@ -5,7 +5,7 @@
 package geneticAlgorithm;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.BasicEvaluator;
-import Graphic_interfaces.GA_convergence.IGA_progress_frame;
+import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 /**
  *
@@ -18,7 +18,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
     private BasicEvaluator evaluator;
     private int currentIteration = 0;
     private int totalIterations = 1;
-    private IGA_progress_frame graphics;
+    private IgaProgressFrame graphics;
 
     public GeneticAlgorithm(GeneticAlgorithmConfiguration configuration) {
         this.config = configuration;
@@ -119,7 +119,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
     }
 
     @Override
-    public void setGraphics(IGA_progress_frame graphics) {
+    public void setGraphics(IgaProgressFrame graphics) {
         this.graphics = graphics;
     }
 

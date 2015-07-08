@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Graphic_interfaces.Silicon_etching.mouseBehaviors;
+package graphicInterfaces.siliconEtching.mouseBehaviors;
 
 
 

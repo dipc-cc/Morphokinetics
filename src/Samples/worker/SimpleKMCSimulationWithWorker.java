@@ -4,7 +4,7 @@
  */
 package Samples.worker;
 
-import Graphic_interfaces.Silicon_etching.Silicon_frame;
+import graphicInterfaces.siliconEtching.SiliconFrame;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.worker.KMC_worker;
@@ -63,7 +63,7 @@ public class SimpleKMCSimulationWithWorker implements IFinish_listener {
     @Override
     public void handleSimulationFinish(int workerID,int work_ID) {
        System.out.println("Worker simulation finished."); 
-       new Silicon_frame().drawKMC(worker.getKMC()); 
+       new SiliconFrame().drawKMC(worker.getKMC()); 
        worker.destroy();
        
     }

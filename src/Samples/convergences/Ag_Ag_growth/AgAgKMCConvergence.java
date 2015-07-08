@@ -11,7 +11,7 @@ import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
-import Graphic_interfaces.GA_convergence.GA_progress_frame;
+import graphicInterfaces.gaConvergence.GaProgressFrame;
 import Rates_library.Si_etching.Si_etch_rates_factory;
 import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
 
@@ -33,7 +33,7 @@ public class AgAgKMCConvergence {
 
         GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
 
-        new GA_progress_frame(GA).setVisible(true);
+        new GaProgressFrame(GA).setVisible(true);
         AbstractPSDEvaluation evaluator = geneticConfiguration.mainEvaluator;
 
         //--------------------------------

@@ -7,8 +7,8 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgG
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import Graphic_interfaces.Difussion2D_Growth.AgAg_growth.AgAgKMC_canvas;
-import Graphic_interfaces.Difussion2D_Growth.DifussionKMC_frame;
+import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
+import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
@@ -37,12 +37,12 @@ public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
         sampledSurface = new float[64][64];
         difference = new float[64][64];
         
-        DifussionKMC_frame frame = create_graphics_frame(KMC);
+        DifussionKmcFrame frame = create_graphics_frame(KMC);
         frame.setVisible(true);   
     }
     
-        private static DifussionKMC_frame create_graphics_frame(Ag_Ag_KMC kmc) {
-        DifussionKMC_frame frame = new DifussionKMC_frame(new AgAgKMC_canvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
+        private static DifussionKmcFrame create_graphics_frame(Ag_Ag_KMC kmc) {
+        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
         return frame;
     }
 

@@ -6,9 +6,9 @@
 
 package Samples.AgAg_growth;
 
-import Graphic_interfaces.Difussion2D_Growth.AgAg_growth.AgAgKMC_canvas;
-import Graphic_interfaces.Difussion2D_Growth.DifussionKMC_frame;
-import Graphic_interfaces.surface_viewer_2D.Frame_2D;
+import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
+import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
+import graphicInterfaces.surfaceViewer2D.Frame2D;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
@@ -53,17 +53,17 @@ public class AgAgPSDTest {
         PSD.apply_simmetry_fold(PSD_signature_2D.HORIZONTAL_SIMMETRY);
        PSD.apply_simmetry_fold(PSD_signature_2D.VERTICAL_SIMMETRY);
        
-        new Frame_2D("PSD analysis")
+        new Frame2D("PSD analysis")
         .setMesh(MathUtils.avg_Filter(PSD.getPSD(),1)  );
         
-        new Frame_2D("Sampled surface")
+        new Frame2D("Sampled surface")
         .setMesh(sampledSurface);   
         
         
      }     
      
-     private static DifussionKMC_frame create_graphics_frame(Ag_Ag_KMC kmc) {
-        DifussionKMC_frame frame = new DifussionKMC_frame(new AgAgKMC_canvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
+     private static DifussionKmcFrame create_graphics_frame(Ag_Ag_KMC kmc) {
+        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract_2D_diffusion_lattice) kmc.getLattice()));
         return frame;
     }
      

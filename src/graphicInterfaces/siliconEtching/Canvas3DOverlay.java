@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package Graphic_interfaces.Silicon_etching;
+package graphicInterfaces.siliconEtching;
 
 /**
  *
@@ -18,7 +18,7 @@ import java.awt.*;
 //Esto es un simple canvas3D: elemento donde se renderiza el universo creado con Java3D
 //Tiene operaciones de post-Render para dibujar el GUI por encima del entorno 3D.
 
-public class Canvas3D_overlay extends Canvas3D {
+public class Canvas3DOverlay extends Canvas3D {
 
 
     private String  overlayText="Silicon etching KMC viewer 1.0";
@@ -30,7 +30,7 @@ public class Canvas3D_overlay extends Canvas3D {
 
 
 
-    public Canvas3D_overlay(java.awt.GraphicsConfiguration graphicsConfiguration){
+    public Canvas3DOverlay(java.awt.GraphicsConfiguration graphicsConfiguration){
         super(graphicsConfiguration);
     }
 
