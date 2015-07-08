@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.Si_etching;
+package ratesLibrary.siEtching;
 
 /**
  *
@@ -11,7 +11,7 @@ package Rates_library.Si_etching;
  * Etch rates datas obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
  * 
  */
-public class Rates_from_PRE_Gosalvez implements ISiRates {
+public class RatesFromPreGosalvez implements ISiRates {
  
       private  double E0=0;
       private  double E1=0.526;
@@ -32,7 +32,7 @@ public class Rates_from_PRE_Gosalvez implements ISiRates {
       private  double[][] prefactors=new double[4][16];
       private  double[][] energies   =new double[4][16];
                     
-public Rates_from_PRE_Gosalvez(){
+public RatesFromPreGosalvez(){
 
 energies[0][0]=E0;  prefactors[0][0]=P0;
 energies[0][1]=E0;  prefactors[0][1]=P0;

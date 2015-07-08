@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.basic;
-
-import Rates_library.Si_etching.*;
+package ratesLibrary.basic;
 
 /**
  *
@@ -13,22 +11,22 @@ import Rates_library.Si_etching.*;
  * Etch rates datas obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
  * 
  */
-public class Rates_case_E implements IBasicRates {
+public class RatesCaseOther implements IBasicRates {
  
       private  double E0=0.0;
       private  double E1=0.0;
-      private  double E2=0.3;
-      private  double E3=0.55;
- 
-      private  double P0=5e+003;
-      private  double P1=5e+003;
-      private  double P2=5e+003;;
-      private  double P3=5e+003;
+      private  double E2=0;
+      private  double E3=0;
+      
+      private  double P0=1.0;
+      private  double P1=1.0;
+      private  double P2=1.0;
+      private  double P3=0.01;
 
       private  double[] prefactors=new double[4];
       private  double[] energies   =new double[4];
                     
-public Rates_case_E(){
+public RatesCaseOther(){
 
 energies[0]=E0;  prefactors[0]=P0;
 energies[1]=E1;  prefactors[1]=P1;

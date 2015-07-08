@@ -11,7 +11,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
+import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 
 ;
 
@@ -29,20 +29,20 @@ public class AgAgMulthreadedEvaluatorTest {
                 .setList_type(List_configuration.LINEAR_LIST);
 
         float experitental_temp = 135;
-        double deposition_rate = new Ag_Ag_growth_rates_factory().getDepositionRate("COX_PRB", experitental_temp);
-        double island_density = new Ag_Ag_growth_rates_factory().getIslandDensity("COX_PRB", experitental_temp);
+        double deposition_rate = new AgAgGrowthRatesFactory().getDepositionRate("COX_PRB", experitental_temp);
+        double island_density = new AgAgGrowthRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
 
         Ag_Ag_KMC_config config = new Ag_Ag_KMC_config(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 
         //Ag_ag_growth_Threaded_PSD_Evaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
         AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
         
-        Individual individual = new Individual(new Ag_Ag_growth_rates_factory().getRates("COX_PRB", experitental_temp));
+        Individual individual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp));
         float[][] experimentalPSD = evaluation.calculate_PSD_from_individual(individual);
 
         evaluation.setPSD(experimentalPSD);
 
-        Individual newIndividual = new Individual(new Ag_Ag_growth_rates_factory().getRates("COX_PRB", 125));
+        Individual newIndividual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", 125));
         Population population = new Population(1);
         population.setIndividual(newIndividual, 0);
         double[] populationErrors = evaluation.evaluate(population);

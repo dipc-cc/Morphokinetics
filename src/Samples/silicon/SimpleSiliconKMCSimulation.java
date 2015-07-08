@@ -4,7 +4,7 @@ import graphicInterfaces.siliconEtching.SiliconFrame;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.Si_etching.Si_etch_rates_factory;
+import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /*
  * To change this template, choose Tools | Templates
@@ -26,8 +26,7 @@ public class SimpleSiliconKMCSimulation {
 
         long start = System.nanoTime();
 
-        KMC.initializeRates(
-                new Si_etch_rates_factory()
+        KMC.initializeRates(new SiEtchRatesFactory()
                 .getRates("Gosalvez_PRE", 350));
 
         KMC.simulate();

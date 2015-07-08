@@ -2,16 +2,17 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.Si_etching;
+package ratesLibrary.basic;
+
 
 /**
  *
  * @author Nestor
  */
-public interface ISiRates {
+public interface IBasicRates {
  
     
     
-public double getPrefactor(int i,int j);
-public double getEnergy(int i,int j);  
+public double getPrefactor(int i);
+public double getEnergy(int i);  
 }

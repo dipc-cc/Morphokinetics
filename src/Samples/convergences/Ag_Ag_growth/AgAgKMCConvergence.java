@@ -12,8 +12,8 @@ import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
-import Rates_library.Si_etching.Si_etch_rates_factory;
-import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
+import ratesLibrary.siEtching.SiEtchRatesFactory;
+import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 
 /**
  *
@@ -24,9 +24,9 @@ public class AgAgKMCConvergence {
     public static void main(String[] args) {
 
         float experitental_temp = 135;
-        double deposition_rate = new Ag_Ag_growth_rates_factory().getDepositionRate("COX_PRB", experitental_temp);
-        double island_density = new Ag_Ag_growth_rates_factory().getIslandDensity("COX_PRB", experitental_temp);
-        double diffusion_rate = new Ag_Ag_growth_rates_factory().getRates("COX_PRB", experitental_temp)[0];
+        double deposition_rate = new AgAgGrowthRatesFactory().getDepositionRate("COX_PRB", experitental_temp);
+        double island_density = new AgAgGrowthRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
+        double diffusion_rate = new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp)[0];
 
         GeneticAlgorithmConfiguration geneticConfiguration = new genetic_algorithm_config_factory()
                 .create_Ag_Ag_convergence_configuration(diffusion_rate, island_density, deposition_rate);
@@ -38,7 +38,7 @@ public class AgAgKMCConvergence {
 
         //--------------------------------
         evaluator.setRepeats(evaluator.getRepeats() * 5);
-        Individual individual = new Individual(new Ag_Ag_growth_rates_factory().getRates("COX_PRB", experitental_temp));
+        Individual individual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp));
         float[][] experimentalPSD = evaluator.calculate_PSD_from_individual(individual);
         double simulationTime = individual.getSimulationTime();
         evaluator.setRepeats(evaluator.getRepeats() / 5);

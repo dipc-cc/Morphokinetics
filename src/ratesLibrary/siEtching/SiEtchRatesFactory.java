@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.basic;
+package ratesLibrary.siEtching;
 
-import Rates_library.Si_etching.*;
-import Rates_library.IRatesFactory;
+import ratesLibrary.IRatesFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,34 +12,33 @@ import java.util.Map;
  *
  * @author Nestor
  */
-public class Basic_etch_rates_factory implements IRatesFactory {
+public class SiEtchRatesFactory implements IRatesFactory {
     
-    private static Map<String,IBasicRates> experiments;
+    private static Map<String,ISiRates> experiments;
     private static double kB=8.617332e-5;
    
     
-  public Basic_etch_rates_factory(){
+  public SiEtchRatesFactory(){
   
     experiments=new HashMap();  
-    experiments.put("Basic_E", new Rates_case_E());
-    experiments.put("Basic_F", new Rates_case_F());
-    experiments.put("Basic_OTHER", new Rates_case_OHTER());  
-    experiments.put("Basic_H", new Rates_case_H());  
+    experiments.put("Gosalvez_PRE", new RatesFromPreGosalvez());
   }  
     
     @Override
  public double[] getRates(String experimentName, double temperature){
     
-   IBasicRates experiment=experiments.get(experimentName);
-   double[] rates=new double[4];
+   ISiRates experiment=experiments.get(experimentName);
+   double[] rates=new double[64];
         
      for(int i=0;i<4;i++){
-        rates[i]=(experiment.getPrefactor(i)*Math.exp(-experiment.getEnergy(i)/(kB*temperature)));
-      }
+     for(int j=0;j<16;j++){
+        rates[i*16+j]=(experiment.getPrefactor(i, j)*Math.exp(-experiment.getEnergy(i, j)/(kB*temperature)));
+      }}
      return rates;       
     }
-
-    @Override
+ 
+ 
+     @Override
     public double getDepositionRate(String experimentName, double temperature) {
         throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms."); 
     }
@@ -49,7 +47,5 @@ public class Basic_etch_rates_factory implements IRatesFactory {
     public double getIslandDensity(String experimentName, double temperature) {
         throw new UnsupportedOperationException("This KMC does does not form islands."); 
     }
- 
- 
       
 }

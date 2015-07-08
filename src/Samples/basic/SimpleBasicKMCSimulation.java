@@ -4,7 +4,7 @@ package Samples.basic;
 import graphicInterfaces.basic.BasicFrame;
 import Kinetic_Monte_Carlo.KMC_core.etching.basic_KMC.Basic_KMC;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.basic.Basic_etch_rates_factory;
+import ratesLibrary.basic.BasicEtchRatesFactory;
 import utils.Wait;
 
 /*
@@ -32,7 +32,7 @@ public class SimpleBasicKMCSimulation {
       
       BasicFrame panel=new BasicFrame(3);  
       
-      KMC.initializeRates(new Basic_etch_rates_factory().getRates("Basic_OTHER", 350));
+      KMC.initializeRates(new BasicEtchRatesFactory().getRates("Basic_OTHER", 350));
       
       
       for (int i=0;i<1000;i++){

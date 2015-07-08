@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.diffusion.Ag_Ag_Growth;
+package ratesLibrary.diffusion.agAgGrowth;
 
-import Rates_library.diffusion.IDiffusionRates;
-import Rates_library.IRatesFactory;
+import ratesLibrary.diffusion.IDiffusionRates;
+import ratesLibrary.IRatesFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,14 +13,14 @@ import java.util.Map;
  *
  * @author Nestor
  */
-public class Ag_Ag_growth_rates_factory implements IRatesFactory {
+public class AgAgGrowthRatesFactory implements IRatesFactory {
 
     private static Map<String, IDiffusionRates> experiments;
 
-    public Ag_Ag_growth_rates_factory() {
+    public AgAgGrowthRatesFactory() {
 
         experiments = new HashMap();
-        experiments.put("COX_PRB", new Rates_from_PRB_Cox());
+        experiments.put("COX_PRB", new RatesFromPrbCox());
     }
 
   

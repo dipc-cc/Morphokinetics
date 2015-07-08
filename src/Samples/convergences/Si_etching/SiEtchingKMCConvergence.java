@@ -11,7 +11,7 @@ import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
-import Rates_library.Si_etching.Si_etch_rates_factory;
+import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**
  *
@@ -40,7 +40,7 @@ public class SiEtchingKMCConvergence {
         for (int i = 0; i < totalConvergences; i++) {
 
           evaluator.setRepeats(evaluator.getRepeats()*20);
-          Individual individual=new Individual(new Si_etch_rates_factory().getRates("Gosalvez_PRE", 340));
+          Individual individual=new Individual(new SiEtchRatesFactory().getRates("Gosalvez_PRE", 340));
           float[][] experimentalPSD=evaluator.calculate_PSD_from_individual(individual);
           double simulationTime=individual.getSimulationTime();
           evaluator.setRepeats(evaluator.getRepeats()/20);

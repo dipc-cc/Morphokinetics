@@ -10,7 +10,7 @@ import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.worker.KMC_worker;
 import Kinetic_Monte_Carlo.KMC_core.worker.IFinish_listener;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.Si_etching.Si_etch_rates_factory;
+import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**
  *
@@ -36,7 +36,7 @@ public class SimpleKMCSimulationWithWorker implements IFinish_listener {
                                          worker_ID); 
         worker.start();
                 
-        worker.initialize( new Si_etch_rates_factory().getRates("Gosalvez_PRE", 350));
+        worker.initialize(new SiEtchRatesFactory().getRates("Gosalvez_PRE", 350));
      
         System.out.println("Launching worker...");
         worker.simulate(new SimpleKMCSimulationWithWorker(),work_ID);

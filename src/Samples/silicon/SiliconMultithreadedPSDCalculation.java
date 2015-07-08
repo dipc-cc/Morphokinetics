@@ -11,7 +11,7 @@ import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.Si_etching.Si_etch_rates_factory;
+import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**
  *
@@ -29,9 +29,8 @@ public class SiliconMultithreadedPSDCalculation {
                 evaluation.setWheight(1.0f);
                 evaluation.setShowGraphics(false);
         
-        float[][] PSD = ((AbstractPSDEvaluation)evaluation).calculate_PSD_from_individual(
-                new Individual(
-                new Si_etch_rates_factory().getRates("Gosalvez_PRE", 350)));
+        float[][] PSD = ((AbstractPSDEvaluation)evaluation).calculate_PSD_from_individual(new Individual(
+                new SiEtchRatesFactory().getRates("Gosalvez_PRE", 350)));
         
         evaluation.dispose();
      

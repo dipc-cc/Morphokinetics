@@ -12,7 +12,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
+import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 import static Samples.AgAg_growth.SimpleAgAgGrowthKMCSimulation.constant_Y;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
@@ -30,7 +30,7 @@ public class AgAgPSDTest {
          
        System.out.println("Simple simulation of the Ag/Ag growth KMC");
        
-        Ag_Ag_growth_rates_factory ratesFactory = new Ag_Ag_growth_rates_factory();
+        AgAgGrowthRatesFactory ratesFactory = new AgAgGrowthRatesFactory();
 
         Ag_Ag_KMC kmc = initialize_kmc();
         
@@ -83,7 +83,7 @@ public class AgAgPSDTest {
     }
     
     
-    private static void initializeRates(Ag_Ag_growth_rates_factory reatesFactory, Ag_Ag_KMC kmc) {
+    private static void initializeRates(AgAgGrowthRatesFactory reatesFactory, Ag_Ag_KMC kmc) {
 
         double deposition_rate = reatesFactory.getDepositionRate("COX_PRB", 135);
         double island_density = reatesFactory.getIslandDensity("COX_PRB", 135);

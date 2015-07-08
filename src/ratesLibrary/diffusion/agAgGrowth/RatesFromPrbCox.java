@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.diffusion.Ag_Ag_Growth;
+package ratesLibrary.diffusion.agAgGrowth;
 
-import Rates_library.diffusion.IDiffusionRates;
+import ratesLibrary.diffusion.IDiffusionRates;
 
 /**
  *
@@ -14,7 +14,7 @@ import Rates_library.diffusion.IDiffusionRates;
  * 031604
  *
  */
-public class Rates_from_PRB_Cox implements IDiffusionRates {
+public class RatesFromPrbCox implements IDiffusionRates {
 
     private double kB = 8.617332e-5;
     private double difusion_ML = 0.0035;
@@ -44,7 +44,7 @@ public class Rates_from_PRB_Cox implements IDiffusionRates {
         //4:bulk
         //5: B side
     
-    public Rates_from_PRB_Cox() {
+    public RatesFromPrbCox() {
 
         //[source type][destination type]
         energies[0][0] = Ed;

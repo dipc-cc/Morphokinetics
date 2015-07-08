@@ -2,15 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.diffusion.Graphene_CVD_Growth;
+package ratesLibrary.diffusion.grapheneCvdGrowth;
 
-import Rates_library.diffusion.IDiffusionRates;
+import ratesLibrary.diffusion.IDiffusionRates;
 
 /**
  *
  * @author Nestor
  */
-public class synthetic_rates implements IDiffusionRates {
+public class SyntheticRates implements IDiffusionRates {
 
  private double[][] rates;
  private double depositionRateInML_second=0.000035;

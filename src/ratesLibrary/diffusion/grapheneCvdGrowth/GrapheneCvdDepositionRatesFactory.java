@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Rates_library.diffusion.Graphene_CVD_Growth;
+package ratesLibrary.diffusion.grapheneCvdGrowth;
 
-import Rates_library.IRatesFactory;
-import Rates_library.diffusion.IDiffusionRates;
+import ratesLibrary.IRatesFactory;
+import ratesLibrary.diffusion.IDiffusionRates;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,16 +13,16 @@ import java.util.Map;
  *
  * @author Nestor
  */
-public class Graphene_CVD_deposition_rates_factory implements IRatesFactory{
+public class GrapheneCvdDepositionRatesFactory implements IRatesFactory{
     
     
    private static Map<String,IDiffusionRates> experiments;
    
    
-  public Graphene_CVD_deposition_rates_factory(){
+  public GrapheneCvdDepositionRatesFactory(){
   
     experiments=new HashMap();  
-    experiments.put("synthetic", new synthetic_rates());
+    experiments.put("synthetic", new SyntheticRates());
   }  
   
   
