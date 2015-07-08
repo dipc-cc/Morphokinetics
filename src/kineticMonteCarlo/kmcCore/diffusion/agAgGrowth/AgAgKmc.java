@@ -35,9 +35,9 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
       
       
         HopsPerStep distance_per_step = new HopsPerStep();
-        this.lattice = new AgAgGrowthLattice(config.getXsize(), config.getYsize(), modified_buffer, distance_per_step);
+        this.lattice = new AgAgGrowthLattice(config.getSizeX(), config.getSizeY(), modified_buffer, distance_per_step);
         if (justCentralFlake) configureDevitaAccelerator(distance_per_step);  
-          this.setIslandDensityAndDepositionRate( config.getDeposition_rate(),config.getIsland_density());
+          this.setIslandDensityAndDepositionRate( config.getDepositionRate(),config.getIslandDensity());
     }
     
     
