@@ -23,7 +23,7 @@ import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
-import static Samples.AgAg_growth.AgAgMulthreadedEvaluatorTest.constant_Y;
+import static samples.agAgGrowth.AgAgMultithreadedEvaluatorTest.constant_Y;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author Nestor
  */
-public class genetic_algorithm_config_factory {
+public class GeneticAlgorithmConfigFactory {
 
     public GeneticAlgorithmConfiguration create_silicon_convergence_configuration() {
 

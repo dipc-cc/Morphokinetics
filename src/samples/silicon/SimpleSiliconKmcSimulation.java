@@ -1,4 +1,4 @@
-package Samples.silicon;
+package samples.silicon;
 
 import graphicInterfaces.siliconEtching.SiliconFrame;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
@@ -14,7 +14,7 @@ import ratesLibrary.siEtching.SiEtchRatesFactory;
  *
  * @author Nestor
  */
-public class SimpleSiliconKMCSimulation {
+public class SimpleSiliconKmcSimulation {
 
     public static void main(String args[]) {
 

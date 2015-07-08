@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.Graphene_CVD_growth;
+package samples.grapheneCvdGrowth;
 
 import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
 import graphicInterfaces.difussion2DGrowth.grapheneCvdGrowth.GrapheneKmcCanvas;
@@ -15,7 +15,7 @@ import ratesLibrary.diffusion.grapheneCvdGrowth.GrapheneCvdDepositionRatesFactor
  *
  * @author Nestor
  */
-public class SimpleGrapheneKMCSimulation {
+public class SimpleGrapheneKmcSimulation {
 
     private static final double cos30 = Math.cos(30 * Math.PI / 180);
 

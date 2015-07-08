@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.AgAg_growth;
+package samples.agAgGrowth;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgBasicPsdEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgGrowthThreadedPsdEvaluation;
@@ -19,7 +19,7 @@ import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
  *
  * @author Nestor
  */
-public class AgAgMulthreadedEvaluatorTest {
+public class AgAgMultithreadedEvaluatorTest {
 
     public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
 

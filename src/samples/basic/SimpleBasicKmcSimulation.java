@@ -1,4 +1,4 @@
-package Samples.basic;
+package samples.basic;
 
 
 import graphicInterfaces.basic.BasicFrame;
@@ -16,7 +16,7 @@ import utils.Wait;
  *
  * @author Nestor
  */
-public class SimpleBasicKMCSimulation {
+public class SimpleBasicKmcSimulation {
     
     
     public static void main(String args[]){

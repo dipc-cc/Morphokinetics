@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.silicon;
+package samples.silicon;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
@@ -17,7 +17,7 @@ import ratesLibrary.siEtching.SiEtchRatesFactory;
  *
  * @author Nestor
  */
-public class SiliconMultithreadedPSDCalculation {
+public class SiliconMultithreadedPsdCalculation {
 
     public static void main(String[] args) {
         

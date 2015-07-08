@@ -1,4 +1,4 @@
-package Samples.silicon;
+package samples.silicon;
 
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
@@ -16,7 +16,7 @@ import utils.PSD_analysis.PSD_signature_2D;
  *
  * @author Nestor
  */
-public class SimpleSiliconKMCFFTAnalisys {
+public class SimpleSiliconKmcFftAnalisys {
 
     public static void main(String args[]) {
 

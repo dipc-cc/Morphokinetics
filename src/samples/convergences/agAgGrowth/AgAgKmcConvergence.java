@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.convergences.Ag_Ag_growth;
+package samples.convergences.agAgGrowth;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
-import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
+import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
@@ -19,7 +19,7 @@ import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
  *
  * @author Nestor
  */
-public class AgAgKMCConvergence {
+public class AgAgKmcConvergence {
 
     public static void main(String[] args) {
 
@@ -28,7 +28,7 @@ public class AgAgKMCConvergence {
         double island_density = new AgAgGrowthRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
         double diffusion_rate = new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp)[0];
 
-        GeneticAlgorithmConfiguration geneticConfiguration = new genetic_algorithm_config_factory()
+        GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
                 .create_Ag_Ag_convergence_configuration(diffusion_rate, island_density, deposition_rate);
 
         GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);

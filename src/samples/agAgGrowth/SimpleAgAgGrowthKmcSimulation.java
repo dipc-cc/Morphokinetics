@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.AgAg_growth;
+package samples.agAgGrowth;
 
 import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
@@ -15,7 +15,7 @@ import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
  *
  * @author Nestor
  */
-public class SimpleAgAgGrowthKMCSimulation {
+public class SimpleAgAgGrowthKmcSimulation {
    
   public static float constant_Y=(float)Math.sqrt(3)/2.0f;
     

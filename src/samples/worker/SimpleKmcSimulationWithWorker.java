@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.worker;
+package samples.worker;
 
 import graphicInterfaces.siliconEtching.SiliconFrame;
 import Kinetic_Monte_Carlo.KMC_core.etching.Si_etching.Si_etching_KMC;
@@ -16,7 +16,7 @@ import ratesLibrary.siEtching.SiEtchRatesFactory;
  *
  * @author Nestor
  */
-public class SimpleKMCSimulationWithWorker implements IFinish_listener {
+public class SimpleKmcSimulationWithWorker implements IFinish_listener {
 
     
     private static KMC_worker worker;
@@ -39,7 +39,7 @@ public class SimpleKMCSimulationWithWorker implements IFinish_listener {
         worker.initialize(new SiEtchRatesFactory().getRates("Gosalvez_PRE", 350));
      
         System.out.println("Launching worker...");
-        worker.simulate(new SimpleKMCSimulationWithWorker(),work_ID);
+        worker.simulate(new SimpleKmcSimulationWithWorker(),work_ID);
         System.out.println("Continuing execution.");  
     }
 

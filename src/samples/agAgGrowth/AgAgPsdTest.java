@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package Samples.AgAg_growth;
+package samples.agAgGrowth;
 
 import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
@@ -13,7 +13,7 @@ import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC;
 import Kinetic_Monte_Carlo.lattice.diffusion.Abstract_2D_diffusion_lattice;
 import Kinetic_Monte_Carlo.list.List_configuration;
 import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
-import static Samples.AgAg_growth.SimpleAgAgGrowthKMCSimulation.constant_Y;
+import static samples.agAgGrowth.SimpleAgAgGrowthKmcSimulation.constant_Y;
 import utils.MathUtils;
 import utils.PSD_analysis.PSD_signature_2D;
 
@@ -21,7 +21,7 @@ import utils.PSD_analysis.PSD_signature_2D;
  *
  * @author Nestor
  */
-public class AgAgPSDTest {
+public class AgAgPsdTest {
     
     public static float constant_Y=(float)Math.sqrt(3)/2.0f;
     

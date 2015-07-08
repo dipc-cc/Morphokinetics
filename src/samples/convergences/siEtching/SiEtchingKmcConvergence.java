@@ -2,14 +2,14 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package Samples.convergences.Si_etching;
+package samples.convergences.siEtching;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
-import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
+import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 
@@ -17,21 +17,21 @@ import ratesLibrary.siEtching.SiEtchRatesFactory;
  *
  * @author Nestor
  */
-public class SiEtchingKMCConvergence {
+public class SiEtchingKmcConvergence {
 
     private final int totalConvergences = 15;
 
     public static void main(String[] args) {
 
         System.out.println("Recovering Si etching KMC rates by using the KMC");
-        new SiEtchingKMCConvergence().performConvergence();
+        new SiEtchingKmcConvergence().performConvergence();
 
     }
 
     public void performConvergence() {
 
 
-        GeneticAlgorithmConfiguration geneticConfiguration = new genetic_algorithm_config_factory()
+        GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
                 .create_silicon_convergence_configuration();
         GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
         new GaProgressFrame(GA).setVisible(true);
