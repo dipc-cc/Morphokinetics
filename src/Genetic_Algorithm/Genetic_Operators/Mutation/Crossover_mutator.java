@@ -22,7 +22,6 @@ public class Crossover_mutator implements IMutation {
 			Individual child = p.getIndividual(k);
 			
 			// Crossover.
-			RichArray jr = new RichArray(config.n, 1);
 			Random random = new Random();
 			double jr = Math.ceil(config.n * random.nextDouble());
 		
