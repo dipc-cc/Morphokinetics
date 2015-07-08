@@ -2,7 +2,7 @@ package utils.akting;
 
 import java.util.ArrayList;
 
-import Genetic_Algorithm.Population;
+import geneticAlgorithm.Population;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
 import utils.akting.operations.Operation;

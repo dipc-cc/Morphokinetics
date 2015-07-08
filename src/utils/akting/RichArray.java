@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import Genetic_Algorithm.Individual;
+import geneticAlgorithm.Individual;
 import utils.akting.operations.Operation;
 
 @SuppressWarnings("serial")

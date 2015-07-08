@@ -4,8 +4,8 @@
  */
 package Graphic_interfaces.GA_convergence;
 
-import Genetic_Algorithm.IProgressable;
-import Genetic_Algorithm.Individual;
+import geneticAlgorithm.IProgressable;
+import geneticAlgorithm.Individual;
 
 /**
  *

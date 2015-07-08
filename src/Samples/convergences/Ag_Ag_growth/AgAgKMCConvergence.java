@@ -5,12 +5,12 @@
  */
 package Samples.convergences.Ag_Ag_growth;
 
-import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.AbstractPSDEvaluation;
-import Genetic_Algorithm.Genetic_algorithm;
-import Genetic_Algorithm.Genetic_algorithm_configuration;
-import Genetic_Algorithm.IGenetic_algorithm;
-import Genetic_Algorithm.Individual;
-import Genetic_Algorithm.genetic_algorithm_database.genetic_algorithm_config_factory;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.Genetic_algorithm;
+import geneticAlgorithm.Genetic_algorithm_configuration;
+import geneticAlgorithm.IGenetic_algorithm;
+import geneticAlgorithm.Individual;
+import geneticAlgorithm.geneticAlgorithmDatabase.genetic_algorithm_config_factory;
 import Graphic_interfaces.GA_convergence.GA_progress_frame;
 import Rates_library.Si_etching.Si_etch_rates_factory;
 import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;

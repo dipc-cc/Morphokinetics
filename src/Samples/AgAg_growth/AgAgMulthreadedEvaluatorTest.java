@@ -5,10 +5,10 @@
  */
 package Samples.AgAg_growth;
 
-import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Ag_ag_growth.Ag_Ag_Basic_PSD_Evaluation;
-import Genetic_Algorithm.Genetic_Operators.Evaluation_Functions.PSD_Evaluator.Ag_ag_growth.Ag_ag_growth_Threaded_PSD_Evaluation;
-import Genetic_Algorithm.Individual;
-import Genetic_Algorithm.Population;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgBasicPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgGrowthThreadedPsdEvaluation;
+import geneticAlgorithm.Individual;
+import geneticAlgorithm.Population;
 import Kinetic_Monte_Carlo.KMC_core.diffusion.Ag_Ag_Growth.Ag_Ag_KMC_config;
 import Kinetic_Monte_Carlo.list.List_configuration;
 import Rates_library.diffusion.Ag_Ag_Growth.Ag_Ag_growth_rates_factory;
@@ -34,8 +34,8 @@ public class AgAgMulthreadedEvaluatorTest {
 
         Ag_Ag_KMC_config config = new Ag_Ag_KMC_config(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 
-        //Ag_ag_growth_Threaded_PSD_Evaluation evaluation = new Ag_ag_growth_Threaded_PSD_Evaluation(config, 20, Integer.MAX_VALUE, 4);
-        Ag_Ag_Basic_PSD_Evaluation evaluation= new Ag_Ag_Basic_PSD_Evaluation(config, 20, Integer.MAX_VALUE);
+        //Ag_ag_growth_Threaded_PSD_Evaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
+        AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
         
         Individual individual = new Individual(new Ag_Ag_growth_rates_factory().getRates("COX_PRB", experitental_temp));
         float[][] experimentalPSD = evaluation.calculate_PSD_from_individual(individual);

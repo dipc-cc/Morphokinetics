@@ -4,8 +4,8 @@
  */
 package Graphic_interfaces.GA_convergence;
 
-import Genetic_Algorithm.IGenetic_algorithm;
-import Genetic_Algorithm.Individual;
+import geneticAlgorithm.IGenetic_algorithm;
+import geneticAlgorithm.Individual;
 import java.awt.Color;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
