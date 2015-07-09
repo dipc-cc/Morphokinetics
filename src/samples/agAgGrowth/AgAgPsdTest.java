@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package samples.agAgGrowth;
 
 import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
@@ -22,75 +21,65 @@ import utils.psdAnalysis.PsdSignature2D;
  * @author Nestor
  */
 public class AgAgPsdTest {
-    
-    public static float constant_Y=(float)Math.sqrt(3)/2.0f;
-    
-  
-         public static void main(String args[]) {
-         
-       System.out.println("Simple simulation of the Ag/Ag growth KMC");
-       
-        AgAgGrowthRatesFactory ratesFactory = new AgAgGrowthRatesFactory();
 
-        AgAgKmc kmc = initialize_kmc();
-        
-        //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
-        PsdSignature2D PSD = new PsdSignature2D(128, 128);
-        float[][] sampledSurface=new float[128][128];
-         
-         for (int i=0;i<30;i++){
-        initializeRates(ratesFactory,kmc); 
-       
-        kmc.simulate();
-        
-        
-        
-        kmc.getSampledSurface(sampledSurface);
-               
-        PSD.addSurfaceSample(sampledSurface);
-        System.out.println("flake "+i);
-         }
-        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-       PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
-       
-        new Frame2D("PSD analysis")
-        .setMesh(MathUtils.avg_Filter(PSD.getPSD(),1)  );
-        
-        new Frame2D("Sampled surface")
-        .setMesh(sampledSurface);   
-        
-        
-     }     
-     
-     private static DifussionKmcFrame create_graphics_frame(AgAgKmc kmc) {
-        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
-        return frame;
+  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
+
+  public static void main(String args[]) {
+
+    System.out.println("Simple simulation of the Ag/Ag growth KMC");
+
+    AgAgGrowthRatesFactory ratesFactory = new AgAgGrowthRatesFactory();
+
+    AgAgKmc kmc = initialize_kmc();
+
+    //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
+    PsdSignature2D PSD = new PsdSignature2D(128, 128);
+    float[][] sampledSurface = new float[128][128];
+
+    for (int i = 0; i < 30; i++) {
+      initializeRates(ratesFactory, kmc);
+      kmc.simulate();
+
+      kmc.getSampledSurface(sampledSurface);
+
+      PSD.addSurfaceSample(sampledSurface);
+      System.out.println("flake " + i);
     }
-     
-     
-    private static AgAgKmc initialize_kmc() {
+    PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-        ListConfiguration config = new ListConfiguration()
-                .setList_type(ListConfiguration.LINEAR_LIST);
+    new Frame2D("PSD analysis").setMesh(MathUtils.avg_Filter(PSD.getPSD(), 1));
 
-        int sizeX = 256;
-        int sizeY = (int) (sizeX /constant_Y);
+    new Frame2D("Sampled surface")
+            .setMesh(sampledSurface);
 
-        AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true);
-        
-       
-        return kmc;
-    }
-    
-    
-    private static void initializeRates(AgAgGrowthRatesFactory reatesFactory, AgAgKmc kmc) {
+  }
 
-        double deposition_rate = reatesFactory.getDepositionRate("COX_PRB", 135);
-        double island_density = reatesFactory.getIslandDensity("COX_PRB", 135);
-        kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
-        kmc.initializeRates(reatesFactory.getRates("COX_PRB", 135));
+  private static DifussionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+    DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    return frame;
+  }
 
-    }
-    
-    
+  private static AgAgKmc initialize_kmc() {
+
+    ListConfiguration config = new ListConfiguration()
+            .setList_type(ListConfiguration.LINEAR_LIST);
+
+    int sizeX = 256;
+    int sizeY = (int) (sizeX / constant_Y);
+
+    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true);
+
+    return kmc;
+  }
+
+  private static void initializeRates(AgAgGrowthRatesFactory reatesFactory, AgAgKmc kmc) {
+
+    double deposition_rate = reatesFactory.getDepositionRate("COX_PRB", 135);
+    double island_density = reatesFactory.getIslandDensity("COX_PRB", 135);
+    kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
+    kmc.initializeRates(reatesFactory.getRates("COX_PRB", 135));
+
+  }
+
 }
