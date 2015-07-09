@@ -16,67 +16,64 @@ import java.util.Set;
  */
 public class ModifiedBuffer {
 
-    private final Set<Abstract2DDiffusionAtom> buffer;
-    private final Set<Abstract2DDiffusionAtom> bufferL;
+  private final Set<Abstract2DDiffusionAtom> buffer;
+  private final Set<Abstract2DDiffusionAtom> bufferL;
 
+  public ModifiedBuffer() {
 
-    public ModifiedBuffer() {
+    buffer = new HashSet(8, 0.9f);
+    bufferL = new HashSet(8, 0.9f);
+  }
 
-        buffer = new HashSet(8, 0.9f);
-        bufferL = new HashSet(8, 0.9f);
+  public void addOwnAtom(Abstract2DDiffusionAtom a) {
+    buffer.add(a);
+
+  }
+
+  public void addBondAtom(Abstract2DDiffusionAtom a) {
+    bufferL.add(a);
+  }
+
+  public void updateAtoms(AbstractList list, Abstract2DDiffusionLattice lattice) {
+
+    Iterator<Abstract2DDiffusionAtom> it = buffer.iterator();
+    while (it.hasNext()) {
+      updateAllRates(it.next(), list);
     }
 
-    public void addAtomPropio(Abstract2DDiffusionAtom a) {
-        buffer.add(a);
+    it = bufferL.iterator();
+    out:
+    while (it.hasNext()) {
+      updateAllNeighbours(it.next(), lattice);
+    }
+    clear();
+  }
 
-    }
+  private void updateAllRates(Abstract2DDiffusionAtom atom, AbstractList list) {
 
-    public void addAtomLigaduras(Abstract2DDiffusionAtom a) {
-        bufferL.add(a);
+    if (atom.isEligible() && !atom.isOnList()) {
+      list.add_Atom(atom);
     }
-    
-    public void updateAtoms(AbstractList list, Abstract2DDiffusionLattice lattice) {
-    
-        
-        
-        Iterator<Abstract2DDiffusionAtom> it = buffer.iterator();
-        while (it.hasNext()) {
-            update_allRates(it.next(),list);
-        }
-        
-        it = bufferL.iterator();
-        out:
-        while (it.hasNext()) {
-            update_all_neighbors(it.next(),lattice);
-        }
-        clear();
-    }
+    atom.updateAllRates();
 
-    private void update_allRates(Abstract2DDiffusionAtom atom,AbstractList list) {
-      
-        if (atom.isEligible() && !atom.isOnList()) {
-            list.add_Atom(atom);
-        }
-        atom.updateAllRates();
-        
-    }
-    
-    private void update_all_neighbors(Abstract2DDiffusionAtom atom,Abstract2DDiffusionLattice lattice) {
-        for (int i = 0; i < atom.getNeighbourCount(); i++) {
-            update_neighbor(atom, i,lattice);
-        }
-    }
+  }
 
-    private void update_neighbor(Abstract2DDiffusionAtom atom, int neighborPos,Abstract2DDiffusionLattice lattice) {
-
-        Abstract2DDiffusionAtom vecino = lattice.getNeighbour(atom.getX(), atom.getY(), neighborPos);
-        if ( vecino.isEligible() && !buffer.contains(vecino)) {
-            vecino.updateOneBound(neighborPos);
-        }
+  private void updateAllNeighbours(Abstract2DDiffusionAtom atom, Abstract2DDiffusionLattice lattice) {
+    for (int i = 0; i < atom.getNeighbourCount(); i++) {
+      updateNeighbour(atom, i, lattice);
     }
+  }
 
-    public void clear() {
-        buffer.clear();
-        bufferL.clear();
+  private void updateNeighbour(Abstract2DDiffusionAtom atom, int neighborPos, Abstract2DDiffusionLattice lattice) {
+
+    Abstract2DDiffusionAtom vecino = lattice.getNeighbour(atom.getX(), atom.getY(), neighborPos);
+    if (vecino.isEligible() && !buffer.contains(vecino)) {
+      vecino.updateOneBound(neighborPos);
     }
+  }
+
+  public void clear() {
+    buffer.clear();
+    bufferL.clear();
+  }
 }

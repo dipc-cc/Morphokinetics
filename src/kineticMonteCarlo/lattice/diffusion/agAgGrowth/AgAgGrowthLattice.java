@@ -144,7 +144,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public Abstract2DDiffusionAtom getNeighbour(int Xpos, int Ypos, int neighbor) {
-    return ((AgAgAtom) atoms[Xpos][Ypos]).getNeighbor(neighbor);
+    return ((AgAgAtom) atoms[Xpos][Ypos]).getNeighbour(neighbor);
   }
 
   @Override

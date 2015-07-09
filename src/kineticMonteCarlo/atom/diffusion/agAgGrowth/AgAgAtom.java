@@ -37,7 +37,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     neighbours[pos] = a;
   }
 
-  public AgAgAtom getNeighbor(int pos) {
+  public AgAgAtom getNeighbour(int pos) {
     return neighbours[pos];
   }
 
@@ -51,7 +51,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     return occupied && (type < 3);
   }
 
-  private boolean isPartOfInamovibleSubstrate() {
+  private boolean isPartOfImmobilSubstrate() {
     return occupied && (type == 4);
   }
 
@@ -167,33 +167,33 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
       switch (corner_position) {
         case 0:
-          return neighbours[5].getNeighbor(0);
+          return neighbours[5].getNeighbour(0);
         case 1:
-          return neighbours[2].getNeighbor(1);
+          return neighbours[2].getNeighbour(1);
         case 2:
-          return neighbours[1].getNeighbor(2);
+          return neighbours[1].getNeighbour(2);
         case 3:
-          return neighbours[4].getNeighbor(3);
+          return neighbours[4].getNeighbour(3);
         case 4:
-          return neighbours[3].getNeighbor(4);
+          return neighbours[3].getNeighbour(4);
         case 5:
-          return neighbours[0].getNeighbor(5);
+          return neighbours[0].getNeighbour(5);
       }
     } else {
 
       switch (corner_position) {
         case 0:
-          return neighbours[1].getNeighbor(0);
+          return neighbours[1].getNeighbour(0);
         case 1:
-          return neighbours[0].getNeighbor(1);
+          return neighbours[0].getNeighbour(1);
         case 2:
-          return neighbours[3].getNeighbor(2);
+          return neighbours[3].getNeighbour(2);
         case 3:
-          return neighbours[2].getNeighbor(3);
+          return neighbours[2].getNeighbour(3);
         case 4:
-          return neighbours[5].getNeighbor(4);
+          return neighbours[5].getNeighbour(4);
         case 5:
-          return neighbours[4].getNeighbor(5);
+          return neighbours[4].getNeighbour(5);
       }
     }
     return null;
@@ -242,14 +242,14 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
       type = new_type;
 
-      modified.addAtomPropio(this);
+      modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
-        modified.addAtomLigaduras(this);
+        modified.addBondAtom(this);
       }
 
       if (inmov_to_mov && occupied) {
         for (int i = 0; i < 6; i++) {
-          if (!neighbours[i].isPartOfInamovibleSubstrate()) {
+          if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeInmovilAddMovil();
           }
         }
@@ -257,7 +257,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
   }
 
-  public void rem_Movil_add_Inmovil_procesa(boolean forceNucleation) {
+  public void removeMobileAddImmobileProcess(boolean forceNucleation) {
 
     if (nMobile == 0) {
       nMobile--;
@@ -265,59 +265,59 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       return;
     }
 
-    byte new_type = typesTable.getType(++nImmobile, --nMobile);
+    byte newType = typesTable.getType(++nImmobile, --nMobile);
 
     if (forceNucleation && occupied) {
-      new_type = 4;
+      newType = 4;
     }
 
-    if (type != new_type) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean mov_to_inmov = (type < 3 && new_type >= 3);
-      type = new_type;
-      modified.addAtomPropio(this);
+    if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean mov_to_inmov = (type < 3 && newType >= 3);
+      type = newType;
+      modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
-        modified.addAtomLigaduras(this);
+        modified.addBondAtom(this);
       }
       if (mov_to_inmov && occupied) {
 
         for (int i = 0; i < 6; i++) {
-          if (!neighbours[i].isPartOfInamovibleSubstrate()) {
-            neighbours[i].rem_Movil_add_Inmovil_procesa(forceNucleation);
+          if (!neighbours[i].isPartOfImmobilSubstrate()) {
+            neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
           }
         }
       }
     }
   }
 
-  public void add_Vecino_Ocupado_procesa(byte tipo_origen, boolean force_nucleation) { //este lo ejecutan los primeros vecinos
+  public void addOccupiedNeighbourProcess(byte originType, boolean forceNucleation) { //este lo ejecutan los primeros vecinos
 
     byte new_type;
 
-    if (tipo_origen < 3) {
+    if (originType < 3) {
       new_type = typesTable.getType(nImmobile, ++nMobile);
     } else {
       new_type = typesTable.getType(++nImmobile, nMobile);
     }
 
-    if (force_nucleation) {
+    if (forceNucleation) {
       new_type = 4;
     }
 
     if (type != new_type) {
 
-      boolean mov_to_inmov = (type < 3 && new_type >= 3);
+      boolean mobileToImmobile = (type < 3 && new_type >= 3);
 
       type = new_type;
 
-      modified.addAtomPropio(this);
+      modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
-        modified.addAtomLigaduras(this);
+        modified.addBondAtom(this);
       }
 
-      if (mov_to_inmov && occupied) {
+      if (mobileToImmobile && occupied) {
         for (int i = 0; i < 6; i++) {
-          if (!neighbours[i].isPartOfInamovibleSubstrate()) {
-            neighbours[i].rem_Movil_add_Inmovil_procesa(force_nucleation);
+          if (!neighbours[i].isPartOfImmobilSubstrate()) {
+            neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
           }
         }
       }
@@ -334,14 +334,14 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
       type = new_type;
 
-      modified.addAtomPropio(this);
+      modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
-        modified.addAtomLigaduras(this);
+        modified.addBondAtom(this);
       }
 
       if (inmov_to_mov && occupied) {
         for (int i = 0; i < 6; i++) {
-          if (!neighbours[i].isPartOfInamovibleSubstrate()) {
+          if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeInmovilAddMovil();
           }
         }
@@ -360,14 +360,14 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
     byte tipo_original = type;
     for (int i = 0; i < 6; i++) {
-      if (!neighbours[i].isPartOfInamovibleSubstrate()) {
-        neighbours[i].add_Vecino_Ocupado_procesa(tipo_original, force_nucleation);
+      if (!neighbours[i].isPartOfImmobilSubstrate()) {
+        neighbours[i].addOccupiedNeighbourProcess(tipo_original, force_nucleation);
       }
     }
 
-    modified.addAtomPropio(this);
+    modified.addOwnAtom(this);
     if (nMobile > 0) {
-      modified.addAtomLigaduras(this);
+      modified.addBondAtom(this);
     }
     totalProbability = 0;
   }
@@ -377,13 +377,13 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     occupied = false;
 
     for (int i = 0; i < 6; i++) {
-      if (!neighbours[i].isPartOfInamovibleSubstrate()) {
+      if (!neighbours[i].isPartOfImmobilSubstrate()) {
         neighbours[i].removeMovilOccupied();
       }
     }
 
     if (nMobile > 0) {
-      modified.addAtomLigaduras(this);
+      modified.addBondAtom(this);
     }
 
     list.addTotalProbability(-totalProbability);

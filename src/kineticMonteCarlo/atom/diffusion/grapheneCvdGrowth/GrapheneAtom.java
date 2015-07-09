@@ -178,9 +178,9 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       lattice.getNeighbour(X, Y, i).add3rdNeighbour();
     }
 
-    modified.addAtomPropio(this);
+    modified.addOwnAtom(this);
     if (getn1n2n3() > 0) {
-      modified.addAtomLigaduras(this);
+      modified.addBondAtom(this);
     }
     totalProbability = 0;
   }
@@ -203,7 +203,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     }
 
     if (getn1n2n3() > 0) {
-      modified.addAtomLigaduras(this);
+      modified.addBondAtom(this);
     }
 
     list.addTotalProbability(-totalProbability);
@@ -362,10 +362,10 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     if (type != newType) {
       type = newType;
       if (occupied) {
-        modified.addAtomPropio(this);
+        modified.addOwnAtom(this);
       }
       if (getn1n2n3() > 0 && !occupied) {
-        modified.addAtomLigaduras(this);
+        modified.addBondAtom(this);
       }
     }
   }
@@ -374,10 +374,10 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     if (type != newType) {
       type = newType;
       if (occupied) {
-        modified.addAtomPropio(this);
+        modified.addOwnAtom(this);
       }
       if (getn1n2n3() > 1 && !occupied) {
-        modified.addAtomLigaduras(this);
+        modified.addBondAtom(this);
       }
     }
   }
