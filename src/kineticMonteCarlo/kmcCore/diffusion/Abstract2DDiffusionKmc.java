@@ -69,7 +69,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     }
 
     @Override
-    protected boolean perform_simulation_step() {
+    protected boolean performSimulationStep() {
 
         Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.next_event(RNG));
         Abstract2DDiffusionAtom destinationAtom;
@@ -104,7 +104,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 		iterations_for_last_simulation = 0;
 	
 		for (int i = 0; i < iterations; i++) {
-			if (perform_simulation_step())
+			if (performSimulationStep())
 				break;
 			
 			iterations_for_last_simulation++;

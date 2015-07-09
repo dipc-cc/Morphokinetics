@@ -14,15 +14,15 @@ import kineticMonteCarlo.list.ListConfiguration;
  */
 public abstract class AbstractEtchingKmc extends AbstractKmc {
 
-    public AbstractEtchingKmc(ListConfiguration config) {
-        super(config);
-    }
-       
+  public AbstractEtchingKmc(ListConfiguration config) {
+    super(config);
+  }
 
-    protected AbstractEtchingLattice lattice;
+  protected AbstractEtchingLattice lattice;
 
-    @Override
-    public AbstractEtchingLattice getLattice() {return lattice;}
-    
-         
+  @Override
+  public AbstractEtchingLattice getLattice() {
+    return lattice;
+  }
+
 }

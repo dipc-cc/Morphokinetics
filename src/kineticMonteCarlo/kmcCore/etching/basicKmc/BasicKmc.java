@@ -49,7 +49,7 @@ public class BasicKmc extends AbstractEtchingKmc {
     }
 
     @Override
-    protected boolean perform_simulation_step() {
+    protected boolean performSimulationStep() {
 
                 BasicAtom atom = (BasicAtom) list.next_event(RNG);
         if (atom.getY() > lattice.getSizeY()-minHeight) {
