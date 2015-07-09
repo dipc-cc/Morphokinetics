@@ -391,7 +391,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     totalProbability = 0;
 
     if (this.isEligible()) {
-      obtainRatesFromNeighBors();
+      obtainRatesFromNeighbours();
       temp += totalProbability;
     }
     if (this.isOnList()) {
@@ -399,7 +399,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
   }
 
-  private void obtainRatesFromNeighBors() {
+  private void obtainRatesFromNeighbours() {
 
     for (int i = 0; i < 6; i++) {
       bondsProbability[i] = probJumpToNeighbour(i);
