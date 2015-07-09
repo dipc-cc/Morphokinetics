@@ -6,35 +6,27 @@ package ratesLibrary.basic;
 
 /**
  *
- * @author Nestor
- * 
- * Etch rates datas obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
- * 
+ * @author Nestor, J. Alberdi-Rodriguez
+ *
+ * Etch rates data obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
+ *
  */
-public class RatesCaseOther implements IBasicRates {
- 
-      private  double E0=0.0;
-      private  double E1=0.0;
-      private  double E2=0;
-      private  double E3=0;
-      
-      private  double P0=1.0;
-      private  double P1=1.0;
-      private  double P2=1.0;
-      private  double P3=0.01;
+public class RatesCaseOther extends RatesCase {
 
-      private  double[] prefactors=new double[4];
-      private  double[] energies   =new double[4];
-                    
-public RatesCaseOther(){
+  public RatesCaseOther() {
+    double[] prefactors = new double[4];
+    double[] energies = new double[4];
 
-energies[0]=E0;  prefactors[0]=P0;
-energies[1]=E1;  prefactors[1]=P1;
-energies[2]=E2;  prefactors[2]=P2;
-energies[3]=E3;  prefactors[3]=P3;
+    energies[0] = 0.0;
+    energies[1] = 0.0;
+    energies[2] = 0.0;
+    energies[3] = 0.0;
 
-}   
-      
-public double getPrefactor(int i)     {return prefactors[i];}
-public double getEnergy(int i)        {return energies[i];}
+    prefactors[0] = 1.0;
+    prefactors[1] = 1.0;
+    prefactors[2] = 1.0;
+    prefactors[3] = 0.01;
+
+    setRates(energies, prefactors);
+  }
 }
