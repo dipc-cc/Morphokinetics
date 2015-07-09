@@ -1,4 +1,4 @@
-package kineticMonteCarlo.lattice.etching.siEtching.unitCell;
+package basic.unitCell;
 
 /**
  *
@@ -7,19 +7,19 @@ package kineticMonteCarlo.lattice.etching.siEtching.unitCell;
 public class UnitCellAtom {
 
 //sólo para la creación de la unit cell
-  protected short uc_x;
-  protected short uc_y;
-  protected short uc_z;
-  protected UnitCellAtom[] neighs;
-  protected short num;
-  protected int tipo;
-  protected double posX, posY, posZ;
-  protected float posX_space, posY_space, posZ_space;
-  protected static float limitX, limitY, limitZ;
-  protected static float desp_x_y, desp_x_z, desp_y_z;
-  protected static float offset_X, offset_Y;
-  protected static int sX, sY;
-  protected static float topX, topY, topXinv, topYinv;
+  private short uc_x;
+  private short uc_y;
+  private short uc_z;
+  private UnitCellAtom[] neighs;
+  private short num;
+  private int tipo;
+  private double posX, posY, posZ;
+  private float posX_space, posY_space, posZ_space;
+  private static float limitX, limitY, limitZ;
+  private static float desp_x_y, desp_x_z, desp_y_z;
+  private static float offset_X, offset_Y;
+  private static int sX, sY;
+  private static float topX, topY, topXinv, topYinv;
 
   public static float getLimitX() {
     return limitX;

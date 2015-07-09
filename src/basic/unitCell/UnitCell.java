@@ -1,6 +1,6 @@
-package kineticMonteCarlo.lattice.etching.siEtching.unitCell;
+package basic.unitCell;
 
-import java.util.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -8,20 +8,20 @@ import java.util.*;
  */
 public class UnitCell {
 
-  protected static final double LatticeDim = 5.430710f;
-  protected static final double spaceCell = LatticeDim / 4.0f;
-  protected static final int depth = 25;
-  protected double[][] g = new double[3][3];
-  protected short[] neighs;
-  protected byte[] n_block;
-  protected double limitX, limitY, limitZ;
-  protected double limitXnt, limitYnt, limitZnt;
-  protected UnitCellAtom[][][] red0;
-  protected UnitCellAtom[][][] red1;
-  protected UnitCellAtom[][][] red2;
-  protected UnitCellAtom[][][] red3;
-  protected int I_i, I_s, J_i, J_s, K_i, K_s;
-  protected UnitCellAtom[] Cells_Pointer;
+  private static final double LatticeDim = 5.430710f;
+  private static final double spaceCell = LatticeDim / 4.0f;
+  private static final int depth = 25;
+  private double[][] g = new double[3][3];
+  private short[] neighs;
+  private byte[] n_block;
+  private double limitX, limitY, limitZ;
+  private double limitXnt, limitYnt, limitZnt;
+  private UnitCellAtom[][][] red0;
+  private UnitCellAtom[][][] red1;
+  private UnitCellAtom[][][] red2;
+  private UnitCellAtom[][][] red3;
+  private int I_i, I_s, J_i, J_s, K_i, K_s;
+  private UnitCellAtom[] Cells_Pointer;
 
   public double[][] getRotation() {
     return g;
@@ -47,12 +47,10 @@ public class UnitCell {
 
     double M, N;
 
-    M
-            = Math.sqrt((double) m[0] * (double) m[0] + (double) m[1] * (double) m[1]
-                    + (double) m[2] * (double) m[2]);
-    N
-            = Math.sqrt((double) m[3] * (double) m[3] + (double) m[4] * (double) m[4]
-                    + (double) m[5] * (double) m[5]);
+    M = Math.sqrt((double) m[0] * (double) m[0] + (double) m[1] * (double) m[1]
+            + (double) m[2] * (double) m[2]);
+    N = Math.sqrt((double) m[3] * (double) m[3] + (double) m[4] * (double) m[4]
+            + (double) m[5] * (double) m[5]);
 
     g[0][0] = (double) m[3] / (double) N;
     g[1][0] = (double) m[4] / (double) N;
@@ -208,14 +206,14 @@ public class UnitCell {
       }
     }
 
-        //-------------------------------------------------------------------------------------------
+    //-------------------------------------------------------------------------------------------
     // Obtenemos las posiciones de las tres c�lulas que minimizan la celula unidad
     // Se almacena en las variables PX, PY y PZ
     //-------------------------------------------------------------------------------------------
     double PZ_x, PZ_y, PZ_z, P1_x, P1_y, P1_z, P2_x, P2_y, P2_z;
 
     try {
-            //buscamos los angulos que minimizan
+      //buscamos los angulos que minimizan
 
       double sizeMin = Math.sqrt(Math.pow(z_xs.get(0), 2) + Math.pow(z_ys.get(0), 2) + Math.pow(z_zs.get(0), 2));
       int location = 0;
@@ -307,7 +305,7 @@ public class UnitCell {
 //fijamos el angulo de rotaci�n con respecto SC C
     SetRotacion(rot);
 
-        //System.out.println(g[1][0]+" "+g[1][1]+" "+g[1][2]);
+    //System.out.println(g[1][0]+" "+g[1][1]+" "+g[1][2]);
     //si sabemos los limites de X, Y y Z, a partir de ellos sabemos los limites en X, Y y Z pero del sistema de coordenadas de la matriz
     double I_i, I_s, J_i, J_s, K_i, K_s;
     I_i = I_s = J_i = J_s = K_i = K_s = 0;
@@ -479,11 +477,11 @@ public class UnitCell {
     red2 = new UnitCellAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
     red3 = new UnitCellAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
 
-        //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
     // Creamos los atomos
     //-------------------------------------------------------------------------
     int cuantos = creaAtomos();
-        //-----------------------------------------------------------------------
+    //-----------------------------------------------------------------------
     // Por ultimo, interconectamos las celulas
     //-----------------------------------------------------------------------
     if (cuantos > 2048) {
@@ -492,7 +490,7 @@ public class UnitCell {
 
     interconecta();
 
-        //----------------------------------------
+    //----------------------------------------
     // Asignamos la celula origen y numeramos
     //----------------------------------------
     neighs = new short[4 * cuantos];
@@ -701,7 +699,7 @@ public class UnitCell {
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
         for (int k = this.K_i; k < this.K_s; k++) { //X SC B
 
-                    //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
+          //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
           if (red0[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             if (j > this.J_i) {
               red0[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(0, red1[i - this.I_i][j - 1 - this.J_i][k - this.K_i]);
@@ -767,7 +765,7 @@ public class UnitCell {
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
         for (int k = this.K_i; k < this.K_s; k++) { //X SC B
 
-                    //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
+          //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red3[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             if (j > -this.J_i) {
               red3[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(0, red2[i - this.I_i][j - this.J_i - 1][k - this.K_i]);
@@ -994,7 +992,7 @@ public class UnitCell {
 
     }
 
-        // System.out.println();
+    // System.out.println();
     //celula tipo 1 
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       // int cont=0;
@@ -1005,7 +1003,7 @@ public class UnitCell {
             int num = red1[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
             Cells_Pointer[num] = red1[i - this.I_i][j - this.J_i][k - this.K_i];
 
-                        //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
+            //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             //   cont++;
             if (red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {
@@ -1203,7 +1201,7 @@ public class UnitCell {
           if (red2[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red2[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
             Cells_Pointer[num] = red2[i - this.I_i][j - this.J_i][k - this.K_i];
-                        //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
+            //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             //  cont++;
             if (red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {
@@ -1353,7 +1351,7 @@ public class UnitCell {
               posX = posX + (j + 0.5) * LatticeDim / 2;
               posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
               double posZ = LatticeDim * i + spaceCell;
-                            //if (red2[i-this.I_i][j-this.J_i][k-this.K_i].getNum()==11) System.out.println(">"+posX+" "+posY+" "+posZ);
+              //if (red2[i-this.I_i][j-this.J_i][k-this.K_i].getNum()==11) System.out.println(">"+posX+" "+posY+" "+posZ);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1393,7 +1391,7 @@ public class UnitCell {
       }
     }
 
-        //System.out.println();
+    //System.out.println();
     //celula tipo 3 
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       int cont = 0;
@@ -1403,7 +1401,7 @@ public class UnitCell {
           if (red3[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red3[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
             Cells_Pointer[num] = red3[i - this.I_i][j - this.J_i][k - this.K_i];
-                        //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
+            //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             cont++;
             if (red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {

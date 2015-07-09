@@ -6,7 +6,7 @@ package kineticMonteCarlo.lattice.etching.siEtching;
 
 import kineticMonteCarlo.atom.etching.siEtching.SiAtom;
 import kineticMonteCarlo.lattice.etching.AbstractEtchingLattice;
-import kineticMonteCarlo.lattice.etching.siEtching.unitCell.UnitCell;
+import basic.unitCell.UnitCell;
 
 /**
  *
