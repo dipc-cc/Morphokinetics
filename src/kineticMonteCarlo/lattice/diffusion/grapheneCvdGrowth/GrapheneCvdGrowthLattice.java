@@ -83,7 +83,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public GrapheneAtom getNeighbor(int Xpos, int Ypos, int neighbor) {
+  public GrapheneAtom getNeighbour(int Xpos, int Ypos, int neighbor) {
 
     int vec = latticeNeighborhoodData[neighbor];                      //esto define el tipo de atomo
     int vec_X = (short) (vec & 0xFFFF);
@@ -291,9 +291,9 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type_0) {
-          a = getNeighbor(X_v, Y_v, 0);
+          a = getNeighbour(X_v, Y_v, 0);
         } else {
-          a = getNeighbor(X_v, Y_v, 1);
+          a = getNeighbour(X_v, Y_v, 1);
         }
         if (a.is_outside()) {
           error_code |= 1;
@@ -310,9 +310,9 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type_0) {
-          a = getNeighbor(X_v, Y_v, 2);
+          a = getNeighbour(X_v, Y_v, 2);
         } else {
-          a = getNeighbor(X_v, Y_v, 1);
+          a = getNeighbour(X_v, Y_v, 1);
         }
         if (a.is_outside()) {
           error_code |= 1;
@@ -329,9 +329,9 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type_0) {
-          a = getNeighbor(X_v, Y_v, 2);
+          a = getNeighbour(X_v, Y_v, 2);
         } else {
-          a = getNeighbor(X_v, Y_v, 0);
+          a = getNeighbour(X_v, Y_v, 0);
         }
         if (a.is_outside()) {
           error_code |= 1;
@@ -348,9 +348,9 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type_0) {
-          a = getNeighbor(X_v, Y_v, 1);
+          a = getNeighbour(X_v, Y_v, 1);
         } else {
-          a = getNeighbor(X_v, Y_v, 0);
+          a = getNeighbour(X_v, Y_v, 0);
         }
         if (a.is_outside()) {
           error_code |= 1;
@@ -367,9 +367,9 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type_0) {
-          a = getNeighbor(X_v, Y_v, 1);
+          a = getNeighbour(X_v, Y_v, 1);
         } else {
-          a = getNeighbor(X_v, Y_v, 2);
+          a = getNeighbour(X_v, Y_v, 2);
         }
         if (a.is_outside()) {
           error_code |= 1;
@@ -386,9 +386,9 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type_0) {
-          a = getNeighbor(X_v, Y_v, 0);
+          a = getNeighbour(X_v, Y_v, 0);
         } else {
-          a = getNeighbor(X_v, Y_v, 2);
+          a = getNeighbour(X_v, Y_v, 2);
         }
         if (a.is_outside()) {
           error_code |= 1;
@@ -469,8 +469,8 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       Y_v1 = Y_v1_temp;
       Y_v2 = Y_v2_temp;
       if (s == 1 && atoms[X][Y].isOccupied()) {
-        tipo1 = atoms[X_v1][Y_v1].get_type_without_neighbor(vecino1);
-        tipo2 = atoms[X_v2][Y_v2].get_type_without_neighbor(vecino2);
+        tipo1 = atoms[X_v1][Y_v1].getTypeWithoutNeighbour(vecino1);
+        tipo2 = atoms[X_v2][Y_v2].getTypeWithoutNeighbour(vecino2);
       } else {
         tipo1 = atoms[X_v1][Y_v1].getType();
         tipo2 = atoms[X_v2][Y_v2].getType();
@@ -514,7 +514,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       case 0:
         neighbor1 = 10;
         neighbor2 = 2;
-        if (getNeighbor(X, Y, neighbor1).isOccupied()) {
+        if (getNeighbour(X, Y, neighbor1).isOccupied()) {
           neighbor1 = 9;
           neighbor2 = 1;
         }
@@ -522,7 +522,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       case 1:
         neighbor1 = 11;
         neighbor2 = 0;
-        if (getNeighbor(X, Y, neighbor1).isOccupied()) {
+        if (getNeighbour(X, Y, neighbor1).isOccupied()) {
           neighbor1 = 10;
           neighbor2 = 2;
         }
@@ -531,7 +531,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
       case 2:
         neighbor1 = 11;
         neighbor2 = 0;
-        if (getNeighbor(X, Y, neighbor1).isOccupied()) {
+        if (getNeighbour(X, Y, neighbor1).isOccupied()) {
           neighbor1 = 9;
           neighbor2 = 1;
         }
@@ -556,8 +556,8 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         Y_v1 = Y_v1_temp;
         Y_v2 = Y_v2_temp;
         if (s == 1 && atoms[X][Y].isOccupied()) {
-          tipo1 = atoms[X_v1][Y_v1].get_type_without_neighbor(neighbor1);
-          tipo2 = atoms[X_v2][Y_v2].get_type_without_neighbor(neighbor2);
+          tipo1 = atoms[X_v1][Y_v1].getTypeWithoutNeighbour(neighbor1);
+          tipo2 = atoms[X_v2][Y_v2].getTypeWithoutNeighbour(neighbor2);
         } else {
           tipo1 = atoms[X_v1][Y_v1].getType();
           tipo2 = atoms[X_v2][Y_v2].getType();
@@ -572,8 +572,8 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         Y_v1 = Y_v1_temp;
         Y_v2 = Y_v2_temp;
         if (s == 1 && atoms[X][Y].isOccupied()) {
-          tipo1 = atoms[X_v1][Y_v1].get_type_without_neighbor(neighbor2);
-          tipo2 = atoms[X_v2][Y_v2].get_type_without_neighbor(neighbor1);
+          tipo1 = atoms[X_v1][Y_v1].getTypeWithoutNeighbour(neighbor2);
+          tipo2 = atoms[X_v2][Y_v2].getTypeWithoutNeighbour(neighbor1);
         } else {
           tipo1 = atoms[X_v1][Y_v1].getType();
           tipo2 = atoms[X_v2][Y_v2].getType();

@@ -20,25 +20,25 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
   public static final float Y_ratio = (float) Math.sqrt(3) / 2.0f;
 
-  public AgAgGrowthLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distance_per_step) {
+  public AgAgGrowthLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
-    super(sizeX, sizeY, modified, distance_per_step);
+    super(sizeX, sizeY, modified, distancePerStep);
 
     atoms = new AgAgAtom[sizeX][sizeY];
 
-    create_atoms(distance_per_step);
+    create_atoms(distancePerStep);
     setAngles();
   }
 
-  private void create_atoms(HopsPerStep distance_per_step) {
-    instantiate_atoms(distance_per_step);
+  private void create_atoms(HopsPerStep distancePerStep) {
+    instantiate_atoms(distancePerStep);
     interconnect_atoms();
   }
 
-  private void instantiate_atoms(HopsPerStep distance_per_step) {
+  private void instantiate_atoms(HopsPerStep distancePerStep) {
     for (int i = 0; i < sizeX; i++) {
       for (int j = 0; j < sizeY; j++) {
-        atoms[i][j] = new AgAgAtom((short) i, (short) j, distance_per_step);
+        atoms[i][j] = new AgAgAtom((short) i, (short) j, distancePerStep);
       }
     }
   }
@@ -62,7 +62,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         if (Y == sizeY) {
           Y = 0;
         }
-        atom.setNeighbor((AgAgAtom) atoms[X][Y], 0);
+        atom.setNeighbour((AgAgAtom) atoms[X][Y], 0);
         X = i + 1;
         Y = j - 1;
         if (X < 0) {
@@ -77,7 +77,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         if (Y == sizeY) {
           Y = 0;
         }
-        atom.setNeighbor((AgAgAtom) atoms[X][Y], 1);
+        atom.setNeighbour((AgAgAtom) atoms[X][Y], 1);
         X = i + 1;
         Y = j;
         if (X < 0) {
@@ -92,7 +92,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         if (Y == sizeY) {
           Y = 0;
         }
-        atom.setNeighbor((AgAgAtom) atoms[X][Y], 2);
+        atom.setNeighbour((AgAgAtom) atoms[X][Y], 2);
         X = i;
         Y = j + 1;
         if (X < 0) {
@@ -107,7 +107,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         if (Y == sizeY) {
           Y = 0;
         }
-        atom.setNeighbor((AgAgAtom) atoms[X][Y], 3);
+        atom.setNeighbour((AgAgAtom) atoms[X][Y], 3);
         X = i - 1;
         Y = j + 1;
         if (X < 0) {
@@ -122,7 +122,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         if (Y == sizeY) {
           Y = 0;
         }
-        atom.setNeighbor((AgAgAtom) atoms[X][Y], 4);
+        atom.setNeighbour((AgAgAtom) atoms[X][Y], 4);
         X = i - 1;
         Y = j;
         if (X < 0) {
@@ -137,13 +137,13 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         if (Y == sizeY) {
           Y = 0;
         }
-        atom.setNeighbor((AgAgAtom) atoms[X][Y], 5);
+        atom.setNeighbour((AgAgAtom) atoms[X][Y], 5);
       }
     }
   }
 
   @Override
-  public Abstract2DDiffusionAtom getNeighbor(int Xpos, int Ypos, int neighbor) {
+  public Abstract2DDiffusionAtom getNeighbour(int Xpos, int Ypos, int neighbor) {
     return ((AgAgAtom) atoms[Xpos][Ypos]).getNeighbor(neighbor);
   }
 

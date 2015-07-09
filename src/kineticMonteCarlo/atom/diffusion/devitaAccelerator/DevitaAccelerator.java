@@ -43,7 +43,7 @@ public class DevitaAccelerator {
         int sourceAtomType = (int) source.getType();
 
         if (!hops_per_step.isAccelerationEnabled(sourceAtomType)) {
-            return source.choose_random_hop();
+            return source.chooseRandomHop();
         }
 
         int desired_hop_distance = hops_per_step.getDistancePerStep(sourceAtomType, sourceAtomType);
@@ -56,7 +56,7 @@ public class DevitaAccelerator {
 
 
         if (possible_distance <= 0) {
-            destination = source.choose_random_hop();
+            destination = source.chooseRandomHop();
             possible_distance = 1;
         } else {
 

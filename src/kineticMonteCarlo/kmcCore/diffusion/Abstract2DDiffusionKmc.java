@@ -130,7 +130,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
         if (accelerator != null) {
             return accelerator.choose_random_hop(source);
         }
-        return source.choose_random_hop();
+        return source.chooseRandomHop();
     }
 
     protected boolean depositAtom(int X, int Y) {
@@ -153,7 +153,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
             return false;
         }
 
-        boolean force_nucleation = (!justCentralFlake && origin.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
+        boolean force_nucleation = (!justCentralFlake && origin.areTwoTerracesTogether())  ; //indica si 2 terraces se van a chocar    
         origin.deposit(force_nucleation);
         modified_buffer.updateAtoms(list, lattice);
         return true;
@@ -170,7 +170,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
             return false;
         
         
-        boolean force_nucleation = (!justCentralFlake && destination.two_terrace_together())  ; //indica si 2 terraces se van a chocar    
+        boolean force_nucleation = (!justCentralFlake && destination.areTwoTerracesTogether())  ; //indica si 2 terraces se van a chocar    
         origin.extract();
         destination.deposit(force_nucleation);
         modified_buffer.updateAtoms(list, lattice);

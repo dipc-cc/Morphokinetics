@@ -57,7 +57,7 @@ public class ModifiedBuffer {
         if (atom.isEligible() && !atom.isOnList()) {
             list.add_Atom(atom);
         }
-        atom.update_all_rates();
+        atom.updateAllRates();
         
     }
     
@@ -69,9 +69,9 @@ public class ModifiedBuffer {
 
     private void update_neighbor(Abstract2DDiffusionAtom atom, int neighborPos,Abstract2DDiffusionLattice lattice) {
 
-        Abstract2DDiffusionAtom vecino = lattice.getNeighbor(atom.getX(), atom.getY(), neighborPos);
+        Abstract2DDiffusionAtom vecino = lattice.getNeighbour(atom.getX(), atom.getY(), neighborPos);
         if ( vecino.isEligible() && !buffer.contains(vecino)) {
-            vecino.update_one_bound(neighborPos);
+            vecino.updateOneBound(neighborPos);
         }
     }
 

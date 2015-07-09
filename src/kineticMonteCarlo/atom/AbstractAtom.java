@@ -10,22 +10,24 @@ import kineticMonteCarlo.list.IProbabilityHolder;
  *
  * @author Nestor
  */
-public abstract class AbstractAtom {   
-    
-protected IProbabilityHolder list;
+public abstract class AbstractAtom {
 
-public void setOnList(IProbabilityHolder list) {
-    this.list=list;}
+  protected IProbabilityHolder list;
 
-public boolean isOnList()        {return list!=null;}
+  public void setOnList(IProbabilityHolder list) {
+    this.list = list;
+  }
 
-public abstract double getProbability();
+  public boolean isOnList() {
+    return list != null;
+  }
 
-public abstract boolean isEligible();
+  public abstract double getProbability();
 
-public abstract boolean isRemoved();
+  public abstract boolean isEligible();
 
-public abstract byte getType();
+  public abstract boolean isRemoved();
 
-    
+  public abstract byte getType();
+
 }

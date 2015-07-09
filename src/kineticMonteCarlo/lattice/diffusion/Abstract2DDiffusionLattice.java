@@ -31,7 +31,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     this.modified = modified;
   }
 
-  public abstract Abstract2DDiffusionAtom getNeighbor(int Xpos, int Ypos, int neighbor);
+  public abstract Abstract2DDiffusionAtom getNeighbour(int Xpos, int Ypos, int neighbor);
 
   public void configure(double[][] probabilities) {
     for (int i = 0; i < atoms[0].length; i++) { //X
