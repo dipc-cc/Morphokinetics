@@ -23,13 +23,10 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
   public GrapheneAtom(short X, short Y, HopsPerStep distancePerStep) {
 
-    this.X = X;
-    this.Y = Y;
+    super(X, Y, distancePerStep);
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
-
-    this.distancePerStep = distancePerStep;
   }
 
   @Override

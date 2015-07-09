@@ -22,15 +22,10 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   private byte nMobile;
 
   public AgAgAtom(short X, short Y, HopsPerStep distancePerStep) {
-
-    this.X = X;
-    this.Y = Y;
+    super(X, Y, distancePerStep);
     if (typesTable == null) {
       typesTable = new AgAgTypesTable();
     }
-    bondsProbability = new double[6];
-    this.distancePerStep = distancePerStep;
-
   }
 
   public void setNeighbour(AgAgAtom a, int pos) {
@@ -162,10 +157,10 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     return neighbours[cont];
   }
 
-  public AgAgAtom aheadCornerAtom(int corner_position) {
+  public AgAgAtom aheadCornerAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) {
 
-      switch (corner_position) {
+      switch (cornerPosition) {
         case 0:
           return neighbours[5].getNeighbour(0);
         case 1:
@@ -181,7 +176,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       }
     } else {
 
-      switch (corner_position) {
+      switch (cornerPosition) {
         case 0:
           return neighbours[1].getNeighbour(0);
         case 1:

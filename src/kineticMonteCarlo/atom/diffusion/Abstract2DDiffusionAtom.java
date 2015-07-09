@@ -14,6 +14,15 @@ import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
  */
 public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
 
+  public Abstract2DDiffusionAtom(short X, short Y, HopsPerStep distancePerStep) {
+
+    this.X = X;
+    this.Y = Y;
+    
+    bondsProbability = new double[6];
+    this.distancePerStep = distancePerStep;
+  }
+  
   @Override
   public int hashCode() {
     final int prime = 31;
