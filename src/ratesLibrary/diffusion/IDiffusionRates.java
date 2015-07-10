@@ -9,11 +9,10 @@ package ratesLibrary.diffusion;
  * @author Nestor
  */
 public interface IDiffusionRates {
-    
-public double getRate(int i, int j, double temperature);
 
-public double getDepositionRate();
+  public double getRate(int i, int j, double temperature);
 
-public double getIslandsDensityML(double temperature);
+  public double getDepositionRate();
 
+  public double getIslandsDensityML(double temperature);
 }
