@@ -25,11 +25,6 @@ public class Parser {
   final static Charset ENCODING = StandardCharsets.UTF_8;
 
 
-  private enum calculationMode {
-
-    CVD, GA
-  };
-
   private enum ratesLibrary {
 
     basic, gosalvez
@@ -38,6 +33,8 @@ public class Parser {
   private String islandDensityType;
   /** Can be linear or binned */
   private String listType;
+  /** Can be Ag */
+  private String calculationMode;
   private int temperature;
   private int presure;
   private int flow;
@@ -48,7 +45,7 @@ public class Parser {
   private boolean visualize;
   private boolean justCentralFlake;
   private boolean printToImage;
-  private String calculationMode;
+  private boolean psd;
 
   private static final float constant_Y = (float) Math.sqrt(3) / 2.0f;
 
@@ -159,7 +156,12 @@ public class Parser {
       calculationMode = json.getString("calculationMode");
     } catch (JSONException e) {
       calculationMode = "Ag";
-    }
+    }  
+    try {
+      psd = json.getBoolean("psd");
+    } catch (JSONException e) {
+      psd = false;
+    } 
     return 0;
   }
 
@@ -186,8 +188,8 @@ public class Parser {
     System.out.println("\tvisualize:\t\t" + visualize);
     System.out.println("\tprintToImage\t\t" + printToImage);
     System.out.println("\tcalculationMode:\t" + calculationMode);
-            
-    
+    System.out.println("\tpsd:\t\t\t" + psd);
+                
     return 0;
   }
   
@@ -290,5 +292,9 @@ public class Parser {
   
   public String getCalculationMode() {
     return calculationMode;
+  }
+  
+  public boolean doPsd(){
+    return psd;
   }
 }
