@@ -17,7 +17,6 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
   private int startMouseX = 0;
   private int startMouseY = 0;
   private AbstractKmcCanvas canvas1;
-  private boolean imageIsPrinted;
 
   /**
    * Creates new form NewJFrame
@@ -25,7 +24,6 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
   public DiffusionKmcFrame(AbstractKmcCanvas canvas1) {
 
     initComponents();
-    imageIsPrinted = false;
     this.canvas1 = canvas1;
     this.canvas1.setSize(jPanel1.getWidth(), jPanel1.getHeight());
     this.jPanel1.add(canvas1);
@@ -49,10 +47,6 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
     paintLoop p = new paintLoop();
     p.start();
-  }
-
-  public void enablePrintToImage() {
-    imageIsPrinted = true;
   }
 
   public void repaintKMC() {
@@ -178,9 +172,6 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
       int i = 0;
       while (true) {
         repaintKMC();
-        if (imageIsPrinted) {
-          printToImage(i);
-        }
         System.out.println("loop " + i);
         i++;
         try {
