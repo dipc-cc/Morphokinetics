@@ -10,7 +10,6 @@ import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.list.LinearList;
 import kineticMonteCarlo.list.ListConfiguration;
 import java.awt.geom.Point2D;
 import utils.MathUtils;
@@ -78,7 +77,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       destinationAtom = depositNewAtom();
 
     } else {
-      destinationAtom = choose_random_hop(originAtom);
+      destinationAtom = chooseRandomHop(originAtom);
       if (destinationAtom.is_outside()) {
         destinationAtom = this.perimeter.getPerimeterReentrance(originAtom);
       }
@@ -96,19 +95,20 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return false;
   }
 
+  @Override
   public void simulate(int iterations) {
 
     int radius = perimeter.getCurrentRadius();
     int num_events = 0;// contador de eventos desde el ultimo cambio de radio
 
-    iterations_for_last_simulation = 0;
+    iterationsForLastSimulation = 0;
 
     for (int i = 0; i < iterations; i++) {
       if (performSimulationStep()) {
         break;
       }
 
-      iterations_for_last_simulation++;
+      iterationsForLastSimulation++;
       num_events++;
 
       if (radius == 20 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
@@ -119,7 +119,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
         radius = perimeter.getCurrentRadius();
         num_events = 0;
       } else {
-        if ((iterations_for_last_simulation - num_events) * 2 <= num_events) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
+        if ((iterationsForLastSimulation - num_events) * 2 <= num_events) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
         {
           break;
         }
@@ -131,7 +131,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     list.cleanup();
   }
 
-  private Abstract2DDiffusionAtom choose_random_hop(Abstract2DDiffusionAtom source) {
+  private Abstract2DDiffusionAtom chooseRandomHop(Abstract2DDiffusionAtom source) {
     if (accelerator != null) {
       return accelerator.choose_random_hop(source);
     }

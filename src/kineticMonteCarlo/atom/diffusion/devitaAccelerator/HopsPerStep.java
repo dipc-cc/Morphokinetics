@@ -13,14 +13,14 @@ import java.util.Map;
  */
 public class HopsPerStep {
 
-    private final Map<Integer, Integer> desired_hop_distances_map = new HashMap();
+    private final Map<Integer, Integer> desiredHopDistancesMap = new HashMap();
 
     public int getDistancePerStep(int sourceType, int destinationType) {
 
         if (sourceType != destinationType) {
             return 1;
         }
-        Integer hops_per_steps=desired_hop_distances_map.get(sourceType);
+        Integer hops_per_steps=desiredHopDistancesMap.get(sourceType);
         
         if (hops_per_steps!=null) {
             return hops_per_steps;
@@ -31,11 +31,11 @@ public class HopsPerStep {
 
     public void setDistancePerStep(int sourceType, int hops_per_step) {
 
-        desired_hop_distances_map.put(sourceType, hops_per_step);
+        desiredHopDistancesMap.put(sourceType, hops_per_step);
     }
     
     public boolean isAccelerationEnabled(int sourceType){
-        return desired_hop_distances_map.containsKey(sourceType);
+        return desiredHopDistancesMap.containsKey(sourceType);
     }
 
 }

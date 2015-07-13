@@ -16,7 +16,7 @@ public abstract class AbstractKmc implements IKmc {
 
   protected AbstractList list;
   protected static Ranecu RNG;
-  protected int iterations_for_last_simulation;
+  protected int iterationsForLastSimulation;
 
   public AbstractKmc(ListConfiguration config) {
     RNG = new Ranecu(System.nanoTime());
@@ -33,38 +33,38 @@ public abstract class AbstractKmc implements IKmc {
 
   @Override
   public int getIterations() {
-    return iterations_for_last_simulation;
+    return iterationsForLastSimulation;
   }
 
   @Override
   public void simulate() {
-    iterations_for_last_simulation = 0;
+    iterationsForLastSimulation = 0;
     while (!performSimulationStep()) {
-      iterations_for_last_simulation++;
+      iterationsForLastSimulation++;
     }
 
   }
 
   @Override
   public void simulate(double endtime) {
-    iterations_for_last_simulation = 0;
+    iterationsForLastSimulation = 0;
     while (list.getTime() < endtime) {
       if (performSimulationStep()) {
         break;
       }
-      iterations_for_last_simulation++;
+      iterationsForLastSimulation++;
     }
   }
 
   @Override
   public void simulate(int iterations) {
 
-    iterations_for_last_simulation = 0;
+    iterationsForLastSimulation = 0;
     for (int i = 0; i < iterations; i++) {
       if (performSimulationStep()) {
         break;
       }
-      iterations_for_last_simulation++;
+      iterationsForLastSimulation++;
     }
 
     list.cleanup();
