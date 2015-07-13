@@ -8,8 +8,8 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
-import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
+import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
+import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
@@ -43,7 +43,7 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
 
         for (int i = 0; i < num_threads; i++) {
             AgAgKmc kmc = new AgAgKmc(config, true);
-            DifussionKmcFrame frame = create_graphics_frame(kmc);
+            DiffusionKmcFrame frame = create_graphics_frame(kmc);
             frame.setVisible(true);
 
             workers[i] = new KmcWorker(kmc, i);
@@ -54,8 +54,8 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
         PSD_size_Y = 64;
     }
 
-    private static DifussionKmcFrame create_graphics_frame(AgAgKmc kmc) {
-        DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    private static DiffusionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+        DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
         return frame;
     }
 

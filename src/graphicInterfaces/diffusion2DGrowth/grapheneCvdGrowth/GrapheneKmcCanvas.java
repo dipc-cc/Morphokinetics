@@ -2,9 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package graphicInterfaces.difussion2DGrowth.grapheneCvdGrowth;
+package graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth;
 
-import graphicInterfaces.difussion2DGrowth.AbstractKmcCanvas;
+import graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.*;
 
@@ -24,14 +24,14 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
         super.paint(g);
 
         g.setColor(Color.black);
-        g.fillRect(baseX, baseY, (int) (lattice.getSizeX() * escalado * 1.5f), (int) (lattice.getSizeY() * escalado * constant_Y));
+        g.fillRect(baseX, baseY, (int) (lattice.getSizeX() * scale * 1.5f), (int) (lattice.getSizeY() * scale * constant_Y));
 
         
         
         for (int j = 0; j < lattice.getSizeY(); j++) {          //Y
             int i = 0;
             int cont = 0;
-            int Y = Math.round((lattice.getSizeY() - 1 - j) * escalado * constant_Y) + baseY;
+            int Y = Math.round((lattice.getSizeY() - 1 - j) * scale * constant_Y) + baseY;
             while (true) {
 
                 if ((j & 1) == 0) {
@@ -46,9 +46,9 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
                     }
                 }
 
-                int X = (cont * escalado) + baseX;
+                int X = (cont * scale) + baseX;
                 if ((j & 1) == 0) {
-                    X += 0.5f * escalado;
+                    X += 0.5f * scale;
                 }
 
                 if (X < 0 || X > 1024 || Y < 0 || Y > 1024) {
@@ -88,19 +88,19 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
                         break;
                 }
 
-                if (escalado < 3) {
+                if (scale < 3) {
                     if (lattice.getAtom(i, j).isOccupied()) {
-                        g.fillRect(X, Y, escalado, escalado);
+                        g.fillRect(X, Y, scale, scale);
                     } else if (!lattice.getAtom(i, j).is_outside()) {
-                        g.drawRect(X, Y, escalado, escalado);
+                        g.drawRect(X, Y, scale, scale);
                     }
 
                 } else {
 
                     if (lattice.getAtom(i, j).isOccupied()) {
-                        g.fillOval(X, Y, escalado, escalado);
+                        g.fillOval(X, Y, scale, scale);
                     } else if (!lattice.getAtom(i, j).is_outside()) {
-                        g.drawOval(X, Y, escalado, escalado);
+                        g.drawOval(X, Y, scale, scale);
                     }
                 }
 

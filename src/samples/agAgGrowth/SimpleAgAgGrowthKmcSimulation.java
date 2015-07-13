@@ -4,8 +4,8 @@
  */
 package samples.agAgGrowth;
 
-import graphicInterfaces.difussion2DGrowth.agAgGrowth.AgAgKmcCanvas;
-import graphicInterfaces.difussion2DGrowth.DifussionKmcFrame;
+import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
+import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.list.ListConfiguration;
@@ -27,7 +27,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
     AgAgKmc kmc = initialize_kmc();
 
-    DifussionKmcFrame frame = create_graphics_frame(kmc);
+    DiffusionKmcFrame frame = create_graphics_frame(kmc);
     frame.setVisible(true);
 
     for (int simulations = 0; simulations < 10; simulations++) {
@@ -36,8 +36,8 @@ public class SimpleAgAgGrowthKmcSimulation {
     }
   }
 
-  private static DifussionKmcFrame create_graphics_frame(AgAgKmc kmc) {
-    DifussionKmcFrame frame = new DifussionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+  private static DiffusionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }
 
