@@ -6,7 +6,6 @@ package kineticMonteCarlo.kmcCore.diffusion.agAgGrowth;
 
 import kineticMonteCarlo.kmcCore.diffusion.Abstract2DDiffusionKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
-import kineticMonteCarlo.atom.diffusion.agAgGrowth.AgAgAtom;
 import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.atom.diffusion.devitaAccelerator.HopsPerStep;
