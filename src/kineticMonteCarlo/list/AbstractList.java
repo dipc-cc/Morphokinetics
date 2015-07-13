@@ -37,11 +37,11 @@ public abstract class AbstractList implements IProbabilityHolder {
         return this;
     }
 
-    public double get_deposition_probability() {
+    public double getDepositionProbability() {
         return deposition_probability;
     }
 
-    public void set_deposition_probability(double deposition_probability) {
+    public void setDepositionProbability(double deposition_probability) {
         this.deposition_probability = deposition_probability;
     }
 
@@ -59,7 +59,7 @@ public abstract class AbstractList implements IProbabilityHolder {
         this.parent = parent;
     }
 
-    public abstract double getTotalProbability_from_list();
+    public abstract double getTotalProbabilityFromList();
 
     public abstract double getTotalProbability();
 

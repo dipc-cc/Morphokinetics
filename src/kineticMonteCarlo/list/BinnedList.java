@@ -105,11 +105,11 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
     }
 
     @Override
-    public double getTotalProbability_from_list() {
+    public double getTotalProbabilityFromList() {
 
         double totalProb = 0;
         for (AbstractList bin : bins) {
-            totalProb += bin.getTotalProbability_from_list();
+            totalProb += bin.getTotalProbabilityFromList();
         }
 
         return totalProb;

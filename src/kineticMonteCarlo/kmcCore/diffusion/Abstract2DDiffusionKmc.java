@@ -23,7 +23,7 @@ import utils.StaticRandom;
 public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   protected Abstract2DDiffusionLattice lattice;
-  protected ModifiedBuffer modified_buffer;
+  protected ModifiedBuffer modifiedBuffer;
   protected boolean justCentralFlake;
   protected RoundPerimeter perimeter;
   protected DevitaAccelerator accelerator;
@@ -32,16 +32,16 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
     super(config);
     this.justCentralFlake = justCentralFlake;
-    this.modified_buffer = new ModifiedBuffer();
+    this.modifiedBuffer = new ModifiedBuffer();
     this.list.autoCleanup(true);
   }
 
   public void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
 
     if (justCentralFlake) {
-      list.set_deposition_probability(depositionRateML / islandDensitySite);
+      list.setDepositionProbability(depositionRateML / islandDensitySite);
     } else {
-      list.set_deposition_probability(depositionRateML * lattice.getSizeX() * lattice.getSizeY());
+      list.setDepositionProbability(depositionRateML * lattice.getSizeX() * lattice.getSizeY());
     }
   }
 
@@ -149,7 +149,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
     origin.extract();
 
-    modified_buffer.updateAtoms(list, lattice);
+    modifiedBuffer.updateAtoms(list, lattice);
     return true;
   }
 
@@ -160,7 +160,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
     boolean force_nucleation = (!justCentralFlake && origin.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
     origin.deposit(force_nucleation);
-    modified_buffer.updateAtoms(list, lattice);
+    modifiedBuffer.updateAtoms(list, lattice);
     return true;
 
   }
@@ -179,7 +179,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     boolean force_nucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
     origin.extract();
     destination.deposit(force_nucleation);
-    modified_buffer.updateAtoms(list, lattice);
+    modifiedBuffer.updateAtoms(list, lattice);
 
     return true;
   }

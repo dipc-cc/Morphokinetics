@@ -24,7 +24,7 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
     HopsPerStep distance_per_step = new HopsPerStep();
 
-    this.lattice = new GrapheneCvdGrowthLattice(sizeX, sizeY, modified_buffer, distance_per_step);
+    this.lattice = new GrapheneCvdGrowthLattice(sizeX, sizeY, modifiedBuffer, distance_per_step);
 
     if (justCentralFlake) {
       configureDevitaAccelerator(distance_per_step);

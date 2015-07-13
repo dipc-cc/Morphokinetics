@@ -21,7 +21,7 @@ public class Linear_list extends AbstractList {
     }
 
     @Override
-    public double getTotalProbability_from_list() {
+    public double getTotalProbabilityFromList() {
         double totalprobability = 0;
 
         ListIterator<AbstractAtom> LI = surface.listIterator();
