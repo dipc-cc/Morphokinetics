@@ -50,8 +50,7 @@ public class AgAgPsdTest {
 
     new Frame2D("PSD analysis").setMesh(MathUtils.avg_Filter(PSD.getPSD(), 1));
 
-    new Frame2D("Sampled surface")
-            .setMesh(sampledSurface);
+    new Frame2D("Sampled surface").setMesh(sampledSurface);
 
   }
 
