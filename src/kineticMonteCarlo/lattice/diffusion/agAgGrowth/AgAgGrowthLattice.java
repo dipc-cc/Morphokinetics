@@ -174,11 +174,6 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Abstract2DDiffusionAtom getAtom(int X, int Y) {
-    return atoms[X][Y];
-  }
-
-  @Override
   public Point2D getCentralLatticeLocation() {
     return new Point2D.Float(sizeX / 2.0f, (float) (sizeY * YRatio / 2.0));
   }

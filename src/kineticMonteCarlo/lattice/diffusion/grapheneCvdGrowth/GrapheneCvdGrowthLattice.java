@@ -600,13 +600,6 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  //we ignore the unit_cell_pos by now, we get directly the atom of X,Y location
-  @Override
-  public Abstract2DDiffusionAtom getAtom(int X, int Y) {
-    return atoms[X][Y];
-
-  }
-
   @Override
   public float getSpatialSizeX() {
     return sizeX;

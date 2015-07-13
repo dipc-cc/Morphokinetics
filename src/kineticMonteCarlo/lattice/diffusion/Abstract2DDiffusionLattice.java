@@ -40,8 +40,16 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
       }
     }
   }
-
-  public abstract Abstract2DDiffusionAtom getAtom(int X, int Y);
+  
+  /**
+   * we ignore the unit_cell_pos by now, we get directly the atom of X,Y location
+   * @param X
+   * @param Y
+   * @return 
+   */
+  public Abstract2DDiffusionAtom getAtom(int X, int Y) {
+    return atoms[X][Y];
+  }
 
   @Override
   public AbstractAtom getAtom(int X, int Y, int Z, int Unit_cell_pos) {
