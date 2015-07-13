@@ -9,7 +9,7 @@ package kineticMonteCarlo.kmcCore.worker;
  * @author Nestor
  */
 public interface IFinishListener {
-    
-            public void handleSimulationFinish(int workerID,int workID);
-    
+
+  public void handleSimulationFinish(int workerID, int workID);
+
 }

@@ -31,7 +31,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     if (latticeNeighborhoodData == null) {
       initializeNeighborHoodCache();
     }
-    create_atoms(distance_per_step);
+    createAtoms(distance_per_step);
     setAngles();
   }
 
@@ -54,7 +54,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     latticeNeighborhoodData[11] = (-1 & 0xFFFF) + (0 << 16);
   }
 
-  private void create_atoms(HopsPerStep distance_per_step) {
+  private void createAtoms(HopsPerStep distance_per_step) {
 
     for (int i = 0; i < sizeX; i += 2) { //X
       for (int j = 0; j < sizeY; j += 2) { //Y
@@ -141,11 +141,11 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     int[] point = new int[2];
     switch (atomType) {
       case 0:
-        return getClearArea_terrace(Xpos, Ypos, thresholdDistance);
+        return getClearAreaTerrace(Xpos, Ypos, thresholdDistance);
       case 2:
-        return getClearArea_zigzag(Xpos, Ypos, thresholdDistance, point, StaticRandom.raw());
+        return getClearAreaZigzag(Xpos, Ypos, thresholdDistance, point, StaticRandom.raw());
       case 3:
-        return getClearArea_armchair(Xpos, Ypos, thresholdDistance, point, StaticRandom.raw());
+        return getClearAreaArmchair(Xpos, Ypos, thresholdDistance, point, StaticRandom.raw());
       default:
         return 0;
     }
@@ -157,19 +157,19 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     int[] point = new int[2];
     switch (originType) {
       case 0:
-        return chooseClearArea_terrace(Xpos, Ypos, distance, StaticRandom.raw());
+        return chooseClearAreaTerrace(Xpos, Ypos, distance, StaticRandom.raw());
       case 2:
-        getClearArea_zigzag(Xpos, Ypos, distance, point, StaticRandom.raw());
+        getClearAreaZigzag(Xpos, Ypos, distance, point, StaticRandom.raw());
         return this.getAtom(point[0], point[1]);
       case 3:
-        getClearArea_armchair(Xpos, Ypos, distance, point, StaticRandom.raw());
+        getClearAreaArmchair(Xpos, Ypos, distance, point, StaticRandom.raw());
         return this.getAtom(point[0], point[1]);
       default:
         return null;
     }
   }
 
-  private Abstract2DDiffusionAtom chooseClearArea_terrace(short X, short Y, int s, double raw) {
+  private Abstract2DDiffusionAtom chooseClearAreaTerrace(short X, short Y, int s, double raw) {
 
     int temp = (int) (raw * (s * 2 * 6));
 
@@ -270,7 +270,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     return null;
   }
 
-  private int getClearArea_terrace(short X, short Y, int m) {
+  private int getClearAreaTerrace(short X, short Y, int m) {
 
     int s = 1;
 
@@ -424,7 +424,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     return -1;
   }
 
-  private int getClearArea_zigzag(short X, short Y, int m, int[] XY_destino, double raw) {
+  private int getClearAreaZigzag(short X, short Y, int m, int[] XY_destino, double raw) {
 
     int s = 1;
     int X_v1, Y_v1, X_v2, Y_v2;
@@ -496,7 +496,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  private int getClearArea_armchair(short X, short Y, int m, int[] XY_destination, double raw) {
+  private int getClearAreaArmchair(short X, short Y, int m, int[] XY_destination, double raw) {
 
     int s = 1;
     int X_v1, Y_v1, X_v2, Y_v2;

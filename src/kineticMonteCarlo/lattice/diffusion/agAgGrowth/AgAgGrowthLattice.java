@@ -18,7 +18,7 @@ import utils.StaticRandom;
  */
 public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
-  public static final float Y_ratio = (float) Math.sqrt(3) / 2.0f;
+  public static final float YRatio = (float) Math.sqrt(3) / 2.0f;
 
   public AgAgGrowthLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
@@ -26,16 +26,16 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
     atoms = new AgAgAtom[sizeX][sizeY];
 
-    create_atoms(distancePerStep);
+    createAtoms(distancePerStep);
     setAngles();
   }
 
-  private void create_atoms(HopsPerStep distancePerStep) {
-    instantiate_atoms(distancePerStep);
-    interconnect_atoms();
+  private void createAtoms(HopsPerStep distancePerStep) {
+    instantiateAtoms(distancePerStep);
+    interconnectAtoms();
   }
 
-  private void instantiate_atoms(HopsPerStep distancePerStep) {
+  private void instantiateAtoms(HopsPerStep distancePerStep) {
     for (int i = 0; i < sizeX; i++) {
       for (int j = 0; j < sizeY; j++) {
         atoms[i][j] = new AgAgAtom((short) i, (short) j, distancePerStep);
@@ -43,7 +43,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  private void interconnect_atoms() {
+  private void interconnectAtoms() {
 
     for (int j = 0; j < sizeY; j++) {
       for (int i = 0; i < sizeX; i++) {
@@ -154,7 +154,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       case 0:
         return getClearArea_terrace(Xpos, Ypos, thresholdDistance);
       case 2:
-        return getClearArea_step(Xpos, Ypos, thresholdDistance);
+        return getClearAreaStep(Xpos, Ypos, thresholdDistance);
       default:
         return 0;
     }
@@ -165,9 +165,9 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
     switch (originType) {
       case 0:
-        return chooseClearArea_terrace(Xpos, Ypos, distance, StaticRandom.raw());
+        return chooseClearAreaTerrace(Xpos, Ypos, distance, StaticRandom.raw());
       case 2:
-        return chooseClearArea_step(Xpos, Ypos, distance, StaticRandom.raw());
+        return chooseClearAreaStep(Xpos, Ypos, distance, StaticRandom.raw());
       default:
         return null;
     }
@@ -180,7 +180,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public Point2D getCentralLatticeLocation() {
-    return new Point2D.Float(sizeX / 2.0f, (float) (sizeY * Y_ratio / 2.0));
+    return new Point2D.Float(sizeX / 2.0f, (float) (sizeY * YRatio / 2.0));
   }
 
   @Override
@@ -190,7 +190,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public float getSpatialSizeY() {
-    return sizeY * Y_ratio;
+    return sizeY * YRatio;
   }
 
   @Override
@@ -200,7 +200,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
     if (XLocation >= sizeX) {
       XLocation -= sizeX;
     }
-    float YLocation = Ypos * Y_ratio;
+    float YLocation = Ypos * YRatio;
     return new Point2D.Double(XLocation, YLocation);
   }
 
@@ -327,7 +327,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
     return -1;
   }
 
-  public Abstract2DDiffusionAtom chooseClearArea_terrace(short X, short Y, int s, double raw) {
+  public Abstract2DDiffusionAtom chooseClearAreaTerrace(short X, short Y, int s, double raw) {
 
     int temp = (int) (raw * (s * 6));
 
@@ -338,11 +338,11 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       Y_v = sizeY - 1;
     }
 
-    int contador = 0;
+    int counter = 0;
 
     for (int i = 0; i < s; i++) {
-      contador++;
-      if (contador > temp) {
+      counter++;
+      if (counter > temp) {
         return atoms[X_v][Y_v];
       }
       X_v++;
@@ -351,8 +351,8 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       }
     }
     for (int i = 0; i < s; i++) {
-      contador++;
-      if (contador > temp) {
+      counter++;
+      if (counter > temp) {
         return atoms[X_v][Y_v];
       }
       Y_v++;
@@ -361,8 +361,8 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       }
     }
     for (int i = 0; i < s; i++) {
-      contador++;
-      if (contador > temp) {
+      counter++;
+      if (counter > temp) {
         return atoms[X_v][Y_v];
       }
       Y_v++;
@@ -375,8 +375,8 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       }
     }
     for (int i = 0; i < s; i++) {
-      contador++;
-      if (contador > temp) {
+      counter++;
+      if (counter > temp) {
         return atoms[X_v][Y_v];
       }
       X_v--;
@@ -385,8 +385,8 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       }
     }
     for (int i = 0; i < s; i++) {
-      contador++;
-      if (contador > temp) {
+      counter++;
+      if (counter > temp) {
         return atoms[X_v][Y_v];
       }
       Y_v--;
@@ -395,8 +395,8 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
       }
     }
     for (int i = 0; i < s; i++) {
-      contador++;
-      if (contador > temp) {
+      counter++;
+      if (counter > temp) {
         return atoms[X_v][Y_v];
       }
       Y_v--;
@@ -413,7 +413,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
   }
 
-  public int getClearArea_step(short X, short Y, int m) {
+  public int getClearAreaStep(short X, short Y, int m) {
 
     int s = 1;
     int X_v, Y_v;
@@ -501,7 +501,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  public Abstract2DDiffusionAtom chooseClearArea_step(short X, short Y, int s, double raw) {
+  public Abstract2DDiffusionAtom chooseClearAreaStep(short X, short Y, int s, double raw) {
 
     int X_v, Y_v;
 
