@@ -20,10 +20,10 @@ public class HopsPerStep {
     if (sourceType != destinationType) {
       return 1;
     }
-    Integer hops_per_steps = desiredHopDistancesMap.get(sourceType);
+    Integer hopsPerSteps = desiredHopDistancesMap.get(sourceType);
 
-    if (hops_per_steps != null) {
-      return hops_per_steps;
+    if (hopsPerSteps != null) {
+      return hopsPerSteps;
     } else {
       return 1;
     }
