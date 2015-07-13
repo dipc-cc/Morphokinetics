@@ -10,7 +10,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGr
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgGrowthThreadedPsdEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingBasicPsdEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingThreadedPsdEvaluation;
-import geneticAlgorithm.geneticOperators.mutation.BGA_based_mutator;
+import geneticAlgorithm.geneticOperators.mutation.BgaBasedMutator;
 import geneticAlgorithm.geneticOperators.populationInitialization.siEtching.SiEtchingInitialization;
 import geneticAlgorithm.geneticOperators.populationInitialization.agAg.AgAgInitialization;
 import geneticAlgorithm.geneticOperators.recombination.RealRecombination;
@@ -41,7 +41,7 @@ public class GeneticAlgorithmConfigFactory {
         config.offspring_size = 32;
         config.population_replacements = 5;
         config.initialization = new SiEtchingInitialization();
-        config.mutation = new BGA_based_mutator();
+        config.mutation = new BgaBasedMutator();
         config.recombination = new RealRecombination();
         config.reinsertion = new ElitistReinsertion();
         config.restriction = new SiEtchingRestriction();
@@ -60,7 +60,7 @@ public class GeneticAlgorithmConfigFactory {
         config.offspring_size = 32;
         config.population_replacements = 5;
         config.initialization = new AgAgInitialization();
-        config.mutation = new BGA_based_mutator();
+        config.mutation = new BgaBasedMutator();
         config.recombination = new RealRecombination();
         config.reinsertion = new ElitistReinsertion();
         config.restriction = new AgAgRestriction(diffusion_rate);
@@ -80,7 +80,7 @@ public class GeneticAlgorithmConfigFactory {
         config.offspring_size = 32;
         config.population_replacements = 5;
         config.initialization = new AgAgInitialization();
-        //config.mutation = new BGA_based_mutator();
+        //config.mutation = new BgaBasedMutator();
         //config.recombination = new RealRecombination();
         //config.reinsertion = new ElitistReinsertion();
         config.restriction = new AgAgRestriction(diffusion_rate);

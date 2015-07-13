@@ -7,7 +7,7 @@ import utils.akting.RichMatrix;
 import utils.akting.operations.OperationFactory;
 import utils.akting.tests.TestSuite;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.BasicEvaluator;
-import geneticAlgorithm.geneticOperators.mutation.Crossover_mutator;
+import geneticAlgorithm.geneticOperators.mutation.CrossoverMutator;
 import geneticAlgorithm.geneticOperators.recombination.DifferentialRecombination;
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistAllReinsertion;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
@@ -38,7 +38,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
 		// Inicializamos la clase que contiene variables globales del algoritmo.
 		dcmaEsConfig = new DcmaEsConfig(config, population.getIndividual(0).getGeneSize());
 		config.recombination = new DifferentialRecombination(dcmaEsConfig);
-		config.mutation = new Crossover_mutator(dcmaEsConfig);
+		config.mutation = new CrossoverMutator(dcmaEsConfig);
 		config.reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
         
 		config.restriction.apply(this.population);
