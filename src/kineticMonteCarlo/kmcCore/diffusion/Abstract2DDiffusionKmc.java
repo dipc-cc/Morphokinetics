@@ -133,7 +133,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   private Abstract2DDiffusionAtom chooseRandomHop(Abstract2DDiffusionAtom source) {
     if (accelerator != null) {
-      return accelerator.choose_random_hop(source);
+      return accelerator.chooseRandomHop(source);
     }
     return source.chooseRandomHop();
   }

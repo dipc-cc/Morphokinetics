@@ -22,10 +22,10 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
   public AgAgKmc(ListConfiguration config, int sizeX, int sizeY, boolean justCentralFlake) {
     super(config, justCentralFlake);
 
-    HopsPerStep distance_per_step = new HopsPerStep();
-    this.lattice = new AgAgGrowthLattice(sizeX, sizeY, modifiedBuffer, distance_per_step);
+    HopsPerStep distancePerStep = new HopsPerStep();
+    this.lattice = new AgAgGrowthLattice(sizeX, sizeY, modifiedBuffer, distancePerStep);
     if (justCentralFlake) {
-      configureDevitaAccelerator(distance_per_step);
+      configureDevitaAccelerator(distancePerStep);
     }
   }
 
