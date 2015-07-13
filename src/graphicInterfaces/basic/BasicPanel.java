@@ -10,7 +10,7 @@
  */
 package graphicInterfaces.basic;
 
-import kineticMonteCarlo.atom.etching.basic.BasicAtom;
+import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
 import java.awt.Color;

@@ -5,7 +5,7 @@
 package kineticMonteCarlo.lattice.etching.basic;
 
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.etching.basic.BasicAtom;
+import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.lattice.etching.AbstractEtchingLattice;
 
 /**

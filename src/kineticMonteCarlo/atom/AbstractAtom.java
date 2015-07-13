@@ -13,6 +13,11 @@ import kineticMonteCarlo.list.IProbabilityHolder;
 public abstract class AbstractAtom {
 
   protected IProbabilityHolder list;
+  protected double[] probabilities;
+
+  public void initialize(double[] probabilities) {
+    this.probabilities = probabilities;
+  }
 
   public void setOnList(IProbabilityHolder list) {
     this.list = list;

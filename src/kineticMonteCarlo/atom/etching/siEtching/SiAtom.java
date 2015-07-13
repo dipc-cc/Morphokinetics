@@ -4,13 +4,13 @@
  */
 package kineticMonteCarlo.atom.etching.siEtching;
 
-import kineticMonteCarlo.atom.etching.AbstractEtchingAtom;
+import kineticMonteCarlo.atom.AbstractAtom;
 
 /**
  *
  * @author U010531
  */
-public class SiAtom extends AbstractEtchingAtom {
+public class SiAtom extends AbstractAtom {
 
 
     //we reduce the amount of memory use by not using an array neighbour[4] and directly adding the neighbours as part of the object
