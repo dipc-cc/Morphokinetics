@@ -152,7 +152,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
 
     switch (atomType) {
       case 0:
-        return getClearArea_terrace(Xpos, Ypos, thresholdDistance);
+        return getClearAreaTerrace(Xpos, Ypos, thresholdDistance);
       case 2:
         return getClearAreaStep(Xpos, Ypos, thresholdDistance);
       default:
@@ -204,7 +204,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
     return new Point2D.Double(XLocation, YLocation);
   }
 
-  public int getClearArea_terrace(short X, short Y, int m) {
+  public int getClearAreaTerrace(short X, short Y, int m) {
 
     int s = 1;
 
