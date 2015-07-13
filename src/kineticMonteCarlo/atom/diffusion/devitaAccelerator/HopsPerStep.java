@@ -29,8 +29,8 @@ public class HopsPerStep {
     }
   }
 
-  public void setDistancePerStep(int sourceType, int hops_per_step) {
-    desiredHopDistancesMap.put(sourceType, hops_per_step);
+  public void setDistancePerStep(int sourceType, int hopsPerStep) {
+    desiredHopDistancesMap.put(sourceType, hopsPerStep);
   }
 
   public boolean isAccelerationEnabled(int sourceType) {
