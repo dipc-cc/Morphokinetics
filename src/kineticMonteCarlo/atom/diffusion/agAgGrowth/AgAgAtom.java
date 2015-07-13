@@ -221,7 +221,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   }
 
   //================================
-  public void removeInmovilAddMovil() {
+  public void removeImmobilAddMobile() {
 
     if (nImmobile == 0) {  //estado de transición
       nMobile++;
@@ -245,7 +245,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       if (inmov_to_mov && occupied) {
         for (int i = 0; i < 6; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
-            neighbours[i].removeInmovilAddMovil();
+            neighbours[i].removeImmobilAddMobile();
           }
         }
       }
@@ -267,13 +267,13 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
 
     if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean mov_to_inmov = (type < 3 && newType >= 3);
+      boolean mobileToImmobile = (type < 3 && newType >= 3);
       type = newType;
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
         modified.addBondAtom(this);
       }
-      if (mov_to_inmov && occupied) {
+      if (mobileToImmobile && occupied) {
 
         for (int i = 0; i < 6; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
@@ -319,7 +319,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
   }
 
-  public void removeMovilOccupied() {
+  public void removeMobileOccupied() {
 
     byte new_type = typesTable.getType(nImmobile, --nMobile);
 
@@ -337,7 +337,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       if (inmov_to_mov && occupied) {
         for (int i = 0; i < 6; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
-            neighbours[i].removeInmovilAddMovil();
+            neighbours[i].removeImmobilAddMobile();
           }
         }
       }
@@ -373,7 +373,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
     for (int i = 0; i < 6; i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
-        neighbours[i].removeMovilOccupied();
+        neighbours[i].removeMobileOccupied();
       }
     }
 
