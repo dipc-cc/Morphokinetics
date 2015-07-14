@@ -63,9 +63,9 @@ public class RoundPerimeter {
     if (error > 0) {
 
       for (int j = initialLocation - 1; j >= 0; j--) {
-        float error_temp = currentPerimeter[j].getAngle() - destinationAngleRad;
-        if (Math.abs(error_temp) < Math.abs(error)) {
-          error = error_temp;
+        float errorTemp = currentPerimeter[j].getAngle() - destinationAngleRad;
+        if (Math.abs(errorTemp) < Math.abs(error)) {
+          error = errorTemp;
         } else {
           chosen = currentPerimeter[j + 1];
           position = j + 1;
