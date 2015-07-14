@@ -42,7 +42,7 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
             SiAtom atom = (SiAtom) lattice.getAtom(i, j, k, l);
             if (atom.getn1() < 4 && atom.getn1() > 0 && !atom.isRemoved()) {
 
-              list.add_Atom(atom);
+              list.addAtom(atom);
             }
           }
         }
@@ -52,13 +52,13 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
 
   @Override
   protected boolean performSimulationStep() {
-    SiAtom atom = (SiAtom) list.next_event(RNG);
+    SiAtom atom = (SiAtom) list.nextEvent(RNG);
     atom.remove();
     atom.setOnList(null);
     for (int k = 0; k < 4; k++) {
       SiAtom neighbor = atom.getNeighbor(k);
       if (neighbor.getn1() == 3) {
-        list.add_Atom(neighbor);
+        list.addAtom(neighbor);
       }
     }
     return atom.getZ() < minHeight * 2;

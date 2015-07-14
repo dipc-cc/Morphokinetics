@@ -214,7 +214,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
     out:
     while (true) {
       for (int i = 0; i < s; i++) {
-        if (atoms[X_v][Y_v].is_outside()) {
+        if (atoms[X_v][Y_v].isOutside()) {
           error_code |= 1;
         }
         if (atoms[X_v][Y_v].isOccupied()) {
@@ -227,7 +227,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[X_v][Y_v].is_outside()) {
+        if (atoms[X_v][Y_v].isOutside()) {
           error_code |= 1;
         }
         if (atoms[X_v][Y_v].isOccupied()) {
@@ -240,7 +240,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[X_v][Y_v].is_outside()) {
+        if (atoms[X_v][Y_v].isOutside()) {
           error_code |= 1;
         }
         if (atoms[X_v][Y_v].isOccupied()) {
@@ -257,7 +257,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[X_v][Y_v].is_outside()) {
+        if (atoms[X_v][Y_v].isOutside()) {
           error_code |= 1;
         }
         if (atoms[X_v][Y_v].isOccupied()) {
@@ -270,7 +270,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[X_v][Y_v].is_outside()) {
+        if (atoms[X_v][Y_v].isOutside()) {
           error_code |= 1;
         }
         if (atoms[X_v][Y_v].isOccupied()) {
@@ -283,7 +283,7 @@ public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[X_v][Y_v].is_outside()) {
+        if (atoms[X_v][Y_v].isOutside()) {
           error_code |= 1;
         }
         if (atoms[X_v][Y_v].isOccupied()) {

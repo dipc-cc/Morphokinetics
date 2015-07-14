@@ -8,19 +8,19 @@ public abstract class AbstractList implements IProbabilityHolder {
 
     
     protected static final int EVENTS_PER_CLEANUP=2048;
-    protected int removals_since_last_cleanup = 0;
-    protected boolean auto_cleanup=false;
+    protected int removalsSinceLastCleanup = 0;
+    protected boolean autoCleanup=false;
     
     protected double time;
-    protected double deposition_probability = 0;
+    protected double depositionProbability = 0;
     protected int totalAtoms;
     protected double totalProbability;
     protected IProbabilityHolder parent;
     protected int level;
 
-    public abstract void add_Atom(AbstractAtom a);
+    public abstract void addAtom(AbstractAtom a);
 
-    public abstract AbstractAtom next_event(RandomSeedable RNG);
+    public abstract AbstractAtom nextEvent(RandomSeedable RNG);
 
     public double getTime() {
         return time;
@@ -33,16 +33,16 @@ public abstract class AbstractList implements IProbabilityHolder {
     }
     
     public AbstractList autoCleanup(boolean auto) {
-        this.auto_cleanup=auto;
+        this.autoCleanup=auto;
         return this;
     }
 
     public double getDepositionProbability() {
-        return deposition_probability;
+        return depositionProbability;
     }
 
-    public void setDepositionProbability(double deposition_probability) {
-        this.deposition_probability = deposition_probability;
+    public void setDepositionProbability(double depositionProbability) {
+        this.depositionProbability = depositionProbability;
     }
 
     @Override

@@ -70,7 +70,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   @Override
   protected boolean performSimulationStep() {
 
-    Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.next_event(RNG));
+    Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.nextEvent(RNG));
     Abstract2DDiffusionAtom destinationAtom;
 
     if (originAtom == null) {
@@ -78,7 +78,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
     } else {
       destinationAtom = chooseRandomHop(originAtom);
-      if (destinationAtom.is_outside()) {
+      if (destinationAtom.isOutside()) {
         destinationAtom = this.perimeter.getPerimeterReentrance(originAtom);
       }
       this.diffuseAtom(originAtom, destinationAtom);
@@ -99,7 +99,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   public void simulate(int iterations) {
 
     int radius = perimeter.getCurrentRadius();
-    int num_events = 0;// contador de eventos desde el ultimo cambio de radio
+    int numEvents=  0;// contador de eventos desde el ultimo cambio de radio
 
     iterationsForLastSimulation = 0;
 
@@ -109,17 +109,17 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       }
 
       iterationsForLastSimulation++;
-      num_events++;
+      numEvents++;
 
       if (radius == 20 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
-        if (num_events == 4000000) {
+        if (numEvents == 4000000) {
           break;
         }
       } else if (radius != perimeter.getCurrentRadius()) {//Si cambia de radio se vuelve a empezar a contar el nuevo numero de eventos
         radius = perimeter.getCurrentRadius();
-        num_events = 0;
+        numEvents = 0;
       } else {
-        if ((iterationsForLastSimulation - num_events) * 2 <= num_events) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
+        if ((iterationsForLastSimulation - numEvents) * 2 <= numEvents) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
         {
           break;
         }
@@ -158,8 +158,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       return false;
     }
 
-    boolean force_nucleation = (!justCentralFlake && origin.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
-    origin.deposit(force_nucleation);
+    boolean forceNucleation = (!justCentralFlake && origin.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
+    origin.deposit(forceNucleation);
     modifiedBuffer.updateAtoms(list, lattice);
     return true;
 
@@ -176,9 +176,9 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       return false;
     }
 
-    boolean force_nucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
+    boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
     origin.extract();
-    destination.deposit(force_nucleation);
+    destination.deposit(forceNucleation);
     modifiedBuffer.updateAtoms(list, lattice);
 
     return true;

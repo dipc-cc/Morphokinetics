@@ -62,7 +62,7 @@ public class LinearList extends AbstractList {
     }
 
     @Override
-    public void add_Atom(AbstractAtom a) {
+    public void addAtom(AbstractAtom a) {
         surface.add(0,a);
         a.setOnList(this);
         totalProbability += a.getProbability();
@@ -70,19 +70,19 @@ public class LinearList extends AbstractList {
     }
 
     @Override
-    public AbstractAtom next_event(RandomSeedable RNG) {
+    public AbstractAtom nextEvent(RandomSeedable RNG) {
         
-        removals_since_last_cleanup++;  
-        if (auto_cleanup && removals_since_last_cleanup>EVENTS_PER_CLEANUP) {this.cleanup(); removals_since_last_cleanup=0;}
+        removalsSinceLastCleanup++;  
+        if (autoCleanup && removalsSinceLastCleanup>EVENTS_PER_CLEANUP) {this.cleanup(); removalsSinceLastCleanup=0;}
         
-        double position = RNG.raw() * (totalProbability + deposition_probability);
+        double position = RNG.raw() * (totalProbability + depositionProbability);
 
-        time -= Math.log(RNG.raw()) / (totalProbability + deposition_probability);
+        time -= Math.log(RNG.raw()) / (totalProbability + depositionProbability);
 
-        if (position < deposition_probability) {
+        if (position < depositionProbability) {
             return null; //toca añadir un átomo nuevo
         }
-        position -= deposition_probability;
+        position -= depositionProbability;
         double prob_current = 0;
 
         AbstractAtom AC = null;

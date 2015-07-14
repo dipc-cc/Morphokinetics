@@ -91,7 +91,7 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
                 if (scale < 3) {
                     if (lattice.getAtom(i, j).isOccupied()) {
                         g.fillRect(X, Y, scale, scale);
-                    } else if (!lattice.getAtom(i, j).is_outside()) {
+                    } else if (!lattice.getAtom(i, j).isOutside()) {
                         g.drawRect(X, Y, scale, scale);
                     }
 
@@ -99,7 +99,7 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
                     if (lattice.getAtom(i, j).isOccupied()) {
                         g.fillOval(X, Y, scale, scale);
-                    } else if (!lattice.getAtom(i, j).is_outside()) {
+                    } else if (!lattice.getAtom(i, j).isOutside()) {
                         g.drawOval(X, Y, scale, scale);
                     }
                 }

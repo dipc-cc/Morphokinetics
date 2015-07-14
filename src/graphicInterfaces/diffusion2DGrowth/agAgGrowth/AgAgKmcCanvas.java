@@ -81,7 +81,7 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
                 if (scale < 3) {
                     if ( lattice.getAtom(i, j).isOccupied()) {
                         g.fillRect(X, Y, scale, scale);
-                    } else if (!lattice.getAtom(i, j).is_outside() && type>0) {
+                    } else if (!lattice.getAtom(i, j).isOutside() && type>0) {
                       g.drawRect(X, Y, scale, scale);
                     }
 
@@ -89,7 +89,7 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
                     if ( lattice.getAtom(i, j).isOccupied()) {
                         g.fillOval(X, Y, scale, scale);
-                    } else if (!lattice.getAtom(i, j).is_outside() && type>0) {
+                    } else if (!lattice.getAtom(i, j).isOutside() && type>0) {
                        g.drawOval(X, Y, scale, scale);
                     }
                 }

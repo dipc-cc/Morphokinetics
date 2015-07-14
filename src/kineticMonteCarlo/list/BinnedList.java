@@ -54,29 +54,29 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
     
 
     @Override
-    public void add_Atom(AbstractAtom a) {
+    public void addAtom(AbstractAtom a) {
         
         updateCurrentList();
         totalAtoms++;
         totalProbability += a.getProbability();
-        bins[currentBin].add_Atom(a);
+        bins[currentBin].addAtom(a);
     }
 
     
     
     @Override
-    public AbstractAtom next_event(RandomSeedable RNG) {
+    public AbstractAtom nextEvent(RandomSeedable RNG) {
 
-        if (auto_cleanup && removals_since_last_cleanup>EVENTS_PER_CLEANUP) {this.cleanup(); removals_since_last_cleanup=0;}
+        if (autoCleanup && removalsSinceLastCleanup>EVENTS_PER_CLEANUP) {this.cleanup(); removalsSinceLastCleanup=0;}
         
-        double position = RNG.raw() * (totalProbability + deposition_probability);
+        double position = RNG.raw() * (totalProbability + depositionProbability);
         if (this.parent==null)
-            time -= Math.log(RNG.raw()) / (totalProbability + deposition_probability);
+            time -= Math.log(RNG.raw()) / (totalProbability + depositionProbability);
 
-        if (position < deposition_probability) {
+        if (position < depositionProbability) {
             return null; //we have to add a new atom
         }
-        position -= deposition_probability;
+        position -= depositionProbability;
         int selected = 0;
         double accumulation = bins[selected].getTotalProbability();
         
@@ -88,7 +88,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
              accumulation += bins[selected].getTotalProbability();
         }
 
-       AbstractAtom atom=bins[selected].next_event(RNG);
+       AbstractAtom atom=bins[selected].nextEvent(RNG);
        if (atom!=null) totalAtoms--;
 
        

@@ -52,7 +52,7 @@ public class ModifiedBuffer {
   private void updateAllRates(Abstract2DDiffusionAtom atom, AbstractList list) {
 
     if (atom.isEligible() && !atom.isOnList()) {
-      list.add_Atom(atom);
+      list.addAtom(atom);
     }
     atom.updateAllRates();
 

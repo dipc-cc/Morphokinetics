@@ -41,7 +41,7 @@ public class BasicKmc extends AbstractEtchingKmc {
 
             BasicAtom atom = (BasicAtom) lattice.getAtom(i, j, k, l);
             if (atom.getType() < 4 && atom.getType() > 0 && !atom.isRemoved()) {
-              list.add_Atom(atom);
+              list.addAtom(atom);
             }
 
           }
@@ -53,7 +53,7 @@ public class BasicKmc extends AbstractEtchingKmc {
   @Override
   protected boolean performSimulationStep() {
 
-    BasicAtom atom = (BasicAtom) list.next_event(RNG);
+    BasicAtom atom = (BasicAtom) list.nextEvent(RNG);
     if (atom.getY() > lattice.getSizeY() - minHeight) {
 
       return true;
@@ -63,7 +63,7 @@ public class BasicKmc extends AbstractEtchingKmc {
     atom.setOnList(null);
     for (int k = 0; k < 4; k++) {
       if (atom.getHeighbor(k).getType() == 3) {
-        list.add_Atom(atom.getHeighbor(k));
+        list.addAtom(atom.getHeighbor(k));
       }
     }
     return false;

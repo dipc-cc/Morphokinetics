@@ -295,7 +295,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         } else {
           a = getNeighbour(X_v, Y_v, 1);
         }
-        if (a.is_outside()) {
+        if (a.isOutside()) {
           error_code |= 1;
         }
         if (a.isOccupied()) {
@@ -314,7 +314,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         } else {
           a = getNeighbour(X_v, Y_v, 1);
         }
-        if (a.is_outside()) {
+        if (a.isOutside()) {
           error_code |= 1;
         }
         if (a.isOccupied()) {
@@ -333,7 +333,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         } else {
           a = getNeighbour(X_v, Y_v, 0);
         }
-        if (a.is_outside()) {
+        if (a.isOutside()) {
           error_code |= 1;
         }
         if (a.isOccupied()) {
@@ -352,7 +352,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         } else {
           a = getNeighbour(X_v, Y_v, 0);
         }
-        if (a.is_outside()) {
+        if (a.isOutside()) {
           error_code |= 1;
         }
         if (a.isOccupied()) {
@@ -371,7 +371,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         } else {
           a = getNeighbour(X_v, Y_v, 2);
         }
-        if (a.is_outside()) {
+        if (a.isOutside()) {
           error_code |= 1;
         }
         if (a.isOccupied()) {
@@ -390,7 +390,7 @@ public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
         } else {
           a = getNeighbour(X_v, Y_v, 2);
         }
-        if (a.is_outside()) {
+        if (a.isOutside()) {
           error_code |= 1;
         }
         if (a.isOccupied()) {

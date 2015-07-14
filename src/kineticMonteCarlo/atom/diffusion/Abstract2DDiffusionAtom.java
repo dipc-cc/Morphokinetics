@@ -57,9 +57,9 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   protected ModifiedBuffer modified;
   protected HopsPerStep distancePerStep;
 
-  public abstract byte getTypeWithoutNeighbour(int neigh_pos);
+  public abstract byte getTypeWithoutNeighbour(int neighPos);
 
-  public abstract void deposit(boolean force_nucleation);
+  public abstract void deposit(boolean forceNucleation);
 
   public abstract void extract();
 
@@ -98,7 +98,7 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
     this.angle = angle;
   }
 
-  public boolean is_outside() {
+  public boolean isOutside() {
     return outside;
   }
 
