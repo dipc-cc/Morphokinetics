@@ -15,17 +15,17 @@ import java.util.Map;
  */
 public class PerimeterStatisticsFactory {
 
-  private static Map<String, AbstractPerimeterStatistics> perimeter_statistics;
+  private static Map<String, AbstractPerimeterStatistics> perimeterStatistics;
 
   public PerimeterStatisticsFactory() {
 
-    perimeter_statistics = new HashMap();
-    perimeter_statistics.put("Graphene_CVD_growth", new Graphene_perimeter_statistics());
-    perimeter_statistics.put("Ag_Ag_growth", new AgAgPerimeterStatistics());
+    perimeterStatistics = new HashMap();
+    perimeterStatistics.put("Graphene_CVD_growth", new Graphene_perimeter_statistics());
+    perimeterStatistics.put("Ag_Ag_growth", new AgAgPerimeterStatistics());
   }
 
   public AbstractPerimeterStatistics getStatistics(String statisticsName) {
 
-    return perimeter_statistics.get(statisticsName);
+    return perimeterStatistics.get(statisticsName);
   }
 }
