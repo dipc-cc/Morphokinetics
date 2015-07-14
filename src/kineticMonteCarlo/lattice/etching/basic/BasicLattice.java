@@ -50,7 +50,7 @@ public class BasicLattice extends AbstractEtchingLattice {
 
         for (int i = 0; i < sizeY; i++) {
             for (int j = 0; j < sizeX; j++) {
-                lattice[i * sizeX + j].updateType_from_scratch();
+                lattice[i * sizeX + j].updateTypeFromScratch();
             }
         }
 

@@ -4,8 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.atom.AbstractAtom;
-
 /**
  *
  * @author Nestor
@@ -43,11 +41,11 @@ public class BasicAtom extends AbstractAtom {
     return type;
   }
 
-  public void set_bulk() {
+  public void setBulk() {
     type = 3;
   }
 
-  public void updateType_from_scratch() {
+  public void updateTypeFromScratch() {
     type = 0;
     for (int i = 0; i < 4; i++) {
       if (neighs[i] != null && !neighs[i].isRemoved()) {

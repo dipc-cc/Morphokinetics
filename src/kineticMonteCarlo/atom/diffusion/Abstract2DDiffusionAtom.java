@@ -45,6 +45,9 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
     return true;
   }
 
+  /** TODO document the types and change them to constants
+   * 
+   */
   protected byte type;
   protected double[][] probabilities;
   protected double totalProbability;
