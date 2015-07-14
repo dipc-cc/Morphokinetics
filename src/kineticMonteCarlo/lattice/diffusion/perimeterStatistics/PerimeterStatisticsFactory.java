@@ -5,7 +5,7 @@
 package kineticMonteCarlo.lattice.diffusion.perimeterStatistics;
 
 import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgPerimeterStatistics;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.Graphene_perimeter_statistics;
+import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GraphenePerimeterStatistics;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class PerimeterStatisticsFactory {
   public PerimeterStatisticsFactory() {
 
     perimeterStatistics = new HashMap();
-    perimeterStatistics.put("Graphene_CVD_growth", new Graphene_perimeter_statistics());
+    perimeterStatistics.put("Graphene_CVD_growth", new GraphenePerimeterStatistics());
     perimeterStatistics.put("Ag_Ag_growth", new AgAgPerimeterStatistics());
   }
 

@@ -8,7 +8,7 @@ package kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowt
  *
  * @author U010531
  */
-public class Raw_statisticData_hopsCount_1Million {
+public class RawStatisticDataHopsCount1Million {
 
     
     
