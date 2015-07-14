@@ -20,8 +20,8 @@ public class RoundPerimeter {
   private Abstract2DDiffusionAtom[] currentPerimeter;
   private AbstractPerimeterStatistics perimeterStatistics;
 
-  public RoundPerimeter(String statistic_data) {
-    this.perimeterStatistics = new PerimeterStatisticsFactory().getStatistics(statistic_data);
+  public RoundPerimeter(String statisticData) {
+    this.perimeterStatistics = new PerimeterStatisticsFactory().getStatistics(statisticData);
     this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
   }
 
@@ -41,7 +41,7 @@ public class RoundPerimeter {
 
   public Abstract2DDiffusionAtom getPerimeterReentrance(Abstract2DDiffusionAtom origin) {
 
-    int i = search_perimeter_offset_reentrance();
+    int i = searchPerimeterOffsetReentrance();
     int neededSteps = perimeterStatistics.getHopsCount(currentPerimeterRadius, i);
 
     if (utils.StaticRandom.raw() < 0.5) {
@@ -53,16 +53,16 @@ public class RoundPerimeter {
       destinationAngleGrad = destinationAngleGrad - 360;
     }
 
-    int initial_location = (int) (destinationAngleGrad * currentPerimeter.length / 360.0);
+    int initialLocation = (int) (destinationAngleGrad * currentPerimeter.length / 360.0);
     float destinationAngleRad = (float) (destinationAngleGrad * Math.PI / 180.0f);
 
     Abstract2DDiffusionAtom chosen = null;
     int position = 0;
-    float error = currentPerimeter[initial_location].getAngle() - destinationAngleRad;
+    float error = currentPerimeter[initialLocation].getAngle() - destinationAngleRad;
 
     if (error > 0) {
 
-      for (int j = initial_location - 1; j >= 0; j--) {
+      for (int j = initialLocation - 1; j >= 0; j--) {
         float error_temp = currentPerimeter[j].getAngle() - destinationAngleRad;
         if (Math.abs(error_temp) < Math.abs(error)) {
           error = error_temp;
@@ -78,10 +78,10 @@ public class RoundPerimeter {
       }
     } else {
 
-      for (int j = initial_location + 1; j < currentPerimeter.length; j++) {
-        float error_temp = currentPerimeter[j].getAngle() - destinationAngleRad;
-        if (Math.abs(error_temp) < Math.abs(error)) {
-          error = error_temp;
+      for (int j = initialLocation + 1; j < currentPerimeter.length; j++) {
+        float errorTemp = currentPerimeter[j].getAngle() - destinationAngleRad;
+        if (Math.abs(errorTemp) < Math.abs(error)) {
+          error = errorTemp;
         } else {
           chosen = currentPerimeter[j - 1];
           position = j - 1;
@@ -108,7 +108,7 @@ public class RoundPerimeter {
 
   }
 
-  protected int search_perimeter_offset_reentrance() {
+  protected int searchPerimeterOffsetReentrance() {
     int linearSearch = (int) (perimeterStatistics.getTotalCount() * StaticRandom.raw());
     int actualCount = 0;
     int i = 0;
