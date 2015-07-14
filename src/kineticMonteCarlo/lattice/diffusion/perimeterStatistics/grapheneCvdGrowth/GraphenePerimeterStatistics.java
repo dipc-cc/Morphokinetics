@@ -27,6 +27,7 @@ public class GraphenePerimeterStatistics extends AbstractPerimeterStatistics {
 
       this.atomsCountMap.put(radius, currentRadiusCountMap);
       this.hopsCountMap.put(radius, currentRadiusHopMap);
+      
       for (int j = 0; j < 180; j++) {
         currentRadiusCountMap.put(j, RawStatisticDataAtomCount1Million.data[i][j]);
         currentRadiusHopMap.put(j, RawStatisticDataHopsCount1Million.data[i][j]);

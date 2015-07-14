@@ -34,7 +34,6 @@ public class AgAgPerimeterStatistics extends AbstractPerimeterStatistics {
       }
       radius += 5;
     }
-
   }
 
 }
