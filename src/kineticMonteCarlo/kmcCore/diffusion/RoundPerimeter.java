@@ -16,13 +16,13 @@ import utils.StaticRandom;
  */
 public class RoundPerimeter {
 
-  protected int currentPerimeterRadius;
-  protected Abstract2DDiffusionAtom[] currentPerimeter;
-  protected AbstractPerimeterStatistics perimeter_statistics;
+  private int currentPerimeterRadius;
+  private Abstract2DDiffusionAtom[] currentPerimeter;
+  private AbstractPerimeterStatistics perimeterStatistics;
 
   public RoundPerimeter(String statistic_data) {
-    this.perimeter_statistics = new PerimeterStatisticsFactory().getStatistics(statistic_data);
-    this.currentPerimeterRadius = perimeter_statistics.getMinRadiusInSize();
+    this.perimeterStatistics = new PerimeterStatisticsFactory().getStatistics(statistic_data);
+    this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
   }
 
   public int getCurrentRadius() {
@@ -30,7 +30,7 @@ public class RoundPerimeter {
   }
 
   public int goToNextRadius() {
-    this.currentPerimeterRadius = perimeter_statistics.getNextRadiusInSize(currentPerimeterRadius);
+    this.currentPerimeterRadius = perimeterStatistics.getNextRadiusInSize(currentPerimeterRadius);
     return this.currentPerimeterRadius;
   }
 
@@ -42,7 +42,7 @@ public class RoundPerimeter {
   public Abstract2DDiffusionAtom getPerimeterReentrance(Abstract2DDiffusionAtom origin) {
 
     int i = search_perimeter_offset_reentrance();
-    int neededSteps = perimeter_statistics.getHopsCount(currentPerimeterRadius, i);
+    int neededSteps = perimeterStatistics.getHopsCount(currentPerimeterRadius, i);
 
     if (utils.StaticRandom.raw() < 0.5) {
       i = 360 - i;
@@ -109,12 +109,12 @@ public class RoundPerimeter {
   }
 
   protected int search_perimeter_offset_reentrance() {
-    int linearSearch = (int) (perimeter_statistics.getTotalCount() * StaticRandom.raw());
+    int linearSearch = (int) (perimeterStatistics.getTotalCount() * StaticRandom.raw());
     int actualCount = 0;
     int i = 0;
 
     for (; i < 179; i++) {
-      actualCount += perimeter_statistics.getAtomsCount(currentPerimeterRadius, i);
+      actualCount += perimeterStatistics.getAtomsCount(currentPerimeterRadius, i);
       if (linearSearch <= actualCount) {
         break;
       }
