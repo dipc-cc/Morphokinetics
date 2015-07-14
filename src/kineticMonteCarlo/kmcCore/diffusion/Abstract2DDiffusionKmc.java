@@ -192,7 +192,6 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
         int Y = (int) (StaticRandom.raw() * lattice.getSizeY());
         destinationAtom = lattice.getAtom(X, Y);
       } while (!this.depositAtom(destinationAtom));
-
     } else {
       do {
         destinationAtom = this.perimeter.getRandomPerimeterAtom();
