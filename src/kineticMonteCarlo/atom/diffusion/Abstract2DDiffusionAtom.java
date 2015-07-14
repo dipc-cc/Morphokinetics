@@ -14,22 +14,6 @@ import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
  */
 public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
 
-  /** TODO document the types and change them to constants
-   * 
-   * 0: terrace, 1: corner, 2: edge, 3: kink, 4: bulk
-   */
-  protected byte type;
-  protected double[][] probabilities;
-  protected double totalProbability;
-  protected double[] bondsProbability;
-  protected float angle;
-  protected boolean occupied = false;
-  protected boolean outside = true;
-  protected short X, Y;
-  protected int multiplier = 1;
-  protected ModifiedBuffer modified;
-  protected HopsPerStep distancePerStep;
-  
   public Abstract2DDiffusionAtom(short X, short Y, HopsPerStep distancePerStep) {
 
     this.X = X;
@@ -61,6 +45,20 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
     return true;
   }
 
+  /** TODO document the types and change them to constants
+   * 
+   */
+  protected byte type;
+  protected double[][] probabilities;
+  protected double totalProbability;
+  protected double[] bondsProbability;
+  protected float angle;
+  protected boolean occupied = false;
+  protected boolean outside = true;
+  protected short X, Y;
+  protected int multiplier = 1;
+  protected ModifiedBuffer modified;
+  protected HopsPerStep distancePerStep;
 
   public abstract byte getTypeWithoutNeighbour(int neighPos);
 
