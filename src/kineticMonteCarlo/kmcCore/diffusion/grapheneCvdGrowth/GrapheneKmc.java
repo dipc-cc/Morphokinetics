@@ -58,24 +58,24 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
     this.accelerator.tryToSpeedUp(0,
             new DevitaHopsConfig()
-            .setMin_accumulated_steps(100)
-            .setMax_accumulated_steps(200)
-            .setMin_distance_hops(1)
-            .setMax_distance_hops(10));
+            .setMinAccumulatedSteps(100)
+            .setMaxAccumulatedSteps(200)
+            .setMinDistanceHops(1)
+            .setMaxDistanceHops(10));
 
         //accelerating types 2 and 3 does not improve performance and introduce some morphology differences
     this.accelerator.tryToSpeedUp(2,
             new DevitaHopsConfig()
-            .setMin_accumulated_steps(30)
-            .setMax_accumulated_steps(100)
-            .setMin_distance_hops(1)
-            .setMax_distance_hops(5));
+            .setMinAccumulatedSteps(30)
+            .setMaxAccumulatedSteps(100)
+            .setMinDistanceHops(1)
+            .setMaxDistanceHops(5));
 
     this.accelerator.tryToSpeedUp(3,
             new DevitaHopsConfig()
-            .setMin_accumulated_steps(30)
-            .setMax_accumulated_steps(100)
-            .setMin_distance_hops(1)
-            .setMax_distance_hops(5));
+            .setMinAccumulatedSteps(30)
+            .setMaxAccumulatedSteps(100)
+            .setMinDistanceHops(1)
+            .setMaxDistanceHops(5));
   }
 }

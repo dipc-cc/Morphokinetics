@@ -73,23 +73,23 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     }
   }
 
-  private void configureDevitaAccelerator(HopsPerStep distance_per_step) {
-    this.accelerator = new DevitaAccelerator(this.lattice, distance_per_step);
+  private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
+    this.accelerator = new DevitaAccelerator(this.lattice, distancePerStep);
 
     if (accelerator != null) {
       this.accelerator.tryToSpeedUp(0,
               new DevitaHopsConfig()
-              .setMin_accumulated_steps(100)
-              .setMax_accumulated_steps(200)
-              .setMin_distance_hops(1)
-              .setMax_distance_hops(8));
+              .setMinAccumulatedSteps(100)
+              .setMaxAccumulatedSteps(200)
+              .setMinDistanceHops(1)
+              .setMaxDistanceHops(8));
 
       this.accelerator.tryToSpeedUp(2,
               new DevitaHopsConfig()
-              .setMin_accumulated_steps(30)
-              .setMax_accumulated_steps(100)
-              .setMin_distance_hops(1)
-              .setMax_distance_hops(5));
+              .setMinAccumulatedSteps(30)
+              .setMaxAccumulatedSteps(100)
+              .setMinDistanceHops(1)
+              .setMaxDistanceHops(5));
     }
   }
 

@@ -78,10 +78,10 @@ public class DevitaAccelerator {
 
     DevitaHopsConfig config = devitaConfig.get(sourceAtomType);
 
-    if (pending_jumps < config.getMin_accumulated_steps() && desiredHopDistance < config.getMax_distance_hops()) {
+    if (pending_jumps < config.getMinAccumulatedSteps() && desiredHopDistance < config.getMaxDistanceHops()) {
       hopsPerStep.setDistancePerStep(sourceAtomType, desiredHopDistance + 1);
     }
-    if (pending_jumps > config.getMax_accumulated_steps() && desiredHopDistance > config.getMin_distance_hops()) {
+    if (pending_jumps > config.getMaxAccumulatedSteps() && desiredHopDistance > config.getMinDistanceHops()) {
       hopsPerStep.setDistancePerStep(sourceAtomType, desiredHopDistance >> 1);
     }
   }
