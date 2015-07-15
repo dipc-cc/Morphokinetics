@@ -22,8 +22,6 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
     private PsdSignature2D PSD = new PsdSignature2D(128, 128);
     private float[][] surface = new float[128][128];
     private float[][] difference = new float[128][128];
-    private int PSD_size_X;
-    private int PSD_size_Y;
 
     public SiEtchingBasicPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval) {
 

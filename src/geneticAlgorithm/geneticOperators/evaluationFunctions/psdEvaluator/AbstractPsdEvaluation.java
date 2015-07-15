@@ -20,6 +20,8 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
   protected int measureInterval;
   protected Population currentPopulation;
   protected int currentSimulation;
+  protected int PSD_size_X;
+  protected int PSD_size_Y;
 
   public AbstractPsdEvaluation(int repeats, int measureInterval) {
     super();

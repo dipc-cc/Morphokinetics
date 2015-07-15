@@ -32,10 +32,13 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
         super(repeats, measureInterval);
 
+        PSD_size_X = 64;
+        PSD_size_Y = 64;
+        
         KMC = new AgAgKmc(config,true);
-        PSD = new PsdSignature2D(64,64);
-        sampledSurface = new float[64][64];
-        difference = new float[64][64];
+        PSD = new PsdSignature2D(PSD_size_Y,PSD_size_X);
+        sampledSurface = new float[PSD_size_Y][PSD_size_X];
+        difference = new float[PSD_size_Y][PSD_size_X];
         
         DiffusionKmcFrame frame = create_graphics_frame(KMC);
         frame.setVisible(true);   
@@ -68,8 +71,8 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
         difference=MathUtils.avg_Filter(difference, 5);
         double error = 0;
-        for (int a = 0; a < difference.length; a++) {
-            for (int b = 0; b < difference[0].length; b++) {
+        for (int a = 0; a < PSD_size_X; a++) {
+            for (int b = 0; b < PSD_size_Y; b++) {
                 
                 error += Math.abs(difference[a][b]);
             }
