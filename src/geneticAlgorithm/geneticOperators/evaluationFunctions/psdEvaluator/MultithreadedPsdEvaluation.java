@@ -23,7 +23,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
   protected int PSD_size_X;
   protected int PSD_size_Y;
-  protected PsdSignature2D[] PSDs;
+  protected PsdSignature2D[] PSDs; // TODO joseba might not be initialized
   protected double[] times;
   protected long time_last_render;
 
