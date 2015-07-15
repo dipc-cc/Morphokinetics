@@ -37,9 +37,9 @@ public class AgAgMultithreadedEvaluatorTest {
         AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
         
         Individual individual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp));
-        float[][] experimentalPSD = evaluation.calculate_PSD_from_individual(individual);
+        float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);
 
-        evaluation.setPSD(experimentalPSD);
+        evaluation.setPsd(experimentalPSD);
 
         Individual newIndividual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", 125));
         Population population = new Population(1);

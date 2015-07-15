@@ -59,7 +59,7 @@ public class PsdSignature2D {
 
   }
 
-  public float[][] getPSD() {
+  public float[][] getPsd() {
 
     if (!averaged) {
       for (int i = 0; i < psd.length; i++) {

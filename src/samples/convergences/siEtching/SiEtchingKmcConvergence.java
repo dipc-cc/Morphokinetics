@@ -41,7 +41,7 @@ public class SiEtchingKmcConvergence {
 
           evaluator.setRepeats(evaluator.getRepeats()*20);
           Individual individual=new Individual(new SiEtchRatesFactory().getRates("Gosalvez_PRE", 340));
-          float[][] experimentalPSD=evaluator.calculate_PSD_from_individual(individual);
+          float[][] experimentalPSD=evaluator.calculatePsdFromIndividual(individual);
           double simulationTime=individual.getSimulationTime();
           evaluator.setRepeats(evaluator.getRepeats()/20);
            

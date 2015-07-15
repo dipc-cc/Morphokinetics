@@ -87,7 +87,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
         PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
         PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-        return PSD.getPSD();
+        return PSD.getPsd();
     }
 
     private static SiEtchingKmcConfig configKMC() {

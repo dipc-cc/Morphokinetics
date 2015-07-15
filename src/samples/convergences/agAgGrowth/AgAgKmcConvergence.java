@@ -39,7 +39,7 @@ public class AgAgKmcConvergence {
         //--------------------------------
         evaluator.setRepeats(evaluator.getRepeats() * 5);
         Individual individual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp));
-        float[][] experimentalPSD = evaluator.calculate_PSD_from_individual(individual);
+        float[][] experimentalPSD = evaluator.calculatePsdFromIndividual(individual);
         double simulationTime = individual.getSimulationTime();
         evaluator.setRepeats(evaluator.getRepeats() / 5);
          //--------------------------------

@@ -19,64 +19,63 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
-    private AgAgKmc KMC;
+  private AgAgKmc KMC;
 
-    public AgAgBasicPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval) {
+  public AgAgBasicPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval) {
 
-        super(repeats, measureInterval);
+    super(repeats, measureInterval);
 
-        PSD_size_X = 64;
-        PSD_size_Y = 64;
-        
-        KMC = new AgAgKmc(config,true);
-        PSD = new PsdSignature2D(PSD_size_Y,PSD_size_X);
-        sampledSurface = new float[PSD_size_Y][PSD_size_X];
-        difference = new float[PSD_size_Y][PSD_size_X];
-        
-        DiffusionKmcFrame frame = create_graphics_frame(KMC);
-        frame.setVisible(true);   
-    }
-    
-        private static DiffusionKmcFrame create_graphics_frame(AgAgKmc kmc) {
-        DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
-        return frame;
-    }
+    psdSizeX = 64;
+    psdSizeY = 64;
 
-    @Override
-    public float[][] calculate_PSD_from_individual(Individual i) {
+    KMC = new AgAgKmc(config, true);
+    psd = new PsdSignature2D(psdSizeY, psdSizeX);
+    sampledSurface = new float[psdSizeY][psdSizeX];
+    difference = new float[psdSizeY][psdSizeX];
 
-        this._calculate_PSD_from_individual(i);
-        return PSD.getPSD();
-    }
+    DiffusionKmcFrame frame = createGraphicsFrame(KMC);
+    frame.setVisible(true);
+  }
 
-    @Override
-    public void dispose() {
-        PSD=null;
-        KMC=null;
-        sampledSurface=null;
-        difference=null;   
-    }
+  private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    return frame;
+  }
 
-    private void _calculate_PSD_from_individual(Individual ind) {
-        PSD.reset();
-        double time = 0.0;
-        for (int i = 0; i < repeats; i++) {
-            KMC.initializeRates(ind.getGenes());
-            while (true) {
-                KMC.simulate(measureInterval);
-                KMC.getSampledSurface(sampledSurface);
-                PSD.addSurfaceSample(sampledSurface);
-                if (KMC.getIterations() < measureInterval) {
-                	time += KMC.getTime();
-                    break;
-                }
-            }
-            currentSimulation++;
+  @Override
+  public float[][] calculatePsdFromIndividual(Individual i) {
+
+    this._calculatePsdFromIndividual(i);
+    return psd.getPsd();
+  }
+
+  @Override
+  public void dispose() {
+    psd = null;
+    KMC = null;
+    sampledSurface = null;
+    difference = null;
+  }
+
+  private void _calculatePsdFromIndividual(Individual ind) {
+    psd.reset();
+    double time = 0.0;
+    for (int i = 0; i < repeats; i++) {
+      KMC.initializeRates(ind.getGenes());
+      while (true) {
+        KMC.simulate(measureInterval);
+        KMC.getSampledSurface(sampledSurface);
+        psd.addSurfaceSample(sampledSurface);
+        if (KMC.getIterations() < measureInterval) {
+          time += KMC.getTime();
+          break;
         }
-        ind.setSimulationTime(time / repeats);
-        PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-        PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+      }
+      currentSimulation++;
     }
-    
-    
+    ind.setSimulationTime(time / repeats);
+    psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+  }
+
 }

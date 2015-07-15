@@ -16,14 +16,14 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
 
-  protected int PSD_size_X;
-  protected int PSD_size_Y;
-  protected PsdSignature2D PSD ;
-  protected float[][] sampledSurface ;
+  protected int psdSizeX;
+  protected int psdSizeY;
+  protected PsdSignature2D psd;
+  protected float[][] sampledSurface;
   protected float[][] difference;
-  
+
   protected int repeats;
-  protected float[][] experimentalPSD;
+  protected float[][] experimentalPsd;
   protected int measureInterval;
   protected Population currentPopulation;
   protected int currentSimulation;
@@ -35,19 +35,19 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
 
   }
 
-  public AbstractPsdEvaluation setPSD(float[][] ExperimentalPSD) {
-    this.experimentalPSD = ExperimentalPSD;
+  public AbstractPsdEvaluation setPsd(float[][] ExperimentalPSD) {
+    this.experimentalPsd = ExperimentalPSD;
     return this;
   }
 
-  public abstract float[][] calculate_PSD_from_individual(Individual i);
+  public abstract float[][] calculatePsdFromIndividual(Individual i);
 
-  protected void calculateRelativeDifference(float[][] difference, PsdSignature2D PSD) {
+  protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
 
     for (int a = 0; a < difference.length; a++) {
       for (int b = 0; b < difference[0].length; b++) {
 
-        difference[a][b] = (PSD.getPSD()[a][b] - experimentalPSD[a][b]) / Math.min(experimentalPSD[a][b], PSD.getPSD()[a][b]);
+        difference[a][b] = (psd.getPsd()[a][b] - experimentalPsd[a][b]) / Math.min(experimentalPsd[a][b], psd.getPsd()[a][b]);
       }
     }
 
@@ -69,34 +69,35 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
   public void setRepeats(int repeats) {
     this.repeats = repeats;
   }
-@Override
-    public double[] evaluate(Population p) {
 
-        this.currentPopulation = p;
-        this.currentSimulation = 0;
-        double[] results = new double[p.size()];
+  @Override
+  public double[] evaluate(Population p) {
 
-        for (int i = 0; i < p.size(); i++) {
-            results[i] = evaluate_individual(p.getIndividual(i));
-           
-        }
+    this.currentPopulation = p;
+    this.currentSimulation = 0;
+    double[] results = new double[p.size()];
 
-        return results;
+    for (int i = 0; i < p.size(); i++) {
+      results[i] = evaluateIndividual(p.getIndividual(i));
+
     }
 
-    private double evaluate_individual(Individual ind) {
-        
-        calculate_PSD_from_individual(ind);
-        calculateRelativeDifference(difference, PSD);
+    return results;
+  }
 
-        difference=MathUtils.avg_Filter(difference, 5);
-        double error = 0;
-        for (int a = 0; a < PSD_size_X; a++) {
-            for (int b = 0; b < PSD_size_Y; b++) {
-                
-                error += Math.abs(difference[a][b]);
-            }
-        }        
-        return error * wheight;
+  private double evaluateIndividual(Individual ind) {
+
+    calculatePsdFromIndividual(ind);
+    calculateRelativeDifference(difference, psd);
+
+    difference = MathUtils.avg_Filter(difference, 5);
+    double error = 0;
+    for (int a = 0; a < psdSizeX; a++) {
+      for (int b = 0; b < psdSizeY; b++) {
+
+        error += Math.abs(difference[a][b]);
+      }
     }
+    return error * wheight;
+  }
 }

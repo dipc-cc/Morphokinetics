@@ -27,18 +27,18 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
 
     for (int i = 0; i < num_threads; i++) {
       AgAgKmc kmc = new AgAgKmc(config, true);
-      DiffusionKmcFrame frame = create_graphics_frame(kmc);
+      DiffusionKmcFrame frame = createGraphicsFrame(kmc);
       frame.setVisible(true);
 
       workers[i] = new KmcWorker(kmc, i);
       workers[i].start();
     }
 
-    PSD_size_X = 64;
-    PSD_size_Y = 64;
+    psdSizeX = 64;
+    psdSizeY = 64;
   }
 
-  private static DiffusionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+  private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {
     DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }

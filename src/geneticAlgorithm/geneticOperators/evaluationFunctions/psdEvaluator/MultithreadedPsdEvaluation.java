@@ -21,8 +21,6 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
   protected static final int FPS_GRAPHICS = 2;
 
-  protected int PSD_size_X;
-  protected int PSD_size_Y;
   protected PsdSignature2D[] PSDs; // TODO joseba might not be initialized
   protected double[] times;
   protected long time_last_render;
@@ -52,18 +50,18 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
       evalation_complete.release();
     }
   }
-  
+
   @Override
   public void handleSimulationIntervalFinish(int workerID, int workID) {
 
-    float[][] surface = new float[PSD_size_Y][PSD_size_X];
+    float[][] surface = new float[psdSizeY][psdSizeX];
     workers[workerID].getSampledSurface(surface);
     times[workID] += workers[workerID].getKMC().getTime();
     addToPSD(workID, surface);
 
     System.out.println("Worker " + workerID + " finished a simulation :(" + workID + ")");
   }
-  
+
   private void addToPSD(int workID, float[][] surface) {
     PSDs[workID].addSurfaceSample(surface);
   }
@@ -88,58 +86,58 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
   @Override
   public double[] evaluate(Population p) {
-    calculate_PSD_of_population(p);
-    double[] results = calculate_difference_with_RealPSD();
+    calculatePsdOfPopulation(p);
+    double[] results = calculateDifferenceWithRealPsd();
     return results;
   }
 
   @Override
-  public float[][] calculate_PSD_from_individual(Individual i) {
+  public float[][] calculatePsdFromIndividual(Individual i) {
 
     Population p = new Population(1);
     p.setIndividual(i, 0);
-    this.calculate_PSD_of_population(p);
+    this.calculatePsdOfPopulation(p);
 
     PSDs[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     PSDs[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    return PSDs[0].getPSD();
+    return PSDs[0].getPsd();
   }
 
-  private double[] calculate_difference_with_RealPSD() {
+  private double[] calculateDifferenceWithRealPsd() {
     double[] results = new double[currentPopulation.size()];
     for (int i = 0; i < currentPopulation.size(); i++) {
-      results[i] = evaluate_individual(i);
+      results[i] = evaluateIndividual(i);
     }
     return results;
   }
 
-  private double evaluate_individual(int individual_pos) {
+  private double evaluateIndividual(int individualPos) {
 
     double error = 0;
-    float[][] difference = new float[PSD_size_Y][PSD_size_X];
+    float[][] difference = new float[psdSizeY][psdSizeX];
 
-    PSDs[individual_pos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    PSDs[individual_pos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    PSDs[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    PSDs[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    calculateRelativeDifference(difference, PSDs[individual_pos]);
+    calculateRelativeDifference(difference, PSDs[individualPos]);
 
     difference = MathUtils.avg_Filter(difference, 5);
 
-    for (int a = 0; a < PSD_size_Y; a++) {
-      for (int b = 0; b < PSD_size_X; b++) {
+    for (int a = 0; a < psdSizeY; a++) {
+      for (int b = 0; b < psdSizeX; b++) {
         error += Math.abs(difference[a][b]);
       }
     }
     return error * wheight;
   }
 
-  private void calculate_PSD_of_population(Population p) {
+  private void calculatePsdOfPopulation(Population p) {
     PSDs = new PsdSignature2D[p.size()];
 
     times = new double[p.size()];
     for (int i = 0; i < p.size(); i++) {
-      PSDs[i] = new PsdSignature2D(PSD_size_Y, PSD_size_X);
+      PSDs[i] = new PsdSignature2D(psdSizeY, psdSizeX);
     }
 
     currentPopulation = p;
@@ -154,11 +152,11 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
       evalation_complete.acquire();
     } catch (Exception e) {
     }
-    store_simulation_times(p);
+    storeSimulationTimes(p);
 
   }
 
-  private void store_simulation_times(Population p) {
+  private void storeSimulationTimes(Population p) {
     for (int i = 0; i < p.size(); i++) {
       times[i] /= repeats;
       p.getIndividual(i).setSimulationTime(times[i]);

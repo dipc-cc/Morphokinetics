@@ -34,7 +34,7 @@ public class GeneticAlgorithmConfiguration {
     public double expected_simulation_time;
 
     public GeneticAlgorithmConfiguration setExperimentalPSD(float[][] PSD_experimental) {
-        mainEvaluator.setPSD(PSD_experimental);
+        mainEvaluator.setPsd(PSD_experimental);
         return this;
     }
 }
