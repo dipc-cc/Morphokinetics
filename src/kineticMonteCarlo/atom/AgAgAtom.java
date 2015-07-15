@@ -2,11 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.atom.diffusion.agAgGrowth;
+package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.StaticRandom;
 

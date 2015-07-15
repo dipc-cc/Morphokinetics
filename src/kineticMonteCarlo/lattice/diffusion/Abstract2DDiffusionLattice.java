@@ -5,11 +5,11 @@
 package kineticMonteCarlo.lattice.diffusion;
 
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
+import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import utils.QuickSort;
 

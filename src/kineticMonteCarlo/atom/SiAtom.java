@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.atom.etching.siEtching;
-
-import kineticMonteCarlo.atom.AbstractAtom;
+package kineticMonteCarlo.atom;
 
 /**
  *

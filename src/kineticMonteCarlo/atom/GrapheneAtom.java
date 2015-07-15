@@ -4,12 +4,12 @@
  *  La clase alberga todas los parámetros necesarios
  * 
  */
-package kineticMonteCarlo.atom.diffusion.grapheneCvdGrowth;
+package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.atom.diffusion.ArrayStack;
+import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.ArrayStack;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
+import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth.GrapheneCvdGrowthLattice;
 import utils.StaticRandom;

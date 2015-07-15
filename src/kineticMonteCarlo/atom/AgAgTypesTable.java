@@ -1,4 +1,4 @@
-package kineticMonteCarlo.atom.diffusion.agAgGrowth;
+package kineticMonteCarlo.atom;
 
 public class AgAgTypesTable {
 

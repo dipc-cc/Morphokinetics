@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.kmcCore.diffusion;
 
-import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.AbstractPerimeterStatistics;
 import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.PerimeterStatisticsFactory;
 import utils.StaticRandom;

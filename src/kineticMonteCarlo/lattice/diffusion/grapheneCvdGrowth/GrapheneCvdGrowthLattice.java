@@ -4,10 +4,10 @@
  */
 package kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth;
 
-import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.atom.diffusion.grapheneCvdGrowth.GrapheneAtom;
-import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
+import kineticMonteCarlo.atom.GrapheneAtom;
+import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.geom.Point2D;
 import utils.StaticRandom;

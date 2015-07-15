@@ -1,5 +1,5 @@
 
-package kineticMonteCarlo.atom.diffusion.grapheneCvdGrowth;
+package kineticMonteCarlo.atom;
 
 
 public class GrapheneTypesTable {

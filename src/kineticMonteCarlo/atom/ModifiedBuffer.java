@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.atom.diffusion;
+package kineticMonteCarlo.atom;
 
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.list.AbstractList;

@@ -4,10 +4,10 @@
  */
 package kineticMonteCarlo.lattice.diffusion.agAgGrowth;
 
-import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.atom.diffusion.agAgGrowth.AgAgAtom;
+import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AgAgAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
+import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.geom.Point2D;
 import utils.StaticRandom;

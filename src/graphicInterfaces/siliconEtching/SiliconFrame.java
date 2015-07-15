@@ -11,7 +11,7 @@ import graphicInterfaces.siliconEtching.mouseBehaviors.MouseTranslate;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRotate;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRocking;
 import utils.list.AbstractList;
-import kineticMonteCarlo.atom.etching.siEtching.SiAtom;
+import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import java.awt.GraphicsConfiguration;
 import com.sun.j3d.utils.universe.*;
