@@ -111,8 +111,8 @@ public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
             currentSimulation++;
         }
         ind.setSimulationTime(time / repeats);
-        PSD.apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-        PSD.apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
+        PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
     }
     
     

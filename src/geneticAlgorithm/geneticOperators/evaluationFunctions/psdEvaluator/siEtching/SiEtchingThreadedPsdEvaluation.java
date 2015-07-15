@@ -58,8 +58,8 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
         p.setIndividual(i, 0);
         this.calculate_PSD_of_population(p);
 
-        PSDs[0].apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-        PSDs[0].apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
+        PSDs[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSDs[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
         return PSDs[0].getPSD();
     }
@@ -69,8 +69,8 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
         double error = 0;
         float[][] difference = new float[PSD_size_Y][PSD_size_X];
 
-        PSDs[individual_pos].apply_simmetry_fold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-        PSDs[individual_pos].apply_simmetry_fold(PsdSignature2D.VERTICAL_SIMMETRY);
+        PSDs[individual_pos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+        PSDs[individual_pos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
         calculateRelativeDifference(difference, PSDs[individual_pos]);
         
