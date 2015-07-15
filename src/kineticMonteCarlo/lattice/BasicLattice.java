@@ -2,11 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.etching.basic;
+package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.BasicAtom;
-import kineticMonteCarlo.lattice.etching.AbstractEtchingLattice;
 
 /**
  *

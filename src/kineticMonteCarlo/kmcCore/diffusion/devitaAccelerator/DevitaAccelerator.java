@@ -6,7 +6,7 @@
 package kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator;
 
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.lattice.diffusion.IDevitaLattice;
+import kineticMonteCarlo.lattice.IDevitaLattice;
 import java.util.HashMap;
 import java.util.Map;
 

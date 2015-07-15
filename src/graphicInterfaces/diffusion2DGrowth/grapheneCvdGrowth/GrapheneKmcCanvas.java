@@ -5,7 +5,7 @@
 package graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth;
 
 import graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import java.awt.*;
 
 public class GrapheneKmcCanvas extends AbstractKmcCanvas {

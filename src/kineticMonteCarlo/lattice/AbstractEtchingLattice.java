@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.etching;
+package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.lattice.AbstractLattice;
 

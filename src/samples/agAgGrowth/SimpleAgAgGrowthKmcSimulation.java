@@ -7,7 +7,7 @@ package samples.agAgGrowth;
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 

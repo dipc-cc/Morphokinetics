@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth;
+package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.geom.Point2D;
 import utils.StaticRandom;
 
@@ -16,13 +15,13 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class GrapheneCvdGrowthLattice extends Abstract2DDiffusionLattice {
+public class GrapheneLattice extends Abstract2DDiffusionLattice {
 
   private static int[] latticeNeighborhoodData;
   private static final double cos60 = Math.cos(60 * Math.PI / 180);
   private static final double cos30 = Math.cos(30 * Math.PI / 180);
 
-  public GrapheneCvdGrowthLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distance_per_step) {
+  public GrapheneLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distance_per_step) {
 
     super(sizeX, sizeY, modified, distance_per_step);
 

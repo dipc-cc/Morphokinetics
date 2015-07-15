@@ -5,7 +5,7 @@
 package kineticMonteCarlo.atom;
 
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 
 /**
  *

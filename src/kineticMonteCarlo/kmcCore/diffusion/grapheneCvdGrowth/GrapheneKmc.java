@@ -9,7 +9,7 @@ import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth.GrapheneCvdGrowthLattice;
+import kineticMonteCarlo.lattice.GrapheneLattice;
 import utils.list.ListConfiguration;
 import utils.StaticRandom;
 
@@ -24,7 +24,7 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
     HopsPerStep distance_per_step = new HopsPerStep();
 
-    this.lattice = new GrapheneCvdGrowthLattice(sizeX, sizeY, modifiedBuffer, distance_per_step);
+    this.lattice = new GrapheneLattice(sizeX, sizeY, modifiedBuffer, distance_per_step);
 
     if (justCentralFlake) {
       configureDevitaAccelerator(distance_per_step);

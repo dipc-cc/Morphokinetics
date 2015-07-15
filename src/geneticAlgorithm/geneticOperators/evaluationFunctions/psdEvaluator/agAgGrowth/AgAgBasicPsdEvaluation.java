@@ -10,7 +10,7 @@ import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**

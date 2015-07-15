@@ -4,7 +4,7 @@
  */
 package graphicInterfaces.diffusion2DGrowth;
 
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;

@@ -7,13 +7,13 @@
 package kineticMonteCarlo.atom;
 
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth.GrapheneCvdGrowthLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.GrapheneLattice;
 import utils.StaticRandom;
 
 public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
-  private GrapheneCvdGrowthLattice lattice;
+  private GrapheneLattice lattice;
   private static final ArrayStack PStack = new ArrayStack(12);
   private static GrapheneTypesTable typesTable;
   private byte n1, n2, n3;
@@ -29,7 +29,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   @Override
   public void initialize(Abstract2DDiffusionLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
     super.initialize(probabilities, modified);
-    this.lattice = (GrapheneCvdGrowthLattice) lattice;
+    this.lattice = (GrapheneLattice) lattice;
   }
 
   @Override

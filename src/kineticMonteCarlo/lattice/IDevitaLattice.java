@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package kineticMonteCarlo.lattice.diffusion;
+package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 

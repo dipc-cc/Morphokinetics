@@ -13,7 +13,7 @@ import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 
 /**
  *

@@ -8,7 +8,7 @@ import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
 import java.awt.geom.Point2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;

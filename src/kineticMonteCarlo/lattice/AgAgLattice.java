@@ -2,13 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.diffusion.agAgGrowth;
+package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.atom.AgAgAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
-import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import java.awt.geom.Point2D;
 import utils.StaticRandom;
 
@@ -16,11 +15,11 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class AgAgGrowthLattice extends Abstract2DDiffusionLattice {
+public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   public static final float YRatio = (float) Math.sqrt(3) / 2.0f;
 
-  public AgAgGrowthLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distancePerStep) {
+  public AgAgLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
     super(sizeX, sizeY, modified, distancePerStep);
 

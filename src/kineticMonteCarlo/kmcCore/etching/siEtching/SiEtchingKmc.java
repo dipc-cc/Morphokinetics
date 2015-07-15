@@ -7,7 +7,7 @@ package kineticMonteCarlo.kmcCore.etching.siEtching;
 import kineticMonteCarlo.kmcCore.etching.AbstractEtchingKmc;
 import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.lattice.etching.siEtching.SiLattice;
+import kineticMonteCarlo.lattice.SiLattice;
 import java.util.ListIterator;
 import utils.MathUtils;
 
