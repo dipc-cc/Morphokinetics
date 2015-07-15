@@ -6,8 +6,6 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgG
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
-import geneticAlgorithm.Individual;
-import geneticAlgorithm.Population;
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
@@ -16,8 +14,6 @@ import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
-import utils.MathUtils;
-import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -46,7 +42,6 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
     DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }
-
 
   @Override
   public void handleSimulationIntervalFinish(int workerID, int workID) {
@@ -78,6 +73,5 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
 
     super.handleSimulationFinish(workerID, workID);
   }
-
 
 }

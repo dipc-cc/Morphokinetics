@@ -6,16 +6,12 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtc
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
-import geneticAlgorithm.Individual;
-import geneticAlgorithm.Population;
 import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
-import utils.MathUtils;
-import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -50,7 +46,6 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     PSDs[workID].addSurfaceSample(surface);
   }
 
-
   @Override
   public AbstractEvaluation setShowGraphics(boolean showGraphics) {
     super.setShowGraphics(showGraphics);
@@ -73,6 +68,5 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
 
     super.handleSimulationFinish(workerID, workID);
   }
-
 
 }

@@ -70,14 +70,15 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation i
     }
 
   }
-    @Override
+
+  @Override
   public double[] evaluate(Population p) {
     calculate_PSD_of_population(p);
     double[] results = calculate_difference_with_RealPSD();
     return results;
   }
-  
-   @Override
+
+  @Override
   public float[][] calculate_PSD_from_individual(Individual i) {
 
     Population p = new Population(1);
@@ -88,16 +89,17 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation i
     PSDs[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
     return PSDs[0].getPSD();
-  } 
+  }
 
-    private double[] calculate_difference_with_RealPSD() {
+  private double[] calculate_difference_with_RealPSD() {
     double[] results = new double[currentPopulation.size()];
     for (int i = 0; i < currentPopulation.size(); i++) {
       results[i] = evaluate_individual(i);
     }
     return results;
   }
-      private double evaluate_individual(int individual_pos) {
+
+  private double evaluate_individual(int individual_pos) {
 
     double error = 0;
     float[][] difference = new float[PSD_size_Y][PSD_size_X];
@@ -116,7 +118,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation i
     }
     return error * wheight;
   }
-    
+
   private void calculate_PSD_of_population(Population p) {
     PSDs = new PsdSignature2D[p.size()];
 
@@ -140,7 +142,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation i
     store_simulation_times(p);
 
   }
-  
+
   private void store_simulation_times(Population p) {
     for (int i = 0; i < p.size(); i++) {
       times[i] /= repeats;
