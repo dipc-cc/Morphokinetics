@@ -96,17 +96,17 @@ public class SiLattice extends AbstractEtchingLattice {
     for (int k = 0; k < (sizeZ - 1) * sizeY * sizeX * unit_cell_size; k++) {
       lattice[k].setOnList(null);
       lattice[k].unRemove();
-      lattice[k].set_as_bulk();
+      lattice[k].setAsBulk();
     }
 
         // Update neighborhood of top atoms
     //----------------------------------------------------------  
     for (int k = (sizeZ - 1) * sizeY * sizeX * unit_cell_size; k < sizeZ * sizeY * sizeX * unit_cell_size; k++) {
-      lattice[k].updaten1_from_scratch();
+      lattice[k].updateN1FromScratch();
     }
 
     for (int k = (sizeZ - 1) * sizeY * sizeX * unit_cell_size; k < sizeZ * sizeY * sizeX * unit_cell_size; k++) {
-      lattice[k].updaten2_from_scratch();
+      lattice[k].updateN2FromScratch();
     }
 
         // Remove top layer atoms
@@ -197,10 +197,10 @@ public class SiLattice extends AbstractEtchingLattice {
               }
               if (vecino_Z < sizeZ) {
 
-                lattice[((Z * sizeY + Y) * sizeX + X) * unit_cell_size + j].setNeighbor(lattice[((vecino_Z * sizeY + vecino_Y) * sizeX + vecino_X) * unit_cell_size + pos_vecino], i);
+                lattice[((Z * sizeY + Y) * sizeX + X) * unit_cell_size + j].setNeighbour(lattice[((vecino_Z * sizeY + vecino_Y) * sizeX + vecino_X) * unit_cell_size + pos_vecino], i);
 
               } else {
-                lattice[((Z * sizeY + Y) * sizeX + X) * unit_cell_size + j].setNeighbor(null, i);
+                lattice[((Z * sizeY + Y) * sizeX + X) * unit_cell_size + j].setNeighbour(null, i);
               }
             }
           }
