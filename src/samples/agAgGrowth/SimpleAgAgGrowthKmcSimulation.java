@@ -43,7 +43,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
   private static AgAgKmc initialize_kmc() {
     ListConfiguration config = new ListConfiguration()
-            .setList_type(ListConfiguration.LINEAR_LIST);
+            .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
     int sizeY = (int) (sizeX / constant_Y);

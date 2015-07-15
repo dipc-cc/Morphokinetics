@@ -92,9 +92,9 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     private static SiEtchingKmcConfig configKMC() {
         ListConfiguration listConfig=  new ListConfiguration()
-           .setList_type(ListConfiguration.BINNED_LIST)
-           .setBins_per_level(100)
-           .set_extra_levels(0);
+           .setListType(ListConfiguration.BINNED_LIST)
+           .setBinsPerLevel(100)
+           .setExtraLevels(0);
         SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                                     .setMillerX(1)
                                     .setMillerY(0)

@@ -20,7 +20,7 @@ public abstract class AbstractKmc implements IKmc {
 
   public AbstractKmc(ListConfiguration config) {
     RNG = new Ranecu(System.nanoTime());
-    list = config.create_list();
+    list = config.createList();
   }
 
   @Override

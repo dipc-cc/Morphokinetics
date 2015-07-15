@@ -46,7 +46,7 @@ public class SimpleGrapheneKmcSimulation {
     private static GrapheneKmc initialize_kmc() {
 
         ListConfiguration config = new ListConfiguration()
-                .setList_type(ListConfiguration.LINEAR_LIST);
+                .setListType(ListConfiguration.LINEAR_LIST);
 
         int sizeX = 256;
         int sizeY = (int) (sizeX * (2 * cos30));

@@ -44,9 +44,9 @@ public class SiliconMultithreadedPsdCalculation {
 
     private static SiEtchingKmcConfig configKMC() {
         ListConfiguration listConfig=  new ListConfiguration()
-              .setList_type(ListConfiguration.BINNED_LIST)
-              .setBins_per_level(12)
-              .set_extra_levels(1);
+              .setListType(ListConfiguration.BINNED_LIST)
+              .setBinsPerLevel(12)
+              .setExtraLevels(1);
         
         SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                 .setMillerX(1)

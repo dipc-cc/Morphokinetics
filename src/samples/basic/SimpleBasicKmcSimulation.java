@@ -24,9 +24,9 @@ public class SimpleBasicKmcSimulation {
       System.out.println("Simple simulation of the Basic KMC");  
         
       ListConfiguration listConfig=  new ListConfiguration()
-              .setList_type(ListConfiguration.BINNED_LIST)
-              .setBins_per_level(100)
-              .set_extra_levels(0);
+              .setListType(ListConfiguration.BINNED_LIST)
+              .setBinsPerLevel(100)
+              .setExtraLevels(0);
               
       BasicKmc KMC=new BasicKmc(listConfig,512,128);
       

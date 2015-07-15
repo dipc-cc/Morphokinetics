@@ -119,9 +119,9 @@ public class GeneticAlgorithmConfigFactory {
 
     private static SiEtchingKmcConfig SiEtchConfigKMC() {
         ListConfiguration listConfig = new ListConfiguration()
-                .setList_type(ListConfiguration.BINNED_LIST)
-                .setBins_per_level(20)
-                .set_extra_levels(1);
+                .setListType(ListConfiguration.BINNED_LIST)
+                .setBinsPerLevel(20)
+                .setExtraLevels(1);
 
         SiEtchingKmcConfig config = new SiEtchingKmcConfig()
                 .setMillerX(1)
@@ -137,8 +137,8 @@ public class GeneticAlgorithmConfigFactory {
     private AgAgKmcConfig AgAgConfigKMC(double deposition_rate, double island_density) {
 
         ListConfiguration listConfig = new ListConfiguration()
-                .setList_type(ListConfiguration.BINNED_LIST)
-                .setBins_per_level(20);
+                .setListType(ListConfiguration.BINNED_LIST)
+                .setBinsPerLevel(20);
 
         return new AgAgKmcConfig(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 

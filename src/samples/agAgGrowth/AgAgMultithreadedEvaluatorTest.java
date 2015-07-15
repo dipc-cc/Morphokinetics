@@ -25,7 +25,7 @@ public class AgAgMultithreadedEvaluatorTest {
 
     public static void main(String[] args) {
 
-        ListConfiguration listConfig = new ListConfiguration().setList_type(ListConfiguration.LINEAR_LIST);
+        ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
 
         float experitental_temp = 135;
         double deposition_rate = new AgAgGrowthRatesFactory().getDepositionRate("COX_PRB", experitental_temp);

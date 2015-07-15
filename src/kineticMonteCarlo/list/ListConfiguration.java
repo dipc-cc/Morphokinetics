@@ -9,40 +9,43 @@ package kineticMonteCarlo.list;
  * @author Nestor
  */
 public class ListConfiguration {
-  
-    
- public static final int LINEAR_LIST=0;           
- public static final int BINNED_LIST=1;
- 
- public int bin_levels;
- public int bins_per_level;
- public int list_type;
 
-    public ListConfiguration set_extra_levels(int bin_levels) {
-        
-        this.bin_levels = bin_levels;
-        return this;
+  public static final int LINEAR_LIST = 0;
+  public static final int BINNED_LIST = 1;
+
+  private int binLevels;
+  private int binsPerLevel;
+  private int listType;
+
+  public ListConfiguration setExtraLevels(int binLevels) {
+
+    this.binLevels = binLevels;
+    return this;
+  }
+
+  public ListConfiguration setListType(int listType) {
+
+    this.listType = listType;
+    return this;
+  }
+
+  public ListConfiguration setBinsPerLevel(int binsPerLevel) {
+
+    this.binsPerLevel = binsPerLevel;
+    return this;
+  }
+
+  public AbstractList createList() {
+
+    AbstractList list = null;
+    if (listType == LINEAR_LIST) {
+      list = new LinearList();
+    }
+    if (listType == BINNED_LIST) {
+      list = new BinnedList(binsPerLevel, binLevels);
     }
 
-    public ListConfiguration setList_type(int list_type) {
-        
-        this.list_type = list_type;
-        return this;
-    }
+    return list;
+  }
 
-    public ListConfiguration setBins_per_level(int bins_per_level) {
-        
-        this.bins_per_level = bins_per_level;
-        return this;
-    }
-
-    public AbstractList create_list(){
-
-        AbstractList list=null;
-        if (list_type==LINEAR_LIST) list=new LinearList();
-        if (list_type==BINNED_LIST) list=new BinnedList(bins_per_level,bin_levels);
-
-        return list;
-    }    
-       
 }
