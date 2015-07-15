@@ -10,7 +10,7 @@ import graphicInterfaces.siliconEtching.mouseBehaviors.MouseZoom;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseTranslate;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRotate;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRocking;
-import kineticMonteCarlo.list.AbstractList;
+import utils.list.AbstractList;
 import kineticMonteCarlo.atom.etching.siEtching.SiAtom;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import java.awt.GraphicsConfiguration;

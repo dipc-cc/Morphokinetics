@@ -1,7 +1,7 @@
-package kineticMonteCarlo.list.otherImplementation;
+package utils.list.otherImplementation;
 
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.list.AbstractList;
+import utils.list.AbstractList;
 import java.util.*;
 import utils.edu.cornell.lassp.houle.rngPack.RandomSeedable;
 

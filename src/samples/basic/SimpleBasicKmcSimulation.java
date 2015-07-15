@@ -3,7 +3,7 @@ package samples.basic;
 
 import graphicInterfaces.basic.BasicFrame;
 import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import ratesLibrary.basic.BasicEtchRatesFactory;
 import utils.Wait;
 

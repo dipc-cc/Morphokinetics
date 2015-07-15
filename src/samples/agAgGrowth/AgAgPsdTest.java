@@ -10,7 +10,7 @@ import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
 import static samples.agAgGrowth.SimpleAgAgGrowthKmcSimulation.constant_Y;
 import utils.MathUtils;

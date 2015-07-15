@@ -9,7 +9,7 @@ import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**

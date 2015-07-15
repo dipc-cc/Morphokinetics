@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.list.IProbabilityHolder;
+import utils.list.IProbabilityHolder;
 
 /**
  *

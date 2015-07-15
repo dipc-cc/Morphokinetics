@@ -6,7 +6,7 @@ package kineticMonteCarlo.kmcCore.worker;
 
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.lattice.AbstractLattice;
-import kineticMonteCarlo.list.AbstractList;
+import utils.list.AbstractList;
 import java.util.concurrent.Semaphore;
 
 /**

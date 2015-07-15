@@ -22,7 +22,7 @@ import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import static samples.agAgGrowth.AgAgMultithreadedEvaluatorTest.constant_Y;
 import java.util.ArrayList;
 import java.util.List;

@@ -4,7 +4,7 @@ import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 

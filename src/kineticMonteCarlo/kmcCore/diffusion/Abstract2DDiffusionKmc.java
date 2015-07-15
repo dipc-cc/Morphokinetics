@@ -10,7 +10,7 @@ import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import java.awt.geom.Point2D;
 import utils.MathUtils;
 import utils.StaticRandom;

@@ -1,4 +1,4 @@
-package kineticMonteCarlo.list;
+package utils.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;

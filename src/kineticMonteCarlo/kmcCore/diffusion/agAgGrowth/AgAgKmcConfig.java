@@ -6,7 +6,7 @@
 
 package kineticMonteCarlo.kmcCore.diffusion.agAgGrowth;
 
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 
 /**
  *

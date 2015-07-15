@@ -5,7 +5,7 @@
 package kineticMonteCarlo.atom.diffusion;
 
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.list.AbstractList;
+import utils.list.AbstractList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;

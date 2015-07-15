@@ -5,7 +5,7 @@
 package kineticMonteCarlo.kmcCore;
 
 import kineticMonteCarlo.lattice.AbstractLattice;
-import kineticMonteCarlo.list.AbstractList;
+import utils.list.AbstractList;
 
 /**
  *

@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.etching.siEtching;
 
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 
 /**
  *

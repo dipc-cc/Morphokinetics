@@ -8,7 +8,7 @@ import kineticMonteCarlo.kmcCore.etching.AbstractEtchingKmc;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.lattice.etching.basic.BasicLattice;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import java.util.ListIterator;
 
 /**

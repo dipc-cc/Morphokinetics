@@ -10,7 +10,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtch
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
-import kineticMonteCarlo.list.ListConfiguration;
+import utils.list.ListConfiguration;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 
 /**
