@@ -33,18 +33,7 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     PSD_size_Y = config.sizeY_UC * 2;
   }
 
-  @Override
-  public void handleSimulationIntervalFinish(int workerID, int workID) {
 
-    float[][] surface = new float[PSD_size_Y][PSD_size_X];
-    workers[workerID].getSampledSurface(surface);
-    times[workID] += workers[workerID].getKMC().getTime();
-    addToPSD(workID, surface);
-  }
-
-  private void addToPSD(int workID, float[][] surface) {
-    PSDs[workID].addSurfaceSample(surface);
-  }
 
   @Override
   public AbstractEvaluation setShowGraphics(boolean showGraphics) {
