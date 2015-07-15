@@ -9,7 +9,7 @@ package kineticMonteCarlo.kmcCore.worker;
  * @author Nestor
  */
 public interface IIntervalListener {
-    
-            public void handleSimulationIntervalFinish(int workerID,int workID);
-    
+
+  public void handleSimulationIntervalFinish(int workerID, int workID);
+
 }
