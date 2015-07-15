@@ -33,7 +33,7 @@ public class AgAgMultithreadedEvaluatorTest {
 
         AgAgKmcConfig config = new AgAgKmcConfig(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 
-        //Ag_ag_growth_Threaded_PSD_Evaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
+        //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
         AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
         
         Individual individual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp));
