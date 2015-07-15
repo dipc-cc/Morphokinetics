@@ -5,7 +5,7 @@
 package geneticAlgorithm;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.IEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
 import geneticAlgorithm.geneticOperators.populationInitialization.IInitializator;
 import geneticAlgorithm.geneticOperators.recombination.IRecombination;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GeneticAlgorithmConfiguration {
 
-    public AbstractPSDEvaluation mainEvaluator;
+    public AbstractPsdEvaluation mainEvaluator;
     public List<IEvaluation> otherEvaluators;
     public IMutation mutation;
     public IInitializator initialization;

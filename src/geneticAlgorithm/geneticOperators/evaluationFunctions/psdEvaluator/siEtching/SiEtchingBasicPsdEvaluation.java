@@ -4,7 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
@@ -16,7 +16,7 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public class SiEtchingBasicPsdEvaluation extends AbstractPSDEvaluation {
+public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
 
     private SiEtchingKmc KMC;
     private PsdSignature2D PSD = new PsdSignature2D(128, 128);

@@ -5,7 +5,7 @@
 package samples.silicon;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching.SiEtchingThreadedPsdEvaluation;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
@@ -29,7 +29,7 @@ public class SiliconMultithreadedPsdCalculation {
                 evaluation.setWheight(1.0f);
                 evaluation.setShowGraphics(false);
         
-        float[][] PSD = ((AbstractPSDEvaluation)evaluation).calculate_PSD_from_individual(new Individual(
+        float[][] PSD = ((AbstractPsdEvaluation)evaluation).calculate_PSD_from_individual(new Individual(
                 new SiEtchRatesFactory().getRates("Gosalvez_PRE", 350)));
         
         evaluation.dispose();

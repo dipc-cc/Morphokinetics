@@ -5,7 +5,7 @@
  */
 package samples.convergences.agAgGrowth;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
@@ -34,7 +34,7 @@ public class AgAgKmcConvergence {
         GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
 
         new GaProgressFrame(GA).setVisible(true);
-        AbstractPSDEvaluation evaluator = geneticConfiguration.mainEvaluator;
+        AbstractPsdEvaluation evaluator = geneticConfiguration.mainEvaluator;
 
         //--------------------------------
         evaluator.setRepeats(evaluator.getRepeats() * 5);

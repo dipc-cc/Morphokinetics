@@ -13,7 +13,7 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public abstract class AbstractPSDEvaluation extends AbstractEvaluation {
+public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
 
   protected int repeats;
   protected float[][] experimentalPSD;
@@ -21,14 +21,14 @@ public abstract class AbstractPSDEvaluation extends AbstractEvaluation {
   protected Population currentPopulation;
   protected int currentSimulation;
 
-  public AbstractPSDEvaluation(int repeats, int measureInterval) {
+  public AbstractPsdEvaluation(int repeats, int measureInterval) {
     super();
     this.repeats = repeats;
     this.measureInterval = measureInterval;
 
   }
 
-  public AbstractPSDEvaluation setPSD(float[][] ExperimentalPSD) {
+  public AbstractPsdEvaluation setPSD(float[][] ExperimentalPSD) {
     this.experimentalPSD = ExperimentalPSD;
     return this;
   }

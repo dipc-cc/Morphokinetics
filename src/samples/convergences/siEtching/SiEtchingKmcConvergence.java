@@ -4,7 +4,7 @@
  */
 package samples.convergences.siEtching;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
@@ -35,7 +35,7 @@ public class SiEtchingKmcConvergence {
                 .create_silicon_convergence_configuration();
         GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
         new GaProgressFrame(GA).setVisible(true);
-        AbstractPSDEvaluation evaluator=geneticConfiguration.mainEvaluator;
+        AbstractPsdEvaluation evaluator=geneticConfiguration.mainEvaluator;
         
         for (int i = 0; i < totalConvergences; i++) {
 

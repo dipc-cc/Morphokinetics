@@ -4,7 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import java.util.List;
@@ -17,5 +17,5 @@ public interface IEvaluator {
 
 //evaluate all the elements of the population with the list of given evaluators
 //after, it orders them from min to max error.
-    public void evaluate_and_order(Population p,AbstractPSDEvaluation functionWithSimulation, List<IEvaluation> functions);
+    public void evaluate_and_order(Population p,AbstractPsdEvaluation functionWithSimulation, List<IEvaluation> functions);
 }

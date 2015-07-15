@@ -4,7 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
@@ -21,7 +21,7 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public class AgAgBasicPsdEvaluation extends AbstractPSDEvaluation {
+public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
     private AgAgKmc KMC;
     private PsdSignature2D PSD ;

@@ -4,7 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPSDEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.IProgressable;
 import geneticAlgorithm.Population;
 import java.util.List;
@@ -29,7 +29,7 @@ public class BasicEvaluator implements IEvaluator, IProgressable {
 //evaluate all the elements of the population with the list of given evaluators
 //after, it orders them from min to max error.
     @Override
-    public void evaluate_and_order(Population p, AbstractPSDEvaluation functionWithSimulation, List<IEvaluation> functions) {
+    public void evaluate_and_order(Population p, AbstractPsdEvaluation functionWithSimulation, List<IEvaluation> functions) {
 
         currentEvaluator=functionWithSimulation;
         double[] results = functionWithSimulation.evaluate(p);

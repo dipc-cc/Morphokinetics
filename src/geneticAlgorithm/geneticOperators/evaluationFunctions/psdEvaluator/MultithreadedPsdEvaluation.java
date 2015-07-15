@@ -17,7 +17,7 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public abstract class MultithreadedPsdEvaluation extends AbstractPSDEvaluation implements IFinishListener, IIntervalListener {
+public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation implements IFinishListener, IIntervalListener {
 
   protected static final int FPS_GRAPHICS = 2;
 
