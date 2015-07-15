@@ -38,46 +38,6 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
   }
 
   @Override
-  public double[] evaluate(Population p) {
-    calculate_PSD_of_population(p);
-    double[] results = calculate_difference_with_RealPSD();
-    return results;
-  }
-
-  @Override
-  public float[][] calculate_PSD_from_individual(Individual i) {
-
-    Population p = new Population(1);
-    p.setIndividual(i, 0);
-    this.calculate_PSD_of_population(p);
-
-    PSDs[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    PSDs[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
-
-    return PSDs[0].getPSD();
-  }
-
-  private double evaluate_individual(int individual_pos) {
-
-    double error = 0;
-    float[][] difference = new float[PSD_size_Y][PSD_size_X];
-
-    PSDs[individual_pos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    PSDs[individual_pos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
-
-    calculateRelativeDifference(difference, PSDs[individual_pos]);
-
-    difference = MathUtils.avg_Filter(difference, 5);
-
-    for (int a = 0; a < PSD_size_Y; a++) {
-      for (int b = 0; b < PSD_size_X; b++) {
-        error += Math.abs(difference[a][b]);
-      }
-    }
-    return error * wheight;
-  }
-
-  @Override
   public void handleSimulationIntervalFinish(int workerID, int workID) {
 
     float[][] surface = new float[PSD_size_Y][PSD_size_X];
@@ -90,37 +50,6 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     PSDs[workID].addSurfaceSample(surface);
   }
 
-  private void calculate_PSD_of_population(Population p) {
-    PSDs = new PsdSignature2D[p.size()];
-
-    times = new double[p.size()];
-    for (int i = 0; i < p.size(); i++) {
-      PSDs[i] = new PsdSignature2D(PSD_size_Y, PSD_size_X);
-    }
-
-    currentPopulation = p;
-    currentSimulation = 0;
-    finishedSimulation = 0;
-
-    for (int i = 0; i < this.numThreads; i++) {
-      assignNewWork(i);
-    }
-
-    try {
-      evalation_complete.acquire();
-    } catch (Exception e) {
-    }
-    store_simulation_times(p);
-
-  }
-
-  private double[] calculate_difference_with_RealPSD() {
-    double[] results = new double[currentPopulation.size()];
-    for (int i = 0; i < currentPopulation.size(); i++) {
-      results[i] = evaluate_individual(i);
-    }
-    return results;
-  }
 
   @Override
   public AbstractEvaluation setShowGraphics(boolean showGraphics) {
@@ -145,11 +74,5 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
     super.handleSimulationFinish(workerID, workID);
   }
 
-  private void store_simulation_times(Population p) {
-    for (int i = 0; i < p.size(); i++) {
-      times[i] /= repeats;
-      p.getIndividual(i).setSimulationTime(times[i]);
-    }
-  }
 
 }
