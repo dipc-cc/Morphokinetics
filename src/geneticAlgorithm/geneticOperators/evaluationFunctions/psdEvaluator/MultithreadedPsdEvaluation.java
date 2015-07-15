@@ -122,7 +122,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
     calculateRelativeDifference(difference, PSDs[individualPos]);
 
-    difference = MathUtils.avg_Filter(difference, 5);
+    difference = MathUtils.avgFilter(difference, 5);
 
     for (int a = 0; a < psdSizeY; a++) {
       for (int b = 0; b < psdSizeX; b++) {

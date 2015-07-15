@@ -90,7 +90,7 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
     calculatePsdFromIndividual(ind);
     calculateRelativeDifference(difference, psd);
 
-    difference = MathUtils.avg_Filter(difference, 5);
+    difference = MathUtils.avgFilter(difference, 5);
     double error = 0;
     for (int a = 0; a < psdSizeX; a++) {
       for (int b = 0; b < psdSizeY; b++) {

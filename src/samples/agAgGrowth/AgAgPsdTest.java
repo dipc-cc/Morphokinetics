@@ -48,7 +48,7 @@ public class AgAgPsdTest {
     PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    new Frame2D("PSD analysis").setMesh(MathUtils.avg_Filter(PSD.getPsd(), 1));
+    new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
 
     new Frame2D("Sampled surface").setMesh(sampledSurface);
 

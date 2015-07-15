@@ -43,7 +43,7 @@ public class SimpleSiliconKmcFftAnalisys {
         PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
          new Frame2D("PSD analysis")
-                 .setMesh(MathUtils.avg_Filter(PSD.getPsd(),1));
+                 .setMesh(MathUtils.avgFilter(PSD.getPsd(),1));
     }
 
     private static SiEtchingKmcConfig configKMC() {

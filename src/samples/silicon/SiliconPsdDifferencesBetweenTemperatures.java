@@ -48,7 +48,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
         Frame2D frame = new Frame2D("Relative difference between PSDs 400K vs 300K")
             .setLogScale(false)
             .setShift(true)
-            .setMesh(MathUtils.avg_Filter(Relative_error_1, 1));
+            .setMesh(MathUtils.avgFilter(Relative_error_1, 1));
         
         frame.setLocation(frame.getWidth(), 0);
 
@@ -63,7 +63,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
             .setShift(true)
             .setMax(frame.getMax())
             .setMin(frame.getMin())
-            .setMesh(MathUtils.avg_Filter(Relative_error_2, 1));
+            .setMesh(MathUtils.avgFilter(Relative_error_2, 1));
     }
 
     private static float[][] getPSDfromSimulation(SiEtchingKmc KMC, int temperature) {
