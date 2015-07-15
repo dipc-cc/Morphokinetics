@@ -5,7 +5,7 @@
 package kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth;
 
 import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.atom.diffusion.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.diffusion.grapheneCvdGrowth.GrapheneAtom;
 import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;

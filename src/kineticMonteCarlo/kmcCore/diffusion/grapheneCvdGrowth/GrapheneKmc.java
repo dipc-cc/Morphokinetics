@@ -6,9 +6,9 @@ package kineticMonteCarlo.kmcCore.diffusion.grapheneCvdGrowth;
 
 import kineticMonteCarlo.kmcCore.diffusion.Abstract2DDiffusionKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
-import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaAccelerator;
-import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaHopsConfig;
-import kineticMonteCarlo.atom.diffusion.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
+import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
+import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.diffusion.grapheneCvdGrowth.GrapheneCvdGrowthLattice;
 import utils.list.ListConfiguration;
 import utils.StaticRandom;

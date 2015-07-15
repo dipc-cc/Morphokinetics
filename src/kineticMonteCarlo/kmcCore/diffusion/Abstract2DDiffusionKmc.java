@@ -6,7 +6,7 @@ package kineticMonteCarlo.kmcCore.diffusion;
 
 import kineticMonteCarlo.kmcCore.*;
 import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.atom.diffusion.devitaAccelerator.DevitaAccelerator;
+import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;

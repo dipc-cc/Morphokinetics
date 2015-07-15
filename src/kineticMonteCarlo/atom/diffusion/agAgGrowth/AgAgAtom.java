@@ -5,7 +5,7 @@
 package kineticMonteCarlo.atom.diffusion.agAgGrowth;
 
 import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.atom.diffusion.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.diffusion.ModifiedBuffer;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.StaticRandom;

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.atom.diffusion.devitaAccelerator;
+package kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator;
 
 import kineticMonteCarlo.atom.diffusion.Abstract2DDiffusionAtom;
 import kineticMonteCarlo.lattice.diffusion.IDevitaLattice;
