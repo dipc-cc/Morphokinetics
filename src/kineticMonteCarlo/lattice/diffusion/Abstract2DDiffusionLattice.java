@@ -129,7 +129,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
     Abstract2DDiffusionAtom[] perimeter = perimeterList.toArray(new Abstract2DDiffusionAtom[perimeterList.size()]);
 
-    QuickSort.order_by_angle(perimeter, perimeter.length - 1);
+    QuickSort.orderByAngle(perimeter, perimeter.length - 1);
 
     return perimeter;
   }

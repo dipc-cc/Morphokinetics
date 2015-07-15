@@ -23,7 +23,9 @@ public class RoundPerimeter {
   public RoundPerimeter(String statisticData) {
     this.perimeterStatistics = new PerimeterStatisticsFactory().getStatistics(statisticData);
     // TODO change here the radius to enlarge the mesh (joseba) and not to use DLA
-    this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
+    //this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
+    this.currentPerimeterRadius = 1000;
+    System.out.println("Initializing RoundPerimeter!!!!!!!!!!!!! with value " + this.currentPerimeterRadius);
   }
 
   public int getCurrentRadius() {
