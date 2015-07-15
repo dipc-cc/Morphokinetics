@@ -11,8 +11,6 @@ import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
 import kineticMonteCarlo.lattice.diffusion.Abstract2DDiffusionLattice;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
@@ -24,9 +22,6 @@ import utils.psdAnalysis.PsdSignature2D;
 public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
     private AgAgKmc KMC;
-    private PsdSignature2D PSD ;
-    private float[][] sampledSurface ;
-    private float[][] difference;
 
     public AgAgBasicPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval) {
 

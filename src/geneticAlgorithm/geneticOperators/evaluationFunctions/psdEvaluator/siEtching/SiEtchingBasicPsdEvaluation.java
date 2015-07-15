@@ -19,20 +19,17 @@ import utils.psdAnalysis.PsdSignature2D;
 public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
 
     private SiEtchingKmc KMC;
-    private PsdSignature2D PSD = new PsdSignature2D(128, 128);
-    private float[][] surface = new float[128][128];
-    private float[][] difference = new float[128][128];
-
+    
     public SiEtchingBasicPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval) {
 
         super(repeats, measureInterval);
 
-        KMC = new SiEtchingKmc(config);
-        PSD = new PsdSignature2D(config.sizeY_UC * 2, config.sizeX_UC * 2);
-        surface = new float[config.sizeY_UC * 2][config.sizeX_UC * 2];
-        difference = new float[config.sizeY_UC * 2][config.sizeX_UC * 2];
         PSD_size_X = config.sizeX_UC * 2;
         PSD_size_Y = config.sizeY_UC * 2;
+        KMC = new SiEtchingKmc(config);
+        PSD = new PsdSignature2D(PSD_size_Y, PSD_size_X);
+        sampledSurface = new float[PSD_size_Y][PSD_size_X];
+        difference = new float[PSD_size_Y][PSD_size_X];
     }
 
     @Override
@@ -78,7 +75,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
     public void dispose() {
         PSD=null;
         KMC=null;
-        surface=null;
+        sampledSurface=null;
         difference=null;   
     }
 
@@ -89,8 +86,8 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
             KMC.simulate(measureInterval / 2);
             while (true) {
                 KMC.simulate(measureInterval);
-                KMC.getSampledSurface(surface);
-                PSD.addSurfaceSample(surface);
+                KMC.getSampledSurface(sampledSurface);
+                PSD.addSurfaceSample(sampledSurface);
                 if (KMC.getIterations() < measureInterval) {
                     break;
                 }
