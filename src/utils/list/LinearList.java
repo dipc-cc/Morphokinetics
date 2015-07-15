@@ -1,8 +1,8 @@
 package utils.list;
 
+import java.util.ArrayList;
+import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
-import utils.list.AbstractList;
-import java.util.*;
 import utils.edu.cornell.lassp.houle.rngPack.RandomSeedable;
 
 /**

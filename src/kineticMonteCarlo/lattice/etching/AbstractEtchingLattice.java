@@ -4,19 +4,14 @@
  */
 package kineticMonteCarlo.lattice.etching;
 
-import kineticMonteCarlo.lattice.*;
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.lattice.AbstractLattice;
 
 /**
  *
  * @author Nestor
  */
 public abstract class AbstractEtchingLattice extends AbstractLattice {
- 
-    
-    public abstract void setProbabilities(double[] probabilities);
-    
-    
-        
-        
+
+  public abstract void setProbabilities(double[] probabilities);
+
 }

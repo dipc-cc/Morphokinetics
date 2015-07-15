@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.etching;
 
-import kineticMonteCarlo.kmcCore.*;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.lattice.etching.AbstractEtchingLattice;
 import utils.list.ListConfiguration;
 
