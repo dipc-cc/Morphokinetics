@@ -30,39 +30,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
         PSD = new PsdSignature2D(PSD_size_Y, PSD_size_X);
         sampledSurface = new float[PSD_size_Y][PSD_size_X];
         difference = new float[PSD_size_Y][PSD_size_X];
-    }
-
-    @Override
-    public double[] evaluate(Population p) {
-
-        this.currentPopulation = p;
-        this.currentSimulation = 0;
-        double[] results = new double[p.size()];
-
-        for (int i = 0; i < p.size(); i++) {
-            results[i] = evaluate_individual(p.getIndividual(i));
-           
-        }
-
-        return results;
-    }
-
-    private double evaluate_individual(Individual ind) {
-        
-        calculate_PSD_from_individual(ind);
-        calculateRelativeDifference(difference, PSD);
-
-        difference=MathUtils.avg_Filter(difference, 5);
-        double error = 0;
-        for (int a = 0; a < PSD_size_Y; a++) {
-            for (int b = 0; b < PSD_size_X; b++) {
-                error += Math.abs(difference[a][b]);
-            }
-        }        
-        return error * wheight;
-    }
-
-    
+    } 
     
     @Override
     public float[][] calculate_PSD_from_individual(Individual i) {
