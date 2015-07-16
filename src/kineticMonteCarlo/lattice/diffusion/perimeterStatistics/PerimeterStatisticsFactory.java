@@ -8,6 +8,10 @@ import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgPerimete
 import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GraphenePerimeterStatistics;
 import java.util.HashMap;
 import java.util.Map;
+import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgRawStatisticDataAtomCount1Million;
+import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgRawStatisticDataHopsCount1Million;
+import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GrapheneRawStatisticDataAtomCount1Million;
+import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GrapheneRawStatisticDataHopsCount1Million;
 
 /**
  *
@@ -15,17 +19,30 @@ import java.util.Map;
  */
 public class PerimeterStatisticsFactory {
 
-  private static Map<String, AbstractPerimeterStatistics> perimeterStatistics;
+  private AbstractPerimeterStatistics perimeterStatistics;
+  
+  public PerimeterStatisticsFactory(String statisticsName) {
 
-  public PerimeterStatisticsFactory() {
-
-    perimeterStatistics = new HashMap();
-    perimeterStatistics.put("Graphene_CVD_growth", new GraphenePerimeterStatistics());
-    perimeterStatistics.put("Ag_Ag_growth", new AgAgPerimeterStatistics());
+    switch (statisticsName) {
+      case "Graphene_CVD_growth": {
+        perimeterStatistics = new GraphenePerimeterStatistics(new GrapheneRawStatisticDataAtomCount1Million(),
+                new GrapheneRawStatisticDataHopsCount1Million());
+        break;
+      }
+      case "Ag_Ag_growth": {
+        perimeterStatistics = new AgAgPerimeterStatistics(new AgAgRawStatisticDataAtomCount1Million(),
+                new AgAgRawStatisticDataHopsCount1Million());
+        break;
+      }
+      default: {
+        perimeterStatistics = null;
+        System.err.println("Trying to get statistics for "+statisticsName);
+        throw new UnsupportedOperationException("This execution mode is not supported");
+      }
+    }
   }
 
-  public AbstractPerimeterStatistics getStatistics(String statisticsName) {
-
-    return perimeterStatistics.get(statisticsName);
+  public AbstractPerimeterStatistics getStatistics() {
+    return perimeterStatistics;
   }
 }
