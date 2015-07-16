@@ -4,8 +4,10 @@
  */
 package kineticMonteCarlo.lattice.diffusion.perimeterStatistics;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgRawStatisticDataHopsCount1Million;
 
 /**
  *
@@ -17,6 +19,29 @@ public abstract class AbstractPerimeterStatistics {
   protected Map<Integer, Map<Integer, Integer>> hopsCountMap;
   protected Map<Integer, Map<Integer, Integer>> atomsCountMap;
 
+  public AbstractPerimeterStatistics(AbstractStatisticAtom statisticAtom, 
+          AbstractStatisticsHops statisticsHops){
+ 
+    this.totalCount = statisticAtom.getTotalCount();
+    this.atomsCountMap = new HashMap();
+    this.hopsCountMap = new HashMap();
+    int radius = 20;
+
+    for (int i = 0; i < statisticAtom.getLenght(); i++) {
+      Map<Integer, Integer> currentRadiusCountMap = new HashMap();
+      Map<Integer, Integer> currentRadiusHopMap = new HashMap();
+
+      this.atomsCountMap.put(radius, currentRadiusCountMap);
+      this.hopsCountMap.put(radius, currentRadiusHopMap);
+
+      for (int j = 0; j < 180; j++) {
+        currentRadiusCountMap.put(j, statisticAtom.getData(i, j));
+        currentRadiusHopMap.put(j, statisticsHops.getData(i, j));
+      }
+      radius += 5;
+    }
+  }
+          
   public int getTotalCount() {
     return totalCount;
   }
