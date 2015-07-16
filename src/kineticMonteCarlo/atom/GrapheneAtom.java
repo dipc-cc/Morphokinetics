@@ -82,7 +82,10 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     return -1;
   }
 
-//escogemos a que posición vamos a saltar
+  /**
+   * escogemos a que posición vamos a saltar
+   * @return 
+   */
   @Override
   public Abstract2DDiffusionAtom chooseRandomHop() {
 
@@ -111,41 +114,41 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
   private void add1stNeighbour(boolean forceNucleation) {
 
-    byte tipo_new = typesTable.getType(++n1, n2, n3);
+    byte newType = typesTable.getType(++n1, n2, n3);
     if (forceNucleation && occupied) {
-      tipo_new = 7;
+      newType = 7;
     }
-    evaluateModifiedWhenAddNeigh(tipo_new);
+    evaluateModifiedWhenAddNeigh(newType);
   }
 
   private void add2ndNeighbour() {
 
-    byte tipo_new = typesTable.getType(n1, ++n2, n3);
-    evaluateModifiedWhenAddNeigh(tipo_new);
+    byte newType = typesTable.getType(n1, ++n2, n3);
+    evaluateModifiedWhenAddNeigh(newType);
   }
 
   private void add3rdNeighbour() {
 
-    byte tipo_new = typesTable.getType(n1, n2, ++n3);
-    evaluateModifiedWhenAddNeigh(tipo_new);
+    byte newType = typesTable.getType(n1, n2, ++n3);
+    evaluateModifiedWhenAddNeigh(newType);
   }
 
   private void remove1stNeighbour() {
 
-    byte tipo_new = typesTable.getType(--n1, n2, n3);
-    evaluateModifiedWhenRemNeigh(tipo_new);
+    byte newType = typesTable.getType(--n1, n2, n3);
+    evaluateModifiedWhenRemNeigh(newType);
   }
 
   private void remove2ndNeighbour() {
 
-    byte tipo_new = typesTable.getType(n1, --n2, n3);
-    evaluateModifiedWhenRemNeigh(tipo_new);
+    byte newType = typesTable.getType(n1, --n2, n3);
+    evaluateModifiedWhenRemNeigh(newType);
   }
 
   private void remove3rdNeighbour() {
 
-    byte tipo_new = typesTable.getType(n1, n2, --n3);
-    evaluateModifiedWhenRemNeigh(tipo_new);
+    byte newType = typesTable.getType(n1, n2, --n3);
+    evaluateModifiedWhenRemNeigh(newType);
   }
 
   @Override
@@ -154,16 +157,16 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   }
 
   @Override
-  public void deposit(boolean force_nucleation) {
+  public void deposit(boolean forceNucleation) {
 
     occupied = true;
-    if (force_nucleation) {
+    if (forceNucleation) {
       type = 7;
     }
     int i = 0;
 
     for (; i < 3; i++) {
-      lattice.getNeighbour(X, Y, i).add1stNeighbour(force_nucleation);
+      lattice.getNeighbour(X, Y, i).add1stNeighbour(forceNucleation);
     }
     for (; i < 9; i++) {
       lattice.getNeighbour(X, Y, i).add2ndNeighbour();
@@ -179,7 +182,10 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     totalProbability = 0;
   }
 
-//extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos, si cambia algún tipo, recalcula probabilidades)
+  /**
+   * Extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos,
+   * si cambia algún tipo, recalcula probabilidades)
+   */
   @Override
   public void extract() {
 
@@ -215,7 +221,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     totalProbability = 0;
 
     if (this.isEligible()) {
-      obtainRatesFromNeighBors(areAllRatesTheSame());
+      obtainRatesFromNeighbours(areAllRatesTheSame());
       temp += totalProbability;
     }
     if (this.isOnList()) {
@@ -223,16 +229,16 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     }
   }
 
-  private void obtainRatesFromNeighBors(boolean equalRates) {
+  private void obtainRatesFromNeighbours(boolean equalRates) {
     if (equalRates) {
-      totalProbability += prob_jump_to_neighbor(type, 0) * 12.0;
+      totalProbability += probJumpToNeighbour(type, 0) * 12.0;
     } else {
       if (bondsProbability == null) {
         bondsProbability = PStack.getProbArray();
       }
       for (int i = 0; i < 12; i++) {
 
-        bondsProbability[i] = prob_jump_to_neighbor(type, i);
+        bondsProbability[i] = probJumpToNeighbour(type, i);
         totalProbability += bondsProbability[i];
       }
     }
@@ -251,12 +257,12 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   }
 
   @Override
-  public void updateOneBound(int neighborpos) {
+  public void updateOneBound(int posNeighbour) {
 
     double temp = 0;
 
-    int i = neighborpos; //eres el vecino 1 de tu 1º vecino. Eres el vecino 2 de tu 2º vecino. eres el 3º Vecino de tu vecino 3.
-    switch (neighborpos) {
+    int i = posNeighbour; //eres el vecino 1 de tu 1º vecino. Eres el vecino 2 de tu 2º vecino. eres el 3º Vecino de tu vecino 3.
+    switch (posNeighbour) {
       case 3:
       case 4:
       case 5:
@@ -272,21 +278,21 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     }
 
     if (bondsProbability == null) {
-      double rateNuevo = prob_jump_to_neighbor(type, i);
-      if (rateNuevo * 12 != totalProbability) {
-        double prob_independiente = totalProbability / 12.0;
+      double newRate = probJumpToNeighbour(type, i);
+      if (newRate * 12 != totalProbability) {
+        double independentProbability = totalProbability / 12.0;
         bondsProbability = PStack.getProbArray();
         for (int a = 0; a < 12; a++) {
-          bondsProbability[a] = prob_independiente;
+          bondsProbability[a] = independentProbability;
         }
-        bondsProbability[i] = rateNuevo;
-        totalProbability += (rateNuevo - prob_independiente);
-        temp += (rateNuevo - prob_independiente);
+        bondsProbability[i] = newRate;
+        totalProbability += (newRate - independentProbability);
+        temp += (newRate - independentProbability);
       }
     } else {
       totalProbability -= bondsProbability[i];
       temp -= bondsProbability[i];
-      bondsProbability[i] = prob_jump_to_neighbor(type, i);
+      bondsProbability[i] = probJumpToNeighbour(type, i);
       totalProbability += bondsProbability[i];
       temp += bondsProbability[i];
     }
@@ -294,8 +300,13 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
   }
 
-//probabilidad de saltar a cierta posicion vecina
-  private double prob_jump_to_neighbor(int origin_type, int pos) {
+  /**
+   * Probabilidad de saltar a cierta posicion vecina
+   * @param originType
+   * @param pos
+   * @return 
+   */
+  private double probJumpToNeighbour(int originType, int pos) {
 
     Abstract2DDiffusionAtom atom = lattice.getNeighbour(X, Y, pos);
 
@@ -308,40 +319,45 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
     double rate;
     if (multiplier != 1) {
-      rate = probabilities[origin_type][lastTemp] / multiplier;
+      rate = probabilities[originType][lastTemp] / multiplier;
       multiplier = 1;
     } else {
-      int hops = distancePerStep.getDistancePerStep(origin_type, origin_type);
+      int hops = distancePerStep.getDistancePerStep(originType, originType);
 
-           //if (origen_tipo==2) System.out.println(origen_tipo+" "+lastTemp+" "+hops);
-      switch (origin_type) {
+           //if (originType==2) System.out.println(originType+" "+lastTemp+" "+hops);
+      switch (originType) {
         case 0:
-          rate = probabilities[origin_type][lastTemp] / (hops * hops);
+          rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
         case 2:
-          rate = probabilities[origin_type][lastTemp] / (hops * hops);
+          rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
         case 3:
-          rate = probabilities[origin_type][lastTemp] / (hops * hops);
+          rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
         default:
-          rate = probabilities[origin_type][lastTemp];
+          rate = probabilities[originType][lastTemp];
           break;
       }
     }
     return rate;
   }
 
-//saber que tipo de átomo sería si el vecino pos_origen estuviera vacío
-//útil para saber el tipo de átomos que serás al saltar.
-//sabiendo el tipo de átomo origen y destino puedes sacar la probabilidad de éxito   origen ====> destino
-  @Override
-  public byte getTypeWithoutNeighbour(int pos_origen) {
 
-    if (pos_origen < 3) {
+  /**
+   * saber que tipo de átomo sería si el vecino originPos estuviera vacío
+   * útil para saber el tipo de átomos que serás al saltar.
+   * sabiendo el tipo de átomo origen y destino puedes sacar la probabilidad de éxito   origen ====> destino
+   * @param originPos
+   * @return 
+   */
+  @Override
+  public byte getTypeWithoutNeighbour(int originPos) {
+
+    if (originPos < 3) {
       return typesTable.getType(n1 - 1, n2, n3);
     }
-    if (pos_origen < 9) {
+    if (originPos < 9) {
       return typesTable.getType(n1, n2 - 1, n3);
     }
     return typesTable.getType(n1, n2, n3 - 1);
