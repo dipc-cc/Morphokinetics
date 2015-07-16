@@ -5,8 +5,8 @@
 package samples.worker;
 
 import graphicInterfaces.siliconEtching.SiliconFrame;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import utils.list.ListConfiguration;

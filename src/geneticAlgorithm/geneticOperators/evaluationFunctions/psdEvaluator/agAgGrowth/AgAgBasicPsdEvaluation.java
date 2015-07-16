@@ -8,8 +8,8 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.Abstra
 import geneticAlgorithm.Individual;
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmc;
-import kineticMonteCarlo.kmcCore.diffusion.agAgGrowth.AgAgKmcConfig;
+import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.psdAnalysis.PsdSignature2D;
 

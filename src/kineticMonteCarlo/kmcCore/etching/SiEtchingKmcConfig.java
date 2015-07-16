@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.kmcCore.etching.siEtching;
+package kineticMonteCarlo.kmcCore.etching;
 
 import utils.list.ListConfiguration;
 

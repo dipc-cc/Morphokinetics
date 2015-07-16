@@ -1,8 +1,8 @@
 package samples.silicon;
 
 import graphicInterfaces.siliconEtching.SiliconFrame;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import ratesLibrary.siEtching.SiEtchRatesFactory;
 

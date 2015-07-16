@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package kineticMonteCarlo.kmcCore.diffusion.agAgGrowth;
+package kineticMonteCarlo.kmcCore.diffusion;
 
 import utils.list.ListConfiguration;
 

@@ -6,8 +6,8 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtc
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.Individual;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmc;
-import kineticMonteCarlo.kmcCore.etching.siEtching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**

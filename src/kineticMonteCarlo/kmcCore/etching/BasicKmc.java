@@ -2,9 +2,8 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.kmcCore.etching.basicKmc;
+package kineticMonteCarlo.kmcCore.etching;
 
-import kineticMonteCarlo.kmcCore.etching.AbstractEtchingKmc;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.lattice.BasicLattice;

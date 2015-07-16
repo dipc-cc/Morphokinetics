@@ -12,7 +12,7 @@ package graphicInterfaces.basic;
 
 import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
+import kineticMonteCarlo.kmcCore.etching.BasicKmc;
 import java.awt.Color;
 import java.awt.GradientPaint;
 import java.awt.Graphics;

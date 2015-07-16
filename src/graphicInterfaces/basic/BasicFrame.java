@@ -2,7 +2,7 @@ package graphicInterfaces.basic;
 
 import graphicInterfaces.KmcGraphics;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.kmcCore.etching.basicKmc.BasicKmc;
+import kineticMonteCarlo.kmcCore.etching.BasicKmc;
 
 public class BasicFrame extends javax.swing.JFrame implements KmcGraphics {
 
