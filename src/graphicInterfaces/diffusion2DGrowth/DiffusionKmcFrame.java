@@ -172,7 +172,6 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
       int i = 0;
       while (true) {
         repaintKMC();
-        System.out.println("loop " + i);
         i++;
         try {
           paintLoop.sleep(100);
