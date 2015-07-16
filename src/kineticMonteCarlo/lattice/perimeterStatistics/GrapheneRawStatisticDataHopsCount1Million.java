@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth;
-
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.AbstractStatisticsHops;
+package kineticMonteCarlo.lattice.perimeterStatistics;
 
 /**
  * Estos datos corresponden a un estudio estadístico donde se mide la reentrada de átomos de una

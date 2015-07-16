@@ -2,12 +2,11 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.diffusion.perimeterStatistics;
+package kineticMonteCarlo.lattice.perimeterStatistics;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgRawStatisticDataHopsCount1Million;
 
 /**
  *

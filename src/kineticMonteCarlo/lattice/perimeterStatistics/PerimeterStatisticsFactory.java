@@ -2,16 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.diffusion.perimeterStatistics;
-
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgPerimeterStatistics;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GraphenePerimeterStatistics;
-import java.util.HashMap;
-import java.util.Map;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgRawStatisticDataAtomCount1Million;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg.AgAgRawStatisticDataHopsCount1Million;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GrapheneRawStatisticDataAtomCount1Million;
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.grapheneCvdGrowth.GrapheneRawStatisticDataHopsCount1Million;
+package kineticMonteCarlo.lattice.perimeterStatistics;
 
 /**
  *

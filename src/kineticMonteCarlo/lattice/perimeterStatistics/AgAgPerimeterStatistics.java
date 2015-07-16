@@ -2,9 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.lattice.diffusion.perimeterStatistics.agAg;
-
-import kineticMonteCarlo.lattice.diffusion.perimeterStatistics.AbstractPerimeterStatistics;
+package kineticMonteCarlo.lattice.perimeterStatistics;
 
 /**
  *
