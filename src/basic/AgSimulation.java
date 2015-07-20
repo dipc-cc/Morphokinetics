@@ -7,11 +7,9 @@ package basic;
 
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
-import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import ratesLibrary.AgAgRatesFactory;
-import ratesLibrary.IRatesFactory;
 
 /**
  *
@@ -24,8 +22,8 @@ public class AgSimulation extends AbstractSimulation {
   }
 
   @Override
-  public void initialiseKmc(AbstractKmc kmc, IRatesFactory ratesFactory) {
-    super.initialiseKmc(kmc, ratesFactory);
+  public void initialiseKmc() {
+    super.initialiseKmc();
 
     this.ratesFactory = new AgAgRatesFactory();
     this.kmc = new AgAgKmc(config, sizeX, sizeY, currentParser.justCentralFlake());

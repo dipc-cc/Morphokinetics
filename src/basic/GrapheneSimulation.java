@@ -7,11 +7,9 @@ package basic;
 
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth.GrapheneKmcCanvas;
-import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import ratesLibrary.GrapheneRatesFactory;
-import ratesLibrary.IRatesFactory;
 
 /**
  *
@@ -24,15 +22,14 @@ public class GrapheneSimulation extends AbstractSimulation {
   }
 
   @Override
-  public void initialiseKmc(AbstractKmc kmc, IRatesFactory ratesFactory) {
-    super.initialiseKmc(kmc, ratesFactory);
-
-    System.out.println("Is it here?");
+  public void initialiseKmc() {
+    super.initialiseKmc();
+    
     this.ratesFactory = new GrapheneRatesFactory();
     this.kmc = new GrapheneKmc(config, sizeX, sizeY, currentParser.justCentralFlake());
-
   }
 
+  @Override
   public void createFrame() {
     try {
       frame = new DiffusionKmcFrame(new GrapheneKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
