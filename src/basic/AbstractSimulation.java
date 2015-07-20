@@ -39,7 +39,10 @@ public abstract class AbstractSimulation {
     this.currentParser = myParser;
   }
 
-  public void initialiseKmc(AbstractKmc kmc, IRatesFactory ratesFactory) {
+  /**
+   * Initialises Kmc, the basic simulation class
+   */
+  public void initialiseKmc() {
     switch (currentParser.getListType()) {
       case "linear": {
         config = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
@@ -47,8 +50,8 @@ public abstract class AbstractSimulation {
       }
       case "binned": {
         config = new ListConfiguration().setListType(ListConfiguration.BINNED_LIST)
-                .setBinsPerLevel(100)
-                .setExtraLevels(0);
+                .setBinsPerLevel(currentParser.getBinsLevels())
+                .setExtraLevels(currentParser.getExtraLevels());
         break;
       }
       default:
