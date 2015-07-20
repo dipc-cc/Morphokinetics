@@ -200,6 +200,8 @@ public class Parser {
     System.out.println("\tnumberOfSimulations:\t" + numberOfSimulations);
     System.out.println("\tsizeX:\t\t\t" + sizeX);
     System.out.println("\tsizeY:\t\t\t" + sizeY);
+    System.out.println("\tbinLevels:\t\t" + binsLevels);
+    System.out.println("\textraLevels:\t\t" + extraLevels);
     System.out.println("\tpresure:\t\t" + presure);
     System.out.println("\ttemperature:\t\t" + temperature);
     System.out.println("\tflow:\t\t\t" + flow);
