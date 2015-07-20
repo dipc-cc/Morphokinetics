@@ -30,7 +30,7 @@ public class SiliconMultithreadedPsdCalculation {
                 evaluation.setShowGraphics(false);
         
         float[][] PSD = ((AbstractPsdEvaluation)evaluation).calculatePsdFromIndividual(new Individual(
-                new SiRatesFactory().getRates("Gosalvez_PRE", 350)));
+                new SiRatesFactory().getRates(350)));
         
         evaluation.dispose();
      

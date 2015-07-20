@@ -28,20 +28,20 @@ public class AgAgMultithreadedEvaluatorTest {
         ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
 
         float experitental_temp = 135;
-        double deposition_rate = new AgAgRatesFactory().getDepositionRate("COX_PRB", experitental_temp);
-        double island_density = new AgAgRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
+        double deposition_rate = new AgAgRatesFactory().getDepositionRate(experitental_temp);
+        double island_density = new AgAgRatesFactory().getIslandDensity(experitental_temp);
 
         AgAgKmcConfig config = new AgAgKmcConfig(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
 
         //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
         AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
         
-        Individual individual = new Individual(new AgAgRatesFactory().getRates("COX_PRB", experitental_temp));
+        Individual individual = new Individual(new AgAgRatesFactory().getRates(experitental_temp));
         float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);
 
         evaluation.setPsd(experimentalPSD);
 
-        Individual newIndividual = new Individual(new AgAgRatesFactory().getRates("COX_PRB", 125));
+        Individual newIndividual = new Individual(new AgAgRatesFactory().getRates(125));
         Population population = new Population(1);
         population.setIndividual(newIndividual, 0);
         double[] populationErrors = evaluation.evaluate(population);

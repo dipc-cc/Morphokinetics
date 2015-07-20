@@ -27,7 +27,7 @@ public class SimpleSiliconKmcFftAnalisys {
         SiEtchingKmc KMC = new SiEtchingKmc(config);
 
         KMC.initializeRates(new SiRatesFactory()
-                .getRates("Gosalvez_PRE", 350));
+                .getRates(350));
 
         float[][] surface = new float[128][128];
         PsdSignature2D PSD = new PsdSignature2D(128, 128);

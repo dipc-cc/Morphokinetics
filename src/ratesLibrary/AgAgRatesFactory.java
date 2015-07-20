@@ -4,42 +4,38 @@
  */
 package ratesLibrary;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author Nestor
  */
 public class AgAgRatesFactory implements IRatesFactory {
 
-  private static Map<String, IDiffusionRates> experiments;
+  private static IDiffusionRates experiments;
 
   public AgAgRatesFactory() {
-    experiments = new HashMap();
-    experiments.put("COX_PRB", new RatesFromPrbCox());
+    experiments = new  RatesFromPrbCox();
   }
 
   @Override
-  public double[] getRates(String experimentName, double temperature) {
-    IDiffusionRates experiment = experiments.get(experimentName);
+  public double[] getRates(double temperature) {
+   
     double[] rates = new double[49];
 
     for (int i = 0; i < 7; i++) {
       for (int j = 0; j < 7; j++) {
-        rates[i * 7 + j] = (experiment.getRate(i, j, temperature));
+        rates[i * 7 + j] = (experiments.getRate(i, j, temperature));
       }
     }
     return rates;
   }
 
   @Override
-  public double getDepositionRate(String experimentName, double temperature) {
-    return experiments.get(experimentName).getDepositionRate();
+  public double getDepositionRate(double temperature) {
+    return experiments.getDepositionRate();
   }
 
   @Override
-  public double getIslandDensity(String experimentName, double temperature) {
-    return experiments.get(experimentName).getIslandsDensityML(temperature);
+  public double getIslandDensity(double temperature) {
+    return experiments.getIslandsDensityML(temperature);
   }
 }

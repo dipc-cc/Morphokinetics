@@ -27,7 +27,7 @@ public class SimpleSiliconKmcSimulation {
         long start = System.nanoTime();
 
         KMC.initializeRates(new SiRatesFactory()
-                .getRates("Gosalvez_PRE", 350));
+                .getRates(350));
 
         KMC.simulate();
 

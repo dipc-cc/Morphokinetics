@@ -102,10 +102,10 @@ public abstract class AbstractSimulation {
 
   private static void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser) {
     //myParser.getIslandDensityType()
-    double depositionRate = ratesFactory.getDepositionRate(myParser.getIslandDensityType(), myParser.getTemperature());
-    double islandDensity = ratesFactory.getIslandDensity(myParser.getIslandDensityType(), myParser.getTemperature());
+    double depositionRate = ratesFactory.getDepositionRate(myParser.getTemperature());
+    double islandDensity = ratesFactory.getIslandDensity(myParser.getTemperature());
     kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
-    kmc.initializeRates(ratesFactory.getRates(myParser.getIslandDensityType(), myParser.getTemperature()));
+    kmc.initializeRates(ratesFactory.getRates(myParser.getTemperature()));
 
   }
 

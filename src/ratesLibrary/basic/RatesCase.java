@@ -5,8 +5,6 @@
  */
 package ratesLibrary.basic;
 
-import ratesLibrary.IRatesFactory;
-
 /**
  *
  * @author J. Alberdi-Rodriguez

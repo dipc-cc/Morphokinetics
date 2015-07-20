@@ -36,7 +36,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
                                          worker_ID); 
         worker.start();
                 
-        worker.initialize(new SiRatesFactory().getRates("Gosalvez_PRE", 350));
+        worker.initialize(new SiRatesFactory().getRates(350));
      
         System.out.println("Launching worker...");
         worker.simulate(new SimpleKmcSimulationWithWorker(),work_ID);

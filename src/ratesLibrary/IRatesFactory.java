@@ -10,10 +10,10 @@ package ratesLibrary;
  */
 public interface IRatesFactory {
 
-  public double[] getRates(String experiment, double temperature);
+  public double[] getRates(double temperature);
 
-  public double getDepositionRate(String experimentName, double temperature);
+  public double getDepositionRate(double temperature);
 
-  public double getIslandDensity(String experimentName, double temperature);
+  public double getIslandDensity(double temperature);
 
 }

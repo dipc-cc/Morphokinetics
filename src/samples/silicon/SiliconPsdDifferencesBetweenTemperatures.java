@@ -74,7 +74,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
         for (int a = 0; a < 30; a++) {
 
             KMC.initializeRates(new SiRatesFactory()
-                    .getRates("Gosalvez_PRE", temperature));
+                    .getRates(temperature));
 
             KMC.simulate(5000);
             for (int i = 0; i < 10; i++) {
