@@ -4,7 +4,7 @@ import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
-import ratesLibrary.siEtching.SiEtchRatesFactory;
+import ratesLibrary.SiEtchRatesFactory;
 
 /*
  * To change this template, choose Tools | Templates

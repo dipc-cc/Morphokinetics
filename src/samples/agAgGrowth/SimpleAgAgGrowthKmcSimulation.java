@@ -9,7 +9,7 @@ import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
-import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
+import ratesLibrary.AgAgGrowthRatesFactory;
 
 /**
  *

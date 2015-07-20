@@ -9,7 +9,7 @@ import graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth.GrapheneKmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
-import ratesLibrary.diffusion.grapheneCvdGrowth.GrapheneCvdDepositionRatesFactory;
+import ratesLibrary.GrapheneCvdDepositionRatesFactory;
 
 /**
  *

@@ -11,7 +11,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import utils.list.ListConfiguration;
-import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
+import ratesLibrary.AgAgGrowthRatesFactory;
 
 ;
 

@@ -11,7 +11,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
-import ratesLibrary.diffusion.agAgGrowth.AgAgGrowthRatesFactory;
+import ratesLibrary.AgAgGrowthRatesFactory;
 import static samples.agAgGrowth.SimpleAgAgGrowthKmcSimulation.constant_Y;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;

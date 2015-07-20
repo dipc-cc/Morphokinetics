@@ -11,7 +11,7 @@ import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
-import ratesLibrary.siEtching.SiEtchRatesFactory;
+import ratesLibrary.SiEtchRatesFactory;
 
 /**
  *
