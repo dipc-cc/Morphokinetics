@@ -26,7 +26,7 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
   }
 
   /** 
-   * this model ignores the deposition rate
+   * This model ignores the deposition rate
    * @param rates
    */ 
   @Override
