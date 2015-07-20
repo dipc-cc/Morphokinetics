@@ -35,5 +35,7 @@ public interface IKmc {
    * @param surface destination array.
    */
   public void getSampledSurface(float[][] surface);
+  
+  public void setIslandDensityAndDepositionRate(double depositionRate, double landDensity);
 
 }

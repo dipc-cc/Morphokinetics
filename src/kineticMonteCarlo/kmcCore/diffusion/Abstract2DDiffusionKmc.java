@@ -35,6 +35,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     this.list.autoCleanup(true);
   }
 
+  @Override
   public void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
 
     if (justCentralFlake) {
