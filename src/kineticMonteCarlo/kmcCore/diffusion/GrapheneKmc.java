@@ -20,12 +20,12 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   public GrapheneKmc(ListConfiguration config, int sizeX, int sizeY, boolean justCentralFlake) {
     super(config, justCentralFlake);
 
-    HopsPerStep distance_per_step = new HopsPerStep();
+    HopsPerStep distancePerStep = new HopsPerStep();
 
-    this.lattice = new GrapheneLattice(sizeX, sizeY, modifiedBuffer, distance_per_step);
+    this.lattice = new GrapheneLattice(sizeX, sizeY, modifiedBuffer, distancePerStep);
 
     if (justCentralFlake) {
-      configureDevitaAccelerator(distance_per_step);
+      configureDevitaAccelerator(distancePerStep);
     }
   }
 
