@@ -24,16 +24,21 @@ public class Parser {
 
   final static Charset ENCODING = StandardCharsets.UTF_8;
 
-
   private enum ratesLibrary {
 
     basic, gosalvez
   };
-  /** Can be COX_PRB or synthetic*/
+  /**
+   * Can be COX_PRB or synthetic
+   */
   private String islandDensityType;
-  /** Can be linear or binned */
+  /**
+   * Can be linear or binned
+   */
   private String listType;
-  /** Can be Ag */
+  /**
+   * Can be Ag
+   */
   private String calculationMode;
   private int temperature;
   private int presure;
@@ -41,6 +46,8 @@ public class Parser {
   private int numberOfSimulations;
   private int sizeX;
   private int sizeY;
+  private int binsLevels;
+  private int extraLevels;
   private boolean multithreaded;
   private boolean visualize;
   private boolean justCentralFlake;
@@ -53,7 +60,7 @@ public class Parser {
    * Constructor
    */
   public Parser() {
-    this.islandDensityType = "COX_PRB";    
+    this.islandDensityType = "COX_PRB";
     this.listType = "linear";
     this.temperature = 135;
     this.numberOfSimulations = 10;
@@ -133,10 +140,20 @@ public class Parser {
       sizeY = (int) (sizeX / constant_Y);
     }
     try {
+      binsLevels = json.getInt("binsLevels");
+    } catch (JSONException e) {
+      binsLevels = 100;
+    }
+    try {
+      extraLevels = json.getInt("extraLevels");
+    } catch (JSONException e) {
+      extraLevels = 0;
+    }
+    try {
       multithreaded = json.getBoolean("multithreaded");
     } catch (JSONException e) {
       multithreaded = true;
-    } 
+    }
     try {
       visualize = json.getBoolean("visualize");
     } catch (JSONException e) {
@@ -146,22 +163,22 @@ public class Parser {
       justCentralFlake = json.getBoolean("justCentralFlake");
     } catch (JSONException e) {
       justCentralFlake = true;
-    } 
+    }
     try {
       printToImage = json.getBoolean("printToImage");
     } catch (JSONException e) {
       printToImage = false;
-    } 
+    }
     try {
       calculationMode = json.getString("calculationMode");
     } catch (JSONException e) {
       calculationMode = "Ag";
-    }  
+    }
     try {
       psd = json.getBoolean("psd");
     } catch (JSONException e) {
       psd = false;
-    } 
+    }
     return 0;
   }
 
@@ -172,6 +189,7 @@ public class Parser {
 
   /**
    * Prints all the parameters; either read from "parameter" file or the default value
+   *
    * @return
    */
   public int print() {
@@ -189,10 +207,10 @@ public class Parser {
     System.out.println("\tprintToImage\t\t" + printToImage);
     System.out.println("\tcalculationMode:\t" + calculationMode);
     System.out.println("\tpsd:\t\t\t" + psd);
-                
+
     return 0;
   }
-  
+
   /**
    *
    * @return
@@ -208,7 +226,7 @@ public class Parser {
   public String getListType() {
     return listType;
   }
-  
+
   /**
    *
    * @return
@@ -257,6 +275,14 @@ public class Parser {
     return sizeY;
   }
 
+  int getBinsLevels() {
+    return binsLevels;
+  }
+
+  int getExtraLevels() {
+    return extraLevels;
+  }
+
   /**
    *
    * @return
@@ -264,7 +290,7 @@ public class Parser {
   public boolean isMultithreaded() {
     return multithreaded;
   }
-  
+
   /**
    *
    * @return
@@ -272,7 +298,7 @@ public class Parser {
   public boolean visualize() {
     return visualize;
   }
-  
+
   /**
    *
    * @return
@@ -280,21 +306,20 @@ public class Parser {
   public boolean justCentralFlake() {
     return justCentralFlake;
   }
-  
+
   public boolean isVisualize() {
     return visualize;
   }
-  
-  
+
   public boolean isPrintToImage() {
     return printToImage;
   }
-  
+
   public String getCalculationMode() {
     return calculationMode;
   }
-  
-  public boolean doPsd(){
+
+  public boolean doPsd() {
     return psd;
   }
 }
