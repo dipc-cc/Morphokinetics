@@ -4,7 +4,6 @@
  */
 package ratesLibrary;
 
-import ratesLibrary.IRatesFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +16,6 @@ public class AgAgRatesFactory implements IRatesFactory {
   private static Map<String, IDiffusionRates> experiments;
 
   public AgAgRatesFactory() {
-
     experiments = new HashMap();
     experiments.put("COX_PRB", new RatesFromPrbCox());
   }

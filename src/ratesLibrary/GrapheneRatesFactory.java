@@ -4,7 +4,6 @@
  */
 package ratesLibrary;
 
-import ratesLibrary.IRatesFactory;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,13 +43,11 @@ public class GrapheneRatesFactory implements IRatesFactory {
 
   @Override
   public double getDepositionRate(String experimentName, double temperature) {
-
     return experiments.get(experimentName).getDepositionRate();
   }
 
   @Override
   public double getIslandDensity(String experimentName, double temperature) {
-
     return experiments.get(experimentName).getIslandsDensityML(temperature);
   }
 

@@ -4,7 +4,6 @@
  */
 package ratesLibrary;
 
-import ratesLibrary.IRatesFactory;
 import java.util.HashMap;
 import java.util.Map;
 
