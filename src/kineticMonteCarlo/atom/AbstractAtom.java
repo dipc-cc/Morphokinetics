@@ -14,6 +14,7 @@ public abstract class AbstractAtom {
 
   protected IProbabilityHolder list;
   protected double[] probabilities;
+  protected int numberOfNeighbours;
 
   public void initialize(double[] probabilities) {
     this.probabilities = probabilities;
@@ -34,5 +35,9 @@ public abstract class AbstractAtom {
   public abstract boolean isRemoved();
 
   public abstract byte getType();
+
+  public int getNumberOfNeighbours() {
+    return numberOfNeighbours;
+  }
 
 }

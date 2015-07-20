@@ -24,7 +24,8 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       typesTable = new GrapheneTypesTable();
     }
     
-    bondsProbability = new double[6];
+    numberOfNeighbours = 12;
+    bondsProbability = new double[numberOfNeighbours];
   }
 
   @Override
