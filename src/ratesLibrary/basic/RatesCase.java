@@ -24,6 +24,7 @@ public abstract class RatesCase implements IBasicRates {
 
   private double[] prefactors = new double[4];
   private double[] energies = new double[4];
+  private static double kB = 8.617332e-5;
   
   public void setRates(double newEnergies[], double newPrefactors[]) {
     assert(newEnergies.length == 4);
@@ -42,5 +43,15 @@ public abstract class RatesCase implements IBasicRates {
   @Override
   public double getEnergy(int i) {
     return energies[i];
+  }
+  
+  public double[] getRates(double temperature) {
+
+    double[] rates = new double[4];
+
+    for (int i = 0; i < 4; i++) {
+      rates[i] = (this.getPrefactor(i) * Math.exp(-this.getEnergy(i) / (kB * temperature)));
+    }
+    return rates;
   }
 }
