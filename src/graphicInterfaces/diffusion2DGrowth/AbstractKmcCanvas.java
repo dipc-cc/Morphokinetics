@@ -104,6 +104,7 @@ public abstract class AbstractKmcCanvas extends Canvas {
     }
   }
 
+  @Override
   public void paint(Graphics g) {
     g.setColor(Color.BLUE);
     g.drawRect(10, 10, getWidth() - 20, getHeight() - 20);

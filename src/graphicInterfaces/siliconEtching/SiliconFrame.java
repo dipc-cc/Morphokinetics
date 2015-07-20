@@ -5,6 +5,7 @@
  */
 package graphicInterfaces.siliconEtching;
 
+import com.sun.j3d.utils.universe.SimpleUniverse;
 import graphicInterfaces.KmcGraphics;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseZoom;
 import graphicInterfaces.siliconEtching.mouseBehaviors.MouseTranslate;
@@ -14,9 +15,21 @@ import utils.list.AbstractList;
 import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import java.awt.GraphicsConfiguration;
-import com.sun.j3d.utils.universe.*;
-import javax.media.j3d.*;
-import javax.vecmath.*;
+import javax.media.j3d.AmbientLight;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.Background;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.DirectionalLight;
+import javax.media.j3d.Material;
+import javax.media.j3d.PointAttributes;
+import javax.media.j3d.Shape3D;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.Color3f;
+import javax.vecmath.Point3d;
+import javax.vecmath.Vector3f;
+
 
 /**
  *
@@ -24,174 +37,165 @@ import javax.vecmath.*;
  */
 public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
 
-    private SiliconPointArray sil;
+  private SiliconPointArray sil;
 
-    public SiliconFrame() {
-        super();
-        this.setVisible(true);
+  public SiliconFrame() {
+    super();
+    this.setVisible(true);
+  }
+
+  public void drawKMC(AbstractKmc KMC) {
+
+    if (sil == null) {
+      sil = new SiliconPointArray(new float[]{});
+      float side = this.update(KMC);
+      create_Silicon_panel(side);
+    } else {
+      this.update(KMC);
     }
+  }
 
-    public void drawKMC(AbstractKmc KMC) {
+  private BranchGroup createSceneGraph(float sideWidth) {
 
-        if (sil == null) {
-            sil = new SiliconPointArray(new float[]{});
-            float side = this.update(KMC);
-            create_Silicon_panel(side);
-        } else {
-            this.update(KMC);
-        }
-    }
+    // Create the root of the branch graph
+    BranchGroup objRoot = new BranchGroup();
+    objRoot.setCapability(objRoot.ALLOW_DETACH);
 
-    private BranchGroup createSceneGraph(float sideWidth) {
+    TransformGroup objRotate = null;
+    MouseRotate myMouseRotate = null;
+    MouseRocking myMouseRocking = null;
+    MouseTranslate myMouseTranslate = null;
+    MouseZoom wheelZoom = new MouseZoom();
 
-        // Create the root of the branch graph
-        BranchGroup objRoot = new BranchGroup();
-        objRoot.setCapability(objRoot.ALLOW_DETACH);
+    Transform3D transform = new Transform3D();
+    transform.rotX(Math.PI);
+    // create ColorCube and MouseRotate behvaior objects
+    objRotate = new TransformGroup(transform);
+    objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+    objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 
-        TransformGroup objRotate = null;
-        MouseRotate myMouseRotate = null;
-        MouseRocking myMouseRocking = null;
-        MouseTranslate myMouseTranslate = null;
-        MouseZoom wheelZoom = new MouseZoom();
+    objRoot.addChild(objRotate);
 
+    Shape3D shape = new Shape3D(sil, createMaterialAppearance());
 
-        Transform3D transform = new Transform3D();
-        transform.rotX(Math.PI);
-        // create ColorCube and MouseRotate behvaior objects
-        objRotate = new TransformGroup(transform);
-        objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-        objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+    Transform3D scala = new Transform3D();
 
-        objRoot.addChild(objRotate);
+    scala.setScale(1 / sideWidth);
 
-        Shape3D shape = new Shape3D(sil, createMaterialAppearance());
+    TransformGroup SC = new TransformGroup(scala);
+    SC.addChild(shape);
+    objRotate.addChild(SC);
 
+    Background background = new Background();
+    background.setColor(new Color3f(0.2f, 0.2f, 0.2f));
+    background.setApplicationBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0));
 
-        Transform3D scala = new Transform3D();
+    objRoot.addChild(background);
 
-        scala.setScale(1 / sideWidth);
+    myMouseRotate = new MouseRotate();
+    myMouseRotate.setTransformGroup(objRotate);
+    myMouseRotate.setSchedulingBounds(new BoundingSphere());
+    objRoot.addChild(myMouseRotate);
 
-        TransformGroup SC = new TransformGroup(scala);
-        SC.addChild(shape);
-        objRotate.addChild(SC);
+    myMouseRocking = new MouseRocking();
+    myMouseRocking.setTransformGroup(objRotate);
+    myMouseRocking.setSchedulingBounds(new BoundingSphere());
+    objRoot.addChild(myMouseRocking);
 
-        Background background = new Background();
-        background.setColor(new Color3f(0.2f, 0.2f, 0.2f));
-        background.setApplicationBounds(new BoundingSphere(new Point3d(0.0, 0.0, 0.0), 100.0));
+    myMouseTranslate = new MouseTranslate(100);
+    myMouseTranslate.setTransformGroup(objRotate);
+    myMouseTranslate.setSchedulingBounds(new BoundingSphere());
+    objRoot.addChild(myMouseTranslate);
 
-        objRoot.addChild(background);
+    wheelZoom.setTransformGroup(objRotate);
+    wheelZoom.setSchedulingBounds(new BoundingSphere());
+    objRoot.addChild(wheelZoom);
+    wheelZoom.setFactor(10 / sideWidth);
 
-        myMouseRotate = new MouseRotate();
-        myMouseRotate.setTransformGroup(objRotate);
-        myMouseRotate.setSchedulingBounds(new BoundingSphere());
-        objRoot.addChild(myMouseRotate);
+    DirectionalLight lightD = new DirectionalLight();
+    lightD.setDirection(new Vector3f(0.0f, -0.0f, -7f));
 
-        myMouseRocking = new MouseRocking();
-        myMouseRocking.setTransformGroup(objRotate);
-        myMouseRocking.setSchedulingBounds(new BoundingSphere());
-        objRoot.addChild(myMouseRocking);
+    lightD.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000000));
+    objRoot.addChild(lightD);
 
-        myMouseTranslate = new MouseTranslate(100);
-        myMouseTranslate.setTransformGroup(objRotate);
-        myMouseTranslate.setSchedulingBounds(new BoundingSphere());
-        objRoot.addChild(myMouseTranslate);
+    Color3f ambientColour = new Color3f(0.0f, 0.0f, 0.0f);
+    AmbientLight ambientLight = new AmbientLight(ambientColour);
+    ambientLight.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000000));
+    objRoot.addChild(ambientLight);
+    SC.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
+    objRoot.compile();
+    return objRoot;
 
-        wheelZoom.setTransformGroup(objRotate);
-        wheelZoom.setSchedulingBounds(new BoundingSphere());
-        objRoot.addChild(wheelZoom);
-        wheelZoom.setFactor(10 / sideWidth);
+  }
 
-        DirectionalLight lightD = new DirectionalLight();
-        lightD.setDirection(new Vector3f(0.0f, -0.0f, -7f));
+  private void create_Silicon_panel(float side) {
 
-        lightD.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000000));
-        objRoot.addChild(lightD);
+    initComponents();
 
+    GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 
-        Color3f ambientColour = new Color3f(0.0f, 0.0f, 0.0f);
-        AmbientLight ambientLight = new AmbientLight(ambientColour);
-        ambientLight.setInfluencingBounds(new BoundingSphere(new Point3d(0, 0, 0), 10000000));
-        objRoot.addChild(ambientLight);
-        SC.setCapability(TransformGroup.ALLOW_CHILDREN_EXTEND);
-        objRoot.compile();
-        return objRoot;
+    Canvas3DOverlay canvas3D = new Canvas3DOverlay(config);
+    add("Center", canvas3D);
 
-    }
-
-    private void create_Silicon_panel(float side) {
-
-
-        initComponents();
-
-        GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
-
-        Canvas3DOverlay canvas3D = new Canvas3DOverlay(config);
-        add("Center", canvas3D);
-
-        // SimpleUniverse is a Convenience Utility class
-        SimpleUniverse simpleU = new SimpleUniverse(canvas3D);
+    // SimpleUniverse is a Convenience Utility class
+    SimpleUniverse simpleU = new SimpleUniverse(canvas3D);
 
         // This will move the ViewPlatform back a bit so the
-        // objects in the scene can be viewed.
+    // objects in the scene can be viewed.
+    simpleU.getViewingPlatform().setNominalViewingTransform();
+    javax.media.j3d.View view = simpleU.getViewer().getView();
+    view.setBackClipDistance(50000);
+    view.setFrontClipDistance(0.0001);
+    jScrollPane1.setViewportView(canvas3D);
 
-        simpleU.getViewingPlatform().setNominalViewingTransform();
-        javax.media.j3d.View view = simpleU.getViewer().getView();
-        view.setBackClipDistance(50000);
-        view.setFrontClipDistance(0.0001);
-        jScrollPane1.setViewportView(canvas3D);
+    simpleU.addBranchGraph(createSceneGraph(side));
 
+  }
 
-        simpleU.addBranchGraph(createSceneGraph(side));
+  private Appearance createMaterialAppearance() {
 
+    Appearance materialAppear = new Appearance();
+    Material material = new Material();
+    material.setAmbientColor(new Color3f(1.0f, 1.0f, 1.0f));
+    materialAppear.setPointAttributes(new PointAttributes(1, true));
+    return materialAppear;
+  }
+
+  private float update(AbstractKmc KMC) {
+
+    AbstractList surface = KMC.getSurfaceList();
+    float sizeX = 0;
+    float sizeY = 0;
+
+    float[] surface_points = new float[surface.getSize() * 3];
+
+    float max_Z = 0;
+    for (int i = 0; i < surface.getSize(); i++) {
+      SiAtom atom = (SiAtom) surface.getAtomAt(i);
+      surface_points[i * 3] = atom.getX();
+      sizeX = Math.max(atom.getX(), sizeX);
+      surface_points[i * 3 + 1] = atom.getY();
+      sizeY = Math.max(atom.getY(), sizeY);
+      max_Z = Math.max(max_Z, atom.getZ());
+      surface_points[i * 3 + 2] = -atom.getZ();
     }
 
-    private Appearance createMaterialAppearance() {
-
-        Appearance materialAppear = new Appearance();
-        Material material = new Material();
-        material.setAmbientColor(new Color3f(1.0f, 1.0f, 1.0f));
-        materialAppear.setPointAttributes(new PointAttributes(1, true));
-        return materialAppear;
+    for (int i = 0; i < surface.getSize(); i++) {
+      surface_points[i * 3] -= sizeX * 0.5f;
+      surface_points[i * 3 + 1] -= sizeY * 0.5f;
+      surface_points[i * 3 + 2] += max_Z;
     }
 
-    private float update(AbstractKmc KMC) {
+    sil.actualizadata(surface_points);
 
-        AbstractList surface = KMC.getSurfaceList();
-        float sizeX = 0;
-        float sizeY = 0;
+    return Math.max(sizeX, sizeY);
 
-        float[] surface_points = new float[surface.getSize() * 3];
+  }
 
-        float max_Z = 0;
-        for (int i = 0; i < surface.getSize(); i++) {
-            SiAtom atom = (SiAtom) surface.getAtomAt(i);
-            surface_points[i * 3] = atom.getX();
-            sizeX = Math.max(atom.getX(), sizeX);
-            surface_points[i * 3 + 1] = atom.getY();
-            sizeY = Math.max(atom.getY(), sizeY);
-            max_Z = Math.max(max_Z, atom.getZ());
-            surface_points[i * 3 + 2] = -atom.getZ();
-        }
-
-        for (int i = 0; i < surface.getSize(); i++) {
-            surface_points[i * 3] -= sizeX * 0.5f;
-            surface_points[i * 3 + 1] -= sizeY * 0.5f;
-            surface_points[i * 3 + 2] += max_Z;
-        }
-
-
-        sil.actualizadata(surface_points);
-
-
-        return Math.max(sizeX, sizeY);
-
-    }
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
+  /**
+   * This method is called from within the constructor to initialize the form. WARNING: Do NOT
+   * modify this code. The content of this method is always regenerated by the Form Editor.
+   */
   // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
@@ -221,8 +225,8 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
     pack();
   }// </editor-fold>//GEN-END:initComponents
     /**
-     * @param args the command line arguments
-     */
+   * @param args the command line arguments
+   */
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JScrollPane jScrollPane1;
   // End of variables declaration//GEN-END:variables

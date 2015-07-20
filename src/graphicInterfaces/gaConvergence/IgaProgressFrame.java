@@ -4,7 +4,6 @@
  */
 package graphicInterfaces.gaConvergence;
 
-import geneticAlgorithm.IProgressable;
 import geneticAlgorithm.Individual;
 
 /**
@@ -12,9 +11,9 @@ import geneticAlgorithm.Individual;
  * @author Nestor
  */
 public interface IgaProgressFrame {
-    
-    public void addNewBestIndividual(Individual i);
-    public void clear();
-    
-    
+
+  public void addNewBestIndividual(Individual i);
+
+  public void clear();
+
 }
