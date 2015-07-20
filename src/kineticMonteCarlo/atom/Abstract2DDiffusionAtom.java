@@ -32,7 +32,6 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
     this.X = X;
     this.Y = Y;
     
-    bondsProbability = new double[6];
     this.distancePerStep = distancePerStep;
     this.bondsProbability = null;
   }

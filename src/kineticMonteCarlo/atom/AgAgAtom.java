@@ -24,6 +24,8 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     if (typesTable == null) {
       typesTable = new AgAgTypesTable();
     }
+    
+    bondsProbability = new double[12];
   }
 
   public void setNeighbour(AgAgAtom a, int pos) {

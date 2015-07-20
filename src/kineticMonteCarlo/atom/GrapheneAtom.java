@@ -19,11 +19,12 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   private byte n1, n2, n3;
 
   public GrapheneAtom(short X, short Y, HopsPerStep distancePerStep) {
-
     super(X, Y, distancePerStep);
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
+    
+    bondsProbability = new double[6];
   }
 
   @Override
