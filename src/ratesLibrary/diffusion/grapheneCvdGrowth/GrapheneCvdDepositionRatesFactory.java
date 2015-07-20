@@ -13,44 +13,46 @@ import java.util.Map;
  *
  * @author Nestor
  */
-public class GrapheneCvdDepositionRatesFactory implements IRatesFactory{
-    
-    
-   private static Map<String,IDiffusionRates> experiments;
-   
-   
-  public GrapheneCvdDepositionRatesFactory(){
-  
-    experiments=new HashMap();  
+public class GrapheneCvdDepositionRatesFactory implements IRatesFactory {
+
+  private static Map<String, IDiffusionRates> experiments;
+
+  public GrapheneCvdDepositionRatesFactory() {
+
+    experiments = new HashMap();
     experiments.put("synthetic", new SyntheticRates());
-  }  
-  
-  
-  //we don't use the temperature by now.
-    @Override
- public double[] getRates(String experimentName, double temperature){
-    
-   IDiffusionRates experiment=experiments.get(experimentName);
-   double[] rates=new double[64];
-        
-     for(int i=0;i<8;i++){
-     for(int j=0;j<8;j++){
-        rates[i*8+j]=(experiment.getRate(i, j,temperature));
-      }}
-     return rates;       
+  }
+
+  /**
+   * We don't use the temperature by now.
+   * @param experimentName
+   * @param temperature
+   * @return 
+   */ 
+  @Override
+  public double[] getRates(String experimentName, double temperature) {
+
+    IDiffusionRates experiment = experiments.get(experimentName);
+    double[] rates = new double[64];
+
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        rates[i * 8 + j] = (experiment.getRate(i, j, temperature));
+      }
     }
-    
-   @Override
-    public double getDepositionRate(String experimentName, double temperature){
-        
-        return experiments.get(experimentName).getDepositionRate();
-    }
-    
-   @Override
-    public double getIslandDensity(String experimentName, double temperature){
-        
-        return experiments.get(experimentName).getIslandsDensityML(temperature);
-    }
-    
-    
+    return rates;
+  }
+
+  @Override
+  public double getDepositionRate(String experimentName, double temperature) {
+
+    return experiments.get(experimentName).getDepositionRate();
+  }
+
+  @Override
+  public double getIslandDensity(String experimentName, double temperature) {
+
+    return experiments.get(experimentName).getIslandsDensityML(temperature);
+  }
+
 }
