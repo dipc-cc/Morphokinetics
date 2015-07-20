@@ -24,7 +24,10 @@ public class BasicKmc extends AbstractEtchingKmc {
 
   }
 
-  //this models ignore the deposition rate
+  /**
+   * this model ignores the deposition rate
+   * @param rates
+   */ 
   @Override
   public void initializeRates(double[] rates) {
 

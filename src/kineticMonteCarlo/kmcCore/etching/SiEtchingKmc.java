@@ -25,7 +25,10 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
     minHeight = ((SiLattice) lattice).getUnit_Cell().getLimitZ();
   }
 
-  //this models ignore the deposition rate
+  /** 
+   * this model ignores the deposition rate
+   * @param rates
+   */ 
   @Override
   public void initializeRates(double[] rates) {
 
