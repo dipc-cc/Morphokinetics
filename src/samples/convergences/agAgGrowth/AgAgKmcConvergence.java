@@ -12,8 +12,8 @@ import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
-import ratesLibrary.SiEtchRatesFactory;
-import ratesLibrary.AgAgGrowthRatesFactory;
+import ratesLibrary.SiRatesFactory;
+import ratesLibrary.AgAgRatesFactory;
 
 /**
  *
@@ -24,9 +24,9 @@ public class AgAgKmcConvergence {
     public static void main(String[] args) {
 
         float experitental_temp = 135;
-        double deposition_rate = new AgAgGrowthRatesFactory().getDepositionRate("COX_PRB", experitental_temp);
-        double island_density = new AgAgGrowthRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
-        double diffusion_rate = new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp)[0];
+        double deposition_rate = new AgAgRatesFactory().getDepositionRate("COX_PRB", experitental_temp);
+        double island_density = new AgAgRatesFactory().getIslandDensity("COX_PRB", experitental_temp);
+        double diffusion_rate = new AgAgRatesFactory().getRates("COX_PRB", experitental_temp)[0];
 
         GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
                 .create_Ag_Ag_convergence_configuration(diffusion_rate, island_density, deposition_rate);
@@ -38,7 +38,7 @@ public class AgAgKmcConvergence {
 
         //--------------------------------
         evaluator.setRepeats(evaluator.getRepeats() * 5);
-        Individual individual = new Individual(new AgAgGrowthRatesFactory().getRates("COX_PRB", experitental_temp));
+        Individual individual = new Individual(new AgAgRatesFactory().getRates("COX_PRB", experitental_temp));
         float[][] experimentalPSD = evaluator.calculatePsdFromIndividual(individual);
         double simulationTime = individual.getSimulationTime();
         evaluator.setRepeats(evaluator.getRepeats() / 5);

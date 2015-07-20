@@ -9,7 +9,7 @@ import graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth.GrapheneKmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
-import ratesLibrary.GrapheneCvdDepositionRatesFactory;
+import ratesLibrary.GrapheneRatesFactory;
 
 /**
  *
@@ -23,7 +23,7 @@ public class SimpleGrapheneKmcSimulation {
 
         System.out.println("Simple simulation of the Graphene KMC");
 
-        GrapheneCvdDepositionRatesFactory ratesFactory = new GrapheneCvdDepositionRatesFactory();
+        GrapheneRatesFactory ratesFactory = new GrapheneRatesFactory();
         GrapheneKmc kmc = initialize_kmc();
         DiffusionKmcFrame frame = create_graphics_frame(kmc);
         frame.setVisible(true);
@@ -57,7 +57,7 @@ public class SimpleGrapheneKmcSimulation {
         return kmc;
     }
 
-    private static void initializeRates(GrapheneCvdDepositionRatesFactory reatesFactory, GrapheneKmc kmc) {
+    private static void initializeRates(GrapheneRatesFactory reatesFactory, GrapheneKmc kmc) {
 
         double deposition_rate = reatesFactory.getDepositionRate("synthetic", 0);
         double island_density = reatesFactory.getIslandDensity("synthetic", 0);

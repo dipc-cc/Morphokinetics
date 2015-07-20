@@ -12,12 +12,12 @@ import java.util.Map;
  *
  * @author Nestor
  */
-public class SiEtchRatesFactory implements IRatesFactory {
+public class SiRatesFactory implements IRatesFactory {
 
   private static Map<String, ISiRates> experiments;
   private static double kB = 8.617332e-5;
 
-  public SiEtchRatesFactory() {
+  public SiRatesFactory() {
 
     experiments = new HashMap();
     experiments.put("Gosalvez_PRE", new RatesFromPreGosalvez());

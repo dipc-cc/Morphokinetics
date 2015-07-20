@@ -11,7 +11,7 @@ import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
-import ratesLibrary.SiEtchRatesFactory;
+import ratesLibrary.SiRatesFactory;
 
 /**
  *
@@ -30,7 +30,7 @@ public class SiliconMultithreadedPsdCalculation {
                 evaluation.setShowGraphics(false);
         
         float[][] PSD = ((AbstractPsdEvaluation)evaluation).calculatePsdFromIndividual(new Individual(
-                new SiEtchRatesFactory().getRates("Gosalvez_PRE", 350)));
+                new SiRatesFactory().getRates("Gosalvez_PRE", 350)));
         
         evaluation.dispose();
      

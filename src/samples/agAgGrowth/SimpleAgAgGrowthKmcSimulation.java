@@ -9,7 +9,7 @@ import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
-import ratesLibrary.AgAgGrowthRatesFactory;
+import ratesLibrary.AgAgRatesFactory;
 
 /**
  *
@@ -23,7 +23,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
     System.out.println("Simple simulation of the Ag/Ag growth KMC");
 
-    AgAgGrowthRatesFactory ratesFactory = new AgAgGrowthRatesFactory();
+    AgAgRatesFactory ratesFactory = new AgAgRatesFactory();
 
     AgAgKmc kmc = initialize_kmc();
 
@@ -53,7 +53,7 @@ public class SimpleAgAgGrowthKmcSimulation {
     return kmc;
   }
 
-  private static void initializeRates(AgAgGrowthRatesFactory reatesFactory, AgAgKmc kmc) {
+  private static void initializeRates(AgAgRatesFactory reatesFactory, AgAgKmc kmc) {
 
     double deposition_rate = reatesFactory.getDepositionRate("COX_PRB", 135);
     double island_density = reatesFactory.getIslandDensity("COX_PRB", 135);

@@ -1,7 +1,7 @@
 package samples.silicon;
 
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
-import ratesLibrary.SiEtchRatesFactory;
+import ratesLibrary.SiRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
@@ -73,7 +73,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
         for (int a = 0; a < 30; a++) {
 
-            KMC.initializeRates(new SiEtchRatesFactory()
+            KMC.initializeRates(new SiRatesFactory()
                     .getRates("Gosalvez_PRE", temperature));
 
             KMC.simulate(5000);
