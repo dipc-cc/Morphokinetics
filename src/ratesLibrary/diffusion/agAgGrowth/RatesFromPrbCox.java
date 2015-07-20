@@ -10,7 +10,7 @@ import ratesLibrary.diffusion.IDiffusionRates;
  *
  * @author Nestor
  *
- * Etch rates datas obtained from Gosalvez Et al - Physical Review E 68 (2003)
+ * Etch rates data obtained from Gosalvez Et al - Physical Review E 68 (2003)
  * 031604
  *
  */
