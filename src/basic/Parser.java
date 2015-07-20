@@ -18,7 +18,7 @@ import org.json.JSONObject;
 /**
  * This class will read an input file with all the parameters for the execution
  *
- * @author jalberdi004
+ * @author J. Alberdi-Rodriguez
  */
 public class Parser {
 

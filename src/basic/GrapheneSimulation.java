@@ -15,7 +15,7 @@ import ratesLibrary.IRatesFactory;
 
 /**
  *
- * @author jalberdi004
+ * @author J. Alberdi-Rodriguez
  */
 public class GrapheneSimulation extends AbstractSimulation {
 

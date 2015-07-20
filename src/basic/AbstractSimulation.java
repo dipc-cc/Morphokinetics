@@ -17,7 +17,7 @@ import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
- * @author jalberdi004
+ * @author J. Alberdi-Rodriguez
  */
 public abstract class AbstractSimulation {
 

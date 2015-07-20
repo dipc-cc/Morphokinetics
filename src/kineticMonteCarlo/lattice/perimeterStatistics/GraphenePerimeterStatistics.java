@@ -6,7 +6,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
 
 /**
  *
- * @author Nestor, jalberdi004
+ * @author Nestor, J. Alberdi-Rodriguez
  */
 public class GraphenePerimeterStatistics extends AbstractPerimeterStatistics {
 
