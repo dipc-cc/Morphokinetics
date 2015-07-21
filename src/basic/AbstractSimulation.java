@@ -94,7 +94,7 @@ public abstract class AbstractSimulation {
     if (currentParser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
       psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
-      new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
+      new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1)).setLogScale(true);
       new Frame2D("Sampled surface").setMesh(sampledSurface);
     }
   }
