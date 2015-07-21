@@ -21,7 +21,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   
   @Override
   protected void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser) {
-    //myParser.getIslandDensityType()
     double depositionRate = ratesFactory.getDepositionRate(myParser.getTemperature());
     double islandDensity = ratesFactory.getIslandDensity(myParser.getTemperature());
     this.kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
