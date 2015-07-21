@@ -7,10 +7,10 @@ public class Frame2D extends javax.swing.JFrame {
   public static int COLOR_BW = 0;
   public static int COLOR_HSV = 1;
 
-  public Frame2D(String text_info) {
+  public Frame2D(String textInfo) {
     initComponents();
     this.setVisible(true);
-    ((Panel2D) jPanel1).setText_info(text_info);
+    ((Panel2D) jPanel1).setTextInfo(textInfo);
 
   }
 

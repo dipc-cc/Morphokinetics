@@ -24,7 +24,7 @@ public class Panel2D extends javax.swing.JPanel {
   public static int COLOR_BW = 0;
   public static int COLOR_HSV = 1;
 
-  protected float[][] PSD;
+  protected float[][] psd;
   protected double max;
   protected double min;
   protected boolean log = false;
@@ -32,7 +32,7 @@ public class Panel2D extends javax.swing.JPanel {
   protected boolean auto = true;
   protected int colormap = COLOR_HSV;
 
-  protected String text_info = "This is a 2D surface";
+  protected String textInfo = "This is a 2D surface";
 
   /**
    * Creates new form dibujaKMC
@@ -41,24 +41,24 @@ public class Panel2D extends javax.swing.JPanel {
     initComponents();
   }
 
-  public void setPSD(float[][] PSD) {
-    this.PSD = PSD;
+  public void setPSD(float[][] psd) {
+    this.psd = psd;
     if (auto) {
-      get_min_max(PSD);
+      geMinMax(psd);
     }
     this.repaint();
   }
 
   public void setLogScale(boolean log) {
     this.log = log;
-    if (PSD != null && auto) {
-      get_min_max(PSD);
+    if (psd != null && auto) {
+      geMinMax(psd);
     }
     this.repaint();
   }
 
-  public void setText_info(String text_info) {
-    this.text_info = text_info;
+  public void setTextInfo(String textInfo) {
+    this.textInfo = textInfo;
     this.repaint();
   }
 
@@ -100,7 +100,7 @@ public class Panel2D extends javax.swing.JPanel {
   public void setAuto(boolean auto) {
     this.auto = auto;
     if (auto) {
-      get_min_max(PSD);
+      geMinMax(psd);
       this.repaint();
     }
 
@@ -110,16 +110,16 @@ public class Panel2D extends javax.swing.JPanel {
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
 
-    if (PSD != null) {
+    if (psd != null) {
 
-      float scaleY = this.getHeight() / (float) PSD.length;
-      float scaleX = this.getWidth() / (float) PSD[0].length;
+      float scaleY = this.getHeight() / (float) psd.length;
+      float scaleX = this.getWidth() / (float) psd[0].length;
       ((Graphics2D) g).scale(scaleX, scaleY);
 
-      for (int i = 0; i < PSD.length; i++) {
-        for (int j = 0; j < PSD[0].length; j++) {
+      for (int i = 0; i < psd.length; i++) {
+        for (int j = 0; j < psd[0].length; j++) {
 
-          double temp = PSD[i][j];
+          double temp = psd[i][j];
           if (log) {
             temp = Math.log(temp);
           }
@@ -128,8 +128,8 @@ public class Panel2D extends javax.swing.JPanel {
           int posX = i;
           int posY = j;
           if (shift) {
-            posX = (posX + PSD[0].length / 2) % PSD[0].length;
-            posY = (posY + PSD.length / 2) % PSD.length;
+            posX = (posX + psd[0].length / 2) % psd[0].length;
+            posY = (posY + psd.length / 2) % psd.length;
           }
           g.fillRect(posX, posY, 1, 1);
         }
@@ -142,7 +142,7 @@ public class Panel2D extends javax.swing.JPanel {
 
       g.setColor(Color.black);
       g.drawString("Min:" + MathUtils.truncate(min, 4) + ",   Max:" + MathUtils.truncate(max, 4), 2, this.getHeight() - 2);
-      g.drawString(text_info, 2, 14);
+      g.drawString(textInfo, 2, 14);
     }
   }
 
@@ -168,16 +168,16 @@ public class Panel2D extends javax.swing.JPanel {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   // End of variables declaration//GEN-END:variables
 
-  private void get_min_max(float[][] PSD) {
+  private void geMinMax(float[][] psd) {
 
     if (log) {
-      min = max = Math.log(PSD[0][0]);
+      min = max = Math.log(psd[0][0]);
     } else {
-      min = max = PSD[0][0];
+      min = max = psd[0][0];
     }
-    for (int i = 0; i < PSD.length; i++) {
-      for (int j = 0; j < PSD[0].length; j++) {
-        double temp = PSD[i][j];
+    for (int i = 0; i < psd.length; i++) {
+      for (int j = 0; j < psd[0].length; j++) {
+        double temp = psd[i][j];
         if (log) {
           temp = Math.log(temp);
         }
