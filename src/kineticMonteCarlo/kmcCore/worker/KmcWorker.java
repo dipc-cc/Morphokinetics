@@ -15,33 +15,33 @@ import java.util.concurrent.Semaphore;
  */
 public class KmcWorker extends Thread {
 
-  private AbstractKmc KMC;
-  private int workerID;
-  private int workID;
+  private AbstractKmc kmc;
+  private int workerId;
+  private int workId;
   private boolean active = true;
   private Semaphore receiveCommandsLock = new Semaphore(0);
   private Semaphore performSimulationLock = new Semaphore(0);
   private IFinishListener finishListener;
   private IIntervalListener intervalListener;
-  private int interval_steps;
+  private int intervalSteps;
   private int iterations;
   private double endTime;
-  private String simulation_type = "";
+  private String simulationType = "";
 
-  public KmcWorker(AbstractKmc KMC, int workerID) {
-    this.KMC = KMC;
-    this.workerID = workerID;
+  public KmcWorker(AbstractKmc kmc, int workerId) {
+    this.kmc = kmc;
+    this.workerId = workerId;
     this.active = true;
   }
 
   public void destroy() {
     active = false;
     performSimulationLock.release();
-    KMC = null;
+    kmc = null;
   }
 
-  public AbstractKmc getKMC() {
-    return KMC;
+  public AbstractKmc getKmc() {
+    return kmc;
   }
 
   @Override
@@ -49,22 +49,22 @@ public class KmcWorker extends Thread {
 
     while (active) {
 
-      switch (simulation_type) {
+      switch (simulationType) {
 
         case "by_time":
-          KMC.simulate(endTime);
+          kmc.simulate(endTime);
           break;
         case "by_steps":
-          KMC.simulate(iterations);
+          kmc.simulate(iterations);
           break;
         case "until_finish":
-          KMC.simulate();
+          kmc.simulate();
           break;
         case "by_intervals":
           do {
-            KMC.simulate(interval_steps);
-            intervalListener.handleSimulationIntervalFinish(workerID, workID);
-          } while (KMC.getIterations() == interval_steps);
+            kmc.simulate(intervalSteps);
+            intervalListener.handleSimulationIntervalFinish(workerId, workId);
+          } while (kmc.getIterations() == intervalSteps);
           break;
         default:
           break;
@@ -72,8 +72,8 @@ public class KmcWorker extends Thread {
 
       receiveCommandsLock.release();
 
-      if (!"".equals(simulation_type)) {
-        finishListener.handleSimulationFinish(workerID, workID);
+      if (!"".equals(simulationType)) {
+        finishListener.handleSimulationFinish(workerId, workId);
       }
 
       try {
@@ -83,8 +83,8 @@ public class KmcWorker extends Thread {
     }
   }
 
-  public int getID() {
-    return workerID;
+  public int getWorkerId() {
+    return workerId;
   }
 
   public void initialize(double[] rates) {
@@ -94,12 +94,12 @@ public class KmcWorker extends Thread {
       e.printStackTrace();
       return;
     }
-    this.KMC.initializeRates(rates);
+    this.kmc.initializeRates(rates);
     this.receiveCommandsLock.release();
   }
 
   public AbstractLattice getLattice() {
-    return this.KMC.getLattice();
+    return this.kmc.getLattice();
   }
 
   public void simulate(IFinishListener toAdd, int workID) {
@@ -109,9 +109,9 @@ public class KmcWorker extends Thread {
       e.printStackTrace();
       return;
     }
-    this.simulation_type = "until_finish";
+    this.simulationType = "until_finish";
     this.finishListener = toAdd;
-    this.workID = workID;
+    this.workId = workID;
     this.performSimulationLock.release();
   }
 
@@ -122,9 +122,9 @@ public class KmcWorker extends Thread {
       e.printStackTrace();
       return;
     }
-    this.simulation_type = "by_time";
+    this.simulationType = "by_time";
     this.finishListener = toAdd;
-    this.workID = workID;
+    this.workId = workID;
     this.performSimulationLock.release();
   }
 
@@ -135,9 +135,9 @@ public class KmcWorker extends Thread {
       e.printStackTrace();
       return;
     }
-    this.simulation_type = "by_steps";
+    this.simulationType = "by_steps";
     this.finishListener = toAdd;
-    this.workID = workID;
+    this.workId = workID;
     this.iterations = iterations;
     this.performSimulationLock.release();
   }
@@ -149,27 +149,27 @@ public class KmcWorker extends Thread {
       e.printStackTrace();
       return;
     }
-    this.simulation_type = "by_intervals";
+    this.simulationType = "by_intervals";
     this.intervalListener = toAdd;
     this.finishListener = toFinish;
-    this.workID = workID;
-    this.interval_steps = interval_steps;
+    this.workId = workID;
+    this.intervalSteps = interval_steps;
     performSimulationLock.release();
   }
 
   public AbstractList getSurfaceList() {
-    return this.KMC.getSurfaceList();
+    return this.kmc.getSurfaceList();
   }
 
   public double getTime() {
-    return this.KMC.getTime();
+    return this.kmc.getTime();
   }
 
   public int getIterations() {
-    return this.KMC.getIterations();
+    return this.kmc.getIterations();
   }
 
   public void getSampledSurface(float[][] surface) {
-    this.KMC.getSampledSurface(surface);
+    this.kmc.getSampledSurface(surface);
   }
 }

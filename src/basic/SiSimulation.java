@@ -50,7 +50,7 @@ public class SiSimulation extends AbstractSimulation {
   @Override
   public void createFrame() {
     try {
-      new SiliconFrame().drawKMC(kmc);
+      new SiliconFrame().drawKmc(kmc);
     } catch (Exception e) {
       System.err.println("Error: The execution is not able to create the X11 frame");
       System.err.println("Finishing");

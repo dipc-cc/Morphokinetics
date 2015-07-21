@@ -35,7 +35,7 @@ public class SimpleBasicKmcSimulation {
     for (int i = 0; i < 1000; i++) {
 
       KMC.simulate(500);
-      panel.drawKMC(KMC);
+      panel.drawKmc(KMC);
       Wait.manymsec(300);
     }
 

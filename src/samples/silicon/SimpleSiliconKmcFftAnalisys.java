@@ -18,47 +18,47 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class SimpleSiliconKmcFftAnalisys {
 
-    public static void main(String args[]) {
+  public static void main(String args[]) {
 
-        System.out.println("Simple 2D FFT analisys of an etched silicon surface");
-        
-            SiEtchingKmcConfig config = configKMC();
-        
-        SiEtchingKmc KMC = new SiEtchingKmc(config);
+    System.out.println("Simple 2D FFT analisys of an etched silicon surface");
 
-        KMC.initializeRates(new SiRatesFactory()
-                .getRates(350));
+    SiEtchingKmcConfig config = configKmc();
 
-        float[][] surface = new float[128][128];
-        PsdSignature2D PSD = new PsdSignature2D(128, 128);
+    SiEtchingKmc kmc = new SiEtchingKmc(config);
 
-        KMC.simulate(5000);
-        for (int i = 0; i < 100; i++) {
-            KMC.simulate(5000);
-            KMC.getSampledSurface(surface);
-            PSD.addSurfaceSample(surface);
-        }
+    kmc.initializeRates(new SiRatesFactory()
+            .getRates(350));
 
-        PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-        PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    float[][] surface = new float[128][128];
+    PsdSignature2D PSD = new PsdSignature2D(128, 128);
 
-         new Frame2D("PSD analysis")
-                 .setMesh(MathUtils.avgFilter(PSD.getPsd(),1));
+    kmc.simulate(5000);
+    for (int i = 0; i < 100; i++) {
+      kmc.simulate(5000);
+      kmc.getSampledSurface(surface);
+      PSD.addSurfaceSample(surface);
     }
 
-    private static SiEtchingKmcConfig configKMC() {
-        ListConfiguration listConfig=  new ListConfiguration()
-          .setListType(ListConfiguration.BINNED_LIST)
-          .setBinsPerLevel(16)
-          .setExtraLevels(0);
-        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
-                                    .setMillerX(1)
-                                    .setMillerY(1)
-                                    .setMillerZ(0)
-                                    .setSizeX_UC(64)
-                                    .setSizeY_UC(64)
-                                    .setSizeZ_UC(256)
-                                    .setListConfig(listConfig);
-        return config;
-    }
+    PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+
+    new Frame2D("PSD analysis")
+            .setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
+  }
+
+  private static SiEtchingKmcConfig configKmc() {
+    ListConfiguration listConfig = new ListConfiguration()
+            .setListType(ListConfiguration.BINNED_LIST)
+            .setBinsPerLevel(16)
+            .setExtraLevels(0);
+    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+            .setMillerX(1)
+            .setMillerY(1)
+            .setMillerZ(0)
+            .setSizeX_UC(64)
+            .setSizeY_UC(64)
+            .setSizeZ_UC(256)
+            .setListConfig(listConfig);
+    return config;
+  }
 }

@@ -52,8 +52,8 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
 
   @Override
   public synchronized void handleSimulationFinish(int workerID, int workID) {
-    if (showGraphics && (System.currentTimeMillis() - time_last_render) > 1000.0f / FPS_GRAPHICS) {
-      time_last_render = System.currentTimeMillis();
+    if (showGraphics && (System.currentTimeMillis() - timeLastRender) > 1000.0f / FPS_GRAPHICS) {
+      timeLastRender = System.currentTimeMillis();
     }
 
     super.handleSimulationFinish(workerID, workID);

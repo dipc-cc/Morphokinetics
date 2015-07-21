@@ -20,23 +20,22 @@ public class SimpleSiliconKmcSimulation {
 
     System.out.println("Simple simulation of the Silicon etching KMC");
 
-    SiEtchingKmcConfig config = configKMC();
+    SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc KMC = new SiEtchingKmc(config);
+    SiEtchingKmc kmc = new SiEtchingKmc(config);
 
     long start = System.nanoTime();
 
-    KMC.initializeRates(new SiRatesFactory()
-            .getRates(350));
+    kmc.initializeRates(new SiRatesFactory().getRates(350));
 
-    KMC.simulate();
+    kmc.simulate();
 
     System.out.println((System.nanoTime() - start) / 1000000);
 
-    new SiliconFrame().drawKMC(KMC);
+    new SiliconFrame().drawKmc(kmc);
   }
 
-  private static SiEtchingKmcConfig configKMC() {
+  private static SiEtchingKmcConfig configKmc() {
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20)

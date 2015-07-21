@@ -19,43 +19,41 @@ import ratesLibrary.SiRatesFactory;
  */
 public class SiliconMultithreadedPsdCalculation {
 
-    public static void main(String[] args) {
-        
-        System.out.println("Multithreaded PSD calculation from a KMC configuration");
-        
-        SiEtchingKmcConfig config = configKMC();
-        
-        AbstractEvaluation evaluation = new SiEtchingThreadedPsdEvaluation(config, 20, 10000, 4);
-                evaluation.setWheight(1.0f);
-                evaluation.setShowGraphics(false);
-        
-        float[][] PSD = ((AbstractPsdEvaluation)evaluation).calculatePsdFromIndividual(new Individual(
-                new SiRatesFactory().getRates(350)));
-        
-        evaluation.dispose();
-     
+  public static void main(String[] args) {
 
-        
-        new Frame2D("Multi-threaded calculated PSD")
-                .setLogScale(true)
-                .setShift(true)
-                .setMesh(PSD);
-    }
+    System.out.println("Multithreaded PSD calculation from a KMC configuration");
 
-    private static SiEtchingKmcConfig configKMC() {
-        ListConfiguration listConfig=  new ListConfiguration()
-              .setListType(ListConfiguration.BINNED_LIST)
-              .setBinsPerLevel(12)
-              .setExtraLevels(1);
-        
-        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
-                .setMillerX(1)
-                .setMillerY(0)
-                .setMillerZ(0)
-                .setSizeX_UC(32)
-                .setSizeY_UC(32)
-                .setSizeZ_UC(64)
-                .setListConfig(listConfig);
-        return config;
-    }
+    SiEtchingKmcConfig config = configKmc();
+
+    AbstractEvaluation evaluation = new SiEtchingThreadedPsdEvaluation(config, 20, 10000, 4);
+    evaluation.setWheight(1.0f);
+    evaluation.setShowGraphics(false);
+
+    float[][] psd = ((AbstractPsdEvaluation) evaluation).calculatePsdFromIndividual(new Individual(
+            new SiRatesFactory().getRates(350)));
+
+    evaluation.dispose();
+
+    new Frame2D("Multi-threaded calculated PSD")
+            .setLogScale(true)
+            .setShift(true)
+            .setMesh(psd);
+  }
+
+  private static SiEtchingKmcConfig configKmc() {
+    ListConfiguration listConfig = new ListConfiguration()
+            .setListType(ListConfiguration.BINNED_LIST)
+            .setBinsPerLevel(12)
+            .setExtraLevels(1);
+
+    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+            .setMillerX(1)
+            .setMillerY(0)
+            .setMillerZ(0)
+            .setSizeX_UC(32)
+            .setSizeY_UC(32)
+            .setSizeZ_UC(64)
+            .setListConfig(listConfig);
+    return config;
+  }
 }

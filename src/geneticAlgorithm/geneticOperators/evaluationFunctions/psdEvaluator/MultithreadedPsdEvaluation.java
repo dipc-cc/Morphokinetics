@@ -21,21 +21,21 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
   protected static final int FPS_GRAPHICS = 2;
 
-  protected PsdSignature2D[] PSDs; // TODO joseba might not be initialized
+  protected PsdSignature2D[] psds; // TODO joseba might not be initialized
   protected double[] times;
-  protected long time_last_render;
+  protected long timeLastRender;
 
   protected KmcWorker[] workers;
   protected int numThreads;
   protected int finishedSimulation;
-  protected Semaphore evalation_complete;
+  protected Semaphore evalationComplete;
 
-  public MultithreadedPsdEvaluation(int repeats, int measureInterval, int num_threads) {
+  public MultithreadedPsdEvaluation(int repeats, int measureInterval, int numThreads) {
     super(repeats, measureInterval);
 
-    this.workers = new KmcWorker[num_threads];
-    this.numThreads = num_threads;
-    evalation_complete = new Semaphore(0);
+    this.workers = new KmcWorker[numThreads];
+    this.numThreads = numThreads;
+    evalationComplete = new Semaphore(0);
   }
 
   @Override
@@ -47,31 +47,31 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
     }
 
     if (finishedSimulation == currentPopulation.size() * repeats) {
-      evalation_complete.release();
+      evalationComplete.release();
     }
   }
 
   @Override
-  public void handleSimulationIntervalFinish(int workerID, int workID) {
+  public void handleSimulationIntervalFinish(int workerId, int workId) {
 
     float[][] surface = new float[psdSizeY][psdSizeX];
-    workers[workerID].getSampledSurface(surface);
-    times[workID] += workers[workerID].getKMC().getTime();
-    addToPSD(workID, surface);
+    workers[workerId].getSampledSurface(surface);
+    times[workId] += workers[workerId].getKmc().getTime();
+    addToPsd(workId, surface);
 
-    System.out.println("Worker " + workerID + " finished a simulation :(" + workID + ")");
+    System.out.println("Worker " + workerId + " finished a simulation :(" + workId + ")");
   }
 
-  private void addToPSD(int workID, float[][] surface) {
-    PSDs[workID].addSurfaceSample(surface);
+  private void addToPsd(int workId, float[][] surface) {
+    psds[workId].addSurfaceSample(surface);
   }
 
-  protected void assignNewWork(int workerID) {
+  protected void assignNewWork(int workerId) {
 
     int individual = currentSimulation / repeats;
 
-    workers[workerID].initialize(currentPopulation.getIndividual(individual).getGenes());
-    workers[workerID].simulate(this, this, measureInterval, individual);
+    workers[workerId].initialize(currentPopulation.getIndividual(individual).getGenes());
+    workers[workerId].simulate(this, this, measureInterval, individual);
     currentSimulation++;
   }
 
@@ -98,10 +98,10 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
     p.setIndividual(i, 0);
     this.calculatePsdOfPopulation(p);
 
-    PSDs[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    PSDs[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psds[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    psds[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    return PSDs[0].getPsd();
+    return psds[0].getPsd();
   }
 
   private double[] calculateDifferenceWithRealPsd() {
@@ -117,10 +117,10 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
     double error = 0;
     float[][] difference = new float[psdSizeY][psdSizeX];
 
-    PSDs[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    PSDs[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psds[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    psds[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    calculateRelativeDifference(difference, PSDs[individualPos]);
+    calculateRelativeDifference(difference, psds[individualPos]);
 
     difference = MathUtils.avgFilter(difference, 5);
 
@@ -133,11 +133,11 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
   }
 
   private void calculatePsdOfPopulation(Population p) {
-    PSDs = new PsdSignature2D[p.size()];
+    psds = new PsdSignature2D[p.size()];
 
     times = new double[p.size()];
     for (int i = 0; i < p.size(); i++) {
-      PSDs[i] = new PsdSignature2D(psdSizeY, psdSizeX);
+      psds[i] = new PsdSignature2D(psdSizeY, psdSizeX);
     }
 
     currentPopulation = p;
@@ -149,7 +149,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
     }
 
     try {
-      evalation_complete.acquire();
+      evalationComplete.acquire();
     } catch (Exception e) {
     }
     storeSimulationTimes(p);

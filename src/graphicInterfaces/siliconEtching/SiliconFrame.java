@@ -44,14 +44,14 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
     this.setVisible(true);
   }
 
-  public void drawKMC(AbstractKmc KMC) {
+  public void drawKmc(AbstractKmc kmc) {
 
     if (sil == null) {
       sil = new SiliconPointArray(new float[]{});
-      float side = this.update(KMC);
-      create_Silicon_panel(side);
+      float side = this.update(kmc);
+      createSiliconPanel(side);
     } else {
-      this.update(KMC);
+      this.update(kmc);
     }
   }
 
@@ -78,11 +78,11 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
 
     Shape3D shape = new Shape3D(sil, createMaterialAppearance());
 
-    Transform3D scala = new Transform3D();
+    Transform3D scale = new Transform3D();
 
-    scala.setScale(1 / sideWidth);
+    scale.setScale(1 / sideWidth);
 
-    TransformGroup SC = new TransformGroup(scala);
+    TransformGroup SC = new TransformGroup(scale);
     SC.addChild(shape);
     objRotate.addChild(SC);
 
@@ -128,7 +128,7 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
 
   }
 
-  private void create_Silicon_panel(float side) {
+  private void createSiliconPanel(float side) {
 
     initComponents();
 
@@ -161,32 +161,32 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
     return materialAppear;
   }
 
-  private float update(AbstractKmc KMC) {
+  private float update(AbstractKmc kmc) {
 
-    AbstractList surface = KMC.getSurfaceList();
+    AbstractList surface = kmc.getSurfaceList();
     float sizeX = 0;
     float sizeY = 0;
 
-    float[] surface_points = new float[surface.getSize() * 3];
+    float[] surfacePoints = new float[surface.getSize() * 3];
 
     float max_Z = 0;
     for (int i = 0; i < surface.getSize(); i++) {
       SiAtom atom = (SiAtom) surface.getAtomAt(i);
-      surface_points[i * 3] = atom.getX();
+      surfacePoints[i * 3] = atom.getX();
       sizeX = Math.max(atom.getX(), sizeX);
-      surface_points[i * 3 + 1] = atom.getY();
+      surfacePoints[i * 3 + 1] = atom.getY();
       sizeY = Math.max(atom.getY(), sizeY);
       max_Z = Math.max(max_Z, atom.getZ());
-      surface_points[i * 3 + 2] = -atom.getZ();
+      surfacePoints[i * 3 + 2] = -atom.getZ();
     }
 
     for (int i = 0; i < surface.getSize(); i++) {
-      surface_points[i * 3] -= sizeX * 0.5f;
-      surface_points[i * 3 + 1] -= sizeY * 0.5f;
-      surface_points[i * 3 + 2] += max_Z;
+      surfacePoints[i * 3] -= sizeX * 0.5f;
+      surfacePoints[i * 3 + 1] -= sizeY * 0.5f;
+      surfacePoints[i * 3 + 2] += max_Z;
     }
 
-    sil.actualizadata(surface_points);
+    sil.actualizadata(surfacePoints);
 
     return Math.max(sizeX, sizeY);
 

@@ -12,6 +12,6 @@ import kineticMonteCarlo.kmcCore.AbstractKmc;
  */
 public interface KmcGraphics {
     
-    public void drawKMC(AbstractKmc KMC);
+    public void drawKmc(AbstractKmc KMC);
     
 }

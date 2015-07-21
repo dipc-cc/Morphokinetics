@@ -50,9 +50,9 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
 
   @Override
   public synchronized void handleSimulationFinish(int workerID, int workID) {
-    if (showGraphics && (System.currentTimeMillis() - time_last_render) > 1000.0f / FPS_GRAPHICS) {
-      frame.drawKMC(workers[workerID].getKMC());
-      time_last_render = System.currentTimeMillis();
+    if (showGraphics && (System.currentTimeMillis() - timeLastRender) > 1000.0f / FPS_GRAPHICS) {
+      frame.drawKmc(workers[workerID].getKmc());
+      timeLastRender = System.currentTimeMillis();
     }
 
     super.handleSimulationFinish(workerID, workID);
