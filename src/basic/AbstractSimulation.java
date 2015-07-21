@@ -75,7 +75,7 @@ public abstract class AbstractSimulation {
     float[][] sampledSurface = null;
     
     if (currentParser.doPsd()) {
-      //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
+      //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
       psd = new PsdSignature2D(currentParser.getSizeX() / 2, currentParser.getSizeY() / 2);
       sampledSurface = new float[currentParser.getSizeX() / 2][currentParser.getSizeY() / 2];
     }
@@ -84,7 +84,7 @@ public abstract class AbstractSimulation {
     for (int simulations = 0; simulations < currentParser.getNumberOfSimulations(); simulations++) {
       initializeRates(ratesFactory, kmc, currentParser);
       kmc.simulate();
-      if (currentParser.isPrintToImage()) {
+      if (currentParser.printToImage()) {
         frame.printToImage(simulations);
       }
       if (currentParser.doPsd()) {

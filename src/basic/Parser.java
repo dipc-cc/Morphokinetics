@@ -313,7 +313,7 @@ public class Parser {
     return visualize;
   }
 
-  public boolean isPrintToImage() {
+  public boolean printToImage() {
     return printToImage;
   }
 
