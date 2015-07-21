@@ -15,7 +15,7 @@ import ratesLibrary.AgAgRatesFactory;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgSimulation extends AbstractSimulation {
+public class AgSimulation extends AbstractGrowthSimulation {
 
   public AgSimulation(Parser myParser) {
     super(myParser);

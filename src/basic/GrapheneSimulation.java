@@ -15,7 +15,7 @@ import ratesLibrary.GrapheneRatesFactory;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class GrapheneSimulation extends AbstractSimulation {
+public class GrapheneSimulation extends AbstractGrowthSimulation {
 
   public GrapheneSimulation(Parser myParser) {
     super(myParser);
