@@ -44,6 +44,7 @@ public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
     this.setVisible(true);
   }
 
+  @Override
   public void drawKmc(AbstractKmc kmc) {
 
     if (sil == null) {
