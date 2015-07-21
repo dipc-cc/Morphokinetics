@@ -11,7 +11,7 @@ import ratesLibrary.SiRatesFactory;
 
 /**
  *
- * @author jalberdi004
+ * @author J. Alberdi-Rodriguez
  */
 public abstract class AbstractEtchingSimulation extends AbstractSimulation{
 

@@ -9,7 +9,6 @@ import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import ratesLibrary.SiRatesFactory;
-import utils.list.ListConfiguration;
 
 /**
  *
@@ -36,7 +35,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
    * TODO This implementation is temporary, because it is to rigid and not tuneable.
    */
   private SiEtchingKmcConfig configKmc() {
-    
+
     SiEtchingKmcConfig tmpConfig = new SiEtchingKmcConfig()
             .setMillerX(0)
             .setMillerY(1)
@@ -57,9 +56,6 @@ public class SiSimulation extends AbstractEtchingSimulation {
       System.err.println("Finishing");
       throw e;
     }
-//    if (currentParser.isVisualize()) {
-//      frame.setVisible(true);
-//    }
   }
-  
+
 }

@@ -10,7 +10,7 @@ import ratesLibrary.IRatesFactory;
 
 /**
  *
- * @author jalberdi004
+ * @author J. Alberdi-Rodriguez
  */
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 

@@ -6,10 +6,8 @@
 package basic;
 
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import ratesLibrary.IRatesFactory;
 import utils.MathUtils;
 import utils.list.ListConfiguration;
@@ -67,13 +65,13 @@ public abstract class AbstractSimulation {
   }
 
   /**
-   * Creates the simulation frame. For the moment only the simple AgAgKmcCanvas class.
+   * Creates the simulation frame. 
    */
   public abstract void createFrame();
 
   public void doSimulation() {
     float[][] sampledSurface = null;
-    
+
     if (currentParser.doPsd()) {
       //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
       psd = new PsdSignature2D(currentParser.getSizeX() / 2, currentParser.getSizeY() / 2);
