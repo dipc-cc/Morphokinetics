@@ -20,6 +20,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
   /**
    * Creates new form NewJFrame
+   * @param canvas1
    */
   public DiffusionKmcFrame(AbstractKmcCanvas canvas1) {
 
@@ -29,6 +30,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     this.jPanel1.add(canvas1);
     this.canvas1.initialize();
     this.jSpinner2.setValue(((AbstractKmcCanvas) canvas1).getScale());
+    this.setResizable(true);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -49,7 +51,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     p.start();
   }
 
-  public void repaintKMC() {
+  public void repaintKmc() {
     canvas1.performDraw();
   }
 
@@ -140,7 +142,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
 
       canvas1.setScale((Integer) jSpinner2.getValue());
-
+      this.setSize(canvas1.getY()+25, canvas1.getX()+25);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -171,7 +173,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     public void run() {
       int i = 0;
       while (true) {
-        repaintKMC();
+        repaintKmc();
         i++;
         try {
           paintLoop.sleep(100);
