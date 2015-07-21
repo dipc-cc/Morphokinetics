@@ -44,7 +44,7 @@ public class Panel2D extends javax.swing.JPanel {
   public void setPSD(float[][] psd) {
     this.psd = psd;
     if (auto) {
-      geMinMax(psd);
+      getMinMax(psd);
     }
     this.repaint();
   }
@@ -52,7 +52,7 @@ public class Panel2D extends javax.swing.JPanel {
   public void setLogScale(boolean log) {
     this.log = log;
     if (psd != null && auto) {
-      geMinMax(psd);
+      getMinMax(psd);
     }
     this.repaint();
   }
@@ -100,7 +100,7 @@ public class Panel2D extends javax.swing.JPanel {
   public void setAuto(boolean auto) {
     this.auto = auto;
     if (auto) {
-      geMinMax(psd);
+      getMinMax(psd);
       this.repaint();
     }
 
@@ -168,7 +168,7 @@ public class Panel2D extends javax.swing.JPanel {
   // Variables declaration - do not modify//GEN-BEGIN:variables
   // End of variables declaration//GEN-END:variables
 
-  private void geMinMax(float[][] psd) {
+  private void getMinMax(float[][] psd) {
 
     if (log) {
       min = max = Math.log(psd[0][0]);
