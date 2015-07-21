@@ -15,7 +15,7 @@ import utils.list.ListConfiguration;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class SiSimulation extends AbstractSimulation {
+public class SiSimulation extends AbstractEtchingSimulation {
 
   private SiEtchingKmcConfig siConfig;
 
@@ -28,14 +28,15 @@ public class SiSimulation extends AbstractSimulation {
     super.initialiseKmc();
 
     this.ratesFactory = new SiRatesFactory();
-    siConfig = configKMC();
+    this.siConfig = configKmc();
     this.kmc = new SiEtchingKmc(siConfig);
   }
 
   /**
    * TODO This implementation is temporary, because it is to rigid and not tuneable.
    */
-  private SiEtchingKmcConfig configKMC() {
+  private SiEtchingKmcConfig configKmc() {
+    
     SiEtchingKmcConfig tmpConfig = new SiEtchingKmcConfig()
             .setMillerX(0)
             .setMillerY(1)
@@ -43,7 +44,7 @@ public class SiSimulation extends AbstractSimulation {
             .setSizeX_UC(96)
             .setSizeY_UC(96)
             .setSizeZ_UC(16)
-            .setListConfig(config);
+            .setListConfig(this.config);
     return tmpConfig;
   }
 

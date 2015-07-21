@@ -45,11 +45,11 @@ public abstract class AbstractSimulation {
   public void initialiseKmc() {
     switch (currentParser.getListType()) {
       case "linear": {
-        config = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
+        this.config = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
         break;
       }
       case "binned": {
-        config = new ListConfiguration().setListType(ListConfiguration.BINNED_LIST)
+        this.config = new ListConfiguration().setListType(ListConfiguration.BINNED_LIST)
                 .setBinsPerLevel(currentParser.getBinsLevels())
                 .setExtraLevels(currentParser.getExtraLevels());
         break;
@@ -58,7 +58,7 @@ public abstract class AbstractSimulation {
         System.err.println("listType is now properly set");
         System.err.println("listType currently is " + currentParser.getListType());
         System.err.println("Available options are \"linear\" and \"binned\" ");
-        config = null;
+        this.config = null;
     }
     sizeX = currentParser.getSizeX();
     sizeY = currentParser.getSizeY();
@@ -101,14 +101,7 @@ public abstract class AbstractSimulation {
     }
   }
 
-  private static void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser) {
-    //myParser.getIslandDensityType()
-    double depositionRate = ratesFactory.getDepositionRate(myParser.getTemperature());
-    double islandDensity = ratesFactory.getIslandDensity(myParser.getTemperature());
-    kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
-    kmc.initializeRates(ratesFactory.getRates(myParser.getTemperature()));
-
-  }
+  protected abstract void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser);
 
   public AbstractKmc getKmc() {
     return kmc;
