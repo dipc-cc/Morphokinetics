@@ -41,7 +41,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
   
   /**
-   * we ignore the unit_cell_pos by now, we get directly the atom of X,Y location
+   * We ignore the unitCellPos by now, we get directly the atom of X,Y location
    * @param X
    * @param Y
    * @return 
@@ -58,7 +58,12 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     return getAtom(X, Y);
   }
 
-  //obtains the spatial location of certain atom, the distance between atoms is considered as 1
+  /**
+   * obtains the spatial location of certain atom, the distance between atoms is considered as 1
+   * @param X
+   * @param Y
+   * @return 
+   */ 
   public abstract Point2D getSpatialLocation(int X, int Y);
 
   public abstract Point2D getCentralLatticeLocation();
