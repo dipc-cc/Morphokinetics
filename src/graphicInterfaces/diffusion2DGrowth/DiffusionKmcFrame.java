@@ -142,6 +142,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
 
       canvas1.setScale((Integer) jSpinner2.getValue());
+
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -170,10 +171,8 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
     @Override
     public void run() {
-      int i = 0;
       while (true) {
         repaintKmc();
-        i++;
         try {
           paintLoop.sleep(100);
           canvas1.setBaseLocation(mouseX, mouseY);
@@ -181,7 +180,6 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
           mouseX = 0;
           mouseY = 0;
         } catch (Exception e) {
-          System.out.println("This is the last loop" + i);
         }
       }
     }
