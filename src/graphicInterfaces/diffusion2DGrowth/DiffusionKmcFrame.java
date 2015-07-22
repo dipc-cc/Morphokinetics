@@ -73,6 +73,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     jPanel1 = new javax.swing.JPanel();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setTitle("Morphoniketics");
     setResizable(false);
 
     jLabel2.setText("Scale");
