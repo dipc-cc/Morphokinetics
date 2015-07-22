@@ -21,7 +21,9 @@ import javax.imageio.ImageIO;
  * @author Nestor
  */
 public abstract class AbstractKmcCanvas extends Canvas {
-
+  
+  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
+  
   protected int baseX = 0;
   protected int baseY = 0;
   protected BufferStrategy strategy;  //BufferStratrgy

@@ -12,8 +12,6 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 
 public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
-  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
-
   public GrapheneKmcCanvas(Abstract2DDiffusionLattice lattice) {
     super(lattice);
   }

@@ -11,8 +11,6 @@ import java.awt.Graphics;
 
 public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
-  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
-
   public AgAgKmcCanvas(Abstract2DDiffusionLattice lattice) {
     super(lattice);
   }
