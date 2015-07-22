@@ -19,7 +19,7 @@ public class BasicLattice extends AbstractEtchingLattice {
 
         this.sizeX = sizeX;
         this.sizeY = sizeY;
-        this.unit_cell_size=1;
+        this.unitCellSize=1;
         lattice = new BasicAtom[this.sizeX * this.sizeY];
         create_atoms(sizeX, sizeY);
         interconnect_atoms();
@@ -27,7 +27,7 @@ public class BasicLattice extends AbstractEtchingLattice {
 
     @Override
     public AbstractAtom getAtom(int X, int Y, int Z, int Unit_cell_pos) {
-        return lattice[((Y) * sizeX + X) * unit_cell_size + Unit_cell_pos];
+        return lattice[((Y) * sizeX + X) * unitCellSize + Unit_cell_pos];
     }
 
 

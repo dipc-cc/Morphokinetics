@@ -27,24 +27,24 @@ public class SiLattice extends AbstractEtchingLattice {
     this.sizeZ = sizeZ;
 
     unitCell = new UnitCell();
-    unit_cell_size = unitCell.create_Unit_Cell(millerX, millerY, millerZ);
-    if (unit_cell_size < 4 || unit_cell_size > 127) {
-      System.out.println("UC size inappropiate: " + unit_cell_size);
+    unitCellSize = unitCell.create_Unit_Cell(millerX, millerY, millerZ);
+    if (unitCellSize < 4 || unitCellSize > 127) {
+      System.out.println("UC size inappropiate: " + unitCellSize);
       System.exit(-1);
     }
     short[] UC_neig = unitCell.getNeighs();
     byte[] block = unitCell.getN_block();
 
-    float[] coords = new float[unit_cell_size * 3 + 3];
-    for (int i = 0; i < unit_cell_size; i++) {
+    float[] coords = new float[unitCellSize * 3 + 3];
+    for (int i = 0; i < unitCellSize; i++) {
       coords[i * 3] = unitCell.getCellsP()[i].getPos_x(0, 0, 0);
       coords[i * 3 + 1] = unitCell.getCellsP()[i].getPos_y(0, 0, 0);
       coords[i * 3 + 2] = unitCell.getCellsP()[i].getPos_z(0, 0, 0);
     }
 
-    coords[unit_cell_size * 3] = (float) unitCell.getLimitX();
-    coords[unit_cell_size * 3 + 1] = (float) unitCell.getLimitY();
-    coords[unit_cell_size * 3 + 2] = (float) unitCell.getLimitZ();
+    coords[unitCellSize * 3] = (float) unitCell.getLimitX();
+    coords[unitCellSize * 3 + 1] = (float) unitCell.getLimitY();
+    coords[unitCellSize * 3 + 2] = (float) unitCell.getLimitZ();
 
     double tamX = unitCell.getCellsP()[0].getLimitX() * sizeX;
     double tamY = unitCell.getCellsP()[0].getLimitY() * sizeY;
@@ -55,7 +55,7 @@ public class SiLattice extends AbstractEtchingLattice {
       this.sizeY = (int) Math.round((int) sizeY * tamX / tamY);
     }
 
-    lattice = new SiAtom[this.sizeX * this.sizeY * this.sizeZ * unit_cell_size];
+    lattice = new SiAtom[this.sizeX * this.sizeY * this.sizeZ * unitCellSize];
 
     this.create_atoms(coords, unitCell);
     this.interconnect_atoms(UC_neig, block);
@@ -75,7 +75,7 @@ public class SiLattice extends AbstractEtchingLattice {
 
   public SiAtom getAtom(int Unit_cell_X, int Unit_cell_Y, int Unit_cell_Z, int Unit_cell_pos) {
 
-    return lattice[((Unit_cell_Z * sizeY + Unit_cell_Y) * sizeX + Unit_cell_X) * unit_cell_size + Unit_cell_pos];
+    return lattice[((Unit_cell_Z * sizeY + Unit_cell_Y) * sizeX + Unit_cell_X) * unitCellSize + Unit_cell_pos];
   }
 
   @Override
@@ -85,14 +85,14 @@ public class SiLattice extends AbstractEtchingLattice {
     //----------------------------------------------------------
     for (int i = 0; i < this.sizeY; i++) {
       for (int j = 0; j < this.sizeX; j++) {
-        for (int a = 0; a < this.unit_cell_size; a++) {
-          lattice[(((sizeZ - 1) * sizeY + i) * sizeX + j) * unit_cell_size + a].setOnList(null);
-          lattice[(((sizeZ - 1) * sizeY + i) * sizeX + j) * unit_cell_size + a].unRemove();
+        for (int a = 0; a < this.unitCellSize; a++) {
+          lattice[(((sizeZ - 1) * sizeY + i) * sizeX + j) * unitCellSize + a].setOnList(null);
+          lattice[(((sizeZ - 1) * sizeY + i) * sizeX + j) * unitCellSize + a].unRemove();
         }
       }
     }
 
-    for (int k = 0; k < (sizeZ - 1) * sizeY * sizeX * unit_cell_size; k++) {
+    for (int k = 0; k < (sizeZ - 1) * sizeY * sizeX * unitCellSize; k++) {
       lattice[k].setOnList(null);
       lattice[k].unRemove();
       lattice[k].setAsBulk();
@@ -100,11 +100,11 @@ public class SiLattice extends AbstractEtchingLattice {
 
         // Update neighborhood of top atoms
     //----------------------------------------------------------  
-    for (int k = (sizeZ - 1) * sizeY * sizeX * unit_cell_size; k < sizeZ * sizeY * sizeX * unit_cell_size; k++) {
+    for (int k = (sizeZ - 1) * sizeY * sizeX * unitCellSize; k < sizeZ * sizeY * sizeX * unitCellSize; k++) {
       lattice[k].updateN1FromScratch();
     }
 
-    for (int k = (sizeZ - 1) * sizeY * sizeX * unit_cell_size; k < sizeZ * sizeY * sizeX * unit_cell_size; k++) {
+    for (int k = (sizeZ - 1) * sizeY * sizeX * unitCellSize; k < sizeZ * sizeY * sizeX * unitCellSize; k++) {
       lattice[k].updateN2FromScratch();
     }
 
@@ -112,9 +112,9 @@ public class SiLattice extends AbstractEtchingLattice {
     //----------------------------------------------------------
     for (int i = 0; i < this.sizeY; i++) {
       for (int j = 0; j < this.sizeX; j++) {
-        for (int a = 0; a < this.unit_cell_size; a++) {
+        for (int a = 0; a < this.unitCellSize; a++) {
 
-          lattice[(((this.sizeZ - 1) * this.sizeY + i) * this.sizeX + j) * this.unit_cell_size + a].remove();
+          lattice[(((this.sizeZ - 1) * this.sizeY + i) * this.sizeX + j) * this.unitCellSize + a].remove();
         }
       }
     }
@@ -126,7 +126,7 @@ public class SiLattice extends AbstractEtchingLattice {
     for (int a = 0; a < this.sizeZ; a++) {
       for (int b = 0; b < this.sizeY; b++) {
         for (int c = 0; c < this.sizeX; c++) {
-          for (int j = 0; j < unit_cell_size; j++) {
+          for (int j = 0; j < unitCellSize; j++) {
 
             float X = coords[j * 3] + c * (float) UC.getLimitX();
             float Y = coords[j * 3 + 1] + b * (float) UC.getLimitY();
@@ -147,7 +147,7 @@ public class SiLattice extends AbstractEtchingLattice {
     for (int Z = 0; Z < this.sizeZ; Z++) {
       for (int Y = 0; Y < this.sizeY; Y++) {
         for (int X = 0; X < this.sizeX; X++) {
-          for (int j = 0; j < unit_cell_size; j++) {
+          for (int j = 0; j < unitCellSize; j++) {
 
             for (int i = 0; i < 4; i++) {
 
@@ -196,10 +196,10 @@ public class SiLattice extends AbstractEtchingLattice {
               }
               if (vecino_Z < sizeZ) {
 
-                lattice[((Z * sizeY + Y) * sizeX + X) * unit_cell_size + j].setNeighbour(lattice[((vecino_Z * sizeY + vecino_Y) * sizeX + vecino_X) * unit_cell_size + pos_vecino], i);
+                lattice[((Z * sizeY + Y) * sizeX + X) * unitCellSize + j].setNeighbour(lattice[((vecino_Z * sizeY + vecino_Y) * sizeX + vecino_X) * unitCellSize + pos_vecino], i);
 
               } else {
-                lattice[((Z * sizeY + Y) * sizeX + X) * unit_cell_size + j].setNeighbour(null, i);
+                lattice[((Z * sizeY + Y) * sizeX + X) * unitCellSize + j].setNeighbour(null, i);
               }
             }
           }

@@ -6,7 +6,6 @@ package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.lattice.AbstractLattice;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
@@ -27,7 +26,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     this.sizeX = sizeX;
     this.sizeY = sizeY;
     sizeZ = 1;
-    unit_cell_size = 4;
+    unitCellSize = 4;
     this.modified = modified;
   }
 
