@@ -86,7 +86,7 @@ public abstract class AbstractKmcCanvas extends Canvas {
   }
 
   /**
-   * For printing the image to a file
+   * This method prints the current canvas to a file
    * @param i Simulation number
    */
   public void performDrawToImage(int i) {
