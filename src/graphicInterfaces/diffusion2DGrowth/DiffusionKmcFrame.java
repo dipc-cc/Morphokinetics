@@ -143,7 +143,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
 
       canvas1.setScale((Integer) jSpinner2.getValue());
-
+      this.setSize(canvas1.getSizeX(), canvas1.getSizeY());
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
