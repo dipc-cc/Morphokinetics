@@ -31,6 +31,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     this.canvas1.initialize();
     this.jSpinner2.setValue(((AbstractKmcCanvas) canvas1).getScale());
     this.setResizable(true);
+    this.setSize(canvas1.getSizeX()+20, canvas1.getSizeY()+20);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseReleased(java.awt.event.MouseEvent evt) {
