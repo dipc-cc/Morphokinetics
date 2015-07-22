@@ -8,6 +8,7 @@ import graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import java.awt.Color;
 import java.awt.Graphics;
+import kineticMonteCarlo.atom.AbstractAtom;
 
 public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
@@ -50,28 +51,28 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
-          case 0:
+          case AbstractAtom.TERRACE:
             g.setColor(Color.RED);
             break;
-          case 1:
+          case AbstractAtom.CORNER:
             g.setColor(Color.MAGENTA);
             break;
-          case 2:
+          case AbstractAtom.EDGE:
             g.setColor(Color.ORANGE);
             break;
-          case 3:
+          case AbstractAtom.KINK:
             g.setColor(Color.YELLOW);
             break;
-          case 4:
+          case AbstractAtom.BULK:
             g.setColor(Color.GREEN);
             break;
-          case 5:
+          case 5: // imposible
             g.setColor(Color.WHITE);
             break;
-          case 6:
+          case 6: // imposible
             g.setColor(Color.CYAN);
             break;
-          case 7:
+          case 7: // imposible
             g.setColor(Color.BLUE);
             break;
         }
