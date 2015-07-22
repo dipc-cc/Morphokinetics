@@ -27,4 +27,12 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     this.kmc.initializeRates(ratesFactory.getRates(myParser.getTemperature()));
 
   }
+  
+  /**
+   * Do nothing
+   */
+  @Override
+  public void finishSimulation(){
+    
+  }
 }

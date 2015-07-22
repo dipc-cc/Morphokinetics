@@ -47,8 +47,18 @@ public class SiSimulation extends AbstractEtchingSimulation {
     return tmpConfig;
   }
 
+  /**
+   * Do nothing
+   */
   @Override
   public void createFrame() {
+  }
+
+  /**
+   * Show the result of the simulation in a frame
+   */
+  @Override
+  public void finishSimulation() {
     try {
       new SiliconFrame().drawKmc(kmc);
     } catch (Exception e) {
@@ -57,5 +67,4 @@ public class SiSimulation extends AbstractEtchingSimulation {
       throw e;
     }
   }
-
 }

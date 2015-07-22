@@ -101,6 +101,8 @@ public abstract class AbstractSimulation {
 
   protected abstract void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser);
 
+  public abstract void finishSimulation();
+  
   public AbstractKmc getKmc() {
     return kmc;
   }
