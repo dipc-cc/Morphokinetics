@@ -84,11 +84,13 @@ public abstract class AbstractKmcCanvas extends Canvas {
 
   }
 
+  /**
+   * For printing the image to a file
+   * @param i Simulation number
+   */
   public void performDrawToImage(int i) {
-    /* For printing the image to a file */
     BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics = image.createGraphics();
-    //Graphics2D graphics = (Graphics2D) g;
     paint(graphics);
     graphics.dispose();
     try {
@@ -102,11 +104,5 @@ public abstract class AbstractKmcCanvas extends Canvas {
     } catch (IOException e) {
       e.printStackTrace();
     }
-  }
-
-  @Override
-  public void paint(Graphics g) {
-    g.setColor(Color.BLUE);
-    g.drawRect(10, 10, getWidth() - 20, getHeight() - 20);
   }
 }
