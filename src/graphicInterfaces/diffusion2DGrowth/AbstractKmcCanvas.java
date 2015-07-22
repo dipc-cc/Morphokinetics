@@ -20,9 +20,9 @@ import javax.imageio.ImageIO;
  * @author Nestor
  */
 public abstract class AbstractKmcCanvas extends Canvas {
-  
+
   public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
-  
+
   protected int baseX = 0;
   protected int baseY = 0;
   protected BufferStrategy strategy;  //BufferStratrgy
@@ -41,6 +41,14 @@ public abstract class AbstractKmcCanvas extends Canvas {
 
   public int getScale() {
     return scale;
+  }
+
+  public int getSizeX() {
+    return this.lattice.getSizeX() * scale;
+  }
+
+  public int getSizeY() {
+    return this.lattice.getSizeY() * scale;
   }
 
   public void setScale(int scale) {
@@ -87,6 +95,7 @@ public abstract class AbstractKmcCanvas extends Canvas {
 
   /**
    * This method prints the current canvas to a file
+   *
    * @param i Simulation number
    */
   public void performDrawToImage(int i) {
