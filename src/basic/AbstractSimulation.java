@@ -53,7 +53,7 @@ public abstract class AbstractSimulation {
         break;
       }
       default:
-        System.err.println("listType is now properly set");
+        System.err.println("listType is not properly set");
         System.err.println("listType currently is " + currentParser.getListType());
         System.err.println("Available options are \"linear\" and \"binned\" ");
         this.config = null;
