@@ -71,6 +71,7 @@ public abstract class AbstractSimulation {
 
   public void doSimulation() {
     float[][] sampledSurface = null;
+    long startTime = System.currentTimeMillis();
 
     if (currentParser.doPsd()) {
       //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
@@ -80,6 +81,7 @@ public abstract class AbstractSimulation {
 
     // Main loop
     for (int simulations = 0; simulations < currentParser.getNumberOfSimulations(); simulations++) {
+      long iterStartTime = System.currentTimeMillis();
       initializeRates(ratesFactory, kmc, currentParser);
       kmc.simulate();
       if (currentParser.printToImage()) {
@@ -89,7 +91,12 @@ public abstract class AbstractSimulation {
         kmc.getSampledSurface(sampledSurface);
         psd.addSurfaceSample(sampledSurface);
       }
+      System.out.println("Simulation number "+simulations + " executed in "
+              +(System.currentTimeMillis()-iterStartTime)+" ms");
     }
+    System.out.println("Executed "+currentParser.getNumberOfSimulations() + " simulations in " +
+            (System.currentTimeMillis() - startTime ) + ". Average iteration time = " + 
+            ((System.currentTimeMillis() - startTime )/currentParser.getNumberOfSimulations())+" ms");
 
     if (currentParser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
