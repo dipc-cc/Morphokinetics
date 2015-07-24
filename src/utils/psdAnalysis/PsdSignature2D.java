@@ -111,4 +111,21 @@ public class PsdSignature2D {
     }
   }
 
+  public void printToFile(int simulationNumber) {
+    Restart myRestart = new Restart();
+    int dimensions = 2;
+    int sizes[] = new int[2];
+    sizes[0] = psd.length;
+    sizes[1] = psd[0].length;
+    myRestart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
+  }
+
+  public void printSurfaceToFile(int simulationNumber, float[][] sampledSurface){
+    Restart myRestart = new Restart();
+    
+    int sizes[] = new int[2];
+    sizes[0] = sampledSurface.length;
+    sizes[1] = sampledSurface[0].length;
+    myRestart.writeSurfaceBinary(2, sizes, sampledSurface, simulationNumber);
+  }
 }
