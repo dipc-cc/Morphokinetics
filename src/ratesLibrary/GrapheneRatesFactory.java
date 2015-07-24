@@ -19,7 +19,6 @@ public class GrapheneRatesFactory implements IRatesFactory {
 
   /**
    * We don't use the temperature by now.
-   * @param experimentName
    * @param temperature
    * @return 
    */ 
