@@ -59,7 +59,6 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
     times[workId] += workers[workerId].getKmc().getTime();
     addToPsd(workId, surface);
 
-    System.out.println("Worker " + workerId + " finished a simulation :(" + workId + ")");
   }
 
   private void addToPsd(int workId, float[][] surface) {
