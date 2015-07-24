@@ -50,6 +50,7 @@ public class Parser {
   private int extraLevels;
   private boolean multithreaded;
   private boolean visualize;
+  private boolean withGui;
   private boolean justCentralFlake;
   private boolean printToImage;
   private boolean psd;
@@ -160,6 +161,11 @@ public class Parser {
       visualize = true;
     }
     try {
+      withGui = json.getBoolean("withGui");
+    } catch (JSONException e) {
+      withGui = true;
+    }
+    try {
       justCentralFlake = json.getBoolean("justCentralFlake");
     } catch (JSONException e) {
       justCentralFlake = true;
@@ -206,6 +212,7 @@ public class Parser {
     System.out.println("\ttemperature:\t\t" + temperature);
     System.out.println("\tflow:\t\t\t" + flow);
     System.out.println("\tvisualize:\t\t" + visualize);
+    System.out.println("\twithGui:\t\t"+ withGui);
     System.out.println("\tprintToImage\t\t" + printToImage);
     System.out.println("\tcalculationMode:\t" + calculationMode);
     System.out.println("\tpsd:\t\t\t" + psd);
@@ -309,8 +316,8 @@ public class Parser {
     return justCentralFlake;
   }
 
-  public boolean isVisualize() {
-    return visualize;
+  public boolean withGui(){
+    return withGui;
   }
 
   public boolean printToImage() {
