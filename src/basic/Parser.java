@@ -5,6 +5,7 @@
  */
 package basic;
 
+import static graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas.constant_Y;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -55,21 +56,27 @@ public class Parser {
   private boolean printToImage;
   private boolean psd;
 
-  private static final float constant_Y = (float) Math.sqrt(3) / 2.0f;
-
   /**
    * Constructor
    */
   public Parser() {
     this.islandDensityType = "COX_PRB";
     this.listType = "linear";
+    this.calculationMode = "Ag";
     this.temperature = 135;
+    this.presure = 135;
+    this.flow = 135;
     this.numberOfSimulations = 10;
     this.sizeX = 256;
     this.sizeY = (int) (sizeX / constant_Y);
+    this.binsLevels = 100;
+    this.extraLevels = 0;
     this.multithreaded = true;
     this.visualize = true;
+    this.withGui = true;
     this.justCentralFlake = true;
+    this.printToImage = false;
+    this.psd = false;
   }
 
   /**
@@ -109,6 +116,11 @@ public class Parser {
       listType = json.getString("listType");
     } catch (JSONException e) {
       islandDensityType = "linear";
+    }
+    try {
+      calculationMode = json.getString("calculationMode");
+    } catch (JSONException e) {
+      calculationMode = "Ag";
     }
     try {
       temperature = json.getInt("temperature");
@@ -176,11 +188,6 @@ public class Parser {
       printToImage = false;
     }
     try {
-      calculationMode = json.getString("calculationMode");
-    } catch (JSONException e) {
-      calculationMode = "Ag";
-    }
-    try {
       psd = json.getBoolean("psd");
     } catch (JSONException e) {
       psd = false;
@@ -212,7 +219,7 @@ public class Parser {
     System.out.println("\ttemperature:\t\t" + temperature);
     System.out.println("\tflow:\t\t\t" + flow);
     System.out.println("\tvisualize:\t\t" + visualize);
-    System.out.println("\twithGui:\t\t"+ withGui);
+    System.out.println("\twithGui:\t\t" + withGui);
     System.out.println("\tprintToImage\t\t" + printToImage);
     System.out.println("\tcalculationMode:\t" + calculationMode);
     System.out.println("\tpsd:\t\t\t" + psd);
@@ -316,7 +323,7 @@ public class Parser {
     return justCentralFlake;
   }
 
-  public boolean withGui(){
+  public boolean withGui() {
     return withGui;
   }
 
