@@ -29,7 +29,7 @@ public class Parser {
     basic, gosalvez
   };
   /**
-   * Can be COX_PRB or synthetic
+   * Can be COX_PRB or synthetic. Currently not used
    */
   private String islandDensityType;
   /**
