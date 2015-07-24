@@ -28,19 +28,20 @@ public class AgSimulation extends AbstractGrowthSimulation {
     this.ratesFactory = new AgAgRatesFactory();
     this.kmc = new AgAgKmc(config, sizeX, sizeY, currentParser.justCentralFlake());
   }
-  
+
   @Override
   public void createFrame() {
-    try {
-      frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
-    } catch (Exception e) {
-      System.err.println("Error: The execution is not able to create the X11 frame");
-      System.err.println("Finishing");
-      throw e;
-    }
-    if (currentParser.isVisualize()) {
-      frame.setVisible(true);
+    if (currentParser.withGui()) {
+      try {
+        frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+      } catch (Exception e) {
+        System.err.println("Error: The execution is not able to create the X11 frame");
+        System.err.println("Finishing");
+        throw e;
+      }
+      if (currentParser.visualize()) {
+        frame.setVisible(true);
+      }
     }
   }
-  
 }
