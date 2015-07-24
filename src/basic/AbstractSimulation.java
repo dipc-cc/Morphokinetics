@@ -90,6 +90,8 @@ public abstract class AbstractSimulation {
       if (currentParser.doPsd()) {
         kmc.getSampledSurface(sampledSurface);
         psd.addSurfaceSample(sampledSurface);
+        psd.printToFile(simulations);
+        psd.printSurfaceToFile(simulations, sampledSurface);
       }
       System.out.println("Simulation number "+simulations + " executed in "
               +(System.currentTimeMillis()-iterStartTime)+" ms");
@@ -103,7 +105,8 @@ public abstract class AbstractSimulation {
       psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
       new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
               .setLogScale(true)
-              .setShift(true);      
+              .setShift(true);
+      
       new Frame2D("Sampled surface").setMesh(sampledSurface);
     }
   }
