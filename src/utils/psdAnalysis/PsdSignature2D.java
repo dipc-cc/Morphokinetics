@@ -4,8 +4,11 @@
  */
 package utils.psdAnalysis;
 
+import basic.io.Restart;
 import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
 import java.util.concurrent.Semaphore;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -15,6 +18,8 @@ public class PsdSignature2D {
 
   private FloatFFT_2D fftCore;
   private float[][] psd;
+  private ArrayList<float[][]> psdVector;
+  private float[][] psdTmp;
   private float[][] buffer;
   private int measures;
   private Semaphore semaphore;
@@ -26,9 +31,11 @@ public class PsdSignature2D {
 
     fftCore = new FloatFFT_2D(binsY, binsX);
     psd = new float[binsY][binsX];
+    psdTmp = new float[binsY][binsX];
     buffer = new float[binsY][binsX * 2];
     measures = 0;
     semaphore = new Semaphore(1);
+    psdVector = new ArrayList<>();
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
@@ -51,9 +58,11 @@ public class PsdSignature2D {
 
     for (int i = 0; i < psd.length; i++) {
       for (int j = 0; j < psd[0].length; j++) {
-        psd[i][j] += buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1];
+        psdTmp[i][j] = buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1];
+        psd[i][j] += psdTmp[i][j];
       }
     }
+    psdVector.add(psdTmp);
     measures++;
     semaphore.release();
 
