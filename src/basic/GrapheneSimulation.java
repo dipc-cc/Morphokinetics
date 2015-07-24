@@ -38,7 +38,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
       System.err.println("Finishing");
       throw e;
     }
-    if (currentParser.isVisualize()) {
+    if (currentParser.visualize()) {
       frame.setVisible(true);
     }
   }
