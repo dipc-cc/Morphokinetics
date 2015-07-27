@@ -20,6 +20,8 @@ public abstract class AbstractKmc implements IKmc {
 
   public AbstractKmc(ListConfiguration config) {
     RNG = new Ranecu(System.nanoTime());
+    // for testing purposes
+    //RNG = new Ranecu(1,100); // Joseba: To create allways the same "Randoom" numbers
     list = config.createList();
   }
 
