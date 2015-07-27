@@ -104,7 +104,7 @@ public abstract class AbstractKmcCanvas extends Canvas {
     paint(graphics);
     graphics.dispose();
     try {
-      String imageName = "outfile_simulation_" + i + ".png";
+      String imageName = "results/surface" + i + ".png";
       System.out.println("Exporting image: " + imageName);
       FileOutputStream out = new FileOutputStream(imageName);
       ImageIO.write(image, "png", out);
