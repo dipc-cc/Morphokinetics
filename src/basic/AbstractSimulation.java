@@ -65,7 +65,7 @@ public abstract class AbstractSimulation {
   }
 
   /**
-   * Creates the simulation frame. 
+   * Creates the simulation frame.
    */
   public abstract void createFrame();
 
@@ -90,15 +90,19 @@ public abstract class AbstractSimulation {
       if (currentParser.doPsd()) {
         kmc.getSampledSurface(sampledSurface);
         psd.addSurfaceSample(sampledSurface);
-        psd.printToFile(simulations);
-        psd.printSurfaceToFile(simulations, sampledSurface);
+        if (currentParser.outputData()) {
+          psd.printToFile(simulations);
+          psd.printSurfaceToFile(simulations, sampledSurface);
+        }
       }
-      System.out.println("Simulation number "+simulations + " executed in "
-              +(System.currentTimeMillis()-iterStartTime)+" ms");
+      System.out.println("Simulation number " + simulations + " executed in "
+              + (System.currentTimeMillis() - iterStartTime) + " ms");
     }
-    System.out.println("Executed "+currentParser.getNumberOfSimulations() + " simulations in " +
-            (System.currentTimeMillis() - startTime ) + ". Average iteration time = " + 
-            ((System.currentTimeMillis() - startTime )/currentParser.getNumberOfSimulations())+" ms");
+    System.out.println("All " + currentParser.getNumberOfSimulations() + " simulations executed in "
+            + ((System.currentTimeMillis() - startTime) / currentParser.getNumberOfSimulations()) + " ms");
+    System.out.println("Executed " + currentParser.getNumberOfSimulations() + " simulations in "
+            + (System.currentTimeMillis() - startTime) + ". Average iteration time = "
+            + ((System.currentTimeMillis() - startTime) / currentParser.getNumberOfSimulations()) + " ms");
 
     if (currentParser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
@@ -106,7 +110,7 @@ public abstract class AbstractSimulation {
       new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
               .setLogScale(true)
               .setShift(true);
-      
+
       new Frame2D("Sampled surface").setMesh(sampledSurface);
     }
   }
@@ -114,7 +118,7 @@ public abstract class AbstractSimulation {
   protected abstract void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser);
 
   public abstract void finishSimulation();
-  
+
   public AbstractKmc getKmc() {
     return kmc;
   }
