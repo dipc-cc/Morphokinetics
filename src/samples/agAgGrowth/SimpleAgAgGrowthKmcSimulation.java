@@ -8,6 +8,7 @@ import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
 
@@ -16,8 +17,6 @@ import ratesLibrary.AgAgRatesFactory;
  * @author Nestor
  */
 public class SimpleAgAgGrowthKmcSimulation {
-
-  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
 
   public static void main(String args[]) {
 
@@ -46,7 +45,7 @@ public class SimpleAgAgGrowthKmcSimulation {
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
-    int sizeY = (int) (sizeX / constant_Y);
+    int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
     AgAgKmc kmc = new AgAgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true);
 

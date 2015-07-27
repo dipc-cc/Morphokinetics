@@ -21,8 +21,6 @@ import javax.imageio.ImageIO;
  */
 public abstract class AbstractKmcCanvas extends Canvas {
 
-  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
-
   protected int baseX = 0;
   protected int baseY = 0;
   protected BufferStrategy strategy;  //BufferStratrgy
@@ -108,7 +106,7 @@ public abstract class AbstractKmcCanvas extends Canvas {
       System.out.println("Exporting image: " + imageName);
       FileOutputStream out = new FileOutputStream(imageName);
       ImageIO.write(image, "png", out);
-      out.close();
+      out.close();    
     } catch (FileNotFoundException e) {
       e.printStackTrace();
     } catch (IOException e) {

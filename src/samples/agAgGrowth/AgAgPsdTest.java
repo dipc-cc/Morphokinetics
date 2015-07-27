@@ -10,9 +10,9 @@ import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
-import static samples.agAgGrowth.SimpleAgAgGrowthKmcSimulation.constant_Y;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -21,8 +21,6 @@ import utils.psdAnalysis.PsdSignature2D;
  * @author Nestor
  */
 public class AgAgPsdTest {
-
-  public static float constant_Y = (float) Math.sqrt(3) / 2.0f;
 
   public static void main(String args[]) {
 
@@ -65,7 +63,7 @@ public class AgAgPsdTest {
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
-    int sizeY = (int) (sizeX / constant_Y);
+    int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
     AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true);
 

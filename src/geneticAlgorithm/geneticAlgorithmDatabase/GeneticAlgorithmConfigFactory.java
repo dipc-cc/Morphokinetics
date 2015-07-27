@@ -23,9 +23,9 @@ import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
-import static samples.agAgGrowth.AgAgMultithreadedEvaluatorTest.constant_Y;
 import java.util.ArrayList;
 import java.util.List;
+import kineticMonteCarlo.lattice.AgAgLattice;
 
 /**
  *
@@ -140,7 +140,7 @@ public class GeneticAlgorithmConfigFactory {
                 .setListType(ListConfiguration.BINNED_LIST)
                 .setBinsPerLevel(20);
 
-        return new AgAgKmcConfig(256, (int) (256 / constant_Y), listConfig, deposition_rate, island_density);
+        return new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, deposition_rate, island_density);
 
     }
 

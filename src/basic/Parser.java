@@ -5,7 +5,6 @@
  */
 package basic;
 
-import static graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas.constant_Y;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -13,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import kineticMonteCarlo.lattice.AgAgLattice;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -69,7 +69,7 @@ public class Parser {
     this.flow = 135;
     this.numberOfSimulations = 10;
     this.sizeX = 256;
-    this.sizeY = (int) (sizeX / constant_Y);
+    this.sizeY = (int) (sizeX / AgAgLattice.YRatio);
     this.binsLevels = 100;
     this.extraLevels = 0;
     this.multithreaded = true;
@@ -152,7 +152,7 @@ public class Parser {
     try {
       sizeY = json.getInt("sizeY");
     } catch (JSONException e) {
-      sizeY = (int) (sizeX / constant_Y);
+      sizeY = (int) (sizeX / AgAgLattice.YRatio);
     }
     try {
       binsLevels = json.getInt("binsLevels");
