@@ -55,6 +55,7 @@ public class Parser {
   private boolean justCentralFlake;
   private boolean printToImage;
   private boolean psd;
+  private boolean outputData;
 
   /**
    * Constructor
@@ -77,6 +78,7 @@ public class Parser {
     this.justCentralFlake = true;
     this.printToImage = false;
     this.psd = false;
+    this.outputData = false;
   }
 
   /**
@@ -103,7 +105,7 @@ public class Parser {
       str += String.valueOf(readList.get(i));
     }
 
-    System.out.println("Read " + lines + " lines");
+    System.out.println("Parser read " + lines + " lines from " + filename);
 
     // Once the file is read, proceed to read the parameters
     JSONObject json = new JSONObject(str);
@@ -192,6 +194,11 @@ public class Parser {
     } catch (JSONException e) {
       psd = false;
     }
+    try {
+      outputData = json.getBoolean("outputData");
+    } catch (JSONException e) {
+      outputData = false;
+    }
     return 0;
   }
 
@@ -223,6 +230,7 @@ public class Parser {
     System.out.println("\tprintToImage\t\t" + printToImage);
     System.out.println("\tcalculationMode:\t" + calculationMode);
     System.out.println("\tpsd:\t\t\t" + psd);
+    System.out.println("\toutputData:\t\t" + outputData);
 
     return 0;
   }
@@ -337,5 +345,9 @@ public class Parser {
 
   public boolean doPsd() {
     return psd;
+  }
+  
+  public boolean outputData(){
+    return outputData;
   }
 }
