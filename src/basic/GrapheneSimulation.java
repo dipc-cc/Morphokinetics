@@ -26,7 +26,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
     super.initialiseKmc();
     
     this.ratesFactory = new GrapheneRatesFactory();
-    this.kmc = new GrapheneKmc(config, sizeX, sizeY, currentParser.justCentralFlake());
+    this.kmc = new GrapheneKmc(config, sizeX, sizeY, currentParser.justCentralFlake(), currentParser.randomise());
   }
 
   @Override

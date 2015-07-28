@@ -28,7 +28,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
 
     this.ratesFactory = new SiRatesFactory();
     this.siConfig = configKmc();
-    this.kmc = new SiEtchingKmc(siConfig);
+    this.kmc = new SiEtchingKmc(siConfig, currentParser.randomise());
   }
 
   /**
