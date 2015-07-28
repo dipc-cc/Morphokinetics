@@ -109,9 +109,10 @@ public abstract class AbstractSimulation {
       psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
       new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
               .setLogScale(true)
-              .setShift(true);
+              .setShift(true)
+              .performDrawToImage(1);
 
-      new Frame2D("Sampled surface").setMesh(sampledSurface);
+      new Frame2D("Sampled surface").setMesh(sampledSurface).performDrawToImage(2);
     }
   }
 
