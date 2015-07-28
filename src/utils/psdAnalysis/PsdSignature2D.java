@@ -24,6 +24,9 @@ public class PsdSignature2D {
   private int measures;
   private Semaphore semaphore;
   private boolean averaged = false;
+  private int binsY;
+  private int binsX;
+  private Restart myRestart;
   public static final int HORIZONTAL_SIMMETRY = 0;
   public static final int VERTICAL_SIMMETRY = 1;
 
@@ -36,6 +39,9 @@ public class PsdSignature2D {
     measures = 0;
     semaphore = new Semaphore(1);
     psdVector = new ArrayList<>();
+    binsY = binsY;
+    binsX = binsX;
+    myRestart = new Restart();
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
@@ -112,7 +118,6 @@ public class PsdSignature2D {
   }
 
   public void printToFile(int simulationNumber) {
-    Restart myRestart = new Restart();
     int dimensions = 2;
     int sizes[] = new int[2];
     sizes[0] = psd.length;
@@ -121,7 +126,6 @@ public class PsdSignature2D {
   }
 
   public void printSurfaceToFile(int simulationNumber, float[][] sampledSurface){
-    Restart myRestart = new Restart();
     
     int sizes[] = new int[2];
     sizes[0] = sampledSurface.length;
