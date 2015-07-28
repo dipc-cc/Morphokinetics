@@ -17,8 +17,8 @@ import utils.StaticRandom;
  */
 public class AgAgKmc extends Abstract2DDiffusionKmc {
 
-  public AgAgKmc(ListConfiguration config, int sizeX, int sizeY, boolean justCentralFlake) {
-    super(config, justCentralFlake);
+  public AgAgKmc(ListConfiguration config, int sizeX, int sizeY, boolean justCentralFlake, boolean randomise) {
+    super(config, justCentralFlake, randomise);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     this.lattice = new AgAgLattice(sizeX, sizeY, modifiedBuffer, distancePerStep);
@@ -27,9 +27,9 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     }
   }
 
-  public AgAgKmc(AgAgKmcConfig config, boolean justCentralFlake) {
+  public AgAgKmc(AgAgKmcConfig config, boolean justCentralFlake, boolean randomise) {
 
-    super(config.getListConfig(), justCentralFlake);
+    super(config.getListConfig(), justCentralFlake, randomise);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     this.lattice = new AgAgLattice(config.getSizeX(), config.getSizeY(), modifiedBuffer, distancePerStep);

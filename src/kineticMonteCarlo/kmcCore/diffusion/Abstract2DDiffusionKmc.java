@@ -27,9 +27,9 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   protected RoundPerimeter perimeter;
   protected DevitaAccelerator accelerator;
 
-  public Abstract2DDiffusionKmc(ListConfiguration config, boolean justCentralFlake) {
+  public Abstract2DDiffusionKmc(ListConfiguration config, boolean justCentralFlake, boolean randomise) {
 
-    super(config);
+    super(config, randomise);
     this.justCentralFlake = justCentralFlake;
     this.modifiedBuffer = new ModifiedBuffer();
     this.list.autoCleanup(true);

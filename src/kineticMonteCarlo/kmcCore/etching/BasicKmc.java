@@ -18,14 +18,14 @@ public class BasicKmc extends AbstractEtchingKmc {
 
   private double minHeight;
 
-  public BasicKmc(ListConfiguration listCconfig, int sizeX, int sizeY) {
-    super(listCconfig);
+  public BasicKmc(ListConfiguration listCconfig, int sizeX, int sizeY, boolean randomise) {
+    super(listCconfig, randomise);
     lattice = new BasicLattice(sizeX, sizeY);
 
   }
 
   /**
-   * this model ignores the deposition rate
+   * This model ignores the deposition rate
    * @param rates
    */ 
   @Override

@@ -18,17 +18,18 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
 
   private final double minHeight;
 
-  public SiEtchingKmc(SiEtchingKmcConfig config) {
-    super(config.listConfig);
+  public SiEtchingKmc(SiEtchingKmcConfig config, boolean randomise) {
+    super(config.listConfig, randomise);
     lattice = new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC);
 
     minHeight = ((SiLattice) lattice).getUnit_Cell().getLimitZ();
   }
 
-  /** 
+  /**
    * This model ignores the deposition rate
+   *
    * @param rates
-   */ 
+   */
   @Override
   public void initializeRates(double[] rates) {
 

@@ -14,8 +14,8 @@ import utils.list.ListConfiguration;
  */
 public abstract class AbstractEtchingKmc extends AbstractKmc {
 
-  public AbstractEtchingKmc(ListConfiguration config) {
-    super(config);
+  public AbstractEtchingKmc(ListConfiguration config, boolean randomise) {
+    super(config, randomise);
   }
 
   protected AbstractEtchingLattice lattice;
