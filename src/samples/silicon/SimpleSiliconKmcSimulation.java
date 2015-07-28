@@ -22,7 +22,7 @@ public class SimpleSiliconKmcSimulation {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config);
+    SiEtchingKmc kmc = new SiEtchingKmc(config, true);
 
     long start = System.nanoTime();
 

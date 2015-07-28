@@ -17,52 +17,52 @@ import ratesLibrary.GrapheneRatesFactory;
  */
 public class SimpleGrapheneKmcSimulation {
 
-    private static final double cos30 = Math.cos(30 * Math.PI / 180);
+  private static final double cos30 = Math.cos(30 * Math.PI / 180);
 
-    public static void main(String args[]) {
+  public static void main(String args[]) {
 
-        System.out.println("Simple simulation of the Graphene KMC");
+    System.out.println("Simple simulation of the Graphene KMC");
 
-        GrapheneRatesFactory ratesFactory = new GrapheneRatesFactory();
-        GrapheneKmc kmc = initialize_kmc();
-        DiffusionKmcFrame frame = create_graphics_frame(kmc);
-        frame.setVisible(true);
+    GrapheneRatesFactory ratesFactory = new GrapheneRatesFactory();
+    GrapheneKmc kmc = initialize_kmc();
+    DiffusionKmcFrame frame = create_graphics_frame(kmc);
+    frame.setVisible(true);
 
-        for (int i = 0; i < 10; i++) {
-            initializeRates(ratesFactory, kmc);
-            kmc.simulate();
-        }
-
-        float[][] surface = new float[256][256];
-        kmc.getSampledSurface(surface);
-
+    for (int i = 0; i < 10; i++) {
+      initializeRates(ratesFactory, kmc);
+      kmc.simulate();
     }
 
-    private static DiffusionKmcFrame create_graphics_frame(GrapheneKmc kmc) {
-        DiffusionKmcFrame frame = new DiffusionKmcFrame(new GrapheneKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
-        return frame;
+    float[][] surface = new float[256][256];
+    kmc.getSampledSurface(surface);
+
+  }
+
+  private static DiffusionKmcFrame create_graphics_frame(GrapheneKmc kmc) {
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new GrapheneKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    return frame;
+  }
+
+  private static GrapheneKmc initialize_kmc() {
+
+    ListConfiguration config = new ListConfiguration()
+            .setListType(ListConfiguration.LINEAR_LIST);
+
+    int sizeX = 256;
+    int sizeY = (int) (sizeX * (2 * cos30));
+    if ((sizeY & 1) != 0) {
+      sizeY++;
     }
+    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false, true);
+    return kmc;
+  }
 
-    private static GrapheneKmc initialize_kmc() {
+  private static void initializeRates(GrapheneRatesFactory reatesFactory, GrapheneKmc kmc) {
 
-        ListConfiguration config = new ListConfiguration()
-                .setListType(ListConfiguration.LINEAR_LIST);
+    double deposition_rate = reatesFactory.getDepositionRate(0);
+    double island_density = reatesFactory.getIslandDensity(0);
+    kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
+    kmc.initializeRates(reatesFactory.getRates(0));
 
-        int sizeX = 256;
-        int sizeY = (int) (sizeX * (2 * cos30));
-        if ((sizeY & 1) != 0) {
-            sizeY++;
-        }
-        GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false);
-        return kmc;
-    }
-
-    private static void initializeRates(GrapheneRatesFactory reatesFactory, GrapheneKmc kmc) {
-
-        double deposition_rate = reatesFactory.getDepositionRate(0);
-        double island_density = reatesFactory.getIslandDensity(0);
-        kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
-        kmc.initializeRates(reatesFactory.getRates(0));
-
-    }
+  }
 }

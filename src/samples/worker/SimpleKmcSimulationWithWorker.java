@@ -29,7 +29,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
 
     SiEtchingKmcConfig config = configKmc();
 
-    worker = new KmcWorker(new SiEtchingKmc(config),
+    worker = new KmcWorker(new SiEtchingKmc(config, true),
             worker_ID);
     worker.start();
 

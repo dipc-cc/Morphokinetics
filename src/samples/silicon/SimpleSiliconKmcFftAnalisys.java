@@ -24,7 +24,7 @@ public class SimpleSiliconKmcFftAnalisys {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config);
+    SiEtchingKmc kmc = new SiEtchingKmc(config, true);
 
     kmc.initializeRates(new SiRatesFactory()
             .getRates(350));

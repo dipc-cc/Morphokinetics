@@ -24,7 +24,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config);
+    SiEtchingKmc kmc = new SiEtchingKmc(config, true);
 
     float[][] PSD300_1
             = getPsdFromSimulation(kmc, 300);

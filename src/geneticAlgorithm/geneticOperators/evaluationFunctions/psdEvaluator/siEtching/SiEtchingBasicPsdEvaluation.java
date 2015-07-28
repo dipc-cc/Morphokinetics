@@ -24,7 +24,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
 
         psdSizeX = config.sizeX_UC * 2;
         psdSizeY = config.sizeY_UC * 2;
-        KMC = new SiEtchingKmc(config);
+        KMC = new SiEtchingKmc(config, true);
         psd = new PsdSignature2D(psdSizeY, psdSizeX);
         sampledSurface = new float[psdSizeY][psdSizeX];
         difference = new float[psdSizeY][psdSizeX];
