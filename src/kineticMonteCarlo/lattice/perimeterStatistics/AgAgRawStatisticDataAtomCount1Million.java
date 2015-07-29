@@ -8,7 +8,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  *
  * @author Nestor
  */
-public class AgAgRawStatisticDataAtomCount1Million extends AbstractStatisticAtom {
+public class AgAgRawStatisticDataAtomCount1Million extends AbstractStatistics {
    
     public AgAgRawStatisticDataAtomCount1Million(){
       this.setData(rawData);

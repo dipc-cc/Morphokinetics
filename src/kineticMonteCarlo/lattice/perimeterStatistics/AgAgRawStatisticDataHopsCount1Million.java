@@ -8,7 +8,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  *
  * @author Nestor
  */
-public class AgAgRawStatisticDataHopsCount1Million extends AbstractStatisticsHops {
+public class AgAgRawStatisticDataHopsCount1Million extends AbstractStatistics {
   
   public AgAgRawStatisticDataHopsCount1Million() {
     this.setData(rawData);

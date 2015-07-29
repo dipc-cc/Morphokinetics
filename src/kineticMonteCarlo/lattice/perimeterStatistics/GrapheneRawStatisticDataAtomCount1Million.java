@@ -24,7 +24,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  *
  * @author U010531
  */
-public class GrapheneRawStatisticDataAtomCount1Million extends AbstractStatisticAtom {
+public class GrapheneRawStatisticDataAtomCount1Million extends AbstractStatistics {
  
   public GrapheneRawStatisticDataAtomCount1Million(){
     this.setData(rawData);

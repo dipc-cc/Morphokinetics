@@ -9,7 +9,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class AbstractStatisticAtom {
+public abstract class AbstractStatistics {
   
   private int[][] data;
   

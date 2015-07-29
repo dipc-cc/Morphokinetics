@@ -18,8 +18,8 @@ public abstract class AbstractPerimeterStatistics {
   protected Map<Integer, Map<Integer, Integer>> hopsCountMap;
   protected Map<Integer, Map<Integer, Integer>> atomsCountMap;
 
-  public AbstractPerimeterStatistics(AbstractStatisticAtom statisticAtom, 
-          AbstractStatisticsHops statisticsHops){
+  public AbstractPerimeterStatistics(AbstractStatistics statisticAtom, 
+          AbstractStatistics statisticsHops){
  
     this.totalCount = statisticAtom.getTotalCount();
     this.atomsCountMap = new HashMap();
