@@ -5,11 +5,14 @@
  */
 package basic.io;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
+import java.util.StringTokenizer;
 
 /**
  *
@@ -57,7 +60,7 @@ public class Restart {
    */
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
     String fileName = FOLDER + "psd" + simulationNumber + ".txt";
-    writeLowText2D(data, fileName,true);
+    writeLowText2D(data, fileName, true);
   }
 
   /**
@@ -78,7 +81,11 @@ public class Restart {
 
   public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
     String fileName = FOLDER + "surface" + simulationNumber + ".txt";
-    writeLowText2D(data, fileName,false);
+    writeLowText2D(data, fileName, false);
+  }
+
+  public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) {
+    return readLowText2D(fileName, sizes);
   }
 
   /**
@@ -194,5 +201,29 @@ public class Restart {
       // if any I/O error occurs
       e.printStackTrace();
     }
+  }
+
+  private float[][] readLowText2D(String fileName, int[] sizes) {
+    float[][] data = new float[sizes[0]][sizes[1]];
+    System.out.println("Trying to read " + fileName + " file " + sizes[0] + " " + sizes[1]
+            + " " + data.length + " " + data[0].length);
+    try {
+
+      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      String line;
+      // <-- read whole line
+      line = in.readLine();
+      while (line != null) {
+        StringTokenizer tk = new StringTokenizer(line);
+        int i = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
+        int j = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
+        data[i][j] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+        line = in.readLine();
+      }
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+    return data;
   }
 }
