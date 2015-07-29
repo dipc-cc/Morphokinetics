@@ -9,6 +9,7 @@ import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
 import java.util.concurrent.Semaphore;
 
 import java.util.ArrayList;
+import utils.MathUtils;
 
 /**
  *
@@ -125,6 +126,14 @@ public class PsdSignature2D {
     myRestart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
   }
 
+  public void printAvgToFile(){
+    int dimensions = 2;
+    int sizes[] = new int[2];
+    sizes[0] = psd.length;
+    sizes[1] = psd[0].length;
+    myRestart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(psd, 1), -1);
+  }
+  
   public void printSurfaceToFile(int simulationNumber, float[][] sampledSurface){
     
     int sizes[] = new int[2];

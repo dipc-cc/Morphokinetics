@@ -113,6 +113,7 @@ public abstract class AbstractSimulation {
               .performDrawToImage(1);
 
       new Frame2D("Sampled surface").setMesh(sampledSurface).performDrawToImage(2);
+      psd.printAvgToFile();
     }
   }
 
