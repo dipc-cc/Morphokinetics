@@ -174,13 +174,13 @@ public class Restart {
       PrintWriter printWriter = new PrintWriter(file);
 
       // for each byte in the buffer
-      for (int i = 0; i < data[0].length; i++) {
-        for (int j = 0; j < data.length; j++) {
+      for (int i = 0; i < data.length; i++) {
+        for (int j = 0; j < data[0].length; j++) {
           int posX = i;
           int posY = j;
           if (shift) {
-            posX = (posX + data[0].length / 2) % data[0].length;
-            posY = (posY + data.length / 2) % data.length;
+            posX = (posX + data.length / 2) % data.length;
+            posY = (posY + data[0].length / 2) % data[0].length;
           }
           String s = format("%.3f", data[i][j]);
           printWriter.write(posX + " " + posY + " " + s + "\n");
