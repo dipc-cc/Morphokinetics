@@ -4,6 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore;
 
+import java.util.Date;
 import utils.list.AbstractList;
 import utils.list.ListConfiguration;
 import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
@@ -23,7 +24,7 @@ public abstract class AbstractKmc implements IKmc {
       RNG = new Ranecu(System.nanoTime());
     } else {
       // for testing purposes
-      RNG = new Ranecu(1, 100); // Joseba: To create allways the same "Randoom" numbers
+      RNG = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Randoom" numbers
     }
     list = config.createList();
   }
