@@ -56,7 +56,7 @@ public class Parser {
   private boolean printToImage;
   private boolean psd;
   private boolean outputData;
-  private boolean randomise;
+  private boolean randomSeed;
 
   /**
    * Constructor
@@ -80,7 +80,7 @@ public class Parser {
     this.printToImage = false;
     this.psd = false;
     this.outputData = false;
-    this.randomise = true;
+    this.randomSeed = true;
   }
 
   /**
@@ -202,9 +202,9 @@ public class Parser {
       outputData = false;
     }
     try {
-      randomise = json.getBoolean("randomise");
+      randomSeed = json.getBoolean("randomSeed");
     } catch (JSONException e) {
-      randomise = true;
+      randomSeed = true;
     }
     return 0;
   }
@@ -238,7 +238,7 @@ public class Parser {
     System.out.println("\tcalculationMode:\t" + calculationMode);
     System.out.println("\tpsd:\t\t\t" + psd);
     System.out.println("\toutputData:\t\t" + outputData);
-    System.out.println("\trandomise:\t\t" + randomise);
+    System.out.println("\trandomSeed:\t\t" + randomSeed);
 
     return 0;
   }
@@ -359,7 +359,7 @@ public class Parser {
     return outputData;
   }
   
-  public boolean randomise(){
-    return randomise;
+  public boolean randomSeed(){
+    return randomSeed;
   }
 }
