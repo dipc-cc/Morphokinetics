@@ -26,12 +26,9 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
     g.fillRect(baseX, baseY, (int) (lattice.getSizeX() * scale), (int) (lattice.getSizeY() * scale * AgAgLattice.YRatio));
 
     for (int j = 0; j < lattice.getSizeY(); j++) {          //Y
-      int i = 0;
-      int cont = 0;
       int Y = Math.round((lattice.getSizeY() - 1 - j) * scale * AgAgLattice.YRatio) + baseY;
-      while (true) {
-
-        int X = (int) ((cont * scale) + (j) / 2.0f * scale);
+      for (int i = 0; i < lattice.getSizeX(); i++) {
+        int X = (int) ((i * scale) + (j) / 2.0f * scale);
 
         if (X >= lattice.getSizeX() * scale) {
           X -= lattice.getSizeX() * scale;
@@ -83,12 +80,6 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
           } else if (!lattice.getAtom(i, j).isOutside() && type > 0) {
             g.drawOval(X, Y, scale, scale);
           }
-        }
-
-        i++;
-        cont++;
-        if (i == lattice.getSizeX()) {
-          break;
         }
       }
     }
