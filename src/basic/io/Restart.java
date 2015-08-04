@@ -49,6 +49,19 @@ public class Restart {
     writeLowBinary(dimensions, sizes, data, fileName);
   }
 
+  public void writePsdBinary(int dimensions, int[] sizes, float[][] data, String fileName) {
+    if (!fileName.startsWith(FOLDER)){
+      fileName = FOLDER + fileName;
+    }
+    writePsdText2D(dimensions, sizes, data, fileName);
+
+    String subfix = ".mko";
+    if (!fileName.endsWith(subfix)) {
+      fileName = fileName + ".mko";
+    }
+    writeLowBinary(dimensions, sizes, data, fileName);
+  }
+
   /**
    * Function to print to text file each PSD result. Mainly thought to plot it with gnuplot
    * Instructions to plot: > set dgrid3d 30,30 > splot "psd0.txt" u 1:2:3 w l
@@ -60,6 +73,14 @@ public class Restart {
    */
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
     String fileName = FOLDER + "psd" + simulationNumber + ".txt";
+    writeLowText2D(data, fileName, true);
+  }
+
+  public void writePsdText2D(int dimensions, int[] sizes, float[][] data, String fileName) {
+    String subfix = ".txt";
+    if (!fileName.endsWith(subfix)) {
+      fileName = fileName + ".txt";
+    }
     writeLowText2D(data, fileName, true);
   }
 
