@@ -41,15 +41,6 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
         }
         X += baseX;
 
-        if (X < 0 || X > 1024 || Y < 0 || Y > 1024) {
-          i++;
-          cont++;
-          if (i == lattice.getSizeX()) {
-            break;
-          }
-          continue;
-        }
-
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case AbstractAtom.TERRACE:
