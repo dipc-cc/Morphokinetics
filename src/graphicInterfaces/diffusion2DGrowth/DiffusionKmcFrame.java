@@ -26,12 +26,12 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
     initComponents();
     this.canvas1 = canvas1;
-    this.canvas1.setSize(jPanel1.getWidth(), jPanel1.getHeight());
+    this.canvas1.setSize(canvas1.getSizeX(),canvas1.getSizeY());
     this.jPanel1.add(canvas1);
     this.canvas1.initialize();
     this.jSpinner2.setValue(((AbstractKmcCanvas) canvas1).getScale());
     this.setResizable(true);
-    this.setSize(canvas1.getSizeX()+20, canvas1.getSizeY()+20);
+    this.setSize(canvas1.getSizeX()+25, canvas1.getSizeY()+35);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -105,11 +105,11 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 1024, Short.MAX_VALUE)
+      .addGap(0, 0, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
       jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGap(0, 1030, Short.MAX_VALUE)
+      .addGap(0, 0, Short.MAX_VALUE)
     );
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -144,7 +144,8 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
 
       canvas1.setScale((Integer) jSpinner2.getValue());
-      this.setSize(canvas1.getSizeX(), canvas1.getSizeY());
+      canvas1.setSize(canvas1.getSizeX(),canvas1.getSizeY());
+      this.setSize(canvas1.getSizeX()+25, canvas1.getSizeY()+35);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed

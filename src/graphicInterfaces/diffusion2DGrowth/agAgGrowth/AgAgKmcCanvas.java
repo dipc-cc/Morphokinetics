@@ -103,4 +103,9 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
     }
     g.dispose();
   }
+  
+  @Override
+  public int getSizeY() {
+    return (int) (this.lattice.getSizeY() * scale * AgAgLattice.YRatio);
+  }
 }
