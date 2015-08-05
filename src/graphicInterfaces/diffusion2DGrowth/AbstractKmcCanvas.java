@@ -14,6 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import kineticMonteCarlo.lattice.AgAgLattice;
 
 /**
  *
@@ -46,7 +47,7 @@ public abstract class AbstractKmcCanvas extends Canvas {
   }
 
   public int getSizeY() {
-    return this.lattice.getSizeY() * scale;
+    return (int) (this.lattice.getSizeY() * scale * AgAgLattice.YRatio);
   }
 
   public void setScale(int scale) {
