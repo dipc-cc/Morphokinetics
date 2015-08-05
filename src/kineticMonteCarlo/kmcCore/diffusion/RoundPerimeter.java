@@ -24,7 +24,6 @@ public class RoundPerimeter {
     this.perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
     // TODO change here the radius to enlarge the mesh (joseba) and not to use DLA. 125 is the maximum allowed value for the radius
     this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
-    //this.currentPerimeterRadius = 125;
     this.currentPerimeter = null;
   }
 
@@ -36,13 +35,11 @@ public class RoundPerimeter {
     return this.currentPerimeter;
   }
   public int goToNextRadius() {
-    System.out.println("Going to the next radius. From " + this.currentPerimeterRadius + " to " + perimeterStatistics.getNextRadiusInSize(currentPerimeterRadius));
     this.currentPerimeterRadius = perimeterStatistics.getNextRadiusInSize(currentPerimeterRadius);
     return this.currentPerimeterRadius;
   }
 
   public void setAtomPerimeter(Abstract2DDiffusionAtom[] perimeter) {
-    System.out.println("Calling setAtomPerimeter");
     this.currentPerimeter = perimeter;
 
   }
