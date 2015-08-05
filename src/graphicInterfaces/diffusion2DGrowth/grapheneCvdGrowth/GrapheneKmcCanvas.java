@@ -48,15 +48,6 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
           X += 0.5f * scale;
         }
 
-        if (X < 0 || X > 1024 || Y < 0 || Y > 1024) {
-          i++;
-          cont++;
-          if (i == lattice.getSizeX()) {
-            break;
-          }
-          continue;
-        }
-
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case 0:
@@ -111,4 +102,11 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
     g.dispose();
   }
+  
+  @Override
+  public int getSizeX() {
+    return (int) (lattice.getSizeX() * scale * 1.5f);
+  }
+  
+  
 }
