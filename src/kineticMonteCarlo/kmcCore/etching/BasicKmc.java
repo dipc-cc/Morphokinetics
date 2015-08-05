@@ -36,9 +36,9 @@ public class BasicKmc extends AbstractEtchingKmc {
     lattice.reset();
     minHeight = 4;
 
-    for (int i = 0; i < lattice.getSizeX(); i++) {
-      for (int j = 0; j < lattice.getSizeY(); j++) {
-        for (int k = 0; k < lattice.getSizeZ(); k++) {
+    for (int i = 0; i < lattice.getAxonSizeI(); i++) {
+      for (int j = 0; j < lattice.getAxonSizeJ(); j++) {
+        for (int k = 0; k < lattice.getAxonSizeK(); k++) {
           for (int l = 0; l < lattice.getSizeUC(); l++) {
 
             BasicAtom atom = (BasicAtom) lattice.getAtom(i, j, k, l);
@@ -56,7 +56,7 @@ public class BasicKmc extends AbstractEtchingKmc {
   protected boolean performSimulationStep() {
 
     BasicAtom atom = (BasicAtom) list.nextEvent(RNG);
-    if (atom.getY() > lattice.getSizeY() - minHeight) {
+    if (atom.getY() > lattice.getAxonSizeJ() - minHeight) {
 
       return true;
     }
@@ -77,7 +77,7 @@ public class BasicKmc extends AbstractEtchingKmc {
     int binY = surface.length;
     int binX = surface[0].length;
 
-    double scaleX = binX / (float) lattice.getSizeX();
+    double scaleX = binX / (float) lattice.getAxonSizeI();
     ListIterator<AbstractAtom> iterator = list.getIterator();
 
     while (iterator.hasNext()) {

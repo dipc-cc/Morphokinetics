@@ -17,11 +17,11 @@ import utils.StaticRandom;
  */
 public class AgAgKmc extends Abstract2DDiffusionKmc {
 
-  public AgAgKmc(ListConfiguration config, int sizeX, int sizeY, boolean justCentralFlake, boolean randomise) {
+  public AgAgKmc(ListConfiguration config, int axonSizeI, int axonSizeJ, boolean justCentralFlake, boolean randomise) {
     super(config, justCentralFlake, randomise);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    this.lattice = new AgAgLattice(sizeX, sizeY, modifiedBuffer, distancePerStep);
+    this.lattice = new AgAgLattice(axonSizeI, axonSizeJ, modifiedBuffer, distancePerStep);
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
     }
@@ -32,7 +32,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     super(config.getListConfig(), justCentralFlake, randomise);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    this.lattice = new AgAgLattice(config.getSizeX(), config.getSizeY(), modifiedBuffer, distancePerStep);
+    this.lattice = new AgAgLattice(config.getAxonSizeI(), config.getAxonSizeJ(), modifiedBuffer, distancePerStep);
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
     }
@@ -47,8 +47,8 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
 
       this.perimeter.setAtomPerimeter(lattice.setInside(perimeter.getCurrentRadius()));
 
-      int Ycenter = (lattice.getSizeY() / 2);
-      int Xcenter = (lattice.getSizeX() / 2) - (lattice.getSizeY() / 4);
+      int Ycenter = (lattice.getAxonSizeJ() / 2);
+      int Xcenter = (lattice.getAxonSizeI() / 2) - (lattice.getAxonSizeJ() / 4);
 
       this.depositAtom(Xcenter, Ycenter);
       this.depositAtom(Xcenter + 1, Ycenter);
@@ -64,8 +64,8 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     } else {
 
       for (int i = 0; i < 3; i++) {
-        int X = (int) (StaticRandom.raw() * lattice.getSizeX());
-        int Y = (int) (StaticRandom.raw() * lattice.getSizeY());
+        int X = (int) (StaticRandom.raw() * lattice.getAxonSizeI());
+        int Y = (int) (StaticRandom.raw() * lattice.getAxonSizeJ());
         depositAtom(X, Y);
       }
     }

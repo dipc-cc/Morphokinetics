@@ -15,26 +15,26 @@ import utils.list.ListConfiguration;
 public class AgAgKmcConfig {
     
     
-    private int sizeX;
-    private int sizeY;
+    private int axonSizeI;
+    private int axonSizeJ;
     private ListConfiguration listConfig;
-    private double deposition_rate;
-    private double island_density;
+    private double depositionRate;
+    private double islandDensity;
 
-    public AgAgKmcConfig(int sizeX, int sizeY, ListConfiguration listConfig, double deposition_rate, double island_density) {
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
+    public AgAgKmcConfig(int axonSizeI, int axonSizeJ, ListConfiguration listConfig, double depositionRate, double islandDensity) {
+        this.axonSizeI = axonSizeI;
+        this.axonSizeJ = axonSizeJ;
         this.listConfig = listConfig;
-        this.deposition_rate = deposition_rate;
-        this.island_density = island_density;
+        this.depositionRate = depositionRate;
+        this.islandDensity = islandDensity;
     }
 
-    public int getSizeX() {
-        return sizeX;
+    public int getAxonSizeI() {
+        return axonSizeI;
     }
 
-    public int getSizeY() {
-        return sizeY;
+    public int getAxonSizeJ() {
+        return axonSizeJ;
     }
 
     public ListConfiguration getListConfig() {
@@ -42,11 +42,11 @@ public class AgAgKmcConfig {
     }
 
     public double getDepositionRate() {
-        return deposition_rate;
+        return depositionRate;
     }
 
     public double getIslandDensity() {
-        return island_density;
+        return islandDensity;
     }
     
     

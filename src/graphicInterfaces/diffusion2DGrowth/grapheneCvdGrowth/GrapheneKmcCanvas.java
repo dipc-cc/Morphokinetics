@@ -23,12 +23,12 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
     super.paint(g);
 
     g.setColor(Color.black);
-    g.fillRect(baseX, baseY, (int) (lattice.getSizeX() * scale * 1.5f), (int) (lattice.getSizeY() * scale * AgAgLattice.YRatio));
+    g.fillRect(baseX, baseY, (int) (lattice.getAxonSizeI() * scale * 1.5f), (int) (lattice.getAxonSizeJ() * scale * AgAgLattice.YRatio));
 
-    for (int j = 0; j < lattice.getSizeY(); j++) {          //Y
+    for (int j = 0; j < lattice.getAxonSizeJ(); j++) {          //Y
       int i = 0;
       int cont = 0;
-      int Y = Math.round((lattice.getSizeY() - 1 - j) * scale * AgAgLattice.YRatio  ) + baseY;
+      int Y = Math.round((lattice.getAxonSizeJ() - 1 - j) * scale * AgAgLattice.YRatio  ) + baseY;
       while (true) {
 
         if ((j & 1) == 0) {
@@ -94,7 +94,7 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
         i++;
         cont++;
-        if (i == lattice.getSizeX()) {
+        if (i == lattice.getAxonSizeI()) {
           break;
         }
       }
@@ -105,7 +105,7 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
   
   @Override
   public int getSizeX() {
-    return (int) (lattice.getSizeX() * scale * 1.5f);
+    return (int) (lattice.getAxonSizeI() * scale * 1.5f);
   }
   
   

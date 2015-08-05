@@ -44,8 +44,8 @@ public class BasicPanel extends javax.swing.JPanel {
   public void setKMC(BasicKmc kmc) {
     this.kmc = kmc;
 
-    gradientPaint_etched = new GradientPaint(new Point(0, 0), Color.black, new Point(0, kmc.getLattice().getSizeY()), Color.gray.darker(), false);
-    gradientPaint_bulk = new GradientPaint(new Point(0, 0), Color.white, new Point(0, kmc.getLattice().getSizeY()), Color.gray.brighter(), false);
+    gradientPaint_etched = new GradientPaint(new Point(0, 0), Color.black, new Point(0, kmc.getLattice().getAxonSizeJ()), Color.gray.darker(), false);
+    gradientPaint_bulk = new GradientPaint(new Point(0, 0), Color.white, new Point(0, kmc.getLattice().getAxonSizeJ()), Color.gray.brighter(), false);
 
   }
 
@@ -55,8 +55,8 @@ public class BasicPanel extends javax.swing.JPanel {
     if (this.kmc == null) {
       return;
     }
-    int sizeX = kmc.getLattice().getSizeX();
-    int sizeY = kmc.getLattice().getSizeY();
+    int sizeX = kmc.getLattice().getAxonSizeI();
+    int sizeY = kmc.getLattice().getAxonSizeJ();
 
     Paint defaultPaint = ((Graphics2D) g).getPaint();
 

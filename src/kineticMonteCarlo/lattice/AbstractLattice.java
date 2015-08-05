@@ -12,29 +12,29 @@ import kineticMonteCarlo.atom.AbstractAtom;
  */
 public abstract class AbstractLattice {
 
-  protected int sizeX;
-  protected int sizeY;
-  protected int sizeZ;
+  protected int axonSizeI;
+  protected int axonSizeJ;
+  protected int axonSizeK;
 
   protected int unitCellSize;
 
-  public int getSizeX() {
-    return sizeX;
+  public int getAxonSizeI() {
+    return axonSizeI;
   }
 
-  public int getSizeY() {
-    return sizeY;
+  public int getAxonSizeJ() {
+    return axonSizeJ;
   }
 
-  public int getSizeZ() {
-    return sizeZ;
+  public int getAxonSizeK() {
+    return axonSizeK;
   }
 
   public int getSizeUC() {
     return unitCellSize;
   }
 
-  public abstract AbstractAtom getAtom(int X, int Y, int Z, int Unit_cell_pos);
+  public abstract AbstractAtom getAtom(int i, int j, int k, int unitCellPos);
 
   public abstract void reset();
 

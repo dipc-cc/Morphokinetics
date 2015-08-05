@@ -17,12 +17,12 @@ import utils.StaticRandom;
  */
 public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
-  public GrapheneKmc(ListConfiguration config, int sizeX, int sizeY, boolean justCentralFlake, boolean randomise) {
+  public GrapheneKmc(ListConfiguration config, int axonSizeI, int axonSizeJ, boolean justCentralFlake, boolean randomise) {
     super(config, justCentralFlake, randomise);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    this.lattice = new GrapheneLattice(sizeX, sizeY, modifiedBuffer, distancePerStep);
+    this.lattice = new GrapheneLattice(axonSizeI, axonSizeJ, modifiedBuffer, distancePerStep);
 
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
@@ -35,24 +35,24 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
       this.perimeter = new RoundPerimeter("Graphene_CVD_growth");
       this.perimeter.setAtomPerimeter(lattice.setInside(perimeter.getCurrentRadius()));
 
-      int Ycenter = lattice.getSizeY() / 2;
-      int Xcenter = (lattice.getSizeX() / 2);
+      int iCenter = lattice.getAxonSizeJ() / 2;
+      int jCenter = lattice.getAxonSizeI() / 2;
       for (int j = -1; j < 2; j++) {
         for (int i = -1; i < 1; i++) {
-          this.depositAtom(Xcenter + i, Ycenter + j);
+          this.depositAtom(jCenter + i, iCenter + j);
         }
       }
     } else {
       for (int i = 0; i < 3; i++) {
-        int X = (int) (StaticRandom.raw() * lattice.getSizeX());
-        int Y = (int) (StaticRandom.raw() * lattice.getSizeY());
-        depositAtom(X, Y);
+        int iAxon = (int) (StaticRandom.raw() * lattice.getAxonSizeI());
+        int jAxon = (int) (StaticRandom.raw() * lattice.getAxonSizeJ());
+        depositAtom(iAxon, jAxon);
       }
     }
   }
 
-  private void configureDevitaAccelerator(HopsPerStep distance_per_step) {
-    this.accelerator = new DevitaAccelerator(this.lattice, distance_per_step);
+  private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
+    this.accelerator = new DevitaAccelerator(this.lattice, distancePerStep);
 
     this.accelerator.tryToSpeedUp(0,
             new DevitaHopsConfig()

@@ -21,16 +21,16 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
   private static final double cos60 = Math.cos(60 * Math.PI / 180);
   private static final double cos30 = Math.cos(30 * Math.PI / 180);
 
-  public GrapheneLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distance_per_step) {
+  public GrapheneLattice(int axonSizeI, int axonSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
-    super(sizeX, sizeY, modified, distance_per_step);
+    super(axonSizeI, axonSizeJ, modified);
 
-    atoms = new GrapheneAtom[sizeX][sizeY];
+    atoms = new GrapheneAtom[axonSizeI][axonSizeJ];
 
     if (latticeNeighborhoodData == null) {
       initializeNeighborHoodCache();
     }
-    createAtoms(distance_per_step);
+    createAtoms(distancePerStep);
     setAngles();
   }
 
@@ -53,131 +53,130 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     latticeNeighborhoodData[11] = (-1 & 0xFFFF) + (0 << 16);
   }
 
-  private void createAtoms(HopsPerStep distance_per_step) {
+  private void createAtoms(HopsPerStep distancePerStep) {
 
-    for (int i = 0; i < sizeX; i += 2) { //X
-      for (int j = 0; j < sizeY; j += 2) { //Y
+    for (int iAxon = 0; iAxon < axonSizeI; iAxon += 2) {
+      for (int jAxon = 0; jAxon < axonSizeJ; jAxon += 2) {
         //para cada unit cell
 
         //atomo 0 de la unit cell, tipo 0
-        atoms[i][j] = new GrapheneAtom((short) i, (short) j, distance_per_step);
+        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
 
-        i++;
+        iAxon++;
         //atomo 1 de la unit cell, tipo 1
-        atoms[i][j] = new GrapheneAtom((short) i, (short) j, distance_per_step);
+        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
 
-        i--;
-        j++;
+        iAxon--;
+        jAxon++;
         //atomo 2 de la unit cell, tipo 1   
-        atoms[i][j] = new GrapheneAtom((short) i, (short) j, distance_per_step);
+        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
 
-        i++;
+        iAxon++;
         //atomo 3 de la unit cell, tipo 0
-        atoms[i][j] = new GrapheneAtom((short) i, (short) j, distance_per_step);
+        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
 
-        i--;
-        j--;
+        iAxon--;
+        jAxon--;
       }
     }
   }
 
   @Override
-  public GrapheneAtom getNeighbour(int Xpos, int Ypos, int neighbor) {
+  public GrapheneAtom getNeighbour(int xCart, int yCart, int neighbour) {
 
-    int vec = latticeNeighborhoodData[neighbor];                      //esto define el tipo de atomo
+    int vec = latticeNeighborhoodData[neighbour];                      //esto define el tipo de atomo
     int vec_X = (short) (vec & 0xFFFF);
     int vec_Y = ((vec >> 16));
-    if (((Xpos + Ypos) & 1) != 0) {
+    if (((xCart + yCart) & 1) != 0) {
       vec_X = -vec_X;
       vec_Y = -vec_Y;
     }
-    int posXV = Xpos + vec_X;
-    if (posXV < 0) {
-      posXV += atoms.length;
-    } else if (posXV >= atoms.length) {
-      posXV -= atoms.length;
+    int iAxon = xCart + vec_X;
+    if (iAxon < 0) {
+      iAxon += axonSizeI;
+    } else if (iAxon >= axonSizeI) {
+      iAxon -= axonSizeI;
     }
-    int posYV = Ypos + vec_Y;
-    if (posYV < 0) {
-      posYV += atoms[0].length;
-    } else if (posYV >= atoms[0].length) {
-      posYV -= atoms[0].length;
+    int jAxon = yCart + vec_Y;
+    if (jAxon < 0) {
+      jAxon += axonSizeJ;
+    } else if (jAxon >= axonSizeJ) {
+      jAxon -= axonSizeJ;
     }
-    return (GrapheneAtom) atoms[posXV][posYV];
+    return (GrapheneAtom) atoms[iAxon][jAxon];
   }
 
-  public int getPosX(int X, int Y, int pos, boolean tipo0) {
+  public int getCartPosX(int iAxon, int jAxon, int pos, boolean type0) {
     int vec_X = (short) (latticeNeighborhoodData[pos] & 0xFFFF);
-    if (!tipo0) {
+    if (!type0) {
       vec_X = -vec_X;
     }
-    int posXV = X + vec_X;
+    int posXV = iAxon + vec_X;
     if (posXV < 0) {
-      posXV += atoms.length;
-    } else if (posXV >= atoms.length) {
-      posXV -= atoms.length;
+      posXV += axonSizeI;
+    } else if (posXV >= axonSizeI) {
+      posXV -= axonSizeI;
     }
     return posXV;
   }
 
-  public int getPosY(int X, int Y, int pos, boolean tipo0) {
+  public int getCartPosY(int iAxon, int jAxon, int pos, boolean type0) {
     int vec_Y = ((latticeNeighborhoodData[pos] >> 16));
-    if (!tipo0) {
+    if (!type0) {
       vec_Y = -vec_Y;
     }
-    int posYV = Y + vec_Y;
+    int posYV = jAxon + vec_Y;
     if (posYV < 0) {
-      posYV += atoms[0].length;
-    } else if (posYV >= atoms[0].length) {
-      posYV -= atoms[0].length;
+      posYV += axonSizeJ;
+    } else if (posYV >= axonSizeJ) {
+      posYV -= axonSizeJ;
     }
     return posYV;
   }
 
   @Override
-  public int getAvailableDistance(int atomType, short Xpos, short Ypos, int thresholdDistance) {
+  public int getAvailableDistance(int atomType, short iAxon, short jAxon, int thresholdDistance) {
 
     int[] point = new int[2];
     switch (atomType) {
       case 0:
-        return getClearAreaTerrace(Xpos, Ypos, thresholdDistance);
+        return getClearAreaTerrace(iAxon, jAxon, thresholdDistance);
       case 2:
-        return getClearAreaZigzag(Xpos, Ypos, thresholdDistance, point, StaticRandom.raw());
+        return getClearAreaZigzag(iAxon, jAxon, thresholdDistance, point, StaticRandom.raw());
       case 3:
-        return getClearAreaArmchair(Xpos, Ypos, thresholdDistance, point, StaticRandom.raw());
+        return getClearAreaArmchair(iAxon, jAxon, thresholdDistance, point, StaticRandom.raw());
       default:
         return 0;
     }
   }
 
   @Override
-  public Abstract2DDiffusionAtom getFarSite(int originType, short Xpos, short Ypos, int distance) {
+  public Abstract2DDiffusionAtom getFarSite(int originType, short iAxon, short jAxon, int distance) {
 
     int[] point = new int[2];
     switch (originType) {
       case 0:
-        return chooseClearAreaTerrace(Xpos, Ypos, distance, StaticRandom.raw());
+        return chooseClearAreaTerrace(iAxon, jAxon, distance, StaticRandom.raw());
       case 2:
-        getClearAreaZigzag(Xpos, Ypos, distance, point, StaticRandom.raw());
+        getClearAreaZigzag(iAxon, jAxon, distance, point, StaticRandom.raw());
         return this.getAtom(point[0], point[1]);
       case 3:
-        getClearAreaArmchair(Xpos, Ypos, distance, point, StaticRandom.raw());
+        getClearAreaArmchair(iAxon, jAxon, distance, point, StaticRandom.raw());
         return this.getAtom(point[0], point[1]);
       default:
         return null;
     }
   }
 
-  private Abstract2DDiffusionAtom chooseClearAreaTerrace(short X, short Y, int s, double raw) {
+  private Abstract2DDiffusionAtom chooseClearAreaTerrace(short iAxonOrigin, short jAxonOrigin, int s, double raw) {
 
     int temp = (int) (raw * (s * 2 * 6));
 
-    boolean tipo_0 = (((X + Y) & 1) == 0);
-    int X_v, Y_v;
-    X_v = X;
-    Y_v = (Y - s * 2);
-    if (Y_v < 0) {
-      Y_v += atoms[0].length;
+    boolean type0 = (((iAxonOrigin + jAxonOrigin) & 1) == 0);
+    int iAxon = iAxonOrigin;
+    int jAxon = (jAxonOrigin - s * 2);
+    if (jAxon < 0) {
+      jAxon += axonSizeJ;
     }
 
     int counter = 0;
@@ -185,270 +184,269 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[X_v][Y_v];
+        return atoms[iAxon][jAxon];
       }
-      if (tipo_0) {
-        X_v = getPosX(X_v, Y_v, 0, true);
-        Y_v = getPosY(X_v, Y_v, 0, true);
+      if (type0) {
+        iAxon = getCartPosX(iAxon, jAxon, 0, true);
+        jAxon = getCartPosY(iAxon, jAxon, 0, true);
       } else {
-        X_v = getPosX(X_v, Y_v, 1, false);
-        Y_v = getPosY(X_v, Y_v, 1, false);
+        iAxon = getCartPosX(iAxon, jAxon, 1, false);
+        jAxon = getCartPosY(iAxon, jAxon, 1, false);
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[X_v][Y_v];
+        return atoms[iAxon][jAxon];
       }
-      if (tipo_0) {
-        X_v = getPosX(X_v, Y_v, 2, true);
-        Y_v = getPosY(X_v, Y_v, 2, true);
+      if (type0) {
+        iAxon = getCartPosX(iAxon, jAxon, 2, true);
+        jAxon = getCartPosY(iAxon, jAxon, 2, true);
       } else {
-        X_v = getPosX(X_v, Y_v, 1, false);
-        Y_v = getPosY(X_v, Y_v, 1, false);
+        iAxon = getCartPosX(iAxon, jAxon, 1, false);
+        jAxon = getCartPosY(iAxon, jAxon, 1, false);
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[X_v][Y_v];
+        return atoms[iAxon][jAxon];
       }
-      if (tipo_0) {
-        X_v = getPosX(X_v, Y_v, 2, true);
-        Y_v = getPosY(X_v, Y_v, 2, true);
+      if (type0) {
+        iAxon = getCartPosX(iAxon, jAxon, 2, true);
+        jAxon = getCartPosY(iAxon, jAxon, 2, true);
       } else {
-        X_v = getPosX(X_v, Y_v, 0, false);
-        Y_v = getPosY(X_v, Y_v, 0, false);
+        iAxon = getCartPosX(iAxon, jAxon, 0, false);
+        jAxon = getCartPosY(iAxon, jAxon, 0, false);
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[X_v][Y_v];
+        return atoms[iAxon][jAxon];
       }
-      if (tipo_0) {
-        X_v = getPosX(X_v, Y_v, 1, true);
-        Y_v = getPosY(X_v, Y_v, 1, true);
+      if (type0) {
+        iAxon = getCartPosX(iAxon, jAxon, 1, true);
+        jAxon = getCartPosY(iAxon, jAxon, 1, true);
       } else {
-        X_v = getPosX(X_v, Y_v, 0, false);
-        Y_v = getPosY(X_v, Y_v, 0, false);
+        iAxon = getCartPosX(iAxon, jAxon, 0, false);
+        jAxon = getCartPosY(iAxon, jAxon, 0, false);
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[X_v][Y_v];
+        return atoms[iAxon][jAxon];
       }
-      if (tipo_0) {
-        X_v = getPosX(X_v, Y_v, 1, true);
-        Y_v = getPosY(X_v, Y_v, 1, true);
+      if (type0) {
+        iAxon = getCartPosX(iAxon, jAxon, 1, true);
+        jAxon = getCartPosY(iAxon, jAxon, 1, true);
       } else {
-        X_v = getPosX(X_v, Y_v, 2, false);
-        Y_v = getPosY(X_v, Y_v, 2, false);
+        iAxon = getCartPosX(iAxon, jAxon, 2, false);
+        jAxon = getCartPosY(iAxon, jAxon, 2, false);
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[X_v][Y_v];
+        return atoms[iAxon][jAxon];
       }
-      if (tipo_0) {
-        X_v = getPosX(X_v, Y_v, 0, true);
-        Y_v = getPosY(X_v, Y_v, 0, true);
+      if (type0) {
+        iAxon = getCartPosX(iAxon, jAxon, 0, true);
+        jAxon = getCartPosY(iAxon, jAxon, 0, true);
       } else {
-        X_v = getPosX(X_v, Y_v, 2, false);
-        Y_v = getPosY(X_v, Y_v, 2, false);
+        iAxon = getCartPosX(iAxon, jAxon, 2, false);
+        jAxon = getCartPosY(iAxon, jAxon, 2, false);
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
     }
     return null;
   }
 
-  private int getClearAreaTerrace(short X, short Y, int m) {
+  private int getClearAreaTerrace(short iAxonOrigin, short jAxonOrigin, int m) {
 
     int s = 1;
 
-    boolean type_0 = (((X + Y) & 1) == 0);
+    boolean type0 = (((iAxonOrigin + jAxonOrigin) & 1) == 0);
 
-    short X_v, Y_v;
-    X_v = X;
+    short iAxon;
+    iAxon = iAxonOrigin;
 
-    Y_v = (short) (Y - 2);
-    if (Y_v < 0) {
-      Y_v += atoms[0].length;
+    short jAxon = (short) (jAxonOrigin - 2);
+    if (jAxon < 0) {
+      jAxon += axonSizeJ;
     }
-    byte error_code = 0;
+    byte errorCode = 0;
 
     out:
     while (true) {
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
-        if (type_0) {
-          a = getNeighbour(X_v, Y_v, 0);
+        if (type0) {
+          a = getNeighbour(iAxon, jAxon, 0);
         } else {
-          a = getNeighbour(X_v, Y_v, 1);
+          a = getNeighbour(iAxon, jAxon, 1);
         }
         if (a.isOutside()) {
-          error_code |= 1;
+          errorCode |= 1;
         }
         if (a.isOccupied()) {
-          error_code |= 2;
+          errorCode |= 2;
           break out;
         }
-        X_v = a.getX();
-        Y_v = a.getY();
-        type_0 = !type_0;
+        iAxon = a.getX();
+        jAxon = a.getY();
+        type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
-        if (type_0) {
-          a = getNeighbour(X_v, Y_v, 2);
+        if (type0) {
+          a = getNeighbour(iAxon, jAxon, 2);
         } else {
-          a = getNeighbour(X_v, Y_v, 1);
+          a = getNeighbour(iAxon, jAxon, 1);
         }
         if (a.isOutside()) {
-          error_code |= 1;
+          errorCode |= 1;
         }
         if (a.isOccupied()) {
-          error_code |= 2;
+          errorCode |= 2;
           break out;
         }
-        X_v = a.getX();
-        Y_v = a.getY();
-        type_0 = !type_0;
+        iAxon = a.getX();
+        jAxon = a.getY();
+        type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
-        if (type_0) {
-          a = getNeighbour(X_v, Y_v, 2);
+        if (type0) {
+          a = getNeighbour(iAxon, jAxon, 2);
         } else {
-          a = getNeighbour(X_v, Y_v, 0);
+          a = getNeighbour(iAxon, jAxon, 0);
         }
         if (a.isOutside()) {
-          error_code |= 1;
+          errorCode |= 1;
         }
         if (a.isOccupied()) {
-          error_code |= 2;
+          errorCode |= 2;
           break out;
         }
-        X_v = a.getX();
-        Y_v = a.getY();
-        type_0 = !type_0;
+        iAxon = a.getX();
+        jAxon = a.getY();
+        type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
-        if (type_0) {
-          a = getNeighbour(X_v, Y_v, 1);
+        if (type0) {
+          a = getNeighbour(iAxon, jAxon, 1);
         } else {
-          a = getNeighbour(X_v, Y_v, 0);
+          a = getNeighbour(iAxon, jAxon, 0);
         }
         if (a.isOutside()) {
-          error_code |= 1;
+          errorCode |= 1;
         }
         if (a.isOccupied()) {
-          error_code |= 2;
+          errorCode |= 2;
           break out;
         }
-        X_v = a.getX();
-        Y_v = a.getY();
-        type_0 = !type_0;
+        iAxon = a.getX();
+        jAxon = a.getY();
+        type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
-        if (type_0) {
-          a = getNeighbour(X_v, Y_v, 1);
+        if (type0) {
+          a = getNeighbour(iAxon, jAxon, 1);
         } else {
-          a = getNeighbour(X_v, Y_v, 2);
+          a = getNeighbour(iAxon, jAxon, 2);
         }
         if (a.isOutside()) {
-          error_code |= 1;
+          errorCode |= 1;
         }
         if (a.isOccupied()) {
-          error_code |= 2;
+          errorCode |= 2;
           break out;
         }
-        X_v = a.getX();
-        Y_v = a.getY();
-        type_0 = !type_0;
+        iAxon = a.getX();
+        jAxon = a.getY();
+        type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
-        if (type_0) {
-          a = getNeighbour(X_v, Y_v, 0);
+        if (type0) {
+          a = getNeighbour(iAxon, jAxon, 0);
         } else {
-          a = getNeighbour(X_v, Y_v, 2);
+          a = getNeighbour(iAxon, jAxon, 2);
         }
         if (a.isOutside()) {
-          error_code |= 1;
+          errorCode |= 1;
         }
         if (a.isOccupied()) {
-          error_code |= 2;
+          errorCode |= 2;
           break out;
         }
-        X_v = a.getX();
-        Y_v = a.getY();
-        type_0 = !type_0;
+        iAxon = a.getX();
+        jAxon = a.getY();
+        type0 = !type0;
       }
 
-      if (error_code != 0) {
+      if (errorCode != 0) {
         break;
       }
       if (s >= m) {
         return s;
       }
       s++;
-      Y_v -= 2;
-      if (Y_v < 0) {
-        Y_v = (short) (sizeY - 1);
+      jAxon -= 2;
+      if (jAxon < 0) {
+        jAxon = (short) (axonSizeJ - 1);
       }
     }
 
-    if ((error_code & 2) != 0) {
+    if ((errorCode & 2) != 0) {
       return s - 1;
     }
-    if ((error_code & 1) != 0) {
+    if ((errorCode & 1) != 0) {
       return s;
     }
     return -1;
   }
 
-  private int getClearAreaZigzag(short X, short Y, int m, int[] XY_destino, double raw) {
+  private int getClearAreaZigzag(short iAxonOrigin, short jAxonOrigin, int m, int[] XY_destino, double raw) {
 
     int s = 1;
-    int X_v1, Y_v1, X_v2, Y_v2;
-    int orientation = atoms[X][Y].getOrientation();
+    int orientation = atoms[iAxonOrigin][jAxonOrigin].getOrientation();
 
-    X_v1 = X;
-    Y_v1 = Y;
-    X_v2 = X;
-    Y_v2 = Y;
+    int iAxon1 = iAxonOrigin;
+    int jAxon1 = jAxonOrigin;
+    int iAxon2 = iAxonOrigin;
+    int jAxon2 = jAxonOrigin;
 
-    int vecino1, vecino2;
+    int neighbour1, neighbour2;
 
     switch (orientation) {
 
       case 0:
-        vecino1 = 5;
-        vecino2 = 8;
+        neighbour1 = 5;
+        neighbour2 = 8;
         break;
       case 1:
-        vecino1 = 4;
-        vecino2 = 7;
+        neighbour1 = 4;
+        neighbour2 = 7;
         break;
       case 2:
-        vecino1 = 3;
-        vecino2 = 6;
+        neighbour1 = 3;
+        neighbour2 = 6;
         break;
       default: {
         return -1;
@@ -456,83 +454,77 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     }
 
     while (true) {
-      int tipo1, tipo2;
-      int X_v1_temp, X_v2_temp, Y_v1_temp, Y_v2_temp;
+      int type1, type2;
 
-      X_v1_temp = getPosX(X_v1, Y_v1, vecino1, true);
-      Y_v1_temp = getPosY(X_v1, Y_v1, vecino1, true);
-      X_v2_temp = getPosX(X_v2, Y_v2, vecino2, true);
-      Y_v2_temp = getPosY(X_v2, Y_v2, vecino2, true);
-      X_v1 = X_v1_temp;
-      X_v2 = X_v2_temp;
-      Y_v1 = Y_v1_temp;
-      Y_v2 = Y_v2_temp;
-      if (s == 1 && atoms[X][Y].isOccupied()) {
-        tipo1 = atoms[X_v1][Y_v1].getTypeWithoutNeighbour(vecino1);
-        tipo2 = atoms[X_v2][Y_v2].getTypeWithoutNeighbour(vecino2);
+      iAxon1 = getCartPosX(iAxon1, jAxon1, neighbour1, true);
+      iAxon2 = getCartPosX(iAxon2, jAxon2, neighbour2, true);
+      jAxon1 = getCartPosY(iAxon1, jAxon1, neighbour1, true);
+      jAxon2 = getCartPosY(iAxon2, jAxon2, neighbour2, true);
+      if (s == 1 && atoms[iAxonOrigin][jAxonOrigin].isOccupied()) {
+        type1 = atoms[iAxon1][jAxon1].getTypeWithoutNeighbour(neighbour1);
+        type2 = atoms[iAxon2][jAxon2].getTypeWithoutNeighbour(neighbour2);
       } else {
-        tipo1 = atoms[X_v1][Y_v1].getType();
-        tipo2 = atoms[X_v2][Y_v2].getType();
+        type1 = atoms[iAxon1][jAxon1].getType();
+        type2 = atoms[iAxon2][jAxon2].getType();
       }
 
-      if (atoms[X_v1][Y_v1].isOccupied() || atoms[X_v2][Y_v2].isOccupied() || tipo2 != 2 || tipo1 != 2) {
+      if (atoms[iAxon1][jAxon1].isOccupied() || atoms[iAxon2][jAxon2].isOccupied() || type2 != 2 || type1 != 2) {
         return s - 1;
       }
 
       if (raw < 0.5) {
-        XY_destino[0] = X_v1;
-        XY_destino[1] = Y_v1;
+        XY_destino[0] = iAxon1;
+        XY_destino[1] = jAxon1;
       } else {
-        XY_destino[0] = X_v2;
-        XY_destino[1] = Y_v2;
+        XY_destino[0] = iAxon2;
+        XY_destino[1] = jAxon2;
       }
 
       if (s == m) {
         return s;
       }
-      //System.out.println("holaaa!! "+ s);
       s++;
     }
   }
 
-  private int getClearAreaArmchair(short X, short Y, int m, int[] XY_destination, double raw) {
+  private int getClearAreaArmchair(short iAxonOrigin, short jAxonOrigin, int m, int[] XY_destination, double raw) {
 
     int s = 1;
-    int X_v1, Y_v1, X_v2, Y_v2;
-    boolean tipo_0 = (((X + Y) & 1) == 0);
-    int orientacion = atoms[X][Y].getOrientation();
+    boolean type0 = (((iAxonOrigin + jAxonOrigin) & 1) == 0);
+    int orientacion = atoms[iAxonOrigin][jAxonOrigin].getOrientation();
 
-    X_v1 = X;
-    Y_v1 = Y;
-    X_v2 = X;
-    Y_v2 = Y;
+    int iAxon1 = iAxonOrigin;
+    int jAxon1 = jAxonOrigin;
+    int iAxon2 = iAxonOrigin;
+    int jAxon2 = jAxonOrigin;
 
-    int neighbor1, neighbor2;
+    int neighbour1;
+    int neighbour2;
 
     switch (orientacion) {
       case 0:
-        neighbor1 = 10;
-        neighbor2 = 2;
-        if (getNeighbour(X, Y, neighbor1).isOccupied()) {
-          neighbor1 = 9;
-          neighbor2 = 1;
+        neighbour1 = 10;
+        neighbour2 = 2;
+        if (getNeighbour(iAxonOrigin, jAxonOrigin, neighbour1).isOccupied()) {
+          neighbour1 = 9;
+          neighbour2 = 1;
         }
         break;
       case 1:
-        neighbor1 = 11;
-        neighbor2 = 0;
-        if (getNeighbour(X, Y, neighbor1).isOccupied()) {
-          neighbor1 = 10;
-          neighbor2 = 2;
+        neighbour1 = 11;
+        neighbour2 = 0;
+        if (getNeighbour(iAxonOrigin, jAxonOrigin, neighbour1).isOccupied()) {
+          neighbour1 = 10;
+          neighbour2 = 2;
         }
         break;
 
       case 2:
-        neighbor1 = 11;
-        neighbor2 = 0;
-        if (getNeighbour(X, Y, neighbor1).isOccupied()) {
-          neighbor1 = 9;
-          neighbor2 = 1;
+        neighbour1 = 11;
+        neighbour2 = 0;
+        if (getNeighbour(iAxonOrigin, jAxonOrigin, neighbour1).isOccupied()) {
+          neighbour1 = 9;
+          neighbour2 = 1;
         }
         break;
 
@@ -540,91 +532,81 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
         return -1;
     }
 
-//System.out.println(vecino1+" "+vecino2);
     while (true) {
       int tipo1, tipo2;
-      int X_v1_temp, X_v2_temp, Y_v1_temp, Y_v2_temp;
 
-      if (tipo_0) {
-        X_v1_temp = getPosX(X_v1, Y_v1, neighbor1, true);
-        Y_v1_temp = getPosY(X_v1, Y_v1, neighbor1, true);
-        X_v2_temp = getPosX(X_v2, Y_v2, neighbor2, true);
-        Y_v2_temp = getPosY(X_v2, Y_v2, neighbor2, true);
-        X_v1 = X_v1_temp;
-        X_v2 = X_v2_temp;
-        Y_v1 = Y_v1_temp;
-        Y_v2 = Y_v2_temp;
-        if (s == 1 && atoms[X][Y].isOccupied()) {
-          tipo1 = atoms[X_v1][Y_v1].getTypeWithoutNeighbour(neighbor1);
-          tipo2 = atoms[X_v2][Y_v2].getTypeWithoutNeighbour(neighbor2);
+      if (type0) {
+        iAxon1 = getCartPosX(iAxon1, jAxon1, neighbour1, true);
+        iAxon2 = getCartPosX(iAxon2, jAxon2, neighbour2, true);
+        jAxon1 = getCartPosY(iAxon1, jAxon1, neighbour1, true);
+        jAxon2 = getCartPosY(iAxon2, jAxon2, neighbour2, true);
+        if (s == 1 && atoms[iAxonOrigin][jAxonOrigin].isOccupied()) {
+          tipo1 = atoms[iAxon1][jAxon1].getTypeWithoutNeighbour(neighbour1);
+          tipo2 = atoms[iAxon2][jAxon2].getTypeWithoutNeighbour(neighbour2);
         } else {
-          tipo1 = atoms[X_v1][Y_v1].getType();
-          tipo2 = atoms[X_v2][Y_v2].getType();
+          tipo1 = atoms[iAxon1][jAxon1].getType();
+          tipo2 = atoms[iAxon2][jAxon2].getType();
         }
       } else {
-        X_v1_temp = getPosX(X_v1, Y_v1, neighbor2, false);
-        Y_v1_temp = getPosY(X_v1, Y_v1, neighbor2, false);
-        X_v2_temp = getPosX(X_v2, Y_v2, neighbor1, false);
-        Y_v2_temp = getPosY(X_v2, Y_v2, neighbor1, false);
-        X_v1 = X_v1_temp;
-        X_v2 = X_v2_temp;
-        Y_v1 = Y_v1_temp;
-        Y_v2 = Y_v2_temp;
-        if (s == 1 && atoms[X][Y].isOccupied()) {
-          tipo1 = atoms[X_v1][Y_v1].getTypeWithoutNeighbour(neighbor2);
-          tipo2 = atoms[X_v2][Y_v2].getTypeWithoutNeighbour(neighbor1);
+        iAxon1 = getCartPosX(iAxon1, jAxon1, neighbour2, false);
+        iAxon2 = getCartPosX(iAxon2, jAxon2, neighbour1, false);
+        jAxon1 = getCartPosY(iAxon1, jAxon1, neighbour2, false);
+        jAxon2 = getCartPosY(iAxon2, jAxon2, neighbour1, false);
+        if (s == 1 && atoms[iAxonOrigin][jAxonOrigin].isOccupied()) {
+          tipo1 = atoms[iAxon1][jAxon1].getTypeWithoutNeighbour(neighbour2);
+          tipo2 = atoms[iAxon2][jAxon2].getTypeWithoutNeighbour(neighbour1);
         } else {
-          tipo1 = atoms[X_v1][Y_v1].getType();
-          tipo2 = atoms[X_v2][Y_v2].getType();
+          tipo1 = atoms[iAxon1][jAxon1].getType();
+          tipo2 = atoms[iAxon2][jAxon2].getType();
         }
       }
 
-      if (atoms[X_v1][Y_v1].isOccupied() || atoms[X_v2][Y_v2].isOccupied() || tipo2 != 3 || tipo1 != 3) {
+      if (atoms[iAxon1][jAxon1].isOccupied() || atoms[iAxon2][jAxon2].isOccupied() || tipo2 != 3 || tipo1 != 3) {
         return s - 1;
       }
 
       if (raw < 0.5) {
-        XY_destination[0] = X_v1;
-        XY_destination[1] = Y_v1;
+        XY_destination[0] = iAxon1;
+        XY_destination[1] = jAxon1;
       } else {
-        XY_destination[0] = X_v2;
-        XY_destination[1] = Y_v2;
+        XY_destination[0] = iAxon2;
+        XY_destination[1] = jAxon2;
       }
 
       if (s == m) {
         return s;
       }
-      tipo_0 = !tipo_0;
+      type0 = !type0;
       s++;
     }
   }
 
   @Override
-  public float getSpatialSizeX() {
-    return sizeX;
+  public float getCartSizeX() {
+    return axonSizeI;
   }
 
   @Override
-  public float getSpatialSizeY() {
-    return sizeY;
+  public float getCartSizeY() {
+    return axonSizeJ;
   }
 
   @Override
-  public Point2D getCentralLatticeLocation() {
-    return getSpatialLocation(sizeX / 2, sizeY / 2);
+  public Point2D getCentralAxonometricLocation() {
+    return getCartesianLocation(axonSizeI / 2, axonSizeJ / 2);
   }
 
   @Override
-  public Point2D getSpatialLocation(int Xpos, int Ypos) {
+  public Point2D getCartesianLocation(int iAxon, int jAxon) {
 
-    double XLocation;
-    if ((Xpos & 1) == 0) {
-      XLocation = (Xpos >> 1) * (2 + 2 * cos60) + 0.5 + (1 & Xpos) + cos60;
+    double xCart;
+    if ((iAxon & 1) == 0) {
+      xCart = (iAxon >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iAxon) + cos60;
     } else {
-      XLocation = (Xpos >> 1) * (2 + 2 * cos60) + 0.5 + (1 & Xpos) * (1 + 2 * cos60);
+      xCart = (iAxon >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iAxon) * (1 + 2 * cos60);
     }
-    double YLocation = (Ypos >> 1) * (2 * cos30) + (1 & Ypos) * cos30;
-    return new Point2D.Double(XLocation, YLocation);
+    double yCart = (jAxon >> 1) * (2 * cos30) + (1 & jAxon) * cos30;
+    return new Point2D.Double(xCart, yCart);
 
   }
 }

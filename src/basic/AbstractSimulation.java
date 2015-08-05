@@ -25,8 +25,8 @@ public abstract class AbstractSimulation {
   protected PsdSignature2D psd;
 
   protected ListConfiguration config;
-  protected int sizeX;
-  protected int sizeY;
+  protected int sizeAxonI;
+  protected int sizeAxonJ;
   protected Parser currentParser;
 
   public AbstractSimulation(Parser myParser) {
@@ -58,8 +58,8 @@ public abstract class AbstractSimulation {
         System.err.println("Available options are \"linear\" and \"binned\" ");
         this.config = null;
     }
-    sizeX = currentParser.getSizeX();
-    sizeY = currentParser.getSizeY();
+    sizeAxonI = currentParser.getSizeX();
+    sizeAxonJ = currentParser.getSizeY();
     this.kmc = null;
     this.ratesFactory = null;
   }

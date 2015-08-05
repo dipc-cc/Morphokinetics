@@ -37,9 +37,9 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
     lattice.reset();
     list.reset();
 
-    for (int i = 0; i < lattice.getSizeX(); i++) {
-      for (int j = 0; j < lattice.getSizeY(); j++) {
-        for (int k = 0; k < lattice.getSizeZ(); k++) {
+    for (int i = 0; i < lattice.getAxonSizeI(); i++) {
+      for (int j = 0; j < lattice.getAxonSizeJ(); j++) {
+        for (int k = 0; k < lattice.getAxonSizeK(); k++) {
           for (int l = 0; l < lattice.getSizeUC(); l++) {
 
             SiAtom atom = (SiAtom) lattice.getAtom(i, j, k, l);
@@ -72,8 +72,8 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
     int binY = surface.length;
     int binX = surface[0].length;
 
-    double scaleX = binX / (lattice.getSizeX() * ((SiLattice) lattice).getUnit_Cell().getLimitX());
-    double scaleY = binY / (lattice.getSizeY() * ((SiLattice) lattice).getUnit_Cell().getLimitY());
+    double scaleX = binX / (lattice.getAxonSizeI() * ((SiLattice) lattice).getUnit_Cell().getLimitX());
+    double scaleY = binY / (lattice.getAxonSizeJ() * ((SiLattice) lattice).getUnit_Cell().getLimitY());
     ListIterator<AbstractAtom> iterator = list.getIterator();
 
     for (int i = 0; i < binY; i++) {

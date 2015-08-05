@@ -9,7 +9,6 @@ import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import utils.QuickSort;
 
 /**
@@ -22,55 +21,58 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
   private final ModifiedBuffer modified;
 
-  public Abstract2DDiffusionLattice(int sizeX, int sizeY, ModifiedBuffer modified, HopsPerStep distance_per_step) {
-    this.sizeX = sizeX;
-    this.sizeY = sizeY;
-    sizeZ = 1;
+  public Abstract2DDiffusionLattice(int axonSizeI, int axonSizeJ, ModifiedBuffer modified) {
+    this.axonSizeI = axonSizeI;
+    this.axonSizeJ = axonSizeJ;
+    axonSizeK = 1;
     unitCellSize = 4;
     this.modified = modified;
   }
 
-  public abstract Abstract2DDiffusionAtom getNeighbour(int Xpos, int Ypos, int neighbor);
+  public abstract Abstract2DDiffusionAtom getNeighbour(int iAxon, int jAxon, int neighbour);
 
   public void configure(double[][] probabilities) {
-    for (int i = 0; i < atoms[0].length; i++) { //X
-      for (int j = 0; j < atoms.length; j++) { //Y   
-        atoms[j][i].initialize(this, probabilities, this.getModified());
+    for (int iAxon = 0; iAxon < atoms[0].length; iAxon++) {
+      for (int jAxon = 0; jAxon < atoms.length; jAxon++) {
+        atoms[jAxon][iAxon].initialize(this, probabilities, this.getModified());
       }
     }
   }
-  
+
   /**
-   * We ignore the unitCellPos by now, we get directly the atom of X,Y location
-   * @param X
-   * @param Y
-   * @return 
+   * We ignore the unitCellPos by now, we get directly the atom of i,j axonometric location
+   *
+   * @param iAxon
+   * @param jAxon
+   * @return
    */
-  public Abstract2DDiffusionAtom getAtom(int X, int Y) {
-    return atoms[X][Y];
+  public Abstract2DDiffusionAtom getAtom(int iAxon, int jAxon) {
+    return atoms[iAxon][jAxon];
   }
 
   @Override
-  public AbstractAtom getAtom(int X, int Y, int Z, int Unit_cell_pos) {
-    if (Z != 0 || Unit_cell_pos != 0) {
+  public AbstractAtom getAtom(int iAxon, int jAxon, int kAxon, int unitCellPos) {
+    if (kAxon != 0 || unitCellPos != 0) {
       throw new UnsupportedOperationException("Z position or position inside unit cell cannot be different than 0, not supported"); //To change body of generated methods, choose Tools | Templates.
     }
-    return getAtom(X, Y);
+    return getAtom(iAxon, jAxon);
   }
 
   /**
-   * obtains the spatial location of certain atom, the distance between atoms is considered as 1
-   * @param X
-   * @param Y
-   * @return 
-   */ 
-  public abstract Point2D getSpatialLocation(int X, int Y);
+   * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
+   * Returns the cartesian position, given the axonometric (lattice) location
+   *
+   * @param iAxon i index in the axonometric mesh
+   * @param jAxon j index in the axonometric mesh
+   * @return
+   */
+  public abstract Point2D getCartesianLocation(int iAxon, int jAxon);
 
-  public abstract Point2D getCentralLatticeLocation();
+  public abstract Point2D getCentralAxonometricLocation();
 
-  public abstract float getSpatialSizeX();
+  public abstract float getCartSizeX();
 
-  public abstract float getSpatialSizeY();
+  public abstract float getCartSizeY();
 
   @Override
   public void reset() {
@@ -82,50 +84,57 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
 
   protected void setAngles() {
-    Point2D middle = getCentralLatticeLocation();
-    for (int Y = 0; Y < sizeY; Y++) {
-      for (int X = 0; X < sizeX; X++) {
-        Point2D position = getSpatialLocation(X, Y);
-        double Xdif = position.getX() - middle.getX();
-        double Ydif = position.getY() - middle.getY();
-        if (Xdif == 0) {
-          Xdif = 1e-8;
+    Point2D middle = getCentralAxonometricLocation();
+    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
+      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
+        Point2D cartPosition = getCartesianLocation(iAxon, jAxon);
+        double xDif = cartPosition.getX() - middle.getX();
+        double yDif = cartPosition.getY() - middle.getY();
+        if (xDif == 0) {
+          xDif = 1e-8;
         }
-        double angle = Math.atan(Ydif / Xdif);
-        if (Xdif < 0) {
+        double angle = Math.atan(yDif / xDif);
+        if (xDif < 0) {
           angle = Math.PI + angle;
         }
-        if (Xdif >= 0 && Ydif < 0) {
+        if (xDif >= 0 && yDif < 0) {
           angle = 2 * Math.PI + angle;
         }
-        atoms[X][Y].setAngle((float) angle);
+        atoms[iAxon][jAxon].setAngle((float) angle);
       }
     }
   }
 
-  public double getDistanceToCenter(int X, int Y) {
+  public double getDistanceToCenter(int iAxon, int jAxon) {
 
-    Point2D middle = getCentralLatticeLocation();
-    Point2D position = getSpatialLocation(X, Y);
+    Point2D middle = getCentralAxonometricLocation();
+    Point2D position = getCartesianLocation(iAxon, jAxon);
 
     return position.distance(middle);
   }
 
-    //define como átomos inside a los átomos dentro de dicho rádio
-  //devuelve un array de átomos que es el perimetro de dicha circunferencia.
+  /**
+   * Defines which atoms are inside from the current position.
+   *
+   * Define como átomos inside a los átomos dentro de dicho rádio Devuelve un array de átomos que es
+   * el perimetro de dicha circunferencia.
+   *
+   * @param radius
+   * @return An array with the atoms that are inside this circumference
+   */
   public Abstract2DDiffusionAtom[] setInside(int radius) {
 
     ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
 
-    for (int Y = 0; Y < sizeY; Y++) {
-      for (int X = 0; X < sizeX; X++) {
-        double distance = getDistanceToCenter(X, Y);
+    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
+      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
+        double distance = getDistanceToCenter(iAxon, jAxon);
         if (radius <= distance) {
-          atoms[X][Y].setOutside(true);
+          atoms[iAxon][jAxon].setOutside(true);
         } else {
-          atoms[X][Y].setOutside(false);
+          atoms[iAxon][jAxon].setOutside(false);
           if (distance > (radius - 1)) {
-            perimeterList.add(atoms[X][Y]);
+            perimeterList.add(atoms[iAxon][jAxon]);
           }
         }
       }

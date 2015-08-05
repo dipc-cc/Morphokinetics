@@ -41,7 +41,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     if (justCentralFlake) {
       list.setDepositionProbability(depositionRateML / islandDensitySite);
     } else {
-      list.setDepositionProbability(depositionRateML * lattice.getSizeX() * lattice.getSizeY());
+      list.setDepositionProbability(depositionRateML * lattice.getAxonSizeI() * lattice.getAxonSizeJ());
     }
   }
 
@@ -67,7 +67,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   public AbstractLattice getLattice() {
     return lattice;
   }
-
+  
   @Override
   protected boolean performSimulationStep() {
 
@@ -189,8 +189,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     Abstract2DDiffusionAtom destinationAtom;
     if (!justCentralFlake) {
       do {
-        int X = (int) (StaticRandom.raw() * lattice.getSizeX());
-        int Y = (int) (StaticRandom.raw() * lattice.getSizeY());
+        int X = (int) (StaticRandom.raw() * lattice.getAxonSizeI());
+        int Y = (int) (StaticRandom.raw() * lattice.getAxonSizeJ());
         destinationAtom = lattice.getAtom(X, Y);
       } while (!this.depositAtom(destinationAtom));
     } else {
@@ -210,9 +210,9 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     int binY = surface.length;
     int binX = surface[0].length;
 
-    Point2D corner1 = lattice.getSpatialLocation(0, 0);
-    double scaleX = Math.abs(binX / (lattice.getSpatialSizeX()));
-    double scaleY = Math.abs(binY / (lattice.getSpatialSizeY()));
+    Point2D corner1 = lattice.getCartesianLocation(0, 0);
+    double scaleX = Math.abs(binX / (lattice.getCartSizeX()));
+    double scaleY = Math.abs(binY / (lattice.getCartSizeY()));
 
     if (scaleX > 1 || scaleY > 1) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
@@ -225,10 +225,10 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       }
     }
 
-    for (int i = 0; i < lattice.getSizeY(); i++) {
-      for (int j = 0; j < lattice.getSizeX(); j++) {
+    for (int i = 0; i < lattice.getAxonSizeJ(); i++) {
+      for (int j = 0; j < lattice.getAxonSizeI(); j++) {
         if (lattice.getAtom(j, i).isOccupied()) {
-          Point2D position = lattice.getSpatialLocation(j, i);
+          Point2D position = lattice.getCartesianLocation(j, i);
           surface[(int) ((position.getY() - corner1.getY()) * scaleY)][(int) ((position.getX() - corner1.getX()) * scaleX)] = 0;
         }
       }
