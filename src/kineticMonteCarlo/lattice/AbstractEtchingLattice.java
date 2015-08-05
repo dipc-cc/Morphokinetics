@@ -4,8 +4,6 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.lattice.AbstractLattice;
-
 /**
  *
  * @author Nestor
