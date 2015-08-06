@@ -37,6 +37,7 @@ public class Parser {
    * Can be linear or binned
    */
   private String listType;
+  private String perimeterType;
   /**
    * Can be Ag
    */
@@ -65,6 +66,7 @@ public class Parser {
   public Parser() {
     this.islandDensityType = "COX_PRB";
     this.listType = "linear";
+    this.perimeterType = "circle";
     this.calculationMode = "Ag";
     this.temperature = 135;
     this.presure = 135;
@@ -122,6 +124,11 @@ public class Parser {
       listType = json.getString("listType");
     } catch (JSONException e) {
       islandDensityType = "linear";
+    }
+    try {
+      perimeterType = json.getString("perimeterType");
+    } catch (JSONException e) {
+      perimeterType = "circle";
     }
     try {
       calculationMode = json.getString("calculationMode");
@@ -230,6 +237,7 @@ public class Parser {
     System.out.println("\tislandDensityType:\t" + islandDensityType);
     System.out.println("\tjustCentralFlake:\t" + justCentralFlake);
     System.out.println("\tlistType:\t\t" + listType);
+    System.out.println("\tperimeterType:\t\t" + perimeterType);
     System.out.println("\tmultithreaded:\t\t" + multithreaded);
     System.out.println("\tnumberOfSimulations:\t" + numberOfSimulations);
     System.out.println("\tsizeX:\t\t\t" + sizeX);
@@ -257,6 +265,10 @@ public class Parser {
     return listType;
   }
 
+  public String getPerimeterType(){
+    return perimeterType;
+  }
+  
   public int getTemperature() {
     return temperature;
   }
