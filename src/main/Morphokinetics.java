@@ -23,24 +23,24 @@ public class Morphokinetics {
   public static void main(String[] args) {
     printHeader();
 
-    Parser myParser = new Parser();
+    Parser parser = new Parser();
     try {
-      myParser.readFile("parameters");
+      parser.readFile("parameters");
     } catch (IOException ex) {
       Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    myParser.print();
+    parser.print();
     AbstractSimulation currentSimulation = null;
-    switch (myParser.getCalculationMode()) {
+    switch (parser.getCalculationMode()) {
       case "Ag":
-        currentSimulation = new AgSimulation(myParser);
+        currentSimulation = new AgSimulation(parser);
         break;
       case "graphene":
-        currentSimulation = new GrapheneSimulation(myParser);
+        currentSimulation = new GrapheneSimulation(parser);
         break;
       case "Si":
-        currentSimulation = new SiSimulation(myParser);
+        currentSimulation = new SiSimulation(parser);
         break;
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
