@@ -16,8 +16,8 @@ import utils.StaticRandom;
  */
 public class RoundPerimeter {
 
-  public final static int CIRCLE = 0;
-  public final static int SQUARE = 1;
+  public final static short CIRCLE = 0;
+  public final static short SQUARE = 1;
     
   private int currentPerimeterRadius;
   private Abstract2DDiffusionAtom[] currentPerimeter;
