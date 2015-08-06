@@ -57,6 +57,7 @@ public class Parser {
   private boolean psd;
   private boolean outputData;
   private boolean randomSeed;
+  private boolean useMaxPerimeter;
 
   /**
    * Constructor
@@ -81,6 +82,7 @@ public class Parser {
     this.psd = false;
     this.outputData = false;
     this.randomSeed = true;
+    this.useMaxPerimeter = false;
   }
 
   /**
@@ -206,6 +208,11 @@ public class Parser {
     } catch (JSONException e) {
       randomSeed = true;
     }
+    try {
+      useMaxPerimeter = json.getBoolean("useMaxPerimeter");
+    } catch (JSONException e) {
+      useMaxPerimeter = false;
+    }
     return 0;
   }
 
@@ -219,7 +226,7 @@ public class Parser {
    *
    * @return
    */
-  public int print() {
+  public void print() {
     System.out.println("\tislandDensityType:\t" + islandDensityType);
     System.out.println("\tjustCentralFlake:\t" + justCentralFlake);
     System.out.println("\tlistType:\t\t" + listType);
@@ -239,70 +246,37 @@ public class Parser {
     System.out.println("\tpsd:\t\t\t" + psd);
     System.out.println("\toutputData:\t\t" + outputData);
     System.out.println("\trandomSeed:\t\t" + randomSeed);
-
-    return 0;
+    System.out.println("\tuseMaxPerimeter:\t" + useMaxPerimeter);
   }
 
-  /**
-   *
-   * @return
-   */
   public String getIslandDensityType() {
     return islandDensityType;
   }
 
-  /**
-   *
-   * @return
-   */
   public String getListType() {
     return listType;
   }
 
-  /**
-   *
-   * @return
-   */
   public int getTemperature() {
     return temperature;
   }
 
-  /**
-   *
-   * @return
-   */
   public int getPresure() {
     return presure;
   }
 
-  /**
-   *
-   * @return
-   */
   public int getFlow() {
     return flow;
   }
-
-  /**
-   *
-   * @return
-   */
+  
   public int getNumberOfSimulations() {
     return numberOfSimulations;
   }
 
-  /**
-   *
-   * @return
-   */
   public int getSizeX() {
     return sizeX;
   }
 
-  /**
-   *
-   * @return
-   */
   public int getSizeY() {
     return sizeY;
   }
@@ -315,26 +289,14 @@ public class Parser {
     return extraLevels;
   }
 
-  /**
-   *
-   * @return
-   */
   public boolean isMultithreaded() {
     return multithreaded;
   }
 
-  /**
-   *
-   * @return
-   */
   public boolean visualize() {
     return visualize;
   }
 
-  /**
-   *
-   * @return
-   */
   public boolean justCentralFlake() {
     return justCentralFlake;
   }
@@ -361,5 +323,9 @@ public class Parser {
   
   public boolean randomSeed(){
     return randomSeed;
+  }
+  
+  public boolean useMaxPerimeter(){
+    return useMaxPerimeter;
   }
 }
