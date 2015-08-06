@@ -16,14 +16,27 @@ import utils.StaticRandom;
  */
 public class RoundPerimeter {
 
+  public final static int CIRCLE = 0;
+  public final static int SQUARE = 1;
+    
   private int currentPerimeterRadius;
   private Abstract2DDiffusionAtom[] currentPerimeter;
   private AbstractPerimeterStatistics perimeterStatistics;
+  private short type;
 
   public RoundPerimeter(String statisticData) {
     this.perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
     this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
     this.currentPerimeter = null;
+  }
+  
+  public RoundPerimeter(String statisticData, short type){
+   this(statisticData);
+   this.type = type;
+  }
+  
+  public short getType() {
+    return type;
   }
 
   public int getCurrentRadius() {
