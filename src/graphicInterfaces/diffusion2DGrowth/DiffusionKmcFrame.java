@@ -179,6 +179,9 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
   private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel1MouseWheelMoved
 
     int zoom = (Integer) jSpinner2.getValue() - (Integer) evt.getWheelRotation();
+    if (zoom == 0) {
+      zoom = 1;
+    }
     jSpinner2.setValue(zoom);
     canvas1.setScale(zoom);
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
