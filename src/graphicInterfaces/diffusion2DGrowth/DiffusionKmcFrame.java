@@ -20,18 +20,19 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
   /**
    * Creates new form NewJFrame
+   *
    * @param canvas1
    */
   public DiffusionKmcFrame(AbstractKmcCanvas canvas1) {
 
     initComponents();
     this.canvas1 = canvas1;
-    this.canvas1.setSize(canvas1.getSizeX(),canvas1.getSizeY());
+    this.canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
     this.jPanel1.add(canvas1);
     this.canvas1.initialize();
     this.jSpinner2.setValue(((AbstractKmcCanvas) canvas1).getScale());
     this.setResizable(true);
-    this.setSize(canvas1.getSizeX()+25, canvas1.getSizeY()+35);
+    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -87,17 +88,22 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
       }
     });
 
-    jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
-        jPanel1MouseReleased(evt);
-      }
-      public void mousePressed(java.awt.event.MouseEvent evt) {
-        jPanel1MousePressed(evt);
-      }
-    });
     jPanel1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
       public void mouseDragged(java.awt.event.MouseEvent evt) {
         jPanel1MouseDragged(evt);
+      }
+    });
+    jPanel1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+      public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+        jPanel1MouseWheelMoved(evt);
+      }
+    });
+    jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mousePressed(java.awt.event.MouseEvent evt) {
+        jPanel1MousePressed(evt);
+      }
+      public void mouseReleased(java.awt.event.MouseEvent evt) {
+        jPanel1MouseReleased(evt);
       }
     });
 
@@ -144,8 +150,8 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
 
       canvas1.setScale((Integer) jSpinner2.getValue());
-      canvas1.setSize(canvas1.getSizeX(),canvas1.getSizeY());
-      this.setSize(canvas1.getSizeX()+25, canvas1.getSizeY()+35);
+      canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
+      this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -167,8 +173,17 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
         mouseX = evt.getX() - startMouseX;
         mouseY = evt.getY() - startMouseY;
       }
-
+      
     }//GEN-LAST:event_jPanel1MouseDragged
+
+  private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel1MouseWheelMoved
+
+    int zoom = (Integer) jSpinner2.getValue() - (Integer) evt.getWheelRotation();
+    jSpinner2.setValue(zoom);
+    canvas1.setScale(zoom);
+    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
+    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
+  }//GEN-LAST:event_jPanel1MouseWheelMoved
 
   final class paintLoop extends Thread {
 
