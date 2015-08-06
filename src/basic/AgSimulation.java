@@ -17,8 +17,8 @@ import ratesLibrary.AgAgRatesFactory;
  */
 public class AgSimulation extends AbstractGrowthSimulation {
 
-  public AgSimulation(Parser myParser) {
-    super(myParser);
+  public AgSimulation(Parser parser) {
+    super(parser);
   }
 
   @Override
@@ -26,13 +26,13 @@ public class AgSimulation extends AbstractGrowthSimulation {
     super.initialiseKmc();
 
     this.ratesFactory = new AgAgRatesFactory();
-    this.kmc = new AgAgKmc(config, sizeAxonI, sizeAxonJ, currentParser.justCentralFlake(), 
-            currentParser.randomSeed(), currentParser.useMaxPerimeter());
+    this.kmc = new AgAgKmc(config, parser.getSizeX(), parser.getSizeY(),
+            parser.justCentralFlake(), parser.randomSeed(), parser.useMaxPerimeter());
   }
 
   @Override
   public void createFrame() {
-    if (currentParser.withGui()) {
+    if (parser.withGui()) {
       try {
         frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
       } catch (Exception e) {
@@ -40,7 +40,7 @@ public class AgSimulation extends AbstractGrowthSimulation {
         System.err.println("Finishing");
         throw e;
       }
-      if (currentParser.visualize()) {
+      if (parser.visualize()) {
         frame.setVisible(true);
       }
     }

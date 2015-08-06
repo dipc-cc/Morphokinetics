@@ -15,14 +15,14 @@ import ratesLibrary.SiRatesFactory;
  */
 public abstract class AbstractEtchingSimulation extends AbstractSimulation{
 
-  public AbstractEtchingSimulation(Parser myParser) {
-    super(myParser);
+  public AbstractEtchingSimulation(Parser parser) {
+    super(parser);
   }
   
   @Override
   protected void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser){
     
-    this.kmc.initializeRates(new SiRatesFactory().getRates(currentParser.getTemperature()));
+    this.kmc.initializeRates(new SiRatesFactory().getRates(parser.getTemperature()));
   }
   
   

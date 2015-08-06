@@ -25,41 +25,37 @@ public abstract class AbstractSimulation {
   protected PsdSignature2D psd;
 
   protected ListConfiguration config;
-  protected int sizeAxonI;
-  protected int sizeAxonJ;
-  protected Parser currentParser;
+  protected Parser parser;
 
-  public AbstractSimulation(Parser myParser) {
+  public AbstractSimulation(Parser parser) {
     kmc = null;
     ratesFactory = null;
     frame = null;
     psd = null;
-    this.currentParser = myParser;
+    this.parser = parser;
   }
 
   /**
    * Initialises Kmc, the basic simulation class
    */
   public void initialiseKmc() {
-    switch (currentParser.getListType()) {
+    switch (parser.getListType()) {
       case "linear": {
         this.config = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
         break;
       }
       case "binned": {
         this.config = new ListConfiguration().setListType(ListConfiguration.BINNED_LIST)
-                .setBinsPerLevel(currentParser.getBinsLevels())
-                .setExtraLevels(currentParser.getExtraLevels());
+                .setBinsPerLevel(parser.getBinsLevels())
+                .setExtraLevels(parser.getExtraLevels());
         break;
       }
       default:
         System.err.println("listType is not properly set");
-        System.err.println("listType currently is " + currentParser.getListType());
+        System.err.println("listType currently is " + parser.getListType());
         System.err.println("Available options are \"linear\" and \"binned\" ");
         this.config = null;
     }
-    sizeAxonI = currentParser.getSizeX();
-    sizeAxonJ = currentParser.getSizeY();
     this.kmc = null;
     this.ratesFactory = null;
   }
@@ -73,24 +69,24 @@ public abstract class AbstractSimulation {
     float[][] sampledSurface = null;
     long startTime = System.currentTimeMillis();
 
-    if (currentParser.doPsd()) {
+    if (parser.doPsd()) {
       //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
-      psd = new PsdSignature2D(currentParser.getSizeX() / 2, currentParser.getSizeY() / 2);
-      sampledSurface = new float[currentParser.getSizeX() / 2][currentParser.getSizeY() / 2];
+      psd = new PsdSignature2D(parser.getSizeX() / 2, parser.getSizeY() / 2);
+      sampledSurface = new float[parser.getSizeX() / 2][parser.getSizeY() / 2];
     }
 
     // Main loop
-    for (int simulations = 0; simulations < currentParser.getNumberOfSimulations(); simulations++) {
+    for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
       long iterStartTime = System.currentTimeMillis();
-      initializeRates(ratesFactory, kmc, currentParser);
+      initializeRates(ratesFactory, kmc, parser);
       kmc.simulate();
-      if (currentParser.printToImage()) {
+      if (parser.printToImage()) {
         frame.printToImage(simulations);
       }
-      if (currentParser.doPsd()) {
+      if (parser.doPsd()) {
         kmc.getSampledSurface(sampledSurface);
         psd.addSurfaceSample(sampledSurface);
-        if (currentParser.outputData()) {
+        if (parser.outputData()) {
           psd.printToFile(simulations);
           psd.printSurfaceToFile(simulations, sampledSurface);
         }
@@ -98,13 +94,13 @@ public abstract class AbstractSimulation {
       System.out.println("Simulation number " + simulations + " executed in "
               + (System.currentTimeMillis() - iterStartTime) + " ms");
     }
-    System.out.println("All " + currentParser.getNumberOfSimulations() + " simulations executed in "
-            + ((System.currentTimeMillis() - startTime) / currentParser.getNumberOfSimulations()) + " ms");
-    System.out.println("Executed " + currentParser.getNumberOfSimulations() + " simulations in "
+    System.out.println("All " + parser.getNumberOfSimulations() + " simulations executed in "
+            + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
+    System.out.println("Executed " + parser.getNumberOfSimulations() + " simulations in "
             + (System.currentTimeMillis() - startTime) + ". Average iteration time = "
-            + ((System.currentTimeMillis() - startTime) / currentParser.getNumberOfSimulations()) + " ms");
+            + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
 
-    if (currentParser.doPsd()) {
+    if (parser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
       psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
       new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))

@@ -18,8 +18,8 @@ public class SiSimulation extends AbstractEtchingSimulation {
 
   private SiEtchingKmcConfig siConfig;
 
-  public SiSimulation(Parser myParser) {
-    super(myParser);
+  public SiSimulation(Parser parser) {
+    super(parser);
   }
 
   @Override
@@ -28,7 +28,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
 
     this.ratesFactory = new SiRatesFactory();
     this.siConfig = configKmc();
-    this.kmc = new SiEtchingKmc(siConfig, currentParser.randomSeed());
+    this.kmc = new SiEtchingKmc(siConfig, parser.randomSeed());
   }
 
   /**
@@ -48,7 +48,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
   }
 
   /**
-   * Do nothing
+   * Does nothing
    */
   @Override
   public void createFrame() {

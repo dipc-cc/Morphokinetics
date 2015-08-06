@@ -17,8 +17,8 @@ import ratesLibrary.GrapheneRatesFactory;
  */
 public class GrapheneSimulation extends AbstractGrowthSimulation {
 
-  public GrapheneSimulation(Parser myParser) {
-    super(myParser);
+  public GrapheneSimulation(Parser parser) {
+    super(parser);
   }
 
   @Override
@@ -26,8 +26,8 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
     super.initialiseKmc();
     
     this.ratesFactory = new GrapheneRatesFactory();
-    this.kmc = new GrapheneKmc(config, sizeAxonI, sizeAxonJ, currentParser.justCentralFlake(), 
-            currentParser.randomSeed(), currentParser.useMaxPerimeter());
+    this.kmc = new GrapheneKmc(config, parser.getSizeX(), parser.getSizeY(), 
+            parser.justCentralFlake(), parser.randomSeed(), parser.useMaxPerimeter());
   }
 
   @Override
@@ -39,7 +39,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
       System.err.println("Finishing");
       throw e;
     }
-    if (currentParser.visualize()) {
+    if (parser.visualize()) {
       frame.setVisible(true);
     }
   }
