@@ -7,6 +7,8 @@ package kineticMonteCarlo.lattice;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import java.awt.geom.Point2D;
+import static java.lang.Math.abs;
+import static java.lang.Math.round;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
@@ -120,23 +122,66 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
    * el perimetro de dicha circunferencia.
    *
    * @param radius
-   * @return An array with the atoms that are inside this circumference
+   * @return An array with the atoms that are in the circumference (only the perimeter)
    */
-  public Abstract2DDiffusionAtom[] setInside(int radius) {
+  public Abstract2DDiffusionAtom[] setInsideCircle(int radius) {
 
     ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
 
     for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
       for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
-        double distance = getDistanceToCenter(iAxon, jAxon);
-        if (radius <= distance) {
-          atoms[iAxon][jAxon].setOutside(true);
-        } else {
+          double distance = getDistanceToCenter(iAxon, jAxon);
+          if (radius <= distance) {
+            atoms[iAxon][jAxon].setOutside(true);
+          } else {
+            atoms[iAxon][jAxon].setOutside(false);
+            if (distance > (radius - 1)) {
+              perimeterList.add(atoms[iAxon][jAxon]);
+            }
+          }
+      }
+    }
+    
+    Abstract2DDiffusionAtom[] perimeter = perimeterList.toArray(new Abstract2DDiffusionAtom[perimeterList.size()]);
+
+    QuickSort.orderByAngle(perimeter, perimeter.length - 1);
+
+    return perimeter;
+  }
+
+  /**
+   * Defines which atoms are inside from the current position.
+   *
+   *
+   * @param radius is the half of the square side
+   * @return An array with the atoms that are in the perimeter
+   */
+  public Abstract2DDiffusionAtom[] setInsideSquare(int radius) {
+    ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
+
+    int yRadius = round(radius / (float) AgAgLattice.YRatio);
+    Point2D centreCart = getCentralCartesianLocation();
+    double left = centreCart.getX() - radius;
+    double right = centreCart.getX() + radius;
+    double bottom = centreCart.getY() - yRadius * AgAgLattice.YRatio;
+    double top = centreCart.getY() + radius;
+    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
+      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
+        Point2D position = getCartesianLocation(iAxon, jAxon);
+        if (left <= position.getX() && position.getX() <= right
+                && bottom <= position.getY() + AgAgLattice.YRatio
+                && position.getY() - AgAgLattice.YRatio <= top) {
           atoms[iAxon][jAxon].setOutside(false);
-          if (distance > (radius - 1)) {
+          if (abs(left - position.getX()) < 0.6
+                  || abs(right - position.getX()) < 0.6
+                  || abs(top - position.getY()) < AgAgLattice.YRatio
+                  || abs(bottom - position.getY()) < AgAgLattice.YRatio) {
             perimeterList.add(atoms[iAxon][jAxon]);
           }
+        } else {
+          atoms[iAxon][jAxon].setOutside(true);
         }
+
       }
     }
 
