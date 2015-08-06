@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.AgAgLattice;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -265,10 +266,16 @@ public class Parser {
     return listType;
   }
 
-  public String getPerimeterType(){
-    return perimeterType;
+  public short getPerimeterType() {
+    switch (perimeterType) {
+      case "square":
+        return RoundPerimeter.SQUARE;
+      case "circle":
+      default:
+        return RoundPerimeter.CIRCLE;
+    }
   }
-  
+
   public int getTemperature() {
     return temperature;
   }
@@ -280,7 +287,7 @@ public class Parser {
   public int getFlow() {
     return flow;
   }
-  
+
   public int getNumberOfSimulations() {
     return numberOfSimulations;
   }
@@ -328,16 +335,16 @@ public class Parser {
   public boolean doPsd() {
     return psd;
   }
-  
-  public boolean outputData(){
+
+  public boolean outputData() {
     return outputData;
   }
-  
-  public boolean randomSeed(){
+
+  public boolean randomSeed() {
     return randomSeed;
   }
-  
-  public boolean useMaxPerimeter(){
+
+  public boolean useMaxPerimeter() {
     return useMaxPerimeter;
   }
 }
