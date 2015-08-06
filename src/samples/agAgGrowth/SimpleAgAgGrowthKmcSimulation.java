@@ -47,7 +47,7 @@ public class SimpleAgAgGrowthKmcSimulation {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, true);
+    AgAgKmc kmc = new AgAgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, true, false);
 
     return kmc;
   }

@@ -17,8 +17,9 @@ import utils.StaticRandom;
  */
 public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
-  public GrapheneKmc(ListConfiguration config, int axonSizeI, int axonSizeJ, boolean justCentralFlake, boolean randomise) {
-    super(config, justCentralFlake, randomise);
+  public GrapheneKmc(ListConfiguration config, int axonSizeI, int axonSizeJ, boolean justCentralFlake, 
+          boolean randomise, boolean useMaxPerimeter) {
+    super(config, justCentralFlake, randomise, useMaxPerimeter);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 

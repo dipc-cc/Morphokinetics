@@ -22,7 +22,6 @@ public class RoundPerimeter {
 
   public RoundPerimeter(String statisticData) {
     this.perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
-    // TODO change here the radius to enlarge the mesh (joseba) and not to use DLA. 125 is the maximum allowed value for the radius
     this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
     this.currentPerimeter = null;
   }
@@ -44,6 +43,10 @@ public class RoundPerimeter {
 
   }
 
+  public void setMaxPerimeter(){
+    this.currentPerimeterRadius = 125;
+  }
+  
   public Abstract2DDiffusionAtom getPerimeterReentrance(Abstract2DDiffusionAtom origin) {
 
     int i = searchPerimeterOffsetReentrance();
