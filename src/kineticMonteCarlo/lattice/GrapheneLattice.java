@@ -592,7 +592,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Point2D getCentralAxonometricLocation() {
+  public Point2D getCentralCartesianLocation() {
     return getCartesianLocation(axonSizeI / 2, axonSizeJ / 2);
   }
 

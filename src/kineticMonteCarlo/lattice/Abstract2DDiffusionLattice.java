@@ -68,7 +68,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
    */
   public abstract Point2D getCartesianLocation(int iAxon, int jAxon);
 
-  public abstract Point2D getCentralAxonometricLocation();
+  public abstract Point2D getCentralCartesianLocation();
 
   public abstract float getCartSizeX();
 
@@ -84,7 +84,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
 
   protected void setAngles() {
-    Point2D middle = getCentralAxonometricLocation();
+    Point2D middle = getCentralCartesianLocation();
     for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
       for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
         Point2D cartPosition = getCartesianLocation(iAxon, jAxon);
@@ -107,7 +107,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
   public double getDistanceToCenter(int iAxon, int jAxon) {
 
-    Point2D middle = getCentralAxonometricLocation();
+    Point2D middle = getCentralCartesianLocation();
     Point2D position = getCartesianLocation(iAxon, jAxon);
 
     return position.distance(middle);

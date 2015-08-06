@@ -173,8 +173,8 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Point2D getCentralAxonometricLocation() {
-    return new Point2D.Float(axonSizeI / 2.0f, (float) (axonSizeJ * YRatio / 2.0));
+  public Point2D getCentralCartesianLocation() {
+    return new Point2D.Float(axonSizeI / 2.0f, (float) (axonSizeJ * YRatio / 2.0f));
   }
 
   @Override
