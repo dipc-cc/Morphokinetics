@@ -26,14 +26,20 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   protected boolean justCentralFlake;
   protected RoundPerimeter perimeter;
   protected boolean useMaxPerimeter;
+  protected short perimeterType;
   protected DevitaAccelerator accelerator;
 
-  public Abstract2DDiffusionKmc(ListConfiguration config, boolean justCentralFlake, boolean randomise, boolean useMaxPerimeter) {
+  public Abstract2DDiffusionKmc(ListConfiguration config, 
+          boolean justCentralFlake, 
+          boolean randomise, 
+          boolean useMaxPerimeter,
+          short perimeterType) {
     super(config, randomise);
     this.justCentralFlake = justCentralFlake;
     this.useMaxPerimeter = useMaxPerimeter;
     this.modifiedBuffer = new ModifiedBuffer();
     this.list.autoCleanup(true);
+    this.perimeterType = perimeterType;
   }
 
   @Override
@@ -89,7 +95,11 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     if (PerimeterMustBeEnlarged(destinationAtom)) {
       int nextRadius = this.perimeter.goToNextRadius();
       if (nextRadius > 0) {
-        this.perimeter.setAtomPerimeter(lattice.setInside(nextRadius));
+        if (this.perimeterType == RoundPerimeter.CIRCLE) {
+          this.perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
+        } else {
+          this.perimeter.setAtomPerimeter(lattice.setInsideSquare(nextRadius));
+        }
       } else {
         return true;
       }

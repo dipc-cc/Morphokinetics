@@ -17,9 +17,14 @@ import utils.StaticRandom;
  */
 public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
-  public GrapheneKmc(ListConfiguration config, int axonSizeI, int axonSizeJ, boolean justCentralFlake, 
-          boolean randomise, boolean useMaxPerimeter) {
-    super(config, justCentralFlake, randomise, useMaxPerimeter);
+  public GrapheneKmc(ListConfiguration config, 
+          int axonSizeI, 
+          int axonSizeJ, 
+          boolean justCentralFlake, 
+          boolean randomise, 
+          boolean useMaxPerimeter,
+          short perimeterType) {
+    super(config, justCentralFlake, randomise, useMaxPerimeter, perimeterType);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
@@ -34,7 +39,14 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   protected void depositSeed() {
     if (justCentralFlake) {
       this.perimeter = new RoundPerimeter("Graphene_CVD_growth");
-      this.perimeter.setAtomPerimeter(lattice.setInside(perimeter.getCurrentRadius()));
+      if (this.useMaxPerimeter){
+        this.perimeter.setMaxPerimeter();
+      }
+      if (this.perimeterType == RoundPerimeter.CIRCLE) {
+        this.perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius())); 
+      } else {
+        this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
+      }
 
       int iCenter = lattice.getAxonSizeJ() / 2;
       int jCenter = lattice.getAxonSizeI() / 2;

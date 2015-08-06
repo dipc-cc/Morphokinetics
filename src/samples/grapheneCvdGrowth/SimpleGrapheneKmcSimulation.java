@@ -7,6 +7,7 @@ package samples.grapheneCvdGrowth;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth.GrapheneKmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
+import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.GrapheneRatesFactory;
@@ -53,7 +54,7 @@ public class SimpleGrapheneKmcSimulation {
     if ((sizeY & 1) != 0) {
       sizeY++;
     }
-    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false, true, false);
+    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false, true, false, RoundPerimeter.CIRCLE);
     return kmc;
   }
 

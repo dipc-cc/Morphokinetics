@@ -26,8 +26,12 @@ public class AgSimulation extends AbstractGrowthSimulation {
     super.initialiseKmc();
 
     this.ratesFactory = new AgAgRatesFactory();
-    this.kmc = new AgAgKmc(config, parser.getSizeX(), parser.getSizeY(),
-            parser.justCentralFlake(), parser.randomSeed(), parser.useMaxPerimeter());
+    this.kmc = new AgAgKmc(config, parser.getSizeX(), 
+            parser.getSizeY(),
+            parser.justCentralFlake(),
+            parser.randomSeed(), 
+            parser.useMaxPerimeter(),
+            parser.getPerimeterType());
   }
 
   @Override

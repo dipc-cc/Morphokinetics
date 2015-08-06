@@ -17,9 +17,14 @@ import utils.StaticRandom;
  */
 public class AgAgKmc extends Abstract2DDiffusionKmc {
 
-  public AgAgKmc(ListConfiguration config, int axonSizeI, int axonSizeJ, boolean justCentralFlake,
-          boolean randomise, boolean useMaxPerimeter) {
-    super(config, justCentralFlake, randomise, useMaxPerimeter);
+  public AgAgKmc(ListConfiguration config, 
+          int axonSizeI, 
+          int axonSizeJ, 
+          boolean justCentralFlake,
+          boolean randomise, 
+          boolean useMaxPerimeter,
+          short perimeterType) {
+    super(config, justCentralFlake, randomise, useMaxPerimeter, perimeterType);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     this.lattice = new AgAgLattice(axonSizeI, axonSizeJ, modifiedBuffer, distancePerStep);
@@ -30,7 +35,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
 
   public AgAgKmc(AgAgKmcConfig config, boolean justCentralFlake, boolean randomise) {
 
-    super(config.getListConfig(), justCentralFlake, randomise, false);
+    super(config.getListConfig(), justCentralFlake, randomise, false, RoundPerimeter.CIRCLE);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     this.lattice = new AgAgLattice(config.getAxonSizeI(), config.getAxonSizeJ(), modifiedBuffer, distancePerStep);
@@ -48,8 +53,11 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
       if (this.useMaxPerimeter){
         this.perimeter.setMaxPerimeter();
       }
-
-      this.perimeter.setAtomPerimeter(lattice.setInside(perimeter.getCurrentRadius()));
+      if (this.perimeterType == RoundPerimeter.CIRCLE) {
+        this.perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius()));
+      } else {
+        this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
+      }
 
       int Ycenter = (lattice.getAxonSizeJ() / 2);
       int Xcenter = (lattice.getAxonSizeI() / 2) - (lattice.getAxonSizeJ() / 4);

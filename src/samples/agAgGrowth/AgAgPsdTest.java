@@ -9,6 +9,7 @@ import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
@@ -65,7 +66,7 @@ public class AgAgPsdTest {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, true, false);
+    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, true, false, RoundPerimeter.CIRCLE);
 
     return kmc;
   }
