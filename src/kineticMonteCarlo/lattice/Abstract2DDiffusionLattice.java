@@ -172,10 +172,10 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
                 && bottom <= position.getY() + AgAgLattice.YRatio
                 && position.getY() - AgAgLattice.YRatio <= top) {
           atoms[iAxon][jAxon].setOutside(false);
-          if (abs(left - position.getX()) < 0.6
-                  || abs(right - position.getX()) < 0.6
-                  || abs(top - position.getY()) < AgAgLattice.YRatio
-                  || abs(bottom - position.getY()) < AgAgLattice.YRatio) {
+          if (abs(left - position.getX()) < 0.49
+                  || abs(right - position.getX()) < 0.49
+                  || abs(top - position.getY()) < AgAgLattice.YRatio - 0.5
+                  || abs(bottom - position.getY()) < AgAgLattice.YRatio - 0.5) {
             perimeterList.add(atoms[iAxon][jAxon]);
           }
         } else {
