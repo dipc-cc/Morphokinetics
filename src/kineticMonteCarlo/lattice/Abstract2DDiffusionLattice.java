@@ -22,8 +22,6 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   protected Abstract2DDiffusionAtom[][] atoms;
 
   private final ModifiedBuffer modified;
-  
-   private final double yMax = AgAgLattice.YRatio - 0.5;
 
   public Abstract2DDiffusionLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     this.hexaSizeI = hexaSizeI;
