@@ -31,27 +31,29 @@ public class Morphokinetics {
     }
 
     parser.print();
-    AbstractSimulation currentSimulation = null;
+    AbstractSimulation simulation = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
-        currentSimulation = new AgSimulation(parser);
+        simulation = new AgSimulation(parser);
         break;
       case "graphene":
-        currentSimulation = new GrapheneSimulation(parser);
+        simulation = new GrapheneSimulation(parser);
         break;
       case "Si":
-        currentSimulation = new SiSimulation(parser);
+        simulation = new SiSimulation(parser);
         break;
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-    currentSimulation.initialiseKmc();
-    currentSimulation.createFrame();
-    currentSimulation.doSimulation();
-    currentSimulation.finishSimulation();
+    simulation.initialiseKmc();
+    simulation.createFrame();
+    simulation.doSimulation();
+    simulation.finishSimulation();
 
     System.out.println("Execution has finished");
+    if (!parser.withGui() || !parser.visualize())
+      System.exit(0);
   }
 
   private static void printHeader() {
