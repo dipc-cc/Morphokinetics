@@ -22,53 +22,55 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   protected Abstract2DDiffusionAtom[][] atoms;
 
   private final ModifiedBuffer modified;
+  
+   private final double yMax = AgAgLattice.YRatio - 0.5;
 
-  public Abstract2DDiffusionLattice(int axonSizeI, int axonSizeJ, ModifiedBuffer modified) {
-    this.axonSizeI = axonSizeI;
-    this.axonSizeJ = axonSizeJ;
-    axonSizeK = 1;
+  public Abstract2DDiffusionLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
+    this.hexaSizeI = hexaSizeI;
+    this.hexaSizeJ = hexaSizeJ;
+    hexaSizeK = 1;
     unitCellSize = 4;
     this.modified = modified;
   }
 
-  public abstract Abstract2DDiffusionAtom getNeighbour(int iAxon, int jAxon, int neighbour);
+  public abstract Abstract2DDiffusionAtom getNeighbour(int iHexa, int jHexa, int neighbour);
 
   public void configure(double[][] probabilities) {
-    for (int iAxon = 0; iAxon < atoms[0].length; iAxon++) {
-      for (int jAxon = 0; jAxon < atoms.length; jAxon++) {
-        atoms[jAxon][iAxon].initialize(this, probabilities, this.getModified());
+    for (int iHexa = 0; iHexa < atoms[0].length; iHexa++) {
+      for (int jHexa = 0; jHexa < atoms.length; jHexa++) {
+        atoms[jHexa][iHexa].initialize(this, probabilities, this.getModified());
       }
     }
   }
 
   /**
-   * We ignore the unitCellPos by now, we get directly the atom of i,j axonometric location
+   * We ignore the unitCellPos by now, we get directly the atom of i,j hexagonal location
    *
-   * @param iAxon
-   * @param jAxon
+   * @param iHexa
+   * @param jHexa
    * @return
    */
-  public Abstract2DDiffusionAtom getAtom(int iAxon, int jAxon) {
-    return atoms[iAxon][jAxon];
+  public Abstract2DDiffusionAtom getAtom(int iHexa, int jHexa) {
+    return atoms[iHexa][jHexa];
   }
 
   @Override
-  public AbstractAtom getAtom(int iAxon, int jAxon, int kAxon, int unitCellPos) {
-    if (kAxon != 0 || unitCellPos != 0) {
+  public AbstractAtom getAtom(int iHexa, int jHexa, int kHexa, int unitCellPos) {
+    if (kHexa != 0 || unitCellPos != 0) {
       throw new UnsupportedOperationException("Z position or position inside unit cell cannot be different than 0, not supported"); //To change body of generated methods, choose Tools | Templates.
     }
-    return getAtom(iAxon, jAxon);
+    return getAtom(iHexa, jHexa);
   }
 
   /**
    * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
-   * Returns the cartesian position, given the axonometric (lattice) location
+   * Returns the cartesian position, given the hexagonal (lattice) location
    *
-   * @param iAxon i index in the axonometric mesh
-   * @param jAxon j index in the axonometric mesh
+   * @param iHexa i index in the hexagonal mesh
+   * @param jHexa j index in the hexagonal mesh
    * @return
    */
-  public abstract Point2D getCartesianLocation(int iAxon, int jAxon);
+  public abstract Point2D getCartesianLocation(int iHexa, int jHexa);
 
   public abstract Point2D getCentralCartesianLocation();
 
@@ -87,9 +89,9 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
   protected void setAngles() {
     Point2D middle = getCentralCartesianLocation();
-    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
-      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
-        Point2D cartPosition = getCartesianLocation(iAxon, jAxon);
+    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
+      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+        Point2D cartPosition = getCartesianLocation(iHexa, jHexa);
         double xDif = cartPosition.getX() - middle.getX();
         double yDif = cartPosition.getY() - middle.getY();
         if (xDif == 0) {
@@ -102,15 +104,15 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
         if (xDif >= 0 && yDif < 0) {
           angle = 2 * Math.PI + angle;
         }
-        atoms[iAxon][jAxon].setAngle((float) angle);
+        atoms[iHexa][jHexa].setAngle((float) angle);
       }
     }
   }
 
-  public double getDistanceToCenter(int iAxon, int jAxon) {
+  public double getDistanceToCenter(int iHexa, int jHexa) {
 
     Point2D middle = getCentralCartesianLocation();
-    Point2D position = getCartesianLocation(iAxon, jAxon);
+    Point2D position = getCartesianLocation(iHexa, jHexa);
 
     return position.distance(middle);
   }
@@ -128,15 +130,15 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
     ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
 
-    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
-      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
-          double distance = getDistanceToCenter(iAxon, jAxon);
+    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
+      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+          double distance = getDistanceToCenter(iHexa, jHexa);
           if (radius <= distance) {
-            atoms[iAxon][jAxon].setOutside(true);
+            atoms[iHexa][jHexa].setOutside(true);
           } else {
-            atoms[iAxon][jAxon].setOutside(false);
+            atoms[iHexa][jHexa].setOutside(false);
             if (distance > (radius - 1)) {
-              perimeterList.add(atoms[iAxon][jAxon]);
+              perimeterList.add(atoms[iHexa][jHexa]);
             }
           }
       }
@@ -165,21 +167,22 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     double right = centreCart.getX() + radius;
     double bottom = centreCart.getY() - yRadius * AgAgLattice.YRatio;
     double top = centreCart.getY() + radius;
-    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
-      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
-        Point2D position = getCartesianLocation(iAxon, jAxon);
+    Point2D position;
+    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
+      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+        position = getCartesianLocation(iHexa, jHexa); // TODO deklarazioa hemendik kentzeko!!!!!!!!!!!!!!!
         if (left <= position.getX() && position.getX() <= right
                 && bottom <= position.getY() + AgAgLattice.YRatio
                 && position.getY() - AgAgLattice.YRatio <= top) {
-          atoms[iAxon][jAxon].setOutside(false);
+          atoms[iHexa][jHexa].setOutside(false);
           if (abs(left - position.getX()) < 0.49
                   || abs(right - position.getX()) < 0.49
-                  || abs(top - position.getY()) < AgAgLattice.YRatio - 0.5
-                  || abs(bottom - position.getY()) < AgAgLattice.YRatio - 0.5) {
-            perimeterList.add(atoms[iAxon][jAxon]);
+                  || abs(top - position.getY()) <  AgAgLattice.YRatio - 0.5
+                  || abs(bottom - position.getY()) <  AgAgLattice.YRatio - 0.5) {
+            perimeterList.add(atoms[iHexa][jHexa]);
           }
         } else {
-          atoms[iAxon][jAxon].setOutside(true);
+          atoms[iHexa][jHexa].setOutside(true);
         }
 
       }

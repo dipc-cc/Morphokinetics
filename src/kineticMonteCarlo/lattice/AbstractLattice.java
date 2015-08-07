@@ -12,22 +12,22 @@ import kineticMonteCarlo.atom.AbstractAtom;
  */
 public abstract class AbstractLattice {
 
-  protected int axonSizeI;
-  protected int axonSizeJ;
-  protected int axonSizeK;
+  protected int hexaSizeI;
+  protected int hexaSizeJ;
+  protected int hexaSizeK;
 
   protected int unitCellSize;
 
-  public int getAxonSizeI() {
-    return axonSizeI;
+  public int getHexaSizeI() {
+    return hexaSizeI;
   }
 
-  public int getAxonSizeJ() {
-    return axonSizeJ;
+  public int getHexaSizeJ() {
+    return hexaSizeJ;
   }
 
-  public int getAxonSizeK() {
-    return axonSizeK;
+  public int getHexaSizeK() {
+    return hexaSizeK;
   }
 
   public int getSizeUC() {

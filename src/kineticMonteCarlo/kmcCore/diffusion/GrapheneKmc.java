@@ -18,8 +18,8 @@ import utils.StaticRandom;
 public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
   public GrapheneKmc(ListConfiguration config, 
-          int axonSizeI, 
-          int axonSizeJ, 
+          int hexaSizeI, 
+          int hexaSizeJ, 
           boolean justCentralFlake, 
           boolean randomise, 
           boolean useMaxPerimeter,
@@ -28,7 +28,7 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    this.lattice = new GrapheneLattice(axonSizeI, axonSizeJ, modifiedBuffer, distancePerStep);
+    this.lattice = new GrapheneLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
 
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
@@ -48,8 +48,8 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
         this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
       }
 
-      int iCenter = lattice.getAxonSizeJ() / 2;
-      int jCenter = lattice.getAxonSizeI() / 2;
+      int iCenter = lattice.getHexaSizeJ() / 2;
+      int jCenter = lattice.getHexaSizeI() / 2;
       for (int j = -1; j < 2; j++) {
         for (int i = -1; i < 1; i++) {
           this.depositAtom(jCenter + i, iCenter + j);
@@ -57,9 +57,9 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
       }
     } else {
       for (int i = 0; i < 3; i++) {
-        int iAxon = (int) (StaticRandom.raw() * lattice.getAxonSizeI());
-        int jAxon = (int) (StaticRandom.raw() * lattice.getAxonSizeJ());
-        depositAtom(iAxon, jAxon);
+        int iHexa = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
+        int jHexa = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
+        depositAtom(iHexa, jHexa);
       }
     }
   }

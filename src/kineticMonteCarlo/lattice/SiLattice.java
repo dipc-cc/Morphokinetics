@@ -22,9 +22,9 @@ public class SiLattice extends AbstractEtchingLattice {
       System.exit(-1);
     }
 
-    this.axonSizeI = sizeX;
-    this.axonSizeJ = sizeY;
-    this.axonSizeK = sizeZ;
+    this.hexaSizeI = sizeX;
+    this.hexaSizeJ = sizeY;
+    this.hexaSizeK = sizeZ;
 
     unitCell = new UnitCell();
     unitCellSize = unitCell.create_Unit_Cell(millerX, millerY, millerZ);
@@ -50,12 +50,12 @@ public class SiLattice extends AbstractEtchingLattice {
     double tamY = unitCell.getCellsP()[0].getLimitY() * sizeY;
 
     if (tamX > tamY) {
-      this.axonSizeI = (int) Math.round((int) sizeX * tamY / tamX);
+      this.hexaSizeI = (int) Math.round((int) sizeX * tamY / tamX);
     } else {
-      this.axonSizeJ = (int) Math.round((int) sizeY * tamX / tamY);
+      this.hexaSizeJ = (int) Math.round((int) sizeY * tamX / tamY);
     }
 
-    lattice = new SiAtom[this.axonSizeI * this.axonSizeJ * this.axonSizeK * unitCellSize];
+    lattice = new SiAtom[this.hexaSizeI * this.hexaSizeJ * this.hexaSizeK * unitCellSize];
 
     this.create_atoms(coords, unitCell);
     this.interconnect_atoms(UC_neig, block);
@@ -75,7 +75,7 @@ public class SiLattice extends AbstractEtchingLattice {
 
   public SiAtom getAtom(int Unit_cell_X, int Unit_cell_Y, int Unit_cell_Z, int Unit_cell_pos) {
 
-    return lattice[((Unit_cell_Z * axonSizeJ + Unit_cell_Y) * axonSizeI + Unit_cell_X) * unitCellSize + Unit_cell_pos];
+    return lattice[((Unit_cell_Z * hexaSizeJ + Unit_cell_Y) * hexaSizeI + Unit_cell_X) * unitCellSize + Unit_cell_pos];
   }
 
   @Override
@@ -83,16 +83,16 @@ public class SiLattice extends AbstractEtchingLattice {
 
         //Unremove atoms and set to bulk mode (4,12)
     //----------------------------------------------------------
-    for (int i = 0; i < this.axonSizeJ; i++) {
-      for (int j = 0; j < this.axonSizeI; j++) {
+    for (int i = 0; i < this.hexaSizeJ; i++) {
+      for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
-          lattice[(((axonSizeK - 1) * axonSizeJ + i) * axonSizeI + j) * unitCellSize + a].setOnList(null);
-          lattice[(((axonSizeK - 1) * axonSizeJ + i) * axonSizeI + j) * unitCellSize + a].unRemove();
+          lattice[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].setOnList(null);
+          lattice[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].unRemove();
         }
       }
     }
 
-    for (int k = 0; k < (axonSizeK - 1) * axonSizeJ * axonSizeI * unitCellSize; k++) {
+    for (int k = 0; k < (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
       lattice[k].setOnList(null);
       lattice[k].unRemove();
       lattice[k].setAsBulk();
@@ -100,21 +100,21 @@ public class SiLattice extends AbstractEtchingLattice {
 
         // Update neighborhood of top atoms
     //----------------------------------------------------------  
-    for (int k = (axonSizeK - 1) * axonSizeJ * axonSizeI * unitCellSize; k < axonSizeK * axonSizeJ * axonSizeI * unitCellSize; k++) {
+    for (int k = (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k < hexaSizeK * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
       lattice[k].updateN1FromScratch();
     }
 
-    for (int k = (axonSizeK - 1) * axonSizeJ * axonSizeI * unitCellSize; k < axonSizeK * axonSizeJ * axonSizeI * unitCellSize; k++) {
+    for (int k = (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k < hexaSizeK * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
       lattice[k].updateN2FromScratch();
     }
 
         // Remove top layer atoms
     //----------------------------------------------------------
-    for (int i = 0; i < this.axonSizeJ; i++) {
-      for (int j = 0; j < this.axonSizeI; j++) {
+    for (int i = 0; i < this.hexaSizeJ; i++) {
+      for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
 
-          lattice[(((this.axonSizeK - 1) * this.axonSizeJ + i) * this.axonSizeI + j) * this.unitCellSize + a].remove();
+          lattice[(((this.hexaSizeK - 1) * this.hexaSizeJ + i) * this.hexaSizeI + j) * this.unitCellSize + a].remove();
         }
       }
     }
@@ -123,9 +123,9 @@ public class SiLattice extends AbstractEtchingLattice {
   private void create_atoms(float[] coords, UnitCell UC) {
     //atoms creation
     int cont = 0;
-    for (int a = 0; a < this.axonSizeK; a++) {
-      for (int b = 0; b < this.axonSizeJ; b++) {
-        for (int c = 0; c < this.axonSizeI; c++) {
+    for (int a = 0; a < this.hexaSizeK; a++) {
+      for (int b = 0; b < this.hexaSizeJ; b++) {
+        for (int c = 0; c < this.hexaSizeI; c++) {
           for (int j = 0; j < unitCellSize; j++) {
 
             float X = coords[j * 3] + c * (float) UC.getLimitX();
@@ -144,9 +144,9 @@ public class SiLattice extends AbstractEtchingLattice {
   private void interconnect_atoms(short[] UC_neig, byte[] block) {
     //atoms inter-connection
 
-    for (int Z = 0; Z < this.axonSizeK; Z++) {
-      for (int Y = 0; Y < this.axonSizeJ; Y++) {
-        for (int X = 0; X < this.axonSizeI; X++) {
+    for (int Z = 0; Z < this.hexaSizeK; Z++) {
+      for (int Y = 0; Y < this.hexaSizeJ; Y++) {
+        for (int X = 0; X < this.hexaSizeI; X++) {
           for (int j = 0; j < unitCellSize; j++) {
 
             for (int i = 0; i < 4; i++) {
@@ -162,9 +162,9 @@ public class SiLattice extends AbstractEtchingLattice {
                 vecino_Y--;
               }
               if (vecino_Y < 0) {
-                vecino_Y = axonSizeJ - 1;
+                vecino_Y = hexaSizeJ - 1;
               }
-              if (vecino_Y > axonSizeJ - 1) {
+              if (vecino_Y > hexaSizeJ - 1) {
                 vecino_Y = 0;
               }
 
@@ -175,9 +175,9 @@ public class SiLattice extends AbstractEtchingLattice {
                 vecino_X--;
               }
               if (vecino_X < 0) {
-                vecino_X = axonSizeI - 1;
+                vecino_X = hexaSizeI - 1;
               }
-              if (vecino_X > axonSizeI - 1) {
+              if (vecino_X > hexaSizeI - 1) {
                 vecino_X = 0;
               }
 
@@ -194,12 +194,12 @@ public class SiLattice extends AbstractEtchingLattice {
                 vecino_Z = 0;
                 pos_vecino = j;
               }
-              if (vecino_Z < axonSizeK) {
+              if (vecino_Z < hexaSizeK) {
 
-                lattice[((Z * axonSizeJ + Y) * axonSizeI + X) * unitCellSize + j].setNeighbour(lattice[((vecino_Z * axonSizeJ + vecino_Y) * axonSizeI + vecino_X) * unitCellSize + pos_vecino], i);
+                lattice[((Z * hexaSizeJ + Y) * hexaSizeI + X) * unitCellSize + j].setNeighbour(lattice[((vecino_Z * hexaSizeJ + vecino_Y) * hexaSizeI + vecino_X) * unitCellSize + pos_vecino], i);
 
               } else {
-                lattice[((Z * axonSizeJ + Y) * axonSizeI + X) * unitCellSize + j].setNeighbour(null, i);
+                lattice[((Z * hexaSizeJ + Y) * hexaSizeI + X) * unitCellSize + j].setNeighbour(null, i);
               }
             }
           }

@@ -15,19 +15,19 @@ public class BasicLattice extends AbstractEtchingLattice {
 
   private BasicAtom[] lattice;
 
-  public BasicLattice(int axonSizeI, int axonSizeJ) {
+  public BasicLattice(int hexaSizeI, int hexaSizeJ) {
 
-    this.axonSizeI = axonSizeI;
-    this.axonSizeJ = axonSizeJ;
+    this.hexaSizeI = hexaSizeI;
+    this.hexaSizeJ = hexaSizeJ;
     this.unitCellSize = 1;
-    lattice = new BasicAtom[this.axonSizeI * this.axonSizeJ];
-    createAtoms(axonSizeI, axonSizeJ);
+    lattice = new BasicAtom[this.hexaSizeI * this.hexaSizeJ];
+    createAtoms(hexaSizeI, hexaSizeJ);
     interconnectAtoms();
   }
 
   @Override
-  public AbstractAtom getAtom(int iAxon, int jAxon, int kAxon, int unitCellPos) {
-    return lattice[((jAxon) * axonSizeI + iAxon) * unitCellSize + unitCellPos];
+  public AbstractAtom getAtom(int iHexa, int jHexa, int kHexa, int unitCellPos) {
+    return lattice[((jHexa) * hexaSizeI + iHexa) * unitCellSize + unitCellPos];
   }
 
   @Override
@@ -39,40 +39,40 @@ public class BasicLattice extends AbstractEtchingLattice {
 
   @Override
   public void reset() {
-    for (int i = 0; i < axonSizeJ; i++) {
-      for (int j = 0; j < axonSizeI; j++) {
-        lattice[i * axonSizeI + j].setOnList(null);
-        lattice[i * axonSizeI + j].unRemove();
+    for (int i = 0; i < hexaSizeJ; i++) {
+      for (int j = 0; j < hexaSizeI; j++) {
+        lattice[i * hexaSizeI + j].setOnList(null);
+        lattice[i * hexaSizeI + j].unRemove();
       }
     }
 
-    for (int i = 0; i < axonSizeJ; i++) {
-      for (int j = 0; j < axonSizeI; j++) {
-        lattice[i * axonSizeI + j].updateTypeFromScratch();
+    for (int i = 0; i < hexaSizeJ; i++) {
+      for (int j = 0; j < hexaSizeI; j++) {
+        lattice[i * hexaSizeI + j].updateTypeFromScratch();
       }
     }
 
-    for (int i = 0; i < axonSizeJ; i++) {
-      for (int j = 0; j < axonSizeI; j++) {
+    for (int i = 0; i < hexaSizeJ; i++) {
+      for (int j = 0; j < hexaSizeI; j++) {
         if (i < 4) {
-          lattice[i * axonSizeI + j].remove();
+          lattice[i * hexaSizeI + j].remove();
         }
       }
     }
   }
 
   @Override
-  public int getAxonSizeI() {
-    return super.getAxonSizeI();
+  public int getHexaSizeI() {
+    return super.getHexaSizeI();
   }
 
   @Override
-  public int getAxonSizeJ() {
-    return super.getAxonSizeJ();
+  public int getHexaSizeJ() {
+    return super.getHexaSizeJ();
   }
 
   @Override
-  public int getAxonSizeK() {
+  public int getHexaSizeK() {
     return 1;
   }
 
@@ -81,27 +81,27 @@ public class BasicLattice extends AbstractEtchingLattice {
     return 1;
   }
 
-  private void createAtoms(int axonSizeI, int axonSizeJ) {
-    for (short i = 0; i < axonSizeJ; i++) {
-      for (short j = 0; j < axonSizeI; j++) {
-        lattice[i * axonSizeI + j] = new BasicAtom(j, i);
+  private void createAtoms(int hexaSizeI, int hexaSizeJ) {
+    for (short i = 0; i < hexaSizeJ; i++) {
+      for (short j = 0; j < hexaSizeI; j++) {
+        lattice[i * hexaSizeI + j] = new BasicAtom(j, i);
       }
     }
   }
 
   private void interconnectAtoms() {
-    for (int i = 0; i < axonSizeJ; i++) {
-      for (int j = 0; j < axonSizeI; j++) {
+    for (int i = 0; i < hexaSizeJ; i++) {
+      for (int j = 0; j < hexaSizeI; j++) {
         if (i - 1 >= 0) {
-          lattice[i * axonSizeI + j].setNeighbor(lattice[(i - 1) * axonSizeI + j], 0);                    //up        
+          lattice[i * hexaSizeI + j].setNeighbor(lattice[(i - 1) * hexaSizeI + j], 0);                    //up        
         }
-        lattice[i * axonSizeI + j].setNeighbor(lattice[Math.min(i + 1, axonSizeJ - 1) * axonSizeI + j], 1);      //down        
+        lattice[i * hexaSizeI + j].setNeighbor(lattice[Math.min(i + 1, hexaSizeJ - 1) * hexaSizeI + j], 1);      //down        
         int izq = j - 1;
         if (izq < 0) {
-          izq = axonSizeI - 1;
+          izq = hexaSizeI - 1;
         }
-        lattice[i * axonSizeI + j].setNeighbor(lattice[i * axonSizeI + izq], 2);                        //left        
-        lattice[i * axonSizeI + j].setNeighbor(lattice[i * axonSizeI + ((j + 1) % axonSizeI)], 3);              //right       
+        lattice[i * hexaSizeI + j].setNeighbor(lattice[i * hexaSizeI + izq], 2);                        //left        
+        lattice[i * hexaSizeI + j].setNeighbor(lattice[i * hexaSizeI + ((j + 1) % hexaSizeI)], 3);              //right       
       }
     }
   }

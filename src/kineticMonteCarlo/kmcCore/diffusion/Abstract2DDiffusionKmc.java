@@ -48,7 +48,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     if (justCentralFlake) {
       list.setDepositionProbability(depositionRateML / islandDensitySite);
     } else {
-      list.setDepositionProbability(depositionRateML * lattice.getAxonSizeI() * lattice.getAxonSizeJ());
+      list.setDepositionProbability(depositionRateML * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
     }
   }
 
@@ -200,8 +200,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     Abstract2DDiffusionAtom destinationAtom;
     if (!justCentralFlake) {
       do {
-        int X = (int) (StaticRandom.raw() * lattice.getAxonSizeI());
-        int Y = (int) (StaticRandom.raw() * lattice.getAxonSizeJ());
+        int X = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
+        int Y = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
         destinationAtom = lattice.getAtom(X, Y);
       } while (!this.depositAtom(destinationAtom));
     } else {
@@ -236,8 +236,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       }
     }
 
-    for (int i = 0; i < lattice.getAxonSizeJ(); i++) {
-      for (int j = 0; j < lattice.getAxonSizeI(); j++) {
+    for (int i = 0; i < lattice.getHexaSizeJ(); i++) {
+      for (int j = 0; j < lattice.getHexaSizeI(); j++) {
         if (lattice.getAtom(j, i).isOccupied()) {
           Point2D position = lattice.getCartesianLocation(j, i);
           surface[(int) ((position.getY() - corner1.getY()) * scaleY)][(int) ((position.getX() - corner1.getX()) * scaleX)] = 0;

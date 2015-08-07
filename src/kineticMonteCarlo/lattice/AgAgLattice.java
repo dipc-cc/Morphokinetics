@@ -19,11 +19,11 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   public static final float YRatio = (float) Math.sqrt(3) / 2.0f; // it is the same as: sin 60º
 
-  public AgAgLattice(int axonSizeI, int axonSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
+  public AgAgLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
-    super(axonSizeI, axonSizeJ, modified);
+    super(hexaSizeI, hexaSizeJ, modified);
 
-    atoms = new AgAgAtom[axonSizeI][axonSizeJ];
+    atoms = new AgAgAtom[hexaSizeI][hexaSizeJ];
 
     createAtoms(distancePerStep);
     setAngles();
@@ -35,8 +35,8 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   }
 
   private void instantiateAtoms(HopsPerStep distancePerStep) {
-    for (int i = 0; i < axonSizeI; i++) {
-      for (int j = 0; j < axonSizeJ; j++) {
+    for (int i = 0; i < hexaSizeI; i++) {
+      for (int j = 0; j < hexaSizeJ; j++) {
         atoms[i][j] = new AgAgAtom((short) i, (short) j, distancePerStep);
       }
     }
@@ -44,96 +44,96 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   private void interconnectAtoms() {
 
-    for (int jAxon = 0; jAxon < axonSizeJ; jAxon++) {
-      for (int iAxon = 0; iAxon < axonSizeI; iAxon++) {
-        AgAgAtom atom = (AgAgAtom) atoms[iAxon][jAxon];
-        int X = iAxon;
-        int Y = jAxon - 1;
+    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
+      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+        AgAgAtom atom = (AgAgAtom) atoms[iHexa][jHexa];
+        int X = iHexa;
+        int Y = jHexa - 1;
         if (X < 0) {
-          X = axonSizeI - 1;
+          X = hexaSizeI - 1;
         }
-        if (X == axonSizeI) {
+        if (X == hexaSizeI) {
           X = 0;
         }
         if (Y < 0) {
-          Y = axonSizeJ - 1;
+          Y = hexaSizeJ - 1;
         }
-        if (Y == axonSizeJ) {
+        if (Y == hexaSizeJ) {
           Y = 0;
         }
         atom.setNeighbour((AgAgAtom) atoms[X][Y], 0);
-        X = iAxon + 1;
-        Y = jAxon - 1;
+        X = iHexa + 1;
+        Y = jHexa - 1;
         if (X < 0) {
-          X = axonSizeI - 1;
+          X = hexaSizeI - 1;
         }
-        if (X == axonSizeI) {
+        if (X == hexaSizeI) {
           X = 0;
         }
         if (Y < 0) {
-          Y = axonSizeJ - 1;
+          Y = hexaSizeJ - 1;
         }
-        if (Y == axonSizeJ) {
+        if (Y == hexaSizeJ) {
           Y = 0;
         }
         atom.setNeighbour((AgAgAtom) atoms[X][Y], 1);
-        X = iAxon + 1;
-        Y = jAxon;
+        X = iHexa + 1;
+        Y = jHexa;
         if (X < 0) {
-          X = axonSizeI - 1;
+          X = hexaSizeI - 1;
         }
-        if (X == axonSizeI) {
+        if (X == hexaSizeI) {
           X = 0;
         }
         if (Y < 0) {
-          Y = axonSizeJ - 1;
+          Y = hexaSizeJ - 1;
         }
-        if (Y == axonSizeJ) {
+        if (Y == hexaSizeJ) {
           Y = 0;
         }
         atom.setNeighbour((AgAgAtom) atoms[X][Y], 2);
-        X = iAxon;
-        Y = jAxon + 1;
+        X = iHexa;
+        Y = jHexa + 1;
         if (X < 0) {
-          X = axonSizeI - 1;
+          X = hexaSizeI - 1;
         }
-        if (X == axonSizeI) {
+        if (X == hexaSizeI) {
           X = 0;
         }
         if (Y < 0) {
-          Y = axonSizeJ - 1;
+          Y = hexaSizeJ - 1;
         }
-        if (Y == axonSizeJ) {
+        if (Y == hexaSizeJ) {
           Y = 0;
         }
         atom.setNeighbour((AgAgAtom) atoms[X][Y], 3);
-        X = iAxon - 1;
-        Y = jAxon + 1;
+        X = iHexa - 1;
+        Y = jHexa + 1;
         if (X < 0) {
-          X = axonSizeI - 1;
+          X = hexaSizeI - 1;
         }
-        if (X == axonSizeI) {
+        if (X == hexaSizeI) {
           X = 0;
         }
         if (Y < 0) {
-          Y = axonSizeJ - 1;
+          Y = hexaSizeJ - 1;
         }
-        if (Y == axonSizeJ) {
+        if (Y == hexaSizeJ) {
           Y = 0;
         }
         atom.setNeighbour((AgAgAtom) atoms[X][Y], 4);
-        X = iAxon - 1;
-        Y = jAxon;
+        X = iHexa - 1;
+        Y = jHexa;
         if (X < 0) {
-          X = axonSizeI - 1;
+          X = hexaSizeI - 1;
         }
-        if (X == axonSizeI) {
+        if (X == hexaSizeI) {
           X = 0;
         }
         if (Y < 0) {
-          Y = axonSizeJ - 1;
+          Y = hexaSizeJ - 1;
         }
-        if (Y == axonSizeJ) {
+        if (Y == hexaSizeJ) {
           Y = 0;
         }
         atom.setNeighbour((AgAgAtom) atoms[X][Y], 5);
@@ -142,31 +142,31 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Abstract2DDiffusionAtom getNeighbour(int iAxon, int jAxon, int neighbour) {
-    return ((AgAgAtom) atoms[iAxon][jAxon]).getNeighbour(neighbour);
+  public Abstract2DDiffusionAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+    return ((AgAgAtom) atoms[iHexa][jHexa]).getNeighbour(neighbour);
   }
 
   @Override
-  public int getAvailableDistance(int atomType, short iAxon, short jAxon, int thresholdDistance) {
+  public int getAvailableDistance(int atomType, short iHexa, short jHexa, int thresholdDistance) {
 
     switch (atomType) {
       case 0:
-        return getClearAreaTerrace(iAxon, jAxon, thresholdDistance);
+        return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
       case 2:
-        return getClearAreaStep(iAxon, jAxon, thresholdDistance);
+        return getClearAreaStep(iHexa, jHexa, thresholdDistance);
       default:
         return 0;
     }
   }
 
   @Override
-  public Abstract2DDiffusionAtom getFarSite(int originType, short iAxon, short jAxon, int distance) {
+  public Abstract2DDiffusionAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
 
     switch (originType) {
       case 0:
-        return chooseClearAreaTerrace(iAxon, jAxon, distance, StaticRandom.raw());
+        return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
       case 2:
-        return chooseClearAreaStep(iAxon, jAxon, distance, StaticRandom.raw());
+        return chooseClearAreaStep(iHexa, jHexa, distance, StaticRandom.raw());
       default:
         return null;
     }
@@ -174,127 +174,127 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public Point2D getCentralCartesianLocation() {
-    return new Point2D.Float(axonSizeI / 2.0f, (float) (axonSizeJ * YRatio / 2.0f));
+    return new Point2D.Float(hexaSizeI / 2.0f, (float) (hexaSizeJ * YRatio / 2.0f));
   }
 
   @Override
   public float getCartSizeX() {
-    return axonSizeI;
+    return hexaSizeI;
   }
 
   @Override
   public float getCartSizeY() {
-    return axonSizeJ * YRatio;
+    return hexaSizeJ * YRatio;
   }
 
   @Override
-  public Point2D getCartesianLocation(int iAxon, int jAxon) {
+  public Point2D getCartesianLocation(int iHexa, int jHexa) {
 
-    float xCart = iAxon + jAxon * 0.5f;
-    if (xCart >= axonSizeI) {
-      xCart -= axonSizeI;
+    float xCart = iHexa + jHexa * 0.5f;
+    if (xCart >= hexaSizeI) {
+      xCart -= hexaSizeI;
     }
-    float yCart = jAxon * YRatio;
+    float yCart = jHexa * YRatio;
     return new Point2D.Double(xCart, yCart);
   }
 
-  public int getClearAreaTerrace(short iAxonOrigin, short jAxonOrigin, int m) {
+  public int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int m) {
 
     int s = 1;
 
-    int iAxon = iAxonOrigin;
-    int jAxon = jAxonOrigin - 1;
+    int iHexa = iHexaOrigin;
+    int jHexa = jHexaOrigin - 1;
     byte errorCode = 0;
-    if (jAxon < 0) {
-      jAxon = axonSizeJ - 1;
+    if (jHexa < 0) {
+      jHexa = hexaSizeJ - 1;
     }
 
     out:
     while (true) {
       for (int i = 0; i < s; i++) {
-        if (atoms[iAxon][jAxon].isOutside()) {
+        if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
-        if (atoms[iAxon][jAxon].isOccupied()) {
+        if (atoms[iHexa][jHexa].isOccupied()) {
           errorCode |= 2;
           break out;
         }
-        iAxon++;
-        if (iAxon == axonSizeI) {
-          iAxon = 0;
+        iHexa++;
+        if (iHexa == hexaSizeI) {
+          iHexa = 0;
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[iAxon][jAxon].isOutside()) {
+        if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
-        if (atoms[iAxon][jAxon].isOccupied()) {
+        if (atoms[iHexa][jHexa].isOccupied()) {
           errorCode |= 2;
           break out;
         }
-        jAxon++;
-        if (jAxon == axonSizeJ) {
-          jAxon = 0;
+        jHexa++;
+        if (jHexa == hexaSizeJ) {
+          jHexa = 0;
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[iAxon][jAxon].isOutside()) {
+        if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
-        if (atoms[iAxon][jAxon].isOccupied()) {
+        if (atoms[iHexa][jHexa].isOccupied()) {
           errorCode |= 2;
           break out;
         }
-        jAxon++;
-        iAxon--;
-        if (jAxon == axonSizeJ) {
-          jAxon = 0;
+        jHexa++;
+        iHexa--;
+        if (jHexa == hexaSizeJ) {
+          jHexa = 0;
         }
-        if (iAxon < 0) {
-          iAxon = axonSizeI - 1;
+        if (iHexa < 0) {
+          iHexa = hexaSizeI - 1;
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[iAxon][jAxon].isOutside()) {
+        if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
-        if (atoms[iAxon][jAxon].isOccupied()) {
+        if (atoms[iHexa][jHexa].isOccupied()) {
           errorCode |= 2;
           break out;
         }
-        iAxon--;
-        if (iAxon < 0) {
-          iAxon = axonSizeI - 1;
+        iHexa--;
+        if (iHexa < 0) {
+          iHexa = hexaSizeI - 1;
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[iAxon][jAxon].isOutside()) {
+        if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
-        if (atoms[iAxon][jAxon].isOccupied()) {
+        if (atoms[iHexa][jHexa].isOccupied()) {
           errorCode |= 2;
           break out;
         }
-        jAxon--;
-        if (jAxon < 0) {
-          jAxon = axonSizeJ - 1;
+        jHexa--;
+        if (jHexa < 0) {
+          jHexa = hexaSizeJ - 1;
         }
       }
       for (int i = 0; i < s; i++) {
-        if (atoms[iAxon][jAxon].isOutside()) {
+        if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
-        if (atoms[iAxon][jAxon].isOccupied()) {
+        if (atoms[iHexa][jHexa].isOccupied()) {
           errorCode |= 2;
           break out;
         }
-        jAxon--;
-        iAxon++;
-        if (jAxon < 0) {
-          jAxon = axonSizeJ - 1;
+        jHexa--;
+        iHexa++;
+        if (jHexa < 0) {
+          jHexa = hexaSizeJ - 1;
         }
-        if (iAxon == axonSizeI) {
-          iAxon = 0;
+        if (iHexa == hexaSizeI) {
+          iHexa = 0;
         }
       }
 
@@ -305,9 +305,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         return s;
       }
       s++;
-      jAxon--;
-      if (jAxon < 0) {
-        jAxon = axonSizeJ - 1;
+      jHexa--;
+      if (jHexa < 0) {
+        jHexa = hexaSizeJ - 1;
       }
     }
 
@@ -320,14 +320,14 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return -1;
   }
 
-  public Abstract2DDiffusionAtom chooseClearAreaTerrace(short iAxonOrigin, short jAxonOrigin, int s, double raw) {
+  public Abstract2DDiffusionAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int s, double raw) {
 
     int temp = (int) (raw * (s * 6));
 
-    int iAxon = iAxonOrigin;
-    int jAxon = jAxonOrigin - s;
-    if (jAxon < 0) {
-      jAxon = axonSizeJ - 1;
+    int iHexa = iHexaOrigin;
+    int jHexa = jHexaOrigin - s;
+    if (jHexa < 0) {
+      jHexa = hexaSizeJ - 1;
     }
 
     int counter = 0;
@@ -335,69 +335,69 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     for (int i = 0; i < s; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
-      iAxon++;
-      if (iAxon == axonSizeI) {
-        iAxon = 0;
-      }
-    }
-    for (int i = 0; i < s; i++) {
-      counter++;
-      if (counter > temp) {
-        return atoms[iAxon][jAxon];
-      }
-      jAxon++;
-      if (jAxon == axonSizeJ) {
-        jAxon = 0;
+      iHexa++;
+      if (iHexa == hexaSizeI) {
+        iHexa = 0;
       }
     }
     for (int i = 0; i < s; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
-      jAxon++;
-      iAxon--;
-      if (jAxon == axonSizeJ) {
-        jAxon = 0;
-      }
-      if (iAxon < 0) {
-        iAxon = axonSizeI - 1;
+      jHexa++;
+      if (jHexa == hexaSizeJ) {
+        jHexa = 0;
       }
     }
     for (int i = 0; i < s; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
-      iAxon--;
-      if (iAxon < 0) {
-        iAxon = axonSizeI - 1;
+      jHexa++;
+      iHexa--;
+      if (jHexa == hexaSizeJ) {
+        jHexa = 0;
       }
-    }
-    for (int i = 0; i < s; i++) {
-      counter++;
-      if (counter > temp) {
-        return atoms[iAxon][jAxon];
-      }
-      jAxon--;
-      if (jAxon < 0) {
-        jAxon = axonSizeJ - 1;
+      if (iHexa < 0) {
+        iHexa = hexaSizeI - 1;
       }
     }
     for (int i = 0; i < s; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
-      jAxon--;
-      iAxon++;
-      if (jAxon < 0) {
-        jAxon = axonSizeJ - 1;
+      iHexa--;
+      if (iHexa < 0) {
+        iHexa = hexaSizeI - 1;
       }
-      if (iAxon == axonSizeI) {
-        iAxon = 0;
+    }
+    for (int i = 0; i < s; i++) {
+      counter++;
+      if (counter > temp) {
+        return atoms[iHexa][jHexa];
+      }
+      jHexa--;
+      if (jHexa < 0) {
+        jHexa = hexaSizeJ - 1;
+      }
+    }
+    for (int i = 0; i < s; i++) {
+      counter++;
+      if (counter > temp) {
+        return atoms[iHexa][jHexa];
+      }
+      jHexa--;
+      iHexa++;
+      if (jHexa < 0) {
+        jHexa = hexaSizeJ - 1;
+      }
+      if (iHexa == hexaSizeI) {
+        iHexa = 0;
       }
     }
 
@@ -405,28 +405,28 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   }
 
-  public int getClearAreaStep(short iAxonOrigin, short jAxonOrigin, int m) {
+  public int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int m) {
 
     int s = 1;
-    int iAxon;
-    int jAxon;
+    int iHexa;
+    int jHexa;
 
-    switch (atoms[iAxonOrigin][jAxonOrigin].getOrientation()) {
+    switch (atoms[iHexaOrigin][jHexaOrigin].getOrientation()) {
       case 0:
       case 3:
         while (true) {
-          iAxon = iAxonOrigin + s;
-          if (iAxon >= axonSizeI) {
-            iAxon = 0;
+          iHexa = iHexaOrigin + s;
+          if (iHexa >= hexaSizeI) {
+            iHexa = 0;
           }
-          if (atoms[iAxon][jAxonOrigin].isOccupied() || atoms[iAxon][jAxonOrigin].getType() < 2) {
+          if (atoms[iHexa][jHexaOrigin].isOccupied() || atoms[iHexa][jHexaOrigin].getType() < 2) {
             return s - 1;
           }
-          iAxon = iAxonOrigin - s;
-          if (iAxon < 0) {
-            iAxon = axonSizeI - 1;
+          iHexa = iHexaOrigin - s;
+          if (iHexa < 0) {
+            iHexa = hexaSizeI - 1;
           }
-          if (atoms[iAxon][jAxonOrigin].isOccupied() || atoms[iAxon][jAxonOrigin].getType() < 2) {
+          if (atoms[iHexa][jHexaOrigin].isOccupied() || atoms[iHexa][jHexaOrigin].getType() < 2) {
             return s - 1;
           }
           if (s == m) {
@@ -438,18 +438,18 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
       case 1:
       case 4:
         while (true) {
-          jAxon = jAxonOrigin + s;
-          if (jAxon >= axonSizeJ) {
-            jAxon = 0;
+          jHexa = jHexaOrigin + s;
+          if (jHexa >= hexaSizeJ) {
+            jHexa = 0;
           }
-          if (atoms[iAxonOrigin][jAxon].isOccupied() || atoms[iAxonOrigin][jAxon].getType() < 2) {
+          if (atoms[iHexaOrigin][jHexa].isOccupied() || atoms[iHexaOrigin][jHexa].getType() < 2) {
             return s - 1;
           }
-          jAxon = jAxonOrigin - s;
-          if (jAxon < 0) {
-            jAxon = axonSizeJ - 1;
+          jHexa = jHexaOrigin - s;
+          if (jHexa < 0) {
+            jHexa = hexaSizeJ - 1;
           }
-          if (atoms[iAxonOrigin][jAxon].isOccupied() || atoms[iAxonOrigin][jAxon].getType() < 2) {
+          if (atoms[iHexaOrigin][jHexa].isOccupied() || atoms[iHexaOrigin][jHexa].getType() < 2) {
             return s - 1;
           }
           if (s == m) {
@@ -461,26 +461,26 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
       case 2:
       case 5:
         while (true) {
-          iAxon = iAxonOrigin - s;
-          if (iAxon < 0) {
-            iAxon = axonSizeI - 1;
+          iHexa = iHexaOrigin - s;
+          if (iHexa < 0) {
+            iHexa = hexaSizeI - 1;
           }
-          jAxon = jAxonOrigin + s;
-          if (jAxon >= axonSizeJ) {
-            jAxon = 0;
+          jHexa = jHexaOrigin + s;
+          if (jHexa >= hexaSizeJ) {
+            jHexa = 0;
           }
-          if (atoms[iAxon][jAxon].isOccupied() || atoms[iAxon][jAxon].getType() < 2) {
+          if (atoms[iHexa][jHexa].isOccupied() || atoms[iHexa][jHexa].getType() < 2) {
             return s - 1;
           }
-          iAxon = iAxonOrigin + s;
-          if (iAxon >= axonSizeI) {
-            iAxon = 0;
+          iHexa = iHexaOrigin + s;
+          if (iHexa >= hexaSizeI) {
+            iHexa = 0;
           }
-          jAxon = jAxonOrigin - s;
-          if (jAxon < 0) {
-            jAxon = axonSizeJ - 1;
+          jHexa = jHexaOrigin - s;
+          if (jHexa < 0) {
+            jHexa = hexaSizeJ - 1;
           }
-          if (atoms[iAxon][jAxon].isOccupied() || atoms[iAxon][jAxon].getType() < 2) {
+          if (atoms[iHexa][jHexa].isOccupied() || atoms[iHexa][jHexa].getType() < 2) {
             return s - 1;
           }
           if (s == m) {
@@ -494,64 +494,64 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  public Abstract2DDiffusionAtom chooseClearAreaStep(short iAxonOrigin, short jAxonOrigin, int s, double raw) {
+  public Abstract2DDiffusionAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int s, double raw) {
 
-    int iAxon;
-    int jAxon;
+    int iHexa;
+    int jHexa;
 
-    switch (atoms[iAxonOrigin][jAxonOrigin].getOrientation()) {
+    switch (atoms[iHexaOrigin][jHexaOrigin].getOrientation()) {
       case 0:
       case 3:
         if (raw > 0.5) {
-          iAxon = iAxonOrigin + s;
-          if (iAxon >= axonSizeI) {
-            iAxon = 0;
+          iHexa = iHexaOrigin + s;
+          if (iHexa >= hexaSizeI) {
+            iHexa = 0;
           }
-          return atoms[iAxon][jAxonOrigin];
+          return atoms[iHexa][jHexaOrigin];
         } else {
-          iAxon = iAxonOrigin - s;
-          if (iAxon < 0) {
-            iAxon = axonSizeI - 1;
+          iHexa = iHexaOrigin - s;
+          if (iHexa < 0) {
+            iHexa = hexaSizeI - 1;
           }
-          return atoms[iAxon][jAxonOrigin];
+          return atoms[iHexa][jHexaOrigin];
         }
       case 1:
       case 4:
         if (raw > 0.5) {
-          jAxon = jAxonOrigin + s;
-          if (jAxon >= axonSizeJ) {
-            jAxon = 0;
+          jHexa = jHexaOrigin + s;
+          if (jHexa >= hexaSizeJ) {
+            jHexa = 0;
           }
-          return atoms[iAxonOrigin][jAxon];
+          return atoms[iHexaOrigin][jHexa];
         } else {
-          jAxon = jAxonOrigin - s;
-          if (jAxon < 0) {
-            jAxon = axonSizeJ - 1;
+          jHexa = jHexaOrigin - s;
+          if (jHexa < 0) {
+            jHexa = hexaSizeJ - 1;
           }
-          return atoms[iAxonOrigin][jAxon];
+          return atoms[iHexaOrigin][jHexa];
         }
       case 2:
       case 5:
         if (raw > 0.5) {
-          iAxon = iAxonOrigin - s;
-          if (iAxon < 0) {
-            iAxon = axonSizeI - 1;
+          iHexa = iHexaOrigin - s;
+          if (iHexa < 0) {
+            iHexa = hexaSizeI - 1;
           }
-          jAxon = jAxonOrigin + s;
-          if (jAxon >= axonSizeJ) {
-            jAxon = 0;
+          jHexa = jHexaOrigin + s;
+          if (jHexa >= hexaSizeJ) {
+            jHexa = 0;
           }
-          return atoms[iAxon][jAxon];
+          return atoms[iHexa][jHexa];
         } else {
-          iAxon = iAxonOrigin + s;
-          if (iAxon >= axonSizeI) {
-            iAxon = 0;
+          iHexa = iHexaOrigin + s;
+          if (iHexa >= hexaSizeI) {
+            iHexa = 0;
           }
-          jAxon = jAxonOrigin - s;
-          if (jAxon < 0) {
-            jAxon = axonSizeJ - 1;
+          jHexa = jHexaOrigin - s;
+          if (jHexa < 0) {
+            jHexa = hexaSizeJ - 1;
           }
-          return atoms[iAxon][jAxon];
+          return atoms[iHexa][jHexa];
         }
     }
     return null;

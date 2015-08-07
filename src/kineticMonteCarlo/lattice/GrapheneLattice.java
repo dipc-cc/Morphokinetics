@@ -21,11 +21,11 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
   private static final double cos60 = Math.cos(60 * Math.PI / 180);
   private static final double cos30 = Math.cos(30 * Math.PI / 180);
 
-  public GrapheneLattice(int axonSizeI, int axonSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
+  public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
-    super(axonSizeI, axonSizeJ, modified);
+    super(hexaSizeI, hexaSizeJ, modified);
 
-    atoms = new GrapheneAtom[axonSizeI][axonSizeJ];
+    atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
 
     if (latticeNeighborhoodData == null) {
       initializeNeighborHoodCache();
@@ -55,28 +55,28 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
 
   private void createAtoms(HopsPerStep distancePerStep) {
 
-    for (int iAxon = 0; iAxon < axonSizeI; iAxon += 2) {
-      for (int jAxon = 0; jAxon < axonSizeJ; jAxon += 2) {
+    for (int iHexa = 0; iHexa < hexaSizeI; iHexa += 2) {
+      for (int jHexa = 0; jHexa < hexaSizeJ; jHexa += 2) {
         //para cada unit cell
 
         //atomo 0 de la unit cell, tipo 0
-        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
 
-        iAxon++;
+        iHexa++;
         //atomo 1 de la unit cell, tipo 1
-        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
 
-        iAxon--;
-        jAxon++;
+        iHexa--;
+        jHexa++;
         //atomo 2 de la unit cell, tipo 1   
-        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
 
-        iAxon++;
+        iHexa++;
         //atomo 3 de la unit cell, tipo 0
-        atoms[iAxon][jAxon] = new GrapheneAtom((short) iAxon, (short) jAxon, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
 
-        iAxon--;
-        jAxon--;
+        iHexa--;
+        jHexa--;
       }
     }
   }
@@ -91,92 +91,92 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       vec_X = -vec_X;
       vec_Y = -vec_Y;
     }
-    int iAxon = xCart + vec_X;
-    if (iAxon < 0) {
-      iAxon += axonSizeI;
-    } else if (iAxon >= axonSizeI) {
-      iAxon -= axonSizeI;
+    int iHexa = xCart + vec_X;
+    if (iHexa < 0) {
+      iHexa += hexaSizeI;
+    } else if (iHexa >= hexaSizeI) {
+      iHexa -= hexaSizeI;
     }
-    int jAxon = yCart + vec_Y;
-    if (jAxon < 0) {
-      jAxon += axonSizeJ;
-    } else if (jAxon >= axonSizeJ) {
-      jAxon -= axonSizeJ;
+    int jHexa = yCart + vec_Y;
+    if (jHexa < 0) {
+      jHexa += hexaSizeJ;
+    } else if (jHexa >= hexaSizeJ) {
+      jHexa -= hexaSizeJ;
     }
-    return (GrapheneAtom) atoms[iAxon][jAxon];
+    return (GrapheneAtom) atoms[iHexa][jHexa];
   }
 
-  public int getCartPosX(int iAxon, int jAxon, int pos, boolean type0) {
+  public int getCartPosX(int iHexa, int jHexa, int pos, boolean type0) {
     int vec_X = (short) (latticeNeighborhoodData[pos] & 0xFFFF);
     if (!type0) {
       vec_X = -vec_X;
     }
-    int posXV = iAxon + vec_X;
+    int posXV = iHexa + vec_X;
     if (posXV < 0) {
-      posXV += axonSizeI;
-    } else if (posXV >= axonSizeI) {
-      posXV -= axonSizeI;
+      posXV += hexaSizeI;
+    } else if (posXV >= hexaSizeI) {
+      posXV -= hexaSizeI;
     }
     return posXV;
   }
 
-  public int getCartPosY(int iAxon, int jAxon, int pos, boolean type0) {
+  public int getCartPosY(int iHexa, int jHexa, int pos, boolean type0) {
     int vec_Y = ((latticeNeighborhoodData[pos] >> 16));
     if (!type0) {
       vec_Y = -vec_Y;
     }
-    int posYV = jAxon + vec_Y;
+    int posYV = jHexa + vec_Y;
     if (posYV < 0) {
-      posYV += axonSizeJ;
-    } else if (posYV >= axonSizeJ) {
-      posYV -= axonSizeJ;
+      posYV += hexaSizeJ;
+    } else if (posYV >= hexaSizeJ) {
+      posYV -= hexaSizeJ;
     }
     return posYV;
   }
 
   @Override
-  public int getAvailableDistance(int atomType, short iAxon, short jAxon, int thresholdDistance) {
+  public int getAvailableDistance(int atomType, short iHexa, short jHexa, int thresholdDistance) {
 
     int[] point = new int[2];
     switch (atomType) {
       case 0:
-        return getClearAreaTerrace(iAxon, jAxon, thresholdDistance);
+        return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
       case 2:
-        return getClearAreaZigzag(iAxon, jAxon, thresholdDistance, point, StaticRandom.raw());
+        return getClearAreaZigzag(iHexa, jHexa, thresholdDistance, point, StaticRandom.raw());
       case 3:
-        return getClearAreaArmchair(iAxon, jAxon, thresholdDistance, point, StaticRandom.raw());
+        return getClearAreaArmchair(iHexa, jHexa, thresholdDistance, point, StaticRandom.raw());
       default:
         return 0;
     }
   }
 
   @Override
-  public Abstract2DDiffusionAtom getFarSite(int originType, short iAxon, short jAxon, int distance) {
+  public Abstract2DDiffusionAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
 
     int[] point = new int[2];
     switch (originType) {
       case 0:
-        return chooseClearAreaTerrace(iAxon, jAxon, distance, StaticRandom.raw());
+        return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
       case 2:
-        getClearAreaZigzag(iAxon, jAxon, distance, point, StaticRandom.raw());
+        getClearAreaZigzag(iHexa, jHexa, distance, point, StaticRandom.raw());
         return this.getAtom(point[0], point[1]);
       case 3:
-        getClearAreaArmchair(iAxon, jAxon, distance, point, StaticRandom.raw());
+        getClearAreaArmchair(iHexa, jHexa, distance, point, StaticRandom.raw());
         return this.getAtom(point[0], point[1]);
       default:
         return null;
     }
   }
 
-  private Abstract2DDiffusionAtom chooseClearAreaTerrace(short iAxonOrigin, short jAxonOrigin, int s, double raw) {
+  private Abstract2DDiffusionAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int s, double raw) {
 
     int temp = (int) (raw * (s * 2 * 6));
 
-    boolean type0 = (((iAxonOrigin + jAxonOrigin) & 1) == 0);
-    int iAxon = iAxonOrigin;
-    int jAxon = (jAxonOrigin - s * 2);
-    if (jAxon < 0) {
-      jAxon += axonSizeJ;
+    boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
+    int iHexa = iHexaOrigin;
+    int jHexa = (jHexaOrigin - s * 2);
+    if (jHexa < 0) {
+      jHexa += hexaSizeJ;
     }
 
     int counter = 0;
@@ -184,102 +184,102 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
       if (type0) {
-        iAxon = getCartPosX(iAxon, jAxon, 0, true);
-        jAxon = getCartPosY(iAxon, jAxon, 0, true);
+        iHexa = getCartPosX(iHexa, jHexa, 0, true);
+        jHexa = getCartPosY(iHexa, jHexa, 0, true);
       } else {
-        iAxon = getCartPosX(iAxon, jAxon, 1, false);
-        jAxon = getCartPosY(iAxon, jAxon, 1, false);
+        iHexa = getCartPosX(iHexa, jHexa, 1, false);
+        jHexa = getCartPosY(iHexa, jHexa, 1, false);
       }
       type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
       if (type0) {
-        iAxon = getCartPosX(iAxon, jAxon, 2, true);
-        jAxon = getCartPosY(iAxon, jAxon, 2, true);
+        iHexa = getCartPosX(iHexa, jHexa, 2, true);
+        jHexa = getCartPosY(iHexa, jHexa, 2, true);
       } else {
-        iAxon = getCartPosX(iAxon, jAxon, 1, false);
-        jAxon = getCartPosY(iAxon, jAxon, 1, false);
+        iHexa = getCartPosX(iHexa, jHexa, 1, false);
+        jHexa = getCartPosY(iHexa, jHexa, 1, false);
       }
       type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
       if (type0) {
-        iAxon = getCartPosX(iAxon, jAxon, 2, true);
-        jAxon = getCartPosY(iAxon, jAxon, 2, true);
+        iHexa = getCartPosX(iHexa, jHexa, 2, true);
+        jHexa = getCartPosY(iHexa, jHexa, 2, true);
       } else {
-        iAxon = getCartPosX(iAxon, jAxon, 0, false);
-        jAxon = getCartPosY(iAxon, jAxon, 0, false);
+        iHexa = getCartPosX(iHexa, jHexa, 0, false);
+        jHexa = getCartPosY(iHexa, jHexa, 0, false);
       }
       type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
       if (type0) {
-        iAxon = getCartPosX(iAxon, jAxon, 1, true);
-        jAxon = getCartPosY(iAxon, jAxon, 1, true);
+        iHexa = getCartPosX(iHexa, jHexa, 1, true);
+        jHexa = getCartPosY(iHexa, jHexa, 1, true);
       } else {
-        iAxon = getCartPosX(iAxon, jAxon, 0, false);
-        jAxon = getCartPosY(iAxon, jAxon, 0, false);
+        iHexa = getCartPosX(iHexa, jHexa, 0, false);
+        jHexa = getCartPosY(iHexa, jHexa, 0, false);
       }
       type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
       if (type0) {
-        iAxon = getCartPosX(iAxon, jAxon, 1, true);
-        jAxon = getCartPosY(iAxon, jAxon, 1, true);
+        iHexa = getCartPosX(iHexa, jHexa, 1, true);
+        jHexa = getCartPosY(iHexa, jHexa, 1, true);
       } else {
-        iAxon = getCartPosX(iAxon, jAxon, 2, false);
-        jAxon = getCartPosY(iAxon, jAxon, 2, false);
+        iHexa = getCartPosX(iHexa, jHexa, 2, false);
+        jHexa = getCartPosY(iHexa, jHexa, 2, false);
       }
       type0 = !type0;
     }
     for (int i = 0; i < s * 2; i++) {
       counter++;
       if (counter > temp) {
-        return atoms[iAxon][jAxon];
+        return atoms[iHexa][jHexa];
       }
       if (type0) {
-        iAxon = getCartPosX(iAxon, jAxon, 0, true);
-        jAxon = getCartPosY(iAxon, jAxon, 0, true);
+        iHexa = getCartPosX(iHexa, jHexa, 0, true);
+        jHexa = getCartPosY(iHexa, jHexa, 0, true);
       } else {
-        iAxon = getCartPosX(iAxon, jAxon, 2, false);
-        jAxon = getCartPosY(iAxon, jAxon, 2, false);
+        iHexa = getCartPosX(iHexa, jHexa, 2, false);
+        jHexa = getCartPosY(iHexa, jHexa, 2, false);
       }
       type0 = !type0;
     }
     return null;
   }
 
-  private int getClearAreaTerrace(short iAxonOrigin, short jAxonOrigin, int m) {
+  private int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int m) {
 
     int s = 1;
 
-    boolean type0 = (((iAxonOrigin + jAxonOrigin) & 1) == 0);
+    boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
 
-    short iAxon;
-    iAxon = iAxonOrigin;
+    short iHexa;
+    iHexa = iHexaOrigin;
 
-    short jAxon = (short) (jAxonOrigin - 2);
-    if (jAxon < 0) {
-      jAxon += axonSizeJ;
+    short jHexa = (short) (jHexaOrigin - 2);
+    if (jHexa < 0) {
+      jHexa += hexaSizeJ;
     }
     byte errorCode = 0;
 
@@ -289,9 +289,9 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type0) {
-          a = getNeighbour(iAxon, jAxon, 0);
+          a = getNeighbour(iHexa, jHexa, 0);
         } else {
-          a = getNeighbour(iAxon, jAxon, 1);
+          a = getNeighbour(iHexa, jHexa, 1);
         }
         if (a.isOutside()) {
           errorCode |= 1;
@@ -300,17 +300,17 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
           errorCode |= 2;
           break out;
         }
-        iAxon = a.getX();
-        jAxon = a.getY();
+        iHexa = a.getX();
+        jHexa = a.getY();
         type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type0) {
-          a = getNeighbour(iAxon, jAxon, 2);
+          a = getNeighbour(iHexa, jHexa, 2);
         } else {
-          a = getNeighbour(iAxon, jAxon, 1);
+          a = getNeighbour(iHexa, jHexa, 1);
         }
         if (a.isOutside()) {
           errorCode |= 1;
@@ -319,17 +319,17 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
           errorCode |= 2;
           break out;
         }
-        iAxon = a.getX();
-        jAxon = a.getY();
+        iHexa = a.getX();
+        jHexa = a.getY();
         type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type0) {
-          a = getNeighbour(iAxon, jAxon, 2);
+          a = getNeighbour(iHexa, jHexa, 2);
         } else {
-          a = getNeighbour(iAxon, jAxon, 0);
+          a = getNeighbour(iHexa, jHexa, 0);
         }
         if (a.isOutside()) {
           errorCode |= 1;
@@ -338,17 +338,17 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
           errorCode |= 2;
           break out;
         }
-        iAxon = a.getX();
-        jAxon = a.getY();
+        iHexa = a.getX();
+        jHexa = a.getY();
         type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type0) {
-          a = getNeighbour(iAxon, jAxon, 1);
+          a = getNeighbour(iHexa, jHexa, 1);
         } else {
-          a = getNeighbour(iAxon, jAxon, 0);
+          a = getNeighbour(iHexa, jHexa, 0);
         }
         if (a.isOutside()) {
           errorCode |= 1;
@@ -357,17 +357,17 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
           errorCode |= 2;
           break out;
         }
-        iAxon = a.getX();
-        jAxon = a.getY();
+        iHexa = a.getX();
+        jHexa = a.getY();
         type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type0) {
-          a = getNeighbour(iAxon, jAxon, 1);
+          a = getNeighbour(iHexa, jHexa, 1);
         } else {
-          a = getNeighbour(iAxon, jAxon, 2);
+          a = getNeighbour(iHexa, jHexa, 2);
         }
         if (a.isOutside()) {
           errorCode |= 1;
@@ -376,17 +376,17 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
           errorCode |= 2;
           break out;
         }
-        iAxon = a.getX();
-        jAxon = a.getY();
+        iHexa = a.getX();
+        jHexa = a.getY();
         type0 = !type0;
       }
 
       for (int i = 0; i < s * 2; i++) {
         GrapheneAtom a;
         if (type0) {
-          a = getNeighbour(iAxon, jAxon, 0);
+          a = getNeighbour(iHexa, jHexa, 0);
         } else {
-          a = getNeighbour(iAxon, jAxon, 2);
+          a = getNeighbour(iHexa, jHexa, 2);
         }
         if (a.isOutside()) {
           errorCode |= 1;
@@ -395,8 +395,8 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
           errorCode |= 2;
           break out;
         }
-        iAxon = a.getX();
-        jAxon = a.getY();
+        iHexa = a.getX();
+        jHexa = a.getY();
         type0 = !type0;
       }
 
@@ -407,9 +407,9 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
         return s;
       }
       s++;
-      jAxon -= 2;
-      if (jAxon < 0) {
-        jAxon = (short) (axonSizeJ - 1);
+      jHexa -= 2;
+      if (jHexa < 0) {
+        jHexa = (short) (hexaSizeJ - 1);
       }
     }
 
@@ -422,15 +422,15 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     return -1;
   }
 
-  private int getClearAreaZigzag(short iAxonOrigin, short jAxonOrigin, int m, int[] XY_destino, double raw) {
+  private int getClearAreaZigzag(short iHexaOrigin, short jHexaOrigin, int m, int[] XY_destino, double raw) {
 
     int s = 1;
-    int orientation = atoms[iAxonOrigin][jAxonOrigin].getOrientation();
+    int orientation = atoms[iHexaOrigin][jHexaOrigin].getOrientation();
 
-    int iAxon1 = iAxonOrigin;
-    int jAxon1 = jAxonOrigin;
-    int iAxon2 = iAxonOrigin;
-    int jAxon2 = jAxonOrigin;
+    int iHexa1 = iHexaOrigin;
+    int jHexa1 = jHexaOrigin;
+    int iHexa2 = iHexaOrigin;
+    int jHexa2 = jHexaOrigin;
 
     int neighbour1, neighbour2;
 
@@ -456,28 +456,28 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     while (true) {
       int type1, type2;
 
-      iAxon1 = getCartPosX(iAxon1, jAxon1, neighbour1, true);
-      iAxon2 = getCartPosX(iAxon2, jAxon2, neighbour2, true);
-      jAxon1 = getCartPosY(iAxon1, jAxon1, neighbour1, true);
-      jAxon2 = getCartPosY(iAxon2, jAxon2, neighbour2, true);
-      if (s == 1 && atoms[iAxonOrigin][jAxonOrigin].isOccupied()) {
-        type1 = atoms[iAxon1][jAxon1].getTypeWithoutNeighbour(neighbour1);
-        type2 = atoms[iAxon2][jAxon2].getTypeWithoutNeighbour(neighbour2);
+      iHexa1 = getCartPosX(iHexa1, jHexa1, neighbour1, true);
+      iHexa2 = getCartPosX(iHexa2, jHexa2, neighbour2, true);
+      jHexa1 = getCartPosY(iHexa1, jHexa1, neighbour1, true);
+      jHexa2 = getCartPosY(iHexa2, jHexa2, neighbour2, true);
+      if (s == 1 && atoms[iHexaOrigin][jHexaOrigin].isOccupied()) {
+        type1 = atoms[iHexa1][jHexa1].getTypeWithoutNeighbour(neighbour1);
+        type2 = atoms[iHexa2][jHexa2].getTypeWithoutNeighbour(neighbour2);
       } else {
-        type1 = atoms[iAxon1][jAxon1].getType();
-        type2 = atoms[iAxon2][jAxon2].getType();
+        type1 = atoms[iHexa1][jHexa1].getType();
+        type2 = atoms[iHexa2][jHexa2].getType();
       }
 
-      if (atoms[iAxon1][jAxon1].isOccupied() || atoms[iAxon2][jAxon2].isOccupied() || type2 != 2 || type1 != 2) {
+      if (atoms[iHexa1][jHexa1].isOccupied() || atoms[iHexa2][jHexa2].isOccupied() || type2 != 2 || type1 != 2) {
         return s - 1;
       }
 
       if (raw < 0.5) {
-        XY_destino[0] = iAxon1;
-        XY_destino[1] = jAxon1;
+        XY_destino[0] = iHexa1;
+        XY_destino[1] = jHexa1;
       } else {
-        XY_destino[0] = iAxon2;
-        XY_destino[1] = jAxon2;
+        XY_destino[0] = iHexa2;
+        XY_destino[1] = jHexa2;
       }
 
       if (s == m) {
@@ -487,16 +487,16 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  private int getClearAreaArmchair(short iAxonOrigin, short jAxonOrigin, int m, int[] XY_destination, double raw) {
+  private int getClearAreaArmchair(short iHexaOrigin, short jHexaOrigin, int m, int[] XY_destination, double raw) {
 
     int s = 1;
-    boolean type0 = (((iAxonOrigin + jAxonOrigin) & 1) == 0);
-    int orientacion = atoms[iAxonOrigin][jAxonOrigin].getOrientation();
+    boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
+    int orientacion = atoms[iHexaOrigin][jHexaOrigin].getOrientation();
 
-    int iAxon1 = iAxonOrigin;
-    int jAxon1 = jAxonOrigin;
-    int iAxon2 = iAxonOrigin;
-    int jAxon2 = jAxonOrigin;
+    int iHexa1 = iHexaOrigin;
+    int jHexa1 = jHexaOrigin;
+    int iHexa2 = iHexaOrigin;
+    int jHexa2 = jHexaOrigin;
 
     int neighbour1;
     int neighbour2;
@@ -505,7 +505,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       case 0:
         neighbour1 = 10;
         neighbour2 = 2;
-        if (getNeighbour(iAxonOrigin, jAxonOrigin, neighbour1).isOccupied()) {
+        if (getNeighbour(iHexaOrigin, jHexaOrigin, neighbour1).isOccupied()) {
           neighbour1 = 9;
           neighbour2 = 1;
         }
@@ -513,7 +513,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       case 1:
         neighbour1 = 11;
         neighbour2 = 0;
-        if (getNeighbour(iAxonOrigin, jAxonOrigin, neighbour1).isOccupied()) {
+        if (getNeighbour(iHexaOrigin, jHexaOrigin, neighbour1).isOccupied()) {
           neighbour1 = 10;
           neighbour2 = 2;
         }
@@ -522,7 +522,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       case 2:
         neighbour1 = 11;
         neighbour2 = 0;
-        if (getNeighbour(iAxonOrigin, jAxonOrigin, neighbour1).isOccupied()) {
+        if (getNeighbour(iHexaOrigin, jHexaOrigin, neighbour1).isOccupied()) {
           neighbour1 = 9;
           neighbour2 = 1;
         }
@@ -536,41 +536,41 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       int tipo1, tipo2;
 
       if (type0) {
-        iAxon1 = getCartPosX(iAxon1, jAxon1, neighbour1, true);
-        iAxon2 = getCartPosX(iAxon2, jAxon2, neighbour2, true);
-        jAxon1 = getCartPosY(iAxon1, jAxon1, neighbour1, true);
-        jAxon2 = getCartPosY(iAxon2, jAxon2, neighbour2, true);
-        if (s == 1 && atoms[iAxonOrigin][jAxonOrigin].isOccupied()) {
-          tipo1 = atoms[iAxon1][jAxon1].getTypeWithoutNeighbour(neighbour1);
-          tipo2 = atoms[iAxon2][jAxon2].getTypeWithoutNeighbour(neighbour2);
+        iHexa1 = getCartPosX(iHexa1, jHexa1, neighbour1, true);
+        iHexa2 = getCartPosX(iHexa2, jHexa2, neighbour2, true);
+        jHexa1 = getCartPosY(iHexa1, jHexa1, neighbour1, true);
+        jHexa2 = getCartPosY(iHexa2, jHexa2, neighbour2, true);
+        if (s == 1 && atoms[iHexaOrigin][jHexaOrigin].isOccupied()) {
+          tipo1 = atoms[iHexa1][jHexa1].getTypeWithoutNeighbour(neighbour1);
+          tipo2 = atoms[iHexa2][jHexa2].getTypeWithoutNeighbour(neighbour2);
         } else {
-          tipo1 = atoms[iAxon1][jAxon1].getType();
-          tipo2 = atoms[iAxon2][jAxon2].getType();
+          tipo1 = atoms[iHexa1][jHexa1].getType();
+          tipo2 = atoms[iHexa2][jHexa2].getType();
         }
       } else {
-        iAxon1 = getCartPosX(iAxon1, jAxon1, neighbour2, false);
-        iAxon2 = getCartPosX(iAxon2, jAxon2, neighbour1, false);
-        jAxon1 = getCartPosY(iAxon1, jAxon1, neighbour2, false);
-        jAxon2 = getCartPosY(iAxon2, jAxon2, neighbour1, false);
-        if (s == 1 && atoms[iAxonOrigin][jAxonOrigin].isOccupied()) {
-          tipo1 = atoms[iAxon1][jAxon1].getTypeWithoutNeighbour(neighbour2);
-          tipo2 = atoms[iAxon2][jAxon2].getTypeWithoutNeighbour(neighbour1);
+        iHexa1 = getCartPosX(iHexa1, jHexa1, neighbour2, false);
+        iHexa2 = getCartPosX(iHexa2, jHexa2, neighbour1, false);
+        jHexa1 = getCartPosY(iHexa1, jHexa1, neighbour2, false);
+        jHexa2 = getCartPosY(iHexa2, jHexa2, neighbour1, false);
+        if (s == 1 && atoms[iHexaOrigin][jHexaOrigin].isOccupied()) {
+          tipo1 = atoms[iHexa1][jHexa1].getTypeWithoutNeighbour(neighbour2);
+          tipo2 = atoms[iHexa2][jHexa2].getTypeWithoutNeighbour(neighbour1);
         } else {
-          tipo1 = atoms[iAxon1][jAxon1].getType();
-          tipo2 = atoms[iAxon2][jAxon2].getType();
+          tipo1 = atoms[iHexa1][jHexa1].getType();
+          tipo2 = atoms[iHexa2][jHexa2].getType();
         }
       }
 
-      if (atoms[iAxon1][jAxon1].isOccupied() || atoms[iAxon2][jAxon2].isOccupied() || tipo2 != 3 || tipo1 != 3) {
+      if (atoms[iHexa1][jHexa1].isOccupied() || atoms[iHexa2][jHexa2].isOccupied() || tipo2 != 3 || tipo1 != 3) {
         return s - 1;
       }
 
       if (raw < 0.5) {
-        XY_destination[0] = iAxon1;
-        XY_destination[1] = jAxon1;
+        XY_destination[0] = iHexa1;
+        XY_destination[1] = jHexa1;
       } else {
-        XY_destination[0] = iAxon2;
-        XY_destination[1] = jAxon2;
+        XY_destination[0] = iHexa2;
+        XY_destination[1] = jHexa2;
       }
 
       if (s == m) {
@@ -583,29 +583,29 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public float getCartSizeX() {
-    return axonSizeI;
+    return hexaSizeI;
   }
 
   @Override
   public float getCartSizeY() {
-    return axonSizeJ;
+    return hexaSizeJ;
   }
 
   @Override
   public Point2D getCentralCartesianLocation() {
-    return getCartesianLocation(axonSizeI / 2, axonSizeJ / 2);
+    return getCartesianLocation(hexaSizeI / 2, hexaSizeJ / 2);
   }
 
   @Override
-  public Point2D getCartesianLocation(int iAxon, int jAxon) {
+  public Point2D getCartesianLocation(int iHexa, int jHexa) {
 
     double xCart;
-    if ((iAxon & 1) == 0) {
-      xCart = (iAxon >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iAxon) + cos60;
+    if ((iHexa & 1) == 0) {
+      xCart = (iHexa >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iHexa) + cos60;
     } else {
-      xCart = (iAxon >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iAxon) * (1 + 2 * cos60);
+      xCart = (iHexa >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iHexa) * (1 + 2 * cos60);
     }
-    double yCart = (jAxon >> 1) * (2 * cos30) + (1 & jAxon) * cos30;
+    double yCart = (jHexa >> 1) * (2 * cos30) + (1 & jHexa) * cos30;
     return new Point2D.Double(xCart, yCart);
 
   }
