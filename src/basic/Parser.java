@@ -47,8 +47,8 @@ public class Parser {
   private int presure;
   private int flow;
   private int numberOfSimulations;
-  private int sizeX;
-  private int sizeY;
+  private int cartSizeX;
+  private int cartSizeY;
   private int binsLevels;
   private int extraLevels;
   private boolean multithreaded;
@@ -73,8 +73,8 @@ public class Parser {
     this.presure = 135;
     this.flow = 135;
     this.numberOfSimulations = 10;
-    this.sizeX = 256;
-    this.sizeY = (int) (sizeX / AgAgLattice.YRatio);
+    this.cartSizeX = 256;
+    this.cartSizeY = (int) (cartSizeX / AgAgLattice.YRatio);
     this.binsLevels = 100;
     this.extraLevels = 0;
     this.multithreaded = true;
@@ -156,15 +156,15 @@ public class Parser {
     } catch (JSONException e) {
       numberOfSimulations = 10;
     }
-    try {
-      sizeX = json.getInt("sizeX");
+   try {
+      cartSizeX = json.getInt("cartSizeX");
     } catch (JSONException e) {
-      sizeX = 256;
-    }
+      cartSizeX = 256;
+    }  
     try {
-      sizeY = json.getInt("sizeY");
+      cartSizeY = json.getInt("cartSizeY");
     } catch (JSONException e) {
-      sizeY = (int) (sizeX / AgAgLattice.YRatio);
+      cartSizeY = cartSizeX;
     }
     try {
       binsLevels = json.getInt("binsLevels");
@@ -241,8 +241,8 @@ public class Parser {
     System.out.println("\tperimeterType:\t\t" + perimeterType);
     System.out.println("\tmultithreaded:\t\t" + multithreaded);
     System.out.println("\tnumberOfSimulations:\t" + numberOfSimulations);
-    System.out.println("\tsizeX:\t\t\t" + sizeX);
-    System.out.println("\tsizeY:\t\t\t" + sizeY);
+    System.out.println("\tcartSizeX:\t\t" + cartSizeX);
+    System.out.println("\tcartSizeY:\t\t" + cartSizeY);
     System.out.println("\tbinsLevels:\t\t" + binsLevels);
     System.out.println("\textraLevels:\t\t" + extraLevels);
     System.out.println("\tpresure:\t\t" + presure);
@@ -292,12 +292,12 @@ public class Parser {
     return numberOfSimulations;
   }
 
-  public int getSizeX() {
-    return sizeX;
+  public int getCartSizeX() {
+    return cartSizeX;
   }
 
-  public int getSizeY() {
-    return sizeY;
+  public int getCartSizeY() {
+    return cartSizeY;
   }
 
   int getBinsLevels() {
