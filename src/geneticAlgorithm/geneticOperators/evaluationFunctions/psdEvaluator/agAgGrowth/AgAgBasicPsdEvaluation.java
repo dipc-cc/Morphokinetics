@@ -28,7 +28,11 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
     psdSizeX = 64;
     psdSizeY = 64;
 
-    KMC = new AgAgKmc(config);
+    KMC = new AgAgKmc(config.getListConfig(), 
+            config.getHexaSizeI(), 
+            config.getHexaSizeJ(), 
+            config.getDepositionRate(),
+            config.getIslandDensity());
     psd = new PsdSignature2D(psdSizeY, psdSizeX);
     sampledSurface = new float[psdSizeY][psdSizeX];
     difference = new float[psdSizeY][psdSizeX];

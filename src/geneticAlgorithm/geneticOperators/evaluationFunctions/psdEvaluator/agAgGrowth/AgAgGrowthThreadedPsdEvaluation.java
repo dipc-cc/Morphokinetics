@@ -26,7 +26,11 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
     super(repeats, measureInterval, num_threads);
 
     for (int i = 0; i < num_threads; i++) {
-      AgAgKmc kmc = new AgAgKmc(config);
+      AgAgKmc kmc = new AgAgKmc(config.getListConfig(),
+              config.getHexaSizeI(),
+              config.getHexaSizeJ(), 
+              config.getDepositionRate(),
+              config.getIslandDensity());
       DiffusionKmcFrame frame = createGraphicsFrame(kmc);
       frame.setVisible(true);
 

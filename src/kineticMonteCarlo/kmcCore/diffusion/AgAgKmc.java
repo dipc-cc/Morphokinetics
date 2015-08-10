@@ -33,16 +33,20 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     }
   }
 
-  public AgAgKmc(AgAgKmcConfig config) {
+  public AgAgKmc(ListConfiguration config, 
+          int hexaSizeI, 
+          int hexaSizeJ, 
+          double depositionRate, 
+          double islandDensity) {
 
-    super(config.getListConfig(), false, true, false, RoundPerimeter.CIRCLE);
+    super(config, false, true, false, RoundPerimeter.CIRCLE);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    this.lattice = new AgAgLattice(config.getHexaSizeI(), config.getHexaSizeJ(), modifiedBuffer, distancePerStep);
+    this.lattice = new AgAgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
     }
-    this.setIslandDensityAndDepositionRate(config.getDepositionRate(), config.getIslandDensity());
+    this.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
   }
 
   @Override
