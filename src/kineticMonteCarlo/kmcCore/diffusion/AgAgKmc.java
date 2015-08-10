@@ -33,9 +33,9 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     }
   }
 
-  public AgAgKmc(AgAgKmcConfig config, boolean justCentralFlake, boolean randomise) {
+  public AgAgKmc(AgAgKmcConfig config) {
 
-    super(config.getListConfig(), justCentralFlake, randomise, false, RoundPerimeter.CIRCLE);
+    super(config.getListConfig(), false, true, false, RoundPerimeter.CIRCLE);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     this.lattice = new AgAgLattice(config.getHexaSizeI(), config.getHexaSizeJ(), modifiedBuffer, distancePerStep);
