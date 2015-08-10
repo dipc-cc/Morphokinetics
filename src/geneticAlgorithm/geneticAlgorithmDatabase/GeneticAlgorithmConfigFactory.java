@@ -102,7 +102,7 @@ public class GeneticAlgorithmConfigFactory {
 
   private AbstractPsdEvaluation get_Ag_Ag_growth_main_evaluator(double depositionRate, double islandDensity) {
 
-    //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(AgAgConfigKMC(deposition_rate,island_density), 30, Integer.MAX_VALUE, 2);
+    //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(AgAgConfigKMC(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
     AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(AgAgConfigKMC(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
 
     evaluator.setWheight(1.0f);
