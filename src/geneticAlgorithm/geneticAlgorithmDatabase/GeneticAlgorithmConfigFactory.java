@@ -52,7 +52,7 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
-  public GeneticAlgorithmConfiguration create_Ag_Ag_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+  public GeneticAlgorithmConfiguration create_Ag_Ag_convergence_configuration(double diffusionRate, double islandDensity, double depositionRate) {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
@@ -63,15 +63,15 @@ public class GeneticAlgorithmConfigFactory {
     config.mutation = new BgaBasedMutator();
     config.recombination = new RealRecombination();
     config.reinsertion = new ElitistReinsertion();
-    config.restriction = new AgAgRestriction(diffusion_rate);
+    config.restriction = new AgAgRestriction(diffusionRate);
     config.selection = new RankingSelection();
-    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate, island_density);
+    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(depositionRate, islandDensity);
     config.otherEvaluators = add_no_more_evaluators();
 
     return config;
   }
 
-  public GeneticAlgorithmConfiguration create_Ag_Ag_dcma_es_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+  public GeneticAlgorithmConfiguration create_Ag_Ag_dcma_es_convergence_configuration(double diffusionRate, double islandDensity, double depositionRate) {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
@@ -83,9 +83,9 @@ public class GeneticAlgorithmConfigFactory {
         //config.mutation = new BgaBasedMutator();
     //config.recombination = new RealRecombination();
     //config.reinsertion = new ElitistReinsertion();
-    config.restriction = new AgAgRestriction(diffusion_rate);
+    config.restriction = new AgAgRestriction(diffusionRate);
     config.selection = new RandomSelection();
-    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate, island_density);
+    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(depositionRate, islandDensity);
     config.otherEvaluators = add_no_more_evaluators();
 
     return config;
