@@ -18,8 +18,8 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   private static GrapheneTypesTable typesTable;
   private byte n1, n2, n3;
 
-  public GrapheneAtom(short X, short Y, HopsPerStep distancePerStep) {
-    super(X, Y, distancePerStep);
+  public GrapheneAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
+    super(iHexa, jHexa, distancePerStep);
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
@@ -76,7 +76,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
     if (n1 == 1) {
       for (int i = 0; i < 3; i++) {
-        if (lattice.getNeighbour(X, Y, i).isOccupied()) {
+        if (lattice.getNeighbour(iHexa, jHexa, i).isOccupied()) {
           return i;
         }
       }
@@ -94,7 +94,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     double raw = StaticRandom.raw();
 
     if (bondsProbability == null) {
-      return lattice.getNeighbour(X, Y, (int) (raw * 12));
+      return lattice.getNeighbour(iHexa, jHexa, (int) (raw * 12));
     }
 
     double linearSearch = raw * totalProbability;
@@ -111,7 +111,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       }
     }
     //System.out.println(bondsProbability.length);
-    return lattice.getNeighbour(X, Y, cont - 1);
+    return lattice.getNeighbour(iHexa, jHexa, cont - 1);
   }
 
   private void add1stNeighbour(boolean forceNucleation) {
@@ -168,13 +168,13 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     int i = 0;
 
     for (; i < 3; i++) {
-      lattice.getNeighbour(X, Y, i).add1stNeighbour(forceNucleation);
+      lattice.getNeighbour(iHexa, jHexa, i).add1stNeighbour(forceNucleation);
     }
     for (; i < 9; i++) {
-      lattice.getNeighbour(X, Y, i).add2ndNeighbour();
+      lattice.getNeighbour(iHexa, jHexa, i).add2ndNeighbour();
     }
     for (; i < 12; i++) {
-      lattice.getNeighbour(X, Y, i).add3rdNeighbour();
+      lattice.getNeighbour(iHexa, jHexa, i).add3rdNeighbour();
     }
 
     modified.addOwnAtom(this);
@@ -195,13 +195,13 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
     int i = 0;
     for (; i < 3; i++) {
-      lattice.getNeighbour(X, Y, i).remove1stNeighbour();
+      lattice.getNeighbour(iHexa, jHexa, i).remove1stNeighbour();
     }
     for (; i < 9; i++) {
-      lattice.getNeighbour(X, Y, i).remove2ndNeighbour();
+      lattice.getNeighbour(iHexa, jHexa, i).remove2ndNeighbour();
     }
     for (; i < 12; i++) {
-      lattice.getNeighbour(X, Y, i).remove3rdNeighbour();
+      lattice.getNeighbour(iHexa, jHexa, i).remove3rdNeighbour();
     }
 
     if (getn1n2n3() > 0) {
@@ -251,7 +251,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       return false;
     }
     for (int i = 11; i >= 3; i--) {
-      if (lattice.getNeighbour(X, Y, i).getType() != 0) {
+      if (lattice.getNeighbour(iHexa, jHexa, i).getType() != 0) {
         return false;
       }
     }
@@ -310,7 +310,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
    */
   private double probJumpToNeighbour(int originType, int pos) {
 
-    Abstract2DDiffusionAtom atom = lattice.getNeighbour(X, Y, pos);
+    Abstract2DDiffusionAtom atom = lattice.getNeighbour(iHexa, jHexa, pos);
 
     if (atom.isOccupied()) {
 

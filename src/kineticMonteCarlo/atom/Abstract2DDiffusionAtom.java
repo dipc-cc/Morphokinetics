@@ -22,15 +22,16 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   protected float angle;
   protected boolean occupied = false;
   protected boolean outside = true;
-  protected short X, Y;
+  protected short iHexa;
+  protected short jHexa;
   protected int multiplier = 1;
   protected ModifiedBuffer modified;
   protected HopsPerStep distancePerStep;
 
   public Abstract2DDiffusionAtom(short X, short Y, HopsPerStep distancePerStep) {
 
-    this.X = X;
-    this.Y = Y;
+    this.iHexa = X;
+    this.jHexa = Y;
     
     this.distancePerStep = distancePerStep;
     this.bondsProbability = null;
@@ -40,8 +41,8 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + X;
-    result = prime * result + Y;
+    result = prime * result + iHexa;
+    result = prime * result + jHexa;
     return result;
   }
 
@@ -49,10 +50,10 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   public boolean equals(Object obj) {
 
     Abstract2DDiffusionAtom other = (Abstract2DDiffusionAtom) obj;
-    if (X != other.X) {
+    if (iHexa != other.iHexa) {
       return false;
     }
-    if (Y != other.Y) {
+    if (jHexa != other.jHexa) {
       return false;
     }
     return true;
@@ -85,11 +86,11 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   }
 
   public short getX() {
-    return X;
+    return iHexa;
   }
 
   public short getY() {
-    return Y;
+    return jHexa;
   }
 
   public float getAngle() {
