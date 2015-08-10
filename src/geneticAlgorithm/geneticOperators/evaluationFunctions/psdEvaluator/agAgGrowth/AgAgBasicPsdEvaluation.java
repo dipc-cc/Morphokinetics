@@ -9,7 +9,6 @@ import geneticAlgorithm.Individual;
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -19,25 +18,21 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
-  private AgAgKmc KMC;
+  private AgAgKmc kmc;
 
-  public AgAgBasicPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval) {
+  public AgAgBasicPsdEvaluation(AgAgKmc kmc, int repeats, int measureInterval) {
 
     super(repeats, measureInterval);
 
     psdSizeX = 64;
     psdSizeY = 64;
 
-    KMC = new AgAgKmc(config.getListConfig(), 
-            config.getHexaSizeI(), 
-            config.getHexaSizeJ(), 
-            config.getDepositionRate(),
-            config.getIslandDensity());
+    this.kmc = kmc;
     psd = new PsdSignature2D(psdSizeY, psdSizeX);
     sampledSurface = new float[psdSizeY][psdSizeX];
     difference = new float[psdSizeY][psdSizeX];
 
-    DiffusionKmcFrame frame = createGraphicsFrame(KMC);
+    DiffusionKmcFrame frame = createGraphicsFrame(kmc);
     frame.setVisible(true);
   }
 
@@ -56,7 +51,7 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
   @Override
   public void dispose() {
     psd = null;
-    KMC = null;
+    kmc = null;
     sampledSurface = null;
     difference = null;
   }
@@ -65,13 +60,13 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
     psd.reset();
     double time = 0.0;
     for (int i = 0; i < repeats; i++) {
-      KMC.initializeRates(ind.getGenes());
+      kmc.initializeRates(ind.getGenes());
       while (true) {
-        KMC.simulate(measureInterval);
-        KMC.getSampledSurface(sampledSurface);
+        kmc.simulate(measureInterval);
+        kmc.getSampledSurface(sampledSurface);
         psd.addSurfaceSample(sampledSurface);
-        if (KMC.getIterations() < measureInterval) {
-          time += KMC.getTime();
+        if (kmc.getIterations() < measureInterval) {
+          time += kmc.getTime();
           break;
         }
       }

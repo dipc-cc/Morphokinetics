@@ -8,6 +8,7 @@ package samples.agAgGrowth;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgBasicPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
+import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
@@ -21,18 +22,12 @@ public class AgAgMultithreadedEvaluatorTest {
 
   public static void main(String[] args) {
 
-    ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
-
-    float experitentalTemp = 135;
-    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
-    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
-
-    AgAgKmcConfig config = new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, depositionRate, islandDensity);
+    float experimentalTemp = 135;
 
     //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
-    AgAgBasicPsdEvaluation evaluation = new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
+    AgAgBasicPsdEvaluation evaluation = new AgAgBasicPsdEvaluation(localAgAgKmc(experimentalTemp), 20, Integer.MAX_VALUE);
 
-    Individual individual = new Individual(new AgAgRatesFactory().getRates(experitentalTemp));
+    Individual individual = new Individual(new AgAgRatesFactory().getRates(experimentalTemp));
     float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);
 
     evaluation.setPsd(experimentalPSD);
@@ -43,6 +38,16 @@ public class AgAgMultithreadedEvaluatorTest {
     double[] populationErrors = evaluation.evaluate(population);
 
     System.out.println(populationErrors[0]);
+
+  }
+  
+  private static AgAgKmc localAgAgKmc(float experimentalTemp) {
+
+    ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
+    double depositionRate = new AgAgRatesFactory().getDepositionRate(experimentalTemp);
+    double islandDensity = new AgAgRatesFactory().getIslandDensity(experimentalTemp);
+
+    return new AgAgKmc(listConfig, 256, (int) (256 / AgAgLattice.YRatio), depositionRate, islandDensity);
 
   }
 

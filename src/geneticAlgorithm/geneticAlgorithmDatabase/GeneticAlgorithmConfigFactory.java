@@ -20,7 +20,7 @@ import geneticAlgorithm.geneticOperators.restrictions.agAg.AgAgRestriction;
 import geneticAlgorithm.geneticOperators.selection.RandomSelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
+import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import java.util.ArrayList;
@@ -103,7 +103,7 @@ public class GeneticAlgorithmConfigFactory {
   private AbstractPsdEvaluation get_Ag_Ag_growth_main_evaluator(double depositionRate, double islandDensity) {
 
     //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(AgAgConfigKMC(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
-    AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(AgAgConfigKMC(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
+    AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
 
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
@@ -134,13 +134,13 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
-  private AgAgKmcConfig AgAgConfigKMC(double depositionRate, double islandDensity) {
+  private AgAgKmc localAgAgKmc(double depositionRate, double islandDensity) {
 
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20);
-
-    return new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, depositionRate, islandDensity);
+    
+    return new AgAgKmc(listConfig, 256, (int) (256 / AgAgLattice.YRatio),depositionRate, islandDensity);
 
   }
 
