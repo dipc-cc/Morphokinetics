@@ -25,8 +25,11 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
 
     super(hexaSizeI, hexaSizeJ, modified);
 
+    // j axis has to be multiple of two
+    if ((hexaSizeJ % 2) != 0) {
+      hexaSizeJ++;
+    }
     atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
-
     if (latticeNeighborhoodData == null) {
       initializeNeighborHoodCache();
     }
@@ -588,7 +591,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public float getCartSizeY() {
-    return hexaSizeJ;
+    return hexaSizeJ / AgAgLattice.YRatio;
   }
 
   @Override
