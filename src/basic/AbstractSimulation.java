@@ -93,6 +93,7 @@ public abstract class AbstractSimulation {
       }
       System.out.println("Simulation number " + simulations + " executed in "
               + (System.currentTimeMillis() - iterStartTime) + " ms");
+      System.out.println("Simulated " + kmc.getTime() + " time");
     }
     System.out.println("All " + parser.getNumberOfSimulations() + " simulations executed in "
             + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
