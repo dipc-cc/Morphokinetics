@@ -299,6 +299,14 @@ public class Parser {
   public int getCartSizeY() {
     return cartSizeY;
   }
+  
+  public int getHexaSizeI() {
+    return cartSizeX;
+  }
+  
+  public int getHexaSizeJ() {
+    return (int) (this.getCartSizeX() / AgAgLattice.YRatio);
+  }
 
   int getBinsLevels() {
     return binsLevels;
