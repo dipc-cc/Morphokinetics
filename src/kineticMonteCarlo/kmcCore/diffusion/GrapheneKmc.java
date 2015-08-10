@@ -48,11 +48,12 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
         this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
       }
 
-      int iCenter = lattice.getHexaSizeJ() / 2;
-      int jCenter = lattice.getHexaSizeI() / 2;
+      int iCentre = lattice.getHexaSizeJ() / 2;
+      int jCentre = lattice.getHexaSizeI() / 2;
+      
       for (int j = -1; j < 2; j++) {
         for (int i = -1; i < 1; i++) {
-          this.depositAtom(jCenter + i, iCenter + j);
+          this.depositAtom(jCentre + i, iCentre + j);
         }
       }
     } else {
