@@ -23,7 +23,7 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
     super.paint(g);
 
     g.setColor(Color.black);
-    g.fillRect(baseX, baseY, (int) (lattice.getHexaSizeI() * scale), (int) (lattice.getHexaSizeJ() * scale * AgAgLattice.YRatio));
+    g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX()* scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
       int Y = Math.round((lattice.getHexaSizeJ() - 1 - j) * scale * AgAgLattice.YRatio) + baseY;
