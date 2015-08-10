@@ -150,8 +150,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return source.chooseRandomHop();
   }
 
-  protected boolean depositAtom(int X, int Y) {
-    return this.depositAtom(lattice.getAtom(X, Y));
+  protected boolean depositAtom(int iHexa, int jHexa) {
+    return this.depositAtom(lattice.getAtom(iHexa, jHexa));
   }
 
   protected boolean extractAtom(Abstract2DDiffusionAtom origin) {
