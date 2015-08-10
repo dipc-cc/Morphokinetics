@@ -19,8 +19,8 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   private byte nImmobile;
   private byte nMobile;
 
-  public AgAgAtom(short X, short Y, HopsPerStep distancePerStep) {
-    super(X, Y, distancePerStep);
+  public AgAgAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
+    super(iHexa, jHexa, distancePerStep);
     if (typesTable == null) {
       typesTable = new AgAgTypesTable();
     }
