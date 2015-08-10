@@ -39,13 +39,8 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
           double depositionRate, 
           double islandDensity) {
 
-    super(config, false, true, false, RoundPerimeter.CIRCLE);
-
-    HopsPerStep distancePerStep = new HopsPerStep();
-    this.lattice = new AgAgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
-    if (justCentralFlake) {
-      configureDevitaAccelerator(distancePerStep);
-    }
+    this(config, hexaSizeI, hexaSizeJ, false, true, false, RoundPerimeter.CIRCLE);
+    
     this.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
   }
 
