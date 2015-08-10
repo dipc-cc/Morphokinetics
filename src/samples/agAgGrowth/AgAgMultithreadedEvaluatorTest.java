@@ -13,39 +13,37 @@ import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
 
-;
-
 /**
  *
  * @author Nestor
  */
 public class AgAgMultithreadedEvaluatorTest {
 
-    public static void main(String[] args) {
+  public static void main(String[] args) {
 
-        ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
+    ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
 
-        float experitental_temp = 135;
-        double deposition_rate = new AgAgRatesFactory().getDepositionRate(experitental_temp);
-        double island_density = new AgAgRatesFactory().getIslandDensity(experitental_temp);
+    float experitentalTemp = 135;
+    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
+    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
 
-        AgAgKmcConfig config = new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, deposition_rate, island_density);
+    AgAgKmcConfig config = new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, depositionRate, islandDensity);
 
-        //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
-        AgAgBasicPsdEvaluation evaluation= new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
-        
-        Individual individual = new Individual(new AgAgRatesFactory().getRates(experitental_temp));
-        float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);
+    //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
+    AgAgBasicPsdEvaluation evaluation = new AgAgBasicPsdEvaluation(config, 20, Integer.MAX_VALUE);
 
-        evaluation.setPsd(experimentalPSD);
+    Individual individual = new Individual(new AgAgRatesFactory().getRates(experitentalTemp));
+    float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);
 
-        Individual newIndividual = new Individual(new AgAgRatesFactory().getRates(125));
-        Population population = new Population(1);
-        population.setIndividual(newIndividual, 0);
-        double[] populationErrors = evaluation.evaluate(population);
+    evaluation.setPsd(experimentalPSD);
 
-        System.out.println(populationErrors[0]);
+    Individual newIndividual = new Individual(new AgAgRatesFactory().getRates(125));
+    Population population = new Population(1);
+    population.setIndividual(newIndividual, 0);
+    double[] populationErrors = evaluation.evaluate(population);
 
-    }
+    System.out.println(populationErrors[0]);
+
+  }
 
 }
