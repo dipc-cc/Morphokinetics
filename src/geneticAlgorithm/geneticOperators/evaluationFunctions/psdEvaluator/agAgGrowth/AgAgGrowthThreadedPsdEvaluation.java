@@ -9,7 +9,6 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.Multit
 import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
@@ -21,16 +20,11 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
  */
 public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinishListener, IIntervalListener {
 
-  public AgAgGrowthThreadedPsdEvaluation(AgAgKmcConfig config, int repeats, int measureInterval, int num_threads) {
+  public AgAgGrowthThreadedPsdEvaluation(AgAgKmc kmc, int repeats, int measureInterval, int numThreads) {
 
-    super(repeats, measureInterval, num_threads);
+    super(repeats, measureInterval, numThreads);
 
-    for (int i = 0; i < num_threads; i++) {
-      AgAgKmc kmc = new AgAgKmc(config.getListConfig(),
-              config.getHexaSizeI(),
-              config.getHexaSizeJ(), 
-              config.getDepositionRate(),
-              config.getIslandDensity());
+    for (int i = 0; i < numThreads; i++) {
       DiffusionKmcFrame frame = createGraphicsFrame(kmc);
       frame.setVisible(true);
 

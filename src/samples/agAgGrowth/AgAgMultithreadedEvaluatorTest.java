@@ -9,7 +9,6 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGr
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmcConfig;
 import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
