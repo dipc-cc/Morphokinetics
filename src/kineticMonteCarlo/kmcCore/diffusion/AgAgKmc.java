@@ -58,19 +58,19 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
         this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
       }
 
-      int Ycenter = (lattice.getHexaSizeJ() / 2);
-      int Xcenter = (lattice.getHexaSizeI() / 2) - (lattice.getHexaSizeJ() / 4);
+      int jCentre = (lattice.getHexaSizeJ() / 2);
+      int iCentre = (lattice.getHexaSizeI() / 2) - (lattice.getHexaSizeJ() / 4);
 
-      this.depositAtom(Xcenter, Ycenter);
-      this.depositAtom(Xcenter + 1, Ycenter);
+      this.depositAtom(iCentre, jCentre);
+      this.depositAtom(iCentre + 1, jCentre);
 
-      this.depositAtom(Xcenter - 1, Ycenter + 1);
-      this.depositAtom(Xcenter, Ycenter + 1);
-      this.depositAtom(Xcenter + 1, Ycenter + 1);
+      this.depositAtom(iCentre - 1, jCentre + 1);
+      this.depositAtom(iCentre, jCentre + 1);
+      this.depositAtom(iCentre + 1, jCentre + 1);
 
-      this.depositAtom(Xcenter, Ycenter + 2);
-      this.depositAtom(Xcenter - 1, Ycenter + 2);
-      this.depositAtom(Xcenter - 1, Ycenter + 3);
+      this.depositAtom(iCentre, jCentre + 2);
+      this.depositAtom(iCentre - 1, jCentre + 2);
+      this.depositAtom(iCentre - 1, jCentre + 3);
 
     } else {
 
