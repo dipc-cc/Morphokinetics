@@ -28,10 +28,10 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   protected ModifiedBuffer modified;
   protected HopsPerStep distancePerStep;
 
-  public Abstract2DDiffusionAtom(short X, short Y, HopsPerStep distancePerStep) {
+  public Abstract2DDiffusionAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
 
-    this.iHexa = X;
-    this.jHexa = Y;
+    this.iHexa = iHexa;
+    this.jHexa = jHexa;
     
     this.distancePerStep = distancePerStep;
     this.bondsProbability = null;
