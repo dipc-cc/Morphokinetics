@@ -33,115 +33,115 @@ import kineticMonteCarlo.lattice.AgAgLattice;
  */
 public class GeneticAlgorithmConfigFactory {
 
-    public GeneticAlgorithmConfiguration create_silicon_convergence_configuration() {
+  public GeneticAlgorithmConfiguration create_silicon_convergence_configuration() {
 
-        GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-        config.population_size = 100;
-        config.offspring_size = 32;
-        config.population_replacements = 5;
-        config.initialization = new SiEtchingInitialization();
-        config.mutation = new BgaBasedMutator();
-        config.recombination = new RealRecombination();
-        config.reinsertion = new ElitistReinsertion();
-        config.restriction = new SiEtchingRestriction();
-        config.selection = new RankingSelection();
-        config.mainEvaluator = get_silicon_etching_main_evaluators();
-        config.otherEvaluators = add_no_more_evaluators();
+    config.population_size = 100;
+    config.offspring_size = 32;
+    config.population_replacements = 5;
+    config.initialization = new SiEtchingInitialization();
+    config.mutation = new BgaBasedMutator();
+    config.recombination = new RealRecombination();
+    config.reinsertion = new ElitistReinsertion();
+    config.restriction = new SiEtchingRestriction();
+    config.selection = new RankingSelection();
+    config.mainEvaluator = get_silicon_etching_main_evaluators();
+    config.otherEvaluators = add_no_more_evaluators();
 
-        return config;
-    }
+    return config;
+  }
 
-    public GeneticAlgorithmConfiguration create_Ag_Ag_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+  public GeneticAlgorithmConfiguration create_Ag_Ag_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
 
-        GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-        config.population_size = 100;
-        config.offspring_size = 32;
-        config.population_replacements = 5;
-        config.initialization = new AgAgInitialization();
-        config.mutation = new BgaBasedMutator();
-        config.recombination = new RealRecombination();
-        config.reinsertion = new ElitistReinsertion();
-        config.restriction = new AgAgRestriction(diffusion_rate);
-        config.selection = new RankingSelection();
-        config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate,island_density);
-        config.otherEvaluators = add_no_more_evaluators();
+    config.population_size = 100;
+    config.offspring_size = 32;
+    config.population_replacements = 5;
+    config.initialization = new AgAgInitialization();
+    config.mutation = new BgaBasedMutator();
+    config.recombination = new RealRecombination();
+    config.reinsertion = new ElitistReinsertion();
+    config.restriction = new AgAgRestriction(diffusion_rate);
+    config.selection = new RankingSelection();
+    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate, island_density);
+    config.otherEvaluators = add_no_more_evaluators();
 
-        return config;
-    }
-    
-    public GeneticAlgorithmConfiguration create_Ag_Ag_dcma_es_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
+    return config;
+  }
 
-        GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+  public GeneticAlgorithmConfiguration create_Ag_Ag_dcma_es_convergence_configuration(double diffusion_rate, double island_density, double deposition_rate) {
 
-        //config.population_size = 100;
-        config.population_size = 5;
-        config.offspring_size = 32;
-        config.population_replacements = 5;
-        config.initialization = new AgAgInitialization();
+    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+
+    //config.population_size = 100;
+    config.population_size = 5;
+    config.offspring_size = 32;
+    config.population_replacements = 5;
+    config.initialization = new AgAgInitialization();
         //config.mutation = new BgaBasedMutator();
-        //config.recombination = new RealRecombination();
-        //config.reinsertion = new ElitistReinsertion();
-        config.restriction = new AgAgRestriction(diffusion_rate);
-        config.selection = new RandomSelection();
-        config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate,island_density);
-        config.otherEvaluators = add_no_more_evaluators();
+    //config.recombination = new RealRecombination();
+    //config.reinsertion = new ElitistReinsertion();
+    config.restriction = new AgAgRestriction(diffusion_rate);
+    config.selection = new RandomSelection();
+    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(deposition_rate, island_density);
+    config.otherEvaluators = add_no_more_evaluators();
 
-        return config;
-    }
+    return config;
+  }
 
-    private AbstractPsdEvaluation get_silicon_etching_main_evaluators() {
+  private AbstractPsdEvaluation get_silicon_etching_main_evaluators() {
 
-        SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(SiEtchConfigKMC(), 30, 10000, 8);
-        evaluator.setWheight(1.0f);
-        evaluator.setShowGraphics(true);
+    SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(SiEtchConfigKMC(), 30, 10000, 8);
+    evaluator.setWheight(1.0f);
+    evaluator.setShowGraphics(true);
 
-        return evaluator;
-    }
+    return evaluator;
+  }
 
-    private AbstractPsdEvaluation get_Ag_Ag_growth_main_evaluator(double deposition_rate, double island_density) {
+  private AbstractPsdEvaluation get_Ag_Ag_growth_main_evaluator(double depositionRate, double islandDensity) {
 
-        //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(AgAgConfigKMC(deposition_rate,island_density), 30, Integer.MAX_VALUE, 2);
-    	AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(AgAgConfigKMC(deposition_rate,island_density), 1, Integer.MAX_VALUE);
-    	
-        evaluator.setWheight(1.0f);
-        evaluator.setShowGraphics(true);
+    //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(AgAgConfigKMC(deposition_rate,island_density), 30, Integer.MAX_VALUE, 2);
+    AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(AgAgConfigKMC(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
 
-        return evaluator;
-    }
+    evaluator.setWheight(1.0f);
+    evaluator.setShowGraphics(true);
 
-    private List<IEvaluation> add_no_more_evaluators() {
+    return evaluator;
+  }
 
-        List<IEvaluation> evaluation = new ArrayList();
-        return evaluation;
-    }
+  private List<IEvaluation> add_no_more_evaluators() {
 
-    private static SiEtchingKmcConfig SiEtchConfigKMC() {
-        ListConfiguration listConfig = new ListConfiguration()
-                .setListType(ListConfiguration.BINNED_LIST)
-                .setBinsPerLevel(20)
-                .setExtraLevels(1);
+    List<IEvaluation> evaluation = new ArrayList();
+    return evaluation;
+  }
 
-        SiEtchingKmcConfig config = new SiEtchingKmcConfig()
-                .setMillerX(1)
-                .setMillerY(0)
-                .setMillerZ(0)
-                .setSizeX_UC(32)
-                .setSizeY_UC(32)
-                .setSizeZ_UC(48)
-                .setListConfig(listConfig);
-        return config;
-    }
+  private static SiEtchingKmcConfig SiEtchConfigKMC() {
+    ListConfiguration listConfig = new ListConfiguration()
+            .setListType(ListConfiguration.BINNED_LIST)
+            .setBinsPerLevel(20)
+            .setExtraLevels(1);
 
-    private AgAgKmcConfig AgAgConfigKMC(double deposition_rate, double island_density) {
+    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+            .setMillerX(1)
+            .setMillerY(0)
+            .setMillerZ(0)
+            .setSizeX_UC(32)
+            .setSizeY_UC(32)
+            .setSizeZ_UC(48)
+            .setListConfig(listConfig);
+    return config;
+  }
 
-        ListConfiguration listConfig = new ListConfiguration()
-                .setListType(ListConfiguration.BINNED_LIST)
-                .setBinsPerLevel(20);
+  private AgAgKmcConfig AgAgConfigKMC(double depositionRate, double islandDensity) {
 
-        return new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, deposition_rate, island_density);
+    ListConfiguration listConfig = new ListConfiguration()
+            .setListType(ListConfiguration.BINNED_LIST)
+            .setBinsPerLevel(20);
 
-    }
+    return new AgAgKmcConfig(256, (int) (256 / AgAgLattice.YRatio), listConfig, depositionRate, islandDensity);
+
+  }
 
 }
