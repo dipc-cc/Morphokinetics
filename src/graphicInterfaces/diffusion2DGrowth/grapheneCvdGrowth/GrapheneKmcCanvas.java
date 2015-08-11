@@ -8,8 +8,6 @@ import graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.lattice.AgAgLattice;
-
 
 public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
@@ -23,7 +21,7 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
     super.paint(g);
 
     g.setColor(Color.black);
-    g.fillRect(baseX, baseY, (int) (lattice.getHexaSizeI() * scale * 1.5f), (int) (lattice.getHexaSizeJ() * scale * AgAgLattice.YRatio));
+    g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
      
