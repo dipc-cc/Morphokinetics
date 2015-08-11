@@ -21,7 +21,7 @@ import kineticMonteCarlo.atom.AbstractAtom;
  *
  * @author Nestor
  */
-public abstract class AbstractKmcCanvas extends Canvas {
+public class AbstractKmcCanvas extends Canvas {
 
   protected int baseX = 0;
   protected int baseY = 0;
