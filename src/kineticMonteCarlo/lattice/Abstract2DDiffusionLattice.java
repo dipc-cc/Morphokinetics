@@ -172,7 +172,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     Point2D position;
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
-        position = getCartesianLocation(iHexa, jHexa); // TODO deklarazioa hemendik kentzeko!!!!!!!!!!!!!!!
+        position = getCartesianLocation(iHexa, jHexa);
         if (left <= position.getX() && position.getX() <= right
                 && bottom <= position.getY() + AgAgLattice.YRatio
                 && position.getY() - AgAgLattice.YRatio <= top) {
