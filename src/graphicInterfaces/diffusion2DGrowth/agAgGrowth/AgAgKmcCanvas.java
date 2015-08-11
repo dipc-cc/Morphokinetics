@@ -9,7 +9,6 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import java.awt.Color;
 import java.awt.Graphics;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.lattice.AgAgLattice;
 
 public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
@@ -26,18 +25,10 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX()* scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
-      int Y = Math.round((lattice.getHexaSizeJ() - 1 - j) * scale * AgAgLattice.YRatio) + baseY;
+      int Y = (int) (Math.round(lattice.getCartY(j) * scale) + baseY);
       for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-        int X = (int) ((i * scale) + (j) / 2.0f * scale);
-
-        if (X >= lattice.getHexaSizeI() * scale) {
-          X -= lattice.getHexaSizeI() * scale;
-        }
-        if (X < 0) {
-          X += lattice.getHexaSizeI() * scale;
-        }
-        X += baseX;
-
+        int X = (int)(lattice.getCartX(i,j) * scale)+ baseX;
+        
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case AbstractAtom.TERRACE:
