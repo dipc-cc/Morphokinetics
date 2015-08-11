@@ -45,11 +45,11 @@ public abstract class AbstractKmcCanvas extends Canvas {
   }
 
   public int getSizeX() {
-    return this.lattice.getHexaSizeI() * scale;
+    return (int) (this.lattice.getCartSizeX() * scale);
   }
 
   public int getSizeY() {
-    return (int) (this.lattice.getHexaSizeJ() * scale * AgAgLattice.YRatio);
+    return (int) (this.lattice.getCartSizeY() * scale);
   }
 
   public void setScale(int scale) {

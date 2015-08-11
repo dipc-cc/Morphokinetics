@@ -13,10 +13,4 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
     super(lattice);
   }
   
-  @Override
-  public int getSizeX() {
-    return (int) (lattice.getCartSizeX() * scale);
-  }
-  
-  
 }
