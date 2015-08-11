@@ -198,15 +198,25 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return new Point2D.Double(xCart, yCart);
   }
 
+  /**
+   * The Cartesian X is the location I, plus the half of J.
+   * We have to do the module to ensure that fits in a rectangular Cartesian mesh
+   * @param iHexa
+   * @param jHexa
+   * @return
+   */
   @Override
   public double getCartX(int iHexa, int jHexa) {
-    float xCart = iHexa + jHexa * 0.5f;
-    if (xCart >= hexaSizeI) {
-      xCart -= hexaSizeI;
-    }
+    float xCart = (iHexa + jHexa * 0.5f) % hexaSizeI;
     return xCart;
   }
 
+  /**
+   * Simple relation between Y (Cartesian) and J (hexagonal),
+   * with YRatio (=sin 60º)
+   * @param jHexa
+   * @return
+   */
   @Override
   public double getCartY(int jHexa) {
     return jHexa * YRatio;
