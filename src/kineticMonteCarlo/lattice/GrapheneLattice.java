@@ -603,13 +603,30 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
   public Point2D getCartesianLocation(int iHexa, int jHexa) {
 
     double xCart;
-    if ((iHexa & 1) == 0) {
+    if ((iHexa & 1) == 0) { //even
       xCart = (iHexa >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iHexa) + cos60;
-    } else {
+    } else { //odd
       xCart = (iHexa >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iHexa) * (1 + 2 * cos60);
     }
     double yCart = (jHexa >> 1) * (2 * cos30) + (1 & jHexa) * cos30;
     return new Point2D.Double(xCart, yCart);
 
+  }
+  
+  @Override
+  public double getCartX(int iHexa, int jHexa) {
+    double xCart;
+    if ((jHexa & 1) == 0) { //j even
+      xCart = (iHexa >> 1) + iHexa + 0.5;
+    } else { // odd
+      xCart = (iHexa + 1 >> 1) + iHexa;
+
+    }
+    return xCart;
+  }
+  
+  @Override
+  public double getCartY(int jHexa){
+    return jHexa*AgAgLattice.YRatio;
   }
 }

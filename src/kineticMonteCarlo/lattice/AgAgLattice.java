@@ -198,6 +198,20 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return new Point2D.Double(xCart, yCart);
   }
 
+  @Override
+  public double getCartX(int iHexa, int jHexa) {
+    float xCart = iHexa + jHexa * 0.5f;
+    if (xCart >= hexaSizeI) {
+      xCart -= hexaSizeI;
+    }
+    return xCart;
+  }
+
+  @Override
+  public double getCartY(int jHexa) {
+    return jHexa * YRatio;
+  }
+
   public int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int m) {
 
     int s = 1;

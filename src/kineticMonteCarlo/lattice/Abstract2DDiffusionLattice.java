@@ -75,6 +75,10 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   public abstract float getCartSizeX();
 
   public abstract float getCartSizeY();
+  
+  public abstract double getCartX(int iHexa, int jHexa);
+  
+  public abstract double getCartY(int jHexa);
 
   @Override
   public void reset() {
