@@ -6,8 +6,8 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgG
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.Individual;
-import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
+import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.psdAnalysis.PsdSignature2D;
@@ -37,7 +37,7 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
   }
 
   private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }
 

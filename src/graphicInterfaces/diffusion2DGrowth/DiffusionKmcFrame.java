@@ -16,21 +16,21 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
   private int mouseX, mouseY;
   private int startMouseX = 0;
   private int startMouseY = 0;
-  private AbstractKmcCanvas canvas1;
+  private KmcCanvas canvas1;
 
   /**
    * Creates new form NewJFrame
    *
    * @param canvas1
    */
-  public DiffusionKmcFrame(AbstractKmcCanvas canvas1) {
+  public DiffusionKmcFrame(KmcCanvas canvas1) {
 
     initComponents();
     this.canvas1 = canvas1;
     this.canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
     this.jPanel1.add(canvas1);
     this.canvas1.initialize();
-    this.jSpinner2.setValue(((AbstractKmcCanvas) canvas1).getScale());
+    this.jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
     this.setResizable(true);
     this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
 

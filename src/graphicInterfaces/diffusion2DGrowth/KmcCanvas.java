@@ -21,7 +21,7 @@ import kineticMonteCarlo.atom.AbstractAtom;
  *
  * @author Nestor
  */
-public class AbstractKmcCanvas extends Canvas {
+public class KmcCanvas extends Canvas {
 
   protected int baseX = 0;
   protected int baseY = 0;
@@ -30,7 +30,7 @@ public class AbstractKmcCanvas extends Canvas {
   protected Abstract2DDiffusionLattice lattice;
   public int scale = 2;
 
-  public AbstractKmcCanvas(Abstract2DDiffusionLattice lattice) {
+  public KmcCanvas(Abstract2DDiffusionLattice lattice) {
     this.lattice = lattice;
   }
 
@@ -55,7 +55,7 @@ public class AbstractKmcCanvas extends Canvas {
     this.scale = scale;
   }
 
-  public AbstractKmcCanvas() {   //constructor
+  public KmcCanvas() {   //constructor
     this.setIgnoreRepaint(true); //we repaint manually
     this.setFocusable(false);
   }

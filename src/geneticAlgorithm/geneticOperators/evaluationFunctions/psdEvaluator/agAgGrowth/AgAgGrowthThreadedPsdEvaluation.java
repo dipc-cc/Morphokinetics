@@ -6,7 +6,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgG
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
-import graphicInterfaces.diffusion2DGrowth.agAgGrowth.AgAgKmcCanvas;
+import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
@@ -37,7 +37,7 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
   }
 
   private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new AgAgKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }
 

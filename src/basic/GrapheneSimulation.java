@@ -5,7 +5,7 @@
  */
 package basic;
 
-import graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas;
+import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
@@ -38,7 +38,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
   @Override
   public void createFrame() {
     try {
-      frame = new DiffusionKmcFrame(new AbstractKmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+      frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     } catch (Exception e) {
       System.err.println("Error: The execution is not able to create the X11 frame");
       System.err.println("Finishing");
