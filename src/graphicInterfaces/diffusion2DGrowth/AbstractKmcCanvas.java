@@ -16,7 +16,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.lattice.AgAgLattice;
 
 /**
  *
