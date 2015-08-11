@@ -26,28 +26,11 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
     g.fillRect(baseX, baseY, (int) (lattice.getHexaSizeI() * scale * 1.5f), (int) (lattice.getHexaSizeJ() * scale * AgAgLattice.YRatio));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
-      int i = 0;
-      int cont = 0;
-      int Y = Math.round((lattice.getHexaSizeJ() - 1 - j) * scale * AgAgLattice.YRatio  ) + baseY;
-      while (true) {
-
-        if ((j & 1) == 0) {
-          if ((cont % 3) == 2) {
-            cont++;
-            continue;
-          }
-        } else {
-          if ((cont % 3) == 1) {
-            cont++;
-            continue;
-          }
-        }
-
-        int X = (cont * scale) + baseX;
-        if ((j & 1) == 0) {
-          X += 0.5f * scale;
-        }
-
+     
+      int Y = (int) (Math.round(lattice.getCartY(j) * scale) + baseY);
+      for (int i=0; i<lattice.getHexaSizeI(); i++) {
+        
+        int X = (int) Math.round(lattice.getCartX(i, j) * scale) + baseX;
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case 0:
@@ -91,15 +74,8 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
             g.drawOval(X, Y, scale, scale);
           }
         }
-
-        i++;
-        cont++;
-        if (i == lattice.getHexaSizeI()) {
-          break;
-        }
       }
     }
-
     g.dispose();
   }
   
