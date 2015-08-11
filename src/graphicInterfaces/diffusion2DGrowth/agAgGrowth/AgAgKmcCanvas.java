@@ -22,13 +22,12 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
     super.paint(g);
 
     g.setColor(Color.black);
-    g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX()* scale), (int) (lattice.getCartSizeY() * scale));
+    g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
       int Y = (int) (Math.round(lattice.getCartY(j) * scale) + baseY);
       for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-        int X = (int)(lattice.getCartX(i,j) * scale)+ baseX;
-        
+        int X = (int) Math.round(lattice.getCartX(i,j) * scale) + baseX;
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case AbstractAtom.TERRACE:
@@ -60,7 +59,7 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
         if (scale < 3) {
           if (lattice.getAtom(i, j).isOccupied()) {
             g.fillRect(X, Y, scale, scale);
-          } else if (!lattice.getAtom(i, j).isOutside() && type > 0) {
+          } else if (!lattice.getAtom(i, j).isOutside()) {
             g.drawRect(X, Y, scale, scale);
           }
 
@@ -68,7 +67,7 @@ public class AgAgKmcCanvas extends AbstractKmcCanvas {
 
           if (lattice.getAtom(i, j).isOccupied()) {
             g.fillOval(X, Y, scale, scale);
-          } else if (!lattice.getAtom(i, j).isOutside() && type > 0) {
+          } else if (!lattice.getAtom(i, j).isOutside()) {
             g.drawOval(X, Y, scale, scale);
           }
         }

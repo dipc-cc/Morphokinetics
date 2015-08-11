@@ -5,9 +5,10 @@
 package graphicInterfaces.diffusion2DGrowth.grapheneCvdGrowth;
 
 import graphicInterfaces.diffusion2DGrowth.AbstractKmcCanvas;
+import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import java.awt.Color;
 import java.awt.Graphics;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.atom.AbstractAtom;
 
 public class GrapheneKmcCanvas extends AbstractKmcCanvas {
 
@@ -24,26 +25,24 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
-     
       int Y = (int) (Math.round(lattice.getCartY(j) * scale) + baseY);
-      for (int i=0; i<lattice.getHexaSizeI(); i++) {
-        
-        int X = (int) Math.round(lattice.getCartX(i, j) * scale) + baseX;
+      for (int i = 0; i < lattice.getHexaSizeI(); i++) {  
+        int X = (int) Math.round(lattice.getCartX(i,j) * scale) + baseX;
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
-          case 0:
+          case AbstractAtom.TERRACE:
             g.setColor(Color.RED);
             break;
-          case 1:
+          case AbstractAtom.CORNER:
             g.setColor(Color.MAGENTA);
             break;
-          case 2:
+          case AbstractAtom.EDGE:
             g.setColor(Color.ORANGE);
             break;
-          case 3:
+          case AbstractAtom.KINK:
             g.setColor(Color.YELLOW);
             break;
-          case 4:
+          case AbstractAtom.BULK:
             g.setColor(Color.GREEN);
             break;
           case 5:
@@ -79,7 +78,7 @@ public class GrapheneKmcCanvas extends AbstractKmcCanvas {
   
   @Override
   public int getSizeX() {
-    return (int) (lattice.getHexaSizeI() * scale * 1.5f);
+    return (int) (lattice.getCartSizeX() * scale);
   }
   
   
