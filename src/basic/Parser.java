@@ -301,7 +301,11 @@ public class Parser {
   }
   
   public int getHexaSizeI() {
-    return cartSizeX;
+    if (this.getCalculationMode().equals("Ag")) {
+      return cartSizeX;
+    } else {
+      return (int) (cartSizeX/1.5f);
+    }
   }
   
   public int getHexaSizeJ() {
