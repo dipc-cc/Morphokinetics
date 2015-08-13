@@ -29,7 +29,19 @@ public class KmcCanvas extends Canvas {
   protected boolean initialized = false;
   protected Abstract2DDiffusionLattice lattice;
   public int scale = 2;
-
+  
+  private final static Color gray = new Color (220,220,220);
+  private final static Color whiteGray = new Color (230,230,230);
+  // Colours from: https://github.com/Gnuplotting/gnuplot-palettes/blob/master/set3.pal
+  private final static Color teal = new Color (141,211,199);
+  private final static Color banana = new Color (255,255,179); 
+  private final static Color lilac = new Color (190,186,218);
+  private final static Color red = new Color (251,128,114);
+  private final static Color blue = new Color (128,177,211);
+   private final static Color orange = new Color (253,180,98);
+  private final static Color green = new Color (179,222,105);
+  private final static Color mauve = new Color (252,205,229);
+  
   public KmcCanvas(Abstract2DDiffusionLattice lattice) {
     this.lattice = lattice;
   }
@@ -121,7 +133,7 @@ public class KmcCanvas extends Canvas {
 
     super.paint(g);
 
-    g.setColor(Color.black);
+    g.setColor(gray);
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
@@ -131,19 +143,19 @@ public class KmcCanvas extends Canvas {
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case AbstractAtom.TERRACE:
-            g.setColor(Color.RED);
+            g.setColor(whiteGray);
             break;
           case AbstractAtom.CORNER:
-            g.setColor(Color.MAGENTA);
+            g.setColor(red);
             break;
           case AbstractAtom.EDGE:
-            g.setColor(Color.ORANGE);
+            g.setColor(lilac);
             break;
           case AbstractAtom.KINK:
-            g.setColor(Color.YELLOW);
+            g.setColor(banana);
             break;
           case AbstractAtom.BULK:
-            g.setColor(Color.GREEN);
+            g.setColor(green);
             break;
           case 5: // imposible
             g.setColor(Color.WHITE);
