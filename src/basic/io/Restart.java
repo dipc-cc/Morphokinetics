@@ -211,7 +211,8 @@ public class Restart {
             posY = (posY + data[0].length / 2) % data[0].length;
           }
           String s = format("%.3f", data[i][j]);
-          printWriter.write(posX + " " + posY + " " + s + "\n");
+          String sLog = format("%.3f", Math.log(data[i][j]));
+          printWriter.write(posX + " " + posY + " " + sLog + " " + s + "\n");
         }
 
         //printWriter.write("\n");
