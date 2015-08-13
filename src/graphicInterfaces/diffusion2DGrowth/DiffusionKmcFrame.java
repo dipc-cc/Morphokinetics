@@ -32,7 +32,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     this.canvas1.initialize();
     this.jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
     this.setResizable(true);
-    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
+    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -151,7 +151,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
       canvas1.setScale((Integer) jSpinner2.getValue());
       canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-      this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
+      this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 75);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
