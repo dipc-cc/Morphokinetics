@@ -337,6 +337,9 @@ public class Parser {
   }
 
   public boolean printToImage() {
+    if (!withGui) {
+      return false;
+    }
     return printToImage;
   }
 
