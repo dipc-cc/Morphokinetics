@@ -151,7 +151,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
       canvas1.setScale((Integer) jSpinner2.getValue());
       canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-      this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 75);
+      this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -185,7 +185,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     jSpinner2.setValue(zoom);
     canvas1.setScale(zoom);
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 35);
+    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }//GEN-LAST:event_jPanel1MouseWheelMoved
 
   final class paintLoop extends Thread {
