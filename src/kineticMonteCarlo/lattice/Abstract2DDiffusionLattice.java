@@ -160,13 +160,14 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   public Abstract2DDiffusionAtom[] setInsideSquare(int radius) {
     ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
 
-    int yRadius = round(radius / (float) AgAgLattice.YRatio);
     Point2D centreCart = getCentralCartesianLocation();
     double left = centreCart.getX() - radius;
     double right = centreCart.getX() + radius;
-    double bottom = centreCart.getY() - yRadius * AgAgLattice.YRatio;
+    double bottom = centreCart.getY() - radius;
     double top = centreCart.getY() + radius;
     Point2D position;
+    int countTop = 1;
+    int countBottom = 1;
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
         position = getCartesianLocation(iHexa, jHexa);
@@ -176,8 +177,15 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
           atoms[iHexa][jHexa].setOutside(false);
           if (abs(left - position.getX()) < 0.49
                   || abs(right - position.getX()) < 0.49
-                  || abs(top - position.getY()) <  AgAgLattice.YRatio - 0.5
-                  || abs(bottom - position.getY()) <  AgAgLattice.YRatio - 0.5) {
+                  || abs(top - position.getY()) < AgAgLattice.YRatio/2
+                  || abs(bottom - position.getY()) < AgAgLattice.YRatio/2) { 
+            if (abs(top - position.getY()) < AgAgLattice.YRatio/2){
+              countTop++;
+              if (countTop % 2 == 0 && countTop % 10 != 0) continue;
+            }
+            if (abs(bottom - position.getY())< AgAgLattice.YRatio/2) {
+              if (countBottom % 2 == 0 && countBottom % 10 != 0) continue;
+            }
             perimeterList.add(atoms[iHexa][jHexa]);
           }
         } else {
