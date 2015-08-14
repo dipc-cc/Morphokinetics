@@ -136,7 +136,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
             atoms[iHexa][jHexa].setOutside(true);
           } else {
             atoms[iHexa][jHexa].setOutside(false);
-            if (distance > (radius - 1)) {
+            if (distance > radius - 1) {
               perimeterList.add(atoms[iHexa][jHexa]);
             }
           }
