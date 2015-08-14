@@ -22,7 +22,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   protected Abstract2DDiffusionAtom[][] atoms;
 
   private final ModifiedBuffer modified;
-
+  private static Point2D middle;
   public Abstract2DDiffusionLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     this.hexaSizeI = hexaSizeI;
     this.hexaSizeJ = hexaSizeJ;
@@ -90,7 +90,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
 
   protected void setAngles() {
-    Point2D middle = getCentralCartesianLocation();
+    middle = getCentralCartesianLocation();
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
         Point2D cartPosition = getCartesianLocation(iHexa, jHexa);
@@ -112,11 +112,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
 
   public double getDistanceToCenter(int iHexa, int jHexa) {
-
-    Point2D middle = getCentralCartesianLocation();
-    Point2D position = getCartesianLocation(iHexa, jHexa);
-
-    return position.distance(middle);
+    return middle.distance(getCartesianLocation(iHexa, jHexa));
   }
 
   /**
@@ -132,6 +128,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
     ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
 
+    middle = getCentralCartesianLocation();
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
           double distance = getDistanceToCenter(iHexa, jHexa);
