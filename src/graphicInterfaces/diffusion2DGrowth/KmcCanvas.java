@@ -151,20 +151,20 @@ public class KmcCanvas extends Canvas {
           case AbstractAtom.EDGE:
             g.setColor(lilac);
             break;
+          case AbstractAtom.ARMCHAIR_EDGE:
+            g.setColor(Color.WHITE);
+            break;
+          case AbstractAtom.ZIGZAG_WITH_EXTRA:
+            g.setColor(Color.CYAN);
+            break;
+          case AbstractAtom.SICK:
+            g.setColor(Color.BLUE);
+            break;
           case AbstractAtom.KINK:
             g.setColor(banana);
             break;
           case AbstractAtom.BULK:
             g.setColor(green);
-            break;
-          case 5:
-            g.setColor(Color.WHITE);
-            break;
-          case 6:
-            g.setColor(Color.CYAN);
-            break;
-          case 7:
-            g.setColor(Color.BLUE);
             break;
         }
 

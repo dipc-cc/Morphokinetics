@@ -19,8 +19,12 @@ public abstract class AbstractAtom {
   public static final int TERRACE = 0;
   public static final int CORNER = 1;
   public static final int EDGE = 2;
-  public static final int KINK = 3;
-  public static final int BULK = 4;
+  public static final int ZIGZAG_EDGE = 2;
+  public static final int ARMCHAIR_EDGE = 3;
+  public static final int ZIGZAG_WITH_EXTRA = 4;
+  public static final int SICK = 5;
+  public static final int KINK = 6;
+  public static final int BULK = 7;
 
   public void initialize(double[] probabilities) {
     this.probabilities = probabilities;
