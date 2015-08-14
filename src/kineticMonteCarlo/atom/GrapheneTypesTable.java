@@ -1,16 +1,10 @@
 package kineticMonteCarlo.atom;
 
 public class GrapheneTypesTable {
-//oooooooooooooooooooooooooooo
-/*  
-
-   [1º neighbors amount][2º neighbors amount][ 3º neighbors amount]=atom type;
-  
-   //Types: 0 terrace, 1 corner, 2 zigzag edge,3 armchair edge, 4 zigzag__with_extra, 5 sick, 6 kinks, 7 bulk
-   //[1º neighbors amount][2º neighbors amount][ 3º neighbors amount]: local atom configuration
+  /*  
+   [1st neighbors amount][2nd neighbors amount][3rd neighbors amount] = atom type
    */
-//oooooooooooooooooooooooooooo
-
+  
   private final byte[][][] table;
 
   public byte getType(int neigh1st, int neigh2nd, int neigh3rd) {

@@ -16,6 +16,7 @@ public abstract class AbstractAtom {
   protected double[] probabilities;
   protected int numberOfNeighbours;
 
+  // Atoms types
   public static final int TERRACE = 0;
   public static final int CORNER = 1;
   public static final int EDGE = 2;

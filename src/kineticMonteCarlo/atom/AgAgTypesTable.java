@@ -12,9 +12,7 @@ public class AgAgTypesTable {
 
     table = new byte[7][7];
 
-    // [Number of immobile neighbours][Number of mobile neighbours]
-    //[inmovil][movil]
-    //0: terrace, 1: corner, 2: edge, 3: kink, 4: bulk
+    // [Number of immobile neighbours][Number of mobile neighbours] = atom type
     //we don't differenciate here between A edge and B edge, this table is just for obtaining the atom type without orientation differences.
     table[0][0] = AbstractAtom.TERRACE;
     table[0][1] = AbstractAtom.TERRACE; //nucleación!!, intocable, algoritmos óptimos de difustion pensados para que no cambie el tipo de los vecinos al difundirse
