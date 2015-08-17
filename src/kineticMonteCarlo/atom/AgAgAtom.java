@@ -444,7 +444,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     if (type == 2 && destination == 1) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
 
       int otherCorner = 0;
-      if (originType == 2) {
+      if (originType == EDGE) {
         otherCorner = 5;
       }
       if (originType == 5) {
