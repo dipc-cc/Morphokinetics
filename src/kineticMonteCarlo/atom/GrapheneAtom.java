@@ -36,29 +36,29 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
   @Override
   public boolean isEligible() {
-    return occupied && (type < 6);
-  } // tipos 6 y 7 son considerados atomos inmoviles
+    return occupied && (type < KINK);
+  } // KINK and BULK atoms types are considered immobil atoms
 
-  public byte getn1() {
+  public byte getN1() {
     return n1;
   }
 
-  public byte getn2() {
+  public byte getN2() {
     return n2;
   }
 
-  public byte getn3() {
+  public byte getN3() {
     return n3;
   }
 
-  public int getn1n2n3() {
+  public int getN1N2N3() {
     return (n1 + n2 + n3);
   }
 
   @Override
   public void clear() {
 
-    n1 = n2 = n3 = type = 0;
+    n1 = n2 = n3 = type = TERRACE;
     occupied = false;
     outside = false;
 
@@ -115,55 +115,48 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   }
 
   private void add1stNeighbour(boolean forceNucleation) {
-
     byte newType = typesTable.getType(++n1, n2, n3);
     if (forceNucleation && occupied) {
-      newType = 7;
+      newType = BULK;
     }
     evaluateModifiedWhenAddNeigh(newType);
   }
 
   private void add2ndNeighbour() {
-
     byte newType = typesTable.getType(n1, ++n2, n3);
     evaluateModifiedWhenAddNeigh(newType);
   }
 
   private void add3rdNeighbour() {
-
     byte newType = typesTable.getType(n1, n2, ++n3);
     evaluateModifiedWhenAddNeigh(newType);
   }
 
   private void remove1stNeighbour() {
-
     byte newType = typesTable.getType(--n1, n2, n3);
     evaluateModifiedWhenRemNeigh(newType);
   }
 
   private void remove2ndNeighbour() {
-
     byte newType = typesTable.getType(n1, --n2, n3);
     evaluateModifiedWhenRemNeigh(newType);
   }
 
   private void remove3rdNeighbour() {
-
     byte newType = typesTable.getType(n1, n2, --n3);
     evaluateModifiedWhenRemNeigh(newType);
   }
 
   @Override
   public boolean areTwoTerracesTogether() {
-    return n1 == 2 && n2 == 0 && n3 == 0;
+    return n1 == ZIGZAG_EDGE && n2 == TERRACE && n3 == TERRACE;
   }
 
   @Override
   public void deposit(boolean forceNucleation) {
-
     occupied = true;
     if (forceNucleation) {
-      type = 7;
+      type = TERRACE;
     }
     int i = 0;
 
@@ -178,7 +171,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     }
 
     modified.addOwnAtom(this);
-    if (getn1n2n3() > 0) {
+    if (getN1N2N3() > 0) {
       modified.addBondAtom(this);
     }
     totalProbability = 0;
@@ -190,7 +183,6 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
    */
   @Override
   public void extract() {
-
     occupied = false;
 
     int i = 0;
@@ -204,7 +196,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       lattice.getNeighbour(iHexa, jHexa, i).remove3rdNeighbour();
     }
 
-    if (getn1n2n3() > 0) {
+    if (getN1N2N3() > 0) {
       modified.addBondAtom(this);
     }
 
@@ -218,7 +210,6 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
   @Override
   public void updateAllRates() {
-
     double temp = -totalProbability;
     totalProbability = 0;
 
@@ -247,7 +238,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
   }
 
   private boolean areAllRatesTheSame() {
-    if ((n1 + n2 + n3) != 0) {
+    if ((n1 + n2 + n3) != TERRACE) {
       return false;
     }
     for (int i = 11; i >= 3; i--) {
@@ -328,13 +319,13 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
 
            //if (originType==2) System.out.println(originType+" "+lastTemp+" "+hops);
       switch (originType) {
-        case 0:
+        case TERRACE:
           rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
-        case 2:
+        case ZIGZAG_EDGE:
           rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
-        case 3:
+        case ARMCHAIR_EDGE:
           rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
         default:
@@ -376,7 +367,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       if (occupied) {
         modified.addOwnAtom(this);
       }
-      if (getn1n2n3() > 0 && !occupied) {
+      if (getN1N2N3() > 0 && !occupied) {
         modified.addBondAtom(this);
       }
     }
@@ -388,7 +379,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
       if (occupied) {
         modified.addOwnAtom(this);
       }
-      if (getn1n2n3() > 1 && !occupied) {
+      if (getN1N2N3() > 1 && !occupied) {
         modified.addBondAtom(this);
       }
     }
