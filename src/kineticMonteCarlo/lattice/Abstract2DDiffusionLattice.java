@@ -8,7 +8,6 @@ import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
 import java.awt.geom.Point2D;
 import static java.lang.Math.abs;
-import static java.lang.Math.round;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
