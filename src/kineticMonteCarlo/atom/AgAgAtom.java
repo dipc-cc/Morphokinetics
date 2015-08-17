@@ -221,7 +221,6 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     return 6;
   }
 
-  //================================
   public void removeImmobilAddMobile() {
 
     if (nImmobile == 0) {  //estado de transición
@@ -230,20 +229,20 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       return;
     }
 
-    byte new_type = typesTable.getType(--nImmobile, ++nMobile);
+    byte newType = typesTable.getType(--nImmobile, ++nMobile);
 
-    if (type != new_type) { // ha cambiado el tipo, hay que actualizar ligaduras
+    if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
 
-      boolean inmov_to_mov = (type >= 3 && new_type < 3);
+      boolean immobileToMobile = (type >= 3 && newType < 3);
 
-      type = new_type;
+      type = newType;
 
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
         modified.addBondAtom(this);
       }
 
-      if (inmov_to_mov && occupied) {
+      if (immobileToMobile && occupied) {
         for (int i = 0; i < 6; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
@@ -284,26 +283,30 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       }
     }
   }
+  /**
+   * Éste lo ejecutan los primeros vecinos
+   * @param originType
+   * @param forceNucleation 
+   */
+  public void addOccupiedNeighbourProcess(byte originType, boolean forceNucleation) { 
 
-  public void addOccupiedNeighbourProcess(byte originType, boolean forceNucleation) { //este lo ejecutan los primeros vecinos
-
-    byte new_type;
+    byte newType;
 
     if (originType < 3) {
-      new_type = typesTable.getType(nImmobile, ++nMobile);
+      newType = typesTable.getType(nImmobile, ++nMobile);
     } else {
-      new_type = typesTable.getType(++nImmobile, nMobile);
+      newType = typesTable.getType(++nImmobile, nMobile);
     }
 
     if (forceNucleation) {
-      new_type = 4;
+      newType = 4;
     }
 
-    if (type != new_type) {
+    if (type != newType) {
 
-      boolean mobileToImmobile = (type < 3 && new_type >= 3);
+      boolean mobileToImmobile = (type < 3 && newType >= 3);
 
-      type = new_type;
+      type = newType;
 
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
@@ -322,20 +325,20 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
   public void removeMobileOccupied() {
 
-    byte new_type = typesTable.getType(nImmobile, --nMobile);
+    byte newType = typesTable.getType(nImmobile, --nMobile);
 
-    if (type != new_type) {
+    if (type != newType) {
 
-      boolean inmov_to_mov = (type >= 3 && new_type < 3);
+      boolean immobileToMobile = (type >= 3 && newType < 3);
 
-      type = new_type;
+      type = newType;
 
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
         modified.addBondAtom(this);
       }
 
-      if (inmov_to_mov && occupied) {
+      if (immobileToMobile && occupied) {
         for (int i = 0; i < 6; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
@@ -345,19 +348,18 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
   }
 
-  //=================================
   @Override
-  public void deposit(boolean force_nucleation) {
+  public void deposit(boolean forceNucleation) {
 
     occupied = true;
-    if (force_nucleation) {
+    if (forceNucleation) {
       type = 4;
     }
 
-    byte tipo_original = type;
+    byte originalType = type;
     for (int i = 0; i < 6; i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
-        neighbours[i].addOccupiedNeighbourProcess(tipo_original, force_nucleation);
+        neighbours[i].addOccupiedNeighbourProcess(originalType, forceNucleation);
       }
     }
 
@@ -401,7 +403,6 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   }
 
   private void obtainRatesFromNeighbours() {
-
     for (int i = 0; i < 6; i++) {
       bondsProbability[i] = probJumpToNeighbour(i);
       totalProbability += bondsProbability[i];
@@ -428,28 +429,28 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       return 0;
     }
 
-    byte origin_type = type;
+    byte originType = type;
     if (type == 2 && (getOrientation() & 1) == 0) {
-      origin_type = 5;
+      originType = 5;
     }
     if (type == 3 && (getOrientation() & 1) == 0) {
-      origin_type = 6;
+      originType = 6;
     }
 
-    int my_position_for_neighbor = (position + 3) % 6;
+    int myPositionForNeighbor = (position + 3) % 6;
 
-    byte destination = neighbours[position].getTypeWithoutNeighbour(my_position_for_neighbor);
+    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbor);
 
     if (type == 2 && destination == 1) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
 
-      int othercorner = 0;
-      if (origin_type == 2) {
-        othercorner = 5;
+      int otherCorner = 0;
+      if (originType == 2) {
+        otherCorner = 5;
       }
-      if (origin_type == 5) {
-        othercorner = 2;
+      if (originType == 5) {
+        otherCorner = 2;
       }
-      return probabilities[origin_type][othercorner];
+      return probabilities[originType][otherCorner];
 
     } else {
 
@@ -459,18 +460,18 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
         destination = 5;
       }
 
-      return probabilities[origin_type][destination];
+      return probabilities[originType][destination];
     }
   }
 
   @Override
-  public byte getTypeWithoutNeighbour(int neigh_pos) {
+  public byte getTypeWithoutNeighbour(int posNeighbour) {
 
-    if (!neighbours[neigh_pos].isOccupied()) {
+    if (!neighbours[posNeighbour].isOccupied()) {
       return type;
     }
 
-    if (neighbours[neigh_pos].getType() < 3) {
+    if (neighbours[posNeighbour].getType() < 3) {
       return typesTable.getType(nImmobile, nMobile - 1);
     } else {
       return typesTable.getType(nImmobile - 1, nMobile);
