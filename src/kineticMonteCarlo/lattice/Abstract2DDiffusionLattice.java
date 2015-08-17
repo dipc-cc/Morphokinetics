@@ -23,12 +23,20 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
   private final ModifiedBuffer modified;
   private static Point2D middle;
+  private final ArrayList<Integer> includePerimeterList; 
+
   public Abstract2DDiffusionLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     this.hexaSizeI = hexaSizeI;
     this.hexaSizeJ = hexaSizeJ;
     hexaSizeK = 1;
     unitCellSize = 4;
     this.modified = modified;
+    
+    // Initialise the square perimeter include points. This is required because the number of points in the horizontal and vertical perimeters should be as equal as possible.
+    this.includePerimeterList = new ArrayList<>();
+    for (int i = 0; i < 256; i++) {
+      includePerimeterList.add(Math.round(2*AgAgLattice.YRatio + 2*i*AgAgLattice.YRatio));
+    }
   }
 
   public abstract Abstract2DDiffusionAtom getNeighbour(int iHexa, int jHexa, int neighbour);
@@ -62,7 +70,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
   /**
    * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
-   * Returns the cartesian position, given the hexagonal (lattice) location
+   * Returns the Cartesian position, given the hexagonal (lattice) location
    *
    * @param iHexa i index in the hexagonal mesh
    * @param jHexa j index in the hexagonal mesh
@@ -181,10 +189,11 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
                   || abs(bottom - position.getY()) < AgAgLattice.YRatio/2) { 
             if (abs(top - position.getY()) < AgAgLattice.YRatio/2){
               countTop++;
-              if (countTop % 2 == 0 && countTop % 10 != 0) continue;
+              if (!includePerimeterList.contains(countTop)) continue;
             }
             if (abs(bottom - position.getY())< AgAgLattice.YRatio/2) {
-              if (countBottom % 2 == 0 && countBottom % 10 != 0) continue;
+              countBottom++;
+              if (!includePerimeterList.contains(countBottom)) continue;
             }
             perimeterList.add(atoms[iHexa][jHexa]);
           }
