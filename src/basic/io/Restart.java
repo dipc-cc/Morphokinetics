@@ -22,14 +22,24 @@ import java.util.StringTokenizer;
 public class Restart {
 
   public static final int MAX_DIMS = 3;
-  private static final String FOLDER = "results/";
+  private static String FOLDER; 
 
   public Restart() {
+    FOLDER = "results/";
+    createFolder(FOLDER);
+  }
+  
+  public Restart(String folder){ 
+    FOLDER = folder;
+    createFolder(folder);
+  }
+  
+  private void createFolder(String folder){
     try {
-      File file = new File(FOLDER);
+      File file = new File(folder);
       file.mkdir();
     } catch (Exception e) {
-      System.err.println("Error creating folder: " + FOLDER);
+      System.err.println("Error creating folder: " + folder);
     }
   }
 
@@ -228,6 +238,11 @@ public class Restart {
 
   private float[][] readLowText2D(String fileName, int[] sizes) throws FileNotFoundException {
     float[][] data = new float[sizes[0]][sizes[1]];
+    String subfix = ".txt";
+    if (!fileName.endsWith(subfix)) {
+      fileName = fileName + ".txt";
+    }
+    fileName = FOLDER + fileName;
     System.out.println("Trying to read " + fileName + " file of size " + sizes[0] + "x" + sizes[1]);
     int i = -1;
     int j = -1;
