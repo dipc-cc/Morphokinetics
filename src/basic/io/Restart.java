@@ -8,6 +8,7 @@ package basic.io;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -33,8 +34,8 @@ public class Restart {
   }
 
   /**
-   * Writes fload data to a file called "psd[number].mko". First of all calls to the header
-   * writting: look documentation there.
+   * Writes float data to a file called "psd[number].mko". First of all calls to the header
+   * writing: look documentation there.
    *
    * @param dimensions
    * @param sizes
@@ -85,8 +86,8 @@ public class Restart {
   }
 
   /**
-   * Writes fload data to a file called "surface[number].mko". First of all calls to the header
-   * writting: look documentation there.
+   * Writes float data to a file called "surface[number].mko". First of all calls to the header
+   * writing: look documentation there.
    *
    * @param dimensions
    * @param sizes
@@ -105,12 +106,12 @@ public class Restart {
     writeLowText2D(data, fileName, false);
   }
 
-  public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) {
+  public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
     return readLowText2D(fileName, sizes);
   }
 
   /**
-   * This method does the actual writting to the file
+   * This method does the actual writing to the file
    *
    * @param dimensions
    * @param sizes
@@ -132,8 +133,8 @@ public class Restart {
       dos = new DataOutputStream(fos);
 
       // for each byte in the buffer
-      for (int i = 0; i < data[0].length; i++) {
-        for (int j = 0; j < data.length; j++) {
+      for (int i = 0; i < sizes[0]; i++) {
+        for (int j = 0; j < sizes[1]; j++) {
           // write float to the dos
           dos.writeFloat(data[i][j]);
         }
@@ -153,7 +154,7 @@ public class Restart {
   /**
    * The header of the file has to have the following structure: - The "Morphokinetics" keyword -
    * The number of dimensions (int) - The size of each dimension (3 x int) - Trash to fill 64 bytes
-   * (in case we need some more space for the future) Right now is 32. Has to be addapted in the
+   * (in case we need some more space for the future) Right now is 32. Has to be adapted in the
    * future
    *
    * @param dimensions
@@ -225,10 +226,11 @@ public class Restart {
     }
   }
 
-  private float[][] readLowText2D(String fileName, int[] sizes) {
+  private float[][] readLowText2D(String fileName, int[] sizes) throws FileNotFoundException {
     float[][] data = new float[sizes[0]][sizes[1]];
-    System.out.println("Trying to read " + fileName + " file " + sizes[0] + " " + sizes[1]
-            + " " + data.length + " " + data[0].length);
+    System.out.println("Trying to read " + fileName + " file of size " + sizes[0] + "x" + sizes[1]);
+    int i = -1;
+    int j = -1;
     try {
 
       BufferedReader in = new BufferedReader(new FileReader(fileName));
@@ -237,13 +239,17 @@ public class Restart {
       line = in.readLine();
       while (line != null) {
         StringTokenizer tk = new StringTokenizer(line);
-        int i = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
-        int j = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
+        i = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
+        j = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
         data[i][j] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         line = in.readLine();
       }
-    } catch (Exception e) {
+    } catch (FileNotFoundException fe){
+      throw fe;
+    }
+      catch (Exception e) {
       // if any I/O error occurs
+      System.err.println("Point: " + i + " " + j);
       e.printStackTrace();
     }
     return data;
