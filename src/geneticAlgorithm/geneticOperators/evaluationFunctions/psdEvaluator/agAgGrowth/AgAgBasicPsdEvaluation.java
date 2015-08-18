@@ -29,7 +29,6 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
 
     this.kmc = kmc;
     psd = new PsdSignature2D(psdSizeY, psdSizeX);
-    sampledSurface = new float[psdSizeY][psdSizeX];
     difference = new float[psdSizeY][psdSizeX];
 
     DiffusionKmcFrame frame = createGraphicsFrame(kmc);
@@ -63,7 +62,7 @@ public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
       kmc.initializeRates(ind.getGenes());
       while (true) {
         kmc.simulate(measureInterval);
-        kmc.getSampledSurface(sampledSurface);
+        sampledSurface = kmc.getSampledSurface(psdSizeY, psdSizeX);
         psd.addSurfaceSample(sampledSurface);
         if (kmc.getIterations() < measureInterval) {
           time += kmc.getTime();

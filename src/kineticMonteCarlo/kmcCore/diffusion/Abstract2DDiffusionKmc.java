@@ -235,17 +235,16 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   }
 
   @Override
-  public void getSampledSurface(float[][] surface) {
-    int binY = surface.length;
-    int binX = surface[0].length;
-
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
+    
     Point2D corner1 = lattice.getCartesianLocation(0, 0);
     double scaleX = Math.abs(binX / (lattice.getCartSizeX()));
     double scaleY = Math.abs(binY / (lattice.getCartSizeY()));
 
     if (scaleX > 1 || scaleY > 1) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
-      return;
+      return null;
     }
 
     for (int i = 0; i < surface.length; i++) {
@@ -263,6 +262,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       }
     }
     MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
+    return surface;
   }
 
   protected abstract void depositSeed();

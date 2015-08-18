@@ -33,13 +33,13 @@ public class AgAgPsdTest {
 
     //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
     PsdSignature2D PSD = new PsdSignature2D(128, 128);
-    float[][] sampledSurface = new float[128][128];
+    float[][] sampledSurface = null;
 
     for (int i = 0; i < 30; i++) {
       initializeRates(ratesFactory, kmc);
       kmc.simulate();
 
-      kmc.getSampledSurface(sampledSurface);
+      sampledSurface = kmc.getSampledSurface(128, 128);
 
       PSD.addSurfaceSample(sampledSurface);
       System.out.println("flake " + i);

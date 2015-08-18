@@ -54,8 +54,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
   @Override
   public void handleSimulationIntervalFinish(int workerId, int workId) {
 
-    float[][] surface = new float[psdSizeY][psdSizeX];
-    workers[workerId].getSampledSurface(surface);
+    float[][] surface = workers[workerId].getSampledSurface(psdSizeY, psdSizeX);
     times[workId] += workers[workerId].getKmc().getTime();
     addToPsd(workId, surface);
 

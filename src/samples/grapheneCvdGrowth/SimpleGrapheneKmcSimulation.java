@@ -33,8 +33,7 @@ public class SimpleGrapheneKmcSimulation {
       kmc.simulate();
     }
 
-    float[][] surface = new float[256][256];
-    kmc.getSampledSurface(surface);
+    float[][] surface = kmc.getSampledSurface(256, 256);
 
   }
 

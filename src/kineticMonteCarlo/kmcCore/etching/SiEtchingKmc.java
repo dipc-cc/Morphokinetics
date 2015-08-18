@@ -68,10 +68,9 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
   }
 
   @Override
-  public void getSampledSurface(float[][] surface) {
-    int binY = surface.length;
-    int binX = surface[0].length;
-
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
+    
     double scaleX = binX / (lattice.getHexaSizeI() * ((SiLattice) lattice).getUnit_Cell().getLimitX());
     double scaleY = binY / (lattice.getHexaSizeJ() * ((SiLattice) lattice).getUnit_Cell().getLimitY());
     ListIterator<AbstractAtom> iterator = list.getIterator();
@@ -99,5 +98,6 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
     }
 
     MathUtils.fillSurfaceHoles(surface);
+    return surface;
   }
 }

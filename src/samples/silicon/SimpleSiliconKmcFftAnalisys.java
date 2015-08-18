@@ -29,13 +29,13 @@ public class SimpleSiliconKmcFftAnalisys {
     kmc.initializeRates(new SiRatesFactory()
             .getRates(350));
 
-    float[][] surface = new float[128][128];
+    float[][] surface;;
     PsdSignature2D PSD = new PsdSignature2D(128, 128);
 
     kmc.simulate(5000);
     for (int i = 0; i < 100; i++) {
       kmc.simulate(5000);
-      kmc.getSampledSurface(surface);
+      surface = kmc.getSampledSurface(128, 128);
       PSD.addSurfaceSample(surface);
     }
 

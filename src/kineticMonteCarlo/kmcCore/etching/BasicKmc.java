@@ -73,9 +73,8 @@ public class BasicKmc extends AbstractEtchingKmc {
   }
 
   @Override
-  public void getSampledSurface(float[][] surface) {
-    int binY = surface.length;
-    int binX = surface[0].length;
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
 
     double scaleX = binX / (float) lattice.getHexaSizeI();
     ListIterator<AbstractAtom> iterator = list.getIterator();
@@ -87,6 +86,6 @@ public class BasicKmc extends AbstractEtchingKmc {
         surface[0][sampledPosX] = atom.getY();
       }
     }
-
+    return surface;
   }
 }

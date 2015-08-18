@@ -32,9 +32,11 @@ public interface IKmc {
   /**
    * Returns a sampled topological measurement of the KMC surface
    *
-   * @param surface destination array.
+   * @param binX
+   * @param binY
+   * @return 
    */
-  public void getSampledSurface(float[][] surface);
+  public float[][] getSampledSurface(int binX, int binY);
   
   public void setIslandDensityAndDepositionRate(double depositionRate, double landDensity);
 

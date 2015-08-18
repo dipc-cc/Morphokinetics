@@ -69,7 +69,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
   private static float[][] getPsdFromSimulation(SiEtchingKmc kmc, int temperature) {
 
     PsdSignature2D psd = new PsdSignature2D(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2);
-    float[][] surface = new float[kmc.getLattice().getHexaSizeJ() * 2][kmc.getLattice().getHexaSizeI() * 2];
+    float[][] surface;
 
     for (int a = 0; a < 30; a++) {
 
@@ -79,7 +79,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
       kmc.simulate(5000);
       for (int i = 0; i < 10; i++) {
         kmc.simulate(10000);
-        kmc.getSampledSurface(surface);
+        surface = kmc.getSampledSurface(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2);
         psd.addSurfaceSample(surface);
       }
     }

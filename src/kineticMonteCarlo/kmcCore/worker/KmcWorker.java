@@ -169,7 +169,7 @@ public class KmcWorker extends Thread {
     return this.kmc.getIterations();
   }
 
-  public void getSampledSurface(float[][] surface) {
-    this.kmc.getSampledSurface(surface);
+  public float[][] getSampledSurface(int binX, int binY) {
+    return this.kmc.getSampledSurface(binX, binY);
   }
 }
