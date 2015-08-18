@@ -246,6 +246,7 @@ public class Restart {
     System.out.println("Trying to read " + fileName + " file of size " + sizes[0] + "x" + sizes[1]);
     int i = -1;
     int j = -1;
+    float trash;
     try {
 
       BufferedReader in = new BufferedReader(new FileReader(fileName));
@@ -256,6 +257,7 @@ public class Restart {
         StringTokenizer tk = new StringTokenizer(line);
         i = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
         j = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
+        trash = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         data[i][j] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         line = in.readLine();
       }
