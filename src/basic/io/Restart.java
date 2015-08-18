@@ -22,24 +22,24 @@ import java.util.StringTokenizer;
 public class Restart {
 
   public static final int MAX_DIMS = 3;
-  private static String FOLDER; 
+  private static String folder; 
 
   public Restart() {
-    FOLDER = "results/";
-    createFolder(FOLDER);
-  }
-  
-  public Restart(String folder){ 
-    FOLDER = folder;
+    folder = "results/";
     createFolder(folder);
   }
   
-  private void createFolder(String folder){
+  public Restart(String restartFolder){ 
+    folder = restartFolder;
+    createFolder(restartFolder);
+  }
+  
+  private void createFolder(String restartFolder){
     try {
-      File file = new File(folder);
+      File file = new File(restartFolder);
       file.mkdir();
     } catch (Exception e) {
-      System.err.println("Error creating folder: " + folder);
+      System.err.println("Error creating folder: " + restartFolder);
     }
   }
 
@@ -53,7 +53,7 @@ public class Restart {
    * @param simulationNumber
    */
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = FOLDER + "psd" + simulationNumber + ".mko";
+    String fileName = folder + "psd" + simulationNumber + ".mko";
 
     writePsdText2D(dimensions, sizes, data, simulationNumber);
 
@@ -61,8 +61,8 @@ public class Restart {
   }
 
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, String fileName) {
-    if (!fileName.startsWith(FOLDER)){
-      fileName = FOLDER + fileName;
+    if (!fileName.startsWith(folder)){
+      fileName = folder + fileName;
     }
     writePsdText2D(dimensions, sizes, data, fileName);
 
@@ -83,7 +83,7 @@ public class Restart {
    * @param simulationNumber
    */
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = FOLDER + "psd" + simulationNumber + ".txt";
+    String fileName = folder + "psd" + simulationNumber + ".txt";
     writeLowText2D(data, fileName, true);
   }
 
@@ -105,14 +105,14 @@ public class Restart {
    * @param simulationNumber
    */
   public void writeSurfaceBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = FOLDER + "surface" + simulationNumber + ".mko";
+    String fileName = folder + "surface" + simulationNumber + ".mko";
     writeLowBinary(dimensions, sizes, data, fileName);
 
     writeSurfaceText2D(dimensions, sizes, data, simulationNumber);
   }
 
   public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = FOLDER + "surface" + simulationNumber + ".txt";
+    String fileName = folder + "surface" + simulationNumber + ".txt";
     writeLowText2D(data, fileName, false);
   }
 
@@ -242,7 +242,7 @@ public class Restart {
     if (!fileName.endsWith(subfix)) {
       fileName = fileName + ".txt";
     }
-    fileName = FOLDER + fileName;
+    fileName = folder + fileName;
     System.out.println("Trying to read " + fileName + " file of size " + sizes[0] + "x" + sizes[1]);
     int i = -1;
     int j = -1;
