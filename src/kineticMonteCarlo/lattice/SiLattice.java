@@ -27,19 +27,19 @@ public class SiLattice extends AbstractEtchingLattice {
     this.hexaSizeK = sizeZ;
 
     unitCell = new UnitCell();
-    unitCellSize = unitCell.create_Unit_Cell(millerX, millerY, millerZ);
+    unitCellSize = unitCell.createUnitCell(millerX, millerY, millerZ);
     if (unitCellSize < 4 || unitCellSize > 127) {
       System.out.println("UC size inappropiate: " + unitCellSize);
       System.exit(-1);
     }
-    short[] UC_neig = unitCell.getNeighs();
-    byte[] block = unitCell.getN_block();
+    short[] ucNeighbours = unitCell.getNeighs();
+    byte[] block = unitCell.getNBlock();
 
     float[] coords = new float[unitCellSize * 3 + 3];
     for (int i = 0; i < unitCellSize; i++) {
-      coords[i * 3] = unitCell.getCellsP()[i].getPos_x(0, 0, 0);
-      coords[i * 3 + 1] = unitCell.getCellsP()[i].getPos_y(0, 0, 0);
-      coords[i * 3 + 2] = unitCell.getCellsP()[i].getPos_z(0, 0, 0);
+      coords[i * 3] = unitCell.getCellsP()[i].getPosX(0, 0, 0);
+      coords[i * 3 + 1] = unitCell.getCellsP()[i].getPosY(0, 0, 0);
+      coords[i * 3 + 2] = unitCell.getCellsP()[i].getPosZ(0, 0, 0);
     }
 
     coords[unitCellSize * 3] = (float) unitCell.getLimitX();
@@ -57,8 +57,8 @@ public class SiLattice extends AbstractEtchingLattice {
 
     lattice = new SiAtom[this.hexaSizeI * this.hexaSizeJ * this.hexaSizeK * unitCellSize];
 
-    this.create_atoms(coords, unitCell);
-    this.interconnect_atoms(UC_neig, block);
+    this.createAtoms(coords, unitCell);
+    this.interconnectAtoms(ucNeighbours, block);
   }
 
   @Override
@@ -68,14 +68,14 @@ public class SiLattice extends AbstractEtchingLattice {
     }
   }
 
-  public UnitCell getUnit_Cell() {
+  public UnitCell getUnitCell() {
 
     return unitCell;
   }
 
-  public SiAtom getAtom(int Unit_cell_X, int Unit_cell_Y, int Unit_cell_Z, int Unit_cell_pos) {
+  public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
 
-    return lattice[((Unit_cell_Z * hexaSizeJ + Unit_cell_Y) * hexaSizeI + Unit_cell_X) * unitCellSize + Unit_cell_pos];
+    return lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
   }
 
   @Override
@@ -120,7 +120,7 @@ public class SiLattice extends AbstractEtchingLattice {
     }
   }
 
-  private void create_atoms(float[] coords, UnitCell UC) {
+  private void createAtoms(float[] coords, UnitCell UC) {
     //atoms creation
     int cont = 0;
     for (int a = 0; a < this.hexaSizeK; a++) {
@@ -141,7 +141,7 @@ public class SiLattice extends AbstractEtchingLattice {
     }
   }
 
-  private void interconnect_atoms(short[] UC_neig, byte[] block) {
+  private void interconnectAtoms(short[] UC_neig, byte[] block) {
     //atoms inter-connection
 
     for (int Z = 0; Z < this.hexaSizeK; Z++) {

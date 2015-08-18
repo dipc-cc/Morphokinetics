@@ -88,7 +88,7 @@ public class UnitCellAtom {
 
   }
 
-  public float getPos_x(int uc_x, int uc_y, int uc_z) {
+  public float getPosX(int uc_x, int uc_y, int uc_z) {
 
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
 
@@ -101,7 +101,7 @@ public class UnitCellAtom {
 
   }
 
-  public float getPos_y(int uc_x, int uc_y, int uc_z) {
+  public float getPosY(int uc_x, int uc_y, int uc_z) {
 
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
 
@@ -112,11 +112,11 @@ public class UnitCellAtom {
     return temp;
   }
 
-  public float getPos_z(int uc_x, int uc_y, int uc_z) {
+  public float getPosZ(int uc_x, int uc_y, int uc_z) {
     return posZ_space - uc_z * limitZ;
   }
 
-  public float getPos_x_offset(int uc_x, int uc_y, int uc_z) {
+  public float getPosXOffset(int uc_x, int uc_y, int uc_z) {
 
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
 
@@ -127,7 +127,7 @@ public class UnitCellAtom {
     return temp - offset_X;
   }
 
-  public float getPos_y_offset(int uc_x, int uc_y, int uc_z) {
+  public float getPosYOffset(int uc_x, int uc_y, int uc_z) {
 
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
 
@@ -138,21 +138,21 @@ public class UnitCellAtom {
     return temp - offset_Y;
   }
 
-  public float getPos_x_pure(int uc_x, int uc_y, int uc_z) {
+  public float getPosXPure(int uc_x, int uc_y, int uc_z) {
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
     return temp;
   }
 
-  public float getPos_y_pure(int uc_x, int uc_y, int uc_z) {
+  public float getPosYPure(int uc_x, int uc_y, int uc_z) {
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
     return temp;
   }
 
-  public float getPos_z_nobase() {
+  public float getPosZNobase() {
     return posZ_space;
   }
 
-  public static void initialize_size_variables(int sX_a, int sY_a) {
+  public static void initializeSizeVariables(int sX_a, int sY_a) {
     sX = sX_a;
     sY = sY_a;
     offset_X = (limitX * sX) / 2.0f;

@@ -118,7 +118,7 @@ public class UnitCell {
     return (((double) temp) / desp);
   }
 
-  public int create_Unit_Cell(int MillerX, int MillerY, int MillerZ) {
+  public int createUnitCell(int MillerX, int MillerY, int MillerZ) {
 
     limitX = 0;
     limitY = 0;
@@ -1596,7 +1596,7 @@ public class UnitCell {
     return neighs;
   }
 
-  public byte[] getN_block() {
+  public byte[] getNBlock() {
     return n_block;
   }
 }

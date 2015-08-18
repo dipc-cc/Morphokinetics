@@ -22,7 +22,7 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
     super(config.listConfig, randomise);
     lattice = new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC);
 
-    minHeight = ((SiLattice) lattice).getUnit_Cell().getLimitZ();
+    minHeight = ((SiLattice) lattice).getUnitCell().getLimitZ();
   }
 
   /**
@@ -71,8 +71,8 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
   public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
     
-    double scaleX = binX / (lattice.getHexaSizeI() * ((SiLattice) lattice).getUnit_Cell().getLimitX());
-    double scaleY = binY / (lattice.getHexaSizeJ() * ((SiLattice) lattice).getUnit_Cell().getLimitY());
+    double scaleX = binX / (lattice.getHexaSizeI() * ((SiLattice) lattice).getUnitCell().getLimitX());
+    double scaleY = binY / (lattice.getHexaSizeJ() * ((SiLattice) lattice).getUnitCell().getLimitY());
     ListIterator<AbstractAtom> iterator = list.getIterator();
 
     for (int i = 0; i < binY; i++) {
