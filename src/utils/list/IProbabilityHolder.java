@@ -9,9 +9,7 @@ package utils.list;
  * @author Nestor
  */
 public interface IProbabilityHolder {
-    
-    
-    public void addTotalProbability(double probabilityChanges);
-    
-    
+
+  public void addTotalProbability(double probabilityChanges);
+
 }
