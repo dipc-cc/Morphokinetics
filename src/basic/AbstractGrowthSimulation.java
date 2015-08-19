@@ -17,8 +17,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   public AbstractGrowthSimulation(Parser myParser) {
     super(myParser);
   }
-  
-  
+
   @Override
   protected void initializeRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser) {
     double depositionRate = ratesFactory.getDepositionRate(myParser.getTemperature());
@@ -27,12 +26,12 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     this.kmc.initializeRates(ratesFactory.getRates(myParser.getTemperature()));
 
   }
-  
+
   /**
    * Do nothing
    */
   @Override
-  public void finishSimulation(){
-    
+  public void finishSimulation() {
+
   }
 }
