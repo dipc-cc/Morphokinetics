@@ -1,0 +1,17 @@
+{ "temperature": 135,
+  "numberOfSimulations": 1,
+  "cartSizeX": 256,
+  "cartSizeY": 256,
+  "visualize": false, 
+  "withGui"  : false,
+  "justCentralFlake": true,
+  "listType": binned,
+  "printToImage": false,
+  "psd": true,
+  "calculationMode": Si,
+  "binsLevels": 20,
+  "extraLevels": 1,
+  "outputData": true, 
+  "randomSeed": false,
+  "useMaxPerimeter": false
+}

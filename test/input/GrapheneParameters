@@ -1,0 +1,18 @@
+{ "temperature": 135,
+  "numberOfSimulations": 1,
+  "cartSizeX": 400,
+  "cartSizeY": 400,
+  "visualize": false, 
+  "withGui"  : false,
+  "justCentralFlake": true,
+  "listType": linear,
+  "printToImage": false,
+  "psd": true,
+  "calculationMode": graphene,
+  "binsLevels": 100,
+  "extraLevels": 0,
+  "outputData": true, 
+  "randomSeed": false,
+  "useMaxPerimeter": false,
+  "perimeterType": circle
+}
