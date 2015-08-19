@@ -59,12 +59,14 @@ public class SiSimulation extends AbstractEtchingSimulation {
    */
   @Override
   public void finishSimulation() {
-    try {
-      new SiliconFrame().drawKmc(kmc);
-    } catch (Exception e) {
-      System.err.println("Error: The execution is not able to create the X11 frame");
-      System.err.println("Finishing");
-      throw e;
+    if (parser.visualize()) {
+      try {
+        new SiliconFrame().drawKmc(kmc);
+      } catch (Exception e) {
+        System.err.println("Error: The execution is not able to create the X11 frame");
+        System.err.println("Finishing");
+        throw e;
+      }
     }
   }
 }
