@@ -39,7 +39,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
           double depositionRate, 
           double islandDensity) {
 
-    this(config, hexaSizeI, hexaSizeJ, false, true, false, RoundPerimeter.CIRCLE);
+    this(config, hexaSizeI, hexaSizeJ, true, true, false, RoundPerimeter.CIRCLE);
     
     this.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
   }
