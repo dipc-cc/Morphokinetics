@@ -222,13 +222,10 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       double top = centreCart.getY() + this.perimeter.getCurrentRadius();
       Point2D  position = lattice.getCartesianLocation(destinationAtom.getX(),destinationAtom.getY());
 
-      if ((destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
+      return (destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
               || Math.abs(right - position.getX()) < 2
               || Math.abs(top - position.getY()) < 2
-              || Math.abs(bottom - position.getY()) < 2)) {
-        return true;
-    }
-      return false;
+              || Math.abs(bottom - position.getY()) < 2);
     } else {
       return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getX(), destinationAtom.getY()) >= (this.perimeter.getCurrentRadius() - 2);
     }
