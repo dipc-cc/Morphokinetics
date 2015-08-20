@@ -40,8 +40,8 @@ public class PsdSignature2D {
     measures = 0;
     semaphore = new Semaphore(1);
     psdVector = new ArrayList<>();
-    binsY = binsY;
-    binsX = binsX;
+    this.binsY = binsY;
+    this.binsX = binsX;
     myRestart = new Restart();
   }
 
@@ -63,8 +63,8 @@ public class PsdSignature2D {
 
     fftCore.realForwardFull(buffer);
 
-    for (int i = 0; i < psd.length; i++) {
-      for (int j = 0; j < psd[0].length; j++) {
+    for (int i = 0; i < binsY; i++) {
+      for (int j = 0; j < binsX; j++) {
         psdTmp[i][j] = buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1];
         psd[i][j] += psdTmp[i][j];
       }
@@ -78,8 +78,8 @@ public class PsdSignature2D {
   public float[][] getPsd() {
 
     if (!averaged) {
-      for (int i = 0; i < psd.length; i++) {
-        for (int j = 0; j < psd[0].length; j++) {
+      for (int i = 0; i < binsY; i++) {
+        for (int j = 0; j < binsX; j++) {
           psd[i][j] /= measures;
         }
       }
@@ -91,27 +91,27 @@ public class PsdSignature2D {
   public void reset() {
     averaged = false;
     measures = 0;
-    psd = new float[psd.length][psd[0].length];
+    psd = new float[binsY][binsX];
   }
 
   public void applySimmetryFold(int simmetryType) {
 
     switch (simmetryType) {
       case HORIZONTAL_SIMMETRY:
-        for (int i = 0; i < psd.length; i++) {
-          for (int j = 1; j < psd[0].length / 2; j++) {
+        for (int i = 0; i < binsY; i++) {
+          for (int j = 1; j < binsX / 2; j++) {
 
-            float temp = (psd[i][j] + psd[i][psd[0].length - j - 1]) * 0.5f;
-            psd[i][j] = psd[i][psd[0].length - j - 1] = temp;
+            float temp = (psd[i][j] + psd[i][binsX - j - 1]) * 0.5f;
+            psd[i][j] = psd[i][binsX - j - 1] = temp;
           }
         }
         break;
 
       case VERTICAL_SIMMETRY:
-        for (int i = 1; i < psd.length / 2; i++) {
-          for (int j = 0; j < psd[0].length; j++) {
-            float temp = (psd[i][j] + psd[psd.length - i - 1][j]) * 0.5f;
-            psd[i][j] = psd[psd.length - i - 1][j] = temp;
+        for (int i = 1; i < binsY / 2; i++) {
+          for (int j = 0; j < binsX; j++) {
+            float temp = (psd[i][j] + psd[binsY - i - 1][j]) * 0.5f;
+            psd[i][j] = psd[binsY - i - 1][j] = temp;
           }
         }
         break;
@@ -121,16 +121,16 @@ public class PsdSignature2D {
   public void printToFile(int simulationNumber) {
     int dimensions = 2;
     int sizes[] = new int[2];
-    sizes[0] = psd.length;
-    sizes[1] = psd[0].length;
+    sizes[0] = binsY;
+    sizes[1] = binsX;
     myRestart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
   }
 
   public void printAvgToFile(){
     int dimensions = 2;
     int sizes[] = new int[2];
-    sizes[0] = psd.length;
-    sizes[1] = psd[0].length;
+    sizes[0] = binsY;
+    sizes[1] = binsX;
     myRestart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(psd, 1), "psdAvgFil");
     myRestart.writePsdBinary(dimensions, sizes, psd, "psdAvgRaw");
   }
