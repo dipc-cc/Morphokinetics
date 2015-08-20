@@ -77,7 +77,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
   public void dispose() {
 
     for (int i = 0; i < workers.length; i++) {
-      workers[i].destroy();
+      workers[i].destroyWorker();
     }
 
   }

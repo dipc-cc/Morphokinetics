@@ -60,7 +60,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
   public void handleSimulationFinish(int workerID, int work_ID) {
     System.out.println("Worker simulation finished.");
     new SiliconFrame().drawKmc(worker.getKmc());
-    worker.destroy();
+    worker.destroyWorker();
 
   }
 

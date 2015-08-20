@@ -34,8 +34,7 @@ public class KmcWorker extends Thread {
     this.active = true;
   }
 
-  // TODO: This method is deprecated
-  public void destroy() {
+  public void destroyWorker() {
     active = false;
     performSimulationLock.release();
     kmc = null;
