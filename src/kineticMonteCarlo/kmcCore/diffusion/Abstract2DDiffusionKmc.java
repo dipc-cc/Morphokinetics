@@ -247,8 +247,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       return null;
     }
 
-    for (int i = 0; i < surface.length; i++) {
-      for (int j = 0; j < surface[0].length; j++) {
+    for (int i = 0; i < binX; i++) {
+      for (int j = 0; j < binY; j++) {
         surface[i][j] = -1;
       }
     }
