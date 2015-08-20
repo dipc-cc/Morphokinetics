@@ -77,6 +77,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   @Override
   protected boolean performSimulationStep() {
+    //System.out.println("hemen???");
 
     Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.nextEvent(RNG));
     Abstract2DDiffusionAtom destinationAtom;
@@ -94,7 +95,9 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
     if (PerimeterMustBeEnlarged(destinationAtom)) {
       int nextRadius = this.perimeter.goToNextRadius();
-      if (nextRadius > 0) {
+      if (nextRadius > 0 && 
+              nextRadius < lattice.getCartSizeX()/2 &&
+              nextRadius < lattice.getCartSizeY()/2) {
         if (this.perimeterType == RoundPerimeter.CIRCLE) {
           this.perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
         } else {
