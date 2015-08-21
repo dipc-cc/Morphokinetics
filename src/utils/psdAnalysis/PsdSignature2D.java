@@ -134,12 +134,4 @@ public class PsdSignature2D {
     myRestart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(psd, 1), "psdAvgFil");
     myRestart.writePsdBinary(dimensions, sizes, psd, "psdAvgRaw");
   }
-  
-  public void printSurfaceToFile(int simulationNumber, float[][] sampledSurface){
-    
-    int sizes[] = new int[2];
-    sizes[0] = sampledSurface.length;
-    sizes[1] = sampledSurface[0].length;
-    myRestart.writeSurfaceBinary(2, sizes, sampledSurface, simulationNumber);
-  }
 }
