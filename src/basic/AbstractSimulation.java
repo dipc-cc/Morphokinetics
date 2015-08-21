@@ -5,6 +5,7 @@
  */
 package basic;
 
+import basic.io.Restart;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -69,10 +70,14 @@ public abstract class AbstractSimulation {
     float[][] sampledSurface = null;
     long startTime = System.currentTimeMillis();
     double totalTime = 0.0;
-
+    Restart restart = new Restart("results/tmp"+System.currentTimeMillis());
+    int sizes[] = new int[2];
+    //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
+    sizes[0] = parser.getCartSizeX() / 2;
+    sizes[1] = parser.getCartSizeY() / 2;
+    
     if (parser.doPsd()) {
-      //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
-      psd = new PsdSignature2D(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+      psd = new PsdSignature2D(sizes[0], sizes[1]);
     }
 
     // Main loop
@@ -84,11 +89,11 @@ public abstract class AbstractSimulation {
         frame.printToImage(simulations);
       }
       if (parser.doPsd()) {
-        sampledSurface = kmc.getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+        sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]);
         psd.addSurfaceSample(sampledSurface);
         if (parser.outputData()) {
           psd.printToFile(simulations);
-          psd.printSurfaceToFile(simulations, sampledSurface);
+          restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
         }
       }
       System.out.println("Simulation number " + simulations + " executed in "
