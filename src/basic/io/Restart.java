@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 public class Restart {
 
   public static final int MAX_DIMS = 3;
-  private static String folder; 
+  private String folder; 
 
   public Restart() {
     folder = "results/";
@@ -31,6 +31,9 @@ public class Restart {
   
   public Restart(String restartFolder){ 
     folder = restartFolder;
+    if (!folder.endsWith("/")){
+      folder += "/";
+    }
     createFolder(restartFolder);
   }
   
