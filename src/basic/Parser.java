@@ -235,27 +235,27 @@ public class Parser {
    * @return
    */
   public void print() {
-    System.out.println("\tislandDensityType:\t" + islandDensityType);
-    System.out.println("\tjustCentralFlake:\t" + justCentralFlake);
-    System.out.println("\tlistType:\t\t" + listType);
-    System.out.println("\tperimeterType:\t\t" + perimeterType);
-    System.out.println("\tmultithreaded:\t\t" + multithreaded);
-    System.out.println("\tnumberOfSimulations:\t" + numberOfSimulations);
-    System.out.println("\tcartSizeX:\t\t" + cartSizeX);
-    System.out.println("\tcartSizeY:\t\t" + cartSizeY);
-    System.out.println("\tbinsLevels:\t\t" + binsLevels);
-    System.out.println("\textraLevels:\t\t" + extraLevels);
-    System.out.println("\tpresure:\t\t" + presure);
-    System.out.println("\ttemperature:\t\t" + temperature);
-    System.out.println("\tflow:\t\t\t" + flow);
-    System.out.println("\tvisualize:\t\t" + visualize);
-    System.out.println("\twithGui:\t\t" + withGui);
-    System.out.println("\tprintToImage\t\t" + printToImage);
-    System.out.println("\tcalculationMode:\t" + calculationMode);
-    System.out.println("\tpsd:\t\t\t" + psd);
-    System.out.println("\toutputData:\t\t" + outputData);
-    System.out.println("\trandomSeed:\t\t" + randomSeed);
-    System.out.println("\tuseMaxPerimeter:\t" + useMaxPerimeter);
+    System.out.println("\t\"islandDensityType\":\t" + islandDensityType + ",");
+    System.out.println("\t\"justCentralFlake\":\t" + justCentralFlake + ",");
+    System.out.println("\t\"listType\":\t\t" + listType + ",");
+    System.out.println("\t\"perimeterType\":\t" + perimeterType + ",");
+    System.out.println("\t\"multithreaded\":\t" + multithreaded + ",");
+    System.out.println("\t\"numberOfSimulations\":\t" + numberOfSimulations + ",");
+    System.out.println("\t\"cartSizeX\":\t\t" + cartSizeX + ",");
+    System.out.println("\t\"cartSizeY\":\t\t" + cartSizeY + ",");
+    System.out.println("\t\"binsLevels\":\t\t" + binsLevels + ",");
+    System.out.println("\t\"extraLevels\":\t\t" + extraLevels + ",");
+    System.out.println("\t\"presure\":\t\t" + presure + ",");
+    System.out.println("\t\"temperature\":\t\t" + temperature + ",");
+    System.out.println("\t\"flow\":\t\t\t" + flow + ",");
+    System.out.println("\t\"visualize\":\t\t" + visualize + ",");
+    System.out.println("\t\"withGui\":\t\t" + withGui + ",");
+    System.out.println("\t\"printToImage\":\t\t" + printToImage + ",");
+    System.out.println("\t\"calculationMode\":\t" + calculationMode + ",");
+    System.out.println("\t\"psd\":\t\t\t" + psd + ",");
+    System.out.println("\t\"outputData\":\t\t" + outputData + ",");
+    System.out.println("\t\"randomSeed\":\t\t" + randomSeed + ",");
+    System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter);
   }
 
   public String getIslandDensityType() {
