@@ -222,9 +222,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return jHexa * YRatio;
   }
 
-  public int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int m) {
+  public int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
 
-    int s = 1;
+    int possibleDistance = 1;
 
     int iHexa = iHexaOrigin;
     int jHexa = jHexaOrigin - 1;
@@ -235,7 +235,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
     out:
     while (true) {
-      for (int i = 0; i < s; i++) {
+      for (int i = 0; i < possibleDistance; i++) {
         if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
@@ -248,7 +248,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
           iHexa = 0;
         }
       }
-      for (int i = 0; i < s; i++) {
+      for (int i = 0; i < possibleDistance; i++) {
         if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
@@ -261,7 +261,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
           jHexa = 0;
         }
       }
-      for (int i = 0; i < s; i++) {
+      for (int i = 0; i < possibleDistance; i++) {
         if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
@@ -278,7 +278,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
           iHexa = hexaSizeI - 1;
         }
       }
-      for (int i = 0; i < s; i++) {
+      for (int i = 0; i < possibleDistance; i++) {
         if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
@@ -291,7 +291,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
           iHexa = hexaSizeI - 1;
         }
       }
-      for (int i = 0; i < s; i++) {
+      for (int i = 0; i < possibleDistance; i++) {
         if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
@@ -304,7 +304,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
           jHexa = hexaSizeJ - 1;
         }
       }
-      for (int i = 0; i < s; i++) {
+      for (int i = 0; i < possibleDistance; i++) {
         if (atoms[iHexa][jHexa].isOutside()) {
           errorCode |= 1;
         }
@@ -325,10 +325,10 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
       if (errorCode != 0) {
         break;
       }
-      if (s >= m) {
-        return s;
+      if (possibleDistance >= thresholdDistance) {
+        return possibleDistance;
       }
-      s++;
+      possibleDistance++;
       jHexa--;
       if (jHexa < 0) {
         jHexa = hexaSizeJ - 1;
@@ -336,10 +336,10 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     }
 
     if ((errorCode & 2) != 0) {
-      return s - 1;
+      return possibleDistance - 1;
     }
     if ((errorCode & 1) != 0) {
-      return s;
+      return possibleDistance;
     }
     return -1;
   }
