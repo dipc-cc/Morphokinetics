@@ -236,111 +236,55 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     out:
     while (true) {
       for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) {
-          errorCode |= 1;
-        }
-        if (atoms[iHexa][jHexa].isOccupied()) {
-          errorCode |= 2;
-          break out;
-        }
+        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
+        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
         iHexa++;
-        if (iHexa == hexaSizeI) {
-          iHexa = 0;
-        }
+        if (iHexa == hexaSizeI) iHexa = 0;
       }
       for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) {
-          errorCode |= 1;
-        }
-        if (atoms[iHexa][jHexa].isOccupied()) {
-          errorCode |= 2;
-          break out;
-        }
+        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
+        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
         jHexa++;
-        if (jHexa == hexaSizeJ) {
-          jHexa = 0;
-        }
+        if (jHexa == hexaSizeJ) jHexa = 0;
       }
       for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) {
-          errorCode |= 1;
-        }
-        if (atoms[iHexa][jHexa].isOccupied()) {
-          errorCode |= 2;
-          break out;
-        }
+        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
+        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
         jHexa++;
         iHexa--;
-        if (jHexa == hexaSizeJ) {
-          jHexa = 0;
-        }
-        if (iHexa < 0) {
-          iHexa = hexaSizeI - 1;
-        }
+        if (jHexa == hexaSizeJ) jHexa = 0;
+        if (iHexa < 0) iHexa = hexaSizeI - 1;
       }
       for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) {
-          errorCode |= 1;
-        }
-        if (atoms[iHexa][jHexa].isOccupied()) {
-          errorCode |= 2;
-          break out;
-        }
+        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
+        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
         iHexa--;
-        if (iHexa < 0) {
-          iHexa = hexaSizeI - 1;
-        }
+        if (iHexa < 0) iHexa = hexaSizeI - 1;
       }
       for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) {
-          errorCode |= 1;
-        }
-        if (atoms[iHexa][jHexa].isOccupied()) {
-          errorCode |= 2;
-          break out;
-        }
+        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
+        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
         jHexa--;
-        if (jHexa < 0) {
-          jHexa = hexaSizeJ - 1;
-        }
+        if (jHexa < 0) jHexa = hexaSizeJ - 1;
       }
       for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) {
-          errorCode |= 1;
-        }
-        if (atoms[iHexa][jHexa].isOccupied()) {
-          errorCode |= 2;
-          break out;
-        }
+        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
+        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
         jHexa--;
         iHexa++;
-        if (jHexa < 0) {
-          jHexa = hexaSizeJ - 1;
-        }
-        if (iHexa == hexaSizeI) {
-          iHexa = 0;
-        }
+        if (jHexa < 0) jHexa = hexaSizeJ - 1;
+        if (iHexa == hexaSizeI) iHexa = 0;
       }
 
-      if (errorCode != 0) {
-        break;
-      }
-      if (possibleDistance >= thresholdDistance) {
-        return possibleDistance;
-      }
+      if (errorCode != 0) break;
+      if (possibleDistance >= thresholdDistance) return possibleDistance;
       possibleDistance++;
       jHexa--;
-      if (jHexa < 0) {
-        jHexa = hexaSizeJ - 1;
-      }
+      if (jHexa < 0) jHexa = hexaSizeJ - 1;
     }
-
-    if ((errorCode & 2) != 0) {
-      return possibleDistance - 1;
-    }
-    if ((errorCode & 1) != 0) {
-      return possibleDistance;
-    }
+    if (errorCode > 3) System.out.println("Error code: " + errorCode);
+    if ((errorCode & 2) != 0) return possibleDistance - 1;
+    if ((errorCode & 1) != 0) return possibleDistance;
     return -1;
   }
 
