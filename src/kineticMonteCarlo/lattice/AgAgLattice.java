@@ -226,63 +226,67 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
     int possibleDistance = 1;
 
-    int iHexa = iHexaOrigin;
-    int jHexa = jHexaOrigin - 1;
+    int i = iHexaOrigin;
+    int j = jHexaOrigin - 1;
     byte errorCode = 0;
-    if (jHexa < 0) {
-      jHexa = hexaSizeJ - 1;
+    if (j < 0) {
+      j = hexaSizeJ - 1;
     }
-
+    
+    // This while follows this iteration pattern:
+    // go right, up, left up, left, down, right down (-1), jump down and increment
+    //
+    // This implementation is clearly not efficient (simple profiling is enough to demonstrate)
     out:
     while (true) {
-      for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
-        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
-        iHexa++;
-        if (iHexa == hexaSizeI) iHexa = 0;
+      for (int iter = 0; iter < possibleDistance; iter++) {
+        if (atoms[i][j].isOutside()) errorCode |= 1;
+        if (atoms[i][j].isOccupied()) {errorCode |= 2; break out;}
+        i++;
+        if (i == hexaSizeI) i = 0;
       }
-      for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
-        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
-        jHexa++;
-        if (jHexa == hexaSizeJ) jHexa = 0;
+      for (int iter = 0; iter < possibleDistance; iter++) {
+        if (atoms[i][j].isOutside()) errorCode |= 1;
+        if (atoms[i][j].isOccupied()) {errorCode |= 2; break out;}
+        j++;
+        if (j == hexaSizeJ) j = 0;
       }
-      for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
-        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
-        jHexa++;
-        iHexa--;
-        if (jHexa == hexaSizeJ) jHexa = 0;
-        if (iHexa < 0) iHexa = hexaSizeI - 1;
+      for (int iter = 0; iter < possibleDistance; iter++) {
+        if (atoms[i][j].isOutside()) errorCode |= 1;
+        if (atoms[i][j].isOccupied()) {errorCode |= 2; break out;}
+        j++;
+        i--;
+        if (j == hexaSizeJ) j = 0;
+        if (i < 0) i = hexaSizeI - 1;
       }
-      for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
-        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
-        iHexa--;
-        if (iHexa < 0) iHexa = hexaSizeI - 1;
+      for (int iter = 0; iter < possibleDistance; iter++) {
+        if (atoms[i][j].isOutside()) errorCode |= 1;
+        if (atoms[i][j].isOccupied()) {errorCode |= 2; break out;}
+        i--;
+        if (i < 0) i = hexaSizeI - 1;
       }
-      for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
-        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
-        jHexa--;
-        if (jHexa < 0) jHexa = hexaSizeJ - 1;
+      for (int iter = 0; iter < possibleDistance; iter++) {
+        if (atoms[i][j].isOutside()) errorCode |= 1;
+        if (atoms[i][j].isOccupied()) {errorCode |= 2; break out;}
+        j--;
+        if (j < 0) j = hexaSizeJ - 1;
       }
-      for (int i = 0; i < possibleDistance; i++) {
-        if (atoms[iHexa][jHexa].isOutside()) errorCode |= 1;
-        if (atoms[iHexa][jHexa].isOccupied()) {errorCode |= 2; break out;}
-        jHexa--;
-        iHexa++;
-        if (jHexa < 0) jHexa = hexaSizeJ - 1;
-        if (iHexa == hexaSizeI) iHexa = 0;
+      for (int iter = 0; iter < possibleDistance; iter++) {
+        if (atoms[i][j].isOutside()) errorCode |= 1;
+        if (atoms[i][j].isOccupied()) {errorCode |= 2; break out;}
+        j--;
+        i++;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (i == hexaSizeI) i = 0;
       }
 
       if (errorCode != 0) break;
       if (possibleDistance >= thresholdDistance) return possibleDistance;
       possibleDistance++;
-      jHexa--;
-      if (jHexa < 0) jHexa = hexaSizeJ - 1;
+      j--;
+      if (j < 0) j = hexaSizeJ - 1;
+      
     }
-    if (errorCode > 3) System.out.println("Error code: " + errorCode);
     if ((errorCode & 2) != 0) return possibleDistance - 1;
     if ((errorCode & 1) != 0) return possibleDistance;
     return -1;
