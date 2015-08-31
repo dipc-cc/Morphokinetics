@@ -24,11 +24,11 @@ public class LinearList extends AbstractList {
   public double getTotalProbabilityFromList() {
     double totalprobability = 0;
 
-    ListIterator<AbstractAtom> LI = surface.listIterator();
-    while (LI.hasNext()) {
-      AbstractAtom AC = LI.next();
-      if (AC.isEligible()) {
-        totalprobability += AC.getProbability();
+    ListIterator<AbstractAtom> li = surface.listIterator();
+    while (li.hasNext()) {
+      AbstractAtom atom = li.next();
+      if (atom.isEligible()) {
+        totalprobability += atom.getProbability();
 
       }
     }
@@ -46,17 +46,17 @@ public class LinearList extends AbstractList {
   @Override
   public int cleanup() {
 
-    int temp = totalAtoms;
-    ListIterator<AbstractAtom> LI = surface.listIterator();
-    while (LI.hasNext()) {
-      AbstractAtom AC = LI.next();
+    int tmp = totalAtoms;
+    ListIterator<AbstractAtom> li = surface.listIterator();
+    while (li.hasNext()) {
+      AbstractAtom AC = li.next();
       if (!AC.isEligible()) {
         AC.setOnList(null);
-        LI.remove();
+        li.remove();
         totalAtoms--;
       }
     }
-    return (temp - totalAtoms);
+    return (tmp - totalAtoms);
   }
 
   @Override
@@ -68,17 +68,16 @@ public class LinearList extends AbstractList {
   }
 
   @Override
-  public AbstractAtom nextEvent(RandomSeedable RNG) {
-
+  public AbstractAtom nextEvent(RandomSeedable rng) {
     removalsSinceLastCleanup++;
     if (autoCleanup && removalsSinceLastCleanup > EVENTS_PER_CLEANUP) {
       this.cleanup();
       removalsSinceLastCleanup = 0;
     }
 
-    double position = RNG.raw() * (totalProbability + depositionProbability);
+    double position = rng.raw() * (totalProbability + depositionProbability);
 
-    time -= Math.log(RNG.raw()) / (totalProbability + depositionProbability);
+    time -= Math.log(rng.raw()) / (totalProbability + depositionProbability);
 
     if (position < depositionProbability) {
       return null; //toca añadir un átomo nuevo
