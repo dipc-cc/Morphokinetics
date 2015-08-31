@@ -22,17 +22,16 @@ public class LinearList extends AbstractList {
 
   @Override
   public double getTotalProbabilityFromList() {
-    double totalprobability = 0;
+    double totalProbability = 0;
 
     ListIterator<AbstractAtom> li = surface.listIterator();
     while (li.hasNext()) {
       AbstractAtom atom = li.next();
       if (atom.isEligible()) {
-        totalprobability += atom.getProbability();
-
+        totalProbability += atom.getProbability();
       }
     }
-    return totalprobability;
+    return totalProbability;
   }
 
   @Override
@@ -83,26 +82,26 @@ public class LinearList extends AbstractList {
       return null; //toca añadir un átomo nuevo
     }
     position -= depositionProbability;
-    double prob_current = 0;
+    double currentProbability = 0;
 
-    AbstractAtom AC = null;
+    AbstractAtom atom = null;
     outside:
     for (int i = 0; i < surface.size(); i++) {
-      AC = surface.get(i);
-      prob_current += AC.getProbability();
-      if (prob_current >= position) {
+      atom = surface.get(i);
+      currentProbability += atom.getProbability();
+      if (currentProbability >= position) {
         surface.remove(i);
         totalAtoms--;
-        return AC;
+        return atom;
       }
     }
 
-    if (AC != null) {
+    if (atom != null) {
       surface.remove(surface.size() - 1);
       totalAtoms--;
     }
 
-    return AC;
+    return atom;
   }
 
   @Override
