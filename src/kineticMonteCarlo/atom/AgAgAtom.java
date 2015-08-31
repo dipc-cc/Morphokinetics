@@ -390,15 +390,15 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
   @Override
   public void updateAllRates() {
-    double temp = -totalProbability;
+    double tmp = -totalProbability;
     totalProbability = 0;
 
     if (this.isEligible()) {
       obtainRatesFromNeighbours();
-      temp += totalProbability;
+      tmp += totalProbability;
     }
     if (this.isOnList()) {
-      list.addTotalProbability(temp);
+      list.addTotalProbability(tmp);
     }
   }
 
