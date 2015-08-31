@@ -412,15 +412,15 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   @Override
   public void updateOneBound(int neighborpos) {
 
-    double temp = 0;
+    double tmp = 0;
     totalProbability -= bondsProbability[neighborpos];
-    temp -= bondsProbability[neighborpos];
+    tmp -= bondsProbability[neighborpos];
     bondsProbability[neighborpos] = (float) probJumpToNeighbour(neighborpos);
 
     totalProbability += bondsProbability[neighborpos];
-    temp += bondsProbability[neighborpos];
+    tmp += bondsProbability[neighborpos];
 
-    list.addTotalProbability(temp);
+    list.addTotalProbability(tmp);
   }
 
   private double probJumpToNeighbour(int position) {
