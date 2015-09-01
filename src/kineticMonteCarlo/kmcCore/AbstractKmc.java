@@ -15,15 +15,15 @@ import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
 public abstract class AbstractKmc implements IKmc {
 
   protected AbstractList list;
-  protected static Ranecu RNG;
+  protected static Ranecu rng;
   protected int iterationsForLastSimulation;
 
-  public AbstractKmc(ListConfiguration config, boolean randomise) {
-    if (randomise) {
-      RNG = new Ranecu(System.nanoTime());
+  public AbstractKmc(ListConfiguration config, boolean randomSeed) {
+    if (randomSeed) {
+      rng = new Ranecu(System.nanoTime());
     } else {
       // for testing purposes
-      RNG = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Randoom" numbers
+      rng = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Randoom" numbers
     }
     list = config.createList();
   }
@@ -63,7 +63,6 @@ public abstract class AbstractKmc implements IKmc {
 
   @Override
   public void simulate(int iterations) {
-
     iterationsForLastSimulation = 0;
     for (int i = 0; i < iterations; i++) {
       if (performSimulationStep()) {
