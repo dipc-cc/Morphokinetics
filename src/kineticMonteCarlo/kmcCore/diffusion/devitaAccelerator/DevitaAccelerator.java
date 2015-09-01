@@ -57,13 +57,10 @@ public class DevitaAccelerator {
       destination = source.chooseRandomHop();
       possibleDistance = 1;
     } else {
-
       destination = lattice.getFarSite(sourceAtomType, source.getX(), source.getY(), possibleDistance);
     }
 
     remainingHops -= possibleDistance * possibleDistance;
-
-        //System.out.println(desired_hop_distance);
     updateRemainingHops(sourceAtomType, remainingHops);
     updateDesiredHopDistances(remainingHops, desiredHopDistance, sourceAtomType);
 
