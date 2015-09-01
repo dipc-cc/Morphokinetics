@@ -77,8 +77,6 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   @Override
   protected boolean performSimulationStep() {
-    //System.out.println("hemen???");
-
     Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.nextEvent(RNG));
     Abstract2DDiffusionAtom destinationAtom;
 
