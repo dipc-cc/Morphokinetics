@@ -430,32 +430,19 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
 
     byte originType = type;
-    if (type == EDGE && (getOrientation() & 1) == 0) {
-      originType = 5;
-    }
-    if (type == KINK && (getOrientation() & 1) == 0) {
-      originType = 6;
-    }
+    if (type == EDGE && (getOrientation() & 1) == 0) originType = 5;
+    if (type == KINK && (getOrientation() & 1) == 0) originType = 6;
 
     int myPositionForNeighbour = (position + 3) % 6;
-    
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     if (type == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
-      
       int otherCorner = 0;
-      if (originType == EDGE) {
-        otherCorner = 5;
-      }
-      if (originType == 5) {
-        otherCorner = 2;
-      }
+      if (originType == EDGE) otherCorner = 5;
+      if (originType == 5)    otherCorner = 2;
       return probabilities[originType][otherCorner];
-
     } else {
-
       destination = (byte) Math.min(destination, 2);
-
       if (destination == 2 && (neighbours[position].getOrientation() & 1) == 0) {
         destination = 5;
       }
@@ -467,9 +454,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   @Override
   public byte getTypeWithoutNeighbour(int posNeighbour) {
 
-    if (!neighbours[posNeighbour].isOccupied()) {
-      return type;
-    }
+    if (!neighbours[posNeighbour].isOccupied()) return type;
 
     if (neighbours[posNeighbour].getType() < KINK) {
       return typesTable.getType(nImmobile, nMobile - 1);
