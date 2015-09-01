@@ -166,13 +166,13 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return true;
   }
 
-  protected boolean depositAtom(Abstract2DDiffusionAtom origin) {
-    if (origin.isOccupied()) {
+  protected boolean depositAtom(Abstract2DDiffusionAtom atom) {
+    if (atom.isOccupied()) {
       return false;
     }
 
-    boolean forceNucleation = (!justCentralFlake && origin.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
-    origin.deposit(forceNucleation);
+    boolean forceNucleation = (!justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
+    atom.deposit(forceNucleation);
     modifiedBuffer.updateAtoms(list, lattice);
     return true;
 
