@@ -15,12 +15,12 @@ public class PerimeterStatisticsFactory {
   public PerimeterStatisticsFactory(String statisticsName) {
 
     switch (statisticsName) {
-      case "Graphene_CVD_growth": {
+      case "graphene": {
         perimeterStatistics = new GraphenePerimeterStatistics(new GrapheneRawStatisticDataAtomCount1Million(),
                 new GrapheneRawStatisticDataHopsCount1Million());
         break;
       }
-      case "Ag_Ag_growth": {
+      case "Ag": {
         perimeterStatistics = new AgAgPerimeterStatistics(new AgAgRawStatisticDataAtomCount1Million(),
                 new AgAgRawStatisticDataHopsCount1Million());
         break;

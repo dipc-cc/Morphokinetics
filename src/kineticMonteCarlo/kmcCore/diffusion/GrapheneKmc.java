@@ -38,7 +38,7 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   @Override
   protected void depositSeed() {
     if (justCentralFlake) {
-      this.perimeter = new RoundPerimeter("Graphene_CVD_growth");
+      this.perimeter = new RoundPerimeter("graphene");
       if (this.useMaxPerimeter){
         this.perimeter.setMaxPerimeter();
       }

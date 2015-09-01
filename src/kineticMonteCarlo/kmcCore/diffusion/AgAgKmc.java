@@ -50,7 +50,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
   protected void depositSeed() {
 
     if (justCentralFlake) {
-      this.perimeter = new RoundPerimeter("Ag_Ag_growth");
+      this.perimeter = new RoundPerimeter("Ag");
       if (this.useMaxPerimeter){
         this.perimeter.setMaxPerimeter();
       }
