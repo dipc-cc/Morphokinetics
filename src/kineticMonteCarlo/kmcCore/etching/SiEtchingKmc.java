@@ -55,7 +55,7 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
 
   @Override
   protected boolean performSimulationStep() {
-    SiAtom atom = (SiAtom) list.nextEvent(RNG);
+    SiAtom atom = (SiAtom) list.nextEvent(rng);
     atom.remove();
     atom.setOnList(null);
     for (int k = 0; k < 4; k++) {
