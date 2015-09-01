@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.kmcCore.diffusion;
 
+import static kineticMonteCarlo.atom.AbstractAtom.EDGE;
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
@@ -86,14 +88,14 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     this.accelerator = new DevitaAccelerator(this.lattice, distancePerStep);
 
     if (accelerator != null) {
-      this.accelerator.tryToSpeedUp(0,
+      this.accelerator.tryToSpeedUp(TERRACE,
               new DevitaHopsConfig()
               .setMinAccumulatedSteps(100)
               .setMaxAccumulatedSteps(200)
               .setMinDistanceHops(1)
               .setMaxDistanceHops(8));
 
-      this.accelerator.tryToSpeedUp(2,
+      this.accelerator.tryToSpeedUp(EDGE,
               new DevitaHopsConfig()
               .setMinAccumulatedSteps(30)
               .setMaxAccumulatedSteps(100)
