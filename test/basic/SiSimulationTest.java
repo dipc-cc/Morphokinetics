@@ -70,6 +70,7 @@ public class SiSimulationTest {
    */
   @Test
   public void testSi() {
+    AbstractSimulation.printHeader("Si test");
     Parser parser = new Parser();
     try {
       parser.readFile("test/input/SiParameters");
