@@ -72,6 +72,7 @@ public class GrapheneSimulationTest {
    */
   @Test
   public void testGraphene() {
+    AbstractSimulation.printHeader("Graphene test");
     Parser parser = new Parser();
     try {
       parser.readFile("test/input/GrapheneParameters");
