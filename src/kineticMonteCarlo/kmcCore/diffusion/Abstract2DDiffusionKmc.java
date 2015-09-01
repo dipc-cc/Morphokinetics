@@ -201,9 +201,9 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     Abstract2DDiffusionAtom destinationAtom;
     if (!justCentralFlake) {
       do {
-        int X = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
-        int Y = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
-        destinationAtom = lattice.getAtom(X, Y);
+        int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
+        int j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
+        destinationAtom = lattice.getAtom(i, j);
       } while (!this.depositAtom(destinationAtom));
     } else {
       do {
