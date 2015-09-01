@@ -263,7 +263,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     byte newType = typesTable.getType(++nImmobile, --nMobile);
 
     if (forceNucleation && occupied) {
-      newType = 4;
+      newType = BULK;
     }
 
     if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
