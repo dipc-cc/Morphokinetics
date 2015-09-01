@@ -71,14 +71,13 @@ public class DevitaAccelerator {
     remainingHopsMap.put(sourceAtomType, pendingJumps);
   }
 
-  private void updateDesiredHopDistances(int pending_jumps, int desiredHopDistance, int sourceAtomType) {
-
+  private void updateDesiredHopDistances(int pendingJumps, int desiredHopDistance, int sourceAtomType) {
     DevitaHopsConfig config = devitaConfig.get(sourceAtomType);
 
-    if (pending_jumps < config.getMinAccumulatedSteps() && desiredHopDistance < config.getMaxDistanceHops()) {
+    if (pendingJumps < config.getMinAccumulatedSteps() && desiredHopDistance < config.getMaxDistanceHops()) {
       hopsPerStep.setDistancePerStep(sourceAtomType, desiredHopDistance + 1);
     }
-    if (pending_jumps > config.getMaxAccumulatedSteps() && desiredHopDistance > config.getMinDistanceHops()) {
+    if (pendingJumps > config.getMaxAccumulatedSteps() && desiredHopDistance > config.getMinDistanceHops()) {
       hopsPerStep.setDistancePerStep(sourceAtomType, desiredHopDistance >> 1);
     }
   }
