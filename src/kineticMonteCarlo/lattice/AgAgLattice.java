@@ -9,6 +9,8 @@ import kineticMonteCarlo.atom.AgAgAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
+import static kineticMonteCarlo.atom.AbstractAtom.EDGE;
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import utils.StaticRandom;
 
 /**
@@ -150,9 +152,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   public int getAvailableDistance(int atomType, short iHexa, short jHexa, int thresholdDistance) {
 
     switch (atomType) {
-      case 0:
+      case TERRACE:
         return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
-      case 2:
+      case EDGE:
         return getClearAreaStep(iHexa, jHexa, thresholdDistance);
       default:
         return 0;
@@ -163,9 +165,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   public Abstract2DDiffusionAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
 
     switch (originType) {
-      case 0:
+      case TERRACE:
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
-      case 2:
+      case EDGE:
         return chooseClearAreaStep(iHexa, jHexa, distance, StaticRandom.raw());
       default:
         return null;
@@ -292,21 +294,21 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return -1;
   }
 
-  public Abstract2DDiffusionAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int s, double raw) {
+  public Abstract2DDiffusionAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
-    int temp = (int) (raw * (s * 6));
+    int tmp = (int) (raw * (distance * 6));
 
     int iHexa = iHexaOrigin;
-    int jHexa = jHexaOrigin - s;
+    int jHexa = jHexaOrigin - distance;
     if (jHexa < 0) {
       jHexa = hexaSizeJ - 1;
     }
 
     int counter = 0;
 
-    for (int i = 0; i < s; i++) {
+    for (int i = 0; i < distance; i++) {
       counter++;
-      if (counter > temp) {
+      if (counter > tmp) {
         return atoms[iHexa][jHexa];
       }
       iHexa++;
@@ -314,9 +316,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         iHexa = 0;
       }
     }
-    for (int i = 0; i < s; i++) {
+    for (int i = 0; i < distance; i++) {
       counter++;
-      if (counter > temp) {
+      if (counter > tmp) {
         return atoms[iHexa][jHexa];
       }
       jHexa++;
@@ -324,9 +326,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         jHexa = 0;
       }
     }
-    for (int i = 0; i < s; i++) {
+    for (int i = 0; i < distance; i++) {
       counter++;
-      if (counter > temp) {
+      if (counter > tmp) {
         return atoms[iHexa][jHexa];
       }
       jHexa++;
@@ -338,9 +340,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         iHexa = hexaSizeI - 1;
       }
     }
-    for (int i = 0; i < s; i++) {
+    for (int i = 0; i < distance; i++) {
       counter++;
-      if (counter > temp) {
+      if (counter > tmp) {
         return atoms[iHexa][jHexa];
       }
       iHexa--;
@@ -348,9 +350,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         iHexa = hexaSizeI - 1;
       }
     }
-    for (int i = 0; i < s; i++) {
+    for (int i = 0; i < distance; i++) {
       counter++;
-      if (counter > temp) {
+      if (counter > tmp) {
         return atoms[iHexa][jHexa];
       }
       jHexa--;
@@ -358,9 +360,9 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         jHexa = hexaSizeJ - 1;
       }
     }
-    for (int i = 0; i < s; i++) {
+    for (int i = 0; i < distance; i++) {
       counter++;
-      if (counter > temp) {
+      if (counter > tmp) {
         return atoms[iHexa][jHexa];
       }
       jHexa--;
