@@ -42,7 +42,6 @@ public class ModifiedBuffer {
     }
 
     it = bufferL.iterator();
-    out:
     while (it.hasNext()) {
       updateAllNeighbours(it.next(), lattice);
     }
@@ -64,11 +63,10 @@ public class ModifiedBuffer {
     }
   }
 
-  private void updateNeighbour(Abstract2DDiffusionAtom atom, int neighborPos, Abstract2DDiffusionLattice lattice) {
-
-    Abstract2DDiffusionAtom vecino = lattice.getNeighbour(atom.getX(), atom.getY(), neighborPos);
-    if (vecino.isEligible() && !buffer.contains(vecino)) {
-      vecino.updateOneBound(neighborPos);
+  private void updateNeighbour(Abstract2DDiffusionAtom atom, int posNeighbour, Abstract2DDiffusionLattice lattice) {
+    Abstract2DDiffusionAtom neighbour = lattice.getNeighbour(atom.getX(), atom.getY(), posNeighbour);
+    if (neighbour.isEligible() && !buffer.contains(neighbour)) {
+      neighbour.updateOneBound(posNeighbour);
     }
   }
 
