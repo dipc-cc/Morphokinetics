@@ -4,6 +4,9 @@
  */
 package kineticMonteCarlo.kmcCore.diffusion;
 
+import static kineticMonteCarlo.atom.AbstractAtom.ARMCHAIR_EDGE;
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
@@ -68,22 +71,22 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
     this.accelerator = new DevitaAccelerator(this.lattice, distancePerStep);
 
-    this.accelerator.tryToSpeedUp(0,
+    this.accelerator.tryToSpeedUp(TERRACE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(100)
             .setMaxAccumulatedSteps(200)
             .setMinDistanceHops(1)
             .setMaxDistanceHops(10));
 
-        //accelerating types 2 and 3 does not improve performance and introduce some morphology differences
-    this.accelerator.tryToSpeedUp(2,
+        //accelerating types 2 (ZIGZAG_EDGE) and 3 (ARMCHAIR_EDGE) does not improve performance and introduce some morphology differences
+    this.accelerator.tryToSpeedUp(ZIGZAG_EDGE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(30)
             .setMaxAccumulatedSteps(100)
             .setMinDistanceHops(1)
             .setMaxDistanceHops(5));
 
-    this.accelerator.tryToSpeedUp(3,
+    this.accelerator.tryToSpeedUp(ARMCHAIR_EDGE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(30)
             .setMaxAccumulatedSteps(100)
