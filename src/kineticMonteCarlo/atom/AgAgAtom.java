@@ -437,7 +437,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       originType = 6;
     }
 
-    int myPositionForNeighbor = (position + 3) % 6;
+    int myPositionForNeighbour = (position + 3) % 6;
     
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
