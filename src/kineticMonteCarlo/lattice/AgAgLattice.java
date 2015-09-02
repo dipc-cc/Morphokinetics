@@ -348,88 +348,72 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return null;
   }
 
-  public int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int m) {
+  public int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
 
-    int s = 1;
-    int iHexa;
-    int jHexa;
+    int distance = 1;
+    int i;
+    int j;
 
     switch (atoms[iHexaOrigin][jHexaOrigin].getOrientation()) {
       case 0:
       case 3:
         while (true) {
-          iHexa = iHexaOrigin + s;
-          if (iHexa >= hexaSizeI) {
-            iHexa = 0;
+          i = iHexaOrigin + distance;
+          if (i >= hexaSizeI) i = 0;
+          if (atoms[i][jHexaOrigin].isOccupied() || atoms[i][jHexaOrigin].getType() < 2) {
+            return distance - 1;
           }
-          if (atoms[iHexa][jHexaOrigin].isOccupied() || atoms[iHexa][jHexaOrigin].getType() < 2) {
-            return s - 1;
+          i = iHexaOrigin - distance;
+          if (i < 0) i = hexaSizeI - 1;
+          if (atoms[i][jHexaOrigin].isOccupied() || atoms[i][jHexaOrigin].getType() < 2) {
+            return distance - 1;
           }
-          iHexa = iHexaOrigin - s;
-          if (iHexa < 0) {
-            iHexa = hexaSizeI - 1;
+          if (distance == thresholdDistance) {
+            return distance;
           }
-          if (atoms[iHexa][jHexaOrigin].isOccupied() || atoms[iHexa][jHexaOrigin].getType() < 2) {
-            return s - 1;
-          }
-          if (s == m) {
-            return s;
-          }
-          s++;
+          distance++;
         }
 
       case 1:
       case 4:
         while (true) {
-          jHexa = jHexaOrigin + s;
-          if (jHexa >= hexaSizeJ) {
-            jHexa = 0;
+          j = jHexaOrigin + distance;
+          if (j >= hexaSizeJ) j = 0;
+          if (atoms[iHexaOrigin][j].isOccupied() || atoms[iHexaOrigin][j].getType() < 2) {
+            return distance - 1;
           }
-          if (atoms[iHexaOrigin][jHexa].isOccupied() || atoms[iHexaOrigin][jHexa].getType() < 2) {
-            return s - 1;
+          j = jHexaOrigin - distance;
+          if (j < 0) j = hexaSizeJ - 1;
+          if (atoms[iHexaOrigin][j].isOccupied() || atoms[iHexaOrigin][j].getType() < 2) {
+            return distance - 1;
           }
-          jHexa = jHexaOrigin - s;
-          if (jHexa < 0) {
-            jHexa = hexaSizeJ - 1;
+          if (distance == thresholdDistance) {
+            return distance;
           }
-          if (atoms[iHexaOrigin][jHexa].isOccupied() || atoms[iHexaOrigin][jHexa].getType() < 2) {
-            return s - 1;
-          }
-          if (s == m) {
-            return s;
-          }
-          s++;
+          distance++;
         }
 
       case 2:
       case 5:
         while (true) {
-          iHexa = iHexaOrigin - s;
-          if (iHexa < 0) {
-            iHexa = hexaSizeI - 1;
+          i = iHexaOrigin - distance;
+          if (i < 0) i = hexaSizeI - 1;
+          j = jHexaOrigin + distance;
+          if (j >= hexaSizeJ) j = 0;
+          if (atoms[i][j].isOccupied() || atoms[i][j].getType() < 2) {
+            return distance - 1;
           }
-          jHexa = jHexaOrigin + s;
-          if (jHexa >= hexaSizeJ) {
-            jHexa = 0;
+          i = iHexaOrigin + distance;
+          if (i >= hexaSizeI) i = 0;
+          j = jHexaOrigin - distance;
+          if (j < 0) j = hexaSizeJ - 1;
+          if (atoms[i][j].isOccupied() || atoms[i][j].getType() < 2) {
+            return distance - 1;
           }
-          if (atoms[iHexa][jHexa].isOccupied() || atoms[iHexa][jHexa].getType() < 2) {
-            return s - 1;
+          if (distance == thresholdDistance) {
+            return distance;
           }
-          iHexa = iHexaOrigin + s;
-          if (iHexa >= hexaSizeI) {
-            iHexa = 0;
-          }
-          jHexa = jHexaOrigin - s;
-          if (jHexa < 0) {
-            jHexa = hexaSizeJ - 1;
-          }
-          if (atoms[iHexa][jHexa].isOccupied() || atoms[iHexa][jHexa].getType() < 2) {
-            return s - 1;
-          }
-          if (s == m) {
-            return s;
-          }
-          s++;
+          distance++;
         }
 
       default:
@@ -437,64 +421,48 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  public Abstract2DDiffusionAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int s, double raw) {
+  public Abstract2DDiffusionAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
-    int iHexa;
-    int jHexa;
+    int i;
+    int j;
 
     switch (atoms[iHexaOrigin][jHexaOrigin].getOrientation()) {
       case 0:
       case 3:
         if (raw > 0.5) {
-          iHexa = iHexaOrigin + s;
-          if (iHexa >= hexaSizeI) {
-            iHexa = 0;
-          }
-          return atoms[iHexa][jHexaOrigin];
+          i = iHexaOrigin + distance;
+          if (i >= hexaSizeI) i = 0;
+          return atoms[i][jHexaOrigin];
         } else {
-          iHexa = iHexaOrigin - s;
-          if (iHexa < 0) {
-            iHexa = hexaSizeI - 1;
-          }
-          return atoms[iHexa][jHexaOrigin];
+          i = iHexaOrigin - distance;
+          if (i < 0) i = hexaSizeI - 1;
+          return atoms[i][jHexaOrigin];
         }
       case 1:
       case 4:
         if (raw > 0.5) {
-          jHexa = jHexaOrigin + s;
-          if (jHexa >= hexaSizeJ) {
-            jHexa = 0;
-          }
-          return atoms[iHexaOrigin][jHexa];
+          j = jHexaOrigin + distance;
+          if (j >= hexaSizeJ) j = 0;
+          return atoms[iHexaOrigin][j];
         } else {
-          jHexa = jHexaOrigin - s;
-          if (jHexa < 0) {
-            jHexa = hexaSizeJ - 1;
-          }
-          return atoms[iHexaOrigin][jHexa];
+          j = jHexaOrigin - distance;
+          if (j < 0) j = hexaSizeJ - 1;
+          return atoms[iHexaOrigin][j];
         }
       case 2:
       case 5:
         if (raw > 0.5) {
-          iHexa = iHexaOrigin - s;
-          if (iHexa < 0) {
-            iHexa = hexaSizeI - 1;
-          }
-          jHexa = jHexaOrigin + s;
-          if (jHexa >= hexaSizeJ) {
-            jHexa = 0;
-          }
-          return atoms[iHexa][jHexa];
+          i = iHexaOrigin - distance;
+          if (i < 0) i = hexaSizeI - 1;
+          j = jHexaOrigin + distance;
+          if (j >= hexaSizeJ) j = 0;
+          return atoms[i][j];
         } else {
-          iHexa = iHexaOrigin + s;
-          if (iHexa >= hexaSizeI) {
-            iHexa = 0;
-          }
-          jHexa = jHexaOrigin - s;
-          if (jHexa < 0) {
-            jHexa = hexaSizeJ - 1;
-          }
-          return atoms[iHexa][jHexa];
+          i = iHexaOrigin + distance;
+          if (i >= hexaSizeI) i = 0;
+          j = jHexaOrigin - distance;
+          if (j < 0) j = hexaSizeJ - 1;
+          return atoms[i][j];
         }
     }
     return null;
