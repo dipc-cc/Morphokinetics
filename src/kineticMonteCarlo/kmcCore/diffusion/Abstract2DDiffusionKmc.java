@@ -91,7 +91,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       this.diffuseAtom(originAtom, destinationAtom);
     }
 
-    if (PerimeterMustBeEnlarged(destinationAtom)) {
+    if (perimeterMustBeEnlarged(destinationAtom)) {
       int nextRadius = this.perimeter.goToNextRadius();
       if (nextRadius > 0 && 
               nextRadius < lattice.getCartSizeX()/2 &&
@@ -213,7 +213,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return destinationAtom;
   }
 
-  protected boolean PerimeterMustBeEnlarged(Abstract2DDiffusionAtom destinationAtom) {
+  private boolean perimeterMustBeEnlarged(Abstract2DDiffusionAtom destinationAtom) {
     
     if (this.perimeterType == RoundPerimeter.SQUARE) {
       Point2D centreCart = lattice.getCentralCartesianLocation();
