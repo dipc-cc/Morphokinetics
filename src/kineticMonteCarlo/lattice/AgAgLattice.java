@@ -298,85 +298,54 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
     int tmp = (int) (raw * (distance * 6));
 
-    int iHexa = iHexaOrigin;
-    int jHexa = jHexaOrigin - distance;
-    if (jHexa < 0) {
-      jHexa = hexaSizeJ - 1;
-    }
+    int i = iHexaOrigin;
+    int j = jHexaOrigin - distance;
+    if (j < 0) j = hexaSizeJ - 1;
 
     int counter = 0;
 
-    for (int i = 0; i < distance; i++) {
+    for (int iter = 0; iter < distance; iter++) {
       counter++;
-      if (counter > tmp) {
-        return atoms[iHexa][jHexa];
-      }
-      iHexa++;
-      if (iHexa == hexaSizeI) {
-        iHexa = 0;
-      }
+      if (counter > tmp) return atoms[i][j];
+      i++;
+      if (i == hexaSizeI) i = 0;
     }
-    for (int i = 0; i < distance; i++) {
+    for (int iter = 0; iter < distance; iter++) {
       counter++;
-      if (counter > tmp) {
-        return atoms[iHexa][jHexa];
-      }
-      jHexa++;
-      if (jHexa == hexaSizeJ) {
-        jHexa = 0;
-      }
+      if (counter > tmp) return atoms[i][j];
+      j++;
+      if (j == hexaSizeJ) j = 0;
     }
-    for (int i = 0; i < distance; i++) {
+    for (int iter = 0; iter < distance; iter++) {
       counter++;
-      if (counter > tmp) {
-        return atoms[iHexa][jHexa];
-      }
-      jHexa++;
-      iHexa--;
-      if (jHexa == hexaSizeJ) {
-        jHexa = 0;
-      }
-      if (iHexa < 0) {
-        iHexa = hexaSizeI - 1;
-      }
+      if (counter > tmp) return atoms[i][j];
+      j++;
+      i--;
+      if (j == hexaSizeJ) j = 0;
+      if (i < 0) i = hexaSizeI - 1;
     }
-    for (int i = 0; i < distance; i++) {
+    for (int iter = 0; iter < distance; iter++) {
       counter++;
-      if (counter > tmp) {
-        return atoms[iHexa][jHexa];
-      }
-      iHexa--;
-      if (iHexa < 0) {
-        iHexa = hexaSizeI - 1;
-      }
+      if (counter > tmp) return atoms[i][j];
+      i--;
+      if (i < 0) i = hexaSizeI - 1;
     }
-    for (int i = 0; i < distance; i++) {
+    for (int iter = 0; iter < distance; iter++) {
       counter++;
-      if (counter > tmp) {
-        return atoms[iHexa][jHexa];
-      }
-      jHexa--;
-      if (jHexa < 0) {
-        jHexa = hexaSizeJ - 1;
-      }
+      if (counter > tmp) return atoms[i][j];
+      j--;
+      if (j < 0) j = hexaSizeJ - 1;
     }
-    for (int i = 0; i < distance; i++) {
+    for (int iter = 0; iter < distance; iter++) {
       counter++;
-      if (counter > tmp) {
-        return atoms[iHexa][jHexa];
-      }
-      jHexa--;
-      iHexa++;
-      if (jHexa < 0) {
-        jHexa = hexaSizeJ - 1;
-      }
-      if (iHexa == hexaSizeI) {
-        iHexa = 0;
-      }
+      if (counter > tmp) return atoms[i][j];
+      j--;
+      i++;
+      if (j < 0) j = hexaSizeJ - 1;
+      if (i == hexaSizeI) i = 0;
     }
 
     return null;
-
   }
 
   public int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int m) {
