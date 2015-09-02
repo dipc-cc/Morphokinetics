@@ -166,7 +166,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return true;
   }
 
-  protected boolean depositAtom(Abstract2DDiffusionAtom atom) {
+  private boolean depositAtom(Abstract2DDiffusionAtom atom) {
     if (atom.isOccupied()) {
       return false;
     }
@@ -178,7 +178,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   }
 
-  protected boolean diffuseAtom(Abstract2DDiffusionAtom origin, Abstract2DDiffusionAtom destination) {
+  private boolean diffuseAtom(Abstract2DDiffusionAtom origin, Abstract2DDiffusionAtom destination) {
 
     //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
     if (!origin.isEligible()) {
@@ -197,7 +197,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return true;
   }
 
-  protected Abstract2DDiffusionAtom depositNewAtom() {
+  private Abstract2DDiffusionAtom depositNewAtom() {
     Abstract2DDiffusionAtom destinationAtom;
     if (!justCentralFlake) {
       do {
