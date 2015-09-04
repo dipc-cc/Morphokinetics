@@ -6,8 +6,10 @@
 package basic.io;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
@@ -23,6 +25,10 @@ public class Restart {
 
   public static final int MAX_DIMS = 3;
   private String folder; 
+
+  private int sizeX;
+  private int sizeY;
+  private int sizeZ;
 
   public Restart() {
     folder = "results/";
@@ -46,6 +52,14 @@ public class Restart {
     }
   }
 
+  public int getSizeX() {
+    return sizeX;
+  }
+
+  public int getSizeY() {
+    return sizeY;
+  }
+    
   /**
    * Writes float data to a file called "psd[number].mko". First of all calls to the header
    * writing: look documentation there.
@@ -119,8 +133,18 @@ public class Restart {
     writeLowText2D(data, fileName, false);
   }
 
+  public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, String fileName){
+    writeLowText2D(data, fileName, false);
+  }
+  
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
     return readLowText2D(fileName, sizes);
+  }
+  public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
+    return readLowBinary(fileName); 
+  }
+  public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
+    return readLowText2D(fileName);
   }
 
   /**
@@ -162,6 +186,72 @@ public class Restart {
       // if any I/O error occurs
       e.printStackTrace();
     }
+  }
+/**
+   * This method reads the binary file
+   *
+   * @param dimensions
+   * @param sizes
+   * @param data
+   * @param fileName
+   */
+  private float[][] readLowBinary(String fileName) throws FileNotFoundException {
+    System.out.println("Reading matrix of unknown sizes. "
+            + "File: " + fileName);
+
+    float[][] data = null;
+    FileInputStream fis;
+    DataInputStream dis;
+    int dimensions = -1; 
+    int i = -1;
+    int j = -1;
+    int[] sizes = new int[3];
+    int tmp = -99;
+    try {
+      //readHeaderBinary(dimensions, sizes, fileName);
+      // create file output stream
+      fis = new FileInputStream(fileName);
+      // create data output stream
+      dis = new DataInputStream(fis);
+     
+      dis.skipBytes(14);
+      // Read the dimensions of the file
+      dimensions = dis.readInt();
+      // Read the sizes of the actual dimensions
+      for (i = 0; i < dimensions; i++) {
+        sizes[i] = dis.readInt();
+      }
+      // Skip the rest of the dimensions
+      for (j = i; j < MAX_DIMS; j++) {
+        tmp = dis.readInt();
+      }
+      // Skip the rest of the header
+      for (j = 0; j < 8; j++) {
+        tmp = dis.readInt();
+      }
+      
+      this.sizeX = sizes[0];
+      this.sizeY = sizes[1];
+      data = new float [sizes[0]][sizes[1]];
+      
+      // for each byte in the buffer
+      for (i = 0; i < sizes[0]; i++) {
+        for (j = 0; j < sizes[1]; j++) {
+          // write float to the dos, reading an int
+          data[i][j] = (float) dis.readByte();
+        }
+      }
+      // releases all system resources from the streams
+      fis.close();
+      dis.close();
+    } catch (FileNotFoundException fe) {
+      throw fe;
+    } catch (Exception e) {
+      // if any I/O error occurs
+      System.err.println("Point: " + i + " " + j);
+      e.printStackTrace();
+    }
+    return data;
   }
 
   /**
@@ -238,6 +328,47 @@ public class Restart {
       e.printStackTrace();
     }
   }
+   
+  private float[][] readLowText2D(String fileName) throws FileNotFoundException {
+    float[][] data = null;
+    System.out.println("Trying to read " + fileName + " file of unknown size ");
+    int i = -1;
+    int j = -1;
+    try {
+      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      String line;
+      // <-- read whole line
+      line = in.readLine();
+      if (line != null) {
+        StringTokenizer tk = new StringTokenizer(line);
+        if (!tk.nextToken().equals("#")) {
+          System.err.println("File format not valid. Should start with a line with # character");
+          throw new FileNotFoundException("Fix the file format");
+        }
+        int size = Integer.parseInt(tk.nextToken());
+        this.sizeX = size;
+        this.sizeY = size;
+        data = new float[size][size];
+      }
+      line = in.readLine();
+      for (int x=0; x<this.sizeX; x++) {
+        StringTokenizer tk = new StringTokenizer(line);
+        for (int y=0; y<this.sizeY; y++) {
+          data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+        }
+        line = in.readLine();
+      }
+    } catch (FileNotFoundException fe){
+      throw fe;
+    }
+      catch (Exception e) {
+      // if any I/O error occurs
+      System.err.println("Point: " + i + " " + j);
+      e.printStackTrace();
+    }
+    
+    return data;
+  }   
 
   private float[][] readLowText2D(String fileName, int[] sizes) throws FileNotFoundException {
     float[][] data = new float[sizes[0]][sizes[1]];
