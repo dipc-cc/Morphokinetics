@@ -49,96 +49,54 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
         AgAgAtom atom = (AgAgAtom) atoms[iHexa][jHexa];
-        int X = iHexa;
-        int Y = jHexa - 1;
-        if (X < 0) {
-          X = hexaSizeI - 1;
-        }
-        if (X == hexaSizeI) {
-          X = 0;
-        }
-        if (Y < 0) {
-          Y = hexaSizeJ - 1;
-        }
-        if (Y == hexaSizeJ) {
-          Y = 0;
-        }
-        atom.setNeighbour((AgAgAtom) atoms[X][Y], 0);
-        X = iHexa + 1;
-        Y = jHexa - 1;
-        if (X < 0) {
-          X = hexaSizeI - 1;
-        }
-        if (X == hexaSizeI) {
-          X = 0;
-        }
-        if (Y < 0) {
-          Y = hexaSizeJ - 1;
-        }
-        if (Y == hexaSizeJ) {
-          Y = 0;
-        }
-        atom.setNeighbour((AgAgAtom) atoms[X][Y], 1);
-        X = iHexa + 1;
-        Y = jHexa;
-        if (X < 0) {
-          X = hexaSizeI - 1;
-        }
-        if (X == hexaSizeI) {
-          X = 0;
-        }
-        if (Y < 0) {
-          Y = hexaSizeJ - 1;
-        }
-        if (Y == hexaSizeJ) {
-          Y = 0;
-        }
-        atom.setNeighbour((AgAgAtom) atoms[X][Y], 2);
-        X = iHexa;
-        Y = jHexa + 1;
-        if (X < 0) {
-          X = hexaSizeI - 1;
-        }
-        if (X == hexaSizeI) {
-          X = 0;
-        }
-        if (Y < 0) {
-          Y = hexaSizeJ - 1;
-        }
-        if (Y == hexaSizeJ) {
-          Y = 0;
-        }
-        atom.setNeighbour((AgAgAtom) atoms[X][Y], 3);
-        X = iHexa - 1;
-        Y = jHexa + 1;
-        if (X < 0) {
-          X = hexaSizeI - 1;
-        }
-        if (X == hexaSizeI) {
-          X = 0;
-        }
-        if (Y < 0) {
-          Y = hexaSizeJ - 1;
-        }
-        if (Y == hexaSizeJ) {
-          Y = 0;
-        }
-        atom.setNeighbour((AgAgAtom) atoms[X][Y], 4);
-        X = iHexa - 1;
-        Y = jHexa;
-        if (X < 0) {
-          X = hexaSizeI - 1;
-        }
-        if (X == hexaSizeI) {
-          X = 0;
-        }
-        if (Y < 0) {
-          Y = hexaSizeJ - 1;
-        }
-        if (Y == hexaSizeJ) {
-          Y = 0;
-        }
-        atom.setNeighbour((AgAgAtom) atoms[X][Y], 5);
+        int i = iHexa;
+        int j = jHexa - 1;
+        if (i < 0) i = hexaSizeI - 1;
+        if (i == hexaSizeI) i = 0;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (j == hexaSizeJ) j = 0;
+
+        atom.setNeighbour((AgAgAtom) atoms[i][j], 0);
+        i = iHexa + 1;
+        j = jHexa - 1;
+        if (i < 0) i = hexaSizeI - 1;
+        if (i == hexaSizeI) i = 0;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (j == hexaSizeJ) j = 0;
+
+        atom.setNeighbour((AgAgAtom) atoms[i][j], 1);
+        i = iHexa + 1;
+        j = jHexa;
+        if (i < 0) i = hexaSizeI - 1;
+        if (i == hexaSizeI) i = 0;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (j == hexaSizeJ) j = 0;
+
+        atom.setNeighbour((AgAgAtom) atoms[i][j], 2);
+        i = iHexa;
+        j = jHexa + 1;
+        if (i < 0) i = hexaSizeI - 1;
+        if (i == hexaSizeI) i = 0;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (j == hexaSizeJ)
+          j = 0;
+
+        atom.setNeighbour((AgAgAtom) atoms[i][j], 3);
+        i = iHexa - 1;
+        j = jHexa + 1;
+        if (i < 0) i = hexaSizeI - 1;
+        if (i == hexaSizeI) i = 0;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (j == hexaSizeJ) j = 0;
+
+        atom.setNeighbour((AgAgAtom) atoms[i][j], 4);
+        i = iHexa - 1;
+        j = jHexa;
+        if (i < 0) i = hexaSizeI - 1;
+        if (i == hexaSizeI) i = 0;
+        if (j < 0) j = hexaSizeJ - 1;
+        if (j == hexaSizeJ) j = 0;
+        atom.setNeighbour((AgAgAtom) atoms[i][j], 5);
       }
     }
   }
