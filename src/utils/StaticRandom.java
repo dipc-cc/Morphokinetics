@@ -18,6 +18,15 @@ public class StaticRandom {
     rand = new Ranecu(System.nanoTime());
   }
   
+  public StaticRandom(boolean randomSeed){
+     if (randomSeed) {
+      rand = new Ranecu(System.nanoTime());
+    } else {
+      // for testing purposes
+      rand = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Randoom" numbers
+    }
+  }
+  
   public static double raw() {
 
     return rand.raw();

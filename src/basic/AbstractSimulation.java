@@ -37,7 +37,7 @@ public abstract class AbstractSimulation {
     frame = null;
     psd = null;
     this.parser = parser;
-    staticRandom = new StaticRandom();
+    staticRandom = new StaticRandom(parser.randomSeed());
   }
 
   /**
