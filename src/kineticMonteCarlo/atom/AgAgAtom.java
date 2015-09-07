@@ -96,17 +96,17 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   private int aggrCalculateEdgeType(int code) {
 
     switch (code) {
-      case 12:
-        return 5;
-      case 48:
-        return 1;
-      case 3:
+      case 3: //1+2 | It has two neighbours (it is an edge)
         return 3;
-      case 6:
+      case 6: //2+4 positions (2+3 neighbours)
         return 4;
-      case 24:
+      case 12: //4+8positions (3+4 neighbours)
+        return 5;
+      case 24: //8+16 positions (4+5 neighbours)
         return 0;
-      case 33:
+      case 48: //16+32 positions (5+6 neighbours)
+        return 1;
+      case 33: //1+32 positions (6+1 neighbours)
         return 2;
       default:
         return -1;
@@ -116,17 +116,17 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   private int aggrCalculateKinkType(int code) {
 
     switch (code) {
-      case (1 + 2 + 4):
+      case 7:  //1 + 2 + 4 | It has three neighbours (it is a kink)
         return 0;
-      case (2 + 4 + 8):
+      case 14: //2 + 4 + 8
         return 1;
-      case (4 + 8 + 16):
+      case 28: //4 + 8 + 16
         return 2;
-      case (8 + 16 + 32):
+      case 56: //8 + 16 + 32
         return 3;
-      case (16 + 32 + 1):
+      case 49: //16 + 32 + 1
         return 4;
-      case (32 + 1 + 2):
+      case 35: //32 + 1 + 2
         return 5;
       default:
         return -1;
