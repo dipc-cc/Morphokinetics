@@ -443,7 +443,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       return probabilities[originType][otherCorner];
     } else {
       destination = (byte) Math.min(destination, 2);
-      if (destination == 2 && (neighbours[position].getOrientation() & 1) == 0) {
+      if (destination == EDGE && (neighbours[position].getOrientation() & 1) == 0) {
         destination = 5;
       }
 
