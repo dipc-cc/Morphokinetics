@@ -12,6 +12,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.SiRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -30,6 +31,7 @@ public class SiEtchingKmcConvergence {
 
   public void performConvergence() {
 
+    new StaticRandom();
     GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
             .create_silicon_convergence_configuration();
     GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);

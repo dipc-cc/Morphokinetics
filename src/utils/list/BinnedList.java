@@ -6,7 +6,7 @@ package utils.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
-import utils.edu.cornell.lassp.houle.rngPack.RandomSeedable;
+import utils.StaticRandom;
 
 /**
  *
@@ -58,16 +58,16 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public AbstractAtom nextEvent(RandomSeedable rng) {
+  public AbstractAtom nextEvent() {
 
     if (autoCleanup && removalsSinceLastCleanup > EVENTS_PER_CLEANUP) {
       this.cleanup();
       removalsSinceLastCleanup = 0;
     }
 
-    double position = rng.raw() * (totalProbability + depositionProbability);
+    double position = StaticRandom.raw() * (totalProbability + depositionProbability);
     if (this.parent == null) {
-      time -= Math.log(rng.raw()) / (totalProbability + depositionProbability);
+      time -= Math.log(StaticRandom.raw()) / (totalProbability + depositionProbability);
     }
 
     if (position < depositionProbability) {
@@ -85,7 +85,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
       accumulation += bins[selected].getTotalProbability();
     }
 
-    AbstractAtom atom = bins[selected].nextEvent(rng);
+    AbstractAtom atom = bins[selected].nextEvent();
     if (atom != null) {
       totalAtoms--;
     }

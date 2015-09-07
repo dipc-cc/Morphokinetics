@@ -2,7 +2,6 @@ package utils.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
-import utils.edu.cornell.lassp.houle.rngPack.RandomSeedable;
 
 public abstract class AbstractList implements IProbabilityHolder {
 
@@ -19,7 +18,7 @@ public abstract class AbstractList implements IProbabilityHolder {
 
   public abstract void addAtom(AbstractAtom a);
 
-  public abstract AbstractAtom nextEvent(RandomSeedable RNG);
+  public abstract AbstractAtom nextEvent();
 
   public double getTime() {
     return time;

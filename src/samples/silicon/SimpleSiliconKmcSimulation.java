@@ -5,6 +5,7 @@ import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
+import utils.StaticRandom;
 
 /*
  * To change this template, choose Tools | Templates
@@ -22,7 +23,7 @@ public class SimpleSiliconKmcSimulation {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config, true);
+    SiEtchingKmc kmc = new SiEtchingKmc(config);
 
     long start = System.nanoTime();
 
@@ -36,6 +37,7 @@ public class SimpleSiliconKmcSimulation {
   }
 
   private static SiEtchingKmcConfig configKmc() {
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20)

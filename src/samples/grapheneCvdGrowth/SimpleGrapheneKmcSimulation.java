@@ -11,6 +11,7 @@ import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.GrapheneRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -28,6 +29,7 @@ public class SimpleGrapheneKmcSimulation {
     GrapheneKmc kmc = initialize_kmc();
     DiffusionKmcFrame frame = create_graphics_frame(kmc);
 
+    frame.setVisible(true);
     for (int i = 0; i < 10; i++) {
       initializeRates(ratesFactory, kmc);
       kmc.simulate();
@@ -44,6 +46,7 @@ public class SimpleGrapheneKmcSimulation {
 
   private static GrapheneKmc initialize_kmc() {
 
+    new StaticRandom();
     ListConfiguration config = new ListConfiguration()
             .setListType(ListConfiguration.LINEAR_LIST);
 
@@ -52,7 +55,7 @@ public class SimpleGrapheneKmcSimulation {
     if ((sizeY & 1) != 0) {
       sizeY++;
     }
-    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false, true, false, RoundPerimeter.CIRCLE);
+    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false, false, RoundPerimeter.CIRCLE);
     return kmc;
   }
 

@@ -6,6 +6,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import utils.MathUtils;
+import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
 
 /*
@@ -24,7 +25,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config, true);
+    SiEtchingKmc kmc = new SiEtchingKmc(config);
 
     float[][] PSD300_1
             = getPsdFromSimulation(kmc, 300);
@@ -91,6 +92,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
   }
 
   private static SiEtchingKmcConfig configKmc() {
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(100)

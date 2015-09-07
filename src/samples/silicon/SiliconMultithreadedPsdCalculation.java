@@ -12,6 +12,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -41,6 +42,7 @@ public class SiliconMultithreadedPsdCalculation {
   }
 
   private static SiEtchingKmcConfig configKmc() {
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(12)

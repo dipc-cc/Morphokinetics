@@ -30,7 +30,6 @@ public class AgSimulation extends AbstractGrowthSimulation {
             parser.getHexaSizeI(), 
             parser.getHexaSizeJ(),
             parser.justCentralFlake(),
-            parser.randomSeed(), 
             parser.useMaxPerimeter(),
             parser.getPerimeterType());
   }

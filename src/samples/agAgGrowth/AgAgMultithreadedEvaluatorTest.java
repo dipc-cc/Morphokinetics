@@ -12,6 +12,7 @@ import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -42,6 +43,7 @@ public class AgAgMultithreadedEvaluatorTest {
   
   private static AgAgKmc localAgAgKmc(float experimentalTemp) {
 
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
     double depositionRate = new AgAgRatesFactory().getDepositionRate(experimentalTemp);
     double islandDensity = new AgAgRatesFactory().getIslandDensity(experimentalTemp);

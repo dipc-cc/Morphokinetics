@@ -4,6 +4,7 @@ import graphicInterfaces.basic.BasicFrame;
 import kineticMonteCarlo.kmcCore.etching.BasicKmc;
 import utils.list.ListConfiguration;
 import ratesLibrary.basic.RatesCaseOther;
+import utils.StaticRandom;
 import utils.Wait;
 
 /*
@@ -20,6 +21,7 @@ public class SimpleBasicKmcSimulation {
 
     System.out.println("Simple simulation of the Basic KMC");
 
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(100)

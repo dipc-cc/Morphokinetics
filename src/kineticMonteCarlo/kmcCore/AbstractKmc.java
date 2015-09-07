@@ -6,7 +6,6 @@ package kineticMonteCarlo.kmcCore;
 
 import utils.list.AbstractList;
 import utils.list.ListConfiguration;
-import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
 
 /**
  *
@@ -15,16 +14,9 @@ import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
 public abstract class AbstractKmc implements IKmc {
 
   protected AbstractList list;
-  protected static Ranecu rng;
   protected int iterationsForLastSimulation;
 
-  public AbstractKmc(ListConfiguration config, boolean randomSeed) {
-    if (randomSeed) {
-      rng = new Ranecu(System.nanoTime());
-    } else {
-      // for testing purposes
-      rng = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Randoom" numbers
-    }
+  public AbstractKmc(ListConfiguration config) {
     list = config.createList();
   }
 

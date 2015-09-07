@@ -3,8 +3,8 @@ package utils.list.otherImplementation;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
+import utils.StaticRandom;
 import utils.list.AbstractList;
-import utils.edu.cornell.lassp.houle.rngPack.RandomSeedable;
 
 /**
  *
@@ -69,14 +69,14 @@ public class Linear_list extends AbstractList {
     }
 
     @Override
-    public AbstractAtom nextEvent(RandomSeedable RNG) {
+    public AbstractAtom nextEvent() {
         
         removalsSinceLastCleanup++;  
         if (autoCleanup && removalsSinceLastCleanup>EVENTS_PER_CLEANUP) {this.cleanup(); removalsSinceLastCleanup=0;}
         
-        double position = RNG.raw() * (totalProbability + depositionProbability);
+        double position = StaticRandom.raw() * (totalProbability + depositionProbability);
 
-        time -= Math.log(RNG.raw()) / (totalProbability + depositionProbability);
+        time -= Math.log(StaticRandom.raw()) / (totalProbability + depositionProbability);
 
         if (position < depositionProbability) {
             return null; //toca añadir un átomo nuevo

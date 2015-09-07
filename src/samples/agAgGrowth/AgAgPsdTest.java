@@ -15,6 +15,7 @@ import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
 import utils.MathUtils;
+import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -60,13 +61,14 @@ public class AgAgPsdTest {
 
   private static AgAgKmc initialize_kmc() {
 
+    new StaticRandom();
     ListConfiguration config = new ListConfiguration()
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, true, false, RoundPerimeter.CIRCLE);
+    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, false, RoundPerimeter.CIRCLE);
 
     return kmc;
   }

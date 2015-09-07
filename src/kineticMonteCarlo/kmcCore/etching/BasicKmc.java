@@ -19,7 +19,7 @@ public class BasicKmc extends AbstractEtchingKmc {
   private double minHeight;
 
   public BasicKmc(ListConfiguration listCconfig, int sizeX, int sizeY, boolean randomise) {
-    super(listCconfig, randomise);
+    super(listCconfig);
     lattice = new BasicLattice(sizeX, sizeY);
 
   }
@@ -55,7 +55,7 @@ public class BasicKmc extends AbstractEtchingKmc {
   @Override
   protected boolean performSimulationStep() {
 
-    BasicAtom atom = (BasicAtom) list.nextEvent(rng);
+    BasicAtom atom = (BasicAtom) list.nextEvent();
     if (atom.getY() > lattice.getHexaSizeJ() - minHeight) {
 
       return true;

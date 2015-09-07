@@ -6,6 +6,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import utils.MathUtils;
+import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
 
 /*
@@ -24,7 +25,7 @@ public class SimpleSiliconKmcFftAnalisys {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config, true);
+    SiEtchingKmc kmc = new SiEtchingKmc(config);
 
     kmc.initializeRates(new SiRatesFactory()
             .getRates(350));
@@ -47,6 +48,7 @@ public class SimpleSiliconKmcFftAnalisys {
   }
 
   private static SiEtchingKmcConfig configKmc() {
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(16)

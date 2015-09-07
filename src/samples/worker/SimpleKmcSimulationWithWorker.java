@@ -11,6 +11,7 @@ import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -29,7 +30,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
 
     SiEtchingKmcConfig config = configKmc();
 
-    worker = new KmcWorker(new SiEtchingKmc(config, true),
+    worker = new KmcWorker(new SiEtchingKmc(config),
             worker_ID);
     worker.start();
 
@@ -41,6 +42,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
   }
 
   private static SiEtchingKmcConfig configKmc() {
+    new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(16)

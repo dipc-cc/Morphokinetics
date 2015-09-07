@@ -11,6 +11,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import ratesLibrary.IRatesFactory;
 import utils.MathUtils;
+import utils.StaticRandom;
 import utils.list.ListConfiguration;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -28,12 +29,15 @@ public abstract class AbstractSimulation {
   protected ListConfiguration config;
   protected Parser parser;
 
+  private StaticRandom staticRandom;
+  
   public AbstractSimulation(Parser parser) {
     kmc = null;
     ratesFactory = null;
     frame = null;
     psd = null;
     this.parser = parser;
+    staticRandom = new StaticRandom();
   }
 
   /**

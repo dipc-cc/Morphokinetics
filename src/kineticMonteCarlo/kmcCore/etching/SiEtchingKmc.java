@@ -18,8 +18,8 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
 
   private final double minHeight;
 
-  public SiEtchingKmc(SiEtchingKmcConfig config, boolean randomise) {
-    super(config.listConfig, randomise);
+  public SiEtchingKmc(SiEtchingKmcConfig config) {
+    super(config.listConfig);
     lattice = new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC);
 
     minHeight = ((SiLattice) lattice).getUnitCell().getLimitZ();
@@ -55,7 +55,7 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
 
   @Override
   protected boolean performSimulationStep() {
-    SiAtom atom = (SiAtom) list.nextEvent(rng);
+    SiAtom atom = (SiAtom) list.nextEvent();
     atom.remove();
     atom.setOnList(null);
     for (int k = 0; k < 4; k++) {

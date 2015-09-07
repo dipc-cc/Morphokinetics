@@ -13,6 +13,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.AgAgRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -22,6 +23,7 @@ public class AgAgKmcConvergence {
 
   public static void main(String[] args) {
 
+    new StaticRandom();
     float experitental_temp = 135;
     double deposition_rate = new AgAgRatesFactory().getDepositionRate(experitental_temp);
     double island_density = new AgAgRatesFactory().getIslandDensity(experitental_temp);

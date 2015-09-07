@@ -23,11 +23,10 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   public GrapheneKmc(ListConfiguration config, 
           int hexaSizeI, 
           int hexaSizeJ, 
-          boolean justCentralFlake, 
-          boolean randomise, 
+          boolean justCentralFlake,
           boolean useMaxPerimeter,
           short perimeterType) {
-    super(config, justCentralFlake, randomise, useMaxPerimeter, perimeterType);
+    super(config, justCentralFlake, useMaxPerimeter, perimeterType);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 

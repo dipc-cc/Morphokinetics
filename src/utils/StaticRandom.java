@@ -12,8 +12,12 @@ import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
  */
 public class StaticRandom {
 
-  private static Ranecu rand = new Ranecu(2/*System.nanoTime()*/);
+  private static Ranecu rand;
 
+  public StaticRandom() {
+    rand = new Ranecu(System.nanoTime());
+  }
+  
   public static double raw() {
 
     return rand.raw();

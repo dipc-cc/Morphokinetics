@@ -23,10 +23,9 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
           int hexaSizeI, 
           int hexaSizeJ, 
           boolean justCentralFlake,
-          boolean randomise, 
           boolean useMaxPerimeter,
           short perimeterType) {
-    super(config, justCentralFlake, randomise, useMaxPerimeter, perimeterType);
+    super(config, justCentralFlake, useMaxPerimeter, perimeterType);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     this.lattice = new AgAgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
@@ -41,7 +40,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
           double depositionRate, 
           double islandDensity) {
 
-    this(config, hexaSizeI, hexaSizeJ, true, true, false, RoundPerimeter.CIRCLE);
+    this(config, hexaSizeI, hexaSizeJ, true, false, RoundPerimeter.CIRCLE);
     
     this.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
   }

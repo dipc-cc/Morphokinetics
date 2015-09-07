@@ -31,10 +31,9 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   public Abstract2DDiffusionKmc(ListConfiguration config, 
           boolean justCentralFlake, 
-          boolean randomise, 
           boolean useMaxPerimeter,
           short perimeterType) {
-    super(config, randomise);
+    super(config);
     this.justCentralFlake = justCentralFlake;
     this.useMaxPerimeter = useMaxPerimeter;
     this.modifiedBuffer = new ModifiedBuffer();
@@ -77,7 +76,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   @Override
   protected boolean performSimulationStep() {
-    Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.nextEvent(rng));
+    Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.nextEvent());
     Abstract2DDiffusionAtom destinationAtom;
 
     if (originAtom == null) {

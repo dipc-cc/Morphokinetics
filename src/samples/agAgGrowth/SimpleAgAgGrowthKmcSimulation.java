@@ -12,6 +12,7 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.lattice.AgAgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
+import utils.StaticRandom;
 
 /**
  *
@@ -42,13 +43,14 @@ public class SimpleAgAgGrowthKmcSimulation {
   }
 
   private static AgAgKmc initialize_kmc() {
+    new StaticRandom();
     ListConfiguration config = new ListConfiguration()
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, true, false, RoundPerimeter.CIRCLE);
+    AgAgKmc kmc = new AgAgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, false, RoundPerimeter.CIRCLE);
 
     return kmc;
   }
