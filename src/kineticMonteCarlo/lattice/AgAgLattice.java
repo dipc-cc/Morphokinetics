@@ -51,51 +51,34 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
         AgAgAtom atom = (AgAgAtom) atoms[iHexa][jHexa];
         int i = iHexa;
         int j = jHexa - 1;
-        if (i < 0) i = hexaSizeI - 1;
-        if (i == hexaSizeI) i = 0;
         if (j < 0) j = hexaSizeJ - 1;
-        if (j == hexaSizeJ) j = 0;
 
         atom.setNeighbour((AgAgAtom) atoms[i][j], 0);
         i = iHexa + 1;
         j = jHexa - 1;
-        if (i < 0) i = hexaSizeI - 1;
         if (i == hexaSizeI) i = 0;
         if (j < 0) j = hexaSizeJ - 1;
-        if (j == hexaSizeJ) j = 0;
 
         atom.setNeighbour((AgAgAtom) atoms[i][j], 1);
         i = iHexa + 1;
         j = jHexa;
-        if (i < 0) i = hexaSizeI - 1;
         if (i == hexaSizeI) i = 0;
-        if (j < 0) j = hexaSizeJ - 1;
-        if (j == hexaSizeJ) j = 0;
 
         atom.setNeighbour((AgAgAtom) atoms[i][j], 2);
         i = iHexa;
         j = jHexa + 1;
-        if (i < 0) i = hexaSizeI - 1;
-        if (i == hexaSizeI) i = 0;
-        if (j < 0) j = hexaSizeJ - 1;
-        if (j == hexaSizeJ)
-          j = 0;
+        if (j == hexaSizeJ) j = 0;
 
         atom.setNeighbour((AgAgAtom) atoms[i][j], 3);
         i = iHexa - 1;
         j = jHexa + 1;
         if (i < 0) i = hexaSizeI - 1;
-        if (i == hexaSizeI) i = 0;
-        if (j < 0) j = hexaSizeJ - 1;
         if (j == hexaSizeJ) j = 0;
 
         atom.setNeighbour((AgAgAtom) atoms[i][j], 4);
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = hexaSizeI - 1;
-        if (i == hexaSizeI) i = 0;
-        if (j < 0) j = hexaSizeJ - 1;
-        if (j == hexaSizeJ) j = 0;
         atom.setNeighbour((AgAgAtom) atoms[i][j], 5);
       }
     }
