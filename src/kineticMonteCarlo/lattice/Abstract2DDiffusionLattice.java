@@ -23,6 +23,8 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   private final ModifiedBuffer modified;
   private static Point2D middle;
   private final ArrayList<Integer> includePerimeterList; 
+  private int hexaArea;
+  private int occupied;
 
   public Abstract2DDiffusionLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     this.hexaSizeI = hexaSizeI;
@@ -30,6 +32,8 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     hexaSizeK = 1;
     unitCellSize = 4;
     this.modified = modified;
+    hexaArea = hexaSizeI * hexaSizeJ;
+    occupied = 0;
     
     // Initialise the square perimeter include points. This is required because the number of points in the horizontal and vertical perimeters should be as equal as possible.
     this.includePerimeterList = new ArrayList<>();
@@ -212,5 +216,27 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
 
   public ModifiedBuffer getModified() {
     return modified;
+  }
+  
+  /**
+   * Adds an occupied atom to the counter
+   */
+  public void addOccupied() {
+    occupied++;
+  }
+  
+  /**
+   * Subtracts an occupied atom from the counter
+   */
+  public void subtractOccupied() {
+    occupied--;
+  }
+  
+  /**
+   * 
+   * @return the covering of the lattice 
+   */
+  public float getCovering() {
+    return (float) occupied / (float) hexaArea;
   }
 }
