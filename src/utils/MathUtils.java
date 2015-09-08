@@ -10,6 +10,11 @@ package utils;
  */
 public class MathUtils {
 
+  public static int mod(int x, int m) {
+    int r = x%m;
+    return r<0 ? r+m : r;
+  }
+  
   public static double truncate(double value, int decimals) {
     int desp = 1;
     for (int i = 0; i < decimals; i++) {
