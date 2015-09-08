@@ -98,15 +98,15 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     switch (code) {
       case 3: //1+2 | It has two neighbours (it is an edge)
         return 3;
-      case 6: //2+4 positions    (2+3 neighbours)
+      case 6: //2+4 positions    (1+2 neighbours)
         return 4;
-      case 12: //4+8positions    (3+4 neighbours)
+      case 12: //4+8positions    (2+3 neighbours)
         return 5;
-      case 24: //8+16 positions  (4+5 neighbours)
+      case 24: //8+16 positions  (3+4 neighbours)
         return 0;
-      case 48: //16+32 positions (5+6 neighbours)
+      case 48: //16+32 positions (4+5 neighbours)
         return 1;
-      case 33: //1+32 positions  (6+1 neighbours)
+      case 33: //1+32 positions  (5+0 neighbours)
         return 2;
       default:
         return -1;
@@ -118,15 +118,15 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     switch (code) {
       case 7:  //1 + 2 + 4 | It has three neighbours (it is a kink)
         return 0;
-      case 14: //2 + 4 + 8   (2+3+4 neighbours)
+      case 14: //2 + 4 + 8   (1+2+3 neighbours)
         return 1;
-      case 28: //4 + 8 + 16  (3+4+5 neighbours)
+      case 28: //4 + 8 + 16  (2+3+4 neighbours)
         return 2;
-      case 56: //8 + 16 + 32 (4+5+6 neighbours)
+      case 56: //8 + 16 + 32 (3+4+5 neighbours)
         return 3;
-      case 49: //16 + 32 + 1 (5+6+1 neighbours)
+      case 49: //16 + 32 + 1 (4+5+0 neighbours)
         return 4;
-      case 35: //32 + 1 + 2  (6+1+2 neighbours)
+      case 35: //32 + 1 + 2  (5+0+1 neighbours)
         return 5;
       default:
         return -1;
