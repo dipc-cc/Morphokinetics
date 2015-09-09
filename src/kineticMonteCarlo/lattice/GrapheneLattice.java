@@ -620,8 +620,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
       xCart = (iHexa >> 1) + iHexa + 0.5;
     } else { // odd
       xCart = (iHexa + 1 >> 1) + iHexa;
-
-}
+    }
     return xCart;
   }
   
