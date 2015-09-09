@@ -68,7 +68,7 @@ public class AgAgPsdTest {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, false, RoundPerimeter.CIRCLE);
+    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE);
 
     return kmc;
   }

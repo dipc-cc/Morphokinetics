@@ -28,13 +28,22 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   protected boolean useMaxPerimeter;
   protected short perimeterType;
   protected DevitaAccelerator accelerator;
-
+  
+  private float maxCovering; // This attribute defines which is the maximum covering for a multi-flake simulation
+  
   public Abstract2DDiffusionKmc(ListConfiguration config, 
           boolean justCentralFlake, 
+          float covering,
           boolean useMaxPerimeter,
           short perimeterType) {
     super(config);
     this.justCentralFlake = justCentralFlake;
+    if ((!justCentralFlake) && ((0f < covering) || (1f > covering))) {
+      System.err.println("Chosen covering is not permitted. Selecting the default one: %30");
+      this.maxCovering = 0.3f;
+    } else {
+      this.maxCovering = covering;
+    }
     this.useMaxPerimeter = useMaxPerimeter;
     this.modifiedBuffer = new ModifiedBuffer();
     this.list.autoCleanup(true);
@@ -107,11 +116,16 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return false;
   }
 
-  public void simulateUntilCovering(float covering) {
-    while (lattice.getCovering() < covering) {
+  @Override
+  public void simulate() {
+    if (justCentralFlake){
+      super.simulate();
+    } else {
+      while (lattice.getCovering() < maxCovering) {
       if (performSimulationStep()) {
         break;
       }
+    }
     }
   }
   

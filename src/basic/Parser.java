@@ -51,6 +51,7 @@ public class Parser {
   private int cartSizeY;
   private int binsLevels;
   private int extraLevels;
+  private int covering;
   private boolean multithreaded;
   private boolean visualize;
   private boolean withGui;
@@ -77,6 +78,7 @@ public class Parser {
     this.cartSizeY = (int) (cartSizeX / AgAgLattice.YRatio);
     this.binsLevels = 100;
     this.extraLevels = 0;
+    this.covering = 30;
     this.multithreaded = true;
     this.visualize = true;
     this.withGui = true;
@@ -177,6 +179,11 @@ public class Parser {
       extraLevels = 0;
     }
     try {
+      covering = json.getInt("covering");
+    } catch (JSONException e) {
+      covering = 30;
+    }
+    try {
       multithreaded = json.getBoolean("multithreaded");
     } catch (JSONException e) {
       multithreaded = true;
@@ -245,6 +252,7 @@ public class Parser {
     System.out.println("\t\"cartSizeY\":\t\t" + cartSizeY + ",");
     System.out.println("\t\"binsLevels\":\t\t" + binsLevels + ",");
     System.out.println("\t\"extraLevels\":\t\t" + extraLevels + ",");
+    System.out.println("\t\"covering\":\t\t" + covering + ",");
     System.out.println("\t\"presure\":\t\t" + presure + ",");
     System.out.println("\t\"temperature\":\t\t" + temperature + ",");
     System.out.println("\t\"flow\":\t\t\t" + flow + ",");
@@ -318,6 +326,10 @@ public class Parser {
 
   int getExtraLevels() {
     return extraLevels;
+  }
+  
+  int getCovering() {
+    return covering;
   }
 
   public boolean isMultithreaded() {
