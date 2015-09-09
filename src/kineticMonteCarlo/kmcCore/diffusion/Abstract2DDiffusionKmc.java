@@ -38,7 +38,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
           short perimeterType) {
     super(config);
     this.justCentralFlake = justCentralFlake;
-    if ((!justCentralFlake) && ((0f < covering) || (1f > covering))) {
+    if ((!justCentralFlake) && ((0f > covering) || (1f < covering))) {
       System.err.println("Chosen covering is not permitted. Selecting the default one: %30");
       this.maxCovering = 0.3f;
     } else {
