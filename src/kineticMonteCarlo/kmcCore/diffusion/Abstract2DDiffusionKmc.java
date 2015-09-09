@@ -107,6 +107,14 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return false;
   }
 
+  public void simulateUntilCovering(float covering) {
+    while (lattice.getCovering() < covering) {
+      if (performSimulationStep()) {
+        break;
+      }
+    }
+  }
+  
   @Override
   public void simulate(int iterations) {
 
@@ -160,7 +168,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     }
 
     origin.extract();
-
+    lattice.subtractOccupied();
     modifiedBuffer.updateAtoms(list, lattice);
     return true;
   }
@@ -172,6 +180,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
     boolean forceNucleation = (!justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
     atom.deposit(forceNucleation);
+    lattice.addOccupied();
     modifiedBuffer.updateAtoms(list, lattice);
     return true;
 
