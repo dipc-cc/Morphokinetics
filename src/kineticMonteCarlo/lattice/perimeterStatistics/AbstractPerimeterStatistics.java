@@ -18,6 +18,12 @@ public abstract class AbstractPerimeterStatistics {
   protected Map<Integer, Map<Integer, Integer>> hopsCountMap;
   protected Map<Integer, Map<Integer, Integer>> atomsCountMap;
 
+  /**
+   * This constructor limits the size of the perimeter. Arbitrarily starts at radius 20 
+   * and finishes at radius 125, increasing 5 by 5.
+   * @param statisticAtom
+   * @param statisticsHops 
+   */
   public AbstractPerimeterStatistics(AbstractStatistics statisticAtom, 
           AbstractStatistics statisticsHops){
  
