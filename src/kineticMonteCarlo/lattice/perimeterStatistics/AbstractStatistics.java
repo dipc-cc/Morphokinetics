@@ -14,7 +14,7 @@ public abstract class AbstractStatistics {
   private int[][] data;
   
   /**
-   * 
+   * Returns the total value of analysed atoms used to do the statistics, which is stores in the last position (for every radius).
    * @return the value of data[0][180]
    */
   public int getTotalCount(){
