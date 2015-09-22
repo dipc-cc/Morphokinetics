@@ -24,7 +24,7 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   protected boolean outside = true;
   protected short iHexa;
   protected short jHexa;
-  protected int multiplier = 1;
+  private int multiplier;
   protected ModifiedBuffer modified;
   protected HopsPerStep distancePerStep;
 
@@ -35,6 +35,7 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
     
     this.distancePerStep = distancePerStep;
     this.bondsProbability = null;
+    multiplier = 1;
   }
   
   @Override
@@ -132,11 +133,10 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   }
 
   public void setMultiplier(int multiplier) {
-
     this.multiplier = multiplier;
   }
 
-  public float multiplier() {
+  public int getMultiplier() {
     return multiplier;
   }
 

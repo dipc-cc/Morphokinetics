@@ -311,20 +311,16 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     byte lastTemp = atom.getTypeWithoutNeighbour(pos);
 
     double rate;
+    int multiplier = super.getMultiplier();
     if (multiplier != 1) {
       rate = probabilities[originType][lastTemp] / multiplier;
-      multiplier = 1;
+      super.setMultiplier(1);
     } else {
       int hops = distancePerStep.getDistancePerStep(originType, originType);
 
-           //if (originType==2) System.out.println(originType+" "+lastTemp+" "+hops);
       switch (originType) {
         case TERRACE:
-          rate = probabilities[originType][lastTemp] / (hops * hops);
-          break;
         case ZIGZAG_EDGE:
-          rate = probabilities[originType][lastTemp] / (hops * hops);
-          break;
         case ARMCHAIR_EDGE:
           rate = probabilities[originType][lastTemp] / (hops * hops);
           break;
