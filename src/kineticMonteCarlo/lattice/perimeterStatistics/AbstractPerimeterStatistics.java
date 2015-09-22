@@ -5,7 +5,6 @@
 package kineticMonteCarlo.lattice.perimeterStatistics;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -15,9 +14,10 @@ import java.util.Map;
 public abstract class AbstractPerimeterStatistics {
 
   protected int totalCount;
-  protected Map<Integer, Map<Integer, Integer>> hopsCountMap;
-  protected Map<Integer, Map<Integer, Integer>> atomsCountMap;
-
+  protected Map<Integer, int[]> hopsCountMap;
+  protected Map<Integer, int[]> atomsCountMap;
+  private final int minRadius;
+  
   /**
    * This constructor limits the size of the perimeter. Arbitrarily starts at radius 20 
    * and finishes at radius 125, increasing 5 by 5.
@@ -30,18 +30,19 @@ public abstract class AbstractPerimeterStatistics {
     this.totalCount = statisticAtom.getTotalCount();
     this.atomsCountMap = new HashMap();
     this.hopsCountMap = new HashMap();
+    minRadius = 20;
     int radius = 20;
 
     for (int i = 0; i < statisticAtom.getLenght(); i++) {
-      Map<Integer, Integer> currentRadiusCountMap = new HashMap();
-      Map<Integer, Integer> currentRadiusHopMap = new HashMap();
+      int currentRadiusAtomsCountMatrix[] = new int[181];
+      int currentRadiusHopsCountMatrix[] = new int[181];
 
-      this.atomsCountMap.put(radius, currentRadiusCountMap);
-      this.hopsCountMap.put(radius, currentRadiusHopMap);
+      this.atomsCountMap.put(radius, currentRadiusAtomsCountMatrix);
+      this.hopsCountMap.put(radius, currentRadiusHopsCountMatrix);
 
       for (int j = 0; j < 180; j++) {
-        currentRadiusCountMap.put(j, statisticAtom.getData(i, j));
-        currentRadiusHopMap.put(j, statisticsHops.getData(i, j));
+        currentRadiusAtomsCountMatrix[j] = statisticAtom.getData(i, j);
+        currentRadiusHopsCountMatrix[j] = statisticsHops.getData(i, j);
       }
       radius += 5;
     }
@@ -52,38 +53,32 @@ public abstract class AbstractPerimeterStatistics {
   }
 
   public int getAtomsCount(int radius, int offsetDegree) {
-    return atomsCountMap.get(radius).get(offsetDegree);
+    return atomsCountMap.get(radius)[offsetDegree];
   }
 
   public int getHopsCount(int radius, int offsetDegree) {
-
-    return hopsCountMap.get(radius).get(offsetDegree);
+    return hopsCountMap.get(radius)[offsetDegree];
   }
 
+  /**
+   * We increase the radius in 5 positions, 
+   * because statistics are done with this criteria
+   * @param radiusSize current radius size
+   * @return next radius size (current+5)
+   */
   public int getNextRadiusInSize(int radiusSize) {
-
-    Iterator<Integer> it = atomsCountMap.keySet().iterator();
-    int radius = -1;
-    while (it.hasNext()) {
-      int value = it.next();
-      if (value > radiusSize && (value < radius || radius == -1)) {
-        radius = value;
-      }
-    }
-    return radius;
+    radiusSize += 5; //increase in 5
+    if (radiusSize >= 125) 
+      return -1;
+    return radiusSize;
   }
 
+  /**
+   * Arbitrarily the minimum radius is 20
+   * @return 20
+   */
   public int getMinRadiusInSize() {
-
-    Iterator<Integer> it = atomsCountMap.keySet().iterator();
-    int radius = -1;
-    while (it.hasNext()) {
-      int value = it.next();
-      if ((value < radius || radius == -1)) {
-        radius = value;
-      }
-    }
-    return radius;
+    return minRadius;
   }
 
 }
