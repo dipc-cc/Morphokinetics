@@ -65,17 +65,18 @@ public class RoundPerimeter {
     int i = searchPerimeterOffsetReentrance();
     int neededSteps = perimeterStatistics.getHopsCount(currentPerimeterRadius, i);
 
+    /* It randomly turns */
     if (utils.StaticRandom.raw() < 0.5) {
       i = 360 - i;
     }
 
-    float destinationAngleGrad = (float) (i + (origin.getAngle() * 180.0 / Math.PI));
-    if (destinationAngleGrad >= 360) {
-      destinationAngleGrad = destinationAngleGrad - 360;
+    float destinationAngleDegree = (float) (i + (origin.getAngle() * 180.0 / Math.PI));
+    if (destinationAngleDegree >= 360) {
+      destinationAngleDegree = destinationAngleDegree - 360;
     }
 
-    int initialLocation = (int) (destinationAngleGrad * currentPerimeter.length / 360.0);
-    float destinationAngleRad = (float) (destinationAngleGrad * Math.PI / 180.0f);
+    int initialLocation = (int) (destinationAngleDegree * currentPerimeter.length / 360.0);
+    float destinationAngleRad = (float) (destinationAngleDegree * Math.PI / 180.0f);
 
     Abstract2DDiffusionAtom chosen = null;
     int position = 0;
