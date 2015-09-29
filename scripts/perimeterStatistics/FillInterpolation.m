@@ -16,10 +16,10 @@ for i=1:size(zz,1)
 end
 
 %% Save processed data
-save('zz_interpolated_data.mat','zz');
+save('reentranceProbabilityFromStatisticsAndInterpolation.mat','zz');
 
 %% Save processed data in text mode
-fid=fopen('zz_interpolated_data.txt','w'); 
+fid=fopen('reentranceProbabilityFromStatisticsAndInterpolation.txt','w'); 
 for i=1:size(zz,1)
   for j=1:size(zz,2)
     fprintf(fid,'%12.8e ',zz(i,j));
