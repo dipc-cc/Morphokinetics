@@ -331,11 +331,11 @@ public class Restart {
    
   private float[][] readLowText2D(String fileName) throws FileNotFoundException {
     float[][] data = null;
-    System.out.println("Trying to read " + fileName + " file of unknown size ");
-    int i = -1;
-    int j = -1;
+    System.out.println("Trying to read "+folder+ fileName + " file of unknown size ");
+    int x = -1;
+    int y = -1;
     try {
-      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      BufferedReader in = new BufferedReader(new FileReader(folder+fileName));
       String line;
       // <-- read whole line
       line = in.readLine();
@@ -345,15 +345,14 @@ public class Restart {
           System.err.println("File format not valid. Should start with a line with # character");
           throw new FileNotFoundException("Fix the file format");
         }
-        int size = Integer.parseInt(tk.nextToken());
-        this.sizeX = size;
-        this.sizeY = size;
-        data = new float[size][size];
+        this.sizeY = Integer.parseInt(tk.nextToken());
+        this.sizeX = Integer.parseInt(tk.nextToken());
+        data = new float[sizeX][sizeY];
       }
       line = in.readLine();
-      for (int x=0; x<this.sizeX; x++) {
+      for (x=0; x<this.sizeX; x++) {
         StringTokenizer tk = new StringTokenizer(line);
-        for (int y=0; y<this.sizeY; y++) {
+        for (y=0; y<this.sizeY; y++) {
           data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         }
         line = in.readLine();
@@ -363,7 +362,7 @@ public class Restart {
     }
       catch (Exception e) {
       // if any I/O error occurs
-      System.err.println("Point: " + i + " " + j);
+      System.err.println("Point: " + x + " " + y);
       e.printStackTrace();
     }
     
