@@ -62,15 +62,15 @@ public class RoundPerimeter {
   
   public Abstract2DDiffusionAtom getPerimeterReentrance(Abstract2DDiffusionAtom origin) {
 
-    int i = searchPerimeterOffsetReentrance();
-    int neededSteps = perimeterStatistics.getHopsCount(currentPerimeterRadius, i);
+    int angle = searchPerimeterOffsetReentrance();
+    int neededSteps = perimeterStatistics.getHopsCount(currentPerimeterRadius, angle);
 
     /* It randomly turns */
     if (utils.StaticRandom.raw() < 0.5) {
-      i = 360 - i;
+      angle = 360 - angle;
     }
 
-    float destinationAngleDegree = (float) (i + (origin.getAngle() * 180.0 / Math.PI));
+    float destinationAngleDegree = (float) (angle + (origin.getAngle() * 180.0 / Math.PI));
     if (destinationAngleDegree >= 360) {
       destinationAngleDegree = destinationAngleDegree - 360;
     }
@@ -133,16 +133,16 @@ public class RoundPerimeter {
   protected int searchPerimeterOffsetReentrance() {
     int linearSearch = (int) (perimeterStatistics.getTotalCount() * StaticRandom.raw());
     int actualCount = 0;
-    int i = 0;
+    int angle = 0;
 
-    for (; i < 179; i++) {
-      actualCount += perimeterStatistics.getAtomsCount(currentPerimeterRadius, i);
+    for (; angle < 179; angle++) {
+      actualCount += perimeterStatistics.getAtomsCount(currentPerimeterRadius, angle);
       if (linearSearch <= actualCount) {
         break;
       }
     }
 
-    return i;
+    return angle;
   }
 
   public Abstract2DDiffusionAtom getRandomPerimeterAtom() {
