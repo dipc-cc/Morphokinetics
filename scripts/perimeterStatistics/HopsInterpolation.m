@@ -37,7 +37,7 @@ y0_80=hh_80./ha_80;
 y0_160=hh_160./ha_160;
 y0_320=hh_320./ha_320;
 
-[XX,YY]=meshgrid(1:181,[10 20 40 80 160 320]);
+[XX,YY]=meshgrid(log10(1:181),[10 20 40 80 160 320]);
 ZZ(1,:)=y0_10;
 ZZ(2,:)=y0_20;
 ZZ(3,:)=y0_40;
@@ -45,7 +45,7 @@ ZZ(4,:)=y0_80;
 ZZ(5,:)=y0_160;
 ZZ(6,:)=y0_320;
 
-%%% Remove the zeros and replace with the lowest number found.
+%%% Remove the zeros and replace with the highest number found.
 ZZtmp = ZZ;
 ZZ(isnan(ZZ)) = 0;
 maxPerRow = max(ZZ,[],2);
@@ -59,7 +59,7 @@ lighting('flat')
 hold on
 
 %%% Interpolate
-[XXI,YYI]=meshgrid(1:181,[10:320]);
+[XXI,YYI]=meshgrid(log10(1:181),[10:320]);
 ZZI=10.^(interp2(XX,YY,log10(ZZ),XXI,YYI,'linear'));
 surf(XXI,YYI,log10(ZZI))
 shading('interp')
@@ -68,6 +68,7 @@ lighting('flat')
 %%% Finally, save the output file
 % Text
 fid=fopen('reentranceHopsFromStatisticsAndInterpolation.txt','w');
+fprintf(fid,'# 181 311\n');
 for i=1:size(ZZI,1)
   for j=1:size(ZZI,2)
     fprintf(fid,'%12.8e ',ZZI(i,j));
