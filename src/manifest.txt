@@ -1,0 +1,2 @@
+Class-Path: lib/j3dcore.jar lib/jtransforms-2.4.jar lib/json-20141113.jar lib/j3dutils.jar lib/vecmath.jar lib/colt.jar
+Main-Class: main.Morphokinetics
