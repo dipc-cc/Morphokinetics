@@ -3,4 +3,4 @@ build/
 nbproject
 .project
 .classpath
-/dist/
+dist/
