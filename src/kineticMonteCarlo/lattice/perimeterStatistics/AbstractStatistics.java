@@ -22,6 +22,7 @@ public abstract class AbstractStatistics {
     return data[index][data[0].length-1];
   }
   
+  @Deprecated
   public int getTotalCount(){
     return data[0][data[0].length-1];
   }
