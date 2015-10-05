@@ -15,10 +15,15 @@ public abstract class AbstractStatistics {
   
   /**
    * Returns the total value of analysed atoms used to do the statistics, which is stores in the last position (for every radius).
+   * @param index
    * @return the value of data[0][180]
    */
+  public int getTotalCount(int index){
+    return data[index][data[0].length-1];
+  }
+  
   public int getTotalCount(){
-    return data[0][180];
+    return data[0][data[0].length-1];
   }
   
   /**
@@ -39,6 +44,15 @@ public abstract class AbstractStatistics {
    */
   protected void setData(int[][] rawData){
     data = rawData;
+  }
+  
+  /**
+   * Returns the entire data matrix that is working on. 
+   * This is the whole information about the atom re-entrance that the code has.
+   * @return 
+   */
+  protected int[][] getWholeData() {
+    return data;
   }
           
 }
