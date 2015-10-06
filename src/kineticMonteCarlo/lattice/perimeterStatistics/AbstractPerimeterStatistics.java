@@ -13,7 +13,8 @@ import java.util.Map;
  */
 public abstract class AbstractPerimeterStatistics {
 
-  protected int totalCount;
+  protected int[] totalCount;
+  private int totalCountFirst;
   protected Map<Integer, int[]> hopsCountMap;
   protected Map<Integer, int[]> atomsCountMap;
   private final int minRadius;
@@ -27,13 +28,16 @@ public abstract class AbstractPerimeterStatistics {
   public AbstractPerimeterStatistics(AbstractStatistics statisticAtom, 
           AbstractStatistics statisticsHops){
  
-    this.totalCount = statisticAtom.getTotalCount();
+    this.totalCount = new int[statisticAtom.getLenght()];
+            
     this.atomsCountMap = new HashMap();
     this.hopsCountMap = new HashMap();
     minRadius = 20;
     int radius = 20;
-
+    
+    totalCountFirst = statisticAtom.getTotalCount();
     for (int i = 0; i < statisticAtom.getLenght(); i++) {
+      this.totalCount[i] = statisticAtom.getTotalCount(i);
       int currentRadiusAtomsCountMatrix[] = new int[181];
       int currentRadiusHopsCountMatrix[] = new int[181];
 
@@ -47,9 +51,14 @@ public abstract class AbstractPerimeterStatistics {
       radius += 5;
     }
   }
-          
+
+  @Deprecated
   public int getTotalCount() {
-    return totalCount;
+    return totalCountFirst;
+  }
+  
+  public int getTotalCount(int radius) {
+    return totalCount[radius - 10];
   }
 
   public int getAtomsCount(int radius, int offsetDegree) {
