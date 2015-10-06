@@ -16,7 +16,7 @@ public class PerimeterStatisticsFactory {
 
     switch (statisticsName) {
       case "graphene": {
-        perimeterStatistics = new GraphenePerimeterStatistics(new GrapheneRawStatisticDataAtomCount1Million(),
+        perimeterStatistics = new GeneralPerimeterStatistics(new GrapheneRawStatisticDataAtomCount1Million(),
                 new GrapheneRawStatisticDataHopsCount1Million());
         break;
       }      
@@ -27,7 +27,7 @@ public class PerimeterStatisticsFactory {
         break;
       }
       case "Ag": {
-        perimeterStatistics = new AgAgPerimeterStatistics(new AgAgRawStatisticDataAtomCount1Million(),
+        perimeterStatistics = new GeneralPerimeterStatistics(new AgAgRawStatisticDataAtomCount1Million(),
                 new AgAgRawStatisticDataHopsCount1Million());
         break;
       }
