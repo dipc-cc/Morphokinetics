@@ -39,10 +39,18 @@ public abstract class AbstractStatistics {
   
   /**
    * 
-   * @return the length of the matrix
+   * @return number of rows of the matrix
    */
-  public int getLenght(){
+  public int getRows(){
     return data.length;
+  } 
+  
+  /**
+   * 
+   * @return number of columns of the matrix
+   */
+  public int getColumns(){
+    return data[0].length;
   }
   
   public int getData(int i, int j){
