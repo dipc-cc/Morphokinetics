@@ -30,7 +30,6 @@ public abstract class AbstractPerimeterStatistics {
     reentranceCount = new int[statisticAtom.getRows()][statisticAtom.getColumns()];
     hopsCount = new int[statisticsHops.getRows()][statisticsHops.getColumns()];
     
-    totalCountFirst = statisticAtom.getTotalCount();
     for (int i = 0; i < statisticAtom.getRows(); i++) {
       this.totalCount[i] = statisticAtom.getTotalCount(i);
     }
