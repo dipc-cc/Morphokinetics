@@ -25,9 +25,9 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  * @author U010531
  */
 @Deprecated
-public class GrapheneRawStatisticDataHopsCount1Million extends AbstractStatistics {
+public class HopsPerAngleGraphene1million extends AbstractStatistics {
 
-  public GrapheneRawStatisticDataHopsCount1Million() {
+  public HopsPerAngleGraphene1million() {
     readAndSetStatistics("hopsPerAngleHexagonalHoneycomb1million.txt");
   }
   /**

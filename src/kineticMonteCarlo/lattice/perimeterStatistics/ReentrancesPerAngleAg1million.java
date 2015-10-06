@@ -9,9 +9,9 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  * @author Nestor
  */
 @Deprecated
-public class AgAgRawStatisticDataAtomCount1Million extends AbstractStatistics {
+public class ReentrancesPerAngleAg1million extends AbstractStatistics {
   
-    public AgAgRawStatisticDataAtomCount1Million(){
+    public ReentrancesPerAngleAg1million(){
       readAndSetStatistics("reentrancesPerAngleHexagonal1million.txt");
     }
     /**

@@ -9,9 +9,9 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  * @author Nestor
  */
 @Deprecated
-public class AgAgRawStatisticDataHopsCount1Million extends AbstractStatistics {
+public class HopsPerAngle1million extends AbstractStatistics {
   
-  public AgAgRawStatisticDataHopsCount1Million() {
+  public HopsPerAngle1million() {
     readAndSetStatistics("hopsPerAngleHexagonal1million.txt");
   }
    /**
