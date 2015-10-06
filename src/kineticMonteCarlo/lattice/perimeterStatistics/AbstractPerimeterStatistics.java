@@ -38,11 +38,6 @@ public abstract class AbstractPerimeterStatistics {
     this.reentranceCount = statisticAtom.getWholeData();
     this.hopsCount = statisticsHops.getWholeData();
   }
-
-  @Deprecated
-  public int getTotalCount() {
-    return totalCountFirst;
-  }
   
   public int getTotalCount(int radius) {
     return totalCount[radius-10];
