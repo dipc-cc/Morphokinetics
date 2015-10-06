@@ -15,7 +15,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.StringTokenizer;
+import kineticMonteCarlo.lattice.perimeterStatistics.ReentrancesPerAngleAg10million;
+import main.Morphokinetics;
 
 /**
  *
@@ -59,7 +63,25 @@ public class Restart {
   public int getSizeY() {
     return sizeY;
   }
-    
+
+  /**
+   * Returns the base location of the JAR file (or the main executable instead).
+   * @return 
+   */
+  public static String getJarBaseDir() {
+    final Class<?> referenceClass = Morphokinetics.class;
+    final URL url = referenceClass.getProtectionDomain().getCodeSource().getLocation();
+    File jarPath;
+    try {
+      jarPath = new File(url.toURI()).getParentFile();
+      System.out.println(jarPath); // this is the path you want 
+    } catch (final URISyntaxException e) {
+      System.err.println("Could not find the base JAR directory. Probably something will go wrong");
+      jarPath = new File("./");
+    }
+    return jarPath.toString();
+  }
+  
   /**
    * Writes float data to a file called "psd[number].mko". First of all calls to the header
    * writing: look documentation there.
