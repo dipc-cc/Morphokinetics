@@ -5,6 +5,11 @@
  */
 package kineticMonteCarlo.lattice.perimeterStatistics;
 
+import basic.io.Restart;
+import java.io.FileNotFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author J. Alberdi-Rodriguez
@@ -12,6 +17,11 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
 public abstract class AbstractStatistics {
   
   private int[][] data;
+  private Restart restart;
+  
+  public AbstractStatistics() {
+    restart = new Restart(Restart.getJarBaseDir() + "/perimeterData");
+  }
   
   /**
    * Returns the total value of analysed atoms used to do the statistics, which is stores in the last position (for every radius).
@@ -55,5 +65,25 @@ public abstract class AbstractStatistics {
   protected int[][] getWholeData() {
     return data;
   }
-          
+     
+  protected void readAndSetStatistics(String fileName) {
+    
+    float[][] tmp;
+    int[][] result;
+    try {
+      tmp = restart.readSurfaceText2D(fileName);
+      result = new int[tmp.length][tmp[1].length];
+      for (int i = 0; i < tmp.length; i++) {
+        for (int j = 0; j < tmp[1].length; j++) {
+          result[i][j] = Math.round(tmp[i][j]);
+        }
+      }
+      setData(result);
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AbstractStatistics.class.getName()).log(Level.SEVERE, null, ex);
+      System.err.println("Could not be read the statistic of the perimeter re-entrance");
+      System.err.println("Exiting...");
+      System.exit(-99);
+    }
+  }
 }
