@@ -19,14 +19,14 @@ public class RoundPerimeter {
   public final static short CIRCLE = 0;
   public final static short SQUARE = 1;
     
-  private int currentPerimeterRadius;
+  private int currentRadius;
   private Abstract2DDiffusionAtom[] currentPerimeter;
   private AbstractPerimeterStatistics perimeterStatistics;
   private short type;
 
   public RoundPerimeter(String statisticData) {
     this.perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
-    this.currentPerimeterRadius = perimeterStatistics.getMinRadiusInSize();
+    this.currentRadius = perimeterStatistics.getMinRadiusInSize();
     this.currentPerimeter = null;
   }
   
@@ -40,15 +40,15 @@ public class RoundPerimeter {
   }
 
   public int getCurrentRadius() {
-    return this.currentPerimeterRadius;
+    return this.currentRadius;
   }
 
   public Abstract2DDiffusionAtom[] getCurrentPerimeter(){
     return this.currentPerimeter;
   }
   public int goToNextRadius() {
-    this.currentPerimeterRadius = perimeterStatistics.getNextRadiusInSize(currentPerimeterRadius);
-    return this.currentPerimeterRadius;
+    this.currentRadius = perimeterStatistics.getNextRadiusInSize(currentRadius);
+    return this.currentRadius;
   }
 
   public void setAtomPerimeter(Abstract2DDiffusionAtom[] perimeter) {
@@ -57,13 +57,13 @@ public class RoundPerimeter {
   }
 
   public void setMaxPerimeter(){
-    this.currentPerimeterRadius = 125;
+    this.currentRadius = 125;
   }
   
   public Abstract2DDiffusionAtom getPerimeterReentrance(Abstract2DDiffusionAtom origin) {
 
     int angle = searchPerimeterOffsetReentrance();
-    int neededSteps = perimeterStatistics.getHopsCount(currentPerimeterRadius, angle);
+    int neededSteps = perimeterStatistics.getHopsCount(currentRadius, angle);
 
     /* It randomly turns */
     if (utils.StaticRandom.raw() < 0.5) {
@@ -131,12 +131,12 @@ public class RoundPerimeter {
   }
 
    protected int searchPerimeterOffsetReentrance() {
-    int linearSearch = (int) (perimeterStatistics.getTotalCount(currentPerimeterRadius) * StaticRandom.raw());
+    int linearSearch = (int) (perimeterStatistics.getTotalCount(currentRadius) * StaticRandom.raw());
     int actualCount = 0;
     int angle = 0;
 
     for (; angle < 179; angle++) {
-      actualCount += perimeterStatistics.getReentranceCount(currentPerimeterRadius, angle);
+      actualCount += perimeterStatistics.getReentranceCount(currentRadius, angle);
       if (linearSearch <= actualCount) {
         break;
       }
