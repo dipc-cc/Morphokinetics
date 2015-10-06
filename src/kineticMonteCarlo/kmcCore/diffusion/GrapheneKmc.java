@@ -34,6 +34,7 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
     this.lattice = new GrapheneLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
 
     if (justCentralFlake) {
+      this.perimeter = new RoundPerimeter("graphene");
       configureDevitaAccelerator(distancePerStep);
     }
   }
@@ -41,10 +42,10 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   @Override
   protected void depositSeed() {
     if (justCentralFlake) {
-      this.perimeter = new RoundPerimeter("graphene");
       if (this.useMaxPerimeter){
         this.perimeter.setMaxPerimeter();
       }
+      perimeter.setMinRadius();
       if (this.perimeterType == RoundPerimeter.CIRCLE) {
         this.perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius())); 
       } else {

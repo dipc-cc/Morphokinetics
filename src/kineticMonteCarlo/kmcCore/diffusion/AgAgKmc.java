@@ -32,6 +32,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
     this.lattice = new AgAgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
+      this.perimeter = new RoundPerimeter("Ag");
     }
   }
 
@@ -50,10 +51,10 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
   protected void depositSeed() {
 
     if (justCentralFlake) {
-      this.perimeter = new RoundPerimeter("Ag");
       if (this.useMaxPerimeter){
         this.perimeter.setMaxPerimeter();
       }
+      perimeter.setMinRadius();
       if (this.perimeterType == RoundPerimeter.CIRCLE) {
         this.perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius()));
       } else {
