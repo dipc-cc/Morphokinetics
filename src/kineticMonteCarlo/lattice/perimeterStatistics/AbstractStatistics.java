@@ -31,12 +31,7 @@ public abstract class AbstractStatistics {
   public int getTotalCount(int index){
     return data[index][data[0].length-1];
   }
-  
-  @Deprecated
-  public int getTotalCount(){
-    return data[0][data[0].length-1];
-  }
-  
+
   /**
    * 
    * @return number of rows of the matrix
