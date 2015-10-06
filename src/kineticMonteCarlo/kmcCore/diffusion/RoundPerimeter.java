@@ -136,7 +136,7 @@ public class RoundPerimeter {
     int angle = 0;
 
     for (; angle < 179; angle++) {
-      actualCount += perimeterStatistics.getAtomsCount(currentPerimeterRadius, angle);
+      actualCount += perimeterStatistics.getReentranceCount(currentPerimeterRadius, angle);
       if (linearSearch <= actualCount) {
         break;
       }
