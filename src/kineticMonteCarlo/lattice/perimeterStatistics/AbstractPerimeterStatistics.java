@@ -4,9 +4,6 @@
  */
 package kineticMonteCarlo.lattice.perimeterStatistics;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  *
  * @author Nestor
@@ -14,9 +11,7 @@ import java.util.Map;
 public abstract class AbstractPerimeterStatistics {
 
   protected int[] totalCount;
-  private int totalCountFirst;
-  protected Map<Integer, int[]> hopsCountMap;
-  protected Map<Integer, int[]> atomsCountMap;
+  private final int totalCountFirst;
   private int[][] hopsCount;
   private int[][] atomsCount;
   private final int minRadius;
@@ -31,11 +26,7 @@ public abstract class AbstractPerimeterStatistics {
           AbstractStatistics statisticsHops){
  
     this.totalCount = new int[statisticAtom.getRows()];
-            
-    this.atomsCountMap = new HashMap();
-    this.hopsCountMap = new HashMap();
     minRadius = 20;
-    int radius = 20;
     
     atomsCount = new int[statisticAtom.getRows()][statisticAtom.getColumns()];
     hopsCount = new int[statisticsHops.getRows()][statisticsHops.getColumns()];
@@ -43,17 +34,6 @@ public abstract class AbstractPerimeterStatistics {
     totalCountFirst = statisticAtom.getTotalCount();
     for (int i = 0; i < statisticAtom.getRows(); i++) {
       this.totalCount[i] = statisticAtom.getTotalCount(i);
-      int currentRadiusAtomsCountMatrix[] = new int[181];
-      int currentRadiusHopsCountMatrix[] = new int[181];
-
-      this.atomsCountMap.put(radius, currentRadiusAtomsCountMatrix);
-      this.hopsCountMap.put(radius, currentRadiusHopsCountMatrix);
-
-      for (int j = 0; j < 180; j++) {
-        currentRadiusAtomsCountMatrix[j] = statisticAtom.getData(i, j);
-        currentRadiusHopsCountMatrix[j] = statisticsHops.getData(i, j);
-      }
-      radius += 5;
     }
     this.atomsCount = statisticAtom.getWholeData();
     this.hopsCount = statisticsHops.getWholeData();
@@ -70,12 +50,10 @@ public abstract class AbstractPerimeterStatistics {
 
   public int getAtomsCount(int radius, int offsetDegree) {
     return atomsCount[radius-10][offsetDegree];
-    //return atomsCountMap.get(radius)[offsetDegree];
   }
 
   public int getHopsCount(int radius, int offsetDegree) {
     return hopsCount[radius-10][offsetDegree];
-    //return hopsCountMap.get(radius)[offsetDegree];
   }
 
   /**
