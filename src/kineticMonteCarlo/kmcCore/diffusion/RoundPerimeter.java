@@ -43,6 +43,10 @@ public class RoundPerimeter {
     return this.currentRadius;
   }
 
+  public void setMinRadius() {
+    this.currentRadius = perimeterStatistics.getMinRadiusInSize();
+  }
+  
   public Abstract2DDiffusionAtom[] getCurrentPerimeter(){
     return this.currentPerimeter;
   }
