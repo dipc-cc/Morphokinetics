@@ -9,9 +9,9 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  *
  * @author Nestor, J. Alberdi-Rodriguez
  */
-public class GeneralPerimeterStatistics extends AbstractPerimeterStatistics {
+public class PerimeterStatistics extends AbstractPerimeterStatistics {
 
-  public GeneralPerimeterStatistics(AbstractStatistics atom, 
+  public PerimeterStatistics(AbstractStatistics atom, 
           AbstractStatistics hops) {
     super(atom, hops);
   }

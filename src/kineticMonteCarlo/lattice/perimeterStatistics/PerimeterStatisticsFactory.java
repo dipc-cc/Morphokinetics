@@ -16,25 +16,25 @@ public class PerimeterStatisticsFactory {
 
     switch (statisticsName) {
       case "graphene": {
-        perimeterStatistics = new GeneralPerimeterStatistics(new GrapheneRawStatisticDataAtomCount1Million(),
+        perimeterStatistics = new PerimeterStatistics(new GrapheneRawStatisticDataAtomCount1Million(),
                 new GrapheneRawStatisticDataHopsCount1Million());
         break;
       }      
       case "grapheneNew": {
         ReentrancesPerAngleGraphene10million atoms = new ReentrancesPerAngleGraphene10million();
         HopsPerAngleGraphene10million hops =  new HopsPerAngleGraphene10million();
-        perimeterStatistics = new GeneralPerimeterStatistics(atoms, hops);
+        perimeterStatistics = new PerimeterStatistics(atoms, hops);
         break;
       }
       case "Ag": {
-        perimeterStatistics = new GeneralPerimeterStatistics(new AgAgRawStatisticDataAtomCount1Million(),
+        perimeterStatistics = new PerimeterStatistics(new AgAgRawStatisticDataAtomCount1Million(),
                 new AgAgRawStatisticDataHopsCount1Million());
         break;
       }
       case "AgNew": {
         ReentrancesPerAngleAg10million atoms = new ReentrancesPerAngleAg10million();
         HopsPerAngleAg10million hops =  new HopsPerAngleAg10million();
-        perimeterStatistics = new GeneralPerimeterStatistics(atoms, hops);
+        perimeterStatistics = new PerimeterStatistics(atoms, hops);
         break;
       }
       default: {
