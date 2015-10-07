@@ -18,7 +18,6 @@ import static java.lang.String.format;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.StringTokenizer;
-import kineticMonteCarlo.lattice.perimeterStatistics.ReentrancesPerAngleAg10million;
 import main.Morphokinetics;
 
 /**
