@@ -85,6 +85,9 @@ public abstract class AbstractSimulation {
       psd = new PsdSignature2D(sizes[0], sizes[1]);
     }
 
+    System.out.println("\tSim.\tCPU t\tSimulated time\t\tCovering");
+    System.out.println("\tnumber\t(ms)\t(units) \t\t(%)");
+    System.out.println("\t__________________________________________________");
     // Main loop
     for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
       long iterStartTime = System.currentTimeMillis();
@@ -101,20 +104,18 @@ public abstract class AbstractSimulation {
           restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
         }
       }
-      System.out.println("Simulation number " + simulations + " executed in "
-              + (System.currentTimeMillis() - iterStartTime) + " ms");
-      System.out.println("Simulation of " + kmc.getTime() + " units");
+      System.out.print("\t"+simulations);
+      System.out.print("\t"+(System.currentTimeMillis() - iterStartTime));
+      System.out.print("\t"+kmc.getTime());
+      System.out.println("\t"+kmc.getCovering());
       totalTime += kmc.getTime();
       covering += kmc.getCovering();
-      System.out.println("covering: "+kmc.getCovering());
     }
-    System.out.println("All " + parser.getNumberOfSimulations() + " simulations executed in "
-            + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
-    System.out.println("Executed " + parser.getNumberOfSimulations() + " simulations in "
-            + (System.currentTimeMillis() - startTime) + ". Average iteration time = "
-            + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
-    System.out.println("Average simulation time: " + totalTime / parser.getNumberOfSimulations() + " units");
-    System.out.println("Average covering of the simulation is "+covering / parser.getNumberOfSimulations());
+    System.out.println("\n\t__________________________________________________");
+    System.out.print("\tAvg");
+    System.out.print("\t"+((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()));
+    System.out.print("\t"+ totalTime / parser.getNumberOfSimulations());
+    System.out.println("\t"+covering/ parser.getNumberOfSimulations());
     
     if (parser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
