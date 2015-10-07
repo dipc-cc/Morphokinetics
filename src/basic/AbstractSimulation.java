@@ -74,6 +74,7 @@ public abstract class AbstractSimulation {
     float[][] sampledSurface = null;
     long startTime = System.currentTimeMillis();
     double totalTime = 0.0;
+    float covering = 0.0f;
     Restart restart = new Restart("results/tmp"+System.currentTimeMillis());
     int sizes[] = new int[2];
     //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
@@ -103,7 +104,9 @@ public abstract class AbstractSimulation {
       System.out.println("Simulation number " + simulations + " executed in "
               + (System.currentTimeMillis() - iterStartTime) + " ms");
       System.out.println("Simulation of " + kmc.getTime() + " units");
-      totalTime+=kmc.getTime();
+      totalTime += kmc.getTime();
+      covering += kmc.getCovering();
+      System.out.println("covering: "+kmc.getCovering());
     }
     System.out.println("All " + parser.getNumberOfSimulations() + " simulations executed in "
             + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
@@ -111,7 +114,8 @@ public abstract class AbstractSimulation {
             + (System.currentTimeMillis() - startTime) + ". Average iteration time = "
             + ((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations()) + " ms");
     System.out.println("Average simulation time: " + totalTime / parser.getNumberOfSimulations() + " units");
-
+    System.out.println("Average covering of the simulation is "+covering / parser.getNumberOfSimulations());
+    
     if (parser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
       psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
