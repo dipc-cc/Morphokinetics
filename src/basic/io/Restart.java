@@ -72,8 +72,7 @@ public class Restart {
     final URL url = referenceClass.getProtectionDomain().getCodeSource().getLocation();
     File jarPath;
     try {
-      jarPath = new File(url.toURI()).getParentFile();
-      System.out.println(jarPath); // this is the path you want 
+      jarPath = new File(url.toURI()).getParentFile(); // this is the path you want 
     } catch (final URISyntaxException e) {
       System.err.println("Could not find the base JAR directory. Probably something will go wrong");
       jarPath = new File("./");
