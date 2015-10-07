@@ -219,17 +219,24 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
   
   /**
-   * Adds an occupied atom to the counter
+   * Adds an occupied location to the counter
    */
   public void addOccupied() {
     occupied++;
   }
   
   /**
-   * Subtracts an occupied atom from the counter
+   * Subtracts an occupied location from the counter
    */
   public void subtractOccupied() {
     occupied--;
+  }
+  
+  /**
+   * Resets to zero the number of occupied locations
+   */
+  public void resetOccupied() {
+    occupied = 0;
   }
   
   /**
