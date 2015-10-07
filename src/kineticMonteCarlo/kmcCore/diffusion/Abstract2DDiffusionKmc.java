@@ -29,7 +29,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   protected short perimeterType;
   protected DevitaAccelerator accelerator;
   
-  private float maxCovering; // This attribute defines which is the maximum covering for a multi-flake simulation
+  private final float maxCovering; // This attribute defines which is the maximum covering for a multi-flake simulation
   
   public Abstract2DDiffusionKmc(ListConfiguration config, 
           boolean justCentralFlake, 
