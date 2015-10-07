@@ -118,6 +118,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   @Override
   public void simulate() {
+    lattice.resetOccupied();
     if (justCentralFlake){
       super.simulate();
     } else {
@@ -131,7 +132,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   @Override
   public void simulate(int iterations) {
-
+    lattice.resetOccupied();
     int radius = perimeter.getCurrentRadius();
     int numEvents=  0;// contador de eventos desde el ultimo cambio de radio
 
@@ -284,6 +285,16 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
     return surface;
   }
-
+  
+  /**
+   * Returns the covering of the simulation. 
+   * Thus, the number of occupied locations divided by the total number of locations
+   * @return A value between 0 and 1
+   */
+  @Override
+  public float getCovering() {
+    return lattice.getCovering();
+  }
+  
   protected abstract void depositSeed();
 }
