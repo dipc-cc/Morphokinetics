@@ -77,6 +77,8 @@
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonal1million.txt" todir="${build.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonalHoneycomb1million.txt" todir="${build.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb1million.txt" todir="${build.dir}/perimeterData"/>
+      <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonalHoneycomb10million.txt" todir="${build.dir}/perimeterData"/>
+      <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb10million.txt" todir="${build.dir}/perimeterData"/>
     </target>
     <target name="-post-jar">
       <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonal10million.txt" todir="${dist.dir}/perimeterData"/>
@@ -85,5 +87,7 @@
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonal1million.txt" todir="${dist.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonalHoneycomb1million.txt" todir="${dist.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb1million.txt" todir="${dist.dir}/perimeterData"/>
+      <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonalHoneycomb10million.txt" todir="${dist.dir}/perimeterData"/>
+      <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb10million.txt" todir="${dist.dir}/perimeterData"/>
           </target> 
 </project>
