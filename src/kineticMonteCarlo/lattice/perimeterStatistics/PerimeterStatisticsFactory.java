@@ -16,25 +16,27 @@ public class PerimeterStatisticsFactory {
 
     switch (statisticsName) {
       case "graphene": {
-        perimeterStatistics = new PerimeterStatistics(new ReentrancesPerAngleGraphene1million(),
-                new HopsPerAngleGraphene1million());
+        perimeterStatistics = new PerimeterStatistics(
+                new Statistics("reentrancesPerAngleHexagonalHoneycomb1million.txt"),
+                new Statistics("hopsPerAngleHexagonalHoneycomb1million.txt"));
         break;
       }      
       case "grapheneNew": {
-        ReentrancesPerAngleGraphene10million atoms = new ReentrancesPerAngleGraphene10million();
-        HopsPerAngleGraphene10million hops =  new HopsPerAngleGraphene10million();
-        perimeterStatistics = new PerimeterStatistics(atoms, hops);
+        perimeterStatistics = new PerimeterStatistics(
+                new Statistics("reentrancesPerAngleHexagonalHoneycomb10million.txt"),
+                new Statistics("hopsPerAngleHexagonalHoneycomb10million.txt"));
         break;
       }
       case "Ag": {
-        perimeterStatistics = new PerimeterStatistics(new ReentrancesPerAngleAg1million(),
-                new HopsPerAngle1million());
+        perimeterStatistics = new PerimeterStatistics(
+                new Statistics("reentrancesPerAngleHexagonal1million.txt"),
+                new Statistics("hopsPerAngleHexagonal1million.txt"));
         break;
       }
       case "AgNew": {
-        ReentrancesPerAngleAg10million atoms = new ReentrancesPerAngleAg10million();
-        HopsPerAngleAg10million hops =  new HopsPerAngleAg10million();
-        perimeterStatistics = new PerimeterStatistics(atoms, hops);
+        perimeterStatistics = new PerimeterStatistics(
+                new Statistics("reentrancesPerAngleHexagonal10million.txt"),
+                new Statistics("hopsPerAngleHexagonal10million.txt"));
         break;
       }
       default: {

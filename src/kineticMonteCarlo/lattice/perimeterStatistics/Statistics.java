@@ -14,13 +14,14 @@ import java.util.logging.Logger;
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class AbstractStatistics {
+public class Statistics {
   
   private int[][] data;
   private Restart restart;
   
-  public AbstractStatistics() {
+  public Statistics(String statisticsFile) {
     restart = new Restart(Restart.getJarBaseDir() + "/perimeterData");
+    readAndSetStatistics(statisticsFile);
   }
   
   /**
@@ -69,7 +70,7 @@ public abstract class AbstractStatistics {
     return data;
   }
      
-  protected void readAndSetStatistics(String fileName) {
+  private void readAndSetStatistics(String fileName) {
     
     float[][] tmp;
     int[][] result;
@@ -83,7 +84,7 @@ public abstract class AbstractStatistics {
       }
       setData(result);
     } catch (FileNotFoundException ex) {
-      Logger.getLogger(AbstractStatistics.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(Statistics.class.getName()).log(Level.SEVERE, null, ex);
       System.err.println("Could not be read the statistic of the perimeter re-entrance");
       System.err.println("Exiting...");
       System.exit(-99);

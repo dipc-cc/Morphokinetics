@@ -21,8 +21,8 @@ public abstract class AbstractPerimeterStatistics {
    * @param statisticAtom
    * @param statisticsHops 
    */
-  public AbstractPerimeterStatistics(AbstractStatistics statisticAtom, 
-          AbstractStatistics statisticsHops){
+  public AbstractPerimeterStatistics(Statistics statisticAtom, 
+          Statistics statisticsHops){
  
     this.totalCount = new int[statisticAtom.getRows()];
     minRadius = 20;
