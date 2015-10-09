@@ -14,6 +14,7 @@ public abstract class AbstractPerimeterStatistics {
   private int[][] hopsCount;
   private int[][] reentranceCount;
   private final int minRadius;
+  private final int maxRadius;
   
   /**
    * This constructor limits the size of the perimeter. Arbitrarily starts at radius 20 
@@ -25,7 +26,8 @@ public abstract class AbstractPerimeterStatistics {
           Statistics statisticsHops){
  
     this.totalCount = new int[statisticAtom.getRows()];
-    minRadius = 20;
+    minRadius = 10;
+    maxRadius = statisticAtom.getRows() - 10;
     
     reentranceCount = new int[statisticAtom.getRows()][statisticAtom.getColumns()];
     hopsCount = new int[statisticsHops.getRows()][statisticsHops.getColumns()];
@@ -57,7 +59,7 @@ public abstract class AbstractPerimeterStatistics {
    */
   public int getNextRadiusInSize(int radiusSize) {
     radiusSize += 5; //increase in 5
-    if (radiusSize >= 125) 
+    if (radiusSize >= maxRadius) 
       return -1;
     return radiusSize;
   }
