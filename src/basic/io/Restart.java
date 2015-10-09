@@ -90,10 +90,8 @@ public class Restart {
    * @param simulationNumber
    */
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = folder + "psd" + simulationNumber + ".mko";
-
+    String fileName = format("%spsd%03d.mko",folder,simulationNumber);
     writePsdText2D(dimensions, sizes, data, simulationNumber);
-
     writeLowBinary(dimensions, sizes, data, fileName);
   }
 
@@ -112,7 +110,7 @@ public class Restart {
 
   /**
    * Function to print to text file each PSD result. Mainly thought to plot it with gnuplot
-   * Instructions to plot: > set dgrid3d 30,30 > splot "psd0.txt" u 1:2:3 w l
+   * Instructions to plot: > set dgrid3d 30,30 > splot "psd000.txt" u 1:2:3 w l
    *
    * @param dimensions
    * @param sizes
@@ -120,7 +118,7 @@ public class Restart {
    * @param simulationNumber
    */
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = folder + "psd" + simulationNumber + ".txt";
+    String fileName = format("%spsd%03d.txt",folder,simulationNumber);
     writeLowText2D(data, fileName, true);
   }
 
@@ -142,14 +140,14 @@ public class Restart {
    * @param simulationNumber
    */
   public void writeSurfaceBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = folder + "surface" + simulationNumber + ".mko";
+    String fileName = format("%ssurface%03d.mko",folder,simulationNumber);
     writeLowBinary(dimensions, sizes, data, fileName);
 
     writeSurfaceText2D(dimensions, sizes, data, simulationNumber);
   }
 
   public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = folder + "surface" + simulationNumber + ".txt";
+    String fileName = format("%ssurface%03d.txt",folder,simulationNumber);
     writeLowText2D(data, fileName, false);
   }
 
