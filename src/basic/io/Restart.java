@@ -49,7 +49,7 @@ public class Restart {
   private void createFolder(String restartFolder){
     try {
       File file = new File(restartFolder);
-      file.mkdir();
+      file.mkdirs();
     } catch (Exception e) {
       System.err.println("Error creating folder: " + restartFolder);
     }
@@ -176,8 +176,6 @@ public class Restart {
    * @param fileName
    */
   private void writeLowBinary(int dimensions, int[] sizes, float[][] data, String fileName) {
-    System.out.println("Writting matrix of size " + sizes[0] + "x" + sizes[1] + " to disk. "
-            + "File: " + fileName);
 
     FileOutputStream fos;
     DataOutputStream dos;
