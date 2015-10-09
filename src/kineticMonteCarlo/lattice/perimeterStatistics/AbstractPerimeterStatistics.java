@@ -17,7 +17,7 @@ public abstract class AbstractPerimeterStatistics {
   
   /**
    * This constructor limits the size of the perimeter. Arbitrarily starts at radius 20 
-   * and finishes at radius 125, increasing 5 by 5.
+   * and finishes at radius of the data, we choose to increase 5 by 5.
    * @param statisticAtom
    * @param statisticsHops 
    */
@@ -51,7 +51,7 @@ public abstract class AbstractPerimeterStatistics {
 
   /**
    * We increase the radius in 5 positions, 
-   * because statistics are done with this criteria
+   * because statistics previously were done with this criteria
    * @param radiusSize current radius size
    * @return next radius size (current+5)
    */
