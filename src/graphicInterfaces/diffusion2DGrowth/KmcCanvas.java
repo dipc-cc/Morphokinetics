@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import static java.lang.String.format;
 import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 
@@ -116,8 +117,7 @@ public class KmcCanvas extends Canvas {
     paint(graphics);
     graphics.dispose();
     try {
-      String imageName = "results/surface" + i + ".png";
-      System.out.println("Exporting image: " + imageName);
+      String imageName = format("results/surface%03d.png",i);
       FileOutputStream out = new FileOutputStream(imageName);
       ImageIO.write(image, "png", out);
       out.close();    
