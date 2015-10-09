@@ -134,4 +134,8 @@ public class PsdSignature2D {
     myRestart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(psd, 1), "psdAvgFil");
     myRestart.writePsdBinary(dimensions, sizes, psd, "psdAvgRaw");
   }
+  
+  public void setRestart(Restart restart) {
+    myRestart = restart;
+  }
 }
