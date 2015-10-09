@@ -65,8 +65,8 @@ public abstract class AbstractPerimeterStatistics {
   }
 
   /**
-   * Arbitrarily the minimum radius is 20
-   * @return 20
+   * Arbitrarily the minimum radius is 10
+   * @return 10
    */
   public int getMinRadiusInSize() {
     return minRadius;
