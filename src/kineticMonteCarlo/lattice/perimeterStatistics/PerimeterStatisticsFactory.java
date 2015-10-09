@@ -15,25 +15,25 @@ public class PerimeterStatisticsFactory {
   public PerimeterStatisticsFactory(String statisticsName) {
 
     switch (statisticsName) {
-      case "graphene": {
+      case "grapheneOld": {
         perimeterStatistics = new PerimeterStatistics(
                 new Statistics("reentrancesPerAngleHexagonalHoneycomb1million.txt"),
                 new Statistics("hopsPerAngleHexagonalHoneycomb1million.txt"));
         break;
       }      
-      case "grapheneNew": {
+      case "graphene": {
         perimeterStatistics = new PerimeterStatistics(
                 new Statistics("reentrancesPerAngleHexagonalHoneycomb10million.txt"),
                 new Statistics("hopsPerAngleHexagonalHoneycomb10million.txt"));
         break;
       }
-      case "Ag": {
+      case "AgOld": {
         perimeterStatistics = new PerimeterStatistics(
                 new Statistics("reentrancesPerAngleHexagonal1million.txt"),
                 new Statistics("hopsPerAngleHexagonal1million.txt"));
         break;
       }
-      case "AgNew": {
+      case "Ag": {
         perimeterStatistics = new PerimeterStatistics(
                 new Statistics("reentrancesPerAngleHexagonal10million.txt"),
                 new Statistics("hopsPerAngleHexagonal10million.txt"));
