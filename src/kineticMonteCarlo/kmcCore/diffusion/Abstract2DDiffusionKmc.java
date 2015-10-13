@@ -118,7 +118,6 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   @Override
   public void simulate() {
-    lattice.resetOccupied();
     if (justCentralFlake){
       super.simulate();
     } else {
@@ -132,7 +131,6 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   @Override
   public void simulate(int iterations) {
-    lattice.resetOccupied();
     int radius = perimeter.getCurrentRadius();
     int numEvents=  0;// contador de eventos desde el ultimo cambio de radio
 
