@@ -30,7 +30,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
             parser.getHexaSizeI(), 
             parser.getHexaSizeJ(), 
             parser.justCentralFlake(), 
-            (float) parser.getCovering()/100,
+            (float) parser.getCoverage()/100,
             parser.useMaxPerimeter(),
             parser.getPerimeterType());
   }
