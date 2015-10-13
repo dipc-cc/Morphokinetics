@@ -293,7 +293,14 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
    */
   @Override
   public float getCovering() {
-    return lattice.getCovering();
+    if (justCentralFlake) {
+      float occupied = (float) lattice.getOccupied();
+      int radius = perimeter.getCurrentRadius()-1;
+      double area = Math.PI*Math.pow(radius,2);
+      return occupied / (float) area;
+    } else {
+      return lattice.getCovering();
+    }
   }
   
   protected abstract void depositSeed();

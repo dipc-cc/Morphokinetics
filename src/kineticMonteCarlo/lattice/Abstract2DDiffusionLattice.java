@@ -246,4 +246,12 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   public float getCovering() {
     return (float) occupied / (float) hexaArea;
   }
+  
+  /**
+   * 
+   * @return  number of occupied positions
+   */
+  public int getOccupied() {
+    return occupied;
+  }
 }
