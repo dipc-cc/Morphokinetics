@@ -29,20 +29,20 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   protected short perimeterType;
   protected DevitaAccelerator accelerator;
   
-  private final float maxCovering; // This attribute defines which is the maximum covering for a multi-flake simulation
+  private final float maxCoverage; // This attribute defines which is the maximum coverage for a multi-flake simulation
   
   public Abstract2DDiffusionKmc(ListConfiguration config, 
           boolean justCentralFlake, 
-          float covering,
+          float coverage,
           boolean useMaxPerimeter,
           short perimeterType) {
     super(config);
     this.justCentralFlake = justCentralFlake;
-    if ((!justCentralFlake) && ((0f > covering) || (1f < covering))) {
-      System.err.println("Chosen covering is not permitted. Selecting the default one: %30");
-      this.maxCovering = 0.3f;
+    if ((!justCentralFlake) && ((0f > coverage) || (1f < coverage))) {
+      System.err.println("Chosen coverage is not permitted. Selecting the default one: %30");
+      this.maxCoverage = 0.3f;
     } else {
-      this.maxCovering = covering;
+      this.maxCoverage = coverage;
     }
     this.useMaxPerimeter = useMaxPerimeter;
     this.modifiedBuffer = new ModifiedBuffer();
@@ -122,7 +122,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     if (justCentralFlake){
       super.simulate();
     } else {
-      while (lattice.getCovering() < maxCovering) {
+      while (lattice.getCoverage() < maxCoverage) {
       if (performSimulationStep()) {
         break;
       }
@@ -287,19 +287,19 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   }
   
   /**
-   * Returns the covering of the simulation. 
+   * Returns the coverage of the simulation. 
    * Thus, the number of occupied locations divided by the total number of locations
    * @return A value between 0 and 1
    */
   @Override
-  public float getCovering() {
+  public float getCoverage() {
     if (justCentralFlake) {
       float occupied = (float) lattice.getOccupied();
       int radius = perimeter.getCurrentRadius()-1;
       double area = Math.PI*Math.pow(radius,2);
       return occupied / (float) area;
     } else {
-      return lattice.getCovering();
+      return lattice.getCoverage();
     }
   }
   

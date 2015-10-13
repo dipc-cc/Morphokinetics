@@ -74,7 +74,7 @@ public abstract class AbstractSimulation {
     float[][] sampledSurface = null;
     long startTime = System.currentTimeMillis();
     double totalTime = 0.0;
-    float covering = 0.0f;
+    float coverage = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
     String folderName = "results/run"+System.currentTimeMillis();
     Restart restart = new Restart(folderName);
@@ -98,7 +98,7 @@ public abstract class AbstractSimulation {
       kmc.simulate();
       System.out.format("    %03d", simulations);
       System.out.format("\t%.3f",(double)kmc.getTime());
-      System.out.format("\t%.3f",kmc.getCovering());
+      System.out.format("\t%.3f",kmc.getCoverage());
       if (parser.printToImage()) {
         frame.printToImage(simulations);
         System.out.format("\tsurface%03d.png", simulations);
@@ -119,15 +119,15 @@ public abstract class AbstractSimulation {
       System.out.print(" "+(System.currentTimeMillis() - iterStartTime));
       System.out.println("");
       totalTime += kmc.getTime();
-      covering += kmc.getCovering();
+      coverage += kmc.getCoverage();
     }
     System.out.println("\n\t__________________________________________________");
     System.out.println("\tAverage");
-    System.out.println("\tSimulation time\t\tCovering\tCPU time");
+    System.out.println("\tSimulation time\t\tCoverage\tCPU time");
     System.out.println("\t(units)\t\t\t (%)\t\t (ms)");
     System.out.println("\t__________________________________________________");
     System.out.print("\t"+ totalTime / parser.getNumberOfSimulations());
-    System.out.print("\t"+covering/ parser.getNumberOfSimulations());
+    System.out.print("\t"+coverage/ parser.getNumberOfSimulations());
     System.out.println("\t"+((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations())+"\n");
     
     if (parser.doPsd()) {

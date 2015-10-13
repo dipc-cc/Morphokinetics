@@ -81,10 +81,10 @@ public abstract class AbstractKmc implements IKmc {
     throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
   }
   /**
-   * Covering is not defined in the etching. So, by default is not defined and returns -1
+   * Coverage is not defined in the etching. So, by default is not defined and returns -1
    * @return 
    */
-  public float getCovering() {
+  public float getCoverage() {
     return -1;
   }
 }

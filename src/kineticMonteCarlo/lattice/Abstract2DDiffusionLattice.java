@@ -241,9 +241,9 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   
   /**
    * 
-   * @return the covering of the lattice 
+   * @return the coverage of the lattice 
    */
-  public float getCovering() {
+  public float getCoverage() {
     return (float) occupied / (float) hexaArea;
   }
   
