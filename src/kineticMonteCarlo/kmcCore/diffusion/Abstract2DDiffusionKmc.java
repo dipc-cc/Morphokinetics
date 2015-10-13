@@ -293,8 +293,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   public float getCoverage() {
     if (justCentralFlake) {
       float occupied = (float) lattice.getOccupied();
-      int radius = perimeter.getCurrentRadius()-1;
-      double area = Math.PI*Math.pow(radius,2);
+      float area = (float) calculateAreAsAsInKmcCanvas();
       return occupied / (float) area;
     } else {
       return lattice.getCoverage();
@@ -302,4 +301,22 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   }
   
   protected abstract void depositSeed();
+  
+  /**
+   * Calculates total area or, i.e. the number of total places that simulation has. 
+   * It is calculated as is done in KmcCanvas class 
+   * @return simulated area
+   */
+  private int calculateAreAsAsInKmcCanvas() {
+    int totalArea = 0;
+    for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+      for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+        if (lattice.getAtom(i, j).isOccupied() || !lattice.getAtom(i, j).isOutside()) {
+          totalArea++;
+        }
+      }
+    }
+    return totalArea;
+  }
+
 }
