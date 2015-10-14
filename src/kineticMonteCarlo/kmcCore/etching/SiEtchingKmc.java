@@ -56,6 +56,8 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
   @Override
   protected boolean performSimulationStep() {
     SiAtom atom = (SiAtom) list.nextEvent();
+    // I am not sure that the next line is correct (Joseba). However,
+    if (atom == null) return false; // next even can be null and we should be ready to handle this
     atom.remove();
     atom.setOnList(null);
     for (int k = 0; k < 4; k++) {
