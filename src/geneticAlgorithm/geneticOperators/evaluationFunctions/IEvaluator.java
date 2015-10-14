@@ -14,7 +14,13 @@ import java.util.List;
  */
 public interface IEvaluator {
 
-//evaluate all the elements of the population with the list of given evaluators
-//after, it orders them from min to max error.
+  /**
+   * Evaluate all the elements of the population with the list of given evaluators. After, it orders
+   * them from min to max error.
+   *
+   * @param p
+   * @param functionWithSimulation
+   * @param functions
+   */
   public void evaluateAndOrder(Population p, AbstractPsdEvaluation functionWithSimulation, List<IEvaluation> functions);
 }
