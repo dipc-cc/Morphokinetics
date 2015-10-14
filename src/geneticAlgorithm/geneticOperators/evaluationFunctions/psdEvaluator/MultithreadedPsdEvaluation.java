@@ -54,7 +54,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
   @Override
   public void handleSimulationIntervalFinish(int workerId, int workId) {
 
-    float[][] surface = workers[workerId].getSampledSurface(psdSizeY, psdSizeX);
+    float[][] surface = workers[workerId].getSampledSurface(getPsdSizeY(), getPsdSizeX());
     times[workId] += workers[workerId].getKmc().getTime();
     addToPsd(workId, surface);
 
@@ -113,7 +113,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
   private double evaluateIndividual(int individualPos) {
 
     double error = 0;
-    float[][] difference = new float[psdSizeY][psdSizeX];
+    float[][] difference = new float[getPsdSizeY()][getPsdSizeX()];
 
     psds[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psds[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
@@ -122,8 +122,8 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
     difference = MathUtils.avgFilter(difference, 5);
 
-    for (int a = 0; a < psdSizeY; a++) {
-      for (int b = 0; b < psdSizeX; b++) {
+    for (int a = 0; a < getPsdSizeY(); a++) {
+      for (int b = 0; b < getPsdSizeX(); b++) {
         error += Math.abs(difference[a][b]);
       }
     }
@@ -135,7 +135,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
 
     times = new double[p.size()];
     for (int i = 0; i < p.size(); i++) {
-      psds[i] = new PsdSignature2D(psdSizeY, psdSizeX);
+      psds[i] = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     }
 
     currentPopulation = p;

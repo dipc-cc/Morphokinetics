@@ -22,11 +22,11 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
 
     super(repeats, measureInterval);
 
-    psdSizeX = config.sizeX_UC * 2;
-    psdSizeY = config.sizeY_UC * 2;
+    setPsdSizeX(config.sizeX_UC * 2);
+    setPsdSizeY(config.sizeY_UC * 2);
     kmc = new SiEtchingKmc(config);
-    psd = new PsdSignature2D(psdSizeY, psdSizeX);
-    difference = new float[psdSizeY][psdSizeX];
+    psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
+    difference = new float[getPsdSizeY()][getPsdSizeX()];
   }
 
   @Override
@@ -51,7 +51,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
       kmc.simulate(measureInterval / 2);
       while (true) {
         kmc.simulate(measureInterval);
-        sampledSurface = kmc.getSampledSurface(psdSizeY, psdSizeX);
+        sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
         if (kmc.getIterations() < measureInterval) {
           break;

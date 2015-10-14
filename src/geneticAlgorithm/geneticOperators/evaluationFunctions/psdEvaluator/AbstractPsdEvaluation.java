@@ -16,8 +16,8 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
 
-  protected int psdSizeX;
-  protected int psdSizeY;
+  private int psdSizeX;
+  private int psdSizeY;
   protected PsdSignature2D psd;
   protected float[][] sampledSurface;
   protected float[][] difference;
@@ -99,5 +99,21 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
       }
     }
     return error * wheight;
+  }
+    
+  public void setPsdSizeX(int psdSizeX) {
+    this.psdSizeX = psdSizeX;
+  }
+
+  public void setPsdSizeY(int psdSizeY) {
+    this.psdSizeY = psdSizeY;
+  }
+
+  public int getPsdSizeX() {
+    return psdSizeX;
+  }
+
+  public int getPsdSizeY() {
+    return psdSizeY;
   }
 }

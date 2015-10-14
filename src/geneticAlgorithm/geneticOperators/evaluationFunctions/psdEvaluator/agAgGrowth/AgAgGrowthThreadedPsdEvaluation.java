@@ -32,8 +32,8 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
       workers[i].start();
     }
 
-    psdSizeX = 64;
-    psdSizeY = 64;
+    setPsdSizeX(64);
+    setPsdSizeY(64);
   }
 
   private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {

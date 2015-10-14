@@ -29,8 +29,8 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
       workers[i] = new KmcWorker(new SiEtchingKmc(config), i);
       workers[i].start();
     }
-    psdSizeX = config.sizeX_UC * 2;
-    psdSizeY = config.sizeY_UC * 2;
+    setPsdSizeX(config.sizeX_UC * 2);
+    setPsdSizeY(config.sizeY_UC * 2);
   }
 
   @Override
