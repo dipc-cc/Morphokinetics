@@ -28,7 +28,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
   public IGeneticAlgorithm initialize() {
     this.population = config.initialization.createRandomPopulation(config.populationSize);
     this.config.restriction.apply(this.population);
-    this.evaluator.evaluate_and_order(this.population, this.config.mainEvaluator, this.config.otherEvaluators);
+    this.evaluator.evaluateAndOrder(this.population, this.config.mainEvaluator, this.config.otherEvaluators);
 
     System.out.println("=============");
     for (int i = 0; i < this.population.size(); i++) {
@@ -55,13 +55,13 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
     int geneSize = population.getIndividual(0).getGeneSize();
     this.config.mutation.mutate(offspring, this.config.restriction.getNonFixedGenes(geneSize));
     this.config.restriction.apply(offspring);
-    this.evaluator.evaluate_and_order(offspring, this.config.mainEvaluator, this.config.otherEvaluators);
+    this.evaluator.evaluateAndOrder(offspring, this.config.mainEvaluator, this.config.otherEvaluators);
 
     //sometimes it is good to reevaluate the whole population
     if (currentIteration > 0 && currentIteration % 25 == 0) {
       this.scaleIndividualRates(this.population);
       this.config.restriction.apply(this.population);
-      this.evaluator.evaluate_and_order(this.population, this.config.mainEvaluator, this.config.otherEvaluators);;
+      this.evaluator.evaluateAndOrder(this.population, this.config.mainEvaluator, this.config.otherEvaluators);;
     }
 
     this.config.reinsertion.Reinsert(population, offspring, this.config.populationReplacements);

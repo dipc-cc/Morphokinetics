@@ -43,7 +43,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
 
     config.restriction.apply(this.population);
 
-    //evaluator.evaluate_and_order(this.population, config.mainEvaluator, config.otherEvaluators);
+    //evaluator.evaluateAndOrder(this.population, config.mainEvaluator, config.otherEvaluators);
     double[] fitness = config.mainEvaluator.evaluate(population);
     //double[] fitness = myEvaluate(population);
     for (int i = 0; i < fitness.length; i++) {
@@ -91,7 +91,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
      ind.setGene(j, Math.max(-500, Math.min(500, val)));
      }
      }*/
-    //this.evaluator.evaluate_and_order(offspring, this.config.mainEvaluator, this.config.otherEvaluators);
+    //this.evaluator.evaluateAndOrder(offspring, this.config.mainEvaluator, this.config.otherEvaluators);
     double[] fitness = config.mainEvaluator.evaluate(offspring);
     //double[] fitness = myEvaluate(offspring);
     for (int i = 0; i < fitness.length; i++) {
@@ -110,7 +110,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
      ind.setGene(j, Math.max(-500, Math.min(500, val)));
      }
      }*/
-            //this.evaluator.evaluate_and_order(this.population, this.config.mainEvaluator, this.config.otherEvaluators);;
+            //this.evaluator.evaluateAndOrder(this.population, this.config.mainEvaluator, this.config.otherEvaluators);;
 
 		//fitness = config.mainEvaluator.evaluate(population);
 		//fitness = myEvaluate(population);
