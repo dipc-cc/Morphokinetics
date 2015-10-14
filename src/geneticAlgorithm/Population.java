@@ -24,10 +24,10 @@ public class Population {
     individuals = new Individual[size];
   }
 
-  public Population(Individual[] p) {
-    individuals = new Individual[p.length];
-    for (int i = 0; i < p.length; i++) {
-      individuals[i] = p[i];
+  public Population(Individual[] ind) {
+    individuals = new Individual[ind.length];
+    for (int i = 0; i < ind.length; i++) {
+      individuals[i] = ind[i];
     }
 
   }
@@ -48,46 +48,44 @@ public class Population {
    * Orders the population, from the least to the more error.
    */
   public void order() {
-
     quicksort(individuals, 0, individuals.length - 1);
   }
 
   /**
    * Quicksort-based ordering algorithm.
-   * @param a
+   * @param ind
    * @param left
    * @param right 
    */
-  private static void quicksort(Individual[] a, int left, int right) {
+  private static void quicksort(Individual[] ind, int left, int right) {
     int i = left;
     int j = right;
     Individual aux;
 
-    double pivote = a[(left + right) / 2].getTotalError();
+    double pivote = ind[(left + right) / 2].getTotalError();
 
     do {
-      while (a[i].getTotalError() < pivote) {
+      while (ind[i].getTotalError() < pivote) {
 
         i++;
       }
-      while (a[j].getTotalError() > pivote) {
+      while (ind[j].getTotalError() > pivote) {
         j--;
 
       }
       if (i <= j) {
-
-        aux = a[i];
-        a[i] = a[j];
-        a[j] = aux;
+        aux = ind[i];
+        ind[i] = ind[j];
+        ind[j] = aux;
         i++;
         j--;
       }
     } while (i <= j);
     if (left < j) {
-      quicksort(a, left, j);
+      quicksort(ind, left, j);
     }
     if (i < right) {
-      quicksort(a, i, right);
+      quicksort(ind, i, right);
     }
   }
 }
