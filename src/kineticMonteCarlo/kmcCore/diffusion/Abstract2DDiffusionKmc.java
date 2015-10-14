@@ -144,7 +144,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       iterationsForLastSimulation++;
       numEvents++;
 
-      if (radius == 20 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
+      if (radius == 10 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
         if (numEvents == 4000000) {
           break;
         }
