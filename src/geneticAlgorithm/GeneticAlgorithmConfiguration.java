@@ -28,13 +28,13 @@ public class GeneticAlgorithmConfiguration {
     public IReinsertion reinsertion;
     public RestrictionOperator restriction;
     public ISelection selection;
-    public int population_size;
-    public int offspring_size;
-    public int population_replacements;
-    public double expected_simulation_time;
+    public int populationSize;
+    public int offspringSize;
+    public int populationReplacements;
+    public double expectedSimulationTime;
 
-    public GeneticAlgorithmConfiguration setExperimentalPSD(float[][] PSD_experimental) {
-        mainEvaluator.setPsd(PSD_experimental);
+    public GeneticAlgorithmConfiguration setExperimentalPsd(float[][] experimentalPsd) {
+        mainEvaluator.setPsd(experimentalPsd);
         return this;
     }
 }
