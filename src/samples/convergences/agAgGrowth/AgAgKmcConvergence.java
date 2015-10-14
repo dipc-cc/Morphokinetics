@@ -30,7 +30,7 @@ public class AgAgKmcConvergence {
     double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
 
     GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
-            .create_Ag_Ag_convergence_configuration(diffusionRate, islandDensity, depositionRate);
+            .createAgAgConvergenceConfiguration(diffusionRate, islandDensity, depositionRate);
 
     GeneticAlgorithm ga = new GeneticAlgorithm(geneticConfiguration);
 

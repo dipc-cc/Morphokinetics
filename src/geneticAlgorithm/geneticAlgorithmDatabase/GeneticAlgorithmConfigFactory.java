@@ -33,7 +33,7 @@ import kineticMonteCarlo.lattice.AgAgLattice;
  */
 public class GeneticAlgorithmConfigFactory {
 
-  public GeneticAlgorithmConfiguration create_silicon_convergence_configuration() {
+  public GeneticAlgorithmConfiguration createSiConvergenceConfiguration() {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
@@ -46,13 +46,13 @@ public class GeneticAlgorithmConfigFactory {
     config.reinsertion = new ElitistReinsertion();
     config.restriction = new SiEtchingRestriction();
     config.selection = new RankingSelection();
-    config.mainEvaluator = get_silicon_etching_main_evaluators();
-    config.otherEvaluators = add_no_more_evaluators();
+    config.mainEvaluator = getSiMainEvaluators();
+    config.otherEvaluators = addNoMoreEvaluators();
 
     return config;
   }
 
-  public GeneticAlgorithmConfiguration create_Ag_Ag_convergence_configuration(double diffusionRate, double islandDensity, double depositionRate) {
+  public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
@@ -65,13 +65,13 @@ public class GeneticAlgorithmConfigFactory {
     config.reinsertion = new ElitistReinsertion();
     config.restriction = new AgAgRestriction(diffusionRate);
     config.selection = new RankingSelection();
-    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(depositionRate, islandDensity);
-    config.otherEvaluators = add_no_more_evaluators();
+    config.mainEvaluator = getAgAgMainEvaluator(depositionRate, islandDensity);
+    config.otherEvaluators = addNoMoreEvaluators();
 
     return config;
   }
 
-  public GeneticAlgorithmConfiguration create_Ag_Ag_dcma_es_convergence_configuration(double diffusionRate, double islandDensity, double depositionRate) {
+  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
@@ -85,22 +85,22 @@ public class GeneticAlgorithmConfigFactory {
     //config.reinsertion = new ElitistReinsertion();
     config.restriction = new AgAgRestriction(diffusionRate);
     config.selection = new RandomSelection();
-    config.mainEvaluator = get_Ag_Ag_growth_main_evaluator(depositionRate, islandDensity);
-    config.otherEvaluators = add_no_more_evaluators();
+    config.mainEvaluator = getAgAgMainEvaluator(depositionRate, islandDensity);
+    config.otherEvaluators = addNoMoreEvaluators();
 
     return config;
   }
 
-  private AbstractPsdEvaluation get_silicon_etching_main_evaluators() {
+  private AbstractPsdEvaluation getSiMainEvaluators() {
 
-    SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(SiEtchConfigKMC(), 30, 10000, 8);
+    SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(localSiKmc(), 30, 10000, 1);
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
 
     return evaluator;
   }
 
-  private AbstractPsdEvaluation get_Ag_Ag_growth_main_evaluator(double depositionRate, double islandDensity) {
+  private AbstractPsdEvaluation getAgAgMainEvaluator(double depositionRate, double islandDensity) {
 
     //Ag_ag_growth_Threaded_PSD_Evaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(AgAgConfigKMC(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
     AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
@@ -111,13 +111,13 @@ public class GeneticAlgorithmConfigFactory {
     return evaluator;
   }
 
-  private List<IEvaluation> add_no_more_evaluators() {
+  private List<IEvaluation> addNoMoreEvaluators() {
 
     List<IEvaluation> evaluation = new ArrayList();
     return evaluation;
   }
 
-  private static SiEtchingKmcConfig SiEtchConfigKMC() {
+  private static SiEtchingKmcConfig localSiKmc() {
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20)

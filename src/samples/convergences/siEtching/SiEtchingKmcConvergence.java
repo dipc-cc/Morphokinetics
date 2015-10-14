@@ -33,7 +33,7 @@ public class SiEtchingKmcConvergence {
 
     new StaticRandom();
     GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
-            .create_silicon_convergence_configuration();
+            .createSiConvergenceConfiguration();
     GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
     new GaProgressFrame(GA).setVisible(true);
     AbstractPsdEvaluation evaluator = geneticConfiguration.mainEvaluator;
