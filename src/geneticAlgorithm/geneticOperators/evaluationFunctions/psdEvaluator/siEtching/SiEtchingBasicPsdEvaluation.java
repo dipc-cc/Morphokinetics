@@ -32,7 +32,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
   @Override
   public float[][] calculatePsdFromIndividual(Individual i) {
 
-    this._calculate_PSD_from_individual(i);
+    this._calculatePsdFromIndividual(i);
     return psd.getPsd();
   }
 
@@ -44,7 +44,7 @@ public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
     difference = null;
   }
 
-  private void _calculate_PSD_from_individual(Individual ind) {
+  private void _calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     for (int i = 0; i < repeats; i++) {
       kmc.initializeRates(ind.getGenes());
