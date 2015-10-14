@@ -16,53 +16,52 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
 
-    private SiEtchingKmc KMC;
-    
-    public SiEtchingBasicPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval) {
+  private SiEtchingKmc kmc;
 
-        super(repeats, measureInterval);
+  public SiEtchingBasicPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval) {
 
-        psdSizeX = config.sizeX_UC * 2;
-        psdSizeY = config.sizeY_UC * 2;
-        KMC = new SiEtchingKmc(config);
-        psd = new PsdSignature2D(psdSizeY, psdSizeX);
-        difference = new float[psdSizeY][psdSizeX];
-    } 
-    
-    @Override
-    public float[][] calculatePsdFromIndividual(Individual i) {
+    super(repeats, measureInterval);
 
-        this._calculate_PSD_from_individual(i);
-        return psd.getPsd();
-    }
+    psdSizeX = config.sizeX_UC * 2;
+    psdSizeY = config.sizeY_UC * 2;
+    kmc = new SiEtchingKmc(config);
+    psd = new PsdSignature2D(psdSizeY, psdSizeX);
+    difference = new float[psdSizeY][psdSizeX];
+  }
 
-    @Override
-    public void dispose() {
-        psd=null;
-        KMC=null;
-        sampledSurface=null;
-        difference=null;   
-    }
+  @Override
+  public float[][] calculatePsdFromIndividual(Individual i) {
 
-    private void _calculate_PSD_from_individual(Individual ind) {
-        psd.reset();
-        for (int i = 0; i < repeats; i++) {
-            KMC.initializeRates(ind.getGenes());
-            KMC.simulate(measureInterval / 2);
-            while (true) {
-                KMC.simulate(measureInterval);
-                sampledSurface = KMC.getSampledSurface(psdSizeY, psdSizeX);
-                psd.addSurfaceSample(sampledSurface);
-                if (KMC.getIterations() < measureInterval) {
-                    break;
-                }
-            }
-            currentSimulation++;
+    this._calculate_PSD_from_individual(i);
+    return psd.getPsd();
+  }
+
+  @Override
+  public void dispose() {
+    psd = null;
+    kmc = null;
+    sampledSurface = null;
+    difference = null;
+  }
+
+  private void _calculate_PSD_from_individual(Individual ind) {
+    psd.reset();
+    for (int i = 0; i < repeats; i++) {
+      kmc.initializeRates(ind.getGenes());
+      kmc.simulate(measureInterval / 2);
+      while (true) {
+        kmc.simulate(measureInterval);
+        sampledSurface = kmc.getSampledSurface(psdSizeY, psdSizeX);
+        psd.addSurfaceSample(sampledSurface);
+        if (kmc.getIterations() < measureInterval) {
+          break;
         }
-
-        psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-        psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+      }
+      currentSimulation++;
     }
-    
-    
+
+    psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
+    psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+  }
+
 }
