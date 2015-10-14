@@ -37,9 +37,9 @@ public class GeneticAlgorithmConfigFactory {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-    config.population_size = 100;
-    config.offspring_size = 32;
-    config.population_replacements = 5;
+    config.populationSize = 100;
+    config.offspringSize = 32;
+    config.populationReplacements = 5;
     config.initialization = new SiEtchingInitialization();
     config.mutation = new BgaBasedMutator();
     config.recombination = new RealRecombination();
@@ -56,9 +56,9 @@ public class GeneticAlgorithmConfigFactory {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-    config.population_size = 100;
-    config.offspring_size = 32;
-    config.population_replacements = 5;
+    config.populationSize = 100;
+    config.offspringSize = 32;
+    config.populationReplacements = 5;
     config.initialization = new AgAgInitialization();
     config.mutation = new BgaBasedMutator();
     config.recombination = new RealRecombination();
@@ -75,10 +75,10 @@ public class GeneticAlgorithmConfigFactory {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-    //config.population_size = 100;
-    config.population_size = 5;
-    config.offspring_size = 32;
-    config.population_replacements = 5;
+    //config.populationSize = 100;
+    config.populationSize = 5;
+    config.offspringSize = 32;
+    config.populationReplacements = 5;
     config.initialization = new AgAgInitialization();
         //config.mutation = new BgaBasedMutator();
     //config.recombination = new RealRecombination();
