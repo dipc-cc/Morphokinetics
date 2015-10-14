@@ -14,7 +14,7 @@ package ratesLibrary;
 public class RatesFromPrbCox implements IDiffusionRates {
 
   private double kB = 8.617332e-5;
-  private double difusion_ML = 0.0035;
+  private double diffusion_ML = 0.0035;
   double P = 10e13;
   double Pd = 10e11; //no lo sabemos
   double Eaa = 0.275;
@@ -162,7 +162,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
 
   @Override
   public double getDepositionRate() {
-    return difusion_ML;
+    return diffusion_ML;
 
   }
 
