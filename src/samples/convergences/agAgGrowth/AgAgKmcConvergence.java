@@ -45,8 +45,8 @@ public class AgAgKmcConvergence {
     evaluator.setRepeats(evaluator.getRepeats() / 5);
          //--------------------------------
 
-    geneticConfiguration.setExperimentalPSD(experimentalPsd);
-    geneticConfiguration.expected_simulation_time = simulationTime;
+    geneticConfiguration.setExperimentalPsd(experimentalPsd);
+    geneticConfiguration.expectedSimulationTime = simulationTime;
 
     ga.initialize();
     ga.iterate(100);
