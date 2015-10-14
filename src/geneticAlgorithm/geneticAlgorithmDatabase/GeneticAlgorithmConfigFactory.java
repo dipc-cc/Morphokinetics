@@ -93,7 +93,7 @@ public class GeneticAlgorithmConfigFactory {
 
   private AbstractPsdEvaluation getSiMainEvaluators() {
 
-    SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(localSiKmc(), 30, 10000, 1);
+    SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(localSiKmc(), 30, 10000, 8);
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
 
