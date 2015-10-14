@@ -46,8 +46,8 @@ public class SiEtchingKmcConvergence {
       double simulationTime = individual.getSimulationTime();
       evaluator.setRepeats(evaluator.getRepeats() / 20);
 
-      geneticConfiguration.setExperimentalPSD(experimentalPSD);
-      geneticConfiguration.expected_simulation_time = simulationTime;
+      geneticConfiguration.setExperimentalPsd(experimentalPSD);
+      geneticConfiguration.expectedSimulationTime = simulationTime;
 
       GA.initialize();
       GA.iterate(100);
