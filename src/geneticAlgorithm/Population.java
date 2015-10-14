@@ -14,34 +14,34 @@ package geneticAlgorithm;
  */
 public class Population {
 
+  private Individual[] individuals;
+  
   public Individual[] getIndividuals() {
-    return Individuals;
+    return individuals;
   }
 
-  private Individual[] Individuals;
-
   public Population(int size) {
-    Individuals = new Individual[size];
+    individuals = new Individual[size];
   }
 
   public Population(Individual[] p) {
-    Individuals = new Individual[p.length];
+    individuals = new Individual[p.length];
     for (int i = 0; i < p.length; i++) {
-      Individuals[i] = p[i];
+      individuals[i] = p[i];
     }
 
   }
 
   public Individual getIndividual(int pos) {
-    return Individuals[pos];
+    return individuals[pos];
   }
 
   public void setIndividual(Individual ind, int pos) {
-    Individuals[pos] = ind;
+    individuals[pos] = ind;
   }
 
   public int size() {
-    return Individuals.length;
+    return individuals.length;
   }
 
   /**
@@ -49,7 +49,7 @@ public class Population {
    */
   public void order() {
 
-    quicksort(Individuals, 0, Individuals.length - 1);
+    quicksort(individuals, 0, individuals.length - 1);
   }
 
   /**
