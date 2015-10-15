@@ -22,14 +22,14 @@ public class CrossoverMutator implements IMutation {
 
       // Crossover.
       Random random = new Random();
-      double jr = Math.ceil(config.n * random.nextDouble());
+      double jr = Math.ceil(config.getN() * random.nextDouble());
 
-      for (int j = 0; j < config.n; j++) {
+      for (int j = 0; j < config.getN(); j++) {
         // Normal distribution with mean Crm and standard deviation Crs.
-        double cr = config.crm + config.crs * random.nextGaussian();
+        double cr = config.getCrm() + config.getCrs() * random.nextGaussian();
 
         if (random.nextDouble() > cr && j != jr) {
-          child.setGene(j, config.offX.get(k).get(j));
+          child.setGene(j, config.getOffX().get(k).get(j));
         }
       }
     }

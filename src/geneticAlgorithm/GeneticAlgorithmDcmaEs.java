@@ -47,16 +47,16 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
     double[] fitness = config.mainEvaluator.evaluate(population);
     //double[] fitness = myEvaluate(population);
     for (int i = 0; i < fitness.length; i++) {
-      dcmaEsConfig.offFitness.set(i, fitness[i]);
+      dcmaEsConfig.getOffFitness().set(i, fitness[i]);
       population.getIndividual(i).setError(0, fitness[i]);
-      dcmaEsConfig.counteval++;
+      dcmaEsConfig.addCountEval();
     }
 
-    offIndex = dcmaEsConfig.offFitness.sortedIndexes();
-    reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(dcmaEsConfig.mu).intValue());
-    dcmaEsConfig.offX = new RichMatrix(population);
-    dcmaEsConfig.xmean = dcmaEsConfig.offX.recombinate(reducedIndex).multiply(dcmaEsConfig.weights);
-    dcmaEsConfig.sigma = dcmaEsConfig.offX.recombinate(reducedIndex).transpose().std().std();
+    offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
+    reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(dcmaEsConfig.getMu()).intValue());
+    dcmaEsConfig.setOffX(new RichMatrix(population));
+    dcmaEsConfig.setXmean(dcmaEsConfig.getOffX().recombinate(reducedIndex).multiply(dcmaEsConfig.getWeights()));
+    dcmaEsConfig.setSigma(dcmaEsConfig.getOffX().recombinate(reducedIndex).transpose().std().std());
 
     Population p = population;
     p.order();
@@ -97,7 +97,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
     for (int i = 0; i < fitness.length; i++) {
       //dcmaEsConfig.offFitness.set(i, fitness[i]);
       offspring.getIndividual(i).setError(0, fitness[i]);
-      dcmaEsConfig.counteval++;
+      dcmaEsConfig.addCountEval();
     }
 
         //sometimes it is good to reevaluate the whole population
@@ -123,23 +123,23 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
      }*/
     population = config.reinsertion.Reinsert(population, offspring, 0);
 
-    offIndex = dcmaEsConfig.offFitness.sortedIndexes();
-    dcmaEsConfig.offX = new RichMatrix(population);
+    offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
+    dcmaEsConfig.setOffX(new RichMatrix(population));
   }
 
   @Override
   public void iterate(int steps) {
     totalIterations = steps;
 
-    while (dcmaEsConfig.counteval < dcmaEsConfig.stopEval && currentIteration < steps) {
+    while (dcmaEsConfig.getCounteval() < dcmaEsConfig.getStopEval() && currentIteration < steps) {
       currentIteration++;
 
       iterateOneStep();
 
       addToGraphics();
 
-      if (dcmaEsConfig.offFitness.apply(OperationFactory.deduct(dcmaEsConfig.offFitness.min())).allLessOrEqualThan(dcmaEsConfig.stopFitness)
-              || dcmaEsConfig.D.max() > 1e7 * dcmaEsConfig.D.min()) {
+      if (dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(dcmaEsConfig.getStopFitness())
+              || dcmaEsConfig.getD().max() > 1e7 * dcmaEsConfig.getD().min()) {
         break;
       }
       if (this.getBestError() < 180) {
@@ -147,12 +147,12 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
       }
     }
 
-    offIndex = dcmaEsConfig.offFitness.sortedIndexes();
-    dcmaEsConfig.offX = dcmaEsConfig.offX.recombinate(offIndex);
-    double fmin = dcmaEsConfig.offFitness.get(0);
-    RichArray xmin = dcmaEsConfig.offX.get(offIndex[0]);
+    offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
+    dcmaEsConfig.setOffX(dcmaEsConfig.getOffX().recombinate(offIndex));
+    double fmin = dcmaEsConfig.getOffFitness().get(0);
+    RichArray xmin = dcmaEsConfig.getOffX().get(offIndex[0]);
 
-    System.out.println(dcmaEsConfig.counteval + ": " + fmin);
+    System.out.println(dcmaEsConfig.getCounteval() + ": " + fmin);
     System.out.println(xmin);
   }
 

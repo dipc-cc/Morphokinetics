@@ -140,7 +140,7 @@ public class GeneticAlgorithmConfigFactory {
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20);
     
-    return new AgAgKmc(listConfig, 256, (int) (256 / AgAgLattice.YRatio),depositionRate, islandDensity);
+    return new AgAgKmc(listConfig, 66, (int) (66 / AgAgLattice.YRatio),depositionRate, islandDensity);
 
   }
 
