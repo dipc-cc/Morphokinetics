@@ -35,7 +35,7 @@ public class AgAgKmcConvergence {
     GeneticAlgorithm ga = new GeneticAlgorithm(geneticConfiguration);
 
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluation evaluator = geneticConfiguration.mainEvaluator;
+    AbstractPsdEvaluation evaluator = geneticConfiguration.getMainEvaluator();
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
@@ -46,7 +46,7 @@ public class AgAgKmcConvergence {
          //--------------------------------
 
     geneticConfiguration.setExperimentalPsd(experimentalPsd);
-    geneticConfiguration.expectedSimulationTime = simulationTime;
+    geneticConfiguration.setExpectedSimulationTime(simulationTime);
 
     ga.initialize();
     ga.iterate(100);

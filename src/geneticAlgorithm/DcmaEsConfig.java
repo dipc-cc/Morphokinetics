@@ -52,7 +52,7 @@ public class DcmaEsConfig {
     stopEval = 1e8;
     gMax = 1e6;
 
-    offSize = configuration.populationSize; //offSize = n * Math.round(28 / Math.sqrt(n));
+    offSize = configuration.getPopulationSize(); //offSize = n * Math.round(28 / Math.sqrt(n));
 
     mu = offSize / 2;
 

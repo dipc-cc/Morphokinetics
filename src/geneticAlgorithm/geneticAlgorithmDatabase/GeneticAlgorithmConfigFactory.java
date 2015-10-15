@@ -37,17 +37,17 @@ public class GeneticAlgorithmConfigFactory {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-    config.populationSize = 100;
-    config.offspringSize = 32;
-    config.populationReplacements = 5;
-    config.initialization = new SiEtchingInitialization();
-    config.mutation = new BgaBasedMutator();
-    config.recombination = new RealRecombination();
-    config.reinsertion = new ElitistReinsertion();
-    config.restriction = new SiEtchingRestriction();
-    config.selection = new RankingSelection();
-    config.mainEvaluator = getSiMainEvaluators();
-    config.otherEvaluators = addNoMoreEvaluators();
+    config.setPopulationSize(100);
+    config.setOffspringSize(32);
+    config.setPopulationReplacements(5);
+    config.setInitialization(new SiEtchingInitialization());
+    config.setMutation(new BgaBasedMutator());
+    config.setRecombination(new RealRecombination());
+    config.setReinsertion(new ElitistReinsertion());
+    config.setRestriction(new SiEtchingRestriction());
+    config.setSelection(new RankingSelection());
+    config.setMainEvaluator(getSiMainEvaluators());
+    config.setOtherEvaluators(addNoMoreEvaluators());
 
     return config;
   }
@@ -56,17 +56,17 @@ public class GeneticAlgorithmConfigFactory {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-    config.populationSize = 100;
-    config.offspringSize = 32;
-    config.populationReplacements = 5;
-    config.initialization = new AgAgInitialization();
-    config.mutation = new BgaBasedMutator();
-    config.recombination = new RealRecombination();
-    config.reinsertion = new ElitistReinsertion();
-    config.restriction = new AgAgRestriction(diffusionRate);
-    config.selection = new RankingSelection();
-    config.mainEvaluator = getAgAgMainEvaluator(depositionRate, islandDensity);
-    config.otherEvaluators = addNoMoreEvaluators();
+    config.setPopulationSize(100);
+    config.setOffspringSize(32);
+    config.setPopulationReplacements(5);
+    config.setInitialization(new AgAgInitialization());
+    config.setMutation(new BgaBasedMutator());
+    config.setRecombination(new RealRecombination());
+    config.setReinsertion(new ElitistReinsertion());
+    config.setRestriction(new AgAgRestriction(diffusionRate));
+    config.setSelection(new RankingSelection());
+    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setOtherEvaluators(addNoMoreEvaluators());
 
     return config;
   }
@@ -75,18 +75,18 @@ public class GeneticAlgorithmConfigFactory {
 
     GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
-    //config.populationSize = 100;
-    config.populationSize = 5;
-    config.offspringSize = 32;
-    config.populationReplacements = 5;
-    config.initialization = new AgAgInitialization();
+    //config.populationSize(100;
+    config.setPopulationSize(5);
+    config.setOffspringSize(32);
+    config.setPopulationReplacements(5);
+    config.setInitialization(new AgAgInitialization());
         //config.mutation = new BgaBasedMutator();
     //config.recombination = new RealRecombination();
     //config.reinsertion = new ElitistReinsertion();
-    config.restriction = new AgAgRestriction(diffusionRate);
-    config.selection = new RandomSelection();
-    config.mainEvaluator = getAgAgMainEvaluator(depositionRate, islandDensity);
-    config.otherEvaluators = addNoMoreEvaluators();
+    config.setRestriction(new AgAgRestriction(diffusionRate));
+    config.setSelection(new RandomSelection());
+    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setOtherEvaluators(addNoMoreEvaluators());
 
     return config;
   }
@@ -140,7 +140,7 @@ public class GeneticAlgorithmConfigFactory {
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20);
     
-    return new AgAgKmc(listConfig, 66, (int) (66 / AgAgLattice.YRatio),depositionRate, islandDensity);
+    return new AgAgKmc(listConfig, 256, (int) (256 / AgAgLattice.YRatio),depositionRate, islandDensity);
 
   }
 

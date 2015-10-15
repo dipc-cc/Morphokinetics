@@ -35,7 +35,7 @@ public class AgAgKmcConvergenceDcmaEs {
     GeneticAlgorithmDcmaEs ga = new GeneticAlgorithmDcmaEs(geneticConfiguration);
 
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluation evaluator = geneticConfiguration.mainEvaluator;
+    AbstractPsdEvaluation evaluator = geneticConfiguration.getMainEvaluator();
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
@@ -46,7 +46,7 @@ public class AgAgKmcConvergenceDcmaEs {
          //--------------------------------
 
     geneticConfiguration.setExperimentalPsd(experimentalPsd);
-    geneticConfiguration.expectedSimulationTime = simulationTime;
+    geneticConfiguration.setExpectedSimulationTime(simulationTime);
 
     ga.initialize();
     ga.iterate(100);
