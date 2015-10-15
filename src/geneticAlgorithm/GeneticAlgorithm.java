@@ -25,6 +25,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
     this.evaluator = new BasicEvaluator();
   }
 
+  @Override
   public IGeneticAlgorithm initialize() {
     this.population = config.getInitialization().createRandomPopulation(config.getPopulationSize());
     this.config.getRestriction().apply(this.population);
@@ -68,6 +69,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
 
   }
 
+  @Override
   public void iterate(int steps) {
     totalIterations = steps;
     for (int i = 0; i < steps; i++) {
@@ -78,10 +80,12 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
     }
   }
 
+  @Override
   public double getBestError() {
     return population.getIndividual(0).getTotalError();
   }
 
+  @Override
   public Individual getIndividual(int pos) {
     return population.getIndividual(pos);
   }
@@ -90,6 +94,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
     return population.getIndividual(0);
   }
 
+  @Override
   public float[] getProgressPercent() {
 
     float[] progress = new float[3];
