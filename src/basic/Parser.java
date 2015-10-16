@@ -43,7 +43,7 @@ public class Parser {
   private String listType;
   private String perimeterType;
   /**
-   * Can be Ag
+   * Can be Ag or graphene
    */
   private String calculationMode;
   private int temperature;
