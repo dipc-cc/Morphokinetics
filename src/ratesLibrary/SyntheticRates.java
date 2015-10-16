@@ -11,8 +11,8 @@ package ratesLibrary;
 public class SyntheticRates implements IDiffusionRates {
 
   private double[][] rates;
-  private double depositionRateInML_second = 0.000035;
-  private double islandDensity_per_site = 1 / 60000f;
+  private final double depositionRateInMlSecond = 0.000035;
+  private final double islandDensityPerSite = 1 / 60000f;
 
   @Override
   public double getRate(int sourceType, int destinationType, double temperature) {
@@ -25,12 +25,12 @@ public class SyntheticRates implements IDiffusionRates {
 
   @Override
   public double getDepositionRate() {
-    return depositionRateInML_second;
+    return depositionRateInMlSecond;
   }
 
   @Override
   public double getIslandsDensityML(double temperature) {
-    return islandDensity_per_site;
+    return islandDensityPerSite;
   }
 
   private void initializeRates() {
