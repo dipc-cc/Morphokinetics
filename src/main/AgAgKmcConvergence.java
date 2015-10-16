@@ -40,7 +40,7 @@ public class AgAgKmcConvergence {
     GeneticAlgorithmConfiguration geneticConfiguration;
     IGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {
-      case "normal":
+      case "original":
         geneticConfiguration = new GeneticAlgorithmConfigFactory()
                 .createAgAgConvergenceConfiguration(diffusionRate, islandDensity, depositionRate);
         ga = new GeneticAlgorithm(geneticConfiguration);
