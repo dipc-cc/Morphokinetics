@@ -12,8 +12,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.AgAgLattice;
+import main.Morphokinetics;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -96,16 +99,15 @@ public class Parser {
    *
    * @param filename
    * @return 0 if success, negative otherwise
-   * @throws java.io.IOException
    */
-  public int readFile(String filename) throws IOException {
-    List<String> readList;
+  public int readFile(String filename) {
+    List<String> readList = null;
     try {
       //read the parameters file
       readList = readSmallTextFile(filename);
     } catch (IOException exception) {
       System.err.println("Could not read file " + filename);
-      throw exception;
+      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
     }
 
     int lines = readList.size();

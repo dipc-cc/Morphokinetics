@@ -10,9 +10,6 @@ import basic.AgSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -24,18 +21,14 @@ public class Morphokinetics {
     AbstractSimulation.printHeader();
 
     Parser parser = new Parser();
-    try {
-      parser.readFile("parameters");
-    } catch (IOException ex) {
-      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, ex);
-    }
-
+    parser.readFile("parameters");
+    
     parser.print();
     AbstractSimulation simulation = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
         simulation = new AgSimulation(parser);
-        break;
+      break;
       case "graphene":
         simulation = new GrapheneSimulation(parser);
         break;
