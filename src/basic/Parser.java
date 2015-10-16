@@ -64,6 +64,9 @@ public class Parser {
   private boolean outputData;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
+  
+  // For evolutionary algorithm
+  private String evolutionaryAlgorithm; /** Can be original or dcma */
 
   /**
    * Constructor
@@ -91,6 +94,8 @@ public class Parser {
     this.outputData = false;
     this.randomSeed = true;
     this.useMaxPerimeter = false;
+    
+    this.evolutionaryAlgorithm = "normal";
   }
 
   /**
@@ -230,6 +235,12 @@ public class Parser {
     } catch (JSONException e) {
       useMaxPerimeter = false;
     }
+    
+    try {
+      listType = json.getString("evolutionaryAlgorithm");
+    } catch (JSONException e) {
+      islandDensityType = "original";
+    }
     return 0;
   }
 
@@ -266,6 +277,7 @@ public class Parser {
     System.out.println("\t\"outputData\":\t\t" + outputData + ",");
     System.out.println("\t\"randomSeed\":\t\t" + randomSeed + ",");
     System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter);
+    System.out.println("\t\"evolutionaryAlgorithm\":\t" + evolutionaryAlgorithm);
   }
 
   public String getIslandDensityType() {
@@ -375,5 +387,9 @@ public class Parser {
 
   public boolean useMaxPerimeter() {
     return useMaxPerimeter;
+  }
+  
+  public String getEvolutionaryAlgorithm() {
+    return evolutionaryAlgorithm;
   }
 }
