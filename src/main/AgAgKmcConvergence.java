@@ -78,6 +78,7 @@ public class AgAgKmcConvergence {
 
   private static void printResult(IGeneticAlgorithm ga) {
     Individual individual = ga.getIndividual(0);
+    System.out.println("This are the results: ");
     System.out.print(individual.getTotalError() + " ");
     for (int gene = 0; gene < individual.getGeneSize(); gene++) {
       System.out.print(individual.getGene(gene) + " ");
