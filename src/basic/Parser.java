@@ -95,7 +95,7 @@ public class Parser {
     this.randomSeed = true;
     this.useMaxPerimeter = false;
     
-    this.evolutionaryAlgorithm = "normal";
+    this.evolutionaryAlgorithm = "original";
   }
 
   /**
@@ -237,7 +237,7 @@ public class Parser {
     }
     
     try {
-      listType = json.getString("evolutionaryAlgorithm");
+      evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
     } catch (JSONException e) {
       islandDensityType = "original";
     }
