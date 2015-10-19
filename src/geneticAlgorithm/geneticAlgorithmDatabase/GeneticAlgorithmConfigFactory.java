@@ -4,6 +4,7 @@
  */
 package geneticAlgorithm.geneticAlgorithmDatabase;
 
+import basic.AgSimulation;
 import basic.Parser;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
@@ -35,9 +36,30 @@ import ratesLibrary.AgAgRatesFactory;
  */
 public class GeneticAlgorithmConfigFactory {
 
+  GeneticAlgorithmConfiguration config;
+  private AgSimulation agSimulation;
+  private Parser parser;
+  private double depositionRate;
+  private double islandDensity;
+  private double diffusionRate;
+  
+  public GeneticAlgorithmConfigFactory() {
+    config = new GeneticAlgorithmConfiguration();
+  }
+  
+  public GeneticAlgorithmConfigFactory(Parser parser) {
+    config = new GeneticAlgorithmConfiguration();
+    this.parser = parser;
+    this.agSimulation = new AgSimulation(parser);
+    agSimulation.initialiseKmc();
+    
+    float experitentalTemp = parser.getTemperature();
+    this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
+    this.islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
+    this.diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
+  }
+  
   public GeneticAlgorithmConfiguration createSiConvergenceConfiguration() {
-
-    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
     config.setPopulationSize(100);
     config.setOffspringSize(32);
@@ -56,8 +78,6 @@ public class GeneticAlgorithmConfigFactory {
 
   public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
-    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
-
     config.setPopulationSize(100);
     config.setOffspringSize(32);
     config.setPopulationReplacements(5);
@@ -72,15 +92,9 @@ public class GeneticAlgorithmConfigFactory {
 
     return config;
   }
-    public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(Parser parser) {
 
-    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+  public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration() {
 
-    float experitentalTemp = parser.getTemperature();
-    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
-    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
-    double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
-    
     config.setPopulationSize(parser.getPopulationSize());
     config.setOffspringSize(parser.getOffspringSize());
     config.setPopulationReplacements(parser.getPopulationReplacement());
@@ -90,15 +104,13 @@ public class GeneticAlgorithmConfigFactory {
     config.setReinsertion(new ElitistReinsertion());
     config.setRestriction(new AgAgRestriction(diffusionRate));
     config.setSelection(new RankingSelection());
-    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setMainEvaluator(getAgAgMainEvaluator());
     config.setOtherEvaluators(addNoMoreEvaluators());
 
     return config;
   }
 
   public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
-
-    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
 
     //config.populationSize(100;
     config.setPopulationSize(5);
@@ -116,22 +128,15 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
   
-  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(Parser parser) {
+  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration() {
 
-    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
-
-    float experitentalTemp = parser.getTemperature();
-    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
-    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
-    double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
-    
     config.setPopulationSize(parser.getPopulationSize());
     config.setOffspringSize(parser.getOffspringSize());
     config.setPopulationReplacements(parser.getPopulationReplacement());
     config.setInitialization(new AgAgInitialization());
     config.setRestriction(new AgAgRestriction(diffusionRate));
     config.setSelection(new RandomSelection());
-    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setMainEvaluator(getAgAgMainEvaluator());
     config.setOtherEvaluators(addNoMoreEvaluators());
 
     return config;
@@ -155,6 +160,25 @@ public class GeneticAlgorithmConfigFactory {
     evaluator.setShowGraphics(true);
 
     return evaluator;
+  }
+
+  private AbstractPsdEvaluation getAgAgMainEvaluator() {
+    AbstractPsdEvaluation evaluator = null;
+    switch (parser.getEvaluator()) {
+      case "serial":
+        evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(), 1, Integer.MAX_VALUE);
+        break;
+      case "threaded":
+        evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(), 30, Integer.MAX_VALUE, 2);
+        break;
+      default:
+        break;
+    }
+    
+    evaluator.setWheight(1.0f);
+    evaluator.setShowGraphics(true);
+    
+    return evaluator;             
   }
 
   private List<IEvaluation> addNoMoreEvaluators() {
@@ -186,8 +210,18 @@ public class GeneticAlgorithmConfigFactory {
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20);
     
-    return new AgAgKmc(listConfig, 256, (int) (256 / AgAgLattice.YRatio),depositionRate, islandDensity);
+    return new AgAgKmc(listConfig, 66, (int) (66 / AgAgLattice.YRatio),depositionRate, islandDensity);
 
   }
 
+  private AgAgKmc localAgAgKmc() {
+    /* Should be:*/
+     agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
+     return (AgAgKmc) agSimulation.getKmc();
+    /*ListConfiguration listConfig = new ListConfiguration()
+            .setListType(ListConfiguration.BINNED_LIST)
+            .setBinsPerLevel(20);
+
+    return new AgAgKmc(listConfig, parser.getHexaSizeI(), parser.getHexaSizeJ(), depositionRate, islandDensity);*/
+  }
 }
