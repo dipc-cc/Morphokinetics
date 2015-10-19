@@ -37,13 +37,13 @@ public class AgAgKmcConvergence {
     IGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {
       case "original":
-        geneticConfiguration = new GeneticAlgorithmConfigFactory()
-                .createAgAgConvergenceConfiguration(parser);
+        geneticConfiguration = new GeneticAlgorithmConfigFactory(parser)
+                .createAgAgConvergenceConfiguration();
         ga = new GeneticAlgorithm(geneticConfiguration);
         break;
       case "dcma":
-        geneticConfiguration = new GeneticAlgorithmConfigFactory()
-                .createAgAgDcmaEsConvergenceConfiguration(parser);
+        geneticConfiguration = new GeneticAlgorithmConfigFactory(parser)
+                .createAgAgDcmaEsConvergenceConfiguration();
         ga = new GeneticAlgorithmDcmaEs(geneticConfiguration);
         break;
       default:
