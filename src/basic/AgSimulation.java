@@ -34,20 +34,4 @@ public class AgSimulation extends AbstractGrowthSimulation {
             parser.useMaxPerimeter(),
             parser.getPerimeterType());
   }
-
-  @Override
-  public void createFrame() {
-    if (parser.withGui()) {
-      try {
-        frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
-      } catch (Exception e) {
-        System.err.println("Error: The execution is not able to create the X11 frame");
-        System.err.println("Finishing");
-        throw e;
-      }
-      if (parser.visualize()) {
-        frame.setVisible(true);
-      }
-    }
-  }
 }
