@@ -67,6 +67,7 @@ public class Parser {
   
   // For evolutionary algorithm
   private String evolutionaryAlgorithm; /** Can be original or dcma */
+  private String evaluator; /** Can be serial or threaded */
   private int populationSize;
   private int offspringSize;
   private int populationReplacement;
@@ -98,6 +99,7 @@ public class Parser {
     this.useMaxPerimeter = false;
     
     this.evolutionaryAlgorithm = "original";
+    this.evaluator = "serial";
     this.populationSize = 5;
     this.offspringSize = 32;
     this.populationReplacement = 5;            
@@ -246,6 +248,11 @@ public class Parser {
       evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
     } catch (JSONException e) {
       islandDensityType = "original";
+    }    
+    try {
+      evaluator = json.getString("evaluator");
+    } catch (JSONException e) {
+      evaluator = "serial";
     }
     try {
       populationSize = json.getInt("populationSize");
@@ -297,6 +304,7 @@ public class Parser {
     System.out.println("\t\"randomSeed\":\t\t" + randomSeed + ",");
     System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter + ",");
     System.out.println("\t\"evolutionaryAlgorithm\":\t" + evolutionaryAlgorithm + ",");
+    System.out.println("\t\"evaluator\":\t\t" + evaluator + ",");
     System.out.println("\t\"populationSize\":\t" + populationSize + ",");
     System.out.println("\t\"offspringSize\":\t" + offspringSize + ",");
     System.out.println("\t\"populationReplacement\":\t" + populationReplacement);
@@ -413,6 +421,10 @@ public class Parser {
   
   public String getEvolutionaryAlgorithm() {
     return evolutionaryAlgorithm;
+  }
+  
+  public String getEvaluator() {
+    return evaluator;
   }
   
   public int getPopulationSize() {
