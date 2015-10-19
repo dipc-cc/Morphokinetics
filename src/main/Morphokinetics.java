@@ -108,7 +108,7 @@ public class Morphokinetics {
     geneticConfiguration.setExpectedSimulationTime(simulationTime);
 
     ga.initialize();
-    ga.iterate(100);
+    ga.iterate(parser.getTotalIterations());
     printResult(ga);
   }
   
