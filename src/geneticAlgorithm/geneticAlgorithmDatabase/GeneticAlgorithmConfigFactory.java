@@ -77,6 +77,7 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
+  @Deprecated
   public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
     config.setPopulationSize(100);
@@ -111,6 +112,7 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
+  @Deprecated
   public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
     //config.populationSize(100;
@@ -152,8 +154,8 @@ public class GeneticAlgorithmConfigFactory {
     return evaluator;
   }
 
+  @Deprecated
   private AbstractPsdEvaluation getAgAgMainEvaluator(double depositionRate, double islandDensity) {
-
     //AgAgGrowthThreadedPsdEvaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
     AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
 
@@ -205,13 +207,13 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
+  @Deprecated
   private AgAgKmc localAgAgKmc(double depositionRate, double islandDensity) {
-
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20);
     
-    return new AgAgKmc(listConfig, 66, (int) (66 / AgAgLattice.YRatio),depositionRate, islandDensity);
+    return new AgAgKmc(listConfig, 256, (int) (256 / AgAgLattice.YRatio),depositionRate, islandDensity);
 
   }
 }
