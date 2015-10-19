@@ -45,11 +45,8 @@ public class SiSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/SiParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/SiParameters");
+
     assertEquals("Si", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -72,11 +69,7 @@ public class SiSimulationTest {
   public void testSi() {
     AbstractSimulation.printHeader("Si test");
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/SiParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/SiParameters");
     
     AbstractSimulation simulation = new SiSimulation(parser);
 

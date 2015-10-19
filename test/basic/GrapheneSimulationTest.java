@@ -46,11 +46,7 @@ public class GrapheneSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/GrapheneParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/GrapheneParameters");
     assertEquals("graphene", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -74,11 +70,7 @@ public class GrapheneSimulationTest {
   public void testGraphene() {
     AbstractSimulation.printHeader("Graphene test");
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/GrapheneParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/GrapheneParameters");
     
     AbstractSimulation simulation = new GrapheneSimulation(parser);
 

@@ -46,11 +46,7 @@ public class AgSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/AgParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/AgParameters");
     assertEquals("Ag", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -74,11 +70,7 @@ public class AgSimulationTest {
   public void testAg() {
     AbstractSimulation.printHeader("Ag test");
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/AgParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/AgParameters");
     
     float[][] surface = doAgTest(parser);
     
@@ -101,11 +93,7 @@ public class AgSimulationTest {
   public void testAgSimple(){
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
-    try {
-      parser.readFile("test/input/AgSmallParameters");
-    } catch (IOException ex) {
-      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    parser.readFile("test/input/AgSmallParameters");
     
     doAgTest(parser);
   }
