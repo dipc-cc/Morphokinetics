@@ -7,7 +7,7 @@ package main;
 
 import basic.AbstractSimulation;
 import basic.Parser;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
@@ -32,22 +32,18 @@ public class AgAgKmcConvergence {
     parser.print();
     
     new StaticRandom();
-    float experitentalTemp = parser.getTemperature();
-    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
-    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
-    double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
     
     GeneticAlgorithmConfiguration geneticConfiguration;
     IGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {
       case "original":
         geneticConfiguration = new GeneticAlgorithmConfigFactory()
-                .createAgAgConvergenceConfiguration(diffusionRate, islandDensity, depositionRate);
+                .createAgAgConvergenceConfiguration(parser);
         ga = new GeneticAlgorithm(geneticConfiguration);
         break;
       case "dcma":
         geneticConfiguration = new GeneticAlgorithmConfigFactory()
-                .createAgAgDcmaEsConvergenceConfiguration(diffusionRate, islandDensity, depositionRate);
+                .createAgAgDcmaEsConvergenceConfiguration(parser);
         ga = new GeneticAlgorithmDcmaEs(geneticConfiguration);
         break;
       default:
@@ -61,11 +57,11 @@ public class AgAgKmcConvergence {
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
-    Individual individual = new Individual(new AgAgRatesFactory().getRates(experitentalTemp));
+    Individual individual = new Individual(new AgAgRatesFactory().getRates(parser.getTemperature()));
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);
-         //--------------------------------
+    //--------------------------------
 
     geneticConfiguration.setExperimentalPsd(experimentalPsd);
     geneticConfiguration.setExpectedSimulationTime(simulationTime);
