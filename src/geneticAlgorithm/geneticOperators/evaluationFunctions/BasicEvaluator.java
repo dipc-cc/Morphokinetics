@@ -25,8 +25,13 @@ public class BasicEvaluator implements IEvaluator, IProgressable {
   private IEvaluation currentEvaluator;
   private float progressPercent;
 
-//evaluate all the elements of the population with the list of given evaluators
-//after, it orders them from min to max error.
+  /**
+   * Evaluate all the elements of the population with the list of given evaluators
+   * after, it orders them from min to max error.
+   * @param p
+   * @param functionWithSimulation
+   * @param functions 
+   */
   @Override
   public void evaluateAndOrder(Population p, AbstractPsdEvaluation functionWithSimulation, List<IEvaluation> functions) {
 
