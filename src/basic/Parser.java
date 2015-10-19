@@ -67,7 +67,9 @@ public class Parser {
   
   // For evolutionary algorithm
   private String evolutionaryAlgorithm; /** Can be original or dcma */
-
+  private int populationSize;
+  private int offspringSize;
+  private int populationReplacement;
   /**
    * Constructor
    */
@@ -96,6 +98,9 @@ public class Parser {
     this.useMaxPerimeter = false;
     
     this.evolutionaryAlgorithm = "original";
+    this.populationSize = 5;
+    this.offspringSize = 32;
+    this.populationReplacement = 5;            
   }
 
   /**
@@ -236,10 +241,26 @@ public class Parser {
       useMaxPerimeter = false;
     }
     
+    //  -------------- Evolutionary Algorithm ----------------------
     try {
       evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
     } catch (JSONException e) {
       islandDensityType = "original";
+    }
+    try {
+      populationSize = json.getInt("populationSize");
+    } catch (JSONException e) {
+      populationSize = 5;
+    }  
+    try {
+      offspringSize = json.getInt("offspringSize");
+    } catch (JSONException e) {
+      offspringSize = 32;
+    }    
+    try {
+      populationReplacement = json.getInt("populationReplacement");
+    } catch (JSONException e) {
+      populationReplacement = 5;
     }
     return 0;
   }
@@ -250,9 +271,7 @@ public class Parser {
   }
 
   /**
-   * Prints all the parameters; either read from "parameter" file or the default value
-   *
-   * @return
+   * Prints all the parameters; either read from "parameter" file or the default value.
    */
   public void print() {
     System.out.println("\t\"islandDensityType\":\t" + islandDensityType + ",");
@@ -277,7 +296,10 @@ public class Parser {
     System.out.println("\t\"outputData\":\t\t" + outputData + ",");
     System.out.println("\t\"randomSeed\":\t\t" + randomSeed + ",");
     System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter + ",");
-    System.out.println("\t\"evolutionaryAlgorithm\":\t" + evolutionaryAlgorithm);
+    System.out.println("\t\"evolutionaryAlgorithm\":\t" + evolutionaryAlgorithm + ",");
+    System.out.println("\t\"populationSize\":\t" + populationSize + ",");
+    System.out.println("\t\"offspringSize\":\t" + offspringSize + ",");
+    System.out.println("\t\"populationReplacement\":\t" + populationReplacement);
   }
 
   public String getIslandDensityType() {
@@ -391,5 +413,17 @@ public class Parser {
   
   public String getEvolutionaryAlgorithm() {
     return evolutionaryAlgorithm;
+  }
+  
+  public int getPopulationSize() {
+    return populationSize;
+  }
+  
+  public int getOffspringSize() {
+    return offspringSize;
+  }
+  
+  public int getPopulationReplacement() {
+    return populationReplacement;
   }
 }
