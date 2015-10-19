@@ -6,93 +6,93 @@ package geneticAlgorithm;
 
 /**
  *
+ * This class models an individual of a Genetic algorithm. The genes consists on floating point
+ * numbers.
+ *
  * @author Nestor
- *
- *
- * This class models an individual of a Genetic algorithm. The genes consists on
- * floating point numbers.
- *
  */
 public class Individual {
 
-    //individual genes
-    private double[] genes;
-    
-    //list of errors associated to this individual
-    //we kept them in an array for debbuging purposes, the GA just uses the global accumulation for selection purposes.
-    private double[] errors;
-    
-    private double simulationTime;
+  /**
+   * Individual genes.
+   */
+  private double[] genes;
 
-    public Individual(int genesNumber, int errorsNumber) {
-        genes = new double[genesNumber];
-        errors = new double[errorsNumber];
-    }
-    
-    public Individual(double[] genes, double[] errors) {
-        this.genes=genes;
-        this.errors=errors;
-    }
-    
-    public Individual(double[] genes) {
-        this.genes=genes;
-        this.errors=new double[]{};
-    }
+  /**
+   * List of errors associated to this individual. We keep them in an array for debugging purposes,
+   * the GA just uses the global accumulation for selection purposes.
+   */
+  private double[] errors;
 
-    public void setGene(int pos, double gene) {
-        genes[pos] = gene;
-    }
+  private double simulationTime;
 
-    public double[] getGenes() {
-        return genes;
-    }
+  public Individual(int genesNumber, int errorsNumber) {
+    genes = new double[genesNumber];
+    errors = new double[errorsNumber];
+  }
 
-    public double getGene(int pos) {
-        return genes[pos];
-    }
+  public Individual(double[] genes, double[] errors) {
+    this.genes = genes;
+    this.errors = errors;
+  }
 
-    public void scaleGene(double scale, int pos) {
-        genes[pos] *= scale;
-    }
+  public Individual(double[] genes) {
+    this.genes = genes;
+    this.errors = new double[]{};
+  }
 
-    public void setError(int pos, double error) {
-        errors[pos] = error;
-    }
+  public void setGene(int pos, double gene) {
+    genes[pos] = gene;
+  }
 
-    public double[] getErrors() {
-        return errors;
-    }
+  public double[] getGenes() {
+    return genes;
+  }
 
-    public double getError(int pos) {
-        return errors[pos];
-    }
+  public double getGene(int pos) {
+    return genes[pos];
+  }
 
-    public double getTotalError() {
-        double temp = 0;
+  public void scaleGene(double scale, int pos) {
+    genes[pos] *= scale;
+  }
 
-        for (int i = 0; i < errors.length; i++) {
-            temp += errors[i];
-        }
+  public void setError(int pos, double error) {
+    errors[pos] = error;
+  }
 
-        return temp;
-    }
+  public double[] getErrors() {
+    return errors;
+  }
 
-    public int getGeneSize() {
-        return genes.length;
+  public double getError(int pos) {
+    return errors[pos];
+  }
+
+  public double getTotalError() {
+    double temp = 0;
+
+    for (int i = 0; i < errors.length; i++) {
+      temp += errors[i];
     }
 
-    public int getErrorsSize() {
-        return errors.length;
-    }
+    return temp;
+  }
 
-    public double getSimulationTime() {
-        return simulationTime;
-    }
+  public int getGeneSize() {
+    return genes.length;
+  }
 
-    public void setSimulationTime(double simulationTime) {
-        this.simulationTime = simulationTime;
-    }
-    
-    
-    
+  public int getErrorsSize() {
+    return errors.length;
+  }
+
+  public double getSimulationTime() {
+    return simulationTime;
+  }
+
+  public void setSimulationTime(double simulationTime) {
+    this.simulationTime = simulationTime;
+  }
+
 }
