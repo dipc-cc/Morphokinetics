@@ -6,16 +6,15 @@ package geneticAlgorithm;
 
 /**
  *
+ * This class just model a Genetic Algorithm population, it can be the main population or an
+ * offspring
+ *
  * @author Nestor
- *
- * This class just model a Genetic Algorithm population, it can be the main population or an offspring
- *
- *
  */
 public class Population {
 
   private Individual[] individuals;
-  
+
   public Individual[] getIndividuals() {
     return individuals;
   }
@@ -53,9 +52,10 @@ public class Population {
 
   /**
    * Quicksort-based ordering algorithm.
+   *
    * @param ind
    * @param left
-   * @param right 
+   * @param right
    */
   private static void quicksort(Individual[] ind, int left, int right) {
     int i = left;
