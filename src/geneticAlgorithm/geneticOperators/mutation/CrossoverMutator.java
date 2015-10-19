@@ -1,11 +1,11 @@
 package geneticAlgorithm.geneticOperators.mutation;
 
 import java.util.List;
-import java.util.Random;
 
 import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
+import utils.StaticRandom;
 
 public class CrossoverMutator implements IMutation {
 
@@ -21,14 +21,13 @@ public class CrossoverMutator implements IMutation {
       Individual child = p.getIndividual(k);
 
       // Crossover.
-      Random random = new Random();
-      double jr = Math.ceil(config.getN() * random.nextDouble());
+      double jr = Math.ceil(config.getN() * StaticRandom.raw());
 
       for (int j = 0; j < config.getN(); j++) {
         // Normal distribution with mean Crm and standard deviation Crs.
-        double cr = config.getCrm() + config.getCrs() * random.nextGaussian();
+        double cr = config.getCrm() + config.getCrs() * StaticRandom.raw();
 
-        if (random.nextDouble() > cr && j != jr) {
+        if (StaticRandom.raw() > cr && j != jr) {
           child.setGene(j, config.getOffX().get(k).get(j));
         }
       }

@@ -2,9 +2,9 @@ package utils.akting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import geneticAlgorithm.Individual;
+import utils.StaticRandom;
 import utils.akting.operations.Operation;
 
 @SuppressWarnings("serial")
@@ -80,7 +80,7 @@ public class RichArray extends ArrayList<Double> {
 		RichArray newArray = new RichArray(initialCapacity);
 		
 		for (int i = 0; i < initialCapacity; i++) {
-			newArray.add(Math.random());
+			newArray.add(StaticRandom.raw());
 		}
 		
 		return newArray;
@@ -88,10 +88,9 @@ public class RichArray extends ArrayList<Double> {
 	
 	public static RichArray randn(int initialCapacity) {
 		RichArray newArray = new RichArray(initialCapacity);
-		Random random = new Random();
 		
 		for (int i = 0; i < initialCapacity; i++) {
-			newArray.add(random.nextGaussian());
+			newArray.add(StaticRandom.raw());
 		}
 		
 		return newArray;
