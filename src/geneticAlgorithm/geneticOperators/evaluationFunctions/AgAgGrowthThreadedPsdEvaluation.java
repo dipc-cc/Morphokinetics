@@ -4,7 +4,6 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;

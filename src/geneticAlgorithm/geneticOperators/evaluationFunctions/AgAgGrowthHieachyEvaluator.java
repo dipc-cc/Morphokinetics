@@ -5,7 +5,6 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 

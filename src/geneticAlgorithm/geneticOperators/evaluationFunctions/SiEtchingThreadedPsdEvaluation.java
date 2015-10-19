@@ -4,7 +4,6 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
