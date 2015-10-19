@@ -5,7 +5,7 @@
  */
 package samples.convergences.agAgGrowth;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
