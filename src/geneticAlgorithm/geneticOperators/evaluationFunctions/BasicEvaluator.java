@@ -4,7 +4,6 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
 import geneticAlgorithm.IProgressable;
 import geneticAlgorithm.Population;
 import java.util.List;

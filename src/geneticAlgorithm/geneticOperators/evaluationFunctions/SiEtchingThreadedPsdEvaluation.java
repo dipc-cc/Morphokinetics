@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.siEtching;
+package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
 import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;

@@ -2,10 +2,9 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth;
+package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.MultithreadedPsdEvaluation;
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;

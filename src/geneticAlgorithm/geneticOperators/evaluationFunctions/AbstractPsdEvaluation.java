@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator;
+package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.Individual;

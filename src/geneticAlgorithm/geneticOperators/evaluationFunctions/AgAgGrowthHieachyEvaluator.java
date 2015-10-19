@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.evaluationFunctions.hierarchyEvaluator.agAgGrowth;
+package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
 import geneticAlgorithm.Individual;
