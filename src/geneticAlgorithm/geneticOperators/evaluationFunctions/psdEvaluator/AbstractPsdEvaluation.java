@@ -32,21 +32,18 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
     super();
     this.repeats = repeats;
     this.measureInterval = measureInterval;
-
   }
 
-  public AbstractPsdEvaluation setPsd(float[][] ExperimentalPSD) {
-    this.experimentalPsd = ExperimentalPSD;
+  public AbstractPsdEvaluation setPsd(float[][] experimentalPsd) {
+    this.experimentalPsd = experimentalPsd;
     return this;
   }
 
   public abstract float[][] calculatePsdFromIndividual(Individual i);
 
   protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
-
     for (int a = 0; a < difference.length; a++) {
       for (int b = 0; b < difference[0].length; b++) {
-
         difference[a][b] = (psd.getPsd()[a][b] - experimentalPsd[a][b]) / Math.min(experimentalPsd[a][b], psd.getPsd()[a][b]);
       }
     }
@@ -72,7 +69,6 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
 
   @Override
   public double[] evaluate(Population p) {
-
     this.currentPopulation = p;
     this.currentSimulation = 0;
     double[] results = new double[p.size()];
@@ -86,7 +82,6 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
   }
 
   private double evaluateIndividual(Individual ind) {
-
     calculatePsdFromIndividual(ind);
     calculateRelativeDifference(difference, psd);
 
