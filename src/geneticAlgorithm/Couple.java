@@ -9,9 +9,8 @@ package geneticAlgorithm;
  * @author Nestor
  */
 public class Couple {
-  
-    public Individual individual1;
-    public Individual individual2;
-    
-    
+
+  public Individual individual1;
+  public Individual individual2;
+
 }
