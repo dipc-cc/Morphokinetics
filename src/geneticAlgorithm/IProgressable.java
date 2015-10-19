@@ -9,9 +9,7 @@ package geneticAlgorithm;
  * @author Nestor
  */
 public interface IProgressable {
-   
-    
-        
-    public float[] getProgressPercent() ;
-    
+
+  public float[] getProgressPercent();
+
 }
