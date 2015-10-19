@@ -5,7 +5,7 @@
  */
 package samples.agAgGrowth;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.agAgGrowth.AgAgBasicPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AgAgBasicPsdEvaluation;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
