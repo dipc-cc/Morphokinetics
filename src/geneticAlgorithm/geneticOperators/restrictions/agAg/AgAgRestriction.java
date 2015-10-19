@@ -19,20 +19,19 @@ public class AgAgRestriction extends RestrictionOperator {
 
   }
 
-  public AgAgRestriction(double diffusion_rate) {
+  public AgAgRestriction(double diffusionRate) {
 
-    //negative values are not valid
+    //Negative values are not valid
     for (int currentGene = 0; currentGene < 7 * 7; currentGene++) {
       genesRestriction.add(new BoundedGeneRestriction(0, 1e20, currentGene));
     }
 
     //Diffusion rate
     for (int i = 0; i < 7; i++) {
-
-      genesRestriction.add(new FixedGeneRestriction(diffusion_rate, 0 * 7 + i));
+      genesRestriction.add(new FixedGeneRestriction(diffusionRate, 0 * 7 + i));
     }
 
-    //non-mobile dimers
+    //Non-mobile dimers
     genesRestriction.add(new FixedGeneRestriction(0, 1 * 7 + 0));
 
     genesRestriction.add(new FixedGeneRestriction(0, 2 * 7 + 0));
@@ -47,8 +46,8 @@ public class AgAgRestriction extends RestrictionOperator {
       genesRestriction.add(new FixedGeneRestriction(0, 6 * 7 + j));
     }
 
-//We set the following atomistic configurations to the same rate (according to the Ag/Ag diffuion paper):
-//(2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
+    //We set the following atomistic configurations to the same rate (according to the Ag/Ag diffusion paper):
+    //(2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
     genesRestriction.add(new ReplicatedGeneRestriction(2 * 7 + 3, 2 * 7 + 4));
     genesRestriction.add(new ReplicatedGeneRestriction(2 * 7 + 3, 2 * 7 + 5));
     genesRestriction.add(new ReplicatedGeneRestriction(2 * 7 + 3, 2 * 7 + 6));
