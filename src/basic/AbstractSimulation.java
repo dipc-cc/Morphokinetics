@@ -22,7 +22,7 @@ import utils.psdAnalysis.PsdSignature2D;
 public abstract class AbstractSimulation {
 
   protected AbstractKmc kmc;
-  protected IRatesFactory ratesFactory;
+  protected IRatesFactory rates;
   protected DiffusionKmcFrame frame;
   protected PsdSignature2D psd;
 
@@ -33,7 +33,7 @@ public abstract class AbstractSimulation {
   
   public AbstractSimulation(Parser parser) {
     kmc = null;
-    ratesFactory = null;
+    rates = null;
     frame = null;
     psd = null;
     this.parser = parser;
@@ -60,7 +60,7 @@ public abstract class AbstractSimulation {
         this.config = null;
     }
     this.kmc = null;
-    this.ratesFactory = null;
+    this.rates = null;
   }
 
   /**
@@ -92,7 +92,7 @@ public abstract class AbstractSimulation {
     // Main loop
     for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
       long iterStartTime = System.currentTimeMillis();
-      initializeRates(ratesFactory, kmc, parser);
+      initializeRates(rates, kmc, parser);
       kmc.simulate();
       System.out.format("    %03d", simulations);
       System.out.format("\t%.3f",(double)kmc.getTime());
@@ -160,7 +160,7 @@ public abstract class AbstractSimulation {
   }
 
   public IRatesFactory getRatesFactory() {
-    return ratesFactory;
+    return rates;
   }
 
   public static void printHeader() {

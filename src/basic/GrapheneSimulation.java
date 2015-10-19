@@ -22,7 +22,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.ratesFactory = new GrapheneRatesFactory();
+    this.rates = new GrapheneRatesFactory();
     this.kmc = new GrapheneKmc(config,
             parser.getHexaSizeI(), 
             parser.getHexaSizeJ(),

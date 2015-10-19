@@ -26,7 +26,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.ratesFactory = new SiRatesFactory();
+    this.rates = new SiRatesFactory();
     this.siConfig = configKmc();
     this.kmc = new SiEtchingKmc(siConfig);
   }

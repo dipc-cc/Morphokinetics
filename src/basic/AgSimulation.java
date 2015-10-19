@@ -22,7 +22,7 @@ public class AgSimulation extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.ratesFactory = new AgAgRatesFactory();
+    this.rates = new AgAgRatesFactory();
     this.kmc = new AgAgKmc(config,
             parser.getHexaSizeI(), 
             parser.getHexaSizeJ(),
