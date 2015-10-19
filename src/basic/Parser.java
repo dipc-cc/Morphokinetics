@@ -30,20 +30,24 @@ public class Parser {
   final static Charset ENCODING = StandardCharsets.UTF_8;
 
   private enum ratesLibrary {
-
     basic, gosalvez
   };
+  
+  /** 
+   * Can be batch or evolutionary.
+   */
+  private String calculationType;
   /**
-   * Can be COX_PRB or synthetic. Currently not used
+   * Can be COX_PRB or synthetic. Currently not used.
    */
   private String islandDensityType;
   /**
-   * Can be linear or binned
+   * Can be linear or binned.
    */
   private String listType;
   private String perimeterType;
   /**
-   * Can be Ag or graphene
+   * Can be Ag or graphene.
    */
   private String calculationMode;
   private int temperature;
@@ -75,6 +79,7 @@ public class Parser {
    * Constructor
    */
   public Parser() {
+    this.calculationType = "batch";
     this.islandDensityType = "COX_PRB";
     this.listType = "linear";
     this.perimeterType = "circle";
@@ -132,6 +137,11 @@ public class Parser {
 
     // Once the file is read, proceed to read the parameters
     JSONObject json = new JSONObject(str);
+    try {
+      calculationType = json.getString("calculationType");
+    } catch (JSONException e) {
+      calculationType = "batch";
+    }    
     try {
       islandDensityType = json.getString("islandDensityType");
     } catch (JSONException e) {
@@ -281,6 +291,7 @@ public class Parser {
    * Prints all the parameters; either read from "parameter" file or the default value.
    */
   public void print() {
+    System.out.println("\t\"calculationType\":\t" + calculationType + ",");
     System.out.println("\t\"islandDensityType\":\t" + islandDensityType + ",");
     System.out.println("\t\"justCentralFlake\":\t" + justCentralFlake + ",");
     System.out.println("\t\"listType\":\t\t" + listType + ",");
@@ -310,6 +321,10 @@ public class Parser {
     System.out.println("\t\"populationReplacement\":\t" + populationReplacement);
   }
 
+  public String getCalculationType() {
+    return calculationType;
+  }
+  
   public String getIslandDensityType() {
     return islandDensityType;
   }
