@@ -5,10 +5,7 @@
  */
 package basic;
 
-import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
-import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import ratesLibrary.AgAgRatesFactory;
 
 /**
