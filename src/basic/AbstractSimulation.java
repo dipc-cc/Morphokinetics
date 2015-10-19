@@ -45,16 +45,14 @@ public abstract class AbstractSimulation {
    */
   public void initialiseKmc() {
     switch (parser.getListType()) {
-      case "linear": {
+      case "linear":
         this.config = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
         break;
-      }
-      case "binned": {
+      case "binned":
         this.config = new ListConfiguration().setListType(ListConfiguration.BINNED_LIST)
                 .setBinsPerLevel(parser.getBinsLevels())
                 .setExtraLevels(parser.getExtraLevels());
         break;
-      }
       default:
         System.err.println("listType is not properly set");
         System.err.println("listType currently is " + parser.getListType());
