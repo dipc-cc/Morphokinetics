@@ -12,8 +12,7 @@ import geneticAlgorithm.Population;
  * @author Nestor
  */
 public interface IRecombination {
-    
-public Population recombinate(IndividualGroup[] groups);    
-    
-    
+
+  public Population recombinate(IndividualGroup[] groups);
+
 }
