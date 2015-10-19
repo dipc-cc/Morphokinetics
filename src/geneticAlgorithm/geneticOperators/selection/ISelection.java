@@ -12,6 +12,6 @@ import geneticAlgorithm.Population;
  * @author Nestor
  */
 public interface ISelection {
-    
-    public IndividualGroup[] Select(Population p, int groups);
+
+  public IndividualGroup[] Select(Population p, int groups);
 }
