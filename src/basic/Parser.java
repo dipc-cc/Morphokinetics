@@ -75,6 +75,7 @@ public class Parser {
   private int populationSize;
   private int offspringSize;
   private int populationReplacement;
+  private int totalIterations;
   /**
    * Constructor
    */
@@ -107,7 +108,8 @@ public class Parser {
     this.evaluator = "serial";
     this.populationSize = 5;
     this.offspringSize = 32;
-    this.populationReplacement = 5;            
+    this.populationReplacement = 5;
+    this.totalIterations = 100;
   }
 
   /**
@@ -278,6 +280,11 @@ public class Parser {
       populationReplacement = json.getInt("populationReplacement");
     } catch (JSONException e) {
       populationReplacement = 5;
+    } 
+    try {
+      totalIterations = json.getInt("totalIterations");
+    } catch (JSONException e) {
+      totalIterations = 100;
     }
     return 0;
   }
@@ -318,7 +325,8 @@ public class Parser {
     System.out.println("\t\"evaluator\":\t\t" + evaluator + ",");
     System.out.println("\t\"populationSize\":\t" + populationSize + ",");
     System.out.println("\t\"offspringSize\":\t" + offspringSize + ",");
-    System.out.println("\t\"populationReplacement\":\t" + populationReplacement);
+    System.out.println("\t\"populationReplacement\":\t" + populationReplacement + ",");
+    System.out.println("\t\"totalIterations\":\t" + totalIterations);
   }
 
   public String getCalculationType() {
@@ -452,5 +460,9 @@ public class Parser {
   
   public int getPopulationReplacement() {
     return populationReplacement;
+  }
+  
+  public int getTotalIterations() {
+    return totalIterations;
   }
 }
