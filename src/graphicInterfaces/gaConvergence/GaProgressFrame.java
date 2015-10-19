@@ -19,7 +19,7 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
   /**
    * Creates new form NewJFrame
    */
-  private IGeneticAlgorithm geenticAlgorithm;
+  private IGeneticAlgorithm geneticAlgorithm;
   private ErrorPanel panel;
   private ProgressUpdater updater;
   private int totalIterations;
@@ -35,8 +35,8 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
 
     this.panel = new ErrorPanel(Color.red);
     this.jScrollPane1.setViewportView(panel);
-    this.geenticAlgorithm = geenticAlgorithm;
-    this.geenticAlgorithm.setGraphics(this);
+    this.geneticAlgorithm = geenticAlgorithm;
+    this.geneticAlgorithm.setGraphics(this);
     this.totalIterations = 0;
     updater = new ProgressUpdater();
     updater.start();
@@ -175,9 +175,9 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
     public void run() {
       while (active) {
 
-        float[] progress = geenticAlgorithm.getProgressPercent();
+        float[] progress = geneticAlgorithm.getProgressPercent();
         jProgressBar1.setValue((int) progress[0]);
-        jProgressBar1.setString(geenticAlgorithm.getCurrentIteration() + "/" + geenticAlgorithm.getTotalIterations());
+        jProgressBar1.setString(geneticAlgorithm.getCurrentIteration() + "/" + geneticAlgorithm.getTotalIterations());
         jProgressBar2.setValue((int) progress[1]);
         jProgressBar2.setString(formatPercent(progress[1]) + "" + "%");
         jProgressBar3.setValue((int) progress[2]);
