@@ -12,8 +12,7 @@ import java.util.List;
  * @author Nestor
  */
 public interface IMutation {
-    
-    
-    public void mutate(Population p,List nonFixedGenes);
-    
+
+  public void mutate(Population p, List nonFixedGenes);
+
 }
