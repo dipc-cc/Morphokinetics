@@ -75,7 +75,6 @@ public class Morphokinetics {
   }
 
   private static void evoluationarySimulation(Parser parser) {
-    new StaticRandom();
     GeneticAlgorithmConfiguration geneticConfiguration;
     IGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {
