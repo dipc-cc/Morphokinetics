@@ -21,9 +21,9 @@ public class Morphokinetics {
     AbstractSimulation.printHeader();
 
     Parser parser = new Parser();
-    parser.readFile("parameters");
-    
+    parser.readFile("parameters");   
     parser.print();
+    
     AbstractSimulation simulation = null;
     switch (parser.getCalculationMode()) {
       case "Ag":

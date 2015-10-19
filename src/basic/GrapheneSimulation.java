@@ -24,12 +24,12 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
   @Override
   public void initialiseKmc() {
     super.initialiseKmc();
-    
+
     this.ratesFactory = new GrapheneRatesFactory();
-    this.kmc = new GrapheneKmc(config, 
+    this.kmc = new GrapheneKmc(config,
             parser.getHexaSizeI(), 
-            parser.getHexaSizeJ(), 
-            parser.justCentralFlake(), 
+            parser.getHexaSizeJ(),
+            parser.justCentralFlake(),
             (float) parser.getCoverage()/100,
             parser.useMaxPerimeter(),
             parser.getPerimeterType());
@@ -37,15 +37,17 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
 
   @Override
   public void createFrame() {
-    try {
-      frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
-    } catch (Exception e) {
-      System.err.println("Error: The execution is not able to create the X11 frame");
-      System.err.println("Finishing");
-      throw e;
-    }
-    if (parser.visualize()) {
-      frame.setVisible(true);
+    if (parser.withGui()) {
+      try {
+        frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+      } catch (Exception e) {
+        System.err.println("Error: The execution is not able to create the X11 frame");
+        System.err.println("Finishing");
+        throw e;
+      }
+      if (parser.visualize()) {
+        frame.setVisible(true);
+      }
     }
   }
 }
