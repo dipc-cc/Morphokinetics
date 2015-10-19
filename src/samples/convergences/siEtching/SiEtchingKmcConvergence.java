@@ -4,7 +4,7 @@
  */
 package samples.convergences.siEtching;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
