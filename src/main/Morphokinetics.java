@@ -21,14 +21,23 @@ public class Morphokinetics {
     AbstractSimulation.printHeader();
 
     Parser parser = new Parser();
-    parser.readFile("parameters");   
+    parser.readFile("parameters");
     parser.print();
-    
+
+    batchSimulation(parser);
+
+    System.out.println("Execution has finished");
+    if (!parser.withGui() || !parser.visualize()) {
+      System.exit(0);
+    }
+  }
+
+  private static void batchSimulation(Parser parser) {
     AbstractSimulation simulation = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
         simulation = new AgSimulation(parser);
-      break;
+        break;
       case "graphene":
         simulation = new GrapheneSimulation(parser);
         break;
@@ -43,9 +52,5 @@ public class Morphokinetics {
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
-
-    System.out.println("Execution has finished");
-    if (!parser.withGui() || !parser.visualize())
-      System.exit(0);
   }
 }
