@@ -74,7 +74,6 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
 
     for (int i = 0; i < p.size(); i++) {
       results[i] = evaluateIndividual(p.getIndividual(i));
-
     }
 
     return results;
@@ -88,7 +87,6 @@ public abstract class AbstractPsdEvaluation extends AbstractEvaluation {
     double error = 0;
     for (int a = 0; a < psdSizeX; a++) {
       for (int b = 0; b < psdSizeY; b++) {
-
         error += Math.abs(difference[a][b]);
       }
     }
