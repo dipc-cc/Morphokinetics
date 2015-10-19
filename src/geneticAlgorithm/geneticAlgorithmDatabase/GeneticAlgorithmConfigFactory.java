@@ -52,6 +52,7 @@ public class GeneticAlgorithmConfigFactory {
     this.parser = parser;
     this.agSimulation = new AgSimulation(parser);
     agSimulation.initialiseKmc();
+    agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
     
     float experitentalTemp = parser.getTemperature();
     this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
@@ -166,10 +167,10 @@ public class GeneticAlgorithmConfigFactory {
     AbstractPsdEvaluation evaluator = null;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(), 1, Integer.MAX_VALUE);
+        evaluator = new AgAgBasicPsdEvaluation((AgAgKmc) agSimulation.getKmc(), 1, Integer.MAX_VALUE);
         break;
       case "threaded":
-        evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(), 30, Integer.MAX_VALUE, 2);
+        evaluator = new AgAgGrowthThreadedPsdEvaluation((AgAgKmc) agSimulation.getKmc(), 30, Integer.MAX_VALUE, 2);
         break;
       default:
         break;
@@ -212,10 +213,5 @@ public class GeneticAlgorithmConfigFactory {
     
     return new AgAgKmc(listConfig, 66, (int) (66 / AgAgLattice.YRatio),depositionRate, islandDensity);
 
-  }
-
-  private AgAgKmc localAgAgKmc() {
-     agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
-     return (AgAgKmc) agSimulation.getKmc();
   }
 }
