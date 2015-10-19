@@ -10,13 +10,13 @@ import java.util.List;
 
 /**
  *
- * @author Nestor
  *
- * This is a basic class that sequentially applies all the evaluation functions over a population
+ * This is a basic class that sequentially applies all the evaluation functions over a population.
  *
  * More advanced implementations can do parallel evaluation of several functions by using
  * multithreading.
  *
+ * @author Nestor
  *
  */
 public class BasicEvaluator implements IEvaluator, IProgressable {
