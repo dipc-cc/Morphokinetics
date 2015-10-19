@@ -11,29 +11,22 @@ import geneticAlgorithm.Individual;
  * @author Nestor
  */
 public class FixedGeneRestriction extends GeneRestriction {
-    
-        private double fixedValue;
 
-    public FixedGeneRestriction(double fixedValue, int genePosition) {
-        super(genePosition);
-        this.fixedValue = fixedValue;
-    }
+  private double fixedValue;
 
-    @Override
-    public void restrictGene(Individual i) {
-       i.setGene(genePosition, fixedValue);
-    }
+  public FixedGeneRestriction(double fixedValue, int genePosition) {
+    super(genePosition);
+    this.fixedValue = fixedValue;
+  }
 
-    @Override
-    public int getRestrictionType() {
-        return GeneRestriction.FIXED_VALUE;
-    }
+  @Override
+  public void restrictGene(Individual i) {
+    i.setGene(genePosition, fixedValue);
+  }
 
+  @Override
+  public int getRestrictionType() {
+    return GeneRestriction.FIXED_VALUE;
+  }
 
-    
-
-    
-    
-    
-    
 }
