@@ -276,7 +276,7 @@ public class Parser {
     System.out.println("\t\"psd\":\t\t\t" + psd + ",");
     System.out.println("\t\"outputData\":\t\t" + outputData + ",");
     System.out.println("\t\"randomSeed\":\t\t" + randomSeed + ",");
-    System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter);
+    System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter + ",");
     System.out.println("\t\"evolutionaryAlgorithm\":\t" + evolutionaryAlgorithm);
   }
 
