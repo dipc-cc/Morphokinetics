@@ -4,6 +4,7 @@
  */
 package geneticAlgorithm.geneticAlgorithmDatabase;
 
+import basic.Parser;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AgAgBasicPsdEvaluation;
@@ -26,6 +27,7 @@ import utils.list.ListConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.lattice.AgAgLattice;
+import ratesLibrary.AgAgRatesFactory;
 
 /**
  *
@@ -70,6 +72,29 @@ public class GeneticAlgorithmConfigFactory {
 
     return config;
   }
+    public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(Parser parser) {
+
+    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+
+    float experitentalTemp = parser.getTemperature();
+    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
+    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
+    double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
+    
+    config.setPopulationSize(parser.getPopulationSize());
+    config.setOffspringSize(parser.getOffspringSize());
+    config.setPopulationReplacements(parser.getPopulationReplacement());
+    config.setInitialization(new AgAgInitialization());
+    config.setMutation(new BgaBasedMutator());
+    config.setRecombination(new RealRecombination());
+    config.setReinsertion(new ElitistReinsertion());
+    config.setRestriction(new AgAgRestriction(diffusionRate));
+    config.setSelection(new RankingSelection());
+    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setOtherEvaluators(addNoMoreEvaluators());
+
+    return config;
+  }
 
   public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
@@ -83,6 +108,27 @@ public class GeneticAlgorithmConfigFactory {
         //config.mutation = new BgaBasedMutator();
     //config.recombination = new RealRecombination();
     //config.reinsertion = new ElitistReinsertion();
+    config.setRestriction(new AgAgRestriction(diffusionRate));
+    config.setSelection(new RandomSelection());
+    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setOtherEvaluators(addNoMoreEvaluators());
+
+    return config;
+  }
+  
+  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(Parser parser) {
+
+    GeneticAlgorithmConfiguration config = new GeneticAlgorithmConfiguration();
+
+    float experitentalTemp = parser.getTemperature();
+    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
+    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
+    double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
+    
+    config.setPopulationSize(parser.getPopulationSize());
+    config.setOffspringSize(parser.getOffspringSize());
+    config.setPopulationReplacements(parser.getPopulationReplacement());
+    config.setInitialization(new AgAgInitialization());
     config.setRestriction(new AgAgRestriction(diffusionRate));
     config.setSelection(new RandomSelection());
     config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
