@@ -5,7 +5,7 @@
 package geneticAlgorithm;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.IEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.psdEvaluator.AbstractPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
 import geneticAlgorithm.geneticOperators.populationInitialization.IInitializator;
 import geneticAlgorithm.geneticOperators.recombination.IRecombination;
