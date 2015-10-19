@@ -6,11 +6,9 @@ package geneticAlgorithm.geneticOperators.restrictions.siEtching;
 
 import geneticAlgorithm.geneticOperators.restrictions.BoundedGeneRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.FixedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.GeneRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.ReplicatedGeneRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
