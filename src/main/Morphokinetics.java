@@ -19,7 +19,6 @@ import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.AgAgRatesFactory;
-import utils.StaticRandom;
 
 /**
  *
