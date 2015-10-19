@@ -52,12 +52,12 @@ public class GeneticAlgorithmConfigFactory {
     this.parser = parser;
     this.agSimulation = new AgSimulation(parser);
     agSimulation.initialiseKmc();
-    agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
     
     float experitentalTemp = parser.getTemperature();
     this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
     this.islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
     this.diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
+    agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
   }
   
   public GeneticAlgorithmConfiguration createSiConvergenceConfiguration() {
