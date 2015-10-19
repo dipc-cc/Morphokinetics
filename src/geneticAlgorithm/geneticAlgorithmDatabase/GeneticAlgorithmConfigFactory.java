@@ -215,13 +215,7 @@ public class GeneticAlgorithmConfigFactory {
   }
 
   private AgAgKmc localAgAgKmc() {
-    /* Should be:*/
      agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
      return (AgAgKmc) agSimulation.getKmc();
-    /*ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(20);
-
-    return new AgAgKmc(listConfig, parser.getHexaSizeI(), parser.getHexaSizeJ(), depositionRate, islandDensity);*/
   }
 }
