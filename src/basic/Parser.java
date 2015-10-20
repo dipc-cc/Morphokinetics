@@ -298,35 +298,35 @@ public class Parser {
    * Prints all the parameters; either read from "parameter" file or the default value.
    */
   public void print() {
-    System.out.println("\t\"calculationType\":\t" + calculationType + ",");
-    System.out.println("\t\"islandDensityType\":\t" + islandDensityType + ",");
-    System.out.println("\t\"justCentralFlake\":\t" + justCentralFlake + ",");
-    System.out.println("\t\"listType\":\t\t" + listType + ",");
-    System.out.println("\t\"perimeterType\":\t" + perimeterType + ",");
-    System.out.println("\t\"multithreaded\":\t" + multithreaded + ",");
-    System.out.println("\t\"numberOfSimulations\":\t" + numberOfSimulations + ",");
-    System.out.println("\t\"cartSizeX\":\t\t" + cartSizeX + ",");
-    System.out.println("\t\"cartSizeY\":\t\t" + cartSizeY + ",");
-    System.out.println("\t\"binsLevels\":\t\t" + binsLevels + ",");
-    System.out.println("\t\"extraLevels\":\t\t" + extraLevels + ",");
-    System.out.println("\t\"coverage\":\t\t" + coverage + ",");
-    System.out.println("\t\"presure\":\t\t" + presure + ",");
-    System.out.println("\t\"temperature\":\t\t" + temperature + ",");
-    System.out.println("\t\"flow\":\t\t\t" + flow + ",");
-    System.out.println("\t\"visualize\":\t\t" + visualize + ",");
-    System.out.println("\t\"withGui\":\t\t" + withGui + ",");
-    System.out.println("\t\"printToImage\":\t\t" + printToImage + ",");
-    System.out.println("\t\"calculationMode\":\t" + calculationMode + ",");
-    System.out.println("\t\"psd\":\t\t\t" + psd + ",");
-    System.out.println("\t\"outputData\":\t\t" + outputData + ",");
-    System.out.println("\t\"randomSeed\":\t\t" + randomSeed + ",");
-    System.out.println("\t\"useMaxPerimeter\":\t" + useMaxPerimeter + ",");
-    System.out.println("\t\"evolutionaryAlgorithm\":\t" + evolutionaryAlgorithm + ",");
-    System.out.println("\t\"evaluator\":\t\t" + evaluator + ",");
-    System.out.println("\t\"populationSize\":\t" + populationSize + ",");
-    System.out.println("\t\"offspringSize\":\t" + offspringSize + ",");
-    System.out.println("\t\"populationReplacement\":\t" + populationReplacement + ",");
-    System.out.println("\t\"totalIterations\":\t" + totalIterations);
+    System.out.printf("%32s: %s,\n", "\"calculationType\"", calculationType);
+    System.out.printf("%32s: %s,\n", "\"islandDensityType\"", islandDensityType);
+    System.out.printf("%32s: %s,\n", "\"justCentralFlake\"", justCentralFlake);
+    System.out.printf("%32s: %s,\n", "\"listType\"", listType);
+    System.out.printf("%32s: %s,\n", "\"perimeterType\"", perimeterType);
+    System.out.printf("%32s: %s,\n", "\"multithreaded\"", multithreaded);
+    System.out.printf("%32s: %s,\n", "\"numberOfSimulations\"", numberOfSimulations);
+    System.out.printf("%32s: %s,\n", "\"cartSizeX\"", cartSizeX);
+    System.out.printf("%32s: %s,\n", "\"cartSizeY\"", cartSizeY);
+    System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
+    System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
+    System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
+    System.out.printf("%32s: %s,\n", "\"presure\"", presure);
+    System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
+    System.out.printf("%32s: %s,\n", "\"flow\"", flow);
+    System.out.printf("%32s: %s,\n", "\"visualize\"", visualize);
+    System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
+    System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
+    System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
+    System.out.printf("%32s: %s,\n", "\"psd\"", psd);
+    System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
+    System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
+    System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
+    System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
+    System.out.printf("%32s: %s,\n", "\"evaluator\"", evaluator);
+    System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
+    System.out.printf("%32s: %s,\n", "\"offspringSize\"", offspringSize);
+    System.out.printf("%32s: %s,\n", "\"populationReplacement\"", populationReplacement);
+    System.out.printf("%32s: %s\n", "\"totalIterations\"", totalIterations);
   }
 
   public String getCalculationType() {
