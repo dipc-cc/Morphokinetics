@@ -30,18 +30,54 @@ public class RatesFromPrbCox implements IDiffusionRates {
   private double diffusion_ML = 0.0035;
   double P = 10e13;
   double Pd = 10e11; //no lo sabemos
+  /**
+   * Energy from edge A to edge A
+   */
   double Eaa = 0.275;
+  /**
+   * Energy from edge B to edge B
+   */
   double Ebb = 0.310;
+  /**
+   * Energy from corner to edge A
+   */
   double Eca = 0.075;
+  /**
+   * Energy from corner to edge B
+   */
   double Ecb = 0.15;
+  /**
+   * Energy from corner to corner
+   */
   double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
+  /**
+   * Energy from edge A to edge B, from corner
+   */
   double Eacb = 0.36;
+  /**
+   * Energy from edge B to edge A, from corner
+   */
   double Ebca = 0.36;
+  /**
+   * Energy from edge A to kink, from corner
+   */
   double Eack = 0.36;
+  /**
+   * Energy from edge B to kink, from corner
+   */
   double Ebck = 0.36;
-  double Eck_a = 0.15;
+  /**
+   * Energy from corner to kink, from edge A
+   */
+  double Eck_a = 0.15;  
+  /**
+   * Energy from corner to kink, from edge B
+   */
   double Eck_b = 0.075;
   double Ed = 0.1;  //no lo sabemos seguro
+  /**
+   * Infinite energy. To make impossible the transition.
+   */
   double E_inf = 9999999;
   private double[][] prefactors = new double[7][7];
   private double[][] energies = new double[7][7];
