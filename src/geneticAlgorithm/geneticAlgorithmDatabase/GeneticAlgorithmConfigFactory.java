@@ -45,6 +45,10 @@ public class GeneticAlgorithmConfigFactory {
   
   public GeneticAlgorithmConfigFactory() {
     config = new GeneticAlgorithmConfiguration();
+    float experitentalTemp = 135;///parser.getTemperature();
+    this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
+    this.islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
+    this.diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
   }
   
   public GeneticAlgorithmConfigFactory(Parser parser) {
