@@ -32,7 +32,7 @@ public class BasicEvaluator implements IEvaluator, IProgressable {
    * @param functions 
    */
   @Override
-  public void evaluateAndOrder(Population p, AbstractPsdEvaluation functionWithSimulation, List<IEvaluation> functions) {
+  public void evaluateAndOrder(Population p, AbstractPsdEvaluator functionWithSimulation, List<IEvaluation> functions) {
 
     currentEvaluator = functionWithSimulation;
     double[] results = functionWithSimulation.evaluate(p);

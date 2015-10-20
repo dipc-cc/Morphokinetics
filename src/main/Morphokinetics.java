@@ -16,7 +16,7 @@ import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.AgAgRatesFactory;
 
@@ -94,7 +94,7 @@ public class Morphokinetics {
     }
 
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluation evaluator = geneticConfiguration.getMainEvaluator();
+    AbstractPsdEvaluator evaluator = geneticConfiguration.getMainEvaluator();
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);

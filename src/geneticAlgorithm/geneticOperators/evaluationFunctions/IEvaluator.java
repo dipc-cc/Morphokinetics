@@ -21,5 +21,5 @@ public interface IEvaluator {
    * @param functionWithSimulation
    * @param functions
    */
-  public void evaluateAndOrder(Population p, AbstractPsdEvaluation functionWithSimulation, List<IEvaluation> functions);
+  public void evaluateAndOrder(Population p, AbstractPsdEvaluator functionWithSimulation, List<IEvaluation> functions);
 }

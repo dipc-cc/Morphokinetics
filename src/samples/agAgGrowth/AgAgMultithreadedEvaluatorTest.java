@@ -5,7 +5,7 @@
  */
 package samples.agAgGrowth;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AgAgBasicPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
@@ -25,7 +25,7 @@ public class AgAgMultithreadedEvaluatorTest {
     float experimentalTemp = 135;
 
     //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
-    AgAgBasicPsdEvaluation evaluation = new AgAgBasicPsdEvaluation(localAgAgKmc(experimentalTemp), 20, Integer.MAX_VALUE);
+    AgBasicPsdEvaluator evaluation = new AgBasicPsdEvaluator(localAgAgKmc(experimentalTemp), 20, Integer.MAX_VALUE);
 
     Individual individual = new Individual(new AgAgRatesFactory().getRates(experimentalTemp));
     float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);

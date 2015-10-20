@@ -5,7 +5,7 @@
 package geneticAlgorithm;
 
 import geneticAlgorithm.geneticOperators.evaluationFunctions.IEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
 import geneticAlgorithm.geneticOperators.populationInitialization.IInitializator;
 import geneticAlgorithm.geneticOperators.recombination.IRecombination;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class GeneticAlgorithmConfiguration {
 
-  private AbstractPsdEvaluation mainEvaluator;
+  private AbstractPsdEvaluator mainEvaluator;
   private List<IEvaluation> otherEvaluators;
   private IMutation mutation;
   private IInitializator initialization;
@@ -33,7 +33,7 @@ public class GeneticAlgorithmConfiguration {
   private int populationReplacements;
   private double expectedSimulationTime;
 
-  public void setMainEvaluator(AbstractPsdEvaluation mainEvaluator) {
+  public void setMainEvaluator(AbstractPsdEvaluator mainEvaluator) {
     this.mainEvaluator = mainEvaluator;
   }
 
@@ -81,7 +81,7 @@ public class GeneticAlgorithmConfiguration {
     this.expectedSimulationTime = expectedSimulationTime;
   }
 
-  public AbstractPsdEvaluation getMainEvaluator() {
+  public AbstractPsdEvaluator getMainEvaluator() {
     return mainEvaluator;
   }
 

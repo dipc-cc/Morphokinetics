@@ -16,9 +16,9 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
  *
  * @author Nestor
  */
-public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinishListener, IIntervalListener {
+public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
-  public AgAgGrowthThreadedPsdEvaluation(AgAgKmc kmc, int repeats, int measureInterval, int numThreads) {
+  public AgThreadedPsdEvaluator(AgAgKmc kmc, int repeats, int measureInterval, int numThreads) {
 
     super(repeats, measureInterval, numThreads);
 
@@ -40,7 +40,7 @@ public class AgAgGrowthThreadedPsdEvaluation extends MultithreadedPsdEvaluation 
   }
 
   @Override
-  public AbstractEvaluation setShowGraphics(boolean showGraphics) {
+  public AbstractEvaluator setShowGraphics(boolean showGraphics) {
     super.setShowGraphics(showGraphics);
 
     return this;

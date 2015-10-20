@@ -15,11 +15,11 @@ import kineticMonteCarlo.kmcCore.worker.KmcWorker;
  *
  * @author Nestor
  */
-public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation implements IFinishListener, IIntervalListener {
+public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
   private SiliconFrame frame;
 
-  public SiEtchingThreadedPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval, int numThreads) {
+  public SiThreadedPsdEvaluator(SiEtchingKmcConfig config, int repeats, int measureInterval, int numThreads) {
 
     super(repeats, measureInterval, numThreads);
 
@@ -32,7 +32,7 @@ public class SiEtchingThreadedPsdEvaluation extends MultithreadedPsdEvaluation i
   }
 
   @Override
-  public AbstractEvaluation setShowGraphics(boolean showGraphics) {
+  public AbstractEvaluator setShowGraphics(boolean showGraphics) {
     super.setShowGraphics(showGraphics);
     if (showGraphics && frame == null) {
       frame = new SiliconFrame();

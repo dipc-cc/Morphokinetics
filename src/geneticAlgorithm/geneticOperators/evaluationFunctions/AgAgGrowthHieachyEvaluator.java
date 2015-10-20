@@ -12,7 +12,7 @@ import geneticAlgorithm.Population;
  *
  * @author Nestor
  */
-public class AgAgGrowthHieachyEvaluator extends AbstractEvaluation {
+public class AgAgGrowthHieachyEvaluator extends AbstractEvaluator {
 
     @Override
     public void dispose() {

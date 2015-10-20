@@ -15,11 +15,11 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public class AgAgBasicPsdEvaluation extends AbstractPsdEvaluation {
+public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private AgAgKmc kmc;
 
-  public AgAgBasicPsdEvaluation(AgAgKmc kmc, int repeats, int measureInterval) {
+  public AgBasicPsdEvaluator(AgAgKmc kmc, int repeats, int measureInterval) {
 
     super(repeats, measureInterval);
 

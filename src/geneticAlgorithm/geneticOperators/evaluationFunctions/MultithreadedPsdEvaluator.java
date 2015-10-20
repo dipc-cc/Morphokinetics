@@ -17,7 +17,7 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation implements IFinishListener, IIntervalListener {
+public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator implements IFinishListener, IIntervalListener {
 
   protected static final int FPS_GRAPHICS = 2;
 
@@ -30,7 +30,7 @@ public abstract class MultithreadedPsdEvaluation extends AbstractPsdEvaluation i
   protected int finishedSimulation;
   protected Semaphore evalationComplete;
 
-  public MultithreadedPsdEvaluation(int repeats, int measureInterval, int numThreads) {
+  public MultithreadedPsdEvaluator(int repeats, int measureInterval, int numThreads) {
     super(repeats, measureInterval);
 
     this.workers = new KmcWorker[numThreads];

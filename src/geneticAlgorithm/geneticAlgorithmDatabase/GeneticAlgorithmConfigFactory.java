@@ -7,11 +7,11 @@ package geneticAlgorithm.geneticAlgorithmDatabase;
 import basic.AgSimulation;
 import basic.Parser;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.IEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AgAgBasicPsdEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AgAgGrowthThreadedPsdEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.SiEtchingBasicPsdEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.SiEtchingThreadedPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AgBasicPsdEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AgThreadedPsdEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.SiBasicPsdEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.geneticOperators.mutation.BgaBasedMutator;
 import geneticAlgorithm.geneticOperators.populationInitialization.SiEtchingInitialization;
 import geneticAlgorithm.geneticOperators.populationInitialization.AgAgInitialization;
@@ -109,22 +109,26 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
-  private AbstractPsdEvaluation getSiMainEvaluators() {
-    SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(localSiKmc(), 30, 10000, 8);
+  private AbstractPsdEvaluator getSiMainEvaluators() {
+    SiThreadedPsdEvaluator evaluator = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
 
     return evaluator;
   }
 
-  private AbstractPsdEvaluation getAgAgMainEvaluator() {
-    AbstractPsdEvaluation evaluator = null;
+  /**
+   * Evaluator evaluation 
+   * @return 
+   */
+  private AbstractPsdEvaluator getAgAgMainEvaluator() {
+    AbstractPsdEvaluator evaluator = null;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluator = new AgAgBasicPsdEvaluation((AgAgKmc) agSimulation.getKmc(), 1, Integer.MAX_VALUE);
+        evaluator = new AgBasicPsdEvaluator((AgAgKmc) agSimulation.getKmc(), 1, Integer.MAX_VALUE);
         break;
       case "threaded":
-        evaluator = new AgAgGrowthThreadedPsdEvaluation((AgAgKmc) agSimulation.getKmc(), 30, Integer.MAX_VALUE, 2);
+        evaluator = new AgThreadedPsdEvaluator((AgAgKmc) agSimulation.getKmc(), 30, Integer.MAX_VALUE, 2);
         break;
       default:
         break;
@@ -195,9 +199,9 @@ public class GeneticAlgorithmConfigFactory {
   }
   
   @Deprecated
-  private AbstractPsdEvaluation getAgAgMainEvaluator(double depositionRate, double islandDensity) {
+  private AbstractPsdEvaluator getAgAgMainEvaluator(double depositionRate, double islandDensity) {
     //AgAgGrowthThreadedPsdEvaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
-    AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
+    AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
 
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);

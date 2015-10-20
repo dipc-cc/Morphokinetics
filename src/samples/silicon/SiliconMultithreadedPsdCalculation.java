@@ -4,9 +4,9 @@
  */
 package samples.silicon;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluation;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.SiEtchingThreadedPsdEvaluation;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
@@ -26,11 +26,11 @@ public class SiliconMultithreadedPsdCalculation {
 
     SiEtchingKmcConfig config = configKmc();
 
-    AbstractEvaluation evaluation = new SiEtchingThreadedPsdEvaluation(config, 20, 10000, 4);
+    AbstractEvaluator evaluation = new SiThreadedPsdEvaluator(config, 20, 10000, 4);
     evaluation.setWheight(1.0f);
     evaluation.setShowGraphics(false);
 
-    float[][] psd = ((AbstractPsdEvaluation) evaluation).calculatePsdFromIndividual(new Individual(
+    float[][] psd = ((AbstractPsdEvaluator) evaluation).calculatePsdFromIndividual(new Individual(
             new SiRatesFactory().getRates(350)));
 
     evaluation.dispose();

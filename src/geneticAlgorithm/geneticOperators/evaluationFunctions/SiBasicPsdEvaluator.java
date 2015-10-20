@@ -13,11 +13,11 @@ import utils.psdAnalysis.PsdSignature2D;
  *
  * @author Nestor
  */
-public class SiEtchingBasicPsdEvaluation extends AbstractPsdEvaluation {
+public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private SiEtchingKmc kmc;
 
-  public SiEtchingBasicPsdEvaluation(SiEtchingKmcConfig config, int repeats, int measureInterval) {
+  public SiBasicPsdEvaluator(SiEtchingKmcConfig config, int repeats, int measureInterval) {
 
     super(repeats, measureInterval);
 

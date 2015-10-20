@@ -8,12 +8,12 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
  *
  * @author Nestor
  */
-public abstract class AbstractEvaluation implements IEvaluation {
+public abstract class AbstractEvaluator implements IEvaluation {
 
   protected double wheight;
   protected boolean showGraphics;
 
-  public AbstractEvaluation() {
+  public AbstractEvaluator() {
     this.wheight = 1.0;
     this.showGraphics = false;
   }
@@ -23,7 +23,7 @@ public abstract class AbstractEvaluation implements IEvaluation {
     return wheight;
   }
 
-  public AbstractEvaluation setShowGraphics(boolean showGraphics) {
+  public AbstractEvaluator setShowGraphics(boolean showGraphics) {
     this.showGraphics = showGraphics;
     return this;
   }
