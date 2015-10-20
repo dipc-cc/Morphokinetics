@@ -38,13 +38,11 @@ public class RatesFromPrbCox implements IDiffusionRates {
   private double[][] prefactors = new double[7][7];
   private double[][] energies = new double[7][7];
 
-  //0: terrace
-  //1: corner
-  //2: A side
-  //3: kink A
-  //4: bulk
-  //5: B side
-  //6: Kink B
+  /**
+   * Atom types are documented in class AbstractAtom. In any case are;
+   *
+   * 0: terrace | 1: corner | 2: A side | 3: kink A | 4: bulk | 5: B side | 6: Kink B
+   */
   public RatesFromPrbCox() {
 
     //[source type][destination type]
