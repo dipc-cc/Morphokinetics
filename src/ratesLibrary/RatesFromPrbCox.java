@@ -69,16 +69,16 @@ public class RatesFromPrbCox implements IDiffusionRates {
   /**
    * Energy from corner to kink, from edge A
    */
-  double Eck_a = 0.15;  
+  double Ecak = 0.15;  
   /**
    * Energy from corner to kink, from edge B
    */
-  double Eck_b = 0.075;
+  double Ecbk = 0.075;
   double Ed = 0.1;  //no lo sabemos seguro
   /**
    * Infinite energy. To make impossible the transition.
    */
-  double E_inf = 9999999;
+  double Einf = 9999999;
   private double[][] prefactors = new double[7][7];
   private double[][] energies = new double[7][7];
 
@@ -98,53 +98,53 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[TERRACE][EDGE_B] = Ed;
     energies[TERRACE][KINK_B] = Ed;
 
-    energies[CORNER][TERRACE] = E_inf;//
+    energies[CORNER][TERRACE] = Einf;//
     energies[CORNER][CORNER] = Ecc;
     energies[CORNER][EDGE_A] = Eca;
-    energies[CORNER][KINK_A] = Eck_a;
-    energies[CORNER][ISLAND] = Math.max(Eck_a, Eck_b);
+    energies[CORNER][KINK_A] = Ecak;
+    energies[CORNER][ISLAND] = Math.max(Ecak, Ecbk);
     energies[CORNER][EDGE_B] = Ecb;
-    energies[CORNER][KINK_B] = Eck_b;
+    energies[CORNER][KINK_B] = Ecbk;
 
-    energies[EDGE_A][TERRACE] = E_inf;
-    energies[EDGE_A][CORNER] = E_inf;
+    energies[EDGE_A][TERRACE] = Einf;
+    energies[EDGE_A][CORNER] = Einf;
     energies[EDGE_A][EDGE_A] = Eaa;
     energies[EDGE_A][KINK_A] = Eack;
     energies[EDGE_A][ISLAND] = Eack;
     energies[EDGE_A][EDGE_B] = Eacb;
     energies[EDGE_A][KINK_B] = Eack;
 
-    energies[KINK_A][TERRACE] = E_inf;
-    energies[KINK_A][CORNER] = E_inf;
-    energies[KINK_A][EDGE_A] = E_inf;
-    energies[KINK_A][KINK_A] = E_inf;
-    energies[KINK_A][ISLAND] = E_inf;
-    energies[KINK_A][EDGE_B] = E_inf;
-    energies[KINK_A][KINK_B] = E_inf;
+    energies[KINK_A][TERRACE] = Einf;
+    energies[KINK_A][CORNER] = Einf;
+    energies[KINK_A][EDGE_A] = Einf;
+    energies[KINK_A][KINK_A] = Einf;
+    energies[KINK_A][ISLAND] = Einf;
+    energies[KINK_A][EDGE_B] = Einf;
+    energies[KINK_A][KINK_B] = Einf;
 
-    energies[ISLAND][TERRACE] = E_inf;
-    energies[ISLAND][CORNER] = E_inf;
-    energies[ISLAND][EDGE_A] = E_inf;
-    energies[ISLAND][KINK_A] = E_inf;
-    energies[ISLAND][ISLAND] = E_inf;
-    energies[ISLAND][EDGE_B] = E_inf;
-    energies[ISLAND][KINK_B] = E_inf;
+    energies[ISLAND][TERRACE] = Einf;
+    energies[ISLAND][CORNER] = Einf;
+    energies[ISLAND][EDGE_A] = Einf;
+    energies[ISLAND][KINK_A] = Einf;
+    energies[ISLAND][ISLAND] = Einf;
+    energies[ISLAND][EDGE_B] = Einf;
+    energies[ISLAND][KINK_B] = Einf;
 
-    energies[EDGE_B][TERRACE] = E_inf;
-    energies[EDGE_B][CORNER] = E_inf;
+    energies[EDGE_B][TERRACE] = Einf;
+    energies[EDGE_B][CORNER] = Einf;
     energies[EDGE_B][EDGE_A] = Ebca;
     energies[EDGE_B][KINK_A] = Ebck;
     energies[EDGE_B][ISLAND] = Ebck;
     energies[EDGE_B][EDGE_B] = Ebb;
     energies[EDGE_B][KINK_B] = Ebck;
 
-    energies[KINK_B][TERRACE] = E_inf;
-    energies[KINK_B][CORNER] = E_inf;
-    energies[KINK_B][EDGE_A] = E_inf;
-    energies[KINK_B][KINK_A] = E_inf;
-    energies[KINK_B][ISLAND] = E_inf;
-    energies[KINK_B][EDGE_B] = E_inf;
-    energies[KINK_B][KINK_B] = E_inf;
+    energies[KINK_B][TERRACE] = Einf;
+    energies[KINK_B][CORNER] = Einf;
+    energies[KINK_B][EDGE_A] = Einf;
+    energies[KINK_B][KINK_A] = Einf;
+    energies[KINK_B][ISLAND] = Einf;
+    energies[KINK_B][EDGE_B] = Einf;
+    energies[KINK_B][KINK_B] = Einf;
 
     prefactors[TERRACE][TERRACE] = Pd;
     prefactors[TERRACE][CORNER] = Pd;
