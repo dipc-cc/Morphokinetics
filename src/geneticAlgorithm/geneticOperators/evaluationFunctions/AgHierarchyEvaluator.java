@@ -9,10 +9,10 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 
 /**
- *
+ * 
  * @author Nestor
  */
-public class AgAgGrowthHieachyEvaluator extends AbstractEvaluator {
+public class AgHierarchyEvaluator extends AbstractEvaluator {
 
     @Override
     public void dispose() {
