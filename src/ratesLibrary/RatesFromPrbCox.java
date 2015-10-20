@@ -28,57 +28,57 @@ public class RatesFromPrbCox implements IDiffusionRates {
    * Diffusion Mono Layer. Utilised to calculate absorption rate
    */
   private double diffusion_ML = 0.0035;
-  double P = 10e13;
-  double Pd = 10e11; //no lo sabemos
+  private double P = 10e13;
+  private double Pd = 10e11; //no lo sabemos
   /**
    * Energy from edge A to edge A
    */
-  double Eaa = 0.275;
+  private double Eaa = 0.275;
   /**
    * Energy from edge B to edge B
    */
-  double Ebb = 0.310;
+  private double Ebb = 0.310;
   /**
    * Energy from corner to edge A
    */
-  double Eca = 0.075;
+  private double Eca = 0.075;
   /**
    * Energy from corner to edge B
    */
-  double Ecb = 0.15;
+  private double Ecb = 0.15;
   /**
    * Energy from corner to corner
    */
-  double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
+  private double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
   /**
    * Energy from edge A to edge B, from corner
    */
-  double Eacb = 0.36;
+  private double Eacb = 0.36;
   /**
    * Energy from edge B to edge A, from corner
    */
-  double Ebca = 0.36;
+  private double Ebca = 0.36;
   /**
    * Energy from edge A to kink, from corner
    */
-  double Eack = 0.36;
+  private double Eack = 0.36;
   /**
    * Energy from edge B to kink, from corner
    */
-  double Ebck = 0.36;
+  private double Ebck = 0.36;
   /**
    * Energy from corner to kink, from edge A
    */
-  double Ecak = 0.15;  
+  private double Ecak = 0.15;  
   /**
    * Energy from corner to kink, from edge B
    */
-  double Ecbk = 0.075;
-  double Ed = 0.1;  //no lo sabemos seguro
+  private double Ecbk = 0.075;
+  private double Ed = 0.1;  //no lo sabemos seguro
   /**
    * Infinite energy. To make impossible the transition.
    */
-  double Einf = 9999999;
+  private double Einf = 9999999;
   private double[][] prefactors = new double[7][7];
   private double[][] energies = new double[7][7];
 
