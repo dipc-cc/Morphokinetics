@@ -6,10 +6,9 @@ package ratesLibrary;
 
 /**
  *
- * @author Nestor
- *
  * Etch rates data obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
- *
+ * 
+ * @author Nestor
  */
 public class RatesFromPreGosalvez implements ISiRates {
 
