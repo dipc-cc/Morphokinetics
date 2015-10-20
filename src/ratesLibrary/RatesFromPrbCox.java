@@ -33,11 +33,11 @@ public class RatesFromPrbCox implements IDiffusionRates {
   private double[][] prefactors = new double[7][7];
   private double[][] energies = new double[7][7];
 
-        //0: terrace
+  //0: terrace
   //1: corner
   //2: A side
-  //3:kink
-  //4:bulk
+  //3: kink
+  //4: bulk
   //5: B side
   public RatesFromPrbCox() {
 
@@ -168,7 +168,6 @@ public class RatesFromPrbCox implements IDiffusionRates {
 
   @Override
   public double getIslandsDensityML(double temperature) {
-
     if (temperature < 135) {//120 degrees
       return 1e-4;
     }
