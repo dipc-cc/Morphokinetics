@@ -29,7 +29,7 @@ public class SyntheticRates implements IDiffusionRates {
   }
 
   @Override
-  public double getIslandsDensityML(double temperature) {
+  public double getIslandsDensityMl(double temperature) {
     return islandDensityPerSite;
   }
 

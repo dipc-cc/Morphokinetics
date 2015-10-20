@@ -62,7 +62,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
     p.order();
     System.out.println("=============");
     for (int i = 0; i < p.size(); i++) {
-      System.out.print(p.getIndividual(i).getTotalError() + "| \t");
+      System.out.print("Total error: " + p.getIndividual(i).getTotalError() + "| \tGenes: ");
 
       for (int a = 0; a < p.getIndividual(i).getGeneSize(); a++) {
         System.out.print(p.getIndividual(i).getGene(a) + " \t");

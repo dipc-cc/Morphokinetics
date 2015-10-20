@@ -27,7 +27,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
   /**
    * Diffusion Mono Layer. Utilised to calculate absorption rate
    */
-  private double diffusion_ML = 0.0035;
+  private double diffusionMl = 0.0035;
   private double P = 10e13;
   private double Pd = 10e11; //no lo sabemos
   /**
@@ -210,12 +210,17 @@ public class RatesFromPrbCox implements IDiffusionRates {
 
   @Override
   public double getDepositionRate() {
-    return diffusion_ML;
+    return diffusionMl;
 
   }
 
+  /**
+   * Returns the island density mono layer depending on the temperature.
+   * @param temperature
+   * @return a double value from 1e-4 to 2e-5
+   */
   @Override
-  public double getIslandsDensityML(double temperature) {
+  public double getIslandsDensityMl(double temperature) {
     if (temperature < 135) {//120 degrees
       return 1e-4;
     }

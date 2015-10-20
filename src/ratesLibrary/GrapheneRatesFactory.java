@@ -42,7 +42,7 @@ public class GrapheneRatesFactory implements IRatesFactory {
 
   @Override
   public double getIslandDensity(double temperature) {
-    return experiments.getIslandsDensityML(temperature);
+    return experiments.getIslandsDensityMl(temperature);
   }
 
 }

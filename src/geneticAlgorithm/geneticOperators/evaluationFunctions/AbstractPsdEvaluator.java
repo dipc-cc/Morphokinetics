@@ -40,10 +40,19 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   public abstract float[][] calculatePsdFromIndividual(Individual i);
 
-  protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
+  /*protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
     for (int a = 0; a < difference.length; a++) {
       for (int b = 0; b < difference[0].length; b++) {
         difference[a][b] = (psd.getPsd()[a][b] - experimentalPsd[a][b]) / Math.min(experimentalPsd[a][b], psd.getPsd()[a][b]);
+      }
+    }
+
+  }*/
+  
+  protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
+    for (int a = 0; a < difference.length; a++) {
+      for (int b = 0; b < difference[0].length; b++) {
+        difference[a][b] = (float) Math.sqrt(Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2));
       }
     }
 
