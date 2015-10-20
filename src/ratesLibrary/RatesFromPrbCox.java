@@ -4,6 +4,14 @@
  */
 package ratesLibrary;
 
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import static kineticMonteCarlo.atom.AbstractAtom.CORNER;
+import static kineticMonteCarlo.atom.AbstractAtom.EDGE_A;
+import static kineticMonteCarlo.atom.AbstractAtom.EDGE_B;
+import static kineticMonteCarlo.atom.AbstractAtom.KINK_A;
+import static kineticMonteCarlo.atom.AbstractAtom.KINK_B;
+import static kineticMonteCarlo.atom.AbstractAtom.BULK;
+
 /**
  *
  * Etch rates data obtained from Cox et al. - PHYSICAL REVIEW B 71, 11541 2005
@@ -46,117 +54,117 @@ public class RatesFromPrbCox implements IDiffusionRates {
   public RatesFromPrbCox() {
 
     //[source type][destination type]
-    energies[0][0] = Ed;
-    energies[0][1] = Ed;
-    energies[0][2] = Ed;
-    energies[0][3] = Ed;
-    energies[0][4] = Ed;
-    energies[0][5] = Ed;
-    energies[0][6] = Ed;
+    energies[TERRACE][TERRACE] = Ed;
+    energies[TERRACE][CORNER] = Ed;
+    energies[TERRACE][EDGE_A] = Ed;
+    energies[TERRACE][KINK_A] = Ed;
+    energies[TERRACE][BULK] = Ed;
+    energies[TERRACE][EDGE_B] = Ed;
+    energies[TERRACE][KINK_B] = Ed;
 
-    energies[1][0] = E_inf;//
-    energies[1][1] = Ecc;
-    energies[1][2] = Eca;
-    energies[1][3] = Eck_a;
-    energies[1][4] = Math.max(Eck_a, Eck_b);
-    energies[1][5] = Ecb;
-    energies[1][6] = Eck_b;
+    energies[CORNER][TERRACE] = E_inf;//
+    energies[CORNER][CORNER] = Ecc;
+    energies[CORNER][EDGE_A] = Eca;
+    energies[CORNER][KINK_A] = Eck_a;
+    energies[CORNER][BULK] = Math.max(Eck_a, Eck_b);
+    energies[CORNER][EDGE_B] = Ecb;
+    energies[CORNER][KINK_B] = Eck_b;
 
-    energies[2][0] = E_inf;
-    energies[2][1] = E_inf;
-    energies[2][2] = Eaa;
-    energies[2][3] = Eack;
-    energies[2][4] = Eack;
-    energies[2][5] = Eacb;
-    energies[2][6] = Eack;
+    energies[EDGE_A][TERRACE] = E_inf;
+    energies[EDGE_A][CORNER] = E_inf;
+    energies[EDGE_A][EDGE_A] = Eaa;
+    energies[EDGE_A][KINK_A] = Eack;
+    energies[EDGE_A][BULK] = Eack;
+    energies[EDGE_A][EDGE_B] = Eacb;
+    energies[EDGE_A][KINK_B] = Eack;
 
-    energies[3][0] = E_inf;
-    energies[3][1] = E_inf;
-    energies[3][2] = E_inf;
-    energies[3][3] = E_inf;
-    energies[3][4] = E_inf;
-    energies[3][5] = E_inf;
-    energies[3][6] = E_inf;
+    energies[KINK_A][TERRACE] = E_inf;
+    energies[KINK_A][CORNER] = E_inf;
+    energies[KINK_A][EDGE_A] = E_inf;
+    energies[KINK_A][KINK_A] = E_inf;
+    energies[KINK_A][BULK] = E_inf;
+    energies[KINK_A][EDGE_B] = E_inf;
+    energies[KINK_A][KINK_B] = E_inf;
 
-    energies[4][0] = E_inf;
-    energies[4][1] = E_inf;
-    energies[4][2] = E_inf;
-    energies[4][3] = E_inf;
-    energies[4][4] = E_inf;
-    energies[4][5] = E_inf;
-    energies[4][6] = E_inf;
+    energies[BULK][TERRACE] = E_inf;
+    energies[BULK][CORNER] = E_inf;
+    energies[BULK][EDGE_A] = E_inf;
+    energies[BULK][KINK_A] = E_inf;
+    energies[BULK][BULK] = E_inf;
+    energies[BULK][EDGE_B] = E_inf;
+    energies[BULK][KINK_B] = E_inf;
 
-    energies[5][0] = E_inf;
-    energies[5][1] = E_inf;
-    energies[5][2] = Ebca;
-    energies[5][3] = Ebck;
-    energies[5][4] = Ebck;
-    energies[5][5] = Ebb;
-    energies[5][6] = Ebck;
+    energies[EDGE_B][TERRACE] = E_inf;
+    energies[EDGE_B][CORNER] = E_inf;
+    energies[EDGE_B][EDGE_A] = Ebca;
+    energies[EDGE_B][KINK_A] = Ebck;
+    energies[EDGE_B][BULK] = Ebck;
+    energies[EDGE_B][EDGE_B] = Ebb;
+    energies[EDGE_B][KINK_B] = Ebck;
 
-    energies[6][0] = E_inf;
-    energies[6][1] = E_inf;
-    energies[6][2] = E_inf;
-    energies[6][3] = E_inf;
-    energies[6][4] = E_inf;
-    energies[6][5] = E_inf;
-    energies[6][6] = E_inf;
+    energies[KINK_B][TERRACE] = E_inf;
+    energies[KINK_B][CORNER] = E_inf;
+    energies[KINK_B][EDGE_A] = E_inf;
+    energies[KINK_B][KINK_A] = E_inf;
+    energies[KINK_B][BULK] = E_inf;
+    energies[KINK_B][EDGE_B] = E_inf;
+    energies[KINK_B][KINK_B] = E_inf;
 
-    prefactors[0][0] = Pd;
-    prefactors[0][1] = Pd;
-    prefactors[0][2] = Pd;
-    prefactors[0][3] = Pd;
-    prefactors[0][4] = Pd;
-    prefactors[0][5] = Pd;
-    prefactors[0][6] = Pd;
+    prefactors[TERRACE][TERRACE] = Pd;
+    prefactors[TERRACE][CORNER] = Pd;
+    prefactors[TERRACE][EDGE_A] = Pd;
+    prefactors[TERRACE][KINK_A] = Pd;
+    prefactors[TERRACE][BULK] = Pd;
+    prefactors[TERRACE][EDGE_B] = Pd;
+    prefactors[TERRACE][KINK_B] = Pd;
 
-    prefactors[1][0] = P;
-    prefactors[1][1] = P;
-    prefactors[1][2] = P;
-    prefactors[1][3] = P;
-    prefactors[1][4] = P;
-    prefactors[1][5] = P;
-    prefactors[1][6] = P;
+    prefactors[CORNER][TERRACE] = P;
+    prefactors[CORNER][CORNER] = P;
+    prefactors[CORNER][EDGE_A] = P;
+    prefactors[CORNER][KINK_A] = P;
+    prefactors[CORNER][BULK] = P;
+    prefactors[CORNER][EDGE_B] = P;
+    prefactors[CORNER][KINK_B] = P;
 
-    prefactors[2][0] = P;
-    prefactors[2][1] = P;
-    prefactors[2][2] = P;
-    prefactors[2][3] = P;
-    prefactors[2][4] = P;
-    prefactors[2][5] = P;
-    prefactors[2][6] = P;
+    prefactors[EDGE_A][TERRACE] = P;
+    prefactors[EDGE_A][CORNER] = P;
+    prefactors[EDGE_A][EDGE_A] = P;
+    prefactors[EDGE_A][KINK_A] = P;
+    prefactors[EDGE_A][BULK] = P;
+    prefactors[EDGE_A][EDGE_B] = P;
+    prefactors[EDGE_A][KINK_B] = P;
 
-    prefactors[3][0] = P;
-    prefactors[3][1] = P;
-    prefactors[3][2] = P;
-    prefactors[3][3] = P;
-    prefactors[3][4] = P;
-    prefactors[3][5] = P;
-    prefactors[3][6] = P;
+    prefactors[KINK_A][TERRACE] = P;
+    prefactors[KINK_A][CORNER] = P;
+    prefactors[KINK_A][EDGE_A] = P;
+    prefactors[KINK_A][KINK_A] = P;
+    prefactors[KINK_A][BULK] = P;
+    prefactors[KINK_A][EDGE_B] = P;
+    prefactors[KINK_A][KINK_B] = P;
 
-    prefactors[4][0] = P;
-    prefactors[4][1] = P;
-    prefactors[4][2] = P;
-    prefactors[4][3] = P;
-    prefactors[4][4] = P;
-    prefactors[4][5] = P;
-    prefactors[4][6] = P;
+    prefactors[BULK][TERRACE] = P;
+    prefactors[BULK][CORNER] = P;
+    prefactors[BULK][EDGE_A] = P;
+    prefactors[BULK][KINK_A] = P;
+    prefactors[BULK][BULK] = P;
+    prefactors[BULK][EDGE_B] = P;
+    prefactors[BULK][KINK_B] = P;
 
-    prefactors[5][0] = P;
-    prefactors[5][1] = P;
-    prefactors[5][2] = P;
-    prefactors[5][3] = P;
-    prefactors[5][4] = P;
-    prefactors[5][5] = P;
-    prefactors[5][6] = P;
+    prefactors[EDGE_B][TERRACE] = P;
+    prefactors[EDGE_B][CORNER] = P;
+    prefactors[EDGE_B][EDGE_A] = P;
+    prefactors[EDGE_B][KINK_A] = P;
+    prefactors[EDGE_B][BULK] = P;
+    prefactors[EDGE_B][EDGE_B] = P;
+    prefactors[EDGE_B][KINK_B] = P;
 
-    prefactors[6][0] = P;
-    prefactors[6][1] = P;
-    prefactors[6][2] = P;
-    prefactors[6][3] = P;
-    prefactors[6][4] = P;
-    prefactors[6][5] = P;
-    prefactors[6][6] = P;
+    prefactors[KINK_B][TERRACE] = P;
+    prefactors[KINK_B][CORNER] = P;
+    prefactors[KINK_B][EDGE_A] = P;
+    prefactors[KINK_B][KINK_A] = P;
+    prefactors[KINK_B][BULK] = P;
+    prefactors[KINK_B][EDGE_B] = P;
+    prefactors[KINK_B][KINK_B] = P;
   }
 
   @Override
