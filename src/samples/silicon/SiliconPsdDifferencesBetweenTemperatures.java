@@ -27,29 +27,26 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     SiEtchingKmc kmc = new SiEtchingKmc(config);
 
-    float[][] PSD300_1
-            = getPsdFromSimulation(kmc, 300);
-    float[][] PSD300_2
-            = getPsdFromSimulation(kmc, 300);
-    float[][] PSD400_1
-            = getPsdFromSimulation(kmc, 400);
+    float[][] psd300_1 = getPsdFromSimulation(kmc, 300);
+    float[][] psd300_2 = getPsdFromSimulation(kmc, 300);
+    float[][] psd400_1 = getPsdFromSimulation(kmc, 400);
 
-    float[][] Relative_error_1
-            = new float[PSD300_1.length][PSD300_1[0].length];
-    float[][] Relative_error_2
-            = new float[PSD300_1.length][PSD300_1[0].length];
+    float[][] relativeError1
+            = new float[psd300_1.length][psd300_1[0].length];
+    float[][] relativeError2
+            = new float[psd300_1.length][psd300_1[0].length];
 
-    for (int i = 0; i < PSD300_1.length; i++) {
-      for (int j = 0; j < PSD300_1[0].length; j++) {
-        Relative_error_1[i][j] = ((PSD400_1[i][j] - PSD300_1[i][j]) / PSD300_1[i][j]);
-        Relative_error_2[i][j] = ((PSD300_2[i][j] - PSD300_1[i][j]) / PSD300_1[i][j]);
+    for (int i = 0; i < psd300_1.length; i++) {
+      for (int j = 0; j < psd300_1[0].length; j++) {
+        relativeError1[i][j] = ((psd400_1[i][j] - psd300_1[i][j]) / psd300_1[i][j]);
+        relativeError2[i][j] = ((psd300_2[i][j] - psd300_1[i][j]) / psd300_1[i][j]);
       }
     }
 
     Frame2D frame = new Frame2D("Relative difference between PSDs 400K vs 300K")
             .setLogScale(false)
             .setShift(true)
-            .setMesh(MathUtils.avgFilter(Relative_error_1, 1));
+            .setMesh(MathUtils.avgFilter(relativeError1, 1));
 
     frame.setLocation(frame.getWidth(), 0);
 
@@ -64,7 +61,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
             .setShift(true)
             .setMax(frame.getMax())
             .setMin(frame.getMin())
-            .setMesh(MathUtils.avgFilter(Relative_error_2, 1));
+            .setMesh(MathUtils.avgFilter(relativeError2, 1));
   }
 
   private static float[][] getPsdFromSimulation(SiEtchingKmc kmc, int temperature) {
@@ -74,8 +71,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     for (int a = 0; a < 30; a++) {
 
-      kmc.initializeRates(new SiRatesFactory()
-              .getRates(temperature));
+      kmc.initializeRates(new SiRatesFactory().getRates(temperature));
 
       kmc.simulate(5000);
       for (int i = 0; i < 10; i++) {
