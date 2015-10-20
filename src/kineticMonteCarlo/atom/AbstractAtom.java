@@ -26,7 +26,13 @@ public abstract class AbstractAtom {
   public static final int SICK = 5;
   public static final int KINK = 6;
   public static final int BULK = 7;
-
+  
+  // For rates library:
+  public static final int EDGE_A = 2;
+  public static final int KINK_A = 3;
+  public static final int EDGE_B = 5;
+  public static final int KINK_B = 6;
+  
   public void initialize(double[] probabilities) {
     this.probabilities = probabilities;
   }
