@@ -12,7 +12,13 @@ package ratesLibrary;
  */
 public class RatesFromPrbCox implements IDiffusionRates {
 
+  /**
+   * Boltzmann constant
+   */
   private double kB = 8.617332e-5;
+  /**
+   * Diffusion Mono Layer. Utilised to calculate absorption rate
+   */
   private double diffusion_ML = 0.0035;
   double P = 10e13;
   double Pd = 10e11; //no lo sabemos
@@ -35,9 +41,10 @@ public class RatesFromPrbCox implements IDiffusionRates {
   //0: terrace
   //1: corner
   //2: A side
-  //3: kink
+  //3: kink A
   //4: bulk
   //5: B side
+  //6: Kink B
   public RatesFromPrbCox() {
 
     //[source type][destination type]
