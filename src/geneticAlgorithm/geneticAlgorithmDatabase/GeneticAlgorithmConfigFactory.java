@@ -77,24 +77,6 @@ public class GeneticAlgorithmConfigFactory {
     return config;
   }
 
-  @Deprecated
-  public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
-
-    config.setPopulationSize(100);
-    config.setOffspringSize(32);
-    config.setPopulationReplacements(5);
-    config.setInitialization(new AgAgInitialization());
-    config.setMutation(new BgaBasedMutator());
-    config.setRecombination(new RealRecombination());
-    config.setReinsertion(new ElitistReinsertion());
-    config.setRestriction(new AgAgRestriction(diffusionRate));
-    config.setSelection(new RankingSelection());
-    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
-    config.setOtherEvaluators(addNoMoreEvaluators());
-
-    return config;
-  }
-
   public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration() {
 
     config.setPopulationSize(parser.getPopulationSize());
@@ -107,25 +89,6 @@ public class GeneticAlgorithmConfigFactory {
     config.setRestriction(new AgAgRestriction(diffusionRate));
     config.setSelection(new RankingSelection());
     config.setMainEvaluator(getAgAgMainEvaluator());
-    config.setOtherEvaluators(addNoMoreEvaluators());
-
-    return config;
-  }
-
-  @Deprecated
-  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
-
-    //config.populationSize(100;
-    config.setPopulationSize(5);
-    config.setOffspringSize(32);
-    config.setPopulationReplacements(5);
-    config.setInitialization(new AgAgInitialization());
-        //config.mutation = new BgaBasedMutator();
-    //config.recombination = new RealRecombination();
-    //config.reinsertion = new ElitistReinsertion();
-    config.setRestriction(new AgAgRestriction(diffusionRate));
-    config.setSelection(new RandomSelection());
-    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
     config.setOtherEvaluators(addNoMoreEvaluators());
 
     return config;
@@ -148,17 +111,6 @@ public class GeneticAlgorithmConfigFactory {
   private AbstractPsdEvaluation getSiMainEvaluators() {
 
     SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(localSiKmc(), 30, 10000, 8);
-    evaluator.setWheight(1.0f);
-    evaluator.setShowGraphics(true);
-
-    return evaluator;
-  }
-
-  @Deprecated
-  private AbstractPsdEvaluation getAgAgMainEvaluator(double depositionRate, double islandDensity) {
-    //AgAgGrowthThreadedPsdEvaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
-    AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
-
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
 
@@ -206,7 +158,55 @@ public class GeneticAlgorithmConfigFactory {
             .setListConfig(listConfig);
     return config;
   }
+  
+  @Deprecated
+  public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
 
+    config.setPopulationSize(100);
+    config.setOffspringSize(32);
+    config.setPopulationReplacements(5);
+    config.setInitialization(new AgAgInitialization());
+    config.setMutation(new BgaBasedMutator());
+    config.setRecombination(new RealRecombination());
+    config.setReinsertion(new ElitistReinsertion());
+    config.setRestriction(new AgAgRestriction(diffusionRate));
+    config.setSelection(new RankingSelection());
+    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setOtherEvaluators(addNoMoreEvaluators());
+
+    return config;
+  }
+  
+  @Deprecated
+  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
+
+    //config.populationSize(100;
+    config.setPopulationSize(5);
+    config.setOffspringSize(32);
+    config.setPopulationReplacements(5);
+    config.setInitialization(new AgAgInitialization());
+        //config.mutation = new BgaBasedMutator();
+    //config.recombination = new RealRecombination();
+    //config.reinsertion = new ElitistReinsertion();
+    config.setRestriction(new AgAgRestriction(diffusionRate));
+    config.setSelection(new RandomSelection());
+    config.setMainEvaluator(getAgAgMainEvaluator(depositionRate, islandDensity));
+    config.setOtherEvaluators(addNoMoreEvaluators());
+
+    return config;
+  }
+  
+  @Deprecated
+  private AbstractPsdEvaluation getAgAgMainEvaluator(double depositionRate, double islandDensity) {
+    //AgAgGrowthThreadedPsdEvaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
+    AgAgBasicPsdEvaluation evaluator = new AgAgBasicPsdEvaluation(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
+
+    evaluator.setWheight(1.0f);
+    evaluator.setShowGraphics(true);
+
+    return evaluator;
+  }
+  
   @Deprecated
   private AgAgKmc localAgAgKmc(double depositionRate, double islandDensity) {
     ListConfiguration listConfig = new ListConfiguration()
