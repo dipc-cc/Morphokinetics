@@ -127,6 +127,7 @@ public class Parser {
     } catch (IOException exception) {
       System.err.println("Could not read file " + filename);
       Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
+      return -1;
     }
 
     int lines = readList.size();
