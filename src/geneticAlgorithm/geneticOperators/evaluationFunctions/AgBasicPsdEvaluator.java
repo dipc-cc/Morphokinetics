@@ -19,12 +19,12 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private AgAgKmc kmc;
 
-  public AgBasicPsdEvaluator(AgAgKmc kmc, int repeats, int measureInterval) {
+  public AgBasicPsdEvaluator(AgAgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY) {
 
     super(repeats, measureInterval);
 
-    setPsdSizeX(64);
-    setPsdSizeY(64);
+    setPsdSizeX(psdSizeX);
+    setPsdSizeY(psdSizeY);
 
     this.kmc = kmc;
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());

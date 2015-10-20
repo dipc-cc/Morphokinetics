@@ -123,12 +123,14 @@ public class GeneticAlgorithmConfigFactory {
    */
   private AbstractPsdEvaluator getAgAgMainEvaluator() {
     AbstractPsdEvaluator evaluator = null;
+    int sizeX = parser.getCartSizeX() / 2;
+    int sizeY = parser.getCartSizeY() / 2;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluator = new AgBasicPsdEvaluator((AgAgKmc) agSimulation.getKmc(), 1, Integer.MAX_VALUE);
+        evaluator = new AgBasicPsdEvaluator((AgAgKmc) agSimulation.getKmc(), 1, Integer.MAX_VALUE, sizeX, sizeY);
         break;
       case "threaded":
-        evaluator = new AgThreadedPsdEvaluator((AgAgKmc) agSimulation.getKmc(), 30, Integer.MAX_VALUE, 2);
+        evaluator = new AgThreadedPsdEvaluator((AgAgKmc) agSimulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
         break;
       default:
         break;
@@ -201,7 +203,7 @@ public class GeneticAlgorithmConfigFactory {
   @Deprecated
   private AbstractPsdEvaluator getAgAgMainEvaluator(double depositionRate, double islandDensity) {
     //AgAgGrowthThreadedPsdEvaluation evaluator = new AgAgGrowthThreadedPsdEvaluation(localAgAgKmc(depositionRate,islandDensity), 30, Integer.MAX_VALUE, 2);
-    AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE);
+    AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(localAgAgKmc(depositionRate, islandDensity), 1, Integer.MAX_VALUE, 128, 128);
 
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
