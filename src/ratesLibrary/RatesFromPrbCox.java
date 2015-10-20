@@ -10,7 +10,7 @@ import static kineticMonteCarlo.atom.AbstractAtom.EDGE_A;
 import static kineticMonteCarlo.atom.AbstractAtom.EDGE_B;
 import static kineticMonteCarlo.atom.AbstractAtom.KINK_A;
 import static kineticMonteCarlo.atom.AbstractAtom.KINK_B;
-import static kineticMonteCarlo.atom.AbstractAtom.BULK;
+import static kineticMonteCarlo.atom.AbstractAtom.ISLAND;
 
 /**
  *
@@ -58,7 +58,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[TERRACE][CORNER] = Ed;
     energies[TERRACE][EDGE_A] = Ed;
     energies[TERRACE][KINK_A] = Ed;
-    energies[TERRACE][BULK] = Ed;
+    energies[TERRACE][ISLAND] = Ed;
     energies[TERRACE][EDGE_B] = Ed;
     energies[TERRACE][KINK_B] = Ed;
 
@@ -66,7 +66,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[CORNER][CORNER] = Ecc;
     energies[CORNER][EDGE_A] = Eca;
     energies[CORNER][KINK_A] = Eck_a;
-    energies[CORNER][BULK] = Math.max(Eck_a, Eck_b);
+    energies[CORNER][ISLAND] = Math.max(Eck_a, Eck_b);
     energies[CORNER][EDGE_B] = Ecb;
     energies[CORNER][KINK_B] = Eck_b;
 
@@ -74,7 +74,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[EDGE_A][CORNER] = E_inf;
     energies[EDGE_A][EDGE_A] = Eaa;
     energies[EDGE_A][KINK_A] = Eack;
-    energies[EDGE_A][BULK] = Eack;
+    energies[EDGE_A][ISLAND] = Eack;
     energies[EDGE_A][EDGE_B] = Eacb;
     energies[EDGE_A][KINK_B] = Eack;
 
@@ -82,23 +82,23 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[KINK_A][CORNER] = E_inf;
     energies[KINK_A][EDGE_A] = E_inf;
     energies[KINK_A][KINK_A] = E_inf;
-    energies[KINK_A][BULK] = E_inf;
+    energies[KINK_A][ISLAND] = E_inf;
     energies[KINK_A][EDGE_B] = E_inf;
     energies[KINK_A][KINK_B] = E_inf;
 
-    energies[BULK][TERRACE] = E_inf;
-    energies[BULK][CORNER] = E_inf;
-    energies[BULK][EDGE_A] = E_inf;
-    energies[BULK][KINK_A] = E_inf;
-    energies[BULK][BULK] = E_inf;
-    energies[BULK][EDGE_B] = E_inf;
-    energies[BULK][KINK_B] = E_inf;
+    energies[ISLAND][TERRACE] = E_inf;
+    energies[ISLAND][CORNER] = E_inf;
+    energies[ISLAND][EDGE_A] = E_inf;
+    energies[ISLAND][KINK_A] = E_inf;
+    energies[ISLAND][ISLAND] = E_inf;
+    energies[ISLAND][EDGE_B] = E_inf;
+    energies[ISLAND][KINK_B] = E_inf;
 
     energies[EDGE_B][TERRACE] = E_inf;
     energies[EDGE_B][CORNER] = E_inf;
     energies[EDGE_B][EDGE_A] = Ebca;
     energies[EDGE_B][KINK_A] = Ebck;
-    energies[EDGE_B][BULK] = Ebck;
+    energies[EDGE_B][ISLAND] = Ebck;
     energies[EDGE_B][EDGE_B] = Ebb;
     energies[EDGE_B][KINK_B] = Ebck;
 
@@ -106,7 +106,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[KINK_B][CORNER] = E_inf;
     energies[KINK_B][EDGE_A] = E_inf;
     energies[KINK_B][KINK_A] = E_inf;
-    energies[KINK_B][BULK] = E_inf;
+    energies[KINK_B][ISLAND] = E_inf;
     energies[KINK_B][EDGE_B] = E_inf;
     energies[KINK_B][KINK_B] = E_inf;
 
@@ -114,7 +114,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     prefactors[TERRACE][CORNER] = Pd;
     prefactors[TERRACE][EDGE_A] = Pd;
     prefactors[TERRACE][KINK_A] = Pd;
-    prefactors[TERRACE][BULK] = Pd;
+    prefactors[TERRACE][ISLAND] = Pd;
     prefactors[TERRACE][EDGE_B] = Pd;
     prefactors[TERRACE][KINK_B] = Pd;
 
@@ -122,7 +122,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     prefactors[CORNER][CORNER] = P;
     prefactors[CORNER][EDGE_A] = P;
     prefactors[CORNER][KINK_A] = P;
-    prefactors[CORNER][BULK] = P;
+    prefactors[CORNER][ISLAND] = P;
     prefactors[CORNER][EDGE_B] = P;
     prefactors[CORNER][KINK_B] = P;
 
@@ -130,7 +130,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     prefactors[EDGE_A][CORNER] = P;
     prefactors[EDGE_A][EDGE_A] = P;
     prefactors[EDGE_A][KINK_A] = P;
-    prefactors[EDGE_A][BULK] = P;
+    prefactors[EDGE_A][ISLAND] = P;
     prefactors[EDGE_A][EDGE_B] = P;
     prefactors[EDGE_A][KINK_B] = P;
 
@@ -138,23 +138,23 @@ public class RatesFromPrbCox implements IDiffusionRates {
     prefactors[KINK_A][CORNER] = P;
     prefactors[KINK_A][EDGE_A] = P;
     prefactors[KINK_A][KINK_A] = P;
-    prefactors[KINK_A][BULK] = P;
+    prefactors[KINK_A][ISLAND] = P;
     prefactors[KINK_A][EDGE_B] = P;
     prefactors[KINK_A][KINK_B] = P;
 
-    prefactors[BULK][TERRACE] = P;
-    prefactors[BULK][CORNER] = P;
-    prefactors[BULK][EDGE_A] = P;
-    prefactors[BULK][KINK_A] = P;
-    prefactors[BULK][BULK] = P;
-    prefactors[BULK][EDGE_B] = P;
-    prefactors[BULK][KINK_B] = P;
+    prefactors[ISLAND][TERRACE] = P;
+    prefactors[ISLAND][CORNER] = P;
+    prefactors[ISLAND][EDGE_A] = P;
+    prefactors[ISLAND][KINK_A] = P;
+    prefactors[ISLAND][ISLAND] = P;
+    prefactors[ISLAND][EDGE_B] = P;
+    prefactors[ISLAND][KINK_B] = P;
 
     prefactors[EDGE_B][TERRACE] = P;
     prefactors[EDGE_B][CORNER] = P;
     prefactors[EDGE_B][EDGE_A] = P;
     prefactors[EDGE_B][KINK_A] = P;
-    prefactors[EDGE_B][BULK] = P;
+    prefactors[EDGE_B][ISLAND] = P;
     prefactors[EDGE_B][EDGE_B] = P;
     prefactors[EDGE_B][KINK_B] = P;
 
@@ -162,7 +162,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     prefactors[KINK_B][CORNER] = P;
     prefactors[KINK_B][EDGE_A] = P;
     prefactors[KINK_B][KINK_A] = P;
-    prefactors[KINK_B][BULK] = P;
+    prefactors[KINK_B][ISLAND] = P;
     prefactors[KINK_B][EDGE_B] = P;
     prefactors[KINK_B][KINK_B] = P;
   }

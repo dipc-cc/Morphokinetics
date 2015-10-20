@@ -30,6 +30,7 @@ public abstract class AbstractAtom {
   // For rates library:
   public static final int EDGE_A = 2;
   public static final int KINK_A = 3;
+  public static final int ISLAND = 4;
   public static final int EDGE_B = 5;
   public static final int KINK_B = 6;
   
