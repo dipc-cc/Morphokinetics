@@ -78,7 +78,6 @@ public class GeneticAlgorithmConfigFactory {
   }
 
   public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration() {
-
     config.setPopulationSize(parser.getPopulationSize());
     config.setOffspringSize(parser.getOffspringSize());
     config.setPopulationReplacements(parser.getPopulationReplacement());
@@ -95,7 +94,6 @@ public class GeneticAlgorithmConfigFactory {
   }
   
   public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration() {
-
     config.setPopulationSize(parser.getPopulationSize());
     config.setOffspringSize(parser.getOffspringSize());
     config.setPopulationReplacements(parser.getPopulationReplacement());
