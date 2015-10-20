@@ -61,7 +61,6 @@ public class GeneticAlgorithmConfigFactory {
   }
   
   public GeneticAlgorithmConfiguration createSiConvergenceConfiguration() {
-
     config.setPopulationSize(100);
     config.setOffspringSize(32);
     config.setPopulationReplacements(5);
@@ -107,7 +106,6 @@ public class GeneticAlgorithmConfigFactory {
   }
 
   private AbstractPsdEvaluation getSiMainEvaluators() {
-
     SiEtchingThreadedPsdEvaluation evaluator = new SiEtchingThreadedPsdEvaluation(localSiKmc(), 30, 10000, 8);
     evaluator.setWheight(1.0f);
     evaluator.setShowGraphics(true);
@@ -159,7 +157,6 @@ public class GeneticAlgorithmConfigFactory {
   
   @Deprecated
   public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
-
     config.setPopulationSize(100);
     config.setOffspringSize(32);
     config.setPopulationReplacements(5);
@@ -177,7 +174,6 @@ public class GeneticAlgorithmConfigFactory {
   
   @Deprecated
   public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
-
     //config.populationSize(100;
     config.setPopulationSize(5);
     config.setOffspringSize(32);
