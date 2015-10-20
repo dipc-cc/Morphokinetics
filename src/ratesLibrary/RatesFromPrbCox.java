@@ -6,7 +6,9 @@ package ratesLibrary;
 
 /**
  *
- * @author Nestor
+ * Etch rates data obtained from Cox et al. - PHYSICAL REVIEW B 71, 11541 2005
+ *
+* @author Nestor
  */
 public class RatesFromPrbCox implements IDiffusionRates {
 
