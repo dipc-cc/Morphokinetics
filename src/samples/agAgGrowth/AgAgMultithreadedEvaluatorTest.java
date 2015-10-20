@@ -28,9 +28,9 @@ public class AgAgMultithreadedEvaluatorTest {
     AgBasicPsdEvaluator evaluation = new AgBasicPsdEvaluator(localAgAgKmc(experimentalTemp), 20, Integer.MAX_VALUE, 128, 128);
 
     Individual individual = new Individual(new AgAgRatesFactory().getRates(experimentalTemp));
-    float[][] experimentalPSD = evaluation.calculatePsdFromIndividual(individual);
+    float[][] experimentalPsd = evaluation.calculatePsdFromIndividual(individual);
 
-    evaluation.setPsd(experimentalPSD);
+    evaluation.setPsd(experimentalPsd);
 
     Individual newIndividual = new Individual(new AgAgRatesFactory().getRates(125));
     Population population = new Population(1);
