@@ -7,9 +7,6 @@ package ratesLibrary;
 /**
  *
  * @author Nestor
- *
- * Etch rates data obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
- *
  */
 public class RatesFromPrbCox implements IDiffusionRates {
 
