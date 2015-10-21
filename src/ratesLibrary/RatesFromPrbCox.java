@@ -16,7 +16,7 @@ import static kineticMonteCarlo.atom.AbstractAtom.ISLAND;
  *
  * Etch rates data obtained from Cox et al. - PHYSICAL REVIEW B 71, 11541 2005
  *
-* @author Nestor
+ * @author Nestor
  */
 public class RatesFromPrbCox implements IDiffusionRates {
 
@@ -212,7 +212,6 @@ public class RatesFromPrbCox implements IDiffusionRates {
   @Override
   public double getDepositionRate() {
     return diffusionMl;
-
   }
 
   /**
@@ -222,19 +221,19 @@ public class RatesFromPrbCox implements IDiffusionRates {
    */
   @Override
   public double getIslandsDensityMl(double temperature) {
-    if (temperature < 135) {//120 degrees
+    if (temperature < 135) {//120 degrees Kelvin
       return 1e-4;
     }
-    if (temperature < 150) {//135 degrees
+    if (temperature < 150) {//135 degrees Kelvin
       return 5e-5;
     }
-    if (temperature < 165) {//150 degrees
+    if (temperature < 165) {//150 degrees Kelvin
       return 4e-5;
     }
-    if (temperature < 180) {//165 degrees
+    if (temperature < 180) {//165 degrees Kelvin
       return 3e-5;
     }
-    return 2e-5; //180 degrees
+    return 2e-5; //180 degrees Kelvin
   }
 
 }
