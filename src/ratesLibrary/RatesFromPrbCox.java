@@ -23,64 +23,64 @@ public class RatesFromPrbCox implements IDiffusionRates {
   /**
    * Boltzmann constant
    */
-  private double kB = 8.617332e-5;
+  private final double kB = 8.617332e-5;
   /**
    * Diffusion Mono Layer. Utilised to calculate absorption rate
    */
-  private double diffusionMl = 0.0035;
-  private double P = 10e13;
-  private double Pd = 10e11; //no lo sabemos
+  private final double diffusionMl = 0.0035;
+  private final double P = 10e13;
+  private final double Pd = 10e11; //no lo sabemos
   /**
    * Energy from edge A to edge A
    */
-  private double Eaa = 0.275;
+  private final double Eaa = 0.275;
   /**
    * Energy from edge B to edge B
    */
-  private double Ebb = 0.310;
+  private final double Ebb = 0.310;
   /**
    * Energy from corner to edge A
    */
-  private double Eca = 0.075;
+  private final double Eca = 0.075;
   /**
    * Energy from corner to edge B
    */
-  private double Ecb = 0.15;
+  private final double Ecb = 0.15;
   /**
    * Energy from corner to corner
    */
-  private double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
+  private final double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
   /**
    * Energy from edge A to edge B, from corner
    */
-  private double Eacb = 0.36;
+  private final double Eacb = 0.36;
   /**
    * Energy from edge B to edge A, from corner
    */
-  private double Ebca = 0.36;
+  private final double Ebca = 0.36;
   /**
    * Energy from edge A to kink, from corner
    */
-  private double Eack = 0.36;
+  private final double Eack = 0.36;
   /**
    * Energy from edge B to kink, from corner
    */
-  private double Ebck = 0.36;
+  private final double Ebck = 0.36;
   /**
    * Energy from corner to kink, from edge A
    */
-  private double Ecak = 0.15;  
+  private final double Ecak = 0.15;  
   /**
    * Energy from corner to kink, from edge B
    */
-  private double Ecbk = 0.075;
-  private double Ed = 0.1;  //no lo sabemos seguro
+  private final double Ecbk = 0.075;
+  private final double Ed = 0.1;  //no lo sabemos seguro
   /**
    * Infinite energy. To make impossible the transition.
    */
-  private double Einf = 9999999;
-  private double[][] prefactors = new double[7][7];
-  private double[][] energies = new double[7][7];
+  private final double Einf = 9999999;
+  private final double[][] prefactors = new double[7][7];
+  private final double[][] energies = new double[7][7];
 
   /**
    * Atom types are documented in class AbstractAtom. In any case are;
