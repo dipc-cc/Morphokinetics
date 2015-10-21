@@ -13,12 +13,12 @@ public class AgAgRatesFactory implements IRatesFactory {
   private static IDiffusionRates experiments;
 
   public AgAgRatesFactory() {
-    experiments = new  RatesFromPrbCox();
+    experiments = new RatesFromPrbCox();
   }
 
   @Override
   public double[] getRates(double temperature) {
-   
+
     double[] rates = new double[49];
 
     for (int i = 0; i < 7; i++) {
