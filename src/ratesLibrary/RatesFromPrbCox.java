@@ -98,7 +98,7 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[TERRACE][EDGE_B] = Ed;
     energies[TERRACE][KINK_B] = Ed;
 
-    energies[CORNER][TERRACE] = Einf;//
+    energies[CORNER][TERRACE] = Einf; // Impossible. Forbid it
     energies[CORNER][CORNER] = Ecc;
     energies[CORNER][EDGE_A] = Eca;
     energies[CORNER][KINK_A] = Ecak;
@@ -106,45 +106,45 @@ public class RatesFromPrbCox implements IDiffusionRates {
     energies[CORNER][EDGE_B] = Ecb;
     energies[CORNER][KINK_B] = Ecbk;
 
-    energies[EDGE_A][TERRACE] = Einf;
-    energies[EDGE_A][CORNER] = Einf;
+    energies[EDGE_A][TERRACE] = Einf; // Impossible. Forbid it
+    energies[EDGE_A][CORNER] = Einf; // Impossible. Forbid it
     energies[EDGE_A][EDGE_A] = Eaa;
     energies[EDGE_A][KINK_A] = Eack;
     energies[EDGE_A][ISLAND] = Eack;
     energies[EDGE_A][EDGE_B] = Eacb;
     energies[EDGE_A][KINK_B] = Eack;
 
-    energies[KINK_A][TERRACE] = Einf;
-    energies[KINK_A][CORNER] = Einf;
-    energies[KINK_A][EDGE_A] = Einf;
-    energies[KINK_A][KINK_A] = Einf;
-    energies[KINK_A][ISLAND] = Einf;
-    energies[KINK_A][EDGE_B] = Einf;
-    energies[KINK_A][KINK_B] = Einf;
+    energies[KINK_A][TERRACE] = Einf; // Impossible. Forbid it
+    energies[KINK_A][CORNER] = Einf; // Impossible. Forbid it
+    energies[KINK_A][EDGE_A] = Einf; // Impossible. Forbid it
+    energies[KINK_A][KINK_A] = Einf; // Impossible. Forbid it
+    energies[KINK_A][ISLAND] = Einf; // Impossible. Forbid it
+    energies[KINK_A][EDGE_B] = Einf; // Impossible. Forbid it
+    energies[KINK_A][KINK_B] = Einf; // Impossible. Forbid it
 
-    energies[ISLAND][TERRACE] = Einf;
-    energies[ISLAND][CORNER] = Einf;
-    energies[ISLAND][EDGE_A] = Einf;
-    energies[ISLAND][KINK_A] = Einf;
-    energies[ISLAND][ISLAND] = Einf;
-    energies[ISLAND][EDGE_B] = Einf;
-    energies[ISLAND][KINK_B] = Einf;
+    energies[ISLAND][TERRACE] = Einf; // Impossible. Forbid it
+    energies[ISLAND][CORNER] = Einf; // Impossible. Forbid it
+    energies[ISLAND][EDGE_A] = Einf; // Impossible. Forbid it
+    energies[ISLAND][KINK_A] = Einf; // Impossible. Forbid it
+    energies[ISLAND][ISLAND] = Einf; // Impossible. Forbid it
+    energies[ISLAND][EDGE_B] = Einf; // Impossible. Forbid it
+    energies[ISLAND][KINK_B] = Einf; // Impossible. Forbid it
 
-    energies[EDGE_B][TERRACE] = Einf;
-    energies[EDGE_B][CORNER] = Einf;
+    energies[EDGE_B][TERRACE] = Einf; // Impossible. Forbid it
+    energies[EDGE_B][CORNER] = Einf; // Impossible. Forbid it
     energies[EDGE_B][EDGE_A] = Ebca;
     energies[EDGE_B][KINK_A] = Ebck;
     energies[EDGE_B][ISLAND] = Ebck;
     energies[EDGE_B][EDGE_B] = Ebb;
     energies[EDGE_B][KINK_B] = Ebck;
 
-    energies[KINK_B][TERRACE] = Einf;
-    energies[KINK_B][CORNER] = Einf;
-    energies[KINK_B][EDGE_A] = Einf;
-    energies[KINK_B][KINK_A] = Einf;
-    energies[KINK_B][ISLAND] = Einf;
-    energies[KINK_B][EDGE_B] = Einf;
-    energies[KINK_B][KINK_B] = Einf;
+    energies[KINK_B][TERRACE] = Einf; // Impossible. Forbid it
+    energies[KINK_B][CORNER] = Einf; // Impossible. Forbid it
+    energies[KINK_B][EDGE_A] = Einf; // Impossible. Forbid it
+    energies[KINK_B][KINK_A] = Einf; // Impossible. Forbid it
+    energies[KINK_B][ISLAND] = Einf; // Impossible. Forbid it
+    energies[KINK_B][EDGE_B] = Einf; // Impossible. Forbid it
+    energies[KINK_B][KINK_B] = Einf; // Impossible. Forbid it
 
     prefactors[TERRACE][TERRACE] = Pd;
     prefactors[TERRACE][CORNER] = Pd;
