@@ -85,7 +85,8 @@ public class RatesFromPrbCox implements IDiffusionRates {
   /**
    * Atom types are documented in class AbstractAtom. In any case are;
    *
-   * 0: terrace | 1: corner | 2: A side | 3: kink A | 4: bulk | 5: B side | 6: Kink B
+   * 0: terrace | 1: corner | 2: A side | 3: kink A | 4: bulk | 5: B side | 6: kink B
+   *                               edge                 island       edge
    */
   public RatesFromPrbCox() {
 
