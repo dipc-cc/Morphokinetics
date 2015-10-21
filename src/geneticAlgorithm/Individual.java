@@ -39,7 +39,6 @@ public class Individual {
   public Individual(double[] genes) {
     this.genes = genes;
     this.errors = new double[]{};
-    System.out.println("init Individual "+genes[0]);
   }
 
   public void setGene(int pos, double gene) {
