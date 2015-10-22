@@ -4,7 +4,6 @@
  */
 package geneticAlgorithm.geneticOperators.populationInitialization;
 
-import geneticAlgorithm.geneticOperators.populationInitialization.IInitializator;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import utils.StaticRandom;
