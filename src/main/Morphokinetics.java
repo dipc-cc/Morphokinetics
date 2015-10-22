@@ -92,7 +92,7 @@ public class Morphokinetics {
 
     new GaProgressFrame(ga).setVisible(true);
 
-    ga.setExperimentalPsd(getExperimentalData(ga));
+    ga.setExperimentalPsd(createExperimentalData(ga));
     //ga.setExpectedSimulationTime(simulationTime);
     ga.initialize();
     
@@ -105,7 +105,7 @@ public class Morphokinetics {
             .performDrawToImage(1);*/
   }
   
-  private static float[][] getExperimentalData(AbstractGeneticAlgorithm ga) {
+  private static float[][] createExperimentalData(AbstractGeneticAlgorithm ga) {
     
     AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
     evaluator.setRepeats(evaluator.getRepeats() * 5);
