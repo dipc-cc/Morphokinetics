@@ -34,8 +34,8 @@ public class SiEtchingKmcConvergence {
     new StaticRandom();
     GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
             .createSiConvergenceConfiguration();
-    GeneticAlgorithm GA = new GeneticAlgorithm(geneticConfiguration);
-    new GaProgressFrame(GA).setVisible(true);
+    GeneticAlgorithm ga = new GeneticAlgorithm(geneticConfiguration);
+    new GaProgressFrame(ga).setVisible(true);
     AbstractPsdEvaluator evaluator = geneticConfiguration.getMainEvaluator();
 
     for (int i = 0; i < totalConvergences; i++) {
@@ -49,9 +49,9 @@ public class SiEtchingKmcConvergence {
       geneticConfiguration.setExperimentalPsd(experimentalPSD);
       geneticConfiguration.setExpectedSimulationTime(simulationTime);
 
-      GA.initialize();
-      GA.iterate(100);
-      printResult(GA);
+      ga.initialize();
+      ga.iterate(100);
+      printResult(ga);
     }
   }
 
