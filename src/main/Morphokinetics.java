@@ -113,7 +113,7 @@ public class Morphokinetics {
     geneticConfiguration.setExperimentalPsd(experimentalPsd);
     geneticConfiguration.setExpectedSimulationTime(simulationTime);
     ga.initialize();
-    System.exit(-9);
+    
     ga.iterate(parser.getTotalIterations());
     printResult(ga);
     experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
