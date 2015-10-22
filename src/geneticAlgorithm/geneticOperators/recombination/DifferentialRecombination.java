@@ -119,7 +119,7 @@ public class DifferentialRecombination implements IRecombination {
       config.setP(0.5);
       // Crossover mean.
       config.setCrm(0.85);
-			// Crossover standard deviation.
+	  // Crossover standard deviation.
       //config.crs = 0.1;
     }
 
@@ -139,7 +139,7 @@ public class DifferentialRecombination implements IRecombination {
               k2.deduct(k3).apply(OperationFactory.multiply(f.get(k)))
       );
 
-			// Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
+	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
       auxInd = config.getXmean().sum(
               config.getB().apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.rand(config.getN())))
