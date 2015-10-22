@@ -123,7 +123,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     int sizeY = parser.getCartSizeY() / 2;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluator = new AgBasicPsdEvaluator((AgAgKmc) simulation.getKmc(), 1, Integer.MAX_VALUE, sizeX, sizeY);
+        evaluator = new AgBasicPsdEvaluator((AgAgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY);
         break;
       case "threaded":
         evaluator = new AgThreadedPsdEvaluator((AgAgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
