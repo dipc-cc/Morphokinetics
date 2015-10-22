@@ -91,11 +91,25 @@ public class Morphokinetics {
     }
 
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
 
-    //--------------------------------
+    ga.setExperimentalPsd(getExperimentalData(ga));
+    //ga.setExpectedSimulationTime(simulationTime);
+    ga.initialize();
+    
+    ga.iterate(parser.getTotalIterations());
+    printResult(ga);
+    /*experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
+    new Frame2D("Calculated PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
+            .setLogScale(true)
+            .setShift(true)
+            .performDrawToImage(1);*/
+  }
+  
+  private static float[][] getExperimentalData(AbstractGeneticAlgorithm ga) {
+    
+    AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
     evaluator.setRepeats(evaluator.getRepeats() * 5);
-    Individual individual = new Individual(new AgAgRatesFactory().getRates(parser.getTemperature()));
+    Individual individual = new Individual(new AgAgRatesFactory().getRates(135));
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     new Frame2D("Expected PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
             .setLogScale(true)
@@ -103,19 +117,7 @@ public class Morphokinetics {
             .performDrawToImage(1);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);
-    //--------------------------------
-
-    ga.setExperimentalPsd(experimentalPsd);
-    ga.setExpectedSimulationTime(simulationTime);
-    ga.initialize();
-    
-    ga.iterate(parser.getTotalIterations());
-    printResult(ga);
-    experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
-    new Frame2D("Calculated PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
-            .setLogScale(true)
-            .setShift(true)
-            .performDrawToImage(1);
+    return experimentalPsd;
   }
   
   private static void printResult(IGeneticAlgorithm ga) {
