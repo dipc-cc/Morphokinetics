@@ -47,7 +47,7 @@ public class Parser {
   private String listType;
   private String perimeterType;
   /**
-   * Can be Ag or graphene.
+   * Can be Si, Ag or graphene.
    */
   private String calculationMode;
   private int temperature;
@@ -422,7 +422,10 @@ public class Parser {
     }
     return printToImage;
   }
-
+  
+  /**
+   * Can be Si, Ag or graphene.
+   */
   public String getCalculationMode() {
     return calculationMode;
   }
@@ -465,6 +468,10 @@ public class Parser {
   
   public int getTotalIterations() {
     return totalIterations;
+  }
+  
+  public void setCalculationMode(String mode) {
+    this.calculationMode = mode;
   }
   
   public void setPopulation(int populationSize) {
