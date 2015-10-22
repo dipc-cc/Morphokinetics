@@ -14,7 +14,10 @@ import geneticAlgorithm.Population;
  */
 public class RealRecombination implements IRecombination {
 
-  private float outBounds = 0.1f; // each gene of the child will be between the father and mother gene value +-15%
+  /**
+   * Each gene of the child will be between the father and mother gene value +-15%.
+   */
+  private float outBounds = 0.1f;
 
   @Override
   public Population recombinate(IndividualGroup[] groups) {
