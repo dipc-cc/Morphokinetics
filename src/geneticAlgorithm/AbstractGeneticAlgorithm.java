@@ -129,7 +129,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         evaluator = new AgThreadedPsdEvaluator((AgAgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
         break;
       default:
-        break;
+        System.err.println("Error: Default evolutor. This evoluator is not implemented!");
+        System.err.println("Current value: " + parser.getEvaluator() + ". Possible values are serial or threaded");
+        throw new IllegalArgumentException("Evaluator mode is not implemented");
     }
     
     evaluator.setWheight(1.0f);
