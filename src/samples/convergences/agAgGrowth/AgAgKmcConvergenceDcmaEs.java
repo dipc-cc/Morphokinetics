@@ -5,12 +5,11 @@
  */
 package samples.convergences.agAgGrowth;
 
+import basic.Parser;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
-import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
-import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.AgAgRatesFactory;
 import utils.StaticRandom;
@@ -25,17 +24,14 @@ public class AgAgKmcConvergenceDcmaEs {
 
     new StaticRandom();
     float experitentalTemp = 135;
-    double depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
-    double islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
-    double diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
 
-    GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
-            .createAgAgDcmaEsConvergenceConfiguration(diffusionRate, islandDensity, depositionRate);
-
-    GeneticAlgorithmDcmaEs ga = new GeneticAlgorithmDcmaEs(geneticConfiguration);
+    Parser parser = new Parser();
+    parser.setEvolutionaryAlgorithm("dcma");
+    
+    GeneticAlgorithmDcmaEs ga = new GeneticAlgorithmDcmaEs(parser);
 
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluator evaluator = geneticConfiguration.getMainEvaluator();
+    AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
@@ -43,10 +39,10 @@ public class AgAgKmcConvergenceDcmaEs {
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);
-         //--------------------------------
+    //--------------------------------
 
-    geneticConfiguration.setExperimentalPsd(experimentalPsd);
-    geneticConfiguration.setExpectedSimulationTime(simulationTime);
+    ga.setExperimentalPsd(experimentalPsd);
+    ga.setExpectedSimulationTime(simulationTime);
 
     ga.initialize();
     ga.iterate(100);

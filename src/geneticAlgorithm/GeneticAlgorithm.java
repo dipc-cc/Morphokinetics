@@ -4,35 +4,29 @@
  */
 package geneticAlgorithm;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.BasicEvaluator;
+import basic.Parser;
+import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 /**
  *
  * @author Nestor
  */
-public class GeneticAlgorithm implements IGeneticAlgorithm {
+public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
-  private Population population;
-  private GeneticAlgorithmConfiguration config;
-  private BasicEvaluator evaluator;
-  private int currentIteration = 0;
-  private int totalIterations = 1;
-  private IgaProgressFrame graphics;
-
-  public GeneticAlgorithm(GeneticAlgorithmConfiguration configuration) {
-    this.config = configuration;
-    this.evaluator = new BasicEvaluator();
+  public GeneticAlgorithm(Parser parser) {
+    super(parser);
+    selection = new RankingSelection();
   }
 
   @Override
   public IGeneticAlgorithm initialize() {
-    this.population = config.getInitialization().createRandomPopulation(config.getPopulationSize());
-    this.config.getRestriction().apply(this.population);
-    this.evaluator.evaluateAndOrder(this.population, this.config.getMainEvaluator(), this.config.getOtherEvaluators());
+    population = initialization.createRandomPopulation(populationSize);
+    restriction.apply(population);
+    this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
 
     System.out.println("=============");
-    for (int i = 0; i < this.population.size(); i++) {
+    for (int i = 0; i < population.size(); i++) {
       System.out.print(population.getIndividual(i).getTotalError() + "| \t");
       for (int a = 0; a < population.getIndividual(i).getGeneSize(); a++) {
         System.out.print(population.getIndividual(i).getGene(a) + " \t");
@@ -40,7 +34,7 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
       System.out.println();
     }
 
-    this.scaleIndividualRates(this.population);
+    this.scaleIndividualRates(population);
 
     if (graphics != null) {
       graphics.clear();
@@ -50,22 +44,22 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
   }
 
   private void iterateOneStep() {
-    IndividualGroup[] couples = this.config.getSelection().Select(this.population, this.config.getOffspringSize());
-    Population offspring = this.config.getRecombination().recombinate(couples);
+    IndividualGroup[] couples = selection.Select(population, offspringSize);
+    Population offspring = recombination.recombinate(couples);
 
     int geneSize = population.getIndividual(0).getGeneSize();
-    this.config.getMutation().mutate(offspring, this.config.getRestriction().getNonFixedGenes(geneSize));
-    this.config.getRestriction().apply(offspring);
-    this.evaluator.evaluateAndOrder(offspring, this.config.getMainEvaluator(), this.config.getOtherEvaluators());
+    mutation.mutate(offspring, restriction.getNonFixedGenes(geneSize));
+    restriction.apply(offspring);
+    evaluator.evaluateAndOrder(offspring, mainEvaluator, otherEvaluators);
 
     //sometimes it is good to reevaluate the whole population
     if (currentIteration > 0 && currentIteration % 25 == 0) {
-      this.scaleIndividualRates(this.population);
-      this.config.getRestriction().apply(this.population);
-      this.evaluator.evaluateAndOrder(this.population, this.config.getMainEvaluator(), this.config.getOtherEvaluators());;
+      this.scaleIndividualRates(population);
+      restriction.apply(population);
+      this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
 
-    this.config.getReinsertion().Reinsert(population, offspring, this.config.getPopulationReplacements());
+    reinsertion.Reinsert(population, offspring, populationReplacements);
 
   }
 
@@ -130,10 +124,9 @@ public class GeneticAlgorithm implements IGeneticAlgorithm {
   }
 
   private void scaleIndividualRates(Population population) {
-
     for (int i = 0; i < population.size(); i++) {
       Individual individual = population.getIndividual(i);
-      double factor = config.getExpectedSimulationTime() / individual.getSimulationTime();
+      double factor = expectedSimulationTime / individual.getSimulationTime();
       for (int j = 0; j < individual.getGeneSize(); j++) {
         individual.setGene(j, individual.getGene(j) / factor);
       }

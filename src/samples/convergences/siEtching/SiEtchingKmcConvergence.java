@@ -4,12 +4,11 @@
  */
 package samples.convergences.siEtching;
 
+import basic.Parser;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.GeneticAlgorithm;
-import geneticAlgorithm.GeneticAlgorithmConfiguration;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
-import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import ratesLibrary.SiRatesFactory;
 import utils.StaticRandom;
@@ -32,11 +31,12 @@ public class SiEtchingKmcConvergence {
   public void performConvergence() {
 
     new StaticRandom();
-    GeneticAlgorithmConfiguration geneticConfiguration = new GeneticAlgorithmConfigFactory()
-            .createSiConvergenceConfiguration();
-    GeneticAlgorithm ga = new GeneticAlgorithm(geneticConfiguration);
+    Parser parser = new Parser();
+    parser.setCalculationMode("Si");
+    
+    GeneticAlgorithm ga = new GeneticAlgorithm(parser);
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluator evaluator = geneticConfiguration.getMainEvaluator();
+    AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
 
     for (int i = 0; i < totalConvergences; i++) {
 
@@ -46,8 +46,8 @@ public class SiEtchingKmcConvergence {
       double simulationTime = individual.getSimulationTime();
       evaluator.setRepeats(evaluator.getRepeats() / 20);
 
-      geneticConfiguration.setExperimentalPsd(experimentalPSD);
-      geneticConfiguration.setExpectedSimulationTime(simulationTime);
+      ga.setExperimentalPsd(experimentalPSD);
+      ga.setExpectedSimulationTime(simulationTime);
 
       ga.initialize();
       ga.iterate(100);

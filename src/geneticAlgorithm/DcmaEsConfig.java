@@ -48,7 +48,7 @@ public class DcmaEsConfig {
 
   //public ArrayList<List<Double>> dat = new ArrayList<List<Double>>();
   //public ArrayList<List<Double>> datx = new ArrayList<List<Double>>();
-  public DcmaEsConfig(GeneticAlgorithmConfiguration configuration, int dimension) {
+  public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
 
     stopFitness = 1e-12;
@@ -83,7 +83,6 @@ public class DcmaEsConfig {
   private void createWeightsArray() {
     weights = RichArray.createArrayInRange(mu);
     weights = weights.apply(new Operation() {
-
       public double apply(double value) {
         return Math.log(mu + 1D / 2) - Math.log(value);
       }

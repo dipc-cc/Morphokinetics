@@ -1,50 +1,48 @@
 package geneticAlgorithm;
 
+import basic.Parser;
 import java.util.Arrays;
 
 import utils.akting.RichArray;
 import utils.akting.RichMatrix;
 import utils.akting.operations.OperationFactory;
 import utils.akting.tests.TestSuite;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.BasicEvaluator;
 import geneticAlgorithm.geneticOperators.mutation.CrossoverMutator;
 import geneticAlgorithm.geneticOperators.recombination.DifferentialRecombination;
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistAllReinsertion;
+import geneticAlgorithm.geneticOperators.selection.RandomSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
-public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
-
-  private Population population;
-  private GeneticAlgorithmConfiguration config;
-  private BasicEvaluator evaluator;
-  private int currentIteration = 0;
-  private int totalIterations = 1;
-  private IgaProgressFrame graphics;
+public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
   private DcmaEsConfig dcmaEsConfig;
 
   Integer[] offIndex;
   Integer[] reducedIndex;
 
-  public GeneticAlgorithmDcmaEs(GeneticAlgorithmConfiguration configuration) {
-    config = configuration;
-    evaluator = new BasicEvaluator();
+  public GeneticAlgorithmDcmaEs(Parser parser) {
+    super(parser);
+    
+    selection = new RandomSelection();
+    mutation = null;
+    recombination = null;
+    reinsertion = null;
   }
 
   @Override
   public IGeneticAlgorithm initialize() {
-    population = config.getInitialization().createRandomPopulation(config.getPopulationSize());
+    population = initialization.createRandomPopulation(populationSize);
 
     // Inicializamos la clase que contiene variables globales del algoritmo.
-    dcmaEsConfig = new DcmaEsConfig(config, population.getIndividual(0).getGeneSize());
-    config.setRecombination(new DifferentialRecombination(dcmaEsConfig));
-    config.setMutation(new CrossoverMutator(dcmaEsConfig));
-    config.setReinsertion(new ElitistAllReinsertion(dcmaEsConfig));
+    dcmaEsConfig = new DcmaEsConfig(this, population.getIndividual(0).getGeneSize());
+    recombination = new DifferentialRecombination(dcmaEsConfig);
+    mutation = new CrossoverMutator(dcmaEsConfig);
+    reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
 
-    config.getRestriction().apply(this.population);
+    restriction.apply(this.population);
 
     //evaluator.evaluateAndOrder(this.population, config.mainEvaluator, config.otherEvaluators);
-    double[] fitness = config.getMainEvaluator().evaluate(population);
+    double[] fitness = mainEvaluator.evaluate(population);
     //double[] fitness = myEvaluate(population);
     for (int i = 0; i < fitness.length; i++) {
       dcmaEsConfig.getOffFitness().set(i, fitness[i]);
@@ -79,11 +77,11 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
   }
 
   private void iterateOneStep() {
-    IndividualGroup[] trios = config.getSelection().Select(population, config.getPopulationSize());
-    Population offspring = config.getRecombination().recombinate(trios);
+    IndividualGroup[] trios = selection.Select(population, populationSize);
+    Population offspring = recombination.recombinate(trios);
 
-    config.getMutation().mutate(offspring, null);
-    config.getRestriction().apply(offspring);
+    mutation.mutate(offspring, null);
+    restriction.apply(offspring);
     /*for (int i = 0; i < offspring.size(); i++) {
      Individual ind = offspring.getIndividual(i);
      for (int j = 0; j < ind.getGeneSize(); j++) {
@@ -92,7 +90,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
      }
      }*/
     //this.evaluator.evaluateAndOrder(offspring, this.config.mainEvaluator, this.config.otherEvaluators);
-    double[] fitness = config.getMainEvaluator().evaluate(offspring);
+    double[] fitness = mainEvaluator.evaluate(offspring);
     //double[] fitness = myEvaluate(offspring);
     for (int i = 0; i < fitness.length; i++) {
       //dcmaEsConfig.offFitness.set(i, fitness[i]);
@@ -102,7 +100,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
 
         //sometimes it is good to reevaluate the whole population
     // if (currentIteration > 0 && currentIteration % 25 == 0) {
-    config.getRestriction().apply(population);
+    restriction.apply(population);
     /*for (int i = 0; i < population.size(); i++) {
      Individual ind = population.getIndividual(i);
      for (int j = 0; j < ind.getGeneSize(); j++) {
@@ -121,7 +119,7 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
      dcmaEsConfig.counteval++;
      }
      }*/
-    population = config.getReinsertion().Reinsert(population, offspring, 0);
+    population = reinsertion.Reinsert(population, offspring, 0);
 
     offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
     dcmaEsConfig.setOffX(new RichMatrix(population));
@@ -219,10 +217,9 @@ public class GeneticAlgorithmDcmaEs implements IGeneticAlgorithm {
   }
 
   private void scaleIndividualRates(Population population) {
-
     for (int i = 0; i < population.size(); i++) {
       Individual individual = population.getIndividual(i);
-      double factor = config.getExpectedSimulationTime() / individual.getSimulationTime();
+      double factor = expectedSimulationTime / individual.getSimulationTime();
       for (int j = 0; j < individual.getGeneSize(); j++) {
         individual.setGene(j, individual.getGene(j) / factor);
       }

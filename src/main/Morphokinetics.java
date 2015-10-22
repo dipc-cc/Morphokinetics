@@ -11,11 +11,10 @@ import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
 import geneticAlgorithm.GeneticAlgorithm;
-import geneticAlgorithm.GeneticAlgorithmConfiguration;
+import geneticAlgorithm.AbstractGeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
-import geneticAlgorithm.geneticAlgorithmDatabase.GeneticAlgorithmConfigFactory;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
@@ -76,18 +75,13 @@ public class Morphokinetics {
   }
 
   private static void evoluationarySimulation(Parser parser) {
-    GeneticAlgorithmConfiguration geneticConfiguration;
-    IGeneticAlgorithm ga;
+    AbstractGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {
       case "original":
-        geneticConfiguration = new GeneticAlgorithmConfigFactory(parser)
-                .createAgAgConvergenceConfiguration();
-        ga = new GeneticAlgorithm(geneticConfiguration);
+        ga = new GeneticAlgorithm(parser);
         break;
       case "dcma":
-        geneticConfiguration = new GeneticAlgorithmConfigFactory(parser)
-                .createAgAgDcmaEsConvergenceConfiguration();
-        ga = new GeneticAlgorithmDcmaEs(geneticConfiguration);
+        ga = new GeneticAlgorithmDcmaEs(parser);
         break;
       default:
         System.err.println("Error: Default evolutionary algorithm. This evolutionary algorithm is not implemented!");
@@ -96,7 +90,7 @@ public class Morphokinetics {
     }
 
     new GaProgressFrame(ga).setVisible(true);
-    AbstractPsdEvaluator evaluator = geneticConfiguration.getMainEvaluator();
+    AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
@@ -110,8 +104,8 @@ public class Morphokinetics {
     evaluator.setRepeats(evaluator.getRepeats() / 5);
     //--------------------------------
 
-    geneticConfiguration.setExperimentalPsd(experimentalPsd);
-    geneticConfiguration.setExpectedSimulationTime(simulationTime);
+    ga.setExperimentalPsd(experimentalPsd);
+    ga.setExpectedSimulationTime(simulationTime);
     ga.initialize();
     
     ga.iterate(parser.getTotalIterations());

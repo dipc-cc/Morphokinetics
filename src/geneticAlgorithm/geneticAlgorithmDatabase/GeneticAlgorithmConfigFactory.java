@@ -21,7 +21,7 @@ import geneticAlgorithm.geneticOperators.restrictions.siEtching.SiEtchingRestric
 import geneticAlgorithm.geneticOperators.restrictions.agAg.AgAgRestriction;
 import geneticAlgorithm.geneticOperators.selection.RandomSelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
-import geneticAlgorithm.GeneticAlgorithmConfiguration;
+import geneticAlgorithm.AbstractGeneticAlgorithm;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
@@ -36,7 +36,7 @@ import ratesLibrary.AgAgRatesFactory;
  */
 public class GeneticAlgorithmConfigFactory {
 
-  GeneticAlgorithmConfiguration config;
+  AbstractGeneticAlgorithm config;
   private AgSimulation agSimulation;
   private Parser parser;
   private double depositionRate;
@@ -44,7 +44,7 @@ public class GeneticAlgorithmConfigFactory {
   private double diffusionRate;
   
   public GeneticAlgorithmConfigFactory() {
-    config = new GeneticAlgorithmConfiguration();
+    //config = new AbstractGeneticAlgorithm();
     float experitentalTemp = 135;///parser.getTemperature();
     this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
     this.islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
@@ -52,7 +52,7 @@ public class GeneticAlgorithmConfigFactory {
   }
   
   public GeneticAlgorithmConfigFactory(Parser parser) {
-    config = new GeneticAlgorithmConfiguration();
+    //config = new AbstractGeneticAlgorithm();
     this.parser = parser;
     this.agSimulation = new AgSimulation(parser);
     agSimulation.initialiseKmc();
@@ -64,7 +64,7 @@ public class GeneticAlgorithmConfigFactory {
     agSimulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
   }
   
-  public GeneticAlgorithmConfiguration createSiConvergenceConfiguration() {
+  public AbstractGeneticAlgorithm createSiConvergenceConfiguration() {
     config.setPopulationSize(100);
     config.setOffspringSize(32);
     config.setPopulationReplacements(5);
@@ -79,36 +79,7 @@ public class GeneticAlgorithmConfigFactory {
 
     return config;
   }
-
-  public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration() {
-    config.setPopulationSize(parser.getPopulationSize());
-    config.setOffspringSize(parser.getOffspringSize());
-    config.setPopulationReplacements(parser.getPopulationReplacement());
-    config.setInitialization(new AgAgInitialization());
-    config.setMutation(new BgaBasedMutator());
-    config.setRecombination(new RealRecombination());
-    config.setReinsertion(new ElitistReinsertion());
-    config.setRestriction(new AgAgRestriction(diffusionRate));
-    config.setSelection(new RankingSelection());
-    config.setMainEvaluator(getAgAgMainEvaluator());
-    config.setOtherEvaluators(addNoMoreEvaluators());
-
-    return config;
-  }
   
-  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration() {
-    config.setPopulationSize(parser.getPopulationSize());
-    config.setOffspringSize(parser.getOffspringSize());
-    config.setPopulationReplacements(parser.getPopulationReplacement());
-    config.setInitialization(new AgAgInitialization());
-    config.setRestriction(new AgAgRestriction(diffusionRate));
-    config.setSelection(new RandomSelection());
-    config.setMainEvaluator(getAgAgMainEvaluator());
-    config.setOtherEvaluators(addNoMoreEvaluators());
-
-    return config;
-  }
-
   private AbstractPsdEvaluator getSiMainEvaluators() {
     SiThreadedPsdEvaluator evaluator = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
     evaluator.setWheight(1.0f);
@@ -166,7 +137,7 @@ public class GeneticAlgorithmConfigFactory {
   }
   
   @Deprecated
-  public GeneticAlgorithmConfiguration createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
+  public AbstractGeneticAlgorithm createAgAgConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
     config.setPopulationSize(100);
     config.setOffspringSize(32);
     config.setPopulationReplacements(5);
@@ -183,7 +154,7 @@ public class GeneticAlgorithmConfigFactory {
   }
   
   @Deprecated
-  public GeneticAlgorithmConfiguration createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
+  public AbstractGeneticAlgorithm createAgAgDcmaEsConvergenceConfiguration(double diffusionRate, double islandDensity, double depositionRate) {
     //config.populationSize(100;
     config.setPopulationSize(5);
     config.setOffspringSize(32);
