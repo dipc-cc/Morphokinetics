@@ -51,27 +51,27 @@ public class RatesFromPrbCox implements IDiffusionRates {
    */
   private final double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
   /**
-   * Energy from edge A to edge B, from corner
+   * Energy from edge A to edge B, across corner
    */
   private final double Eacb = 0.36;
   /**
-   * Energy from edge B to edge A, from corner
+   * Energy from edge B to edge A, across corner
    */
   private final double Ebca = 0.36;
   /**
-   * Energy from edge A to kink, from corner
+   * Energy from edge A to kink, across corner
    */
   private final double Eack = 0.36;
   /**
-   * Energy from edge B to kink, from corner
+   * Energy from edge B to kink, across corner
    */
   private final double Ebck = 0.36;
   /**
-   * Energy from corner to kink, from edge A
+   * Energy from corner to kink A
    */
   private final double Ecak = 0.15;  
   /**
-   * Energy from corner to kink, from edge B
+   * Energy from corner to kink B
    */
   private final double Ecbk = 0.075;
   private final double Ed = 0.1;  //no lo sabemos seguro
