@@ -10,6 +10,7 @@ import basic.AgSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
+import basic.io.Restart;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.AbstractGeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
@@ -21,6 +22,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import ratesLibrary.AgAgRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
+import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -91,8 +93,12 @@ public class Morphokinetics {
     }
 
     new GaProgressFrame(ga).setVisible(true);
-
-    ga.setExperimentalPsd(createExperimentalData(ga));
+    float[][] experimentalPsd = readExperimentalData();
+    new Frame2D("Expected PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
+            .setLogScale(true)
+            .setShift(true)
+            .performDrawToImage(1);
+    ga.setExperimentalPsd(experimentalPsd);
     //ga.setExpectedSimulationTime(simulationTime);
     ga.initialize();
     
@@ -105,16 +111,42 @@ public class Morphokinetics {
             .performDrawToImage(1);*/
   }
   
+  private static float[][] readExperimentalData() {
+    Restart restart = new Restart();
+    int[] sizes = null;
+    float[][] readSurface = null;
+    int islandCount = 0;
+    int numberOfFiles = 45;
+    String surfaceFileName = "psdFromImage/islands/3.OuterIsolatedSmall/island";
+    PsdSignature2D psd = null;
+    for (int i = 1; i <= numberOfFiles; i++) {
+      try {
+        readSurface = restart.readSurfaceBinary2D(surfaceFileName+i+".mko");
+        if (psd == null) {
+          sizes = new int[2];
+          sizes[0] = restart.getSizeX();
+          sizes[1] = restart.getSizeY();
+          psd = new PsdSignature2D(sizes[0], sizes[1]);
+        }
+      } catch (Exception e){
+        System.err.println("Provided filename ["+surfaceFileName+i+".mko] does not exist. Exiting");
+        //throw e;
+        continue;
+      }
+      islandCount++;
+      MathUtils.applyGrowthAccordingDistanceToPerimeter(readSurface);
+      psd.addSurfaceSample(readSurface);
+    }
+
+    return psd.getPsd();
+  }
+  
   private static float[][] createExperimentalData(AbstractGeneticAlgorithm ga) {
     
     AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
     evaluator.setRepeats(evaluator.getRepeats() * 5);
     Individual individual = new Individual(new AgAgRatesFactory().getRates(135));
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
-    new Frame2D("Expected PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
-            .setLogScale(true)
-            .setShift(true)
-            .performDrawToImage(1);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);
     return experimentalPsd;
