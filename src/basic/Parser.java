@@ -76,6 +76,7 @@ public class Parser {
   private int offspringSize;
   private int populationReplacement;
   private int totalIterations;
+  private int repetitions;
   /**
    * Constructor
    */
@@ -110,6 +111,7 @@ public class Parser {
     this.offspringSize = 32;
     this.populationReplacement = 5;
     this.totalIterations = 100;
+    this.repetitions = 18;
   }
 
   /**
@@ -287,6 +289,11 @@ public class Parser {
     } catch (JSONException e) {
       totalIterations = 100;
     }
+    try {
+      repetitions = json.getInt("repetitions");
+    } catch (JSONException e) {
+      repetitions = 18;
+    }
     return 0;
   }
 
@@ -328,6 +335,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"offspringSize\"", offspringSize);
     System.out.printf("%32s: %s,\n", "\"populationReplacement\"", populationReplacement);
     System.out.printf("%32s: %s\n", "\"totalIterations\"", totalIterations);
+    System.out.printf("%32s: %s\n", "\"repetitions\"", repetitions);
   }
 
   public String getCalculationType() {
@@ -468,6 +476,14 @@ public class Parser {
   
   public int getTotalIterations() {
     return totalIterations;
+  }
+  
+  /**
+   * Number of repetitions or evaluations that a single Gene has to do.
+   * @return by default 18 
+   */
+  public int getRepetitions() {
+    return repetitions;
   }
   
   public void setCalculationMode(String mode) {
