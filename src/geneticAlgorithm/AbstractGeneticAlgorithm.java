@@ -83,7 +83,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     switch (parser.getCalculationMode()) {
       case "Ag":
         this.simulation = new AgSimulation(parser);
-
         simulation.initialiseKmc();
         float experitentalTemp = parser.getTemperature();
         this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
@@ -96,6 +95,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         break;
       case "Si":
         this.simulation = new SiSimulation(parser);
+        simulation.initialiseKmc();
         initialization = new SiEtchingInitialization();
         restriction = new SiEtchingRestriction();
         mainEvaluator = getSiMainEvaluators();
@@ -105,7 +105,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         System.err.println("Current calculation mode is " + parser.getCalculationMode());
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-    simulation.initialiseKmc();
     mutation = new BgaBasedMutator();
     recombination = new RealRecombination();
     reinsertion = new ElitistReinsertion();
