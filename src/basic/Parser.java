@@ -466,4 +466,12 @@ public class Parser {
   public int getTotalIterations() {
     return totalIterations;
   }
+  
+  public void setPopulation(int populationSize) {
+    this.populationSize = populationSize;
+  }
+  
+  public void setEvolutionaryAlgorithm(String name) {
+    this.evolutionaryAlgorithm = name;
+  }
 }
