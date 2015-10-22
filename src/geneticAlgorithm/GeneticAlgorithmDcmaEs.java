@@ -41,9 +41,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
     restriction.apply(this.population);
 
-    //evaluator.evaluateAndOrder(this.population, config.mainEvaluator, config.otherEvaluators);
     double[] fitness = mainEvaluator.evaluate(population);
-    //double[] fitness = myEvaluate(population);
     for (int i = 0; i < fitness.length; i++) {
       dcmaEsConfig.getOffFitness().set(i, fitness[i]);
       population.getIndividual(i).setError(0, fitness[i]);
@@ -82,43 +80,13 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
     mutation.mutate(offspring, null);
     restriction.apply(offspring);
-    /*for (int i = 0; i < offspring.size(); i++) {
-     Individual ind = offspring.getIndividual(i);
-     for (int j = 0; j < ind.getGeneSize(); j++) {
-     double val = ind.getGene(j);
-     ind.setGene(j, Math.max(-500, Math.min(500, val)));
-     }
-     }*/
-    //this.evaluator.evaluateAndOrder(offspring, this.config.mainEvaluator, this.config.otherEvaluators);
     double[] fitness = mainEvaluator.evaluate(offspring);
-    //double[] fitness = myEvaluate(offspring);
     for (int i = 0; i < fitness.length; i++) {
-      //dcmaEsConfig.offFitness.set(i, fitness[i]);
       offspring.getIndividual(i).setError(0, fitness[i]);
       dcmaEsConfig.addCountEval();
     }
 
-        //sometimes it is good to reevaluate the whole population
-    // if (currentIteration > 0 && currentIteration % 25 == 0) {
     restriction.apply(population);
-    /*for (int i = 0; i < population.size(); i++) {
-     Individual ind = population.getIndividual(i);
-     for (int j = 0; j < ind.getGeneSize(); j++) {
-     double val = ind.getGene(j);
-     ind.setGene(j, Math.max(-500, Math.min(500, val)));
-     }
-     }*/
-            //this.evaluator.evaluateAndOrder(this.population, this.config.mainEvaluator, this.config.otherEvaluators);;
-
-		//fitness = config.mainEvaluator.evaluate(population);
-		//fitness = myEvaluate(population);
-    /*	
-     for (int i = 0; i < fitness.length; i++) {
-     dcmaEsConfig.offFitness.set(i, fitness[i]);
-     population.getIndividual(i).setError(0, fitness[i]);
-     dcmaEsConfig.counteval++;
-     }
-     }*/
     population = reinsertion.Reinsert(population, offspring, 0);
 
     offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
