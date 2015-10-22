@@ -90,7 +90,7 @@ public class Parser {
     this.flow = 135;
     this.numberOfSimulations = 10;
     this.cartSizeX = 256;
-    this.cartSizeY = (int) (cartSizeX / AgAgLattice.YRatio);
+    this.cartSizeY = 256;
     this.binsLevels = 100;
     this.extraLevels = 0;
     this.coverage = 30;
