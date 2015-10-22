@@ -85,17 +85,7 @@ public class RichArray extends ArrayList<Double> {
 		
 		return newArray;
 	}
-	
-	public static RichArray randn(int initialCapacity) {
-		RichArray newArray = new RichArray(initialCapacity);
 		
-		for (int i = 0; i < initialCapacity; i++) {
-			newArray.add(StaticRandom.raw());
-		}
-		
-		return newArray;
-	}
-	
 	public static RichArray max(RichArray a, RichArray b) {
 		RichArray maxArray = new RichArray(a.capacity);
 		
