@@ -20,6 +20,9 @@ public class DcmaEsConfig {
   private RichArray weights;
 
   private RichMatrix B;
+  /**
+   * D contains the standard deviations
+   */
   private RichArray D;
   private RichMatrix C;
   private RichMatrix invsqrtC;
