@@ -39,18 +39,34 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
     return occupied && (type < KINK);
   } // KINK and BULK atoms types are considered immobil atoms
 
+  /**
+   * Total number of 1st neighbours.
+   * @return 0 <= value <= 3
+   */
   public byte getN1() {
     return n1;
   }
 
+  /**
+   * Total number of 2nd neighbours.
+   * @return 0 <= value <= 6
+   */
   public byte getN2() {
     return n2;
   }
 
+  /**
+   * Total number of 3rd neighbours.
+   * @return 0 <= value <= 3
+   */
   public byte getN3() {
     return n3;
   }
 
+  /**
+   * Total number of neighbours.
+   * @return 0 <= value <= 12
+   */
   public int getN1N2N3() {
     return (n1 + n2 + n3);
   }
@@ -90,7 +106,6 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
    */
   @Override
   public Abstract2DDiffusionAtom chooseRandomHop() {
-
     double raw = StaticRandom.raw();
 
     if (bondsProbability == null) {
