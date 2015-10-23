@@ -391,7 +391,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   }
 
   private void obtainRatesFromNeighbours() {
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < numberOfNeighbours; i++) {
       bondsProbability[i] = probJumpToNeighbour(i);
       totalProbability += bondsProbability[i];
     }
