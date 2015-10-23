@@ -25,7 +25,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       typesTable = new AgAgTypesTable();
     }
     
-    numberOfNeighbours = 12;
+    numberOfNeighbours = 6;
     bondsProbability = new double[numberOfNeighbours];
   }
 
@@ -154,7 +154,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     if (type == EDGE && neighbours[cont].getType() == CORNER) {
       return aheadCornerAtom(cont);
     }
-
+ 
     return neighbours[cont];
   }
 
