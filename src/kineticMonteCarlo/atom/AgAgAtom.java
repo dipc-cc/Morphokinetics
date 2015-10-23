@@ -24,7 +24,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     if (typesTable == null) {
       typesTable = new AgAgTypesTable();
     }
-    
+
     numberOfNeighbours = 6;
     bondsProbability = new double[numberOfNeighbours];
   }
@@ -44,11 +44,11 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
   @Override
   public boolean isEligible() {
-    return occupied && (type < KINK);
+    return occupied && (type < KINK_A);
   }
 
   private boolean isPartOfImmobilSubstrate() {
-    return occupied && (type == BULK);
+    return occupied && (type == ISLAND);
   }
 
   public byte getNImmobile() {
@@ -84,10 +84,10 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       }
     }
 
-    if (type == EDGE) {
+    if (type == EDGE_A) {
       return aggrCalculateEdgeType(occupationCode);
     }
-    if (type == KINK) {
+    if (type == KINK_A) {
       return aggrCalculateKinkType(occupationCode);
     }
     return -1;
@@ -151,10 +151,10 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
     cont--;
 
-    if (type == EDGE && neighbours[cont].getType() == CORNER) {
+    if (type == EDGE_A && neighbours[cont].getType() == CORNER) {
       return aheadCornerAtom(cont);
     }
- 
+
     return neighbours[cont];
   }
 
@@ -232,7 +232,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     byte newType = typesTable.getType(--nImmobile, ++nMobile);
 
     if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean immobileToMobile = (type >= KINK && newType < KINK);
+      boolean immobileToMobile = (type >= KINK_A && newType < KINK_A);
       type = newType;
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
@@ -260,11 +260,11 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     byte newType = typesTable.getType(++nImmobile, --nMobile);
 
     if (forceNucleation && occupied) {
-      newType = BULK;
+      newType = ISLAND;
     }
 
     if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean mobileToImmobile = (type < KINK && newType >= KINK);
+      boolean mobileToImmobile = (type < KINK_A && newType >= KINK_A);
       type = newType;
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
@@ -279,27 +279,28 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
       }
     }
   }
+
   /**
    * Éste lo ejecutan los primeros vecinos
    * @param originType
-   * @param forceNucleation 
+   * @param forceNucleation
    */
-  public void addOccupiedNeighbourProcess(byte originType, boolean forceNucleation) { 
+  public void addOccupiedNeighbourProcess(byte originType, boolean forceNucleation) {
 
     byte newType;
 
-    if (originType < KINK) {
+    if (originType < KINK_A) {
       newType = typesTable.getType(nImmobile, ++nMobile);
     } else {
       newType = typesTable.getType(++nImmobile, nMobile);
     }
 
     if (forceNucleation) {
-      newType = BULK;
+      newType = ISLAND;
     }
 
     if (type != newType) {
-      boolean mobileToImmobile = (type < KINK && newType >= KINK);
+      boolean mobileToImmobile = (type < KINK_A && newType >= KINK_A);
       type = newType;
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
@@ -320,7 +321,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     byte newType = typesTable.getType(nImmobile, --nMobile);
 
     if (type != newType) {
-      boolean immobileToMobile = (type >= KINK && newType < KINK);
+      boolean immobileToMobile = (type >= KINK_A && newType < KINK_A);
       type = newType;
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
@@ -341,7 +342,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
     occupied = true;
     if (forceNucleation) {
-      type = BULK;
+      type = ISLAND;
     }
 
     byte originalType = type;
@@ -413,26 +414,28 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
   private double probJumpToNeighbour(int position) {
 
+    if (type >= KINK_A) {
+      System.out.println("Origin type: " + type);
+    }
     if (neighbours[position].isOccupied()) {
       return 0;
     }
 
     byte originType = type;
-    if (type == EDGE && (getOrientation() & 1) == 0) originType = 5;
-    if (type == KINK && (getOrientation() & 1) == 0) originType = 6;
-
+    if (type == EDGE_A && (getOrientation() & 1) == 0) originType = EDGE_B;
+    if (type == KINK_A && (getOrientation() & 1) == 0) originType = KINK_B;
     int myPositionForNeighbour = (position + 3) % numberOfNeighbours;
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
-    if (type == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
+    if (type == EDGE_A && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
       int otherCorner = 0;
-      if (originType == EDGE) otherCorner = 5;
-      if (originType == 5)    otherCorner = 2;
+      if (originType == EDGE_A) otherCorner = EDGE_B;
+      if (originType == EDGE_B) otherCorner = EDGE_A;
       return probabilities[originType][otherCorner];
     } else {
       destination = (byte) Math.min(destination, 2);
-      if (destination == EDGE && (neighbours[position].getOrientation() & 1) == 0) {
-        destination = 5;
+      if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
+        destination = EDGE_B;
       }
 
       return probabilities[originType][destination];
@@ -444,7 +447,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
     if (!neighbours[posNeighbour].isOccupied()) return type;
 
-    if (neighbours[posNeighbour].getType() < KINK) {
+    if (neighbours[posNeighbour].getType() < KINK_A) {
       return typesTable.getType(nImmobile, nMobile - 1);
     } else {
       return typesTable.getType(nImmobile - 1, nMobile);
