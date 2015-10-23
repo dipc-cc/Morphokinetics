@@ -271,8 +271,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
         modified.addBondAtom(this);
       }
       if (mobileToImmobile && occupied) {
-
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < numberOfNeighbours; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
           }
