@@ -421,7 +421,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     if (type == EDGE && (getOrientation() & 1) == 0) originType = 5;
     if (type == KINK && (getOrientation() & 1) == 0) originType = 6;
 
-    int myPositionForNeighbour = (position + 3) % 6;
+    int myPositionForNeighbour = (position + 3) % numberOfNeighbours;
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     if (type == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
