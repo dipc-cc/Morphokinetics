@@ -320,18 +320,14 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     byte newType = typesTable.getType(nImmobile, --nMobile);
 
     if (type != newType) {
-
       boolean immobileToMobile = (type >= KINK && newType < KINK);
-
       type = newType;
-
       modified.addOwnAtom(this);
       if (nMobile > 0 && !occupied) {
         modified.addBondAtom(this);
       }
-
       if (immobileToMobile && occupied) {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < numberOfNeighbours; i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
           }
