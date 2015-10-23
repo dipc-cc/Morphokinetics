@@ -204,7 +204,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
     int cont = 0;
     int i = 0;
-    while (cont < 2 && i < 6) {
+    while (cont < 2 && i < numberOfNeighbours) {
       if (neighbours[i].isOccupied()) {
         if (neighbours[i].getType() != TERRACE) {
           return false;
