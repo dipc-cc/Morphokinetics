@@ -126,7 +126,12 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   private void scaleIndividualRates(Population population) {
     for (int i = 0; i < population.size(); i++) {
       Individual individual = population.getIndividual(i);
-      double factor = expectedSimulationTime / individual.getSimulationTime();
+      double factor;
+      if (expectedSimulationTime == 0) {
+        factor = 1;
+      } else {
+        factor = expectedSimulationTime / individual.getSimulationTime();
+      }
       for (int j = 0; j < individual.getGeneSize(); j++) {
         individual.setGene(j, individual.getGene(j) / factor);
       }
