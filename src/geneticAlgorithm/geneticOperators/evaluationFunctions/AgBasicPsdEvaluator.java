@@ -7,6 +7,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
+import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import utils.psdAnalysis.PsdSignature2D;
@@ -18,6 +19,7 @@ import utils.psdAnalysis.PsdSignature2D;
 public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private AgAgKmc kmc;
+  private Frame2D psdFrame;
 
   public AgBasicPsdEvaluator(AgAgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY) {
 
@@ -32,6 +34,11 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
     DiffusionKmcFrame frame = createGraphicsFrame(kmc);
     frame.setVisible(true);
+    psdFrame =  new Frame2D("Calculated PSD analysis")
+            .setLogScale(true)
+            .setShift(true)
+            .setMin(2.02634)
+            .setMax(19.34551);
   }
 
   private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {
@@ -73,6 +80,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     ind.setSimulationTime(time / repeats);
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psdFrame.setMesh(psd.getPsd());
   }
 
 }
