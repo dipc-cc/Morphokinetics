@@ -218,7 +218,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
   @Override
   public int getNeighbourCount() {
-    return 6;
+    return numberOfNeighbours;
   }
 
   public void removeImmobilAddMobile() {
