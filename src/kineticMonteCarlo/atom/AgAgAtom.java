@@ -345,7 +345,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     }
 
     byte originalType = type;
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < numberOfNeighbours; i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
         neighbours[i].addOccupiedNeighbourProcess(originalType, forceNucleation);
       }
@@ -362,7 +362,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   public void extract() {
     occupied = false;
 
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < numberOfNeighbours; i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
         neighbours[i].removeMobileOccupied();
       }
