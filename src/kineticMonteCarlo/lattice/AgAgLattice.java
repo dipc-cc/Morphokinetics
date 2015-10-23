@@ -9,8 +9,8 @@ import kineticMonteCarlo.atom.AgAgAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
-import static kineticMonteCarlo.atom.AbstractAtom.EDGE;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgAgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAgAtom.TERRACE;
 import utils.StaticRandom;
 
 /**
@@ -91,7 +91,6 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public int getAvailableDistance(int atomType, short iHexa, short jHexa, int thresholdDistance) {
-
     switch (atomType) {
       case TERRACE:
         return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
@@ -104,7 +103,6 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public Abstract2DDiffusionAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
-
     switch (originType) {
       case TERRACE:
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());

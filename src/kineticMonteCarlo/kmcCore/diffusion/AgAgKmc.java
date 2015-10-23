@@ -4,8 +4,8 @@
  */
 package kineticMonteCarlo.kmcCore.diffusion;
 
-import static kineticMonteCarlo.atom.AbstractAtom.EDGE;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgAgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAgAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;

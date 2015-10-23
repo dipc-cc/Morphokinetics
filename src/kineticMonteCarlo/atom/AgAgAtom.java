@@ -18,7 +18,19 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   private final AgAgAtom[] neighbours = new AgAgAtom[6];
   private byte nImmobile;
   private byte nMobile;
-
+  
+  public static final int TERRACE = 0;
+  public static final int CORNER = 1;
+  public static final int EDGE_A = 2;
+  public static final int KINK_A = 3;
+  public static final int ISLAND = 4;
+  public static final int EDGE_B = 5;
+  public static final int KINK_B = 6;
+  
+  // Before we actually know the value of those, we simply use A type
+  public static final int EDGE = EDGE_A;
+  public static final int KINK = KINK_A;
+  
   public AgAgAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(iHexa, jHexa, distancePerStep);
     if (typesTable == null) {
@@ -414,9 +426,6 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
 
   private double probJumpToNeighbour(int position) {
 
-    if (type >= KINK_A) {
-      System.out.println("Origin type: " + type);
-    }
     if (neighbours[position].isOccupied()) {
       return 0;
     }
