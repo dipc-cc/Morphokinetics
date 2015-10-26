@@ -158,9 +158,52 @@ public class Restart {
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
     return readLowText2D(fileName, sizes);
   }
+  
   public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
     return readLowBinary(fileName); 
   }
+  
+  /**
+   * Reads a surface from a (binary) file and it reduces it surface by the given factor.
+   * @param fileName
+   * @param factor how much we want to reduce the surface. A number greater than one
+   * @return reduced surface
+   * @throws FileNotFoundException 
+   */
+  public float[][] readSurfaceBinary2D(String fileName, int factor) throws FileNotFoundException {
+    float[][] originalSurface = readLowBinary(fileName); 
+    return scale(originalSurface, factor);
+  }
+  
+  /**
+   * Given an original surface it reduces by the given factor.
+   * @param originalSurface
+   * @param factor
+   * @return reduced surface
+   */
+  private float[][] scale(float[][] originalSurface, int factor) {
+    int originalSizeX = originalSurface.length;
+    int originalSizeY = originalSurface[0].length;
+    double scale = (double)1/ (double) factor;
+    int reducedSizeX = (int) Math.ceil(originalSizeX * scale); // This is required to ensure that data properly fits afterwards
+    int reducedSizeY = (int) Math.ceil(originalSizeY * scale);
+    
+    float[][] reducedSurface = new float[reducedSizeX][reducedSizeY];
+    if (scale > 1) {
+      System.err.println("Error:scale must be less or equal to 1.");
+      return originalSurface;
+    }
+    // This is really simple interpolation; last position is visited, this value is assigned
+    for (int x = 0; x < originalSizeX; x++) {
+      for (int y = 0; y < originalSizeY; y++) {
+        int reducedX = (int)(x*scale);
+        int reducedY = (int)(y*scale);
+        reducedSurface[reducedX][reducedY] = originalSurface[x][y];
+      }
+    }
+    return reducedSurface;
+  }
+  
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
     return readLowText2D(fileName);
   }
