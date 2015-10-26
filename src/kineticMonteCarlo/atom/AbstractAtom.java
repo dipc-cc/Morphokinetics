@@ -15,6 +15,7 @@ public abstract class AbstractAtom {
   protected IProbabilityHolder list;
   protected double[] probabilities;
   protected int numberOfNeighbours;
+  protected boolean removed = false;
 
   // Atoms types
   public static final int TERRACE = 0;
@@ -43,8 +44,14 @@ public abstract class AbstractAtom {
 
   public abstract boolean isEligible();
 
-  public abstract boolean isRemoved();
+  public boolean isRemoved() {
+    return removed;
+  }
 
+  public void unRemove() {
+    removed = false;
+  }
+  
   public abstract byte getType();
 
   public int getNumberOfNeighbours() {

@@ -12,7 +12,6 @@ public class BasicAtom extends AbstractAtom {
 
   private BasicAtom[] neighs;
   private byte type;
-  private boolean removed;
   private short x;
   private short y;
 
@@ -88,13 +87,4 @@ public class BasicAtom extends AbstractAtom {
     return (type >= 0 && type < 4);
   }
 
-  @Override
-  public boolean isRemoved() {
-    return removed;
   }
-
-  public void unRemove() {
-    removed = false;
-  }
-
-}
