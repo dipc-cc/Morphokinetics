@@ -69,20 +69,18 @@ public class SiLattice extends AbstractEtchingLattice {
   }
 
   public UnitCell getUnitCell() {
-
     return unitCell;
   }
 
+  @Override
   public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
-
     return lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
   }
 
   @Override
   public void reset() {
 
-        //Unremove atoms and set to bulk mode (4,12)
-    //----------------------------------------------------------
+    //Unremove atoms and set to bulk mode (4,12)
     for (int i = 0; i < this.hexaSizeJ; i++) {
       for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
@@ -98,8 +96,7 @@ public class SiLattice extends AbstractEtchingLattice {
       lattice[k].setAsBulk();
     }
 
-        // Update neighborhood of top atoms
-    //----------------------------------------------------------  
+    // Update neighbourhood of top atoms
     for (int k = (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k < hexaSizeK * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
       lattice[k].updateN1FromScratch();
     }
@@ -108,98 +105,99 @@ public class SiLattice extends AbstractEtchingLattice {
       lattice[k].updateN2FromScratch();
     }
 
-        // Remove top layer atoms
-    //----------------------------------------------------------
+    // Remove top layer atoms
     for (int i = 0; i < this.hexaSizeJ; i++) {
       for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
-
           lattice[(((this.hexaSizeK - 1) * this.hexaSizeJ + i) * this.hexaSizeI + j) * this.unitCellSize + a].remove();
         }
       }
     }
   }
 
+  /**
+   * Atoms creation.
+   * @param coords
+   * @param UC 
+   */
   private void createAtoms(float[] coords, UnitCell UC) {
-    //atoms creation
     int cont = 0;
     for (int a = 0; a < this.hexaSizeK; a++) {
       for (int b = 0; b < this.hexaSizeJ; b++) {
         for (int c = 0; c < this.hexaSizeI; c++) {
           for (int j = 0; j < unitCellSize; j++) {
+            float x = coords[j * 3] + c * (float) UC.getLimitX();
+            float y = coords[j * 3 + 1] + b * (float) UC.getLimitY();
+            float z = -coords[j * 3 + 2] + (a + 1) * (float) UC.getLimitZ();
 
-            float X = coords[j * 3] + c * (float) UC.getLimitX();
-            float Y = coords[j * 3 + 1] + b * (float) UC.getLimitY();
-            float Z = -coords[j * 3 + 2] + (a + 1) * (float) UC.getLimitZ();
-
-            lattice[cont] = new SiAtom(X, Y, Z);
+            lattice[cont] = new SiAtom(x, y, z);
             cont++;
-
           }
         }
       }
     }
   }
 
-  private void interconnectAtoms(short[] UC_neig, byte[] block) {
-    //atoms inter-connection
-
-    for (int Z = 0; Z < this.hexaSizeK; Z++) {
-      for (int Y = 0; Y < this.hexaSizeJ; Y++) {
-        for (int X = 0; X < this.hexaSizeI; X++) {
+  /**
+   * Atoms inter-connection.
+   * @param neihbourUnitCell
+   * @param block 
+   */
+  private void interconnectAtoms(short[] neihbourUnitCell, byte[] block) {
+    for (int z = 0; z < this.hexaSizeK; z++) {
+      for (int y = 0; y < this.hexaSizeJ; y++) {
+        for (int x = 0; x < this.hexaSizeI; x++) {
           for (int j = 0; j < unitCellSize; j++) {
-
             for (int i = 0; i < 4; i++) {
-
-              int vecino_X = X;
-              int vecino_Y = Y;
-              int vecino_Z = Z;
-              int pos_vecino = UC_neig[j * 4 + i];
+              int xNeighbour = x;
+              int yNeighbour = y;
+              int zNeighbour = z;
+              int posNeighbour = neihbourUnitCell[j * 4 + i];
               if ((block[j * 4 + i] & 3) == 1) {
-                vecino_Y++;
+                yNeighbour++;
               }
               if ((block[j * 4 + i] & 3) == 3) {
-                vecino_Y--;
+                yNeighbour--;
               }
-              if (vecino_Y < 0) {
-                vecino_Y = hexaSizeJ - 1;
+              if (yNeighbour < 0) {
+                yNeighbour = hexaSizeJ - 1;
               }
-              if (vecino_Y > hexaSizeJ - 1) {
-                vecino_Y = 0;
+              if (yNeighbour > hexaSizeJ - 1) {
+                yNeighbour = 0;
               }
 
               if (((block[j * 4 + i] >> 2) & 3) == 1) {
-                vecino_X++;
+                xNeighbour++;
               }
               if (((block[j * 4 + i] >> 2) & 3) == 3) {
-                vecino_X--;
+                xNeighbour--;
               }
-              if (vecino_X < 0) {
-                vecino_X = hexaSizeI - 1;
+              if (xNeighbour < 0) {
+                xNeighbour = hexaSizeI - 1;
               }
-              if (vecino_X > hexaSizeI - 1) {
-                vecino_X = 0;
+              if (xNeighbour > hexaSizeI - 1) {
+                xNeighbour = 0;
               }
 
               if (((block[j * 4 + i] >> 4) & 3) == 1) {
-                vecino_Z++;
+                zNeighbour++;
               }
               if (((block[j * 4 + i] >> 4) & 3) == 3) {
-                vecino_Z--;
+                zNeighbour--;
               }
 
-              if (vecino_Z < 0) {
-                vecino_X = 0;
-                vecino_Y = 0;
-                vecino_Z = 0;
-                pos_vecino = j;
+              if (zNeighbour < 0) {
+                xNeighbour = 0;
+                yNeighbour = 0;
+                zNeighbour = 0;
+                posNeighbour = j;
               }
-              if (vecino_Z < hexaSizeK) {
+              if (zNeighbour < hexaSizeK) {
 
-                lattice[((Z * hexaSizeJ + Y) * hexaSizeI + X) * unitCellSize + j].setNeighbour(lattice[((vecino_Z * hexaSizeJ + vecino_Y) * hexaSizeI + vecino_X) * unitCellSize + pos_vecino], i);
+                lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].setNeighbour(lattice[((zNeighbour * hexaSizeJ + yNeighbour) * hexaSizeI + xNeighbour) * unitCellSize + posNeighbour], i);
 
               } else {
-                lattice[((Z * hexaSizeJ + Y) * hexaSizeI + X) * unitCellSize + j].setNeighbour(null, i);
+                lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].setNeighbour(null, i);
               }
             }
           }
