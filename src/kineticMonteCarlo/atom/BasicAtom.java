@@ -10,23 +10,25 @@ package kineticMonteCarlo.atom;
  */
 public class BasicAtom extends AbstractAtom {
 
-  private BasicAtom[] neighs = new BasicAtom[4];
+  private BasicAtom[] neighs;
   private byte type;
-  private boolean removed = false;
+  private boolean removed;
   private short x;
   private short y;
 
+  public BasicAtom(short x, short y) {
+    this.x = x;
+    this.y = y;
+    this.neighs = new BasicAtom[4];
+    this.removed = false;
+  }
+  
   public short getX() {
     return x;
   }
 
   public short getY() {
     return y;
-  }
-
-  public BasicAtom(short x, short y) {
-    this.x = x;
-    this.y = y;
   }
 
   public void setNeighbor(BasicAtom a, int pos) {
