@@ -29,7 +29,7 @@ public class BasicKmc extends AbstractEtchingKmc {
    * @param rates
    */ 
   @Override
-  public void initializeRates(double[] rates) {
+  public void initialiseRates(double[] rates) {
 
     lattice.setProbabilities(rates);
     list.reset();

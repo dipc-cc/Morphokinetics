@@ -61,10 +61,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   }
 
   @Override
-  public void initializeRates(double[] rates) {
-
-    lattice.reset();
-    list.reset();
+  public void initialiseRates(double[] rates) {
     //we modify the 1D array into a 2D array;
     int length = (int) Math.sqrt(rates.length);
     double[][] processProbs2D = new double[length][length];
@@ -75,9 +72,14 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
       }
     }
     lattice.configure(processProbs2D);
-    depositSeed();
   }
 
+  public void reset() {
+    lattice.reset();
+    list.reset();
+    depositSeed();
+  }
+  
   @Override
   public AbstractLattice getLattice() {
     return lattice;

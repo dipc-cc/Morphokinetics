@@ -31,4 +31,13 @@ public class AgSimulation extends AbstractGrowthSimulation {
             parser.useMaxPerimeter(),
             parser.getPerimeterType());
   }
+  
+  public void initialiseKmc(double[] rates) {
+    initialiseKmc();
+    kmc.initializeRates(rates);
+    System.out.println("This");
+    for (int i = 0; i < rates.length; i++) {
+      System.out.println(" " + rates[i]);
+    }
+  }
 }

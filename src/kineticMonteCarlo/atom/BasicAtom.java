@@ -88,13 +88,4 @@ public class BasicAtom extends AbstractAtom {
     return (type >= 0 && type < 4);
   }
 
-  @Override
-  public boolean isRemoved() {
-    return removed;
-  }
-
-  public void unRemove() {
-    removed = false;
-  }
-
 }

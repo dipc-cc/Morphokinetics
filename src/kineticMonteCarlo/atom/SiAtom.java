@@ -18,7 +18,6 @@ public class SiAtom extends AbstractAtom {
 
   private byte n1;
   private byte n2;
-  private boolean removed = false;
   private float x;
   private float y;
   private float z;
@@ -82,11 +81,6 @@ public class SiAtom extends AbstractAtom {
 
   public byte getN2() {
     return n2;
-  }
-
-  @Override
-  public boolean isRemoved() {
-    return removed;
   }
 
   private void remove1st() {

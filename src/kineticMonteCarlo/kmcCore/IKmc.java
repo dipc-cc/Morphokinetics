@@ -13,7 +13,9 @@ import utils.list.AbstractList;
  */
 public interface IKmc {
 
-  public void initializeRates(double[] rates);
+  public void initialiseRates(double[] rates);
+  
+  public void reset();
 
   public AbstractLattice getLattice();
 

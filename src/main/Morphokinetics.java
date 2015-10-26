@@ -104,6 +104,12 @@ public class Morphokinetics {
     
     ga.iterate(parser.getTotalIterations());
     printResult(ga);
+    
+    AgSimulation simulation = new AgSimulation(parser);
+    simulation.initialiseKmc(ga.getIndividual(0).getGenes());
+    simulation.createFrame();
+    simulation.doSimulation();
+    simulation.finishSimulation();
     /*experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     new Frame2D("Calculated PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
             .setLogScale(true)
@@ -116,16 +122,18 @@ public class Morphokinetics {
     int[] sizes = null;
     float[][] readSurface = null;
     int islandCount = 0;
-    int numberOfFiles = 45;
+    int numberOfFiles = 43;
     String surfaceFileName = "psdFromImage/islands/3.OuterIsolatedSmall/island";
     PsdSignature2D psd = null;
     for (int i = 1; i <= numberOfFiles; i++) {
       try {
-        readSurface = restart.readSurfaceBinary2D(surfaceFileName+i+".mko");
+        readSurface = restart.readSurfaceBinary2D(surfaceFileName+i+".mko",2);
         if (psd == null) {
           sizes = new int[2];
           sizes[0] = restart.getSizeX();
+          sizes[0] = readSurface.length;
           sizes[1] = restart.getSizeY();
+          sizes[1] = readSurface[0].length;
           psd = new PsdSignature2D(sizes[0], sizes[1]);
         }
       } catch (Exception e){
@@ -138,6 +146,7 @@ public class Morphokinetics {
       psd.addSurfaceSample(readSurface);
     }
 
+    psd.printAvgToFile();
     return psd.getPsd();
   }
   
