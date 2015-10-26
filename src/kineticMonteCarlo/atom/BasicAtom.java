@@ -10,22 +10,23 @@ package kineticMonteCarlo.atom;
  */
 public class BasicAtom extends AbstractAtom {
 
-  protected BasicAtom[] neighs = new BasicAtom[4];
-  protected byte type;
-  protected boolean removed = false;
-  protected short X, Y;
+  private BasicAtom[] neighs = new BasicAtom[4];
+  private byte type;
+  private boolean removed = false;
+  private short x;
+  private short y;
 
   public short getX() {
-    return X;
+    return x;
   }
 
   public short getY() {
-    return Y;
+    return y;
   }
 
-  public BasicAtom(short X, short Y) {
-    this.X = X;
-    this.Y = Y;
+  public BasicAtom(short x, short y) {
+    this.x = x;
+    this.y = y;
   }
 
   public void setNeighbor(BasicAtom a, int pos) {
@@ -55,7 +56,6 @@ public class BasicAtom extends AbstractAtom {
   }
 
   public void remove1st() {
-
     type--;
     if (type < 3 && !removed && list != null) {
       list.addTotalProbability(probabilities[type] - probabilities[type + 1]);
@@ -63,7 +63,6 @@ public class BasicAtom extends AbstractAtom {
   }
 
   public void remove() {
-
     if (!removed) {
       if (list != null) {
         list.addTotalProbability(-probabilities[type]);
