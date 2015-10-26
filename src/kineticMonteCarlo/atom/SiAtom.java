@@ -19,25 +19,25 @@ public class SiAtom extends AbstractAtom {
   protected byte n1;
   protected byte n2;
   protected boolean removed = false;
-  protected float X, Y, Z;
+  private float x, y, z;
 
-  public SiAtom(float X, float Y, float Z) {
+  public SiAtom(float x, float y, float z) {
 
-    this.X = X;
-    this.Y = Y;
-    this.Z = Z;
+    this.x = x;
+    this.y = y;
+    this.z = z;
   }
 
   public float getX() {
-    return X;
+    return x;
   }
 
   public float getY() {
-    return Y;
+    return y;
   }
 
   public float getZ() {
-    return Z;
+    return z;
   }
 
   public SiAtom getNeighbour(int pos) {
@@ -90,14 +90,12 @@ public class SiAtom extends AbstractAtom {
 
   private void remove1st() {
     n1--;
-
     if (n1 < 3 && list != null) {
       list.addTotalProbability(probabilities[n1 * 16 + n2] - probabilities[(n1 + 1) * 16 + n2]);
     }
   }
 
   private void remove2nd() {
-
     n2--;
     if (n1 < 4 && list != null) {
       list.addTotalProbability(probabilities[n1 * 16 + n2] - probabilities[n1 * 16 + n2 + 1]);
@@ -105,7 +103,6 @@ public class SiAtom extends AbstractAtom {
   }
 
   public void updateN1FromScratch() {
-
     n1 = 0;
     for (int i = 0; i < 4; i++) {
       if (getNeighbour(i) != null && !getNeighbour(i).isRemoved()) {
@@ -115,7 +112,6 @@ public class SiAtom extends AbstractAtom {
   }
 
   public void updateN2FromScratch() {
-
     n2 = 0;
     for (int i = 0; i < 4; i++) {
       if (getNeighbour(i) != null) {
@@ -128,13 +124,11 @@ public class SiAtom extends AbstractAtom {
   }
 
   public void setAsBulk() {
-
     n1 = 4;
     n2 = 12;
   }
 
   public void remove() {
-
     if (!removed) {
       if (n1 < 4 && list != null) {
         list.addTotalProbability(-probabilities[n1 * 16 + n2]);
