@@ -79,7 +79,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
 
     jLabel2.setText("Scale");
 
-    jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+    jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), Integer.valueOf(32), Integer.valueOf(1)));
     jSpinner2.setFocusCycleRoot(true);
     jSpinner2.setFocusable(false);
     jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
