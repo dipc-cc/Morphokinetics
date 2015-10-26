@@ -11,14 +11,14 @@ package kineticMonteCarlo.atom;
 public class SiAtom extends AbstractAtom {
 
   //we reduce the amount of memory use by not using an array neighbour[4] and directly adding the neighbours as part of the object
-  protected SiAtom neighbour0;
-  protected SiAtom neighbour1;
-  protected SiAtom neighbour2;
-  protected SiAtom neighbour3;
+  private SiAtom neighbour0;
+  private SiAtom neighbour1;
+  private SiAtom neighbour2;
+  private SiAtom neighbour3;
 
-  protected byte n1;
-  protected byte n2;
-  protected boolean removed = false;
+  private byte n1;
+  private byte n2;
+  private boolean removed = false;
   private float x, y, z;
 
   public SiAtom(float x, float y, float z) {
