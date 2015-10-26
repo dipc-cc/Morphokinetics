@@ -187,6 +187,9 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
     if (zoom <= 0) {
       zoom = 1;
     }
+    if (zoom >= 32) {
+      zoom = 32;
+    }
     jSpinner2.setValue(zoom);
     canvas1.setScale(zoom);
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
