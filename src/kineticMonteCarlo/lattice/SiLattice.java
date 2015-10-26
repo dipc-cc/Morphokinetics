@@ -13,6 +13,7 @@ import basic.unitCell.UnitCell;
  */
 public class SiLattice extends AbstractEtchingLattice {
 
+  private SiAtom[] lattice;
   private UnitCell unitCell;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
@@ -73,7 +74,7 @@ public class SiLattice extends AbstractEtchingLattice {
 
   @Override
   public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
-    return (SiAtom) lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
+    return lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
   }
 
   @Override

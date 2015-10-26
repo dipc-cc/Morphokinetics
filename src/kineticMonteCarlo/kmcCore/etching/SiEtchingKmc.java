@@ -31,7 +31,7 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
    * @param rates
    */
   @Override
-  public void initialiseRates(double[] rates) {
+  public void initializeRates(double[] rates) {
 
     lattice.setProbabilities(rates);
     lattice.reset();

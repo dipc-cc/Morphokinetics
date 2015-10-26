@@ -4,7 +4,6 @@
  */
 package kineticMonteCarlo.kmcCore;
 
-import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.list.AbstractList;
 import utils.list.ListConfiguration;
 
@@ -15,7 +14,6 @@ import utils.list.ListConfiguration;
 public abstract class AbstractKmc implements IKmc {
 
   protected AbstractList list;
-  protected AbstractLattice lattice;
   protected int iterationsForLastSimulation;
 
   public AbstractKmc(ListConfiguration config) {
@@ -23,14 +21,8 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   @Override
-  public abstract void initialiseRates(double[] rates);
+  public abstract void initializeRates(double[] rates);
 
-  @Override
-  public void reset() {
-    lattice.reset();
-    list.reset();
-  }
-  
   /**
    * @return true if a stop condition happened (all atom etched, all surface covered)
    */
