@@ -19,10 +19,11 @@ public class SiAtom extends AbstractAtom {
   private byte n1;
   private byte n2;
   private boolean removed = false;
-  private float x, y, z;
+  private float x;
+  private float y;
+  private float z;
 
   public SiAtom(float x, float y, float z) {
-
     this.x = x;
     this.y = y;
     this.z = z;
