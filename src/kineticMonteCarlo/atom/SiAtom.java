@@ -53,19 +53,20 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
-  public void setNeighbour(SiAtom a, int pos) {
+  @Override
+  public void setNeighbour(AbstractAtom a, int pos) {
     switch (pos) {
       case 0:
-        neighbour0 = a;
+        neighbour0 = (SiAtom) a;
         break;
       case 1:
-        neighbour1 = a;
+        neighbour1 = (SiAtom) a;
         break;
       case 2:
-        neighbour2 = a;
+        neighbour2 = (SiAtom) a;
         break;
       default:
-        neighbour3 = a;
+        neighbour3 = (SiAtom) a;
         break;
     }
   }
