@@ -1,7 +1,7 @@
 package samples.silicon;
 
 import graphicInterfaces.etching.SiFrame;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
@@ -23,7 +23,7 @@ public class SimpleSiliconKmcSimulation {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config);
+    SiKmc kmc = new SiKmc(config);
 
     long start = System.nanoTime();
     kmc.reset();

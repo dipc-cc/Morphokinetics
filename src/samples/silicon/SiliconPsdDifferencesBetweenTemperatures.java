@@ -1,6 +1,6 @@
 package samples.silicon;
 
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import ratesLibrary.SiRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
@@ -25,7 +25,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config);
+    SiKmc kmc = new SiKmc(config);
 
     float[][] psd300_1 = getPsdFromSimulation(kmc, 300);
     float[][] psd300_2 = getPsdFromSimulation(kmc, 300);
@@ -64,7 +64,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
             .setMesh(MathUtils.avgFilter(relativeError2, 1));
   }
 
-  private static float[][] getPsdFromSimulation(SiEtchingKmc kmc, int temperature) {
+  private static float[][] getPsdFromSimulation(SiKmc kmc, int temperature) {
 
     PsdSignature2D psd = new PsdSignature2D(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2);
     float[][] surface;

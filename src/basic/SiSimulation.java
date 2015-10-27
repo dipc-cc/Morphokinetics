@@ -6,7 +6,7 @@
 package basic;
 
 import graphicInterfaces.etching.SiFrame;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import ratesLibrary.SiRatesFactory;
 
@@ -28,7 +28,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
 
     this.rates = new SiRatesFactory();
     this.siConfig = configKmc();
-    this.kmc = new SiEtchingKmc(siConfig);
+    this.kmc = new SiKmc(siConfig);
   }
 
   /**

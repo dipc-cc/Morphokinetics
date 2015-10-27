@@ -14,11 +14,11 @@ import utils.MathUtils;
  *
  * @author Nestor
  */
-public class SiEtchingKmc extends AbstractEtchingKmc {
+public class SiKmc extends AbstractEtchingKmc {
 
   private final double minHeight;
 
-  public SiEtchingKmc(SiEtchingKmcConfig config) {
+  public SiKmc(SiEtchingKmcConfig config) {
     super(config.listConfig);
     lattice = new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC);
 

@@ -6,7 +6,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
 import graphicInterfaces.etching.SiFrame;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -16,7 +16,7 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
-  private SiEtchingKmc kmc;
+  private SiKmc kmc;
   SiFrame frame;
 
   public SiBasicPsdEvaluator(SiEtchingKmcConfig config, int repeats, int measureInterval) {
@@ -25,7 +25,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
     setPsdSizeX(config.sizeX_UC * 2);
     setPsdSizeY(config.sizeY_UC * 2);
-    kmc = new SiEtchingKmc(config);
+    kmc = new SiKmc(config);
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     difference = new float[getPsdSizeY()][getPsdSizeX()];
     frame = new SiFrame();

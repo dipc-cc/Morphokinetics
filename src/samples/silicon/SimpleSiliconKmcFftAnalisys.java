@@ -1,6 +1,6 @@
 package samples.silicon;
 
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import ratesLibrary.SiRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
@@ -25,7 +25,7 @@ public class SimpleSiliconKmcFftAnalisys {
 
     SiEtchingKmcConfig config = configKmc();
 
-    SiEtchingKmc kmc = new SiEtchingKmc(config);
+    SiKmc kmc = new SiKmc(config);
     kmc.reset();
     kmc.initialiseRates(new SiRatesFactory().getRates(350));
     kmc.depositSeed();

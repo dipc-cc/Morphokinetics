@@ -5,7 +5,7 @@
 package samples.worker;
 
 import graphicInterfaces.etching.SiFrame;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
+import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
@@ -30,7 +30,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
 
     SiEtchingKmcConfig config = configKmc();
 
-    worker = new KmcWorker(new SiEtchingKmc(config),
+    worker = new KmcWorker(new SiKmc(config),
             worker_ID);
     worker.start();
 
