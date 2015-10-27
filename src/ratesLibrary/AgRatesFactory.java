@@ -10,7 +10,7 @@ package ratesLibrary;
  */
 public class AgRatesFactory implements IRatesFactory {
 
-  private static IDiffusionRates experiments;
+  private static IGrowthRates experiments;
 
   public AgRatesFactory() {
     experiments = new RatesFromPrbCox();

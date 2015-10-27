@@ -8,7 +8,7 @@ package ratesLibrary;
  *
  * @author Nestor
  */
-public class SyntheticRates implements IDiffusionRates {
+public class SyntheticRates implements IGrowthRates {
 
   private double[][] rates;
   private final double depositionRateInMlSecond = 0.000035;

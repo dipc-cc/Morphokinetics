@@ -18,7 +18,7 @@ import static kineticMonteCarlo.atom.AgAtom.ISLAND;
  *
  * @author Nestor
  */
-public class RatesFromPrbCox implements IDiffusionRates {
+public class RatesFromPrbCox implements IGrowthRates {
 
   /**
    * Boltzmann constant

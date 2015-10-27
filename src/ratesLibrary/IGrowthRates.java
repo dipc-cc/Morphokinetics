@@ -8,7 +8,7 @@ package ratesLibrary;
  *
  * @author Nestor
  */
-public interface IDiffusionRates {
+public interface IGrowthRates {
 
   public double getRate(int i, int j, double temperature);
 

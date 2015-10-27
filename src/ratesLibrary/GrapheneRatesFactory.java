@@ -10,7 +10,7 @@ package ratesLibrary;
  */
 public class GrapheneRatesFactory implements IRatesFactory {
 
-  private static IDiffusionRates experiments;
+  private static IGrowthRates experiments;
 
   public GrapheneRatesFactory() {
 
