@@ -13,13 +13,13 @@ import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
  *
  * @author Nestor
  */
-public class AgAgRestriction extends RestrictionOperator {
+public class AgRestriction extends RestrictionOperator {
 
   public void initialize(double temperature) {
 
   }
 
-  public AgAgRestriction(double diffusionRate) {
+  public AgRestriction(double diffusionRate) {
 
     //Negative values are not valid
     for (int currentGene = 0; currentGene < 7 * 7; currentGene++) {

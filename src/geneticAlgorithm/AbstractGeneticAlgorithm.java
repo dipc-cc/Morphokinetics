@@ -25,7 +25,7 @@ import geneticAlgorithm.geneticOperators.recombination.RealRecombination;
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.geneticOperators.reinsertion.IReinsertion;
 import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
-import geneticAlgorithm.geneticOperators.restrictions.AgAgRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.AgRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.SiEtchingRestriction;
 import geneticAlgorithm.geneticOperators.selection.ISelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
@@ -91,7 +91,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.diffusionRate = new AgRatesFactory().getRates(experitentalTemp)[0];
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialization = new AgInitialisation();
-        restriction = new AgAgRestriction(diffusionRate);
+        restriction = new AgRestriction(diffusionRate);
         mainEvaluator = getAgAgMainEvaluator();
         break;
       case "Si":
