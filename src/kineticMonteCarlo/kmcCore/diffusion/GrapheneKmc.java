@@ -18,7 +18,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class GrapheneKmc extends Abstract2DDiffusionKmc {
+public class GrapheneKmc extends AbstractGrowthKmc {
 
   public GrapheneKmc(ListConfiguration config, 
           int hexaSizeI, 

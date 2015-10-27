@@ -19,7 +19,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
+public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   protected Abstract2DDiffusionLattice lattice;
   protected ModifiedBuffer modifiedBuffer;
@@ -31,7 +31,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   private final float maxCoverage; // This attribute defines which is the maximum coverage for a multi-flake simulation
   
-  public Abstract2DDiffusionKmc(ListConfiguration config, 
+  public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
           float coverage,
           boolean useMaxPerimeter,

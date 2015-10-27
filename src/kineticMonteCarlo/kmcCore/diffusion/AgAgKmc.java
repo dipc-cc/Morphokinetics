@@ -17,7 +17,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class AgAgKmc extends Abstract2DDiffusionKmc {
+public class AgAgKmc extends AbstractGrowthKmc {
 
   public AgAgKmc(ListConfiguration config, 
           int hexaSizeI, 
