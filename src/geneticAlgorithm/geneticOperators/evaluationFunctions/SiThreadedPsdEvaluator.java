@@ -4,7 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
-import graphicInterfaces.etching.SiliconFrame;
+import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
@@ -17,7 +17,7 @@ import kineticMonteCarlo.kmcCore.worker.KmcWorker;
  */
 public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
-  private SiliconFrame frame;
+  private SiFrame frame;
 
   public SiThreadedPsdEvaluator(SiEtchingKmcConfig config, int repeats, int measureInterval, int numThreads) {
 
@@ -35,7 +35,7 @@ public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
   public AbstractEvaluator setShowGraphics(boolean showGraphics) {
     super.setShowGraphics(showGraphics);
     if (showGraphics && frame == null) {
-      frame = new SiliconFrame();
+      frame = new SiFrame();
     }
     if (!showGraphics && frame != null) {
       frame.dispose();

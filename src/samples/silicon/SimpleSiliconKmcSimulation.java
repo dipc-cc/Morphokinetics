@@ -1,6 +1,6 @@
 package samples.silicon;
 
-import graphicInterfaces.etching.SiliconFrame;
+import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.list.ListConfiguration;
@@ -33,7 +33,7 @@ public class SimpleSiliconKmcSimulation {
 
     System.out.println((System.nanoTime() - start) / 1000000);
 
-    new SiliconFrame().drawKmc(kmc);
+    new SiFrame().drawKmc(kmc);
   }
 
   private static SiEtchingKmcConfig configKmc() {

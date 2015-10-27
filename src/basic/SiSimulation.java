@@ -5,7 +5,7 @@
  */
 package basic;
 
-import graphicInterfaces.etching.SiliconFrame;
+import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import ratesLibrary.SiRatesFactory;
@@ -61,7 +61,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
   public void finishSimulation() {
     if (parser.visualise()) {
       try {
-        new SiliconFrame().drawKmc(kmc);
+        new SiFrame().drawKmc(kmc);
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
         System.err.println("Finishing");

@@ -35,11 +35,11 @@ import javax.vecmath.Vector3f;
  *
  * @author Administrador
  */
-public class SiliconFrame extends javax.swing.JFrame implements KmcGraphics {
+public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
   private SiliconPointArray sil;
 
-  public SiliconFrame() {
+  public SiFrame() {
     super();
     this.setVisible(true);
   }
