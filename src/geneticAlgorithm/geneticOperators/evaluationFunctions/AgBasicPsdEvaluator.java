@@ -64,8 +64,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private void _calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     double time = 0.0;
+    kmc.initialiseRates(ind.getGenes());
     for (int i = 0; i < repeats; i++) {
-      kmc.initializeRates(ind.getGenes());
+      kmc.reset();
+      kmc.depositSeed();
       while (true) {
         kmc.simulate(measureInterval);
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
