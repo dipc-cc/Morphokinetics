@@ -50,7 +50,11 @@ public class BasicAtom extends AbstractAtom {
     type = 3;
   }
 
-  public void updateTypeFromScratch() {
+  /**
+   * This was updateTypeFromScratch().
+   */
+  @Override
+  public void updateN1FromScratch() {
     type = 0;
     for (int i = 0; i < numberOfNeighbours; i++) {
       if (neighbours[i] != null && !neighbours[i].isRemoved()) {
