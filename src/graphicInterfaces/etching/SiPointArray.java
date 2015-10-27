@@ -18,7 +18,7 @@ import javax.media.j3d.PointArray;
  *
  * @author nesferjo
  */
-public class SiliconPointArray extends PointArray {
+public class SiPointArray extends PointArray {
 
   private static final int MAX_POINTS = 500000;
 
@@ -28,7 +28,7 @@ public class SiliconPointArray extends PointArray {
 
   private J3DBuffer floatBufferCoord = new J3DBuffer(buffer);
 
-  public SiliconPointArray(float[] surface) {
+  public SiPointArray(float[] surface) {
 
     super(MAX_POINTS, GeometryArray.COORDINATES | GeometryArray.BY_REFERENCE | GeometryArray.USE_NIO_BUFFER);
 
@@ -43,7 +43,7 @@ public class SiliconPointArray extends PointArray {
 
     this.updateData(new GeometryUpdater() {
       public void updateData(Geometry geometry) {
-        ((SiliconPointArray) geometry).updateBuffers(coords);
+        ((SiPointArray) geometry).updateBuffers(coords);
       }
     });
   }

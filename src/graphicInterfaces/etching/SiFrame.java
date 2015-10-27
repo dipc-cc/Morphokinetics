@@ -37,7 +37,7 @@ import javax.vecmath.Vector3f;
  */
 public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
-  private SiliconPointArray sil;
+  private SiPointArray sil;
 
   public SiFrame() {
     super();
@@ -48,7 +48,7 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
   public void drawKmc(AbstractKmc kmc) {
 
     if (sil == null) {
-      sil = new SiliconPointArray(new float[]{});
+      sil = new SiPointArray(new float[]{});
       float side = this.update(kmc);
       createSiliconPanel(side);
     } else {
