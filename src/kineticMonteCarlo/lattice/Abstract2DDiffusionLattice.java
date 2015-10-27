@@ -38,7 +38,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     // Initialise the square perimeter include points. This is required because the number of points in the horizontal and vertical perimeters should be as equal as possible.
     this.includePerimeterList = new ArrayList<>();
     for (int i = 0; i < 256; i++) {
-      includePerimeterList.add(Math.round(2*AgAgLattice.YRatio + 2*i*AgAgLattice.YRatio));
+      includePerimeterList.add(Math.round(2*AgLattice.YRatio + 2*i*AgLattice.YRatio));
     }
   }
 
@@ -183,18 +183,18 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
         position = getCartesianLocation(iHexa, jHexa);
         if (left <= position.getX() && position.getX() <= right
-                && bottom <= position.getY() + AgAgLattice.YRatio
-                && position.getY() - AgAgLattice.YRatio <= top) {
+                && bottom <= position.getY() + AgLattice.YRatio
+                && position.getY() - AgLattice.YRatio <= top) {
           atoms[iHexa][jHexa].setOutside(false);
           if (abs(left - position.getX()) < 0.49
                   || abs(right - position.getX()) < 0.49
-                  || abs(top - position.getY()) < AgAgLattice.YRatio/2
-                  || abs(bottom - position.getY()) < AgAgLattice.YRatio/2) { 
-            if (abs(top - position.getY()) < AgAgLattice.YRatio/2){
+                  || abs(top - position.getY()) < AgLattice.YRatio/2
+                  || abs(bottom - position.getY()) < AgLattice.YRatio/2) { 
+            if (abs(top - position.getY()) < AgLattice.YRatio/2){
               countTop++;
               if (!includePerimeterList.contains(countTop)) continue;
             }
-            if (abs(bottom - position.getY())< AgAgLattice.YRatio/2) {
+            if (abs(bottom - position.getY())< AgLattice.YRatio/2) {
               countBottom++;
               if (!includePerimeterList.contains(countBottom)) continue;
             }

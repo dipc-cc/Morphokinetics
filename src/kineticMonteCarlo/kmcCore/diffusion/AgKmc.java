@@ -9,7 +9,7 @@ import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.AgAgLattice;
+import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;
 import utils.StaticRandom;
 
@@ -29,7 +29,7 @@ public class AgKmc extends AbstractGrowthKmc {
     super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    this.lattice = new AgAgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
+    this.lattice = new AgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
       this.perimeter = new RoundPerimeter("Ag");

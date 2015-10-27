@@ -11,7 +11,7 @@ import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
-import kineticMonteCarlo.lattice.AgAgLattice;
+import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgAgRatesFactory;
 import utils.MathUtils;
@@ -68,7 +68,7 @@ public class AgAgPsdTest {
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
-    int sizeY = (int) (sizeX / AgAgLattice.YRatio);
+    int sizeY = (int) (sizeX / AgLattice.YRatio);
 
     AgKmc kmc = new AgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE);
 

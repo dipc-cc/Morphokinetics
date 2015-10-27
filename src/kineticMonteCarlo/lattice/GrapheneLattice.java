@@ -591,7 +591,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
 
   @Override
   public float getCartSizeY() {
-    return hexaSizeJ * AgAgLattice.YRatio;
+    return hexaSizeJ * AgLattice.YRatio;
   }
 
   @Override
@@ -626,6 +626,6 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
   
   @Override
   public double getCartY(int jHexa){
-    return jHexa*AgAgLattice.YRatio;
+    return jHexa*AgLattice.YRatio;
   }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
-import kineticMonteCarlo.lattice.AgAgLattice;
+import kineticMonteCarlo.lattice.AgLattice;
 import main.Morphokinetics;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -393,7 +393,7 @@ public class Parser {
   }
   
   public int getHexaSizeJ() {
-    return (int) (this.getCartSizeX() / AgAgLattice.YRatio);
+    return (int) (this.getCartSizeX() / AgLattice.YRatio);
   }
 
   int getBinsLevels() {
