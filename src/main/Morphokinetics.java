@@ -51,7 +51,7 @@ public class Morphokinetics {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
     System.out.println("Execution has finished");
-    if (!parser.withGui() || !parser.visualize()) {
+    if (!parser.withGui() || !parser.visualise()) {
       System.exit(0);
     }
   }
