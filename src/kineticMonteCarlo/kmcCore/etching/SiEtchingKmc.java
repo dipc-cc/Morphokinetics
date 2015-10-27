@@ -58,9 +58,9 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
     atom.remove();
     atom.setOnList(null);
     for (int k = 0; k < 4; k++) {
-      SiAtom neighbor = atom.getNeighbour(k);
-      if (neighbor.getN1() == 3) {
-        list.addAtom(neighbor);
+      SiAtom neighbour = atom.getNeighbour(k);
+      if (neighbour.getN1() == 3) {
+        list.addAtom(neighbour);
       }
     }
     return atom.getZ() < minHeight * 2;
