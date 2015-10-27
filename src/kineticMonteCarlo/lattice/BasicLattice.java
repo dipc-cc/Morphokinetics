@@ -92,15 +92,15 @@ public class BasicLattice extends AbstractEtchingLattice {
     for (int i = 0; i < hexaSizeJ; i++) {
       for (int j = 0; j < hexaSizeI; j++) {
         if (i - 1 >= 0) {
-          lattice[i * hexaSizeI + j].setNeighbor(lattice[(i - 1) * hexaSizeI + j], 0);                    //up        
+          lattice[i * hexaSizeI + j].setNeighbour(lattice[(i - 1) * hexaSizeI + j], 0);                      //up        
         }
-        lattice[i * hexaSizeI + j].setNeighbor(lattice[Math.min(i + 1, hexaSizeJ - 1) * hexaSizeI + j], 1);      //down        
+        lattice[i * hexaSizeI + j].setNeighbour(lattice[Math.min(i + 1, hexaSizeJ - 1) * hexaSizeI + j], 1); //down        
         int izq = j - 1;
         if (izq < 0) {
           izq = hexaSizeI - 1;
         }
-        lattice[i * hexaSizeI + j].setNeighbor(lattice[i * hexaSizeI + izq], 2);                        //left        
-        lattice[i * hexaSizeI + j].setNeighbor(lattice[i * hexaSizeI + ((j + 1) % hexaSizeI)], 3);              //right       
+        lattice[i * hexaSizeI + j].setNeighbour(lattice[i * hexaSizeI + izq], 2);                   //left        
+        lattice[i * hexaSizeI + j].setNeighbour(lattice[i * hexaSizeI + ((j + 1) % hexaSizeI)], 3); //right       
       }
     }
   }
