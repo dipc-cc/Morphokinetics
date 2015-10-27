@@ -11,7 +11,7 @@ import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
-import ratesLibrary.AgAgRatesFactory;
+import ratesLibrary.AgRatesFactory;
 import utils.StaticRandom;
 
 /**
@@ -35,7 +35,7 @@ public class AgAgKmcConvergence {
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
-    Individual individual = new Individual(new AgAgRatesFactory().getRates(experitentalTemp));
+    Individual individual = new Individual(new AgRatesFactory().getRates(experitentalTemp));
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);

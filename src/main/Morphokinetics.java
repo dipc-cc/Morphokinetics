@@ -19,7 +19,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import ratesLibrary.AgAgRatesFactory;
+import ratesLibrary.AgRatesFactory;
 import ratesLibrary.IRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
@@ -154,7 +154,7 @@ public class Morphokinetics {
     double[] rates = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
-        rates = new AgAgRatesFactory().getRates(parser.getTemperature());
+        rates = new AgRatesFactory().getRates(parser.getTemperature());
         break;
       case "Si":
         rates = new SiRatesFactory().getRates(parser.getTemperature());

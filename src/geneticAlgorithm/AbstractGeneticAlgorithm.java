@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
-import ratesLibrary.AgAgRatesFactory;
+import ratesLibrary.AgRatesFactory;
 import utils.list.ListConfiguration;
 
 /**
@@ -86,9 +86,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.simulation = new AgSimulation(parser);
         simulation.initialiseKmc();
         float experitentalTemp = parser.getTemperature();
-        this.depositionRate = new AgAgRatesFactory().getDepositionRate(experitentalTemp);
-        this.islandDensity = new AgAgRatesFactory().getIslandDensity(experitentalTemp);
-        this.diffusionRate = new AgAgRatesFactory().getRates(experitentalTemp)[0];
+        this.depositionRate = new AgRatesFactory().getDepositionRate(experitentalTemp);
+        this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
+        this.diffusionRate = new AgRatesFactory().getRates(experitentalTemp)[0];
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialization = new AgAgInitialization();
         restriction = new AgAgRestriction(diffusionRate);

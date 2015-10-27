@@ -11,7 +11,7 @@ import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;
-import ratesLibrary.AgAgRatesFactory;
+import ratesLibrary.AgRatesFactory;
 import utils.StaticRandom;
 
 /**
@@ -27,12 +27,12 @@ public class AgAgMultithreadedEvaluatorTest {
     //AgAgGrowthThreadedPsdEvaluation evaluation = new AgAgGrowthThreadedPsdEvaluation(config, 20, Integer.MAX_VALUE, 4);
     AgBasicPsdEvaluator evaluation = new AgBasicPsdEvaluator(localAgAgKmc(experimentalTemp), 20, Integer.MAX_VALUE, 128, 128);
 
-    Individual individual = new Individual(new AgAgRatesFactory().getRates(experimentalTemp));
+    Individual individual = new Individual(new AgRatesFactory().getRates(experimentalTemp));
     float[][] experimentalPsd = evaluation.calculatePsdFromIndividual(individual);
 
     evaluation.setPsd(experimentalPsd);
 
-    Individual newIndividual = new Individual(new AgAgRatesFactory().getRates(125));
+    Individual newIndividual = new Individual(new AgRatesFactory().getRates(125));
     Population population = new Population(1);
     population.setIndividual(newIndividual, 0);
     double[] populationErrors = evaluation.evaluate(population);
@@ -45,8 +45,8 @@ public class AgAgMultithreadedEvaluatorTest {
 
     new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
-    double depositionRate = new AgAgRatesFactory().getDepositionRate(experimentalTemp);
-    double islandDensity = new AgAgRatesFactory().getIslandDensity(experimentalTemp);
+    double depositionRate = new AgRatesFactory().getDepositionRate(experimentalTemp);
+    double islandDensity = new AgRatesFactory().getIslandDensity(experimentalTemp);
 
     return new AgKmc(listConfig, 256, (int) (256 / AgLattice.YRatio), depositionRate, islandDensity);
 
