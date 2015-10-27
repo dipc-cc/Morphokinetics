@@ -13,8 +13,6 @@ import kineticMonteCarlo.atom.BasicAtom;
  */
 public class BasicLattice extends AbstractEtchingLattice {
 
-  private BasicAtom[] lattice;
-
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
     this.hexaSizeI = hexaSizeI;
     this.hexaSizeJ = hexaSizeJ;
@@ -47,7 +45,7 @@ public class BasicLattice extends AbstractEtchingLattice {
 
     for (int i = 0; i < hexaSizeJ; i++) {
       for (int j = 0; j < hexaSizeI; j++) {
-        lattice[i * hexaSizeI + j].updateTypeFromScratch();
+        lattice[i * hexaSizeI + j].updateN1FromScratch();
       }
     }
 
