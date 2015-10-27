@@ -99,6 +99,7 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
+  @Override
   public void updateN1FromScratch() {
     n1 = 0;
     for (int i = 0; i < 4; i++) {
@@ -108,6 +109,7 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
+  @Override
   public void updateN2FromScratch() {
     n2 = 0;
     for (int i = 0; i < 4; i++) {
@@ -120,11 +122,13 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
+  @Override
   public void setAsBulk() {
     n1 = 4;
     n2 = 12;
   }
 
+  @Override
   public void remove() {
     if (!removed) {
       if (n1 < 4 && list != null) {
