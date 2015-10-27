@@ -19,7 +19,7 @@ import geneticAlgorithm.geneticOperators.mutation.BgaBasedMutator;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
 import geneticAlgorithm.geneticOperators.populationInitialisation.AgInitialisation;
 import geneticAlgorithm.geneticOperators.populationInitialisation.IInitialisator;
-import geneticAlgorithm.geneticOperators.populationInitialisation.SiEtchingInitialization;
+import geneticAlgorithm.geneticOperators.populationInitialisation.SiInitialisation;
 import geneticAlgorithm.geneticOperators.recombination.IRecombination;
 import geneticAlgorithm.geneticOperators.recombination.RealRecombination;
 import geneticAlgorithm.geneticOperators.reinsertion.ElitistReinsertion;
@@ -97,7 +97,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       case "Si":
         this.simulation = new SiSimulation(parser);
         simulation.initialiseKmc();
-        initialization = new SiEtchingInitialization();
+        initialization = new SiInitialisation();
         restriction = new SiEtchingRestriction();
         mainEvaluator = getSiMainEvaluators();
         break;
