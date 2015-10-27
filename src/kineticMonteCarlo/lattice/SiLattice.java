@@ -13,7 +13,6 @@ import basic.unitCell.UnitCell;
  */
 public class SiLattice extends AbstractEtchingLattice {
 
-  private SiAtom[] lattice;
   private UnitCell unitCell;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
@@ -74,7 +73,7 @@ public class SiLattice extends AbstractEtchingLattice {
 
   @Override
   public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
-    return lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
+    return (SiAtom) lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
   }
 
   @Override
@@ -193,9 +192,8 @@ public class SiLattice extends AbstractEtchingLattice {
                 posNeighbour = j;
               }
               if (zNeighbour < hexaSizeK) {
-
-                lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].setNeighbour(lattice[((zNeighbour * hexaSizeJ + yNeighbour) * hexaSizeI + xNeighbour) * unitCellSize + posNeighbour], i);
-
+                lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].
+                        setNeighbour((SiAtom)lattice[((zNeighbour * hexaSizeJ + yNeighbour) * hexaSizeI + xNeighbour) * unitCellSize + posNeighbour], i);
               } else {
                 lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].setNeighbour(null, i);
               }
