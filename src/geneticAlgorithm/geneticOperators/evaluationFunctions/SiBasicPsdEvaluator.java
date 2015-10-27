@@ -5,6 +5,7 @@
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
+import graphicInterfaces.siliconEtching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import utils.psdAnalysis.PsdSignature2D;
@@ -16,6 +17,7 @@ import utils.psdAnalysis.PsdSignature2D;
 public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private SiEtchingKmc kmc;
+  SiliconFrame frame;
 
   public SiBasicPsdEvaluator(SiEtchingKmcConfig config, int repeats, int measureInterval) {
 
@@ -26,6 +28,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
     kmc = new SiEtchingKmc(config);
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     difference = new float[getPsdSizeY()][getPsdSizeX()];
+    frame = new SiliconFrame();
   }
 
   @Override
@@ -45,8 +48,10 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private void _calculatePsdFromIndividual(Individual ind) {
     psd.reset();
+    kmc.initialiseRates(ind.getGenes());
     for (int i = 0; i < repeats; i++) {
-      kmc.initializeRates(ind.getGenes());
+      kmc.reset();
+      kmc.depositSeed();
       kmc.simulate(measureInterval / 2);
       while (true) {
         kmc.simulate(measureInterval);
@@ -61,6 +66,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    frame.drawKmc(kmc);
   }
 
 }
