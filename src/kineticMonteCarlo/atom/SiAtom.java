@@ -147,11 +147,7 @@ public class SiAtom extends AbstractAtom {
       }
     }
   }
-
-  public void unRemove() {
-    removed = false;
-  }
-
+  
   @Override
   public double getProbability() {
     return probabilities[n1 * 16 + n2];
