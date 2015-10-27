@@ -26,6 +26,7 @@ public class SiAtom extends AbstractAtom {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.numberOfNeighbours = 4;
   }
 
   public float getX() {
@@ -132,11 +133,11 @@ public class SiAtom extends AbstractAtom {
 
       removed = true;
 
-      for (int i = 0; i < 4; i++) {
+      for (int i = 0; i < numberOfNeighbours; i++) {
         SiAtom atom1st = getNeighbour(i);
         if (atom1st != null) {
           atom1st.remove1st();
-          for (int j = 0; j < 4; j++) {
+          for (int j = 0; j < numberOfNeighbours; j++) {
             SiAtom atom2nd = atom1st.getNeighbour(j);
             if (atom2nd != null && atom2nd != this && !atom2nd.isRemoved()) {
               atom2nd.remove2nd();
