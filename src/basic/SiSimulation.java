@@ -7,7 +7,7 @@ package basic;
 
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import ratesLibrary.SiRatesFactory;
 
 /**
@@ -16,7 +16,7 @@ import ratesLibrary.SiRatesFactory;
  */
 public class SiSimulation extends AbstractEtchingSimulation {
 
-  private SiEtchingKmcConfig siConfig;
+  private SiKmcConfig siConfig;
 
   public SiSimulation(Parser parser) {
     super(parser);
@@ -34,9 +34,9 @@ public class SiSimulation extends AbstractEtchingSimulation {
   /**
    * TODO This implementation is temporary, because it is to rigid and not tuneable.
    */
-  private SiEtchingKmcConfig configKmc() {
+  private SiKmcConfig configKmc() {
 
-    SiEtchingKmcConfig tmpConfig = new SiEtchingKmcConfig()
+    SiKmcConfig tmpConfig = new SiKmcConfig()
             .setMillerX(0)
             .setMillerY(1)
             .setMillerZ(1)

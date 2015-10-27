@@ -10,7 +10,7 @@ import utils.list.ListConfiguration;
  *
  * @author Nestor
  */
-public class SiEtchingKmcConfig {
+public class SiKmcConfig {
 
   public int millerX;
   public int millerY;
@@ -22,37 +22,37 @@ public class SiEtchingKmcConfig {
 
   public ListConfiguration listConfig;
 
-  public SiEtchingKmcConfig setMillerX(int millerX) {
+  public SiKmcConfig setMillerX(int millerX) {
     this.millerX = millerX;
     return this;
   }
 
-  public SiEtchingKmcConfig setMillerY(int millerY) {
+  public SiKmcConfig setMillerY(int millerY) {
     this.millerY = millerY;
     return this;
   }
 
-  public SiEtchingKmcConfig setMillerZ(int millerZ) {
+  public SiKmcConfig setMillerZ(int millerZ) {
     this.millerZ = millerZ;
     return this;
   }
 
-  public SiEtchingKmcConfig setSizeX_UC(int sizeX_UC) {
+  public SiKmcConfig setSizeX_UC(int sizeX_UC) {
     this.sizeX_UC = sizeX_UC;
     return this;
   }
 
-  public SiEtchingKmcConfig setSizeY_UC(int sizeY_UC) {
+  public SiKmcConfig setSizeY_UC(int sizeY_UC) {
     this.sizeY_UC = sizeY_UC;
     return this;
   }
 
-  public SiEtchingKmcConfig setSizeZ_UC(int sizeZ_UC) {
+  public SiKmcConfig setSizeZ_UC(int sizeZ_UC) {
     this.sizeZ_UC = sizeZ_UC;
     return this;
   }
 
-  public SiEtchingKmcConfig setListConfig(ListConfiguration listConfig) {
+  public SiKmcConfig setListConfig(ListConfiguration listConfig) {
     this.listConfig = listConfig;
     return this;
   }

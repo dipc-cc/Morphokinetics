@@ -18,7 +18,7 @@ public class SiKmc extends AbstractEtchingKmc {
 
   private final double minHeight;
 
-  public SiKmc(SiEtchingKmcConfig config) {
+  public SiKmc(SiKmcConfig config) {
     super(config.listConfig);
     lattice = new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC);
 

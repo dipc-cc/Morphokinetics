@@ -33,7 +33,7 @@ import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import ratesLibrary.AgRatesFactory;
 import utils.list.ListConfiguration;
 
@@ -167,13 +167,13 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return evaluation;
   }
   
-  private static SiEtchingKmcConfig localSiKmc() {
+  private static SiKmcConfig localSiKmc() {
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20)
             .setExtraLevels(1);
 
-    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+    SiKmcConfig config = new SiKmcConfig()
             .setMillerX(1)
             .setMillerY(0)
             .setMillerZ(0)

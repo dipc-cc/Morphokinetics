@@ -2,7 +2,7 @@ package samples.silicon;
 
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
 import utils.StaticRandom;
@@ -21,7 +21,7 @@ public class SimpleSiliconKmcSimulation {
 
     System.out.println("Simple simulation of the Silicon etching KMC");
 
-    SiEtchingKmcConfig config = configKmc();
+    SiKmcConfig config = configKmc();
 
     SiKmc kmc = new SiKmc(config);
 
@@ -36,14 +36,14 @@ public class SimpleSiliconKmcSimulation {
     new SiFrame().drawKmc(kmc);
   }
 
-  private static SiEtchingKmcConfig configKmc() {
+  private static SiKmcConfig configKmc() {
     new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(20)
             .setExtraLevels(1);
 
-    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+    SiKmcConfig config = new SiKmcConfig()
             .setMillerX(0)
             .setMillerY(1)
             .setMillerZ(1)

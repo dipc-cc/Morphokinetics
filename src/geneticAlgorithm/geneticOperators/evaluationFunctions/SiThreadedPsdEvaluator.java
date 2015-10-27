@@ -6,7 +6,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
@@ -19,7 +19,7 @@ public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
 
   private SiFrame frame;
 
-  public SiThreadedPsdEvaluator(SiEtchingKmcConfig config, int repeats, int measureInterval, int numThreads) {
+  public SiThreadedPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, int numThreads) {
 
     super(repeats, measureInterval, numThreads);
 

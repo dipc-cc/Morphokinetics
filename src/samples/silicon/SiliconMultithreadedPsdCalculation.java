@@ -9,7 +9,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluato
 import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
 import utils.StaticRandom;
@@ -24,7 +24,7 @@ public class SiliconMultithreadedPsdCalculation {
 
     System.out.println("Multithreaded PSD calculation from a KMC configuration");
 
-    SiEtchingKmcConfig config = configKmc();
+    SiKmcConfig config = configKmc();
 
     AbstractEvaluator evaluation = new SiThreadedPsdEvaluator(config, 20, 10000, 4);
     evaluation.setWheight(1.0f);
@@ -41,14 +41,14 @@ public class SiliconMultithreadedPsdCalculation {
             .setMesh(psd);
   }
 
-  private static SiEtchingKmcConfig configKmc() {
+  private static SiKmcConfig configKmc() {
     new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(12)
             .setExtraLevels(1);
 
-    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+    SiKmcConfig config = new SiKmcConfig()
             .setMillerX(1)
             .setMillerY(0)
             .setMillerZ(0)

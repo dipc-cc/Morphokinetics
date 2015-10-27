@@ -6,7 +6,7 @@ package samples.worker;
 
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import utils.list.ListConfiguration;
@@ -28,7 +28,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
     int worker_ID = 0;
     int work_ID = 0;
 
-    SiEtchingKmcConfig config = configKmc();
+    SiKmcConfig config = configKmc();
 
     worker = new KmcWorker(new SiKmc(config),
             worker_ID);
@@ -41,13 +41,13 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
     System.out.println("Continuing execution.");
   }
 
-  private static SiEtchingKmcConfig configKmc() {
+  private static SiKmcConfig configKmc() {
     new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(16)
             .setExtraLevels(1);
-    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+    SiKmcConfig config = new SiKmcConfig()
             .setMillerX(1)
             .setMillerY(0)
             .setMillerZ(0)

@@ -3,7 +3,7 @@ package samples.silicon;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import ratesLibrary.SiRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
+import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import utils.list.ListConfiguration;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -23,7 +23,7 @@ public class SimpleSiliconKmcFftAnalisys {
 
     System.out.println("Simple 2D FFT analisys of an etched silicon surface");
 
-    SiEtchingKmcConfig config = configKmc();
+    SiKmcConfig config = configKmc();
 
     SiKmc kmc = new SiKmc(config);
     kmc.reset();
@@ -47,13 +47,13 @@ public class SimpleSiliconKmcFftAnalisys {
             .setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
   }
 
-  private static SiEtchingKmcConfig configKmc() {
+  private static SiKmcConfig configKmc() {
     new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
             .setBinsPerLevel(16)
             .setExtraLevels(0);
-    SiEtchingKmcConfig config = new SiEtchingKmcConfig()
+    SiKmcConfig config = new SiKmcConfig()
             .setMillerX(1)
             .setMillerY(1)
             .setMillerZ(0)
