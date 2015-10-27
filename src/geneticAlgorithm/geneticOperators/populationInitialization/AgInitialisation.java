@@ -12,7 +12,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class AgAgInitialization implements IInitializator {
+public class AgInitialisation implements IInitializator {
 
   /**
    * Robust initialisation methods, it uses a logarithmic distribution of process rates, more
