@@ -90,5 +90,4 @@ public class BasicAtom extends AbstractAtom {
   public boolean isEligible() {
     return (type >= 0 && type < 4);
   }
-
-  }
+}
