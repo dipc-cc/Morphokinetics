@@ -38,4 +38,8 @@ public abstract class AbstractLattice {
 
   public abstract void reset();
 
+  public void setProbabilities(double[] rates) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
 }
