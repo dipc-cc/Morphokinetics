@@ -12,12 +12,12 @@ import kineticMonteCarlo.atom.AbstractAtom;
  */
 public abstract class AbstractEtchingLattice extends AbstractLattice {
 
-  protected AbstractAtom[] lattice;
+  protected AbstractAtom[] atoms;
   
   @Override
   public void setProbabilities(double[] probabilities) {
-    for (int i = 0; i < lattice.length; i++) {
-      lattice[i].initialize(probabilities);
+    for (int i = 0; i < atoms.length; i++) {
+      atoms[i].initialize(probabilities);
     }
   }
 

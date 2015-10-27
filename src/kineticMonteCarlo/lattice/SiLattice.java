@@ -54,7 +54,7 @@ public class SiLattice extends AbstractEtchingLattice {
       this.hexaSizeJ = (int) Math.round((int) sizeY * tamX / tamY);
     }
 
-    lattice = new SiAtom[this.hexaSizeI * this.hexaSizeJ * this.hexaSizeK * unitCellSize];
+    atoms = new SiAtom[this.hexaSizeI * this.hexaSizeJ * this.hexaSizeK * unitCellSize];
 
     this.createAtoms(coords, unitCell);
     this.interconnectAtoms(ucNeighbours, block);
@@ -62,8 +62,8 @@ public class SiLattice extends AbstractEtchingLattice {
 
   @Override
   public void setProbabilities(double[] probabilities) {
-    for (int i = 0; i < lattice.length; i++) {
-      lattice[i].initialize(probabilities);
+    for (int i = 0; i < atoms.length; i++) {
+      atoms[i].initialize(probabilities);
     }
   }
 
@@ -73,7 +73,7 @@ public class SiLattice extends AbstractEtchingLattice {
 
   @Override
   public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
-    return (SiAtom) lattice[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
+    return (SiAtom) atoms[((unitCellZ * hexaSizeJ + unitCellY) * hexaSizeI + unitCellX) * unitCellSize + unitCellPos];
   }
 
   @Override
@@ -83,32 +83,32 @@ public class SiLattice extends AbstractEtchingLattice {
     for (int i = 0; i < this.hexaSizeJ; i++) {
       for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
-          lattice[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].setOnList(null);
-          lattice[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].unRemove();
+          atoms[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].setOnList(null);
+          atoms[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].unRemove();
         }
       }
     }
 
     for (int k = 0; k < (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
-      lattice[k].setOnList(null);
-      lattice[k].unRemove();
-      lattice[k].setAsBulk();
+      atoms[k].setOnList(null);
+      atoms[k].unRemove();
+      atoms[k].setAsBulk();
     }
 
     // Update neighbourhood of top atoms
     for (int k = (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k < hexaSizeK * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
-      lattice[k].updateN1FromScratch();
+      atoms[k].updateN1FromScratch();
     }
 
     for (int k = (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k < hexaSizeK * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
-      lattice[k].updateN2FromScratch();
+      atoms[k].updateN2FromScratch();
     }
 
     // Remove top layer atoms
     for (int i = 0; i < this.hexaSizeJ; i++) {
       for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
-          lattice[(((this.hexaSizeK - 1) * this.hexaSizeJ + i) * this.hexaSizeI + j) * this.unitCellSize + a].remove();
+          atoms[(((this.hexaSizeK - 1) * this.hexaSizeJ + i) * this.hexaSizeI + j) * this.unitCellSize + a].remove();
         }
       }
     }
@@ -129,7 +129,7 @@ public class SiLattice extends AbstractEtchingLattice {
             float y = coords[j * 3 + 1] + b * (float) UC.getLimitY();
             float z = -coords[j * 3 + 2] + (a + 1) * (float) UC.getLimitZ();
 
-            lattice[cont] = new SiAtom(x, y, z);
+            atoms[cont] = new SiAtom(x, y, z);
             cont++;
           }
         }
@@ -192,10 +192,10 @@ public class SiLattice extends AbstractEtchingLattice {
                 posNeighbour = j;
               }
               if (zNeighbour < hexaSizeK) {
-                lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].
-                        setNeighbour((SiAtom)lattice[((zNeighbour * hexaSizeJ + yNeighbour) * hexaSizeI + xNeighbour) * unitCellSize + posNeighbour], i);
+                atoms[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].
+                        setNeighbour((SiAtom)atoms[((zNeighbour * hexaSizeJ + yNeighbour) * hexaSizeI + xNeighbour) * unitCellSize + posNeighbour], i);
               } else {
-                lattice[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].setNeighbour(null, i);
+                atoms[((z * hexaSizeJ + y) * hexaSizeI + x) * unitCellSize + j].setNeighbour(null, i);
               }
             }
           }
