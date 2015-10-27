@@ -16,7 +16,6 @@ public class BasicLattice extends AbstractEtchingLattice {
   private BasicAtom[] lattice;
 
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
-
     this.hexaSizeI = hexaSizeI;
     this.hexaSizeJ = hexaSizeJ;
     this.unitCellSize = 1;
