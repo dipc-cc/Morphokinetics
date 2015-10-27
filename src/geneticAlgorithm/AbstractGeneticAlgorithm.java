@@ -26,7 +26,7 @@ import geneticAlgorithm.geneticOperators.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.geneticOperators.reinsertion.IReinsertion;
 import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
 import geneticAlgorithm.geneticOperators.restrictions.AgAgRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.siEtching.SiEtchingRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.SiEtchingRestriction;
 import geneticAlgorithm.geneticOperators.selection.ISelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
