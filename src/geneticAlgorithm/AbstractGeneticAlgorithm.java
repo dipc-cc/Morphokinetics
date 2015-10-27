@@ -26,7 +26,7 @@ import geneticAlgorithm.geneticOperators.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.geneticOperators.reinsertion.IReinsertion;
 import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
 import geneticAlgorithm.geneticOperators.restrictions.AgRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.SiEtchingRestriction;
+import geneticAlgorithm.geneticOperators.restrictions.SiRestriction;
 import geneticAlgorithm.geneticOperators.selection.ISelection;
 import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
@@ -98,7 +98,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.simulation = new SiSimulation(parser);
         simulation.initialiseKmc();
         initialization = new SiInitialisation();
-        restriction = new SiEtchingRestriction();
+        restriction = new SiRestriction();
         mainEvaluator = getSiMainEvaluators();
         break;
       default:

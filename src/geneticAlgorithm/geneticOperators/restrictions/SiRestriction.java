@@ -14,9 +14,9 @@ import java.util.ArrayList;
  *
  * @author Nestor
  */
-public class SiEtchingRestriction extends RestrictionOperator {
+public class SiRestriction extends RestrictionOperator {
 
-  public SiEtchingRestriction() {
+  public SiRestriction() {
 
     genesRestriction = new ArrayList();
 
