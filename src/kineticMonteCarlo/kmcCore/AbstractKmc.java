@@ -22,9 +22,17 @@ public abstract class AbstractKmc implements IKmc {
     list = config.createList();
   }
 
+  /**
+   * Initialises the rates of the simulation. It has to be called once, and only once (not within a loop.
+   * @param rates 
+   */
   @Override
   public abstract void initialiseRates(double[] rates);
 
+  /**
+   * Resets the lattice and the list of atoms. This method has to be called just before
+   * this.depositSeed() and this.simulate().
+   */
   @Override
   public void reset() {
     lattice.reset();
@@ -32,6 +40,7 @@ public abstract class AbstractKmc implements IKmc {
   }
   
   /**
+   * Performs a simulation step.
    * @return true if a stop condition happened (all atom etched, all surface covered)
    */
   protected abstract boolean performSimulationStep();
@@ -41,6 +50,9 @@ public abstract class AbstractKmc implements IKmc {
     return iterationsForLastSimulation;
   }
 
+  /**
+   * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   */
   @Override
   public void simulate() {
     iterationsForLastSimulation = 0;
@@ -50,6 +62,10 @@ public abstract class AbstractKmc implements IKmc {
 
   }
 
+  /**
+   * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   * @param endtime 
+   */
   @Override
   public void simulate(double endtime) {
     iterationsForLastSimulation = 0;
@@ -61,6 +77,10 @@ public abstract class AbstractKmc implements IKmc {
     }
   }
 
+  /**
+   * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   * @param iterations 
+   */
   @Override
   public void simulate(int iterations) {
     iterationsForLastSimulation = 0;
@@ -88,6 +108,7 @@ public abstract class AbstractKmc implements IKmc {
   public void setIslandDensityAndDepositionRate(double depositionRate, double landDensity) {
     throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
   }
+  
   /**
    * Coverage is not defined in the etching. So, by default is not defined and returns -1
    * @return 
