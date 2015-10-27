@@ -5,7 +5,7 @@
  */
 package basic;
 
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import ratesLibrary.AgAgRatesFactory;
 
 /**
@@ -23,7 +23,7 @@ public class AgSimulation extends AbstractGrowthSimulation {
     super.initialiseKmc();
 
     this.rates = new AgAgRatesFactory();
-    this.kmc = new AgAgKmc(config,
+    this.kmc = new AgKmc(config,
             parser.getHexaSizeI(), 
             parser.getHexaSizeJ(),
             parser.justCentralFlake(),

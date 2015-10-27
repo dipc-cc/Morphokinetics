@@ -17,9 +17,9 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class AgAgKmc extends AbstractGrowthKmc {
+public class AgKmc extends AbstractGrowthKmc {
 
-  public AgAgKmc(ListConfiguration config, 
+  public AgKmc(ListConfiguration config, 
           int hexaSizeI, 
           int hexaSizeJ, 
           boolean justCentralFlake,
@@ -36,7 +36,7 @@ public class AgAgKmc extends AbstractGrowthKmc {
     }
   }
 
-  public AgAgKmc(ListConfiguration config, 
+  public AgKmc(ListConfiguration config, 
           int hexaSizeI, 
           int hexaSizeJ, 
           double depositionRate, 

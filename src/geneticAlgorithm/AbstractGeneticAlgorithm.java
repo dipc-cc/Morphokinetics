@@ -32,7 +32,7 @@ import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import ratesLibrary.AgAgRatesFactory;
 import utils.list.ListConfiguration;
@@ -124,10 +124,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     int sizeY = parser.getCartSizeY() / 2;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluatorTmp = new AgBasicPsdEvaluator((AgAgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY);
+        evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY);
         break;
       case "threaded":
-        evaluatorTmp = new AgThreadedPsdEvaluator((AgAgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
+        evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
         break;
       default:
         System.err.println("Error: Default evolutor. This evoluator is not implemented!");

@@ -6,7 +6,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
@@ -18,7 +18,7 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
  */
 public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
-  public AgThreadedPsdEvaluator(AgAgKmc kmc, int repeats, int measureInterval, int numThreads, int psdSizeX, int psdSizeY) {
+  public AgThreadedPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int numThreads, int psdSizeX, int psdSizeY) {
 
     super(repeats, measureInterval, numThreads);
 
@@ -34,7 +34,7 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     setPsdSizeY(psdSizeY);
   }
 
-  private static DiffusionKmcFrame createGraphicsFrame(AgAgKmc kmc) {
+  private static DiffusionKmcFrame createGraphicsFrame(AgKmc kmc) {
     DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }

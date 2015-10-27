@@ -6,7 +6,7 @@ package samples.agAgGrowth;
 
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.lattice.AgAgLattice;
@@ -26,7 +26,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
     AgAgRatesFactory ratesFactory = new AgAgRatesFactory();
 
-    AgAgKmc kmc = initialize_kmc();
+    AgKmc kmc = initialize_kmc();
 
     DiffusionKmcFrame frame = create_graphics_frame(kmc);
     frame.setVisible(true);
@@ -37,12 +37,12 @@ public class SimpleAgAgGrowthKmcSimulation {
     }
   }
 
-  private static DiffusionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+  private static DiffusionKmcFrame create_graphics_frame(AgKmc kmc) {
     DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }
 
-  private static AgAgKmc initialize_kmc() {
+  private static AgKmc initialize_kmc() {
     new StaticRandom();
     ListConfiguration config = new ListConfiguration()
             .setListType(ListConfiguration.LINEAR_LIST);
@@ -50,12 +50,12 @@ public class SimpleAgAgGrowthKmcSimulation {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, (float) -1, false, RoundPerimeter.CIRCLE);
+    AgKmc kmc = new AgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, (float) -1, false, RoundPerimeter.CIRCLE);
 
     return kmc;
   }
 
-  private static void initializeRates(AgAgRatesFactory reatesFactory, AgAgKmc kmc) {
+  private static void initializeRates(AgAgRatesFactory reatesFactory, AgKmc kmc) {
 
     double deposition_rate = reatesFactory.getDepositionRate(135);
     double island_density = reatesFactory.getIslandDensity(135);

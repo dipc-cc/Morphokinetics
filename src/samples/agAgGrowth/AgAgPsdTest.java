@@ -8,7 +8,7 @@ package samples.agAgGrowth;
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import kineticMonteCarlo.kmcCore.diffusion.AgAgKmc;
+import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.lattice.AgAgLattice;
@@ -30,7 +30,7 @@ public class AgAgPsdTest {
 
     AgAgRatesFactory ratesFactory = new AgAgRatesFactory();
 
-    AgAgKmc kmc = initialize_kmc();
+    AgKmc kmc = initialize_kmc();
 
     //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
     PsdSignature2D PSD = new PsdSignature2D(128, 128);
@@ -56,12 +56,12 @@ public class AgAgPsdTest {
 
   }
 
-  private static DiffusionKmcFrame create_graphics_frame(AgAgKmc kmc) {
+  private static DiffusionKmcFrame create_graphics_frame(AgKmc kmc) {
     DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
     return frame;
   }
 
-  private static AgAgKmc initialize_kmc() {
+  private static AgKmc initialize_kmc() {
 
     new StaticRandom();
     ListConfiguration config = new ListConfiguration()
@@ -70,12 +70,12 @@ public class AgAgPsdTest {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AgAgLattice.YRatio);
 
-    AgAgKmc kmc = new AgAgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE);
+    AgKmc kmc = new AgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE);
 
     return kmc;
   }
 
-  private static void initializeRates(AgAgRatesFactory reatesFactory, AgAgKmc kmc) {
+  private static void initializeRates(AgAgRatesFactory reatesFactory, AgKmc kmc) {
 
     double deposition_rate = reatesFactory.getDepositionRate(135);
     double island_density = reatesFactory.getIslandDensity(135);
