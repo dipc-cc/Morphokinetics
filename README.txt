@@ -6,7 +6,10 @@ This is Morphokinetics software developed at the Donostia International Physics 
 
 Simple instructions to "compile" the code 
 cd src/
-javac -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar main/Morphokinetics.java
+javac -source 7 -target 7 -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main/Morphokinetics.java
+mkdir ../perimeterData
+cp ../scripts/perimeterStatistics/reentrancesPerAngleHexagonal* ../perimeterData/
+cp ../scripts/perimeterStatistics/hopsPerAngleHexagonal* ../perimeterData/
 
 ==========================================
 ====== RUN                    ============
@@ -14,7 +17,7 @@ javac -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib
 
 Run the code:
 In order to be able do a simulation with Morphokinetics, a file called "parameter" have to exits in the current directory. If there is not any file, default simulation is carried out.
-java  -cp  .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar main.Morphokinetics
+java  -cp  .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main.Morphokinetics
 
 
 ==========================================
