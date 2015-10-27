@@ -4,8 +4,8 @@
  */
 package samples.grapheneCvdGrowth;
 
-import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
+import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;

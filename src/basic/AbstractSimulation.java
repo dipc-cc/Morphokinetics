@@ -6,7 +6,7 @@
 package basic;
 
 import basic.io.Restart;
-import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
+import graphicInterfaces.growth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import ratesLibrary.IRatesFactory;

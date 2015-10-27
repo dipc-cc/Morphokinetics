@@ -5,8 +5,8 @@
  */
 package samples.agAgGrowth;
 
-import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
-import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
+import graphicInterfaces.growth.KmcCanvas;
+import graphicInterfaces.growth.DiffusionKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;

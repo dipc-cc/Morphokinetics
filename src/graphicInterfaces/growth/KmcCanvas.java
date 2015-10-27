@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package graphicInterfaces.diffusion2DGrowth;
+package graphicInterfaces.growth;
 
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;

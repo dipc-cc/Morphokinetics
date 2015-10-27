@@ -5,8 +5,8 @@
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
-import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
+import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;

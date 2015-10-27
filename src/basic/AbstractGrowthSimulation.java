@@ -5,8 +5,8 @@
  */
 package basic;
 
-import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
-import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
+import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.IRatesFactory;
