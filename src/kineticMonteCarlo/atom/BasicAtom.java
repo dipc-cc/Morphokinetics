@@ -31,11 +31,12 @@ public class BasicAtom extends AbstractAtom {
     return y;
   }
 
-  public void setNeighbor(BasicAtom a, int pos) {
-    neighbours[pos] = a;
+  @Override
+  public void setNeighbour(AbstractAtom a, int pos) {
+    neighbours[pos] = (BasicAtom) a;
   }
 
-  public BasicAtom getHeighbor(int pos) {
+  public BasicAtom getNeighbour(int pos) {
     return neighbours[pos];
   }
 
@@ -44,7 +45,8 @@ public class BasicAtom extends AbstractAtom {
     return type;
   }
 
-  public void setBulk() {
+  @Override
+  public void setAsBulk() {
     type = 3;
   }
 
