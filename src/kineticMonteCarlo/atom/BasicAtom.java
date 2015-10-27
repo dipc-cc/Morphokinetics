@@ -64,6 +64,7 @@ public class BasicAtom extends AbstractAtom {
     }
   }
 
+  @Override
   public void remove() {
     if (!removed) {
       if (list != null) {
