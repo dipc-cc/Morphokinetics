@@ -10,7 +10,7 @@ package kineticMonteCarlo.atom;
  */
 public class BasicAtom extends AbstractAtom {
 
-  private BasicAtom[] neighs;
+  private BasicAtom[] neighbours;
   private byte type;
   private short x;
   private short y;
@@ -18,7 +18,7 @@ public class BasicAtom extends AbstractAtom {
   public BasicAtom(short x, short y) {
     this.x = x;
     this.y = y;
-    this.neighs = new BasicAtom[4];
+    this.neighbours = new BasicAtom[4];
     this.removed = false;
   }
   
@@ -31,11 +31,11 @@ public class BasicAtom extends AbstractAtom {
   }
 
   public void setNeighbor(BasicAtom a, int pos) {
-    neighs[pos] = a;
+    neighbours[pos] = a;
   }
 
   public BasicAtom getHeighbor(int pos) {
-    return neighs[pos];
+    return neighbours[pos];
   }
 
   @Override
@@ -50,7 +50,7 @@ public class BasicAtom extends AbstractAtom {
   public void updateTypeFromScratch() {
     type = 0;
     for (int i = 0; i < 4; i++) {
-      if (neighs[i] != null && !neighs[i].isRemoved()) {
+      if (neighbours[i] != null && !neighbours[i].isRemoved()) {
         type++;
       }
     }
@@ -70,8 +70,8 @@ public class BasicAtom extends AbstractAtom {
       }
       removed = true;
       for (int i = 0; i < 4; i++) {
-        if (neighs[i] != null) {
-          neighs[i].remove1st();
+        if (neighbours[i] != null) {
+          neighbours[i].remove1st();
         }
       }
     }
