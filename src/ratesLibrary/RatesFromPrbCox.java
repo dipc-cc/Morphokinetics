@@ -4,13 +4,13 @@
  */
 package ratesLibrary;
 
-import static kineticMonteCarlo.atom.AgAgAtom.TERRACE;
-import static kineticMonteCarlo.atom.AgAgAtom.CORNER;
-import static kineticMonteCarlo.atom.AgAgAtom.EDGE_A;
-import static kineticMonteCarlo.atom.AgAgAtom.EDGE_B;
-import static kineticMonteCarlo.atom.AgAgAtom.KINK_A;
-import static kineticMonteCarlo.atom.AgAgAtom.KINK_B;
-import static kineticMonteCarlo.atom.AgAgAtom.ISLAND;
+import static kineticMonteCarlo.atom.AgAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgAtom.CORNER;
+import static kineticMonteCarlo.atom.AgAtom.EDGE_A;
+import static kineticMonteCarlo.atom.AgAtom.EDGE_B;
+import static kineticMonteCarlo.atom.AgAtom.KINK_A;
+import static kineticMonteCarlo.atom.AgAtom.KINK_B;
+import static kineticMonteCarlo.atom.AgAtom.ISLAND;
 
 /**
  *

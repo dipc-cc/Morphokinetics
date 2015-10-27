@@ -1,12 +1,12 @@
 package kineticMonteCarlo.atom;
 
-import static kineticMonteCarlo.atom.AgAgAtom.CORNER;
-import static kineticMonteCarlo.atom.AgAgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAgAtom.ISLAND;
-import static kineticMonteCarlo.atom.AgAgAtom.KINK;
-import static kineticMonteCarlo.atom.AgAgAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgAtom.CORNER;
+import static kineticMonteCarlo.atom.AgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAtom.ISLAND;
+import static kineticMonteCarlo.atom.AgAtom.KINK;
+import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 
-public class AgAgTypesTable {
+public class AgTypesTable {
 
   private final byte[][] table;
 
@@ -14,7 +14,7 @@ public class AgAgTypesTable {
     return table[immobile][mobile];
   }
 
-  public AgAgTypesTable() {
+  public AgTypesTable() {
 
     table = new byte[7][7];
 

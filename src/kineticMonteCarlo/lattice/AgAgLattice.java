@@ -5,12 +5,12 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
-import kineticMonteCarlo.atom.AgAgAtom;
+import kineticMonteCarlo.atom.AgAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
-import static kineticMonteCarlo.atom.AgAgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAgAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import utils.StaticRandom;
 
 /**
@@ -25,7 +25,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
     super(hexaSizeI, hexaSizeJ, modified);
 
-    atoms = new AgAgAtom[hexaSizeI][hexaSizeJ];
+    atoms = new AgAtom[hexaSizeI][hexaSizeJ];
 
     createAtoms(distancePerStep);
     setAngles();
@@ -39,7 +39,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   private void instantiateAtoms(HopsPerStep distancePerStep) {
     for (int i = 0; i < hexaSizeI; i++) {
       for (int j = 0; j < hexaSizeJ; j++) {
-        atoms[i][j] = new AgAgAtom((short) i, (short) j, distancePerStep);
+        atoms[i][j] = new AgAtom((short) i, (short) j, distancePerStep);
       }
     }
   }
@@ -48,45 +48,45 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
 
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
-        AgAgAtom atom = (AgAgAtom) atoms[iHexa][jHexa];
+        AgAtom atom = (AgAtom) atoms[iHexa][jHexa];
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = hexaSizeJ - 1;
 
-        atom.setNeighbour((AgAgAtom) atoms[i][j], 0);
+        atom.setNeighbour((AgAtom) atoms[i][j], 0);
         i = iHexa + 1;
         j = jHexa - 1;
         if (i == hexaSizeI) i = 0;
         if (j < 0) j = hexaSizeJ - 1;
 
-        atom.setNeighbour((AgAgAtom) atoms[i][j], 1);
+        atom.setNeighbour((AgAtom) atoms[i][j], 1);
         i = iHexa + 1;
         j = jHexa;
         if (i == hexaSizeI) i = 0;
 
-        atom.setNeighbour((AgAgAtom) atoms[i][j], 2);
+        atom.setNeighbour((AgAtom) atoms[i][j], 2);
         i = iHexa;
         j = jHexa + 1;
         if (j == hexaSizeJ) j = 0;
 
-        atom.setNeighbour((AgAgAtom) atoms[i][j], 3);
+        atom.setNeighbour((AgAtom) atoms[i][j], 3);
         i = iHexa - 1;
         j = jHexa + 1;
         if (i < 0) i = hexaSizeI - 1;
         if (j == hexaSizeJ) j = 0;
 
-        atom.setNeighbour((AgAgAtom) atoms[i][j], 4);
+        atom.setNeighbour((AgAtom) atoms[i][j], 4);
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = hexaSizeI - 1;
-        atom.setNeighbour((AgAgAtom) atoms[i][j], 5);
+        atom.setNeighbour((AgAtom) atoms[i][j], 5);
       }
     }
   }
 
   @Override
   public Abstract2DDiffusionAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
-    return ((AgAgAtom) atoms[iHexa][jHexa]).getNeighbour(neighbour);
+    return ((AgAtom) atoms[iHexa][jHexa]).getNeighbour(neighbour);
   }
 
   @Override

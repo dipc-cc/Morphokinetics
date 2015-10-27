@@ -12,10 +12,10 @@ import utils.StaticRandom;
  *
  * @author DONOSTIA INTERN
  */
-public class AgAgAtom extends Abstract2DDiffusionAtom {
+public class AgAtom extends Abstract2DDiffusionAtom {
 
-  private static AgAgTypesTable typesTable;
-  private final AgAgAtom[] neighbours = new AgAgAtom[6];
+  private static AgTypesTable typesTable;
+  private final AgAtom[] neighbours = new AgAtom[6];
   private byte nImmobile;
   private byte nMobile;
   
@@ -31,21 +31,21 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
   public static final int EDGE = EDGE_A;
   public static final int KINK = KINK_A;
   
-  public AgAgAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public AgAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(iHexa, jHexa, distancePerStep);
     if (typesTable == null) {
-      typesTable = new AgAgTypesTable();
+      typesTable = new AgTypesTable();
     }
 
     numberOfNeighbours = 6;
     bondsProbability = new double[numberOfNeighbours];
   }
 
-  public void setNeighbour(AgAgAtom a, int pos) {
+  public void setNeighbour(AgAtom a, int pos) {
     neighbours[pos] = a;
   }
 
-  public AgAgAtom getNeighbour(int pos) {
+  public AgAtom getNeighbour(int pos) {
     return neighbours[pos];
   }
 
@@ -170,7 +170,7 @@ public class AgAgAtom extends Abstract2DDiffusionAtom {
     return neighbours[cont];
   }
 
-  public AgAgAtom aheadCornerAtom(int cornerPosition) {
+  public AgAtom aheadCornerAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) {
 
       switch (cornerPosition) {
