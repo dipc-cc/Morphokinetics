@@ -6,7 +6,7 @@
 package basic;
 
 import basic.io.Restart;
-import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import ratesLibrary.IRatesFactory;
@@ -23,7 +23,7 @@ public abstract class AbstractSimulation {
 
   protected AbstractKmc kmc;
   protected IRatesFactory rates;
-  protected DiffusionKmcFrame frame;
+  protected GrowthKmcFrame frame;
   protected PsdSignature2D psd;
 
   protected ListConfiguration config;
@@ -152,7 +152,7 @@ public abstract class AbstractSimulation {
     return kmc;
   }
 
-  public DiffusionKmcFrame getFrame() {
+  public GrowthKmcFrame getFrame() {
     return frame;
   }
 

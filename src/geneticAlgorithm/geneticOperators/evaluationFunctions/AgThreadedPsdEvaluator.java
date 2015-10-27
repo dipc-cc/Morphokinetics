@@ -5,7 +5,7 @@
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import graphicInterfaces.growth.KmcCanvas;
-import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.GrowthKmcFrame;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
@@ -23,7 +23,7 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     super(repeats, measureInterval, numThreads);
 
     for (int i = 0; i < numThreads; i++) {
-      DiffusionKmcFrame frame = createGraphicsFrame(kmc);
+      GrowthKmcFrame frame = createGraphicsFrame(kmc);
       frame.setVisible(true);
 
       workers[i] = new KmcWorker(kmc, i);
@@ -34,8 +34,8 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     setPsdSizeY(psdSizeY);
   }
 
-  private static DiffusionKmcFrame createGraphicsFrame(AgKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
+  private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
+    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 

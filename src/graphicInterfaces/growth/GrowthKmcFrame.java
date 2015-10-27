@@ -10,7 +10,7 @@
  */
 package graphicInterfaces.growth;
 
-public class DiffusionKmcFrame extends javax.swing.JFrame {
+public class GrowthKmcFrame extends javax.swing.JFrame {
 
   private boolean noStartDragData = false;
   private int mouseX, mouseY;
@@ -23,7 +23,7 @@ public class DiffusionKmcFrame extends javax.swing.JFrame {
    *
    * @param canvas1
    */
-  public DiffusionKmcFrame(KmcCanvas canvas1) {
+  public GrowthKmcFrame(KmcCanvas canvas1) {
 
     initComponents();
     this.canvas1 = canvas1;

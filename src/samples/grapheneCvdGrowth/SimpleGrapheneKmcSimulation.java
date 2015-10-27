@@ -4,7 +4,7 @@
  */
 package samples.grapheneCvdGrowth;
 
-import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
@@ -27,7 +27,7 @@ public class SimpleGrapheneKmcSimulation {
 
     GrapheneRatesFactory ratesFactory = new GrapheneRatesFactory();
     GrapheneKmc kmc = initialize_kmc();
-    DiffusionKmcFrame frame = create_graphics_frame(kmc);
+    GrowthKmcFrame frame = create_graphics_frame(kmc);
 
     frame.setVisible(true);
     for (int i = 0; i < 10; i++) {
@@ -39,8 +39,8 @@ public class SimpleGrapheneKmcSimulation {
 
   }
 
-  private static DiffusionKmcFrame create_graphics_frame(GrapheneKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
+  private static GrowthKmcFrame create_graphics_frame(GrapheneKmc kmc) {
+    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 

@@ -5,7 +5,7 @@
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
-import graphicInterfaces.growth.DiffusionKmcFrame;
+import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
@@ -32,7 +32,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     difference = new float[getPsdSizeY()][getPsdSizeX()];
 
-    DiffusionKmcFrame frame = createGraphicsFrame(kmc);
+    GrowthKmcFrame frame = createGraphicsFrame(kmc);
     frame.setVisible(true);
     psdFrame =  new Frame2D("Calculated PSD analysis")
             .setLogScale(true)
@@ -41,8 +41,8 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
             .setMax(19.34551);
   }
 
-  private static DiffusionKmcFrame createGraphicsFrame(AgKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
+  private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
+    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 
