@@ -49,10 +49,15 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   }*/
   
+  /**
+   * This is two-norm error (http://www.netlib.org/lapack/lug/node75.html) if it was a vector.
+   * @param difference
+   * @param psd 
+   */
   protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
     for (int a = 0; a < difference.length; a++) {
       for (int b = 0; b < difference[0].length; b++) {
-        difference[a][b] = (float) Math.sqrt(Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2));
+        difference[a][b] = (float) Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2);
       }
     }
 
@@ -99,6 +104,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
         error += Math.abs(difference[a][b]);
       }
     }
+    error = (float) Math.sqrt(error);
     return error * wheight;
   }
     
