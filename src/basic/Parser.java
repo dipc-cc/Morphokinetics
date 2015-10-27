@@ -60,7 +60,7 @@ public class Parser {
   private int extraLevels;
   private int coverage;
   private boolean multithreaded;
-  private boolean visualize;
+  private boolean visualise;
   private boolean withGui;
   private boolean justCentralFlake;
   private boolean printToImage;
@@ -96,7 +96,7 @@ public class Parser {
     this.extraLevels = 0;
     this.coverage = 30;
     this.multithreaded = true;
-    this.visualize = true;
+    this.visualise = true;
     this.withGui = true;
     this.justCentralFlake = true;
     this.printToImage = false;
@@ -218,9 +218,9 @@ public class Parser {
       multithreaded = true;
     }
     try {
-      visualize = json.getBoolean("visualize");
+      visualise = json.getBoolean("visualise");
     } catch (JSONException e) {
-      visualize = true;
+      visualise = true;
     }
     try {
       withGui = json.getBoolean("withGui");
@@ -321,7 +321,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"presure\"", presure);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"flow\"", flow);
-    System.out.printf("%32s: %s,\n", "\"visualize\"", visualize);
+    System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
     System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
@@ -412,8 +412,8 @@ public class Parser {
     return multithreaded;
   }
 
-  public boolean visualize() {
-    return visualize;
+  public boolean visualise() {
+    return visualise;
   }
 
   public boolean justCentralFlake() {

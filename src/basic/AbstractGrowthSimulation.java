@@ -39,7 +39,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         System.err.println("Finishing");
         throw e;
       }
-      if (parser.visualize()) {
+      if (parser.visualise()) {
         frame.setVisible(true);
       }
     }

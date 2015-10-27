@@ -59,7 +59,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
    */
   @Override
   public void finishSimulation() {
-    if (parser.visualize()) {
+    if (parser.visualise()) {
       try {
         new SiliconFrame().drawKmc(kmc);
       } catch (Exception e) {
