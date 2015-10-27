@@ -13,6 +13,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluato
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AgThreadedPsdEvaluator;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.BasicEvaluator;
+import geneticAlgorithm.geneticOperators.evaluationFunctions.SiBasicPsdEvaluator;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.geneticOperators.mutation.BgaBasedMutator;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
@@ -141,7 +142,20 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
     
   private AbstractPsdEvaluator getSiMainEvaluators() {
-    SiThreadedPsdEvaluator evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
+    AbstractPsdEvaluator evaluatorTmp = null;
+    switch (parser.getEvaluator()) {
+      case "serial":
+        evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000);
+        break;
+      case "threaded":
+      evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
+        break;
+      default:
+        System.err.println("Error: Default evolutor. This evoluator is not implemented!");
+        System.err.println("Current value: " + parser.getEvaluator() + ". Possible values are serial or threaded");
+        throw new IllegalArgumentException("Evaluator mode is not implemented");
+    }
+    
     evaluatorTmp.setWheight(1.0f);
     evaluatorTmp.setShowGraphics(true);
 
