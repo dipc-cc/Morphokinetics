@@ -62,6 +62,8 @@ public class KmcWorker extends Thread {
           break;
         case "by_intervals":
           do {
+            kmc.reset();
+            kmc.depositSeed();
             kmc.simulate(intervalSteps);
             intervalListener.handleSimulationIntervalFinish(workerId, workId);
           } while (kmc.getIterations() == intervalSteps);
