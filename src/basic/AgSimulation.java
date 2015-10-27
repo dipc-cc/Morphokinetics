@@ -30,6 +30,6 @@ public class AgSimulation extends AbstractGrowthSimulation {
             (float) parser.getCoverage()/100,
             parser.useMaxPerimeter(),
             parser.getPerimeterType());
-    initializeRates(rates, kmc, parser);
+    initialiseRates(rates, kmc, parser);
   }
 }
