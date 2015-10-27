@@ -32,7 +32,9 @@ public class SimpleBasicKmcSimulation {
     BasicFrame panel = new BasicFrame(3);
 
     //KMC.initializeRates(new BasicEtchRatesFactory().getRates("Basic_OTHER", 350));
-    KMC.initializeRates(new RatesCaseOther().getRates(350));
+    KMC.reset();
+    KMC.initialiseRates(new RatesCaseOther().getRates(350));
+    KMC.depositSeed();
 
     for (int i = 0; i < 1000; i++) {
 

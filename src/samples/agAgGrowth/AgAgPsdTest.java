@@ -36,8 +36,10 @@ public class AgAgPsdTest {
     PsdSignature2D PSD = new PsdSignature2D(128, 128);
     float[][] sampledSurface = null;
 
+    initializeRates(ratesFactory, kmc);
     for (int i = 0; i < 30; i++) {
-      initializeRates(ratesFactory, kmc);
+      kmc.reset();
+      kmc.depositSeed();
       kmc.simulate();
 
       sampledSurface = kmc.getSampledSurface(128, 128);
@@ -78,8 +80,7 @@ public class AgAgPsdTest {
     double deposition_rate = reatesFactory.getDepositionRate(135);
     double island_density = reatesFactory.getIslandDensity(135);
     kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
-    kmc.initializeRates(reatesFactory.getRates(135));
-
+    kmc.initialiseRates(reatesFactory.getRates(135));
   }
 
 }

@@ -26,9 +26,9 @@ public class SimpleSiliconKmcSimulation {
     SiEtchingKmc kmc = new SiEtchingKmc(config);
 
     long start = System.nanoTime();
-
-    kmc.initializeRates(new SiRatesFactory().getRates(350));
-
+    kmc.reset();
+    kmc.initialiseRates(new SiRatesFactory().getRates(350));
+    kmc.depositSeed();
     kmc.simulate();
 
     System.out.println((System.nanoTime() - start) / 1000000);

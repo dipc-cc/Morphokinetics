@@ -64,7 +64,9 @@ public class SimpleGrapheneKmcSimulation {
     double deposition_rate = reatesFactory.getDepositionRate(0);
     double island_density = reatesFactory.getIslandDensity(0);
     kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
-    kmc.initializeRates(reatesFactory.getRates(0));
+    kmc.reset();
+    kmc.initialiseRates(reatesFactory.getRates(0));
+    kmc.depositSeed(); //might not be needed, it is a multiflake simulation
 
   }
 }

@@ -26,9 +26,9 @@ public class SimpleSiliconKmcFftAnalisys {
     SiEtchingKmcConfig config = configKmc();
 
     SiEtchingKmc kmc = new SiEtchingKmc(config);
-
-    kmc.initializeRates(new SiRatesFactory()
-            .getRates(350));
+    kmc.reset();
+    kmc.initialiseRates(new SiRatesFactory().getRates(350));
+    kmc.depositSeed();
 
     float[][] surface;;
     PsdSignature2D PSD = new PsdSignature2D(128, 128);
