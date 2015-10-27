@@ -40,7 +40,7 @@ public class GrapheneKmc extends Abstract2DDiffusionKmc {
   }
 
   @Override
-  protected void depositSeed() {
+  public void depositSeed() {
     lattice.resetOccupied();
     if (justCentralFlake) {
       if (this.useMaxPerimeter){

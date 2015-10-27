@@ -18,11 +18,9 @@ public abstract class AbstractEtchingKmc extends AbstractKmc {
     super(config);
   }
 
-  protected AbstractEtchingLattice lattice;
-
   @Override
   public AbstractEtchingLattice getLattice() {
-    return lattice;
+    return (AbstractEtchingLattice) lattice;
   }
 
 }

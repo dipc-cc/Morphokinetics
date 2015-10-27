@@ -94,7 +94,9 @@ public class KmcWorker extends Thread {
       e.printStackTrace();
       return;
     }
-    this.kmc.initializeRates(rates);
+    this.kmc.reset();
+    this.kmc.initialiseRates(rates);
+    this.kmc.depositSeed();
     this.receiveCommandsLock.release();
   }
 

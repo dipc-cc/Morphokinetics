@@ -25,22 +25,21 @@ public class BasicKmc extends AbstractEtchingKmc {
   }
 
   /**
-   * This model ignores the deposition rate
+   * This model ignores the deposition rate.
    * @param rates
    */ 
   @Override
-  public void initializeRates(double[] rates) {
-
+  public void initialiseRates(double[] rates) {
     lattice.setProbabilities(rates);
-    list.reset();
-    lattice.reset();
     minHeight = 4;
-
+  }
+    
+  @Override
+  public void depositSeed() {
     for (int i = 0; i < lattice.getHexaSizeI(); i++) {
       for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
         for (int k = 0; k < lattice.getHexaSizeK(); k++) {
           for (int l = 0; l < lattice.getSizeUC(); l++) {
-
             BasicAtom atom = (BasicAtom) lattice.getAtom(i, j, k, l);
             if (atom.getType() < 4 && atom.getType() > 0 && !atom.isRemoved()) {
               list.addAtom(atom);

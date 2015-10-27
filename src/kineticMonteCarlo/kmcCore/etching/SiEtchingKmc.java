@@ -26,25 +26,22 @@ public class SiEtchingKmc extends AbstractEtchingKmc {
   }
 
   /**
-   * This model ignores the deposition rate
-   *
+   * This model ignores the deposition rate.
    * @param rates
    */
   @Override
-  public void initializeRates(double[] rates) {
-
+  public void initialiseRates(double[] rates) {
     lattice.setProbabilities(rates);
-    lattice.reset();
-    list.reset();
-
+  }
+  
+  @Override
+  public void depositSeed() {
     for (int i = 0; i < lattice.getHexaSizeI(); i++) {
       for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
         for (int k = 0; k < lattice.getHexaSizeK(); k++) {
           for (int l = 0; l < lattice.getSizeUC(); l++) {
-
             SiAtom atom = (SiAtom) lattice.getAtom(i, j, k, l);
             if (atom.getN1() < 4 && atom.getN1() > 0 && !atom.isRemoved()) {
-
               list.addAtom(atom);
             }
           }

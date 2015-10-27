@@ -48,7 +48,7 @@ public class AgAgKmc extends Abstract2DDiffusionKmc {
   }
 
   @Override
-  protected void depositSeed() {
+  public void depositSeed() {
     lattice.resetOccupied();
     if (justCentralFlake) {
       if (this.useMaxPerimeter){
