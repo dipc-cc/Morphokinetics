@@ -48,7 +48,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected AbstractPsdEvaluator mainEvaluator;
   protected List<IEvaluation> otherEvaluators;
   protected IMutation mutation;
-  protected IInitialisator initialization;
+  protected IInitialisator initialisation;
   protected IRecombination recombination;
   protected IReinsertion reinsertion;
   protected RestrictionOperator restriction;
@@ -89,14 +89,14 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.diffusionRate = new AgRatesFactory().getRates(experitentalTemp)[0];
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
-        initialization = new AgInitialisation();
+        initialisation = new AgInitialisation();
         restriction = new AgRestriction(diffusionRate);
         mainEvaluator = getAgMainEvaluator();
         break;
       case "Si":
         this.simulation = new SiSimulation(parser);
         simulation.initialiseKmc();
-        initialization = new SiInitialisation();
+        initialisation = new SiInitialisation();
         restriction = new SiRestriction();
         mainEvaluator = getSiMainEvaluators();
         break;
@@ -196,7 +196,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
 
   public void setInitialization(IInitialisator initialization) {
-    this.initialization = initialization;
+    this.initialisation = initialization;
   }
 
   public void setRecombination(IRecombination recombination) {
@@ -244,7 +244,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
 
   public IInitialisator getInitialization() {
-    return initialization;
+    return initialisation;
   }
 
   public IRecombination getRecombination() {

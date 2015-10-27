@@ -31,7 +31,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
   @Override
   public IGeneticAlgorithm initialize() {
-    population = initialization.createRandomPopulation(populationSize);
+    population = initialisation.createRandomPopulation(populationSize);
 
     // Inicializamos la clase que contiene variables globales del algoritmo.
     dcmaEsConfig = new DcmaEsConfig(this, population.getIndividual(0).getGeneSize());
