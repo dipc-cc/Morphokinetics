@@ -10,7 +10,7 @@ import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
  *
@@ -35,7 +35,7 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
   }
 
   private static DiffusionKmcFrame createGraphicsFrame(AgKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 

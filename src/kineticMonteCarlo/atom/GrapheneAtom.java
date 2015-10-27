@@ -7,7 +7,7 @@
 package kineticMonteCarlo.atom;
 
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import utils.StaticRandom;
 
@@ -29,7 +29,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void initialize(Abstract2DDiffusionLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
+  public void initialize(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
     super.initialize(probabilities, modified);
     this.lattice = (GrapheneLattice) lattice;
   }

@@ -8,7 +8,7 @@ import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
 import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.GrapheneRatesFactory;
 import utils.StaticRandom;
@@ -40,7 +40,7 @@ public class SimpleGrapheneKmcSimulation {
   }
 
   private static DiffusionKmcFrame create_graphics_frame(GrapheneKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 

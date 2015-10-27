@@ -9,7 +9,7 @@ import graphicInterfaces.diffusion2DGrowth.DiffusionKmcFrame;
 import graphicInterfaces.diffusion2DGrowth.KmcCanvas;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -42,7 +42,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   }
 
   private static DiffusionKmcFrame createGraphicsFrame(AgKmc kmc) {
-    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((Abstract2DDiffusionLattice) kmc.getLattice()));
+    DiffusionKmcFrame frame = new DiffusionKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 

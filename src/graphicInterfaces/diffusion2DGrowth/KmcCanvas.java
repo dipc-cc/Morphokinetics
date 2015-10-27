@@ -4,7 +4,7 @@
  */
 package graphicInterfaces.diffusion2DGrowth;
 
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -28,7 +28,7 @@ public class KmcCanvas extends Canvas {
   protected int baseY = 0;
   protected BufferStrategy strategy;  //BufferStratrgy
   protected boolean initialized = false;
-  protected Abstract2DDiffusionLattice lattice;
+  protected AbstractGrowthLattice lattice;
   public int scale = 2;
   
   private final static Color gray = new Color (220,220,220);
@@ -43,7 +43,7 @@ public class KmcCanvas extends Canvas {
   private final static Color green = new Color (179,222,105);
   private final static Color mauve = new Color (252,205,229);
   
-  public KmcCanvas(Abstract2DDiffusionLattice lattice) {
+  public KmcCanvas(AbstractGrowthLattice lattice) {
     this.lattice = lattice;
   }
 

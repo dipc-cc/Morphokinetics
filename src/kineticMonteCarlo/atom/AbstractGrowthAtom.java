@@ -5,7 +5,7 @@
 package kineticMonteCarlo.atom;
 
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
  *
@@ -79,7 +79,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public abstract void clear();
 
-  public abstract void initialize(Abstract2DDiffusionLattice lattice, double[][] probabilities, ModifiedBuffer modified);
+  public abstract void initialize(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified);
 
   @Override
   public boolean isRemoved() {

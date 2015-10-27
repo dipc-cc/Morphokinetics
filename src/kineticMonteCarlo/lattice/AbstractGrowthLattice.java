@@ -16,7 +16,7 @@ import utils.QuickSort;
  *
  * @author Nestor
  */
-public abstract class Abstract2DDiffusionLattice extends AbstractLattice implements IDevitaLattice {
+public abstract class AbstractGrowthLattice extends AbstractLattice implements IDevitaLattice {
 
   protected AbstractGrowthAtom[][] atoms;
 
@@ -26,7 +26,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   private int hexaArea;
   private int occupied;
 
-  public Abstract2DDiffusionLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
+  public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     this.hexaSizeI = hexaSizeI;
     this.hexaSizeJ = hexaSizeJ;
     hexaSizeK = 1;

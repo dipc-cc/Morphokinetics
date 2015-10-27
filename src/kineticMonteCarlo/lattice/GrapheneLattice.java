@@ -15,7 +15,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class GrapheneLattice extends Abstract2DDiffusionLattice {
+public class GrapheneLattice extends AbstractGrowthLattice {
 
   private static int[] latticeNeighborhoodData;
   private static final double cos60 = Math.cos(60 * Math.PI / 180);

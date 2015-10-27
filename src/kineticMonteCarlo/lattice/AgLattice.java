@@ -17,7 +17,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class AgLattice extends Abstract2DDiffusionLattice {
+public class AgLattice extends AbstractGrowthLattice {
 
   public static final float YRatio = (float) Math.sqrt(3) / 2.0f; // it is the same as: sin 60º
 

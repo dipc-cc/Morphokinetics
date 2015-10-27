@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.AbstractList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -34,7 +34,7 @@ public class ModifiedBuffer {
     bufferL.add(a);
   }
 
-  public void updateAtoms(AbstractList list, Abstract2DDiffusionLattice lattice) {
+  public void updateAtoms(AbstractList list, AbstractGrowthLattice lattice) {
 
     Iterator<AbstractGrowthAtom> it = buffer.iterator();
     while (it.hasNext()) {
@@ -57,13 +57,13 @@ public class ModifiedBuffer {
 
   }
 
-  private void updateAllNeighbours(AbstractGrowthAtom atom, Abstract2DDiffusionLattice lattice) {
+  private void updateAllNeighbours(AbstractGrowthAtom atom, AbstractGrowthLattice lattice) {
     for (int i = 0; i < atom.getNeighbourCount(); i++) {
       updateNeighbour(atom, i, lattice);
     }
   }
 
-  private void updateNeighbour(AbstractGrowthAtom atom, int posNeighbour, Abstract2DDiffusionLattice lattice) {
+  private void updateNeighbour(AbstractGrowthAtom atom, int posNeighbour, AbstractGrowthLattice lattice) {
     AbstractGrowthAtom neighbour = lattice.getNeighbour(atom.getX(), atom.getY(), posNeighbour);
     if (neighbour.isEligible() && !buffer.contains(neighbour)) {
       neighbour.updateOneBound(posNeighbour);

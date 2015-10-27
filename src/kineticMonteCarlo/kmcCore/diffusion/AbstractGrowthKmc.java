@@ -8,7 +8,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
-import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.ListConfiguration;
 import java.awt.geom.Point2D;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -21,7 +21,7 @@ import utils.StaticRandom;
  */
 public abstract class AbstractGrowthKmc extends AbstractKmc {
 
-  protected Abstract2DDiffusionLattice lattice;
+  protected AbstractGrowthLattice lattice;
   protected ModifiedBuffer modifiedBuffer;
   protected boolean justCentralFlake;
   protected RoundPerimeter perimeter;
