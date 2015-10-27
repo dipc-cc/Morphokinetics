@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.restrictions.agAg;
+package geneticAlgorithm.geneticOperators.restrictions;
 
 import geneticAlgorithm.geneticOperators.restrictions.BoundedGeneRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.FixedGeneRestriction;
