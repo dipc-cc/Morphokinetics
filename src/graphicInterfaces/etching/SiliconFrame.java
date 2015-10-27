@@ -3,14 +3,14 @@
  *
  * Created on 5 de octubre de 2008, 14:22
  */
-package graphicInterfaces.siliconEtching;
+package graphicInterfaces.etching;
 
 import com.sun.j3d.utils.universe.SimpleUniverse;
 import graphicInterfaces.KmcGraphics;
-import graphicInterfaces.siliconEtching.mouseBehaviors.MouseZoom;
-import graphicInterfaces.siliconEtching.mouseBehaviors.MouseTranslate;
-import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRotate;
-import graphicInterfaces.siliconEtching.mouseBehaviors.MouseRocking;
+import graphicInterfaces.etching.mouseBehaviors.MouseZoom;
+import graphicInterfaces.etching.mouseBehaviors.MouseTranslate;
+import graphicInterfaces.etching.mouseBehaviors.MouseRotate;
+import graphicInterfaces.etching.mouseBehaviors.MouseRocking;
 import utils.list.AbstractList;
 import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.kmcCore.AbstractKmc;

@@ -4,7 +4,7 @@
  */
 package samples.worker;
 
-import graphicInterfaces.siliconEtching.SiliconFrame;
+import graphicInterfaces.etching.SiliconFrame;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmc;
 import kineticMonteCarlo.kmcCore.etching.SiEtchingKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;

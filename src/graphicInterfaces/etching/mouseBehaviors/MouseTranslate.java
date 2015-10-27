@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package graphicInterfaces.siliconEtching.mouseBehaviors;
+package graphicInterfaces.etching.mouseBehaviors;
 
 import com.sun.j3d.utils.behaviors.mouse.MouseBehavior;
 import com.sun.j3d.utils.behaviors.mouse.MouseBehaviorCallback;
