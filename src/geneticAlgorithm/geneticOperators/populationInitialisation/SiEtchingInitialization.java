@@ -12,7 +12,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class SiEtchingInitialization implements IInitializator {
+public class SiEtchingInitialization implements IInitialisator {
 
   /**
    * Simplest way of initialisation, a pure random value. AgAg initialisation has a more robust

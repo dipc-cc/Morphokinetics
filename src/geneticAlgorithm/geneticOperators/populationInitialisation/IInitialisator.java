@@ -10,7 +10,7 @@ import geneticAlgorithm.Population;
  *
  * @author Nestor
  */
-public interface IInitializator {
+public interface IInitialisator {
 
   public Population createRandomPopulation(int populationSize);
 

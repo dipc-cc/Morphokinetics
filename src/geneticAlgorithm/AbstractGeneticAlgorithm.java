@@ -18,7 +18,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvalua
 import geneticAlgorithm.geneticOperators.mutation.BgaBasedMutator;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
 import geneticAlgorithm.geneticOperators.populationInitialisation.AgInitialisation;
-import geneticAlgorithm.geneticOperators.populationInitialisation.IInitializator;
+import geneticAlgorithm.geneticOperators.populationInitialisation.IInitialisator;
 import geneticAlgorithm.geneticOperators.populationInitialisation.SiEtchingInitialization;
 import geneticAlgorithm.geneticOperators.recombination.IRecombination;
 import geneticAlgorithm.geneticOperators.recombination.RealRecombination;
@@ -49,7 +49,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected AbstractPsdEvaluator mainEvaluator;
   protected List<IEvaluation> otherEvaluators;
   protected IMutation mutation;
-  protected IInitializator initialization;
+  protected IInitialisator initialization;
   protected IRecombination recombination;
   protected IReinsertion reinsertion;
   protected RestrictionOperator restriction;
@@ -196,7 +196,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     this.mutation = mutation;
   }
 
-  public void setInitialization(IInitializator initialization) {
+  public void setInitialization(IInitialisator initialization) {
     this.initialization = initialization;
   }
 
@@ -244,7 +244,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return mutation;
   }
 
-  public IInitializator getInitialization() {
+  public IInitialisator getInitialization() {
     return initialization;
   }
 
