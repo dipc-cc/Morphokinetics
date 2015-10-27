@@ -20,6 +20,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluato
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import ratesLibrary.AgAgRatesFactory;
+import ratesLibrary.IRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
@@ -93,6 +94,7 @@ public class Morphokinetics {
     }
 
     new GaProgressFrame(ga).setVisible(true);
+    //float[][] experimentalPsd = createExperimentalData(parser, ga);
     float[][] experimentalPsd = readExperimentalData();
     new Frame2D("Expected PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
             .setLogScale(true)
@@ -116,16 +118,18 @@ public class Morphokinetics {
     int[] sizes = null;
     float[][] readSurface = null;
     int islandCount = 0;
-    int numberOfFiles = 45;
+    int numberOfFiles = 43;
     String surfaceFileName = "psdFromImage/islands/3.OuterIsolatedSmall/island";
     PsdSignature2D psd = null;
     for (int i = 1; i <= numberOfFiles; i++) {
       try {
-        readSurface = restart.readSurfaceBinary2D(surfaceFileName+i+".mko");
+        readSurface = restart.readSurfaceBinary2D(surfaceFileName+i+".mko",2);
         if (psd == null) {
           sizes = new int[2];
           sizes[0] = restart.getSizeX();
+          sizes[0] = readSurface.length;
           sizes[1] = restart.getSizeY();
+          sizes[1] = readSurface[0].length;
           psd = new PsdSignature2D(sizes[0], sizes[1]);
         }
       } catch (Exception e){
@@ -138,14 +142,29 @@ public class Morphokinetics {
       psd.addSurfaceSample(readSurface);
     }
 
+    psd.printAvgToFile();
     return psd.getPsd();
   }
   
-  private static float[][] createExperimentalData(AbstractGeneticAlgorithm ga) {
+  private static float[][] createExperimentalData(Parser parser, AbstractGeneticAlgorithm ga) {
     
     AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
     evaluator.setRepeats(evaluator.getRepeats() * 5);
-    Individual individual = new Individual(new AgAgRatesFactory().getRates(135));
+    
+    double[] rates = null;
+    switch (parser.getCalculationMode()) {
+      case "Ag":
+        rates = new AgAgRatesFactory().getRates(parser.getTemperature());
+        break;
+      case "Si":
+        rates = new SiRatesFactory().getRates(parser.getTemperature());
+        break;
+      default:
+        System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
+        System.err.println("Current value: "+parser.getCalculationMode());
+        throw new IllegalArgumentException("This simulation mode is not implemented");
+    }
+    Individual individual = new Individual(rates);
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);
