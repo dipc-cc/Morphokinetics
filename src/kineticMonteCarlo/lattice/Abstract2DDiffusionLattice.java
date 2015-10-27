@@ -219,21 +219,21 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   }
   
   /**
-   * Adds an occupied location to the counter
+   * Adds an occupied location to the counter.
    */
   public void addOccupied() {
     occupied++;
   }
   
   /**
-   * Subtracts an occupied location from the counter
+   * Subtracts an occupied location from the counter.
    */
   public void subtractOccupied() {
     occupied--;
   }
   
   /**
-   * Resets to zero the number of occupied locations
+   * Resets to zero the number of occupied locations.
    */
   public void resetOccupied() {
     occupied = 0;
@@ -241,7 +241,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
   
   /**
    * 
-   * @return the coverage of the lattice 
+   * @return the coverage of the lattice
    */
   public float getCoverage() {
     return (float) occupied / (float) hexaArea;
