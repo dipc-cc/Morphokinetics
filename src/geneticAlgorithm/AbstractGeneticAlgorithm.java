@@ -118,15 +118,15 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
    * @return
    */
   private AbstractPsdEvaluator getAgAgMainEvaluator() {
-    AbstractPsdEvaluator evaluator = null;
+    AbstractPsdEvaluator evaluatorTmp = null;
     int sizeX = parser.getCartSizeX() / 2;
     int sizeY = parser.getCartSizeY() / 2;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluator = new AgBasicPsdEvaluator((AgAgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY);
+        evaluatorTmp = new AgBasicPsdEvaluator((AgAgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY);
         break;
       case "threaded":
-        evaluator = new AgThreadedPsdEvaluator((AgAgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
+        evaluatorTmp = new AgThreadedPsdEvaluator((AgAgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
         break;
       default:
         System.err.println("Error: Default evolutor. This evoluator is not implemented!");
@@ -134,10 +134,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         throw new IllegalArgumentException("Evaluator mode is not implemented");
     }
     
-    evaluator.setWheight(1.0f);
-    evaluator.setShowGraphics(true);
+    evaluatorTmp.setWheight(1.0f);
+    evaluatorTmp.setShowGraphics(true);
     
-    return evaluator;             
+    return evaluatorTmp;             
   }
     
   private AbstractPsdEvaluator getSiMainEvaluators() {
