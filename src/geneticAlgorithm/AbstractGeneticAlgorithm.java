@@ -141,11 +141,11 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
     
   private AbstractPsdEvaluator getSiMainEvaluators() {
-    SiThreadedPsdEvaluator evaluator = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
-    evaluator.setWheight(1.0f);
-    evaluator.setShowGraphics(true);
+    SiThreadedPsdEvaluator evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
+    evaluatorTmp.setWheight(1.0f);
+    evaluatorTmp.setShowGraphics(true);
 
-    return evaluator;
+    return evaluatorTmp;
   }
   
   private List<IEvaluation> addNoMoreEvaluators() {
