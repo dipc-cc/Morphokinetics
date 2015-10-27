@@ -89,10 +89,12 @@ public abstract class AbstractSimulation {
     System.out.println("    I\tSimul t\tCover.\tPNG output\tSurface output\t\t CPU ");
     System.out.println("    \t(units)\t(%)\t(results/)\t"+folderName+" (ms)");
     System.out.println("    _________________________________________________________________________");
+    initializeRates(rates, kmc, parser);
     // Main loop
     for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
       long iterStartTime = System.currentTimeMillis();
-      initializeRates(rates, kmc, parser);
+      kmc.reset();
+      kmc.depositSeed();
       kmc.simulate();
       System.out.format("    %03d", simulations);
       System.out.format("\t%.3f",(double)kmc.getTime());
