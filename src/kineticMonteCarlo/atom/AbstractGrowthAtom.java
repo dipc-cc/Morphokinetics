@@ -11,7 +11,7 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
  *
  * @author Nestor
  */
-public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
+public abstract class AbstractGrowthAtom extends AbstractAtom {
   /** TODO document the types and change them to constants
    * 
    */
@@ -28,7 +28,7 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   protected ModifiedBuffer modified;
   protected HopsPerStep distancePerStep;
 
-  public Abstract2DDiffusionAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public AbstractGrowthAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
 
     this.iHexa = iHexa;
     this.jHexa = jHexa;
@@ -50,7 +50,7 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
   @Override
   public boolean equals(Object obj) {
 
-    Abstract2DDiffusionAtom other = (Abstract2DDiffusionAtom) obj;
+    AbstractGrowthAtom other = (AbstractGrowthAtom) obj;
     if (iHexa != other.iHexa) {
       return false;
     }
@@ -69,7 +69,7 @@ public abstract class Abstract2DDiffusionAtom extends AbstractAtom {
 
   public abstract boolean areTwoTerracesTogether();
 
-  public abstract Abstract2DDiffusionAtom chooseRandomHop();
+  public abstract AbstractGrowthAtom chooseRandomHop();
 
   public abstract int getOrientation();
 

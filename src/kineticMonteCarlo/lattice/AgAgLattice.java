@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
@@ -85,7 +85,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Abstract2DDiffusionAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
     return ((AgAtom) atoms[iHexa][jHexa]).getNeighbour(neighbour);
   }
 
@@ -102,7 +102,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Abstract2DDiffusionAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
+  public AbstractGrowthAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
     switch (originType) {
       case TERRACE:
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
@@ -233,7 +233,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     return -1;
   }
 
-  public Abstract2DDiffusionAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
+  public AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
     int tmp = (int) (raw * (distance * 6));
 
@@ -360,7 +360,7 @@ public class AgAgLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  public Abstract2DDiffusionAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
+  public AbstractGrowthAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
     int i;
     int j;

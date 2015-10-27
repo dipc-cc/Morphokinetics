@@ -11,7 +11,7 @@ import kineticMonteCarlo.lattice.Abstract2DDiffusionLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import utils.StaticRandom;
 
-public class GrapheneAtom extends Abstract2DDiffusionAtom {
+public class GrapheneAtom extends AbstractGrowthAtom {
 
   private GrapheneLattice lattice;
   private static final ArrayStack PStack = new ArrayStack(12);
@@ -105,7 +105,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
    * @return 
    */
   @Override
-  public Abstract2DDiffusionAtom chooseRandomHop() {
+  public AbstractGrowthAtom chooseRandomHop() {
     double raw = StaticRandom.raw();
 
     if (bondsProbability == null) {
@@ -316,7 +316,7 @@ public class GrapheneAtom extends Abstract2DDiffusionAtom {
    */
   private double probJumpToNeighbour(int originType, int pos) {
 
-    Abstract2DDiffusionAtom atom = lattice.getNeighbour(iHexa, jHexa, pos);
+    AbstractGrowthAtom atom = lattice.getNeighbour(iHexa, jHexa, pos);
 
     if (atom.isOccupied()) {
 

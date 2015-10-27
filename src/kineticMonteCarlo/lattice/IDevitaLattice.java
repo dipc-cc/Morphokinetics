@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /**
  *
@@ -15,6 +15,6 @@ public interface IDevitaLattice {
 
   public int getAvailableDistance(int atomType, short Xpos, short Ypos, int thresholdDistance);
 
-  public Abstract2DDiffusionAtom getFarSite(int originType, short Xpos, short Ypos, int distance);
+  public AbstractGrowthAtom getFarSite(int originType, short Xpos, short Ypos, int distance);
 
 }

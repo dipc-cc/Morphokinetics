@@ -12,7 +12,7 @@ import utils.StaticRandom;
  *
  * @author DONOSTIA INTERN
  */
-public class AgAtom extends Abstract2DDiffusionAtom {
+public class AgAtom extends AbstractGrowthAtom {
 
   private static AgTypesTable typesTable;
   private final AgAtom[] neighbours = new AgAtom[6];
@@ -146,7 +146,7 @@ public class AgAtom extends Abstract2DDiffusionAtom {
   }
 
   @Override
-  public Abstract2DDiffusionAtom chooseRandomHop() {
+  public AbstractGrowthAtom chooseRandomHop() {
 
     double linearSearch = StaticRandom.raw() * totalProbability;
 

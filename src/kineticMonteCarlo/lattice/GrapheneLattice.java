@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
@@ -154,7 +154,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
   }
 
   @Override
-  public Abstract2DDiffusionAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
+  public AbstractGrowthAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
 
     int[] point = new int[2];
     switch (originType) {
@@ -171,7 +171,7 @@ public class GrapheneLattice extends Abstract2DDiffusionLattice {
     }
   }
 
-  private Abstract2DDiffusionAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, double raw) {
+  private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, double raw) {
 
     int temp = (int) (raw * (thresholdDistance * 2 * 6));
 

@@ -5,7 +5,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import java.awt.geom.Point2D;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import utils.QuickSort;
  */
 public abstract class Abstract2DDiffusionLattice extends AbstractLattice implements IDevitaLattice {
 
-  protected Abstract2DDiffusionAtom[][] atoms;
+  protected AbstractGrowthAtom[][] atoms;
 
   private final ModifiedBuffer modified;
   private static Point2D middle;
@@ -42,7 +42,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
     }
   }
 
-  public abstract Abstract2DDiffusionAtom getNeighbour(int iHexa, int jHexa, int neighbour);
+  public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
 
   public void configure(double[][] probabilities) {
     for (int iHexa = 0; iHexa < atoms[0].length; iHexa++) {
@@ -59,7 +59,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
    * @param jHexa
    * @return
    */
-  public Abstract2DDiffusionAtom getAtom(int iHexa, int jHexa) {
+  public AbstractGrowthAtom getAtom(int iHexa, int jHexa) {
     return atoms[iHexa][jHexa];
   }
 
@@ -135,9 +135,9 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
    * @param radius
    * @return An array with the atoms that are in the circumference (only the perimeter)
    */
-  public Abstract2DDiffusionAtom[] setInsideCircle(int radius) {
+  public AbstractGrowthAtom[] setInsideCircle(int radius) {
 
-    ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
+    ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
     middle = getCentralCartesianLocation();
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
@@ -154,7 +154,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
       }
     }
     
-    Abstract2DDiffusionAtom[] perimeter = perimeterList.toArray(new Abstract2DDiffusionAtom[perimeterList.size()]);
+    AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
 
     QuickSort.orderByAngle(perimeter, perimeter.length - 1);
 
@@ -168,8 +168,8 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
    * @param radius is the half of the square side
    * @return An array with the atoms that are in the perimeter
    */
-  public Abstract2DDiffusionAtom[] setInsideSquare(int radius) {
-    ArrayList<Abstract2DDiffusionAtom> perimeterList = new ArrayList();
+  public AbstractGrowthAtom[] setInsideSquare(int radius) {
+    ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
     Point2D centreCart = getCentralCartesianLocation();
     double left = centreCart.getX() - radius;
@@ -207,7 +207,7 @@ public abstract class Abstract2DDiffusionLattice extends AbstractLattice impleme
       }
     }
 
-    Abstract2DDiffusionAtom[] perimeter = perimeterList.toArray(new Abstract2DDiffusionAtom[perimeterList.size()]);
+    AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
 
     QuickSort.orderByAngle(perimeter, perimeter.length - 1);
 

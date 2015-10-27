@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.diffusion;
 
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
@@ -86,8 +86,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
   
   @Override
   protected boolean performSimulationStep() {
-    Abstract2DDiffusionAtom originAtom = ((Abstract2DDiffusionAtom) list.nextEvent());
-    Abstract2DDiffusionAtom destinationAtom;
+    AbstractGrowthAtom originAtom = ((AbstractGrowthAtom) list.nextEvent());
+    AbstractGrowthAtom destinationAtom;
 
     if (originAtom == null) {
       destinationAtom = depositNewAtom();
@@ -165,7 +165,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     list.cleanup();
   }
 
-  private Abstract2DDiffusionAtom chooseRandomHop(Abstract2DDiffusionAtom source) {
+  private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom source) {
     if (accelerator != null) {
       return accelerator.chooseRandomHop(source);
     }
@@ -176,7 +176,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return this.depositAtom(lattice.getAtom(iHexa, jHexa));
   }
 
-  protected boolean extractAtom(Abstract2DDiffusionAtom origin) {
+  protected boolean extractAtom(AbstractGrowthAtom origin) {
     if (!origin.isOccupied()) {
       return false;
     }
@@ -187,7 +187,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return true;
   }
 
-  private boolean depositAtom(Abstract2DDiffusionAtom atom) {
+  private boolean depositAtom(AbstractGrowthAtom atom) {
     if (atom.isOccupied()) {
       return false;
     }
@@ -200,7 +200,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
 
   }
 
-  private boolean diffuseAtom(Abstract2DDiffusionAtom origin, Abstract2DDiffusionAtom destination) {
+  private boolean diffuseAtom(AbstractGrowthAtom origin, AbstractGrowthAtom destination) {
 
     //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
     if (!origin.isEligible()) {
@@ -219,8 +219,8 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return true;
   }
 
-  private Abstract2DDiffusionAtom depositNewAtom() {
-    Abstract2DDiffusionAtom destinationAtom;
+  private AbstractGrowthAtom depositNewAtom() {
+    AbstractGrowthAtom destinationAtom;
     if (!justCentralFlake) {
       do {
         int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
@@ -235,7 +235,7 @@ public abstract class Abstract2DDiffusionKmc extends AbstractKmc {
     return destinationAtom;
   }
 
-  private boolean perimeterMustBeEnlarged(Abstract2DDiffusionAtom destinationAtom) {
+  private boolean perimeterMustBeEnlarged(AbstractGrowthAtom destinationAtom) {
     
     if (this.perimeterType == RoundPerimeter.SQUARE) {
       Point2D centreCart = lattice.getCentralCartesianLocation();

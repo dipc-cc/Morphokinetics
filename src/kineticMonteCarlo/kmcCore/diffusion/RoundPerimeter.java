@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.kmcCore.diffusion;
 
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.lattice.perimeterStatistics.AbstractPerimeterStatistics;
 import kineticMonteCarlo.lattice.perimeterStatistics.PerimeterStatisticsFactory;
 import utils.StaticRandom;
@@ -20,7 +20,7 @@ public class RoundPerimeter {
   public final static short SQUARE = 1;
     
   private int currentRadius;
-  private Abstract2DDiffusionAtom[] currentPerimeter;
+  private AbstractGrowthAtom[] currentPerimeter;
   private AbstractPerimeterStatistics perimeterStatistics;
   private short type;
 
@@ -47,7 +47,7 @@ public class RoundPerimeter {
     this.currentRadius = perimeterStatistics.getMinRadiusInSize();
   }
   
-  public Abstract2DDiffusionAtom[] getCurrentPerimeter(){
+  public AbstractGrowthAtom[] getCurrentPerimeter(){
     return this.currentPerimeter;
   }
   public int goToNextRadius() {
@@ -55,7 +55,7 @@ public class RoundPerimeter {
     return this.currentRadius;
   }
 
-  public void setAtomPerimeter(Abstract2DDiffusionAtom[] perimeter) {
+  public void setAtomPerimeter(AbstractGrowthAtom[] perimeter) {
     this.currentPerimeter = perimeter;
 
   }
@@ -64,7 +64,7 @@ public class RoundPerimeter {
     this.currentRadius = 125;
   }
   
-  public Abstract2DDiffusionAtom getPerimeterReentrance(Abstract2DDiffusionAtom origin) {
+  public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom origin) {
 
     int angle = searchPerimeterOffsetReentrance();
     int neededSteps = perimeterStatistics.getHopsCount(currentRadius, angle);
@@ -82,7 +82,7 @@ public class RoundPerimeter {
     int initialLocation = (int) (destinationAngleDegree * currentPerimeter.length / 360.0);
     float destinationAngleRad = (float) (destinationAngleDegree * Math.PI / 180.0f);
 
-    Abstract2DDiffusionAtom chosen = null;
+    AbstractGrowthAtom chosen = null;
     int position = 0;
     float error = currentPerimeter[initialLocation].getAngle() - destinationAngleRad;
 
@@ -149,7 +149,7 @@ public class RoundPerimeter {
     return angle;
   }
 
-  public Abstract2DDiffusionAtom getRandomPerimeterAtom() {
+  public AbstractGrowthAtom getRandomPerimeterAtom() {
     return this.currentPerimeter[(int) (utils.StaticRandom.raw() * currentPerimeter.length)];
   }
 

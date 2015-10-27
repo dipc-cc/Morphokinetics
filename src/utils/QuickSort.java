@@ -1,21 +1,21 @@
 package utils;
 
-import kineticMonteCarlo.atom.Abstract2DDiffusionAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /** 
  * QuickSort algorithm
  */
 public class QuickSort {
 
-  public static void orderByAngle(Abstract2DDiffusionAtom[] a, int sizeEvent) {
+  public static void orderByAngle(AbstractGrowthAtom[] a, int sizeEvent) {
     //quicksort(a, 0, a.length - 1);
     orderByAngle(a, 0, sizeEvent);
   }
 
-  private static void orderByAngle(Abstract2DDiffusionAtom[] atom, int left, int right) {
+  private static void orderByAngle(AbstractGrowthAtom[] atom, int left, int right) {
     int i = left;
     int j = right;
-    Abstract2DDiffusionAtom aux;
+    AbstractGrowthAtom aux;
     double pivote = atom[(left + right) / 2].getAngle();
     do {
       while (atom[i].getAngle() < pivote) {
