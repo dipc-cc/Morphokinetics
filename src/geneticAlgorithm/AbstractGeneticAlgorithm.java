@@ -28,7 +28,6 @@ import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
 import geneticAlgorithm.geneticOperators.restrictions.AgRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.SiRestriction;
 import geneticAlgorithm.geneticOperators.selection.ISelection;
-import geneticAlgorithm.geneticOperators.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +91,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialization = new AgInitialisation();
         restriction = new AgRestriction(diffusionRate);
-        mainEvaluator = getAgAgMainEvaluator();
+        mainEvaluator = getAgMainEvaluator();
         break;
       case "Si":
         this.simulation = new SiSimulation(parser);
@@ -118,7 +117,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
    *
    * @return
    */
-  private AbstractPsdEvaluator getAgAgMainEvaluator() {
+  private AbstractPsdEvaluator getAgMainEvaluator() {
     AbstractPsdEvaluator evaluatorTmp = null;
     int sizeX = parser.getCartSizeX() / 2;
     int sizeY = parser.getCartSizeY() / 2;
