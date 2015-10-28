@@ -20,7 +20,6 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluato
 import graphicInterfaces.gaConvergence.GaProgressFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import ratesLibrary.AgRatesFactory;
-import ratesLibrary.IRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
