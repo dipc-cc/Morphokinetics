@@ -308,7 +308,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
         error += Math.abs(difference[a][b]);
       }
     }
-    error = (float) Math.sqrt(error);
     return error * wheight;
   }
     
