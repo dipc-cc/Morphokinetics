@@ -24,6 +24,6 @@ public interface IGeneticAlgorithm extends IProgressable {
 
   public Individual getIndividual(int pos);
 
-  public void iterate(int steps);
+  public void iterate(int maxIterations);
 
 }
