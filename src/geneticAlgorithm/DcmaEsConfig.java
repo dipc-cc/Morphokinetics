@@ -7,8 +7,6 @@ import utils.akting.operations.Operation;
 public class DcmaEsConfig {
 
   private int n;
-	//public RichArray xMin = new RichArray(n, -500);
-  //public RichArray xMax = new RichArray(n, 500);
 
   private double stopFitness;
   private double stopEval;
@@ -46,8 +44,6 @@ public class DcmaEsConfig {
 
   private int errorsNumber = 4;
 
-  //public ArrayList<List<Double>> dat = new ArrayList<List<Double>>();
-  //public ArrayList<List<Double>> datx = new ArrayList<List<Double>>();
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
 
