@@ -5,42 +5,52 @@ import utils.akting.RichMatrix;
 import utils.akting.operations.Operation;
 
 public class DcmaEsConfig {
-
+  /** Number of objective variables/problem dimension. */
   private int n;
-
+  /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
   private double stopFitness;
+  /** Number of function evaluations to stop. */
   private double stopEval;
+  /** Maximum number of generations. */
   private double gMax;
-
+  /** Population size, offspring number in DE and CMA-ES. */
   private double offSize;
-
+  /** Number of parents for recombination in CMA-ES. */
   private double mu;
+  /** Array for weighted recombination in CMA-ES. */
   private RichArray weights;
-
+  /** B defines the coordinate system. */
   private RichMatrix B;
-  /**
-   * D contains the standard deviations
-   */
+  /** D contains the standard deviations. */
   private RichArray D;
+  /** Covariance matrix C. */
   private RichMatrix C;
+  /** C^-1/2 */
   private RichMatrix invsqrtC;
+  /** Track update of B and D. */
   private double eigeneval;
+  /** Expectation of ||N(0,I)|| == norm(randn(N,1)) */
   private double chiN;
-
+  /** Counter for the number of evaluations. A good optimisation method will minimise this number. */
   private int counteval;
-
+  /** Offspring population. */
   private RichMatrix offX;
+  /** Trial/test offspring population. */
   private RichMatrix offV;
+  /** Objective function values. */
   private RichArray offFitness;
-
+  /** Recombination, new mean value in CMA-ES. */
   private RichArray xmean;
+  /** Step size in CMA-ES. */
   private double sigma;
 
   private boolean performCmaEs = true;
 
   private double p;
-  private double crm; /**  Crossover mean. */
-  private double crs; /** Crossover standard deviation. */
+  /**  Crossover mean. */
+  private double crm; 
+  /** Crossover standard deviation. */
+  private double crs; 
 
   private int errorsNumber = 4;
 
