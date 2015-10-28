@@ -17,6 +17,14 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   private int psdSizeX;
   private int psdSizeY;
+  
+  private float oneNormOfVector;
+  private float twoNormOfVector;
+  private float infiniteNormOfVector;
+  private float oneNormOfMatrix;
+  private float infiniteNormOfMatrix;
+  private float frobeniusNormOfMatrix;
+  
   protected PsdSignature2D psd;
   protected float[][] sampledSurface;
   protected float[][] difference;
@@ -37,6 +45,107 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.experimentalPsd = experimentalPsd;
     return this;
   }
+  
+  /**
+   * ||x||_1 = SUM_i(|x_i|)
+   * @param vector
+   * @return 
+   */
+  private float calculateOneNormVector(float[][] vector) {
+    float result = 0.0f;
+    for (int i = 0; i < vector.length; i++) {
+      for (int j = 0; j < vector[0].length; j++) {
+        result += Math.abs(vector[i][j]);
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * ||x||_2 = (SUM_i(|x_i|2))^1/2
+   * @param vector
+   * @return 
+   */
+  private float calculateTwoNormVector(float[][] vector) {
+    float result = 0.0f;
+    for (int i = 0; i < vector.length; i++) {
+      for (int j = 0; j < vector[0].length; j++) {
+        result += Math.pow(vector[i][j],2);
+      }
+    }
+    result = (float) Math.sqrt(result);
+    return result;
+  }
+
+  /**
+   * ||x||_inf = max_i |x_i|
+   * @param vector
+   * @return 
+   */
+  private float calculateInfiniteNormVector(float[][] vector) {
+    float result = 0.0f;
+    for (int i = 0; i < vector.length; i++) {
+      for (int j = 0; j < vector[0].length; j++) {
+        if (Math.abs(vector[i][j]) > result) {
+          result = Math.abs(vector[i][j]);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * It is simply the maximum absolute column sum of the matrix.
+   * ||A||_1 = max_j SUM_i(|a_ij|)
+   * @param matrix
+   * @return 
+   */
+  private float calculateOneNormMatrix(float[][] matrix) {
+    float result = 0.0f;
+    for (int j = 0; j < matrix[0].length; j++) {
+      float tmp = 0.0f;
+      for (int i = 0; i < matrix.length; i++) {
+        tmp += Math.abs(matrix[i][j]);
+      }
+      if (tmp > result) result = tmp;
+    }
+    return result;
+  }
+   
+  /**
+   * It is simply the maximum absolute row sum of the matrix.
+   * ||A||_1 = max_j SUM_i(|a_ij|)
+   * @param matrix
+   * @return 
+   */
+  private float calculateInfiniteNormMatrix(float[][] matrix) {
+    float result = 0.0f;
+    for (int i = 0; i < matrix.length; i++) {
+      float tmp = 0.0f;
+      for (int j = 0; j < matrix[0].length; j++) {
+        tmp += Math.abs(matrix[i][j]);
+      }
+      if (tmp > result) result = tmp;
+    }
+    return result;
+  }
+  
+  /**
+   * ||A||_F = (SUM(|A_ij|^2))^1/2
+   * @param matrix
+   * @return 
+   */
+  private float calculateFrobeniusNorm(float[][] matrix) {
+    float result = 0.0f;
+    for (int i = 0; i < matrix.length; i++) {
+      for (int j = 0; j < matrix[0].length; j++) {
+        result += Math.pow(matrix[i][j],2);
+      }
+    }
+    result = (float) Math.sqrt(result);
+    return result;
+  }
+    
 
   public abstract float[][] calculatePsdFromIndividual(Individual i);
 
