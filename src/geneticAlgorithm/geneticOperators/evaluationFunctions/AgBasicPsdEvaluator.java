@@ -32,18 +32,13 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     difference = new float[getPsdSizeY()][getPsdSizeX()];
 
-    GrowthKmcFrame frame = createGraphicsFrame(kmc);
+    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     frame.setVisible(true);
     psdFrame =  new Frame2D("Calculated PSD analysis")
             .setLogScale(true)
             .setShift(true)
             .setMin(2.02634)
             .setMax(19.34551);
-  }
-
-  private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
-    return frame;
   }
 
   @Override
