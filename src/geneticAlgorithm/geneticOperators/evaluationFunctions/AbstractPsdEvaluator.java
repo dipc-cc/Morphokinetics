@@ -41,8 +41,22 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.measureInterval = measureInterval;
   }
 
+  /**
+   * Set the reference PSD matrix for future comparisons and starts its norms.
+   * @param experimentalPsd
+   * @return 
+   */
   public AbstractPsdEvaluator setPsd(float[][] experimentalPsd) {
     this.experimentalPsd = experimentalPsd;
+    System.out.println("Setting experimental PSD");
+    oneNormOfVector = calculateOneNormVector(experimentalPsd);
+    twoNormOfVector = calculateTwoNormVector(experimentalPsd);
+    infiniteNormOfVector = calculateInfiniteNormVector(experimentalPsd);
+    
+    oneNormOfMatrix = calculateOneNormMatrix(experimentalPsd);
+    infiniteNormOfMatrix = calculateInfiniteNormMatrix(experimentalPsd);
+    frobeniusNormOfMatrix = calculateFrobeniusNorm(experimentalPsd);
+    
     return this;
   }
   
