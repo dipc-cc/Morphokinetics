@@ -6,6 +6,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
+import sun.misc.MetaIndex;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -181,12 +182,89 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
     for (int a = 0; a < difference.length; a++) {
       for (int b = 0; b < difference[0].length; b++) {
-        difference[a][b] = (float) Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2);
+        difference[a][b] = (float) Math.sqrt(Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2));
       }
     }
-
   }
 
+  private float calculateOneNormErrorVector(PsdSignature2D psd) {
+   float error;
+   float sum = 0.0f;
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        sum += Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
+      }
+    }
+   error = sum/oneNormOfVector;
+   return error;
+  }  
+  
+  private float calculateTwoNormErrorVector(PsdSignature2D psd) {
+   float error;
+   float sum = 0.0f;
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        sum += Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
+      }
+    }
+   error = (float)Math.sqrt(sum)/twoNormOfVector;
+   return error;
+  }
+    
+  private float calculateInfiniteNormErrorVector(PsdSignature2D psd) {
+   float error;
+   float max = 0.0f;
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        if (Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]) > max) {
+          max = Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
+        }
+      }
+    }
+   error = max/infiniteNormOfVector;
+   return error;
+  }
+
+  private float calculateOneNormErrorMatrix(PsdSignature2D psd) {
+    float error;
+    float max = 0.0f;
+    for (int j = 0; j < psdSizeY; j++) {
+      float tmp = 0.0f;
+      for (int i = 0; i < psdSizeX; i++) {
+        tmp += Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
+      }
+      if (tmp > max) max = tmp;
+    }
+    error = max / oneNormOfMatrix;
+    return error;
+  }
+  
+  private float calculateInfiniteNormErrorMatrix(PsdSignature2D psd) {
+    float error;
+    float max = 0.0f;
+    for (int i = 0; i < psdSizeX; i++) {
+      float tmp = 0.0f;
+      for (int j = 0; j < psdSizeY; j++) {
+        tmp += Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
+      }
+      if (tmp > max) max = tmp;
+    }
+    error = max / infiniteNormOfMatrix;
+    return error;
+  }
+  
+  private float calculatefrobeniusNormErrorMatrix(PsdSignature2D psd) {
+    float error;
+    float sum = 0.0f;
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        sum += Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
+      }
+    }
+    error = (float) Math.sqrt(sum)/frobeniusNormOfMatrix;
+    return error;
+  }
+  
   @Override
   public float getProgressPercent() {
     if (currentPopulation != null) {
@@ -220,6 +298,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private double evaluateIndividual(Individual ind) {
     calculatePsdFromIndividual(ind);
     calculateRelativeDifference(difference, psd);
+    System.out.println(" errors; "+calculateOneNormErrorVector(psd)+" "+calculateTwoNormErrorVector(psd)+" "+calculateInfiniteNormErrorVector(psd)+" "+
+            calculateOneNormErrorMatrix(psd)+" "+calculateInfiniteNormErrorMatrix(psd)+" "+calculatefrobeniusNormErrorMatrix(psd));
 
     difference = MathUtils.avgFilter(difference, 5);
     double error = 0;
