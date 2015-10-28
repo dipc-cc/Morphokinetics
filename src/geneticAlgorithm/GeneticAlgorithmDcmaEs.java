@@ -94,10 +94,10 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   }
 
   @Override
-  public void iterate(int steps) {
-    totalIterations = steps;
+  public void iterate(int maxIterations) {
+    totalIterations = maxIterations;
 
-    while (dcmaEsConfig.getCounteval() < dcmaEsConfig.getStopEval() && currentIteration < steps) {
+    while (dcmaEsConfig.getCounteval() < dcmaEsConfig.getStopEval() && currentIteration < maxIterations) {
       currentIteration++;
 
       iterateOneStep();
