@@ -159,7 +159,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }*/
   
   /**
-   * This is two-norm error (http://www.netlib.org/lapack/lug/node75.html) if it was a vector.
+   * This is the first step of Frobenius norm. It is missing the addition and the square root.
+   * (http://www.netlib.org/lapack/lug/node75.html).
    * @param difference
    * @param psd 
    */
