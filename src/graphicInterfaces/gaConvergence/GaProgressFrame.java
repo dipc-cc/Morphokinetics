@@ -24,7 +24,7 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
   private ProgressUpdater updater;
   private int totalIterations;
 
-  public GaProgressFrame(IGeneticAlgorithm geenticAlgorithm) {
+  public GaProgressFrame(IGeneticAlgorithm geneticAlgorithm) {
 
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -35,7 +35,7 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
 
     this.panel = new ErrorPanel(Color.red);
     this.jScrollPane1.setViewportView(panel);
-    this.geneticAlgorithm = geenticAlgorithm;
+    this.geneticAlgorithm = geneticAlgorithm;
     this.geneticAlgorithm.setGraphics(this);
     this.totalIterations = 0;
     updater = new ProgressUpdater();
