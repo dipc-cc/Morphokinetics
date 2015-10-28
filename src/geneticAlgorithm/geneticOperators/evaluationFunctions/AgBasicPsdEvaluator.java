@@ -48,7 +48,6 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   @Override
   public float[][] calculatePsdFromIndividual(Individual i) {
-
     this._calculatePsdFromIndividual(i);
     return psd.getPsd();
   }
