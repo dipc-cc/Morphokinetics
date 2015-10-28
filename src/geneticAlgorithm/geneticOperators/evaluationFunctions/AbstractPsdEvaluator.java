@@ -298,8 +298,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private double evaluateIndividual(Individual ind) {
     calculatePsdFromIndividual(ind);
     calculateRelativeDifference(difference, psd);
-    System.out.println(" errors; "+calculateOneNormErrorVector(psd)+" "+calculateTwoNormErrorVector(psd)+" "+calculateInfiniteNormErrorVector(psd)+" "+
-            calculateOneNormErrorMatrix(psd)+" "+calculateInfiniteNormErrorMatrix(psd)+" "+calculatefrobeniusNormErrorMatrix(psd));
+    System.out.println(" errors; "+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
+            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculatefrobeniusNormErrorMatrix(psd));
 
     difference = MathUtils.avgFilter(difference, 5);
     double error = 0;
