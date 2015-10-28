@@ -64,9 +64,9 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   }
 
   @Override
-  public void iterate(int steps) {
-    totalIterations = steps;
-    for (int i = 0; i < steps; i++) {
+  public void iterate(int maxIterations) {
+    totalIterations = maxIterations;
+    for (int i = 0; i < maxIterations; i++) {
       currentIteration = i;
       iterateOneStep();
       addToGraphics();
