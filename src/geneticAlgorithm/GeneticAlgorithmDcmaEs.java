@@ -76,18 +76,19 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
   private void iterateOneStep() {
     IndividualGroup[] trios = selection.Select(population, populationSize);
-    Population offspring = recombination.recombinate(trios);
-
-    mutation.mutate(offspring, null);
-    restriction.apply(offspring);
-    double[] fitness = mainEvaluator.evaluate(offspring);
+    Population offspringPopulation = recombination.recombinate(trios);
+    offspringPopulation.setIterationNumber(currentIteration);
+    
+    mutation.mutate(offspringPopulation, null);
+    restriction.apply(offspringPopulation);
+    double[] fitness = mainEvaluator.evaluate(offspringPopulation);
     for (int i = 0; i < fitness.length; i++) {
-      offspring.getIndividual(i).setError(0, fitness[i]);
+      offspringPopulation.getIndividual(i).setError(0, fitness[i]);
       dcmaEsConfig.addCountEval();
     }
 
     restriction.apply(population);
-    population = reinsertion.Reinsert(population, offspring, 0);
+    population = reinsertion.Reinsert(population, offspringPopulation, 0);
 
     offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
     dcmaEsConfig.setOffX(new RichMatrix(population));
