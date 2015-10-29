@@ -129,6 +129,21 @@ public class Restart {
     }
     writeLowText2D(data, fileName, true);
   }
+  
+  public void writeTextString(String data, String fileName) {
+    fileName = folder+fileName;
+    try {
+      // create file descriptor
+      File file = new File(fileName);
+      PrintWriter printWriter = new PrintWriter(file);
+      printWriter.write(data + "\n");
+      printWriter.flush();
+      printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  }
 
   /**
    * Writes float data to a file called "surface[number].mko". First of all calls to the header
