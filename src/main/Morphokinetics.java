@@ -101,7 +101,7 @@ public class Morphokinetics {
             .performDrawToImage(1);
     ga.setExperimentalPsd(experimentalPsd);
     //ga.setExpectedSimulationTime(simulationTime);
-    ga.initialize();
+    ga.initialise();
     
     ga.iterate(parser.getTotalIterations());
     printResult(ga);

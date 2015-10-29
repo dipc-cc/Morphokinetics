@@ -12,7 +12,7 @@ import graphicInterfaces.gaConvergence.IgaProgressFrame;
  */
 public interface IGeneticAlgorithm extends IProgressable {
 
-  public IGeneticAlgorithm initialize();
+  public IGeneticAlgorithm initialise();
 
   public int getCurrentIteration();
 

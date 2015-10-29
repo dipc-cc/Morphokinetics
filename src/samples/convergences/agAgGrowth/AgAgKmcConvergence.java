@@ -44,7 +44,7 @@ public class AgAgKmcConvergence {
     ga.setExperimentalPsd(experimentalPsd);
     ga.setExpectedSimulationTime(simulationTime);
 
-    ga.initialize();
+    ga.initialise();
     ga.iterate(100);
     printResult(ga);
 

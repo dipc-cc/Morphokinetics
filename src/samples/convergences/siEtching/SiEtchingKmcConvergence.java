@@ -49,7 +49,7 @@ public class SiEtchingKmcConvergence {
       ga.setExperimentalPsd(experimentalPSD);
       ga.setExpectedSimulationTime(simulationTime);
 
-      ga.initialize();
+      ga.initialise();
       ga.iterate(100);
       printResult(ga);
     }
