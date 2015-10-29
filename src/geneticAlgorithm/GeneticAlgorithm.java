@@ -45,12 +45,13 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
 
   private void iterateOneStep() {
     IndividualGroup[] couples = selection.Select(population, offspringSize);
-    Population offspring = recombination.recombinate(couples);
+    Population offspringPopulation = recombination.recombinate(couples);
+    offspringPopulation.setIterationNumber(currentIteration);
 
     int geneSize = population.getIndividual(0).getGeneSize();
-    mutation.mutate(offspring, restriction.getNonFixedGenes(geneSize));
-    restriction.apply(offspring);
-    evaluator.evaluateAndOrder(offspring, mainEvaluator, otherEvaluators);
+    mutation.mutate(offspringPopulation, restriction.getNonFixedGenes(geneSize));
+    restriction.apply(offspringPopulation);
+    evaluator.evaluateAndOrder(offspringPopulation, mainEvaluator, otherEvaluators);
 
     //sometimes it is good to reevaluate the whole population
     if (currentIteration > 0 && currentIteration % 25 == 0) {
@@ -59,7 +60,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
       this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
 
-    reinsertion.Reinsert(population, offspring, populationReplacements);
+    reinsertion.Reinsert(population, offspringPopulation, populationReplacements);
 
   }
 
