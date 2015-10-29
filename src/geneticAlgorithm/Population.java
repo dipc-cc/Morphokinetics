@@ -14,6 +14,7 @@ package geneticAlgorithm;
 public class Population {
 
   private Individual[] individuals;
+  private int iterationNumber;
 
   public Individual[] getIndividuals() {
     return individuals;
@@ -87,5 +88,13 @@ public class Population {
     if (i < right) {
       quicksort(ind, i, right);
     }
+  }
+  
+  public void setIterationNumber(int iterationNumber) {
+    this.iterationNumber = iterationNumber;
+  }
+  
+  public int getIterationNumber() {
+    return iterationNumber;
   }
 }
