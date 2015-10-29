@@ -4,6 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
+import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
@@ -45,6 +46,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   public float[][] calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     double time = 0.0;
+    String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+currentSimulation/repeats;
+    int sizes[] = new int[2];
+    Restart restart = new Restart(folderName);
+    psd.setRestart(restart);
     kmc.initialiseRates(ind.getGenes());
     for (int i = 0; i < repeats; i++) {
       kmc.reset();
@@ -53,6 +58,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         kmc.simulate(measureInterval);
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
+        sizes[0] = sampledSurface.length;
+        sizes[1] = sampledSurface[0].length;
+        restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
         if (kmc.getIterations() < measureInterval) {
           time += kmc.getTime();
           break;
@@ -61,6 +69,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       currentSimulation++;
     }
     ind.setSimulationTime(time / repeats);
+    psd.printAvgToFile();
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
     psdFrame.setMesh(psd.getPsd());
