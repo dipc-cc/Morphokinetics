@@ -4,6 +4,7 @@
  */
 package geneticAlgorithm.geneticOperators.evaluationFunctions;
 
+import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import sun.misc.MetaIndex;
@@ -298,8 +299,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private double evaluateIndividual(Individual ind) {
     calculatePsdFromIndividual(ind);
     calculateRelativeDifference(difference, psd);
-    System.out.println(" errors; "+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
-            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculatefrobeniusNormErrorMatrix(psd));
 
     difference = MathUtils.avgFilter(difference, 5);
     double error = 0;
@@ -308,6 +307,15 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
         error += Math.abs(difference[a][b]);
       }
     }
+    System.out.println(" errors: "+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
+            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculatefrobeniusNormErrorMatrix(psd)+"\t"+error);
+    String errors = " Errors: OneNormVector\tTwoNormVector\tInfiniteNormVector\tOneNormMatrix\tInfiniteNormMatrix\tFrobeniusNormMatrix\toldError\n";
+    errors = errors+"\t"+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
+            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculatefrobeniusNormErrorMatrix(psd)+"\t"+error;
+    String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+((currentSimulation-repeats)/repeats);
+    Restart restart = new Restart(folderName);
+    String fileName = "errors.txt";
+    restart.writeTextString(errors, fileName);
     return error * wheight;
   }
     
