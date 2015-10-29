@@ -17,7 +17,7 @@ import geneticAlgorithm.geneticOperators.evaluationFunctions.SiBasicPsdEvaluator
 import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.geneticOperators.mutation.BgaBasedMutator;
 import geneticAlgorithm.geneticOperators.mutation.IMutation;
-import geneticAlgorithm.geneticOperators.populationInitialisation.AgInitialisation;
+import geneticAlgorithm.geneticOperators.populationInitialisation.AgInitialisator;
 import geneticAlgorithm.geneticOperators.populationInitialisation.IInitialisator;
 import geneticAlgorithm.geneticOperators.populationInitialisation.SiInitialisation;
 import geneticAlgorithm.geneticOperators.recombination.IRecombination;
@@ -89,7 +89,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.diffusionRate = new AgRatesFactory().getRates(experitentalTemp)[0];
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
-        initialisation = new AgInitialisation();
+        initialisation = new AgInitialisator();
         restriction = new AgRestriction(diffusionRate);
         mainEvaluator = getAgMainEvaluator();
         break;
