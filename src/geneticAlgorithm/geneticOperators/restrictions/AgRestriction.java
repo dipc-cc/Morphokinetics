@@ -4,11 +4,6 @@
  */
 package geneticAlgorithm.geneticOperators.restrictions;
 
-import geneticAlgorithm.geneticOperators.restrictions.BoundedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.FixedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.ReplicatedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
-
 /**
  *
  * @author Nestor
