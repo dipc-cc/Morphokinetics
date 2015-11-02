@@ -109,6 +109,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
               || dcmaEsConfig.getD().max() > 1e7 * dcmaEsConfig.getD().min()) {
         break;
       }
+      System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
       if (this.getBestError() < 180) {
         break;
       }
