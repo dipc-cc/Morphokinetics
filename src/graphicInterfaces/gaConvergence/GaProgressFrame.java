@@ -40,6 +40,7 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
     this.totalIterations = 0;
     updater = new ProgressUpdater();
     updater.start();
+    this.setLocationRelativeTo(null);
     this.setVisible(true);
   }
 
