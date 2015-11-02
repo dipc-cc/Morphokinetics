@@ -71,7 +71,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
       currentIteration = i;
       iterateOneStep();
       addToGraphics();
-
+      System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
     }
   }
 
