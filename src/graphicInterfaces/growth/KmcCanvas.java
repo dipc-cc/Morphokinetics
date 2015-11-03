@@ -78,7 +78,7 @@ public class KmcCanvas extends Canvas {
   }
 
   /**
-   * call this before starting game loop, it initializes the bufferStrategy
+   * Call this before starting game loop, it initialises the bufferStrategy.
    */
   public void initialize() {
     createBufferStrategy(2);  //double buffering
@@ -86,7 +86,7 @@ public class KmcCanvas extends Canvas {
   }
 
   /**
-   * public drawing method, call this from your game loop for update image
+   * Public drawing method, call this from your game loop for update image.
    */
   public void performDraw() {
 
