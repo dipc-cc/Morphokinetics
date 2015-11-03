@@ -12,6 +12,15 @@ public class ElitistAllReinsertion implements IReinsertion {
     this.config = config;
   }
 
+  /**
+   * The offspring individual is accepted if its error is lower than the corresponding original
+   * error
+   *
+   * @param origin Original population
+   * @param offpring Offspring population
+   * @param substitutions Completely ignored
+   * @return
+   */
   @Override
   public Population Reinsert(Population origin, Population offpring, int substitutions) {
     for (int k = 0; k < config.getOffSize(); k++) {
