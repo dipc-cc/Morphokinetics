@@ -26,7 +26,10 @@ public class KmcCanvas extends Canvas {
 
   private int baseX;
   private int baseY;
-  private BufferStrategy strategy;  //BufferStratrgy
+  /**
+   * Buffer Strategy. Makes the connection with the execution to be able to print it
+   */
+  private BufferStrategy strategy;
   private AbstractGrowthLattice lattice;
   public int scale;
   
