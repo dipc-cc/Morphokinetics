@@ -24,12 +24,11 @@ import kineticMonteCarlo.atom.AbstractAtom;
  */
 public class KmcCanvas extends Canvas {
 
-  protected int baseX = 0;
-  protected int baseY = 0;
-  protected BufferStrategy strategy;  //BufferStratrgy
-  protected boolean initialized = false;
-  protected AbstractGrowthLattice lattice;
-  public int scale = 2;
+  private int baseX;
+  private int baseY;
+  private BufferStrategy strategy;  //BufferStratrgy
+  private AbstractGrowthLattice lattice;
+  public int scale;
   
   private final static Color gray = new Color (220,220,220);
   private final static Color whiteGray = new Color (230,230,230);
@@ -39,12 +38,15 @@ public class KmcCanvas extends Canvas {
   private final static Color lilac = new Color (190,186,218);
   private final static Color red = new Color (251,128,114);
   private final static Color blue = new Color (128,177,211);
-   private final static Color orange = new Color (253,180,98);
+  private final static Color orange = new Color (253,180,98);
   private final static Color green = new Color (179,222,105);
   private final static Color mauve = new Color (252,205,229);
   
   public KmcCanvas(AbstractGrowthLattice lattice) {
     this.lattice = lattice;
+    baseX = 0;
+    baseY = 0;
+    scale = 2;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
