@@ -12,6 +12,8 @@ package graphicInterfaces;
 import geneticAlgorithm.IGeneticAlgorithm;
 import graphicInterfaces.gaConvergence.GaProgressPanel;
 import graphicInterfaces.growth.KmcCanvas;
+import static graphicInterfaces.surfaceViewer2D.Panel2D.COLOR_BW;
+import static graphicInterfaces.surfaceViewer2D.Panel2D.COLOR_HSV;
 import graphicInterfaces.surfaceViewer2D.SurfaceViewerPanel2D;
 import java.awt.BorderLayout;
 import static java.awt.BorderLayout.CENTER;
@@ -91,7 +93,7 @@ public class MainInterface extends JFrame {
 
     createBorderLayout(mainScroll,statusbar);
     setTitle("Morphokinetics");
-    setSize(1070, 940);
+    setSize(1150, 1000);
     setLocationRelativeTo(null);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
   }
@@ -225,23 +227,92 @@ public class MainInterface extends JFrame {
     sbarMi.setMnemonic(KeyEvent.VK_S);
     sbarMi.setDisplayedMnemonicIndex(5);
     sbarMi.setSelected(true);
+    
+    JCheckBoxMenuItem colourMi = new JCheckBoxMenuItem("Colour PSD");
+    colourMi.setMnemonic(KeyEvent.VK_C);
+    colourMi.setDisplayedMnemonicIndex(0);
+    colourMi.setSelected(true);
+    
+    JCheckBoxMenuItem shiftMi = new JCheckBoxMenuItem("Shift PSD");
+    shiftMi.setMnemonic(KeyEvent.VK_S);
+    shiftMi.setDisplayedMnemonicIndex(0);
+    shiftMi.setSelected(true);
+        
+    JCheckBoxMenuItem logMi = new JCheckBoxMenuItem("Log scale PSD");
+    logMi.setMnemonic(KeyEvent.VK_L);
+    logMi.setDisplayedMnemonicIndex(0);
+    logMi.setSelected(true);
+    
+    viewMenu.add(sbarMi);
+    viewMenu.add(colourMi);
+    viewMenu.add(shiftMi);
+    viewMenu.add(logMi);
+    menubar.add(fileMenu);
+    menubar.add(viewMenu);
 
+    setJMenuBar(menubar);
+    
     sbarMi.addItemListener(new ItemListener() {
       @Override
       public void itemStateChanged(ItemEvent e) {
-        System.out.println("State changed");
         if (e.getStateChange() == ItemEvent.SELECTED) {
           statusbar.setVisible(true);
         } else {
           statusbar.setVisible(false);
         }
       }
+    });    
+    
+    colourMi.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          simulationPanel2d.setColorMap(COLOR_HSV);
+          experimentalPanel2d.setColorMap(COLOR_HSV);
+          diffFiltPanel2d.setColorMap(COLOR_HSV);
+          diffPanel2d.setColorMap(COLOR_HSV);
+        } else {
+          simulationPanel2d.setColorMap(COLOR_BW);
+          experimentalPanel2d.setColorMap(COLOR_BW);
+          diffFiltPanel2d.setColorMap(COLOR_BW);
+          diffPanel2d.setColorMap(COLOR_BW);
+        }
+      }
     });
-    viewMenu.add(sbarMi);
-    menubar.add(fileMenu);
-    menubar.add(viewMenu);
 
-    setJMenuBar(menubar);
+    shiftMi.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          simulationPanel2d.setShift(true);
+          experimentalPanel2d.setShift(true);
+          diffFiltPanel2d.setShift(true);
+          diffPanel2d.setShift(true);
+        } else {
+          simulationPanel2d.setShift(false);
+          experimentalPanel2d.setShift(false);
+          diffFiltPanel2d.setShift(false);
+          diffPanel2d.setShift(false);
+        }
+      }
+    });
+    
+    logMi.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          simulationPanel2d.setLogScale(true);
+          experimentalPanel2d.setLogScale(true);
+          diffFiltPanel2d.setLogScale(true);
+          diffPanel2d.setLogScale(true);
+        } else {
+          simulationPanel2d.setLogScale(false);
+          experimentalPanel2d.setLogScale(false);
+          diffFiltPanel2d.setLogScale(false);
+          diffPanel2d.setLogScale(false);
+        }
+      }
+    });
   }
 
   public static void main(String[] args) {

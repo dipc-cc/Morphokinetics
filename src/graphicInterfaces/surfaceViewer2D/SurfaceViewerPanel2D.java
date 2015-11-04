@@ -1,5 +1,8 @@
 package graphicInterfaces.surfaceViewer2D;
 
+import java.awt.BorderLayout;
+import static java.awt.BorderLayout.NORTH;
+import static java.awt.BorderLayout.SOUTH;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -19,18 +22,16 @@ import utils.MathUtils;
 
 public class SurfaceViewerPanel2D extends JPanel {
 
-  public static int COLOR_BW = 0;
-  public static int COLOR_HSV = 1;
-
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
     ((Panel2D) jPanel1).setTextInfo(textInfo);
+    decimals = 3;
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
     ((Panel2D) jPanel1).setPSD(mesh);
-    jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), 5) + "");
-    jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), 5) + "");
+    jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), decimals) + "");
+    jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), decimals) + "");
     return this;
   }
 
@@ -141,7 +142,7 @@ public class SurfaceViewerPanel2D extends JPanel {
       .addGap(0, 508, Short.MAX_VALUE)
     );
 
-    jPanel3.setBorder(BorderFactory.createTitledBorder("Colormap"));
+    jPanel3.setBorder(BorderFactory.createTitledBorder(""));
 
     jLabel1.setText("Min");
 
@@ -184,8 +185,6 @@ public class SurfaceViewerPanel2D extends JPanel {
       jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(jPanel3Layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jLabel1)
         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
@@ -205,7 +204,7 @@ public class SurfaceViewerPanel2D extends JPanel {
         .addComponent(jLabel2)
         .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         .addComponent(jCheckBox1)
-        .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+      )
     );
 
     jCheckBox2.setText("Shift PSD");
@@ -243,52 +242,35 @@ public class SurfaceViewerPanel2D extends JPanel {
         .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
-    GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
-    jPanel2.setLayout(jPanel2Layout);
-    jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-      .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-        .addContainerGap())
-    );
-    jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-      .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-      .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-    );
-
+    jPanel2.setLayout(new BorderLayout());
+    jPanel2.add(jPanel3, NORTH);
     GroupLayout layout = new GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
           .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-		  /*.addGroup(layout.createSequentialGroup()
-            .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+		  .addGroup(layout.createSequentialGroup()
+            .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, 10)
             .addGap(0, 14, Short.MAX_VALUE)))
-	    .addContainerGap())*/
-		  )));
+	    )
+		  );
     layout.setVerticalGroup(
       layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addContainerGap()
         .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-		//.addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-		//.addContainerGap())
-		));
+		.addComponent(jPanel2, 10, GroupLayout.DEFAULT_SIZE, 25)
+		)
+		);
 
   }
 
     private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {
       ((Panel2D) jPanel1).setLogScale(jCheckBox3.isSelected());
-      jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), 5) + "");
-      jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), 5) + "");
+      jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), decimals) + "");
+      jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), decimals) + "");
     }
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,15 +291,15 @@ public class SurfaceViewerPanel2D extends JPanel {
       jTextField2.setEnabled(!jCheckBox1.isSelected());
 
       ((Panel2D) jPanel1).setAuto(jCheckBox1.isSelected());
-      jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), 5) + "");
-      jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), 5) + "");
+      jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), decimals) + "");
+      jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), decimals) + "");
     }
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
       try {
         ((Panel2D) jPanel1).setMin(Double.parseDouble(jTextField1.getText()));
       } catch (Exception e) {
-        jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), 5) + "");
+        jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), decimals) + "");
       }
     }
 
@@ -325,7 +307,7 @@ public class SurfaceViewerPanel2D extends JPanel {
       try {
         ((Panel2D) jPanel1).setMax(Double.parseDouble(jTextField2.getText()));
       } catch (Exception e) {
-        jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), 5) + "");
+        jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), decimals) + "");
       }
     }
 
@@ -341,4 +323,5 @@ public class SurfaceViewerPanel2D extends JPanel {
   private JPanel jPanel4;
   private JTextField jTextField1;
   private JTextField jTextField2;
+  private int decimals;
 }
