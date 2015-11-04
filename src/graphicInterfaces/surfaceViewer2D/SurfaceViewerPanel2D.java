@@ -6,18 +6,25 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.GroupLayout;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
 import utils.MathUtils;
 
-public class SurfaceViewerPanel2D extends javax.swing.JPanel {
+public class SurfaceViewerPanel2D extends JPanel {
 
   public static int COLOR_BW = 0;
   public static int COLOR_HSV = 1;
 
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
-    //this.setVisible(true);
     ((Panel2D) jPanel1).setTextInfo(textInfo);
-
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
@@ -105,37 +112,36 @@ public class SurfaceViewerPanel2D extends javax.swing.JPanel {
    * This method is called from within the constructor to initialize the form.
    */
   @SuppressWarnings("unchecked")
-  // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
   private void initComponents() {
 
-    jPanel1 = new graphicInterfaces.surfaceViewer2D.Panel2D();
-    jPanel2 = new javax.swing.JPanel();
-    jPanel3 = new javax.swing.JPanel();
-    jLabel1 = new javax.swing.JLabel();
-    jTextField1 = new javax.swing.JTextField();
-    jLabel2 = new javax.swing.JLabel();
-    jTextField2 = new javax.swing.JTextField();
-    jCheckBox1 = new javax.swing.JCheckBox();
-    jComboBox1 = new javax.swing.JComboBox();
-    jPanel4 = new javax.swing.JPanel();
-    jCheckBox2 = new javax.swing.JCheckBox();
-    jCheckBox3 = new javax.swing.JCheckBox();
+    jPanel1 = new Panel2D();
+    jPanel2 = new JPanel();
+    jPanel3 = new JPanel();
+    jLabel1 = new JLabel();
+    jTextField1 = new JTextField();
+    jLabel2 = new JLabel();
+    jTextField2 = new JTextField();
+    jCheckBox1 = new JCheckBox();
+    jComboBox1 = new JComboBox();
+    jPanel4 = new JPanel();
+    jCheckBox2 = new JCheckBox();
+    jCheckBox3 = new JCheckBox();
 
-    jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+    jPanel1.setBorder(BorderFactory.createEtchedBorder());
     jPanel1.setPreferredSize(new java.awt.Dimension(256, 256));
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+    GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGap(0, 0, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGap(0, 508, Short.MAX_VALUE)
     );
 
-    jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Colormap"));
+    jPanel3.setBorder(BorderFactory.createTitledBorder("Colormap"));
 
     jLabel1.setText("Min");
 
@@ -165,41 +171,41 @@ public class SurfaceViewerPanel2D extends javax.swing.JPanel {
       }
     });
 
-    jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "HSV", "B/W" }));
+    jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "HSV", "B/W" }));
     jComboBox1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jComboBox1ActionPerformed(evt);
       }
     });
 
-    javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+    GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
-      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(jPanel3Layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jLabel1)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jLabel2)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+        .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jCheckBox1)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel3Layout.setVerticalGroup(
-      jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+      jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         .addComponent(jLabel1)
         .addComponent(jLabel2)
-        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         .addComponent(jCheckBox1)
-        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        .addComponent(jComboBox1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
     );
 
     jCheckBox2.setText("Shift PSD");
@@ -216,64 +222,64 @@ public class SurfaceViewerPanel2D extends javax.swing.JPanel {
       }
     });
 
-    javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+    GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
-      jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(jPanel4Layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(jCheckBox2)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jCheckBox3)
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel4Layout.setVerticalGroup(
-      jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(jPanel4Layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
           .addComponent(jCheckBox2)
           .addComponent(jCheckBox3))
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
-    javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+    GroupLayout jPanel2Layout = new GroupLayout(jPanel2);
     jPanel2.setLayout(jPanel2Layout);
     jPanel2Layout.setHorizontalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+      jPanel2Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      .addGroup(GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+        .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
         .addContainerGap())
     );
     jPanel2Layout.setVerticalGroup(
-      jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-      .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-      .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+      jPanel2Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+      .addComponent(jPanel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+      .addComponent(jPanel4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
     );
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    GroupLayout layout = new GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+          .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 		  /*.addGroup(layout.createSequentialGroup()
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
             .addGap(0, 14, Short.MAX_VALUE)))
 	    .addContainerGap())*/
 		  )));
     layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-		//.addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+		//.addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 		//.addContainerGap())
 		));
 
@@ -323,16 +329,16 @@ public class SurfaceViewerPanel2D extends javax.swing.JPanel {
       }
     }
 
-  private javax.swing.JCheckBox jCheckBox1;
-  private javax.swing.JCheckBox jCheckBox2;
-  private javax.swing.JCheckBox jCheckBox3;
-  private javax.swing.JComboBox jComboBox1;
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JPanel jPanel1;
-  private javax.swing.JPanel jPanel2;
-  private javax.swing.JPanel jPanel3;
-  private javax.swing.JPanel jPanel4;
-  private javax.swing.JTextField jTextField1;
-  private javax.swing.JTextField jTextField2;
+  private JCheckBox jCheckBox1;
+  private JCheckBox jCheckBox2;
+  private JCheckBox jCheckBox3;
+  private JComboBox jComboBox1;
+  private JLabel jLabel1;
+  private JLabel jLabel2;
+  private JPanel jPanel1;
+  private JPanel jPanel2;
+  private JPanel jPanel3;
+  private JPanel jPanel4;
+  private JTextField jTextField1;
+  private JTextField jTextField2;
 }
