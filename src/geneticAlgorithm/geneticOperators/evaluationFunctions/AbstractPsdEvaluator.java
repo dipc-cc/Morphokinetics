@@ -7,7 +7,6 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import sun.misc.MetaIndex;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -20,12 +19,12 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private int psdSizeX;
   private int psdSizeY;
   
-  private float oneNormOfVector;
-  private float twoNormOfVector;
-  private float infiniteNormOfVector;
-  private float oneNormOfMatrix;
-  private float infiniteNormOfMatrix;
-  private float frobeniusNormOfMatrix;
+  private double oneNormOfVector;
+  private double twoNormOfVector;
+  private double infiniteNormOfVector;
+  private double oneNormOfMatrix;
+  private double infiniteNormOfMatrix;
+  private double frobeniusNormOfMatrix;
   
   protected PsdSignature2D psd;
   protected float[][] sampledSurface;
@@ -67,8 +66,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param vector
    * @return 
    */
-  private float calculateOneNormVector(float[][] vector) {
-    float result = 0.0f;
+  private double calculateOneNormVector(float[][] vector) {
+    double result = 0.0f;
     for (int i = 0; i < vector.length; i++) {
       for (int j = 0; j < vector[0].length; j++) {
         result += Math.abs(vector[i][j]);
@@ -82,14 +81,14 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param vector
    * @return 
    */
-  private float calculateTwoNormVector(float[][] vector) {
-    float result = 0.0f;
+  private double calculateTwoNormVector(float[][] vector) {
+    double result = 0.0f;
     for (int i = 0; i < vector.length; i++) {
       for (int j = 0; j < vector[0].length; j++) {
         result += Math.pow(vector[i][j],2);
       }
     }
-    result = (float) Math.sqrt(result);
+    result = Math.sqrt(result);
     return result;
   }
 
@@ -98,8 +97,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param vector
    * @return 
    */
-  private float calculateInfiniteNormVector(float[][] vector) {
-    float result = 0.0f;
+  private double calculateInfiniteNormVector(float[][] vector) {
+    double result = 0.0f;
     for (int i = 0; i < vector.length; i++) {
       for (int j = 0; j < vector[0].length; j++) {
         if (Math.abs(vector[i][j]) > result) {
@@ -116,10 +115,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param matrix
    * @return 
    */
-  private float calculateOneNormMatrix(float[][] matrix) {
-    float result = 0.0f;
+  private double calculateOneNormMatrix(float[][] matrix) {
+    double result = 0.0f;
     for (int j = 0; j < matrix[0].length; j++) {
-      float tmp = 0.0f;
+      double tmp = 0.0f;
       for (int i = 0; i < matrix.length; i++) {
         tmp += Math.abs(matrix[i][j]);
       }
@@ -134,10 +133,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param matrix
    * @return 
    */
-  private float calculateInfiniteNormMatrix(float[][] matrix) {
-    float result = 0.0f;
+  private double calculateInfiniteNormMatrix(float[][] matrix) {
+    double result = 0.0f;
     for (int i = 0; i < matrix.length; i++) {
-      float tmp = 0.0f;
+      double tmp = 0.0f;
       for (int j = 0; j < matrix[0].length; j++) {
         tmp += Math.abs(matrix[i][j]);
       }
@@ -151,14 +150,14 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param matrix
    * @return 
    */
-  private float calculateFrobeniusNorm(float[][] matrix) {
-    float result = 0.0f;
+  private double calculateFrobeniusNorm(float[][] matrix) {
+    double result = 0.0f;
     for (int i = 0; i < matrix.length; i++) {
       for (int j = 0; j < matrix[0].length; j++) {
         result += Math.pow(matrix[i][j],2);
       }
     }
-    result = (float) Math.sqrt(result);
+    result = Math.sqrt(result);
     return result;
   }
     
@@ -188,33 +187,33 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     }
   }
 
-  private float calculateOneNormErrorVector(PsdSignature2D psd) {
-   float error;
-   float sum = 0.0f;
+  private double calculateOneNormErrorVector(PsdSignature2D psd) {
+   double error;
+   double sum = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
         sum += Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
       }
     }
-   error = sum/oneNormOfVector;
+   error = sum / oneNormOfVector;
    return error;
   }  
   
-  private float calculateTwoNormErrorVector(PsdSignature2D psd) {
-   float error;
-   float sum = 0.0f;
+  private double calculateTwoNormErrorVector(PsdSignature2D psd) {
+   double error;
+   double sum = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
         sum += Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
       }
     }
-   error = (float)Math.sqrt(sum)/twoNormOfVector;
+   error = Math.sqrt(sum) / twoNormOfVector;
    return error;
   }
     
-  private float calculateInfiniteNormErrorVector(PsdSignature2D psd) {
-   float error;
-   float max = 0.0f;
+  private double calculateInfiniteNormErrorVector(PsdSignature2D psd) {
+   double error;
+   double max = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
         if (Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]) > max) {
@@ -226,11 +225,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    return error;
   }
 
-  private float calculateOneNormErrorMatrix(PsdSignature2D psd) {
-    float error;
-    float max = 0.0f;
+  private double calculateOneNormErrorMatrix(PsdSignature2D psd) {
+    double error;
+    double max = 0.0f;
     for (int j = 0; j < psdSizeY; j++) {
-      float tmp = 0.0f;
+      double tmp = 0.0f;
       for (int i = 0; i < psdSizeX; i++) {
         tmp += Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
       }
@@ -240,11 +239,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     return error;
   }
   
-  private float calculateInfiniteNormErrorMatrix(PsdSignature2D psd) {
-    float error;
-    float max = 0.0f;
+  private double calculateInfiniteNormErrorMatrix(PsdSignature2D psd) {
+    double error;
+    double max = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
-      float tmp = 0.0f;
+      double tmp = 0.0f;
       for (int j = 0; j < psdSizeY; j++) {
         tmp += Math.abs(psd.getPsd()[i][j] - experimentalPsd[i][j]);
       }
@@ -254,15 +253,15 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     return error;
   }
   
-  private float calculatefrobeniusNormErrorMatrix(PsdSignature2D psd) {
-    float error;
-    float sum = 0.0f;
+  private double calculatefrobeniusNormErrorMatrix(PsdSignature2D psd) {
+    double error;
+    double sum = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
         sum += Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
       }
     }
-    error = (float) Math.sqrt(sum)/frobeniusNormOfMatrix;
+    error = Math.sqrt(sum)/frobeniusNormOfMatrix;
     return error;
   }
   
@@ -334,4 +333,4 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   public int getPsdSizeY() {
     return psdSizeY;
   }
-}
+  }
