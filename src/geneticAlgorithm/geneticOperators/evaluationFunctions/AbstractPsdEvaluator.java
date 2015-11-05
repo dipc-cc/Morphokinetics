@@ -253,7 +253,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     return error;
   }
   
-  private double calculatefrobeniusNormErrorMatrix(PsdSignature2D psd) {
+  private double calculateFrobeniusNormErrorMatrix(PsdSignature2D psd) {
     double error;
     double sum = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
@@ -307,10 +307,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       }
     }
     System.out.println(" errors: "+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
-            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculatefrobeniusNormErrorMatrix(psd)+"\t"+error);
+            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+error);
     String errors = " Errors: OneNormVector\tTwoNormVector\tInfiniteNormVector\tOneNormMatrix\tInfiniteNormMatrix\tFrobeniusNormMatrix\toldError\n";
     errors = errors+"\t"+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
-            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculatefrobeniusNormErrorMatrix(psd)+"\t"+error;
+            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+error;
     String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+((currentSimulation-repeats)/repeats);
     Restart restart = new Restart(folderName);
     String fileName = "errors.txt";
