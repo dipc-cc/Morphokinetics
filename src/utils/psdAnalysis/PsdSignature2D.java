@@ -95,12 +95,10 @@ public class PsdSignature2D {
   }
 
   public void applySimmetryFold(int simmetryType) {
-
     switch (simmetryType) {
       case HORIZONTAL_SIMMETRY:
         for (int i = 0; i < binsY; i++) {
           for (int j = 1; j < binsX / 2; j++) {
-
             float temp = (psd[i][j] + psd[i][binsX - j - 1]) * 0.5f;
             psd[i][j] = psd[i][binsX - j - 1] = temp;
           }
