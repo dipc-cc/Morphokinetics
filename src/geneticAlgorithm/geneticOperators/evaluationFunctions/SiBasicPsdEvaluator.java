@@ -32,21 +32,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
   }
 
   @Override
-  public float[][] calculatePsdFromIndividual(Individual i) {
-
-    this._calculatePsdFromIndividual(i);
-    return psd.getPsd();
-  }
-
-  @Override
-  public void dispose() {
-    psd = null;
-    kmc = null;
-    sampledSurface = null;
-    difference = null;
-  }
-
-  private void _calculatePsdFromIndividual(Individual ind) {
+  public float[][] calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     kmc.initialiseRates(ind.getGenes());
     for (int i = 0; i < repeats; i++) {
@@ -67,6 +53,14 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
     frame.drawKmc(kmc);
+    return psd.getPsd();
   }
 
+  @Override
+  public void dispose() {
+    psd = null;
+    kmc = null;
+    sampledSurface = null;
+    difference = null;
+  }
 }
