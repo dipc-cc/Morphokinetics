@@ -187,14 +187,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    * @param psd 
    */
   protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
-    System.out.println("Difference");
     for (int a = 0; a < difference.length; a++) {
       for (int b = 0; b < difference[0].length; b++) {
         difference[a][b] = (float) Math.sqrt(Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2));
-        System.out.print(" "+difference[a][b]);
       }
     }
-    System.out.println("XXXXXXXXDifference");
   }
 
   private double calculateOneNormErrorVector(PsdSignature2D psd) {
