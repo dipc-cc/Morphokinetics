@@ -77,6 +77,8 @@ public class Parser {
   private int populationReplacement;
   private int totalIterations;
   private int repetitions;
+  private boolean readReference;
+  
   /**
    * Constructor
    */
@@ -112,6 +114,7 @@ public class Parser {
     this.populationReplacement = 5;
     this.totalIterations = 100;
     this.repetitions = 18;
+    this.readReference = true;
   }
 
   /**
@@ -294,6 +297,11 @@ public class Parser {
     } catch (JSONException e) {
       repetitions = 18;
     }
+    try {
+      readReference = json.getBoolean("readReference");
+    } catch (JSONException e) {
+      readReference = true;
+    }
     return 0;
   }
 
@@ -334,8 +342,9 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
     System.out.printf("%32s: %s,\n", "\"offspringSize\"", offspringSize);
     System.out.printf("%32s: %s,\n", "\"populationReplacement\"", populationReplacement);
-    System.out.printf("%32s: %s\n", "\"totalIterations\"", totalIterations);
-    System.out.printf("%32s: %s\n", "\"repetitions\"", repetitions);
+    System.out.printf("%32s: %s,\n", "\"totalIterations\"", totalIterations);
+    System.out.printf("%32s: %s,\n", "\"repetitions\"", repetitions);
+    System.out.printf("%32s: %s,\n", "\"readReference\"", readReference);
   }
 
   public String getCalculationType() {
@@ -486,6 +495,14 @@ public class Parser {
     return repetitions;
   }
   
+  /**
+   * Chooses between to read a reference PSD or doing an initial run to be the objective for the Evolutionary run
+   * @return 
+   */
+  public boolean getReadReference() {
+    return readReference;
+  }
+          
   public void setCalculationMode(String mode) {
     this.calculationMode = mode;
   }
@@ -497,4 +514,5 @@ public class Parser {
   public void setEvolutionaryAlgorithm(String name) {
     this.evolutionaryAlgorithm = name;
   }
+  
 }
