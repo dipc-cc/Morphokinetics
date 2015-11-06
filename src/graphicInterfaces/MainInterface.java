@@ -9,7 +9,7 @@ package graphicInterfaces;
  *
  * @author J. Alberdi-Rodriguez
  */
-import geneticAlgorithm.IGeneticAlgorithm;
+import geneticAlgorithm.Individual;
 import graphicInterfaces.gaConvergence.GaProgressPanel;
 import graphicInterfaces.growth.KmcCanvas;
 import static graphicInterfaces.surfaceViewer2D.Panel2D.COLOR_BW;
@@ -31,7 +31,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -48,13 +47,11 @@ public class MainInterface extends JFrame {
 
   private JLabel statusbar;
   private JPanel mainPanel;
-  private Container mainContainer;
   private SurfaceViewerPanel2D experimentalPanel2d;
   private SurfaceViewerPanel2D simulationPanel2d;
   private SurfaceViewerPanel2D diffPanel2d;
-  private SurfaceViewerPanel2D diffFiltPanel2d;
+  private SurfaceViewerPanel2D surfacePanel2d;
   private KmcCanvas surfaceCanvas;
-  private IGeneticAlgorithm ga;
   private GaProgressPanel gaProgressPanel;
   private JLabel scaleLabel;
   private JPanel growPanel; 
@@ -64,9 +61,8 @@ public class MainInterface extends JFrame {
   private JSpinner jSpinner2;
   private BorderLayout growthLayout;
   
-  public MainInterface(IGeneticAlgorithm ga, KmcCanvas canvas1) {
+  public MainInterface(KmcCanvas canvas1) {
     this.growCanvas = canvas1;
-    this.ga = ga;
     this.surfaceCanvas = canvas1;
     initGrowth();
     initUI();
@@ -111,10 +107,10 @@ public class MainInterface extends JFrame {
     diffPanel2d = new SurfaceViewerPanel2D("Difference");
     diffPanel2d.setLogScale(true)
             .setShift(true);
-    diffFiltPanel2d = new SurfaceViewerPanel2D("Difference Filtered");
-    diffFiltPanel2d.setLogScale(true)
-            .setShift(true);
-    gaProgressPanel = new GaProgressPanel(ga);
+    surfacePanel2d = new SurfaceViewerPanel2D("Surface");
+    surfacePanel2d.setMin(-1)
+            .setMax(21);
+    gaProgressPanel = new GaProgressPanel();
  
     JPanel psdPanel = new JPanel();
     JPanel psdNorth = new JPanel();
@@ -122,7 +118,7 @@ public class MainInterface extends JFrame {
     psdNorth.add(experimentalPanel2d);
     psdNorth.add(simulationPanel2d);
     psdSouth.add(diffPanel2d);
-    psdSouth.add(diffFiltPanel2d);
+    psdSouth.add(surfacePanel2d);
     BorderLayout psdLayout = new BorderLayout();
     psdPanel.setLayout(psdLayout);
     psdPanel.add(psdNorth, NORTH);
@@ -139,6 +135,8 @@ public class MainInterface extends JFrame {
   
   public void setExperimentalMesh(float[][] mesh){
     experimentalPanel2d.setMesh(mesh);
+    simulationPanel2d.setMin(experimentalPanel2d.getMin())
+            .setMax(experimentalPanel2d.getMax());
   }
   
   public void setSimulationMesh(float[][] mesh) {
@@ -149,8 +147,8 @@ public class MainInterface extends JFrame {
     diffPanel2d.setMesh(mesh);
   }
   
-  public void setFilteredDifference(float[][] mesh) {
-    diffFiltPanel2d.setMesh(mesh);
+  public void setSurface(float[][] mesh) {
+    surfacePanel2d.setMesh(mesh);
   }
   
   private void createGroupLayout(JComponent... arg) {
@@ -269,12 +267,12 @@ public class MainInterface extends JFrame {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           simulationPanel2d.setColorMap(COLOR_HSV);
           experimentalPanel2d.setColorMap(COLOR_HSV);
-          diffFiltPanel2d.setColorMap(COLOR_HSV);
+          surfacePanel2d.setColorMap(COLOR_HSV);
           diffPanel2d.setColorMap(COLOR_HSV);
         } else {
           simulationPanel2d.setColorMap(COLOR_BW);
           experimentalPanel2d.setColorMap(COLOR_BW);
-          diffFiltPanel2d.setColorMap(COLOR_BW);
+          surfacePanel2d.setColorMap(COLOR_BW);
           diffPanel2d.setColorMap(COLOR_BW);
         }
       }
@@ -286,12 +284,12 @@ public class MainInterface extends JFrame {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           simulationPanel2d.setShift(true);
           experimentalPanel2d.setShift(true);
-          diffFiltPanel2d.setShift(true);
+          surfacePanel2d.setShift(true);
           diffPanel2d.setShift(true);
         } else {
           simulationPanel2d.setShift(false);
           experimentalPanel2d.setShift(false);
-          diffFiltPanel2d.setShift(false);
+          surfacePanel2d.setShift(false);
           diffPanel2d.setShift(false);
         }
       }
@@ -303,12 +301,12 @@ public class MainInterface extends JFrame {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           simulationPanel2d.setLogScale(true);
           experimentalPanel2d.setLogScale(true);
-          diffFiltPanel2d.setLogScale(true);
+          surfacePanel2d.setLogScale(true);
           diffPanel2d.setLogScale(true);
         } else {
           simulationPanel2d.setLogScale(false);
           experimentalPanel2d.setLogScale(false);
-          diffFiltPanel2d.setLogScale(false);
+          surfacePanel2d.setLogScale(false);
           diffPanel2d.setLogScale(false);
         }
       }
@@ -321,7 +319,7 @@ public class MainInterface extends JFrame {
 
       @Override
       public void run() {
-        MainInterface ex = new MainInterface(null,null);
+        MainInterface ex = new MainInterface(null);
         ex.setVisible(true);
       }
     });
@@ -345,7 +343,7 @@ public class MainInterface extends JFrame {
   }
 
   /**
-   * This method is called from within the constructor to initialize the form.
+   * This method is called from within the constructor to initialise the form.
    */
   private void initGrowth() {
     scaleLabel = new JLabel();
@@ -474,5 +472,13 @@ public class MainInterface extends JFrame {
         }
       }
     }
+  }
+
+  public void setProgress(float[] progress) {
+     gaProgressPanel.setProgress(progress);
+  }
+  
+  public void addNewBestIndividual(Individual ind) {
+    gaProgressPanel.addNewBestIndividual(ind);
   }
 }
