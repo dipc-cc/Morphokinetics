@@ -28,9 +28,11 @@ import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
 import geneticAlgorithm.geneticOperators.restrictions.AgRestriction;
 import geneticAlgorithm.geneticOperators.restrictions.SiRestriction;
 import geneticAlgorithm.geneticOperators.selection.ISelection;
+import graphicInterfaces.MainInterface;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
+import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import ratesLibrary.AgRatesFactory;
@@ -62,6 +64,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected int currentIteration = 0;
   protected int totalIterations = 1;
   protected IgaProgressFrame graphics;
+  protected MainInterface mainInterface;
   
   private AbstractSimulation simulation;
   
@@ -69,6 +72,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   private double islandDensity;
   private double diffusionRate;  
   
+  private Updater updater;
 
   public AbstractGeneticAlgorithm(Parser parser) {
     
@@ -282,5 +286,44 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   public AbstractGeneticAlgorithm setExperimentalPsd(float[][] experimentalPsd) {
     mainEvaluator.setPsd(experimentalPsd);
     return this;
+  }
+  
+  public IKmc getKmc() {
+    return simulation.getKmc();
+  }
+
+  /**
+   * Sets the main interface, starts a thread which will be responsible to update it and
+   * assigns the main interface to the evaluator (to be able to also update it with 
+   * the current surface and PSD).
+   * @param mainInterface 
+   */
+  public void setMainInterface(MainInterface mainInterface) {
+    this.mainInterface = mainInterface;
+    mainEvaluator.setMainInterface(mainInterface);
+    updater = new Updater();
+    updater.start();
+  }
+
+  /**
+   * Inner class responsible to update the interface.
+   */
+  final class Updater extends Thread {
+    public Updater() {
+    }
+
+    /**
+     * Every 250 ms updates the interface with the current progress.
+     */
+    @Override
+    public void run() {
+      while (true) {
+        mainInterface.setProgress(getProgressPercent());
+        try {
+          Updater.sleep(250);
+        } catch (Exception e) {
+        }
+      }
+    }
   }
 }
