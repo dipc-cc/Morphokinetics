@@ -163,6 +163,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jTextField1.setText("jTextField1");
     jTextField1.setEnabled(false);
     jTextField1.addActionListener(new java.awt.event.ActionListener() {
+      @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jTextField1ActionPerformed(evt);
       }
@@ -173,6 +174,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jTextField2.setText("jTextField2");
     jTextField2.setEnabled(false);
     jTextField2.addActionListener(new java.awt.event.ActionListener() {
+      @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jTextField2ActionPerformed(evt);
       }
@@ -181,6 +183,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jCheckBox1.setSelected(true);
     jCheckBox1.setText("Auto");
     jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+      @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jCheckBox1ActionPerformed(evt);
       }
@@ -188,6 +191,7 @@ public class SurfaceViewerPanel2D extends JPanel {
 
     jComboBox1.setModel(new DefaultComboBoxModel(new String[] { "HSV", "B/W" }));
     jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+      @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jComboBox1ActionPerformed(evt);
       }
@@ -223,6 +227,7 @@ public class SurfaceViewerPanel2D extends JPanel {
 
     jCheckBox2.setText("Shift PSD");
     jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+      @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jCheckBox2ActionPerformed(evt);
       }
@@ -230,6 +235,7 @@ public class SurfaceViewerPanel2D extends JPanel {
 
     jCheckBox3.setText("Log scale");
     jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
+      @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
         jCheckBox3ActionPerformed(evt);
       }
