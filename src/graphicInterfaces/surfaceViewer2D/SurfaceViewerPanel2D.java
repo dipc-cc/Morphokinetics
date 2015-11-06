@@ -96,13 +96,15 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
   public SurfaceViewerPanel2D setMin(double min) {
-    minTextField.setText(min + "");
+    String minString = format("%.3f", min);
+    minTextField.setText(minString);
     jTextField1ActionPerformed();
     return this;
   }
 
   public SurfaceViewerPanel2D setMax(double max) {
-    maxTextField.setText(max + "");
+    String maxString = format("%.3f", max);
+    maxTextField.setText(maxString);
     jTextField2ActionPerformed();
     return this;
   }
