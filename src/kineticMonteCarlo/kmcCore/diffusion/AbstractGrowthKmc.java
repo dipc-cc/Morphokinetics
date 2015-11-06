@@ -294,7 +294,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public float getCoverage() {
     if (justCentralFlake) {
       float occupied = (float) lattice.getOccupied();
-      float area = (float) calculateAreAsAsInKmcCanvas();
+      float area = (float) calculateAreaAsInKmcCanvas();
       return occupied / (float) area;
     } else {
       return lattice.getCoverage();
@@ -306,7 +306,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * It is calculated as is done in KmcCanvas class 
    * @return simulated area
    */
-  private int calculateAreAsAsInKmcCanvas() {
+  private int calculateAreaAsInKmcCanvas() {
     int totalArea = 0;
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
       for (int i = 0; i < lattice.getHexaSizeI(); i++) {
