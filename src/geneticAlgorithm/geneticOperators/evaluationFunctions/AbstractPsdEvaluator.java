@@ -309,11 +309,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     calculatePsdFromIndividual(ind);
     calculateRelativeDifference(difference, psd);
 
-    if (mainInterface != null) {
-      mainInterface.setSimulationMesh(psd.getPsd());
-      mainInterface.setSurface(sampledSurface);
-      mainInterface.setDifference(difference);
-    } 
     difference = MathUtils.avgFilter(difference, 5);
     double error = 0;
     for (int a = 0; a < psdSizeX; a++) {
@@ -321,6 +316,12 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
         error += Math.abs(difference[a][b]);
       }
     }
+    if (mainInterface != null) {
+      mainInterface.setSimulationMesh(psd.getPsd());
+      mainInterface.setSurface(sampledSurface);
+      mainInterface.setDifference(difference);
+      mainInterface.setError(error);
+    } 
     System.out.println(" errors: "+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
             calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+error);
     String errors = " Errors: OneNormVector\tTwoNormVector\tInfiniteNormVector\tOneNormMatrix\tInfiniteNormMatrix\tFrobeniusNormMatrix\toldError\n";
