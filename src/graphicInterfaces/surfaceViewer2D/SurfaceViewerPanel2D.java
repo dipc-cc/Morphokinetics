@@ -32,7 +32,7 @@ public class SurfaceViewerPanel2D extends JPanel {
   private JComboBox jComboBox1;
   private JLabel minLabel;
   private JLabel maxLabel;
-  private JPanel mainPanel;
+  private Panel2D mainPanel;
   private JPanel lowPanel;
   private JPanel jPanel3;
   private JPanel jPanel4;
@@ -43,20 +43,20 @@ public class SurfaceViewerPanel2D extends JPanel {
   
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
-    ((Panel2D) mainPanel).setTextInfo(textInfo);
+    mainPanel.setTextInfo(textInfo);
     decimals = 3;
     title = textInfo;
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
-    ((Panel2D) mainPanel).setPSD(mesh);
-    minTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMin(), decimals) + "");
-    maxTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMax(), decimals) + "");
+    mainPanel.setPSD(mesh);
+    minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
+    maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
     return this;
   }
 
   public void redrawPSD() {
-    ((Panel2D) mainPanel).repaint();
+    mainPanel.repaint();
   }
 
   public SurfaceViewerPanel2D setLogScale(boolean log) {
@@ -88,11 +88,11 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
   public double getMax() {
-    return ((Panel2D) mainPanel).getMax();
+    return mainPanel.getMax();
   }
 
   public double getMin() {
-    return ((Panel2D) mainPanel).getMin();
+    return mainPanel.getMin();
   }
 
   public SurfaceViewerPanel2D setMin(double min) {
@@ -109,7 +109,7 @@ public class SurfaceViewerPanel2D extends JPanel {
   
   public void setError(double error) {
     String errorString = format("%s (%.3f)",title,error);
-    ((Panel2D) mainPanel).setTextInfo(errorString);
+    mainPanel.setTextInfo(errorString);
   }
   
   /**
@@ -299,46 +299,46 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
     private void jCheckBox3ActionPerformed() {
-      ((Panel2D) mainPanel).setLogScale(logCheckBox.isSelected());
-      minTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMin(), decimals) + "");
-      maxTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMax(), decimals) + "");
+      mainPanel.setLogScale(logCheckBox.isSelected());
+      minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
+      maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
     }
 
     private void jComboBox1ActionPerformed() {
       if (jComboBox1.getSelectedIndex() == 0) {
-        ((Panel2D) mainPanel).setColormap(Panel2D.COLOR_HSV);
+        mainPanel.setColormap(Panel2D.COLOR_HSV);
       }
       if (jComboBox1.getSelectedIndex() == 1) {
-        ((Panel2D) mainPanel).setColormap(Panel2D.COLOR_BW);
+        mainPanel.setColormap(Panel2D.COLOR_BW);
       }
     }
 
     private void jCheckBox2ActionPerformed() {
-      ((Panel2D) mainPanel).setShift(shiftCheckBox.isSelected());
+      mainPanel.setShift(shiftCheckBox.isSelected());
     }
 
     private void jCheckBox1ActionPerformed() {
       minTextField.setEnabled(!autoCheckBox.isSelected());
       maxTextField.setEnabled(!autoCheckBox.isSelected());
 
-      ((Panel2D) mainPanel).setAuto(autoCheckBox.isSelected());
-      minTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMin(), decimals) + "");
-      maxTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMax(), decimals) + "");
+      mainPanel.setAuto(autoCheckBox.isSelected());
+      minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
+      maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
     }
 
     private void jTextField1ActionPerformed() {
       try {
-        ((Panel2D) mainPanel).setMin(Double.parseDouble(minTextField.getText()));
+        mainPanel.setMin(Double.parseDouble(minTextField.getText()));
       } catch (Exception e) {
-        minTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMin(), decimals) + "");
+        minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
       }
     }
 
     private void jTextField2ActionPerformed() {
       try {
-        ((Panel2D) mainPanel).setMax(Double.parseDouble(maxTextField.getText()));
+        mainPanel.setMax(Double.parseDouble(maxTextField.getText()));
       } catch (Exception e) {
-        maxTextField.setText(MathUtils.truncate(((Panel2D) mainPanel).getMax(), decimals) + "");
+        maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
       }
     }
 
