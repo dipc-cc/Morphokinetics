@@ -2,7 +2,6 @@ package graphicInterfaces.surfaceViewer2D;
 
 import java.awt.BorderLayout;
 import static java.awt.BorderLayout.NORTH;
-import static java.awt.BorderLayout.SOUTH;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -34,7 +33,7 @@ public class SurfaceViewerPanel2D extends JPanel {
   private JPanel jPanel4;
   private JTextField jTextField1;
   private JTextField jTextField2;
-  private int decimals;
+  private final int decimals;
   
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
@@ -55,13 +54,13 @@ public class SurfaceViewerPanel2D extends JPanel {
 
   public SurfaceViewerPanel2D setLogScale(boolean log) {
     jCheckBox3.setSelected(log);
-    jCheckBox3ActionPerformed(null);
+    jCheckBox3ActionPerformed();
     return this;
   }
 
   public SurfaceViewerPanel2D setShift(boolean shift) {
     jCheckBox2.setSelected(shift);
-    jCheckBox2ActionPerformed(null);
+    jCheckBox2ActionPerformed();
     return this;
   }
 
@@ -77,7 +76,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     if (colormap == Panel2D.COLOR_BW) {
       jComboBox1.setSelectedIndex(1);
     }
-    jComboBox1ActionPerformed(null);
+    jComboBox1ActionPerformed();
     return this;
   }
 
@@ -91,13 +90,13 @@ public class SurfaceViewerPanel2D extends JPanel {
 
   public SurfaceViewerPanel2D setMin(double min) {
     jTextField1.setText(min + "");
-    jTextField1ActionPerformed(null);
+    jTextField1ActionPerformed();
     return this;
   }
 
   public SurfaceViewerPanel2D setMax(double max) {
     jTextField2.setText(max + "");
-    jTextField2ActionPerformed(null);
+    jTextField2ActionPerformed();
     return this;
   }
   
@@ -124,7 +123,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     }
   }
   /**
-   * This method is called from within the constructor to initialize the form.
+   * This method is called from within the constructor to initialise the form.
    */
   @SuppressWarnings("unchecked")
   private void initComponents() {
@@ -165,7 +164,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jTextField1.addActionListener(new java.awt.event.ActionListener() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jTextField1ActionPerformed(evt);
+        jTextField1ActionPerformed();
       }
     });
 
@@ -176,7 +175,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jTextField2.addActionListener(new java.awt.event.ActionListener() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jTextField2ActionPerformed(evt);
+        jTextField2ActionPerformed();
       }
     });
 
@@ -185,7 +184,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jCheckBox1ActionPerformed(evt);
+        jCheckBox1ActionPerformed();
       }
     });
 
@@ -193,7 +192,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jComboBox1.addActionListener(new java.awt.event.ActionListener() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jComboBox1ActionPerformed(evt);
+        jComboBox1ActionPerformed();
       }
     });
 
@@ -229,7 +228,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jCheckBox2ActionPerformed(evt);
+        jCheckBox2ActionPerformed();
       }
     });
 
@@ -237,7 +236,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     jCheckBox3.addActionListener(new java.awt.event.ActionListener() {
       @Override
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        jCheckBox3ActionPerformed(evt);
+        jCheckBox3ActionPerformed();
       }
     });
 
@@ -287,13 +286,13 @@ public class SurfaceViewerPanel2D extends JPanel {
 
   }
 
-    private void jCheckBox3ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jCheckBox3ActionPerformed() {
       ((Panel2D) jPanel1).setLogScale(jCheckBox3.isSelected());
       jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), decimals) + "");
       jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), decimals) + "");
     }
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jComboBox1ActionPerformed() {
       if (jComboBox1.getSelectedIndex() == 0) {
         ((Panel2D) jPanel1).setColormap(Panel2D.COLOR_HSV);
       }
@@ -302,11 +301,11 @@ public class SurfaceViewerPanel2D extends JPanel {
       }
     }
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jCheckBox2ActionPerformed() {
       ((Panel2D) jPanel1).setShift(jCheckBox2.isSelected());
     }
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jCheckBox1ActionPerformed() {
       jTextField1.setEnabled(!jCheckBox1.isSelected());
       jTextField2.setEnabled(!jCheckBox1.isSelected());
 
@@ -315,7 +314,7 @@ public class SurfaceViewerPanel2D extends JPanel {
       jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), decimals) + "");
     }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jTextField1ActionPerformed() {
       try {
         ((Panel2D) jPanel1).setMin(Double.parseDouble(jTextField1.getText()));
       } catch (Exception e) {
@@ -323,7 +322,7 @@ public class SurfaceViewerPanel2D extends JPanel {
       }
     }
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jTextField2ActionPerformed() {
       try {
         ((Panel2D) jPanel1).setMax(Double.parseDouble(jTextField2.getText()));
       } catch (Exception e) {
