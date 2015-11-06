@@ -153,6 +153,12 @@ public class MainInterface extends JFrame {
     surfacePanel2d.setMesh(mesh);
   }
   
+  public void setError(double error) {
+    diffPanel2d.setError(error);
+    surfacePanel2d.setError(error);
+    simulationPanel2d.setError(error);
+  }
+  
   private void createGroupLayout(JComponent... arg) {
     
     Container pane = getContentPane();
