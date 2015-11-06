@@ -10,6 +10,8 @@
  */
 package graphicInterfaces.growth;
 
+import javax.swing.JScrollPane;
+
 public class GrowthKmcFrame extends javax.swing.JFrame {
 
   private boolean noStartDragData = false;
@@ -73,6 +75,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jSpinner2 = new javax.swing.JSpinner();
     jPanel1 = new javax.swing.JPanel();
 
+    JScrollPane scrollPane = new javax.swing.JScrollPane(jPanel1);
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setTitle("Morphoniketics");
     setResizable(false);
@@ -114,7 +117,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-          .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
           .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -129,7 +132,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
           .addComponent(jLabel2)
           .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addContainerGap())
     );
 
