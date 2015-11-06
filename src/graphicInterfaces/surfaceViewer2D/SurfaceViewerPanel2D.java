@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import static java.lang.String.format;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -38,11 +39,13 @@ public class SurfaceViewerPanel2D extends JPanel {
   private JTextField jTextField1;
   private JTextField jTextField2;
   private final int decimals;
+  private String title;
   
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
     ((Panel2D) jPanel1).setTextInfo(textInfo);
     decimals = 3;
+    title = textInfo;
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
@@ -102,6 +105,11 @@ public class SurfaceViewerPanel2D extends JPanel {
     jTextField2.setText(max + "");
     jTextField2ActionPerformed();
     return this;
+  }
+  
+  public void setError(double error) {
+    String errorString = format("%s (%.3f)",title,error);
+    ((Panel2D) jPanel1).setTextInfo(errorString);
   }
   
   /**
