@@ -17,8 +17,10 @@ import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
-import graphicInterfaces.gaConvergence.GaProgressFrame;
-import graphicInterfaces.surfaceViewer2D.Frame2D;
+import graphicInterfaces.MainInterface;
+import graphicInterfaces.growth.KmcCanvas;
+import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
+import kineticMonteCarlo.lattice.AgLattice;
 import ratesLibrary.AgRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
@@ -92,13 +94,17 @@ public class Morphokinetics {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    new GaProgressFrame(ga).setVisible(true);
+    AgKmc myKmc = (AgKmc) ga.getKmc();
+    AgLattice myLattice = (AgLattice) myKmc.getLattice();
+    KmcCanvas myCanvas = new KmcCanvas(myLattice);
+    MainInterface mainInterface = new MainInterface(myCanvas);
+    mainInterface.initialise();
+    mainInterface.setVisible(true);
+    ga.setMainInterface(mainInterface);
     //float[][] experimentalPsd = createExperimentalData(parser, ga);
     float[][] experimentalPsd = readExperimentalData();
-    new Frame2D("Expected PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
-            .setLogScale(true)
-            .setShift(true)
-            .performDrawToImage(1);
+    
+    mainInterface.setExperimentalMesh(MathUtils.avgFilter(experimentalPsd, 1));
     ga.setExperimentalPsd(experimentalPsd);
     //ga.setExpectedSimulationTime(simulationTime);
     ga.initialise();
