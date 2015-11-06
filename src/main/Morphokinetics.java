@@ -102,8 +102,11 @@ public class Morphokinetics {
     mainInterface.setVisible(true);
     ga.setMainInterface(mainInterface);
     //float[][] experimentalPsd = createExperimentalData(parser, ga);
-    float[][] experimentalPsd = readExperimentalData();
-    
+    float[][] experimentalPsd;
+    if (parser.getReadReference())
+      experimentalPsd = readExperimentalData();
+    else 
+      experimentalPsd = createExperimentalData(parser, ga);
     mainInterface.setExperimentalMesh(MathUtils.avgFilter(experimentalPsd, 1));
     ga.setExperimentalPsd(experimentalPsd);
     //ga.setExpectedSimulationTime(simulationTime);
