@@ -21,10 +21,9 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
    */
   private IGeneticAlgorithm geneticAlgorithm;
   private ErrorPanel panel;
-  private ProgressUpdater updater;
   private int totalIterations;
 
-  public GaProgressPanel(IGeneticAlgorithm geneticAlgorithm) {
+  public GaProgressPanel() {
 
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -35,16 +34,12 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
 
     this.panel = new ErrorPanel(Color.red);
     this.jScrollPane1.setViewportView(panel);
-    this.geneticAlgorithm = geneticAlgorithm;
-    this.geneticAlgorithm.setGraphics(this);
     this.totalIterations = 0;
-    updater = new ProgressUpdater();
-    updater.start();
     this.setVisible(true);
   }
 
   /**
-   * This method is called from within the constructor to initialize the form. 
+   * This method is called from within the constructor to initialise the form. 
    * 
    */ 
   private void initComponents() {
@@ -156,34 +151,15 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
     );
   }
 
-  private final class ProgressUpdater extends Thread {
-
-    private boolean active = true;
-
-    public void dispose() {
-      active = false;
-    }
-
-    @Override
-    public void run() {
-      while (active) {
-
-        float[] progress = geneticAlgorithm.getProgressPercent();
-        jProgressBar1.setValue((int) progress[0]);
-        jProgressBar1.setString(geneticAlgorithm.getCurrentIteration() + "/" + geneticAlgorithm.getTotalIterations());
-        jProgressBar2.setValue((int) progress[1]);
-        jProgressBar2.setString(formatPercent(progress[1]) + "" + "%");
-        jProgressBar3.setValue((int) progress[2]);
-        jProgressBar3.setString(formatPercent(progress[2]) + "%");
-        try {
-          this.wait(100);
-        } catch (Exception e) {
-        }
-
-      }
-    }
+  public void setProgress(float[] progress) {
+    jProgressBar1.setValue((int) progress[0]);
+    //jProgressBar1.setString(geneticAlgorithm.getCurrentIteration() + "/" + geneticAlgorithm.getTotalIterations());
+    jProgressBar2.setValue((int) progress[1]);
+    jProgressBar2.setString(formatPercent(progress[1]) + "" + "%");
+    jProgressBar3.setValue((int) progress[2]);
+    jProgressBar3.setString(formatPercent(progress[2]) + "%");
   }
-
+  
   private String formatPercent(float number) {
     String out = String.valueOf(number);
     if (out.length() > 5) {
@@ -193,18 +169,18 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
   }
 
   @Override
-  public void addNewBestIndividual(Individual i) {
+  public void addNewBestIndividual(Individual ind) {
 
-    panel.addPoint(this.totalIterations, (float) i.getTotalError());
-    checkTableSize(i);
+    panel.addPoint(this.totalIterations, (float) ind.getTotalError());
+    checkTableSize(ind);
 
     for (int column = 1; column < 5; column++) {
-      for (int row = 0; row < i.getGeneSize(); row++) {
+      for (int row = 0; row < ind.getGeneSize(); row++) {
         jTable1.setValueAt(jTable1.getValueAt(row, column), row, column - 1);
       }
     }
-    for (int gene = 0; gene < i.getGeneSize(); gene++) {
-      jTable1.setValueAt((float) i.getGene(gene), gene, 4);
+    for (int gene = 0; gene < ind.getGeneSize(); gene++) {
+      jTable1.setValueAt((float) ind.getGene(gene), gene, 4);
     }
     this.totalIterations++;
   }
