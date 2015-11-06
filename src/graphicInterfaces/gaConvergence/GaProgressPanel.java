@@ -22,6 +22,18 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
   private IGeneticAlgorithm geneticAlgorithm;
   private ErrorPanel panel;
   private int totalIterations;
+  
+  // Interface objects:
+  private javax.swing.JLabel jLabel1;
+  private javax.swing.JLabel jLabel2;
+  private javax.swing.JLabel jLabel3;
+  private javax.swing.JLabel jLabel4;
+  private javax.swing.JProgressBar jProgressBar1;
+  private javax.swing.JProgressBar jProgressBar2;
+  private javax.swing.JProgressBar jProgressBar3;
+  private javax.swing.JScrollPane jScrollPane1;
+  private javax.swing.JScrollPane jScrollPane2;
+  private javax.swing.JTable jTable1;
 
   public GaProgressPanel() {
 
@@ -217,14 +229,4 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
             };
   }
   
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JLabel jLabel3;
-  private javax.swing.JLabel jLabel4;
-  private javax.swing.JProgressBar jProgressBar1;
-  private javax.swing.JProgressBar jProgressBar2;
-  private javax.swing.JProgressBar jProgressBar3;
-  private javax.swing.JScrollPane jScrollPane1;
-  private javax.swing.JScrollPane jScrollPane2;
-  private javax.swing.JTable jTable1;
 }
