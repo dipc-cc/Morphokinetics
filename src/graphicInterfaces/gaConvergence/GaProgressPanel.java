@@ -7,14 +7,29 @@ package graphicInterfaces.gaConvergence;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.GroupLayout;
+import static javax.swing.GroupLayout.Alignment.LEADING;
+import static javax.swing.GroupLayout.Alignment.TRAILING;
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
+import static javax.swing.LayoutStyle.ComponentPlacement.UNRELATED;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
+import static javax.swing.border.BevelBorder.RAISED;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Nestor
  */
-public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFrame {
+public class GaProgressPanel extends JPanel implements IgaProgressFrame {
 
   /**
    * Creates new form NewJFrame
@@ -24,16 +39,16 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
   private int totalIterations;
   
   // Interface objects:
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JLabel jLabel3;
-  private javax.swing.JLabel jLabel4;
-  private javax.swing.JProgressBar jProgressBar1;
-  private javax.swing.JProgressBar jProgressBar2;
-  private javax.swing.JProgressBar jProgressBar3;
-  private javax.swing.JScrollPane jScrollPane1;
-  private javax.swing.JScrollPane jScrollPane2;
-  private javax.swing.JTable jTable1;
+  private JLabel jLabel1;
+  private JLabel jLabel2;
+  private JLabel jLabel3;
+  private JLabel jLabel4;
+  private JProgressBar jProgressBar1;
+  private JProgressBar jProgressBar2;
+  private JProgressBar jProgressBar3;
+  private JScrollPane jScrollPane1;
+  private JScrollPane jScrollPane2;
+  private JTable jTable1;
 
   public GaProgressPanel() {
 
@@ -56,16 +71,16 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
    */ 
   private void initComponents() {
 
-    jProgressBar1 = new javax.swing.JProgressBar();
-    jProgressBar2 = new javax.swing.JProgressBar();
-    jProgressBar3 = new javax.swing.JProgressBar();
-    jLabel1 = new javax.swing.JLabel();
-    jLabel2 = new javax.swing.JLabel();
-    jLabel3 = new javax.swing.JLabel();
-    jScrollPane1 = new javax.swing.JScrollPane();
-    jScrollPane2 = new javax.swing.JScrollPane();
-    jTable1 = new javax.swing.JTable();
-    jLabel4 = new javax.swing.JLabel();
+    jProgressBar1 = new JProgressBar();
+    jProgressBar2 = new JProgressBar();
+    jProgressBar3 = new JProgressBar();
+    jLabel1 = new JLabel();
+    jLabel2 = new JLabel();
+    jLabel3 = new JLabel();
+    jScrollPane1 = new JScrollPane();
+    jScrollPane2 = new JScrollPane();
+    jTable1 = new JTable();
+    jLabel4 = new JLabel();
 
     jProgressBar1.setStringPainted(true);
 
@@ -73,16 +88,16 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
 
     jProgressBar3.setStringPainted(true);
 
-    jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+    jLabel1.setHorizontalAlignment(SwingConstants.RIGHT);
     jLabel1.setText("Total iterations");
 
-    jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+    jLabel2.setHorizontalAlignment(SwingConstants.RIGHT);
     jLabel2.setText("Current Iteration");
 
-    jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+    jLabel3.setHorizontalAlignment(SwingConstants.RIGHT);
     jLabel3.setText("Current Evaluator");
 
-    jTable1.setModel(new javax.swing.table.DefaultTableModel(
+    jTable1.setModel(new DefaultTableModel(
       new Object [][] {
         {null, null, null, null, null},
         {null, null, null, null, ""},
@@ -110,55 +125,55 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
     jTable1.setCellSelectionEnabled(true);
     jScrollPane2.setViewportView(jTable1);
 
-    jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    jLabel4.setHorizontalAlignment(SwingConstants.CENTER);
     jLabel4.setText("Genes of best individual");
-    jLabel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+    jLabel4.setBorder(BorderFactory.createBevelBorder(RAISED));
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    GroupLayout layout = new GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+      layout.createParallelGroup(LEADING)
+      .addGroup(TRAILING, layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-          .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
-          .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+        .addGroup(layout.createParallelGroup(TRAILING)
+          .addComponent(jLabel4, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
+          .addComponent(jScrollPane2, LEADING, DEFAULT_SIZE, 468, Short.MAX_VALUE)
+          .addGroup(LEADING, layout.createSequentialGroup()
             .addComponent(jScrollPane1)
             .addGap(18, 18, 18)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(jProgressBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-              .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createParallelGroup(LEADING)
+              .addComponent(jProgressBar3, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+              .addGroup(TRAILING, layout.createParallelGroup(LEADING)
+                .addComponent(jProgressBar1, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
                 .addComponent(jLabel1)
                 .addComponent(jLabel2))
-              .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+              .addGroup(TRAILING, layout.createParallelGroup(LEADING)
                 .addComponent(jLabel3)
-                .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addComponent(jProgressBar2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)))))
         .addContainerGap())
     );
     layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      layout.createParallelGroup(LEADING)
       .addGroup(layout.createSequentialGroup()
         .addGap(11, 11, 11)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-          .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addGroup(layout.createParallelGroup(TRAILING)
+          .addComponent(jScrollPane1, PREFERRED_SIZE, 212, PREFERRED_SIZE)
           .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel1)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addPreferredGap(RELATED)
+            .addComponent(jProgressBar1, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+            .addPreferredGap(RELATED)
             .addComponent(jLabel2)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jProgressBar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+            .addPreferredGap(RELATED)
+            .addComponent(jProgressBar2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+            .addPreferredGap(RELATED)
             .addComponent(jLabel3)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jProgressBar3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addPreferredGap(RELATED)
+            .addComponent(jProgressBar3, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)))
+        .addPreferredGap(RELATED, DEFAULT_SIZE, Short.MAX_VALUE)
         .addComponent(jLabel4)
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+        .addPreferredGap(UNRELATED)
+        .addComponent(jScrollPane2, PREFERRED_SIZE, 250, PREFERRED_SIZE)
         .addContainerGap())
     );
   }
@@ -214,7 +229,7 @@ public class GaProgressPanel extends javax.swing.JPanel implements IgaProgressFr
 
   private DefaultTableModel createTableModel(int rows, int columns) {
 
-    return new javax.swing.table.DefaultTableModel(
+    return new DefaultTableModel(
             new Object[rows][columns],
             new String[]{
               "minus 4", "minus 3", "minus 2", "minus 1", "Last iteration"
