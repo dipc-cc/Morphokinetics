@@ -180,7 +180,6 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
 
   public void setProgress(float[] progress) {
     jProgressBar1.setValue((int) progress[0]);
-    //jProgressBar1.setString(geneticAlgorithm.getCurrentIteration() + "/" + geneticAlgorithm.getTotalIterations());
     jProgressBar2.setValue((int) progress[1]);
     jProgressBar2.setString(formatPercent(progress[1]) + "" + "%");
     jProgressBar3.setValue((int) progress[2]);
