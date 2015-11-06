@@ -22,6 +22,20 @@ import utils.MathUtils;
 
 public class SurfaceViewerPanel2D extends JPanel {
 
+  private JCheckBox jCheckBox1;
+  private JCheckBox jCheckBox2;
+  private JCheckBox jCheckBox3;
+  private JComboBox jComboBox1;
+  private JLabel jLabel1;
+  private JLabel jLabel2;
+  private JPanel jPanel1;
+  private JPanel jPanel2;
+  private JPanel jPanel3;
+  private JPanel jPanel4;
+  private JTextField jTextField1;
+  private JTextField jTextField2;
+  private int decimals;
+  
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
     ((Panel2D) jPanel1).setTextInfo(textInfo);
@@ -311,17 +325,4 @@ public class SurfaceViewerPanel2D extends JPanel {
       }
     }
 
-  private JCheckBox jCheckBox1;
-  private JCheckBox jCheckBox2;
-  private JCheckBox jCheckBox3;
-  private JComboBox jComboBox1;
-  private JLabel jLabel1;
-  private JLabel jLabel2;
-  private JPanel jPanel1;
-  private JPanel jPanel2;
-  private JPanel jPanel3;
-  private JPanel jPanel4;
-  private JTextField jTextField1;
-  private JTextField jTextField2;
-  private int decimals;
 }
