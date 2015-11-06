@@ -11,6 +11,10 @@ import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
+import static javax.swing.GroupLayout.Alignment.BASELINE;
+import static javax.swing.GroupLayout.Alignment.LEADING;
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -147,11 +151,11 @@ public class SurfaceViewerPanel2D extends JPanel {
     GroupLayout jPanel1Layout = new GroupLayout(jPanel1);
     jPanel1.setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanel1Layout.createParallelGroup(LEADING)
       .addGap(0, 0, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanel1Layout.createParallelGroup(LEADING)
       .addGap(0, 508, Short.MAX_VALUE)
     );
 
@@ -199,27 +203,27 @@ public class SurfaceViewerPanel2D extends JPanel {
     GroupLayout jPanel3Layout = new GroupLayout(jPanel3);
     jPanel3.setLayout(jPanel3Layout);
     jPanel3Layout.setHorizontalGroup(
-      jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanel3Layout.createParallelGroup(LEADING)
       .addGroup(jPanel3Layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(jLabel1)
         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addComponent(jTextField1, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jLabel2)
         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-        .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addComponent(jTextField2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
         .addComponent(jCheckBox1)
-        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel3Layout.setVerticalGroup(
-      jPanel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-      .addGroup(jPanel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-        .addComponent(jTextField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+      jPanel3Layout.createParallelGroup(LEADING)
+      .addGroup(jPanel3Layout.createParallelGroup(BASELINE)
+        .addComponent(jTextField1, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addComponent(jLabel1)
         .addComponent(jLabel2)
-        .addComponent(jTextField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        .addComponent(jTextField2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
         .addComponent(jCheckBox1)
       )
     );
@@ -243,22 +247,22 @@ public class SurfaceViewerPanel2D extends JPanel {
     GroupLayout jPanel4Layout = new GroupLayout(jPanel4);
     jPanel4.setLayout(jPanel4Layout);
     jPanel4Layout.setHorizontalGroup(
-      jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanel4Layout.createParallelGroup(LEADING)
       .addGroup(jPanel4Layout.createSequentialGroup()
         .addContainerGap()
         .addComponent(jCheckBox2)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
         .addComponent(jCheckBox3)
-        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(DEFAULT_SIZE, Short.MAX_VALUE))
     );
     jPanel4Layout.setVerticalGroup(
-      jPanel4Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      jPanel4Layout.createParallelGroup(LEADING)
       .addGroup(jPanel4Layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(jPanel4Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+        .addGroup(jPanel4Layout.createParallelGroup(BASELINE)
           .addComponent(jCheckBox2)
           .addComponent(jCheckBox3))
-        .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        .addContainerGap(DEFAULT_SIZE, Short.MAX_VALUE))
     );
 
     jPanel2.setLayout(new BorderLayout());
@@ -266,21 +270,21 @@ public class SurfaceViewerPanel2D extends JPanel {
     GroupLayout layout = new GroupLayout(this);
     this.setLayout(layout);
     layout.setHorizontalGroup(
-      layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      layout.createParallelGroup(LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-          .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addGroup(layout.createParallelGroup(LEADING)
+          .addComponent(jPanel1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
 		  .addGroup(layout.createSequentialGroup()
-            .addComponent(jPanel2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, 10)
+            .addComponent(jPanel2, PREFERRED_SIZE, DEFAULT_SIZE, 10)
             .addGap(0, 14, Short.MAX_VALUE)))
 	    )
 		  );
     layout.setVerticalGroup(
-      layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+      layout.createParallelGroup(LEADING)
       .addGroup(layout.createSequentialGroup()
-        .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        .addComponent(jPanel1, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-		.addComponent(jPanel2, 10, GroupLayout.DEFAULT_SIZE, 25)
+		.addComponent(jPanel2, 10, DEFAULT_SIZE, 25)
 		)
 		);
 
