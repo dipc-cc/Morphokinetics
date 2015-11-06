@@ -7,6 +7,7 @@ package geneticAlgorithm.geneticOperators.evaluationFunctions;
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
+import graphicInterfaces.MainInterface;
 import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -26,6 +27,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private double infiniteNormOfMatrix;
   private double frobeniusNormOfMatrix;
   
+  protected MainInterface mainInterface;
+  
   protected PsdSignature2D psd;
   protected float[][] sampledSurface;
   protected float[][] difference;
@@ -41,6 +44,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.repeats = repeats;
     this.measureInterval = measureInterval;
   }
+  
+  public void setMainInterface(MainInterface mainInterface) {
+    this.mainInterface = mainInterface;
+  }    
 
   /**
    * Set the reference PSD matrix for future comparisons and starts its norms.
@@ -297,6 +304,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   private double evaluateIndividual(Individual ind) {
     calculatePsdFromIndividual(ind);
+    if (mainInterface != null) {
+      mainInterface.setSimulationMesh(psd.getPsd());
+      mainInterface.setSurface(sampledSurface);
+    } 
     calculateRelativeDifference(difference, psd);
 
     difference = MathUtils.avgFilter(difference, 5);
