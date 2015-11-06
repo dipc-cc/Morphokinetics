@@ -36,7 +36,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected int repeats;
   protected float[][] experimentalPsd;
   protected int measureInterval;
-  private Population currentPopulation;
+  protected Population currentPopulation;
   protected int currentSimulation;
 
   public AbstractPsdEvaluator(int repeats, int measureInterval) {
@@ -265,9 +265,16 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     double sum = 0.0f;
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
-        sum += Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
+       difference[i][j] = (float)Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
       }
     }
+    
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        sum += difference[i][j];
+      }
+    }
+    
     error = Math.sqrt(sum)/frobeniusNormOfMatrix;
     return error;
   }
@@ -313,6 +320,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
         error += Math.abs(difference[a][b]);
       }
     }
+    error = calculateFrobeniusNormErrorMatrix(psd);
     if (mainInterface != null) {
       mainInterface.setSimulationMesh(psd.getPsd());
       mainInterface.setSurface(sampledSurface);
