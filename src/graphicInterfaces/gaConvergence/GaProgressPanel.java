@@ -4,7 +4,6 @@
  */
 package graphicInterfaces.gaConvergence;
 
-import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import java.awt.Color;
 import javax.swing.BorderFactory;
@@ -31,10 +30,6 @@ import javax.swing.table.DefaultTableModel;
  */
 public class GaProgressPanel extends JPanel implements IgaProgressFrame {
 
-  /**
-   * Creates new form NewJFrame
-   */
-  private IGeneticAlgorithm geneticAlgorithm;
   private ErrorPanel panel;
   private int totalIterations;
   
