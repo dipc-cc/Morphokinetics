@@ -106,7 +106,9 @@ public class MainInterface extends JFrame {
             .setShift(true);
     diffPanel2d = new SurfaceViewerPanel2D("Difference");
     diffPanel2d.setLogScale(true)
-            .setShift(true);
+            .setShift(true)
+            .setMin(-2)
+            .setMax(2);
     surfacePanel2d = new SurfaceViewerPanel2D("Surface");
     surfacePanel2d.setMin(-1)
             .setMax(21);
