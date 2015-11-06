@@ -35,7 +35,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   public float[][] calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     double time = 0.0;
-    String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+currentSimulation/repeats;
+    String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+currentSimulation/repeats;
     int sizes[] = new int[2];
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);      

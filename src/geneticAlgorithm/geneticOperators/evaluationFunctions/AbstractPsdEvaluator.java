@@ -36,7 +36,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected int repeats;
   protected float[][] experimentalPsd;
   protected int measureInterval;
-  protected Population currentPopulation;
+  private Population currentPopulation;
   protected int currentSimulation;
 
   public AbstractPsdEvaluator(int repeats, int measureInterval) {
@@ -346,4 +346,12 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   public int getPsdSizeY() {
     return psdSizeY;
   }
+  
+  protected int getCurrentIteration() {
+    if (currentPopulation != null) {
+      return currentPopulation.getIterationNumber();
+    } else {
+      return -1;
+    }
   }
+}
