@@ -309,10 +309,6 @@ public class MainInterface extends JFrame {
   private int startMouseY = 0;
   private KmcCanvas growCanvas;
 
-  public void repaintKmc() {
-    growCanvas.performDraw();
-  }
-
   public void printToImage(int i) {
     growCanvas.performDrawToImage(i);
   }
@@ -438,7 +434,7 @@ public class MainInterface extends JFrame {
   }
 
   public void paintCanvas() {
-    repaintKmc();
+    growCanvas.performDraw();
     try {
       growCanvas.setBaseLocation(mouseX, mouseY);
       noStartDragData = true;
