@@ -98,7 +98,6 @@ public class Morphokinetics {
     AgLattice myLattice = (AgLattice) myKmc.getLattice();
     KmcCanvas myCanvas = new KmcCanvas(myLattice);
     MainInterface mainInterface = new MainInterface(myCanvas);
-    mainInterface.initialise();
     mainInterface.setVisible(true);
     ga.setMainInterface(mainInterface);
     //float[][] experimentalPsd = createExperimentalData(parser, ga);

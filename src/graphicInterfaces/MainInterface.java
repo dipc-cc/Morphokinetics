@@ -72,14 +72,6 @@ public class MainInterface extends JFrame {
    
   }
 
-  /**
-   * Must be called just after the constructor.
-   */
-  public void initialise() {
-    paintLoop p = new paintLoop();
-    p.start(); 
-  }
-  
   private void initUI() {
     createMenuBar();
     createMainJPanel();
@@ -451,24 +443,17 @@ public class MainInterface extends JFrame {
     //this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }
 
-  final class paintLoop extends Thread {
-
-    @Override
-    public void run() {
-      while (true) {
-        repaintKmc();
-        try {
-          paintLoop.sleep(100);
-          growCanvas.setBaseLocation(mouseX, mouseY);
-          noStartDragData = true;
-          mouseX = 0;
-          mouseY = 0;
-        } catch (Exception e) {
-        }
-      }
+  public void paintCanvas() {
+    repaintKmc();
+    try {
+      growCanvas.setBaseLocation(mouseX, mouseY);
+      noStartDragData = true;
+      mouseX = 0;
+      mouseY = 0;
+    } catch (Exception e) {
     }
   }
-
+  
   public void setProgress(float[] progress) {
      gaProgressPanel.setProgress(progress);
   }
