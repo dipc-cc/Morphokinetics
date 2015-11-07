@@ -86,7 +86,6 @@ public class MainInterface extends JFrame {
   }
   
   private void createMainJPanel() {
-    JPanel interiorPanel = new JPanel();
     mainPanel = new JPanel();
     
     experimentalPanel2d = new SurfaceViewerPanel2D("Experimental");
@@ -150,24 +149,7 @@ public class MainInterface extends JFrame {
     simulationPanel2d.setError(error);
   }
   
-  private void createGroupLayout(JComponent... arg) {
-    
-    Container pane = getContentPane();
-    GroupLayout gl = new GroupLayout(pane);
-    
-    pane.setLayout(gl);
-    
-    gl.setAutoCreateContainerGaps(true);
-    gl.setHorizontalGroup(gl.createSequentialGroup()
-            .addComponent(arg[0])
-            .addComponent(arg[1]));
-    gl.setVerticalGroup(gl.createSequentialGroup()
-            .addComponent(arg[0])
-            .addComponent(arg[1]));
-  }
-  
   private void createBorderLayout(JComponent... arg) {
-    
     Container pane = getContentPane();
     
     pane.setLayout(new BorderLayout());
@@ -439,8 +421,6 @@ public class MainInterface extends JFrame {
     }
     jSpinner2.setValue(zoom);
     growCanvas.setScale(zoom);
-    //canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    //this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }
 
   public void paintCanvas() {
