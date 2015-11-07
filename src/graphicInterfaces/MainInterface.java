@@ -337,41 +337,49 @@ public class MainInterface extends JFrame {
     
     // Listeners
     jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
+      @Override
       public void stateChanged(javax.swing.event.ChangeEvent evt) {
         jSpinner2StateChanged(evt);
       }
     });
 
     growPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+      @Override
       public void mouseDragged(java.awt.event.MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
     growPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+      @Override
       public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
         jPanel1MouseWheelMoved(evt);
       }
     });
     growPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+      @Override
       public void mousePressed(java.awt.event.MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
 
+      @Override
       public void mouseReleased(java.awt.event.MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
     });
 
     growCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
+      @Override
       public void mouseReleased(java.awt.event.MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
 
+      @Override
       public void mousePressed(java.awt.event.MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
     });
     growCanvas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+      @Override
       public void mouseDragged(java.awt.event.MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
