@@ -27,6 +27,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
@@ -40,6 +45,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class MainInterface extends JFrame {
 
@@ -335,51 +342,51 @@ public class MainInterface extends JFrame {
     mainGrowPanel.add(scrollPane,CENTER);
     
     // Listeners
-    jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
+    jSpinner2.addChangeListener(new ChangeListener() {
       @Override
-      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+      public void stateChanged(ChangeEvent evt) {
         jSpinner2StateChanged(evt);
       }
     });
 
-    growPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+    growPanel.addMouseMotionListener(new MouseMotionAdapter() {
       @Override
-      public void mouseDragged(java.awt.event.MouseEvent evt) {
+      public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
-    growPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+    growPanel.addMouseWheelListener(new MouseWheelListener() {
       @Override
-      public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+      public void mouseWheelMoved(MouseWheelEvent evt) {
         jPanel1MouseWheelMoved(evt);
       }
     });
-    growPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+    growPanel.addMouseListener(new MouseAdapter() {
       @Override
-      public void mousePressed(java.awt.event.MouseEvent evt) {
+      public void mousePressed(MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
 
       @Override
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
+      public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
     });
 
-    growCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
+    growCanvas.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
+      public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
 
       @Override
-      public void mousePressed(java.awt.event.MouseEvent evt) {
+      public void mousePressed(MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
     });
-    growCanvas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+    growCanvas.addMouseMotionListener(new MouseMotionAdapter() {
       @Override
-      public void mouseDragged(java.awt.event.MouseEvent evt) {
+      public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
@@ -387,21 +394,21 @@ public class MainInterface extends JFrame {
     pack();
   }
 
-  private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {
+  private void jSpinner2StateChanged(ChangeEvent evt) {
     growCanvas.setScale((Integer) jSpinner2.getValue());
     growCanvas.setSize(growCanvas.getSizeX(), growCanvas.getSizeY());
   }
 
-  private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {
+  private void jPanel1MousePressed(MouseEvent evt) {
     startMouseX = evt.getX();
     startMouseY = evt.getY();
   }
 
-  private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseReleased(MouseEvent evt) {
     mouseX = mouseY = startMouseX = startMouseY = 0;
   }
 
-  private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseDragged(MouseEvent evt) {
     if (noStartDragData) {
       startMouseX = evt.getX();
       startMouseY = evt.getY();
@@ -413,7 +420,7 @@ public class MainInterface extends JFrame {
 
   }
 
-  private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+  private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
     int zoom = (Integer) jSpinner2.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
