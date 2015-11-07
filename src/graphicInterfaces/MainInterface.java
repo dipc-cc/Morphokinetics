@@ -320,18 +320,6 @@ public class MainInterface extends JFrame {
       }
     });
   }
-
-  public static void main(String[] args) {
-
-    EventQueue.invokeLater(new Runnable() {
-
-      @Override
-      public void run() {
-        MainInterface ex = new MainInterface(null);
-        ex.setVisible(true);
-      }
-    });
-  }
   
   /***********************************************************/
   /*******Code from GrowthKmcPanel ***************************/
