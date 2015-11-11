@@ -137,7 +137,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   @Override
   public void simulate(int iterations) {
     int radius = perimeter.getCurrentRadius();
-    int numEvents=  0;// contador de eventos desde el ultimo cambio de radio
+    int numEvents = 0;// contador de eventos desde el ultimo cambio de radio
 
     iterationsForLastSimulation = 0;
 
