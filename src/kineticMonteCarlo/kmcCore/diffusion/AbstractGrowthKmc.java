@@ -157,8 +157,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         radius = perimeter.getCurrentRadius();
         numEvents = 0;
       } else {
-        if ((iterationsForLastSimulation - numEvents) * 2 <= numEvents) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
-        {
+        if ((iterationsForLastSimulation - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
           break;
         }
 
