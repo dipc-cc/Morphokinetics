@@ -83,7 +83,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public AbstractLattice getLattice() {
     return lattice;
   }
-  
+    
+  /**
+   * Performs a simulation step.
+   * @return true if a stop condition happened (all atom etched, all surface covered)
+   */
   @Override
   protected boolean performSimulationStep() {
     AbstractGrowthAtom originAtom = ((AbstractGrowthAtom) list.nextEvent());
