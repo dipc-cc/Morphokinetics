@@ -15,6 +15,7 @@ public class RankingSelection implements ISelection {
 
   private float SP = 2f; // selective pressure, choose in interval [1, 2]
 
+  @Override
   public IndividualGroup[] Select(Population p, int groupCount) {
 
     float[] Fitness = new float[p.size()];
