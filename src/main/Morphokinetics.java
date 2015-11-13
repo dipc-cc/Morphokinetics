@@ -100,7 +100,6 @@ public class Morphokinetics {
     MainInterface mainInterface = new MainInterface(myCanvas);
     mainInterface.setVisible(true);
     ga.setMainInterface(mainInterface);
-    //float[][] experimentalPsd = createExperimentalData(parser, ga);
     float[][] experimentalPsd;
     if (parser.getReadReference())
       experimentalPsd = readExperimentalData();
@@ -113,11 +112,6 @@ public class Morphokinetics {
     
     ga.iterate(parser.getTotalIterations());
     printResult(ga);
-    /*experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
-    new Frame2D("Calculated PSD analysis").setMesh(MathUtils.avgFilter(experimentalPsd, 1))
-            .setLogScale(true)
-            .setShift(true)
-            .performDrawToImage(1);*/
   }
   
   private static float[][] readExperimentalData() {
