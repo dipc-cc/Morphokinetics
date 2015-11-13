@@ -14,9 +14,12 @@ import java.util.List;
  */
 public class BgaBasedMutator implements IMutation {
 
-  private float r = /*0.1f*/ 1f;           //mutation range
-  private float k = 7;                     //mutation precission  
-  private float mutRate = 0.5f;            //mutation rate as percentage
+  /** mutation range */
+  private float r = /*0.1f*/ 1f;
+  /** mutation precision */
+  private float k = 7;
+  /** mutation rate as percentage */
+  private float mutRate = 0.5f;
 
   public void mutate(Population p, List nonFixedGenes) {
 
