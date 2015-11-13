@@ -12,7 +12,7 @@ import geneticAlgorithm.Individual;
  */
 public class ReplicatedGeneRestriction extends GeneRestriction {
 
-  private int genePositionToReplicate;
+  private final int genePositionToReplicate;
 
   public ReplicatedGeneRestriction(int genePositionToReplicate, int genePosition) {
     super(genePosition);
