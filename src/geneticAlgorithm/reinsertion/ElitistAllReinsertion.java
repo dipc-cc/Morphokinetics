@@ -1,4 +1,4 @@
-package geneticAlgorithm.geneticOperators.reinsertion;
+package geneticAlgorithm.reinsertion;
 
 import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.Individual;

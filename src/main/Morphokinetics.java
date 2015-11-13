@@ -16,7 +16,7 @@ import geneticAlgorithm.AbstractGeneticAlgorithm;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
+import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.MainInterface;
 import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.diffusion.AgKmc;

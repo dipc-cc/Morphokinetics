@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.populationInitialisation;
+package geneticAlgorithm.populationInitialisation;
 
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;

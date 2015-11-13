@@ -7,10 +7,10 @@ import utils.akting.RichArray;
 import utils.akting.RichMatrix;
 import utils.akting.operations.OperationFactory;
 import utils.akting.tests.TestSuite;
-import geneticAlgorithm.geneticOperators.mutation.CrossoverMutator;
-import geneticAlgorithm.geneticOperators.recombination.DifferentialRecombination;
-import geneticAlgorithm.geneticOperators.reinsertion.ElitistAllReinsertion;
-import geneticAlgorithm.geneticOperators.selection.RandomSelection;
+import geneticAlgorithm.mutation.CrossoverMutator;
+import geneticAlgorithm.recombination.DifferentialRecombination;
+import geneticAlgorithm.reinsertion.ElitistAllReinsertion;
+import geneticAlgorithm.selection.RandomSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {

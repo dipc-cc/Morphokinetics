@@ -2,12 +2,12 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package geneticAlgorithm.geneticOperators.restrictions;
+package geneticAlgorithm.restrictions;
 
-import geneticAlgorithm.geneticOperators.restrictions.BoundedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.FixedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.ReplicatedGeneRestriction;
-import geneticAlgorithm.geneticOperators.restrictions.RestrictionOperator;
+import geneticAlgorithm.restrictions.BoundedGeneRestriction;
+import geneticAlgorithm.restrictions.FixedGeneRestriction;
+import geneticAlgorithm.restrictions.ReplicatedGeneRestriction;
+import geneticAlgorithm.restrictions.RestrictionOperator;
 import java.util.ArrayList;
 
 /**

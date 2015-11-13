@@ -1,4 +1,4 @@
-package geneticAlgorithm.geneticOperators.selection;
+package geneticAlgorithm.selection;
 
 import geneticAlgorithm.IndividualGroup;
 import geneticAlgorithm.Population;

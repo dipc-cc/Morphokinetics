@@ -5,7 +5,7 @@
 package geneticAlgorithm;
 
 import basic.Parser;
-import geneticAlgorithm.geneticOperators.selection.RankingSelection;
+import geneticAlgorithm.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 /**

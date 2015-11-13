@@ -1,4 +1,4 @@
-package geneticAlgorithm.geneticOperators.recombination;
+package geneticAlgorithm.recombination;
 
 import java.util.Arrays;
 import java.util.Collections;

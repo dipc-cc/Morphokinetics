@@ -1,4 +1,4 @@
-package geneticAlgorithm.geneticOperators.mutation;
+package geneticAlgorithm.mutation;
 
 import java.util.List;
 import java.util.Random;

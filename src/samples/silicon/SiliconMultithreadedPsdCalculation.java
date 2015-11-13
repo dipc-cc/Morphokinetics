@@ -4,9 +4,9 @@
  */
 package samples.silicon;
 
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractEvaluator;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.AbstractPsdEvaluator;
-import geneticAlgorithm.geneticOperators.evaluationFunctions.SiThreadedPsdEvaluator;
+import geneticAlgorithm.evaluationFunctions.AbstractEvaluator;
+import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
+import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
