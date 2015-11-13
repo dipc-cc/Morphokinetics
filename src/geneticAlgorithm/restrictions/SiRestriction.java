@@ -4,10 +4,6 @@
  */
 package geneticAlgorithm.restrictions;
 
-import geneticAlgorithm.restrictions.BoundedGeneRestriction;
-import geneticAlgorithm.restrictions.FixedGeneRestriction;
-import geneticAlgorithm.restrictions.ReplicatedGeneRestriction;
-import geneticAlgorithm.restrictions.RestrictionOperator;
 import java.util.ArrayList;
 
 /**
