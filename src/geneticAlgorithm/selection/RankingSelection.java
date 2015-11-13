@@ -14,10 +14,10 @@ import geneticAlgorithm.Population;
 public class RankingSelection implements ISelection {
 
   /** selective pressure, choose in interval [1, 2] */
-  private float SP; // 
+  private float selectivePressure; // 
 
   public RankingSelection() {
-    this.SP = 2f;
+    this.selectivePressure = 2f;
   }
   
   @Override
@@ -25,7 +25,7 @@ public class RankingSelection implements ISelection {
 
     float[] Fitness = new float[p.size()];
     for (int i = 0; i < p.size(); i++) {
-      Fitness[p.size() - i - 1] = 2.0f - SP + 2.0f * (SP - 1.0f) * (i)
+      Fitness[p.size() - i - 1] = 2.0f - selectivePressure + 2.0f * (selectivePressure - 1.0f) * (i)
               / (p.size() - 1.0f);
     }
 
