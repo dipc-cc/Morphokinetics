@@ -22,14 +22,17 @@ import static java.awt.BorderLayout.EAST;
 import static java.awt.BorderLayout.NORTH;
 import static java.awt.BorderLayout.WEST;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
@@ -42,6 +45,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.KeyStroke;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class MainInterface extends JFrame {
 
@@ -73,14 +78,6 @@ public class MainInterface extends JFrame {
    
   }
 
-  /**
-   * Must be called just after the constructor.
-   */
-  public void initialise() {
-    paintLoop p = new paintLoop();
-    p.start(); 
-  }
-  
   private void initUI() {
     createMenuBar();
     createMainJPanel();
@@ -95,7 +92,6 @@ public class MainInterface extends JFrame {
   }
   
   private void createMainJPanel() {
-    JPanel interiorPanel = new JPanel();
     mainPanel = new JPanel();
     
     experimentalPanel2d = new SurfaceViewerPanel2D("Experimental");
@@ -159,24 +155,7 @@ public class MainInterface extends JFrame {
     simulationPanel2d.setError(error);
   }
   
-  private void createGroupLayout(JComponent... arg) {
-    
-    Container pane = getContentPane();
-    GroupLayout gl = new GroupLayout(pane);
-    
-    pane.setLayout(gl);
-    
-    gl.setAutoCreateContainerGaps(true);
-    gl.setHorizontalGroup(gl.createSequentialGroup()
-            .addComponent(arg[0])
-            .addComponent(arg[1]));
-    gl.setVerticalGroup(gl.createSequentialGroup()
-            .addComponent(arg[0])
-            .addComponent(arg[1]));
-  }
-  
   private void createBorderLayout(JComponent... arg) {
-    
     Container pane = getContentPane();
     
     pane.setLayout(new BorderLayout());
@@ -320,18 +299,6 @@ public class MainInterface extends JFrame {
       }
     });
   }
-
-  public static void main(String[] args) {
-
-    EventQueue.invokeLater(new Runnable() {
-
-      @Override
-      public void run() {
-        MainInterface ex = new MainInterface(null);
-        ex.setVisible(true);
-      }
-    });
-  }
   
   /***********************************************************/
   /*******Code from GrowthKmcPanel ***************************/
@@ -341,10 +308,6 @@ public class MainInterface extends JFrame {
   private int startMouseX = 0;
   private int startMouseY = 0;
   private KmcCanvas growCanvas;
-
-  public void repaintKmc() {
-    growCanvas.performDraw();
-  }
 
   public void printToImage(int i) {
     growCanvas.performDrawToImage(i);
@@ -375,43 +338,51 @@ public class MainInterface extends JFrame {
     mainGrowPanel.add(scrollPane,CENTER);
     
     // Listeners
-    jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
-      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+    jSpinner2.addChangeListener(new ChangeListener() {
+      @Override
+      public void stateChanged(ChangeEvent evt) {
         jSpinner2StateChanged(evt);
       }
     });
 
-    growPanel.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-      public void mouseDragged(java.awt.event.MouseEvent evt) {
+    growPanel.addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
-    growPanel.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-      public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+    growPanel.addMouseWheelListener(new MouseWheelListener() {
+      @Override
+      public void mouseWheelMoved(MouseWheelEvent evt) {
         jPanel1MouseWheelMoved(evt);
       }
     });
-    growPanel.addMouseListener(new java.awt.event.MouseAdapter() {
-      public void mousePressed(java.awt.event.MouseEvent evt) {
+    growPanel.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
 
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
+      @Override
+      public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
     });
 
-    growCanvas.addMouseListener(new java.awt.event.MouseAdapter() {
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
+    growCanvas.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
 
-      public void mousePressed(java.awt.event.MouseEvent evt) {
+      @Override
+      public void mousePressed(MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
     });
-    growCanvas.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-      public void mouseDragged(java.awt.event.MouseEvent evt) {
+    growCanvas.addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
@@ -419,21 +390,21 @@ public class MainInterface extends JFrame {
     pack();
   }
 
-  private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {
+  private void jSpinner2StateChanged(ChangeEvent evt) {
     growCanvas.setScale((Integer) jSpinner2.getValue());
     growCanvas.setSize(growCanvas.getSizeX(), growCanvas.getSizeY());
   }
 
-  private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {
+  private void jPanel1MousePressed(MouseEvent evt) {
     startMouseX = evt.getX();
     startMouseY = evt.getY();
   }
 
-  private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseReleased(MouseEvent evt) {
     mouseX = mouseY = startMouseX = startMouseY = 0;
   }
 
-  private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseDragged(MouseEvent evt) {
     if (noStartDragData) {
       startMouseX = evt.getX();
       startMouseY = evt.getY();
@@ -445,7 +416,7 @@ public class MainInterface extends JFrame {
 
   }
 
-  private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+  private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
     int zoom = (Integer) jSpinner2.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
@@ -460,28 +431,19 @@ public class MainInterface extends JFrame {
     }
     jSpinner2.setValue(zoom);
     growCanvas.setScale(zoom);
-    //canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    //this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }
 
-  final class paintLoop extends Thread {
-
-    @Override
-    public void run() {
-      while (true) {
-        repaintKmc();
-        try {
-          paintLoop.sleep(100);
-          growCanvas.setBaseLocation(mouseX, mouseY);
-          noStartDragData = true;
-          mouseX = 0;
-          mouseY = 0;
-        } catch (Exception e) {
-        }
-      }
+  public void paintCanvas() {
+    growCanvas.performDraw();
+    try {
+      growCanvas.setBaseLocation(mouseX, mouseY);
+      noStartDragData = true;
+      mouseX = 0;
+      mouseY = 0;
+    } catch (Exception e) {
     }
   }
-
+  
   public void setProgress(float[] progress) {
      gaProgressPanel.setProgress(progress);
   }

@@ -313,14 +313,15 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     }
 
     /**
-     * Every 250 ms updates the interface with the current progress.
+     * Every 100 ms updates the interface with the current progress.
      */
     @Override
     public void run() {
       while (true) {
         mainInterface.setProgress(getProgressPercent());
+        mainInterface.paintCanvas();
         try {
-          Updater.sleep(250);
+          Updater.sleep(100);
         } catch (Exception e) {
         }
       }

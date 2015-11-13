@@ -83,7 +83,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public AbstractLattice getLattice() {
     return lattice;
   }
-  
+    
+  /**
+   * Performs a simulation step.
+   * @return true if a stop condition happened (all atom etched, all surface covered)
+   */
   @Override
   protected boolean performSimulationStep() {
     AbstractGrowthAtom originAtom = ((AbstractGrowthAtom) list.nextEvent());
@@ -133,7 +137,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   @Override
   public void simulate(int iterations) {
     int radius = perimeter.getCurrentRadius();
-    int numEvents=  0;// contador de eventos desde el ultimo cambio de radio
+    int numEvents = 0;// contador de eventos desde el ultimo cambio de radio
 
     iterationsForLastSimulation = 0;
 
@@ -153,8 +157,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         radius = perimeter.getCurrentRadius();
         numEvents = 0;
       } else {
-        if ((iterationsForLastSimulation - numEvents) * 2 <= numEvents) //Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin.
-        {
+        if ((iterationsForLastSimulation - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
           break;
         }
 
