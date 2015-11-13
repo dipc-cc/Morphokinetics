@@ -27,6 +27,7 @@ public class BgaBasedMutator implements IMutation {
     this.mutRate = 0.5f;
   }
 
+  @Override
   public void mutate(Population p, List nonFixedGenes) {
 
     for (int ind = 0; ind < p.size(); ind++) {
