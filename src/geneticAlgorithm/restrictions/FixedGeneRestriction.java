@@ -12,7 +12,7 @@ import geneticAlgorithm.Individual;
  */
 public class FixedGeneRestriction extends GeneRestriction {
 
-  private double fixedValue;
+  private final double fixedValue;
 
   public FixedGeneRestriction(double fixedValue, int genePosition) {
     super(genePosition);
