@@ -6,7 +6,6 @@ package geneticAlgorithm.evaluationFunctions;
 
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
-import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -17,7 +16,6 @@ import utils.psdAnalysis.PsdSignature2D;
 public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private AgKmc kmc;
-  private Frame2D psdFrame;
 
   public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY) {
 
