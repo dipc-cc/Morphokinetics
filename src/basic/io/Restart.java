@@ -31,7 +31,6 @@ public class Restart {
 
   private int sizeX;
   private int sizeY;
-  private int sizeZ;
 
   public Restart() {
     folder = "results/";
