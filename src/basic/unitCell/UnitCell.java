@@ -11,7 +11,7 @@ public class UnitCell {
   private static final double LatticeDim = 5.430710f;
   private static final double spaceCell = LatticeDim / 4.0f;
   private static final int depth = 25;
-  private double[][] g = new double[3][3];
+  private double[][] g;
   private short[] neighs;
   private byte[] n_block;
   private double limitX, limitY, limitZ;
@@ -22,6 +22,10 @@ public class UnitCell {
   private UnitCellAtom[][][] red3;
   private int I_i, I_s, J_i, J_s, K_i, K_s;
   private UnitCellAtom[] Cells_Pointer;
+
+  public UnitCell() {
+    this.g = new double[3][3];
+  }
 
   public double[][] getRotation() {
     return g;
