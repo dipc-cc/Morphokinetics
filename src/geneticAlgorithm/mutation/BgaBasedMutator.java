@@ -29,15 +29,10 @@ public class BgaBasedMutator implements IMutation {
 
   @Override
   public void mutate(Population p, List nonFixedGenes) {
-
     for (int ind = 0; ind < p.size(); ind++) {
-
       Individual child = p.getIndividual(ind);
-
       int mutations = (int) Math.round(utils.StaticRandom.raw() * nonFixedGenes.size() * mutRate);
-
       for (int m = 0; m < mutations; m++) {
-
         int posList = (int) (utils.StaticRandom.raw() * nonFixedGenes.size());
         int pos = (Integer) nonFixedGenes.get(posList);
 
@@ -46,12 +41,8 @@ public class BgaBasedMutator implements IMutation {
         double oldValue = child.getGene(pos);
         double newValue = oldValue + s * r * a * oldValue;
 
-        //System.out.println(pos+","+oldValue+" "+(newValue));
         child.setGene(pos, newValue);
-
       }
-
     }
-
   }
 }
