@@ -12,8 +12,8 @@ import geneticAlgorithm.Population;
  */
 public class ElitistReinsertion implements IReinsertion {
 
+  @Override
   public Population Reinsert(Population origin, Population offpring, int substitutions) {
-
     //we order, just in case    
     origin.order();
     offpring.order();
