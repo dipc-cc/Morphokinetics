@@ -5,7 +5,7 @@
  */
 package basic;
 
-import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import ratesLibrary.AgRatesFactory;
 
 /**

@@ -6,7 +6,7 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import utils.StaticRandom;

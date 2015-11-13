@@ -33,7 +33,7 @@ import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
-import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import ratesLibrary.AgRatesFactory;
 import utils.list.ListConfiguration;

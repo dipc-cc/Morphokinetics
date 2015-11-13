@@ -6,7 +6,7 @@ package geneticAlgorithm.evaluationFunctions;
 
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
-import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;

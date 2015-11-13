@@ -6,8 +6,8 @@ package samples.agAgGrowth;
 
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
-import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
-import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
+import kineticMonteCarlo.kmcCore.growth.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;

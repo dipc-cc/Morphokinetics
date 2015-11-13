@@ -2,13 +2,13 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.kmcCore.diffusion;
+package kineticMonteCarlo.kmcCore.growth;
 
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaHopsConfig;
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
+import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
+import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;
 import utils.StaticRandom;

@@ -5,7 +5,7 @@
  */
 package basic;
 
-import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
+import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
 import ratesLibrary.GrapheneRatesFactory;
 
 /**

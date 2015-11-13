@@ -19,7 +19,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.MainInterface;
 import graphicInterfaces.growth.KmcCanvas;
-import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.lattice.AgLattice;
 import ratesLibrary.AgRatesFactory;
 import ratesLibrary.SiRatesFactory;

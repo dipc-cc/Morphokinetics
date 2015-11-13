@@ -2,10 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.kmcCore.diffusion;
+package kineticMonteCarlo.kmcCore.growth;
 
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.DevitaAccelerator;
+import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;

@@ -8,7 +8,7 @@ package samples.agAgGrowth;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import kineticMonteCarlo.kmcCore.diffusion.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgRatesFactory;

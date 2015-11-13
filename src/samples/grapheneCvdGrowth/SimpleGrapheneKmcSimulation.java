@@ -6,8 +6,8 @@ package samples.grapheneCvdGrowth;
 
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
-import kineticMonteCarlo.kmcCore.diffusion.GrapheneKmc;
-import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
+import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
+import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.GrapheneRatesFactory;

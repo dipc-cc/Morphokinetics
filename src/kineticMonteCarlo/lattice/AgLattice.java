@@ -6,7 +6,7 @@ package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
-import kineticMonteCarlo.kmcCore.diffusion.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;

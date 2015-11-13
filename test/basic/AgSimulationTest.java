@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kineticMonteCarlo.kmcCore.diffusion.RoundPerimeter;
+import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
