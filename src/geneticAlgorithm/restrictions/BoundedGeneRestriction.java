@@ -12,8 +12,8 @@ import geneticAlgorithm.Individual;
  */
 public class BoundedGeneRestriction extends GeneRestriction {
 
-  private double minValue;
-  private double maxValue;
+  private final double minValue;
+  private final double maxValue;
 
   public BoundedGeneRestriction(double minValue, double maxValue, int genePosition) {
     super(genePosition);
