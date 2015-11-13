@@ -13,8 +13,13 @@ import geneticAlgorithm.Population;
  */
 public class RankingSelection implements ISelection {
 
-  private float SP = 2f; // selective pressure, choose in interval [1, 2]
+  /** selective pressure, choose in interval [1, 2] */
+  private float SP; // 
 
+  public RankingSelection() {
+    this.SP = 2f;
+  }
+  
   @Override
   public IndividualGroup[] Select(Population p, int groupCount) {
 
