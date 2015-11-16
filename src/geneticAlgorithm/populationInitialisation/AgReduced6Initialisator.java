@@ -15,15 +15,21 @@ import utils.StaticRandom;
  */
 public class AgReduced6Initialisator implements IInitialisator{
   
+  /**
+   * Initialises the terrace rates between 1e5 and 1e12, the rest of the genes between
+   * 100 and 1e8
+   * @param populationSize
+   * @return 
+   */
   @Override
   public Population createRandomPopulation(int populationSize) {
     Population p = new Population(populationSize);
     for (int ind = 0; ind < p.size(); ind++) {
       System.out.println("Individual " + ind);
       Individual i = new Individual(6, 4);
-      for (int j = 0; j < 6; j++) {
-        i.setGene(j, Math.max(0.1, 1000 * Math.pow(150000, StaticRandom.raw())));
-        //System.out.println("Individual"+ind+" random gene "+a+" "+j+" "+ i.getGene(a*7+j));
+      i.setGene(0, 1E5 * Math.pow(1E12, StaticRandom.raw()));
+      for (int j = 1; j < 6; j++) {
+        i.setGene(j, 100 * Math.pow(1E8, StaticRandom.raw()));
       }
       p.setIndividual(i, ind);
     }
