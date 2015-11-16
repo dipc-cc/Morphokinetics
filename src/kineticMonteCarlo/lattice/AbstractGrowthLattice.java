@@ -127,7 +127,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   /**
-   * Defines which atoms are inside from the current position.
+   * Defines which atoms are inside from the current position (centre) and given radius.
    *
    * Define como átomos inside a los átomos dentro de dicho rádio Devuelve un array de átomos que es
    * el perimetro de dicha circunferencia.
