@@ -142,20 +142,19 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     middle = getCentralCartesianLocation();
     for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
       for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
-          double distance = getDistanceToCenter(iHexa, jHexa);
-          if (radius <= distance) {
-            atoms[iHexa][jHexa].setOutside(true);
-          } else {
-            atoms[iHexa][jHexa].setOutside(false);
-            if (distance > radius - 1) {
-              perimeterList.add(atoms[iHexa][jHexa]);
-            }
+        double distance = getDistanceToCenter(iHexa, jHexa);
+        if (radius <= distance) {
+          atoms[iHexa][jHexa].setOutside(true);
+        } else {
+          atoms[iHexa][jHexa].setOutside(false);
+          if (distance > radius - 1) {
+            perimeterList.add(atoms[iHexa][jHexa]);
           }
+        }
       }
     }
-    
-    AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
 
+    AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
     QuickSort.orderByAngle(perimeter, perimeter.length - 1);
 
     return perimeter;
