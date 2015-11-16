@@ -37,7 +37,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     int sizes[] = new int[2];
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);
-    kmc.initialiseRates(ind.getGenes());
+    kmc.initialiseRates(getRates6(ind.getGenes()));
     for (int i = 0; i < repeats; i++) {
       kmc.reset();
       kmc.depositSeed();
