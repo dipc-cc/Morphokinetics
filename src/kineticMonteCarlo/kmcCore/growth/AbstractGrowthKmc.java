@@ -30,7 +30,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   protected DevitaAccelerator accelerator;
   
   private final float maxCoverage; // This attribute defines which is the maximum coverage for a multi-flake simulation
-  private final int area;
+  private int area;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
@@ -49,11 +49,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.modifiedBuffer = new ModifiedBuffer();
     this.list.autoCleanup(true);
     this.perimeterType = perimeterType;
-    this.area = calculateAreaAsInLattice();
   }
 
   @Override
   public void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
+    this.area = calculateAreaAsInLattice();
 
     if (justCentralFlake) {
       list.setDepositionProbability(depositionRateML / islandDensitySite);
