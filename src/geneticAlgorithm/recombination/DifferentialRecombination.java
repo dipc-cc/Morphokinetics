@@ -142,7 +142,7 @@ public class DifferentialRecombination implements IRecombination {
 	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
       auxInd = config.getXmean().sum(
-              config.getB().apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.rand(config.getN())))
+              config.getB().apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.randn(config.getN())))
       ).apply(OperationFactory.multiply(1 - config.getP())).sum(
               auxInd.apply(OperationFactory.multiply(config.getP()))
       );
