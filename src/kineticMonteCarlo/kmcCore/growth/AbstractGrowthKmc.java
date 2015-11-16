@@ -30,6 +30,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   protected DevitaAccelerator accelerator;
   
   private final float maxCoverage; // This attribute defines which is the maximum coverage for a multi-flake simulation
+  private final int area;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
@@ -48,6 +49,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.modifiedBuffer = new ModifiedBuffer();
     this.list.autoCleanup(true);
     this.perimeterType = perimeterType;
+    this.area = calculateAreaAsInLattice();
   }
 
   @Override
@@ -297,16 +299,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public float getCoverage() {
     if (justCentralFlake) {
       float occupied = (float) lattice.getOccupied();
-      float area = (float) calculateAreaAsInKmcCanvas();
-      return occupied / (float) area;
+      return occupied / area;
     } else {
       return lattice.getCoverage();
     }
   }
-  
+
   /**
-   * Calculates total area or, i.e. the number of total places that simulation has. 
-   * It is calculated as is done in KmcCanvas class 
+   * Calculates current area or, i.e. the number of current places that simulation has. This total
+   * area changes with the current radius It is calculated as is done in KmcCanvas class
    * @return simulated area
    */
   private int calculateAreaAsInKmcCanvas() {
@@ -321,4 +322,25 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return totalArea;
   }
 
+  /**
+   * Calculates the total area of a single flake simulation. 
+   * @return 
+   */
+  private int calculateAreaAsInLattice() {
+    int totalArea = 0;
+    // Get the minimum radius of both coordinates
+    float minRadius = Math.min(lattice.getCartSizeX()/2,lattice.getCartSizeY()/2);
+    // Get the maximum radius multiple of 5
+    float radius = ((float) Math.floor(minRadius/5f)*5f);
+    
+    for (int jHexa = 0; jHexa < lattice.getHexaSizeJ(); jHexa++) {
+      for (int iHexa = 0; iHexa < lattice.getHexaSizeI(); iHexa++) {
+        double distance = lattice.getDistanceToCenter(iHexa, jHexa);
+        if (radius > distance) {
+          totalArea++;
+        } 
+      }
+    }
+    return totalArea;
+  }
 }
