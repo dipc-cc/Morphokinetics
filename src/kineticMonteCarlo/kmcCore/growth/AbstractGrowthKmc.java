@@ -76,6 +76,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.configure(processProbs2D);
   }
 
+  @Override
   public void reset() {
     lattice.reset();
     list.reset();
