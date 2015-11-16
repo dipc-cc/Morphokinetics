@@ -7,6 +7,7 @@ package geneticAlgorithm.recombination;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.IndividualGroup;
 import geneticAlgorithm.Population;
+import utils.StaticRandom;
 
 /**
  *
@@ -33,7 +34,7 @@ public class RealRecombination implements IRecombination {
 
       for (int a = 0; a < child.getGeneSize(); a++) {
 
-        double e = utils.StaticRandom.raw() * (1 + 2 * outBounds) - outBounds;
+        double e = StaticRandom.raw() * (1 + 2 * outBounds) - outBounds;
         child.setGene(a, Math.max(0.0, groups[i].get(0).getGene(a) * e + groups[i].get(1).getGene(a) * (1 - e)));
 
       }
