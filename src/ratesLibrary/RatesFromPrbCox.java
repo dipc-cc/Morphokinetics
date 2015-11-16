@@ -23,64 +23,64 @@ public class RatesFromPrbCox implements IGrowthRates {
   /**
    * Boltzmann constant
    */
-  private final double kB = 8.617332e-5;
+  private final double kB;
   /**
    * Diffusion Mono Layer. Utilised to calculate absorption rate
    */
-  private final double diffusionMl = 0.0035;
-  private final double P = 10e13;
-  private final double Pd = 10e11; //no lo sabemos
+  private final double diffusionMl;
+  private final double P;
+  private final double Pd;
   /**
    * Energy from edge A to edge A
    */
-  private final double Eaa = 0.275;
+  private final double Eaa;
   /**
    * Energy from edge B to edge B
    */
-  private final double Ebb = 0.310;
+  private final double Ebb;
   /**
    * Energy from corner to edge A
    */
-  private final double Eca = 0.075;
+  private final double Eca;
   /**
    * Energy from corner to edge B
    */
-  private final double Ecb = 0.15;
+  private final double Ecb;
   /**
    * Energy from corner to corner
    */
-  private final double Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
+  private final double Ecc; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
   /**
    * Energy from edge A to edge B, across corner
    */
-  private final double Eacb = 0.36;
+  private final double Eacb;
   /**
    * Energy from edge B to edge A, across corner
    */
-  private final double Ebca = 0.36;
+  private final double Ebca;
   /**
    * Energy from edge A to kink, across corner
    */
-  private final double Eack = 0.36;
+  private final double Eack;
   /**
    * Energy from edge B to kink, across corner
    */
-  private final double Ebck = 0.36;
+  private final double Ebck;
   /**
    * Energy from corner to kink A
    */
-  private final double Ecak = 0.15;  
+  private final double Ecak;  
   /**
    * Energy from corner to kink B
    */
-  private final double Ecbk = 0.075;
-  private final double Ed = 0.1;  //no lo sabemos seguro
+  private final double Ecbk;
+  private final double Ed;
   /**
    * Infinite energy. To make impossible the transition.
    */
-  private final double Einf = 9999999;
-  private final double[][] prefactors = new double[7][7];
-  private final double[][] energies = new double[7][7];
+  private final double Einf;
+  private final double[][] prefactors;
+  private final double[][] energies;
 
   /**
    * Atom types are documented in class AbstractAtom. In any case are;
@@ -88,7 +88,26 @@ public class RatesFromPrbCox implements IGrowthRates {
    * 0: terrace | 1: corner | 2: A side | 3: kink A | 4: bulk | 5: B side | 6: kink B
    *                               edge                 island       edge
    */
-  public RatesFromPrbCox() {
+  public RatesFromPrbCox() { 
+    kB = 8.617332e-5;
+    diffusionMl = 0.0035;
+    P = 10e13;
+    Pd = 10e11; //no lo sabemos
+    Eaa = 0.275; //1
+    Ebb = 0.310; //2
+    Eca = 0.075; //3
+    Ecb = 0.15;  //4
+    Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
+    Eacb = 0.36; //5
+    Ebca = 0.36;
+    Eack = 0.36;
+    Ebck = 0.36;
+    Ecak = 0.15;
+    Ecbk = 0.075;
+    Ed = 0.1;  //6; no lo sabemos seguro
+    Einf = 9999999;
+    prefactors = new double[7][7];
+    energies = new double[7][7];
 
     //[source type][destination type]
     energies[TERRACE][TERRACE] = Ed;
