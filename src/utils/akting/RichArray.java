@@ -2,6 +2,7 @@ package utils.akting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 import geneticAlgorithm.Individual;
 import utils.StaticRandom;
@@ -86,6 +87,17 @@ public class RichArray extends ArrayList<Double> {
 		return newArray;
 	}
 		
+	public static RichArray randn(int initialCapacity) {
+		RichArray newArray = new RichArray(initialCapacity);
+		Random random = new Random();
+		
+		for (int i = 0; i < initialCapacity; i++) {
+			newArray.add(random.nextGaussian());
+		}
+		
+		return newArray;
+	}
+	
 	public static RichArray max(RichArray a, RichArray b) {
 		RichArray maxArray = new RichArray(a.capacity);
 		
