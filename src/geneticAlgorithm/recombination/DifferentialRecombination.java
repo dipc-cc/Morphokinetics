@@ -124,6 +124,7 @@ public class DifferentialRecombination implements IRecombination {
     }
 
     RichArray f = RichArray.rand(Double.valueOf(groups.length).intValue()).apply(new Operation() {
+      @Override
       public double apply(double value) {
         return 0.5 + 0.5 * value;
       }
