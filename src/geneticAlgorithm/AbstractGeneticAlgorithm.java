@@ -18,6 +18,7 @@ import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.mutation.BgaBasedMutator;
 import geneticAlgorithm.mutation.IMutation;
 import geneticAlgorithm.populationInitialisation.AgInitialisator;
+import geneticAlgorithm.populationInitialisation.AgReduced6Initialisator;
 import geneticAlgorithm.populationInitialisation.IInitialisator;
 import geneticAlgorithm.populationInitialisation.SiInitialisator;
 import geneticAlgorithm.recombination.IRecombination;
@@ -29,6 +30,8 @@ import geneticAlgorithm.restrictions.AgRestriction;
 import geneticAlgorithm.restrictions.SiRestriction;
 import geneticAlgorithm.selection.ISelection;
 import graphicInterfaces.MainInterface;
+import geneticAlgorithm.restrictions.AgReduced6Restriction;
+import geneticAlgorithm.restrictions.AgReducedRestriction;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,8 +96,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.diffusionRate = new AgRatesFactory().getRates(experitentalTemp)[0];
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
-        initialisation = new AgInitialisator();
-        restriction = new AgRestriction(diffusionRate);
+        initialisation = new AgReduced6Initialisator();
+        restriction = new AgReduced6Restriction();
         mainEvaluator = getAgMainEvaluator();
         break;
       case "Si":
@@ -290,7 +293,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   public IKmc getKmc() {
     return simulation.getKmc();
-  }
+}
 
   /**
    * Sets the main interface, starts a thread which will be responsible to update it and
