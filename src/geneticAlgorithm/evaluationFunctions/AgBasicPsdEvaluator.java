@@ -48,6 +48,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         sizes[0] = sampledSurface.length;
         sizes[1] = sampledSurface[0].length;
         restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
+        if (kmc.getCoverage() < 0.05) continue;
         if (kmc.getIterations() < measureInterval) {
           time += kmc.getTime();
           break;
