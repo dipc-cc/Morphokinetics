@@ -85,11 +85,11 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       rates[i] = 0; // All rates to 0 (actually, %80 are 0)
     }
     for (int i = 0; i < 7; i++) {
-      rates[i] = genes[0]; // Deposition rate
+      rates[i] = genes[0]; // Terrace to any
     }
 
     System.arraycopy(genes, 1, rates, 8, 6); // Corner rates
-
+    
     rates[2 * 7 + 2] = genes[7]; // Rate corresponding to E_aa
     rates[5 * 7 + 5] = genes[9]; // Rate corresponding to E_bb
 
@@ -111,12 +111,12 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * genes.
    *
    * Ratio (energy type) | ratio index
-   * E_d                    (0,j)
-   * E_c                    (1,1)(1,2)
-   * E_e                    (1,5)
-   * E_f                    (2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
-   * E_a                    (2,2)
-   * E_b                    (5,5)
+   * 0) E_d                    (0,j)
+   * 1) E_c                    (1,1)(1,2)(1,6)
+   * 2) E_e                    (1,3)(1,5)
+   * 3) E_f                    (2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
+   * 4) E_a                    (2,2)
+   * 5) E_b                    (5,5)
    * @param genes
    * @return
    */
@@ -128,13 +128,18 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       rates[i] = 0; // All rates to 0 (actually, %80 are 0)
     }
     for (int i = 0; i < 7; i++) {
-      rates[i] = genes[0]; // Deposition rate
+      rates[i] = genes[0]; // Terrace to any
     }
 
     rates[1 * 7 + 1] = genes[1]; // E_c
     rates[1 * 7 + 2] = genes[1]; // E_c
+    rates[1 * 7 + 6] = genes[1]; // E_c
+    
+    rates[1 * 7 + 3] = genes[2]; // E_e
     rates[1 * 7 + 5] = genes[2]; // E_e
 
+    rates[1 * 7 + 4] = Math.max(genes[1], genes[2]);
+    
     // E_f
     rates[2 * 7 + 3] = genes[3];
     rates[2 * 7 + 4] = genes[3];
@@ -147,8 +152,6 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
     rates[2 * 7 + 2] = genes[4]; // Rate corresponding to E_a
     rates[5 * 7 + 5] = genes[5]; // Rate corresponding to E_b
-
-    rates[1 * 7 + 4] = Math.max(genes[1], genes[3]);
 
     return rates;
   }
