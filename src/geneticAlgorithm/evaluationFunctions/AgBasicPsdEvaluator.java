@@ -36,14 +36,14 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+currentSimulation/repeats;
     int sizes[] = new int[2];
     Restart restart = new Restart(folderName);
-    psd.setRestart(restart);      
+    psd.setRestart(restart);
     kmc.initialiseRates(ind.getGenes());
     for (int i = 0; i < repeats; i++) {
       kmc.reset();
       kmc.depositSeed();
       while (true) {
         kmc.simulate(measureInterval);
-        sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());   
+        sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
         sizes[0] = sampledSurface.length;
         sizes[1] = sampledSurface[0].length;
@@ -69,5 +69,87 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     kmc = null;
     sampledSurface = null;
     difference = null;
+  }
+  
+  /**
+   * Calculates rates from the genes. Most of the rates are 0, the rest is calculated from the given
+   * genes.
+   *
+   * @param genes
+   * @return
+   */
+  public double[] getRates(double[] genes) {
+    double[] rates = new double[49];
+
+    for (int i = 0; i < rates.length; i++) {
+      rates[i] = 0; // All rates to 0 (actually, %80 are 0)
+    }
+    for (int i = 0; i < 7; i++) {
+      rates[i] = genes[0]; // Deposition rate
+    }
+
+    System.arraycopy(genes, 1, rates, 8, 6); // Corner rates
+
+    rates[2 * 7 + 2] = genes[7]; // Rate corresponding to E_aa
+    rates[5 * 7 + 5] = genes[9]; // Rate corresponding to E_bb
+
+    //We set the following atomistic configurations to the same rate (according to the Ag/Ag diffusion paper):
+    //(2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
+    rates[2 * 7 + 3] = genes[8];
+    rates[2 * 7 + 4] = genes[8];
+    rates[2 * 7 + 5] = genes[8];
+    rates[2 * 7 + 6] = genes[8];
+    rates[5 * 7 + 2] = genes[8];
+    rates[5 * 7 + 3] = genes[8];
+    rates[5 * 7 + 4] = genes[8];
+    rates[5 * 7 + 6] = genes[8];
+    return rates;
+  }
+  
+  /**
+   * Calculates rates from the genes. Most of the rates are 0, the rest is calculated from the given
+   * genes.
+   *
+   * Ratio (energy type) | ratio index
+   * E_d                    (0,j)
+   * E_c                    (1,1)(1,2)
+   * E_e                    (1,5)
+   * E_f                    (2,3)=(2,4)=(2,5)=(2,6)=(5,2)=(5,3)=(5,4)=(5,6)
+   * E_a                    (2,2)
+   * E_b                    (5,5)
+   * @param genes
+   * @return
+   */
+  public double[] getRates6(double[] genes) {
+    System.out.println("getting new rates");
+    double[] rates = new double[49];
+
+    for (int i = 0; i < rates.length; i++) {
+      rates[i] = 0; // All rates to 0 (actually, %80 are 0)
+    }
+    for (int i = 0; i < 7; i++) {
+      rates[i] = genes[0]; // Deposition rate
+    }
+
+    rates[1 * 7 + 1] = genes[1]; // E_c
+    rates[1 * 7 + 2] = genes[1]; // E_c
+    rates[1 * 7 + 5] = genes[2]; // E_e
+
+    // E_f
+    rates[2 * 7 + 3] = genes[3];
+    rates[2 * 7 + 4] = genes[3];
+    rates[2 * 7 + 5] = genes[3];
+    rates[2 * 7 + 6] = genes[3];
+    rates[5 * 7 + 2] = genes[3];
+    rates[5 * 7 + 3] = genes[3];
+    rates[5 * 7 + 4] = genes[3];
+    rates[5 * 7 + 6] = genes[3];
+
+    rates[2 * 7 + 2] = genes[4]; // Rate corresponding to E_a
+    rates[5 * 7 + 5] = genes[5]; // Rate corresponding to E_b
+
+    rates[1 * 7 + 4] = Math.max(genes[1], genes[3]);
+
+    return rates;
   }
 }
