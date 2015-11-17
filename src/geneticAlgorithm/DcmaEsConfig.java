@@ -89,6 +89,7 @@ public class DcmaEsConfig {
   private void createWeightsArray() {
     weights = RichArray.createArrayInRange(mu);
     weights = weights.apply(new Operation() {
+      @Override
       public double apply(double value) {
         return Math.log(mu + 1D / 2) - Math.log(value);
       }
