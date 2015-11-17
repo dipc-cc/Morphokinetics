@@ -44,7 +44,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       kmc.reset();
       kmc.depositSeed();
       while (true) {
-        kmc.simulate();
+        kmc.simulate(measureInterval);
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
         sizes[0] = sampledSurface.length;
