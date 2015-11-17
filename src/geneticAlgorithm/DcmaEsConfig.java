@@ -33,8 +33,6 @@ public class DcmaEsConfig {
   private RichArray offFitness;
   /** Recombination, new mean value in CMA-ES. */
   private RichArray xmean;
-  /** Step size in CMA-ES. */
-  private double sigma;
 
   private boolean performCmaEs = true;
 
@@ -139,11 +137,7 @@ public class DcmaEsConfig {
   public RichArray getXmean() {
     return xmean;
   }
-
-  public double getSigma() {
-    return sigma;
-  }
-
+  
   public boolean isPerformCmaEs() {
     return performCmaEs;
   }
@@ -174,10 +168,6 @@ public class DcmaEsConfig {
 
   public void setXmean(RichArray xmean) {
     this.xmean = xmean;
-  }
-
-  public void setSigma(double sigma) {
-    this.sigma = sigma;
   }
 
   public void setCrm(double crm) {

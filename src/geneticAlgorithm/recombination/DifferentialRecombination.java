@@ -34,6 +34,8 @@ public class DifferentialRecombination implements IRecombination {
   private RichMatrix C;
   /** C^-1/2 */
   private RichMatrix invsqrtC;
+  /** Step size in CMA-ES. */
+  private double sigma;
 
   public DifferentialRecombination(DcmaEsConfig config) {
     this.config = config;
@@ -52,6 +54,7 @@ public class DifferentialRecombination implements IRecombination {
     B = RichMatrix.eye(config.getN());
     C = RichMatrix.covariance(B, config.getD());
     invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
+    
   }
 
   @Override
@@ -68,19 +71,19 @@ public class DifferentialRecombination implements IRecombination {
     ps = ps.apply(OperationFactory.multiply(1 - cs)).sum(
             invsqrtC.apply(
                     OperationFactory.multiply(Math.sqrt(cs * (2 - cs) * mueff))).multiply(
-                    config.getXmean().deduct(xold).apply(OperationFactory.divide(config.getSigma()))));
+                    config.getXmean().deduct(xold).apply(OperationFactory.divide(sigma))));
 
     double hsig = (ps.apply(OperationFactory.pow(2)).sum()
             / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / config.getOffSize())) / config.getN() < 2 + 4 / (config.getN() + 1)) ? 1 : 0;
 
     pc = pc.apply(OperationFactory.multiply(1 - cc)).sum(
             config.getXmean().deduct(xold).apply(
-                    OperationFactory.divide(config.getSigma())).apply(
+                    OperationFactory.divide(sigma)).apply(
                     OperationFactory.multiply(hsig * Math.sqrt(cc * (2 - cc) * mueff))));
 
     // Adapt covariance matrix C.
     RichMatrix artmp = config.getOffX().recombinate(reducedIndex).deduct(
-            RichMatrix.repmat(xold, Double.valueOf(config.getMu()).intValue())).apply(OperationFactory.multiply(1 / config.getSigma()));
+            RichMatrix.repmat(xold, Double.valueOf(config.getMu()).intValue())).apply(OperationFactory.multiply(1 / sigma));
 
     C = C.apply(OperationFactory.multiply(1 - c1 - cmu)).sum(
             pc.multiply(pc.transpose()).sum(
@@ -90,7 +93,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	// Adapt step size sigma.
     //config.sigma = config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1));
-    config.setSigma(Math.max(0.1, config.getSigma() * Math.exp((cs / damps) * (ps.norm() / config.getChiN() - 1))));
+    sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / config.getChiN() - 1)));
 
     // Update B and D from C.
     if (config.getCounteval() - config.getEigeneval() > config.getOffSize() / (c1 + cmu) / config.getN() / 10) {
@@ -120,7 +123,7 @@ public class DifferentialRecombination implements IRecombination {
     config.setCrs(0.1);
 
     boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) < 10);
-    boolean cond2 = ((config.getSigma() * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
+    boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
     boolean cond = (cond1 || cond2);
     if (config.isPerformCmaEs() && cond) {
       p = 0.5;
@@ -150,7 +153,7 @@ public class DifferentialRecombination implements IRecombination {
 	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
       auxInd = config.getXmean().sum(
-              B.apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.randn(config.getN())))
+              B.apply(OperationFactory.multiply(sigma)).multiply(config.getD().multiply(RichArray.randn(config.getN())))
       ).apply(OperationFactory.multiply(1 - p)).sum(
               auxInd.apply(OperationFactory.multiply(p))
       );
@@ -161,4 +164,7 @@ public class DifferentialRecombination implements IRecombination {
     return offspring;
   }
 
+  public void setSigma(double sigma) {
+    this.sigma = sigma;
+  }
 }

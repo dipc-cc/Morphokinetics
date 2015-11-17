@@ -52,7 +52,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(dcmaEsConfig.getMu()).intValue());
     dcmaEsConfig.setOffX(new RichMatrix(population));
     dcmaEsConfig.setXmean(dcmaEsConfig.getOffX().recombinate(reducedIndex).multiply(dcmaEsConfig.getWeights()));
-    dcmaEsConfig.setSigma(dcmaEsConfig.getOffX().recombinate(reducedIndex).transpose().std().std());
+    double sigma = dcmaEsConfig.getOffX().recombinate(reducedIndex).transpose().std().std();
+    ((DifferentialRecombination) recombination).setSigma(sigma);
 
     Population p = population;
     p.order();
