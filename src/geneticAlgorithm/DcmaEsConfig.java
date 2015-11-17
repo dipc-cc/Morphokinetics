@@ -187,11 +187,7 @@ public class DcmaEsConfig {
   public int getErrorsNumber() {
     return errorsNumber;
   }
-
-  public void setStopFitness(double stopFitness) {
-    this.stopFitness = stopFitness;
-  }
-
+  
   public void setStopEval(double stopEval) {
     this.stopEval = stopEval;
   }
