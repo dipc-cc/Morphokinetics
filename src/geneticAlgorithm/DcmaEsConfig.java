@@ -188,25 +188,6 @@ public class DcmaEsConfig {
     return errorsNumber;
   }
   
-  public void setStopEval(double stopEval) {
-    this.stopEval = stopEval;
-  }
-
-  public void setgMax(double gMax) {
-    this.gMax = gMax;
-  }
-
-  public void setOffSize(double offSize) {
-    this.offSize = offSize;
-  }
-
-  public void setMu(double mu) {
-    this.mu = mu;
-  }
-
-  public void setWeights(RichArray weights) {
-    this.weights = weights;
-  }
 
   public void setB(RichMatrix B) {
     this.B = B;
@@ -220,32 +201,12 @@ public class DcmaEsConfig {
     this.C = C;
   }
 
-  public void setInvsqrtC(RichMatrix invsqrtC) {
-    this.invsqrtC = invsqrtC;
-  }
-
   public void setEigeneval(double eigeneval) {
     this.eigeneval = eigeneval;
   }
 
-  public void setChiN(double chiN) {
-    this.chiN = chiN;
-  }
-
-  public void setCounteval(int counteval) {
-    this.counteval = counteval;
-  }
-
   public void setOffX(RichMatrix offX) {
     this.offX = offX;
-  }
-
-  public void setOffV(RichMatrix offV) {
-    this.offV = offV;
-  }
-
-  public void setOffFitness(RichArray offFitness) {
-    this.offFitness = offFitness;
   }
 
   public void setXmean(RichArray xmean) {
@@ -256,20 +217,12 @@ public class DcmaEsConfig {
     this.sigma = sigma;
   }
 
-  public void setPerformCmaEs(boolean performCmaEs) {
-    this.performCmaEs = performCmaEs;
-  }
-
   public void setCrm(double crm) {
     this.crm = crm;
   }
 
   public void setCrs(double crs) {
     this.crs = crs;
-  }
-
-  public void setErrorsNumber(int errorsNumber) {
-    this.errorsNumber = errorsNumber;
   }
 
   void addCountEval() {
