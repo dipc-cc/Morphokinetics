@@ -123,7 +123,11 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * @return
    */
   public double[] getRates6(double[] genes) {
-    System.out.println("getting new rates");
+    System.out.print("population"+getCurrentIteration()+"/individual"+currentSimulation/repeats);
+    for (int i = 0; i < 6; i++) {
+      System.out.print(" "+genes[i]);;
+    }
+    System.out.println(" ");
     double[] rates = new double[49];
 
     for (int i = 0; i < rates.length; i++) {
