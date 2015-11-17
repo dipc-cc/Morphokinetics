@@ -11,8 +11,6 @@ public class DcmaEsConfig {
   private double stopFitness;
   /** Number of function evaluations to stop. */
   private double stopEval;
-  /** Maximum number of generations. */
-  private double gMax;
   /** Population size, offspring number in DE and CMA-ES. */
   private double offSize;
   /** Number of parents for recombination in CMA-ES. */
@@ -58,7 +56,6 @@ public class DcmaEsConfig {
 
     stopFitness = 1e-12;
     stopEval = 1e8;
-    gMax = 1e6;
 
     offSize = configuration.getPopulationSize(); //offSize = n * Math.round(28 / Math.sqrt(n));
 
@@ -106,10 +103,6 @@ public class DcmaEsConfig {
 
   public double getStopEval() {
     return stopEval;
-  }
-
-  public double getgMax() {
-    return gMax;
   }
 
   public double getOffSize() {
