@@ -31,19 +31,20 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   @Override
   public float[][] calculatePsdFromIndividual(Individual ind) {
-    mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+currentSimulation/repeats);
+    int individualCount = currentSimulation/repeats;
     psd.reset();
     double time = 0.0;
-    String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+currentSimulation/repeats;
+    String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+individualCount;
     int sizes[] = new int[2];
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);
     kmc.initialiseRates(getRates6(ind.getGenes()));
     for (int i = 0; i < repeats; i++) {
+      mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(repeats-1));
       kmc.reset();
       kmc.depositSeed();
       while (true) {
-        kmc.simulate(measureInterval);
+        kmc.simulate();
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
         sizes[0] = sampledSurface.length;
@@ -59,9 +60,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     }
  
     ind.setSimulationTime(time / repeats);
-    psd.printAvgToFile();
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psd.printAvgToFile();
     return psd.getPsd();
   }
 
