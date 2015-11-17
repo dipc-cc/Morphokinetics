@@ -106,7 +106,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	// Update P and F:
     // P = 0.5 * ( 1 + G / Gmax )
-    config.setP(1);
+    double p = 1;
     // Crossover mean.
     config.setCrm(0.5);
     // Crossover standard deviation.
@@ -116,7 +116,7 @@ public class DifferentialRecombination implements IRecombination {
     boolean cond2 = ((config.getSigma() * Math.sqrt(Collections.max(config.getC().diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
     boolean cond = (cond1 || cond2);
     if (config.isPerformCmaEs() && cond) {
-      config.setP(0.5);
+      p = 0.5;
       // Crossover mean.
       config.setCrm(0.85);
 	  // Crossover standard deviation.
@@ -144,8 +144,8 @@ public class DifferentialRecombination implements IRecombination {
       // account when P < 1.
       auxInd = config.getXmean().sum(
               config.getB().apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.randn(config.getN())))
-      ).apply(OperationFactory.multiply(1 - config.getP())).sum(
-              auxInd.apply(OperationFactory.multiply(config.getP()))
+      ).apply(OperationFactory.multiply(1 - p)).sum(
+              auxInd.apply(OperationFactory.multiply(p))
       );
 
       offspring.setIndividual(auxInd.toIndividual(config.getErrorsNumber()), k);

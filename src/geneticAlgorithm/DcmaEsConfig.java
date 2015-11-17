@@ -46,7 +46,6 @@ public class DcmaEsConfig {
 
   private boolean performCmaEs = true;
 
-  private double p;
   /**  Crossover mean. */
   private double crm; 
   /** Crossover standard deviation. */
@@ -175,10 +174,6 @@ public class DcmaEsConfig {
     return performCmaEs;
   }
 
-  public double getP() {
-    return p;
-  }
-
   public double getCrm() {
     return crm;
   }
@@ -269,10 +264,6 @@ public class DcmaEsConfig {
 
   public void setPerformCmaEs(boolean performCmaEs) {
     this.performCmaEs = performCmaEs;
-  }
-
-  public void setP(double p) {
-    this.p = p;
   }
 
   public void setCrm(double crm) {
