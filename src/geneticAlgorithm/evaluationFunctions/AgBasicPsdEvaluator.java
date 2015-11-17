@@ -144,7 +144,8 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     rates[1 * 7 + 3] = genes[2]; // E_e
     rates[1 * 7 + 5] = genes[2]; // E_e
 
-    rates[1 * 7 + 4] = Math.max(genes[1], genes[2]);
+    // The maximum energy has to be chosen, so the minimum ratio.
+    rates[1 * 7 + 4] = Math.min(genes[1], genes[2]);
     
     // E_f
     rates[2 * 7 + 3] = genes[3];
