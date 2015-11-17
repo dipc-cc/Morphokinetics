@@ -112,6 +112,7 @@ public class Morphokinetics {
     
     ga.iterate(parser.getTotalIterations());
     printResult(ga);
+    mainInterface.setStatusBar("Finished");
   }
   
   private static float[][] readExperimentalData() {
