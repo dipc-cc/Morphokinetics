@@ -23,8 +23,6 @@ public class DcmaEsConfig {
   private RichArray D;
   /** Covariance matrix C. */
   private RichMatrix C;
-  /** C^-1/2 */
-  private RichMatrix invsqrtC;
   /** Track update of B and D. */
   private double eigeneval;
   /** Expectation of ||N(0,I)|| == norm(randn(N,1)) */
@@ -64,7 +62,6 @@ public class DcmaEsConfig {
     B = RichMatrix.eye(n);
     D = new RichArray(n, 1);
     C = RichMatrix.covariance(B, D);
-    invsqrtC = RichMatrix.invsqrtCovariance(B, D);
     eigeneval = 0;
     chiN = Math.pow(n, 0.5) * (1 - 1D / (4 * n) + 1D / (21 * Math.pow(n, 2)));
 
@@ -127,10 +124,6 @@ public class DcmaEsConfig {
 
   public RichMatrix getC() {
     return C;
-  }
-
-  public RichMatrix getInvsqrtC() {
-    return invsqrtC;
   }
 
   public double getEigeneval() {
