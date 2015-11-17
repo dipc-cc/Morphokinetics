@@ -17,15 +17,15 @@ public class DifferentialRecombination implements IRecombination {
 
   private DcmaEsConfig config;
 
-  public double mueff;
+  private double mueff;
 
-  public double cc;
+  private double cc;
   private double cs;
-  public double c1;
-  public double cmu;
-  public double damps;
+  private double c1;
+  private double cmu;
+  private double damps;
 
-  public RichArray pc;
+  private RichArray pc;
   private RichArray ps;
 
   private RichMatrix invsqrtC;
