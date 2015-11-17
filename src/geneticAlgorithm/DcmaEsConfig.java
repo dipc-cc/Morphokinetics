@@ -17,12 +17,8 @@ public class DcmaEsConfig {
   private double mu;
   /** Array for weighted recombination in CMA-ES. */
   private RichArray weights;
-  /** B defines the coordinate system. */
-  private RichMatrix B;
   /** D contains the standard deviations. */
   private RichArray D;
-  /** Covariance matrix C. */
-  private RichMatrix C;
   /** Track update of B and D. */
   private double eigeneval;
   /** Expectation of ||N(0,I)|| == norm(randn(N,1)) */
@@ -59,9 +55,7 @@ public class DcmaEsConfig {
 
     mu = offSize / 2;
 
-    B = RichMatrix.eye(n);
     D = new RichArray(n, 1);
-    C = RichMatrix.covariance(B, D);
     eigeneval = 0;
     chiN = Math.pow(n, 0.5) * (1 - 1D / (4 * n) + 1D / (21 * Math.pow(n, 2)));
 
@@ -114,16 +108,8 @@ public class DcmaEsConfig {
     return weights;
   }
 
-  public RichMatrix getB() {
-    return B;
-  }
-
   public RichArray getD() {
     return D;
-  }
-
-  public RichMatrix getC() {
-    return C;
   }
 
   public double getEigeneval() {
@@ -173,18 +159,9 @@ public class DcmaEsConfig {
   public int getErrorsNumber() {
     return errorsNumber;
   }
-  
-
-  public void setB(RichMatrix B) {
-    this.B = B;
-  }
 
   public void setD(RichArray D) {
     this.D = D;
-  }
-
-  public void setC(RichMatrix C) {
-    this.C = C;
   }
 
   public void setEigeneval(double eigeneval) {

@@ -27,7 +27,12 @@ public class DifferentialRecombination implements IRecombination {
 
   private RichArray pc;
   private RichArray ps;
-
+  
+  /** B defines the coordinate system. */
+  private RichMatrix B;
+  /** Covariance matrix C. */
+  private RichMatrix C;
+  /** C^-1/2 */
   private RichMatrix invsqrtC;
 
   public DifferentialRecombination(DcmaEsConfig config) {
@@ -44,7 +49,9 @@ public class DifferentialRecombination implements IRecombination {
     cmu = Math.min(1 - c1, 2 * (mueff - 2 + 1D / mueff) / (Math.pow(config.getN() + 2, 2) + mueff));
     damps = 1 + 2 * Math.max(0, Math.sqrt((mueff - 1) / (config.getN() + 1)) - 1) + cs;
 
-    invsqrtC = RichMatrix.invsqrtCovariance(config.getB(), config.getD());
+    B = RichMatrix.eye(config.getN());
+    C = RichMatrix.covariance(B, config.getD());
+    invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
   }
 
   @Override
@@ -75,11 +82,11 @@ public class DifferentialRecombination implements IRecombination {
     RichMatrix artmp = config.getOffX().recombinate(reducedIndex).deduct(
             RichMatrix.repmat(xold, Double.valueOf(config.getMu()).intValue())).apply(OperationFactory.multiply(1 / config.getSigma()));
 
-    config.setC(config.getC().apply(OperationFactory.multiply(1 - c1 - cmu)).sum(
+    C = C.apply(OperationFactory.multiply(1 - c1 - cmu)).sum(
             pc.multiply(pc.transpose()).sum(
-                    config.getC().apply(OperationFactory.multiply((1 - hsig) * cc * (2 - cc))
+                    C.apply(OperationFactory.multiply((1 - hsig) * cc * (2 - cc))
                     ).apply(OperationFactory.multiply(c1)))
-    ).sum(artmp.multiply(RichMatrix.diag(config.getWeights())).multiply(artmp.transpose()).apply(OperationFactory.multiply(cmu))));
+    ).sum(artmp.multiply(RichMatrix.diag(config.getWeights())).multiply(artmp.transpose()).apply(OperationFactory.multiply(cmu)));
 
 	// Adapt step size sigma.
     //config.sigma = config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1));
@@ -90,18 +97,18 @@ public class DifferentialRecombination implements IRecombination {
       config.setEigeneval(config.getCounteval());
 
       // Enforce symmetry.
-      config.setC(config.getC().triu(0).sum(config.getC().triu(1).transpose()));
+      C = C.triu(0).sum(C.triu(1).transpose());
 
       // Eigen decomposition, B==normalized eigenvectors.
-      EigenvalueDecomposition eigenvalueDecomposition = new EigenvalueDecomposition(new DenseDoubleMatrix2D(config.getC().getPureMatrix()));
+      EigenvalueDecomposition eigenvalueDecomposition = new EigenvalueDecomposition(new DenseDoubleMatrix2D(C.getPureMatrix()));
 
-      config.setB(new RichMatrix(eigenvalueDecomposition.getV().toArray()));
+      B = new RichMatrix(eigenvalueDecomposition.getV().toArray());
 
       RichMatrix auxD = new RichMatrix(eigenvalueDecomposition.getD().toArray());
       // D contains standard deviations now.
       config.setD(auxD.diag().apply(OperationFactory.sqrt()));
 
-      invsqrtC = RichMatrix.invsqrtCovariance(config.getB(), config.getD());
+      invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
     }
 
 	// Update P and F:
@@ -113,7 +120,7 @@ public class DifferentialRecombination implements IRecombination {
     config.setCrs(0.1);
 
     boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) < 10);
-    boolean cond2 = ((config.getSigma() * Math.sqrt(Collections.max(config.getC().diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
+    boolean cond2 = ((config.getSigma() * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
     boolean cond = (cond1 || cond2);
     if (config.isPerformCmaEs() && cond) {
       p = 0.5;
@@ -143,7 +150,7 @@ public class DifferentialRecombination implements IRecombination {
 	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
       auxInd = config.getXmean().sum(
-              config.getB().apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.randn(config.getN())))
+              B.apply(OperationFactory.multiply(config.getSigma())).multiply(config.getD().multiply(RichArray.randn(config.getN())))
       ).apply(OperationFactory.multiply(1 - p)).sum(
               auxInd.apply(OperationFactory.multiply(p))
       );
