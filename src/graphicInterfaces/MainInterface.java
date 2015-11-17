@@ -451,4 +451,8 @@ public class MainInterface extends JFrame {
   public void addNewBestIndividual(Individual ind) {
     gaProgressPanel.addNewBestIndividual(ind);
   }
+  
+  public void setStatusBar(String text) {
+    statusbar.setText(text);
+  }
 }
