@@ -76,6 +76,7 @@ public class DcmaEsConfig {
     offX = RichMatrix.zeros(Double.valueOf(n).intValue(), Double.valueOf(offSize).intValue());
     offV = RichMatrix.zeros(Double.valueOf(n).intValue(), Double.valueOf(offSize).intValue());
     offFitness = new RichArray(Double.valueOf(offSize).intValue(), 1D).apply(new Operation() {
+      @Override
       public double apply(double value) {
         return 1e8 * value;
       }
