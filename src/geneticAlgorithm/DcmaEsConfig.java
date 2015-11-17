@@ -41,8 +41,6 @@ public class DcmaEsConfig {
   /** Crossover standard deviation. */
   private double crs; 
 
-  private int errorsNumber = 4;
-
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
 
@@ -149,11 +147,7 @@ public class DcmaEsConfig {
   public double getCrs() {
     return crs;
   }
-
-  public int getErrorsNumber() {
-    return errorsNumber;
-  }
-
+  
   public void setD(RichArray D) {
     this.D = D;
   }

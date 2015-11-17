@@ -36,6 +36,8 @@ public class DifferentialRecombination implements IRecombination {
   private RichMatrix invsqrtC;
   /** Step size in CMA-ES. */
   private double sigma;
+  
+  private final int errorsNumber;
 
   public DifferentialRecombination(DcmaEsConfig config) {
     this.config = config;
@@ -55,6 +57,7 @@ public class DifferentialRecombination implements IRecombination {
     C = RichMatrix.covariance(B, config.getD());
     invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
     
+    errorsNumber = 4;
   }
 
   @Override
@@ -158,7 +161,7 @@ public class DifferentialRecombination implements IRecombination {
               auxInd.apply(OperationFactory.multiply(p))
       );
 
-      offspring.setIndividual(auxInd.toIndividual(config.getErrorsNumber()), k);
+      offspring.setIndividual(auxInd.toIndividual(errorsNumber), k);
     }
 
     return offspring;
