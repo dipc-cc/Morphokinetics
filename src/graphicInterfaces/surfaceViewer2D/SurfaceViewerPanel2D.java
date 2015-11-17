@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import static java.lang.String.format;
+import java.text.DecimalFormat;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -22,7 +23,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle;
-import utils.MathUtils;
 
 public class SurfaceViewerPanel2D extends JPanel {
 
@@ -38,20 +38,20 @@ public class SurfaceViewerPanel2D extends JPanel {
   private JPanel jPanel4;
   private JTextField minTextField;
   private JTextField maxTextField;
-  private final int decimals;
   private String title;
+  private final DecimalFormat formatter;
   
   public SurfaceViewerPanel2D(String textInfo) {
     initComponents();
     mainPanel.setTextInfo(textInfo);
-    decimals = 3;
     title = textInfo;
+    formatter = new DecimalFormat("+00.000;-#");
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
     mainPanel.setPSD(mesh);
-    minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
-    maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
+    minTextField.setText(formatter.format(mainPanel.getMin()));
+    maxTextField.setText(formatter.format(mainPanel.getMax()));
     return this;
   }
 
@@ -96,14 +96,15 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
   public SurfaceViewerPanel2D setMin(double min) {
-    String minString = format("%.3f", min);
+    
+    String minString = formatter.format(min);
     minTextField.setText(minString);
     jTextField1ActionPerformed();
     return this;
   }
 
   public SurfaceViewerPanel2D setMax(double max) {
-    String maxString = format("%.3f", max);
+    String maxString = formatter.format(max);
     maxTextField.setText(maxString);
     jTextField2ActionPerformed();
     return this;
@@ -302,8 +303,8 @@ public class SurfaceViewerPanel2D extends JPanel {
 
     private void jCheckBox3ActionPerformed() {
       mainPanel.setLogScale(logCheckBox.isSelected());
-      minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
-      maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
+      minTextField.setText(formatter.format(mainPanel.getMin()));
+      maxTextField.setText(formatter.format(mainPanel.getMax()));
     }
 
     private void jComboBox1ActionPerformed() {
@@ -324,15 +325,15 @@ public class SurfaceViewerPanel2D extends JPanel {
       maxTextField.setEnabled(!autoCheckBox.isSelected());
 
       mainPanel.setAuto(autoCheckBox.isSelected());
-      minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
-      maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
+      minTextField.setText(formatter.format(mainPanel.getMin()));
+      maxTextField.setText(formatter.format(mainPanel.getMax()));
     }
 
     private void jTextField1ActionPerformed() {
       try {
         mainPanel.setMin(Double.parseDouble(minTextField.getText()));
       } catch (Exception e) {
-        minTextField.setText(MathUtils.truncate(mainPanel.getMin(), decimals) + "");
+        minTextField.setText(formatter.format(mainPanel.getMin()));
       }
     }
 
@@ -340,7 +341,7 @@ public class SurfaceViewerPanel2D extends JPanel {
       try {
         mainPanel.setMax(Double.parseDouble(maxTextField.getText()));
       } catch (Exception e) {
-        maxTextField.setText(MathUtils.truncate(mainPanel.getMax(), decimals) + "");
+        maxTextField.setText(formatter.format(mainPanel.getMax()));
       }
     }
 
