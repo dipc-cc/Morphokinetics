@@ -186,10 +186,6 @@ public class DcmaEsConfig {
     return errorsNumber;
   }
 
-  public void setN(int n) {
-    this.n = n;
-  }
-
   public void setStopFitness(double stopFitness) {
     this.stopFitness = stopFitness;
   }
