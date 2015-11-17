@@ -93,18 +93,18 @@ public class RatesFromPrbCox implements IGrowthRates {
     diffusionMl = 0.0035;
     P = 10e13;
     Pd = 10e11; //no lo sabemos
-    Eaa = 0.275; //1
-    Ebb = 0.310; //2
-    Eca = 0.075; //3
-    Ecb = 0.15;  //4
-    Ecc = 0.075; //consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
-    Eacb = 0.36; //5
-    Ebca = 0.36;
-    Eack = 0.36;
-    Ebck = 0.36;
-    Ecak = 0.15;
-    Ecbk = 0.075;
-    Ed = 0.1;  //6; no lo sabemos seguro
+    // Gene 0; no lo sabemos seguro
+    Ed = 0.1;
+    // Gene 1 (Ec); consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
+    Ecc = Eca = Ecbk = 0.075; 
+    // Gene 2 (Ee)
+    Ecak = Ecb = 0.15;
+    // Gene 3 (Ef)
+    Eack = Ebca = Ebck = Eacb = 0.36;
+    // Gene 4 (Ea)
+    Eaa = 0.275;
+    // Gene 5 (Eb)
+    Ebb = 0.310; 
     Einf = 9999999;
     prefactors = new double[7][7];
     energies = new double[7][7];
