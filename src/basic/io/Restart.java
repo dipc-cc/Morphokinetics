@@ -165,10 +165,11 @@ public class Restart {
     writeLowText2D(data, fileName, false);
   }
 
-  public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, String fileName){
+  public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, String fileName) {
+    fileName = folder + fileName;
     writeLowText2D(data, fileName, false);
   }
-  
+
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
     return readLowText2D(fileName, sizes);
   }
