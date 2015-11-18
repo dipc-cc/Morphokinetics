@@ -6,6 +6,7 @@ package graphicInterfaces.gaConvergence;
 
 import geneticAlgorithm.Individual;
 import java.awt.Color;
+import java.text.DecimalFormat;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import static javax.swing.GroupLayout.Alignment.LEADING;
@@ -44,7 +45,8 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
   private JScrollPane jScrollPane1;
   private JScrollPane jScrollPane2;
   private JTable jTable1;
-
+  private DecimalFormat formatter;
+  
   public GaProgressPanel() {
 
     try {
@@ -58,6 +60,8 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
     this.jScrollPane1.setViewportView(panel);
     this.totalIterations = 0;
     this.setVisible(true);
+    
+    formatter = new DecimalFormat("0.#####E0");
   }
 
   /**
@@ -201,7 +205,8 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
       }
     }
     for (int gene = 0; gene < ind.getGeneSize(); gene++) {
-      jTable1.setValueAt((float) ind.getGene(gene), gene, 4);
+      String string = formatter.format((float) ind.getGene(gene));
+      jTable1.setValueAt(string, gene, 4);
     }
     this.totalIterations++;
   }
