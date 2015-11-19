@@ -55,10 +55,6 @@ public class SurfaceViewerPanel2D extends JPanel {
     return this;
   }
 
-  public void redrawPSD() {
-    mainPanel.repaint();
-  }
-
   public SurfaceViewerPanel2D setLogScale(boolean log) {
     logCheckBox.setSelected(log);
     jCheckBox3ActionPerformed();
