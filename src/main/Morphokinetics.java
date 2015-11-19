@@ -32,6 +32,8 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class Morphokinetics {
 
+  private static double simulationTime;
+  
   public static void main(String[] args) {
     AbstractSimulation.printHeader();
 
@@ -103,11 +105,12 @@ public class Morphokinetics {
     float[][] experimentalPsd;
     if (parser.getReadReference())
       experimentalPsd = readExperimentalData();
-    else 
+    else {
       experimentalPsd = createExperimentalData(parser, ga);
+      ga.setExpectedSimulationTime(simulationTime);
+    }
     mainInterface.setExperimentalMesh(MathUtils.avgFilter(experimentalPsd, 1));
     ga.setExperimentalPsd(experimentalPsd);
-    //ga.setExpectedSimulationTime(simulationTime);
     ga.initialise();
     
     ga.iterate(parser.getTotalIterations());
@@ -156,7 +159,8 @@ public class Morphokinetics {
     double[] rates = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
-        rates = new AgRatesFactory().getRates(parser.getTemperature());
+        //rates = new AgRatesFactory().getRates(parser.getTemperature());
+        rates = new AgRatesFactory().getReduced6Rates(parser.getTemperature());
         break;
       case "Si":
         rates = new SiRatesFactory().getRates(parser.getTemperature());
@@ -168,7 +172,7 @@ public class Morphokinetics {
     }
     Individual individual = new Individual(rates);
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
-    double simulationTime = individual.getSimulationTime();
+    simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);
     return experimentalPsd;
   }
