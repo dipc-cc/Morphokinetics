@@ -103,8 +103,8 @@ public class MainInterface extends JFrame {
     diffPanel2d = new SurfaceViewerPanel2D("Difference");
     diffPanel2d.setLogScale(true)
             .setShift(true)
-            .setMin(-2)
-            .setMax(2);
+            .setMin(0)
+            .setMax(1);
     surfacePanel2d = new SurfaceViewerPanel2D("Surface");
     surfacePanel2d.setMin(-1)
             .setMax(21);
@@ -142,6 +142,7 @@ public class MainInterface extends JFrame {
   }
   
   public void setDifference(float[][] mesh) {
+    diffPanel2d.setLogScale(false);
     diffPanel2d.setMesh(mesh);
   }
   
