@@ -67,11 +67,6 @@ public class SurfaceViewerPanel2D extends JPanel {
     return this;
   }
 
-  public SurfaceViewerPanel2D showPSDControls(boolean enabled) {
-    jPanel4.setVisible(enabled);
-    return this;
-  }
-
   public SurfaceViewerPanel2D setColorMap(int colormap) {
     if (colormap == Panel2D.COLOR_HSV) {
       jComboBox1.setSelectedIndex(0);
