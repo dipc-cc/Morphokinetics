@@ -21,7 +21,7 @@ public class Frame2D extends javax.swing.JFrame {
   }
 
   public Frame2D setMesh(float[][] mesh) {
-    ((Panel2D) jPanel1).setPSD(mesh);
+    ((Panel2D) jPanel1).setPsd(mesh);
     jTextField1.setText(MathUtils.truncate(((Panel2D) jPanel1).getMin(), 5) + "");
     jTextField2.setText(MathUtils.truncate(((Panel2D) jPanel1).getMax(), 5) + "");
     return this;

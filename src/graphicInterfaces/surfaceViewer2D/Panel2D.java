@@ -41,7 +41,7 @@ public class Panel2D extends javax.swing.JPanel {
     initComponents();
   }
 
-  public void setPSD(float[][] psd) {
+  public void setPsd(float[][] psd) {
     this.psd = psd;
     if (auto) {
       getMinMax(psd);

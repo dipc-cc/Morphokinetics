@@ -49,7 +49,7 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
-    mainPanel.setPSD(mesh);
+    mainPanel.setPsd(mesh);
     minTextField.setText(formatter.format(mainPanel.getMin()));
     maxTextField.setText(formatter.format(mainPanel.getMax()));
     return this;
