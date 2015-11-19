@@ -154,7 +154,7 @@ public class Morphokinetics {
   private static float[][] createExperimentalData(Parser parser, AbstractGeneticAlgorithm ga) {
     
     AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
-    evaluator.setRepeats(evaluator.getRepeats() * 5);
+    evaluator.setRepeats(50);
     
     double[] rates = null;
     switch (parser.getCalculationMode()) {
@@ -173,7 +173,7 @@ public class Morphokinetics {
     Individual individual = new Individual(rates);
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     simulationTime = individual.getSimulationTime();
-    evaluator.setRepeats(evaluator.getRepeats() / 5);
+    evaluator.setRepeats(parser.getRepetitions());
     return experimentalPsd;
   }
   
