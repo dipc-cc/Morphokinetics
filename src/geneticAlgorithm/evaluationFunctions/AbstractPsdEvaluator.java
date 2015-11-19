@@ -34,7 +34,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected float[][] difference;
 
   protected int repeats;
-  protected float[][] experimentalPsd;
+  private float[][] experimentalPsd;
   protected int measureInterval;
   protected Population currentPopulation;
   protected int currentSimulation;
@@ -56,6 +56,12 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
    */
   public AbstractPsdEvaluator setPsd(float[][] experimentalPsd) {
     this.experimentalPsd = experimentalPsd;
+    for (int i = 0; i < experimentalPsd.length; i++) {
+      for (int j = 0; j < experimentalPsd[0].length; j++) {
+        this.experimentalPsd[i][j] = (float)Math.log(experimentalPsd[i][j]);        
+      }
+    }
+        
     System.out.println("Setting experimental PSD");
     oneNormOfVector = calculateOneNormVector(experimentalPsd);
     twoNormOfVector = calculateTwoNormVector(experimentalPsd);
@@ -263,9 +269,12 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private double calculateFrobeniusNormErrorMatrix(PsdSignature2D psd) {
     double error;
     double sum = 0.0f;
+    // Apply the filter to smooth it
+    float[][] currentPsd = MathUtils.avgFilter(psd.getPsd(), 1);
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
-       difference[i][j] = (float)Math.pow(psd.getPsd()[i][j] - experimentalPsd[i][j],2);
+        // Apply the log_e and calculate the difference
+        difference[i][j] = (float) Math.pow(Math.log(currentPsd[i][j]) - experimentalPsd[i][j],2);
       }
     }
     
@@ -322,7 +331,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     }
     error = calculateFrobeniusNormErrorMatrix(psd);
     if (mainInterface != null) {
-      mainInterface.setSimulationMesh(psd.getPsd());
+      mainInterface.setSimulationMesh(MathUtils.avgFilter(psd.getPsd(),1));
       mainInterface.setSurface(sampledSurface);
       mainInterface.setDifference(difference);
       mainInterface.setError(error);
@@ -336,6 +345,16 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     Restart restart = new Restart(folderName);
     String fileName = "errors.txt";
     restart.writeTextString(errors, fileName);
+    fileName = "genes.txt";
+    String genes = "";
+    for (int i = 0; i < 6; i++) {
+      genes += "\t"+ind.getGene(i);
+    }
+    restart.writeTextString(genes, fileName);
+    int[] sizes = new int[2];
+    sizes[0] = psdSizeX;
+    sizes[1] = psdSizeY;
+    restart.writeSurfaceText2D(2, sizes, difference, "difference");
     return error * wheight;
   }
     
