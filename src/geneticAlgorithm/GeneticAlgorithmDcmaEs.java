@@ -162,12 +162,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   @Override
   public float[] getProgressPercent() {
     float[] progress = new float[3];
-
     progress[0] = currentIteration * 100.0f / totalIterations;
-
-    float[] subprogress = evaluator.getProgressPercent();
-    progress[1] = subprogress[0];
-    progress[2] = subprogress[1];
+    progress[2] = mainEvaluator.getProgressPercent();
 
     return progress;
   }
