@@ -18,6 +18,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   private DcmaEsConfig dcmaEsConfig;
   /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
   private final double stopFitness;
+  /** Number of function evaluations to stop. */
+  private double stopEval;
   
   Integer[] offIndex;
   Integer[] reducedIndex;
@@ -31,6 +33,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     reinsertion = null;
     
     stopFitness = 1e-12;
+    stopEval = 1e8;
   }
 
   @Override
@@ -103,7 +106,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   public void iterate(int maxIterations) {
     totalIterations = maxIterations;
 
-    while (dcmaEsConfig.getCounteval() < dcmaEsConfig.getStopEval() && currentIteration < maxIterations) {
+    while (dcmaEsConfig.getCounteval() < stopEval && currentIteration < maxIterations) {
       currentIteration++;
 
       iterateOneStep();

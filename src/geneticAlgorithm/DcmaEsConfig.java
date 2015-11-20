@@ -7,8 +7,6 @@ import utils.akting.operations.Operation;
 public class DcmaEsConfig {
   /** Number of objective variables/problem dimension. */
   private int n;
-  /** Number of function evaluations to stop. */
-  private double stopEval;
   /** Population size, offspring number in DE and CMA-ES. */
   private double offSize;
   /** Number of parents for recombination in CMA-ES. */
@@ -41,8 +39,6 @@ public class DcmaEsConfig {
 
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
-
-    stopEval = 1e8;
 
     offSize = configuration.getPopulationSize(); //offSize = n * Math.round(28 / Math.sqrt(n));
 
@@ -79,10 +75,6 @@ public class DcmaEsConfig {
   
   public int getN() {
     return n;
-  }
-
-  public double getStopEval() {
-    return stopEval;
   }
 
   public double getOffSize() {
