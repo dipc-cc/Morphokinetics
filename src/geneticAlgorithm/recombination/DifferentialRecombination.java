@@ -128,7 +128,7 @@ public class DifferentialRecombination implements IRecombination {
     boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) < 10);
     boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
     boolean cond = (cond1 || cond2);
-    if (config.isPerformCmaEs() && cond) {
+    if (cond) {
       p = 0.5;
       // Crossover mean.
       config.setCrm(0.85);

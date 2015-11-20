@@ -30,8 +30,6 @@ public class DcmaEsConfig {
   /** Recombination, new mean value in CMA-ES. */
   private RichArray xmean;
 
-  private boolean performCmaEs = true;
-
   /**  Crossover mean. */
   private double crm; 
   /** Crossover standard deviation. */
@@ -115,10 +113,6 @@ public class DcmaEsConfig {
 
   public RichArray getXmean() {
     return xmean;
-  }
-  
-  public boolean isPerformCmaEs() {
-    return performCmaEs;
   }
 
   public double getCrm() {
