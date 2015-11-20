@@ -16,7 +16,9 @@ import graphicInterfaces.gaConvergence.IgaProgressFrame;
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
   private DcmaEsConfig dcmaEsConfig;
-
+  /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
+  private final double stopFitness;
+  
   Integer[] offIndex;
   Integer[] reducedIndex;
 
@@ -27,6 +29,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     mutation = null;
     recombination = null;
     reinsertion = null;
+    
+    stopFitness = 1e-12;
   }
 
   @Override
@@ -106,7 +110,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
       addToGraphics();
 
-      if (dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(dcmaEsConfig.getStopFitness())
+      if (dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(stopFitness)
               || dcmaEsConfig.getD().max() > 1e7 * dcmaEsConfig.getD().min()) {
         System.out.println("Exiting for an unknown reason");
         break;

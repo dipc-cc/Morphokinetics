@@ -7,8 +7,6 @@ import utils.akting.operations.Operation;
 public class DcmaEsConfig {
   /** Number of objective variables/problem dimension. */
   private int n;
-  /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
-  private double stopFitness;
   /** Number of function evaluations to stop. */
   private double stopEval;
   /** Population size, offspring number in DE and CMA-ES. */
@@ -44,7 +42,6 @@ public class DcmaEsConfig {
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
 
-    stopFitness = 1e-12;
     stopEval = 1e8;
 
     offSize = configuration.getPopulationSize(); //offSize = n * Math.round(28 / Math.sqrt(n));
@@ -82,10 +79,6 @@ public class DcmaEsConfig {
   
   public int getN() {
     return n;
-  }
-
-  public double getStopFitness() {
-    return stopFitness;
   }
 
   public double getStopEval() {
