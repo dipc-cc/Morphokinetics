@@ -1,0 +1,14 @@
+reset
+set term pngcairo
+set output "OUTPUT.png"
+# set term postscript enhanced color "Arial" 20
+# set output "OUTPUT.eps"
+unset colorbox
+unset xtics
+set ytics ("YTIC" 50) rotate by 90
+#unset ytics
+unset border
+set palette rgbformulae 33,13,10
+set size square
+# Big endian, skip 64 bytes and treat it as a matrix. Don't print -1 values (they aren't from the surface
+plot "INPUT.mko" binary endian=big skip=64  array=(MAX, MAX) u ($1>-1?$1:NaN) w image t ""
