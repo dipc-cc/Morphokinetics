@@ -108,6 +108,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
       if (dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(dcmaEsConfig.getStopFitness())
               || dcmaEsConfig.getD().max() > 1e7 * dcmaEsConfig.getD().min()) {
+        System.out.println("Exiting for an unknown reason");
         break;
       }
       System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
