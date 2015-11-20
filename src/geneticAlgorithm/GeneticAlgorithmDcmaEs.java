@@ -116,7 +116,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
         System.out.print(getBestIndividual().getGenes()[i] + " ");
       }
       System.out.println("");
-      if (this.getBestError() < 0.01) {
+      if (this.getBestError() < 0.022) {
         System.out.println("Stopping because the error is "+this.getBestError());
         break;
       }
