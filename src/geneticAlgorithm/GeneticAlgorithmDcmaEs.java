@@ -19,10 +19,10 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
   private final double stopFitness;
   /** Number of function evaluations to stop. */
-  private double stopEval;
+  private final double stopEval;
   
-  Integer[] offIndex;
-  Integer[] reducedIndex;
+  private Integer[] offIndex;
+  private Integer[] reducedIndex;
 
   public GeneticAlgorithmDcmaEs(Parser parser) {
     super(parser);
