@@ -135,7 +135,7 @@ public class DifferentialRecombination implements IRecombination {
 	  // Crossover standard deviation.
       //config.crs = 0.1;
     }
-
+    System.out.println("P=" + p);
     RichArray f = RichArray.rand(Double.valueOf(groups.length).intValue()).apply(new Operation() {
       @Override
       public double apply(double value) {
