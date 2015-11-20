@@ -124,10 +124,6 @@ public class DcmaEsConfig {
     return offX;
   }
 
-  public RichMatrix getOffV() {
-    return offV;
-  }
-
   public RichArray getOffFitness() {
     return offFitness;
   }
