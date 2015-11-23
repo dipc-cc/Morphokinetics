@@ -40,7 +40,7 @@ public class SimpleBasicKmcSimulation {
 
       KMC.simulate(500);
       panel.drawKmc(KMC);
-      Wait.manymsec(300);
+      Wait.manyMilliSec(300);
     }
 
   }
