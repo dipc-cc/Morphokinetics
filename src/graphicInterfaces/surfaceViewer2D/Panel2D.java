@@ -34,9 +34,6 @@ public class Panel2D extends javax.swing.JPanel {
 
   protected String textInfo = "This is a 2D surface";
 
-  /**
-   * Creates new form dibujaKMC
-   */
   public Panel2D() {
     initComponents();
   }
