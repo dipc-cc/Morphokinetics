@@ -8,7 +8,6 @@ import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import graphicInterfaces.MainInterface;
-import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -20,11 +19,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private int psdSizeX;
   private int psdSizeY;
   
-  private double oneNormOfVector;
-  private double twoNormOfVector;
-  private double infiniteNormOfVector;
-  private double oneNormOfMatrix;
-  private double infiniteNormOfMatrix;
   private double frobeniusNormOfMatrix;
   
   protected MainInterface mainInterface;
@@ -40,7 +34,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected int currentSimulation;
   private double expectedSimulationTime;
 
-  private float[][] currentPsd;
   protected int kmcError;
   
   public AbstractPsdEvaluator(int repeats, int measureInterval) {
@@ -98,7 +91,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     double error;
     double sum = 0.0f;
     // Apply the filter to smooth it
-    currentPsd = psd.getPsd();
+    float[][] currentPsd = psd.getPsd();
     for (int i = 0; i < psdSizeX; i++) {
       for (int j = 0; j < psdSizeY; j++) {
         // Apply the log_e and calculate the difference
