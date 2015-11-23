@@ -38,6 +38,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected int measureInterval;
   protected Population currentPopulation;
   protected int currentSimulation;
+  private double expectedSimulationTime;
 
   private float[][] currentPsd;
   protected int kmcError;
@@ -75,6 +76,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     frobeniusNormOfMatrix = calculateFrobeniusNorm(experimentalPsd);
     
     return this;
+  }
+  
+  public void setExpectedSimulationTime(double expectedSimulationTime) {
+    this.expectedSimulationTime = expectedSimulationTime;
   }
   
   /**
