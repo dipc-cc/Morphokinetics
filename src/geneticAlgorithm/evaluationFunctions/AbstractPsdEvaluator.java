@@ -146,9 +146,9 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     error += timeError;
     if (kmcError == -1) error = 1000;
 
-    System.out.println(" errors: "+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError);
-    String errors = " Errors: FrobeniusNormMatrix\ttimeError\n";
-    errors = errors+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError;
+    System.out.println(" errors: "+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError+"\t"+error);
+    String errors = " Errors: FrobeniusNormMatrix\ttimeError\tError\n";
+    errors = errors+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError+"\t"+error;
     String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+((currentSimulation-repeats)/repeats);
     Restart restart = new Restart(folderName);
     String fileName = "errors.txt";
