@@ -26,7 +26,7 @@ public class Wait {
     }
   }
 
-  public static void manymsec(long s) {
+  public static void manyMilliSec(long s) {
     try {
       Thread.currentThread().sleep(s);
     } catch (InterruptedException e) {
