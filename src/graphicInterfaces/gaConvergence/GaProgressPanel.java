@@ -61,7 +61,7 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
     this.totalIterations = 0;
     this.setVisible(true);
     
-    formatter = new DecimalFormat("0.#####E0");
+    formatter = new DecimalFormat("0.##E0");
   }
 
   /**
@@ -98,23 +98,20 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
 
     jTable1.setModel(new DefaultTableModel(
       new Object [][] {
-        {null, null, null, null, null},
-        {null, null, null, null, ""},
-        {null, null, null, null, null},
-        {null, null, null, null, null},
-        {null, null, null, null, null},
-        {null, null, null, null, null},
-        {null, null, null, null, null},
-        {null, null, null, null, null},
-        {null, null, null, null, null},
-        {null, null, null, null, null}
+        {"Terrace", "E_d", "E_d", "E_d", "E_d", "E_d", "E_d", "E_d"},
+        {"Corner ", null, "E_c", "E_c", "E_e", "Max", "E_e", "E_c"},
+        {"Edge A ", null, null, "E_a", "E_f", "E_f", "E_f", "E_f"},
+        {"Kink A ", null, null, null, null, null, null, null},
+        {"Bulk   ", null, null, null, null, null, null, null},
+        {"Edge B ", null, null, "E_f", "E_f", "E_f", "E_b", "E_f"},
+        {"Kink B ", null, null, null, null, null, null, null}
       },
       new String [] {
-        "minus 4", "minus 3", "minus 2", "minus 1", "Last iteration"
+        "", "Terrace", "Corner", "Edge A", "Kink A", "Bulk", "Edge B", "Kink B"
       }
     ) {
       boolean[] canEdit = new boolean [] {
-        false, false, false, false, false
+        false, false, false, false, false, false, false
       };
 
       public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -197,17 +194,35 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
   public void addNewBestIndividual(Individual ind) {
 
     panel.addPoint(this.totalIterations, (float) ind.getTotalError());
-    checkTableSize(ind);
 
-    for (int column = 1; column < 5; column++) {
-      for (int row = 0; row < ind.getGeneSize(); row++) {
-        jTable1.setValueAt(jTable1.getValueAt(row, column), row, column - 1);
-      }
+    String value;
+    for (int column = 1; column < 8; column++) {
+      value = formatter.format((float) ind.getGene(0)); // E_d
+      jTable1.setValueAt(value, 0, column);
     }
-    for (int gene = 0; gene < ind.getGeneSize(); gene++) {
-      String string = formatter.format((float) ind.getGene(gene));
-      jTable1.setValueAt(string, gene, 4);
-    }
+    value = formatter.format((float) ind.getGene(1)); // E_c
+    jTable1.setValueAt(value, 1, 2);
+    jTable1.setValueAt(value, 1, 3);
+    jTable1.setValueAt(value, 1, 7);
+    
+    value = formatter.format((float) ind.getGene(2)); // E_e
+    jTable1.setValueAt(value, 1, 4);
+    jTable1.setValueAt(value, 1, 6);
+    
+    value = formatter.format((float) ind.getGene(3));
+    jTable1.setValueAt(value, 2, 4);
+    jTable1.setValueAt(value, 2, 5);
+    jTable1.setValueAt(value, 2, 6);
+    jTable1.setValueAt(value, 2, 7);
+    jTable1.setValueAt(value, 5, 3);
+    jTable1.setValueAt(value, 5, 4);
+    jTable1.setValueAt(value, 5, 5);
+    jTable1.setValueAt(value, 5, 7);
+    
+    value = formatter.format((float) ind.getGene(4));
+    jTable1.setValueAt(value, 2, 3);
+    value = formatter.format((float) ind.getGene(5));
+    jTable1.setValueAt(value, 5, 6);
     this.totalIterations++;
   }
 
@@ -217,30 +232,4 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
     // jTable1. //TODO CLEAR JTABLE
     this.totalIterations = 0;
   }
-
-  private void checkTableSize(Individual i) {
-
-    if (jTable1.getModel().getRowCount() != i.getGeneSize()) {
-      jTable1.setModel(createTableModel(i.getGeneSize(), 5));
-    }
-
-  }
-
-  private DefaultTableModel createTableModel(int rows, int columns) {
-
-    return new DefaultTableModel(
-            new Object[rows][columns],
-            new String[]{
-              "minus 4", "minus 3", "minus 2", "minus 1", "Last iteration"
-            }) {
-              boolean[] canEdit = new boolean[]{
-                false, false, false, false, false
-              };
-
-              public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit[columnIndex];
-              }
-            };
-  }
-  
 }
