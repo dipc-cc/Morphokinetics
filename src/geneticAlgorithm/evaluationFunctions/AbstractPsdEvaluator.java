@@ -139,13 +139,13 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
 
   private double evaluateIndividual(Individual ind) {
-    calculatePsdFromIndividual(ind);
-    double error = calculateFrobeniusNormErrorMatrix(psd);
-    double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime;
-    // update error with the Frobenius error of the log of the time
-    error += timeError;
-    if (kmcError == -1) error = 1000;
+    calculatePsdFromIndividual(ind); // Do KMC run and calculate its PSD
+    double error = calculateFrobeniusNormErrorMatrix(psd); // Calculate corresponding error with the reference
+    double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
+    error += timeError; // update error with the Frobenius error of the log of the time
+    if (kmcError == -1) error = 1000; // If the KMC execution did not finish properly, set huge error
 
+    // Print to standard output, file and GUI
     System.out.println(" errors: "+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError+"\t"+error);
     String errors = " Errors: FrobeniusNormMatrix\ttimeError\tError\n";
     errors = errors+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError+"\t"+error;
