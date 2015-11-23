@@ -39,17 +39,26 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);
     kmc.initialiseRates(getRates6(ind.getGenes()));
+    kmcError = 0;
     for (int i = 0; i < repeats; i++) {
       mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(repeats-1));
       kmc.reset();
       kmc.depositSeed();
       while (true) {
-        kmc.simulate();
-        sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
-        psd.addSurfaceSample(sampledSurface);
-        sizes[0] = sampledSurface.length;
-        sizes[1] = sampledSurface[0].length;
-        restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
+        int result;
+        if (kmcError == 0) {
+          result = kmc.simulate();
+          sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
+          psd.addSurfaceSample(sampledSurface);
+          sizes[0] = sampledSurface.length;
+          sizes[1] = sampledSurface[0].length;
+          restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
+        } else 
+          result = -1;
+        if (result == -1) {
+          kmcError = -1;
+          break;
+        }
         if (kmc.getCoverage() < 0.05) continue;
         if (kmc.getIterations() < measureInterval) {
           time += kmc.getTime();
@@ -124,6 +133,12 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * @return
    */
   public double[] getRates6(double[] genes) {
+      /*genes[0] =1.8485467015993026E8;
+      genes[1] =1.5853414702210693E11;
+      genes[2] =2.513307577202702E8;
+      genes[3] =3.6357125335394893;
+      genes[4] =5417.309825567712;
+      genes[5] =267.4079556676412;*/
     System.out.print("population"+getCurrentIteration()+"/individual"+currentSimulation/repeats);
     for (int i = 0; i < 6; i++) {
       System.out.print(" "+genes[i]);;
