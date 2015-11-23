@@ -24,6 +24,7 @@ import kineticMonteCarlo.lattice.AgLattice;
 import ratesLibrary.AgRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
+import utils.Wait;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -109,7 +110,10 @@ public class Morphokinetics {
       experimentalPsd = createExperimentalData(parser, ga);
       ga.setExpectedSimulationTime(simulationTime);
     }
-    mainInterface.setExperimentalMesh(MathUtils.avgFilter(experimentalPsd, 1));
+    
+    Wait.manyMilliSec(250);
+    mainInterface.setExperimentalMesh(experimentalPsd);
+    Wait.manyMilliSec(250);
     ga.setExperimentalPsd(experimentalPsd);
     ga.initialise();
     
