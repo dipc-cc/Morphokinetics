@@ -66,13 +66,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       }
     }
           
-    System.out.println("Setting experimental PSD");
-    oneNormOfVector = calculateOneNormVector(experimentalPsd);
-    twoNormOfVector = calculateTwoNormVector(experimentalPsd);
-    infiniteNormOfVector = calculateInfiniteNormVector(experimentalPsd);
-    
-    oneNormOfMatrix = calculateOneNormMatrix(experimentalPsd);
-    infiniteNormOfMatrix = calculateInfiniteNormMatrix(experimentalPsd);
     frobeniusNormOfMatrix = calculateFrobeniusNorm(experimentalPsd);
     
     return this;
@@ -80,90 +73,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   
   public void setExpectedSimulationTime(double expectedSimulationTime) {
     this.expectedSimulationTime = Math.log(expectedSimulationTime);
-  }
-  
-  /**
-   * ||x||_1 = SUM_i(|x_i|)
-   * @param vector
-   * @return 
-   */
-  private double calculateOneNormVector(float[][] vector) {
-    double result = 0.0f;
-    for (int i = 0; i < vector.length; i++) {
-      for (int j = 0; j < vector[0].length; j++) {
-        result += Math.abs(vector[i][j]);
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * ||x||_2 = (SUM_i(|x_i|2))^1/2
-   * @param vector
-   * @return 
-   */
-  private double calculateTwoNormVector(float[][] vector) {
-    double result = 0.0f;
-    for (int i = 0; i < vector.length; i++) {
-      for (int j = 0; j < vector[0].length; j++) {
-        result += Math.pow(vector[i][j],2);
-      }
-    }
-    result = Math.sqrt(result);
-    return result;
-  }
-
-  /**
-   * ||x||_inf = max_i |x_i|
-   * @param vector
-   * @return 
-   */
-  private double calculateInfiniteNormVector(float[][] vector) {
-    double result = 0.0f;
-    for (int i = 0; i < vector.length; i++) {
-      for (int j = 0; j < vector[0].length; j++) {
-        if (Math.abs(vector[i][j]) > result) {
-          result = Math.abs(vector[i][j]);
-        }
-      }
-    }
-    return result;
-  }
-
-  /**
-   * It is simply the maximum absolute column sum of the matrix.
-   * ||A||_1 = max_j SUM_i(|a_ij|)
-   * @param matrix
-   * @return 
-   */
-  private double calculateOneNormMatrix(float[][] matrix) {
-    double result = 0.0f;
-    for (int j = 0; j < matrix[0].length; j++) {
-      double tmp = 0.0f;
-      for (int i = 0; i < matrix.length; i++) {
-        tmp += Math.abs(matrix[i][j]);
-      }
-      if (tmp > result) result = tmp;
-    }
-    return result;
-  }
-   
-  /**
-   * It is simply the maximum absolute row sum of the matrix.
-   * ||A||_1 = max_j SUM_i(|a_ij|)
-   * @param matrix
-   * @return 
-   */
-  private double calculateInfiniteNormMatrix(float[][] matrix) {
-    double result = 0.0f;
-    for (int i = 0; i < matrix.length; i++) {
-      double tmp = 0.0f;
-      for (int j = 0; j < matrix[0].length; j++) {
-        tmp += Math.abs(matrix[i][j]);
-      }
-      if (tmp > result) result = tmp;
-    }
-    return result;
   }
   
   /**
@@ -184,101 +93,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     
 
   public abstract float[][] calculatePsdFromIndividual(Individual i);
-
-  protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
-    currentPsd = psd.getPsd();
-    for (int a = 0; a < difference.length; a++) {
-      for (int b = 0; b < difference[0].length; b++) {
-        difference[a][b] = (float) ((Math.log(currentPsd[a][b]) - experimentalPsd[a][b]) / Math.min(experimentalPsd[a][b], Math.log(currentPsd[a][b])));
-      }
-    }
-
-  }
-  
-  /**
-   * This is the first step of Frobenius norm. It is missing the addition and the square root.
-   * (http://www.netlib.org/lapack/lug/node75.html).
-   * @param difference
-   * @param psd 
-   */
-  /*protected void calculateRelativeDifference(float[][] difference, PsdSignature2D psd) {
-    for (int a = 0; a < difference.length; a++) {
-      for (int b = 0; b < difference[0].length; b++) {
-        difference[a][b] = (float) Math.sqrt(Math.pow((psd.getPsd()[a][b] - experimentalPsd[a][b]) / experimentalPsd[a][b],2));
-      }
-    }
-  }*/
-
-  private double calculateOneNormErrorVector(PsdSignature2D psd) {
-   double error;
-   double sum = 0.0f;
-    currentPsd = psd.getPsd();
-    for (int i = 0; i < psdSizeX; i++) {
-      for (int j = 0; j < psdSizeY; j++) {
-        sum += Math.abs(Math.log(currentPsd[i][j]) - experimentalPsd[i][j]);
-      }
-    }
-   error = sum / oneNormOfVector;
-   return error;
-  }  
-  
-  private double calculateTwoNormErrorVector(PsdSignature2D psd) {
-   double error;
-   double sum = 0.0f;
-    currentPsd = psd.getPsd();
-    for (int i = 0; i < psdSizeX; i++) {
-      for (int j = 0; j < psdSizeY; j++) {
-        sum += Math.pow(Math.log(currentPsd[i][j]) - experimentalPsd[i][j],2);
-      }
-    }
-   error = Math.sqrt(sum) / twoNormOfVector;
-   return error;
-  }
-    
-  private double calculateInfiniteNormErrorVector(PsdSignature2D psd) {
-   double error;
-   double max = 0.0f;
-    currentPsd = psd.getPsd();
-    for (int i = 0; i < psdSizeX; i++) {
-      for (int j = 0; j < psdSizeY; j++) {
-        if (Math.abs(Math.log(currentPsd[i][j]) - experimentalPsd[i][j]) > max) {
-          max = Math.abs(Math.log(currentPsd[i][j]) - experimentalPsd[i][j]);
-        }
-      }
-    }
-   error = max/infiniteNormOfVector;
-   return error;
-  }
-
-  private double calculateOneNormErrorMatrix(PsdSignature2D psd) {
-    double error;
-    double max = 0.0f;
-    currentPsd = psd.getPsd();
-    for (int j = 0; j < psdSizeY; j++) {
-      double tmp = 0.0f;
-      for (int i = 0; i < psdSizeX; i++) {
-        tmp += Math.abs(Math.log(currentPsd[i][j]) - experimentalPsd[i][j]);
-      }
-      if (tmp > max) max = tmp;
-    }
-    error = max / oneNormOfMatrix;
-    return error;
-  }
-  
-  private double calculateInfiniteNormErrorMatrix(PsdSignature2D psd) {
-    double error;
-    double max = 0.0f;
-    currentPsd = psd.getPsd();
-    for (int i = 0; i < psdSizeX; i++) {
-      double tmp = 0.0f;
-      for (int j = 0; j < psdSizeY; j++) {
-        tmp += Math.abs(Math.log(currentPsd[i][j]) - experimentalPsd[i][j]);
-      }
-      if (tmp > max) max = tmp;
-    }
-    error = max / infiniteNormOfMatrix;
-    return error;
-  }
   
   private double calculateFrobeniusNormErrorMatrix(PsdSignature2D psd) {
     double error;
@@ -334,21 +148,15 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   private double evaluateIndividual(Individual ind) {
     calculatePsdFromIndividual(ind);
-    calculateRelativeDifference(difference, psd);
+    double error = calculateFrobeniusNormErrorMatrix(psd);
+    double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime;
+    // update error with the Frobenius error of the log of the time
+    error += timeError;
+    if (kmcError == -1) error = 1000;
 
-    difference = MathUtils.avgFilter(difference, 5);
-    double error = 0;
-    for (int a = 0; a < psdSizeX; a++) {
-      for (int b = 0; b < psdSizeY; b++) {
-        error += Math.abs(difference[a][b]);
-      }
-    }
-   
-    System.out.println(" errors: "+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
-            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+error);
-    String errors = " Errors: OneNormVector\tTwoNormVector\tInfiniteNormVector\tOneNormMatrix\tInfiniteNormMatrix\tFrobeniusNormMatrix\toldError\n";
-    errors = errors+"\t"+calculateOneNormErrorVector(psd)+"\t"+calculateTwoNormErrorVector(psd)+"\t"+calculateInfiniteNormErrorVector(psd)+"\t"+
-            calculateOneNormErrorMatrix(psd)+"\t"+calculateInfiniteNormErrorMatrix(psd)+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+error;
+    System.out.println(" errors: "+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError);
+    String errors = " Errors: FrobeniusNormMatrix\ttimeError\n";
+    errors = errors+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError;
     String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+((currentSimulation-repeats)/repeats);
     Restart restart = new Restart(folderName);
     String fileName = "errors.txt";
@@ -363,12 +171,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     sizes[0] = psdSizeX;
     sizes[1] = psdSizeY;
     restart.writeSurfaceText2D(2, sizes, difference, "difference");
-    error = calculateFrobeniusNormErrorMatrix(psd);
-    if (kmcError == -1) error = 1000;
     
-    // update error with the Frobenius error of the log of the time
-    double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime;
-    error += timeError;
     if (mainInterface != null) {
       mainInterface.setSimulationMesh(psd.getPsd());
       mainInterface.setSurface(sampledSurface);
