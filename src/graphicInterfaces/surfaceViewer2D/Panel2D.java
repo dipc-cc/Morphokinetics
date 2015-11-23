@@ -4,7 +4,6 @@
  */
 
 /*
- * dibujaKMC.java
  *
  * Created on 31-ene-2012, 12:47:47
  */
