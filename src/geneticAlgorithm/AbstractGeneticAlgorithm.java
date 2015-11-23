@@ -234,6 +234,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   public void setExpectedSimulationTime(double expectedSimulationTime) {
     this.expectedSimulationTime = expectedSimulationTime;
+    mainEvaluator.setExpectedSimulationTime(expectedSimulationTime);
   }
 
   public AbstractPsdEvaluator getMainEvaluator() {
