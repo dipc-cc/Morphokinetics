@@ -10,6 +10,9 @@ package utils;
  */
 public class Wait {
 
+  /**
+   * Waits one second
+   */
   public static void oneSec() {
     try {
       Thread.currentThread().sleep(1000);
@@ -18,6 +21,10 @@ public class Wait {
     }
   }
 
+  /**
+   * Waits given seconds
+   * @param s seconds
+   */
   public static void manySec(long s) {
     try {
       Thread.currentThread().sleep(s * 1000);
@@ -26,9 +33,13 @@ public class Wait {
     }
   }
 
-  public static void manyMilliSec(long s) {
+  /**
+   * Waits given milliseconds 
+   * @param ms milliseconds 
+   */
+  public static void manyMilliSec(long ms) {
     try {
-      Thread.currentThread().sleep(s);
+      Thread.currentThread().sleep(ms);
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
