@@ -10,7 +10,6 @@ import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import java.util.concurrent.Semaphore;
-import utils.MathUtils;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -75,11 +74,9 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   @Override
   public void dispose() {
-
     for (int i = 0; i < workers.length; i++) {
       workers[i].destroyWorker();
     }
-
   }
 
   @Override
@@ -91,7 +88,6 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   @Override
   public float[][] calculatePsdFromIndividual(Individual i) {
-
     Population p = new Population(1);
     p.setIndividual(i, 0);
     this.calculatePsdOfPopulation(p);
@@ -111,22 +107,10 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   }
 
   private double evaluateIndividual(int individualPos) {
-
-    double error = 0;
-    float[][] difference = new float[getPsdSizeY()][getPsdSizeX()];
-
     psds[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psds[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    calculateRelativeDifference(difference, psds[individualPos]);
-
-    difference = MathUtils.avgFilter(difference, 5);
-
-    for (int a = 0; a < getPsdSizeY(); a++) {
-      for (int b = 0; b < getPsdSizeX(); b++) {
-        error += Math.abs(difference[a][b]);
-      }
-    }
+    double error = calculateFrobeniusNormErrorMatrix(psds[individualPos]);
     return error * wheight;
   }
 
