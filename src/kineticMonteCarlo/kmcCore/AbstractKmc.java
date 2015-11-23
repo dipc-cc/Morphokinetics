@@ -54,12 +54,17 @@ public abstract class AbstractKmc implements IKmc {
    * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
    */
   @Override
-  public void simulate() {
+  public int simulate() {
     iterationsForLastSimulation = 0;
-    while (!performSimulationStep()) {
+    int max = (int) 1E6;
+    while (!performSimulationStep() && iterationsForLastSimulation < max) {
       iterationsForLastSimulation++;
     }
-
+    if (iterationsForLastSimulation >= max) {
+      System.out.println("Too many simulation steps. Simulation steps: "+iterationsForLastSimulation);
+      return -1;
+    }
+    return iterationsForLastSimulation;
   }
 
   /**
