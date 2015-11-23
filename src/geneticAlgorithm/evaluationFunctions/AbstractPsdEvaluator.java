@@ -58,7 +58,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
         this.experimentalPsd[i][j] = (float)Math.log(experimentalPsd[i][j]);        
       }
     }
-          
     frobeniusNormOfMatrix = calculateFrobeniusNorm(experimentalPsd);
     
     return this;
@@ -87,7 +86,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   public abstract float[][] calculatePsdFromIndividual(Individual i);
   
-  private double calculateFrobeniusNormErrorMatrix(PsdSignature2D psd) {
+  protected double calculateFrobeniusNormErrorMatrix(PsdSignature2D psd) {
     double error;
     double sum = 0.0f;
     // Apply the filter to smooth it
