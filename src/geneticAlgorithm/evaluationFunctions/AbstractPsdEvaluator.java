@@ -79,7 +79,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
   
   public void setExpectedSimulationTime(double expectedSimulationTime) {
-    this.expectedSimulationTime = expectedSimulationTime;
+    this.expectedSimulationTime = Math.log(expectedSimulationTime);
   }
   
   /**
@@ -365,6 +365,10 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     restart.writeSurfaceText2D(2, sizes, difference, "difference");
     error = calculateFrobeniusNormErrorMatrix(psd);
     if (kmcError == -1) error = 1000;
+    
+    // update error with the Frobenius error of the log of the time
+    double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime;
+    error += timeError;
     if (mainInterface != null) {
       mainInterface.setSimulationMesh(psd.getPsd());
       mainInterface.setSurface(sampledSurface);
