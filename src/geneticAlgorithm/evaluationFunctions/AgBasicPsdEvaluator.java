@@ -57,6 +57,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
           result = -1;
         if (result == -1) {
           kmcError = -1;
+          time = Integer.MAX_VALUE;
           break;
         }
         if (kmc.getCoverage() < 0.05) continue;
