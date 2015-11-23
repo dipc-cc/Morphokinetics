@@ -21,7 +21,7 @@ public interface IKmc {
 
   public AbstractLattice getLattice();
 
-  public void simulate();
+  public int simulate();
 
   public void simulate(double endtime);
 
