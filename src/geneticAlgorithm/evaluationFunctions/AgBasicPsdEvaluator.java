@@ -17,6 +17,18 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private AgKmc kmc;
 
+  private double g4g0;
+  private double g5g0;
+  private double g5g4;
+  private double g3g0;
+  private double g3g1;
+  private double g3g2;
+  private double g3g4;
+  private double g3g5;
+  private double g4g1;
+  private double g5g1;
+  private double g2g1;
+  
   public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY) {
 
     super(repeats, measureInterval);
@@ -76,6 +88,47 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     return psd.getPsd();
   }
 
+  /**
+   * Sets the expected rates hierarchies, based on the objective rates (genes)
+   * @param genes 
+   */
+  public void setHierarchy(double[] genes) {
+    g4g0 = genes[4] / genes[0];
+    g5g0 = genes[5] / genes[0];
+    g5g4 = genes[5] / genes[4];
+    g3g0 = genes[3] / genes[0];
+    g3g1 = genes[3] / genes[1];
+    g3g2 = genes[3] / genes[2];
+    g3g4 = genes[3] / genes[4];
+    g3g5 = genes[3] / genes[5];
+    g4g1 = genes[4] / genes[1];
+    g5g1 = genes[5] / genes[1];
+    g2g1 = genes[2] / genes[1];
+  }
+  
+  /**
+   * Calculates the hierarchy error based on the rates of Cox et al. 
+   * @param ind Current individual
+   * @return normalised hierarchy error
+   */
+  @Override
+  protected double calculateHierarchyErrorFromReference(Individual ind) {
+    double error = 0;
+    error += Math.sqrt(Math.pow(ind.getGene(4)/ind.getGene(0) - g4g0, 2))/g4g0;
+    error += Math.sqrt(Math.pow(ind.getGene(5)/ind.getGene(0) - g5g0, 2))/g5g0;
+    error += Math.sqrt(Math.pow(ind.getGene(5)/ind.getGene(4) - g5g4, 2))/g5g4;
+    error += Math.sqrt(Math.pow(ind.getGene(3)/ind.getGene(0) - g3g0, 2))/g3g0;
+    error += Math.sqrt(Math.pow(ind.getGene(3)/ind.getGene(1) - g3g1, 2))/g3g1;
+    error += Math.sqrt(Math.pow(ind.getGene(3)/ind.getGene(2) - g3g2, 2))/g3g2;
+    error += Math.sqrt(Math.pow(ind.getGene(3)/ind.getGene(4) - g3g4, 2))/g3g4;
+    error += Math.sqrt(Math.pow(ind.getGene(3)/ind.getGene(5) - g3g5, 2))/g3g5;
+    error += Math.sqrt(Math.pow(ind.getGene(4)/ind.getGene(1) - g4g1, 2))/g4g1;
+    error += Math.sqrt(Math.pow(ind.getGene(5)/ind.getGene(1) - g5g1, 2))/g5g1;
+    error += Math.sqrt(Math.pow(ind.getGene(2)/ind.getGene(1) - g2g1, 2))/g2g1;
+    
+    return error;
+  }  
+  
   /**
    * Calculates the hierarchy error based on the rates of Cox et al. 
    * @param ind Current individual
