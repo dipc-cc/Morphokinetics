@@ -83,4 +83,9 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     return error;
   }
 
+  @Override
+  protected double calculateHierarchyErrorFromReference(Individual i) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
 }
