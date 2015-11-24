@@ -73,4 +73,14 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
   protected double calculateHierarchyError(Individual i) {
     return 0;
   }
+
+  /**
+   * It is not implemented
+   * @param i
+   * @return 0
+   */
+  @Override
+  protected double calculateHierarchyErrorFromReference(Individual i) {
+    return 0;
+  }
 }
