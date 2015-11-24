@@ -118,7 +118,7 @@ public class Morphokinetics {
     ga.initialise();
     
     ga.iterate(parser.getTotalIterations());
-    printResult(ga);
+    printResult(parser, ga);
     mainInterface.setStatusBar("Finished");
   }
   
@@ -181,14 +181,22 @@ public class Morphokinetics {
     return experimentalPsd;
   }
   
-  private static void printResult(IGeneticAlgorithm ga) {
+  private static void printResult(Parser parser, IGeneticAlgorithm ga) {
     Individual individual = ga.getIndividual(0);
     
     System.out.println("These are the results: ");
     System.out.println("Total error is:" + individual.getTotalError());
+    System.out.print("Genes: ");
     for (int gene = 0; gene < individual.getGeneSize(); gene++) {
       System.out.print(individual.getGene(gene) + " ");
     }
     System.out.println();
+    double kB = 8.617332e-5; // Boltzmann constant
+    System.out.print("Energies: ");
+    for (int gene = 0; gene < individual.getGeneSize(); gene++) {
+      System.out.print(-kB * parser.getTemperature() * Math.log(individual.getGene(gene) / 1e13) + " ");
+    }
+    System.out.println();
+    
   }
 }
