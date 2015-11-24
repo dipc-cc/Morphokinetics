@@ -165,6 +165,7 @@ public class Morphokinetics {
       case "Ag":
         //rates = new AgRatesFactory().getRates(parser.getTemperature());
         rates = new AgRatesFactory().getReduced6Rates(parser.getTemperature());
+        ga.setHierarchy(rates);
         break;
       case "Si":
         rates = new SiRatesFactory().getRates(parser.getTemperature());
