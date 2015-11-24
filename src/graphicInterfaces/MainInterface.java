@@ -56,7 +56,6 @@ public class MainInterface extends JFrame {
   private SurfaceViewerPanel2D simulationPanel2d;
   private SurfaceViewerPanel2D diffPanel2d;
   private SurfaceViewerPanel2D surfacePanel2d;
-  private KmcCanvas surfaceCanvas;
   private GaProgressPanel gaProgressPanel;
   private JLabel scaleLabel;
   private JPanel growPanel; 
@@ -68,7 +67,6 @@ public class MainInterface extends JFrame {
   
   public MainInterface(KmcCanvas canvas1) {
     this.growCanvas = canvas1;
-    this.surfaceCanvas = canvas1;
     initGrowth();
     initUI();
     this.growPanel.add(canvas1);
@@ -84,7 +82,7 @@ public class MainInterface extends JFrame {
     statusbar = new JLabel("Ready");
     statusbar.setBorder(BorderFactory.createEtchedBorder());
 
-    createBorderLayout(mainScroll,statusbar);
+    createBorderLayout(mainScroll, statusbar);
     setTitle("Morphokinetics");
     setSize(1150, 1000);
     setLocationRelativeTo(null);
@@ -123,10 +121,10 @@ public class MainInterface extends JFrame {
     psdPanel.add(psdSouth, SOUTH);
     BorderLayout mainLayout = new BorderLayout();
     mainPanel.setLayout(mainLayout);
-    mainPanel.add(mainGrowPanel,NORTH);
-    mainPanel.add(gaProgressPanel,WEST);
-    mainPanel.add(psdPanel,EAST);
-    
+    mainPanel.add(mainGrowPanel, NORTH);
+    mainPanel.add(gaProgressPanel, WEST);
+    mainPanel.add(psdPanel, EAST);
+
     mainScroll = new JScrollPane(mainPanel);
     
   }
