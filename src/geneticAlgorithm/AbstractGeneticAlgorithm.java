@@ -307,6 +307,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     updater.start();
   }
 
+  public void setHierarchy(double[] rates) {
+    ((AgBasicPsdEvaluator) mainEvaluator).setHierarchy(rates);
+  }
+
   /**
    * Inner class responsible to update the interface.
    */
