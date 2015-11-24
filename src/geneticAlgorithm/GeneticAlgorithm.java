@@ -72,7 +72,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
       iterateOneStep();
       addToGraphics();
       System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
-      if (this.getBestError() < 0.086) {
+      if (this.getBestError() < 0.022) {
         System.out.println("Stopping because the error is "+this.getBestError());
         break;
       }
