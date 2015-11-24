@@ -84,7 +84,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   @Override
   protected double calculateHierarchyError(Individual ind) {
     double error = 0;
-    error += ind.getGene(4)/in  d.getGene(0);
+    error += ind.getGene(4)/ind.getGene(0);
     error += ind.getGene(5)/ind.getGene(0);
     
     error += ind.getGene(5)/ind.getGene(4);
