@@ -91,8 +91,8 @@ public class RatesFromPrbCox implements IGrowthRates {
   public RatesFromPrbCox() { 
     kB = 8.617332e-5;
     diffusionMl = 0.0035;
-    P = 10e13;
-    Pd = 10e11; //no lo sabemos
+    P = 1e13;
+    Pd = 1e11; //no lo sabemos
     // Gene 0; no lo sabemos seguro
     Ed = 0.1;
     // Gene 1 (Ec); consideramos la misma barrera para corner a corner, a diferencia de Cox et al.
