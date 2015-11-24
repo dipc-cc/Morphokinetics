@@ -107,6 +107,36 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   }
   
   /**
+   * If the difference is lower than 1, error is not added; otherwise, 
+   * error is added by one
+   * @param ind
+   * @return 
+   */
+  @Override
+  protected double calculateHierarchyErrorDiscrete(Individual ind) {
+    double error = 0;
+
+    error += stepFunction(ind.getGene(4) / ind.getGene(0));
+    error += stepFunction(ind.getGene(5) / ind.getGene(0));
+    error += stepFunction(ind.getGene(5) / ind.getGene(4));
+    error += stepFunction(ind.getGene(3) / ind.getGene(0));
+    error += stepFunction(ind.getGene(3) / ind.getGene(1));
+    error += stepFunction(ind.getGene(3) / ind.getGene(2));
+    error += stepFunction(ind.getGene(3) / ind.getGene(4));
+    error += stepFunction(ind.getGene(3) / ind.getGene(5));
+    error += stepFunction(ind.getGene(4) / ind.getGene(1));
+    error += stepFunction(ind.getGene(5) / ind.getGene(1));
+    error += stepFunction(ind.getGene(2) / ind.getGene(1));
+    
+    return error;
+  }
+  
+  private double stepFunction(double division) {
+    if (division < 1) return 0;
+    else return 1;
+  }
+  
+  /**
    * Calculates the hierarchy error based on the rates of Cox et al. 
    * @param ind Current individual
    * @return normalised hierarchy error
