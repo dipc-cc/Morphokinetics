@@ -31,7 +31,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     this.canvas1 = canvas1;
     this.canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
     this.jPanel1.add(canvas1);
-    this.canvas1.initialize();
+    this.canvas1.initialise();
     this.jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
     this.setResizable(true);
     this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);

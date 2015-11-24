@@ -56,7 +56,7 @@ public class GrowthKmcPanel extends javax.swing.JPanel {
   }
   
   public void initCanvas(){
-    this.canvas1.initialize();
+    this.canvas1.initialise();
   }
 
   public void repaintKmc() {

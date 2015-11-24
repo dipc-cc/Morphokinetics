@@ -70,7 +70,7 @@ public class MainInterface extends JFrame {
     initGrowth();
     initUI();
     this.growPanel.add(canvas1);
-    this.growCanvas.initialize();
+    this.growCanvas.initialise();
     this.jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
     this.setResizable(true);
    
