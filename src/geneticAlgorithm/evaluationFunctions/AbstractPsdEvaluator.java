@@ -144,17 +144,17 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   private double evaluateIndividual(Individual ind) {
     calculatePsdFromIndividual(ind); // Do KMC run and calculate its PSD
-    double error = calculateFrobeniusNormErrorMatrix(psd); // Calculate corresponding error with the reference
+    double fError = calculateFrobeniusNormErrorMatrix(psd); // Calculate corresponding error with the reference
     double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
-    error += timeError; // update error with the Frobenius error of the log of the time
-    error += calculateHierarchyErrorFromReference(ind);
+    double hError = calculateHierarchyErrorFromReference(ind);
+    double error = fError + timeError + hError; // Sum up all errors: Frobenius, time and hierarchy
     if (kmcError == -1) error = 1000; // If the KMC execution did not finish properly, set huge error
 
     // Print to standard output, file and GUI
-    System.out.println("  errors: "+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError+"\t"+calculateHierarchyErrorFromReference(ind)+"\t"+error);
+    System.out.println("  errors: "+"\t"+fError+"\t"+timeError+"\t"+hError+"\t"+error);
     System.out.println("  simul. time: "+ind.getSimulationTime()+"\t("+expectedSimulationTime+")");
     String errors = " Errors: FrobeniusNormMatrix\ttimeError\tHierarchy\tError\n";
-    errors = errors+"\t"+calculateFrobeniusNormErrorMatrix(psd)+"\t"+timeError+"\t"+calculateHierarchyErrorFromReference(ind)+"\t"+error;
+    errors = errors+"\t"+fError+"\t"+timeError+"\t"+hError+"\t"+error;
     String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+((currentSimulation-repeats)/repeats);
     Restart restart = new Restart(folderName);
     String fileName = "errors.txt";
