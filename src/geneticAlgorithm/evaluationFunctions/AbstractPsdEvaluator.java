@@ -89,6 +89,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected abstract double calculateHierarchyError(Individual i);
   
   protected abstract double calculateHierarchyErrorFromReference(Individual i);
+  protected abstract double calculateHierarchyErrorDiscrete(Individual ind);
   
   protected double calculateFrobeniusNormErrorMatrix(PsdSignature2D psd) {
     double error;
