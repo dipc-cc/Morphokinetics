@@ -4,6 +4,7 @@
  */
 package geneticAlgorithm.evaluationFunctions;
 
+import geneticAlgorithm.Individual;
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
@@ -53,6 +54,33 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     }
 
     super.handleSimulationFinish(workerID, workID);
+  }
+
+  /**
+   * Calculates the hierarchy error based on the rates of Cox et al. 
+   * @param ind Current individual
+   * @return hierarchy error, at least 6.52e-2
+   */
+  @Override
+  protected double calculateHierarchyError(Individual ind) {
+    double error = 0;
+    error += ind.getGene(4)/ind.getGene(0);
+    error += ind.getGene(5)/ind.getGene(0);
+    
+    error += ind.getGene(5)/ind.getGene(4);
+    
+    error += ind.getGene(3)/ind.getGene(0);
+    error += ind.getGene(3)/ind.getGene(1);
+    error += ind.getGene(3)/ind.getGene(2);
+    error += ind.getGene(3)/ind.getGene(4);
+    error += ind.getGene(3)/ind.getGene(5);
+    
+    error += ind.getGene(4)/ind.getGene(1);
+    error += ind.getGene(5)/ind.getGene(1);
+    
+    error += ind.getGene(2)/ind.getGene(1);
+    
+    return error;
   }
 
 }

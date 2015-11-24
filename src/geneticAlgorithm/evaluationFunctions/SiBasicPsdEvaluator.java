@@ -63,4 +63,14 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
     sampledSurface = null;
     difference = null;
   }
+  
+  /**
+   * It is not implemented
+   * @param i
+   * @return 0
+   */
+  @Override
+  protected double calculateHierarchyError(Individual i) {
+    return 0;
+  }
 }

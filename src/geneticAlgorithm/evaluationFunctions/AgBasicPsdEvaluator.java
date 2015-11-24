@@ -76,6 +76,33 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     return psd.getPsd();
   }
 
+  /**
+   * Calculates the hierarchy error based on the rates of Cox et al. 
+   * @param ind Current individual
+   * @return hierarchy error, at least 6.52e-2
+   */
+  @Override
+  protected double calculateHierarchyError(Individual ind) {
+    double error = 0;
+    error += ind.getGene(4)/in  d.getGene(0);
+    error += ind.getGene(5)/ind.getGene(0);
+    
+    error += ind.getGene(5)/ind.getGene(4);
+    
+    error += ind.getGene(3)/ind.getGene(0);
+    error += ind.getGene(3)/ind.getGene(1);
+    error += ind.getGene(3)/ind.getGene(2);
+    error += ind.getGene(3)/ind.getGene(4);
+    error += ind.getGene(3)/ind.getGene(5);
+    
+    error += ind.getGene(4)/ind.getGene(1);
+    error += ind.getGene(5)/ind.getGene(1);
+    
+    error += ind.getGene(2)/ind.getGene(1);
+    
+    return error;
+  }
+  
   @Override
   public void dispose() {
     psd = null;

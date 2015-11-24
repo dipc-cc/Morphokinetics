@@ -4,6 +4,7 @@
  */
 package geneticAlgorithm.evaluationFunctions;
 
+import geneticAlgorithm.Individual;
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
@@ -54,4 +55,13 @@ public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     super.handleSimulationFinish(workerId, workId);
   }
 
+  /**
+   * It is not implemented
+   * @param i
+   * @return 0
+   */
+  @Override
+  protected double calculateHierarchyError(Individual i) {
+    return 0;
+  }
 }
