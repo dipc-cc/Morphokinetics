@@ -87,7 +87,7 @@ public abstract class AbstractKmc implements IKmc {
    * @param iterations 
    */
   @Override
-  public void simulate(int iterations) {
+  public int simulate(int iterations) {
     iterationsForLastSimulation = 0;
     for (int i = 0; i < iterations; i++) {
       if (performSimulationStep()) {
@@ -95,8 +95,14 @@ public abstract class AbstractKmc implements IKmc {
       }
       iterationsForLastSimulation++;
     }
-
+    
     list.cleanup();
+
+    if (iterationsForLastSimulation == iterations ) {
+      System.out.println("Too many simulation steps. Simulation steps: "+iterationsForLastSimulation);
+      return -1;
+    }
+    return iterationsForLastSimulation;
   }
 
   @Override
