@@ -244,7 +244,7 @@ public class RichArray extends ArrayList<Double> {
 		RichArray newArray = new RichArray(capacity);
 		
 		for (int i = 0; i < capacity; i++) {
-			newArray.add((i <= k) ? get(i) : 0);
+			newArray.add((i <= k) ? get(i) : 0.0);
 		}
 		
 		return newArray;
