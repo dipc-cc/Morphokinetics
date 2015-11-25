@@ -55,8 +55,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(repeats-1));
       kmc.reset();
       kmc.depositSeed();
+      int max = (int)1e6;
       while (true) {
-        int kmcReturn = kmc.simulate();
+        int kmcReturn = kmc.simulate(max);
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         if (kmcReturn == -1) kmcError++;
         else psd.addSurfaceSample(sampledSurface);
