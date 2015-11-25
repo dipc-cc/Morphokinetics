@@ -57,17 +57,14 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       kmc.reset();
       kmc.depositSeed();
       while (true) {
-        int result;
-        if (kmcError == 0) {
-          result = kmc.simulate();
-          sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
-          psd.addSurfaceSample(sampledSurface);
-          sizes[0] = sampledSurface.length;
-          sizes[1] = sampledSurface[0].length;
-          restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
-        } else 
-          result = -1;
-        if (result == -1) {
+        int kmcReturn = kmc.simulate();
+        sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
+        if (kmcReturn == -1) kmcError++;
+        else psd.addSurfaceSample(sampledSurface);
+        sizes[0] = sampledSurface.length;
+        sizes[1] = sampledSurface[0].length;
+        restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
+        if (kmcError > 2) { // Allow 3 errors or strange surfaces. Exit individual with more
           kmcError = -1;
           time = Integer.MAX_VALUE;
           break;
@@ -77,6 +74,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
           time += kmc.getTime();
           break;
         }
+      }
+      if (kmcError == -1) {
+        currentSimulation += repeats - i;
+        break;
       }
       currentSimulation++;
     }
