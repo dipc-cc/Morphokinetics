@@ -157,6 +157,14 @@ public class Restart {
     String fileName = format("%ssurface%03d.mko",folder,simulationNumber);
     writeLowBinary(dimensions, sizes, data, fileName);
   }
+  
+  public void writeSurfaceBinary2D(float[][] data, int simulationNumber) {
+    int sizes[] = new int[2];
+    sizes[0] = data.length;
+    sizes[1] = data[0].length;
+    String fileName = format("%ssurface%03d.mko",folder,simulationNumber);
+    writeLowBinary(2, sizes, data, fileName);
+  }
 
   public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
     String fileName = format("%ssurface%03d.txt",folder,simulationNumber);
