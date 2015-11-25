@@ -25,7 +25,7 @@ public interface IKmc {
 
   public void simulate(double endtime);
 
-  public void simulate(int iterations);
+  public int simulate(int iterations);
 
   public AbstractList getSurfaceList();
 
