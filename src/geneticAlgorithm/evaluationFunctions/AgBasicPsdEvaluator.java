@@ -127,6 +127,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     error += stepFunction(ind.getGene(4) / ind.getGene(1));
     error += stepFunction(ind.getGene(5) / ind.getGene(1));
     error += stepFunction(ind.getGene(2) / ind.getGene(1));
+    error += stepFunction(ind.getGene(0) / ind.getGene(2)); // not physically meaningful
     
     return error;
   }
