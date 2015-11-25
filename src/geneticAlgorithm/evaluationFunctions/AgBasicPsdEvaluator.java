@@ -47,7 +47,6 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     psd.reset();
     double time = 0.0;
     String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+individualCount;
-    int sizes[] = new int[2];
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);
     kmc.initialiseRates(getRates6(ind.getGenes()));
@@ -61,9 +60,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         if (kmcReturn == -1) kmcError++;
         else psd.addSurfaceSample(sampledSurface);
-        sizes[0] = sampledSurface.length;
-        sizes[1] = sampledSurface[0].length;
-        restart.writeSurfaceBinary(2, sizes, sampledSurface, i);
+        restart.writeSurfaceBinary2D(sampledSurface, i);
         if (kmcError > 2) { // Allow 3 errors or strange surfaces. Exit individual with more
           kmcError = -1;
           time = Integer.MAX_VALUE;
