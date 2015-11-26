@@ -8,6 +8,7 @@ public class DivideOperation implements Operation {
     this.factor = factor;
   }
 
+  @Override
   public double apply(double value) {
     return value / factor;
   }
