@@ -255,6 +255,7 @@ public class RichArray extends ArrayList<Double> {
 
     return apply(new Operation() {
 
+      @Override
       public double apply(double value) {
         return value / sum;
       }
