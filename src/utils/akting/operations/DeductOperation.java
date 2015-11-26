@@ -8,6 +8,7 @@ public class DeductOperation implements Operation {
     this.deductValue = deductValue;
   }
 
+  @Override
   public double apply(double value) {
     return value - deductValue;
   }
