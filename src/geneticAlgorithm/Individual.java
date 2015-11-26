@@ -79,6 +79,10 @@ public class Individual {
     return temp;
   }
 
+  /**
+   * Returns the number of genes 
+   * @return number of genes
+   */
   public int getGeneSize() {
     return genes.length;
   }
