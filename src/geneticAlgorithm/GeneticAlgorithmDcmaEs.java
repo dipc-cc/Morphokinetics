@@ -42,7 +42,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
     // Inicializamos la clase que contiene variables globales del algoritmo.
     dcmaEsConfig = new DcmaEsConfig(this, population.getIndividual(0).getGeneSize());
-    recombination = new DifferentialRecombination(dcmaEsConfig);
+    recombination = new DifferentialRecombination(dcmaEsConfig, population.getIndividual(0).getGeneSize());
     mutation = new CrossoverMutator(dcmaEsConfig);
     reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
 
