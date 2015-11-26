@@ -21,8 +21,6 @@ public class DcmaEsConfig {
   private int counteval;
   /** Offspring population. */
   private RichMatrix offX;
-  /** Trial/test offspring population. */
-  private RichMatrix offV;
   /** Objective function values. */
   private RichArray offFitness;
   /** Recombination, new mean value in CMA-ES. */
@@ -46,7 +44,6 @@ public class DcmaEsConfig {
     counteval = 0;
 
     offX = RichMatrix.zeros(Double.valueOf(n).intValue(), Double.valueOf(offSize).intValue());
-    offV = RichMatrix.zeros(Double.valueOf(n).intValue(), Double.valueOf(offSize).intValue());
     offFitness = new RichArray(Double.valueOf(offSize).intValue(), 1D).apply(new Operation() {
       @Override
       public double apply(double value) {
