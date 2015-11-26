@@ -21,6 +21,7 @@ public class RichArrayComparator implements Comparator<Integer> {
     return indexes;
   }
 
+  @Override
   public int compare(Integer o1, Integer o2) {
     return richArray.get(o1).compareTo(richArray.get(o2));
   }
