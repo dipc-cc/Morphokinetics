@@ -63,6 +63,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         else psd.addSurfaceSample(sampledSurface);
         restart.writeSurfaceBinary2D(sampledSurface, i);
         if (kmcError > 2) { // Allow 3 errors or strange surfaces. Exit individual with more
+          System.out.println("Skipping individual");
           kmcError = -1;
           time = Integer.MAX_VALUE;
           break;
