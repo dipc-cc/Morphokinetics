@@ -62,7 +62,7 @@ public class DcmaEsConfig {
       public double apply(double value) {
         return Math.log(mu + 1D / 2) - Math.log(value);
       }
-    }).normalize();
+    }).normalise();
   }
   
   public int getN() {

@@ -250,7 +250,7 @@ public class RichArray extends ArrayList<Double> {
     return newArray;
   }
 
-  public RichArray normalize() {
+  public RichArray normalise() {
     final double sum = sum();
 
     return apply(new Operation() {
