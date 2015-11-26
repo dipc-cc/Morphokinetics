@@ -8,6 +8,7 @@ public class PowOperation implements Operation {
     this.exponent = exponent;
   }
 
+  @Override
   public double apply(double value) {
     return Math.pow(value, exponent);
   }
