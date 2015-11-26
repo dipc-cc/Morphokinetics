@@ -23,7 +23,7 @@ public class ElitistAllReinsertion implements IReinsertion {
    */
   @Override
   public Population Reinsert(Population origin, Population offpring, int substitutions) {
-    for (int k = 0; k < config.getOffSize(); k++) {
+    for (int k = 0; k < origin.size(); k++) {
 
       Individual original = origin.getIndividual(k);
       Individual candidate = offpring.getIndividual(k);
