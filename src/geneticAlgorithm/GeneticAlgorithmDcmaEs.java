@@ -22,7 +22,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   private final double stopEval;
   
   private Integer[] offIndex;
-  private Integer[] reducedIndex;
 
   public GeneticAlgorithmDcmaEs(Parser parser) {
     super(parser);
@@ -56,7 +55,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     }
 
     offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
-    reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(dcmaEsConfig.getMu()).intValue());
+    Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(dcmaEsConfig.getMu()).intValue());
     dcmaEsConfig.setOffX(new RichMatrix(population));
     dcmaEsConfig.setXmean(dcmaEsConfig.getOffX().recombinate(reducedIndex).multiply(dcmaEsConfig.getWeights()));
     double sigma = dcmaEsConfig.getOffX().recombinate(reducedIndex).transpose().std().std();
