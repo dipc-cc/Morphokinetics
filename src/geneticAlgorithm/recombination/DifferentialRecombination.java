@@ -35,13 +35,16 @@ public class DifferentialRecombination implements IRecombination {
   /** C^-1/2 */
   private RichMatrix invsqrtC;
   /** Step size in CMA-ES. */
-  private double sigma;
+  private double sigma;  
+  /** Expectation of ||N(0,I)|| == norm(randn(N,1)). */
+  private final double chiN;
   
   private final int errorsNumber;
 
   public DifferentialRecombination(DcmaEsConfig config) {
     this.config = config;
 
+    chiN = Math.pow(config.getN(), 0.5) * (1 - 1D / (4 * config.getN()) + 1D / (21 * Math.pow(config.getN(), 2)));
     mueff = Math.pow(config.getWeights().sum(), 2) / config.getWeights().apply(OperationFactory.pow(2)).sum();
 
     pc = new RichArray(config.getN(), 0);
@@ -96,7 +99,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	// Adapt step size sigma.
     //config.sigma = config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1));
-    sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / config.getChiN() - 1)));
+    sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1)));
 
     // Update B and D from C.
     if (config.getCounteval() - config.getEigeneval() > config.getOffSize() / (c1 + cmu) / config.getN() / 10) {

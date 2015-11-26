@@ -17,8 +17,6 @@ public class DcmaEsConfig {
   private RichArray D;
   /** Track update of B and D. */
   private double eigeneval;
-  /** Expectation of ||N(0,I)|| == norm(randn(N,1)) */
-  private double chiN;
   /** Counter for the number of evaluations. A good optimisation method will minimise this number. */
   private int counteval;
   /** Offspring population. */
@@ -38,13 +36,12 @@ public class DcmaEsConfig {
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
 
-    offSize = configuration.getPopulationSize(); //offSize = n * Math.round(28 / Math.sqrt(n));
+    offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
 
     mu = offSize / 2;
 
     D = new RichArray(n, 1);
     eigeneval = 0;
-    chiN = Math.pow(n, 0.5) * (1 - 1D / (4 * n) + 1D / (21 * Math.pow(n, 2)));
 
     counteval = 0;
 
@@ -93,10 +90,6 @@ public class DcmaEsConfig {
 
   public double getEigeneval() {
     return eigeneval;
-  }
-
-  public double getChiN() {
-    return chiN;
   }
 
   public int getCounteval() {
