@@ -38,25 +38,28 @@ public class DifferentialRecombination implements IRecombination {
   private double sigma;  
   /** Expectation of ||N(0,I)|| == norm(randn(N,1)). */
   private final double chiN;
+  /** Number of objective variables/problem dimension. */
+  private int dimensions;
   
   private final int errorsNumber;
 
-  public DifferentialRecombination(DcmaEsConfig config) {
+  public DifferentialRecombination(DcmaEsConfig config, int dimensions) {
     this.config = config;
-
-    chiN = Math.pow(config.getN(), 0.5) * (1 - 1D / (4 * config.getN()) + 1D / (21 * Math.pow(config.getN(), 2)));
+    this.dimensions = dimensions;
+    
+    chiN = Math.pow(dimensions, 0.5) * (1 - 1D / (4 * dimensions) + 1D / (21 * Math.pow(dimensions, 2)));
     mueff = Math.pow(config.getWeights().sum(), 2) / config.getWeights().apply(OperationFactory.pow(2)).sum();
 
-    pc = new RichArray(config.getN(), 0);
-    ps = new RichArray(config.getN(), 0);
+    pc = new RichArray(dimensions, 0);
+    ps = new RichArray(dimensions, 0);
 
-    cc = (4 + mueff / config.getN()) / (config.getN() + 4 + 2 * mueff / config.getN());
-    cs = (mueff + 2) / (config.getN() + mueff + 5);
-    c1 = 2 / (Math.pow(config.getN() + 1.3, 2) + mueff);
-    cmu = Math.min(1 - c1, 2 * (mueff - 2 + 1D / mueff) / (Math.pow(config.getN() + 2, 2) + mueff));
-    damps = 1 + 2 * Math.max(0, Math.sqrt((mueff - 1) / (config.getN() + 1)) - 1) + cs;
+    cc = (4 + mueff / dimensions) / (dimensions + 4 + 2 * mueff / dimensions);
+    cs = (mueff + 2) / (dimensions + mueff + 5);
+    c1 = 2 / (Math.pow(dimensions + 1.3, 2) + mueff);
+    cmu = Math.min(1 - c1, 2 * (mueff - 2 + 1D / mueff) / (Math.pow(dimensions + 2, 2) + mueff));
+    damps = 1 + 2 * Math.max(0, Math.sqrt((mueff - 1) / (dimensions + 1)) - 1) + cs;
 
-    B = RichMatrix.eye(config.getN());
+    B = RichMatrix.eye(dimensions);
     C = RichMatrix.covariance(B, config.getD());
     invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
     
@@ -80,7 +83,7 @@ public class DifferentialRecombination implements IRecombination {
                     config.getXmean().deduct(xold).apply(OperationFactory.divide(sigma))));
 
     double hsig = (ps.apply(OperationFactory.pow(2)).sum()
-            / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / offspring.size())) / config.getN() < 2 + 4 / (config.getN() + 1)) ? 1 : 0;
+            / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
 
     pc = pc.apply(OperationFactory.multiply(1 - cc)).sum(
             config.getXmean().deduct(xold).apply(
@@ -102,7 +105,7 @@ public class DifferentialRecombination implements IRecombination {
     sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1)));
 
     // Update B and D from C.
-    if (config.getCounteval() - config.getEigeneval() > offspring.size() / (c1 + cmu) / config.getN() / 10) {
+    if (config.getCounteval() - config.getEigeneval() > offspring.size() / (c1 + cmu) / dimensions / 10) {
       config.setEigeneval(config.getCounteval());
 
       // Enforce symmetry.
@@ -158,7 +161,7 @@ public class DifferentialRecombination implements IRecombination {
 	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
       auxInd = config.getXmean().sum(
-              B.apply(OperationFactory.multiply(sigma)).multiply(config.getD().multiply(RichArray.randn(config.getN())))
+              B.apply(OperationFactory.multiply(sigma)).multiply(config.getD().multiply(RichArray.randn(dimensions)))
       ).apply(OperationFactory.multiply(1 - p)).sum(
               auxInd.apply(OperationFactory.multiply(p))
       );
