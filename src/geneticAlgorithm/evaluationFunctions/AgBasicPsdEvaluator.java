@@ -52,7 +52,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     kmc.initialiseRates(getRates6(ind.getGenes()));
     kmcError = 0;
     for (int i = 0; i < repeats; i++) {
-      mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(repeats-1));
+      if (mainInterface != null) mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(repeats-1));
       kmc.reset();
       kmc.depositSeed();
       int max = (int)1e6;
