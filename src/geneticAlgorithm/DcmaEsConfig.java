@@ -8,7 +8,7 @@ public class DcmaEsConfig {
   /** Number of objective variables/problem dimension. */
   private int n;
   /** Population size, offspring number in DE and CMA-ES. */
-  private double offSize;
+  private int offSize;
   /** Number of parents for recombination in CMA-ES. */
   private double mu;
   /** Array for weighted recombination in CMA-ES. */
@@ -40,11 +40,10 @@ public class DcmaEsConfig {
 
     D = new RichArray(n, 1);
     eigeneval = 0;
-
     counteval = 0;
 
-    offX = RichMatrix.zeros(Double.valueOf(n).intValue(), Double.valueOf(offSize).intValue());
-    offFitness = new RichArray(Double.valueOf(offSize).intValue(), 1D).apply(new Operation() {
+    offX = RichMatrix.zeros(n, offSize);
+    offFitness = new RichArray(offSize, 1D).apply(new Operation() {
       @Override
       public double apply(double value) {
         return 1e8 * value;
@@ -69,7 +68,7 @@ public class DcmaEsConfig {
     return n;
   }
 
-  public double getOffSize() {
+  public int getOffSize() {
     return offSize;
   }
 
