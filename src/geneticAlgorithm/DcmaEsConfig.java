@@ -7,8 +7,6 @@ import utils.akting.operations.Operation;
 public class DcmaEsConfig {
   /** Number of objective variables/problem dimension. */
   private int n;
-  /** Population size, offspring number in DE and CMA-ES. */
-  private int offSize;
   /** Number of parents for recombination in CMA-ES. */
   private double mu;
   /** Array for weighted recombination in CMA-ES. */
@@ -34,7 +32,7 @@ public class DcmaEsConfig {
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     n = dimension;
 
-    offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
+    int offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
 
     mu = offSize / 2;
 
@@ -66,10 +64,6 @@ public class DcmaEsConfig {
   
   public int getN() {
     return n;
-  }
-
-  public int getOffSize() {
-    return offSize;
   }
 
   public double getMu() {
