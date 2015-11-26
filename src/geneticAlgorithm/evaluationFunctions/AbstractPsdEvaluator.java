@@ -149,7 +149,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
     double hError = calculateHierarchyErrorFromReference(ind);
     double error = fError + timeError + hError; // Sum up all errors: Frobenius, time and hierarchy
-    if (kmcError == -1) error = 1000; // If the KMC execution did not finish properly, set huge error
+    if (kmcError == -1) error = 1e30; // If the KMC execution did not finish properly, set huge error
 
     // Print to standard output, file and GUI
     System.out.println("  errors: "+"\t"+fError+"\t"+timeError+"\t"+hError+"\t"+error);
