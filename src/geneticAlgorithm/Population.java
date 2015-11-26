@@ -32,6 +32,11 @@ public class Population {
 
   }
 
+  /**
+   * Return an population individual from position pos
+   * @param pos position
+   * @return Individual
+   */
   public Individual getIndividual(int pos) {
     return individuals[pos];
   }
