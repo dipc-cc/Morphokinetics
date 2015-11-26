@@ -8,6 +8,7 @@ public class MultiplyOperation implements Operation {
     this.factor = factor;
   }
 
+  @Override
   public double apply(double value) {
     return value * factor;
   }
