@@ -80,7 +80,7 @@ public class DifferentialRecombination implements IRecombination {
                     config.getXmean().deduct(xold).apply(OperationFactory.divide(sigma))));
 
     double hsig = (ps.apply(OperationFactory.pow(2)).sum()
-            / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / config.getOffSize())) / config.getN() < 2 + 4 / (config.getN() + 1)) ? 1 : 0;
+            / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / offspring.size())) / config.getN() < 2 + 4 / (config.getN() + 1)) ? 1 : 0;
 
     pc = pc.apply(OperationFactory.multiply(1 - cc)).sum(
             config.getXmean().deduct(xold).apply(
@@ -102,7 +102,7 @@ public class DifferentialRecombination implements IRecombination {
     sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1)));
 
     // Update B and D from C.
-    if (config.getCounteval() - config.getEigeneval() > config.getOffSize() / (c1 + cmu) / config.getN() / 10) {
+    if (config.getCounteval() - config.getEigeneval() > offspring.size() / (c1 + cmu) / config.getN() / 10) {
       config.setEigeneval(config.getCounteval());
 
       // Enforce symmetry.
