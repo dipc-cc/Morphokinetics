@@ -100,9 +100,12 @@ public class Morphokinetics {
     AgKmc myKmc = (AgKmc) ga.getKmc();
     AgLattice myLattice = (AgLattice) myKmc.getLattice();
     KmcCanvas myCanvas = new KmcCanvas(myLattice);
-    MainInterface mainInterface = new MainInterface(myCanvas);
-    mainInterface.setVisible(true);
-    ga.setMainInterface(mainInterface);
+    MainInterface mainInterface = null;
+    if (parser.withGui()) mainInterface = new MainInterface(myCanvas);
+    if (parser.withGui() && parser.visualise()) {
+      mainInterface.setVisible(true);
+      ga.setMainInterface(mainInterface);
+    }
     float[][] experimentalPsd;
     if (parser.getReadReference())
       experimentalPsd = readExperimentalData();
@@ -111,15 +114,17 @@ public class Morphokinetics {
       ga.setExpectedSimulationTime(simulationTime);
     }
     
-    Wait.manyMilliSec(250);
-    mainInterface.setExperimentalMesh(experimentalPsd);
-    Wait.manyMilliSec(250);
+    if (parser.withGui() && parser.visualise()) {
+      Wait.manyMilliSec(250);
+      mainInterface.setExperimentalMesh(experimentalPsd);
+      Wait.manyMilliSec(250);
+    }
     ga.setExperimentalPsd(experimentalPsd);
     ga.initialise();
     
     ga.iterate(parser.getTotalIterations());
     printResult(parser, ga);
-    mainInterface.setStatusBar("Finished");
+    if (parser.withGui() && parser.visualise()) mainInterface.setStatusBar("Finished");
   }
   
   private static float[][] readExperimentalData() {
