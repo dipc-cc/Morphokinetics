@@ -8,6 +8,12 @@ package basic;
 import basic.io.Restart;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import ratesLibrary.IRatesFactory;
 import utils.MathUtils;
@@ -175,6 +181,16 @@ public abstract class AbstractSimulation {
     System.out.println("/ \\/ \\(  O ))   / ) __/) __ ((  O ))  (  )( /    / ) _)   )(   )(( (__ \\___ \\");
     System.out.println("\\_)(_/ \\__/(__\\_)(__)  \\_)(_/ \\__/(__\\_)(__)\\_)__)(____) (__) (__)\\___)(____/");
     System.out.println("");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Date date = new Date();
+    System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48
+    java.net.InetAddress localMachine;
+    try {
+      localMachine = java.net.InetAddress.getLocalHost();
+      System.out.println(" in " + localMachine.getHostName());
+    } catch (UnknownHostException ex) {
+      Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
+    }
   }
   
   public static void printHeader(String message){
