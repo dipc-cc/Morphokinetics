@@ -55,6 +55,7 @@ public class TestSuite {
     Operation pow2 = OperationFactory.pow(2);
     return RichArray.createArrayInRange(size - 1).apply(new Operation() {
 
+      @Override
       public double apply(double value) {
         return Math.pow(1e4, value / (size - 1));
       }
@@ -69,6 +70,7 @@ public class TestSuite {
     int size = individual.size();
     RichArray scale = RichArray.createArrayInRange(0, size - 1).apply(OperationFactory.divide(size - 1)).apply(new Operation() {
 
+      @Override
       public double apply(double value) {
         return Math.pow(10, value);
       }
@@ -76,6 +78,7 @@ public class TestSuite {
 
     return 10 * size + scale.multiply(individual).apply(OperationFactory.pow(2)).deduct(scale.multiply(individual).apply(new Operation() {
 
+      @Override
       public double apply(double value) {
         return 10 * Math.cos(2 * Math.PI * value);
       }
