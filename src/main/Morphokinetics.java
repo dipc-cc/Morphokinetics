@@ -19,6 +19,9 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.MainInterface;
 import graphicInterfaces.growth.KmcCanvas;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.lattice.AgLattice;
 import ratesLibrary.AgRatesFactory;
@@ -54,7 +57,7 @@ public class Morphokinetics {
         System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are batch or evolutionary");
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-    System.out.println("Execution has finished");
+    printEnd();
     if (!parser.withGui() || !parser.visualise()) {
       System.exit(0);
     }
@@ -203,6 +206,11 @@ public class Morphokinetics {
       System.out.print(-kB * parser.getTemperature() * Math.log(individual.getGene(gene) / 1e13) + " ");
     }
     System.out.println();
-    
+  }
+
+  private static void printEnd() {
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Date date = new Date();
+    System.out.println("Execution finished on " + dateFormat.format(date)); //2014/08/06 15:59:48
   }
 }
