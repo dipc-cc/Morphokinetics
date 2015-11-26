@@ -23,9 +23,9 @@ public class CrossoverMutator implements IMutation {
 
       // Crossover.
       Random random = new Random();
-      double jr = Math.ceil(config.getN() * StaticRandom.raw());
+      double jr = Math.ceil(p.getIndividual(0).getGeneSize() * StaticRandom.raw());
 
-      for (int j = 0; j < config.getN(); j++) {
+      for (int j = 0; j < p.getIndividual(0).getGeneSize(); j++) {
         // Normal distribution with mean Crm and standard deviation Crs.
         double cr = config.getCrm() + config.getCrs() * random.nextGaussian();
 
