@@ -107,9 +107,10 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
       addToGraphics();
       // Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable
-      if (dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(stopFitness)
-              || dcmaEsConfig.getD().max() > 1e7 * dcmaEsConfig.getD().min()) {
-        System.out.println("Exiting for an unknown reason");
+      boolean cond1 = dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(stopFitness);
+      boolean cond2 = dcmaEsConfig.getD().max() > 1e7 * dcmaEsConfig.getD().min();
+      if (cond1 || cond2) {
+        System.out.println("Exiting for an unknown reason "+cond1+" "+cond2);
         break;
       }
       System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
