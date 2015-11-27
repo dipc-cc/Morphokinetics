@@ -31,7 +31,9 @@ public class DifferentialRecombination implements IRecombination {
   /** B defines the coordinate system. */
   private RichMatrix B;
   /** Covariance matrix C. */
-  private RichMatrix C;
+  private RichMatrix C;  
+  /** D contains the standard deviations. */
+  private RichArray D;
   /** C^-1/2 */
   private RichMatrix invsqrtC;
   /** Step size in CMA-ES. */
@@ -68,8 +70,9 @@ public class DifferentialRecombination implements IRecombination {
     damps = 1 + 2 * Math.max(0, Math.sqrt((mueff - 1) / (dimensions + 1)) - 1) + cs;
 
     B = RichMatrix.eye(dimensions);
-    C = RichMatrix.covariance(B, config.getD());
-    invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
+    D = new RichArray(dimensions, 1);
+    C = RichMatrix.covariance(B, D);
+    invsqrtC = RichMatrix.invsqrtCovariance(B, D);
     
     errorsNumber = 4;
   }
@@ -145,9 +148,9 @@ public class DifferentialRecombination implements IRecombination {
 
       RichMatrix auxD = new RichMatrix(eigenvalueDecomposition.getD().toArray());
       // D contains standard deviations now.
-      config.setD(auxD.diag().apply(OperationFactory.sqrt()));
+      D = auxD.diag().apply(OperationFactory.sqrt());
 
-      invsqrtC = RichMatrix.invsqrtCovariance(B, config.getD());
+      invsqrtC = RichMatrix.invsqrtCovariance(B, D);
     }
 
 	// Update P and F:
@@ -158,8 +161,8 @@ public class DifferentialRecombination implements IRecombination {
     // Crossover standard deviation.
     config.setCrs(0.1);
 
-    boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) < 10);
-    boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(config.getD()) / Collections.min(config.getD()) > 10);
+    boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(D) / Collections.min(D) < 10);
+    boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(D) / Collections.min(D) > 10);
     if (cond1 || cond2) {
       p = 0.5;
       // Crossover mean.
@@ -188,7 +191,7 @@ public class DifferentialRecombination implements IRecombination {
 	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
       auxInd = xmean.sum(
-              B.apply(OperationFactory.multiply(sigma)).multiply(config.getD().multiply(RichArray.randn(dimensions)))
+              B.apply(OperationFactory.multiply(sigma)).multiply(D.multiply(RichArray.randn(dimensions)))
       ).apply(OperationFactory.multiply(1 - p)).sum(
               auxInd.apply(OperationFactory.multiply(p))
       );
@@ -204,6 +207,6 @@ public class DifferentialRecombination implements IRecombination {
    * @return 
    */
   public boolean isDtooLarge() {
-    return config.getD().max() > 1e7 * config.getD().min();
+    return D.max() > 1e7 * D.min();
   }
 }

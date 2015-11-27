@@ -5,8 +5,6 @@ import utils.akting.RichMatrix;
 import utils.akting.operations.Operation;
 
 public class DcmaEsConfig {
-  /** D contains the standard deviations. */
-  private RichArray D;
   /** Track update of B and D. */
   private double eigeneval;
   /** Counter for the number of evaluations. A good optimisation method will minimise this number. */
@@ -28,7 +26,6 @@ public class DcmaEsConfig {
    */
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     int offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
-    D = new RichArray(dimension, 1);
     eigeneval = 0;
     counteval = 0;
 
@@ -40,10 +37,6 @@ public class DcmaEsConfig {
       }
     });
 
-  }
-
-  public RichArray getD() {
-    return D;
   }
 
   public double getEigeneval() {
@@ -68,10 +61,6 @@ public class DcmaEsConfig {
 
   public double getCrs() {
     return crs;
-  }
-  
-  public void setD(RichArray D) {
-    this.D = D;
   }
 
   public void setEigeneval(double eigeneval) {
