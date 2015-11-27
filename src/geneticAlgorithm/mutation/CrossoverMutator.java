@@ -11,9 +11,12 @@ import utils.StaticRandom;
 public class CrossoverMutator implements IMutation {
 
   private DcmaEsConfig config;
+  /** Crossover standard deviation. */
+  private double crs; 
 
   public CrossoverMutator(DcmaEsConfig config) {
     this.config = config;
+    crs = 0.1;
   }
 
   @Override
@@ -27,7 +30,7 @@ public class CrossoverMutator implements IMutation {
 
       for (int j = 0; j < p.getIndividual(0).getGeneSize(); j++) {
         // Normal distribution with mean Crm and standard deviation Crs.
-        double cr = config.getCrm() + config.getCrs() * random.nextGaussian();
+        double cr = config.getCrm() + crs * random.nextGaussian();
 
         if (StaticRandom.raw() > cr && j != jr) {
           child.setGene(j, config.getOffX().get(k).get(j));

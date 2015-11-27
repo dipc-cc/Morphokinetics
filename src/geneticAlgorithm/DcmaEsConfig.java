@@ -13,9 +13,7 @@ public class DcmaEsConfig {
   private RichArray offFitness;
 
   /**  Crossover mean. */
-  private double crm; 
-  /** Crossover standard deviation. */
-  private double crs; 
+  private double crm;
 
   /**
    * 
@@ -52,20 +50,12 @@ public class DcmaEsConfig {
     return crm;
   }
 
-  public double getCrs() {
-    return crs;
-  }
-
   public void setOffX(RichMatrix offX) {
     this.offX = offX;
   }
 
   public void setCrm(double crm) {
     this.crm = crm;
-  }
-
-  public void setCrs(double crs) {
-    this.crs = crs;
   }
 
   void addCountEval() {

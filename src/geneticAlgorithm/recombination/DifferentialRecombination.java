@@ -161,8 +161,6 @@ public class DifferentialRecombination implements IRecombination {
     double p = 1;
     // Crossover mean.
     config.setCrm(0.5);
-    // Crossover standard deviation.
-    config.setCrs(0.1);
 
     boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(D) / Collections.min(D) < 10);
     boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(D) / Collections.min(D) > 10);
