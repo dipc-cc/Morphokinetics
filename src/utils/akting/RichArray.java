@@ -54,11 +54,10 @@ public class RichArray extends ArrayList<Double> {
     simulationTime = individual.getSimulationTime();
   }
 
-  public static RichArray createArrayInRange(double end) {
-    int endFloored = Double.valueOf(Math.floor(end)).intValue();
-    RichArray richArray = new RichArray(endFloored);
+  public static RichArray createArrayInRange(int end) {
+    RichArray richArray = new RichArray(end);
 
-    for (double i = 0; i < endFloored; i++) {
+    for (double i = 0; i < end; i++) {
       richArray.add(i + 1);
     }
 
