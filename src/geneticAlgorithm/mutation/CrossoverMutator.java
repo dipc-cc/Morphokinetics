@@ -12,7 +12,7 @@ public class CrossoverMutator implements IMutation {
 
   private DcmaEsConfig config;
   /** Crossover standard deviation. */
-  private double crs; 
+  private final double crs; 
 
   public CrossoverMutator(DcmaEsConfig config) {
     this.config = config;
