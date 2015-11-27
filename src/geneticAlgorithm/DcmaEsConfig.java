@@ -5,8 +5,6 @@ import utils.akting.RichMatrix;
 import utils.akting.operations.Operation;
 
 public class DcmaEsConfig {
-  /** Number of objective variables/problem dimension. */
-  private int n;
   /** Number of parents for recombination in CMA-ES. */
   private double mu;
   /** Array for weighted recombination in CMA-ES. */
@@ -27,18 +25,19 @@ public class DcmaEsConfig {
   /** Crossover standard deviation. */
   private double crs; 
 
+  /**
+   * 
+   * @param configuration
+   * @param dimension Number of objective variables/problem dimension.
+   */
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
-    n = dimension;
-
     int offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
-
     mu = offSize / 2;
-
-    D = new RichArray(n, 1);
+    D = new RichArray(dimension, 1);
     eigeneval = 0;
     counteval = 0;
 
-    offX = RichMatrix.zeros(n, offSize);
+    offX = RichMatrix.zeros(dimension, offSize);
     offFitness = new RichArray(offSize, 1D).apply(new Operation() {
       @Override
       public double apply(double value) {
@@ -47,7 +46,6 @@ public class DcmaEsConfig {
     });
 
     createWeightsArray();
-
   }
 
   private void createWeightsArray() {
