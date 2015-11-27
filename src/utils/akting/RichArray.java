@@ -64,12 +64,10 @@ public class RichArray extends ArrayList<Double> {
     return richArray;
   }
 
-  public static RichArray createArrayInRange(double start, double end) {
-    int startFloored = Double.valueOf(Math.floor(start)).intValue();
-    int endFloored = Double.valueOf(Math.floor(end)).intValue();
-    RichArray richArray = new RichArray(endFloored + 1 - startFloored);
+  public static RichArray createArrayInRange(int start, int end) {
+    RichArray richArray = new RichArray(end + 1 - start);
 
-    for (double i = startFloored; i <= endFloored; i++) {
+    for (double i = start; i <= end; i++) {
       richArray.add(i);
     }
 
