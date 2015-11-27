@@ -21,8 +21,6 @@ public class DcmaEsConfig {
   private RichMatrix offX;
   /** Objective function values. */
   private RichArray offFitness;
-  /** Recombination, new mean value in CMA-ES. */
-  private RichArray xmean;
 
   /**  Crossover mean. */
   private double crm; 
@@ -94,10 +92,6 @@ public class DcmaEsConfig {
     return offFitness;
   }
 
-  public RichArray getXmean() {
-    return xmean;
-  }
-
   public double getCrm() {
     return crm;
   }
@@ -116,10 +110,6 @@ public class DcmaEsConfig {
 
   public void setOffX(RichMatrix offX) {
     this.offX = offX;
-  }
-
-  public void setXmean(RichArray xmean) {
-    this.xmean = xmean;
   }
 
   public void setCrm(double crm) {

@@ -39,7 +39,9 @@ public class DifferentialRecombination implements IRecombination {
   /** Expectation of ||N(0,I)|| == norm(randn(N,1)). */
   private final double chiN;
   /** Number of objective variables/problem dimension. */
-  private int dimensions;
+  private int dimensions;  
+  /** Recombination, new mean value in CMA-ES. */
+  private RichArray xmean;
   
   private final int errorsNumber;
 
@@ -66,29 +68,38 @@ public class DifferentialRecombination implements IRecombination {
     errorsNumber = 4;
   }
 
+  public void initialise(Population population) {
+    Integer[] offIndex = config.getOffFitness().sortedIndexes();
+    Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(config.getMu()).intValue());
+    config.setOffX(new RichMatrix(population));
+    xmean = config.getOffX().recombinate(reducedIndex).multiply(config.getWeights());
+    sigma = config.getOffX().recombinate(reducedIndex).transpose().std().std();
+    
+  }
+  
   @Override
   public Population recombinate(IndividualGroup[] groups) {
     Population offspring = new Population(groups.length);
 
     // Sort by fitness and compute weighted mean into xmean.
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
-    RichArray xold = config.getXmean().copy();
+    RichArray xold = xmean.copy();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(config.getMu()).intValue());
-    config.setXmean(config.getOffX().recombinate(reducedIndex).multiply(config.getWeights()));
+    xmean = config.getOffX().recombinate(reducedIndex).multiply(config.getWeights());
 
     // Cumulation: Update evolution paths.
     ps = ps.apply(OperationFactory.multiply(1 - cs)).sum(
             invsqrtC.apply(
                     OperationFactory.multiply(Math.sqrt(cs * (2 - cs) * mueff))).multiply(
-                    config.getXmean().deduct(xold).apply(OperationFactory.divide(sigma))));
+                    xmean.deduct(xold).apply(OperationFactory.divide(sigma))));
 
     double hsig = (ps.apply(OperationFactory.pow(2)).sum()
             / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
 
     pc = pc.apply(OperationFactory.multiply(1 - cc)).sum(
-            config.getXmean().deduct(xold).apply(
-                    OperationFactory.divide(sigma)).apply(
-                    OperationFactory.multiply(hsig * Math.sqrt(cc * (2 - cc) * mueff))));
+            xmean.deduct(xold).apply(
+            OperationFactory.divide(sigma)).apply(
+            OperationFactory.multiply(hsig * Math.sqrt(cc * (2 - cc) * mueff))));
 
     // Adapt covariance matrix C.
     RichMatrix artmp = config.getOffX().recombinate(reducedIndex).deduct(
@@ -160,7 +171,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	  // Weighted sum of CMA-ES and DE values. CMA-ES value taken into 
       // account when P < 1.
-      auxInd = config.getXmean().sum(
+      auxInd = xmean.sum(
               B.apply(OperationFactory.multiply(sigma)).multiply(config.getD().multiply(RichArray.randn(dimensions)))
       ).apply(OperationFactory.multiply(1 - p)).sum(
               auxInd.apply(OperationFactory.multiply(p))
