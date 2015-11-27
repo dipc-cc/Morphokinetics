@@ -5,10 +5,6 @@ import utils.akting.RichMatrix;
 import utils.akting.operations.Operation;
 
 public class DcmaEsConfig {
-  /** Number of parents for recombination in CMA-ES. */
-  private double mu;
-  /** Array for weighted recombination in CMA-ES. */
-  private RichArray weights;
   /** D contains the standard deviations. */
   private RichArray D;
   /** Track update of B and D. */
@@ -32,7 +28,6 @@ public class DcmaEsConfig {
    */
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     int offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
-    mu = offSize / 2;
     D = new RichArray(dimension, 1);
     eigeneval = 0;
     counteval = 0;
@@ -45,21 +40,6 @@ public class DcmaEsConfig {
       }
     });
 
-    createWeightsArray();
-  }
-
-  private void createWeightsArray() {
-    weights = RichArray.createArrayInRange(mu);
-    weights = weights.apply(new Operation() {
-      @Override
-      public double apply(double value) {
-        return Math.log(mu + 1D / 2) - Math.log(value);
-      }
-    }).normalise();
-  }
-  
-  public RichArray getWeights() {
-    return weights;
   }
 
   public RichArray getD() {

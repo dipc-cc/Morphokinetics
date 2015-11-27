@@ -44,15 +44,19 @@ public class DifferentialRecombination implements IRecombination {
   private RichArray xmean;  
   /** Number of parents for recombination in CMA-ES. */
   private int mu;
+  /** Array for weighted recombination in CMA-ES. */
+  private RichArray weights;
   
   private final int errorsNumber;
 
-  public DifferentialRecombination(DcmaEsConfig config, int dimensions) {
+  public DifferentialRecombination(DcmaEsConfig config, Population population) {
     this.config = config;
-    this.dimensions = dimensions;
+    dimensions = population.getIndividual(0).getGeneSize();
+    mu = population.size() / 2;
     
+    createWeightsArray();
     chiN = Math.pow(dimensions, 0.5) * (1 - 1D / (4 * dimensions) + 1D / (21 * Math.pow(dimensions, 2)));
-    mueff = Math.pow(config.getWeights().sum(), 2) / config.getWeights().apply(OperationFactory.pow(2)).sum();
+    mueff = Math.pow(weights.sum(), 2) / weights.apply(OperationFactory.pow(2)).sum();
 
     pc = new RichArray(dimensions, 0);
     ps = new RichArray(dimensions, 0);
@@ -70,12 +74,21 @@ public class DifferentialRecombination implements IRecombination {
     errorsNumber = 4;
   }
 
+  private void createWeightsArray() {
+    weights = RichArray.createArrayInRange(mu);
+    weights = weights.apply(new Operation() {
+      @Override
+      public double apply(double value) {
+        return Math.log(mu + 1D / 2) - Math.log(value);
+      }
+    }).normalise();
+  }
+  
   public void initialise(Population population) {
-    mu = population.size() / 2;
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
     config.setOffX(new RichMatrix(population));
-    xmean = config.getOffX().recombinate(reducedIndex).multiply(config.getWeights());
+    xmean = config.getOffX().recombinate(reducedIndex).multiply(weights);
     sigma = config.getOffX().recombinate(reducedIndex).transpose().std().std();
     
   }
@@ -88,7 +101,7 @@ public class DifferentialRecombination implements IRecombination {
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
     RichArray xold = xmean.copy();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
-    xmean = config.getOffX().recombinate(reducedIndex).multiply(config.getWeights());
+    xmean = config.getOffX().recombinate(reducedIndex).multiply(weights);
 
     // Cumulation: Update evolution paths.
     ps = ps.apply(OperationFactory.multiply(1 - cs)).sum(
@@ -112,7 +125,7 @@ public class DifferentialRecombination implements IRecombination {
             pc.multiply(pc.transpose()).sum(
                     C.apply(OperationFactory.multiply((1 - hsig) * cc * (2 - cc))
                     ).apply(OperationFactory.multiply(c1)))
-    ).sum(artmp.multiply(RichMatrix.diag(config.getWeights())).multiply(artmp.transpose()).apply(OperationFactory.multiply(cmu)));
+    ).sum(artmp.multiply(RichMatrix.diag(weights)).multiply(artmp.transpose()).apply(OperationFactory.multiply(cmu)));
 
 	// Adapt step size sigma.
     //config.sigma = config.sigma * Math.exp((cs / damps) * (ps.norm() / config.chiN - 1));
