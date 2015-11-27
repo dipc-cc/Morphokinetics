@@ -56,14 +56,10 @@ public abstract class AbstractKmc implements IKmc {
   @Override
   public int simulate() {
     iterationsForLastSimulation = 0;
-    int max = (int) 1E6;
-    while (!performSimulationStep() && iterationsForLastSimulation < max) {
+    while (!performSimulationStep()) {
       iterationsForLastSimulation++;
     }
-    if (iterationsForLastSimulation >= max) {
-      System.out.println("Too many simulation steps. Simulation steps: "+iterationsForLastSimulation);
-      return -1;
-    }
+
     return iterationsForLastSimulation;
   }
 
