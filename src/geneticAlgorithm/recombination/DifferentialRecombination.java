@@ -34,6 +34,8 @@ public class DifferentialRecombination implements IRecombination {
   private RichMatrix C;  
   /** D contains the standard deviations. */
   private RichArray D;
+  /** Track update of B and D. */
+  private double eigeneval;
   /** C^-1/2 */
   private RichMatrix invsqrtC;
   /** Step size in CMA-ES. */
@@ -55,6 +57,7 @@ public class DifferentialRecombination implements IRecombination {
     this.config = config;
     dimensions = population.getIndividual(0).getGeneSize();
     mu = population.size() / 2;
+    eigeneval = 0;
     
     createWeightsArray();
     chiN = Math.pow(dimensions, 0.5) * (1 - 1D / (4 * dimensions) + 1D / (21 * Math.pow(dimensions, 2)));
@@ -135,8 +138,8 @@ public class DifferentialRecombination implements IRecombination {
     sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1)));
 
     // Update B and D from C.
-    if (config.getCounteval() - config.getEigeneval() > offspring.size() / (c1 + cmu) / dimensions / 10) {
-      config.setEigeneval(config.getCounteval());
+    if (config.getCounteval() - eigeneval > offspring.size() / (c1 + cmu) / dimensions / 10) {
+      eigeneval = config.getCounteval();
 
       // Enforce symmetry.
       C = C.triu(0).sum(C.triu(1).transpose());

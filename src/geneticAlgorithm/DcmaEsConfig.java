@@ -5,8 +5,6 @@ import utils.akting.RichMatrix;
 import utils.akting.operations.Operation;
 
 public class DcmaEsConfig {
-  /** Track update of B and D. */
-  private double eigeneval;
   /** Counter for the number of evaluations. A good optimisation method will minimise this number. */
   private int counteval;
   /** Offspring population. */
@@ -26,7 +24,6 @@ public class DcmaEsConfig {
    */
   public DcmaEsConfig(AbstractGeneticAlgorithm configuration, int dimension) {
     int offSize = configuration.getPopulationSize(); //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
-    eigeneval = 0;
     counteval = 0;
 
     offX = RichMatrix.zeros(dimension, offSize);
@@ -38,11 +35,7 @@ public class DcmaEsConfig {
     });
 
   }
-
-  public double getEigeneval() {
-    return eigeneval;
-  }
-
+  
   public int getCounteval() {
     return counteval;
   }
@@ -61,10 +54,6 @@ public class DcmaEsConfig {
 
   public double getCrs() {
     return crs;
-  }
-
-  public void setEigeneval(double eigeneval) {
-    this.eigeneval = eigeneval;
   }
 
   public void setOffX(RichMatrix offX) {
