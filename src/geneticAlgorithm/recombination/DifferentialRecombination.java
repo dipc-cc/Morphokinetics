@@ -41,7 +41,9 @@ public class DifferentialRecombination implements IRecombination {
   /** Number of objective variables/problem dimension. */
   private int dimensions;  
   /** Recombination, new mean value in CMA-ES. */
-  private RichArray xmean;
+  private RichArray xmean;  
+  /** Number of parents for recombination in CMA-ES. */
+  private int mu;
   
   private final int errorsNumber;
 
@@ -69,8 +71,9 @@ public class DifferentialRecombination implements IRecombination {
   }
 
   public void initialise(Population population) {
+    mu = population.size() / 2;
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
-    Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(config.getMu()).intValue());
+    Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
     config.setOffX(new RichMatrix(population));
     xmean = config.getOffX().recombinate(reducedIndex).multiply(config.getWeights());
     sigma = config.getOffX().recombinate(reducedIndex).transpose().std().std();
@@ -84,7 +87,7 @@ public class DifferentialRecombination implements IRecombination {
     // Sort by fitness and compute weighted mean into xmean.
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
     RichArray xold = xmean.copy();
-    Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, Double.valueOf(config.getMu()).intValue());
+    Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
     xmean = config.getOffX().recombinate(reducedIndex).multiply(config.getWeights());
 
     // Cumulation: Update evolution paths.
@@ -103,7 +106,7 @@ public class DifferentialRecombination implements IRecombination {
 
     // Adapt covariance matrix C.
     RichMatrix artmp = config.getOffX().recombinate(reducedIndex).deduct(
-            RichMatrix.repmat(xold, Double.valueOf(config.getMu()).intValue())).apply(OperationFactory.multiply(1 / sigma));
+            RichMatrix.repmat(xold, mu)).apply(OperationFactory.multiply(1 / sigma));
 
     C = C.apply(OperationFactory.multiply(1 - c1 - cmu)).sum(
             pc.multiply(pc.transpose()).sum(
