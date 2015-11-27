@@ -28,6 +28,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private double g4g1;
   private double g5g1;
   private double g2g1;
+  private double hierarchyFrobeniusRef;
   
   public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY) {
 
@@ -93,6 +94,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * @param genes 
    */
   public void setHierarchy(double[] genes) {
+    double sum = 0;
     g4g0 = genes[4] / genes[0];
     g5g0 = genes[5] / genes[0];
     g5g4 = genes[5] / genes[4];
@@ -104,6 +106,20 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     g4g1 = genes[4] / genes[1];
     g5g1 = genes[5] / genes[1];
     g2g1 = genes[2] / genes[1];
+    
+    sum += Math.pow(g4g0, 2);
+    sum += Math.pow(g5g0, 2);
+    sum += Math.pow(g5g4, 2);
+    sum += Math.pow(g3g0, 2);
+    sum += Math.pow(g3g1, 2);
+    sum += Math.pow(g3g2, 2);
+    sum += Math.pow(g3g4, 2);
+    sum += Math.pow(g3g5, 2);
+    sum += Math.pow(g4g1, 2);
+    sum += Math.pow(g5g1, 2);
+    sum += Math.pow(g2g1, 2);
+    
+    hierarchyFrobeniusRef = Math.sqrt(sum);
   }
   
   /**
@@ -159,6 +175,26 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     
     return error;
   }  
+  
+  protected double calculatedHierarchyErrorFrobenius(Individual ind) {
+    double error;
+    double sum = 0;
+    sum += Math.sqrt(Math.pow(ind.getGene(4) / ind.getGene(0) - g4g0, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(5) / ind.getGene(0) - g5g0, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(5) / ind.getGene(4) - g5g4, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(3) / ind.getGene(0) - g3g0, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(3) / ind.getGene(1) - g3g1, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(3) / ind.getGene(2) - g3g2, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(3) / ind.getGene(4) - g3g4, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(3) / ind.getGene(5) - g3g5, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(4) / ind.getGene(1) - g4g1, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(5) / ind.getGene(1) - g5g1, 2));
+    sum += Math.sqrt(Math.pow(ind.getGene(2) / ind.getGene(1) - g2g1, 2));
+
+    error = Math.sqrt(sum) / hierarchyFrobeniusRef;
+    return error;
+  }
+
   
   /**
    * Calculates the hierarchy error based on the rates of Cox et al. 
