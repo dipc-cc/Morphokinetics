@@ -60,10 +60,6 @@ public class DcmaEsConfig {
     }).normalise();
   }
   
-  public int getN() {
-    return n;
-  }
-
   public RichArray getWeights() {
     return weights;
   }
