@@ -176,7 +176,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     return error;
   }  
   
-  protected double calculatedHierarchyErrorFrobenius(Individual ind) {
+  protected double calculateHierarchyErrorFrobenius(Individual ind) {
     double error;
     double sum = 0;
     sum += Math.sqrt(Math.pow(ind.getGene(4) / ind.getGene(0) - g4g0, 2));
