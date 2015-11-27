@@ -198,8 +198,12 @@ public class DifferentialRecombination implements IRecombination {
 
     return offspring;
   }
-
-  public void setSigma(double sigma) {
-    this.sigma = sigma;
+  
+  /**
+   * Condition exceeds 1e14
+   * @return 
+   */
+  public boolean isDtooLarge() {
+    return config.getD().max() > 1e7 * config.getD().min();
   }
 }
