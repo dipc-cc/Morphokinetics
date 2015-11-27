@@ -64,10 +64,6 @@ public class DcmaEsConfig {
     return n;
   }
 
-  public double getMu() {
-    return mu;
-  }
-
   public RichArray getWeights() {
     return weights;
   }
