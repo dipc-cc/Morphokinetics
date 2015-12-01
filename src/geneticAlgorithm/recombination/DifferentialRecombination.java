@@ -17,14 +17,14 @@ public class DifferentialRecombination implements IRecombination {
 
   private DcmaEsConfig config;
 
-  private double muEffective;
+  private final double muEffective;
 
-  private double cc;
+  private final  double cc;
   /** C_sigma. */
-  private double cs;
-  private double c1;
-  private double cmu;
-  private double damps;
+  private final double cs;
+  private final double c1;
+  private final double cmu;
+  private final double damps;
 
   /** P_c of sigma. */
   private RichArray pc;
@@ -45,11 +45,11 @@ public class DifferentialRecombination implements IRecombination {
   /** Expectation of ||N(0,I)|| == norm(randn(N,1)). */
   private final double chiN;
   /** Number of objective variables/problem dimension. */
-  private int dimensions;  
+  private final int dimensions;  
   /** Recombination, new mean value in CMA-ES. */
   private RichArray xmean;  
   /** Number of parents for recombination in CMA-ES. */
-  private int mu;
+  private final int mu;
   /** Array for weighted recombination in CMA-ES. */
   private RichArray weights;
   
