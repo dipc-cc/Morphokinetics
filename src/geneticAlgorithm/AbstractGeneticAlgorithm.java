@@ -75,6 +75,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   private double islandDensity;
   
   private Updater updater;
+  /** The stop error. If the current error is below this number, stop. */
+  private final double stopError;
 
   public AbstractGeneticAlgorithm(Parser parser) {
     
@@ -115,6 +117,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     reinsertion = new ElitistReinsertion();
     otherEvaluators = addNoMoreEvaluators();
 
+    stopError = parser.getStopError();
   }
 
   /**
@@ -311,6 +314,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     ((AgBasicPsdEvaluator) mainEvaluator).setHierarchy(rates);
   }
 
+  protected double getStopError() {
+    return stopError;
+  }
   /**
    * Inner class responsible to update the interface.
    */
