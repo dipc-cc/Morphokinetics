@@ -1,7 +1,6 @@
 package geneticAlgorithm;
 
 import basic.Parser;
-import java.util.Arrays;
 
 import utils.akting.RichArray;
 import utils.akting.RichMatrix;
