@@ -138,7 +138,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	// Adapt step size, sigma. Determine new overall variance (σ) = step size
     //sigma = sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1));
-    sigma = Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1)));
+    sigma = Math.min(Math.max(0.1, sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1))),1e50);
 
     // Update B and D from C.
     if (config.getCounteval() - eigeneval > offspring.size() / (c1 + cmu) / dimensions / 10) { // to achieve O(N^2)
