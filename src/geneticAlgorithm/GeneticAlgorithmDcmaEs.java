@@ -20,6 +20,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   private final double stopFitness;
   /** Number of function evaluations to stop. */
   private final double stopEval;
+  /** The stop error. If the current error is below this number, stop. */
+  private final double stopError;
   
   private Integer[] offIndex;
 
@@ -33,6 +35,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     
     stopFitness = 1e-12;
     stopEval = 1e8;
+    stopError = parser.getStopError();
   }
 
   @Override
@@ -119,7 +122,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
         System.out.print(getBestIndividual().getGenes()[i] + " ");
       }
       System.out.println("");
-      if (this.getBestError() < 0.022) {
+      if (this.getBestError() < stopError) {
         System.out.println("Stopping because the error is "+this.getBestError());
         break;
       }
