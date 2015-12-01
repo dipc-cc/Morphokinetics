@@ -104,7 +104,7 @@ public class Population {
   }
   
   /**
-   * Prints in a line of standard output the current genes
+   * Prints to the standard output the current individuals, one line per individual with all its genes.
    * @param header An string to be added at the beginning of the line.
    */
   public void print(String header) {
