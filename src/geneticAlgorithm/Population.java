@@ -102,4 +102,19 @@ public class Population {
   public int getIterationNumber() {
     return iterationNumber;
   }
+  
+  /**
+   * Prints in a line of standard output the current genes
+   * @param header An string to be added at the beginning of the line.
+   */
+  public void print(String header) {
+    for (int i = 0; i < individuals.length; i++) {
+      Individual individual = individuals[i];
+      System.out.print("\t\t" + header + "\tPopulation " + iterationNumber + " individual " + i + " genes ");
+      for (int j = 0; j < individual.getGeneSize(); j++) {
+        System.out.print(" " + individual.getGene(j));
+      }
+      System.out.println("");
+    }
+  }
 }
