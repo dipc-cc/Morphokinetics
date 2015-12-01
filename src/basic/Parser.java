@@ -78,6 +78,7 @@ public class Parser {
   private int totalIterations;
   private int repetitions;
   private boolean readReference;
+  private double stopError;
   
   /**
    * Constructor
@@ -115,6 +116,7 @@ public class Parser {
     this.totalIterations = 100;
     this.repetitions = 18;
     this.readReference = true;
+    this.stopError = 0.022;
   }
 
   /**
@@ -302,6 +304,11 @@ public class Parser {
     } catch (JSONException e) {
       readReference = true;
     }
+    try {
+      stopError = json.getDouble("stopError");
+    } catch (JSONException e) {
+      stopError = 0.022;
+    }
     return 0;
   }
 
@@ -345,6 +352,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"totalIterations\"", totalIterations);
     System.out.printf("%32s: %s,\n", "\"repetitions\"", repetitions);
     System.out.printf("%32s: %s,\n", "\"readReference\"", readReference);
+    System.out.printf("%32s: %s,\n", "\"stopError\"", stopError);
   }
 
   public String getCalculationType() {
@@ -513,6 +521,14 @@ public class Parser {
   
   public void setEvolutionaryAlgorithm(String name) {
     this.evolutionaryAlgorithm = name;
+  }
+  
+  /**
+   * For evolutinary algorithm run mode target minimum error
+   * @return minimum error
+   */
+  public double getStopError() {
+    return stopError;
   }
   
 }
