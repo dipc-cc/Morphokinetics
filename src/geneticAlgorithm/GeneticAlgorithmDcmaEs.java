@@ -126,7 +126,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     double fmin = dcmaEsConfig.getOffFitness().get(0);
     RichArray xmin = dcmaEsConfig.getOffX().get(offIndex[0]);
 
-    System.out.println(dcmaEsConfig.getCounteval() + ": " + fmin);
+    System.out.println(currentIteration + ": " + fmin);
     System.out.println(xmin);
   }
 
