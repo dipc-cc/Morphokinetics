@@ -64,6 +64,9 @@ public class DifferentialRecombination implements IRecombination {
   /** Array for weighted recombination in CMA-ES. Positive weight coefficients for recombination. */
   private RichArray weights;
   
+  /** Counter for the number of evaluations. A good optimisation method will minimise this number. */
+  private int counteval;
+  
   private final int errorsNumber;
 
   public DifferentialRecombination(DcmaEsConfig config, Population population) {
@@ -71,6 +74,7 @@ public class DifferentialRecombination implements IRecombination {
     dimensions = population.getIndividual(0).getGeneSize();
     mu = population.size() / 2;
     eigeneval = 0;
+    counteval = 0;
     
     createWeightsArray();
     chiN = Math.pow(dimensions, 0.5) * (1 - 1D / (4 * dimensions) + 1D / (21 * Math.pow(dimensions, 2)));
@@ -116,6 +120,7 @@ public class DifferentialRecombination implements IRecombination {
   public Population recombinate(IndividualGroup[] groups) {
     Population offspring = new Population(groups.length);
 
+    counteval += offspring.size(); // Adding to the evaluation counter the number of individuals of the population
     // Sort by fitness and compute weighted mean into xmean.
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
     RichArray xold = xmean.copy();
@@ -130,7 +135,7 @@ public class DifferentialRecombination implements IRecombination {
 
     // The Heaviside function (hSigma) stalls the update of pc if ||pc|| is large.
     double hSigma = (pSigma.apply(OperationFactory.pow(2)).sum()
-            / (1 - Math.pow(1 - cSigma, 2 * config.getCounteval() / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
+            / (1 - Math.pow(1 - cSigma, 2 * counteval / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
 
     //Covariance matrix adaptation
     pc = pc.apply(OperationFactory.multiply(1 - cc)).sum(
@@ -153,9 +158,8 @@ public class DifferentialRecombination implements IRecombination {
     sigma = Math.min(Math.max(0.1, sigma * Math.exp((cSigma / damps) * (pSigma.norm() / chiN - 1))),1e50);
 
     // Update B and D from C.
-    if (config.getCounteval() - eigeneval > offspring.size() / (c1 + cmu) / dimensions / 10) { // to achieve O(N^2)
-      System.out.println("\t\t\t Recombination. Updating B and D from C");
-      eigeneval = config.getCounteval();
+    if (counteval - eigeneval > offspring.size() / (c1 + cmu) / dimensions / 10) { // to achieve O(N^2)
+      eigeneval = counteval;
 
       // Enforce symmetry.
       C = C.triu(0).sum(C.triu(1).transpose());

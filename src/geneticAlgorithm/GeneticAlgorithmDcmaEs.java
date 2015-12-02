@@ -47,7 +47,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     for (int i = 0; i < fitness.length; i++) {
       dcmaEsConfig.getOffFitness().set(i, fitness[i]);
       population.getIndividual(i).setError(0, fitness[i]);
-      dcmaEsConfig.addCountEval();
     }
 
     ((DifferentialRecombination) recombination).initialise(population);
@@ -82,7 +81,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     double[] fitness = mainEvaluator.evaluate(offspringPopulation);
     for (int i = 0; i < fitness.length; i++) {
       offspringPopulation.getIndividual(i).setError(0, fitness[i]);
-      dcmaEsConfig.addCountEval();
     }
 
     restriction.apply(population);
