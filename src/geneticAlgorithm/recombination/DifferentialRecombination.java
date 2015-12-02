@@ -34,7 +34,7 @@ public class DifferentialRecombination implements IRecombination {
   private RichMatrix B;
   /** Covariance matrix C. */
   private RichMatrix C;  
-  /** D contains the standard deviations. */
+  /** D contains the standard deviations. Diagonal D defines the scaling. */
   private RichArray D;
   /** Track update of B and D. */
   private double eigeneval;
