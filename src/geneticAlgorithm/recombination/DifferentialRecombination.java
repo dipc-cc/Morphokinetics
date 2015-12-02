@@ -17,8 +17,6 @@ public class DifferentialRecombination implements IRecombination {
 
   private DcmaEsConfig config;
 
-  private final double muEffective;
-
   private final  double cc;
   /** C_sigma. */
   private final double cs;
@@ -61,7 +59,9 @@ public class DifferentialRecombination implements IRecombination {
   private RichArray xmean;  
   /** Number of parents for recombination in CMA-ES. */
   private final int mu;
-  /** Array for weighted recombination in CMA-ES. */
+  /** Variance effective selection mass. It holds 1 <= muEffective <= mu */
+  private final double muEffective;
+  /** Array for weighted recombination in CMA-ES. Positive weight coefficients for recombination. */
   private RichArray weights;
   
   private final int errorsNumber;
@@ -128,6 +128,7 @@ public class DifferentialRecombination implements IRecombination {
                     OperationFactory.multiply(Math.sqrt(cs * (2 - cs) * muEffective))).multiply(
                     xmean.deduct(xold).apply(OperationFactory.divide(sigma))));
 
+    // The Heaviside function (hSigma) stalls the update of pc if ||pc|| is large.
     double hSigma = (pSigma.apply(OperationFactory.pow(2)).sum()
             / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
 
