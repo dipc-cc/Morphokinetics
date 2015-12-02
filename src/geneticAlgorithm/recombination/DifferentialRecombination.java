@@ -26,7 +26,7 @@ public class DifferentialRecombination implements IRecombination {
   private final double cmu;
   private final double damps;
 
-  /** P_c of sigma. */
+  /** P_c of sigma. Evolution paths for C and sigma*/
   private RichArray pc;
   private RichArray ps;
   
