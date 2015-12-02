@@ -33,13 +33,23 @@ public class DifferentialRecombination implements IRecombination {
   /** Step size in CMA-ES. */
   private double sigma;  
   
-  /** B defines the coordinate system. */
+  /** B defines the coordinate system. B is an orthogonal matrix. Columns of B are eigenvectors of C
+   * with unit length and correspond to the diagonal elements of D.
+   */
   private RichMatrix B;
-  /** Covariance matrix C. */
-  private RichMatrix C;  
-  /** D contains the standard deviations. Diagonal D defines the scaling. */
+  /**
+   * Covariance matrix C. Covariance matrix at generation g.
+   */
+  private RichMatrix C;
+  /**
+   * D contains the standard deviations. Diagonal D defines the scaling. A diagonal matrix (thus,
+   * represented with an array). The diagonal elements of D are square roots of eigenvalues of C and
+   * correspond to the respective columns of B.
+   */
   private RichArray D;
-  /** Track update of B and D. */
+  /**
+   * Track update of B and D.
+   */
   private double eigeneval;
   /** C^-1/2 */
   private RichMatrix invsqrtC;
