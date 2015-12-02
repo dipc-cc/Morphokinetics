@@ -19,7 +19,7 @@ public class DifferentialRecombination implements IRecombination {
 
   private final  double cc;
   /** C_sigma. */
-  private final double cs;
+  private final double cSigma;
   private final double c1;
   private final double cmu;
   private final double damps;
@@ -80,10 +80,10 @@ public class DifferentialRecombination implements IRecombination {
     pSigma = new RichArray(dimensions, 0);
 
     cc = (4 + muEffective / dimensions) / (dimensions + 4 + 2 * muEffective / dimensions);
-    cs = (muEffective + 2) / (dimensions + muEffective + 5);
+    cSigma = (muEffective + 2) / (dimensions + muEffective + 5);
     c1 = 2 / (Math.pow(dimensions + 1.3, 2) + muEffective);
     cmu = Math.min(1 - c1, 2 * (muEffective - 2 + 1D / muEffective) / (Math.pow(dimensions + 2, 2) + muEffective));
-    damps = 1 + 2 * Math.max(0, Math.sqrt((muEffective - 1) / (dimensions + 1)) - 1) + cs;
+    damps = 1 + 2 * Math.max(0, Math.sqrt((muEffective - 1) / (dimensions + 1)) - 1) + cSigma;
 
     B = RichMatrix.eye(dimensions);
     D = new RichArray(dimensions, 1);
@@ -123,14 +123,14 @@ public class DifferentialRecombination implements IRecombination {
     xmean = config.getOffX().recombinate(reducedIndex).multiply(weights);
 
     // Cumulation: Update evolution paths.
-    pSigma = pSigma.apply(OperationFactory.multiply(1 - cs)).sum(
+    pSigma = pSigma.apply(OperationFactory.multiply(1 - cSigma)).sum(
             invsqrtC.apply(
-                    OperationFactory.multiply(Math.sqrt(cs * (2 - cs) * muEffective))).multiply(
+                    OperationFactory.multiply(Math.sqrt(cSigma * (2 - cSigma) * muEffective))).multiply(
                     xmean.deduct(xold).apply(OperationFactory.divide(sigma))));
 
     // The Heaviside function (hSigma) stalls the update of pc if ||pc|| is large.
     double hSigma = (pSigma.apply(OperationFactory.pow(2)).sum()
-            / (1 - Math.pow(1 - cs, 2 * config.getCounteval() / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
+            / (1 - Math.pow(1 - cSigma, 2 * config.getCounteval() / offspring.size())) / dimensions < 2 + 4 / (dimensions + 1)) ? 1 : 0;
 
     //Covariance matrix adaptation
     pc = pc.apply(OperationFactory.multiply(1 - cc)).sum(
@@ -150,7 +150,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	// Adapt step size, sigma. Determine new overall variance (σ) = step size
     //sigma = sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1));
-    sigma = Math.min(Math.max(0.1, sigma * Math.exp((cs / damps) * (pSigma.norm() / chiN - 1))),1e50);
+    sigma = Math.min(Math.max(0.1, sigma * Math.exp((cSigma / damps) * (pSigma.norm() / chiN - 1))),1e50);
 
     // Update B and D from C.
     if (config.getCounteval() - eigeneval > offspring.size() / (c1 + cmu) / dimensions / 10) { // to achieve O(N^2)
