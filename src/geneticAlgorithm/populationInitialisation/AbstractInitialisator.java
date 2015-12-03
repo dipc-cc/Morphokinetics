@@ -13,7 +13,7 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class GeneralInitialisator implements IInitialisator {
+public abstract class AbstractInitialisator implements IInitialisator {
 
   /**
    * Initialises the population with random numbers, with linear or logarithmic distribution.
