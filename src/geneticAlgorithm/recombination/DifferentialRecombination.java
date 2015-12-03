@@ -22,7 +22,8 @@ public class DifferentialRecombination implements IRecombination {
   private final double cSigma;
   private final double c1;
   private final double cmu;
-  private final double damps;
+  /** Damping for sigma. */
+  private final double dampSigma;
 
   /** P_c of sigma. Evolution paths for C and sigma*/
   private RichArray pc;
@@ -87,7 +88,7 @@ public class DifferentialRecombination implements IRecombination {
     cSigma = (muEffective + 2) / (dimensions + muEffective + 5);
     c1 = 2 / (Math.pow(dimensions + 1.3, 2) + muEffective);
     cmu = Math.min(1 - c1, 2 * (muEffective - 2 + 1D / muEffective) / (Math.pow(dimensions + 2, 2) + muEffective));
-    damps = 1 + 2 * Math.max(0, Math.sqrt((muEffective - 1) / (dimensions + 1)) - 1) + cSigma;
+    dampSigma = 1 + 2 * Math.max(0, Math.sqrt((muEffective - 1) / (dimensions + 1)) - 1) + cSigma;
 
     B = RichMatrix.eye(dimensions);
     D = new RichArray(dimensions, 1);
@@ -155,7 +156,7 @@ public class DifferentialRecombination implements IRecombination {
 
 	// Adapt step size, sigma. Determine new overall variance (σ) = step size
     //sigma = sigma * Math.exp((cs / damps) * (ps.norm() / chiN - 1));
-    sigma = Math.min(Math.max(0.1, sigma * Math.exp((cSigma / damps) * (pSigma.norm() / chiN - 1))),1e50);
+    sigma = Math.min(Math.max(0.1, sigma * Math.exp((cSigma / dampSigma) * (pSigma.norm() / chiN - 1))),1e50);
     System.out.println("\t\t\t sigma = "+sigma);
     // Update B and D from C.
     if (counteval - eigeneval > offspring.size() / (c1 + cmu) / dimensions / 10) { // to achieve O(N^2)
