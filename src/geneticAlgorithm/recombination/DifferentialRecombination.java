@@ -29,7 +29,7 @@ public class DifferentialRecombination implements IRecombination {
   private RichArray pc;
   /** P of sigma. Used for step size control. */
   private RichArray pSigma;
-  /** Step size in CMA-ES. */
+  /** Step size in CMA-ES. It stores the standard deviation of all objective variables. */
   private double sigma;  
   
   /** B defines the coordinate system. B is an orthogonal matrix. Columns of B are eigenvectors of C
