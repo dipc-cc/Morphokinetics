@@ -35,14 +35,11 @@ public class GeneralInitialisator implements IInitialisator {
     for (int ind = 0; ind < p.size(); ind++) {
       Individual i = new Individual(dimensions, 4);
       for (int j = 0; j < dimensions; j++) {
-        double value;
-        if (log) {
-          value = min * Math.pow(max / min, StaticRandom.raw());
-        } else {
-          value = min + (max - min) * StaticRandom.raw();
+        if (log) { // Calculate a random number with exponential distribution
+          i.setGene(j, min * Math.pow(max / min, StaticRandom.raw()));
+        } else { // Calculate a random number with linear distribution
+          i.setGene(j, min + (max - min) * StaticRandom.raw());
         }
-        System.out.println("Value 1 "+value);
-        i.setGene(j, value);
       }
 
       p.setIndividual(i, ind);
