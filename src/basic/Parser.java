@@ -79,6 +79,10 @@ public class Parser {
   private int repetitions;
   private boolean readReference;
   private double stopError;
+  /** Minimum possible value that a gene can have. */
+  private double minValueGene;
+  /** Maximum possible value that a gene can have. */
+  private double maxValueGene;
   
   /**
    * Constructor
@@ -117,6 +121,8 @@ public class Parser {
     this.repetitions = 18;
     this.readReference = true;
     this.stopError = 0.022;
+    this.minValueGene = 0.1;
+    this.maxValueGene = 1e11;
   }
 
   /**
@@ -309,6 +315,16 @@ public class Parser {
     } catch (JSONException e) {
       stopError = 0.022;
     }
+    try {
+      minValueGene = json.getDouble("minValueGene");
+    } catch (JSONException e) {
+      stopError = 0.1;
+    }
+    try {
+      maxValueGene = json.getDouble("maxValueGene");
+    } catch (JSONException e) {
+      maxValueGene = 1e11;
+    }
     return 0;
   }
 
@@ -353,6 +369,8 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"repetitions\"", repetitions);
     System.out.printf("%32s: %s,\n", "\"readReference\"", readReference);
     System.out.printf("%32s: %s,\n", "\"stopError\"", stopError);
+    System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
+    System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
   }
 
   public String getCalculationType() {
@@ -524,11 +542,28 @@ public class Parser {
   }
   
   /**
-   * For evolutinary algorithm run mode target minimum error
+   * For evolutionary algorithm run mode target minimum error
    * @return minimum error
    */
   public double getStopError() {
     return stopError;
   }
+
+  /**
+   * For evolutionary algorithm, minimum possible value of a gene.
+   *
+   * @return minimum error
+   */
+  public double getMinValueGene() {
+    return minValueGene;
+  }  
   
+  /**
+   * For evolutionary algorithm, maximum possible value of a gene.
+   *
+   * @return minimum error
+   */
+  public double getMaxValueGene() {
+    return maxValueGene;
+  }  
 }
