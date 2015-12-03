@@ -83,6 +83,8 @@ public class Parser {
   private double minValueGene;
   /** Maximum possible value that a gene can have. */
   private double maxValueGene;
+  /** Chooses between exponential distribution of the random genes (true) or linear distribution (false). */
+  private boolean expDistribution;
   
   /**
    * Constructor
@@ -123,6 +125,7 @@ public class Parser {
     this.stopError = 0.022;
     this.minValueGene = 0.1;
     this.maxValueGene = 1e11;
+    this.expDistribution = true;
   }
 
   /**
@@ -325,6 +328,11 @@ public class Parser {
     } catch (JSONException e) {
       maxValueGene = 1e11;
     }
+    try {
+      expDistribution = json.getBoolean("expDistribution");
+    } catch (JSONException e) {
+      expDistribution = true;
+    }
     return 0;
   }
 
@@ -371,6 +379,8 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"stopError\"", stopError);
     System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
     System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
+    System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);
+    
   }
 
   public String getCalculationType() {
@@ -565,5 +575,14 @@ public class Parser {
    */
   public double getMaxValueGene() {
     return maxValueGene;
-  }  
+  } 
+  
+  /**
+   * Chooses between exponential distribution of the random genes (true) or linear distribution (false)
+   * 
+   * @return true exponential distribution; false linear
+   */
+  public boolean isExpDistribution() {
+    return expDistribution;
+  }
 }
