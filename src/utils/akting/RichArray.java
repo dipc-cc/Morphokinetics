@@ -145,6 +145,10 @@ public class RichArray extends ArrayList<Double> {
     return max;
   }
 
+  /**
+   * Calculates the standard deviation of an array
+   * @return standard deviation
+   */
   public double std() {
     double diffs = 0;
     double avg = avg();
