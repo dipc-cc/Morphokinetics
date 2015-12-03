@@ -21,6 +21,6 @@ public class SiInitialisator extends GeneralInitialisator implements IInitialisa
    */
   @Override
   public Population createRandomPopulation(int populationSize) {
-    return createRandomPopulation(populationSize, 16*4, 1e-8, 1e7,true);
+    return createRandomPopulation(populationSize, 16 * 4, 1e-8, 1e7, true);
   }
 }
