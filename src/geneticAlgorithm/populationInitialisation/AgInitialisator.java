@@ -10,7 +10,7 @@ import geneticAlgorithm.Population;
  *
  * @author Nestor
  */
-public class AgInitialisator extends GeneralInitialisator implements IInitialisator {
+public class AgInitialisator extends AbstractInitialisator implements IInitialisator {
 
   /**
    * Robust initialisation methods, it uses a logarithmic distribution of process rates, more

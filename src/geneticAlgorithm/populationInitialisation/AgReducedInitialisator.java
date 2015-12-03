@@ -12,7 +12,7 @@ import geneticAlgorithm.Population;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgReducedInitialisator extends GeneralInitialisator implements IInitialisator {
+public class AgReducedInitialisator extends AbstractInitialisator implements IInitialisator {
 
   /**
    * Initialises all the rates between 1 and 1e12

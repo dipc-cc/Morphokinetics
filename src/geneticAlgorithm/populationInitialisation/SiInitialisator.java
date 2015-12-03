@@ -10,7 +10,7 @@ import geneticAlgorithm.Population;
  *
  * @author Nestor
  */
-public class SiInitialisator extends GeneralInitialisator implements IInitialisator {
+public class SiInitialisator extends AbstractInitialisator implements IInitialisator {
 
   /**
    * Simplest way of initialisation, a pure random value. AgAg initialisation has a more robust
