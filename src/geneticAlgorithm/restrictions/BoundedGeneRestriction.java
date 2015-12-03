@@ -5,6 +5,7 @@
 package geneticAlgorithm.restrictions;
 
 import geneticAlgorithm.Individual;
+import utils.StaticRandom;
 
 /**
  *
@@ -28,6 +29,13 @@ public class BoundedGeneRestriction extends GeneRestriction {
     }
     if (i.getGene(genePosition) > maxValue) {
       i.setGene(genePosition, maxValue);
+    }
+    // If gene is not defined initialise again with random number. In any case, the algorithm seems to be lost by now
+    if (Double.isNaN(i.getGene(genePosition))) {
+      double newGene = minValue * Math.pow(maxValue / minValue, StaticRandom.raw());
+      System.err.println("Setting new random gene to position " + genePosition + " because it turned to be NaN. Value: " + newGene);
+      System.out.println("Setting new random gene to position " + genePosition + " because it turned to be NaN. Value: " + newGene);
+      i.setGene(genePosition, newGene);
     }
   }
 
