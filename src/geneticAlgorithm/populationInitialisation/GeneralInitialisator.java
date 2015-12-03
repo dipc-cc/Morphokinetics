@@ -13,12 +13,7 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class GeneralInitialisator implements IInitialisator {
-
-  @Override
-  public Population createRandomPopulation(int populationSize) {
-    return createRandomPopulation(populationSize, 6, 0.2, 6, true);
-  }
+public abstract class GeneralInitialisator implements IInitialisator {
 
   /**
    * Initialises the population with random numbers, with linear or logarithmic distribution.
