@@ -47,7 +47,7 @@ import utils.list.ListConfiguration;
  */
 public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
-  private Parser parser;
+  protected Parser parser;
   
   protected BasicEvaluator evaluator;
   protected AbstractPsdEvaluator mainEvaluator;
@@ -97,7 +97,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialisation = new AgReduced6Initialisator();
-        restriction = new AgReduced6Restriction();
+        restriction = new AgReduced6Restriction(6, parser.getMinValueGene(), parser.getMaxValueGene());
         mainEvaluator = getAgMainEvaluator();
         break;
       case "Si":
