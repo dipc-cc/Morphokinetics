@@ -12,7 +12,7 @@ import utils.StaticRandom;
  *
  * @author Nestor
  */
-public class AgInitialisator implements IInitialisator {
+public class AgInitialisator extends GeneralInitialisator implements IInitialisator {
 
   /**
    * Robust initialisation methods, it uses a logarithmic distribution of process rates, more
@@ -23,20 +23,6 @@ public class AgInitialisator implements IInitialisator {
    */
   @Override
   public Population createRandomPopulation(int populationSize) {
-    Population p = new Population(populationSize);
-    for (int ind = 0; ind < p.size(); ind++) {
-      Individual i = new Individual(49, 4);
-      for (int a = 0; a < 7; a++) {
-        for (int j = 0; j < 7; j++) {
-          if (a == 1) {
-            i.setGene(a * 7 + j, Math.max(0.1, 1000 * Math.pow(150000, StaticRandom.raw())));
-          } else {
-            i.setGene(a * 7 + j, Math.max(0.1, 0.1 * Math.pow(10000000, StaticRandom.raw())));
-          }
-        }
-      }
-      p.setIndividual(i, ind);
-    }
-    return p;
+    return  createRandomPopulation(populationSize, 49, 0.1, 10000000, true);
   }
 }
