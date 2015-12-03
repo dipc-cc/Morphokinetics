@@ -5,32 +5,23 @@
  */
 package geneticAlgorithm.populationInitialisation;
 
-import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import utils.StaticRandom;
 
 /**
+ * This class only considers 6 different genes for Ag/Ag growth.
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgReduced6Initialisator implements IInitialisator{
-  
+public class AgReduced6Initialisator extends GeneralInitialisator implements IInitialisator {
+
   /**
-   * Initialises the terrace rates between 1e5 and 1e12, the rest of the genes between
-   * 100 and 1e8
+   * Initialises all the rates between 1 and 1e12
+   *
    * @param populationSize
-   * @return 
+   * @return
    */
   @Override
   public Population createRandomPopulation(int populationSize) {
-    Population p = new Population(populationSize);
-    for (int ind = 0; ind < p.size(); ind++) {
-      Individual i = new Individual(6, 4);
-      for (int j = 0; j < 6; j++) {
-        i.setGene(j, 1 * Math.pow(1E12, StaticRandom.raw()));
-      }
-      p.setIndividual(i, ind);
-    }
-    return p;
+    return createRandomPopulation(populationSize, 6, 1, 1e12, true);
   }
 }
