@@ -33,7 +33,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
   @Override
   public IGeneticAlgorithm initialise() {
-    population = initialisation.createRandomPopulation(populationSize);
+    population = initialisation.createRandomPopulation(populationSize, 6, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
 
     // Inicializamos la clase que contiene variables globales del algoritmo.
     dcmaEsConfig = new DcmaEsConfig(this, population.getIndividual(0).getGeneSize());
@@ -114,7 +114,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
       }
       System.out.println("");
       if (this.getBestError() < getStopError()) {
-        System.out.println("Stopping because the error is "+this.getBestError());
+        System.out.println("Stopping because the error is "+this.getBestError()+" ("+getStopError()+")");
         break;
       }
     }
