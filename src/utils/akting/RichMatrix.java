@@ -180,6 +180,10 @@ public class RichMatrix extends ArrayList<RichArray> {
     return newMatrix;
   }
 
+  /**
+   * Calculates the standard deviation of a matrix
+   * @return standard deviation
+   */
   public RichArray std() {
     RichArray newArray = new RichArray(capacity);
 
