@@ -14,4 +14,5 @@ public interface IInitialisator {
 
   public Population createRandomPopulation(int populationSize);
 
+  public Population createRandomPopulation(int populationSize, int dimensions, double min, double max, boolean log);
 }
