@@ -109,4 +109,9 @@ public class SyntheticRates implements IGrowthRates {
 
   }
 
+  @Override
+  public double getEnergy(int i, int j) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
 }

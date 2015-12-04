@@ -52,6 +52,17 @@ public class AgRatesFactory implements IRatesFactory {
     return rates;
   }
   
+  public double[] getReduced6Energies() {
+    double[] rates = new double[6];
+    rates[0] = experiments.getEnergy(0, 0);
+    rates[1] = experiments.getEnergy(1, 1);
+    rates[2] = experiments.getEnergy(1, 3);
+    rates[3] = experiments.getEnergy(2, 3);
+    rates[4] = experiments.getEnergy(2, 2);
+    rates[5] = experiments.getEnergy(5, 5);
+    return rates;
+  }
+    
   @Override
   public double getDepositionRate(double temperature) {
     return experiments.getDepositionRate();

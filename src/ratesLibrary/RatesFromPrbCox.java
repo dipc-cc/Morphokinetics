@@ -255,4 +255,9 @@ public class RatesFromPrbCox implements IGrowthRates {
     return 2e-5; //180 degrees Kelvin
   }
 
+  @Override
+  public double getEnergy(int i, int j) {
+    return energies[i][j];
+  }
+
 }

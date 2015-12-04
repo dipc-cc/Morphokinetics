@@ -20,4 +20,6 @@ public interface IGrowthRates {
    * @return a double value
    */
   public double getIslandsDensityMl(double temperature);
+
+  public double getEnergy(int i, int j);
 }
