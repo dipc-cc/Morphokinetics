@@ -90,6 +90,7 @@ public class Parser {
   private boolean expDistribution;
   /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY. */
   private EvaluatorType evaluatorType;
+  /** This numbers reflect the power of two and gives the chance to choose between inclusively among PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
   private long numericStatusCode;
   
   /**
