@@ -41,7 +41,8 @@ public class AgReduced6Restriction extends RestrictionOperator {
       throw new IllegalArgumentException("Minimum has to be greater than 0");
     }
 
-    for (int currentGene = 0; currentGene < dimensions; currentGene++) {
+    genesRestriction.add(new BoundedGeneRestriction(10000, max, 0));
+    for (int currentGene = 1; currentGene < dimensions; currentGene++) {
       genesRestriction.add(new BoundedGeneRestriction(min, max, currentGene));
     }
   }
