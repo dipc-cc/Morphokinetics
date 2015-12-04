@@ -26,7 +26,7 @@ public class SiliconMultithreadedPsdCalculation {
 
     SiKmcConfig config = configKmc();
 
-    AbstractEvaluator evaluation = new SiThreadedPsdEvaluator(config, 20, 10000, 4);
+    AbstractEvaluator evaluation = new SiThreadedPsdEvaluator(config, 20, 10000, 4, null);
     evaluation.setWheight(1.0f);
     evaluation.setShowGraphics(false);
 

@@ -6,6 +6,7 @@ package geneticAlgorithm.evaluationFunctions;
 
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
+import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -30,9 +31,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private double g2g1;
   private double hierarchyFrobeniusRef;
   
-  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY) {
+  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags) {
 
-    super(repeats, measureInterval);
+    super(repeats, measureInterval, flags);
 
     setPsdSizeX(psdSizeX);
     setPsdSizeY(psdSizeY);

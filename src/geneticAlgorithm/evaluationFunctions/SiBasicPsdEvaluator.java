@@ -6,6 +6,7 @@ package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
 import graphicInterfaces.etching.SiFrame;
+import java.util.Set;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import utils.psdAnalysis.PsdSignature2D;
@@ -19,9 +20,9 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
   private SiKmc kmc;
   SiFrame frame;
 
-  public SiBasicPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval) {
+  public SiBasicPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, Set flags) {
 
-    super(repeats, measureInterval);
+    super(repeats, measureInterval, flags);
 
     setPsdSizeX(config.sizeX_UC * 2);
     setPsdSizeY(config.sizeY_UC * 2);

@@ -131,10 +131,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     int sizeY = parser.getCartSizeY() / 2;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY);
+        evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes());
         break;
       case "threaded":
-        evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY);
+        evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
         break;
       default:
         System.err.println("Error: Default evolutor. This evoluator is not implemented!");
@@ -152,10 +152,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     AbstractPsdEvaluator evaluatorTmp = null;
     switch (parser.getEvaluator()) {
       case "serial":
-        evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000);
+        evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000, parser.getEvaluatorTypes());
         break;
       case "threaded":
-      evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8);
+      evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8, parser.getEvaluatorTypes());
         break;
       default:
         System.err.println("Error: Default evolutor. This evoluator is not implemented!");

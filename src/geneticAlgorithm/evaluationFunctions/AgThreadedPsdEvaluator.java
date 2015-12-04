@@ -7,6 +7,7 @@ package geneticAlgorithm.evaluationFunctions;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
+import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
@@ -19,9 +20,9 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
  */
 public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
-  public AgThreadedPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int numThreads, int psdSizeX, int psdSizeY) {
+  public AgThreadedPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int numThreads, int psdSizeX, int psdSizeY, Set flags) {
 
-    super(repeats, measureInterval, numThreads);
+    super(repeats, measureInterval, numThreads, flags);
 
     for (int i = 0; i < numThreads; i++) {
       GrowthKmcFrame frame = createGraphicsFrame(kmc);

@@ -4,10 +4,12 @@
  */
 package geneticAlgorithm.evaluationFunctions;
 
+import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import graphicInterfaces.MainInterface;
+import java.util.Set;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -35,11 +37,19 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private double expectedSimulationTime;
 
   protected int kmcError;
+  private final Set flags;
   
-  public AbstractPsdEvaluator(int repeats, int measureInterval) {
+  public AbstractPsdEvaluator(int repeats, int measureInterval, Set flags) {
     super();
     this.repeats = repeats;
     this.measureInterval = measureInterval;
+    // If no flag is given only use the PSD to evaluate the function
+    if (flags == null) {
+      EvaluatorType et = new EvaluatorType();
+      flags = et.getStatusFlags(1);
+    }
+    this.flags = flags;
+    kmcError = 0;
   }
   
   public void setMainInterface(MainInterface mainInterface) {
@@ -144,18 +154,34 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
 
   private double evaluateIndividual(Individual ind) {
-    calculatePsdFromIndividual(ind); // Do KMC run and calculate its PSD
-    double fError = calculateFrobeniusNormErrorMatrix(psd); // Calculate corresponding error with the reference
-    double timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
-    double hError = calculateHierarchyErrorFromReference(ind);
-    double error = fError + timeError + hError; // Sum up all errors: Frobenius, time and hierarchy
-    if (kmcError == -1) error = 1e30; // If the KMC execution did not finish properly, set huge error
+    double psdError = 0;
+    double timeError = 0;
+    double hierarchyError = 0;
+    boolean runKmc = flags.contains(evaluatorFlag.PSD) || flags.contains(evaluatorFlag.TIME);
+    if (runKmc) {
+      calculatePsdFromIndividual(ind); // Do KMC run and calculate its PSD
+    }
+    if (flags.contains(evaluatorFlag.PSD)) {
+      psdError = calculateFrobeniusNormErrorMatrix(psd); // Calculate corresponding error with the reference
+    }
+    if (flags.contains(evaluatorFlag.TIME)) {
+      timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
+    }
+    // There is no need to run the KMC to evaluate the hierachies
+    if (flags.contains(evaluatorFlag.HIERARCHY)) {
+      hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorDiscrete(ind);
+      //((AgBasicPsdEvaluator)this).calculateHierarchyErrorFrobenius(ind);
+    }
+
+    double error = psdError + timeError + hierarchyError; // Sum up all errors: Frobenius psd, time and hierarchy
+    printGenes(ind.getGenes());
+    if (kmcError == -1 && runKmc) error = 1e30; // If the KMC execution did not finish properly, set huge error
 
     // Print to standard output, file and GUI
-    System.out.println("  errors: "+"\t"+fError+"\t"+timeError+"\t"+hError+"\t"+error);
+    System.out.println("  errors: "+"\t"+psdError+"\t"+timeError+"\t"+hierarchyError+"\t"+error);
     System.out.println("  simul. time: "+ind.getSimulationTime()+"\t("+expectedSimulationTime+")");
     String errors = " Errors: FrobeniusNormMatrix\ttimeError\tHierarchy\tError\n";
-    errors = errors+"\t"+fError+"\t"+timeError+"\t"+hError+"\t"+error;
+    errors = errors+"\t"+psdError+"\t"+timeError+"\t"+hierarchyError+"\t"+error;
     String folderName = "gaResults/population"+currentPopulation.getIterationNumber()+"/individual"+((currentSimulation-repeats)/repeats);
     Restart restart = new Restart(folderName);
     String fileName = "errors.txt";
@@ -178,6 +204,15 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       mainInterface.setError(error);
     }
     return error * wheight;
+  }
+   
+  private void printGenes(double[] genes) {
+    System.out.print("population" + getCurrentIteration() + "/individual" + currentSimulation / repeats);
+    for (int i = 0; i < 6; i++) {
+      System.out.print(" " + genes[i]);;
+    }
+    System.out.println(" ");
+    currentSimulation++;
   }
     
   public void setPsdSizeX(int psdSizeX) {

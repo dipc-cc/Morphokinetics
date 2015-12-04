@@ -6,6 +6,7 @@ package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
+import java.util.Set;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
@@ -29,8 +30,8 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   protected int finishedSimulation;
   protected Semaphore evalationComplete;
 
-  public MultithreadedPsdEvaluator(int repeats, int measureInterval, int numThreads) {
-    super(repeats, measureInterval);
+  public MultithreadedPsdEvaluator(int repeats, int measureInterval, int numThreads, Set flags) {
+    super(repeats, measureInterval, flags);
 
     this.workers = new KmcWorker[numThreads];
     this.numThreads = numThreads;
