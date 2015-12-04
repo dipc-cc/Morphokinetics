@@ -321,7 +321,7 @@ public class Parser {
     try {
       minValueGene = json.getDouble("minValueGene");
     } catch (JSONException e) {
-      stopError = 0.1;
+      minValueGene = 0.1;
     }
     try {
       maxValueGene = json.getDouble("maxValueGene");
