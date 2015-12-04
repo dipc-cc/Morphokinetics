@@ -318,7 +318,12 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return stopError;
   } 
   
-  // Hau mugitu goiko klasera eta derrigortu hala izan dadin baita CMA-ESn ere.
+  /**
+   * Scales genes (ratios) with respect to the expected simulation time. If expected simulation time
+   * is 0, no scaling is done
+   *
+   * @param population The population to be scaled.
+   */
   protected void scaleIndividualRates(Population population) {
     for (int i = 0; i < population.size(); i++) {
       Individual individual = population.getIndividual(i);
@@ -333,6 +338,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       }
     }
   }
+  
   /**
    * Inner class responsible to update the interface.
    */
