@@ -5,12 +5,15 @@
  */
 package basic;
 
+import geneticAlgorithm.evaluationFunctions.EvaluatorType;
+import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -85,6 +88,9 @@ public class Parser {
   private double maxValueGene;
   /** Chooses between exponential distribution of the random genes (true) or linear distribution (false). */
   private boolean expDistribution;
+  /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY. */
+  private EvaluatorType evaluatorType;
+  private long numericStatusCode;
   
   /**
    * Constructor
@@ -126,6 +132,8 @@ public class Parser {
     this.minValueGene = 0.1;
     this.maxValueGene = 1e11;
     this.expDistribution = true;
+    this.evaluatorType = new EvaluatorType();
+    this.numericStatusCode = 3;
   }
 
   /**
@@ -332,6 +340,11 @@ public class Parser {
       expDistribution = json.getBoolean("expDistribution");
     } catch (JSONException e) {
       expDistribution = true;
+    }  
+    try {
+      numericStatusCode = json.getLong("evaluatorType");
+    } catch (JSONException e) {
+      numericStatusCode = 3;
     }
     return 0;
   }
@@ -380,6 +393,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
     System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
     System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);
+    System.out.printf("%32s: %s,\n", "\"evaluatorType\"", numericStatusCode);
     
   }
 
@@ -584,5 +598,14 @@ public class Parser {
    */
   public boolean isExpDistribution() {
     return expDistribution;
+  } 
+  
+  /**
+   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY.
+   * @return 
+   */
+  public EnumSet<evaluatorFlag> getEvaluatorTypes() {
+    return evaluatorType.getStatusFlags(numericStatusCode);
   }
+    
 }
