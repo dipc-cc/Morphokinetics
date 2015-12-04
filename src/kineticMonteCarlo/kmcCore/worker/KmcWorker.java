@@ -146,7 +146,7 @@ public class KmcWorker extends Thread {
     this.performSimulationLock.release();
   }
 
-  public void simulate(IIntervalListener toAdd, IFinishListener toFinish, int interval_steps, int workID) {
+  public void simulate(IIntervalListener toAdd, IFinishListener toFinish, int intervalSteps, int workID) {
     try {
       this.receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
@@ -157,7 +157,7 @@ public class KmcWorker extends Thread {
     this.intervalListener = toAdd;
     this.finishListener = toFinish;
     this.workId = workID;
-    this.intervalSteps = interval_steps;
+    this.intervalSteps = intervalSteps;
     performSimulationLock.release();
   }
 
