@@ -316,6 +316,22 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   protected double getStopError() {
     return stopError;
+  } 
+  
+  // Hau mugitu goiko klasera eta derrigortu hala izan dadin baita CMA-ESn ere.
+  protected void scaleIndividualRates(Population population) {
+    for (int i = 0; i < population.size(); i++) {
+      Individual individual = population.getIndividual(i);
+      double factor;
+      if (expectedSimulationTime == 0) {
+        factor = 1;
+      } else {
+        factor = expectedSimulationTime / individual.getSimulationTime();
+      }
+      for (int j = 0; j < individual.getGeneSize(); j++) {
+        individual.setGene(j, individual.getGene(j) / factor);
+      }
+    }
   }
   /**
    * Inner class responsible to update the interface.

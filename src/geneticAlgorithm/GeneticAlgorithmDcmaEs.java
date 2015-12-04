@@ -188,14 +188,4 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   public Individual getIndividual(int pos) {
     return population.getIndividual(pos);
   }
-
-  private void scaleIndividualRates(Population population) {
-    for (int i = 0; i < population.size(); i++) {
-      Individual individual = population.getIndividual(i);
-      double factor = expectedSimulationTime / individual.getSimulationTime();
-      for (int j = 0; j < individual.getGeneSize(); j++) {
-        individual.setGene(j, individual.getGene(j) / factor);
-      }
-    }
-  }
 }
