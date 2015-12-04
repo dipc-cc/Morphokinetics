@@ -154,6 +154,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
 
   private double evaluateIndividual(Individual ind) {
+    printGenes(ind.getGenes());
     double psdError = 0;
     double timeError = 0;
     double hierarchyError = 0;
@@ -174,7 +175,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     }
 
     double error = psdError + timeError + hierarchyError; // Sum up all errors: Frobenius psd, time and hierarchy
-    printGenes(ind.getGenes());
     if (kmcError == -1 && runKmc) error = 1e30; // If the KMC execution did not finish properly, set huge error
 
     // Print to standard output, file and GUI
