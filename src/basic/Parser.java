@@ -344,6 +344,10 @@ public class Parser {
     }  
     try {
       numericStatusCode = json.getLong("evaluatorType");
+      if (numericStatusCode > 7 || numericStatusCode < 1) {
+        System.out.println("Warning: With the current configuration no evaluator has been chosen. "
+                + "Please select a number between 1 and 7 (inclusive) for \"evaluatorType\"");
+      }
     } catch (JSONException e) {
       numericStatusCode = 3;
     }
