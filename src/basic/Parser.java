@@ -21,6 +21,7 @@ import javax.print.DocFlavor;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AgLattice;
 import main.Morphokinetics;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -359,6 +360,27 @@ public class Parser {
       hierarchyEvaluator = json.getString("hierarchyEvaluator");
     } catch (JSONException e) {
       hierarchyEvaluator = "basic";
+    }
+    try {
+      numericStatusCode = 0;
+      JSONArray array;
+      array = json.getJSONArray("evaluator");
+      for (int i = 0; i < array.length(); i++) {
+        JSONObject evaluatorType = array.getJSONObject(i);
+        String type = evaluatorType.getString("type");
+     	// This values must agree with those ones in evaluatorFlag of file EvaluatorType.java
+        if (type.equals("psd")) {
+          numericStatusCode += 1;
+        }
+        if (type.equals("time")) {
+          numericStatusCode += 2;
+        }
+        if (type.equals("hierarchy")){
+          numericStatusCode +=4;
+        }
+      }
+    } catch (JSONException e) {
+        numericStatusCode = 1 + 2 + 4; // All the evaluators by default
     }
     return 0;
   }
