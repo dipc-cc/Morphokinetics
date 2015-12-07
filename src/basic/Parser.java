@@ -93,6 +93,7 @@ public class Parser {
   private EvaluatorType evaluatorType;
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
   private long numericStatusCode;
+  private JSONArray evaluator;
   /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options: "basic", "step", "reference" and "Frobenius". */
   private String hierarchyEvaluator;
   
@@ -353,11 +354,10 @@ public class Parser {
     }
     try {
       numericStatusCode = 0;
-      JSONArray array;
-      array = json.getJSONArray("evaluator");
-      for (int i = 0; i < array.length(); i++) {
-        JSONObject evaluator = array.getJSONObject(i);
-        String type = evaluator.getString("type");
+      evaluator = json.getJSONArray("evaluator");
+      for (int i = 0; i < evaluator.length(); i++) {
+        JSONObject currentEvaluator = evaluator.getJSONObject(i);
+        String type = currentEvaluator.getString("type");
      	// This values must agree with those ones in evaluatorFlag of file EvaluatorType.java
         if (type.equals("psd")) {
           numericStatusCode += 1;
@@ -418,7 +418,18 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"stopError\"", stopError);
     System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
     System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
-    System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);
+    System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);    
+    if (evaluator != null) {
+      System.out.printf("%32s: [", "\"evaluator\"");
+      
+      for (int i = 0; i < evaluator.length(); i++) {
+        JSONObject currentEvaluator = evaluator.getJSONObject(i);
+        System.out.printf(" {%s: \"%s\"},", "\"type\"", currentEvaluator.getString("type"));
+      }
+      System.out.printf("],\n");
+    } else {
+      System.out.printf("%32s: [ {\"type\": \"psd\"}, {\"type\": \"time\"}, {\"type\": \"hierarchy\"},],\n", "\"evaluator\"");
+    }
     System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
     
   }
