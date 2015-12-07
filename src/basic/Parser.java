@@ -336,6 +336,11 @@ public class Parser {
       stopError = 0.022;
     }
     try {
+      evolutionarySearchType = json.getString("evolutionarySearchType");
+    } catch (JSONException e) {
+      evolutionarySearchType = "rates";
+    }
+    try {
       minValueGene = json.getDouble("minValueGene");
     } catch (JSONException e) {
       minValueGene = 0.1;
@@ -343,12 +348,14 @@ public class Parser {
     try {
       maxValueGene = json.getDouble("maxValueGene");
     } catch (JSONException e) {
-      maxValueGene = 1e11;
+      if (evolutionarySearchType.equals("energies")) maxValueGene = 1;
+      else maxValueGene = 1e11;
     }
     try {
       expDistribution = json.getBoolean("expDistribution");
     } catch (JSONException e) {
-      expDistribution = true;
+      if (evolutionarySearchType.equals("energies")) expDistribution = false;
+      else expDistribution = true;
     }  
     try {
       hierarchyEvaluator = json.getString("hierarchyEvaluator");
@@ -374,11 +381,6 @@ public class Parser {
       }
     } catch (JSONException e) {
         numericStatusCode = 1 + 2 + 4; // All the evaluators by default
-    }
-    try {
-      evolutionarySearchType = json.getString("evolutionarySearchType");
-    } catch (JSONException e) {
-      evolutionarySearchType = "rates";
     }
     return 0;
   }
