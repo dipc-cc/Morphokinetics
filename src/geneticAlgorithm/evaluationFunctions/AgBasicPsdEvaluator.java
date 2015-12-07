@@ -31,9 +31,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private double g2g1;
   private double hierarchyFrobeniusRef;
   
-  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags) {
+  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator) {
 
-    super(repeats, measureInterval, flags);
+    super(repeats, measureInterval, flags, hierarchyEvaluator);
 
     setPsdSizeX(psdSizeX);
     setPsdSizeY(psdSizeY);

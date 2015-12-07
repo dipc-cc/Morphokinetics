@@ -31,7 +31,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   protected Semaphore evalationComplete;
 
   public MultithreadedPsdEvaluator(int repeats, int measureInterval, int numThreads, Set flags) {
-    super(repeats, measureInterval, flags);
+    super(repeats, measureInterval, flags, null);
 
     this.workers = new KmcWorker[numThreads];
     this.numThreads = numThreads;

@@ -22,7 +22,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   public SiBasicPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, Set flags) {
 
-    super(repeats, measureInterval, flags);
+    super(repeats, measureInterval, flags, null);
 
     setPsdSizeX(config.sizeX_UC * 2);
     setPsdSizeY(config.sizeY_UC * 2);

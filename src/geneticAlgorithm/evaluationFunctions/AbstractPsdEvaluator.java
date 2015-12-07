@@ -38,8 +38,17 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   protected int kmcError;
   private final Set flags;
+  private final String hierarchyEvaluator;
   
-  public AbstractPsdEvaluator(int repeats, int measureInterval, Set flags) {
+  /**
+   *
+   * @param repeats
+   * @param measureInterval
+   * @param flags
+   * @param hierarchyEvaluator either "basic", "step", "reference" or "Frobenius". It is safe to
+   * assign null. It will be used only if the hierarchy flag is enabled
+   */
+  public AbstractPsdEvaluator(int repeats, int measureInterval, Set flags, String hierarchyEvaluator) {
     super();
     this.repeats = repeats;
     this.measureInterval = measureInterval;
@@ -48,7 +57,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       EvaluatorType et = new EvaluatorType();
       flags = et.getStatusFlags(1);
     }
+    if (hierarchyEvaluator == null) {
+      hierarchyEvaluator = "";
+    }
     this.flags = flags;
+    this.hierarchyEvaluator = hierarchyEvaluator;
     kmcError = 0;
   }
   
@@ -170,8 +183,18 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     }
     // There is no need to run the KMC to evaluate the hierachies
     if (flags.contains(evaluatorFlag.HIERARCHY)) {
-      hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorDiscrete(ind);
-      //((AgBasicPsdEvaluator)this).calculateHierarchyErrorFrobenius(ind);
+      if (hierarchyEvaluator.equals("basic")) {
+        hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyError(ind);
+      }
+      if (hierarchyEvaluator.equals("step")) {
+        hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorDiscrete(ind);
+      }
+      if (hierarchyEvaluator.equals("reference")) {
+        hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorFromReference(ind);
+      }
+      if (hierarchyEvaluator.equals("Frobenius")) {
+        hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorFrobenius(ind);
+      }
     }
 
     double error = psdError + timeError + hierarchyError; // Sum up all errors: Frobenius psd, time and hierarchy
