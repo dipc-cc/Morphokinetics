@@ -129,17 +129,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     AbstractPsdEvaluator evaluatorTmp = null;
     int sizeX = parser.getCartSizeX() / 2;
     int sizeY = parser.getCartSizeY() / 2;
-    switch (parser.getEvaluator()) {
-      case "serial":
+    if (parser.isEvaluatorParallel()) {
+	evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());  
+    } else {
         evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator());
-        break;
-      case "threaded":
-        evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
-        break;
-      default:
-        System.err.println("Error: Default evolutor. This evoluator is not implemented!");
-        System.err.println("Current value: " + parser.getEvaluator() + ". Possible values are serial or threaded");
-        throw new IllegalArgumentException("Evaluator mode is not implemented");
     }
     
     evaluatorTmp.setWheight(1.0f);
@@ -150,17 +143,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     
   private AbstractPsdEvaluator getSiMainEvaluators() {
     AbstractPsdEvaluator evaluatorTmp = null;
-    switch (parser.getEvaluator()) {
-      case "serial":
-        evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000, parser.getEvaluatorTypes());
-        break;
-      case "threaded":
+    if (parser.isEvaluatorParallel()) {
       evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8, parser.getEvaluatorTypes());
-        break;
-      default:
-        System.err.println("Error: Default evolutor. This evoluator is not implemented!");
-        System.err.println("Current value: " + parser.getEvaluator() + ". Possible values are serial or threaded");
-        throw new IllegalArgumentException("Evaluator mode is not implemented");
+    } else {
+      evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000, parser.getEvaluatorTypes());
     }
     
     evaluatorTmp.setWheight(1.0f);

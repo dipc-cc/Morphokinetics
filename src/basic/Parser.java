@@ -17,7 +17,6 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.print.DocFlavor;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AgLattice;
 import main.Morphokinetics;
@@ -76,7 +75,7 @@ public class Parser {
   
   // For evolutionary algorithm
   private String evolutionaryAlgorithm; /** Can be original or dcma */
-  private String evaluator; /** Can be serial or threaded */
+  private boolean parallelEvaluator; /** Can be serial or threaded */
   private int populationSize;
   private int offspringSize;
   private int populationReplacement;
@@ -126,7 +125,7 @@ public class Parser {
     this.useMaxPerimeter = false;
     
     this.evolutionaryAlgorithm = "original";
-    this.evaluator = "serial";
+    this.parallelEvaluator = false;
     this.populationSize = 5;
     this.offspringSize = 32;
     this.populationReplacement = 5;
@@ -293,9 +292,9 @@ public class Parser {
       islandDensityType = "original";
     }    
     try {
-      evaluator = json.getString("evaluator");
+      parallelEvaluator = json.getBoolean("parallelEvaluator");
     } catch (JSONException e) {
-      evaluator = "serial";
+      parallelEvaluator = false;
     }
     try {
       populationSize = json.getInt("populationSize");
@@ -418,7 +417,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
-    System.out.printf("%32s: %s,\n", "\"evaluator\"", evaluator);
+    System.out.printf("%32s: %s,\n", "\"parallelEvaluator\"", parallelEvaluator);
     System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
     System.out.printf("%32s: %s,\n", "\"offspringSize\"", offspringSize);
     System.out.printf("%32s: %s,\n", "\"populationReplacement\"", populationReplacement);
@@ -554,8 +553,8 @@ public class Parser {
     return evolutionaryAlgorithm;
   }
   
-  public String getEvaluator() {
-    return evaluator;
+  public boolean isEvaluatorParallel() {
+    return parallelEvaluator;
   }
   
   public int getPopulationSize() {
