@@ -17,6 +17,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.print.DocFlavor;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AgLattice;
 import main.Morphokinetics;
@@ -92,6 +93,8 @@ public class Parser {
   private EvaluatorType evaluatorType;
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
   private long numericStatusCode;
+  /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options: "basic", "step", "reference" and "Frobenius". */
+  private String hierarchyEvaluator;
   
   /**
    * Constructor
@@ -135,6 +138,7 @@ public class Parser {
     this.expDistribution = true;
     this.evaluatorType = new EvaluatorType();
     this.numericStatusCode = 3;
+    this.hierarchyEvaluator = "basic";
   }
 
   /**
@@ -350,6 +354,11 @@ public class Parser {
       }
     } catch (JSONException e) {
       numericStatusCode = 3;
+    }  
+    try {
+      hierarchyEvaluator = json.getString("hierarchyEvaluator");
+    } catch (JSONException e) {
+      hierarchyEvaluator = "basic";
     }
     return 0;
   }
@@ -399,6 +408,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
     System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);
     System.out.printf("%32s: %s,\n", "\"evaluatorType\"", numericStatusCode);
+    System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
     
   }
 
@@ -611,6 +621,14 @@ public class Parser {
    */
   public EnumSet<evaluatorFlag> getEvaluatorTypes() {
     return evaluatorType.getStatusFlags(numericStatusCode);
+  }
+  
+  /**
+   * If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options: "basic", "step", "reference" and "Frobenius".
+   * @return "basic", "step", "reference" or "Frobenius".
+   */
+  public String getHierarchyEvaluator() {
+    return hierarchyEvaluator;
   }
     
 }
