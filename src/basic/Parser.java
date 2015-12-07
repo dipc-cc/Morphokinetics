@@ -96,6 +96,8 @@ public class Parser {
   private JSONArray evaluator;
   /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options: "basic", "step", "reference" and "Frobenius". */
   private String hierarchyEvaluator;
+  /** Search for "rates" or "energies". */
+  private String evolutionarySearchType;
   
   /**
    * Constructor
@@ -140,6 +142,7 @@ public class Parser {
     this.evaluatorType = new EvaluatorType();
     this.numericStatusCode = 3;
     this.hierarchyEvaluator = "basic";
+    this.evolutionarySearchType = "rates";
   }
 
   /**
@@ -372,6 +375,11 @@ public class Parser {
     } catch (JSONException e) {
         numericStatusCode = 1 + 2 + 4; // All the evaluators by default
     }
+    try {
+      evolutionarySearchType = json.getString("evolutionarySearchType");
+    } catch (JSONException e) {
+      evolutionarySearchType = "rates";
+    }
     return 0;
   }
 
@@ -431,6 +439,7 @@ public class Parser {
       System.out.printf("%32s: [ {\"type\": \"psd\"}, {\"type\": \"time\"}, {\"type\": \"hierarchy\"},],\n", "\"evaluator\"");
     }
     System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
+    System.out.printf("%32s: %s,\n", "\"evolutionarySearchType\"", evolutionarySearchType);
     
   }
 
@@ -653,4 +662,12 @@ public class Parser {
     return hierarchyEvaluator;
   }
     
+  public String getEvolutionarySearchType() {
+    if (evolutionarySearchType.equals("rates") || evolutionarySearchType.equals("energies")) {
+      return evolutionarySearchType;
+    } else {
+      System.out.println("Not valid search type. It must be \"rates\" of \"energies\".");
+      return null;
+    }
+  }
 }
