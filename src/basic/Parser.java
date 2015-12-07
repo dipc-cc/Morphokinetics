@@ -347,15 +347,6 @@ public class Parser {
       expDistribution = true;
     }  
     try {
-      numericStatusCode = json.getLong("evaluatorType");
-      if (numericStatusCode > 7 || numericStatusCode < 1) {
-        System.out.println("Warning: With the current configuration no evaluator has been chosen. "
-                + "Please select a number between 1 and 7 (inclusive) for \"evaluatorType\"");
-      }
-    } catch (JSONException e) {
-      numericStatusCode = 3;
-    }  
-    try {
       hierarchyEvaluator = json.getString("hierarchyEvaluator");
     } catch (JSONException e) {
       hierarchyEvaluator = "basic";
@@ -365,8 +356,8 @@ public class Parser {
       JSONArray array;
       array = json.getJSONArray("evaluator");
       for (int i = 0; i < array.length(); i++) {
-        JSONObject evaluatorType = array.getJSONObject(i);
-        String type = evaluatorType.getString("type");
+        JSONObject evaluator = array.getJSONObject(i);
+        String type = evaluator.getString("type");
      	// This values must agree with those ones in evaluatorFlag of file EvaluatorType.java
         if (type.equals("psd")) {
           numericStatusCode += 1;
@@ -428,7 +419,6 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
     System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
     System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);
-    System.out.printf("%32s: %s,\n", "\"evaluatorType\"", numericStatusCode);
     System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
     
   }
