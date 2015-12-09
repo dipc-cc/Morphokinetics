@@ -21,14 +21,13 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   protected static final int FPS_GRAPHICS = 2;
 
-  protected PsdSignature2D[] psds; // TODO joseba might not be initialized
-  protected double[] times;
-  protected long timeLastRender;
+  private PsdSignature2D[] psds; // TODO joseba might not be initialized
+  private double[] times;
 
   protected KmcWorker[] workers;
-  protected int numThreads;
-  protected int finishedSimulation;
-  protected Semaphore evalationComplete;
+  private final int numThreads;
+  private int finishedSimulation;
+  private final Semaphore evalationComplete;
 
   public MultithreadedPsdEvaluator(int repeats, int measureInterval, int numThreads, Set flags) {
     super(repeats, measureInterval, flags, null);
@@ -64,7 +63,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
     psds[workId].addSurfaceSample(surface);
   }
 
-  protected void assignNewWork(int workerId) {
+  private void assignNewWork(int workerId) {
 
     int individual = getCurrentSimulation() / this.getRepeats();
 
@@ -112,7 +111,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
     psds[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
     double error = calculateFrobeniusNormErrorMatrix(psds[individualPos].getPsd());
-    return error * wheight;
+    return error * getWheight();
   }
 
   private void calculatePsdOfPopulation(Population p) {

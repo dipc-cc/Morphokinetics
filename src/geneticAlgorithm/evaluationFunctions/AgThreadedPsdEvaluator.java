@@ -21,6 +21,8 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
  */
 public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
+  private long timeLastRender;
+  
   public AgThreadedPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int numThreads, int psdSizeX, int psdSizeY, Set flags) {
 
     super(repeats, measureInterval, numThreads, flags);
@@ -51,7 +53,7 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
 
   @Override
   public synchronized void handleSimulationFinish(int workerID, int workID) {
-    if (showGraphics && (System.currentTimeMillis() - timeLastRender) > 1000.0f / FPS_GRAPHICS) {
+    if (showGraphics() && (System.currentTimeMillis() - timeLastRender) > 1000.0f / FPS_GRAPHICS) {
       timeLastRender = System.currentTimeMillis();
     }
 

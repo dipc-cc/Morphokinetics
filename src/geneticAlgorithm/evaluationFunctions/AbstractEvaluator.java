@@ -10,8 +10,8 @@ package geneticAlgorithm.evaluationFunctions;
  */
 public abstract class AbstractEvaluator implements IEvaluation {
 
-  protected double wheight;
-  protected boolean showGraphics;
+  private double wheight;
+  private boolean showGraphics;
 
   public AbstractEvaluator() {
     this.wheight = 1.0;
@@ -23,6 +23,10 @@ public abstract class AbstractEvaluator implements IEvaluation {
     return wheight;
   }
 
+  public boolean showGraphics() {
+    return showGraphics;
+  }
+  
   public AbstractEvaluator setShowGraphics(boolean showGraphics) {
     this.showGraphics = showGraphics;
     return this;

@@ -21,6 +21,7 @@ import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements IFinishListener, IIntervalListener {
 
   private SiFrame frame;
+  private long timeLastRender;
 
   public SiThreadedPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, int numThreads, Set flags) {
 
@@ -49,7 +50,7 @@ public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
 
   @Override
   public synchronized void handleSimulationFinish(int workerId, int workId) {
-    if (showGraphics && (System.currentTimeMillis() - timeLastRender) > 1000.0f / FPS_GRAPHICS) {
+    if (showGraphics() && (System.currentTimeMillis() - timeLastRender) > 1000.0f / FPS_GRAPHICS) {
       frame.drawKmc(workers[workerId].getKmc());
       timeLastRender = System.currentTimeMillis();
     }

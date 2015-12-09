@@ -259,7 +259,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       mainInterface.setError(error);
     }
     
-    return error * wheight;
+    return error * getWheight();
   }
    
   private void printGenes(double[] genes) {
