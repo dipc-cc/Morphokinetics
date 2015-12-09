@@ -44,6 +44,7 @@ public class AgReduced6Restriction extends RestrictionOperator {
       throw new IllegalArgumentException("Minimum has to be greater than 0");
     }
 
+    this.searchEnergy = searchEnergy;
     if (searchEnergy) {
       genesRestriction.add(new BoundedGeneRestriction(0.1, max, 0));
     } else {
