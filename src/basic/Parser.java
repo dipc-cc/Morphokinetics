@@ -683,6 +683,10 @@ public class Parser {
     }
   }
   
+  public boolean isEnergySearch() {
+    return evolutionarySearchType.equals("energies");
+  }
+  
   /**
    * Decides if diffusion must be fixed.
    *
