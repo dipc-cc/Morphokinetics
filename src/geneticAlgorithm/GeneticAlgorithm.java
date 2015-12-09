@@ -34,8 +34,6 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
       System.out.println();
     }
 
-    this.scaleIndividualRates(population);
-
     if (graphics != null) {
       graphics.clear();
     }
@@ -55,7 +53,6 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
 
     //sometimes it is good to reevaluate the whole population
     if (currentIteration > 0 && currentIteration % 25 == 0) {
-      this.scaleIndividualRates(population);
       restriction.apply(population);
       this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
