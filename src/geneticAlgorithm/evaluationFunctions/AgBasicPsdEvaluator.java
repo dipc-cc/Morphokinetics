@@ -93,7 +93,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       setCurrentSimulation(getCurrentSimulation()+1);
     }
  
-    if (mainInterface != null)  mainInterface.setSurface(null);
+    if (mainInterface != null)  mainInterface.setSurface(sampledSurface);
     ind.setSimulationTime(time / getRepeats());
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
