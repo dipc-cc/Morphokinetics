@@ -13,6 +13,8 @@ package geneticAlgorithm.restrictions;
  */
 public class AgReduced6Restriction extends RestrictionOperator {
 
+  private boolean searchEnergy;
+  
   public void initialize(double temperature) {
 
   }
@@ -29,8 +31,9 @@ public class AgReduced6Restriction extends RestrictionOperator {
    * @param dimensions number of genes (or variables)
    * @param min the minimum value
    * @param max the maximum value
+   * @param searchEnergy searches for energy?
    */
-  public AgReduced6Restriction(int dimensions, double min, double max) {
+  public AgReduced6Restriction(int dimensions, double min, double max, boolean searchEnergy) {
     //Negative and 0 values are not valid
     if (min > max) {
       System.out.println("Minimum has to be less than maximum");
@@ -41,7 +44,11 @@ public class AgReduced6Restriction extends RestrictionOperator {
       throw new IllegalArgumentException("Minimum has to be greater than 0");
     }
 
-    genesRestriction.add(new BoundedGeneRestriction(10000, max, 0));
+    if (searchEnergy) {
+      genesRestriction.add(new BoundedGeneRestriction(0.1, max, 0));
+    } else {
+      genesRestriction.add(new BoundedGeneRestriction(10000, max, 0));
+    }
     for (int currentGene = 1; currentGene < dimensions; currentGene++) {
       genesRestriction.add(new BoundedGeneRestriction(min, max, currentGene));
     }
@@ -55,10 +62,8 @@ public class AgReduced6Restriction extends RestrictionOperator {
   /**
    * Fixes diffusion (terrace to terrace, or terrace to anywhere) ratio with the default value. The
    * fixed value changes with the search mode (energies or rates)
-   *
-   * @param searchEnergy searches for energy?
    */
-  public void fixDiffusion(boolean searchEnergy) {
+  public void fixDiffusion() {
     if (searchEnergy) {
       genesRestriction.add(new FixedGeneRestriction(0.12, 0));
     } else {
