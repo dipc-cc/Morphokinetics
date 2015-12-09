@@ -28,7 +28,7 @@ public class AgReducedRestriction extends RestrictionOperator {
   }
 
   @Override
-  public void initialize() {
+  public void initialise() {
 
   }
 

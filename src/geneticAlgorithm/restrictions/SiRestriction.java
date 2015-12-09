@@ -114,7 +114,7 @@ public class SiRestriction extends RestrictionOperator {
    for(int it=0;it<64;it++)   individual.setGene(it, ratesBad[it]);
    */
   @Override
-  public void initialize() {
+  public void initialise() {
 
   }
 

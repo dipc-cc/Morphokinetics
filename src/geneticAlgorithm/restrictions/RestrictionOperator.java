@@ -17,7 +17,7 @@ public abstract class RestrictionOperator {
 
   protected List<GeneRestriction> genesRestriction = new ArrayList();
 
-  public abstract void initialize();
+  public abstract void initialise();
 
   public void apply(Population p) {
     for (int ind = 0; ind < p.size(); ind++) {

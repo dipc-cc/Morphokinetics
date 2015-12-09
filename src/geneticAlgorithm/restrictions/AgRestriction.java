@@ -55,7 +55,7 @@ public class AgRestriction extends RestrictionOperator {
   }
 
   @Override
-  public void initialize() {
+  public void initialise() {
 
   }
 
