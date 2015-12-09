@@ -132,7 +132,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     if (parser.isEvaluatorParallel()) {
 	evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());  
     } else {
-        evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator());
+        evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType());
     }
     
     evaluatorTmp.setWheight(1.0f);

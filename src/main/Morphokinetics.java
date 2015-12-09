@@ -169,11 +169,12 @@ public class Morphokinetics {
     evaluator.setRepeats(50);
     
     double[] rates = null;
+    double[] energies = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
         //rates = new AgRatesFactory().getRates(parser.getTemperature());
         rates = new AgRatesFactory().getReduced6Rates(parser.getTemperature());
-        ga.setHierarchy(rates);
+        energies = new AgRatesFactory().getReduced6Energies();
         break;
       case "Si":
         rates = new SiRatesFactory().getRates(parser.getTemperature());
@@ -183,7 +184,19 @@ public class Morphokinetics {
         System.err.println("Current value: "+parser.getCalculationMode());
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-    Individual individual = new Individual(rates);
+    Individual individual;
+    switch (parser.getEvolutionarySearchType()) {
+      case "rates" :
+        ga.setHierarchy(rates);
+        individual = new Individual(rates);
+        break;
+      case "energies" :
+        ga.setHierarchy(energies);
+        individual = new Individual(energies);
+        break;
+      default :
+        individual = null;
+    }
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(parser.getRepetitions());

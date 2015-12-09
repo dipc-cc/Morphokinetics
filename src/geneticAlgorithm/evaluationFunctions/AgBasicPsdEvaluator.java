@@ -30,8 +30,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private double g5g1;
   private double g2g1;
   private double hierarchyFrobeniusRef;
+  private boolean searchEnergies;
   
-  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator) {
+  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType) {
 
     super(repeats, measureInterval, flags, hierarchyEvaluator);
 
@@ -41,8 +42,11 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     this.kmc = kmc;
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     difference = new float[getPsdSizeY()][getPsdSizeX()];
+    if (evolutionarySearchType != null) {
+      searchEnergies = evolutionarySearchType.equals("energies");
+    }
   }
-
+  
   @Override
   public float[][] calculatePsdFromIndividual(Individual ind) {
     int individualCount = currentSimulation/repeats;
@@ -282,45 +286,52 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * @return
    */
   public double[] getRates6(double[] genes) {
-      /*genes[0] = 1.8485467015993025E7;
+     /*genes[0] = 1.8485467015993025E7;
       genes[1] = 1.5853414702210693E10;
       genes[2] = 2.513307577202702E7;
       genes[3] = 0.36357125335394896;
       genes[4] = 541.7309825567712;
       genes[5] = 26.740795566764117;*/
-         
+
     double[] rates = new double[49];
 
     for (int i = 0; i < rates.length; i++) {
-      rates[i] = 0; // All rates to 0 (actually, %80 are 0)
+      rates[i] = 0; // All rates to 0 (actually, 80% are 0)
     }
     for (int i = 0; i < 7; i++) {
-      rates[i] = genes[0]; // Terrace to any
+      rates[i] = getRate(genes[0]); // Terrace to any
     }
 
-    rates[1 * 7 + 1] = genes[1]; // E_c
-    rates[1 * 7 + 2] = genes[1]; // E_c
-    rates[1 * 7 + 6] = genes[1]; // E_c
+    rates[1 * 7 + 1] = getRate(genes[1]); // E_c
+    rates[1 * 7 + 2] = getRate(genes[1]); // E_c
+    rates[1 * 7 + 6] = getRate(genes[1]); // E_c
     
-    rates[1 * 7 + 3] = genes[2]; // E_e
-    rates[1 * 7 + 5] = genes[2]; // E_e
+    rates[1 * 7 + 3] = getRate(genes[2]); // E_e
+    rates[1 * 7 + 5] = getRate(genes[2]); // E_e
 
     // The maximum energy has to be chosen, so the minimum ratio.
-    rates[1 * 7 + 4] = Math.min(genes[1], genes[2]);
+    rates[1 * 7 + 4] = Math.min(getRate(genes[1]), getRate(genes[2]));
     
     // E_f
-    rates[2 * 7 + 3] = genes[3];
-    rates[2 * 7 + 4] = genes[3];
-    rates[2 * 7 + 5] = genes[3];
-    rates[2 * 7 + 6] = genes[3];
-    rates[5 * 7 + 2] = genes[3];
-    rates[5 * 7 + 3] = genes[3];
-    rates[5 * 7 + 4] = genes[3];
-    rates[5 * 7 + 6] = genes[3];
+    rates[2 * 7 + 3] = getRate(genes[3]);
+    rates[2 * 7 + 4] = getRate(genes[3]);
+    rates[2 * 7 + 5] = getRate(genes[3]);
+    rates[2 * 7 + 6] = getRate(genes[3]);
+    rates[5 * 7 + 2] = getRate(genes[3]);
+    rates[5 * 7 + 3] = getRate(genes[3]);
+    rates[5 * 7 + 4] = getRate(genes[3]);
+    rates[5 * 7 + 6] = getRate(genes[3]);
 
-    rates[2 * 7 + 2] = genes[4]; // Rate corresponding to E_a
-    rates[5 * 7 + 5] = genes[5]; // Rate corresponding to E_b
-
+    rates[2 * 7 + 2] = getRate(genes[4]); // Rate corresponding to E_a
+    rates[5 * 7 + 5] = getRate(genes[5]); // Rate corresponding to E_b
     return rates;
+  }
+  private double getRate(double gene) {
+    if (searchEnergies) {
+      double kB = 8.617332e-5;;
+      double temperature = 135;
+      return (1e13 * Math.exp(-gene / (kB * temperature)));
+    }
+    return gene;
   }
 }
