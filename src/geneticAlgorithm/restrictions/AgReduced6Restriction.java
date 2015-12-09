@@ -52,4 +52,17 @@ public class AgReduced6Restriction extends RestrictionOperator {
 
   }
 
+  /**
+   * Fixes diffusion (terrace to terrace, or terrace to anywhere) ratio with the default value. The
+   * fixed value changes with the search mode (energies or rates)
+   *
+   * @param searchEnergy searches for energy?
+   */
+  public void fixDiffusion(boolean searchEnergy) {
+    if (searchEnergy) {
+      genesRestriction.add(new FixedGeneRestriction(0.12, 0));
+    } else {
+      genesRestriction.add(new FixedGeneRestriction(1.8485467015993025E7, 0));
+    }
+  }
 }
