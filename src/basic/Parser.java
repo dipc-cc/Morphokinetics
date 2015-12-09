@@ -343,7 +343,8 @@ public class Parser {
     try {
       minValueGene = json.getDouble("minValueGene");
     } catch (JSONException e) {
-      minValueGene = 0.1;
+      if (evolutionarySearchType.equals("energies")) minValueGene = 0.05;
+      else minValueGene = 0.1;
     }
     try {
       maxValueGene = json.getDouble("maxValueGene");
