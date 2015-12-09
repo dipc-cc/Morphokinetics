@@ -54,7 +54,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   @Override
   public float[][] calculatePsdFromIndividual(Individual ind) {
     float[][] sampledSurface = null;
-    int individualCount = getCurrentSimulation()/getRepeats();
+    int individualCount = getCurrentSimulation() / getRepeats();
     psd.reset();
     double time = 0.0;
     String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+individualCount;
@@ -90,7 +90,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         kmcHasFailed();
         break;
       }
-      setCurrentSimulation(getCurrentSimulation()+1);
+      setCurrentSimulation(getCurrentSimulation() + 1);
     }
  
     if (mainInterface != null)  mainInterface.setSurface(sampledSurface);
