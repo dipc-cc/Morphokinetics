@@ -98,6 +98,8 @@ public class Parser {
   private String hierarchyEvaluator;
   /** Search for "rates" or "energies". */
   private String evolutionarySearchType;
+  /** Decides if diffusion must be fixed. */
+  private boolean fixDiffusion;
   
   /**
    * Constructor
@@ -143,6 +145,7 @@ public class Parser {
     this.numericStatusCode = 3;
     this.hierarchyEvaluator = "basic";
     this.evolutionarySearchType = "rates";
+    this.fixDiffusion = true;
   }
 
   /**
@@ -383,6 +386,11 @@ public class Parser {
     } catch (JSONException e) {
         numericStatusCode = 1 + 2 + 4; // All the evaluators by default
     }
+    try {
+      fixDiffusion = json.getBoolean("fixDiffusion");
+    } catch (JSONException e) {
+      fixDiffusion = true;
+    }
     return 0;
   }
 
@@ -443,6 +451,7 @@ public class Parser {
     }
     System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
     System.out.printf("%32s: %s,\n", "\"evolutionarySearchType\"", evolutionarySearchType);
+    System.out.printf("%32s: %s,\n", "\"fixDiffusion\"", fixDiffusion);
     
   }
 
@@ -672,5 +681,14 @@ public class Parser {
       System.out.println("Not valid search type. It must be \"rates\" of \"energies\".");
       return null;
     }
+  }
+  
+  /**
+   * Decides if diffusion must be fixed.
+   *
+   * @return
+   */
+  public boolean isDiffusionFixed() {
+    return fixDiffusion;
   }
 }
