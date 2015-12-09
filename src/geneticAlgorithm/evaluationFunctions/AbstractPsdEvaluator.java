@@ -61,8 +61,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.flags = flags;
     this.hierarchyEvaluator = hierarchyEvaluator;
     this.kmcError = false;
-    //tamaina gaizki dago (edo egon liteke);
-    //this.difference = new float[getPsdSizeY()][getPsdSizeX()];
   }
     
   public void setMainInterface(MainInterface mainInterface) {
