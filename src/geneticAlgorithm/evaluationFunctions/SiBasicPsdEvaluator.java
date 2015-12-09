@@ -19,7 +19,7 @@ import utils.psdAnalysis.PsdSignature2D;
 public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private SiKmc kmc;
-  SiFrame frame;
+  private final SiFrame frame;
   private PsdSignature2D psd;
   private float[][] sampledSurface;
 
