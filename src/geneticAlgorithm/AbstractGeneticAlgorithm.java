@@ -97,7 +97,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialisation = new AgReduced6Initialisator();
-        restriction = new AgReduced6Restriction(6, parser.getMinValueGene(), parser.getMaxValueGene());
+        restriction = new AgReduced6Restriction(6, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
+        if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();
         mainEvaluator = getAgMainEvaluator();
         break;
       case "Si":
