@@ -311,6 +311,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
    *
    * @param population The population to be scaled.
    */
+  @Deprecated
   protected void scaleIndividualRates(Population population) {
     for (int i = 0; i < population.size(); i++) {
       Individual individual = population.getIndividual(i);
