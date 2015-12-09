@@ -5,6 +5,7 @@
 package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
+import graphicInterfaces.MainInterface;
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import java.util.Set;
@@ -91,6 +92,11 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
 
   @Override
   protected double calculateHierarchyErrorDiscrete(Individual ind) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setMainInterface(MainInterface mainInterface) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

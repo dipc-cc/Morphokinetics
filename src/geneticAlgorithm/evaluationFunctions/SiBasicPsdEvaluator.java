@@ -5,6 +5,7 @@
 package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
+import graphicInterfaces.MainInterface;
 import graphicInterfaces.etching.SiFrame;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
@@ -19,6 +20,8 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   private SiKmc kmc;
   SiFrame frame;
+  private PsdSignature2D psd;
+  private float[][] sampledSurface;
 
   public SiBasicPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, Set flags) {
 
@@ -28,7 +31,6 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
     setPsdSizeY(config.sizeY_UC * 2);
     kmc = new SiKmc(config);
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
-    difference = new float[getPsdSizeY()][getPsdSizeX()];
     frame = new SiFrame();
   }
 
@@ -36,19 +38,19 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
   public float[][] calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     kmc.initialiseRates(ind.getGenes());
-    for (int i = 0; i < repeats; i++) {
+    for (int i = 0; i < this.getRepeats(); i++) {
       kmc.reset();
       kmc.depositSeed();
-      kmc.simulate(measureInterval / 2);
+      kmc.simulate(getMeasureInterval() / 2);
       while (true) {
-        kmc.simulate(measureInterval);
+        kmc.simulate(getMeasureInterval());
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
-        if (kmc.getIterations() < measureInterval) {
+        if (kmc.getIterations() < getMeasureInterval()) {
           break;
         }
       }
-      currentSimulation++;
+      setCurrentSimulation(getCurrentSimulation()+1);
     }
 
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
@@ -62,7 +64,6 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
     psd = null;
     kmc = null;
     sampledSurface = null;
-    difference = null;
   }
   
   /**
@@ -87,6 +88,11 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
 
   @Override
   protected double calculateHierarchyErrorDiscrete(Individual ind) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setMainInterface(MainInterface mainInterface) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

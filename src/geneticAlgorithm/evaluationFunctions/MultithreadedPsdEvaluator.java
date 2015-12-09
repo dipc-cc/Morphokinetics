@@ -42,11 +42,11 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   public synchronized void handleSimulationFinish(int workerID, int workID) {
 
     finishedSimulation++;
-    if (currentSimulation < currentPopulation.size() * repeats) {
+    if (getCurrentSimulation() < getCurrentPopulation().size() * this.getRepeats()) {
       assignNewWork(workerID);
     }
 
-    if (finishedSimulation == currentPopulation.size() * repeats) {
+    if (finishedSimulation == getCurrentPopulation().size() * this.getRepeats()) {
       evalationComplete.release();
     }
   }
@@ -66,11 +66,11 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   protected void assignNewWork(int workerId) {
 
-    int individual = currentSimulation / repeats;
+    int individual = getCurrentSimulation() / this.getRepeats();
 
-    workers[workerId].initialize(currentPopulation.getIndividual(individual).getGenes());
-    workers[workerId].simulate(this, this, measureInterval, individual);
-    currentSimulation++;
+    workers[workerId].initialize(getCurrentPopulation().getIndividual(individual).getGenes());
+    workers[workerId].simulate(this, this, getMeasureInterval(), individual);
+    setCurrentSimulation(getCurrentSimulation() + 1);
   }
 
   @Override
@@ -100,8 +100,8 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   }
 
   private double[] calculateDifferenceWithRealPsd() {
-    double[] results = new double[currentPopulation.size()];
-    for (int i = 0; i < currentPopulation.size(); i++) {
+    double[] results = new double[getCurrentPopulation().size()];
+    for (int i = 0; i < getCurrentPopulation().size(); i++) {
       results[i] = evaluateIndividual(i);
     }
     return results;
@@ -111,7 +111,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
     psds[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psds[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
 
-    double error = calculateFrobeniusNormErrorMatrix(psds[individualPos]);
+    double error = calculateFrobeniusNormErrorMatrix(psds[individualPos].getPsd());
     return error * wheight;
   }
 
@@ -123,8 +123,8 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
       psds[i] = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
     }
 
-    currentPopulation = p;
-    currentSimulation = 0;
+    setCurrentPopulation(p);
+    setCurrentSimulation(0);
     finishedSimulation = 0;
 
     for (int i = 0; i < this.numThreads; i++) {
@@ -141,7 +141,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   private void storeSimulationTimes(Population p) {
     for (int i = 0; i < p.size(); i++) {
-      times[i] /= repeats;
+      times[i] /= this.getRepeats();
       p.getIndividual(i).setSimulationTime(times[i]);
     }
   }

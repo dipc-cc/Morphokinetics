@@ -6,6 +6,7 @@ package geneticAlgorithm.evaluationFunctions;
 
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
+import graphicInterfaces.MainInterface;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import utils.psdAnalysis.PsdSignature2D;
@@ -32,6 +33,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private double hierarchyFrobeniusRef;
   private boolean searchEnergies;
   
+  private PsdSignature2D psd;
+  private int kmcError;
+  
+  private MainInterface mainInterface;
   public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType) {
 
     super(repeats, measureInterval, flags, hierarchyEvaluator);
@@ -40,8 +45,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     setPsdSizeY(psdSizeY);
 
     this.kmc = kmc;
-    psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
-    difference = new float[getPsdSizeY()][getPsdSizeX()];
+    psd = new PsdSignature2D(psdSizeY, psdSizeX);
     if (evolutionarySearchType != null) {
       searchEnergies = evolutionarySearchType.equals("energies");
     }
@@ -49,7 +53,8 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   
   @Override
   public float[][] calculatePsdFromIndividual(Individual ind) {
-    int individualCount = currentSimulation/repeats;
+    float[][] sampledSurface = null;
+    int individualCount = getCurrentSimulation()/getRepeats();
     psd.reset();
     double time = 0.0;
     String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+individualCount;
@@ -57,8 +62,8 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     psd.setRestart(restart);
     kmc.initialiseRates(getRates6(ind.getGenes()));
     kmcError = 0;
-    for (int i = 0; i < repeats; i++) {
-      if (mainInterface != null) mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(repeats-1));
+    for (int i = 0; i < getRepeats(); i++) {
+      if (mainInterface != null) mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(getRepeats()-1));
       kmc.reset();
       kmc.depositSeed();
       int max = (int)1e6;
@@ -75,24 +80,32 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
           break;
         }
         if (kmc.getCoverage() < 0.05) continue;
-        if (kmc.getIterations() < measureInterval) {
+        if (kmc.getIterations() < getMeasureInterval()) {
           time += kmc.getTime();
           break;
         }
       }
       if (kmcError == -1) {
-        currentSimulation += repeats - i;
+        setCurrentSimulation(getCurrentSimulation() + getRepeats() - i);
+        kmcHasFailed();
         break;
       }
-      currentSimulation++;
+      setCurrentSimulation(getCurrentSimulation()+1);
     }
  
-    ind.setSimulationTime(time / repeats);
+    if (mainInterface != null)  mainInterface.setSurface(null);
+    ind.setSimulationTime(time / getRepeats());
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
     psd.printAvgToFile();
     return psd.getPsd();
   }
+    
+  @Override
+  public void setMainInterface(MainInterface mainInterface) {
+    this.mainInterface = mainInterface;
+    super.setMainInterface(mainInterface);
+  }  
 
   /**
    * Sets the expected rates hierarchies, based on the objective rates (genes)
@@ -232,8 +245,6 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   public void dispose() {
     psd = null;
     kmc = null;
-    sampledSurface = null;
-    difference = null;
   }
   
   /**
