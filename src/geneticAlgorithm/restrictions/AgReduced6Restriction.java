@@ -66,7 +66,7 @@ public class AgReduced6Restriction extends RestrictionOperator {
    */
   public void fixDiffusion() {
     if (searchEnergy) {
-      genesRestriction.add(new FixedGeneRestriction(0.12, 0));
+      genesRestriction.add(new FixedGeneRestriction(0.153573778552368, 0));
     } else {
       genesRestriction.add(new FixedGeneRestriction(1.8485467015993025E7, 0));
     }
