@@ -3,6 +3,7 @@ package geneticAlgorithm.reinsertion;
 import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
+import utils.akting.RichMatrix;
 
 public class ElitistAllReinsertion implements IReinsertion {
 
@@ -33,7 +34,7 @@ public class ElitistAllReinsertion implements IReinsertion {
         config.getOffFitness().set(k, candidate.getTotalError());
       }
     }
-
+    config.setOffX(new RichMatrix(origin));
     return origin;
   }
 
