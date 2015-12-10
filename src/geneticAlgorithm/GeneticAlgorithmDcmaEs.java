@@ -81,7 +81,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     }
 
     getRestriction().apply(population);
-    population = reinsertion.Reinsert(population, offspringPopulation, 0);
+    population = reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
 
     dcmaEsConfig.setOffX(new RichMatrix(population));
   }
