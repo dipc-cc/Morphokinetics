@@ -69,7 +69,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     return this;
   }
 
-  private void iterateOneStep() {
+  @Override
+  public void iterateOneStep() {
     IndividualGroup[] trios = selection.Select(population, getPopulationSize());
     Population offspringPopulation = recombination.recombinate(trios);
     offspringPopulation.setIterationNumber(getCurrentIteration());
@@ -88,28 +89,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     dcmaEsConfig.setOffX(new RichMatrix(population));
   }
 
-  @Override
-  public void iterate() {
-    for (int i = 0; i < getTotalIterations(); i++) {
-      setCurrentIteration(i);
-      iterateOneStep();
-      addToGraphics();
-
-      // Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable
-      boolean cond1 = dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(stopFitness);
-      boolean cond2 = ((DifferentialRecombination) recombination).isDtooLarge();
-      if (cond1 || cond2) {
-        System.out.println("Exiting for an unknown reason "+cond1+" "+cond2);
-        break;
-      }
-      System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
-      if (this.getBestError() < getStopError()) {
-        System.out.println("Stopping because the error is "+this.getBestError()+" ("+getStopError()+")");
-        break;
-      }
-    }
-  }
-
   private double[] myEvaluate(Population population) {
     double[] values = new double[population.size()];
 
@@ -118,6 +97,21 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     }
 
     return values;
+  }
+  
+  /**
+   * Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable
+   * @return 
+   */
+  @Override
+  public boolean exitCondition() {
+    boolean cond1 = dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(stopFitness);
+    boolean cond2 = ((DifferentialRecombination) recombination).isDtooLarge();
+    if (cond1 || cond2) {
+      System.out.println("Exiting for an unknown reason " + cond1 + " " + cond2);
+      return false;
+    }
+    return false;
   }
 
   @Override

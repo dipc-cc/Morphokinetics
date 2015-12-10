@@ -54,7 +54,8 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     return this;
   }
 
-  private void iterateOneStep() {
+  @Override
+  public void iterateOneStep() {
     IndividualGroup[] couples = selection.Select(population, getOffspringSize());
     Population offspringPopulation = recombination.recombinate(couples);
     offspringPopulation.setIterationNumber(getCurrentIteration());
@@ -73,20 +74,14 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
 
   }
-
+  
+  /**
+   * This method has only mining in @see geneticAlgorithm.GeneticAlgorithmDcmaEs#exitCondition()
+   * @return 
+   */
   @Override
-  public void iterate() {
-    for (int i = 0; i < getTotalIterations(); i++) {
-      setCurrentIteration(i);
-      iterateOneStep();
-      addToGraphics();
-      System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
-      if (this.getBestError() < getStopError()) {
-        System.out.println("Stopping because the error is "+this.getBestError()+" ("+getStopError()+")");
-        break;
-      }
-
-    }
+  public boolean exitCondition() {
+    return false;
   }
 
   @Override

@@ -159,6 +159,21 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
             .setListConfig(listConfig);
     return config;
   }
+  
+  @Override 
+  public void iterate() {
+    for (int i = 0; i < getTotalIterations(); i++) {
+      setCurrentIteration(i);
+      iterateOneStep();
+      addToGraphics();
+      System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());
+      if (exitCondition()) break;
+      if (this.getBestError() < getStopError()) {
+        System.out.println("Stopping because the error is "+this.getBestError()+" ("+getStopError()+")");
+        break;
+      }
+    }
+  }
 
   public void setCurrentIteration(int i) {
     currentIteration = i;
