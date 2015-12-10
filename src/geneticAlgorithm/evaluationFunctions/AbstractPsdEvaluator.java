@@ -268,7 +268,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       System.out.print(" " + genes[i]);;
     }
     System.out.println(" ");
-    currentSimulation++;
   }
     
   public void setPsdSizeX(int psdSizeX) {
