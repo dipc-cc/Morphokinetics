@@ -34,7 +34,7 @@ import utils.list.ListConfiguration;
  */
 public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
-  protected Parser parser;
+  private Parser parser;
   
   protected BasicEvaluator evaluator;
   protected AbstractPsdEvaluator mainEvaluator;
@@ -45,7 +45,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   private final int populationReplacements;
   private double expectedSimulationTime;
   /** Number of different genes. */
-  private int dimensions;
+  private final int dimensions;
+  private final double minValueGene;
+  private final double maxValueGene;
+  private final boolean expDistribution;
   
   private int currentIteration = 0;
   private int totalIterations = 1;
@@ -73,6 +76,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     dimensions = 6;
     stopError = parser.getStopError();
     totalIterations = parser.getTotalIterations();
+    minValueGene = parser.getMinValueGene();
+    maxValueGene = parser.getMaxValueGene();
+    expDistribution = parser.isExpDistribution();
     
     switch (parser.getCalculationMode()) {
       case "Ag":
@@ -211,6 +217,17 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   public final int getDimensions() {
     return dimensions;
+  }
+  
+  public double getMinValueGene() {
+    return minValueGene;
+  }
+  
+  public double getMaxValueGene() {
+    return maxValueGene;
+  }
+  public boolean isExpDistribution() {
+    return expDistribution;
   }
 
   @Override
