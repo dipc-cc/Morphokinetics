@@ -167,7 +167,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   @Override 
   public void iterate() {
-    for (int i = 0; i < getTotalIterations(); i++) {
+    for (int i = 1; i <= getTotalIterations(); i++) {
       setCurrentIteration(i);
       iterateOneStep();
       addToGraphics();
