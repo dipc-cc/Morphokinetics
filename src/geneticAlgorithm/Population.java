@@ -57,10 +57,7 @@ public class Population {
    */
   public void order() {
     if (!ordered) {
-      System.out.println("ordering");
       quicksort(individuals, 0, individuals.length - 1);
-    } else {
-      System.out.println("not ordering");
     }
     ordered = true;
   }
