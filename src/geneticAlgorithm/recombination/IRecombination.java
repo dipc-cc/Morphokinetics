@@ -13,6 +13,8 @@ import geneticAlgorithm.Population;
  */
 public interface IRecombination {
 
+  public void initialise(Population population);
+  
   public Population recombinate(IndividualGroup[] groups);
 
 }

@@ -114,6 +114,11 @@ public class DifferentialRecombination implements IRecombination {
     }).normalise();
   }
   
+  /**
+   * Initialises the first population and assigns values to sigma and xMean. 
+   * @param population 
+   */
+  @Override
   public void initialise(Population population) {
     Integer[] offIndex = config.getOffFitness().sortedIndexes();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);

@@ -43,4 +43,13 @@ public class RealRecombination implements IRecombination {
 
     return offspring;
   }
+
+  /**
+   * Does nothing
+   * @param population 
+   */
+  @Override
+  public void initialise(Population population) {
+    // Do nothing 
+  }
 }
