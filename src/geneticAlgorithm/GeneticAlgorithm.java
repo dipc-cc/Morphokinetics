@@ -24,7 +24,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
 
   @Override
   public IGeneticAlgorithm initialise() {
-    population = initialisation.createRandomPopulation(populationSize, 6, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
+    population = initialisation.createRandomPopulation(populationSize, getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
     restriction.apply(population);
     this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
 

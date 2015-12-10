@@ -32,14 +32,14 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     reinsertion = null;
     
     stopFitness = 1e-12;
+    // Inicializamos la clase que contiene variables globales del algoritmo.
+    dcmaEsConfig = new DcmaEsConfig(getPopulationSize(), getDimensions());
   }
 
   @Override
   public IGeneticAlgorithm initialise() {
     population = initialisation.createRandomPopulation(populationSize, 6, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
 
-    // Inicializamos la clase que contiene variables globales del algoritmo.
-    dcmaEsConfig = new DcmaEsConfig(this, population.getIndividual(0).getGeneSize());
     recombination = new DifferentialRecombination(dcmaEsConfig, population);
     mutation = new CrossoverMutator(dcmaEsConfig);
     reinsertion = new ElitistAllReinsertion(dcmaEsConfig);

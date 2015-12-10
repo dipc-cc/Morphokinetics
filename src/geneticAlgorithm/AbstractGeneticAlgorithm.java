@@ -62,6 +62,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected int offspringSize;
   protected int populationReplacements;
   private double expectedSimulationTime;
+  /** Number of different genes. */
+  private int dimensions;
   
   protected int currentIteration = 0;
   protected int totalIterations = 1;
@@ -85,6 +87,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     populationSize = parser.getPopulationSize();
     offspringSize = parser.getOffspringSize();
     populationReplacements = parser.getPopulationReplacement();
+    dimensions = 6;
     
     switch (parser.getCalculationMode()) {
       case "Ag":
@@ -95,7 +98,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialisation = new AgReduced6Initialisator();
-        restriction = new AgReduced6Restriction(6, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
+        restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
         if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();
         mainEvaluator = getAgMainEvaluator();
         break;
@@ -257,7 +260,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return selection;
   }
 
-  public int getPopulationSize() {
+  public final int getPopulationSize() {
     return populationSize;
   }
 
@@ -277,11 +280,15 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     mainEvaluator.setPsd(experimentalPsd);
     return this;
   }
-  
+ 
   public IKmc getKmc() {
     return simulation.getKmc();
-}
-  
+  }
+
+  public final int getDimensions() {
+    return dimensions;
+  }
+
   @Override
   public int getCurrentIteration() {
     return currentIteration;
