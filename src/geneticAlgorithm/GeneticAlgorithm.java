@@ -40,6 +40,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), getMinValueGene(), getMaxValueGene(), isExpDistribution());
     getRestriction().apply(population);
     this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
+    recombination.initialise(population);
 
     System.out.println("==================================");
     System.out.println("Finished initial random population");

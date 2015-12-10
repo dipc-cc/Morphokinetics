@@ -44,17 +44,8 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   public IGeneticAlgorithm initialise() {
     population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), getMinValueGene(), getMaxValueGene(), isExpDistribution());
     getRestriction().apply(this.population);
-
-    double[] fitness = mainEvaluator.evaluate(population);
-    for (int i = 0; i < fitness.length; i++) {
-      dcmaEsConfig.getOffFitness().set(i, fitness[i]);
-      population.getIndividual(i).setError(0, fitness[i]);
-    }
-
+    this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     recombination.initialise(population);
-
-    Population p = population;
-    p.order();
 
     System.out.println("==================================");
     System.out.println("Finished initial random population");
