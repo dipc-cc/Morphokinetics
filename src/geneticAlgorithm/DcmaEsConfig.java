@@ -15,7 +15,7 @@ public class DcmaEsConfig {
 
   /**
    * 
-   * @param configuration
+   * @param populationSize Number of individuals of the population
    * @param dimension Number of objective variables/problem dimension.
    */
   public DcmaEsConfig(int populationSize, int dimension) {
