@@ -15,6 +15,7 @@ public class Population {
 
   private Individual[] individuals;
   private int iterationNumber;
+  private boolean ordered;
 
   public Individual[] getIndividuals() {
     return individuals;
@@ -22,6 +23,7 @@ public class Population {
 
   public Population(int size) {
     individuals = new Individual[size];
+    ordered = false;
   }
 
   public Population(Individual[] ind) {
@@ -29,7 +31,7 @@ public class Population {
     for (int i = 0; i < ind.length; i++) {
       individuals[i] = ind[i];
     }
-
+    ordered = false;
   }
 
   /**
@@ -43,6 +45,7 @@ public class Population {
 
   public void setIndividual(Individual ind, int pos) {
     individuals[pos] = ind;
+    ordered = false;
   }
 
   public int size() {
@@ -53,7 +56,13 @@ public class Population {
    * Orders the population, from the least to the more error.
    */
   public void order() {
-    quicksort(individuals, 0, individuals.length - 1);
+    if (!ordered) {
+      System.out.println("ordering");
+      quicksort(individuals, 0, individuals.length - 1);
+    } else {
+      System.out.println("not ordering");
+    }
+    ordered = true;
   }
 
   /**
