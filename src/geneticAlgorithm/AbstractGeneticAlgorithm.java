@@ -59,8 +59,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected RestrictionOperator restriction;
   protected ISelection selection;
   private int populationSize;
-  protected int offspringSize;
-  protected int populationReplacements;
+  private int offspringSize;
+  private int populationReplacements;
   private double expectedSimulationTime;
   /** Number of different genes. */
   private int dimensions;
@@ -209,18 +209,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   public void setSelection(ISelection selection) {
     this.selection = selection;
-  }
-
-  public void setPopulationSize(int populationSize) {
-    this.populationSize = populationSize;
-  }
-
-  public void setOffspringSize(int offspringSize) {
-    this.offspringSize = offspringSize;
-  }
-
-  public void setPopulationReplacements(int populationReplacements) {
-    this.populationReplacements = populationReplacements;
   }
 
   public void setExpectedSimulationTime(double expectedSimulationTime) {

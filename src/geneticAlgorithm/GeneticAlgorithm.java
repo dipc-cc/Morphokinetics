@@ -45,7 +45,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   }
 
   private void iterateOneStep() {
-    IndividualGroup[] couples = selection.Select(population, offspringSize);
+    IndividualGroup[] couples = selection.Select(population, getOffspringSize());
     Population offspringPopulation = recombination.recombinate(couples);
     offspringPopulation.setIterationNumber(currentIteration);
 
@@ -60,7 +60,7 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
       this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
 
-    reinsertion.Reinsert(population, offspringPopulation, populationReplacements);
+    reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
 
   }
 
