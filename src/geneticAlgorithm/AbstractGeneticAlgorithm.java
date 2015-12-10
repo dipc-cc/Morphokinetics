@@ -159,10 +159,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
             .setListConfig(listConfig);
     return config;
   }
-  
-  public void setMainEvaluator(AbstractPsdEvaluator mainEvaluator) {
-    this.mainEvaluator = mainEvaluator;
-  }
 
   public void setCurrentIteration(int i) {
     currentIteration = i;
