@@ -47,7 +47,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
       population.getIndividual(i).setError(0, fitness[i]);
     }
 
-    ((DifferentialRecombination) recombination).initialise(population);
+    recombination.initialise(population);
 
     Population p = population;
     p.order();
