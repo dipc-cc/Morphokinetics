@@ -52,7 +52,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   private int currentIteration = 0;
   private int totalIterations = 1;
-  protected MainInterface mainInterface;
+  private MainInterface mainInterface;
   
   private AbstractSimulation simulation;
   
@@ -114,29 +114,29 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
    * @return
    */
   private AbstractPsdEvaluator getAgMainEvaluator() {
-    AbstractPsdEvaluator evaluatorTmp = null;
+    AbstractPsdEvaluator evaluatorTmp;
     int sizeX = parser.getCartSizeX() / 2;
     int sizeY = parser.getCartSizeY() / 2;
     if (parser.isEvaluatorParallel()) {
-	evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), 30, Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());  
+      evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
     } else {
-        evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType());
+      evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType());
     }
-    
+
     evaluatorTmp.setWheight(1.0f);
     evaluatorTmp.setShowGraphics(true);
-    
-    return evaluatorTmp;             
+
+    return evaluatorTmp;
   }
     
   private AbstractPsdEvaluator getSiMainEvaluators() {
-    AbstractPsdEvaluator evaluatorTmp = null;
+    AbstractPsdEvaluator evaluatorTmp;
     if (parser.isEvaluatorParallel()) {
-      evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), 30, 10000, 8, parser.getEvaluatorTypes());
+      evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), parser.getRepetitions(), 10000, 8, parser.getEvaluatorTypes());
     } else {
       evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000, parser.getEvaluatorTypes());
     }
-    
+
     evaluatorTmp.setWheight(1.0f);
     evaluatorTmp.setShowGraphics(true);
 
