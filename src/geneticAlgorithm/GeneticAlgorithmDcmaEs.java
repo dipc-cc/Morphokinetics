@@ -108,14 +108,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
         break;
       }
     }
-
-    offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
-    dcmaEsConfig.setOffX(dcmaEsConfig.getOffX().recombinate(offIndex));
-    double fmin = dcmaEsConfig.getOffFitness().get(0);
-    RichArray xmin = dcmaEsConfig.getOffX().get(offIndex[0]);
-
-    System.out.println(getCurrentIteration() + ": " + fmin);
-    System.out.println(xmin);
   }
 
   private double[] myEvaluate(Population population) {
