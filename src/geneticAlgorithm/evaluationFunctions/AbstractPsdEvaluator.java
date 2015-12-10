@@ -247,14 +247,15 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       genes += "\t"+ind.getGene(i);
     }
     restart.writeTextString(genes, fileName);
-    int[] sizes = new int[2];
-    sizes[0] = psdSizeX;
-    sizes[1] = psdSizeY;
-    restart.writeSurfaceText2D(2, sizes, difference, "difference");
+    if (runKmc) {
+      int[] sizes = new int[2];
+      sizes[0] = psdSizeX;
+      sizes[1] = psdSizeY;
+      restart.writeSurfaceText2D(2, sizes, difference, "difference");
+    }
     
     if (mainInterface != null) {
       mainInterface.setSimulationMesh(psd);
-      //mainInterface.setSurface(sampledSurface);
       mainInterface.setDifference(difference);
       mainInterface.setError(error);
     }
