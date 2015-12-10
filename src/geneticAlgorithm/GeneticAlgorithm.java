@@ -5,8 +5,11 @@
 package geneticAlgorithm;
 
 import basic.Parser;
+import geneticAlgorithm.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,10 +19,12 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
 
   private Population population;
   private IgaProgressFrame graphics;
+  private List<IEvaluation> otherEvaluators;
   
   public GeneticAlgorithm(Parser parser) {
     super(parser);
     selection = new RankingSelection();
+    otherEvaluators = addNoMoreEvaluators();
   }
 
   @Override
@@ -105,4 +110,8 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     }
   }
 
+  private List<IEvaluation> addNoMoreEvaluators() {
+    List<IEvaluation> evaluation = new ArrayList();
+    return evaluation;
+  }
 }

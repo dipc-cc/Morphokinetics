@@ -8,7 +8,6 @@ import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.Parser;
 import basic.SiSimulation;
-import geneticAlgorithm.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgThreadedPsdEvaluator;
@@ -17,7 +16,6 @@ import geneticAlgorithm.evaluationFunctions.SiBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.mutation.BgaBasedMutator;
 import geneticAlgorithm.mutation.IMutation;
-import geneticAlgorithm.populationInitialisation.AgInitialisator;
 import geneticAlgorithm.populationInitialisation.AgReduced6Initialisator;
 import geneticAlgorithm.populationInitialisation.IInitialisator;
 import geneticAlgorithm.populationInitialisation.SiInitialisator;
@@ -26,15 +24,10 @@ import geneticAlgorithm.recombination.RealRecombination;
 import geneticAlgorithm.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.reinsertion.IReinsertion;
 import geneticAlgorithm.restrictions.RestrictionOperator;
-import geneticAlgorithm.restrictions.AgRestriction;
 import geneticAlgorithm.restrictions.SiRestriction;
 import geneticAlgorithm.selection.ISelection;
 import graphicInterfaces.MainInterface;
 import geneticAlgorithm.restrictions.AgReduced6Restriction;
-import geneticAlgorithm.restrictions.AgReducedRestriction;
-import graphicInterfaces.gaConvergence.IgaProgressFrame;
-import java.util.ArrayList;
-import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
@@ -51,7 +44,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   protected BasicEvaluator evaluator;
   protected AbstractPsdEvaluator mainEvaluator;
-  protected List<IEvaluation> otherEvaluators;
   protected IMutation mutation;
   protected IInitialisator initialisation;
   protected IRecombination recombination;
@@ -117,7 +109,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     mutation = new BgaBasedMutator();
     recombination = new RealRecombination();
     reinsertion = new ElitistReinsertion();
-    otherEvaluators = addNoMoreEvaluators();
 
     stopError = parser.getStopError();
   }
@@ -157,11 +148,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return evaluatorTmp;
   }
   
-  private List<IEvaluation> addNoMoreEvaluators() {
-    List<IEvaluation> evaluation = new ArrayList();
-    return evaluation;
-  }
-  
   private static SiKmcConfig localSiKmc() {
     ListConfiguration listConfig = new ListConfiguration()
             .setListType(ListConfiguration.BINNED_LIST)
@@ -181,10 +167,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   public void setMainEvaluator(AbstractPsdEvaluator mainEvaluator) {
     this.mainEvaluator = mainEvaluator;
-  }
-
-  public void setOtherEvaluators(List<IEvaluation> otherEvaluators) {
-    this.otherEvaluators = otherEvaluators;
   }
 
   public void setMutation(IMutation mutation) {
@@ -218,10 +200,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   public AbstractPsdEvaluator getMainEvaluator() {
     return mainEvaluator;
-  }
-
-  public List<IEvaluation> getOtherEvaluators() {
-    return otherEvaluators;
   }
 
   public IMutation getMutation() {
