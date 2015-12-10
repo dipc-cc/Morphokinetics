@@ -51,16 +51,10 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
     Population p = population;
     p.order();
-    System.out.println("=============");
-    for (int i = 0; i < p.size(); i++) {
-      System.out.print("Total error: " + p.getIndividual(i).getTotalError() + "| \tGenes: ");
 
-      for (int a = 0; a < p.getIndividual(i).getGeneSize(); a++) {
-        System.out.print(p.getIndividual(i).getGene(a) + " \t");
-      }
-
-      System.out.println();
-    }
+    System.out.println("==================================");
+    System.out.println("Finished initial random population");
+    System.out.println("==================================");
     clearGraphics();
 
     return this;

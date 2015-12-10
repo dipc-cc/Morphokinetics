@@ -41,14 +41,9 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     getRestriction().apply(population);
     this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
 
-    System.out.println("=============");
-    for (int i = 0; i < population.size(); i++) {
-      System.out.print(population.getIndividual(i).getTotalError() + "| \t");
-      for (int a = 0; a < population.getIndividual(i).getGeneSize(); a++) {
-        System.out.print(population.getIndividual(i).getGene(a) + " \t");
-      }
-      System.out.println();
-    }
+    System.out.println("==================================");
+    System.out.println("Finished initial random population");
+    System.out.println("==================================");
     clearGraphics();
     
     return this;
