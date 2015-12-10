@@ -23,8 +23,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
   private final double stopFitness;
   
-  private Integer[] offIndex;
-
   public GeneticAlgorithmDcmaEs(Parser parser) {
     super(parser);
     
@@ -85,7 +83,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     getRestriction().apply(population);
     population = reinsertion.Reinsert(population, offspringPopulation, 0);
 
-    offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
     dcmaEsConfig.setOffX(new RichMatrix(population));
   }
 
