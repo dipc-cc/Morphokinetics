@@ -10,7 +10,6 @@ import geneticAlgorithm.mutation.BgaBasedMutator;
 import geneticAlgorithm.recombination.RealRecombination;
 import geneticAlgorithm.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.selection.RankingSelection;
-import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +20,6 @@ import java.util.List;
 public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
   private Population population;
-  private IgaProgressFrame graphics;
   private final List<IEvaluation> otherEvaluators;
   private final RankingSelection selection;
   private final BgaBasedMutator mutation;
@@ -51,11 +49,8 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
       }
       System.out.println();
     }
-
-    if (graphics != null) {
-      graphics.clear();
-    }
-
+    clearGraphics();
+    
     return this;
   }
 
@@ -104,19 +99,9 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     return population.getIndividual(pos);
   }
 
+  @Override
   public Individual getBestIndividual() {
     return population.getIndividual(0);
-  }
-
-  @Override
-  public void setGraphics(IgaProgressFrame graphics) {
-    this.graphics = graphics;
-  }
-
-  private void addToGraphics() {
-    if (graphics != null) {
-      graphics.addNewBestIndividual(getBestIndividual());
-    }
   }
 
   private List<IEvaluation> addNoMoreEvaluators() {

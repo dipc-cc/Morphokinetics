@@ -10,12 +10,10 @@ import geneticAlgorithm.mutation.CrossoverMutator;
 import geneticAlgorithm.recombination.DifferentialRecombination;
 import geneticAlgorithm.reinsertion.ElitistAllReinsertion;
 import geneticAlgorithm.selection.RandomSelection;
-import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
   private Population population;
-  private IgaProgressFrame graphics;
   private final RandomSelection selection;
   private final CrossoverMutator mutation;
   private DifferentialRecombination recombination;
@@ -67,10 +65,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
       System.out.println();
     }
-
-    if (graphics != null) {
-      graphics.clear();
-    }
+    clearGraphics();
 
     return this;
   }
@@ -141,19 +136,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   }
 
   @Override
-  public void setGraphics(IgaProgressFrame graphics) {
-    this.graphics = graphics;
-  }
-
-  private void addToGraphics() {
-    if (mainInterface != null) {
-      mainInterface.addNewBestIndividual(getBestIndividual());
-    }
-    if (graphics != null) {
-      graphics.addNewBestIndividual(getBestIndividual());
-    }
-  }
-
   public Individual getBestIndividual() {
     Population p = new Population(population.getIndividuals());
     p.order();

@@ -21,6 +21,7 @@ import geneticAlgorithm.restrictions.RestrictionOperator;
 import geneticAlgorithm.restrictions.SiRestriction;
 import graphicInterfaces.MainInterface;
 import geneticAlgorithm.restrictions.AgReduced6Restriction;
+import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
@@ -58,6 +59,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   private Updater updater;
   /** The stop error. If the current error is below this number, stop. */
   private final double stopError;
+  private IgaProgressFrame graphics;
 
   public AbstractGeneticAlgorithm(Parser parser) {
     
@@ -241,8 +243,30 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     mainEvaluator.setMainInterface(mainInterface);
     updater = new Updater();
     updater.start();
+  }  
+  
+  @Override
+  public void setGraphics(IgaProgressFrame graphics) {
+    this.graphics = graphics;
   }
 
+  public abstract Individual getBestIndividual();
+  
+  protected void addToGraphics() {
+    if (mainInterface != null) {
+      mainInterface.addNewBestIndividual(getBestIndividual());
+    }
+    if (graphics != null) {
+      graphics.addNewBestIndividual(getBestIndividual());
+    }
+  }
+  
+  protected void clearGraphics() {
+    if (graphics != null) {
+      graphics.clear();
+    }
+  }
+    
   public void setHierarchy(double[] rates) {
     ((AgBasicPsdEvaluator) mainEvaluator).setHierarchy(rates);
   }
