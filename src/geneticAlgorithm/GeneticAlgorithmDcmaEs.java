@@ -16,7 +16,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   private Population population;
   private final RandomSelection selection;
   private final CrossoverMutator mutation;
-  private DifferentialRecombination recombination;
+  private final DifferentialRecombination recombination;
   private final ElitistAllReinsertion reinsertion;
   
   private DcmaEsConfig dcmaEsConfig;
@@ -28,12 +28,13 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   public GeneticAlgorithmDcmaEs(Parser parser) {
     super(parser);
     
-    selection = new RandomSelection();
     
     stopFitness = 1e-12;
     // Inicializamos la clase que contiene variables globales del algoritmo.
     dcmaEsConfig = new DcmaEsConfig(getPopulationSize(), getDimensions());
+    selection = new RandomSelection();
     mutation = new CrossoverMutator(dcmaEsConfig);
+    recombination = new DifferentialRecombination(dcmaEsConfig, getPopulationSize(), getDimensions());
     reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
   }
 
@@ -41,7 +42,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   public IGeneticAlgorithm initialise() {
     population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
 
-    recombination = new DifferentialRecombination(dcmaEsConfig, population);
 
     getRestriction().apply(this.population);
 

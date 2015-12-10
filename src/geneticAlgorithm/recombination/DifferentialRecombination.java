@@ -70,10 +70,16 @@ public class DifferentialRecombination implements IRecombination {
   
   private final int errorsNumber;
 
-  public DifferentialRecombination(DcmaEsConfig config, Population population) {
+  /**
+   * 
+   * @param config
+   * @param populationSize Number of individuals of the population
+   * @param dimensions Number of different genes
+   */
+  public DifferentialRecombination(DcmaEsConfig config, int populationSize, int dimensions) {
     this.config = config;
-    dimensions = population.getIndividual(0).getGeneSize();
-    mu = population.size() / 2;
+    this.dimensions = dimensions;
+    mu = populationSize / 2;
     eigeneval = 0;
     counteval = 0;
     
