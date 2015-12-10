@@ -58,9 +58,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected IReinsertion reinsertion;
   protected RestrictionOperator restriction;
   protected ISelection selection;
-  private int populationSize;
-  private int offspringSize;
-  private int populationReplacements;
+  private final int populationSize;
+  private final int offspringSize;
+  private final int populationReplacements;
   private double expectedSimulationTime;
   /** Number of different genes. */
   private int dimensions;
