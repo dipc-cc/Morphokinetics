@@ -38,7 +38,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
   @Override
   public IGeneticAlgorithm initialise() {
-    population = initialisation.createRandomPopulation(populationSize, 6, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
+    population = initialisation.createRandomPopulation(getPopulationSize(), getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
 
     recombination = new DifferentialRecombination(dcmaEsConfig, population);
     mutation = new CrossoverMutator(dcmaEsConfig);
@@ -75,7 +75,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   }
 
   private void iterateOneStep() {
-    IndividualGroup[] trios = selection.Select(population, populationSize);
+    IndividualGroup[] trios = selection.Select(population, getPopulationSize());
     Population offspringPopulation = recombination.recombinate(trios);
     offspringPopulation.setIterationNumber(currentIteration);
     
