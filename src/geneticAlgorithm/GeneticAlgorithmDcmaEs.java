@@ -1,6 +1,7 @@
 package geneticAlgorithm;
 
 import basic.Parser;
+import geneticAlgorithm.evaluationFunctions.IEvaluation;
 
 import utils.akting.RichArray;
 import utils.akting.operations.OperationFactory;
@@ -9,10 +10,13 @@ import geneticAlgorithm.mutation.CrossoverMutator;
 import geneticAlgorithm.recombination.DifferentialRecombination;
 import geneticAlgorithm.reinsertion.ElitistAllReinsertion;
 import geneticAlgorithm.selection.RandomSelection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
   private Population population;
+  private final List<IEvaluation> otherEvaluators;
   private final RandomSelection selection;
   private final CrossoverMutator mutation;
   private final DifferentialRecombination recombination;
@@ -33,12 +37,12 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     mutation = new CrossoverMutator(dcmaEsConfig);
     recombination = new DifferentialRecombination(dcmaEsConfig, getPopulationSize(), getDimensions());
     reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
+    otherEvaluators = addNoMoreEvaluators();
   }
 
   @Override
   public IGeneticAlgorithm initialise() {
     population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), getMinValueGene(), getMaxValueGene(), isExpDistribution());
-
     getRestriction().apply(this.population);
 
     double[] fitness = mainEvaluator.evaluate(population);
@@ -119,5 +123,10 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   @Override
   public Individual getIndividual(int pos) {
     return population.getIndividual(pos);
+  }
+  
+  private List<IEvaluation> addNoMoreEvaluators() {
+    List<IEvaluation> evaluation = new ArrayList();
+    return evaluation;
   }
 }
