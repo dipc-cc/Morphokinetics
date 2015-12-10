@@ -6,6 +6,9 @@ package geneticAlgorithm;
 
 import basic.Parser;
 import geneticAlgorithm.evaluationFunctions.IEvaluation;
+import geneticAlgorithm.mutation.BgaBasedMutator;
+import geneticAlgorithm.recombination.RealRecombination;
+import geneticAlgorithm.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.selection.RankingSelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
@@ -19,18 +22,25 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
 
   private Population population;
   private IgaProgressFrame graphics;
-  private List<IEvaluation> otherEvaluators;
+  private final List<IEvaluation> otherEvaluators;
+  private final RankingSelection selection;
+  private final BgaBasedMutator mutation;
+  private final RealRecombination recombination;
+  private final ElitistReinsertion reinsertion;
   
   public GeneticAlgorithm(Parser parser) {
     super(parser);
     selection = new RankingSelection();
+    mutation = new BgaBasedMutator();
+    recombination = new RealRecombination();
+    reinsertion = new ElitistReinsertion();
     otherEvaluators = addNoMoreEvaluators();
   }
 
   @Override
   public IGeneticAlgorithm initialise() {
-    population = initialisation.createRandomPopulation(getPopulationSize(), getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
-    restriction.apply(population);
+    population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
+    getRestriction().apply(population);
     this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
 
     System.out.println("=============");
@@ -52,16 +62,16 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   private void iterateOneStep() {
     IndividualGroup[] couples = selection.Select(population, getOffspringSize());
     Population offspringPopulation = recombination.recombinate(couples);
-    offspringPopulation.setIterationNumber(currentIteration);
+    offspringPopulation.setIterationNumber(getCurrentIteration());
 
     int geneSize = population.getIndividual(0).getGeneSize();
-    mutation.mutate(offspringPopulation, restriction.getNonFixedGenes(geneSize));
-    restriction.apply(offspringPopulation);
+    mutation.mutate(offspringPopulation, getRestriction().getNonFixedGenes(geneSize));
+    getRestriction().apply(offspringPopulation);
     evaluator.evaluateAndOrder(offspringPopulation, mainEvaluator, otherEvaluators);
 
     //sometimes it is good to reevaluate the whole population
-    if (currentIteration > 0 && currentIteration % 25 == 0) {
-      restriction.apply(population);
+    if (getCurrentIteration() > 0 && getCurrentIteration() % 25 == 0) {
+      getRestriction().apply(population);
       this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
 
@@ -70,10 +80,9 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   }
 
   @Override
-  public void iterate(int maxIterations) {
-    totalIterations = maxIterations;
-    for (int i = 0; i < maxIterations; i++) {
-      currentIteration = i;
+  public void iterate() {
+    for (int i = 0; i < getTotalIterations(); i++) {
+      setCurrentIteration(i);
       iterateOneStep();
       addToGraphics();
       System.out.println("For iteration " + this.getCurrentIteration() + " the best error is " + this.getBestError());

@@ -14,18 +14,11 @@ import geneticAlgorithm.evaluationFunctions.AgThreadedPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.BasicEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
-import geneticAlgorithm.mutation.BgaBasedMutator;
-import geneticAlgorithm.mutation.IMutation;
 import geneticAlgorithm.populationInitialisation.AgReduced6Initialisator;
 import geneticAlgorithm.populationInitialisation.IInitialisator;
 import geneticAlgorithm.populationInitialisation.SiInitialisator;
-import geneticAlgorithm.recombination.IRecombination;
-import geneticAlgorithm.recombination.RealRecombination;
-import geneticAlgorithm.reinsertion.ElitistReinsertion;
-import geneticAlgorithm.reinsertion.IReinsertion;
 import geneticAlgorithm.restrictions.RestrictionOperator;
 import geneticAlgorithm.restrictions.SiRestriction;
-import geneticAlgorithm.selection.ISelection;
 import graphicInterfaces.MainInterface;
 import geneticAlgorithm.restrictions.AgReduced6Restriction;
 import kineticMonteCarlo.kmcCore.IKmc;
@@ -44,12 +37,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   protected BasicEvaluator evaluator;
   protected AbstractPsdEvaluator mainEvaluator;
-  protected IMutation mutation;
-  protected IInitialisator initialisation;
-  protected IRecombination recombination;
-  protected IReinsertion reinsertion;
-  protected RestrictionOperator restriction;
-  protected ISelection selection;
+  private IInitialisator initialisation;
+  private RestrictionOperator restriction;
   private final int populationSize;
   private final int offspringSize;
   private final int populationReplacements;
@@ -57,8 +46,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   /** Number of different genes. */
   private int dimensions;
   
-  protected int currentIteration = 0;
-  protected int totalIterations = 1;
+  private int currentIteration = 0;
+  private int totalIterations = 1;
   protected MainInterface mainInterface;
   
   private AbstractSimulation simulation;
@@ -80,6 +69,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     offspringSize = parser.getOffspringSize();
     populationReplacements = parser.getPopulationReplacement();
     dimensions = 6;
+    stopError = parser.getStopError();
+    totalIterations = parser.getTotalIterations();
     
     switch (parser.getCalculationMode()) {
       case "Ag":
@@ -106,11 +97,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         System.err.println("Current calculation mode is " + parser.getCalculationMode());
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-    mutation = new BgaBasedMutator();
-    recombination = new RealRecombination();
-    reinsertion = new ElitistReinsertion();
 
-    stopError = parser.getStopError();
   }
 
   /**
@@ -169,28 +156,12 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     this.mainEvaluator = mainEvaluator;
   }
 
-  public void setMutation(IMutation mutation) {
-    this.mutation = mutation;
+  public void setCurrentIteration(int i) {
+    currentIteration = i;
   }
-
-  public void setInitialization(IInitialisator initialization) {
+  
+  public void setInitialisation(IInitialisator initialization) {
     this.initialisation = initialization;
-  }
-
-  public void setRecombination(IRecombination recombination) {
-    this.recombination = recombination;
-  }
-
-  public void setReinsertion(IReinsertion reinsertion) {
-    this.reinsertion = reinsertion;
-  }
-
-  public void setRestriction(RestrictionOperator restriction) {
-    this.restriction = restriction;
-  }
-
-  public void setSelection(ISelection selection) {
-    this.selection = selection;
   }
 
   public void setExpectedSimulationTime(double expectedSimulationTime) {
@@ -202,29 +173,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return mainEvaluator;
   }
 
-  public IMutation getMutation() {
-    return mutation;
-  }
-
-  public IInitialisator getInitialization() {
+  public IInitialisator getInitialisation() {
     return initialisation;
   }
 
-  public IRecombination getRecombination() {
-    return recombination;
-  }
-
-  public IReinsertion getReinsertion() {
-    return reinsertion;
-  }
-
-  public RestrictionOperator getRestriction() {
-    return restriction;
-  }
-
-  public ISelection getSelection() {
-    return selection;
-  }
 
   public final int getPopulationSize() {
     return populationSize;
@@ -240,6 +192,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   public double getExpectedSimulationTime() {
     return expectedSimulationTime;
+  }
+
+  public RestrictionOperator getRestriction() {
+    return restriction;
   }
 
   public AbstractGeneticAlgorithm setExperimentalPsd(float[][] experimentalPsd) {

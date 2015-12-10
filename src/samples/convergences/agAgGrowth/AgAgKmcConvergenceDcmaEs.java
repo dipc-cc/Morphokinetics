@@ -45,7 +45,7 @@ public class AgAgKmcConvergenceDcmaEs {
     ga.setExpectedSimulationTime(simulationTime);
 
     ga.initialise();
-    ga.iterate(100);
+    ga.iterate();
     printResult(ga);
 
   }

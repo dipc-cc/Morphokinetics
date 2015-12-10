@@ -16,6 +16,10 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
   private Population population;
   private IgaProgressFrame graphics;
+  private final RandomSelection selection;
+  private final CrossoverMutator mutation;
+  private DifferentialRecombination recombination;
+  private final ElitistAllReinsertion reinsertion;
   
   private DcmaEsConfig dcmaEsConfig;
   /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
@@ -27,24 +31,21 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     super(parser);
     
     selection = new RandomSelection();
-    mutation = null;
-    recombination = null;
-    reinsertion = null;
     
     stopFitness = 1e-12;
     // Inicializamos la clase que contiene variables globales del algoritmo.
     dcmaEsConfig = new DcmaEsConfig(getPopulationSize(), getDimensions());
+    mutation = new CrossoverMutator(dcmaEsConfig);
+    reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
   }
 
   @Override
   public IGeneticAlgorithm initialise() {
-    population = initialisation.createRandomPopulation(getPopulationSize(), getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
+    population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), parser.getMinValueGene(), parser.getMaxValueGene(), parser.isExpDistribution());
 
     recombination = new DifferentialRecombination(dcmaEsConfig, population);
-    mutation = new CrossoverMutator(dcmaEsConfig);
-    reinsertion = new ElitistAllReinsertion(dcmaEsConfig);
 
-    restriction.apply(this.population);
+    getRestriction().apply(this.population);
 
     double[] fitness = mainEvaluator.evaluate(population);
     for (int i = 0; i < fitness.length; i++) {
@@ -77,16 +78,16 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   private void iterateOneStep() {
     IndividualGroup[] trios = selection.Select(population, getPopulationSize());
     Population offspringPopulation = recombination.recombinate(trios);
-    offspringPopulation.setIterationNumber(currentIteration);
+    offspringPopulation.setIterationNumber(getCurrentIteration());
     
     mutation.mutate(offspringPopulation, null);
-    restriction.apply(offspringPopulation);
+    getRestriction().apply(offspringPopulation);
     double[] fitness = mainEvaluator.evaluate(offspringPopulation);
     for (int i = 0; i < fitness.length; i++) {
       offspringPopulation.getIndividual(i).setError(0, fitness[i]);
     }
 
-    restriction.apply(population);
+    getRestriction().apply(population);
     population = reinsertion.Reinsert(population, offspringPopulation, 0);
 
     offIndex = dcmaEsConfig.getOffFitness().sortedIndexes();
@@ -94,11 +95,9 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
   }
 
   @Override
-  public void iterate(int maxIterations) {
-    totalIterations = maxIterations;
-
-    while (currentIteration < maxIterations) {
-      currentIteration++;
+  public void iterate() {
+    while (getCurrentIteration() < getTotalIterations()) {
+      setCurrentIteration(getCurrentIteration() + 1);
 
       iterateOneStep();
 
@@ -127,7 +126,7 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     double fmin = dcmaEsConfig.getOffFitness().get(0);
     RichArray xmin = dcmaEsConfig.getOffX().get(offIndex[0]);
 
-    System.out.println(currentIteration + ": " + fmin);
+    System.out.println(getCurrentIteration() + ": " + fmin);
     System.out.println(xmin);
   }
 

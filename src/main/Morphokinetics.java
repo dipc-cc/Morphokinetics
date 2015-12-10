@@ -125,7 +125,7 @@ public class Morphokinetics {
     ga.setExperimentalPsd(experimentalPsd);
     ga.initialise();
     
-    ga.iterate(parser.getTotalIterations());
+    ga.iterate();
     printResult(parser, ga);
     if (parser.withGui() && parser.visualise()) mainInterface.setStatusBar("Finished");
   }

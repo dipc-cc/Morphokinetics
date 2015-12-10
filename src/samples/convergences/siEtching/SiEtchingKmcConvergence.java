@@ -50,7 +50,7 @@ public class SiEtchingKmcConvergence {
       ga.setExpectedSimulationTime(simulationTime);
 
       ga.initialise();
-      ga.iterate(100);
+      ga.iterate();
       printResult(ga);
     }
   }
