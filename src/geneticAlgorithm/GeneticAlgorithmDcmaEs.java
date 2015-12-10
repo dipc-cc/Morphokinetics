@@ -90,12 +90,11 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
 
   @Override
   public void iterate() {
-    while (getCurrentIteration() < getTotalIterations()) {
-      setCurrentIteration(getCurrentIteration() + 1);
-
+    for (int i = 0; i < getTotalIterations(); i++) {
+      setCurrentIteration(i);
       iterateOneStep();
-
       addToGraphics();
+
       // Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable
       boolean cond1 = dcmaEsConfig.getOffFitness().apply(OperationFactory.deduct(dcmaEsConfig.getOffFitness().min())).allLessOrEqualThan(stopFitness);
       boolean cond2 = ((DifferentialRecombination) recombination).isDtooLarge();
