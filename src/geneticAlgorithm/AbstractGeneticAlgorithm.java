@@ -61,12 +61,10 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected int populationSize;
   protected int offspringSize;
   protected int populationReplacements;
-  protected double expectedSimulationTime;
+  private double expectedSimulationTime;
   
-  protected Population population;
   protected int currentIteration = 0;
   protected int totalIterations = 1;
-  protected IgaProgressFrame graphics;
   protected MainInterface mainInterface;
   
   private AbstractSimulation simulation;
@@ -283,7 +281,26 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   public IKmc getKmc() {
     return simulation.getKmc();
 }
+  
+  @Override
+  public int getCurrentIteration() {
+    return currentIteration;
+  }
+  
+  @Override
+  public int getTotalIterations() {
+    return totalIterations;
+  }
+  
+  @Override
+  public float[] getProgressPercent() {
+    float[] progress = new float[3];
+    progress[0] = currentIteration * 100.0f / getTotalIterations();
+    progress[2] = mainEvaluator.getProgressPercent();
 
+    return progress;
+  }
+  
   /**
    * Sets the main interface, starts a thread which will be responsible to update it and
    * assigns the main interface to the evaluator (to be able to also update it with 

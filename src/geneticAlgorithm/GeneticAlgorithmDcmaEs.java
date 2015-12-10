@@ -14,6 +14,9 @@ import graphicInterfaces.gaConvergence.IgaProgressFrame;
 
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
+  private Population population;
+  private IgaProgressFrame graphics;
+  
   private DcmaEsConfig dcmaEsConfig;
   /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
   private final double stopFitness;
@@ -136,25 +139,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     }
 
     return values;
-  }
-
-  @Override
-  public int getCurrentIteration() {
-    return currentIteration;
-  }
-
-  @Override
-  public int getTotalIterations() {
-    return totalIterations;
-  }
-
-  @Override
-  public float[] getProgressPercent() {
-    float[] progress = new float[3];
-    progress[0] = currentIteration * 100.0f / totalIterations;
-    progress[2] = mainEvaluator.getProgressPercent();
-
-    return progress;
   }
 
   @Override
