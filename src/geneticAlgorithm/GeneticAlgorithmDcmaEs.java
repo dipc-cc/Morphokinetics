@@ -3,7 +3,6 @@ package geneticAlgorithm;
 import basic.Parser;
 
 import utils.akting.RichArray;
-import utils.akting.RichMatrix;
 import utils.akting.operations.OperationFactory;
 import utils.akting.tests.TestSuite;
 import geneticAlgorithm.mutation.CrossoverMutator;
