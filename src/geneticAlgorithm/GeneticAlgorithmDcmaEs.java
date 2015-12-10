@@ -61,14 +61,12 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     Population offspringPopulation = recombination.recombinate(trios);
     offspringPopulation.setIterationNumber(getCurrentIteration());
     
-    mutation.mutate(offspringPopulation, null);
+    int geneSize = population.getIndividual(0).getGeneSize();
+    mutation.mutate(offspringPopulation, getRestriction().getNonFixedGenes(geneSize));
     getRestriction().apply(offspringPopulation);
-    double[] fitness = mainEvaluator.evaluate(offspringPopulation);
-    for (int i = 0; i < fitness.length; i++) {
-      offspringPopulation.getIndividual(i).setError(0, fitness[i]);
-    }
+    evaluator.evaluateAndOrder(offspringPopulation, mainEvaluator, otherEvaluators);
 
-    getRestriction().apply(population);
+    getRestriction().apply(population); // ez dakit ze zentzu daukan
     reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
   }
 
