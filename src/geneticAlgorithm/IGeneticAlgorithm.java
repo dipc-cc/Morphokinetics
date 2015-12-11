@@ -20,8 +20,6 @@ public interface IGeneticAlgorithm extends IProgressable {
 
   public void setGraphics(IgaProgressFrame graphics);
 
-  public double getBestError();
-
   public Individual getIndividual(int pos);
   
   public Individual getBestIndividual();

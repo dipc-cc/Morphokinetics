@@ -224,12 +224,12 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       setCurrentIteration(i);
       iterateOneStep();
       addToGraphics();
-      System.out.println("For iteration " + currentIteration + " the best error is " + this.getBestError());
+      System.out.println("For iteration " + currentIteration + " the best error is " + population.getBestError());
       if (exitCondition()) { // While using DCMA-ES this condition can occur and we must finish
         break;
       }
-      if (this.getBestError() < getStopError()) {
-        System.out.println("Stopping because the error is " + this.getBestError() + " (" + stopError + ")");
+      if (population.getBestError() < getStopError()) {
+        System.out.println("Stopping because the error is " + population.getBestError() + " (" + stopError + ")");
         break;
       }
     }
@@ -325,13 +325,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     //Population p = new Population(population.getIndividuals());
     //p.order();
     return population.getIndividual(0);
-  }
-  
-  @Override
-  public double getBestError() {
-    //Population p = new Population(population.getIndividuals());
-    //p.order();
-    return population.getIndividual(0).getTotalError();
   }
   
   @Override
