@@ -123,4 +123,18 @@ public class Population {
       System.out.println("");
     }
   }
+  
+  /**
+   * Return the best error of the current population. It orders the population (if required) and
+   * returns the sum of the best individual
+   *
+   * @return the lowest error
+   */
+  public double getBestError() {
+    if (!ordered) {
+      this.order();
+    }
+    return this.individuals[0].getTotalError();
+  }
+
 }
