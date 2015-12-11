@@ -8,7 +8,6 @@ import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import graphicInterfaces.MainInterface;
 import java.util.Set;
 
 /**
@@ -38,7 +37,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   private final Set flags;
   private final String hierarchyEvaluator;
   private boolean kmcError;
-  private MainInterface mainInterface;
   
   /**
    *
@@ -64,10 +62,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.hierarchyEvaluator = hierarchyEvaluator;
     this.kmcError = false;
     this.psd = null;
-  }
-    
-  public void setMainInterface(MainInterface mainInterface) {
-    this.mainInterface = mainInterface;
   }
   
   /**
