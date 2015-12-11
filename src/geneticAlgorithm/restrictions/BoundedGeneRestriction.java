@@ -24,18 +24,18 @@ public class BoundedGeneRestriction extends GeneRestriction {
 
   @Override
   public void restrictGene(Individual i) {
-    if (i.getGene(genePosition) < minValue) {
-      i.setGene(genePosition, minValue);
+    if (i.getGene(getGenePosition()) < minValue) {
+      i.setGene(getGenePosition(), minValue);
     }
-    if (i.getGene(genePosition) > maxValue) {
-      i.setGene(genePosition, maxValue);
+    if (i.getGene(getGenePosition()) > maxValue) {
+      i.setGene(getGenePosition(), maxValue);
     }
     // If gene is not defined initialise again with random number. In any case, the algorithm seems to be lost by now
-    if (Double.isNaN(i.getGene(genePosition))) {
+    if (Double.isNaN(i.getGene(getGenePosition()))) {
       double newGene = minValue * Math.pow(maxValue / minValue, StaticRandom.raw());
-      System.err.println("Setting new random gene to position " + genePosition + " because it turned to be NaN. Value: " + newGene);
-      System.out.println("Setting new random gene to position " + genePosition + " because it turned to be NaN. Value: " + newGene);
-      i.setGene(genePosition, newGene);
+      System.err.println("Setting new random gene to position " + getGenePosition() + " because it turned to be NaN. Value: " + newGene);
+      System.out.println("Setting new random gene to position " + getGenePosition() + " because it turned to be NaN. Value: " + newGene);
+      i.setGene(getGenePosition(), newGene);
     }
   }
 

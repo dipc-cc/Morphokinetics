@@ -21,12 +21,12 @@ public class ReplicatedGeneRestriction extends GeneRestriction {
 
   @Override
   public void restrictGene(Individual i) {
-    i.setGene(genePosition, i.getGene(genePositionToReplicate));
+    i.setGene(getGenePosition(), i.getGene(genePositionToReplicate));
   }
 
   @Override
   public int getRestrictionType() {
-    if (genePosition == genePositionToReplicate) {
+    if (getGenePosition() == genePositionToReplicate) {
       return GeneRestriction.NO_RESTRICTION;
     } else {
       return GeneRestriction.REPLICATE_GENE;

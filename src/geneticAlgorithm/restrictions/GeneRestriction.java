@@ -17,7 +17,7 @@ public abstract class GeneRestriction {
   public static final int REPLICATE_GENE = 2;
   public static final int FIXED_VALUE = 3;
 
-  protected int genePosition;
+  private int genePosition;
 
   public GeneRestriction(int genePosition) {
     this.genePosition = genePosition;

@@ -21,7 +21,7 @@ public class FixedGeneRestriction extends GeneRestriction {
 
   @Override
   public void restrictGene(Individual i) {
-    i.setGene(genePosition, fixedValue);
+    i.setGene(getGenePosition(), fixedValue);
   }
 
   @Override
