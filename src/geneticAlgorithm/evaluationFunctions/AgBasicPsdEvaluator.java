@@ -8,6 +8,7 @@ import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
+import ratesLibrary.AgRatesFactory;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -37,8 +38,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   
   private int simulationCount;
   private float[][] sampledSurface;
+  /** Temperature of the simulation. Useful when searching for energies. */
+  private final int temperature;
   
-  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType) {
+  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType, int temperature) {
 
     super(repeats, measureInterval, flags, hierarchyEvaluator);
 
@@ -51,6 +54,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       searchEnergies = evolutionarySearchType.equals("energies");
     }
     sampledSurface = null;
+    this.temperature = temperature;
   }
   
   @Override
@@ -344,11 +348,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     rates[5 * 7 + 5] = getRate(genes[5]); // Rate corresponding to E_b
     return rates;
   }
+  
   private double getRate(double gene) {
     if (searchEnergies) {
-      double kB = 8.617332e-5;;
-      double temperature = 135;
-      return (1e13 * Math.exp(-gene / (kB * temperature)));
+      return AgRatesFactory.getRate(temperature, gene);
     }
     return gene;
   }
