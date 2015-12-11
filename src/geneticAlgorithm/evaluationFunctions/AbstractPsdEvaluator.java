@@ -32,7 +32,9 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   private int currentSimulation;
   private double expectedSimulationTime;
-
+  private double error;
+  private float[][] psd;
+  
   private final Set flags;
   private final String hierarchyEvaluator;
   private boolean kmcError;
@@ -61,6 +63,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.flags = flags;
     this.hierarchyEvaluator = hierarchyEvaluator;
     this.kmcError = false;
+    this.psd = null;
   }
     
   public void setMainInterface(MainInterface mainInterface) {
@@ -113,7 +116,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected abstract double calculateHierarchyErrorDiscrete(Individual ind);
   
   protected double calculateFrobeniusNormErrorMatrix(float[][] currentPsd) {
-    double error;
+    double FrobeniusError;
     double sum = 0.0f;
     difference = new float[psdSizeX][psdSizeY];
     // Apply the filter to smooth it
@@ -130,8 +133,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       }
     }
     
-    error = Math.sqrt(sum)/frobeniusNormOfMatrix;
-    return error;
+    FrobeniusError = Math.sqrt(sum)/frobeniusNormOfMatrix;
+    return FrobeniusError;
   }
   
   @Override
@@ -184,6 +187,21 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
 
   @Override
+  public double getCurrentError() {
+    return error;
+  }
+  
+  @Override
+  public float[][] getCurrentPsd() {
+    return psd;
+  }
+  
+  @Override
+  public float[][] getCurrentDifference() {
+    return difference;
+  }
+  
+  @Override
   public double[] evaluate(Population p) {
     this.currentPopulation = p;
     this.currentSimulation = 0;
@@ -202,7 +220,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     double timeError = 0;
     double hierarchyError = 0;
     boolean runKmc = flags.contains(evaluatorFlag.PSD) || flags.contains(evaluatorFlag.TIME);
-    float[][] psd = null;
     if (runKmc) {
       resetKmcError();
       psd = calculatePsdFromIndividual(ind); // Do KMC run and calculate its PSD
@@ -229,7 +246,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       }
     }
 
-    double error = psdError + timeError + hierarchyError; // Sum up all errors: Frobenius psd, time and hierarchy
+    error = psdError + timeError + hierarchyError; // Sum up all errors: Frobenius psd, time and hierarchy
     if (kmcError && runKmc) error = 1e30; // If the KMC execution did not finish properly, set huge error
 
     // Print to standard output, file and GUI
@@ -252,12 +269,6 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       sizes[0] = psdSizeX;
       sizes[1] = psdSizeY;
       restart.writeSurfaceText2D(2, sizes, difference, "difference");
-    }
-    
-    if (mainInterface != null) {
-      mainInterface.setSimulationMesh(psd);
-      mainInterface.setDifference(difference);
-      mainInterface.setError(error);
     }
     
     return error * getWheight();

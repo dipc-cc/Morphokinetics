@@ -52,27 +52,4 @@ public class AgHierarchyEvaluator extends AbstractEvaluator {
     return errors;
   }
 
-  @Override
-  public float getProgressPercent() {
-    return 0.0f;
-  }
-   
-  /**
-   * Undefined here
-   * @return -1
-   */
-  @Override
-  public int getIndividualCount() {
-    return -1;
-  }
-
-  /**
-   * Undefined here
-   * @return -1
-   */
-  @Override
-  public int getSimulationCount() {
-    return -1;
-  }
-
 }

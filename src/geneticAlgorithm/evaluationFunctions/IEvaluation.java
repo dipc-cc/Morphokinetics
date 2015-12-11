@@ -25,4 +25,10 @@ public interface IEvaluation {
   public int getSimulationCount();
   
   public float[][] getSurface();
+  
+  public double getCurrentError();
+  
+  public float[][] getCurrentPsd();
+  
+  public float[][] getCurrentDifference();
 }

@@ -43,5 +43,55 @@ public abstract class AbstractEvaluator implements IEvaluation {
   @Override
   public float[][] getSurface() {
     return null;
+  } 
+  
+  @Override
+  public float getProgressPercent() {
+    return 0.0f;
+  }
+   
+  /**
+   * Undefined here
+   * @return -1
+   */
+  @Override
+  public int getIndividualCount() {
+    return -1;
+  }
+
+  /**
+   * Undefined here
+   * @return -1
+   */
+  @Override
+  public int getSimulationCount() {
+    return -1;
+  }
+  
+  /**
+   * Undefined here
+   * @return -1
+   */
+  @Override
+  public double getCurrentError() {
+    return -1;
+  }
+  
+  /**
+   * Undefined here
+   * @return -1
+   */
+  @Override
+  public float[][] getCurrentPsd() {
+    return null;
+  }
+  
+  /**
+   * Undefined here
+   * @return -1
+   */
+  @Override
+  public float[][] getCurrentDifference() {
+    return null;
   }
 }
