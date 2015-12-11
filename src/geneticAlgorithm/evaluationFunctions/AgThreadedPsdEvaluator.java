@@ -97,9 +97,4 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
-  @Override
-  public void setMainInterface(MainInterface mainInterface) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
 }

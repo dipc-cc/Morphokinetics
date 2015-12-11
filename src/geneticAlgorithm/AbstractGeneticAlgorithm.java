@@ -300,7 +300,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
    */
   public void setMainInterface(MainInterface mainInterface) {
     this.mainInterface = mainInterface;
-    mainEvaluator.setMainInterface(mainInterface);
     updater = new Updater();
     updater.start();
   }  
