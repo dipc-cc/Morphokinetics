@@ -36,7 +36,6 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private PsdSignature2D psd;
   private int kmcError;
   
-  private MainInterface mainInterface;
   private int simulationCount;
   private float[][] sampledSurface;
   
@@ -52,6 +51,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     if (evolutionarySearchType != null) {
       searchEnergies = evolutionarySearchType.equals("energies");
     }
+    sampledSurface = null;
   }
   
   @Override
@@ -94,19 +94,12 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     }
     simulationCount = getRepeats() - 1;
  
-    if (mainInterface != null)  mainInterface.setSurface(sampledSurface);
     ind.setSimulationTime(time / getRepeats());
     psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
     psd.printAvgToFile();
     return psd.getPsd();
   }
-    
-  @Override
-  public void setMainInterface(MainInterface mainInterface) {
-    this.mainInterface = mainInterface;
-    super.setMainInterface(mainInterface);
-  }  
 
   @Override
   public float[][] getSurface() {
