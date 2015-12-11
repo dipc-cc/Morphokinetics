@@ -271,11 +271,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     System.out.println(" ");
   }
     
-  public void setPsdSizeX(int psdSizeX) {
+  public final void setPsdSizeX(int psdSizeX) {
     this.psdSizeX = psdSizeX;
   }
 
-  public void setPsdSizeY(int psdSizeY) {
+  public final void setPsdSizeY(int psdSizeY) {
     this.psdSizeY = psdSizeY;
   }
 
