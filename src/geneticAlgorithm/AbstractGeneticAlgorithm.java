@@ -322,9 +322,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   @Override
   public Individual getBestIndividual() {
-    //Population p = new Population(population.getIndividuals());
-    //p.order();
-    return population.getIndividual(0);
+    return population.getBestIndividual();
   }
   
   @Override
