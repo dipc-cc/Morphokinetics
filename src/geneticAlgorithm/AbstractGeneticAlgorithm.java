@@ -370,6 +370,13 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       while (true) {
         mainInterface.setProgress(getProgressPercent());
         mainInterface.paintCanvas();
+        //mainInterface.setSurface(mainEvaluator.getSurface());
+        int individualCount  = mainEvaluator.getIndividualCount();
+        int simulationCount  = mainEvaluator.getSimulationCount();;
+        mainInterface.setStatusBar(
+                "Population " + getCurrentIteration() + 
+                " | Individual " + individualCount + 
+                " | Simulation " + simulationCount + "/"+(parser.getRepetitions()-1));
         try {
           Updater.sleep(100);
         } catch (Exception e) {

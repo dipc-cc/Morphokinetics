@@ -37,6 +37,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private int kmcError;
   
   private MainInterface mainInterface;
+  private int simulationCount;
+  private float[][] sampledSurface;
+  
   public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType) {
 
     super(repeats, measureInterval, flags, hierarchyEvaluator);
@@ -53,17 +56,14 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   
   @Override
   public float[][] calculatePsdFromIndividual(Individual ind) {
-    float[][] sampledSurface = null;
-    int individualCount = getCurrentSimulation() / getRepeats();
     psd.reset();
     double time = 0.0;
-    String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+individualCount;
+    String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+getIndividualCount();
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);
     kmc.initialiseRates(getRates6(ind.getGenes()));
     kmcError = 0;
-    for (int i = 0; i < getRepeats(); i++) {
-      if (mainInterface != null) mainInterface.setStatusBar("Population "+getCurrentIteration()+" | Individual "+individualCount+" | Simulation "+i+"/"+(getRepeats()-1));
+    for (simulationCount = 0; simulationCount < getRepeats(); simulationCount++) {
       kmc.reset();
       kmc.depositSeed();
       int max = (int)1e6;
@@ -72,7 +72,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         if (kmcReturn == -1) kmcError++;
         else psd.addSurfaceSample(sampledSurface);
-        restart.writeSurfaceBinary2D(sampledSurface, i);
+        restart.writeSurfaceBinary2D(sampledSurface, simulationCount);
         if (kmcError > 2) { // Allow 3 errors or strange surfaces. Exit individual with more
           System.out.println("Skipping individual");
           kmcError = -1;
@@ -86,12 +86,13 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
         }
       }
       if (kmcError == -1) {
-        setCurrentSimulation(getCurrentSimulation() + getRepeats() - i);
+        setCurrentSimulation(getCurrentSimulation() + getRepeats() - simulationCount);
         kmcHasFailed();
         break;
       }
       setCurrentSimulation(getCurrentSimulation() + 1);
     }
+    simulationCount = getRepeats() - 1;
  
     if (mainInterface != null)  mainInterface.setSurface(sampledSurface);
     ind.setSimulationTime(time / getRepeats());
@@ -107,6 +108,15 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     super.setMainInterface(mainInterface);
   }  
 
+  /**
+   * Method thought to be called from the main interface updater. 
+   * @return number of the current simulation
+   */
+  @Override 
+  public int getSimulationCount() {
+    return simulationCount;
+  }
+  
   /**
    * Sets the expected rates hierarchies, based on the objective rates (genes)
    * @param genes 

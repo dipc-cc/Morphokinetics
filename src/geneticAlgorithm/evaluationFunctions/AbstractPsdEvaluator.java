@@ -294,4 +294,22 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       return -1;
     }
   }
+  
+  /**
+   * Undefined here
+   * @return -1
+   */
+  @Override
+  public int getSimulationCount() {
+    return -1;
+  }
+  
+  /**
+   * Calculates the count (number) of the current simulation
+   * @return 
+   */
+  @Override
+  public int getIndividualCount() {
+    return getCurrentSimulation() / getRepeats();
+  }
 }

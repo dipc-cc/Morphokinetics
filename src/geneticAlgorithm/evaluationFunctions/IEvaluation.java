@@ -19,4 +19,8 @@ public interface IEvaluation {
   public double getWheight();
 
   public IEvaluation setWheight(float wheight);
+  
+  public int getIndividualCount();
+  
+  public int getSimulationCount();
 }
