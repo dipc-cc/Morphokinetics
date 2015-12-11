@@ -12,7 +12,6 @@ import geneticAlgorithm.selection.RandomSelection;
 
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
 
-  private Population population;
   private DcmaEsConfig dcmaEsConfig;
   /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
   private final double stopFitness;
@@ -50,8 +49,6 @@ public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements 
     }
     return false;
   }
-
- 
 
   /**
    * There is no need to reevaluate with DCMA-ES.
