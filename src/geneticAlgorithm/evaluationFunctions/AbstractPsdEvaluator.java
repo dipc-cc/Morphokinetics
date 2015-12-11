@@ -279,11 +279,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.psdSizeY = psdSizeY;
   }
 
-  public int getPsdSizeX() {
+  public final int getPsdSizeX() {
     return psdSizeX;
   }
 
-  public int getPsdSizeY() {
+  public final int getPsdSizeY() {
     return psdSizeY;
   }
   
