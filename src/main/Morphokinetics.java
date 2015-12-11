@@ -13,6 +13,7 @@ import basic.SiSimulation;
 import basic.io.Restart;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.AbstractGeneticAlgorithm;
+import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
@@ -92,7 +93,8 @@ public class Morphokinetics {
         ga = new GeneticAlgorithm(parser);
         break;
       case "dcma":
-        ga = new GeneticAlgorithmDcmaEs(parser);
+        DcmaEsConfig dcmaEsConfig = new DcmaEsConfig(parser.getPopulationSize(), 6);
+        ga = new GeneticAlgorithmDcmaEs(parser, dcmaEsConfig);
         break;
       default:
         System.err.println("Error: Default evolutionary algorithm. This evolutionary algorithm is not implemented!");

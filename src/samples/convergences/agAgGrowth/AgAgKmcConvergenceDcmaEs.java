@@ -6,6 +6,7 @@
 package samples.convergences.agAgGrowth;
 
 import basic.Parser;
+import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
@@ -27,8 +28,9 @@ public class AgAgKmcConvergenceDcmaEs {
 
     Parser parser = new Parser();
     parser.setEvolutionaryAlgorithm("dcma");
+    DcmaEsConfig config = new DcmaEsConfig(parser.getPopulationSize(), 6);
     
-    GeneticAlgorithmDcmaEs ga = new GeneticAlgorithmDcmaEs(parser);
+    GeneticAlgorithmDcmaEs ga = new GeneticAlgorithmDcmaEs(parser, config);
 
     new GaProgressFrame(ga).setVisible(true);
     AbstractPsdEvaluator evaluator = ga.getMainEvaluator();

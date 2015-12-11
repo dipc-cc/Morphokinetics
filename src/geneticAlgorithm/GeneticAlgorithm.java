@@ -5,70 +5,19 @@
 package geneticAlgorithm;
 
 import basic.Parser;
-import geneticAlgorithm.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.mutation.BgaBasedMutator;
 import geneticAlgorithm.recombination.RealRecombination;
 import geneticAlgorithm.reinsertion.ElitistReinsertion;
 import geneticAlgorithm.selection.RankingSelection;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author Nestor
  */
 public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
-
-  private Population population;
-  private final List<IEvaluation> otherEvaluators;
-  private final RankingSelection selection;
-  private final BgaBasedMutator mutation;
-  private final RealRecombination recombination;
-  private final ElitistReinsertion reinsertion;
   
   public GeneticAlgorithm(Parser parser) {
-    super(parser);
-    selection = new RankingSelection();
-    mutation = new BgaBasedMutator();
-    recombination = new RealRecombination();
-    reinsertion = new ElitistReinsertion();
-    otherEvaluators = addNoMoreEvaluators();
-  }
-
-  @Override
-  public IGeneticAlgorithm initialise() {
-    population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), getMinValueGene(), getMaxValueGene(), isExpDistribution());
-    getRestriction().apply(population);
-    this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
-    recombination.initialise(population);
-
-    System.out.println("==================================");
-    System.out.println("Finished initial random population");
-    System.out.println("==================================");
-    clearGraphics();
-    
-    return this;
-  }
-
-  @Override
-  public void iterateOneStep() {
-    IndividualGroup[] couples = selection.Select(population, getOffspringSize());
-    Population offspringPopulation = recombination.recombinate(couples);
-    offspringPopulation.setIterationNumber(getCurrentIteration());
-
-    int geneSize = population.getIndividual(0).getGeneSize();
-    mutation.mutate(offspringPopulation, getRestriction().getNonFixedGenes(geneSize));
-    getRestriction().apply(offspringPopulation);
-    evaluator.evaluateAndOrder(offspringPopulation, mainEvaluator, otherEvaluators);
-
-    //sometimes it is good to reevaluate the whole population
-    if (getCurrentIteration() > 0 && getCurrentIteration() % 25 == 0) {
-      getRestriction().apply(population);
-      this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
-    }
-
-    reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
-
+    super(parser, new RankingSelection(), new BgaBasedMutator(), new RealRecombination(), new ElitistReinsertion());
   }
   
   /**
@@ -80,23 +29,13 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
     return false;
   }
 
+  /**
+   * Sometimes it is good to reevaluate the whole population.
+   * @return true if the current iteration is multiple of 25
+   */
   @Override
-  public double getBestError() {
-    return population.getIndividual(0).getTotalError();
+  public boolean reevaluate() {
+    return (getCurrentIteration() > 0 && getCurrentIteration() % 25 == 0);
   }
-
-  @Override
-  public Individual getIndividual(int pos) {
-    return population.getIndividual(pos);
-  }
-
-  @Override
-  public Individual getBestIndividual() {
-    return population.getIndividual(0);
-  }
-
-  private List<IEvaluation> addNoMoreEvaluators() {
-    List<IEvaluation> evaluation = new ArrayList();
-    return evaluation;
-  }
+      
 }

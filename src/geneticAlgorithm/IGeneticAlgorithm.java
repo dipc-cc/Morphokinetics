@@ -23,11 +23,15 @@ public interface IGeneticAlgorithm extends IProgressable {
   public double getBestError();
 
   public Individual getIndividual(int pos);
+  
+  public Individual getBestIndividual();
 
   public void iterate();
   
   public void iterateOneStep();
   
   public boolean exitCondition();
+  
+  public boolean reevaluate();
 
 }

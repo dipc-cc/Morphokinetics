@@ -52,4 +52,13 @@ public class RealRecombination implements IRecombination {
   public void initialise(Population population) {
     // Do nothing 
   }
+
+  /**
+   * Does nothing
+   * @return false always
+   */
+  @Override
+  public boolean isDtooLarge() {
+    return false; // Do nothing
+  }
 }

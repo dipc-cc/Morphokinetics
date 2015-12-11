@@ -12,16 +12,23 @@ import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgThreadedPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.BasicEvaluator;
+import geneticAlgorithm.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.evaluationFunctions.SiBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
+import geneticAlgorithm.mutation.IMutation;
 import geneticAlgorithm.populationInitialisation.AgReduced6Initialisator;
 import geneticAlgorithm.populationInitialisation.IInitialisator;
 import geneticAlgorithm.populationInitialisation.SiInitialisator;
+import geneticAlgorithm.recombination.IRecombination;
+import geneticAlgorithm.reinsertion.IReinsertion;
 import geneticAlgorithm.restrictions.RestrictionOperator;
 import geneticAlgorithm.restrictions.SiRestriction;
 import graphicInterfaces.MainInterface;
 import geneticAlgorithm.restrictions.AgReduced6Restriction;
+import geneticAlgorithm.selection.ISelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
+import java.util.ArrayList;
+import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
@@ -36,9 +43,15 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   private Parser parser;
   
-  protected BasicEvaluator evaluator;
-  protected AbstractPsdEvaluator mainEvaluator;
+  private Population population;
+  private BasicEvaluator evaluator;
+  private AbstractPsdEvaluator mainEvaluator;
+  private List<IEvaluation> otherEvaluators;
   private IInitialisator initialisation;
+  private ISelection selection;
+  private IMutation mutation;
+  private IRecombination recombination;
+  private IReinsertion reinsertion;
   private RestrictionOperator restriction;
   private final int populationSize;
   private final int offspringSize;
@@ -64,11 +77,16 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   private final double stopError;
   private IgaProgressFrame graphics;
 
-  public AbstractGeneticAlgorithm(Parser parser) {
+  public AbstractGeneticAlgorithm(Parser parser, ISelection selection, IMutation mutation, IRecombination recombination, IReinsertion reinsertion) {
+    this.parser = parser;
+    this.selection = selection;
+    this.mutation = mutation;
+    this.recombination = recombination;
+    this.reinsertion = reinsertion;
     
     this.evaluator = new BasicEvaluator();
+    otherEvaluators = addNoMoreEvaluators();
     
-    this.parser = parser;
     
     populationSize = parser.getPopulationSize();
     offspringSize = parser.getOffspringSize();
@@ -112,7 +130,42 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     }
 
   }
+  
+  @Override
+  public IGeneticAlgorithm initialise() {
+    population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), getMinValueGene(), getMaxValueGene(), isExpDistribution());
+    getRestriction().apply(population);
+    this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
+    recombination.initialise(population);
 
+    System.out.println("==================================");
+    System.out.println("Finished initial random population");
+    System.out.println("==================================");
+    clearGraphics();
+    
+    return this;
+  }
+
+  @Override
+  public void iterateOneStep() {
+    IndividualGroup[] couples = selection.Select(population, getOffspringSize());
+    Population offspringPopulation = recombination.recombinate(couples);
+    offspringPopulation.setIterationNumber(getCurrentIteration());
+
+    int geneSize = population.getIndividual(0).getGeneSize();
+    mutation.mutate(offspringPopulation, getRestriction().getNonFixedGenes(geneSize));
+    getRestriction().apply(offspringPopulation);
+    evaluator.evaluateAndOrder(offspringPopulation, mainEvaluator, otherEvaluators);
+
+    //sometimes it is good to reevaluate the whole population
+    if (reevaluate()) {
+      getRestriction().apply(population);
+      this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
+    }
+
+    reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
+
+  }
   /**
    * Evaluator evaluation
    *
@@ -181,7 +234,11 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       }
     }
   }
-
+  
+  protected boolean isDtooLarge() {
+    return recombination.isDtooLarge();
+  }
+  
   public void setCurrentIteration(int i) {
     currentIteration = i;
   }
@@ -259,12 +316,36 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
   
   @Override
+  public Individual getIndividual(int pos) {
+    return population.getIndividual(pos);
+  }
+  
+  @Override
+  public Individual getBestIndividual() {
+    //Population p = new Population(population.getIndividuals());
+    //p.order();
+    return population.getIndividual(0);
+  }
+  
+  @Override
+  public double getBestError() {
+    //Population p = new Population(population.getIndividuals());
+    //p.order();
+    return population.getIndividual(0).getTotalError();
+  }
+  
+  @Override
   public float[] getProgressPercent() {
     float[] progress = new float[3];
     progress[0] = currentIteration * 100.0f / getTotalIterations();
     progress[2] = mainEvaluator.getProgressPercent();
 
     return progress;
+  }
+  
+  private List<IEvaluation> addNoMoreEvaluators() {
+    List<IEvaluation> evaluation = new ArrayList();
+    return evaluation;
   }
   
   /**
@@ -284,8 +365,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   public void setGraphics(IgaProgressFrame graphics) {
     this.graphics = graphics;
   }
-
-  public abstract Individual getBestIndividual();
   
   protected void addToGraphics() {
     if (mainInterface != null) {
