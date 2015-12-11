@@ -243,7 +243,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     error = psdError + timeError + hierarchyError; // Sum up all errors: Frobenius psd, time and hierarchy
     if (kmcError && runKmc) error = 1e30; // If the KMC execution did not finish properly, set huge error
 
-    // Print to standard output, file and GUI
+    // Print to standard output and file
     System.out.println("  errors: "+"\t"+psdError+"\t"+timeError+"\t"+hierarchyError+"\t"+error);
     System.out.println("  simul. time: "+ind.getSimulationTime()+"\t("+expectedSimulationTime+")");
     String errors = " Errors: FrobeniusNormMatrix\ttimeError\tHierarchy\tError\n";
