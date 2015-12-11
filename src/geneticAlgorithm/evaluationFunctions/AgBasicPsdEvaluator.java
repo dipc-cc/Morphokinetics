@@ -6,7 +6,6 @@ package geneticAlgorithm.evaluationFunctions;
 
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
-import graphicInterfaces.MainInterface;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import utils.psdAnalysis.PsdSignature2D;

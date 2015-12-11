@@ -5,7 +5,6 @@
 package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
-import graphicInterfaces.MainInterface;
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import java.util.Set;

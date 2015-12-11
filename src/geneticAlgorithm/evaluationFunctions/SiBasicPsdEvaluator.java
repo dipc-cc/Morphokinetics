@@ -5,7 +5,6 @@
 package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
-import graphicInterfaces.MainInterface;
 import graphicInterfaces.etching.SiFrame;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
