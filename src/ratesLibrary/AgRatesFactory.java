@@ -30,6 +30,18 @@ public class AgRatesFactory implements IRatesFactory {
   }
 
   /**
+   *  Given energy it returns a rate with a prefactor of 1e13
+   * 
+   * @param temperature system temperature
+   * @param energy input energy
+   * @return rate
+   */
+  public double getRate(double temperature, double energy) {
+      double kB = 8.617332e-5;;
+      return (1e13 * Math.exp(-energy / (kB * temperature)));
+  }
+  
+  /**
    * This is tuned to work with only 6 "genes".
    * Gene 0 from Ed   (0,j)
    * Gene 1 from Ec   (1,1)(1,2)(1,6)
