@@ -125,7 +125,7 @@ public class Population {
   }
   
   /**
-   * Return the best error of the current population. It orders the population (if required) and
+   * Returns the best error of the current population. It orders the population (if required) and
    * returns the sum of the best individual
    *
    * @return the lowest error
@@ -135,6 +135,18 @@ public class Population {
       this.order();
     }
     return this.individuals[0].getTotalError();
+  }
+  
+  /**
+   * Returns the best individual of the current population. It orders the population (if required) and
+   * returns the best individual
+   * @return the best individual
+   */
+  public Individual getBestIndividual() {
+     if (!ordered) {
+      this.order();
+    }
+    return this.individuals[0];
   }
 
 }
