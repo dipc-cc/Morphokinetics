@@ -89,11 +89,12 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     
     
     populationSize = parser.getPopulationSize();
-    offspringSize = parser.getOffspringSize();
     
     if (parser.getEvolutionaryAlgorithm().equals("dcma")) {
+      offspringSize = parser.getPopulationSize();
       populationReplacements = 0;
     } else {
+      offspringSize = parser.getOffspringSize();
       populationReplacements = parser.getPopulationReplacement();
     }
     dimensions = 6;
