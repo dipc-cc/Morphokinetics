@@ -222,7 +222,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   @Override 
   public void iterate() {
     for (int i = 1; i <= totalIterations; i++) {
-      setCurrentIteration(i);
+      currentIteration = i;
       iterateOneStep();
       addToGraphics();
       System.out.println("For iteration " + currentIteration + " the best error is " + population.getBestError());
