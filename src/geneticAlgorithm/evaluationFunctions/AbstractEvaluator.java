@@ -40,4 +40,8 @@ public abstract class AbstractEvaluator implements IEvaluation {
 
   public abstract void dispose();
 
+  @Override
+  public float[][] getSurface() {
+    return null;
+  }
 }

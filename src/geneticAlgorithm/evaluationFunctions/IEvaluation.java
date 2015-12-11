@@ -23,4 +23,6 @@ public interface IEvaluation {
   public int getIndividualCount();
   
   public int getSimulationCount();
+  
+  public float[][] getSurface();
 }

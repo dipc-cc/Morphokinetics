@@ -108,6 +108,11 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     super.setMainInterface(mainInterface);
   }  
 
+  @Override
+  public float[][] getSurface() {
+    return sampledSurface;
+  }
+  
   /**
    * Method thought to be called from the main interface updater. 
    * @return number of the current simulation

@@ -74,4 +74,5 @@ public class AgHierarchyEvaluator extends AbstractEvaluator {
   public int getSimulationCount() {
     return -1;
   }
+
 }
