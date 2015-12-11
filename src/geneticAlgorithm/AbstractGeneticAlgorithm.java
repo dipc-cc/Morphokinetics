@@ -239,14 +239,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   protected boolean isDtooLarge() {
     return recombination.isDtooLarge();
   }
-  
-  public void setCurrentIteration(int i) {
-    currentIteration = i;
-  }
-  
-  public void setInitialisation(IInitialisator initialization) {
-    this.initialisation = initialization;
-  }
 
   public void setExpectedSimulationTime(double expectedSimulationTime) {
     this.expectedSimulationTime = expectedSimulationTime;
@@ -257,31 +249,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return mainEvaluator;
   }
 
-  public IInitialisator getInitialisation() {
-    return initialisation;
-  }
-
-
-  public final int getPopulationSize() {
-    return populationSize;
-  }
-
-  public int getOffspringSize() {
-    return offspringSize;
-  }
-
-  public int getPopulationReplacements() {
-    return populationReplacements;
-  }
-
-  public double getExpectedSimulationTime() {
-    return expectedSimulationTime;
-  }
-
-  public RestrictionOperator getRestriction() {
-    return restriction;
-  }
-
   public AbstractGeneticAlgorithm setExperimentalPsd(float[][] experimentalPsd) {
     mainEvaluator.setPsd(experimentalPsd);
     return this;
@@ -289,21 +256,6 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
  
   public IKmc getKmc() {
     return simulation.getKmc();
-  }
-
-  public final int getDimensions() {
-    return dimensions;
-  }
-  
-  public double getMinValueGene() {
-    return minValueGene;
-  }
-  
-  public double getMaxValueGene() {
-    return maxValueGene;
-  }
-  public boolean isExpDistribution() {
-    return expDistribution;
   }
 
   @Override
