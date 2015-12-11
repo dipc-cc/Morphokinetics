@@ -49,10 +49,13 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
   public SurfaceViewerPanel2D setMesh(float[][] mesh) {
-    mainPanel.setPsd(mesh);
-    minTextField.setText(formatter.format(mainPanel.getMin()));
-    maxTextField.setText(formatter.format(mainPanel.getMax()));
-    return this;
+    if (mesh != null) {
+      mainPanel.setPsd(mesh);
+      minTextField.setText(formatter.format(mainPanel.getMin()));
+      maxTextField.setText(formatter.format(mainPanel.getMax()));
+      return this;
+    }
+    return null;
   }
 
   public SurfaceViewerPanel2D setLogScale(boolean log) {
