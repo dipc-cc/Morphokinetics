@@ -131,10 +131,7 @@ public class Population {
    * @return the lowest error
    */
   public double getBestError() {
-    if (!ordered) {
-      this.order();
-    }
-    return this.individuals[0].getTotalError();
+    return getBestIndividual().getTotalError();
   }
   
   /**
