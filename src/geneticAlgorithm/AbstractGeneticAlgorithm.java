@@ -134,8 +134,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   @Override
   public IGeneticAlgorithm initialise() {
-    population = getInitialisation().createRandomPopulation(getPopulationSize(), getDimensions(), getMinValueGene(), getMaxValueGene(), isExpDistribution());
-    getRestriction().apply(population);
+    population = initialisation.createRandomPopulation(populationSize, dimensions, minValueGene, maxValueGene, expDistribution);
+    restriction.apply(population);
     this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     recombination.initialise(population);
 
@@ -149,22 +149,22 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
 
   @Override
   public void iterateOneStep() {
-    IndividualGroup[] couples = selection.Select(population, getOffspringSize());
+    IndividualGroup[] couples = selection.Select(population, offspringSize);
     Population offspringPopulation = recombination.recombinate(couples);
-    offspringPopulation.setIterationNumber(getCurrentIteration());
+    offspringPopulation.setIterationNumber(currentIteration);
 
     int geneSize = population.getIndividual(0).getGeneSize();
-    mutation.mutate(offspringPopulation, getRestriction().getNonFixedGenes(geneSize));
-    getRestriction().apply(offspringPopulation);
+    mutation.mutate(offspringPopulation, restriction.getNonFixedGenes(geneSize));
+    restriction.apply(offspringPopulation);
     evaluator.evaluateAndOrder(offspringPopulation, mainEvaluator, otherEvaluators);
 
     //sometimes it is good to reevaluate the whole population
     if (reevaluate()) {
-      getRestriction().apply(population);
+      restriction.apply(population);
       this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
 
-    reinsertion.Reinsert(population, offspringPopulation, getPopulationReplacements());
+    reinsertion.Reinsert(population, offspringPopulation, populationReplacements);
 
   }
   /**
@@ -221,7 +221,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   @Override 
   public void iterate() {
-    for (int i = 1; i <= getTotalIterations(); i++) {
+    for (int i = 1; i <= totalIterations; i++) {
       setCurrentIteration(i);
       iterateOneStep();
       addToGraphics();
@@ -229,7 +229,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       if (exitCondition()) { // While using DCMA-ES this condition can occur and we must finish
         break;
       }
-      if (population.getBestError() < getStopError()) {
+      if (population.getBestError() < stopError) {
         System.out.println("Stopping because the error is " + population.getBestError() + " (" + stopError + ")");
         break;
       }
@@ -329,7 +329,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   @Override
   public float[] getProgressPercent() {
     float[] progress = new float[3];
-    progress[0] = currentIteration * 100.0f / getTotalIterations();
+    progress[0] = currentIteration * 100.0f / totalIterations;
     progress[2] = mainEvaluator.getProgressPercent();
 
     return progress;
