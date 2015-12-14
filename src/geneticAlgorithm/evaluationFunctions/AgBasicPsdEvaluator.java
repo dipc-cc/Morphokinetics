@@ -314,7 +314,13 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       genes[3] = 0.36357125335394896;
       genes[4] = 541.7309825567712;
       genes[5] = 26.740795566764117;*/
-
+    /* genes[0] = 0.15357378552368;
+    genes[1] = 0.075;
+    genes[2] = 0.150;
+    genes[3] = 0.360;
+    genes[4] = 0.275;
+    genes[5] = 0.310; */
+            
     double[] rates = new double[49];
 
     for (int i = 0; i < rates.length; i++) {
