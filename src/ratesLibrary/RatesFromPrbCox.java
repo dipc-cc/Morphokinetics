@@ -258,7 +258,7 @@ public class RatesFromPrbCox implements IGrowthRates {
   @Override
   public double getEnergy(int i, int j) {
     // TERRECE to anywhere is an special case. In the code in general it is used a different prefactor (1e11).
-    // This number come from applying the same prefactor
+    // This number comes from applying the same prefactor (1e13)
     if (i == TERRACE) return 0.15357378552368;
     // Return the table value otherwise
     return energies[i][j];
