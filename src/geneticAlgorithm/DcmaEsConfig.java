@@ -15,14 +15,12 @@ public class DcmaEsConfig {
 
   /**
    * 
-   * @param populationSize Number of individuals of the population
+   * @param populationSize Number of individuals of the population. Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
    * @param dimension Number of objective variables/problem dimension.
    */
   public DcmaEsConfig(int populationSize, int dimension) {
-    int offSize = populationSize; //Ideally: offSize = n * Math.round(28 / Math.sqrt(n));
-
-    offX = RichMatrix.zeros(dimension, offSize);
-    offFitness = new RichArray(offSize, 1D).apply(new Operation() {
+    offX = RichMatrix.zeros(dimension, populationSize);
+    offFitness = new RichArray(populationSize, 1D).apply(new Operation() {
       @Override
       public double apply(double value) {
         return 1e8 * value;
