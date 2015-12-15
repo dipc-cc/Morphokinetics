@@ -4,6 +4,9 @@
  */
 package geneticAlgorithm;
 
+import utils.akting.RichArray;
+import utils.akting.operations.Operation;
+
 /**
  *
  * This class just model a Genetic Algorithm population, it can be the main population or an
@@ -16,14 +19,22 @@ public class Population {
   private Individual[] individuals;
   private int iterationNumber;
   private boolean ordered;
+  /** Objective function values. */
+  private RichArray offFitness;
 
   public Individual[] getIndividuals() {
     return individuals;
   }
-
+  
   public Population(int size) {
     individuals = new Individual[size];
-    ordered = false;
+    ordered = false;    
+    offFitness = new RichArray(size, 1D).apply(new Operation() {
+      @Override
+      public double apply(double value) {
+        return 1e8 * value;
+      }
+    });
   }
 
   public Population(Individual[] ind) {
@@ -31,7 +42,13 @@ public class Population {
     for (int i = 0; i < ind.length; i++) {
       individuals[i] = ind[i];
     }
-    ordered = false;
+    ordered = false;    
+    offFitness = new RichArray(ind.length, 1D).apply(new Operation() {
+      @Override
+      public double apply(double value) {
+        return 1e8 * value;
+      }
+    });
   }
 
   /**
@@ -62,6 +79,10 @@ public class Population {
     ordered = true;
   }
 
+  public RichArray getOffFitness() {
+    return offFitness;
+  }
+  
   /**
    * Quicksort-based ordering algorithm.
    *

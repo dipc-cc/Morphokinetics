@@ -120,7 +120,7 @@ public class DifferentialRecombination implements IRecombination {
    */
   @Override
   public void initialise(Population population) {
-    Integer[] offIndex = config.getOffFitness().sortedIndexes();
+    Integer[] offIndex = population.getOffFitness().sortedIndexes();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
     config.setOffX(new RichMatrix(population));
     xMean = config.getOffX().recombinate(reducedIndex).multiply(weights);
@@ -128,13 +128,18 @@ public class DifferentialRecombination implements IRecombination {
     System.out.println("\t\t\t Initialising sigma "+sigma);
   }
   
+  /**
+   * Creates a new offspring population. The new population size has to be equal to the original population size.
+   * @param population original population. For the moment only used to get the fitness errors.
+   * @param groups new individuals.
+   * @return 
+   */
   @Override
-  public Population recombinate(IndividualGroup[] groups) {
+  public Population recombinate(Population population, IndividualGroup[] groups) {
     Population offspring = new Population(groups.length);
-
     counteval += offspring.size(); // Adding to the evaluation counter the number of individuals of the population
     // Sort by fitness and compute weighted mean into xmean.
-    Integer[] offIndex = config.getOffFitness().sortedIndexes();
+    Integer[] offIndex = population.getOffFitness().sortedIndexes();
     RichArray xold = xMean.copy();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
     xMean = config.getOffX().recombinate(reducedIndex).multiply(weights);
@@ -194,7 +199,7 @@ public class DifferentialRecombination implements IRecombination {
     // Crossover mean.
     config.setCrm(0.5);
 
-    boolean cond1 = (config.getOffFitness().avg() - Collections.min(config.getOffFitness()) < 10) && (Collections.max(D) / Collections.min(D) < 10);
+    boolean cond1 = (population.getOffFitness().avg() - Collections.min(population.getOffFitness()) < 10) && (Collections.max(D) / Collections.min(D) < 10);
     boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(D) / Collections.min(D) > 10);
     if (cond1 || cond2) {
       p = 0.5;
@@ -239,6 +244,7 @@ public class DifferentialRecombination implements IRecombination {
    * Condition exceeds 1e14
    * @return 
    */
+  @Override
   public boolean isDtooLarge() {
     return D.max() > 1e7 * D.min();
   }

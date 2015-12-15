@@ -24,8 +24,14 @@ public class RealRecombination implements IRecombination {
     this.outBounds = 0.1f;
   }
 
+  /**
+   * Creates a new offspring population. The new population is usually smaller than whole population
+   * @param population It is ignored
+   * @param groups new individuals to be included in the offspring population
+   * @return 
+   */
   @Override
-  public Population recombinate(IndividualGroup[] groups) {
+  public Population recombinate(Population population, IndividualGroup[] groups) {
     Population offspring = new Population(groups.length);
 
     for (int i = 0; i < (offspring.size()); i++) {

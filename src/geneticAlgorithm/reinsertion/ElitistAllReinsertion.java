@@ -31,7 +31,7 @@ public class ElitistAllReinsertion implements IReinsertion {
 
       if (candidate.getTotalError() <= original.getTotalError()) {
         origin.setIndividual(candidate, k);
-        config.getOffFitness().set(k, candidate.getTotalError());
+        origin.getOffFitness().set(k, candidate.getTotalError());
       }
     }
     config.setOffX(new RichMatrix(origin));

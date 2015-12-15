@@ -15,7 +15,7 @@ public interface IRecombination {
 
   public void initialise(Population population);
   
-  public Population recombinate(IndividualGroup[] groups);
+  public Population recombinate(Population population, IndividualGroup[] groups);
 
   public boolean isDtooLarge();
 }

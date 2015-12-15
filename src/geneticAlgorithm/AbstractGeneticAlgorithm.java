@@ -33,6 +33,7 @@ import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import ratesLibrary.AgRatesFactory;
+import utils.akting.operations.OperationFactory;
 import utils.list.ListConfiguration;
 
 /**
@@ -150,7 +151,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   @Override
   public void iterateOneStep() {
     IndividualGroup[] couples = selection.Select(population, offspringSize);
-    Population offspringPopulation = recombination.recombinate(couples);
+    Population offspringPopulation = recombination.recombinate(population, couples);
     offspringPopulation.setIterationNumber(currentIteration);
 
     int geneSize = population.getIndividual(0).getGeneSize();
@@ -165,8 +166,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     }
 
     reinsertion.Reinsert(population, offspringPopulation, populationReplacements);
-
   }
+  
   /**
    * Evaluator evaluation
    *
@@ -240,6 +241,23 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return recombination.isDtooLarge();
   }
 
+  /**
+   * Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable
+   * @return 
+   */
+  @Override
+  public boolean exitCondition() {
+  /** Stop if mean(fitness) - min(fitness) < stopFitness (minimization). */
+    double stopFitness = 1e-12;
+    boolean cond1 = population.getOffFitness().apply(OperationFactory.deduct(population.getOffFitness().min())).allLessOrEqualThan(stopFitness);
+    boolean cond2 = recombination.isDtooLarge();
+    if (cond1 || cond2) {
+      System.out.println("Exiting for an unknown reason " + cond1 + " " + cond2);
+      return true;
+    }
+    return false;
+  }    
+    
   public void setExpectedSimulationTime(double expectedSimulationTime) {
     this.expectedSimulationTime = expectedSimulationTime;
     mainEvaluator.setExpectedSimulationTime(expectedSimulationTime);
