@@ -183,6 +183,24 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   }
   
   /**
+   * E_f > E_b > E_a > E_d > E_e > E_c
+   * g(3) > g(5) > g(4) > g(0) > g(2) > g(1)
+   * @param ind
+   * @return 
+   */
+  protected double calculateHierarchyErrorOrder(Individual ind) {
+    if ( ind.getGene(3) > ind.getGene(5) &&
+         ind.getGene(5) > ind.getGene(4) &&
+         ind.getGene(4) > ind.getGene(0) &&
+         ind.getGene(0) > ind.getGene(2) &&
+         ind.getGene(2) > ind.getGene(1)) {
+      return 0;
+    } else {
+      return 1;
+    }
+  }
+  
+  /**
    * Calculates the hierarchy error based on the rates of Cox et al. 
    * @param ind Current individual
    * @return normalised hierarchy error
