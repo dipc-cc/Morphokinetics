@@ -53,14 +53,27 @@ public class Population {
 
   /**
    * Return an population individual from position pos
-   * @param pos position
+   *
+   * @param pos position must be less than number of individuals (population size)
    * @return Individual
    */
   public Individual getIndividual(int pos) {
+    if (pos >= individuals.length) {
+      throw new IllegalArgumentException("Required individual does not exist. Required position " + pos + " total number of individuals " + individuals.length);
+    }
     return individuals[pos];
   }
 
+  /**
+   * Sets an individual to position pos
+   *
+   * @param ind Individual to be inserted
+   * @param pos position must be less than number of individuals (population size)
+   */
   public void setIndividual(Individual ind, int pos) {
+    if (pos >= individuals.length) {
+      throw new IllegalArgumentException("Required individual does not exist. Required position " + pos + " total number of individuals " + individuals.length);
+    }
     individuals[pos] = ind;
     ordered = false;
   }
