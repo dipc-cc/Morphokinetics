@@ -122,9 +122,9 @@ public class DifferentialRecombination implements IRecombination {
   public void initialise(Population population) {
     Integer[] offIndex = population.getOffFitness().sortedIndexes();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
-    config.setOffX(new RichMatrix(population));
-    xMean = config.getOffX().recombinate(reducedIndex).multiply(weights);
-    sigma = config.getOffX().recombinate(reducedIndex).transpose().std().std();
+    population.newOffX();
+    xMean = population.getOffX().recombinate(reducedIndex).multiply(weights);
+    sigma = population.getOffX().recombinate(reducedIndex).transpose().std().std();
     System.out.println("\t\t\t Initialising sigma "+sigma);
   }
   
@@ -142,7 +142,7 @@ public class DifferentialRecombination implements IRecombination {
     Integer[] offIndex = population.getOffFitness().sortedIndexes();
     RichArray xold = xMean.copy();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
-    xMean = config.getOffX().recombinate(reducedIndex).multiply(weights);
+    xMean = population.getOffX().recombinate(reducedIndex).multiply(weights);
 
     // Cumulation: Update evolution paths.
     pSigma = pSigma.apply(OperationFactory.multiply(1 - cSigma)).sum(
@@ -161,7 +161,7 @@ public class DifferentialRecombination implements IRecombination {
             OperationFactory.multiply(hSigma * Math.sqrt(cc * (2 - cc) * muEffective))));
 
     // Adapt covariance matrix C.
-    RichMatrix artmp = config.getOffX().recombinate(reducedIndex).deduct(
+    RichMatrix artmp = population.getOffX().recombinate(reducedIndex).deduct(
             RichMatrix.repmat(xold, mu)).apply(OperationFactory.multiply(1 / sigma));
 
     C = C.apply(OperationFactory.multiply(1 - c1 - cmu)).sum(
@@ -237,6 +237,7 @@ public class DifferentialRecombination implements IRecombination {
       offspring.setIndividual(auxInd.toIndividual(errorsNumber), k);
     }
 
+    offspring.setOffX(population.getOffX());
     return offspring;
   }
   

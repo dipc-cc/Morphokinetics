@@ -5,6 +5,7 @@
 package geneticAlgorithm;
 
 import utils.akting.RichArray;
+import utils.akting.RichMatrix;
 import utils.akting.operations.Operation;
 
 /**
@@ -21,36 +22,36 @@ public class Population {
   private boolean ordered;
   /** Objective function values. */
   private RichArray offFitness;
-
+  /** Offspring population. */
+  private RichMatrix offX;
+  
   public Individual[] getIndividuals() {
     return individuals;
   }
   
-  public Population(int size) {
+  /**
+   * 
+   * @param dimensions Number of genes per individual
+   * @param size Number of individuals
+   */
+  public Population(int dimensions, int size) {
     individuals = new Individual[size];
-    ordered = false;    
+    ordered = false;
+    // Set big error for all the individuals
     offFitness = new RichArray(size, 1D).apply(new Operation() {
       @Override
       public double apply(double value) {
         return 1e8 * value;
       }
     });
+    offX = RichMatrix.zeros(dimensions, size);
   }
 
-  public Population(Individual[] ind) {
-    individuals = new Individual[ind.length];
-    for (int i = 0; i < ind.length; i++) {
-      individuals[i] = ind[i];
-    }
-    ordered = false;    
-    offFitness = new RichArray(ind.length, 1D).apply(new Operation() {
-      @Override
-      public double apply(double value) {
-        return 1e8 * value;
-      }
-    });
+  public Population(int size) {
+    individuals = new Individual[size];
+    ordered = false;
   }
-
+  
   /**
    * Return an population individual from position pos
    *
@@ -100,6 +101,18 @@ public class Population {
    */
   public RichArray getOffFitness() {
     return offFitness;
+  }
+  
+  public RichMatrix getOffX() {
+    return offX;
+  }
+  
+  public void newOffX() {
+    offX = new RichMatrix(this);
+  }
+  
+  public void setOffX(RichMatrix offX) {
+    this.offX = offX;
   }
   
   /**

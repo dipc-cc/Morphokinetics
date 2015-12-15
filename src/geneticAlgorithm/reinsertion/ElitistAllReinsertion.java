@@ -1,16 +1,11 @@
 package geneticAlgorithm.reinsertion;
 
-import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
-import utils.akting.RichMatrix;
 
 public class ElitistAllReinsertion implements IReinsertion {
 
-  private DcmaEsConfig config;
-
-  public ElitistAllReinsertion(DcmaEsConfig config) {
-    this.config = config;
+  public ElitistAllReinsertion() {
   }
 
   /**
@@ -34,7 +29,7 @@ public class ElitistAllReinsertion implements IReinsertion {
         origin.getOffFitness().set(k, candidate.getTotalError());
       }
     }
-    config.setOffX(new RichMatrix(origin));
+    origin.newOffX();
     return origin;
   }
 

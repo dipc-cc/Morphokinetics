@@ -27,7 +27,7 @@ public abstract class AbstractInitialisator implements IInitialisator {
    */
   @Override
   public Population createRandomPopulation(int populationSize, int dimensions, double min, double max, boolean log) {
-    Population p = new Population(populationSize);
+    Population p = new Population(dimensions, populationSize);
     for (int ind = 0; ind < p.size(); ind++) {
       Individual i = new Individual(dimensions, 4);
       for (int j = 0; j < dimensions; j++) {
