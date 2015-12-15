@@ -220,6 +220,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     }
     if (flags.contains(evaluatorFlag.PSD)) {
       psdError = calculateFrobeniusNormErrorMatrix(psd); // Calculate corresponding error with the reference
+      if (Double.isNaN(psdError)) psdError = 1e20;
     }
     if (flags.contains(evaluatorFlag.TIME)) {
       timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
