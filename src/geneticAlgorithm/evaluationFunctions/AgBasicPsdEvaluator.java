@@ -69,7 +69,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     for (simulationCount = 0; simulationCount < getRepeats(); simulationCount++) {
       kmc.reset();
       kmc.depositSeed();
-      int max = (int)1e6;
+      int max = (int)getMaxIteration();
       while (true) {
         int kmcReturn = kmc.simulate(max);
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
@@ -360,5 +360,21 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
       return AgRatesFactory.getRate(temperature, gene);
     }
     return gene;
+  }
+  
+  private double getMaxIteration() {
+    if (temperature <= 135) {//135 degrees Kelvin
+      return 4e5;
+    }
+    if (temperature <= 150) {//150 degrees Kelvin
+      return 6e5;
+    }
+    if (temperature <= 165) {//165 degrees Kelvin
+      return 7.5e5;
+    }
+    if (temperature < 180) {//180 degrees Kelvin
+      return 1e6;
+    }
+    return 2e6; //180 degrees Kelvin
   }
 }
