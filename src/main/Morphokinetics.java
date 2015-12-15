@@ -170,6 +170,7 @@ public class Morphokinetics {
     
     double[] rates = null;
     double[] energies = null;
+    double[] genes = null;
     switch (parser.getCalculationMode()) {
       case "Ag":
         //rates = new AgRatesFactory().getRates(parser.getTemperature());
@@ -187,10 +188,12 @@ public class Morphokinetics {
     Individual individual;
     switch (parser.getEvolutionarySearchType()) {
       case "rates" :
+        genes = rates;
         ga.setHierarchy(rates);
         individual = new Individual(rates);
         break;
       case "energies" :
+        genes = energies;
         ga.setHierarchy(energies);
         individual = new Individual(energies);
         break;
@@ -199,6 +202,12 @@ public class Morphokinetics {
     }
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     simulationTime = individual.getSimulationTime();
+    System.out.println("Experimental (objective) simulation time " + simulationTime);
+    System.out.print("Experimental (objective) genes");
+    for (int i = 0; i < genes.length; i++) {
+      System.out.print(" " + genes[i]);;
+    }
+    System.out.println(" ");
     evaluator.setRepeats(parser.getRepetitions());
     return experimentalPsd;
   }
