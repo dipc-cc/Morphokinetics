@@ -23,7 +23,7 @@ public class Population {
   /** Objective function values. */
   private RichArray offFitness;
   /** Offspring population. */
-  private RichMatrix offX;  
+  private RichMatrix offspringGenes;  
   /**  Crossover mean. */
   private double crm;
   
@@ -46,7 +46,7 @@ public class Population {
         return 1e8 * value;
       }
     });
-    offX = RichMatrix.zeros(dimensions, size);
+    offspringGenes = RichMatrix.zeros(dimensions, size);
   }
 
   public Population(int size) {
@@ -105,16 +105,16 @@ public class Population {
     return offFitness;
   }
   
-  public RichMatrix getOffX() {
-    return offX;
+  public RichMatrix getOffspringGenes() {
+    return offspringGenes;
   }
   
-  public void newOffX() {
-    offX = new RichMatrix(this);
+  public void newOffspringGenes() {
+    offspringGenes = new RichMatrix(this);
   }
   
-  public void setOffX(RichMatrix offX) {
-    this.offX = offX;
+  public void setOffspringGenes(RichMatrix offX) {
+    this.offspringGenes = offX;
   }
   
   public double getCrm() {

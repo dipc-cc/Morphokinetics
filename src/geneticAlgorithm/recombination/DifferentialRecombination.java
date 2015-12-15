@@ -117,9 +117,9 @@ public class DifferentialRecombination implements IRecombination {
   public void initialise(Population population) {
     Integer[] offIndex = population.getOffFitness().sortedIndexes();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
-    population.newOffX();
-    xMean = population.getOffX().recombinate(reducedIndex).multiply(weights);
-    sigma = population.getOffX().recombinate(reducedIndex).transpose().std().std();
+    population.newOffspringGenes();
+    xMean = population.getOffspringGenes().recombinate(reducedIndex).multiply(weights);
+    sigma = population.getOffspringGenes().recombinate(reducedIndex).transpose().std().std();
     System.out.println("\t\t\t Initialising sigma "+sigma);
   }
   
@@ -137,7 +137,7 @@ public class DifferentialRecombination implements IRecombination {
     Integer[] offIndex = population.getOffFitness().sortedIndexes();
     RichArray xold = xMean.copy();
     Integer[] reducedIndex = Arrays.copyOfRange(offIndex, 0, mu);
-    xMean = population.getOffX().recombinate(reducedIndex).multiply(weights);
+    xMean = population.getOffspringGenes().recombinate(reducedIndex).multiply(weights);
 
     // Cumulation: Update evolution paths.
     pSigma = pSigma.apply(OperationFactory.multiply(1 - cSigma)).sum(
@@ -156,7 +156,7 @@ public class DifferentialRecombination implements IRecombination {
             OperationFactory.multiply(hSigma * Math.sqrt(cc * (2 - cc) * muEffective))));
 
     // Adapt covariance matrix C.
-    RichMatrix artmp = population.getOffX().recombinate(reducedIndex).deduct(
+    RichMatrix artmp = population.getOffspringGenes().recombinate(reducedIndex).deduct(
             RichMatrix.repmat(xold, mu)).apply(OperationFactory.multiply(1 / sigma));
 
     C = C.apply(OperationFactory.multiply(1 - c1 - cmu)).sum(
@@ -232,7 +232,7 @@ public class DifferentialRecombination implements IRecombination {
       offspring.setIndividual(auxInd.toIndividual(errorsNumber), k);
     }
 
-    offspring.setOffX(population.getOffX());
+    offspring.setOffspringGenes(population.getOffspringGenes());
     return offspring;
   }
   

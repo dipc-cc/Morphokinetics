@@ -29,7 +29,7 @@ public class ElitistAllReinsertion implements IReinsertion {
         origin.getOffFitness().set(k, candidate.getTotalError());
       }
     }
-    origin.newOffX();
+    origin.newOffspringGenes();
     return origin;
   }
 

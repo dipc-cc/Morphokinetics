@@ -30,7 +30,7 @@ public class CrossoverMutator implements IMutation {
         double cr = p.getCrm() + crs * random.nextGaussian();
 
         if (StaticRandom.raw() > cr && j != jr) {
-          child.setGene(j, p.getOffX().get(k).get(j));
+          child.setGene(j, p.getOffspringGenes().get(k).get(j));
         }
       }
     }
