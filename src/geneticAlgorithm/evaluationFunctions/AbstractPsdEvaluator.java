@@ -232,6 +232,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       if (hierarchyEvaluator.equals("step")) {
         hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorDiscrete(ind);
       }
+      if (hierarchyEvaluator.equals("order")) {
+        System.out.println("Order evaluator");
+        hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorOrder(ind);
+      }
+      
       if (hierarchyEvaluator.equals("reference")) {
         hierarchyError = ((AgBasicPsdEvaluator)this).calculateHierarchyErrorFromReference(ind);
       }
