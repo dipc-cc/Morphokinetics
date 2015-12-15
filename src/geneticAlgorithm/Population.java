@@ -79,6 +79,12 @@ public class Population {
     ordered = true;
   }
 
+  /**
+   * Objective function values for DCMA-ES algorithm. Otherwise, it has huge values that never
+   * change
+   *
+   * @return Objective function values
+   */
   public RichArray getOffFitness() {
     return offFitness;
   }
