@@ -23,7 +23,9 @@ public class Population {
   /** Objective function values. */
   private RichArray offFitness;
   /** Offspring population. */
-  private RichMatrix offX;
+  private RichMatrix offX;  
+  /**  Crossover mean. */
+  private double crm;
   
   public Individual[] getIndividuals() {
     return individuals;
@@ -113,6 +115,14 @@ public class Population {
   
   public void setOffX(RichMatrix offX) {
     this.offX = offX;
+  }
+  
+  public double getCrm() {
+    return crm;
+  }
+
+  public void setCrm(double crm) {
+    this.crm = crm;
   }
   
   /**

@@ -11,8 +11,8 @@ import geneticAlgorithm.selection.RandomSelection;
 
 public class GeneticAlgorithmDcmaEs extends AbstractGeneticAlgorithm implements IGeneticAlgorithm {
   
-  public GeneticAlgorithmDcmaEs(Parser parser, DcmaEsConfig config) {
-    super(parser, new RandomSelection(), new CrossoverMutator(config), new DifferentialRecombination(config, parser.getPopulationSize(), 6), new ElitistAllReinsertion());
+  public GeneticAlgorithmDcmaEs(Parser parser) {
+    super(parser, new RandomSelection(), new CrossoverMutator(), new DifferentialRecombination(parser.getPopulationSize(), 6), new ElitistAllReinsertion());
   }
 
   private double[] myEvaluate(Population population) {

@@ -9,13 +9,10 @@ import utils.akting.operations.Operation;
 import utils.akting.operations.OperationFactory;
 import cern.colt.matrix.impl.DenseDoubleMatrix2D;
 import cern.colt.matrix.linalg.EigenvalueDecomposition;
-import geneticAlgorithm.DcmaEsConfig;
 import geneticAlgorithm.IndividualGroup;
 import geneticAlgorithm.Population;
 
 public class DifferentialRecombination implements IRecombination {
-
-  private DcmaEsConfig config;
 
   private final  double cc;
   /** C_sigma. */
@@ -72,12 +69,10 @@ public class DifferentialRecombination implements IRecombination {
 
   /**
    * 
-   * @param config
    * @param populationSize Number of individuals of the population
    * @param dimensions Number of different genes
    */
-  public DifferentialRecombination(DcmaEsConfig config, int populationSize, int dimensions) {
-    this.config = config;
+  public DifferentialRecombination(int populationSize, int dimensions) {
     this.dimensions = dimensions;
     mu = populationSize / 2;
     eigeneval = 0;
@@ -197,14 +192,14 @@ public class DifferentialRecombination implements IRecombination {
     // P = 0.5 * ( 1 + G / Gmax )
     double p = 1;
     // Crossover mean.
-    config.setCrm(0.5);
+    offspring.setCrm(0.5);
 
     boolean cond1 = (population.getOffFitness().avg() - Collections.min(population.getOffFitness()) < 10) && (Collections.max(D) / Collections.min(D) < 10);
     boolean cond2 = ((sigma * Math.sqrt(Collections.max(C.diag()))) < 10) && (Collections.max(D) / Collections.min(D) > 10);
     if (cond1 || cond2) {
       p = 0.5;
       // Crossover mean.
-      config.setCrm(0.85);
+      offspring.setCrm(0.85);
 	  // Crossover standard deviation.
       //config.crs = 0.1;
     }
