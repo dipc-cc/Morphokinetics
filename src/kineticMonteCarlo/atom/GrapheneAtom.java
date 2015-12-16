@@ -215,7 +215,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       modified.addBondAtom(this);
     }
 
-    list.addTotalProbability(-totalProbability);
+    getList().addTotalProbability(-totalProbability);
     this.setOnList(null);
     if (bondsProbability != null) {
       PStack.returnProbArray(bondsProbability);
@@ -233,7 +233,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       temp += totalProbability;
     }
     if (this.isOnList()) {
-      list.addTotalProbability(temp);
+      getList().addTotalProbability(temp);
     }
   }
 
@@ -304,7 +304,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       totalProbability += bondsProbability[i];
       temp += bondsProbability[i];
     }
-    list.addTotalProbability(temp);
+    getList().addTotalProbability(temp);
 
   }
 

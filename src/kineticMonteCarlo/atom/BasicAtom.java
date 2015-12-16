@@ -64,16 +64,16 @@ public class BasicAtom extends AbstractAtom {
 
   public void remove1st() {
     type--;
-    if (type < 3 && !isRemoved() && list != null) {
-      list.addTotalProbability(getProbabilities()[type] - getProbabilities()[type + 1]);
+    if (type < 3 && !isRemoved() && getList() != null) {
+      getList().addTotalProbability(getProbabilities()[type] - getProbabilities()[type + 1]);
     }
   }
 
   @Override
   public void remove() {
     if (!isRemoved()) {
-      if (list != null) {
-        list.addTotalProbability(-getProbabilities()[type]);
+      if (getList() != null) {
+        getList().addTotalProbability(-getProbabilities()[type]);
       }
       remove();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
