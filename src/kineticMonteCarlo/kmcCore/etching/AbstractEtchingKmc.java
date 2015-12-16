@@ -5,7 +5,6 @@
 package kineticMonteCarlo.kmcCore.etching;
 
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.lattice.AbstractEtchingLattice;
 import utils.list.ListConfiguration;
 
 /**
@@ -17,10 +16,4 @@ public abstract class AbstractEtchingKmc extends AbstractKmc {
   public AbstractEtchingKmc(ListConfiguration config) {
     super(config);
   }
-
-  @Override
-  public AbstractEtchingLattice getLattice() {
-    return (AbstractEtchingLattice) getLattice();
-  }
-
 }
