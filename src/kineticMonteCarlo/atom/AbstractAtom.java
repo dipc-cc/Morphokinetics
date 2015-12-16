@@ -43,6 +43,10 @@ public abstract class AbstractAtom {
   public boolean isOnList() {
     return list != null;
   }
+  
+  public boolean isListNull() {
+    return list == null;
+  }
 
   public abstract double getProbability();
 
@@ -84,10 +88,6 @@ public abstract class AbstractAtom {
 
   public void setNeighbour(AbstractAtom lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  public boolean isListNull() {
-    return list == null;
   }
   
   public void addTotalProbability(double probabilityChanges) {
