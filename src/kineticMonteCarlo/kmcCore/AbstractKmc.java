@@ -14,9 +14,9 @@ import utils.list.ListConfiguration;
  */
 public abstract class AbstractKmc implements IKmc {
 
-  protected AbstractList list;
-  protected AbstractLattice lattice;
-  protected int iterationsForLastSimulation;
+  private AbstractList list;
+  private AbstractLattice lattice;
+  private int iterationsForLastSimulation;
 
   public AbstractKmc(ListConfiguration config) {
     list = config.createList();
@@ -49,9 +49,14 @@ public abstract class AbstractKmc implements IKmc {
   public int getIterations() {
     return iterationsForLastSimulation;
   }
+  
+  public void setIterations(int iterations) {
+    iterationsForLastSimulation = iterations;
+  }
 
   /**
    * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   * @return number of iterations that simulation took
    */
   @Override
   public int simulate() {
@@ -81,6 +86,7 @@ public abstract class AbstractKmc implements IKmc {
   /**
    * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
    * @param iterations 
+   * @return number of iterations that simulation took
    */
   @Override
   public int simulate(int iterations) {
@@ -102,11 +108,6 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   @Override
-  public AbstractList getSurfaceList() {
-    return list;
-  }
-
-  @Override
   public double getTime() {
     return list.getTime();
   }
@@ -122,5 +123,35 @@ public abstract class AbstractKmc implements IKmc {
    */
   public float getCoverage() {
     return -1;
+  }
+
+  /**
+   * @return the lattice
+   */
+  @Override
+  public AbstractLattice getLattice() {
+    return lattice;
+  }
+
+  /**
+   * @param lattice the lattice to set
+   */
+  public final void setLattice(AbstractLattice lattice) {
+    this.lattice = lattice;
+  }
+
+  /**
+   * @return the list
+   */
+  @Override
+  public AbstractList getList() {
+    return list;
+  }
+
+  /**
+   * @param list the list to set
+   */
+  public void setList(AbstractList list) {
+    this.list = list;
   }
 }

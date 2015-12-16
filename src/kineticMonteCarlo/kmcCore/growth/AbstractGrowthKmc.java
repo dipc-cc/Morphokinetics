@@ -47,7 +47,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     this.useMaxPerimeter = useMaxPerimeter;
     this.modifiedBuffer = new ModifiedBuffer();
-    this.list.autoCleanup(true);
+    this.getList().autoCleanup(true);
     this.perimeterType = perimeterType;
   }
 
@@ -56,9 +56,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.area = calculateAreaAsInLattice();
 
     if (justCentralFlake) {
-      list.setDepositionProbability(depositionRateML / islandDensitySite);
+      getList().setDepositionProbability(depositionRateML / islandDensitySite);
     } else {
-      list.setDepositionProbability(depositionRateML * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
+      getList().setDepositionProbability(depositionRateML * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
     }
   }
 
@@ -79,7 +79,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   @Override
   public void reset() {
     lattice.reset();
-    list.reset();
+    getList().reset();
   }
   
   @Override
@@ -93,7 +93,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-    AbstractGrowthAtom originAtom = ((AbstractGrowthAtom) list.nextEvent());
+    AbstractGrowthAtom originAtom = ((AbstractGrowthAtom) getList().nextEvent());
     AbstractGrowthAtom destinationAtom;
 
     if (originAtom == null) {
@@ -143,14 +143,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int radius = perimeter.getCurrentRadius();
     int numEvents = 0;// contador de eventos desde el ultimo cambio de radio
 
-    iterationsForLastSimulation = 0;
+    setIterations(0);
 
     for (int i = 0; i < iterations; i++) {
       if (performSimulationStep()) {
         break;
       }
 
-      iterationsForLastSimulation++;
+      setIterations(getIterations() + 1);
       numEvents++;
 
       if (radius == 10 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
@@ -161,7 +161,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         radius = perimeter.getCurrentRadius();
         numEvents = 0;
       } else {
-        if ((iterationsForLastSimulation - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
+        if ((getIterations() - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
           break;
         }
 
@@ -169,7 +169,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     }
 
-    list.cleanup();
+    getList().cleanup();
   }
 
   private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom source) {
@@ -190,7 +190,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     origin.extract();
     lattice.subtractOccupied();
-    modifiedBuffer.updateAtoms(list, lattice);
+    modifiedBuffer.updateAtoms(getList(), lattice);
     return true;
   }
 
@@ -202,7 +202,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean forceNucleation = (!justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
     atom.deposit(forceNucleation);
     lattice.addOccupied();
-    modifiedBuffer.updateAtoms(list, lattice);
+    modifiedBuffer.updateAtoms(getList(), lattice);
     return true;
 
   }
@@ -221,7 +221,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
     origin.extract();
     destination.deposit(forceNucleation);
-    modifiedBuffer.updateAtoms(list, lattice);
+    modifiedBuffer.updateAtoms(getList(), lattice);
 
     return true;
   }

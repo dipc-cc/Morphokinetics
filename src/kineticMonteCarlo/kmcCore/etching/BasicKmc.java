@@ -20,7 +20,7 @@ public class BasicKmc extends AbstractEtchingKmc {
 
   public BasicKmc(ListConfiguration listCconfig, int sizeX, int sizeY, boolean randomise) {
     super(listCconfig);
-    lattice = new BasicLattice(sizeX, sizeY);
+    setLattice(new BasicLattice(sizeX, sizeY));
 
   }
 
@@ -30,19 +30,19 @@ public class BasicKmc extends AbstractEtchingKmc {
    */ 
   @Override
   public void initialiseRates(double[] rates) {
-    lattice.setProbabilities(rates);
+    getLattice().setProbabilities(rates);
     minHeight = 4;
   }
     
   @Override
   public void depositSeed() {
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        for (int k = 0; k < lattice.getHexaSizeK(); k++) {
-          for (int l = 0; l < lattice.getSizeUC(); l++) {
-            BasicAtom atom = (BasicAtom) lattice.getAtom(i, j, k, l);
+    for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
+      for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
+        for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
+          for (int l = 0; l < getLattice().getSizeUC(); l++) {
+            BasicAtom atom = (BasicAtom) getLattice().getAtom(i, j, k, l);
             if (atom.getType() < 4 && atom.getType() > 0 && !atom.isRemoved()) {
-              list.addAtom(atom);
+              getList().addAtom(atom);
             }
 
           }
@@ -53,8 +53,8 @@ public class BasicKmc extends AbstractEtchingKmc {
 
   @Override
   protected boolean performSimulationStep() {
-    BasicAtom atom = (BasicAtom) list.nextEvent();
-    if (atom.getY() > lattice.getHexaSizeJ() - minHeight) {
+    BasicAtom atom = (BasicAtom) getList().nextEvent();
+    if (atom.getY() > getLattice().getHexaSizeJ() - minHeight) {
       return true;
     }
 
@@ -62,7 +62,7 @@ public class BasicKmc extends AbstractEtchingKmc {
     atom.setList(null);
     for (int k = 0; k < 4; k++) {
       if (atom.getNeighbour(k).getType() == 3) {
-        list.addAtom(atom.getNeighbour(k));
+        getList().addAtom(atom.getNeighbour(k));
       }
     }
     return false;
@@ -73,8 +73,8 @@ public class BasicKmc extends AbstractEtchingKmc {
   public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
 
-    double scaleX = binX / (float) lattice.getHexaSizeI();
-    ListIterator<AbstractAtom> iterator = list.getIterator();
+    double scaleX = binX / (float) getLattice().getHexaSizeI();
+    ListIterator<AbstractAtom> iterator = getList().getIterator();
 
     while (iterator.hasNext()) {
       BasicAtom atom = (BasicAtom) iterator.next();

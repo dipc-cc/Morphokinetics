@@ -27,7 +27,7 @@ public interface IKmc {
 
   public int simulate(int iterations);
 
-  public AbstractList getSurfaceList();
+  public AbstractList getList();
 
   public double getTime();
 

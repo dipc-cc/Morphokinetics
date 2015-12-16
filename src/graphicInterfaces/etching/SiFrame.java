@@ -164,7 +164,7 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
   private float update(AbstractKmc kmc) {
 
-    AbstractList surface = kmc.getSurfaceList();
+    AbstractList surface = kmc.getList();
     float sizeX = 0;
     float sizeY = 0;
 

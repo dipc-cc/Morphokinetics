@@ -162,7 +162,7 @@ public class KmcWorker extends Thread {
   }
 
   public AbstractList getSurfaceList() {
-    return this.kmc.getSurfaceList();
+    return this.kmc.getList();
   }
 
   public double getTime() {

@@ -20,9 +20,9 @@ public class SiKmc extends AbstractEtchingKmc {
 
   public SiKmc(SiKmcConfig config) {
     super(config.listConfig);
-    lattice = new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC);
+    setLattice(new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC));
 
-    minHeight = ((SiLattice) lattice).getUnitCell().getLimitZ();
+    minHeight = ((SiLattice) getLattice()).getUnitCell().getLimitZ();
   }
 
   /**
@@ -31,18 +31,18 @@ public class SiKmc extends AbstractEtchingKmc {
    */
   @Override
   public void initialiseRates(double[] rates) {
-    lattice.setProbabilities(rates);
+    getLattice().setProbabilities(rates);
   }
   
   @Override
   public void depositSeed() {
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        for (int k = 0; k < lattice.getHexaSizeK(); k++) {
-          for (int l = 0; l < lattice.getSizeUC(); l++) {
-            SiAtom atom = (SiAtom) lattice.getAtom(i, j, k, l);
+    for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
+      for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
+        for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
+          for (int l = 0; l < getLattice().getSizeUC(); l++) {
+            SiAtom atom = (SiAtom) getLattice().getAtom(i, j, k, l);
             if (atom.getN1() < 4 && atom.getN1() > 0 && !atom.isRemoved()) {
-              list.addAtom(atom);
+              getList().addAtom(atom);
             }
           }
         }
@@ -52,7 +52,7 @@ public class SiKmc extends AbstractEtchingKmc {
 
   @Override
   protected boolean performSimulationStep() {
-    SiAtom atom = (SiAtom) list.nextEvent();
+    SiAtom atom = (SiAtom) getList().nextEvent();
     // I am not sure that the next line is correct (Joseba). However,
     if (atom == null) return false; // next even can be null and we should be ready to handle this
     atom.remove();
@@ -60,7 +60,7 @@ public class SiKmc extends AbstractEtchingKmc {
     for (int k = 0; k < 4; k++) {
       SiAtom neighbour = atom.getNeighbour(k);
       if (neighbour.getN1() == 3) {
-        list.addAtom(neighbour);
+        getList().addAtom(neighbour);
       }
     }
     return atom.getZ() < minHeight * 2;
@@ -70,9 +70,9 @@ public class SiKmc extends AbstractEtchingKmc {
   public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
     
-    double scaleX = binX / (lattice.getHexaSizeI() * ((SiLattice) lattice).getUnitCell().getLimitX());
-    double scaleY = binY / (lattice.getHexaSizeJ() * ((SiLattice) lattice).getUnitCell().getLimitY());
-    ListIterator<AbstractAtom> iterator = list.getIterator();
+    double scaleX = binX / (getLattice().getHexaSizeI() * ((SiLattice) getLattice()).getUnitCell().getLimitX());
+    double scaleY = binY / (getLattice().getHexaSizeJ() * ((SiLattice) getLattice()).getUnitCell().getLimitY());
+    ListIterator<AbstractAtom> iterator = getList().getIterator();
 
     for (int i = 0; i < binY; i++) {
       for (int j = 0; j < binX; j++) {

@@ -20,7 +20,7 @@ public abstract class AbstractEtchingKmc extends AbstractKmc {
 
   @Override
   public AbstractEtchingLattice getLattice() {
-    return (AbstractEtchingLattice) lattice;
+    return (AbstractEtchingLattice) getLattice();
   }
 
 }
