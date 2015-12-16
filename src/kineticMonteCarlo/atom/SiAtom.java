@@ -88,14 +88,14 @@ public class SiAtom extends AbstractAtom {
   private void remove1st() {
     n1--;
     if (n1 < 3 && list != null) {
-      list.addTotalProbability(probabilities[n1 * 16 + n2] - probabilities[(n1 + 1) * 16 + n2]);
+      list.addTotalProbability(getProbabilities()[n1 * 16 + n2] - getProbabilities()[(n1 + 1) * 16 + n2]);
     }
   }
 
   private void remove2nd() {
     n2--;
     if (n1 < 4 && list != null) {
-      list.addTotalProbability(probabilities[n1 * 16 + n2] - probabilities[n1 * 16 + n2 + 1]);
+      list.addTotalProbability(getProbabilities()[n1 * 16 + n2] - getProbabilities()[n1 * 16 + n2 + 1]);
     }
   }
 
@@ -132,7 +132,7 @@ public class SiAtom extends AbstractAtom {
   public void remove() {
     if (!isRemoved()) {
       if (n1 < 4 && list != null) {
-        list.addTotalProbability(-probabilities[n1 * 16 + n2]);
+        list.addTotalProbability(-getProbabilities()[n1 * 16 + n2]);
       }
       remove();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
@@ -152,11 +152,11 @@ public class SiAtom extends AbstractAtom {
   
   @Override
   public double getProbability() {
-    return probabilities[n1 * 16 + n2];
+    return getProbabilities()[n1 * 16 + n2];
   }
 
   @Override
   public boolean isEligible() {
-    return probabilities[n1 * 16 + n2] > 0 && probabilities[n1 * 16 + n2] < 4;
+    return getProbabilities()[n1 * 16 + n2] > 0 && getProbabilities()[n1 * 16 + n2] < 4;
   }
 }

@@ -30,7 +30,7 @@ public class BasicLattice extends AbstractEtchingLattice {
   @Override
   public void setProbabilities(double[] probabilities) {
     for (int i = 0; i < atoms.length; i++) {
-      atoms[i].initialize(probabilities);
+      atoms[i].setProbabilities(probabilities);
     }
   }
 

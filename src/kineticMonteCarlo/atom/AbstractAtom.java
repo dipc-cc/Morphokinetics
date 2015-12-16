@@ -13,7 +13,7 @@ import utils.list.IProbabilityHolder;
 public abstract class AbstractAtom {
 
   protected IProbabilityHolder list;
-  protected double[] probabilities;
+  private double[] probabilities;
   private int numberOfNeighbours;
   private boolean removed = false;
 
@@ -28,8 +28,12 @@ public abstract class AbstractAtom {
   public static final int KINK = 6;
   public static final int BULK = 7;
   
-  public void initialize(double[] probabilities) {
+  public void setProbabilities(double[] probabilities) {
     this.probabilities = probabilities;
+  }
+
+  public double[] getProbabilities() {
+    return probabilities;
   }
 
   public void setOnList(IProbabilityHolder list) {
@@ -81,4 +85,6 @@ public abstract class AbstractAtom {
   public void setNeighbour(AbstractAtom lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+  
+  
 }
