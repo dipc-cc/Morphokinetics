@@ -380,7 +380,7 @@ public class AgAtom extends AbstractGrowthAtom {
       modified.addBondAtom(this);
     }
 
-    getList().addTotalProbability(-totalProbability);
+    addTotalProbability(-totalProbability);
     this.setOnList(null);
   }
 
@@ -394,7 +394,7 @@ public class AgAtom extends AbstractGrowthAtom {
       tmp += totalProbability;
     }
     if (this.isOnList()) {
-      getList().addTotalProbability(tmp);
+      addTotalProbability(tmp);
     }
   }
 
@@ -416,7 +416,7 @@ public class AgAtom extends AbstractGrowthAtom {
     totalProbability += bondsProbability[neighborpos];
     tmp += bondsProbability[neighborpos];
 
-    getList().addTotalProbability(tmp);
+    addTotalProbability(tmp);
   }
 
   private double probJumpToNeighbour(int position) {

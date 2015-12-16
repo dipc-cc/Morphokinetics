@@ -86,15 +86,15 @@ public abstract class AbstractAtom {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
-  public IProbabilityHolder getList() {
-    return list;
-  }
-
   public void setList(IProbabilityHolder list) {
     this.list = list;
   }
   
   public boolean isListNull() {
     return list == null;
-  } 
+  }
+  
+  public void addTotalProbability(double probabilityChanges) {
+    list.addTotalProbability(probabilityChanges);
+  }
 }
