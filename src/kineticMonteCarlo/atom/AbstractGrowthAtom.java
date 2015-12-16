@@ -17,7 +17,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private byte type;
   private double[][] probabilities;
   private double totalProbability;
-  protected double[] bondsProbability;
+  private double[] bondsProbability;
   private float angle;
   private boolean occupied;
   private boolean outside;
@@ -26,14 +26,15 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private int multiplier;
   private ModifiedBuffer modified;
 
-  public AbstractGrowthAtom(short iHexa, short jHexa) {
+  public AbstractGrowthAtom(short iHexa, short jHexa, int numberOfNeighbours) {
 
     this.occupied = false;
     this.outside = true;
     this.iHexa = iHexa;
     this.jHexa = jHexa;
     
-    this.bondsProbability = null;
+    this.setNumberOfNeighbours(numberOfNeighbours);
+    this.bondsProbability = new double[numberOfNeighbours];
     multiplier = 1;
   }
   

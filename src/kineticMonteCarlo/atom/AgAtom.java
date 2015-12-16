@@ -4,7 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.StaticRandom;
 
@@ -32,13 +31,10 @@ public class AgAtom extends AbstractGrowthAtom {
   public static final byte KINK = KINK_A;
   
   public AgAtom(short iHexa, short jHexa) {
-    super(iHexa, jHexa);
+    super(iHexa, jHexa, 6);
     if (typesTable == null) {
       typesTable = new AgTypesTable();
     }
-
-    setNumberOfNeighbours(6);
-    bondsProbability = new double[getNumberOfNeighbours()];
   }
 
   public void setNeighbour(AgAtom a, int pos) {

@@ -20,15 +20,12 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   private HopsPerStep distancePerStep;
 
   public GrapheneAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
-    super(iHexa, jHexa);
+    super(iHexa, jHexa, 12);
   
     this.distancePerStep = distancePerStep;
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
-    
-    setNumberOfNeighbours(12);
-    bondsProbability = new double[getNumberOfNeighbours()];
   }
 
   @Override
