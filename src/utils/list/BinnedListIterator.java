@@ -26,7 +26,7 @@ public class BinnedListIterator implements ListIterator {
   private void addBinsToList(BinnedList list) {
 
     for (int i = 0; i < list.getBins().length; i++) {
-      if (list.level > 0) {
+      if (list.getLevel() > 0) {
         addBinsToList((BinnedList) list.getBins()[i]);
       } else {
         iterators.add((list.getBins()[i]).getIterator());

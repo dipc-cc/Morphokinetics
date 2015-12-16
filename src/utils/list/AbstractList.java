@@ -6,15 +6,22 @@ import java.util.ListIterator;
 public abstract class AbstractList implements IProbabilityHolder {
 
   protected static final int EVENTS_PER_CLEANUP = 2048;
-  protected int removalsSinceLastCleanup = 0;
-  protected boolean autoCleanup = false;
+  private int removalsSinceLastCleanup;
+  private boolean autoCleanup;
 
-  protected double time;
-  protected double depositionProbability = 0;
-  protected int totalAtoms;
-  protected double totalProbability;
-  protected IProbabilityHolder parent;
-  protected int level;
+  private double time;
+  private double depositionProbability;
+  private int totalAtoms;
+  private double totalProbability;
+  private IProbabilityHolder parent;
+  private int level;
+  
+  public AbstractList() {
+    time = 0;
+    depositionProbability = 0;
+    autoCleanup = false;
+    removalsSinceLastCleanup = 0;
+  }
 
   public abstract void addAtom(AbstractAtom a);
 
@@ -23,12 +30,12 @@ public abstract class AbstractList implements IProbabilityHolder {
   public double getTime() {
     return time;
   }
+  
+  public void addTime(double time) {
+    this.time += time;
+  }
 
   public abstract int cleanup();
-
-  public int getTotalAtoms() {
-    return totalAtoms;
-  }
 
   public AbstractList autoCleanup(boolean auto) {
     this.autoCleanup = auto;
@@ -43,6 +50,18 @@ public abstract class AbstractList implements IProbabilityHolder {
     this.depositionProbability = depositionProbability;
   }
 
+  public int getRemovalsSinceLastCleanup() {
+    return removalsSinceLastCleanup;
+  }
+  
+  public void resetRemovalsSinceLastCleanup() {
+    removalsSinceLastCleanup = 0;
+  }
+  
+  public void addRemovalsSinceLastCleanup() {
+    removalsSinceLastCleanup++;
+  }
+  
   @Override
   public void addTotalProbability(double prob) {
     if (prob != 0) {
@@ -56,16 +75,52 @@ public abstract class AbstractList implements IProbabilityHolder {
   public void setParent(IProbabilityHolder parent) {
     this.parent = parent;
   }
+  
+  public IProbabilityHolder getParent() {
+    return parent;
+  }
 
+  public boolean autoCleanup() {
+    return autoCleanup;
+  }
+  
   public abstract double getTotalProbabilityFromList();
 
-  public abstract double getTotalProbability();
+  public double getTotalProbability() {
+     return totalProbability;
+  }
 
-  public abstract void reset();
-
+  public void reset() {
+    time = 0;
+    totalProbability = 0;
+    totalAtoms = 0;
+  }
+    
   public abstract AbstractAtom getAtomAt(int pos);
 
   public abstract int getSize();
 
   public abstract ListIterator getIterator();
+
+  public int getTotalAtoms() {
+    return totalAtoms;
+  }
+
+  public void setTotalAtoms(int totalAtoms) {
+    this.totalAtoms = totalAtoms;
+  }
+
+  /**
+   * @return the level
+   */
+  public int getLevel() {
+    return level;
+  }
+
+  /**
+   * @param level the level to set
+   */
+  public final void setLevel(int level) {
+    this.level = level;
+  }
 }

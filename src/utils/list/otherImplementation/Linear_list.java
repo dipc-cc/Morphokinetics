@@ -17,8 +17,9 @@ public class Linear_list extends AbstractList {
     private final LinkedList<AbstractAtom> surface;
 
     public Linear_list() {
+      super();
         surface = new LinkedList();
-        this.level=-1;
+        this.setLevel(-1);
     }
 
     @Override
@@ -38,50 +39,52 @@ public class Linear_list extends AbstractList {
 
     @Override
     public void reset() {
-        surface.clear();
-        time = 0;
-        totalProbability = 0;
-        totalAtoms=0;
+      super.reset();
+      surface.clear();
+      setTotalAtoms(0);
     }
 
     @Override
     public int cleanup() {
 
-        int temp = totalAtoms;
+        int temp = getTotalAtoms();
         ListIterator<AbstractAtom> LI = surface.listIterator();
         while (LI.hasNext()) {
             AbstractAtom AC = LI.next();
             if (!AC.isEligible()) {
                 AC.setList(null);
                 LI.remove();
-                totalAtoms--;
+                setTotalAtoms(getTotalAtoms() - 1);
             }
         }
-        return (temp - totalAtoms);
+        return (temp - getTotalAtoms());
     }
 
     @Override
     public void addAtom(AbstractAtom a) {
         surface.addFirst(a);
         a.setList(this);
-        totalProbability += a.getProbability();
-        totalAtoms++;
+        addTotalProbability(a.getProbability());
+        setTotalAtoms(getTotalAtoms() + 1);
     }
 
     @Override
     public AbstractAtom nextEvent() {
         
-        removalsSinceLastCleanup++;  
-        if (autoCleanup && removalsSinceLastCleanup>EVENTS_PER_CLEANUP) {this.cleanup(); removalsSinceLastCleanup=0;}
+        addRemovalsSinceLastCleanup();
+      if (autoCleanup() && getRemovalsSinceLastCleanup() > EVENTS_PER_CLEANUP) {
+        this.cleanup();
+        resetRemovalsSinceLastCleanup();
+      }
         
-        double position = StaticRandom.raw() * (totalProbability + depositionProbability);
+        double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
 
-        time -= Math.log(StaticRandom.raw()) / (totalProbability + depositionProbability);
+        addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
 
-        if (position < depositionProbability) {
+        if (position < getDepositionProbability()) {
             return null; //toca añadir un átomo nuevo
         }
-        position -= depositionProbability;
+        position -= getDepositionProbability();
         double prob_current = 0;
         ListIterator<AbstractAtom> LI = surface.listIterator();
         AbstractAtom AC = null;
@@ -91,14 +94,14 @@ public class Linear_list extends AbstractList {
             prob_current += AC.getProbability();
             if (prob_current > position) {
                 LI.remove();
-                totalAtoms--;
+                setTotalAtoms(getTotalAtoms() - 1);
                 return AC;
             }
         }
         
         if (AC!=null){
                 LI.remove();
-                totalAtoms--;}
+                setTotalAtoms(getTotalAtoms() - 1);}
         
        return AC;
     }
@@ -106,11 +109,6 @@ public class Linear_list extends AbstractList {
     @Override
     public int getSize() {
         return surface.size();
-    }
-
-    @Override
-    public double getTotalProbability() {
-        return totalProbability;
     }
 
     @Override

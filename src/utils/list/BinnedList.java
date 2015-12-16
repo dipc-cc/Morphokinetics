@@ -21,8 +21,8 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   private int currentBin;
 
   public BinnedList(int binAmount, int extraBinLevels) {
-
-    this.level = extraBinLevels;
+    super();
+    this.setLevel(extraBinLevels);
 
     if (extraBinLevels > 0) {
       bins = new BinnedList[binAmount];
@@ -41,7 +41,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
   private void updateCurrentList() {
 
-    while (bins[currentBin].getSize() > (totalAtoms * BIN_DIFFERENCE_FACTOR / bins.length)) {
+    while (bins[currentBin].getSize() > (getTotalAtoms() * BIN_DIFFERENCE_FACTOR / bins.length)) {
       currentBin++;
       if (currentBin == bins.length) {
         currentBin = 0;
@@ -52,28 +52,28 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   @Override
   public void addAtom(AbstractAtom atom) {
     updateCurrentList();
-    totalAtoms++;
-    totalProbability += atom.getProbability();
+    setTotalAtoms(getTotalAtoms() + 1);
+    addTotalProbability(atom.getProbability());
     bins[currentBin].addAtom(atom);
   }
 
   @Override
   public AbstractAtom nextEvent() {
 
-    if (autoCleanup && removalsSinceLastCleanup > EVENTS_PER_CLEANUP) {
+    if (autoCleanup() && getRemovalsSinceLastCleanup() > EVENTS_PER_CLEANUP) {
       this.cleanup();
-      removalsSinceLastCleanup = 0;
+      resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (totalProbability + depositionProbability);
-    if (this.parent == null) {
-      time -= Math.log(StaticRandom.raw()) / (totalProbability + depositionProbability);
+    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
+    if (this.getParent() == null) {
+      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
     }
 
-    if (position < depositionProbability) {
+    if (position < getDepositionProbability()) {
       return null; //we have to add a new atom
     }
-    position -= depositionProbability;
+    position -= getDepositionProbability();
     int selected = 0;
     double accumulation = bins[selected].getTotalProbability();
 
@@ -87,7 +87,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
     AbstractAtom atom = bins[selected].nextEvent();
     if (atom != null) {
-      totalAtoms--;
+      setTotalAtoms(getTotalAtoms() - 1);
     }
 
     return atom;
@@ -95,11 +95,11 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
   @Override
   public int cleanup() {
-    int totalAtomsOld = totalAtoms;
+    int totalAtomsOld = getTotalAtoms();
     for (AbstractList bin : bins) {
-      totalAtoms -= bin.cleanup();
+      setTotalAtoms(getTotalAtoms() - bin.cleanup());
     }
-    return (totalAtomsOld - totalAtoms);
+    return (totalAtomsOld - getTotalAtoms());
   }
 
   @Override
@@ -113,15 +113,8 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public double getTotalProbability() {
-    return totalProbability;
-  }
-
-  @Override
   public void reset() {
-    time = 0;
-    totalProbability = 0;
-    totalAtoms = 0;
+    super.reset();
     currentBin = 0;
     for (AbstractList bin : bins) {
       bin.reset();
@@ -141,7 +134,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
   @Override
   public int getSize() {
-    return totalAtoms;
+    return getTotalAtoms();
   }
 
   public void traceSizes(String separator) {
@@ -158,10 +151,6 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
   public AbstractList[] getBins() {
     return bins;
-  }
-
-  public int getLevel() {
-    return level;
   }
 
   @Override
