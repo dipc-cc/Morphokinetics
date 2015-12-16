@@ -243,7 +243,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   private void obtainRatesFromNeighbours(boolean equalRates) {
     if (equalRates) {
-      addTotalProbability(probJumpToNeighbour(getType(), 0) * 12.0);
+      addToTotalProbability(probJumpToNeighbour(getType(), 0) * 12.0);
     } else {
       if (getBondsProbability() == null) {
         setBondsProbability(PStack.getProbArray());
@@ -251,7 +251,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       for (int i = 0; i < 12; i++) {
 
         getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
-        addTotalProbability(getBondsProbability()[i]);
+        addToTotalProbability(getBondsProbability()[i]);
       }
     }
   }
