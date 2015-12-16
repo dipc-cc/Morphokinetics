@@ -20,7 +20,6 @@ public class BasicAtom extends AbstractAtom {
     this.y = y;
     this.numberOfNeighbours = 4;
     this.neighbours = new BasicAtom[numberOfNeighbours];
-    this.removed = false;
   }
   
   public short getX() {
@@ -65,18 +64,18 @@ public class BasicAtom extends AbstractAtom {
 
   public void remove1st() {
     type--;
-    if (type < 3 && !removed && list != null) {
+    if (type < 3 && !isRemoved() && list != null) {
       list.addTotalProbability(probabilities[type] - probabilities[type + 1]);
     }
   }
 
   @Override
   public void remove() {
-    if (!removed) {
+    if (!isRemoved()) {
       if (list != null) {
         list.addTotalProbability(-probabilities[type]);
       }
-      removed = true;
+      remove();
       for (int i = 0; i < numberOfNeighbours; i++) {
         if (neighbours[i] != null) {
           neighbours[i].remove1st();

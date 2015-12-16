@@ -115,7 +115,7 @@ public class SiAtom extends AbstractAtom {
     for (int i = 0; i < 4; i++) {
       if (getNeighbour(i) != null) {
         n2 += getNeighbour(i).getN1();
-        if (!removed) {
+        if (!isRemoved()) {
           n2--;
         }
       }
@@ -130,13 +130,11 @@ public class SiAtom extends AbstractAtom {
 
   @Override
   public void remove() {
-    if (!removed) {
+    if (!isRemoved()) {
       if (n1 < 4 && list != null) {
         list.addTotalProbability(-probabilities[n1 * 16 + n2]);
       }
-
-      removed = true;
-
+      remove();
       for (int i = 0; i < numberOfNeighbours; i++) {
         SiAtom atom1st = getNeighbour(i);
         if (atom1st != null) {

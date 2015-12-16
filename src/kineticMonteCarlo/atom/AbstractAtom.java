@@ -15,7 +15,7 @@ public abstract class AbstractAtom {
   protected IProbabilityHolder list;
   protected double[] probabilities;
   protected int numberOfNeighbours;
-  protected boolean removed = false;
+  private boolean removed = false;
 
   // Atoms types
   public static final int TERRACE = 0;
@@ -71,11 +71,10 @@ public abstract class AbstractAtom {
   }
 
   public void remove() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    removed = true;
   }
 
   public void setNeighbour(AbstractAtom lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-
 }
