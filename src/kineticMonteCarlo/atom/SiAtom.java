@@ -87,14 +87,14 @@ public class SiAtom extends AbstractAtom {
 
   private void remove1st() {
     n1--;
-    if (n1 < 3 && getList() != null) {
+    if (n1 < 3 && !isListNull()) {
       getList().addTotalProbability(getProbabilities()[n1 * 16 + n2] - getProbabilities()[(n1 + 1) * 16 + n2]);
     }
   }
 
   private void remove2nd() {
     n2--;
-    if (n1 < 4 && getList() != null) {
+    if (n1 < 4 && !isListNull()) {
       getList().addTotalProbability(getProbabilities()[n1 * 16 + n2] - getProbabilities()[n1 * 16 + n2 + 1]);
     }
   }
@@ -131,7 +131,7 @@ public class SiAtom extends AbstractAtom {
   @Override
   public void remove() {
     if (!isRemoved()) {
-      if (n1 < 4 && getList() != null) {
+      if (n1 < 4 && !isListNull()) {
         getList().addTotalProbability(-getProbabilities()[n1 * 16 + n2]);
       }
       remove();

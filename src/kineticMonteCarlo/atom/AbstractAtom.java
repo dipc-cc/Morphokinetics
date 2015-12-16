@@ -94,5 +94,7 @@ public abstract class AbstractAtom {
     this.list = list;
   }
   
-  
+  public boolean isListNull() {
+    return list == null;
+  } 
 }
