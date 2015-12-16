@@ -44,10 +44,6 @@ public abstract class AbstractAtom {
     return list != null;
   }
   
-  public boolean isListNull() {
-    return list == null;
-  }
-
   public abstract double getProbability();
 
   public abstract boolean isEligible();

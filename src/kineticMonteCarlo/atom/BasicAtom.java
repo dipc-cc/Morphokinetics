@@ -64,7 +64,7 @@ public class BasicAtom extends AbstractAtom {
 
   public void remove1st() {
     type--;
-    if (type < 3 && !isRemoved() && !isListNull()) {
+    if (type < 3 && !isRemoved() && isOnList()) {
       addTotalProbability(getProbabilities()[type] - getProbabilities()[type + 1]);
     }
   }
@@ -72,7 +72,7 @@ public class BasicAtom extends AbstractAtom {
   @Override
   public void remove() {
     if (!isRemoved()) {
-      if (!isListNull()) {
+      if (isOnList()) {
         addTotalProbability(-getProbabilities()[type]);
       }
       remove();
