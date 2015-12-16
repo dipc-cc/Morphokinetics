@@ -18,15 +18,15 @@ public abstract class AbstractAtom {
   private boolean removed = false;
 
   // Atoms types
-  public static final int TERRACE = 0;
-  public static final int CORNER = 1;
-  public static final int EDGE = 2;
-  public static final int ZIGZAG_EDGE = 2;
-  public static final int ARMCHAIR_EDGE = 3;
-  public static final int ZIGZAG_WITH_EXTRA = 4;
-  public static final int SICK = 5;
-  public static final int KINK = 6;
-  public static final int BULK = 7;
+  public static final byte TERRACE = 0;
+  public static final byte CORNER = 1;
+  public static final byte EDGE = 2;
+  public static final byte ZIGZAG_EDGE = 2;
+  public static final byte ARMCHAIR_EDGE = 3;
+  public static final byte ZIGZAG_WITH_EXTRA = 4;
+  public static final byte SICK = 5;
+  public static final byte KINK = 6;
+  public static final byte BULK = 7;
   
   public void setProbabilities(double[] probabilities) {
     this.probabilities = probabilities;

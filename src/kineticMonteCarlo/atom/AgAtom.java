@@ -19,20 +19,20 @@ public class AgAtom extends AbstractGrowthAtom {
   private byte nImmobile;
   private byte nMobile;
   
-  public static final int TERRACE = 0;
-  public static final int CORNER = 1;
-  public static final int EDGE_A = 2;
-  public static final int KINK_A = 3;
-  public static final int ISLAND = 4;
-  public static final int EDGE_B = 5;
-  public static final int KINK_B = 6;
+  public static final byte TERRACE = 0;
+  public static final byte CORNER = 1;
+  public static final byte EDGE_A = 2;
+  public static final byte KINK_A = 3;
+  public static final byte ISLAND = 4;
+  public static final byte EDGE_B = 5;
+  public static final byte KINK_B = 6;
   
   // Before we actually know the value of those, we simply use A type
-  public static final int EDGE = EDGE_A;
-  public static final int KINK = KINK_A;
+  public static final byte EDGE = EDGE_A;
+  public static final byte KINK = KINK_A;
   
-  public AgAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
-    super(iHexa, jHexa, distancePerStep);
+  public AgAtom(short iHexa, short jHexa) {
+    super(iHexa, jHexa);
     if (typesTable == null) {
       typesTable = new AgTypesTable();
     }
@@ -56,11 +56,11 @@ public class AgAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return occupied && (type < KINK_A);
+    return isOccupied() && (getType() < KINK_A);
   }
 
   private boolean isPartOfImmobilSubstrate() {
-    return occupied && (type == ISLAND);
+    return isOccupied() && (getType() == ISLAND);
   }
 
   public byte getNImmobile() {
@@ -74,13 +74,14 @@ public class AgAtom extends AbstractGrowthAtom {
   @Override
   public void clear() {
 
-    nImmobile = nMobile = type = TERRACE;
-    occupied = false;
-    outside = false;
-
-    totalProbability = 0;
-    for (int i = 0; i < bondsProbability.length; i++) {
-      bondsProbability[i] = 0;
+    setType(TERRACE);
+    nImmobile = nMobile = TERRACE;
+    setOccupied(false);
+    setOutside(false);
+    
+    resetTotalProbability();
+    for (int i = 0; i < getBondsProbability().length; i++) {
+      getBondsProbability()[i] = 0;
     }
 
     setList(null);
@@ -96,10 +97,10 @@ public class AgAtom extends AbstractGrowthAtom {
       }
     }
 
-    if (type == EDGE_A) {
+    if (getType() == EDGE_A) {
       return aggrCalculateEdgeType(occupationCode);
     }
-    if (type == KINK_A) {
+    if (getType() == KINK_A) {
       return aggrCalculateKinkType(occupationCode);
     }
     return -1;
@@ -148,22 +149,22 @@ public class AgAtom extends AbstractGrowthAtom {
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
 
-    double linearSearch = StaticRandom.raw() * totalProbability;
+    double linearSearch = StaticRandom.raw() * getTotalProbability();
 
     double sum = 0;
     int cont = 0;
     while (true) {
-      sum += bondsProbability[cont++];
+      sum += getBondsProbability()[cont++];
       if (sum >= linearSearch) {
         break;
       }
-      if (cont == bondsProbability.length) {
+      if (cont == getBondsProbability().length) {
         break;
       }
     }
     cont--;
 
-    if (type == EDGE_A && neighbours[cont].getType() == CORNER) {
+    if (getType() == EDGE_A && neighbours[cont].getType() == CORNER) {
       return aheadCornerAtom(cont);
     }
 
@@ -238,15 +239,15 @@ public class AgAtom extends AbstractGrowthAtom {
 
     byte newType = typesTable.getType(--nImmobile, ++nMobile);
 
-    if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean immobileToMobile = (type >= KINK_A && newType < KINK_A);
-      type = newType;
-      modified.addOwnAtom(this);
-      if (nMobile > 0 && !occupied) {
-        modified.addBondAtom(this);
+    if (getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean immobileToMobile = (getType() >= KINK_A && newType < KINK_A);
+      setType(newType);
+      addOwnAtom();
+      if (nMobile > 0 && !isOccupied()) {
+        addBondAtom();
       }
 
-      if (immobileToMobile && occupied) {
+      if (immobileToMobile && isOccupied()) {
         for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
@@ -266,18 +267,18 @@ public class AgAtom extends AbstractGrowthAtom {
 
     byte newType = typesTable.getType(++nImmobile, --nMobile);
 
-    if (forceNucleation && occupied) {
+    if (forceNucleation && isOccupied()) {
       newType = ISLAND;
     }
 
-    if (type != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean mobileToImmobile = (type < KINK_A && newType >= KINK_A);
-      type = newType;
-      modified.addOwnAtom(this);
-      if (nMobile > 0 && !occupied) {
-        modified.addBondAtom(this);
+    if (getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean mobileToImmobile = (getType() < KINK_A && newType >= KINK_A);
+      setType(newType);
+      addOwnAtom();
+      if (nMobile > 0 && !isOccupied()) {
+        addBondAtom();
       }
-      if (mobileToImmobile && occupied) {
+      if (mobileToImmobile && isOccupied()) {
         for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
@@ -306,14 +307,14 @@ public class AgAtom extends AbstractGrowthAtom {
       newType = ISLAND;
     }
 
-    if (type != newType) {
-      boolean mobileToImmobile = (type < KINK_A && newType >= KINK_A);
-      type = newType;
-      modified.addOwnAtom(this);
-      if (nMobile > 0 && !occupied) {
-        modified.addBondAtom(this);
+    if (getType() != newType) {
+      boolean mobileToImmobile = (getType() < KINK_A && newType >= KINK_A);
+      setType(newType);
+      addOwnAtom();
+      if (nMobile > 0 && !isOccupied()) {
+        addBondAtom();
       }
-      if (mobileToImmobile && occupied) {
+      if (mobileToImmobile && isOccupied()) {
         for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
@@ -327,14 +328,14 @@ public class AgAtom extends AbstractGrowthAtom {
 
     byte newType = typesTable.getType(nImmobile, --nMobile);
 
-    if (type != newType) {
-      boolean immobileToMobile = (type >= KINK_A && newType < KINK_A);
-      type = newType;
-      modified.addOwnAtom(this);
-      if (nMobile > 0 && !occupied) {
-        modified.addBondAtom(this);
+    if (getType() != newType) {
+      boolean immobileToMobile = (getType() >= KINK_A && newType < KINK_A);
+      setType(newType);
+      addOwnAtom();
+      if (nMobile > 0 && !isOccupied()) {
+        addBondAtom();
       }
-      if (immobileToMobile && occupied) {
+      if (immobileToMobile && isOccupied()) {
         for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
@@ -346,29 +347,28 @@ public class AgAtom extends AbstractGrowthAtom {
 
   @Override
   public void deposit(boolean forceNucleation) {
-
-    occupied = true;
+    setOccupied(true);
     if (forceNucleation) {
-      type = ISLAND;
+      setType(ISLAND);
     }
 
-    byte originalType = type;
+    byte originalType = getType();
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
         neighbours[i].addOccupiedNeighbourProcess(originalType, forceNucleation);
       }
     }
 
-    modified.addOwnAtom(this);
+    addOwnAtom();
     if (nMobile > 0) {
-      modified.addBondAtom(this);
+      addBondAtom();
     }
-    totalProbability = 0;
+    resetTotalProbability();
   }
 
   @Override
   public void extract() {
-    occupied = false;
+    setOccupied(false);
 
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
@@ -377,21 +377,21 @@ public class AgAtom extends AbstractGrowthAtom {
     }
 
     if (nMobile > 0) {
-      modified.addBondAtom(this);
+      addBondAtom();
     }
 
-    addTotalProbability(-totalProbability);
+    addTotalProbability(-getTotalProbability());
     this.setList(null);
   }
 
   @Override
   public void updateAllRates() {
-    double tmp = -totalProbability;
-    totalProbability = 0;
+    double tmp = -getTotalProbability();
+    resetTotalProbability();
 
     if (this.isEligible()) {
       obtainRatesFromNeighbours();
-      tmp += totalProbability;
+      tmp += getTotalProbability();
     }
     if (this.isOnList()) {
       addTotalProbability(tmp);
@@ -400,8 +400,8 @@ public class AgAtom extends AbstractGrowthAtom {
 
   private void obtainRatesFromNeighbours() {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      bondsProbability[i] = probJumpToNeighbour(i);
-      totalProbability += bondsProbability[i];
+      getBondsProbability()[i] = probJumpToNeighbour(i);
+      addToTotalProbability(getBondsProbability()[i]);
     }
   }
 
@@ -409,12 +409,12 @@ public class AgAtom extends AbstractGrowthAtom {
   public void updateOneBound(int neighborpos) {
 
     double tmp = 0;
-    totalProbability -= bondsProbability[neighborpos];
-    tmp -= bondsProbability[neighborpos];
-    bondsProbability[neighborpos] = (float) probJumpToNeighbour(neighborpos);
+    addToTotalProbability(-getBondsProbability()[neighborpos]);
+    tmp -= getBondsProbability()[neighborpos];
+    getBondsProbability()[neighborpos] = (float) probJumpToNeighbour(neighborpos);
 
-    totalProbability += bondsProbability[neighborpos];
-    tmp += bondsProbability[neighborpos];
+    addToTotalProbability(getBondsProbability()[neighborpos]);
+    tmp += getBondsProbability()[neighborpos];
 
     addTotalProbability(tmp);
   }
@@ -425,31 +425,31 @@ public class AgAtom extends AbstractGrowthAtom {
       return 0;
     }
 
-    byte originType = type;
-    if (type == EDGE_A && (getOrientation() & 1) == 0) originType = EDGE_B;
-    if (type == KINK_A && (getOrientation() & 1) == 0) originType = KINK_B;
+    byte originType = getType();
+    if (getType() == EDGE_A && (getOrientation() & 1) == 0) originType = EDGE_B;
+    if (getType() == KINK_A && (getOrientation() & 1) == 0) originType = KINK_B;
     int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
-    if (type == EDGE_A && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
+    if (getType() == EDGE_A && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
       int otherCorner = 0;
       if (originType == EDGE_A) otherCorner = EDGE_B;
       if (originType == EDGE_B) otherCorner = EDGE_A;
-      return probabilities[originType][otherCorner];
+      return getProbability(originType, otherCorner);
     } else {
       destination = (byte) Math.min(destination, 2);
       if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
         destination = EDGE_B;
       }
 
-      return probabilities[originType][destination];
+      return getProbability(originType, destination);
     }
   }
 
   @Override
   public byte getTypeWithoutNeighbour(int posNeighbour) {
 
-    if (!neighbours[posNeighbour].isOccupied()) return type;
+    if (!neighbours[posNeighbour].isOccupied()) return getType();
 
     if (neighbours[posNeighbour].getType() < KINK_A) {
       return typesTable.getType(nImmobile, nMobile - 1);

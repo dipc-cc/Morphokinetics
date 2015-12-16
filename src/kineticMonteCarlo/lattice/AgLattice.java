@@ -27,19 +27,19 @@ public class AgLattice extends AbstractGrowthLattice {
 
     atoms = new AgAtom[hexaSizeI][hexaSizeJ];
 
-    createAtoms(distancePerStep);
+    createAtoms();
     setAngles();
   }
 
-  private void createAtoms(HopsPerStep distancePerStep) {
-    instantiateAtoms(distancePerStep);
+  private void createAtoms() {
+    instantiateAtoms();
     interconnectAtoms();
   }
 
-  private void instantiateAtoms(HopsPerStep distancePerStep) {
+  private void instantiateAtoms() {
     for (int i = 0; i < hexaSizeI; i++) {
       for (int j = 0; j < hexaSizeJ; j++) {
-        atoms[i][j] = new AgAtom((short) i, (short) j, distancePerStep);
+        atoms[i][j] = new AgAtom((short) i, (short) j);
       }
     }
   }

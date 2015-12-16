@@ -27,7 +27,6 @@ public class ModifiedBuffer {
 
   public void addOwnAtom(AbstractGrowthAtom a) {
     buffer.add(a);
-
   }
 
   public void addBondAtom(AbstractGrowthAtom a) {

@@ -4,7 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
@@ -15,25 +14,25 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   /** TODO document the types and change them to constants
    * 
    */
-  protected byte type;
-  protected double[][] probabilities;
-  protected double totalProbability;
+  private byte type;
+  private double[][] probabilities;
+  private double totalProbability;
   protected double[] bondsProbability;
-  protected float angle;
-  protected boolean occupied = false;
-  protected boolean outside = true;
-  protected short iHexa;
-  protected short jHexa;
+  private float angle;
+  private boolean occupied;
+  private boolean outside;
+  private final short iHexa;
+  private final short jHexa;
   private int multiplier;
-  protected ModifiedBuffer modified;
-  protected HopsPerStep distancePerStep;
+  private ModifiedBuffer modified;
 
-  public AbstractGrowthAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public AbstractGrowthAtom(short iHexa, short jHexa) {
 
+    this.occupied = false;
+    this.outside = true;
     this.iHexa = iHexa;
     this.jHexa = jHexa;
     
-    this.distancePerStep = distancePerStep;
     this.bondsProbability = null;
     multiplier = 1;
   }
@@ -123,10 +122,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public boolean isOccupied() {
     return occupied;
   }
+  
+  public void setOccupied(boolean occupied) {
+    this.occupied = occupied;
+  }
 
   public double getProbability(int pos) {
-    if (bondsProbability != null) {
-      return bondsProbability[pos];
+    if (getBondsProbability() != null) {
+      return getBondsProbability()[pos];
     } else {
       return totalProbability / getNumberOfNeighbours();
     }
@@ -137,6 +140,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return type;
   }
 
+  public void setType(byte type) {
+    this.type = type;
+  }
+  
   public void setMultiplier(int multiplier) {
     this.multiplier = multiplier;
   }
@@ -150,4 +157,52 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     this.modified = modified;
   }
 
+  public short getiHexa() {
+    return iHexa;
+  }
+
+  public short getjHexa() {
+    return jHexa;
+  }
+
+  public void addOwnAtom() {
+    modified.addOwnAtom(this);
+  }
+  
+  public void addBondAtom() {
+    modified.addBondAtom(this);
+  }
+
+  /**
+   * @return the bondsProbability
+   */
+  public double[] getBondsProbability() {
+    return bondsProbability;
+  }
+
+  /**
+   * @param bondsProbability the bondsProbability to set
+   */
+  public void setBondsProbability(double[] bondsProbability) {
+    this.bondsProbability = bondsProbability;
+  }
+  
+  public double getTotalProbability() {
+    return totalProbability;
+  }
+  
+  public void resetTotalProbability() {
+    totalProbability = 0;
+  }
+  
+  public void addToTotalProbability(double probability) {
+    totalProbability += probability;
+  }
+
+  /**
+   * @return the probabilities
+   */
+  public double getProbability(int x, int y) {
+    return probabilities[x][y];
+  }
 }

@@ -17,9 +17,12 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   private static final ArrayStack PStack = new ArrayStack(12);
   private static GrapheneTypesTable typesTable;
   private byte n1, n2, n3;
+  private HopsPerStep distancePerStep;
 
   public GrapheneAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
-    super(iHexa, jHexa, distancePerStep);
+    super(iHexa, jHexa);
+  
+    this.distancePerStep = distancePerStep;
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
@@ -36,7 +39,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return occupied && (type < KINK);
+    return isOccupied() && (getType() < KINK);
   } // KINK and BULK atoms types are considered immobil atoms
 
   /**
@@ -74,16 +77,17 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   public void clear() {
 
-    n1 = n2 = n3 = type = TERRACE;
-    occupied = false;
-    outside = false;
+    setType(TERRACE);
+    n1 = n2 = n3 = TERRACE;
+    setOccupied(false);
+    setOutside(false);
 
-    totalProbability = 0;
+    resetTotalProbability();
     setList(null);
 
-    if (bondsProbability != null) {
-      PStack.returnProbArray(bondsProbability);
-      bondsProbability = null;
+    if (getBondsProbability() != null) {
+      PStack.returnProbArray(getBondsProbability());
+      setBondsProbability(null);
     }
   }
 
@@ -92,7 +96,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
     if (n1 == 1) {
       for (int i = 0; i < 3; i++) {
-        if (lattice.getNeighbour(iHexa, jHexa, i).isOccupied()) {
+        if (lattice.getNeighbour(getiHexa(), getjHexa(), i).isOccupied()) {
           return i;
         }
       }
@@ -108,30 +112,30 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   public AbstractGrowthAtom chooseRandomHop() {
     double raw = StaticRandom.raw();
 
-    if (bondsProbability == null) {
-      return lattice.getNeighbour(iHexa, jHexa, (int) (raw * 12));
+    if (getBondsProbability() == null) {
+      return lattice.getNeighbour(getiHexa(), getjHexa(), (int) (raw * 12));
     }
 
-    double linearSearch = raw * totalProbability;
+    double linearSearch = raw * getTotalProbability();
 
     double sum = 0;
     int cont = 0;
     while (true) {
-      sum += bondsProbability[cont++];
+      sum += getBondsProbability()[cont++];
       if (sum >= linearSearch) {
         break;
       }
-      if (cont == bondsProbability.length) {
+      if (cont == getBondsProbability().length) {
         break;
       }
     }
     //System.out.println(bondsProbability.length);
-    return lattice.getNeighbour(iHexa, jHexa, cont - 1);
+    return lattice.getNeighbour(getiHexa(), getjHexa(), cont - 1);
   }
 
   private void add1stNeighbour(boolean forceNucleation) {
     byte newType = typesTable.getType(++n1, n2, n3);
-    if (forceNucleation && occupied) {
+    if (forceNucleation && isOccupied()) {
       newType = BULK;
     }
     evaluateModifiedWhenAddNeigh(newType);
@@ -169,27 +173,27 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   @Override
   public void deposit(boolean forceNucleation) {
-    occupied = true;
+    setOccupied(true);
     if (forceNucleation) {
-      type = TERRACE;
+      setType(TERRACE);
     }
     int i = 0;
 
     for (; i < 3; i++) {
-      lattice.getNeighbour(iHexa, jHexa, i).add1stNeighbour(forceNucleation);
+      lattice.getNeighbour(getiHexa(), getjHexa(), i).add1stNeighbour(forceNucleation);
     }
     for (; i < 9; i++) {
-      lattice.getNeighbour(iHexa, jHexa, i).add2ndNeighbour();
+      lattice.getNeighbour(getiHexa(), getjHexa(), i).add2ndNeighbour();
     }
     for (; i < 12; i++) {
-      lattice.getNeighbour(iHexa, jHexa, i).add3rdNeighbour();
+      lattice.getNeighbour(getiHexa(), getjHexa(), i).add3rdNeighbour();
     }
 
-    modified.addOwnAtom(this);
+    addOwnAtom();
     if (getN1N2N3() > 0) {
-      modified.addBondAtom(this);
+      addBondAtom();
     }
-    totalProbability = 0;
+    resetTotalProbability();
   }
 
   /**
@@ -198,39 +202,39 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public void extract() {
-    occupied = false;
+    setOccupied(false);
 
     int i = 0;
     for (; i < 3; i++) {
-      lattice.getNeighbour(iHexa, jHexa, i).remove1stNeighbour();
+      lattice.getNeighbour(getiHexa(), getjHexa(), i).remove1stNeighbour();
     }
     for (; i < 9; i++) {
-      lattice.getNeighbour(iHexa, jHexa, i).remove2ndNeighbour();
+      lattice.getNeighbour(getiHexa(), getjHexa(), i).remove2ndNeighbour();
     }
     for (; i < 12; i++) {
-      lattice.getNeighbour(iHexa, jHexa, i).remove3rdNeighbour();
+      lattice.getNeighbour(getiHexa(), getjHexa(), i).remove3rdNeighbour();
     }
 
     if (getN1N2N3() > 0) {
-      modified.addBondAtom(this);
+      addBondAtom();
     }
 
-    addTotalProbability(-totalProbability);
+    addTotalProbability(-getTotalProbability());
     this.setList(null);
-    if (bondsProbability != null) {
-      PStack.returnProbArray(bondsProbability);
-      bondsProbability = null;
+    if (getBondsProbability() != null) {
+      PStack.returnProbArray(getBondsProbability());
+      setBondsProbability(null);
     }
   }
 
   @Override
   public void updateAllRates() {
-    double temp = -totalProbability;
-    totalProbability = 0;
+    double temp = -getTotalProbability();
+    resetTotalProbability();
 
     if (this.isEligible()) {
       obtainRatesFromNeighbours(areAllRatesTheSame());
-      temp += totalProbability;
+      temp += getTotalProbability();
     }
     if (this.isOnList()) {
       addTotalProbability(temp);
@@ -239,15 +243,15 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   private void obtainRatesFromNeighbours(boolean equalRates) {
     if (equalRates) {
-      totalProbability += probJumpToNeighbour(type, 0) * 12.0;
+      addTotalProbability(probJumpToNeighbour(getType(), 0) * 12.0);
     } else {
-      if (bondsProbability == null) {
-        bondsProbability = PStack.getProbArray();
+      if (getBondsProbability() == null) {
+        setBondsProbability(PStack.getProbArray());
       }
       for (int i = 0; i < 12; i++) {
 
-        bondsProbability[i] = probJumpToNeighbour(type, i);
-        totalProbability += bondsProbability[i];
+        getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
+        addTotalProbability(getBondsProbability()[i]);
       }
     }
   }
@@ -257,7 +261,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return false;
     }
     for (int i = 11; i >= 3; i--) {
-      if (lattice.getNeighbour(iHexa, jHexa, i).getType() != 0) {
+      if (lattice.getNeighbour(getiHexa(), getjHexa(), i).getType() != 0) {
         return false;
       }
     }
@@ -285,24 +289,24 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         break;
     }
 
-    if (bondsProbability == null) {
-      double newRate = probJumpToNeighbour(type, i);
-      if (newRate * 12 != totalProbability) {
-        double independentProbability = totalProbability / 12.0;
-        bondsProbability = PStack.getProbArray();
+    if (getBondsProbability() == null) {
+      double newRate = probJumpToNeighbour(getType(), i);
+      if (newRate * 12 != getTotalProbability()) {
+        double independentProbability = getTotalProbability() / 12.0;
+        setBondsProbability(PStack.getProbArray());
         for (int a = 0; a < 12; a++) {
-          bondsProbability[a] = independentProbability;
+          getBondsProbability()[a] = independentProbability;
         }
-        bondsProbability[i] = newRate;
-        totalProbability += (newRate - independentProbability);
+        getBondsProbability()[i] = newRate;
+        addToTotalProbability(newRate - independentProbability);
         temp += (newRate - independentProbability);
       }
     } else {
-      totalProbability -= bondsProbability[i];
-      temp -= bondsProbability[i];
-      bondsProbability[i] = probJumpToNeighbour(type, i);
-      totalProbability += bondsProbability[i];
-      temp += bondsProbability[i];
+      addToTotalProbability(-getBondsProbability()[i]);
+      temp -= getBondsProbability()[i];
+      getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
+      addToTotalProbability(getBondsProbability()[i]);
+      temp += getBondsProbability()[i];
     }
     addTotalProbability(temp);
 
@@ -316,7 +320,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   private double probJumpToNeighbour(int originType, int pos) {
 
-    AbstractGrowthAtom atom = lattice.getNeighbour(iHexa, jHexa, pos);
+    AbstractGrowthAtom atom = lattice.getNeighbour(getiHexa(), getjHexa(), pos);
 
     if (atom.isOccupied()) {
 
@@ -328,7 +332,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     double rate;
     int multiplier = super.getMultiplier();
     if (multiplier != 1) {
-      rate = probabilities[originType][lastTemp] / multiplier;
+      rate = getProbability(originType, lastTemp) / multiplier;
       super.setMultiplier(1);
     } else {
       int hops = distancePerStep.getDistancePerStep(originType, originType);
@@ -337,10 +341,10 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         case TERRACE:
         case ZIGZAG_EDGE:
         case ARMCHAIR_EDGE:
-          rate = probabilities[originType][lastTemp] / (hops * hops);
+          rate = getProbability(originType, lastTemp) / (hops * hops);
           break;
         default:
-          rate = probabilities[originType][lastTemp];
+          rate = getProbability(originType, lastTemp);
           break;
       }
     }
@@ -368,25 +372,25 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   private void evaluateModifiedWhenRemNeigh(byte newType) {
-    if (type != newType) {
-      type = newType;
-      if (occupied) {
-        modified.addOwnAtom(this);
+    if (getType() != newType) {
+      setType(newType);
+      if (isOccupied()) {
+        addOwnAtom();
       }
-      if (getN1N2N3() > 0 && !occupied) {
-        modified.addBondAtom(this);
+      if (getN1N2N3() > 0 && !isOccupied()) {
+        addBondAtom();
       }
     }
   }
 
   private void evaluateModifiedWhenAddNeigh(byte newType) {
-    if (type != newType) {
-      type = newType;
-      if (occupied) {
-        modified.addOwnAtom(this);
+    if (getType() != newType) {
+      setType(newType);
+      if (isOccupied()) {
+        addOwnAtom();
       }
-      if (getN1N2N3() > 1 && !occupied) {
-        modified.addBondAtom(this);
+      if (getN1N2N3() > 1 && !isOccupied()) {
+        addBondAtom();
       }
     }
   }
