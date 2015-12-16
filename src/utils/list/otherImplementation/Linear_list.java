@@ -52,7 +52,7 @@ public class Linear_list extends AbstractList {
         while (LI.hasNext()) {
             AbstractAtom AC = LI.next();
             if (!AC.isEligible()) {
-                AC.setOnList(null);
+                AC.setList(null);
                 LI.remove();
                 totalAtoms--;
             }
@@ -63,7 +63,7 @@ public class Linear_list extends AbstractList {
     @Override
     public void addAtom(AbstractAtom a) {
         surface.addFirst(a);
-        a.setOnList(this);
+        a.setList(this);
         totalProbability += a.getProbability();
         totalAtoms++;
     }

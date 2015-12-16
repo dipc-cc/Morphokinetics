@@ -83,14 +83,14 @@ public class SiLattice extends AbstractEtchingLattice {
     for (int i = 0; i < this.hexaSizeJ; i++) {
       for (int j = 0; j < this.hexaSizeI; j++) {
         for (int a = 0; a < this.unitCellSize; a++) {
-          atoms[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].setOnList(null);
+          atoms[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].setList(null);
           atoms[(((hexaSizeK - 1) * hexaSizeJ + i) * hexaSizeI + j) * unitCellSize + a].unRemove();
         }
       }
     }
 
     for (int k = 0; k < (hexaSizeK - 1) * hexaSizeJ * hexaSizeI * unitCellSize; k++) {
-      atoms[k].setOnList(null);
+      atoms[k].setList(null);
       atoms[k].unRemove();
       atoms[k].setAsBulk();
     }

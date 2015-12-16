@@ -83,7 +83,7 @@ public class AgAtom extends AbstractGrowthAtom {
       bondsProbability[i] = 0;
     }
 
-    setOnList(null);
+    setList(null);
   }
 
   @Override
@@ -381,7 +381,7 @@ public class AgAtom extends AbstractGrowthAtom {
     }
 
     addTotalProbability(-totalProbability);
-    this.setOnList(null);
+    this.setList(null);
   }
 
   @Override

@@ -59,7 +59,7 @@ public class BasicKmc extends AbstractEtchingKmc {
     }
 
     atom.remove();
-    atom.setOnList(null);
+    atom.setList(null);
     for (int k = 0; k < 4; k++) {
       if (atom.getNeighbour(k).getType() == 3) {
         list.addAtom(atom.getNeighbour(k));

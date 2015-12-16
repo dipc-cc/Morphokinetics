@@ -56,7 +56,7 @@ public class SiKmc extends AbstractEtchingKmc {
     // I am not sure that the next line is correct (Joseba). However,
     if (atom == null) return false; // next even can be null and we should be ready to handle this
     atom.remove();
-    atom.setOnList(null);
+    atom.setList(null);
     for (int k = 0; k < 4; k++) {
       SiAtom neighbour = atom.getNeighbour(k);
       if (neighbour.getN1() == 3) {

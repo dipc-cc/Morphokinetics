@@ -38,7 +38,7 @@ public class BasicLattice extends AbstractEtchingLattice {
   public void reset() {
     for (int i = 0; i < hexaSizeJ; i++) {
       for (int j = 0; j < hexaSizeI; j++) {
-        atoms[i * hexaSizeI + j].setOnList(null);
+        atoms[i * hexaSizeI + j].setList(null);
         atoms[i * hexaSizeI + j].unRemove();
       }
     }
