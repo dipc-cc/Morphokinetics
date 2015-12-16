@@ -9,12 +9,13 @@ import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.lattice.BasicLattice;
 import utils.list.ListConfiguration;
 import java.util.ListIterator;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
 
 /**
  *
  * @author Nestor
  */
-public class BasicKmc extends AbstractEtchingKmc {
+public class BasicKmc extends AbstractKmc {
 
   private double minHeight;
 

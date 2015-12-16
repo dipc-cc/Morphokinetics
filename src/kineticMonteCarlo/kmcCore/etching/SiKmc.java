@@ -8,13 +8,14 @@ import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.lattice.SiLattice;
 import java.util.ListIterator;
+import kineticMonteCarlo.kmcCore.AbstractKmc;
 import utils.MathUtils;
 
 /**
  *
  * @author Nestor
  */
-public class SiKmc extends AbstractEtchingKmc {
+public class SiKmc extends AbstractKmc {
 
   private final double minHeight;
 
