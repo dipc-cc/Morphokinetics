@@ -22,14 +22,14 @@ public class AgSimulation extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.rates = new AgRatesFactory();
-    this.kmc = new AgKmc(config,
-            parser.getHexaSizeI(), 
-            parser.getHexaSizeJ(),
-            parser.justCentralFlake(),
-            (float) parser.getCoverage()/100,
-            parser.useMaxPerimeter(),
-            parser.getPerimeterType());
-    initialiseRates(rates, kmc, parser);
+    this.setRates(new AgRatesFactory());
+    this.setKmc(new AgKmc(getConfig(),
+            getParser().getHexaSizeI(), 
+            getParser().getHexaSizeJ(),
+            getParser().justCentralFlake(),
+            (float) getParser().getCoverage()/100,
+            getParser().useMaxPerimeter(),
+            getParser().getPerimeterType()));
+    initialiseRates(getRates(), getKmc(), getParser());
   }
 }

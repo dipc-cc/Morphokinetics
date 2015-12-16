@@ -17,29 +17,31 @@ import ratesLibrary.IRatesFactory;
  */
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
-  public AbstractGrowthSimulation(Parser myParser) {
-    super(myParser);
+  private GrowthKmcFrame frame;
+  
+  public AbstractGrowthSimulation(Parser parser) {
+    super(parser);
   }
 
   @Override
-  protected void initialiseRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser) {
-    double depositionRate = ratesFactory.getDepositionRate(myParser.getTemperature());
-    double islandDensity = ratesFactory.getIslandDensity(myParser.getTemperature());
-    this.kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
-    this.kmc.initialiseRates(ratesFactory.getRates(myParser.getTemperature()));
+  protected void initialiseRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser parser) {
+    double depositionRate = ratesFactory.getDepositionRate(parser.getTemperature());
+    double islandDensity = ratesFactory.getIslandDensity(parser.getTemperature());
+    getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity);
+    getKmc().initialiseRates(ratesFactory.getRates(parser.getTemperature()));
   }
   
   @Override
   public void createFrame() {
-    if (parser.withGui()) {
+    if (getParser().withGui()) {
       try {
-        frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
+        frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()));
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
         System.err.println("Finishing");
         throw e;
       }
-      if (parser.visualise()) {
+      if (getParser().visualise()) {
         frame.setVisible(true);
       }
     }
@@ -51,5 +53,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   @Override
   public void finishSimulation() {
 
+  }
+  
+  /**
+   * Prints the current frame to a file
+   * @param i simulation number
+   */
+  @Override
+  protected void printToImage(int i) {
+    frame.printToImage(i);
   }
 }

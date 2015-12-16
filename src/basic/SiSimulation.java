@@ -26,10 +26,10 @@ public class SiSimulation extends AbstractEtchingSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.rates = new SiRatesFactory();
+    this.setRates(new SiRatesFactory());
     this.siConfig = configKmc();
-    this.kmc = new SiKmc(siConfig);
-    initialiseRates(rates, kmc, parser);
+    this.setKmc(new SiKmc(siConfig));
+    initialiseRates(getRates(), getKmc(), getParser());
   }
 
   /**
@@ -44,7 +44,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
             .setSizeX_UC(96)
             .setSizeY_UC(96)
             .setSizeZ_UC(16)
-            .setListConfig(this.config);
+            .setListConfig(this.getConfig());
     return tmpConfig;
   }
 
@@ -60,9 +60,9 @@ public class SiSimulation extends AbstractEtchingSimulation {
    */
   @Override
   public void finishSimulation() {
-    if (parser.visualise()) {
+    if (getParser().visualise()) {
       try {
-        new SiFrame().drawKmc(kmc);
+        new SiFrame().drawKmc(getKmc());
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
         System.err.println("Finishing");

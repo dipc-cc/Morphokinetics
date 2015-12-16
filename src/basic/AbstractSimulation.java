@@ -6,7 +6,6 @@
 package basic;
 
 import basic.io.Restart;
-import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
@@ -27,20 +26,18 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public abstract class AbstractSimulation {
 
-  protected AbstractKmc kmc;
-  protected IRatesFactory rates;
-  protected GrowthKmcFrame frame;
-  protected PsdSignature2D psd;
+  private AbstractKmc kmc;
+  private IRatesFactory rates;
+  private PsdSignature2D psd;
 
-  protected ListConfiguration config;
-  protected Parser parser;
+  private ListConfiguration config;
+  private final Parser parser;
 
   private StaticRandom staticRandom;
   
   public AbstractSimulation(Parser parser) {
     kmc = null;
     rates = null;
-    frame = null;
     psd = null;
     this.parser = parser;
     staticRandom = new StaticRandom(parser.randomSeed());
@@ -105,7 +102,7 @@ public abstract class AbstractSimulation {
       System.out.format("\t%.3f",(double)kmc.getTime());
       System.out.format("\t%.3f",kmc.getCoverage());
       if (parser.printToImage()) {
-        frame.printToImage(simulations);
+        printToImage(simulations);
         System.out.format("\tsurface%03d.png", simulations);
       } else {
         System.out.print("\t none       ");
@@ -154,20 +151,24 @@ public abstract class AbstractSimulation {
 
   public abstract void finishSimulation();
 
+  public void setKmc(AbstractKmc kmc) {
+    this.kmc = kmc;
+  }
+  
   public AbstractKmc getKmc() {
     return kmc;
-  }
-
-  public GrowthKmcFrame getFrame() {
-    return frame;
   }
 
   public PsdSignature2D getPsd() {
     return psd;
   }
+
+  public IRatesFactory getRates() {
+    return rates; 
+  }
   
-  public void setRates(double[] rates) {
-    kmc.initialiseRates(rates);
+  public void setRates(IRatesFactory rates) {
+    this.rates = rates;
   }
   
   public IRatesFactory getRatesFactory() {
@@ -196,5 +197,21 @@ public abstract class AbstractSimulation {
   public static void printHeader(String message){
     printHeader();
     System.out.println("Execution: " + message);
+  }
+  
+  /**
+   * Does nothing. Used to have a common interface
+   * @param i 
+   */
+  protected void printToImage(int i) {
+    //Do nothing
+  }
+
+  public Parser getParser() {
+    return parser;
+  }
+
+  public ListConfiguration getConfig() {
+    return config;
   }
 }
