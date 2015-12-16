@@ -134,7 +134,7 @@ public class SiAtom extends AbstractAtom {
       if (n1 < 4 && isOnList()) {
         addTotalProbability(-getProbabilities()[n1 * 16 + n2]);
       }
-      remove();
+      setRemoved();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         SiAtom atom1st = getNeighbour(i);
         if (atom1st != null) {

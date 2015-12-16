@@ -75,7 +75,7 @@ public class BasicAtom extends AbstractAtom {
       if (isOnList()) {
         addTotalProbability(-getProbabilities()[type]);
       }
-      remove();
+      setRemoved();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         if (neighbours[i] != null) {
           neighbours[i].remove1st();

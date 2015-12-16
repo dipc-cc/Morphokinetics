@@ -80,6 +80,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public abstract void clear();
 
   public abstract void initialize(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified);
+  
+  @Override
+  public void remove() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 
   @Override
   public boolean isRemoved() {

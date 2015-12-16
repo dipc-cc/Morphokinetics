@@ -43,7 +43,7 @@ public abstract class AbstractAtom {
   public boolean isOnList() {
     return list != null;
   }
-  
+
   public abstract double getProbability();
 
   public abstract boolean isEligible();
@@ -55,6 +55,12 @@ public abstract class AbstractAtom {
   public void unRemove() {
     removed = false;
   }
+  
+  public void setRemoved() {
+    removed = true;
+  }
+  
+  public abstract void remove();
   
   public abstract byte getType();
 
@@ -76,10 +82,6 @@ public abstract class AbstractAtom {
 
   public void updateN2FromScratch() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  public void remove() {
-    removed = true;
   }
 
   public void setNeighbour(AbstractAtom lattice, int i) {
