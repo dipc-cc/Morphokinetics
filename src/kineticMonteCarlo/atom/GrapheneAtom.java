@@ -24,8 +24,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       typesTable = new GrapheneTypesTable();
     }
     
-    numberOfNeighbours = 12;
-    bondsProbability = new double[numberOfNeighbours];
+    setNumberOfNeighbours(12);
+    bondsProbability = new double[getNumberOfNeighbours()];
   }
 
   @Override
@@ -365,11 +365,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return typesTable.getType(n1, n2 - 1, n3);
     }
     return typesTable.getType(n1, n2, n3 - 1);
-  }
-
-  @Override
-  public int getNeighbourCount() {
-    return 12;
   }
 
   private void evaluateModifiedWhenRemNeigh(byte newType) {

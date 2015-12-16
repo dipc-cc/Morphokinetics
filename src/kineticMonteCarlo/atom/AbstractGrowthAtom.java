@@ -123,7 +123,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     if (bondsProbability != null) {
       return bondsProbability[pos];
     } else {
-      return totalProbability / getNeighbourCount();
+      return totalProbability / getNumberOfNeighbours();
     }
   }
 
@@ -139,8 +139,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public int getMultiplier() {
     return multiplier;
   }
-
-  public abstract int getNeighbourCount();
 
   protected void initialize(double[][] probabilities, ModifiedBuffer modified) {
     this.probabilities = probabilities;

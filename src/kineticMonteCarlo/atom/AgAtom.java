@@ -37,8 +37,8 @@ public class AgAtom extends AbstractGrowthAtom {
       typesTable = new AgTypesTable();
     }
 
-    numberOfNeighbours = 6;
-    bondsProbability = new double[numberOfNeighbours];
+    setNumberOfNeighbours(6);
+    bondsProbability = new double[getNumberOfNeighbours()];
   }
 
   public void setNeighbour(AgAtom a, int pos) {
@@ -216,7 +216,7 @@ public class AgAtom extends AbstractGrowthAtom {
 
     int cont = 0;
     int i = 0;
-    while (cont < 2 && i < numberOfNeighbours) {
+    while (cont < 2 && i < getNumberOfNeighbours()) {
       if (neighbours[i].isOccupied()) {
         if (neighbours[i].getType() != TERRACE) {
           return false;
@@ -227,12 +227,7 @@ public class AgAtom extends AbstractGrowthAtom {
     }
     return true;
   }
-
-  @Override
-  public int getNeighbourCount() {
-    return numberOfNeighbours;
-  }
-
+  
   public void removeImmobilAddMobile() {
 
     if (nImmobile == 0) {  //estado de transición
@@ -252,7 +247,7 @@ public class AgAtom extends AbstractGrowthAtom {
       }
 
       if (immobileToMobile && occupied) {
-        for (int i = 0; i < numberOfNeighbours; i++) {
+        for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
           }
@@ -283,7 +278,7 @@ public class AgAtom extends AbstractGrowthAtom {
         modified.addBondAtom(this);
       }
       if (mobileToImmobile && occupied) {
-        for (int i = 0; i < numberOfNeighbours; i++) {
+        for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
           }
@@ -319,7 +314,7 @@ public class AgAtom extends AbstractGrowthAtom {
         modified.addBondAtom(this);
       }
       if (mobileToImmobile && occupied) {
-        for (int i = 0; i < numberOfNeighbours; i++) {
+        for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
           }
@@ -340,7 +335,7 @@ public class AgAtom extends AbstractGrowthAtom {
         modified.addBondAtom(this);
       }
       if (immobileToMobile && occupied) {
-        for (int i = 0; i < numberOfNeighbours; i++) {
+        for (int i = 0; i < getNumberOfNeighbours(); i++) {
           if (!neighbours[i].isPartOfImmobilSubstrate()) {
             neighbours[i].removeImmobilAddMobile();
           }
@@ -358,7 +353,7 @@ public class AgAtom extends AbstractGrowthAtom {
     }
 
     byte originalType = type;
-    for (int i = 0; i < numberOfNeighbours; i++) {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
         neighbours[i].addOccupiedNeighbourProcess(originalType, forceNucleation);
       }
@@ -375,7 +370,7 @@ public class AgAtom extends AbstractGrowthAtom {
   public void extract() {
     occupied = false;
 
-    for (int i = 0; i < numberOfNeighbours; i++) {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
       if (!neighbours[i].isPartOfImmobilSubstrate()) {
         neighbours[i].removeMobileOccupied();
       }
@@ -404,7 +399,7 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   private void obtainRatesFromNeighbours() {
-    for (int i = 0; i < numberOfNeighbours; i++) {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
       bondsProbability[i] = probJumpToNeighbour(i);
       totalProbability += bondsProbability[i];
     }
@@ -433,7 +428,7 @@ public class AgAtom extends AbstractGrowthAtom {
     byte originType = type;
     if (type == EDGE_A && (getOrientation() & 1) == 0) originType = EDGE_B;
     if (type == KINK_A && (getOrientation() & 1) == 0) originType = KINK_B;
-    int myPositionForNeighbour = (position + 3) % numberOfNeighbours;
+    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     if (type == EDGE_A && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde

@@ -18,8 +18,8 @@ public class BasicAtom extends AbstractAtom {
   public BasicAtom(short x, short y) {
     this.x = x;
     this.y = y;
-    this.numberOfNeighbours = 4;
-    this.neighbours = new BasicAtom[numberOfNeighbours];
+    setNumberOfNeighbours(4);
+    this.neighbours = new BasicAtom[getNumberOfNeighbours()];
   }
   
   public short getX() {
@@ -55,7 +55,7 @@ public class BasicAtom extends AbstractAtom {
   @Override
   public void updateN1FromScratch() {
     type = 0;
-    for (int i = 0; i < numberOfNeighbours; i++) {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
       if (neighbours[i] != null && !neighbours[i].isRemoved()) {
         type++;
       }
@@ -76,7 +76,7 @@ public class BasicAtom extends AbstractAtom {
         list.addTotalProbability(-probabilities[type]);
       }
       remove();
-      for (int i = 0; i < numberOfNeighbours; i++) {
+      for (int i = 0; i < getNumberOfNeighbours(); i++) {
         if (neighbours[i] != null) {
           neighbours[i].remove1st();
         }

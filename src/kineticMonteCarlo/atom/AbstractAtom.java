@@ -14,7 +14,7 @@ public abstract class AbstractAtom {
 
   protected IProbabilityHolder list;
   protected double[] probabilities;
-  protected int numberOfNeighbours;
+  private int numberOfNeighbours;
   private boolean removed = false;
 
   // Atoms types
@@ -54,8 +54,12 @@ public abstract class AbstractAtom {
   
   public abstract byte getType();
 
-  public int getNumberOfNeighbours() {
+  public final int getNumberOfNeighbours() {
     return numberOfNeighbours;
+  }
+
+  public final void setNumberOfNeighbours(int numberOfNeighbours) {
+    this.numberOfNeighbours = numberOfNeighbours;
   }
 
   public void setAsBulk() {

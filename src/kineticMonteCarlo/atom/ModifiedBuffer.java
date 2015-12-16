@@ -58,7 +58,7 @@ public class ModifiedBuffer {
   }
 
   private void updateAllNeighbours(AbstractGrowthAtom atom, AbstractGrowthLattice lattice) {
-    for (int i = 0; i < atom.getNeighbourCount(); i++) {
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       updateNeighbour(atom, i, lattice);
     }
   }
