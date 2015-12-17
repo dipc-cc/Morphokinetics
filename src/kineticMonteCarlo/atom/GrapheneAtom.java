@@ -16,7 +16,21 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   private GrapheneLattice lattice;
   private static final ArrayStack PStack = new ArrayStack(12);
   private static GrapheneTypesTable typesTable;
-  private byte n1, n2, n3;
+  /**
+   * Total number of 1st neighbours.
+   * @return 0 <= value <= 3
+   */
+  private byte n1;
+  /**
+   * Total number of 2nd neighbours.
+   * @return 0 <= value <= 6
+   */
+  private byte n2;  
+  /**
+   * Total number of 3rd neighbours.
+   * @return 0 <= value <= 3
+   */
+  private byte n3;
   private HopsPerStep distancePerStep;
 
   public GrapheneAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
