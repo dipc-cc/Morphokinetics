@@ -105,7 +105,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
   }
 
-  protected void setAngles() {
+  protected final void setAngles() {
     middle = getCentralCartesianLocation();
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
