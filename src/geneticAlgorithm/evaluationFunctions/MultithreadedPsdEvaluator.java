@@ -21,7 +21,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   protected static final int FPS_GRAPHICS = 2;
 
-  private PsdSignature2D[] psds; // TODO joseba might not be initialized
+  private PsdSignature2D[] psds; // TODO joseba might not be initialised
   private double[] times;
 
   protected KmcWorker[] workers;
@@ -67,7 +67,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
     int individual = getCurrentSimulation() / this.getRepeats();
 
-    workers[workerId].initialize(getCurrentPopulation().getIndividual(individual).getGenes());
+    workers[workerId].initialise(getCurrentPopulation().getIndividual(individual).getGenes());
     workers[workerId].simulate(this, this, getMeasureInterval(), individual);
     setCurrentSimulation(getCurrentSimulation() + 1);
   }

@@ -89,7 +89,7 @@ public class KmcWorker extends Thread {
     return workerId;
   }
 
-  public void initialize(double[] rates) {
+  public void initialise(double[] rates) {
     try {
       this.receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
