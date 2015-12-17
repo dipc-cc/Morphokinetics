@@ -11,7 +11,6 @@ import static java.lang.Math.abs;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
-import static java.lang.Math.abs;
 
 /**
  *
