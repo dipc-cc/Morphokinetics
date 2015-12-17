@@ -4,15 +4,16 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.BasicAtom;
 
 /**
  *
  * @author Nestor
  */
-public class BasicLattice extends AbstractEtchingLattice {
+public class BasicLattice extends AbstractLattice {
 
+  private BasicAtom[] atoms;
+  
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
     setHexaSizeI(hexaSizeI);
     setHexaSizeJ(hexaSizeJ);
@@ -25,7 +26,7 @@ public class BasicLattice extends AbstractEtchingLattice {
   }
 
   @Override
-  public AbstractAtom getAtom(int iHexa, int jHexa, int kHexa, int unitCellPos) {
+  public BasicAtom getAtom(int iHexa, int jHexa, int kHexa, int unitCellPos) {
     return atoms[((jHexa) * getHexaSizeI() + iHexa) * getUnitCellSize() + unitCellPos];
   }
 

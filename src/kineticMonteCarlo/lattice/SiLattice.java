@@ -11,9 +11,10 @@ import basic.unitCell.UnitCell;
  *
  * @author Nestor
  */
-public class SiLattice extends AbstractEtchingLattice {
+public class SiLattice extends AbstractLattice {
 
   private UnitCell unitCell;
+  protected SiAtom[] atoms;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
 
@@ -73,12 +74,11 @@ public class SiLattice extends AbstractEtchingLattice {
 
   @Override
   public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
-    return (SiAtom) atoms[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
+    return atoms[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
   }
 
   @Override
   public void reset() {
-
     //Unremove atoms and set to bulk mode (4,12)
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
