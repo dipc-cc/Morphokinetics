@@ -23,13 +23,13 @@ public class Panel2D extends javax.swing.JPanel {
   public static int COLOR_BW = 0;
   public static int COLOR_HSV = 1;
 
-  protected float[][] psd;
-  protected double max;
-  protected double min;
-  protected boolean log = false;
-  protected boolean shift = false;
-  protected boolean auto = true;
-  protected int colormap = COLOR_HSV;
+  private float[][] psd;
+  private double max;
+  private double min;
+  private boolean log = false;
+  private boolean shift = false;
+  private boolean auto = true;
+  private int colormap = COLOR_HSV;
 
   protected String textInfo = "This is a 2D surface";
 
