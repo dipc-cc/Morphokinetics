@@ -31,7 +31,7 @@ public class Panel2D extends javax.swing.JPanel {
   private boolean auto = true;
   private int colormap = COLOR_HSV;
 
-  protected String textInfo = "This is a 2D surface";
+  private String textInfo = "This is a 2D surface";
 
   public Panel2D() {
     initComponents();
