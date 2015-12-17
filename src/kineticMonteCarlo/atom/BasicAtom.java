@@ -44,7 +44,6 @@ public class BasicAtom extends AbstractAtom {
     return type;
   }
 
-  @Override
   public void setAsBulk() {
     type = 3;
   }
@@ -52,7 +51,6 @@ public class BasicAtom extends AbstractAtom {
   /**
    * This was updateTypeFromScratch().
    */
-  @Override
   public void updateN1FromScratch() {
     type = 0;
     for (int i = 0; i < getNumberOfNeighbours(); i++) {

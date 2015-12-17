@@ -55,19 +55,19 @@ public class SiAtom extends AbstractAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractAtom a, int pos) {
+  public void setNeighbour(AbstractAtom atom, int pos) {
     switch (pos) {
       case 0:
-        neighbour0 = (SiAtom) a;
+        neighbour0 = (SiAtom) atom;
         break;
       case 1:
-        neighbour1 = (SiAtom) a;
+        neighbour1 = (SiAtom) atom;
         break;
       case 2:
-        neighbour2 = (SiAtom) a;
+        neighbour2 = (SiAtom) atom;
         break;
       default:
-        neighbour3 = (SiAtom) a;
+        neighbour3 = (SiAtom) atom;
         break;
     }
   }
@@ -99,7 +99,6 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
-  @Override
   public void updateN1FromScratch() {
     n1 = 0;
     for (int i = 0; i < 4; i++) {
@@ -109,7 +108,6 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
-  @Override
   public void updateN2FromScratch() {
     n2 = 0;
     for (int i = 0; i < 4; i++) {
@@ -122,7 +120,6 @@ public class SiAtom extends AbstractAtom {
     }
   }
 
-  @Override
   public void setAsBulk() {
     n1 = 4;
     n2 = 12;

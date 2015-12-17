@@ -10,7 +10,7 @@ import utils.list.IProbabilityHolder;
  *
  * @author Nestor
  */
-public abstract class AbstractAtom {
+public abstract class AbstractAtom implements IAtom {
 
   private IProbabilityHolder list;
   private double[] probabilities;
@@ -28,66 +28,72 @@ public abstract class AbstractAtom {
   public static final byte KINK = 6;
   public static final byte BULK = 7;
   
+  @Override
   public void setProbabilities(double[] probabilities) {
     this.probabilities = probabilities;
   }
 
+  @Override
   public double[] getProbabilities() {
     return probabilities;
   }
 
+  @Override
   public void setList(IProbabilityHolder list) {
     this.list = list;
   }
 
+  @Override
   public boolean isOnList() {
     return list != null;
   }
 
-  public abstract double getProbability();
-
-  public abstract boolean isEligible();
-
+  @Override
   public boolean isRemoved() {
     return removed;
   }
 
+  @Override
   public void unRemove() {
     removed = false;
   }
   
+  @Override
   public void setRemoved() {
     removed = true;
   }
-  
-  public abstract void remove();
-  
-  public abstract byte getType();
 
+  @Override
   public final int getNumberOfNeighbours() {
     return numberOfNeighbours;
   }
 
+  @Override
   public final void setNumberOfNeighbours(int numberOfNeighbours) {
     this.numberOfNeighbours = numberOfNeighbours;
   }
 
+  @Override
   public void setAsBulk() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+  @Override
   public void updateN1FromScratch() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+  @Override
   public void updateN2FromScratch() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+  @Override
   public void setNeighbour(AbstractAtom lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
+  @Override
   public void addTotalProbability(double probabilityChanges) {
     list.addTotalProbability(probabilityChanges);
   }
