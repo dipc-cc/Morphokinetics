@@ -23,7 +23,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private final ModifiedBuffer modified;
   private static Point2D middle;
   private final ArrayList<Integer> includePerimeterList; 
-  private int hexaArea;
+  private final int hexaArea;
   private int occupied;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
