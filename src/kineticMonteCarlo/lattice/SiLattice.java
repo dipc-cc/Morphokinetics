@@ -14,7 +14,7 @@ import basic.unitCell.UnitCell;
 public class SiLattice extends AbstractLattice {
 
   private UnitCell unitCell;
-  protected SiAtom[] atoms;
+  private SiAtom[] atoms;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
 
