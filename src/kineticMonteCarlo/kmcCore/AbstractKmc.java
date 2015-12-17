@@ -144,7 +144,7 @@ public abstract class AbstractKmc implements IKmc {
    * @return the list
    */
   @Override
-  public AbstractList getList() {
+  public final AbstractList getList() {
     return list;
   }
 
