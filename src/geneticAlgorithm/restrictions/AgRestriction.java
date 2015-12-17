@@ -10,10 +10,6 @@ package geneticAlgorithm.restrictions;
  */
 public class AgRestriction extends RestrictionOperator {
 
-  public void initialize(double temperature) {
-
-  }
-
   public AgRestriction(double diffusionRate) {
 
     //Negative values are not valid

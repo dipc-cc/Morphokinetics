@@ -14,10 +14,6 @@ package geneticAlgorithm.restrictions;
 public class AgReduced6Restriction extends RestrictionOperator {
 
   private boolean searchEnergy;
-  
-  public void initialize(double temperature) {
-
-  }
 
   public AgReduced6Restriction() {
     //Negative and 0 values are not valid

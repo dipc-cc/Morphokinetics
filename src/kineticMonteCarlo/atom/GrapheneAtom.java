@@ -29,8 +29,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void initialize(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
-    super.initialize(probabilities, modified);
+  public void initialise(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
+    super.initialise(probabilities, modified);
     this.lattice = (GrapheneLattice) lattice;
   }
 

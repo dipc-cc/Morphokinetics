@@ -13,10 +13,6 @@ package geneticAlgorithm.restrictions;
  */
 public class AgReducedRestriction extends RestrictionOperator {
 
-  public void initialize(double temperature) {
-
-  }
-
   public AgReducedRestriction() {
     //Negative and 0 values are not valid
     for (int currentGene = 0; currentGene < 10; currentGene++) {

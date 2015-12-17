@@ -60,7 +60,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return true;
   }
 
-
   public abstract byte getTypeWithoutNeighbour(int neighPos);
 
   public abstract void deposit(boolean forceNucleation);
@@ -79,7 +78,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public abstract void clear();
 
-  public abstract void initialize(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified);
+  public abstract void initialise(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified);
   
   @Override
   public void remove() {
@@ -153,7 +152,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return multiplier;
   }
 
-  protected void initialize(double[][] probabilities, ModifiedBuffer modified) {
+  protected void initialise(double[][] probabilities, ModifiedBuffer modified) {
     this.probabilities = probabilities;
     this.modified = modified;
   }
