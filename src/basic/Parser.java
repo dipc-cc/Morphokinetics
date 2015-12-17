@@ -510,7 +510,7 @@ public class Parser {
   }
   
   public int getHexaSizeJ() {
-    return (int) (this.getCartSizeX() / AgLattice.YRatio);
+    return (int) (this.getCartSizeX() / AgLattice.Y_RATIO);
   }
 
   int getBinsLevels() {

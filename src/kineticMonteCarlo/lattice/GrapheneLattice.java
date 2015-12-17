@@ -592,7 +592,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public float getCartSizeY() {
-    return getHexaSizeJ() * AgLattice.YRatio;
+    return getHexaSizeJ() * AgLattice.Y_RATIO;
   }
 
   @Override
@@ -627,6 +627,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   
   @Override
   public double getCartY(int jHexa){
-    return jHexa*AgLattice.YRatio;
+    return jHexa*AgLattice.Y_RATIO;
   }
 }

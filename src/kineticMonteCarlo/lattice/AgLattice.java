@@ -19,7 +19,7 @@ import utils.StaticRandom;
  */
 public class AgLattice extends AbstractGrowthLattice {
 
-  public static final float YRatio = (float) Math.sqrt(3) / 2.0f; // it is the same as: sin 60º
+  public static final float Y_RATIO = (float) Math.sqrt(3) / 2.0f; // it is the same as: sin 60º
 
   public AgLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
@@ -109,7 +109,7 @@ public class AgLattice extends AbstractGrowthLattice {
 
   @Override
   public Point2D getCentralCartesianLocation() {
-    return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() * YRatio / 2.0f));
+    return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() * Y_RATIO / 2.0f));
   }
 
   @Override
@@ -119,7 +119,7 @@ public class AgLattice extends AbstractGrowthLattice {
 
   @Override
   public float getCartSizeY() {
-    return getHexaSizeJ() * YRatio;
+    return getHexaSizeJ() * Y_RATIO;
   }
 
   @Override
@@ -129,7 +129,7 @@ public class AgLattice extends AbstractGrowthLattice {
     if (xCart >= getHexaSizeI()) {
       xCart -= getHexaSizeI();
     }
-    float yCart = jHexa * YRatio;
+    float yCart = jHexa * Y_RATIO;
     return new Point2D.Double(xCart, yCart);
   }
 
@@ -154,7 +154,7 @@ public class AgLattice extends AbstractGrowthLattice {
    */
   @Override
   public double getCartY(int jHexa) {
-    return jHexa * YRatio;
+    return jHexa * Y_RATIO;
   }
 
   public int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {

@@ -48,7 +48,7 @@ public class AgAgMultithreadedEvaluatorTest {
     double depositionRate = new AgRatesFactory().getDepositionRate(experimentalTemp);
     double islandDensity = new AgRatesFactory().getIslandDensity(experimentalTemp);
 
-    return new AgKmc(listConfig, 256, (int) (256 / AgLattice.YRatio), depositionRate, islandDensity);
+    return new AgKmc(listConfig, 256, (int) (256 / AgLattice.Y_RATIO), depositionRate, islandDensity);
 
   }
 

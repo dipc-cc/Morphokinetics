@@ -68,7 +68,7 @@ public class AgAgPsdTest {
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
-    int sizeY = (int) (sizeX / AgLattice.YRatio);
+    int sizeY = (int) (sizeX / AgLattice.Y_RATIO);
 
     AgKmc kmc = new AgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE);
 
