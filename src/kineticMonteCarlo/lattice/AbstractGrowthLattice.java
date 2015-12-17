@@ -18,7 +18,7 @@ import utils.QuickSort;
  */
 public abstract class AbstractGrowthLattice extends AbstractLattice implements IDevitaLattice {
 
-  protected AbstractGrowthAtom[][] atoms;
+  private AbstractGrowthAtom[][] atoms;
 
   private final ModifiedBuffer modified;
   private static Point2D middle;
@@ -71,6 +71,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return getAtom(iHexa, jHexa);
   }
 
+  public final void setAtoms(AbstractGrowthAtom[][] atoms) {
+    this.atoms = atoms;
+  }
+  
   /**
    * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
    * Returns the Cartesian position, given the hexagonal (lattice) location
