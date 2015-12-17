@@ -39,12 +39,6 @@ public interface IAtom {
 
   public void setNumberOfNeighbours(int numberOfNeighbours);
 
-  public void setAsBulk();
-
-  public void updateN1FromScratch();
-
-  public void updateN2FromScratch();
-
   public void setNeighbour(AbstractAtom atom, int i);
   
   public void addTotalProbability(double probabilityChanges);
