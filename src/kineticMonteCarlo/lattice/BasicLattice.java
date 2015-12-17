@@ -14,17 +14,19 @@ import kineticMonteCarlo.atom.BasicAtom;
 public class BasicLattice extends AbstractEtchingLattice {
 
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
-    this.hexaSizeI = hexaSizeI;
-    this.hexaSizeJ = hexaSizeJ;
-    this.unitCellSize = 1;
-    atoms = new BasicAtom[this.hexaSizeI * this.hexaSizeJ];
+    setHexaSizeI(hexaSizeI);
+    setHexaSizeJ(hexaSizeJ);
+    setHexaSizeK(1);
+    setUnitCellSize(1);
+    
+    atoms = new BasicAtom[hexaSizeI * hexaSizeJ];
     createAtoms(hexaSizeI, hexaSizeJ);
     interconnectAtoms();
   }
 
   @Override
   public AbstractAtom getAtom(int iHexa, int jHexa, int kHexa, int unitCellPos) {
-    return atoms[((jHexa) * hexaSizeI + iHexa) * unitCellSize + unitCellPos];
+    return atoms[((jHexa) * getHexaSizeI() + iHexa) * getUnitCellSize() + unitCellPos];
   }
 
   @Override
@@ -36,46 +38,26 @@ public class BasicLattice extends AbstractEtchingLattice {
 
   @Override
   public void reset() {
-    for (int i = 0; i < hexaSizeJ; i++) {
-      for (int j = 0; j < hexaSizeI; j++) {
-        atoms[i * hexaSizeI + j].setList(null);
-        atoms[i * hexaSizeI + j].unRemove();
+    for (int i = 0; i < getHexaSizeJ(); i++) {
+      for (int j = 0; j < getHexaSizeI(); j++) {
+        atoms[i * getHexaSizeI() + j].setList(null);
+        atoms[i * getHexaSizeI() + j].unRemove();
       }
     }
 
-    for (int i = 0; i < hexaSizeJ; i++) {
-      for (int j = 0; j < hexaSizeI; j++) {
-        atoms[i * hexaSizeI + j].updateN1FromScratch();
+    for (int i = 0; i < getHexaSizeJ(); i++) {
+      for (int j = 0; j < getHexaSizeI(); j++) {
+        atoms[i * getHexaSizeI() + j].updateN1FromScratch();
       }
     }
 
-    for (int i = 0; i < hexaSizeJ; i++) {
-      for (int j = 0; j < hexaSizeI; j++) {
+    for (int i = 0; i < getHexaSizeJ(); i++) {
+      for (int j = 0; j < getHexaSizeI(); j++) {
         if (i < 4) {
-          atoms[i * hexaSizeI + j].remove();
+          atoms[i * getHexaSizeI() + j].remove();
         }
       }
     }
-  }
-
-  @Override
-  public int getHexaSizeI() {
-    return super.getHexaSizeI();
-  }
-
-  @Override
-  public int getHexaSizeJ() {
-    return super.getHexaSizeJ();
-  }
-
-  @Override
-  public int getHexaSizeK() {
-    return 1;
-  }
-
-  @Override
-  public int getSizeUC() {
-    return 1;
   }
 
   private void createAtoms(int hexaSizeI, int hexaSizeJ) {
@@ -87,18 +69,18 @@ public class BasicLattice extends AbstractEtchingLattice {
   }
 
   private void interconnectAtoms() {
-    for (int i = 0; i < hexaSizeJ; i++) {
-      for (int j = 0; j < hexaSizeI; j++) {
+    for (int i = 0; i < getHexaSizeJ(); i++) {
+      for (int j = 0; j < getHexaSizeI(); j++) {
         if (i - 1 >= 0) {
-          atoms[i * hexaSizeI + j].setNeighbour(atoms[(i - 1) * hexaSizeI + j], 0);                      //up        
+          atoms[i * getHexaSizeI() + j].setNeighbour(atoms[(i - 1) * getHexaSizeI() + j], 0);                      //up        
         }
-        atoms[i * hexaSizeI + j].setNeighbour(atoms[Math.min(i + 1, hexaSizeJ - 1) * hexaSizeI + j], 1); //down        
+        atoms[i * getHexaSizeI() + j].setNeighbour(atoms[Math.min(i + 1, getHexaSizeJ() - 1) * getHexaSizeI() + j], 1); //down        
         int izq = j - 1;
         if (izq < 0) {
-          izq = hexaSizeI - 1;
+          izq = getHexaSizeI() - 1;
         }
-        atoms[i * hexaSizeI + j].setNeighbour(atoms[i * hexaSizeI + izq], 2);                   //left        
-        atoms[i * hexaSizeI + j].setNeighbour(atoms[i * hexaSizeI + ((j + 1) % hexaSizeI)], 3); //right       
+        atoms[i * getHexaSizeI() + j].setNeighbour(atoms[i * getHexaSizeI() + izq], 2);                   //left        
+        atoms[i * getHexaSizeI() + j].setNeighbour(atoms[i * getHexaSizeI() + ((j + 1) % getHexaSizeI())], 3); //right       
       }
     }
   }

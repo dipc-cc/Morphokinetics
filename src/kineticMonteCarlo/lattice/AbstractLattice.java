@@ -12,27 +12,49 @@ import kineticMonteCarlo.atom.AbstractAtom;
  */
 public abstract class AbstractLattice {
 
-  protected int hexaSizeI;
-  protected int hexaSizeJ;
-  protected int hexaSizeK;
+  private int hexaSizeI;
+  private int hexaSizeJ;
+  private int hexaSizeK;
+  private int unitCellSize;
 
-  protected int unitCellSize;
-
-  public int getHexaSizeI() {
+  public final int getHexaSizeI() {
     return hexaSizeI;
   }
 
-  public int getHexaSizeJ() {
+  public final int getHexaSizeJ() {
     return hexaSizeJ;
   }
 
-  public int getHexaSizeK() {
+  public final int getHexaSizeK() {
     return hexaSizeK;
   }
+  
+  public final void setHexaSizeI(int hexaSizeI) {
+    this.hexaSizeI = hexaSizeI;
+  }
 
-  public int getSizeUC() {
+  public final void setHexaSizeJ(int hexaSizeJ) {
+    this.hexaSizeJ = hexaSizeJ;
+  }
+
+  public final void setHexaSizeK(int hexaSizeK) {
+    this.hexaSizeK = hexaSizeK;
+  }
+ 
+  /**
+   * @return the unitCellSize
+   */
+  public final int getUnitCellSize() {
     return unitCellSize;
   }
+
+  /**
+   * @param unitCellSize the unitCellSize to set
+   */
+  public final void setUnitCellSize(int unitCellSize) {
+    this.unitCellSize = unitCellSize;
+  }
+
 
   public abstract AbstractAtom getAtom(int i, int j, int k, int unitCellPos);
 
@@ -41,5 +63,6 @@ public abstract class AbstractLattice {
   public void setProbabilities(double[] rates) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
 
 }

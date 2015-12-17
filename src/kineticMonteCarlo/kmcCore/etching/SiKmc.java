@@ -40,7 +40,7 @@ public class SiKmc extends AbstractKmc {
     for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
       for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
         for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
-          for (int l = 0; l < getLattice().getSizeUC(); l++) {
+          for (int l = 0; l < getLattice().getUnitCellSize(); l++) {
             SiAtom atom = (SiAtom) getLattice().getAtom(i, j, k, l);
             if (atom.getN1() < 4 && atom.getN1() > 0 && !atom.isRemoved()) {
               getList().addAtom(atom);

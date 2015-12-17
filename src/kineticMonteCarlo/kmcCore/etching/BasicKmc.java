@@ -40,7 +40,7 @@ public class BasicKmc extends AbstractKmc {
     for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
       for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
         for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
-          for (int l = 0; l < getLattice().getSizeUC(); l++) {
+          for (int l = 0; l < getLattice().getUnitCellSize(); l++) {
             BasicAtom atom = (BasicAtom) getLattice().getAtom(i, j, k, l);
             if (atom.getType() < 4 && atom.getType() > 0 && !atom.isRemoved()) {
               getList().addAtom(atom);

@@ -27,10 +27,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int occupied;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
-    this.hexaSizeI = hexaSizeI;
-    this.hexaSizeJ = hexaSizeJ;
-    hexaSizeK = 1;
-    unitCellSize = 4;
+    setHexaSizeI(hexaSizeI);
+    setHexaSizeJ(hexaSizeJ);
+    setHexaSizeK(1);
+    setUnitCellSize(4);
     this.modified = modified;
     hexaArea = hexaSizeI * hexaSizeJ;
     occupied = 0;
@@ -102,8 +102,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   protected void setAngles() {
     middle = getCentralCartesianLocation();
-    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
-      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         Point2D cartPosition = getCartesianLocation(iHexa, jHexa);
         double xDif = cartPosition.getX() - middle.getX();
         double yDif = cartPosition.getY() - middle.getY();
@@ -140,8 +140,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
     middle = getCentralCartesianLocation();
-    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
-      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         double distance = getDistanceToCenter(iHexa, jHexa);
         if (radius <= distance) {
           atoms[iHexa][jHexa].setOutside(true);
@@ -178,8 +178,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     Point2D position;
     int countTop = 1;
     int countBottom = 1;
-    for (int jHexa = 0; jHexa < hexaSizeJ; jHexa++) {
-      for (int iHexa = 0; iHexa < hexaSizeI; iHexa++) {
+    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         position = getCartesianLocation(iHexa, jHexa);
         if (left <= position.getX() && position.getX() <= right
                 && bottom <= position.getY() + AgLattice.YRatio

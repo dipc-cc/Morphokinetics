@@ -58,8 +58,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   private void createAtoms(HopsPerStep distancePerStep) {
 
-    for (int iHexa = 0; iHexa < hexaSizeI; iHexa += 2) {
-      for (int jHexa = 0; jHexa < hexaSizeJ; jHexa += 2) {
+    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
+      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
         //para cada unit cell
 
         //atomo 0 de la unit cell, tipo 0
@@ -96,15 +96,15 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     int iHexa = xCart + vec_X;
     if (iHexa < 0) {
-      iHexa += hexaSizeI;
-    } else if (iHexa >= hexaSizeI) {
-      iHexa -= hexaSizeI;
+      iHexa += getHexaSizeI();
+    } else if (iHexa >= getHexaSizeI()) {
+      iHexa -= getHexaSizeI();
     }
     int jHexa = yCart + vec_Y;
     if (jHexa < 0) {
-      jHexa += hexaSizeJ;
-    } else if (jHexa >= hexaSizeJ) {
-      jHexa -= hexaSizeJ;
+      jHexa += getHexaSizeJ();
+    } else if (jHexa >= getHexaSizeJ()) {
+      jHexa -= getHexaSizeJ();
     }
     return (GrapheneAtom) atoms[iHexa][jHexa];
   }
@@ -116,9 +116,9 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     int posI = iHexa + vecI;
     if (posI < 0) {
-      posI += hexaSizeI;
-    } else if (posI >= hexaSizeI) {
-      posI -= hexaSizeI;
+      posI += getHexaSizeI();
+    } else if (posI >= getHexaSizeI()) {
+      posI -= getHexaSizeI();
     }
     return posI;
   }
@@ -130,9 +130,9 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     int posJ = jHexa + vecJ;
     if (posJ < 0) {
-      posJ += hexaSizeJ;
-    } else if (posJ >= hexaSizeJ) {
-      posJ -= hexaSizeJ;
+      posJ += getHexaSizeJ();
+    } else if (posJ >= getHexaSizeJ()) {
+      posJ -= getHexaSizeJ();
     }
     return posJ;
   }
@@ -179,7 +179,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     int iHexa = iHexaOrigin;
     int jHexa = (jHexaOrigin - thresholdDistance * 2);
     if (jHexa < 0) {
-      jHexa += hexaSizeJ;
+      jHexa += getHexaSizeJ();
     }
 
     int counter = 0;
@@ -282,7 +282,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
     short jHexa = (short) (jHexaOrigin - 2);
     if (jHexa < 0) {
-      jHexa += hexaSizeJ;
+      jHexa += getHexaSizeJ();
     }
     byte errorCode = 0;
 
@@ -412,7 +412,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       distance++;
       jHexa -= 2;
       if (jHexa < 0) {
-        jHexa = (short) (hexaSizeJ - 1);
+        jHexa = (short) (getHexaSizeJ() - 1);
       }
     }
 
@@ -586,17 +586,17 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public float getCartSizeX() {
-    return hexaSizeI * 1.5f;
+    return getHexaSizeI() * 1.5f;
   }
 
   @Override
   public float getCartSizeY() {
-    return hexaSizeJ * AgLattice.YRatio;
+    return getHexaSizeJ() * AgLattice.YRatio;
   }
 
   @Override
   public Point2D getCentralCartesianLocation() {
-    return getCartesianLocation(hexaSizeI / 2, hexaSizeJ / 2);
+    return getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
   }
 
   @Override
