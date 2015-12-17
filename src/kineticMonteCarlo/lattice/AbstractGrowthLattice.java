@@ -47,7 +47,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public void configure(double[][] probabilities) {
     for (int iHexa = 0; iHexa < atoms[0].length; iHexa++) {
       for (int jHexa = 0; jHexa < atoms.length; jHexa++) {
-        atoms[jHexa][iHexa].initialise(this, probabilities, this.getModified());
+        atoms[jHexa][iHexa].initialise(probabilities, this.getModified());
       }
     }
   }

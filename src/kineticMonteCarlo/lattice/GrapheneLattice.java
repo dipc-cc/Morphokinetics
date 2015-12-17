@@ -57,6 +57,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep) {
 
+    //Instantiate atoms
     GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
     for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
       for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
@@ -80,6 +81,20 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
         iHexa--;
         jHexa--;
+      }
+    }
+    
+    setAtoms(atoms);
+    
+    //Interconect atoms
+    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
+      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+        // Get and all 12 neighbours of current graphene atom
+        GrapheneAtom[] neighbours = new GrapheneAtom[12];
+        for (int i = 0; i < 12; i++) {
+          neighbours[i] = getNeighbour(iHexa, jHexa, i);
+        }
+        atoms[iHexa][jHexa].setNeighbours(neighbours);
       }
     }
     return atoms;

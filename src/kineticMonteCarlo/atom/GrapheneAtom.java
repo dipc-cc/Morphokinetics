@@ -7,15 +7,14 @@
 package kineticMonteCarlo.atom;
 
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import kineticMonteCarlo.lattice.GrapheneLattice;
 import utils.StaticRandom;
 
 public class GrapheneAtom extends AbstractGrowthAtom {
 
-  private GrapheneLattice lattice;
   private static final ArrayStack PStack = new ArrayStack(12);
   private static GrapheneTypesTable typesTable;
+  private GrapheneAtom[] neighbours = new GrapheneAtom[12];
+  
   /**
    * Total number of 1st neighbours.
    * @return 0 <= value <= 3
@@ -43,11 +42,14 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void initialise(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
+  public void initialise(double[][] probabilities, ModifiedBuffer modified) {
     super.initialise(probabilities, modified);
-    this.lattice = (GrapheneLattice) lattice;
   }
 
+  public void setNeighbours(GrapheneAtom[] neighbours) {
+    this.neighbours = neighbours;
+  }
+  
   @Override
   public boolean isEligible() {
     return isOccupied() && (getType() < KINK);
@@ -104,10 +106,9 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   @Override
   public int getOrientation() {
-
     if (n1 == 1) {
       for (int i = 0; i < 3; i++) {
-        if (lattice.getNeighbour(getiHexa(), getjHexa(), i).isOccupied()) {
+        if (neighbours[i].isOccupied()) {
           return i;
         }
       }
@@ -124,7 +125,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     double raw = StaticRandom.raw();
 
     if (getBondsProbability() == null) {
-      return lattice.getNeighbour(getiHexa(), getjHexa(), (int) (raw * 12));
+      return neighbours[(int) raw * 12];
     }
 
     double linearSearch = raw * getTotalProbability();
@@ -140,8 +141,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         break;
       }
     }
-    //System.out.println(bondsProbability.length);
-    return lattice.getNeighbour(getiHexa(), getjHexa(), cont - 1);
+    return neighbours[cont - 1];
   }
 
   private void add1stNeighbour(boolean forceNucleation) {
@@ -190,14 +190,14 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     }
     int i = 0;
 
-    for (; i < 3; i++) {
-      lattice.getNeighbour(getiHexa(), getjHexa(), i).add1stNeighbour(forceNucleation);
+    for (; i < 3; i++) { 
+      neighbours[i].add1stNeighbour(forceNucleation);
     }
     for (; i < 9; i++) {
-      lattice.getNeighbour(getiHexa(), getjHexa(), i).add2ndNeighbour();
+      neighbours[i].add2ndNeighbour();
     }
     for (; i < 12; i++) {
-      lattice.getNeighbour(getiHexa(), getjHexa(), i).add3rdNeighbour();
+      neighbours[i].add3rdNeighbour();
     }
 
     addOwnAtom();
@@ -217,13 +217,13 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
     int i = 0;
     for (; i < 3; i++) {
-      lattice.getNeighbour(getiHexa(), getjHexa(), i).remove1stNeighbour();
+      neighbours[i].remove1stNeighbour();
     }
     for (; i < 9; i++) {
-      lattice.getNeighbour(getiHexa(), getjHexa(), i).remove2ndNeighbour();
+      neighbours[i].remove2ndNeighbour();
     }
     for (; i < 12; i++) {
-      lattice.getNeighbour(getiHexa(), getjHexa(), i).remove3rdNeighbour();
+      neighbours[i].remove3rdNeighbour();
     }
 
     if (getNeighbourCount() > 0) {
@@ -272,7 +272,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return false;
     }
     for (int i = 11; i >= 3; i--) {
-      if (lattice.getNeighbour(getiHexa(), getjHexa(), i).getType() != 0) {
+      if (neighbours[i].getType() != 0) {
         return false;
       }
     }
@@ -331,10 +331,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   private double probJumpToNeighbour(int originType, int pos) {
 
-    AbstractGrowthAtom atom = lattice.getNeighbour(getiHexa(), getjHexa(), pos);
-
+    AbstractGrowthAtom atom = neighbours[pos];
     if (atom.isOccupied()) {
-
       return 0;
     }
 

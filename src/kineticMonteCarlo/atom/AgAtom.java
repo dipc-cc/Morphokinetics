@@ -46,11 +46,6 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void initialise(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified) {
-    super.initialise(probabilities, modified);
-  }
-
-  @Override
   public boolean isEligible() {
     return isOccupied() && (getType() < KINK_A);
   }

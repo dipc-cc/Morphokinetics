@@ -77,10 +77,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public abstract void updateOneBound(int bond);
 
   public abstract void clear();
-
-  public abstract void initialise(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified);
   
-  protected void initialise(double[][] probabilities, ModifiedBuffer modified) {
+  public void initialise(double[][] probabilities, ModifiedBuffer modified) {
     this.probabilities = probabilities;
     this.modified = modified;
   }
