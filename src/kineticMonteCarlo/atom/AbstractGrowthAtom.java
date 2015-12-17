@@ -80,6 +80,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public abstract void initialise(AbstractGrowthLattice lattice, double[][] probabilities, ModifiedBuffer modified);
   
+  protected void initialise(double[][] probabilities, ModifiedBuffer modified) {
+    this.probabilities = probabilities;
+    this.modified = modified;
+  }
+  
   @Override
   public void remove() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -98,6 +103,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return jHexa;
   }
 
+  public short getiHexa() {
+    return iHexa;
+  }
+
+  public short getjHexa() {
+    return jHexa;
+  }
+  
   public float getAngle() {
     return angle;
   }
@@ -114,25 +127,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     this.outside = outside;
   }
 
-  @Override
-  public double getProbability() {
-    return totalProbability;
-  }
-
   public boolean isOccupied() {
     return occupied;
   }
   
   public void setOccupied(boolean occupied) {
     this.occupied = occupied;
-  }
-
-  public double getProbability(int pos) {
-    if (getBondsProbability() != null) {
-      return getBondsProbability()[pos];
-    } else {
-      return totalProbability / getNumberOfNeighbours();
-    }
   }
 
   @Override
@@ -150,19 +150,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public int getMultiplier() {
     return multiplier;
-  }
-
-  protected void initialise(double[][] probabilities, ModifiedBuffer modified) {
-    this.probabilities = probabilities;
-    this.modified = modified;
-  }
-
-  public short getiHexa() {
-    return iHexa;
-  }
-
-  public short getjHexa() {
-    return jHexa;
   }
 
   public void addOwnAtom() {
@@ -186,6 +173,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public void setBondsProbability(double[] bondsProbability) {
     this.bondsProbability = bondsProbability;
   }
+
+  @Override
+  public double getProbability() {
+    return totalProbability;
+  }
   
   public double getTotalProbability() {
     return totalProbability;
@@ -204,5 +196,13 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public double getProbability(int x, int y) {
     return probabilities[x][y];
+  }
+  
+  public double getProbability(int pos) {
+    if (getBondsProbability() != null) {
+      return getBondsProbability()[pos];
+    } else {
+      return totalProbability / getNumberOfNeighbours();
+    }
   }
 }
