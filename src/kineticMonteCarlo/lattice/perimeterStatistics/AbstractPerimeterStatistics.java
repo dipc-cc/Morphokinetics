@@ -10,7 +10,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  */
 public abstract class AbstractPerimeterStatistics {
 
-  protected int[] totalCount;
+  private final int[] totalCount;
   private int[][] hopsCount;
   private int[][] reentranceCount;
   private final int minRadius;
