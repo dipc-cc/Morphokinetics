@@ -29,10 +29,10 @@ public class AgKmc extends AbstractGrowthKmc {
     super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    this.lattice = new AgLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
+    this.setLattice(new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
-      this.perimeter = new RoundPerimeter("Ag");
+      this.setPerimeter(new RoundPerimeter("Ag"));
     }
   }
 
@@ -49,20 +49,12 @@ public class AgKmc extends AbstractGrowthKmc {
 
   @Override
   public void depositSeed() {
-    lattice.resetOccupied();
-    if (justCentralFlake) {
-      if (this.useMaxPerimeter){
-        this.perimeter.setMaxPerimeter();
-      }
-      perimeter.setMinRadius();
-      if (this.perimeterType == RoundPerimeter.CIRCLE) {
-        this.perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius()));
-      } else {
-        this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
-      }
+    getLattice().resetOccupied();
+    if (isJustCentralFlake()) {
+      setAtomPerimeter();
 
-      int jCentre = (lattice.getHexaSizeJ() / 2);
-      int iCentre = (lattice.getHexaSizeI() / 2) - (lattice.getHexaSizeJ() / 4);
+      int jCentre = (getLattice().getHexaSizeJ() / 2);
+      int iCentre = (getLattice().getHexaSizeI() / 2) - (getLattice().getHexaSizeJ() / 4);
 
       this.depositAtom(iCentre, jCentre);
       this.depositAtom(iCentre + 1, jCentre);
@@ -78,25 +70,25 @@ public class AgKmc extends AbstractGrowthKmc {
     } else {
 
       for (int i = 0; i < 3; i++) {
-        int X = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
-        int Y = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
+        int X = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
+        int Y = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
         depositAtom(X, Y);
       }
     }
   }
 
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
-    this.accelerator = new DevitaAccelerator(this.lattice, distancePerStep);
+    this.setAccelerator(new DevitaAccelerator(this.getLattice(), distancePerStep));
 
-    if (accelerator != null) {
-      this.accelerator.tryToSpeedUp(TERRACE,
+    if (getAccelerator() != null) {
+      this.getAccelerator().tryToSpeedUp(TERRACE,
               new DevitaHopsConfig()
               .setMinAccumulatedSteps(100)
               .setMaxAccumulatedSteps(200)
               .setMinDistanceHops(1)
               .setMaxDistanceHops(8));
 
-      this.accelerator.tryToSpeedUp(EDGE,
+      this.getAccelerator().tryToSpeedUp(EDGE,
               new DevitaHopsConfig()
               .setMinAccumulatedSteps(30)
               .setMaxAccumulatedSteps(100)

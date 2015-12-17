@@ -7,7 +7,6 @@ package kineticMonteCarlo.kmcCore.growth;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
-import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.ListConfiguration;
 import java.awt.geom.Point2D;
@@ -21,13 +20,13 @@ import utils.StaticRandom;
  */
 public abstract class AbstractGrowthKmc extends AbstractKmc {
 
-  protected AbstractGrowthLattice lattice;
-  protected ModifiedBuffer modifiedBuffer;
-  protected boolean justCentralFlake;
-  protected RoundPerimeter perimeter;
-  protected boolean useMaxPerimeter;
-  protected short perimeterType;
-  protected DevitaAccelerator accelerator;
+  private AbstractGrowthLattice lattice;
+  private final ModifiedBuffer modifiedBuffer;
+  private final boolean justCentralFlake;
+  private RoundPerimeter perimeter;
+  private final boolean useMaxPerimeter;
+  private final short perimeterType;
+  private DevitaAccelerator accelerator;
   
   private final float maxCoverage; // This attribute defines which is the maximum coverage for a multi-flake simulation
   private int area;
@@ -52,7 +51,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
 
   @Override
-  public void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
+  public final void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
     this.area = calculateAreaAsInLattice();
 
     if (justCentralFlake) {
@@ -83,7 +82,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
   
   @Override
-  public AbstractLattice getLattice() {
+  public AbstractGrowthLattice getLattice() {
     return lattice;
   }
     
@@ -344,5 +343,64 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     return totalArea;
+  }
+
+  public DevitaAccelerator getAccelerator() {
+    return accelerator;
+  }
+
+  public void setAccelerator(DevitaAccelerator accelerator) {
+    this.accelerator = accelerator;
+  }
+
+  /**
+   * @param lattice the lattice to set
+   */
+  public final void setLattice(AbstractGrowthLattice lattice) {
+    this.lattice = lattice;
+  }
+
+  /**
+   * @return the modifiedBuffer
+   */
+  public final ModifiedBuffer getModifiedBuffer() {
+    return modifiedBuffer;
+  }
+  
+  /**
+   * @return the justCentralFlake
+   */
+  public boolean isJustCentralFlake() {
+    return justCentralFlake;
+  }
+
+  /**
+   * @param perimeter the perimeter to set
+   */
+  public final void setPerimeter(RoundPerimeter perimeter) {
+    this.perimeter = perimeter;
+  }
+
+  /**
+   * @param area the area to set
+   */
+  public void setArea(int area) {
+    this.area = area;
+  }
+  
+  /**
+   * Internal method to select the perimeter size and type. Must be used in depositSeed() method
+   * just before depositing the seed.
+   */
+  void setAtomPerimeter() {
+    if (useMaxPerimeter) {
+      perimeter.setMaxPerimeter();
+    }
+    perimeter.setMinRadius();
+    if (perimeterType == RoundPerimeter.CIRCLE) {
+      perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius()));
+    } else {
+      perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
+    }
   }
 }

@@ -31,30 +31,22 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    this.lattice = new GrapheneLattice(hexaSizeI, hexaSizeJ, modifiedBuffer, distancePerStep);
+    this.setLattice(new GrapheneLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
 
     if (justCentralFlake) {
-      this.perimeter = new RoundPerimeter("graphene");
+      this.setPerimeter(new RoundPerimeter("graphene"));
       configureDevitaAccelerator(distancePerStep);
     }
   }
 
   @Override
   public void depositSeed() {
-    lattice.resetOccupied();
-    if (justCentralFlake) {
-      if (this.useMaxPerimeter){
-        this.perimeter.setMaxPerimeter();
-      }
-      perimeter.setMinRadius();
-      if (this.perimeterType == RoundPerimeter.CIRCLE) {
-        this.perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius())); 
-      } else {
-        this.perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
-      }
+    getLattice().resetOccupied();
+    if (isJustCentralFlake()) {
+      setAtomPerimeter();
 
-      int iCentre = lattice.getHexaSizeJ() / 2;
-      int jCentre = lattice.getHexaSizeI() / 2;
+      int iCentre = getLattice().getHexaSizeJ() / 2;
+      int jCentre = getLattice().getHexaSizeI() / 2;
       
       for (int j = -1; j < 2; j++) {
         for (int i = -1; i < 1; i++) {
@@ -63,17 +55,17 @@ public class GrapheneKmc extends AbstractGrowthKmc {
       }
     } else {
       for (int i = 0; i < 3; i++) {
-        int iHexa = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
-        int jHexa = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
+        int iHexa = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
+        int jHexa = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
         depositAtom(iHexa, jHexa);
       }
     }
   }
 
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
-    this.accelerator = new DevitaAccelerator(this.lattice, distancePerStep);
+    this.setAccelerator(new DevitaAccelerator(this.getLattice(), distancePerStep));
 
-    this.accelerator.tryToSpeedUp(TERRACE,
+    this.getAccelerator().tryToSpeedUp(TERRACE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(100)
             .setMaxAccumulatedSteps(200)
@@ -81,14 +73,14 @@ public class GrapheneKmc extends AbstractGrowthKmc {
             .setMaxDistanceHops(10));
 
         //accelerating types 2 (ZIGZAG_EDGE) and 3 (ARMCHAIR_EDGE) does not improve performance and introduce some morphology differences
-    this.accelerator.tryToSpeedUp(ZIGZAG_EDGE,
+    this.getAccelerator().tryToSpeedUp(ZIGZAG_EDGE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(30)
             .setMaxAccumulatedSteps(100)
             .setMinDistanceHops(1)
             .setMaxDistanceHops(5));
 
-    this.accelerator.tryToSpeedUp(ARMCHAIR_EDGE,
+    this.getAccelerator().tryToSpeedUp(ARMCHAIR_EDGE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(30)
             .setMaxAccumulatedSteps(100)
