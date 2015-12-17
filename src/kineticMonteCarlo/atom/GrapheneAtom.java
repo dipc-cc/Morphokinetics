@@ -81,8 +81,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * Total number of neighbours.
    * @return 0 <= value <= 12
    */
-  public int getN1N2N3() {
-    return (n1 + n2 + n3);
+  private int getNeighbourCount() {
+    return n1 + n2 + n3;
   }
 
   @Override
@@ -201,7 +201,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     }
 
     addOwnAtom();
-    if (getN1N2N3() > 0) {
+    if (getNeighbourCount() > 0) {
       addBondAtom();
     }
     resetTotalProbability();
@@ -226,7 +226,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       lattice.getNeighbour(getiHexa(), getjHexa(), i).remove3rdNeighbour();
     }
 
-    if (getN1N2N3() > 0) {
+    if (getNeighbourCount() > 0) {
       addBondAtom();
     }
 
@@ -388,7 +388,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       if (isOccupied()) {
         addOwnAtom();
       }
-      if (getN1N2N3() > 0 && !isOccupied()) {
+      if (getNeighbourCount() > 0 && !isOccupied()) {
         addBondAtom();
       }
     }
@@ -400,7 +400,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       if (isOccupied()) {
         addOwnAtom();
       }
-      if (getN1N2N3() > 1 && !isOccupied()) {
+      if (getNeighbourCount() > 1 && !isOccupied()) {
         addBondAtom();
       }
     }
