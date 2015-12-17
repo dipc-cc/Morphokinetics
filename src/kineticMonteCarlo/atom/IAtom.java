@@ -8,7 +8,7 @@ package kineticMonteCarlo.atom;
 import utils.list.IProbabilityHolder;
 
 /**
- *
+ * This interface defines the minimum methods that an atom class have to have.
  * @author J. Alberdi-Rodriguez
  */
 public interface IAtom {
