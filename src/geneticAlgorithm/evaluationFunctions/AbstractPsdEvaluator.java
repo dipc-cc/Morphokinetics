@@ -223,7 +223,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       if (Double.isNaN(psdError)) psdError = 1e20;
     }
     if (flags.contains(evaluatorFlag.TIME)) {
-      timeError = Math.pow(Math.log(ind.getSimulationTime()) - expectedSimulationTime, 2) / expectedSimulationTime; // Calculate simulated time error with the reference
+      timeError = Math.abs(Math.log(ind.getSimulationTime()) - expectedSimulationTime) / expectedSimulationTime; // Calculate simulated time error with the reference
     }
     // There is no need to run the KMC to evaluate the hierachies
     if (flags.contains(evaluatorFlag.HIERARCHY)) {
