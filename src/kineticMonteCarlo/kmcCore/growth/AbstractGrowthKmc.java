@@ -92,7 +92,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-    AbstractGrowthAtom originAtom = ((AbstractGrowthAtom) getList().nextEvent());
+    AbstractGrowthAtom originAtom = (AbstractGrowthAtom) getList().nextEvent();
     AbstractGrowthAtom destinationAtom;
 
     if (originAtom == null) {
