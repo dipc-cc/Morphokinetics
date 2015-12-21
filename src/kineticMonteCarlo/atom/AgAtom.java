@@ -14,7 +14,9 @@ public class AgAtom extends AbstractGrowthAtom {
 
   private static AgTypesTable typesTable;
   private final AgAtom[] neighbours = new AgAtom[6];
+  /** Number of immobile neighbours. */
   private byte nImmobile;
+  /** Number of mobile neighbours. */
   private byte nMobile;
   
   public static final byte TERRACE = 0;
@@ -53,17 +55,24 @@ public class AgAtom extends AbstractGrowthAtom {
     return isOccupied() && (getType() == ISLAND);
   }
 
+  /**
+   * 
+   * @return the number of immobile neighbours.
+   */
   public byte getNImmobile() {
     return nImmobile;
   }
 
+  /**
+   * 
+   * @return the number of mobile neighbours.
+   */
   public byte getNMobile() {
     return nMobile;
   }
 
   @Override
   public void clear() {
-
     setType(TERRACE);
     nImmobile = nMobile = TERRACE;
     setOccupied(false);
@@ -79,7 +88,7 @@ public class AgAtom extends AbstractGrowthAtom {
 
   @Override
   public int getOrientation() {
-
+    // Create the occupation code shifting the number of positions with the neighbours of the current atom
     int occupationCode = 0;
     for (int i = 0; i < 6; i++) {
       if (neighbours[i].isOccupied()) {
@@ -88,18 +97,29 @@ public class AgAtom extends AbstractGrowthAtom {
     }
 
     if (getType() == EDGE_A) {
-      return aggrCalculateEdgeType(occupationCode);
+      return calculateEdgeType(occupationCode);
     }
     if (getType() == KINK_A) {
-      return aggrCalculateKinkType(occupationCode);
+      return calculateKinkType(occupationCode);
     }
     return -1;
   }
 
-  private int aggrCalculateEdgeType(int code) {
-
+  /**
+   * This atom is an edge (it has two neighbours). There are 6 possible positions for the edge,
+   * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
+   * its neighbours:                 
+   *    4  3
+   *   5 [] 2
+   *    0  1
+   * A proper image of the positions is documented here:
+   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
+   * @param code binary code with the occupied neighbours.
+   * @return orientation (a number between 0 and 5 inclusive).
+   */
+  private int calculateEdgeType(int code) {
     switch (code) {
-      case 3: //1+2 | It has two neighbours (it is an edge)
+      case 3: //1+2 positions    (0+1 neighbours)
         return 3;
       case 6: //2+4 positions    (1+2 neighbours)
         return 4;
@@ -116,10 +136,22 @@ public class AgAtom extends AbstractGrowthAtom {
     }
   }
 
-  private int aggrCalculateKinkType(int code) {
+  /**
+   * This atom is a kink (it has three neighbours). There are 6 possible positions for the kink,
+   * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
+   * its neighbours:                 
+   *    4  3
+   *   5 [] 2
+   *    0  1
+   * A proper image of the positions is documented here:
+   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
+   * @param code binary code with the occupied neighbours.
+   * @return  orientation (a number between 0 and 5 inclusive).
+   */
+  private int calculateKinkType(int code) {
 
     switch (code) {
-      case 7:  //1 + 2 + 4 | It has three neighbours (it is a kink)
+      case 7:  //1 + 2 + 4   (0+1+2 neighbours)
         return 0;
       case 14: //2 + 4 + 8   (1+2+3 neighbours)
         return 1;

@@ -10,6 +10,13 @@ public class AgTypesTable {
 
   private final byte[][] table;
 
+  /**
+   * Returns the type of the atom between TERRACE, CORNER, EDGE, KINK and ISLAND.
+   *
+   * @param immobile Number of immobile neighbours
+   * @param mobile Number of mobile neighbours
+   * @return type of the atom (byte)
+   */
   public byte getType(int immobile, int mobile) {
     return table[immobile][mobile];
   }
