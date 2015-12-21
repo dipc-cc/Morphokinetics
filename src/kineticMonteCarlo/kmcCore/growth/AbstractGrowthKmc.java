@@ -395,8 +395,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   void setAtomPerimeter() {
     if (useMaxPerimeter) {
       perimeter.setMaxPerimeter();
+    } else {
+      perimeter.setMinRadius();
     }
-    perimeter.setMinRadius();
     if (perimeterType == RoundPerimeter.CIRCLE) {
       perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius()));
     } else {
