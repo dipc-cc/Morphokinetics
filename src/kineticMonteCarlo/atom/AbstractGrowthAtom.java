@@ -150,11 +150,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return multiplier;
   }
 
-  public void addOwnAtom() {
+  void addOwnAtom() {
     modified.addOwnAtom(this);
   }
   
-  public void addBondAtom() {
+  void addBondAtom() {
     modified.addBondAtom(this);
   }
 
