@@ -308,7 +308,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   /**
    * Calculates current area or, i.e. the number of current places that simulation has. This total
-   * area changes with the current radius It is calculated as is done in KmcCanvas class
+   * area changes with the current. radius It is calculated as is done in KmcCanvas class
    * @return simulated area
    */
   private int calculateAreaAsInKmcCanvas() {
