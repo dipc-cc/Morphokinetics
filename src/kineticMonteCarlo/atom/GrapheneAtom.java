@@ -240,15 +240,15 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   @Override
   public void updateAllRates() {
-    double temp = -getTotalProbability();
+    double tmp = -getTotalProbability();
     resetTotalProbability();
 
     if (this.isEligible()) {
       obtainRatesFromNeighbours(areAllRatesTheSame());
-      temp += getTotalProbability();
+      tmp += getTotalProbability();
     }
     if (this.isOnList()) {
-      addTotalProbability(temp);
+      addTotalProbability(tmp);
     }
   }
 
@@ -272,7 +272,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return false;
     }
     for (int i = 11; i >= 3; i--) {
-      if (neighbours[i].getType() != 0) {
+      if (neighbours[i].getType() != TERRACE) {
         return false;
       }
     }
