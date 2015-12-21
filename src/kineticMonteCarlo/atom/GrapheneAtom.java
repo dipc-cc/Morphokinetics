@@ -239,8 +239,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  void obtainRatesFromNeighbours(boolean equalRates) {
-    if (equalRates) {
+  void obtainRatesFromNeighbours() {
+    if (areAllRatesTheSame()) {
       addToTotalProbability(probJumpToNeighbour(getType(), 0) * 12.0);
     } else {
       if (getBondsProbability() == null) {
@@ -254,7 +254,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     }
   }
 
-  @Override
   boolean areAllRatesTheSame() {
     if ((n1 + n2 + n3) != TERRACE) {
       return false;

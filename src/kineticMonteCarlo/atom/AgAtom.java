@@ -375,25 +375,12 @@ public class AgAtom extends AbstractGrowthAtom {
     this.setList(null);
   }
 
-  /**
-   * 
-   * @param equalRates ignored
-   */
   @Override
-  void obtainRatesFromNeighbours(boolean equalRates) {
+  void obtainRatesFromNeighbours() {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       getBondsProbability()[i] = probJumpToNeighbour(i);
       addToTotalProbability(getBondsProbability()[i]);
     }
-  }
-  
-  /**
-   * Does nothing.
-   * @return 
-   */
-  @Override
-  boolean areAllRatesTheSame() {
-    return false;
   }
 
   @Override

@@ -77,7 +77,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     resetTotalProbability();
 
     if (this.isEligible()) {
-      obtainRatesFromNeighbours(areAllRatesTheSame());
+      obtainRatesFromNeighbours();
       tmp += getTotalProbability();
     }
     if (this.isOnList()) {
@@ -85,8 +85,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
   }
   
-  abstract void obtainRatesFromNeighbours(boolean equalRates);
-  abstract boolean areAllRatesTheSame();
+  abstract void obtainRatesFromNeighbours();
   
   public abstract void updateOneBound(int bond);
 
