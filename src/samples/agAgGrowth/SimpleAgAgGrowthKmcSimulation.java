@@ -9,7 +9,6 @@ import graphicInterfaces.growth.GrowthKmcFrame;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import kineticMonteCarlo.lattice.AgLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgRatesFactory;
 import utils.StaticRandom;
@@ -48,7 +47,7 @@ public class SimpleAgAgGrowthKmcSimulation {
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
-    int sizeY = (int) (sizeX / AgLattice.Y_RATIO);
+    int sizeY = (int) (sizeX / AbstractGrowthLattice.Y_RATIO);
 
     AgKmc kmc = new AgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, (float) -1, false, RoundPerimeter.CIRCLE);
 

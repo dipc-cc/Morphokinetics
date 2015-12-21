@@ -9,7 +9,7 @@ import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
-import kineticMonteCarlo.lattice.AgLattice;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.ListConfiguration;
 import ratesLibrary.AgRatesFactory;
 import utils.StaticRandom;
@@ -48,7 +48,7 @@ public class AgAgMultithreadedEvaluatorTest {
     double depositionRate = new AgRatesFactory().getDepositionRate(experimentalTemp);
     double islandDensity = new AgRatesFactory().getIslandDensity(experimentalTemp);
 
-    return new AgKmc(listConfig, 256, (int) (256 / AgLattice.Y_RATIO), depositionRate, islandDensity);
+    return new AgKmc(listConfig, 256, (int) (256 / AbstractGrowthLattice.Y_RATIO), depositionRate, islandDensity);
 
   }
 
