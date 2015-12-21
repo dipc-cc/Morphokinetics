@@ -72,8 +72,22 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public abstract int getOrientation();
 
-  public abstract void updateAllRates();
+  public void updateAllRates() {
+    double tmp = -getTotalProbability();
+    resetTotalProbability();
 
+    if (this.isEligible()) {
+      obtainRatesFromNeighbours(areAllRatesTheSame());
+      tmp += getTotalProbability();
+    }
+    if (this.isOnList()) {
+      addTotalProbability(tmp);
+    }
+  }
+  
+  abstract void obtainRatesFromNeighbours(boolean equalRates);
+  abstract boolean areAllRatesTheSame();
+  
   public abstract void updateOneBound(int bond);
 
   public abstract void clear();

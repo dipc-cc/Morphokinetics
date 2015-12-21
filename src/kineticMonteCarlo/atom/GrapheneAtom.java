@@ -239,27 +239,14 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void updateAllRates() {
-    double tmp = -getTotalProbability();
-    resetTotalProbability();
-
-    if (this.isEligible()) {
-      obtainRatesFromNeighbours(areAllRatesTheSame());
-      tmp += getTotalProbability();
-    }
-    if (this.isOnList()) {
-      addTotalProbability(tmp);
-    }
-  }
-
-  private void obtainRatesFromNeighbours(boolean equalRates) {
+  void obtainRatesFromNeighbours(boolean equalRates) {
     if (equalRates) {
       addToTotalProbability(probJumpToNeighbour(getType(), 0) * 12.0);
     } else {
       if (getBondsProbability() == null) {
         setBondsProbability(PStack.getProbArray());
       }
-      for (int i = 0; i < 12; i++) {
+      for (int i = 0; i < getNumberOfNeighbours(); i++) {
 
         getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
         addToTotalProbability(getBondsProbability()[i]);
@@ -267,7 +254,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     }
   }
 
-  private boolean areAllRatesTheSame() {
+  @Override
+  boolean areAllRatesTheSame() {
     if ((n1 + n2 + n3) != TERRACE) {
       return false;
     }
