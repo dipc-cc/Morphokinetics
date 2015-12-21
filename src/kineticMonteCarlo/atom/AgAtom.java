@@ -4,7 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.StaticRandom;
 
 /**
