@@ -19,8 +19,6 @@ import utils.StaticRandom;
  */
 public class AgLattice extends AbstractGrowthLattice {
 
-  public static final float Y_RATIO = (float) Math.sqrt(3) / 2.0f; // it is the same as: sin 60º
-
   public AgLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
     super(hexaSizeI, hexaSizeJ, modified);
@@ -148,7 +146,7 @@ public class AgLattice extends AbstractGrowthLattice {
 
   /**
    * Simple relation between Y (Cartesian) and J (hexagonal),
-   * with YRatio (=sin 60º)
+   * with Y_RATIO (=sin 60º)
    * @param jHexa
    * @return
    */

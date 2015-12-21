@@ -18,6 +18,8 @@ import utils.QuickSort;
  */
 public abstract class AbstractGrowthLattice extends AbstractLattice implements IDevitaLattice {
 
+  public static final float Y_RATIO = (float) Math.sqrt(3) / 2.0F; // it is the same as: sin 60º
+
   private AbstractGrowthAtom[][] atoms;
 
   private final ModifiedBuffer modified;
