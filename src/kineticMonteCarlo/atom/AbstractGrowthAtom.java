@@ -4,8 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-
 /**
  *
  * @author Nestor
