@@ -18,7 +18,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * jump from terrace to edge.
    */
   private double[][] probabilities;
-  private double totalProbability;
+  private double probability;
   private double[] bondsProbability;
   private float angle;
   private boolean occupied;
@@ -189,15 +189,15 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   @Override
   public double getProbability() {
-    return totalProbability;
+    return probability;
   }
   
-  public double getTotalProbability() {
-    return totalProbability;
+  public void resetProbability() {
+    probability = 0;
   }
   
-  public void resetTotalProbability() {
-    totalProbability = 0;
+  public void addProbability(double probability) {
+    this.probability += probability;
   }
   
   public void addToTotalProbability(double probability) {
@@ -219,7 +219,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     if (getBondsProbability() != null) {
       return getBondsProbability()[pos];
     } else {
-      return totalProbability / getNumberOfNeighbours();
+      return probability / getNumberOfNeighbours();
     }
   }
 }
