@@ -424,13 +424,13 @@ public class AgAtom extends AbstractGrowthAtom {
   @Override
   public void updateOneBound(int neighborpos) {
 
-    double tmp = 0;
+    double probababilityChange = 0;
     addProbability(-getBondsProbability()[neighborpos]);
-    tmp -= getBondsProbability()[neighborpos];
+    probababilityChange -= getBondsProbability()[neighborpos];
     getBondsProbability()[neighborpos] = (float) probJumpToNeighbour(neighborpos);
 
     addProbability(getBondsProbability()[neighborpos]);
-    tmp += getBondsProbability()[neighborpos];
+    probababilityChange += getBondsProbability()[neighborpos];
 
     addTotalProbability(tmp);
   }
