@@ -62,10 +62,19 @@ public abstract class AbstractList implements IProbabilityHolder {
     removalsSinceLastCleanup++;
   }
   
+  /**
+   * Updates the total probability
+   * @param prob probability change
+   */
   @Override
   public void addTotalProbability(double prob) {
     if (prob != 0) {
       totalProbability += prob;
+      // Next line shouldn't be here:
+      if (totalProbability < 0) {
+        System.out.println("Error: total probability is lower than 0 "+totalProbability);
+        //totalProbability = 0;
+      }
       if (this.parent != null) {
         this.parent.addTotalProbability(prob);
       }
