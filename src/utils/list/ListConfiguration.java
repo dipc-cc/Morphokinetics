@@ -18,25 +18,21 @@ public class ListConfiguration {
   private int listType;
 
   public ListConfiguration setExtraLevels(int binLevels) {
-
     this.binLevels = binLevels;
     return this;
   }
 
   public ListConfiguration setListType(int listType) {
-
     this.listType = listType;
     return this;
   }
 
   public ListConfiguration setBinsPerLevel(int binsPerLevel) {
-
     this.binsPerLevel = binsPerLevel;
     return this;
   }
 
   public AbstractList createList() {
-
     AbstractList list = null;
     if (listType == LINEAR_LIST) {
       list = new LinearList();
