@@ -450,10 +450,12 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  void obtainRatesFromNeighbours() {
+  public double obtainRatesFromNeighbours() {
+    double rates = 0.0;
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       getBondsProbability()[i] = probJumpToNeighbour(i);
       addProbability(getBondsProbability()[i]);
+      rates += getBondsProbability()[i];
     }
   }
 

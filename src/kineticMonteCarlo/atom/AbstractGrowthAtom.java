@@ -86,6 +86,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
       addTotalProbability(tmp);
     }
   }
+  public abstract double obtainRatesFromNeighbours();
   
   public abstract void setNeighbour(AbstractGrowthAtom a, int pos);
 
