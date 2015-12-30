@@ -8,16 +8,16 @@ import utils.StaticRandom;
 
 /**
  *
- * @author DONOSTIA INTERN
+ * @author DONOSTIA INTERN, J. Alberdi-Rodriguez
  */
 public class AgAtom extends AbstractGrowthAtom {
 
   private static AgTypesTable typesTable;
   private final AgAtom[] neighbours = new AgAtom[6];
   /** Number of immobile neighbours. */
-  private byte nImmobile;
+  private int nImmobile;
   /** Number of mobile neighbours. */
-  private byte nMobile;
+  private int nMobile;
   
   public static final byte TERRACE = 0;
   public static final byte CORNER = 1;
@@ -59,7 +59,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * 
    * @return the number of immobile neighbours.
    */
-  public byte getNImmobile() {
+  public int getNImmobile() {
     return nImmobile;
   }
 
@@ -67,14 +67,14 @@ public class AgAtom extends AbstractGrowthAtom {
    * 
    * @return the number of mobile neighbours.
    */
-  public byte getNMobile() {
+  public int getNMobile() {
     return nMobile;
   }
 
   @Override
   public void clear() {
     setType(TERRACE);
-    nImmobile = nMobile = TERRACE;
+    nImmobile = nMobile = 0;
     setOccupied(false);
     setOutside(false);
     
@@ -367,6 +367,11 @@ public class AgAtom extends AbstractGrowthAtom {
     }
   }
 
+  /**
+   * 
+   * @param neighborpos
+   * @return change in the probability
+   */
   @Override
   public void deposit(boolean forceNucleation) {
     setOccupied(true);
