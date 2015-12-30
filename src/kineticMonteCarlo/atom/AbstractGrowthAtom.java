@@ -13,6 +13,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * 
    */
   private byte type;
+  /**
+   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
+   * jump from terrace to edge.
+   */
   private double[][] probabilities;
   private double totalProbability;
   private double[] bondsProbability;
