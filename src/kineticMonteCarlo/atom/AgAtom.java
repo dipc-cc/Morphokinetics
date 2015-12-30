@@ -40,10 +40,12 @@ public class AgAtom extends AbstractGrowthAtom {
     nMobile   = 0;
   }
 
-  public void setNeighbour(AgAtom a, int pos) {
-    neighbours[pos] = a;
+  @Override
+  public void setNeighbour(AbstractGrowthAtom a, int pos) {
+    neighbours[pos] = (AgAtom) a;
   }
 
+  @Override
   public AgAtom getNeighbour(int pos) {
     return neighbours[pos];
   }

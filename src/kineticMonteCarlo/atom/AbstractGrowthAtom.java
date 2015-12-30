@@ -87,7 +87,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
   }
   
-  abstract void obtainRatesFromNeighbours();
+  public abstract void setNeighbour(AbstractGrowthAtom a, int pos);
+
+  public abstract AbstractGrowthAtom getNeighbour(int pos);
   
   public abstract void updateOneBound(int bond);
 

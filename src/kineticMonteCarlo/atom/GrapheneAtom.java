@@ -86,6 +86,16 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   private int getNeighbourCount() {
     return n1 + n2 + n3;
   }
+  
+  @Override
+  public void setNeighbour(AbstractGrowthAtom a, int pos) {
+    neighbours[pos] = (GrapheneAtom) a;
+  }
+
+  @Override
+  public GrapheneAtom getNeighbour(int pos) {
+    return neighbours[pos];
+  }
 
   @Override
   public void clear() {
