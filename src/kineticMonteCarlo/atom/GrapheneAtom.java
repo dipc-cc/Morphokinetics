@@ -19,17 +19,17 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * Total number of 1st neighbours.
    * @return 0 <= value <= 3
    */
-  private byte n1;
+  private int n1;
   /**
    * Total number of 2nd neighbours.
    * @return 0 <= value <= 6
    */
-  private byte n2;  
+  private int n2;  
   /**
    * Total number of 3rd neighbours.
    * @return 0 <= value <= 3
    */
-  private byte n3;
+  private int n3;
   private HopsPerStep distancePerStep;
 
   public GrapheneAtom(short iHexa, short jHexa, HopsPerStep distancePerStep) {
@@ -59,7 +59,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * Total number of 1st neighbours.
    * @return 0 <= value <= 3
    */
-  public byte getN1() {
+  public int getN1() {
     return n1;
   }
 
@@ -67,7 +67,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * Total number of 2nd neighbours.
    * @return 0 <= value <= 6
    */
-  public byte getN2() {
+  public int getN2() {
     return n2;
   }
 
@@ -75,7 +75,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * Total number of 3rd neighbours.
    * @return 0 <= value <= 3
    */
-  public byte getN3() {
+  public int getN3() {
     return n3;
   }
 
