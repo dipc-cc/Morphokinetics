@@ -55,6 +55,7 @@ public class BasicKmc extends AbstractKmc {
   @Override
   protected boolean performSimulationStep() {
     BasicAtom atom = (BasicAtom) getList().nextEvent();
+    if (atom == null) return false;
     if (atom.getY() > getLattice().getHexaSizeJ() - minHeight) {
       return true;
     }
