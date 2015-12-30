@@ -36,6 +36,8 @@ public class AgAtom extends AbstractGrowthAtom {
     if (typesTable == null) {
       typesTable = new AgTypesTable();
     }
+    nImmobile = 0;
+    nMobile   = 0;
   }
 
   public void setNeighbour(AgAtom a, int pos) {
