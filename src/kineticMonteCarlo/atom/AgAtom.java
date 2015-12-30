@@ -73,6 +73,40 @@ public class AgAtom extends AbstractGrowthAtom {
     return nMobile;
   }
 
+  public void setNImmobile(int nImmobile) {
+    this.nImmobile = (byte) nImmobile;
+  }
+
+  public void setNMobile(int nMobile) {
+    this.nMobile = (byte) nMobile;
+  }
+  
+  /**
+   * Adds the given number to the number of mobile neighbours
+   * @param quantity 
+   */
+  public void addNMobile(int quantity) {
+    this.nMobile = this.nMobile + quantity;
+  }
+  
+  /**
+   * Adds the given number to the number of immobile neighbours
+   * @param quantity 
+   */
+  public void addNImmobile(int quantity) {
+    this.nImmobile = this.nImmobile + quantity;
+  }
+
+  /**
+   * Calculates the new atom type when adding or removing a neighbour.
+   * @param addToImmobile variation of the number of immobile neighbours. Must be -1, 0 or 1
+   * @param addToMobile variation of the number of mobile neighbours. Must be -1, 0 or 1
+   * @return
+   */
+  public byte getNewType(int addToImmobile, int addToMobile) {
+    return typesTable.getType(nImmobile + addToImmobile, nMobile + addToMobile);
+  }
+  
   @Override
   public void clear() {
     setType(TERRACE);
