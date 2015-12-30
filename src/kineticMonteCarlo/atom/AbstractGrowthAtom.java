@@ -201,10 +201,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   }
 
   /**
+   * Returns the predefined probability (from rates) to jump from origin type to target type.
+   *
+   * @param originType origin type, from where the atom is going to jump.
+   * @param targetType target type, to where the atom is going to jump.
    * @return the probabilities
    */
-  public double getProbability(int x, int y) {
-    return probabilities[x][y];
+  public double getProbability(int originType, int targetType) {
+    return probabilities[originType][targetType];
   }
   
   public double getProbability(int pos) {
