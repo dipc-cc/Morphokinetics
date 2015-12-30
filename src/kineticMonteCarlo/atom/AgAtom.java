@@ -457,6 +457,7 @@ public class AgAtom extends AbstractGrowthAtom {
       addProbability(getBondsProbability()[i]);
       rates += getBondsProbability()[i];
     }
+    return rates;
   }
 
   @Override
