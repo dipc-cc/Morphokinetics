@@ -75,12 +75,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public abstract int getOrientation();
 
   public void updateAllRates() {
-    double tmp = -getTotalProbability();
-    resetTotalProbability();
+    double tmp = -getProbability();
+    resetProbability();
 
     if (this.isEligible()) {
       obtainRatesFromNeighbours();
-      tmp += getTotalProbability();
+      tmp += getProbability();
     }
     if (this.isOnList()) {
       addTotalProbability(tmp);
@@ -200,10 +200,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     this.probability += probability;
   }
   
-  public void addToTotalProbability(double probability) {
-    totalProbability += probability;
-  }
-
   /**
    * Returns the predefined probability (from rates) to jump from origin type to target type.
    *

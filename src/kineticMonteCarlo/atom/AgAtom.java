@@ -78,7 +78,7 @@ public class AgAtom extends AbstractGrowthAtom {
     setOccupied(false);
     setOutside(false);
     
-    resetTotalProbability();
+    resetProbability();
     for (int i = 0; i < getBondsProbability().length; i++) {
       getBondsProbability()[i] = 0;
     }
@@ -171,7 +171,7 @@ public class AgAtom extends AbstractGrowthAtom {
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
 
-    double linearSearch = StaticRandom.raw() * getTotalProbability();
+    double linearSearch = StaticRandom.raw() * getProbability();
 
     double sum = 0;
     int cont = 0;
@@ -385,7 +385,7 @@ public class AgAtom extends AbstractGrowthAtom {
     if (nMobile > 0) {
       addBondAtom();
     }
-    resetTotalProbability();
+    resetProbability();
   }
 
   @Override
@@ -402,7 +402,7 @@ public class AgAtom extends AbstractGrowthAtom {
       addBondAtom();
     }
 
-    addTotalProbability(-getTotalProbability());
+    addTotalProbability(-getProbability());
     this.setList(null);
   }
 
@@ -410,7 +410,7 @@ public class AgAtom extends AbstractGrowthAtom {
   void obtainRatesFromNeighbours() {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       getBondsProbability()[i] = probJumpToNeighbour(i);
-      addToTotalProbability(getBondsProbability()[i]);
+      addProbability(getBondsProbability()[i]);
     }
   }
 
@@ -418,11 +418,11 @@ public class AgAtom extends AbstractGrowthAtom {
   public void updateOneBound(int neighborpos) {
 
     double tmp = 0;
-    addToTotalProbability(-getBondsProbability()[neighborpos]);
+    addProbability(-getBondsProbability()[neighborpos]);
     tmp -= getBondsProbability()[neighborpos];
     getBondsProbability()[neighborpos] = (float) probJumpToNeighbour(neighborpos);
 
-    addToTotalProbability(getBondsProbability()[neighborpos]);
+    addProbability(getBondsProbability()[neighborpos]);
     tmp += getBondsProbability()[neighborpos];
 
     addTotalProbability(tmp);

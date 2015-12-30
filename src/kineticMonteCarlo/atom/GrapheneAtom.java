@@ -95,7 +95,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     setOccupied(false);
     setOutside(false);
 
-    resetTotalProbability();
+    resetProbability();
     setList(null);
 
     if (getBondsProbability() != null) {
@@ -128,7 +128,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return neighbours[(int) raw * 12];
     }
 
-    double linearSearch = raw * getTotalProbability();
+    double linearSearch = raw * getProbability();
 
     double sum = 0;
     int cont = 0;
@@ -204,7 +204,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     if (getNeighbourCount() > 0) {
       addBondAtom();
     }
-    resetTotalProbability();
+    resetProbability();
   }
 
   /**
@@ -230,7 +230,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       addBondAtom();
     }
 
-    addTotalProbability(-getTotalProbability());
+    addTotalProbability(-getProbability());
     this.setList(null);
     if (getBondsProbability() != null) {
       PStack.returnProbArray(getBondsProbability());
@@ -241,7 +241,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   void obtainRatesFromNeighbours() {
     if (areAllRatesTheSame()) {
-      addToTotalProbability(probJumpToNeighbour(getType(), 0) * 12.0);
+      addProbability(probJumpToNeighbour(getType(), 0) * 12.0);
     } else {
       if (getBondsProbability() == null) {
         setBondsProbability(PStack.getProbArray());
@@ -249,7 +249,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
 
         getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
-        addToTotalProbability(getBondsProbability()[i]);
+        addProbability(getBondsProbability()[i]);
       }
     }
   }
@@ -289,21 +289,21 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
     if (getBondsProbability() == null) {
       double newRate = probJumpToNeighbour(getType(), i);
-      if (newRate * 12 != getTotalProbability()) {
-        double independentProbability = getTotalProbability() / 12.0;
+      if (newRate * 12 != getProbability()) {
+        double independentProbability = getProbability() / 12.0;
         setBondsProbability(PStack.getProbArray());
         for (int a = 0; a < 12; a++) {
           getBondsProbability()[a] = independentProbability;
         }
         getBondsProbability()[i] = newRate;
-        addToTotalProbability(newRate - independentProbability);
+        addProbability(newRate - independentProbability);
         temp += (newRate - independentProbability);
       }
     } else {
-      addToTotalProbability(-getBondsProbability()[i]);
+      addProbability(-getBondsProbability()[i]);
       temp -= getBondsProbability()[i];
       getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
-      addToTotalProbability(getBondsProbability()[i]);
+      addProbability(getBondsProbability()[i]);
       temp += getBondsProbability()[i];
     }
     addTotalProbability(temp);
