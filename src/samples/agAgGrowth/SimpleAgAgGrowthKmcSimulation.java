@@ -25,23 +25,23 @@ public class SimpleAgAgGrowthKmcSimulation {
 
     AgRatesFactory ratesFactory = new AgRatesFactory();
 
-    AgKmc kmc = initialize_kmc();
+    AgKmc kmc = initialiseKmc();
 
-    GrowthKmcFrame frame = create_graphics_frame(kmc);
+    GrowthKmcFrame frame = createGraphicsFrame(kmc);
     frame.setVisible(true);
 
     for (int simulations = 0; simulations < 10; simulations++) {
-      initializeRates(ratesFactory, kmc);
+      initialiseRates(ratesFactory, kmc);
       kmc.simulate();
     }
   }
 
-  private static GrowthKmcFrame create_graphics_frame(AgKmc kmc) {
+  private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
     GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 
-  private static AgKmc initialize_kmc() {
+  private static AgKmc initialiseKmc() {
     new StaticRandom();
     ListConfiguration config = new ListConfiguration()
             .setListType(ListConfiguration.LINEAR_LIST);
@@ -54,11 +54,11 @@ public class SimpleAgAgGrowthKmcSimulation {
     return kmc;
   }
 
-  private static void initializeRates(AgRatesFactory reatesFactory, AgKmc kmc) {
+  private static void initialiseRates(AgRatesFactory reatesFactory, AgKmc kmc) {
 
-    double deposition_rate = reatesFactory.getDepositionRate(135);
-    double island_density = reatesFactory.getIslandDensity(135);
-    kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
+    double depositionRate = reatesFactory.getDepositionRate(135);
+    double islandDensity = reatesFactory.getIslandDensity(135);
+    kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
     kmc.reset();
     kmc.initialiseRates(reatesFactory.getRates(135));
     kmc.depositSeed();

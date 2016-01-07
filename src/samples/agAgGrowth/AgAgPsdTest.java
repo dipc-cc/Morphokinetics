@@ -29,13 +29,13 @@ public class AgAgPsdTest {
 
     AgRatesFactory ratesFactory = new AgRatesFactory();
 
-    AgKmc kmc = initialize_kmc();
+    AgKmc kmc = initialiseKmc();
 
     //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
     PsdSignature2D PSD = new PsdSignature2D(128, 128);
     float[][] sampledSurface = null;
 
-    initializeRates(ratesFactory, kmc);
+    initialiseRates(ratesFactory, kmc);
     for (int i = 0; i < 30; i++) {
       kmc.reset();
       kmc.depositSeed();
@@ -55,12 +55,12 @@ public class AgAgPsdTest {
 
   }
 
-  private static GrowthKmcFrame create_graphics_frame(AgKmc kmc) {
+  private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
     GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
     return frame;
   }
 
-  private static AgKmc initialize_kmc() {
+  private static AgKmc initialiseKmc() {
 
     new StaticRandom();
     ListConfiguration config = new ListConfiguration()
@@ -74,11 +74,11 @@ public class AgAgPsdTest {
     return kmc;
   }
 
-  private static void initializeRates(AgRatesFactory reatesFactory, AgKmc kmc) {
+  private static void initialiseRates(AgRatesFactory reatesFactory, AgKmc kmc) {
 
-    double deposition_rate = reatesFactory.getDepositionRate(135);
-    double island_density = reatesFactory.getIslandDensity(135);
-    kmc.setIslandDensityAndDepositionRate(deposition_rate, island_density);
+    double depositionRate = reatesFactory.getDepositionRate(135);
+    double islandDensity = reatesFactory.getIslandDensity(135);
+    kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
     kmc.initialiseRates(reatesFactory.getRates(135));
   }
 
