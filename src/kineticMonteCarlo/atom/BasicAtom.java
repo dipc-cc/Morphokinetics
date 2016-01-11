@@ -60,26 +60,29 @@ public class BasicAtom extends AbstractAtom {
     }
   }
 
-  public void remove1st() {
+  public double remove1st() {
     type--;
     if (type < 3 && !isRemoved() && isOnList()) {
-      addTotalProbability(getProbabilities()[type] - getProbabilities()[type + 1]);
+      return getProbabilities()[type] - getProbabilities()[type + 1];
     }
+    return 0;
   }
 
   @Override
-  public void remove() {
+  public double remove() {
+    double probabilityChange = 0;
     if (!isRemoved()) {
       if (isOnList()) {
-        addTotalProbability(-getProbabilities()[type]);
+       probabilityChange += -getProbabilities()[type];
       }
       setRemoved();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         if (neighbours[i] != null) {
-          neighbours[i].remove1st();
+          probabilityChange += neighbours[i].remove1st();
         }
       }
     }
+    return probabilityChange;
   }
 
   @Override

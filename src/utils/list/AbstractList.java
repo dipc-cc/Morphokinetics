@@ -1,7 +1,10 @@
 package utils.list;
 
+import java.util.Iterator;
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.ModifiedBuffer;
 
 public abstract class AbstractList implements IProbabilityHolder {
 
@@ -12,6 +15,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   private double time;
   private double depositionProbability;
   private int totalAtoms;
+  /** Sum of all probabilities. Useful to measure the time. */
   private double totalProbability;
   private IProbabilityHolder parent;
   private int level;
@@ -75,12 +79,13 @@ public abstract class AbstractList implements IProbabilityHolder {
         System.out.println("Error: total probability is lower than 0 "+totalProbability);
         //totalProbability = 0;
       }
-      if (this.parent != null) {
-        this.parent.addTotalProbability(prob);
-      }
     }
   }
 
+  void setTotalProbability(double prob) {
+    this.totalProbability = prob;
+  }
+  
   public void setParent(IProbabilityHolder parent) {
     this.parent = parent;
   }
@@ -95,8 +100,13 @@ public abstract class AbstractList implements IProbabilityHolder {
   
   public abstract double getTotalProbabilityFromList();
 
+  /**
+   *
+   * @return total probability (always >= 0)
+   */
   public double getTotalProbability() {
-     return totalProbability;
+    return totalProbability > 0 ? totalProbability : 0;
+    //return totalProbability;
   }
 
   public void reset() {

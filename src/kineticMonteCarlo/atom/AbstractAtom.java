@@ -4,15 +4,13 @@
  */
 package kineticMonteCarlo.atom;
 
-import utils.list.IProbabilityHolder;
-
 /**
  *
  * @author Nestor
  */
 public abstract class AbstractAtom implements IAtom {
 
-  private IProbabilityHolder list;
+  private Boolean list = false;
   private double[] probabilities;
   private int numberOfNeighbours;
   private boolean removed = false;
@@ -39,13 +37,16 @@ public abstract class AbstractAtom implements IAtom {
   }
 
   @Override
-  public void setList(IProbabilityHolder list) {
+  public void setList(Boolean list) {
     this.list = list;
   }
 
   @Override
   public boolean isOnList() {
-    return list != null;
+    if (list != null) 
+      return list;
+    else
+      return false;
   }
 
   @Override
@@ -76,10 +77,5 @@ public abstract class AbstractAtom implements IAtom {
   @Override
   public void setNeighbour(AbstractAtom lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  @Override
-  public void addTotalProbability(double probabilityChanges) {
-    list.addTotalProbability(probabilityChanges);
   }
 }

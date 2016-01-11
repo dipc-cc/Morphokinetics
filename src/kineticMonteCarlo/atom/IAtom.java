@@ -5,8 +5,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import utils.list.IProbabilityHolder;
-
 /**
  * This interface defines the minimum methods that an atom class have to have.
  * @author J. Alberdi-Rodriguez
@@ -17,7 +15,7 @@ public interface IAtom {
 
   public double[] getProbabilities();
 
-  public void setList(IProbabilityHolder list);
+  public void setList(Boolean list);
 
   public boolean isOnList();
 
@@ -31,7 +29,7 @@ public interface IAtom {
   
   public void setRemoved();
   
-  public void remove();
+  public double remove();
   
   public byte getType();
 
@@ -41,5 +39,4 @@ public interface IAtom {
 
   public void setNeighbour(AbstractAtom atom, int i);
   
-  public void addTotalProbability(double probabilityChanges);
 }

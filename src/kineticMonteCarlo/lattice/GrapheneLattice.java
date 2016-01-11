@@ -9,6 +9,9 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
+import static kineticMonteCarlo.atom.AbstractAtom.BULK;
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import kineticMonteCarlo.atom.ArrayStack;
 import utils.StaticRandom;
 
 /**
@@ -20,6 +23,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   private static int[] latticeNeighborhoodData;
   private static final double cos60 = Math.cos(60 * Math.PI / 180);
   private static final double cos30 = Math.cos(30 * Math.PI / 180);
+  private static final ArrayStack PStack = new ArrayStack(12);;
 
   public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
@@ -643,5 +647,120 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   @Override
   public double getCartY(int jHexa) {
     return jHexa * Y_RATIO;
+  }
+  
+  @Override
+  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
+    GrapheneAtom atom = (GrapheneAtom) a;
+    atom.setOccupied(true);
+    if (forceNucleation) {
+      atom.setType(TERRACE);
+    }
+    int i = 0;
+
+    for (; i < 3; i++) {
+      add1stNeighbour(atom.getNeighbour(i), forceNucleation);
+    }
+    for (; i < 9; i++) {
+      add2ndNeighbour(atom.getNeighbour(i));
+    }
+    for (; i < 12; i++) {
+      add3rdNeighbour(atom.getNeighbour(i));
+    }
+
+    addAtom(atom);
+    if (atom.getNeighbourCount() > 0) {
+      addBondAtom(atom);
+    }
+    atom.resetProbability();
+  }
+    
+  /**
+   * Extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos,
+   * si cambia algún tipo, recalcula probabilidades)
+   */
+  @Override
+  public void extract(AbstractGrowthAtom a) {
+    GrapheneAtom atom = (GrapheneAtom) a;
+    atom.setOccupied(false);
+
+    int i = 0;
+    for (; i < 3; i++) {
+      remove1stNeighbour(atom.getNeighbour(i));
+    }
+    for (; i < 9; i++) {
+      remove2ndNeighbour(atom.getNeighbour(i));
+    }
+    for (; i < 12; i++) {
+      remove3rdNeighbour(atom.getNeighbour(i));
+    }
+
+    if (atom.getNeighbourCount() > 0) {
+      addBondAtom(atom);
+    }
+
+    if (atom.getBondsProbability() != null) {
+      PStack.returnProbArray(atom.getBondsProbability());
+      atom.setBondsProbability(null);
+    }
+    atom.setList(false);
+  }
+      
+  private void add1stNeighbour(GrapheneAtom atom, boolean forceNucleation) {
+    byte newType = atom.getNewType(1, 1);
+    //set type is missing!
+    if (forceNucleation && atom.isOccupied()) {
+      newType = BULK;
+    }
+    evaluateModifiedWhenAddNeigh(atom, newType);
+  }
+
+  private void add2ndNeighbour(GrapheneAtom atom) {
+    byte newType = atom.getNewType(2, 1);
+    evaluateModifiedWhenAddNeigh(atom, newType);
+  }
+
+  private void add3rdNeighbour(GrapheneAtom atom) {
+    byte newType = atom.getNewType(3, 1);
+    evaluateModifiedWhenAddNeigh(atom, newType);
+  }
+
+  private void remove1stNeighbour(GrapheneAtom atom) {
+    byte newType = atom.getNewType(1, -1);
+    evaluateModifiedWhenRemNeigh(atom, newType);
+  }
+
+  private void remove2ndNeighbour(GrapheneAtom atom) {
+    byte newType = atom.getNewType(2, -1);
+    evaluateModifiedWhenRemNeigh(atom, newType);
+  }
+
+  private void remove3rdNeighbour(GrapheneAtom atom) {
+    byte newType = atom.getNewType(3, -1);
+    evaluateModifiedWhenRemNeigh(atom, newType);
+  }
+  
+  private void evaluateModifiedWhenRemNeigh(GrapheneAtom atom, byte newType) {
+    if (atom.getType() != newType) {
+      atom.setType(newType);
+      if (atom.isOccupied()) {
+        addAtom(atom);
+      }
+      if (atom.getNeighbourCount() > 0 && !atom.isOccupied()) {
+        addBondAtom(atom);
+      }
+    }
+  }
+
+  private void evaluateModifiedWhenAddNeigh(GrapheneAtom atom, byte newType) {
+    if (atom.getType() != newType) {
+      atom.setType(newType);
+      if (atom.isOccupied()) {
+        addAtom(atom);
+      }
+      if (atom.getNeighbourCount() > 1 && !atom.isOccupied()) {
+        addBondAtom(atom);
+      }
+    }
   }
 }

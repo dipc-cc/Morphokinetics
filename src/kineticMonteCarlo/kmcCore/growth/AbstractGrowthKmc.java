@@ -182,26 +182,29 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return this.depositAtom(lattice.getAtom(iHexa, jHexa));
   }
 
-  protected boolean extractAtom(AbstractGrowthAtom origin) {
+  /*protected boolean extractAtom(AbstractGrowthAtom origin) {
     if (!origin.isOccupied()) {
       return false;
     }
 
-    origin.extract();
+    double probabilityChange = -origin.getProbability();
     lattice.subtractOccupied();
+    getList().addTotalProbability(probabilityChange);
+    lattice.extract(origin);
     modifiedBuffer.updateAtoms(getList(), lattice);
     return true;
-  }
+  }*/
 
   private boolean depositAtom(AbstractGrowthAtom atom) {
     if (atom.isOccupied()) {
       return false;
     }
 
-    boolean forceNucleation = (!justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
-    atom.deposit(forceNucleation);
+    boolean forceNucleation = (!justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    lattice.deposit(atom, forceNucleation);
     lattice.addOccupied();
-    modifiedBuffer.updateAtoms(getList(), lattice);
+    modifiedBuffer.updateAtoms(getList());
+    
     return true;
 
   }
@@ -217,10 +220,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       return false;
     }
 
-    boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar    
-    origin.extract();
-    destination.deposit(forceNucleation);
-    modifiedBuffer.updateAtoms(getList(), lattice);
+    boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    double probabilityChange = -origin.getProbability();
+    getList().addTotalProbability(probabilityChange);
+    lattice.extract(origin);
+    //modifiedBuffer.updateAtoms(getList());
+    lattice.deposit(destination, forceNucleation);
+    modifiedBuffer.updateAtoms(getList());
 
     return true;
   }

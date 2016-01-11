@@ -55,7 +55,7 @@ public class AgAtom extends AbstractGrowthAtom {
     return isOccupied() && (getType() < KINK_A);
   }
 
-  private boolean isPartOfImmobilSubstrate() {
+  public boolean isPartOfImmobilSubstrate() {
     return isOccupied() && (getType() == ISLAND);
   }
 
@@ -120,8 +120,6 @@ public class AgAtom extends AbstractGrowthAtom {
     for (int i = 0; i < getBondsProbability().length; i++) {
       getBondsProbability()[i] = 0;
     }
-
-    setList(null);
   }
 
   @Override
@@ -288,120 +286,12 @@ public class AgAtom extends AbstractGrowthAtom {
     }
     return true;
   }
-  
-  public void removeImmobilAddMobile() {
 
-    if (nImmobile == 0) {  //estado de transición
-      nMobile++;
-      nImmobile--;
-      return;
-    }
-
-    byte newType = typesTable.getType(--nImmobile, ++nMobile);
-
-    if (getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean immobileToMobile = (getType() >= KINK_A && newType < KINK_A);
-      setType(newType);
-      addOwnAtom();
-      if (nMobile > 0 && !isOccupied()) {
-        addBondAtom();
-      }
-
-      if (immobileToMobile && isOccupied()) {
-        for (int i = 0; i < getNumberOfNeighbours(); i++) {
-          if (!neighbours[i].isPartOfImmobilSubstrate()) {
-            neighbours[i].removeImmobilAddMobile();
-          }
-        }
-      }
-    }
-  }
-
-  public void removeMobileAddImmobileProcess(boolean forceNucleation) {
-
-    if (nMobile == 0) {
-      nMobile--;
-      nImmobile++;
-      return;
-    }
-
-    byte newType = typesTable.getType(++nImmobile, --nMobile);
-
-    if (forceNucleation && isOccupied()) {
-      newType = ISLAND;
-    }
-
-    if (getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean mobileToImmobile = (getType() < KINK_A && newType >= KINK_A);
-      setType(newType);
-      addOwnAtom();
-      if (nMobile > 0 && !isOccupied()) {
-        addBondAtom();
-      }
-      if (mobileToImmobile && isOccupied()) {
-        for (int i = 0; i < getNumberOfNeighbours(); i++) {
-          if (!neighbours[i].isPartOfImmobilSubstrate()) {
-            neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Éste lo ejecutan los primeros vecinos
-   * @param originType
-   * @param forceNucleation
-   */
-  public void addOccupiedNeighbourProcess(byte originType, boolean forceNucleation) {
-
-    byte newType;
-
-    if (originType < KINK_A) {
-      newType = typesTable.getType(nImmobile, ++nMobile);
-    } else {
-      newType = typesTable.getType(++nImmobile, nMobile);
-    }
-
-    if (forceNucleation) {
-      newType = ISLAND;
-    }
-
-    if (getType() != newType) {
-      boolean mobileToImmobile = (getType() < KINK_A && newType >= KINK_A);
-      setType(newType);
-      addOwnAtom();
-      if (nMobile > 0 && !isOccupied()) {
-        addBondAtom();
-      }
-      if (mobileToImmobile && isOccupied()) {
-        for (int i = 0; i < getNumberOfNeighbours(); i++) {
-          if (!neighbours[i].isPartOfImmobilSubstrate()) {
-            neighbours[i].removeMobileAddImmobileProcess(forceNucleation);
-          }
-        }
-      }
-    }
-  }
-
-  public void removeMobileOccupied() {
-
-    byte newType = typesTable.getType(nImmobile, --nMobile);
-
-    if (getType() != newType) {
-      boolean immobileToMobile = (getType() >= KINK_A && newType < KINK_A);
-      setType(newType);
-      addOwnAtom();
-      if (nMobile > 0 && !isOccupied()) {
-        addBondAtom();
-      }
-      if (immobileToMobile && isOccupied()) {
-        for (int i = 0; i < getNumberOfNeighbours(); i++) {
-          if (!neighbours[i].isPartOfImmobilSubstrate()) {
-            neighbours[i].removeImmobilAddMobile();
-          }
-        }
-      }
+  @Override
+  public void obtainRateFromNeighbours() {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      getBondsProbability()[i] = probJumpToNeighbour(i);
+      addProbability(getBondsProbability()[i]);
     }
   }
 
@@ -411,57 +301,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @return change in the probability
    */
   @Override
-  public void deposit(boolean forceNucleation) {
-    setOccupied(true);
-    if (forceNucleation) {
-      setType(ISLAND);
-    }
-
-    byte originalType = getType();
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      if (!neighbours[i].isPartOfImmobilSubstrate()) {
-        neighbours[i].addOccupiedNeighbourProcess(originalType, forceNucleation);
-      }
-    }
-
-    addOwnAtom();
-    if (nMobile > 0) {
-      addBondAtom();
-    }
-    resetProbability();
-  }
-
-  @Override
-  public void extract() {
-    setOccupied(false);
-
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      if (!neighbours[i].isPartOfImmobilSubstrate()) {
-        neighbours[i].removeMobileOccupied();
-      }
-    }
-
-    if (nMobile > 0) {
-      addBondAtom();
-    }
-
-    addTotalProbability(-getProbability());
-    this.setList(null);
-  }
-
-  @Override
-  public double obtainRatesFromNeighbours() {
-    double rates = 0.0;
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      getBondsProbability()[i] = probJumpToNeighbour(i);
-      addProbability(getBondsProbability()[i]);
-      rates += getBondsProbability()[i];
-    }
-    return rates;
-  }
-
-  @Override
-  public void updateOneBound(int neighborpos) {
+  public double updateOneBound(int neighborpos) {
 
     double probabilityChange = 0;
     addProbability(-getBondsProbability()[neighborpos]);
@@ -471,7 +311,7 @@ public class AgAtom extends AbstractGrowthAtom {
     addProbability(getBondsProbability()[neighborpos]);
     probabilityChange += getBondsProbability()[neighborpos];
 
-    addTotalProbability(probabilityChange);
+    return probabilityChange;
   }
 
   private double probJumpToNeighbour(int position) {

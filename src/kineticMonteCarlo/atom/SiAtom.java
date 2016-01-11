@@ -85,18 +85,20 @@ public class SiAtom extends AbstractAtom {
     return n2;
   }
 
-  private void remove1st() {
+  private double remove1st() {
     n1--;
     if (n1 < 3 && isOnList()) {
-      addTotalProbability(getProbabilities()[n1 * 16 + n2] - getProbabilities()[(n1 + 1) * 16 + n2]);
+      return getProbabilities()[n1 * 16 + n2] - getProbabilities()[(n1 + 1) * 16 + n2];
     }
+    return 0;
   }
 
-  private void remove2nd() {
+  private double remove2nd() {
     n2--;
     if (n1 < 4 && isOnList()) {
-      addTotalProbability(getProbabilities()[n1 * 16 + n2] - getProbabilities()[n1 * 16 + n2 + 1]);
+      return getProbabilities()[n1 * 16 + n2] - getProbabilities()[n1 * 16 + n2 + 1];
     }
+    return 0;
   }
 
   public void updateN1FromScratch() {
@@ -126,25 +128,27 @@ public class SiAtom extends AbstractAtom {
   }
 
   @Override
-  public void remove() {
+  public double remove() {
+    double probabilityChange = 0;
     if (!isRemoved()) {
       if (n1 < 4 && isOnList()) {
-        addTotalProbability(-getProbabilities()[n1 * 16 + n2]);
+        probabilityChange += -getProbabilities()[n1 * 16 + n2];
       }
       setRemoved();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         SiAtom atom1st = getNeighbour(i);
         if (atom1st != null) {
-          atom1st.remove1st();
+          probabilityChange += atom1st.remove1st();
           for (int j = 0; j < getNumberOfNeighbours(); j++) {
             SiAtom atom2nd = atom1st.getNeighbour(j);
             if (atom2nd != null && atom2nd != this && !atom2nd.isRemoved()) {
-              atom2nd.remove2nd();
+              probabilityChange += atom2nd.remove2nd();
             }
           }
         }
       }
     }
+    return probabilityChange;
   }
   
   @Override

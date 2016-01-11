@@ -40,7 +40,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   private void updateCurrentList() {
-
+    
     while (bins[currentBin].getSize() > (getTotalAtoms() * BIN_DIFFERENCE_FACTOR / bins.length)) {
       currentBin++;
       if (currentBin == bins.length) {
@@ -53,10 +53,19 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   public void addAtom(AbstractAtom atom) {
     updateCurrentList();
     setTotalAtoms(getTotalAtoms() + 1);
-    addTotalProbability(atom.getProbability());
     bins[currentBin].addAtom(atom);
   }
-
+  
+  /**
+   * Updates the total probability
+   * @param prob probability change
+   */
+  @Override
+  public void addTotalProbability(double prob) {
+    setTotalProbability(getTotalProbability() + prob);
+    bins[currentBin].addTotalProbability(prob);
+  }
+  
   @Override
   public AbstractAtom nextEvent() {
 
@@ -65,31 +74,32 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
+    double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability()); // has to be getTotalProbability() 
     if (this.getParent() == null) {
-      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
+      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbabilityFromList() + getDepositionProbability())); // has to be getTotalProbability()
     }
 
     if (position < getDepositionProbability()) {
       return null; //we have to add a new atom
     }
+    // Possible bug here! !Removing next line results of Ag run are much more similar (remove & solve?) 
     position -= getDepositionProbability();
     int selected = 0;
-    double accumulation = bins[selected].getTotalProbability();
+    double accumulation = bins[selected].getTotalProbabilityFromList(); //has to be bins[selectedBin].getTotalProbability() instead
 
     while (position >= accumulation) {
       selected++;
       if (selected == bins.length - 1) {
         break;
       }
-      accumulation += bins[selected].getTotalProbability();
+      accumulation += bins[selected].getTotalProbabilityFromList(); // has to be bins[selectedBin].getTotalProbability() instead
     }
-
+    
     AbstractAtom atom = bins[selected].nextEvent();
-    if (atom != null) {
+    if (atom != null) { //this never happens (with no extra levels at least)
       setTotalAtoms(getTotalAtoms() - 1);
     }
-
+    
     return atom;
   }
 

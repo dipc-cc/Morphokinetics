@@ -26,7 +26,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private final short iHexa;
   private final short jHexa;
   private int multiplier;
-  private ModifiedBuffer modified;
 
   public AbstractGrowthAtom(short iHexa, short jHexa, int numberOfNeighbours) {
 
@@ -64,45 +63,46 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public abstract byte getTypeWithoutNeighbour(int neighPos);
 
-  public abstract void deposit(boolean forceNucleation);
-
-  public abstract void extract();
-
   public abstract boolean areTwoTerracesTogether();
 
   public abstract AbstractGrowthAtom chooseRandomHop();
 
   public abstract int getOrientation();
-
-  public void updateAllRates() {
+  
+  /**
+   * If current atom is not eligible (thus, is immobile) return its probability in negative. Its
+   * probability is then set to zero.
+   *
+   * If the current atom is eligible, update its probability with its neighbours.
+   *
+   * @return a probability change
+   */
+  public double updateRate() {
     double tmp = -getProbability();
     resetProbability();
 
     if (this.isEligible()) {
-      obtainRatesFromNeighbours();
+      obtainRateFromNeighbours();
       tmp += getProbability();
     }
-    if (this.isOnList()) {
-      addTotalProbability(tmp);
-    }
+    return tmp;
   }
-  public abstract double obtainRatesFromNeighbours();
+  public abstract void obtainRateFromNeighbours();
   
   public abstract void setNeighbour(AbstractGrowthAtom a, int pos);
 
   public abstract AbstractGrowthAtom getNeighbour(int pos);
   
-  public abstract void updateOneBound(int bond);
+  public abstract double updateOneBound(int bond);
 
   public abstract void clear();
   
-  public void initialise(double[][] probabilities, ModifiedBuffer modified) {
+  public void initialise(double[][] probabilities) {
     this.probabilities = probabilities;
-    this.modified = modified;
   }
   
   @Override
-  public void remove() {
+  public double remove() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
@@ -166,15 +166,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public int getMultiplier() {
     return multiplier;
-  }
-
-  void addOwnAtom() {
-    modified.addOwnAtom(this);
-  }
-  
-  void addBondAtom() {
-    modified.addBondAtom(this);
-  }
+  }  
 
   /**
    * @return the bondsProbability

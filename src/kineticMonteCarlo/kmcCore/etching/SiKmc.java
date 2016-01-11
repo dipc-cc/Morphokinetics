@@ -44,6 +44,7 @@ public class SiKmc extends AbstractKmc {
             SiAtom atom = (SiAtom) getLattice().getAtom(i, j, k, l);
             if (atom.getN1() < 4 && atom.getN1() > 0 && !atom.isRemoved()) {
               getList().addAtom(atom);
+              //getList().addTotalProbability(atom.getProbability());
             }
           }
         }
@@ -56,12 +57,14 @@ public class SiKmc extends AbstractKmc {
     SiAtom atom = (SiAtom) getList().nextEvent();
     // I am not sure that the next line is correct (Joseba). However,
     if (atom == null) return false; // next even can be null and we should be ready to handle this
-    atom.remove();
+    double probabilityChange = atom.remove();
+    getList().addTotalProbability(probabilityChange);
     atom.setList(null);
     for (int k = 0; k < 4; k++) {
       SiAtom neighbour = atom.getNeighbour(k);
       if (neighbour.getN1() == 3) {
         getList().addAtom(neighbour);
+        //getList().addTotalProbability(atom.getProbability());
       }
     }
     return atom.getZ() < minHeight * 2;

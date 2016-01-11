@@ -27,6 +27,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private final ArrayList<Integer> includePerimeterList; 
   private final int hexaArea;
   private int occupied;
+  private double[][] probabilities;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -46,10 +47,19 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
 
+  public abstract void deposit(AbstractGrowthAtom atom, boolean forceNucleation);
+
+  /**
+   * Extract the given atom from the lattice
+   * @param atom the atom to be extracted
+   */
+  public abstract void extract(AbstractGrowthAtom atom);
+  
   public void configure(double[][] probabilities) {
+    this.probabilities = probabilities;
     for (int iHexa = 0; iHexa < atoms[0].length; iHexa++) {
       for (int jHexa = 0; jHexa < atoms.length; jHexa++) {
-        atoms[jHexa][iHexa].initialise(probabilities, modified);
+        atoms[jHexa][iHexa].initialise(probabilities);
       }
     }
   }
@@ -254,5 +264,13 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public int getOccupied() {
     return occupied;
+  }
+  
+  void addAtom(AbstractGrowthAtom atom) {
+    modified.addOwnAtom(atom);
+  }
+  
+  void addBondAtom(AbstractGrowthAtom atom) {
+    modified.addBondAtom(atom);
   }
 }

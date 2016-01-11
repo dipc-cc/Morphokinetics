@@ -4,7 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.AbstractList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -20,7 +19,6 @@ public class ModifiedBuffer {
   private final Set<AbstractGrowthAtom> bufferL;
 
   public ModifiedBuffer() {
-
     buffer = new HashSet(8, 0.9f);
     bufferL = new HashSet(8, 0.9f);
   }
@@ -32,9 +30,9 @@ public class ModifiedBuffer {
   public void addBondAtom(AbstractGrowthAtom a) {
     bufferL.add(a);
   }
-
-  public void updateAtoms(AbstractList list, AbstractGrowthLattice lattice) {
-
+  
+  public void updateAtoms(AbstractList list) {
+    
     Iterator<AbstractGrowthAtom> it = buffer.iterator();
     while (it.hasNext()) {
       updateAllRates(it.next(), list);
@@ -42,30 +40,28 @@ public class ModifiedBuffer {
 
     it = bufferL.iterator();
     while (it.hasNext()) {
-      updateAllNeighbours(it.next(), lattice);
+      updateAllNeighbours(it.next(), list);
     }
     clear();
   }
 
   private void updateAllRates(AbstractGrowthAtom atom, AbstractList list) {
-
-    if (atom.isEligible() && !atom.isOnList()) {
-      list.addAtom(atom);
+    double probabilityChange = atom.updateRate();
+    if (list != null) {
+      if (atom.isEligible()&& !atom.isOnList()) {
+        list.addAtom(atom);
+      }
+      list.addTotalProbability(probabilityChange);
     }
-    atom.updateAllRates();
-
   }
 
-  private void updateAllNeighbours(AbstractGrowthAtom atom, AbstractGrowthLattice lattice) {
+  private void updateAllNeighbours(AbstractGrowthAtom atom, AbstractList list) {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      updateNeighbour(atom, i, lattice);
-    }
-  }
-
-  private void updateNeighbour(AbstractGrowthAtom atom, int posNeighbour, AbstractGrowthLattice lattice) {
-    AbstractGrowthAtom neighbour = lattice.getNeighbour(atom.getX(), atom.getY(), posNeighbour);
-    if (neighbour.isEligible() && !buffer.contains(neighbour)) {
-      neighbour.updateOneBound(posNeighbour);
+      AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+      if (neighbour.isEligible() && !buffer.contains(neighbour)) {
+        double probabilityChange = neighbour.updateOneBound(i);
+        list.addTotalProbability(probabilityChange);
+      }
     }
   }
 

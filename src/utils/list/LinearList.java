@@ -14,7 +14,7 @@ import utils.StaticRandom;
 public class LinearList extends AbstractList implements IProbabilityHolder{
 
   private final ArrayList<AbstractAtom> surface;
-
+  
   public LinearList() {
     super();
     surface = new ArrayList();
@@ -49,7 +49,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     while (li.hasNext()) {
       AbstractAtom AC = li.next();
       if (!AC.isEligible()) {
-        AC.setList(null);
         li.remove();
         setTotalAtoms(getTotalAtoms() - 1);
       }
@@ -60,8 +59,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   @Override
   public void addAtom(AbstractAtom a) {
     surface.add(0, a);
-    a.setList(this);
-    addTotalProbability(a.getProbability());
+    a.setList(true);
     setTotalAtoms(getTotalAtoms() + 1);
   }
 
@@ -73,9 +71,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
+    double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability()); // has to be getTotalProbability()
 
-    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
+    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbabilityFromList() + getDepositionProbability())); // has to be getTotalProbability()
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
@@ -96,10 +94,10 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     }
 
     if (atom != null) {
-      surface.remove(surface.size() - 1);
-      setTotalAtoms(getTotalAtoms() - 1);
+      surface.remove(surface.size() - 1); // Remove from the list the last element
+      setTotalAtoms(getTotalAtoms() - 1); // Update accordingly the number of atoms
     }
-
+    
     return atom;
   }
 

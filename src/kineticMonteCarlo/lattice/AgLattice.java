@@ -10,6 +10,8 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAtom.ISLAND;
+import static kineticMonteCarlo.atom.AgAtom.KINK_A;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import utils.StaticRandom;
 
@@ -398,5 +400,175 @@ public class AgLattice extends AbstractGrowthLattice {
     }
     return null;
   }
+  
+  @Override
+  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
+    AgAtom atom = (AgAtom) a;
+    atom.setOccupied(true);
+    if (forceNucleation) {
+      atom.setType(ISLAND);
+    }
 
+    byte originalType = atom.getType();
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+        addOccupiedNeighbourProcess(atom.getNeighbour(i), originalType, forceNucleation);
+      }
+    }
+
+    addAtom(atom);
+    if (atom.getNMobile() > 0) {
+      addBondAtom(atom);
+    }
+    atom.resetProbability();
+    //atom.setList(true);
+  }
+
+  @Override
+  public void extract(AbstractGrowthAtom a) {
+    AgAtom atom = (AgAtom) a;
+    atom.setOccupied(false);
+    
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+        removeMobileOccupied(atom.getNeighbour(i));
+      }
+    }
+
+    if (atom.getNMobile() > 0) {
+      addBondAtom(atom);
+    }
+
+    atom.resetProbability();
+    atom.setList(false);
+  }
+
+    
+  public void removeImmobilAddMobile(AgAtom atom) {
+
+    if (atom.getNImmobile() == 0) {  //estado de transición
+      atom.addNMobile(1); // nMobile++;
+      atom.addNImmobile(-1); // nImmobile--;
+      return;
+    }
+
+    byte newType = atom.getNewType(-1, +1); // --nImmobile, ++nMobile
+    atom.addNImmobile(-1);
+    atom.addNMobile(1);
+
+    if (atom.getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean immobileToMobile = (atom.getType() >= KINK_A && newType < KINK_A);
+      atom.setType(newType);
+      addAtom(atom);
+      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
+        addBondAtom(atom);
+      }
+
+      if (immobileToMobile && atom.isOccupied()) {
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeImmobilAddMobile(atom.getNeighbour(i));
+          }
+        }
+      }
+    }
+  }
+  
+  public void removeMobileAddImmobileProcess(AgAtom atom, boolean forceNucleation) {
+
+    if (atom.getNMobile() == 0) {
+      atom.addNMobile(-1); // nMobile--
+      atom.addNImmobile(1); // nImmobile++
+      return;
+    }
+
+    byte newType = atom.getNewType(1, -1); //++nImmobile, --nMobile
+    atom.addNMobile(-1);
+    atom.addNImmobile(1);
+
+    if (forceNucleation && atom.isOccupied()) {
+      newType = ISLAND;
+    }
+
+    if (atom.getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean mobileToImmobile = (atom.getType() < KINK_A && newType >= KINK_A);
+      atom.setType(newType);
+      addAtom(atom);
+      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
+        addBondAtom(atom);
+      }
+      if (mobileToImmobile && atom.isOccupied()) {
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeMobileAddImmobileProcess(atom.getNeighbour(i), forceNucleation);
+          }
+        }
+      }
+    }
+  }
+   
+  /**
+   * Éste lo ejecutan los primeros vecinos
+   * @param atom neighbour atom of the original atom
+   * @param originType type of the original atom
+   * @param forceNucleation
+   */
+  public void addOccupiedNeighbourProcess(AgAtom atom, byte originType, boolean forceNucleation) {
+    
+    byte newType;
+
+    if (originType < KINK_A) {
+      newType = atom.getNewType(0, 1); //nImmobile, ++nMobile
+      atom.addNMobile(1);
+    } else {
+      newType = atom.getNewType(1, 0); //++nImmobile, nMobile
+      atom.addNImmobile(1);
+    }
+
+    if (forceNucleation) {
+      newType = ISLAND;
+    }
+
+    if (atom.getType() != newType) {
+      boolean mobileToImmobile = (atom.getType() < KINK_A && newType >= KINK_A);
+      atom.setType(newType);
+      addAtom(atom);
+      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
+        addBondAtom(atom);
+      }
+      if (mobileToImmobile && atom.isOccupied()) {
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeMobileAddImmobileProcess(atom.getNeighbour(i), forceNucleation);
+          }
+        }
+      }
+    }
+  }
+   
+  /**
+   * 
+   * @param atom neighbour atom of the original atom
+   */
+  public void removeMobileOccupied(AgAtom atom) {
+
+    byte newType = atom.getNewType(0, -1); //nImmobile, --nMobile
+    atom.addNMobile(-1); // remove one mobile atom (original atom has been extracted)
+
+    if (atom.getType() != newType) {
+      boolean immobileToMobile = (atom.getType() >= KINK_A && newType < KINK_A);
+      atom.setType(newType);
+      addAtom(atom);
+      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
+        addBondAtom(atom);
+      }
+      if (immobileToMobile && atom.isOccupied()) {
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeImmobilAddMobile(atom.getNeighbour(i));
+          }
+        }
+      }
+    }
+  }
 }
