@@ -297,19 +297,17 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * 
-   * @param neighborpos
+   * @param pos position of the neighbour
    * @return change in the probability
    */
   @Override
-  public double updateOneBound(int neighborpos) {
-
-    double probabilityChange = 0;
-    addProbability(-getBondsProbability()[neighborpos]);
-    probabilityChange -= getBondsProbability()[neighborpos];
-    getBondsProbability()[neighborpos] = (float) probJumpToNeighbour(neighborpos);
-
-    addProbability(getBondsProbability()[neighborpos]);
-    probabilityChange += getBondsProbability()[neighborpos];
+  public double updateOneBound(int pos) {
+    // Store previous probability
+    double probabilityChange = -getBondsProbability()[pos];
+    // Update to the new probability and save
+    getBondsProbability()[pos] = (float) probJumpToNeighbour(pos);
+    probabilityChange += getBondsProbability()[pos];
+    addProbability(probabilityChange);
 
     return probabilityChange;
   }
