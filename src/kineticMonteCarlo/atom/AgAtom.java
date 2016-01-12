@@ -120,6 +120,8 @@ public class AgAtom extends AbstractGrowthAtom {
     for (int i = 0; i < getBondsProbability().length; i++) {
       getBondsProbability()[i] = 0;
     }
+    
+    setList(false);
   }
 
   @Override
