@@ -92,7 +92,6 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
     if (position < getDepositionProbability()) {
       return null; //we have to add a new atom
     }
-    // Possible bug here! !Removing next line results of Ag run are much more similar (remove & solve?) 
     position -= getDepositionProbability();
     int selected = 0;
     double accumulation = bins[selected].getTotalProbabilityFromList(); //has to be bins[selectedBin].getTotalProbability() instead
