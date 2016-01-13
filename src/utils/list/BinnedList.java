@@ -19,6 +19,10 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   private static final float BIN_DIFFERENCE_FACTOR = 1.25f;
   private final AbstractList[] bins;
   private int currentBin;
+  /**
+   * Stores if the current totalProbability and the probability calculated from the list are the same.
+   */
+  private boolean clean;
 
   public BinnedList(int binAmount, int extraBinLevels) {
     super();
@@ -37,6 +41,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
         bins[i].setParent(this);
       }
     }
+    clean = false;
   }
 
   private void updateCurrentList() {
@@ -51,17 +56,19 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
   @Override
   public void addAtom(AbstractAtom atom) {
+    clean = false;
     updateCurrentList();
     setTotalAtoms(getTotalAtoms() + 1);
     bins[currentBin].addAtom(atom);
   }
   
   /**
-   * Updates the total probability
+   * Updates the total probability 
    * @param prob probability change
    */
   @Override
   public void addTotalProbability(double prob) {
+    clean = false;
     setTotalProbability(getTotalProbability() + prob);
     // How I know which is the correct bin?? 
     // next line creates an ERROR!! (when using getTotalProbability()
@@ -71,7 +78,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   
   @Override
   public AbstractAtom nextEvent() {
-
+    clean = false;
     if (autoCleanup() && getRemovalsSinceLastCleanup() > EVENTS_PER_CLEANUP) {
       this.cleanup();
       resetRemovalsSinceLastCleanup();
@@ -117,12 +124,18 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
   @Override
   public double getTotalProbabilityFromList() {
-    double totalProb = 0;
-    for (AbstractList bin : bins) {
-      totalProb += bin.getTotalProbabilityFromList();
-    }
+    if (clean) {
+      return getTotalProbability();
+    } else {
+      double totalProb = 0;
+      for (AbstractList bin : bins) {
+        totalProb += bin.getTotalProbabilityFromList();
+      }
 
-    return totalProb;
+      clean = true;
+      setTotalProbability(totalProb);
+      return totalProb;
+    }
   }
 
   @Override

@@ -14,25 +14,46 @@ import utils.StaticRandom;
 public class LinearList extends AbstractList implements IProbabilityHolder{
 
   private final ArrayList<AbstractAtom> surface;
+  /**
+   * Stores if the current totalProbability and the probability calculated from the list are the same.
+   */
+  private boolean clean;
   
   public LinearList() {
     super();
     surface = new ArrayList();
     this.setLevel(-1);
+    clean = false;
   }
 
   @Override
   public double getTotalProbabilityFromList() {
-    double totalProbability = 0;
+    if (clean) {
+      return getTotalProbability();
+    } else {
+      double totalProbability = 0;
 
-    ListIterator<AbstractAtom> li = surface.listIterator();
-    while (li.hasNext()) {
-      AbstractAtom atom = li.next();
-      if (atom.isEligible()) {
-        totalProbability += atom.getProbability();
+      ListIterator<AbstractAtom> li = surface.listIterator();
+      while (li.hasNext()) {
+        AbstractAtom atom = li.next();
+        if (atom.isEligible()) {
+          totalProbability += atom.getProbability();
+        }
       }
+      clean = true;
+      setTotalProbability(totalProbability);
+      return totalProbability;
     }
-    return totalProbability;
+  }  
+  
+  /**
+   * Updates the total probability
+   * @param prob probability change
+   */
+  @Override
+  public void addTotalProbability(double prob) {
+    clean = false;
+    setTotalProbability(getTotalProbability() + prob);
   }
 
   @Override
@@ -58,6 +79,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
   @Override
   public void addAtom(AbstractAtom a) {
+    clean = false;
     surface.add(0, a);
     a.setList(true);
     setTotalAtoms(getTotalAtoms() + 1);
@@ -84,6 +106,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     AbstractAtom atom = null;
     outside:
     for (int i = 0; i < surface.size(); i++) {
+      clean = false;
       atom = surface.get(i);
       currentProbability += atom.getProbability();
       if (currentProbability >= position) {
@@ -94,6 +117,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     }
 
     if (atom != null) {
+      clean = false;
       surface.remove(surface.size() - 1); // Remove from the list the last element
       setTotalAtoms(getTotalAtoms() - 1); // Update accordingly the number of atoms
     }

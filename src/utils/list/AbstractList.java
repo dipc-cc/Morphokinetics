@@ -1,10 +1,7 @@
 package utils.list;
 
-import java.util.Iterator;
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.ModifiedBuffer;
 
 public abstract class AbstractList implements IProbabilityHolder {
 
@@ -64,22 +61,6 @@ public abstract class AbstractList implements IProbabilityHolder {
   
   public void addRemovalsSinceLastCleanup() {
     removalsSinceLastCleanup++;
-  }
-  
-  /**
-   * Updates the total probability
-   * @param prob probability change
-   */
-  @Override
-  public void addTotalProbability(double prob) {
-    if (prob != 0) {
-      totalProbability += prob;
-      // Next line shouldn't be here:
-      if (totalProbability < 0) {
-        System.out.println("Error: total probability is lower than 0 "+totalProbability);
-        //totalProbability = 0;
-      }
-    }
   }
 
   void setTotalProbability(double prob) {
