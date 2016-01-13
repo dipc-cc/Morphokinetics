@@ -412,7 +412,7 @@ public class AgLattice extends AbstractGrowthLattice {
     byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-        addOccupiedNeighbourProcess(atom.getNeighbour(i), originalType, forceNucleation);
+        addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
       }
     }
 
@@ -443,9 +443,7 @@ public class AgLattice extends AbstractGrowthLattice {
     atom.setList(false);
   }
 
-    
-  public void removeImmobilAddMobile(AgAtom atom) {
-
+  private void removeImmobilAddMobile(AgAtom atom) {
     if (atom.getNImmobile() == 0) {  //estado de transición
       atom.addNMobile(1); // nMobile++;
       atom.addNImmobile(-1); // nImmobile--;
@@ -474,8 +472,7 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
   
-  public void removeMobileAddImmobileProcess(AgAtom atom, boolean forceNucleation) {
-
+  private void removeMobileAddImmobile(AgAtom atom, boolean forceNucleation) {
     if (atom.getNMobile() == 0) {
       atom.addNMobile(-1); // nMobile--
       atom.addNImmobile(1); // nImmobile++
@@ -500,7 +497,7 @@ public class AgLattice extends AbstractGrowthLattice {
       if (mobileToImmobile && atom.isOccupied()) {
         for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
           if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeMobileAddImmobileProcess(atom.getNeighbour(i), forceNucleation);
+            removeMobileAddImmobile(atom.getNeighbour(i), forceNucleation);
           }
         }
       }
@@ -513,8 +510,7 @@ public class AgLattice extends AbstractGrowthLattice {
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  public void addOccupiedNeighbourProcess(AgAtom atom, byte originType, boolean forceNucleation) {
-    
+  private void addOccupiedNeighbour(AgAtom atom, byte originType, boolean forceNucleation) {
     byte newType;
 
     if (originType < KINK_A) {
@@ -539,7 +535,7 @@ public class AgLattice extends AbstractGrowthLattice {
       if (mobileToImmobile && atom.isOccupied()) {
         for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
           if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeMobileAddImmobileProcess(atom.getNeighbour(i), forceNucleation);
+            removeMobileAddImmobile(atom.getNeighbour(i), forceNucleation);
           }
         }
       }
@@ -550,7 +546,7 @@ public class AgLattice extends AbstractGrowthLattice {
    * 
    * @param atom neighbour atom of the original atom
    */
-  public void removeMobileOccupied(AgAtom atom) {
+  private void removeMobileOccupied(AgAtom atom) {
 
     byte newType = atom.getNewType(0, -1); //nImmobile, --nMobile
     atom.addNMobile(-1); // remove one mobile atom (original atom has been extracted)
