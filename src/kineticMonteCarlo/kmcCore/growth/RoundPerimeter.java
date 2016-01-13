@@ -18,8 +18,14 @@ public class RoundPerimeter {
 
   public final static short CIRCLE = 0;
   public final static short SQUARE = 1;
-    
+
+  /**
+   * Current size of the radius (in units).
+   */
   private int currentRadius;
+  /**
+   * Atoms vector belonging to the perimeter.
+   */
   private AbstractGrowthAtom[] currentPerimeter;
   private AbstractPerimeterStatistics perimeterStatistics;
   private short type;
@@ -39,6 +45,10 @@ public class RoundPerimeter {
     return type;
   }
 
+  /**
+   * 
+   * @return current size of the radius (in units).
+   */
   public int getCurrentRadius() {
     return this.currentRadius;
   }
@@ -47,9 +57,18 @@ public class RoundPerimeter {
     this.currentRadius = perimeterStatistics.getMinRadiusInSize();
   }
   
+  /**
+   * 
+   * @return atoms vector belonging to the perimeter.
+   */
   public AbstractGrowthAtom[] getCurrentPerimeter(){
     return this.currentPerimeter;
   }
+  
+  /**
+   * Enlarge the perimeter; i.e. go to the next radius in the perimeter.
+   * @return the new value of the perimeter.
+   */
   public int goToNextRadius() {
     this.currentRadius = perimeterStatistics.getNextRadiusInSize(currentRadius);
     return this.currentRadius;
@@ -149,7 +168,7 @@ public class RoundPerimeter {
     return angle;
   }
 
-  public AbstractGrowthAtom getRandomPerimeterAtom() {
+   public AbstractGrowthAtom getRandomPerimeterAtom() {
     return this.currentPerimeter[(int) (utils.StaticRandom.raw() * currentPerimeter.length)];
   }
 
