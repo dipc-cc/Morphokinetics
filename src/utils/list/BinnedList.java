@@ -64,16 +64,16 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   
   /**
    * Updates the total probability 
-   * @param prob probability change
+   * @param probabilityChange probability change
    */
   @Override
-  public void addTotalProbability(double prob) {
+  public void addTotalProbability(double probabilityChange) {
     clean = false;
-    setTotalProbability(getTotalProbability() + prob);
+    setTotalProbability(getTotalProbability() + probabilityChange);
     // How I know which is the correct bin?? 
     // next line creates an ERROR!! (when using getTotalProbability()
     // Previously the current atom was updating its linear list and propagating the change to the parents.
-    bins[currentBin].addTotalProbability(prob);
+    bins[currentBin].addTotalProbability(probabilityChange);
   }
   
   @Override
@@ -148,14 +148,14 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public AbstractAtom getAtomAt(int pos) {
+  public AbstractAtom getAtomAt(int position) {
     int cont = 0;
     int i = 0;
-    while (pos >= cont + bins[i].getSize()) {
+    while (position >= cont + bins[i].getSize()) {
       cont += bins[i].getSize();
       i++;
     }
-    return bins[i].getAtomAt(pos - cont);
+    return bins[i].getAtomAt(position - cont);
   }
 
   @Override

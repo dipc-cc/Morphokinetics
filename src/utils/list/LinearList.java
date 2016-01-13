@@ -48,12 +48,12 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   
   /**
    * Updates the total probability
-   * @param prob probability change
+   * @param probabilityChange probability change
    */
   @Override
-  public void addTotalProbability(double prob) {
+  public void addTotalProbability(double probabilityChange) {
     clean = false;
-    setTotalProbability(getTotalProbability() + prob);
+    setTotalProbability(getTotalProbability() + probabilityChange);
   }
 
   @Override
@@ -68,8 +68,8 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     int tmp = getTotalAtoms();
     ListIterator<AbstractAtom> li = surface.listIterator();
     while (li.hasNext()) {
-      AbstractAtom AC = li.next();
-      if (!AC.isEligible()) {
+      AbstractAtom atom = li.next();
+      if (!atom.isEligible()) {
         li.remove();
         setTotalAtoms(getTotalAtoms() - 1);
       }
@@ -78,10 +78,10 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   }
 
   @Override
-  public void addAtom(AbstractAtom a) {
+  public void addAtom(AbstractAtom atom) {
     clean = false;
-    surface.add(0, a);
-    a.setList(true);
+    surface.add(0, atom);
+    atom.setList(true);
     setTotalAtoms(getTotalAtoms() + 1);
   }
 
@@ -104,7 +104,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     double currentProbability = 0;
 
     AbstractAtom atom = null;
-    outside:
     for (int i = 0; i < surface.size(); i++) {
       clean = false;
       atom = surface.get(i);
