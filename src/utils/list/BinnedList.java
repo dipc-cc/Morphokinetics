@@ -63,6 +63,9 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   @Override
   public void addTotalProbability(double prob) {
     setTotalProbability(getTotalProbability() + prob);
+    // How I know which is the correct bin?? 
+    // next line creates an ERROR!! (when using getTotalProbability()
+    // Previously the current atom was updating its linear list and propagating the change to the parents.
     bins[currentBin].addTotalProbability(prob);
   }
   
