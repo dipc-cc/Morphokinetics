@@ -224,7 +224,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     double probabilityChange = -origin.getProbability();
     getList().addTotalProbability(probabilityChange);
     lattice.extract(origin);
-    //modifiedBuffer.updateAtoms(getList());
     lattice.deposit(destination, forceNucleation);
     modifiedBuffer.updateAtoms(getList());
 
