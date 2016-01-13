@@ -84,27 +84,27 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability()); // has to be getTotalProbability() 
+    double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability());
     if (this.getParent() == null) {
-      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbabilityFromList() + getDepositionProbability())); // has to be getTotalProbability()
+      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbabilityFromList() + getDepositionProbability()));
     }
 
     if (position < getDepositionProbability()) {
       return null; //we have to add a new atom
     }
     position -= getDepositionProbability();
-    int selected = 0;
-    double accumulation = bins[selected].getTotalProbabilityFromList(); //has to be bins[selectedBin].getTotalProbability() instead
+    int selectedBin = 0;
+    double accumulation = bins[selectedBin].getTotalProbabilityFromList();
 
     while (position >= accumulation) {
-      selected++;
-      if (selected == bins.length - 1) {
+      selectedBin++;
+      if (selectedBin == bins.length - 1) {
         break;
       }
-      accumulation += bins[selected].getTotalProbabilityFromList(); // has to be bins[selectedBin].getTotalProbability() instead
+      accumulation += bins[selectedBin].getTotalProbabilityFromList();
     }
     
-    AbstractAtom atom = bins[selected].nextEvent();
+    AbstractAtom atom = bins[selectedBin].nextEvent();
     if (atom != null) { //this never happens (with no extra levels at least)
       setTotalAtoms(getTotalAtoms() - 1);
     }
