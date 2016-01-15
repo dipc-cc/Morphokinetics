@@ -24,7 +24,7 @@ public class SyntheticRates implements IGrowthRates {
   }
 
   @Override
-  public double getDepositionRate() {
+  public double getDepositionRate(double temperature) {
     return depositionRateInMlSecond;
   }
 

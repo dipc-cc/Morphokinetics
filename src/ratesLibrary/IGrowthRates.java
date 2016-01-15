@@ -12,7 +12,7 @@ public interface IGrowthRates {
 
   public double getRate(int i, int j, double temperature);
 
-  public double getDepositionRate();
+  public double getDepositionRate(double temperature);
   
   /**
    * Returns the island density mono layer depending on the temperature.

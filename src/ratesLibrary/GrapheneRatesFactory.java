@@ -37,7 +37,7 @@ public class GrapheneRatesFactory implements IRatesFactory {
 
   @Override
   public double getDepositionRate(double temperature) {
-    return experiments.getDepositionRate();
+    return experiments.getDepositionRate(temperature);
   }
 
   @Override

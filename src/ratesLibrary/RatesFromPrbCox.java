@@ -229,7 +229,7 @@ public class RatesFromPrbCox implements IGrowthRates {
   }
 
   @Override
-  public double getDepositionRate() {
+  public double getDepositionRate(double temperature) {
     return diffusionMl;
   }
 
