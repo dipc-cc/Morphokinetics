@@ -13,7 +13,6 @@ public class GrapheneRatesFactory implements IRatesFactory {
   private static IGrowthRates experiments;
 
   public GrapheneRatesFactory() {
-
     experiments = new SyntheticRates();
   }
 
@@ -24,7 +23,6 @@ public class GrapheneRatesFactory implements IRatesFactory {
    */ 
   @Override
   public double[] getRates(double temperature) {
-
     double[] rates = new double[64];
 
     for (int i = 0; i < 8; i++) {
