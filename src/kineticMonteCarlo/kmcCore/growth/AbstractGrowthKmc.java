@@ -55,7 +55,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.area = calculateAreaAsInLattice();
 
     if (justCentralFlake) {
-      getList().setDepositionProbability(depositionRateML / islandDensitySite);
+      getList().setDepositionProbability(depositionRateML * calculateAreaAsInLattice());
     } else {
       getList().setDepositionProbability(depositionRateML * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
     }
