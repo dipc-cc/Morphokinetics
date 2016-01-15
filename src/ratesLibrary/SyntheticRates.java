@@ -18,7 +18,7 @@ public class SyntheticRates implements IGrowthRates {
   public double getRate(int sourceType, int destinationType, double temperature) {
     if (rates == null) {
       rates = new double[8][8];
-      initializeRates();
+      initialiseRates();
     }
     return rates[sourceType][destinationType];
   }
@@ -33,7 +33,7 @@ public class SyntheticRates implements IGrowthRates {
     return islandDensityPerSite;
   }
 
-  private void initializeRates() {
+  private void initialiseRates() {
 
     rates[0][0] = 1e9;
     rates[0][1] = 1e9;
