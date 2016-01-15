@@ -51,13 +51,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
 
   @Override
-  public final void setIslandDensityAndDepositionRate(double depositionRateML, double islandDensitySite) {
+  public final void setDepositionRate(double depositionRatePerSite) {
     this.area = calculateAreaAsInLattice();
 
     if (justCentralFlake) {
-      getList().setDepositionProbability(depositionRateML * calculateAreaAsInLattice());
+      getList().setDepositionProbability(depositionRatePerSite * calculateAreaAsInLattice());
     } else {
-      getList().setDepositionProbability(depositionRateML * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
+      getList().setDepositionProbability(depositionRatePerSite * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
     }
   }
 

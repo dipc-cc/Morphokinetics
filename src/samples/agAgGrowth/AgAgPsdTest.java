@@ -76,9 +76,8 @@ public class AgAgPsdTest {
 
   private static void initialiseRates(AgRatesFactory reatesFactory, AgKmc kmc) {
 
-    double depositionRate = reatesFactory.getDepositionRatePerSite(135);
-    double islandDensity = reatesFactory.getIslandDensity(135);
-    kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
+    double depositionRatePerSite = reatesFactory.getDepositionRatePerSite(135);
+    kmc.setDepositionRate(depositionRatePerSite);
     kmc.initialiseRates(reatesFactory.getRates(135));
   }
 

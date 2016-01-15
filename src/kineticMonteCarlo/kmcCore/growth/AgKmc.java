@@ -39,12 +39,11 @@ public class AgKmc extends AbstractGrowthKmc {
   public AgKmc(ListConfiguration config, 
           int hexaSizeI, 
           int hexaSizeJ, 
-          double depositionRate, 
-          double islandDensity) {
+          double depositionRatePerSite) {
 
     this(config, hexaSizeI, hexaSizeJ, true, (float) -1, false, RoundPerimeter.CIRCLE);
     
-    this.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
+    setDepositionRate(depositionRatePerSite);
   }
 
   @Override

@@ -70,8 +70,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   private AbstractSimulation simulation;
   
-  private double depositionRate;
-  private double islandDensity;
+  private double depositionRatePerSite;
   
   private Updater updater;
   /** The stop error. If the current error is below this number, stop. */
@@ -110,9 +109,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.simulation = new AgSimulation(parser);
         simulation.initialiseKmc();
         float experitentalTemp = parser.getTemperature();
-        this.depositionRate = new AgRatesFactory().getDepositionRatePerSite(experitentalTemp);
-        this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
-        this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
+        this.depositionRatePerSite = new AgRatesFactory().getDepositionRatePerSite(experitentalTemp);
+        this.simulation.getKmc().setDepositionRate(depositionRatePerSite);
         initialisation = new AgReduced6Initialisator();
         restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
         if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();

@@ -113,7 +113,7 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   @Override
-  public void setIslandDensityAndDepositionRate(double depositionRate, double landDensity) {
+  public void setDepositionRate(double depositionRatePerSite) {
     throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
   }
   
