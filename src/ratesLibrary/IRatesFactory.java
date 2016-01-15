@@ -12,7 +12,7 @@ public interface IRatesFactory {
 
   public double[] getRates(double temperature);
 
-  public double getDepositionRate(double temperature);
+  public double getDepositionRatePerSite(double temperature);
 
   public double getIslandDensity(double temperature);
 

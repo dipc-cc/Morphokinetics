@@ -110,7 +110,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         this.simulation = new AgSimulation(parser);
         simulation.initialiseKmc();
         float experitentalTemp = parser.getTemperature();
-        this.depositionRate = new AgRatesFactory().getDepositionRate(experitentalTemp);
+        this.depositionRate = new AgRatesFactory().getDepositionRatePerSite(experitentalTemp);
         this.islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
         this.simulation.getKmc().setIslandDensityAndDepositionRate(depositionRate, islandDensity); 
         initialisation = new AgReduced6Initialisator();

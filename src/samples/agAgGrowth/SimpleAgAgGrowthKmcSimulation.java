@@ -56,7 +56,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
   private static void initialiseRates(AgRatesFactory reatesFactory, AgKmc kmc) {
 
-    double depositionRate = reatesFactory.getDepositionRate(135);
+    double depositionRate = reatesFactory.getDepositionRatePerSite(135);
     double islandDensity = reatesFactory.getIslandDensity(135);
     kmc.setIslandDensityAndDepositionRate(depositionRate, islandDensity);
     kmc.reset();

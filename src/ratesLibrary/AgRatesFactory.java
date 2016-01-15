@@ -76,7 +76,7 @@ public class AgRatesFactory implements IRatesFactory {
   }
     
   @Override
-  public double getDepositionRate(double temperature) {
+  public double getDepositionRatePerSite(double temperature) {
     return experiments.getDepositionRatePerSite(temperature);
   }
 

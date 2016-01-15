@@ -45,7 +45,7 @@ public class AgAgMultithreadedEvaluatorTest {
 
     new StaticRandom();
     ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
-    double depositionRate = new AgRatesFactory().getDepositionRate(experimentalTemp);
+    double depositionRate = new AgRatesFactory().getDepositionRatePerSite(experimentalTemp);
     double islandDensity = new AgRatesFactory().getIslandDensity(experimentalTemp);
 
     return new AgKmc(listConfig, 256, (int) (256 / AbstractGrowthLattice.Y_RATIO), depositionRate, islandDensity);
