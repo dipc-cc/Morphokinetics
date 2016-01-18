@@ -29,7 +29,8 @@ public class AgSimulation extends AbstractGrowthSimulation {
             getParser().justCentralFlake(),
             (float) getParser().getCoverage()/100,
             getParser().useMaxPerimeter(),
-            getParser().getPerimeterType()));
+            getParser().getPerimeterType(),
+            getParser().depositInAllArea()));
     initialiseRates(getRates(), getKmc(), getParser());
   }
 }

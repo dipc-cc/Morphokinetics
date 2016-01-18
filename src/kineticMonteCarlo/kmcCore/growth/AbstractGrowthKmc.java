@@ -28,14 +28,31 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final short perimeterType;
   private DevitaAccelerator accelerator;
   
-  private final float maxCoverage; // This attribute defines which is the maximum coverage for a multi-flake simulation
+  /**
+   * This attribute defines which is the maximum coverage for a multi-flake simulation.
+   */
+  private final float maxCoverage; 
+  /**
+   * Total area of a single flake simulation
+   */
   private int area;
+  /**
+   * 
+   */
+  private int currentArea;
+  /**
+   * Chooses to deposit in all area in a single flake simulation.
+   */
+  private final boolean depositInAllArea;
+  private double depositionRatePerSite;
+  private int freeArea;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
           float coverage,
           boolean useMaxPerimeter,
-          short perimeterType) {
+          short perimeterType,
+          boolean depositInAllArea) {
     super(config);
     this.justCentralFlake = justCentralFlake;
     if ((!justCentralFlake) && ((0f > coverage) || (1f < coverage))) {
@@ -48,15 +65,20 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.modifiedBuffer = new ModifiedBuffer();
     this.getList().autoCleanup(true);
     this.perimeterType = perimeterType;
+    this.depositInAllArea = depositInAllArea;
   }
 
   @Override
   public final void setDepositionRate(double depositionRatePerSite) {
     this.area = calculateAreaAsInLattice();
-
+    this.depositionRatePerSite = depositionRatePerSite;
+    
     if (justCentralFlake) {
+      currentArea = calculateAreaAsInKmcCanvas();
+      freeArea = currentArea;
       getList().setDepositionProbability(depositionRatePerSite * calculateAreaAsInLattice());
     } else {
+      this.freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
       getList().setDepositionProbability(depositionRatePerSite * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
     }
   }
@@ -232,15 +254,34 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   private AbstractGrowthAtom depositNewAtom() {
     AbstractGrowthAtom destinationAtom;
+    int i;
+    int j;
     if (!justCentralFlake) {
       do {
-        int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
-        int j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
+        i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
+        j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
         destinationAtom = lattice.getAtom(i, j);
       } while (!this.depositAtom(destinationAtom));
     } else {
       do {
-        destinationAtom = this.perimeter.getRandomPerimeterAtom();
+        if (depositInAllArea) {
+          // Get random angle and radius 
+          double angle = StaticRandom.raw() * 2;
+          double randomRadius = StaticRandom.raw() * perimeter.getCurrentRadius();
+          // convert to Cartesian
+          double x = randomRadius * Math.cos(angle * Math.PI);
+          double y = randomRadius * Math.sin(angle * Math.PI);
+          // and, centre them
+          x += lattice.getCentralCartesianLocation().getX();
+          y += lattice.getCentralCartesianLocation().getY();
+          // Convert to lattice vector (hexagonal) coordinates
+          i = lattice.getiHexa(x, y);
+          j = lattice.getjHexa(y);
+
+          destinationAtom = lattice.getAtom(i, j);
+        } else { // old default case: deposit in the perimeter
+          destinationAtom = this.perimeter.getRandomPerimeterAtom();
+        }
       } while (!this.depositAtom(destinationAtom));
     }
     return destinationAtom;
@@ -313,7 +354,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   /**
    * Calculates current area or, i.e. the number of current places that simulation has. This total
-   * area changes with the current. radius It is calculated as is done in KmcCanvas class
+   * area changes with the current radius. It is calculated as is done in KmcCanvas class
    * @return simulated area
    */
   private int calculateAreaAsInKmcCanvas() {
@@ -392,6 +433,16 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public void setArea(int area) {
     this.area = area;
   }
+  
+  /**
+   * This has to be called only once from AgKmc or GrapheneKmc.
+   * @param seedSize Size of the seed in atoms. Number to calculate free space. 
+   */
+  void setCurrentArea(int seedSize) {
+    this.currentArea = calculateAreaAsInKmcCanvas();
+    this.freeArea = currentArea - seedSize;
+  }
+  
   
   /**
    * Internal method to select the perimeter size and type. Must be used in depositSeed() method
