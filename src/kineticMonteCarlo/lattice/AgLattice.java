@@ -132,7 +132,16 @@ public class AgLattice extends AbstractGrowthLattice {
     float yCart = jHexa * Y_RATIO;
     return new Point2D.Double(xCart, yCart);
   }
-  
+
+  public int[] getHexagonalCoordinates(double xCart, double yCart) {
+    int[] result; 
+    result = new int[2];
+    result[0] = getiHexa(xCart, yCart);
+    result[1] = getjHexa(yCart);
+    
+    return result;
+  }
+    
   /**
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
    * @param xCart Cartesian X coordinate
