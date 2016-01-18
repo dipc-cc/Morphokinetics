@@ -72,6 +72,10 @@ public class Parser {
   private boolean outputData;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
+  /**
+   * Chooses to deposit in all area in a single flake simulation.
+   */
+  private boolean depositInAllArea;
   
   // For evolutionary algorithm
   private String evolutionaryAlgorithm; /** Can be original or dcma */
@@ -128,6 +132,7 @@ public class Parser {
     this.outputData = false;
     this.randomSeed = true;
     this.useMaxPerimeter = false;
+    this.depositInAllArea = false;
     
     this.evolutionaryAlgorithm = "original";
     this.parallelEvaluator = false;
@@ -291,6 +296,11 @@ public class Parser {
     } catch (JSONException e) {
       useMaxPerimeter = false;
     }
+    try {
+      depositInAllArea = json.getBoolean("depositInAllArea");
+    } catch (JSONException e) {
+      depositInAllArea = false;
+    }
     
     //  -------------- Evolutionary Algorithm ----------------------
     try {
@@ -426,6 +436,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
+    System.out.printf("%32s: %s,\n", "\"depositInAllArea\"", depositInAllArea);
     System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
     System.out.printf("%32s: %s,\n", "\"parallelEvaluator\"", parallelEvaluator);
     System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
@@ -569,6 +580,15 @@ public class Parser {
 
   public boolean useMaxPerimeter() {
     return useMaxPerimeter;
+  }
+  
+  /**
+   * Chooses to deposit in all area in a single flake simulation.
+   * By default is false, it deposits in the perimeter.
+   * @return deposit in all area
+   */
+  public boolean depositInAllArea() {
+    return depositInAllArea;
   }
   
   public String getEvolutionaryAlgorithm() {
