@@ -108,12 +108,14 @@ public class Panel2D extends javax.swing.JPanel {
 
     if (psd != null) {
 
-      float scaleY = this.getHeight() / (float) psd.length;
-      float scaleX = this.getWidth() / (float) psd[0].length;
+      int binSizeX = psd.length;
+      int binSizeY = psd[0].length;
+      float scaleY = this.getHeight() / (float) binSizeY;
+      float scaleX = this.getWidth() / (float) binSizeX;
       ((Graphics2D) g).scale(scaleX, scaleY);
 
-      for (int i = 0; i < psd.length; i++) {
-        for (int j = 0; j < psd[0].length; j++) {
+      for (int i = 0; i < binSizeX; i++) {
+        for (int j = 0; j < binSizeY; j++) {
 
           double temp = psd[i][j];
           if (log) {
@@ -124,8 +126,8 @@ public class Panel2D extends javax.swing.JPanel {
           int posX = i;
           int posY = j;
           if (shift) {
-            posX = (posX + psd[0].length / 2) % psd[0].length;
-            posY = (posY + psd.length / 2) % psd.length;
+            posX = (posX + binSizeX / 2) % binSizeX;
+            posY = (posY + binSizeY / 2) % binSizeY;
           }
           g.fillRect(posX, posY, 1, 1);
         }
@@ -171,8 +173,10 @@ public class Panel2D extends javax.swing.JPanel {
     } else {
       min = max = psd[0][0];
     }
-    for (int i = 0; i < psd.length; i++) {
-      for (int j = 0; j < psd[0].length; j++) {
+    int binSizeX = psd.length;
+    int binSizeY = psd[0].length;
+    for (int i = 0; i < binSizeX; i++) {
+      for (int j = 0; j < binSizeY; j++) {
         double temp = psd[i][j];
         if (log) {
           temp = Math.log(temp);
