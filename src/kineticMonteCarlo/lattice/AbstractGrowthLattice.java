@@ -105,7 +105,22 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   public abstract double getCartX(int iHexa, int jHexa);
   
-  public abstract double getCartY(int jHexa);
+  public abstract double getCartY(int jHexa);  
+  
+  /**
+   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * @param xCart Cartesian X coordinate
+   * @param yCart Cartesian Y coordinate
+   * @return 
+   */
+  public abstract int getiHexa(double xCart, double yCart);
+
+  /**
+   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * @param yCart Cartesian Y coordinate
+   * @return 
+   */
+  public abstract int getjHexa(double yCart);
 
   @Override
   public void reset() {

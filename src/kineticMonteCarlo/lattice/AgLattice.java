@@ -132,7 +132,36 @@ public class AgLattice extends AbstractGrowthLattice {
     float yCart = jHexa * Y_RATIO;
     return new Point2D.Double(xCart, yCart);
   }
-
+  
+  /**
+   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * @param xCart Cartesian X coordinate
+   * @param yCart Cartesian Y coordinate
+   * @return 
+   */
+  @Override
+  public int getiHexa(double xCart, double yCart) {
+    int iHexa;
+    int jHexa = getjHexa(yCart); // First, we need to know which is the j coordinate
+    double x = xCart;
+    if (yCart > Y_RATIO*2*x) { // If it is in the wrapped Cartesian area (a triangle)
+      x += getHexaSizeI(); // Move to the mirrored location
+    }
+    iHexa = (int) Math.round(x - (jHexa/2));
+    
+    return iHexa;
+  }
+  
+  /**
+   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * @param yCart Cartesian Y coordinate
+   * @return 
+   */
+  @Override
+  public int getjHexa(double yCart) {
+    return (int) Math.round(yCart / Y_RATIO);
+  }
+  
   /**
    * The Cartesian X is the location I, plus the half of J.
    * We have to do the module to ensure that fits in a rectangular Cartesian mesh

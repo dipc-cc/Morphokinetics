@@ -650,6 +650,16 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
   
   @Override
+  public int getiHexa(double xCart, double yCart) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public int getjHexa(double yCart) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  @Override
   public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
     GrapheneAtom atom = (GrapheneAtom) a;
     atom.setOccupied(true);
