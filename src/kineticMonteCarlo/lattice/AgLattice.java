@@ -20,11 +20,14 @@ import utils.StaticRandom;
  * @author Nestor
  */
 public class AgLattice extends AbstractGrowthLattice {
+  
+  private final Point2D centralCartesianLocation;
 
   public AgLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
     super(hexaSizeI, hexaSizeJ, modified);
 
+    centralCartesianLocation = new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() * Y_RATIO / 2.0f));
     setAtoms(createAtoms());
     setAngles();
   }
@@ -109,7 +112,7 @@ public class AgLattice extends AbstractGrowthLattice {
 
   @Override
   public Point2D getCentralCartesianLocation() {
-    return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() * Y_RATIO / 2.0f));
+    return centralCartesianLocation;
   }
 
   @Override

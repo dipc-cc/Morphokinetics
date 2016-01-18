@@ -24,6 +24,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   private static final double cos60 = Math.cos(60 * Math.PI / 180);
   private static final double cos30 = Math.cos(30 * Math.PI / 180);
   private static final ArrayStack PStack = new ArrayStack(12);;
+  private Point2D centralCartesianLocation;
 
   public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
@@ -36,6 +37,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     if (latticeNeighborhoodData == null) {
       initializeNeighborHoodCache();
     }
+    
+    centralCartesianLocation = getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
     setAtoms(createAtoms(hexaSizeI, hexaSizeJ, distancePerStep));
     setAngles();
   }
@@ -616,7 +619,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public Point2D getCentralCartesianLocation() {
-    return getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
+    return centralCartesianLocation;
   }
 
   @Override
