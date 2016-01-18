@@ -21,10 +21,10 @@ import utils.StaticRandom;
 public class GrapheneLattice extends AbstractGrowthLattice {
 
   private static int[] latticeNeighborhoodData;
-  private static final double cos60 = Math.cos(60 * Math.PI / 180);
-  private static final double cos30 = Math.cos(30 * Math.PI / 180);
+  private static final double COS60 = Math.cos(60 * Math.PI / 180);
+  private static final double COS30 = Math.cos(30 * Math.PI / 180);
   private static final ArrayStack PStack = new ArrayStack(12);;
-  private Point2D centralCartesianLocation;
+  private final Point2D centralCartesianLocation;
 
   public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
 
@@ -35,7 +35,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       hexaSizeJ++;
     }
     if (latticeNeighborhoodData == null) {
-      initializeNeighborHoodCache();
+      initialiseNeighborHoodCache();
     }
     
     centralCartesianLocation = getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
@@ -43,7 +43,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     setAngles();
   }
 
-  private static void initializeNeighborHoodCache() {
+  private static void initialiseNeighborHoodCache() {
 
     latticeNeighborhoodData = new int[12];
     latticeNeighborhoodData[0] = (1 & 0xFFFF) + (0 << 16);
@@ -623,15 +623,15 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public Point2D getCartesianLocation(int iHexa, int jHexa) {
+  public final Point2D getCartesianLocation(int iHexa, int jHexa) {
 
     double xCart;
     if ((iHexa & 1) == 0) { //even
-      xCart = (iHexa >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iHexa) + cos60;
+      xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) + COS60;
     } else { //odd
-      xCart = (iHexa >> 1) * (2 + 2 * cos60) + 0.5 + (1 & iHexa) * (1 + 2 * cos60);
+      xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) * (1 + 2 * COS60);
     }
-    double yCart = (jHexa >> 1) * (2 * cos30) + (1 & jHexa) * cos30;
+    double yCart = (jHexa >> 1) * (2 * COS30) + (1 & jHexa) * COS30;
     return new Point2D.Double(xCart, yCart);
 
   }
