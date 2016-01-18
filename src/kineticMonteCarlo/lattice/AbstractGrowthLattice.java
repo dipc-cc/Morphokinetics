@@ -27,7 +27,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private final ArrayList<Integer> includePerimeterList; 
   private final int hexaArea;
   private int occupied;
-  private double[][] probabilities;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -56,7 +55,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public abstract void extract(AbstractGrowthAtom atom);
   
   public void configure(double[][] probabilities) {
-    this.probabilities = probabilities;
     for (int iHexa = 0; iHexa < atoms[0].length; iHexa++) {
       for (int jHexa = 0; jHexa < atoms.length; jHexa++) {
         atoms[jHexa][iHexa].initialise(probabilities);
