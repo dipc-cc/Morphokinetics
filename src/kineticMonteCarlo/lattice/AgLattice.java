@@ -147,14 +147,14 @@ public class AgLattice extends AbstractGrowthLattice {
     if (yCart > Y_RATIO * 2 * x) { // If it is in the wrapped Cartesian area (a triangle)
       x += getHexaSizeI(); // Move to the mirrored location
     }
-    iHexa = (int) Math.round(x - (jHexa / 2));
+    iHexa = (int) Math.round(x - (jHexa / 2)); // Calculate its hexagonal position
+    // Wrap if needed
     while (iHexa < 0) {
       iHexa = iHexa + getHexaSizeI();
     }
     while (iHexa >= getHexaSizeI()) {
       iHexa = iHexa - getHexaSizeI();
     }
-
     return iHexa;
   }
   
@@ -165,7 +165,8 @@ public class AgLattice extends AbstractGrowthLattice {
    */
   @Override
   public int getjHexa(double yCart) {
-    int jHexa = (int) Math.round(yCart / Y_RATIO);
+    int jHexa = (int) Math.round(yCart / Y_RATIO); // Calculate its hexagonal position
+    // Wrap if needed
     while (jHexa < 0) {
       jHexa = jHexa + getHexaSizeJ();
     }
