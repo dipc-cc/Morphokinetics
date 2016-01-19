@@ -208,19 +208,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return this.depositAtom(lattice.getAtom(iHexa, jHexa));
   }
 
-  /*protected boolean extractAtom(AbstractGrowthAtom origin) {
-    if (!origin.isOccupied()) {
-      return false;
-    }
-
-    double probabilityChange = -origin.getProbability();
-    lattice.subtractOccupied();
-    getList().addTotalProbability(probabilityChange);
-    lattice.extract(origin);
-    modifiedBuffer.updateAtoms(getList(), lattice);
-    return true;
-  }*/
-
   private boolean depositAtom(AbstractGrowthAtom atom) {
     if (atom.isOccupied()) {
       return false;
