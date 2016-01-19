@@ -30,10 +30,10 @@ public class AgKmc extends AbstractGrowthKmc {
     super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType, depositInAllArea);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    this.setLattice(new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
+    setLattice(new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
-      this.setPerimeter(new RoundPerimeter("Ag"));
+      setPerimeter(new RoundPerimeter("Ag"));
     }
   }
 
@@ -58,16 +58,16 @@ public class AgKmc extends AbstractGrowthKmc {
       int jCentre = (getLattice().getHexaSizeJ() / 2);
       int iCentre = (getLattice().getHexaSizeI() / 2) - (getLattice().getHexaSizeJ() / 4);
 
-      this.depositAtom(iCentre, jCentre);
-      this.depositAtom(iCentre + 1, jCentre);
+      depositAtom(iCentre, jCentre);
+      depositAtom(iCentre + 1, jCentre);
 
-      this.depositAtom(iCentre - 1, jCentre + 1);
-      this.depositAtom(iCentre, jCentre + 1);
-      this.depositAtom(iCentre + 1, jCentre + 1);
+      depositAtom(iCentre - 1, jCentre + 1);
+      depositAtom(iCentre, jCentre + 1);
+      depositAtom(iCentre + 1, jCentre + 1);
 
-      this.depositAtom(iCentre, jCentre + 2);
-      this.depositAtom(iCentre - 1, jCentre + 2);
-      this.depositAtom(iCentre - 1, jCentre + 3);
+      depositAtom(iCentre, jCentre + 2);
+      depositAtom(iCentre - 1, jCentre + 2);
+      depositAtom(iCentre - 1, jCentre + 3);
 
     } else {
 
@@ -80,17 +80,17 @@ public class AgKmc extends AbstractGrowthKmc {
   }
 
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
-    this.setAccelerator(new DevitaAccelerator(this.getLattice(), distancePerStep));
+    setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));
 
     if (getAccelerator() != null) {
-      this.getAccelerator().tryToSpeedUp(TERRACE,
+      getAccelerator().tryToSpeedUp(TERRACE,
               new DevitaHopsConfig()
               .setMinAccumulatedSteps(100)
               .setMaxAccumulatedSteps(200)
               .setMinDistanceHops(1)
               .setMaxDistanceHops(8));
 
-      this.getAccelerator().tryToSpeedUp(EDGE,
+      getAccelerator().tryToSpeedUp(EDGE,
               new DevitaHopsConfig()
               .setMinAccumulatedSteps(30)
               .setMaxAccumulatedSteps(100)
