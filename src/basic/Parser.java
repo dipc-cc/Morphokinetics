@@ -132,7 +132,10 @@ public class Parser {
     this.outputData = false;
     this.randomSeed = true;
     this.useMaxPerimeter = false;
-    this.depositInAllArea = false;
+    if (justCentralFlake) 
+      this.depositInAllArea = false;
+    else
+      this.depositInAllArea = true;
     
     this.evolutionaryAlgorithm = "original";
     this.parallelEvaluator = false;
@@ -299,7 +302,10 @@ public class Parser {
     try {
       depositInAllArea = json.getBoolean("depositInAllArea");
     } catch (JSONException e) {
-      depositInAllArea = false;
+      if (justCentralFlake) 
+        depositInAllArea = false;
+      else
+        depositInAllArea = true;
     }
     
     //  -------------- Evolutionary Algorithm ----------------------
