@@ -294,14 +294,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double right = centreCart.getX() + perimeter.getCurrentRadius();
       double bottom = centreCart.getY() - perimeter.getCurrentRadius();
       double top = centreCart.getY() + perimeter.getCurrentRadius();
-      Point2D  position = lattice.getCartesianLocation(destinationAtom.getX(),destinationAtom.getY());
+      Point2D  position = lattice.getCartesianLocation(destinationAtom.getiHexa(),destinationAtom.getjHexa());
 
       return (destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
               || Math.abs(right - position.getX()) < 2
               || Math.abs(top - position.getY()) < 2
               || Math.abs(bottom - position.getY()) < 2);
     } else {
-      return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getX(), destinationAtom.getY()) >= (perimeter.getCurrentRadius() - 2);
+      return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getiHexa(), destinationAtom.getY()) >= (perimeter.getCurrentRadius() - 2);
     }
   }
 
