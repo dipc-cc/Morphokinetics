@@ -15,6 +15,6 @@ public interface IDevitaLattice {
 
   public int getAvailableDistance(int atomType, short Xpos, short Ypos, int thresholdDistance);
 
-  public AbstractGrowthAtom getFarSite(int originType, short Xpos, short Ypos, int distance);
+  public AbstractGrowthAtom getFarSite(int originType, short iHexa, short jHexa, int distance);
 
 }
