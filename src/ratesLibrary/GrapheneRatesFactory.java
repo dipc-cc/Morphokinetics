@@ -37,6 +37,11 @@ public class GrapheneRatesFactory implements IRatesFactory {
   public double getDepositionRatePerSite(double temperature) {
     return experiments.getDepositionRatePerSite(temperature);
   }
+  
+  @Override
+  public double getDepositionRatePerSite() {
+    return experiments.getDepositionRatePerSite();
+  }
 
   @Override
   public double getIslandDensity(double temperature) {

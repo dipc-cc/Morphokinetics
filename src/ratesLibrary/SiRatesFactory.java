@@ -37,6 +37,11 @@ public class SiRatesFactory implements IRatesFactory {
   }
 
   @Override
+  public double getDepositionRatePerSite() {
+    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
+  }
+
+  @Override
   public double getIslandDensity(double temperature) {
     throw new UnsupportedOperationException("This KMC does does not form islands.");
   }

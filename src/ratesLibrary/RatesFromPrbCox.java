@@ -257,6 +257,11 @@ public class RatesFromPrbCox implements IGrowthRates {
     return depositionRatePerSite;
   }
 
+  @Override
+  public double getDepositionRatePerSite() {
+    return diffusionMl;
+  }
+  
   /**
    * Returns the island density mono layer depending on the temperature. 
    * These values are taken from section 4 of the paper of Cox et al.

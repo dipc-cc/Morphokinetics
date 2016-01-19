@@ -14,6 +14,8 @@ public interface IGrowthRates {
 
   public double getDepositionRatePerSite(double temperature);
   
+  public double getDepositionRatePerSite();
+  
   /**
    * Returns the island density mono layer depending on the temperature.
    * @param temperature

@@ -29,6 +29,11 @@ public class SyntheticRates implements IGrowthRates {
   }
 
   @Override
+  public double getDepositionRatePerSite() {
+    return depositionRateInMlSecond;
+  }
+
+  @Override
   public double getIslandsDensityMl(double temperature) {
     return islandDensityPerSite;
   }
