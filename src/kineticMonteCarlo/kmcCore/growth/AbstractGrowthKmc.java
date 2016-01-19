@@ -135,6 +135,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
               nextRadius < lattice.getCartSizeY()/2) {
         if (this.perimeterType == RoundPerimeter.CIRCLE) {
           this.perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
+          int newArea;
+          newArea = calculateAreaAsInKmcCanvas();
+          freeArea += newArea - currentArea;
+          currentArea = newArea;
         } else {
           this.perimeter.setAtomPerimeter(lattice.setInsideSquare(nextRadius));
         }
@@ -284,6 +288,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         }
       } while (!this.depositAtom(destinationAtom));
     }
+    if (depositInAllArea) { // update the free area and the deposition rate counting just deposited atom
+      freeArea--;
+      getList().setDepositionProbability(depositionRatePerSite * freeArea);
+    }
     return destinationAtom;
   }
 
@@ -324,12 +332,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         surface[i][j] = -1;
       }
     }
-
+    int x;
+    int y;
     for (int i = 0; i < lattice.getHexaSizeJ(); i++) {
       for (int j = 0; j < lattice.getHexaSizeI(); j++) {
         if (lattice.getAtom(j, i).isOccupied()) {
           Point2D position = lattice.getCartesianLocation(j, i);
-          surface[(int) ((position.getY() - corner1.getY()) * scaleY)][(int) ((position.getX() - corner1.getX()) * scaleX)] = 0;
+          y = (int) ((position.getY() - corner1.getY()) * scaleY);
+          x = (int) ((position.getX() - corner1.getX()) * scaleX);
+          surface[x][y] = 0;
         }
       }
     }
@@ -436,11 +447,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   /**
    * This has to be called only once from AgKmc or GrapheneKmc.
-   * @param seedSize Size of the seed in atoms. Number to calculate free space. 
+   * @param occupied Size of the seed in atoms. Number to calculate free space. 
    */
-  void setCurrentArea(int seedSize) {
+  void setCurrentOccupiedArea(int occupiedSize) {
     this.currentArea = calculateAreaAsInKmcCanvas();
-    this.freeArea = currentArea - seedSize;
+    this.freeArea = currentArea - occupiedSize;
   }
   
   

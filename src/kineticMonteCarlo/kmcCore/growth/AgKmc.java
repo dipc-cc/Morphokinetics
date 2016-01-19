@@ -52,7 +52,8 @@ public class AgKmc extends AbstractGrowthKmc {
     getLattice().resetOccupied();
     if (isJustCentralFlake()) {
       setAtomPerimeter();
-
+      setCurrentOccupiedArea(8); // Seed will have 8 atoms
+      
       int jCentre = (getLattice().getHexaSizeJ() / 2);
       int iCentre = (getLattice().getHexaSizeI() / 2) - (getLattice().getHexaSizeJ() / 4);
 
