@@ -326,8 +326,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
           errorCode |= 2;
           break out;
         }
-        iHexa = a.getX();
-        jHexa = a.getY();
+        iHexa = a.getiHexa();
+        jHexa = a.getjHexa();
         type0 = !type0;
       }
 
@@ -345,8 +345,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
           errorCode |= 2;
           break out;
         }
-        iHexa = a.getX();
-        jHexa = a.getY();
+        iHexa = a.getiHexa();
+        jHexa = a.getjHexa();
         type0 = !type0;
       }
 
@@ -364,8 +364,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
           errorCode |= 2;
           break out;
         }
-        iHexa = a.getX();
-        jHexa = a.getY();
+        iHexa = a.getiHexa();
+        jHexa = a.getjHexa();
         type0 = !type0;
       }
 
@@ -383,8 +383,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
           errorCode |= 2;
           break out;
         }
-        iHexa = a.getX();
-        jHexa = a.getY();
+        iHexa = a.getiHexa();
+        jHexa = a.getjHexa();
         type0 = !type0;
       }
 
@@ -402,8 +402,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
           errorCode |= 2;
           break out;
         }
-        iHexa = a.getX();
-        jHexa = a.getY();
+        iHexa = a.getiHexa();
+        jHexa = a.getjHexa();
         type0 = !type0;
       }
 
@@ -421,8 +421,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
           errorCode |= 2;
           break out;
         }
-        iHexa = a.getX();
-        jHexa = a.getY();
+        iHexa = a.getiHexa();
+        jHexa = a.getjHexa();
         type0 = !type0;
       }
 
