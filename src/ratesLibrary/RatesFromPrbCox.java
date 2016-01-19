@@ -21,11 +21,12 @@ import static kineticMonteCarlo.atom.AgAtom.ISLAND;
 public class RatesFromPrbCox implements IGrowthRates {
 
   /**
-   * Boltzmann constant
+   * Boltzmann constant.
    */
   private final double kB;
   /**
-   * Diffusion Mono Layer. Utilised to calculate absorption rate
+   * Diffusion Mono Layer (F). Utilised to calculate absorption rate. Cox et al. define to be 
+   * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
    */
   private final double diffusionMl;
   private double depositionRatePerSite;
@@ -257,7 +258,8 @@ public class RatesFromPrbCox implements IGrowthRates {
   }
 
   /**
-   * Returns the island density mono layer depending on the temperature.
+   * Returns the island density mono layer depending on the temperature. 
+   * These values are taken from section 4 of the paper of Cox et al.
    * @param temperature
    * @return a double value from 1e-4 to 2e-5
    */
