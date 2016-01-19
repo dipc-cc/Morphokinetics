@@ -57,21 +57,21 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.justCentralFlake = justCentralFlake;
     if ((!justCentralFlake) && ((0f > coverage) || (1f < coverage))) {
       System.err.println("Chosen coverage is not permitted. Selecting the default one: %30");
-      this.maxCoverage = 0.3f;
+      maxCoverage = 0.3f;
     } else {
-      this.maxCoverage = coverage;
+      maxCoverage = coverage;
     }
     this.useMaxPerimeter = useMaxPerimeter;
-    this.modifiedBuffer = new ModifiedBuffer();
-    this.getList().autoCleanup(true);
+    modifiedBuffer = new ModifiedBuffer();
+    getList().autoCleanup(true);
     this.perimeterType = perimeterType;
     this.depositInAllArea = depositInAllArea;
   }
 
   @Override
   public final void setDepositionRate(double depositionRateML, double islandDensitySite) {
-    this.area = calculateAreaAsInLattice();
-    this.depositionRatePerSite = depositionRateML;
+    area = calculateAreaAsInLattice();
+    depositionRatePerSite = depositionRateML;
     
     if (justCentralFlake) {
       if (depositInAllArea) {
@@ -82,7 +82,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         getList().setDepositionProbability(depositionRateML / islandDensitySite);
       }
     } else {
-      this.freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
+      freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
       getList().setDepositionProbability(depositionRatePerSite * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
     }
   }
@@ -127,24 +127,24 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       destinationAtom = chooseRandomHop(originAtom);
       if (destinationAtom.isOutside()) {
-        destinationAtom = this.perimeter.getPerimeterReentrance(originAtom);
+        destinationAtom = perimeter.getPerimeterReentrance(originAtom);
       }
-      this.diffuseAtom(originAtom, destinationAtom);
+      diffuseAtom(originAtom, destinationAtom);
     }
 
     if (perimeterMustBeEnlarged(destinationAtom)) {
-      int nextRadius = this.perimeter.goToNextRadius();
+      int nextRadius = perimeter.goToNextRadius();
       if (nextRadius > 0 && 
               nextRadius < lattice.getCartSizeX()/2 &&
               nextRadius < lattice.getCartSizeY()/2) {
-        if (this.perimeterType == RoundPerimeter.CIRCLE) {
-          this.perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
+        if (perimeterType == RoundPerimeter.CIRCLE) {
+          perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
           int newArea;
           newArea = calculateAreaAsInKmcCanvas();
           freeArea += newArea - currentArea;
           currentArea = newArea;
         } else {
-          this.perimeter.setAtomPerimeter(lattice.setInsideSquare(nextRadius));
+          perimeter.setAtomPerimeter(lattice.setInsideSquare(nextRadius));
         }
       } else {
         return true;
@@ -209,7 +209,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
 
   protected boolean depositAtom(int iHexa, int jHexa) {
-    return this.depositAtom(lattice.getAtom(iHexa, jHexa));
+    return depositAtom(lattice.getAtom(iHexa, jHexa));
   }
 
   private boolean depositAtom(AbstractGrowthAtom atom) {
@@ -256,7 +256,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
         j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
         destinationAtom = lattice.getAtom(i, j);
-      } while (!this.depositAtom(destinationAtom));
+      } while (!depositAtom(destinationAtom));
     } else {
       do {
         if (depositInAllArea) {
@@ -275,9 +275,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
           destinationAtom = lattice.getAtom(i, j);
         } else { // old default case: deposit in the perimeter
-          destinationAtom = this.perimeter.getRandomPerimeterAtom();
+          destinationAtom = perimeter.getRandomPerimeterAtom();
         }
-      } while (!this.depositAtom(destinationAtom));
+      } while (!depositAtom(destinationAtom));
     }
     if (depositInAllArea) { // update the free area and the deposition rate counting just deposited atom
       freeArea--;
@@ -288,12 +288,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   private boolean perimeterMustBeEnlarged(AbstractGrowthAtom destinationAtom) {
     
-    if (this.perimeterType == RoundPerimeter.SQUARE) {
+    if (perimeterType == RoundPerimeter.SQUARE) {
       Point2D centreCart = lattice.getCentralCartesianLocation();
-      double left = centreCart.getX() - this.perimeter.getCurrentRadius();
-      double right = centreCart.getX() + this.perimeter.getCurrentRadius();
-      double bottom = centreCart.getY() - this.perimeter.getCurrentRadius();
-      double top = centreCart.getY() + this.perimeter.getCurrentRadius();
+      double left = centreCart.getX() - perimeter.getCurrentRadius();
+      double right = centreCart.getX() + perimeter.getCurrentRadius();
+      double bottom = centreCart.getY() - perimeter.getCurrentRadius();
+      double top = centreCart.getY() + perimeter.getCurrentRadius();
       Point2D  position = lattice.getCartesianLocation(destinationAtom.getX(),destinationAtom.getY());
 
       return (destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
@@ -301,7 +301,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
               || Math.abs(top - position.getY()) < 2
               || Math.abs(bottom - position.getY()) < 2);
     } else {
-      return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getX(), destinationAtom.getY()) >= (this.perimeter.getCurrentRadius() - 2);
+      return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getX(), destinationAtom.getY()) >= (perimeter.getCurrentRadius() - 2);
     }
   }
 
@@ -441,8 +441,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param occupied Size of the seed in atoms. Number to calculate free space. 
    */
   void setCurrentOccupiedArea(int occupiedSize) {
-    this.currentArea = calculateAreaAsInKmcCanvas();
-    this.freeArea = currentArea - occupiedSize;
+    currentArea = calculateAreaAsInKmcCanvas();
+    freeArea = currentArea - occupiedSize;
   }
   
   
