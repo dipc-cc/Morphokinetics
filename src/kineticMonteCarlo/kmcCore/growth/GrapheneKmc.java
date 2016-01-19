@@ -32,10 +32,10 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    this.setLattice(new GrapheneLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
+    setLattice(new GrapheneLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
 
     if (justCentralFlake) {
-      this.setPerimeter(new RoundPerimeter("graphene"));
+      setPerimeter(new RoundPerimeter("graphene"));
       configureDevitaAccelerator(distancePerStep);
     }
   }
@@ -52,7 +52,7 @@ public class GrapheneKmc extends AbstractGrowthKmc {
       
       for (int j = -1; j < 2; j++) {
         for (int i = -1; i < 1; i++) {
-          this.depositAtom(jCentre + i, iCentre + j);
+          depositAtom(jCentre + i, iCentre + j);
         }
       }
       this.depositAtom(jCentre+2, iCentre+1);
@@ -66,24 +66,24 @@ public class GrapheneKmc extends AbstractGrowthKmc {
   }
 
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
-    this.setAccelerator(new DevitaAccelerator(this.getLattice(), distancePerStep));
+    setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));
 
-    this.getAccelerator().tryToSpeedUp(TERRACE,
+    getAccelerator().tryToSpeedUp(TERRACE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(100)
             .setMaxAccumulatedSteps(200)
             .setMinDistanceHops(1)
             .setMaxDistanceHops(10));
 
-        //accelerating types 2 (ZIGZAG_EDGE) and 3 (ARMCHAIR_EDGE) does not improve performance and introduce some morphology differences
-    this.getAccelerator().tryToSpeedUp(ZIGZAG_EDGE,
+    //accelerating types 2 (ZIGZAG_EDGE) and 3 (ARMCHAIR_EDGE) does not improve performance and introduce some morphology differences
+    getAccelerator().tryToSpeedUp(ZIGZAG_EDGE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(30)
             .setMaxAccumulatedSteps(100)
             .setMinDistanceHops(1)
             .setMaxDistanceHops(5));
 
-    this.getAccelerator().tryToSpeedUp(ARMCHAIR_EDGE,
+    getAccelerator().tryToSpeedUp(ARMCHAIR_EDGE,
             new DevitaHopsConfig()
             .setMinAccumulatedSteps(30)
             .setMaxAccumulatedSteps(100)
