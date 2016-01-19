@@ -141,7 +141,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   public IGeneticAlgorithm initialise() {
     population = initialisation.createRandomPopulation(populationSize, dimensions, minValueGene, maxValueGene, expDistribution);
     restriction.apply(population);
-    this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
+    evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     recombination.initialise(population);
 
     System.out.println("==================================");
@@ -166,7 +166,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     //sometimes it is good to reevaluate the whole population
     if (reevaluate()) {
       restriction.apply(population);
-      this.evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
+      evaluator.evaluateAndOrder(population, mainEvaluator, otherEvaluators);
     }
 
     reinsertion.Reinsert(population, offspringPopulation, populationReplacements);
