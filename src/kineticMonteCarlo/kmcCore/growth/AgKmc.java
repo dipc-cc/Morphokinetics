@@ -72,9 +72,9 @@ public class AgKmc extends AbstractGrowthKmc {
     } else {
 
       for (int i = 0; i < 3; i++) {
-        int X = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
-        int Y = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
-        depositAtom(X, Y);
+        int I = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
+        int J = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
+        depositAtom(I, J);
       }
     }
   }
