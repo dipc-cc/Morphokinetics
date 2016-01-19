@@ -476,7 +476,6 @@ public class AgLattice extends AbstractGrowthLattice {
       addBondAtom(atom);
     }
     atom.resetProbability();
-    //atom.setList(true);
   }
 
   @Override
