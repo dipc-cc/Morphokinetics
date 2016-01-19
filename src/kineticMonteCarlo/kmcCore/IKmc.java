@@ -42,6 +42,6 @@ public interface IKmc {
    */
   public float[][] getSampledSurface(int binX, int binY);
   
-  public void setDepositionRate(double depositionRatePerSite);
+  public void setDepositionRate(double depositionRatePerSite, double islandDensity);
 
 }

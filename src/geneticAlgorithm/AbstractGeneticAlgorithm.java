@@ -71,6 +71,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   private AbstractSimulation simulation;
   
   private double depositionRatePerSite;
+  private double islandDensity;
   
   private Updater updater;
   /** The stop error. If the current error is below this number, stop. */
@@ -106,18 +107,23 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     
     switch (parser.getCalculationMode()) {
       case "Ag":
-        this.simulation = new AgSimulation(parser);
+        simulation = new AgSimulation(parser);
         simulation.initialiseKmc();
         float experitentalTemp = parser.getTemperature();
-        this.depositionRatePerSite = new AgRatesFactory().getDepositionRatePerSite(experitentalTemp);
-        this.simulation.getKmc().setDepositionRate(depositionRatePerSite);
+        if (parser.depositInAllArea()) {
+          depositionRatePerSite = new AgRatesFactory().getDepositionRatePerSite(experitentalTemp);
+        } else {
+          depositionRatePerSite = new AgRatesFactory().getDepositionRatePerSite();
+        }
+        islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
+        simulation.getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
         initialisation = new AgReduced6Initialisator();
         restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
         if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();
         mainEvaluator = getAgMainEvaluator();
         break;
       case "Si":
-        this.simulation = new SiSimulation(parser);
+        simulation = new SiSimulation(parser);
         simulation.initialiseKmc();
         initialisation = new SiInitialisator();
         restriction = new SiRestriction();

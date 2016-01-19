@@ -184,9 +184,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
 
     AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
-    QuickSort.orderByAngle(perimeter, perimeter.length - 1);
+      QuickSort.orderByAngle(perimeter, perimeter.length - 1);
 
-    return perimeter;
+      return perimeter;
   }
 
   /**

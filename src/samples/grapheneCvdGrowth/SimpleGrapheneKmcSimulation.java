@@ -19,7 +19,7 @@ import utils.StaticRandom;
  */
 public class SimpleGrapheneKmcSimulation {
 
-  private static final double cos30 = Math.cos(30 * Math.PI / 180);
+  private static final double COS30 = Math.cos(30 * Math.PI / 180);
 
   public static void main(String args[]) {
 
@@ -51,20 +51,21 @@ public class SimpleGrapheneKmcSimulation {
             .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
-    int sizeY = (int) (sizeX * (2 * cos30));
+    int sizeY = (int) (sizeX * (2 * COS30));
     if ((sizeY & 1) != 0) {
       sizeY++;
     }
-    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, false, 0.3f, false, RoundPerimeter.CIRCLE, false);
+    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, true, 0.3f, false, RoundPerimeter.CIRCLE, false);
     return kmc;
   }
 
-  private static void initializeRates(GrapheneRatesFactory reatesFactory, GrapheneKmc kmc) {
+  private static void initializeRates(GrapheneRatesFactory ratesFactory, GrapheneKmc kmc) {
 
-    double depositionRatePerSite = reatesFactory.getDepositionRatePerSite(0);
-    kmc.setDepositionRate(depositionRatePerSite);
+    double depositionRatePerSite = ratesFactory.getDepositionRatePerSite();
+    double islandDensity = ratesFactory.getIslandDensity(0);
+    kmc.setDepositionRate(depositionRatePerSite, islandDensity);
     kmc.reset();
-    kmc.initialiseRates(reatesFactory.getRates(0));
+    kmc.initialiseRates(ratesFactory.getRates(0));
     kmc.depositSeed(); //might not be needed, it is a multiflake simulation
 
   }

@@ -69,14 +69,18 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
 
   @Override
-  public final void setDepositionRate(double depositionRatePerSite) {
+  public final void setDepositionRate(double depositionRateML, double islandDensitySite) {
     this.area = calculateAreaAsInLattice();
-    this.depositionRatePerSite = depositionRatePerSite;
+    this.depositionRatePerSite = depositionRateML;
     
     if (justCentralFlake) {
-      currentArea = calculateAreaAsInKmcCanvas();
-      freeArea = currentArea;
-      getList().setDepositionProbability(depositionRatePerSite * calculateAreaAsInLattice());
+      if (depositInAllArea) {
+        currentArea = calculateAreaAsInKmcCanvas();
+        freeArea = currentArea;
+        getList().setDepositionProbability(depositionRatePerSite * calculateAreaAsInLattice());
+      } else {
+        getList().setDepositionProbability(depositionRateML / islandDensitySite);
+      }
     } else {
       this.freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
       getList().setDepositionProbability(depositionRatePerSite * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
