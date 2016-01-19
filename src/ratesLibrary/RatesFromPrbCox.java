@@ -257,6 +257,12 @@ public class RatesFromPrbCox implements IGrowthRates {
     return depositionRatePerSite;
   }
 
+  /**
+   * Deposition rate is constant to 0.0035 ML/s. What changes is island density. Consequently,
+   * deposition rate in practice varies with the temperature.
+   *
+   * @return diffusion mono layer
+   */
   @Override
   public double getDepositionRatePerSite() {
     return diffusionMl;
