@@ -14,8 +14,8 @@ public abstract class AbstractEvaluator implements IEvaluation {
   private boolean showGraphics;
 
   public AbstractEvaluator() {
-    this.wheight = 1.0;
-    this.showGraphics = false;
+    wheight = 1.0;
+    showGraphics = false;
   }
 
   @Override

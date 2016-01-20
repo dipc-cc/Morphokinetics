@@ -32,7 +32,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   public MultithreadedPsdEvaluator(int repeats, int measureInterval, int numThreads, Set flags) {
     super(repeats, measureInterval, flags, null);
 
-    this.workers = new KmcWorker[numThreads];
+    workers = new KmcWorker[numThreads];
     this.numThreads = numThreads;
     evalationComplete = new Semaphore(0);
   }
@@ -41,11 +41,11 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   public synchronized void handleSimulationFinish(int workerID, int workID) {
 
     finishedSimulation++;
-    if (getCurrentSimulation() < getCurrentPopulation().size() * this.getRepeats()) {
+    if (getCurrentSimulation() < getCurrentPopulation().size() * getRepeats()) {
       assignNewWork(workerID);
     }
 
-    if (finishedSimulation == getCurrentPopulation().size() * this.getRepeats()) {
+    if (finishedSimulation == getCurrentPopulation().size() * getRepeats()) {
       evalationComplete.release();
     }
   }
@@ -65,7 +65,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   private void assignNewWork(int workerId) {
 
-    int individual = getCurrentSimulation() / this.getRepeats();
+    int individual = getCurrentSimulation() / getRepeats();
 
     workers[workerId].initialise(getCurrentPopulation().getIndividual(individual).getGenes());
     workers[workerId].simulate(this, this, getMeasureInterval(), individual);
@@ -90,7 +90,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   public float[][] calculatePsdFromIndividual(Individual i) {
     Population p = new Population(1);
     p.setIndividual(i, 0);
-    this.calculatePsdOfPopulation(p);
+    calculatePsdOfPopulation(p);
 
     psds[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
     psds[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
@@ -126,7 +126,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
     setCurrentSimulation(0);
     finishedSimulation = 0;
 
-    for (int i = 0; i < this.numThreads; i++) {
+    for (int i = 0; i < numThreads; i++) {
       assignNewWork(i);
     }
 
@@ -140,7 +140,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   private void storeSimulationTimes(Population p) {
     for (int i = 0; i < p.size(); i++) {
-      times[i] /= this.getRepeats();
+      times[i] /= getRepeats();
       p.getIndividual(i).setSimulationTime(times[i]);
     }
   }

@@ -32,16 +32,16 @@ public class SiPointArray extends PointArray {
 
     super(MAX_POINTS, GeometryArray.COORDINATES | GeometryArray.BY_REFERENCE | GeometryArray.USE_NIO_BUFFER);
 
-    this.setCapability(this.ALLOW_REF_DATA_WRITE);
-    this.setCapability(this.ALLOW_COUNT_WRITE);
-    this.setValidVertexCount(0);
-    this.setCoordRefBuffer(floatBufferCoord);
+    setCapability(ALLOW_REF_DATA_WRITE);
+    setCapability(ALLOW_COUNT_WRITE);
+    setValidVertexCount(0);
+    setCoordRefBuffer(floatBufferCoord);
     actualizadata(surface);
   }
 
   public void actualizadata(final float[] coords) {
 
-    this.updateData(new GeometryUpdater() {
+    updateData(new GeometryUpdater() {
       public void updateData(Geometry geometry) {
         ((SiPointArray) geometry).updateBuffers(coords);
       }
@@ -50,7 +50,7 @@ public class SiPointArray extends PointArray {
 
   public void updateBuffers(float[] coords) {
     int validVertex = Math.min(MAX_POINTS, coords.length / 3);
-    this.setValidVertexCount(validVertex);
+    setValidVertexCount(validVertex);
     buffer.rewind();
     buffer.put(coords);
   }

@@ -49,7 +49,7 @@ public class ErrorPanel extends JPanel {
     }
     this.Xs.add(Xslog);
     this.Ys.add(Yslog);
-    this.repaint();
+    repaint();
   }
 
   public float getLogYSize() {
@@ -75,37 +75,37 @@ public class ErrorPanel extends JPanel {
     G2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, // Anti-alias!
             RenderingHints.VALUE_ANTIALIAS_ON);
     G2d.setColor(Color.white);
-    G2d.setPaint(new GradientPaint(0, 0, Color.white, 0, this.getHeight(), new Color(240, 240, 240)));
-    G2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+    G2d.setPaint(new GradientPaint(0, 0, Color.white, 0, getHeight(), new Color(240, 240, 240)));
+    G2d.fillRect(0, 0, getWidth(), getHeight());
     if (Xs.size() < 2) {
       return;
     }
     G2d.setColor(c);
-    float width = this.getWidth() - 40;
-    float height = this.getHeight() - 40;
+    float width = getWidth() - 40;
+    float height = getHeight() - 40;
     float scaleX = width / maxX;
     float scaleY = height / (maxY - minY);
 
     for (int i = 1; i < Xs.size(); i++) {
       G2d.drawLine(10 + (int) (Xs.get(i - 1) * scaleX),
-              this.getHeight() - (20 + (int) ((Ys.get(i - 1) - minY) * scaleY)),
+              getHeight() - (20 + (int) ((Ys.get(i - 1) - minY) * scaleY)),
               10 + (int) (Xs.get(i) * scaleX),
-              this.getHeight() - (20 + (int) ((Ys.get(i) - minY) * scaleY)));
+              getHeight() - (20 + (int) ((Ys.get(i) - minY) * scaleY)));
 
     }
 
     G2d.fillOval(8 + (int) (Xs.get(Xs.size() - 1) * scaleX),
-            this.getHeight() - (20 + (int) ((Ys.get(Xs.size() - 1) - minY) * scaleY)) - 2, 4, 4);
+            getHeight() - (20 + (int) ((Ys.get(Xs.size() - 1) - minY) * scaleY)) - 2, 4, 4);
 
     if (Xs.size() > 0) {
       g.setColor(Color.black);
       g.drawString(Float.toString((float) Math.pow(10, Ys.get(Xs.size() - 1))),
               -29 + (int) (Xs.get(Xs.size() - 1) * scaleX), -4
-              + this.getHeight() - (20 + (int) (+(Ys.get(Xs.size() - 1) - minY) * scaleY)));
+              + getHeight() - (20 + (int) (+(Ys.get(Xs.size() - 1) - minY) * scaleY)));
       G2d.setColor(c);
       g.drawString(Float.toString((float) Math.pow(10, Ys.get(Xs.size() - 1))),
               -30 + (int) (Xs.get(Xs.size() - 1) * scaleX), -5
-              + this.getHeight() - (20 + (int) (+(Ys.get(Xs.size() - 1) - minY) * scaleY)));
+              + getHeight() - (20 + (int) (+(Ys.get(Xs.size() - 1) - minY) * scaleY)));
     }
 
     G2d.setColor(Color.black);

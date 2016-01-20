@@ -273,7 +273,7 @@ public class SurfaceViewerPanel2D extends JPanel {
     lowPanel.setLayout(new BorderLayout());
     lowPanel.add(jPanel3, NORTH);
     GroupLayout layout = new GroupLayout(this);
-    this.setLayout(layout);
+    setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(LEADING)
       .addGroup(layout.createSequentialGroup()

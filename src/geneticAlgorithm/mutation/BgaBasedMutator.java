@@ -22,9 +22,9 @@ public class BgaBasedMutator implements IMutation {
   private final float mutRate;
   
   public BgaBasedMutator() {
-    this.r = /*0.1f*/ 1f;
-    this.k = 7;
-    this.mutRate = 0.5f;
+    r = /*0.1f*/ 1f;
+    k = 7;
+    mutRate = 0.5f;
   }
 
   @Override

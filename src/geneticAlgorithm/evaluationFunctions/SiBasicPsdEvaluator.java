@@ -37,7 +37,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
   public float[][] calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     kmc.initialiseRates(ind.getGenes());
-    for (int i = 0; i < this.getRepeats(); i++) {
+    for (int i = 0; i < getRepeats(); i++) {
       kmc.reset();
       kmc.depositSeed();
       kmc.simulate(getMeasureInterval() / 2);

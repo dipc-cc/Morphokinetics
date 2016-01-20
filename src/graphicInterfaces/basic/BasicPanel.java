@@ -52,7 +52,7 @@ public class BasicPanel extends javax.swing.JPanel {
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    if (this.kmc == null) {
+    if (kmc == null) {
       return;
     }
     int sizeX = kmc.getLattice().getHexaSizeI();
@@ -108,7 +108,7 @@ public class BasicPanel extends javax.swing.JPanel {
   private void initComponents() {
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-    this.setLayout(layout);
+    setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGap(0, 604, Short.MAX_VALUE)

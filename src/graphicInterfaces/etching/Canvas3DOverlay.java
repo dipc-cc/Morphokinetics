@@ -24,7 +24,7 @@ public class Canvas3DOverlay extends Canvas3D {
 
   public void setOverlayText(String p) {
     overlayText = p;
-    this.postRender();
+    postRender();
   }
 
   public Canvas3DOverlay(java.awt.GraphicsConfiguration graphicsConfiguration) {

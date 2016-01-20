@@ -60,8 +60,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     }
     this.flags = flags;
     this.hierarchyEvaluator = hierarchyEvaluator;
-    this.kmcError = false;
-    this.psd = null;
+    kmcError = false;
+    psd = null;
   }
   
   /**
@@ -82,7 +82,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
   
   public void setExpectedSimulationTime(double expectedSimulationTime) {
-    this.expectedSimulationTime = Math.log(expectedSimulationTime);
+    expectedSimulationTime = Math.log(expectedSimulationTime);
   }
   
   /**
@@ -169,11 +169,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
 
   public void resetKmcError() {
-    this.kmcError = false;
+    kmcError = false;
   }
   
   public void kmcHasFailed() {
-    this.kmcError = true;
+    kmcError = true;
   }
   
   public boolean hasKmcFailed() {
@@ -197,8 +197,8 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   
   @Override
   public double[] evaluate(Population p) {
-    this.currentPopulation = p;
-    this.currentSimulation = 0;
+    currentPopulation = p;
+    currentSimulation = 0;
     double[] results = new double[p.size()];
 
     for (int i = 0; i < p.size(); i++) {

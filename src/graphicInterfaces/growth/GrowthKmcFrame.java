@@ -29,12 +29,12 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
 
     initComponents();
     this.canvas1 = canvas1;
-    this.canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    this.jPanel1.add(canvas1);
-    this.canvas1.initialise();
-    this.jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
-    this.setResizable(true);
-    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
+    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
+    jPanel1.add(canvas1);
+    canvas1.initialise();
+    jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
+    setResizable(true);
+    setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -143,7 +143,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
 
       canvas1.setScale((Integer) jSpinner2.getValue());
       canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-      this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
+      setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
     }//GEN-LAST:event_jSpinner2StateChanged
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
@@ -185,7 +185,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jSpinner2.setValue(zoom);
     canvas1.setScale(zoom);
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    this.setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
+    setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }//GEN-LAST:event_jPanel1MouseWheelMoved
 
   final class paintLoop extends Thread {

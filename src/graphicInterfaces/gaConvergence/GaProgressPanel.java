@@ -56,10 +56,10 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
 
     initComponents();
 
-    this.panel = new ErrorPanel(Color.red);
-    this.jScrollPane1.setViewportView(panel);
-    this.totalIterations = 0;
-    this.setVisible(true);
+    panel = new ErrorPanel(Color.red);
+    jScrollPane1.setViewportView(panel);
+    totalIterations = 0;
+    setVisible(true);
     
     formatter = new DecimalFormat("0.##E0");
   }
@@ -126,7 +126,7 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
     jLabel4.setBorder(BorderFactory.createBevelBorder(RAISED));
 
     GroupLayout layout = new GroupLayout(this);
-    this.setLayout(layout);
+    setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(LEADING)
       .addGroup(TRAILING, layout.createSequentialGroup()
@@ -193,7 +193,7 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
   @Override
   public void addNewBestIndividual(Individual ind) {
 
-    panel.addPoint(this.totalIterations, (float) ind.getTotalError());
+    panel.addPoint(totalIterations, (float) ind.getTotalError());
 
     String value;
     for (int column = 1; column < 8; column++) {
@@ -223,13 +223,13 @@ public class GaProgressPanel extends JPanel implements IgaProgressFrame {
     jTable1.setValueAt(value, 2, 3);
     value = formatter.format((float) ind.getGene(5));
     jTable1.setValueAt(value, 5, 6);
-    this.totalIterations++;
+    totalIterations++;
   }
 
   @Override
   public void clear() {
     panel.clear();
     // jTable1. //TODO CLEAR JTABLE
-    this.totalIterations = 0;
+    totalIterations = 0;
   }
 }

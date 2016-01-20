@@ -62,11 +62,11 @@ public class KmcCanvas extends Canvas {
   }
 
   public int getSizeX() {
-    return (int) (this.lattice.getCartSizeX() * scale);
+    return (int) (lattice.getCartSizeX() * scale);
   }
 
   public int getSizeY() {
-    return (int) (this.lattice.getCartSizeY() * scale);
+    return (int) (lattice.getCartSizeY() * scale);
   }
 
   public void setScale(int scale) {
@@ -74,8 +74,8 @@ public class KmcCanvas extends Canvas {
   }
 
   public KmcCanvas() {   //constructor
-    this.setIgnoreRepaint(true); //we repaint manually
-    this.setFocusable(false);
+    setIgnoreRepaint(true); //we repaint manually
+    setFocusable(false);
   }
 
   public void dispose() {
@@ -102,7 +102,7 @@ public class KmcCanvas extends Canvas {
       e.printStackTrace();
       return;
     }
-    this.paint((Graphics2D) g);
+    paint((Graphics2D) g);
     g.dispose();
 
     if (!strategy.contentsLost()) {

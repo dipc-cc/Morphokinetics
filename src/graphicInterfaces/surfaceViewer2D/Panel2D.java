@@ -42,7 +42,7 @@ public class Panel2D extends javax.swing.JPanel {
     if (auto) {
       getMinMax(psd);
     }
-    this.repaint();
+    repaint();
   }
 
   public void setLogScale(boolean log) {
@@ -50,22 +50,22 @@ public class Panel2D extends javax.swing.JPanel {
     if (psd != null && auto) {
       getMinMax(psd);
     }
-    this.repaint();
+    repaint();
   }
 
   public void setTextInfo(String textInfo) {
     this.textInfo = textInfo;
-    this.repaint();
+    repaint();
   }
 
   public void setColormap(int colormap) {
     this.colormap = colormap;
-    this.repaint();
+    repaint();
   }
 
   public void setShift(boolean shift) {
     this.shift = shift;
-    this.repaint();
+    repaint();
   }
 
   public double getMax() {
@@ -74,8 +74,8 @@ public class Panel2D extends javax.swing.JPanel {
 
   public void setMax(double max) {
     this.max = max;
-    this.auto = false;
-    this.repaint();
+    auto = false;
+    repaint();
   }
 
   public double getMin() {
@@ -84,8 +84,8 @@ public class Panel2D extends javax.swing.JPanel {
 
   public void setMin(double min) {
     this.min = min;
-    this.auto = false;
-    this.repaint();
+    auto = false;
+    repaint();
 
   }
 
@@ -97,7 +97,7 @@ public class Panel2D extends javax.swing.JPanel {
     this.auto = auto;
     if (auto) {
       getMinMax(psd);
-      this.repaint();
+      repaint();
     }
 
   }
@@ -110,8 +110,8 @@ public class Panel2D extends javax.swing.JPanel {
 
       int binSizeX = psd.length;
       int binSizeY = psd[0].length;
-      float scaleY = this.getHeight() / (float) binSizeY;
-      float scaleX = this.getWidth() / (float) binSizeX;
+      float scaleY = getHeight() / (float) binSizeY;
+      float scaleX = getWidth() / (float) binSizeX;
       ((Graphics2D) g).scale(scaleX, scaleY);
 
       for (int i = 0; i < binSizeX; i++) {
@@ -135,11 +135,11 @@ public class Panel2D extends javax.swing.JPanel {
       ((Graphics2D) g).scale(1 / scaleX, 1 / scaleY);
 
       g.setColor(new Color(1.0f, 1.0f, 1.0f, 0.66f));
-      g.fillRect(0, this.getHeight() - 15, this.getWidth(), 15);
-      g.fillRect(0, 0, this.getWidth(), 15);
+      g.fillRect(0, getHeight() - 15, getWidth(), 15);
+      g.fillRect(0, 0, getWidth(), 15);
 
       g.setColor(Color.black);
-      g.drawString("Min:" + MathUtils.truncate(min, 4) + ",   Max:" + MathUtils.truncate(max, 4), 2, this.getHeight() - 2);
+      g.drawString("Min:" + MathUtils.truncate(min, 4) + ",   Max:" + MathUtils.truncate(max, 4), 2, getHeight() - 2);
       g.drawString(textInfo, 2, 14);
     }
   }
@@ -153,7 +153,7 @@ public class Panel2D extends javax.swing.JPanel {
   private void initComponents() {
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-    this.setLayout(layout);
+    setLayout(layout);
     layout.setHorizontalGroup(
       layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
       .addGap(0, 604, Short.MAX_VALUE)

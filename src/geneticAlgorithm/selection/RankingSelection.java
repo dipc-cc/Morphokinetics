@@ -17,7 +17,7 @@ public class RankingSelection implements ISelection {
   private float selectivePressure; // 
 
   public RankingSelection() {
-    this.selectivePressure = 2f;
+    selectivePressure = 2f;
   }
   
   @Override

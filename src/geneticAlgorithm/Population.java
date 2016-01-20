@@ -114,7 +114,7 @@ public class Population {
   }
   
   public void setOffspringGenes(RichMatrix offX) {
-    this.offspringGenes = offX;
+    offspringGenes = offX;
   }
   
   public double getCrm() {
@@ -204,9 +204,9 @@ public class Population {
    */
   public Individual getBestIndividual() {
      if (!ordered) {
-      this.order();
+      order();
     }
-    return this.individuals[0];
+    return individuals[0];
   }
 
 }

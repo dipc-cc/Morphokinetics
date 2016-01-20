@@ -33,15 +33,15 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
 
     initComponents();
 
-    this.panel = new ErrorPanel(Color.red);
-    this.jScrollPane1.setViewportView(panel);
+    panel = new ErrorPanel(Color.red);
+    jScrollPane1.setViewportView(panel);
     this.geneticAlgorithm = geneticAlgorithm;
-    this.geneticAlgorithm.setGraphics(this);
-    this.totalIterations = 0;
+    geneticAlgorithm.setGraphics(this);
+    totalIterations = 0;
     updater = new ProgressUpdater();
     updater.start();
-    this.setLocationRelativeTo(null);
-    this.setVisible(true);
+    setLocationRelativeTo(null);
+    setVisible(true);
   }
 
   /**
@@ -184,7 +184,7 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
         jProgressBar3.setValue((int) progress[2]);
         jProgressBar3.setString(formatPercent(progress[2]) + "%");
         try {
-          this.wait(100);
+          wait(100);
         } catch (Exception e) {
         }
 
@@ -209,7 +209,7 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
   @Override
   public void addNewBestIndividual(Individual i) {
 
-    panel.addPoint(this.totalIterations, (float) i.getTotalError());
+    panel.addPoint(totalIterations, (float) i.getTotalError());
     checkTableSize(i);
 
     for (int column = 1; column < 5; column++) {
@@ -220,14 +220,14 @@ public class GaProgressFrame extends javax.swing.JFrame implements IgaProgressFr
     for (int gene = 0; gene < i.getGeneSize(); gene++) {
       jTable1.setValueAt((float) i.getGene(gene), gene, 4);
     }
-    this.totalIterations++;
+    totalIterations++;
   }
 
   @Override
   public void clear() {
     panel.clear();
     // jTable1. //TODO CLEAR JTABLE
-    this.totalIterations = 0;
+    totalIterations = 0;
   }
 
   private void checkTableSize(Individual i) {

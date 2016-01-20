@@ -66,13 +66,13 @@ public class MainInterface extends JFrame {
   private BorderLayout growthLayout;
   
   public MainInterface(KmcCanvas canvas1) {
-    this.growCanvas = canvas1;
+    growCanvas = canvas1;
     initGrowth();
     initUI();
-    this.growPanel.add(canvas1);
-    this.growCanvas.initialise();
-    this.jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
-    this.setResizable(true);
+    growPanel.add(canvas1);
+    growCanvas.initialise();
+    jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
+    setResizable(true);
    
   }
 

@@ -11,13 +11,13 @@ public class BasicFrame extends javax.swing.JFrame implements KmcGraphics {
   public BasicFrame(int zoom) {
     this.zoom = zoom;
     initComponents();
-    this.setVisible(true);
+    setVisible(true);
   }
 
   @Override
   public void drawKmc(AbstractKmc kmc) {
 
-    this.setSize(kmc.getLattice().getHexaSizeI() * zoom + 4, kmc.getLattice().getHexaSizeJ() * zoom + 16);
+    setSize(kmc.getLattice().getHexaSizeI() * zoom + 4, kmc.getLattice().getHexaSizeJ() * zoom + 16);
     ((BasicPanel) jPanel1).setKMC((BasicKmc) kmc);
     ((BasicPanel) jPanel1).repaint();
   }

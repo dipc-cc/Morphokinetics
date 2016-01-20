@@ -41,7 +41,7 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
   public SiFrame() {
     super();
-    this.setVisible(true);
+    setVisible(true);
   }
 
   @Override
@@ -49,10 +49,10 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
     if (sil == null) {
       sil = new SiPointArray(new float[]{});
-      float side = this.update(kmc);
+      float side = update(kmc);
       createSiliconPanel(side);
     } else {
-      this.update(kmc);
+      update(kmc);
     }
   }
 
