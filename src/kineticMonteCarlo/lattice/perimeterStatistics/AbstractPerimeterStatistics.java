@@ -25,7 +25,7 @@ public abstract class AbstractPerimeterStatistics {
   public AbstractPerimeterStatistics(Statistics statisticAtom, 
           Statistics statisticsHops){
  
-    this.totalCount = new int[statisticAtom.getRows()];
+    totalCount = new int[statisticAtom.getRows()];
     minRadius = 10;
     maxRadius = statisticAtom.getRows() - 10;
     
@@ -33,10 +33,10 @@ public abstract class AbstractPerimeterStatistics {
     hopsCount = new int[statisticsHops.getRows()][statisticsHops.getColumns()];
     
     for (int i = 0; i < statisticAtom.getRows(); i++) {
-      this.totalCount[i] = statisticAtom.getTotalCount(i);
+      totalCount[i] = statisticAtom.getTotalCount(i);
     }
-    this.reentranceCount = statisticAtom.getWholeData();
-    this.hopsCount = statisticsHops.getWholeData();
+    reentranceCount = statisticAtom.getWholeData();
+    hopsCount = statisticsHops.getWholeData();
   }
   
   public int getTotalCount(int radius) {

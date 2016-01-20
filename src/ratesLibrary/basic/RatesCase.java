@@ -50,7 +50,7 @@ public abstract class RatesCase implements IBasicRates {
     double[] rates = new double[4];
 
     for (int i = 0; i < 4; i++) {
-      rates[i] = (this.getPrefactor(i) * Math.exp(-this.getEnergy(i) / (kB * temperature)));
+      rates[i] = (getPrefactor(i) * Math.exp(-getEnergy(i) / (kB * temperature)));
     }
     return rates;
   }

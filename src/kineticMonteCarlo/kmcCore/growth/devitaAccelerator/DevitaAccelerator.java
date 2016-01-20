@@ -28,13 +28,13 @@ public class DevitaAccelerator {
   public DevitaAccelerator(IDevitaLattice lattice, HopsPerStep hopsPerSteps) {
     this.lattice = lattice;
     this.hopsPerStep = hopsPerSteps;
-    this.remainingHopsMap = new HashMap();
-    this.devitaConfig = new HashMap();
+    remainingHopsMap = new HashMap();
+    devitaConfig = new HashMap();
   }
 
   public void tryToSpeedUp(int type, DevitaHopsConfig config) {
-    this.hopsPerStep.setDistancePerStep(type, 1);
-    this.devitaConfig.put(type, config);
+    hopsPerStep.setDistancePerStep(type, 1);
+    devitaConfig.put(type, config);
     updateRemainingHops(type, 0);
   }
 

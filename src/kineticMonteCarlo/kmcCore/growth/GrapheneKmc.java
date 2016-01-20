@@ -55,7 +55,7 @@ public class GrapheneKmc extends AbstractGrowthKmc {
           depositAtom(jCentre + i, iCentre + j);
         }
       }
-      this.depositAtom(jCentre+2, iCentre+1);
+      depositAtom(jCentre + 2, iCentre + 1);
     } else {
       for (int i = 0; i < 3; i++) {
         int iHexa = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());

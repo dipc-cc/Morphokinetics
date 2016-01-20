@@ -38,7 +38,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     occupied = 0;
     
     // Initialise the square perimeter include points. This is required because the number of points in the horizontal and vertical perimeters should be as equal as possible.
-    this.includePerimeterList = new ArrayList<>();
+    includePerimeterList = new ArrayList<>();
     for (int i = 0; i < 256; i++) {
       includePerimeterList.add(Math.round(2 * Y_RATIO + 2 * i * Y_RATIO));
     }

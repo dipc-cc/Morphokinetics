@@ -185,10 +185,10 @@ public class GrapheneLattice extends AbstractGrowthLattice {
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
       case 2:
         getClearAreaZigzag(iHexa, jHexa, distance, point, StaticRandom.raw());
-        return this.getAtom(point[0], point[1]);
+        return getAtom(point[0], point[1]);
       case 3:
         getClearAreaArmchair(iHexa, jHexa, distance, point, StaticRandom.raw());
-        return this.getAtom(point[0], point[1]);
+        return getAtom(point[0], point[1]);
       default:
         return null;
     }

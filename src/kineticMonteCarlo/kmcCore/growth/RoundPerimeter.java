@@ -31,9 +31,9 @@ public class RoundPerimeter {
   private short type;
 
   public RoundPerimeter(String statisticData) {
-    this.perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
-    this.currentRadius = perimeterStatistics.getMinRadiusInSize();
-    this.currentPerimeter = null;
+    perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
+    currentRadius = perimeterStatistics.getMinRadiusInSize();
+    currentPerimeter = null;
   }
   
   public RoundPerimeter(String statisticData, short type){
@@ -50,11 +50,11 @@ public class RoundPerimeter {
    * @return current size of the radius (in units).
    */
   public int getCurrentRadius() {
-    return this.currentRadius;
+    return currentRadius;
   }
 
   public void setMinRadius() {
-    this.currentRadius = perimeterStatistics.getMinRadiusInSize();
+    currentRadius = perimeterStatistics.getMinRadiusInSize();
   }
   
   /**
@@ -62,7 +62,7 @@ public class RoundPerimeter {
    * @return atoms vector belonging to the perimeter.
    */
   public AbstractGrowthAtom[] getCurrentPerimeter(){
-    return this.currentPerimeter;
+    return currentPerimeter;
   }
   
   /**
@@ -70,17 +70,17 @@ public class RoundPerimeter {
    * @return the new value of the perimeter.
    */
   public int goToNextRadius() {
-    this.currentRadius = perimeterStatistics.getNextRadiusInSize(currentRadius);
-    return this.currentRadius;
+    currentRadius = perimeterStatistics.getNextRadiusInSize(currentRadius);
+    return currentRadius;
   }
 
   public void setAtomPerimeter(AbstractGrowthAtom[] perimeter) {
-    this.currentPerimeter = perimeter;
+    currentPerimeter = perimeter;
 
   }
 
   public void setMaxPerimeter(){
-    this.currentRadius = 125;
+    currentRadius = 125;
   }
   
   public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom origin) {
@@ -169,7 +169,7 @@ public class RoundPerimeter {
   }
 
    public AbstractGrowthAtom getRandomPerimeterAtom() {
-    return this.currentPerimeter[(int) (utils.StaticRandom.raw() * currentPerimeter.length)];
+    return currentPerimeter[(int) (utils.StaticRandom.raw() * currentPerimeter.length)];
   }
 
 }

@@ -31,7 +31,7 @@ public abstract class AbstractKmc implements IKmc {
 
   /**
    * Resets the lattice and the list of atoms. This method has to be called just before
-   * this.depositSeed() and this.simulate().
+   * depositSeed() and simulate().
    */
   @Override
   public void reset() {
@@ -55,7 +55,7 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   /**
-   * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   * Does the actual simulation. It has to be called after reset() and depositSeed().
    * @return number of iterations that simulation took
    */
   @Override
@@ -69,7 +69,7 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   /**
-   * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   * Does the actual simulation. It has to be called after reset() and depositSeed().
    * @param endtime 
    */
   @Override
@@ -84,7 +84,7 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   /**
-   * Does the actual simulation. It has to be called after this.reset() and this.depositSeed().
+   * Does the actual simulation. It has to be called after reset() and depositSeed().
    * @param iterations 
    * @return number of iterations that simulation took
    */

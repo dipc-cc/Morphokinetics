@@ -57,8 +57,8 @@ public class SiLattice extends AbstractLattice {
 
     atoms = new SiAtom[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
 
-    this.createAtoms(coords, unitCell);
-    this.interconnectAtoms(ucNeighbours, block);
+    createAtoms(coords, unitCell);
+    interconnectAtoms(ucNeighbours, block);
   }
 
   @Override
@@ -82,7 +82,7 @@ public class SiLattice extends AbstractLattice {
     //Unremove atoms and set to bulk mode (4,12)
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
-        for (int a = 0; a < this.getUnitCellSize(); a++) {
+        for (int a = 0; a < getUnitCellSize(); a++) {
           atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].setList(null);
           atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].unRemove();
         }
@@ -107,8 +107,8 @@ public class SiLattice extends AbstractLattice {
     // Remove top layer atoms
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
-        for (int a = 0; a < this.getUnitCellSize(); a++) {
-          atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * this.getUnitCellSize() + a].remove();
+        for (int a = 0; a < getUnitCellSize(); a++) {
+          atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].remove();
         }
       }
     }

@@ -31,7 +31,7 @@ public class KmcWorker extends Thread {
   public KmcWorker(AbstractKmc kmc, int workerId) {
     this.kmc = kmc;
     this.workerId = workerId;
-    this.active = true;
+    active = true;
   }
 
   public void destroyWorker() {
@@ -91,89 +91,89 @@ public class KmcWorker extends Thread {
 
   public void initialise(double[] rates) {
     try {
-      this.receiveCommandsLock.acquire();
+      receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
       e.printStackTrace();
       return;
     }
-    this.kmc.reset();
-    this.kmc.initialiseRates(rates);
-    this.kmc.depositSeed();
-    this.receiveCommandsLock.release();
+    kmc.reset();
+    kmc.initialiseRates(rates);
+    kmc.depositSeed();
+    receiveCommandsLock.release();
   }
 
   public AbstractLattice getLattice() {
-    return this.kmc.getLattice();
+    return kmc.getLattice();
   }
 
   public void simulate(IFinishListener toAdd, int workID) {
     try {
-      this.receiveCommandsLock.acquire();
+      receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
       e.printStackTrace();
       return;
     }
-    this.simulationType = "until_finish";
-    this.finishListener = toAdd;
-    this.workId = workID;
-    this.performSimulationLock.release();
+    simulationType = "until_finish";
+    finishListener = toAdd;
+    workId = workID;
+    performSimulationLock.release();
   }
 
   public void simulate(double endtime, IFinishListener toAdd, int workID) {
     try {
-      this.receiveCommandsLock.acquire();
+      receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
       e.printStackTrace();
       return;
     }
-    this.simulationType = "by_time";
-    this.finishListener = toAdd;
-    this.workId = workID;
-    this.performSimulationLock.release();
+    simulationType = "by_time";
+    finishListener = toAdd;
+    workId = workID;
+    performSimulationLock.release();
   }
 
   public void simulate(int iterations, IFinishListener toAdd, int workID) {
     try {
-      this.receiveCommandsLock.acquire();
+      receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
       e.printStackTrace();
       return;
     }
-    this.simulationType = "by_steps";
-    this.finishListener = toAdd;
-    this.workId = workID;
+    simulationType = "by_steps";
+    finishListener = toAdd;
+    workId = workID;
     this.iterations = iterations;
-    this.performSimulationLock.release();
+    performSimulationLock.release();
   }
 
-  public void simulate(IIntervalListener toAdd, IFinishListener toFinish, int intervalSteps, int workID) {
+  public void simulate(IIntervalListener toAdd, IFinishListener toFinish, int intervalSteps, int workId) {
     try {
-      this.receiveCommandsLock.acquire();
+      receiveCommandsLock.acquire();
     } catch (InterruptedException e) {
       e.printStackTrace();
       return;
     }
-    this.simulationType = "by_intervals";
-    this.intervalListener = toAdd;
-    this.finishListener = toFinish;
-    this.workId = workID;
+    simulationType = "by_intervals";
+    intervalListener = toAdd;
+    finishListener = toFinish;
+    this.workId = workId;
     this.intervalSteps = intervalSteps;
     performSimulationLock.release();
   }
 
   public AbstractList getSurfaceList() {
-    return this.kmc.getList();
+    return kmc.getList();
   }
 
   public double getTime() {
-    return this.kmc.getTime();
+    return kmc.getTime();
   }
 
   public int getIterations() {
-    return this.kmc.getIterations();
+    return kmc.getIterations();
   }
 
   public float[][] getSampledSurface(int binX, int binY) {
-    return this.kmc.getSampledSurface(binX, binY);
+    return kmc.getSampledSurface(binX, binY);
   }
 }

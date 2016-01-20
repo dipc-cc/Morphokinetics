@@ -88,7 +88,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param quantity 
    */
   public void addNMobile(int quantity) {
-    this.nMobile = this.nMobile + quantity;
+    nMobile = nMobile + quantity;
   }
   
   /**
@@ -96,7 +96,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param quantity 
    */
   public void addNImmobile(int quantity) {
-    this.nImmobile = this.nImmobile + quantity;
+    nImmobile = nImmobile + quantity;
   }
 
   /**

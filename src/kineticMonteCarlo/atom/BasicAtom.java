@@ -19,7 +19,7 @@ public class BasicAtom extends AbstractAtom {
     this.x = x;
     this.y = y;
     setNumberOfNeighbours(4);
-    this.neighbours = new BasicAtom[getNumberOfNeighbours()];
+    neighbours = new BasicAtom[getNumberOfNeighbours()];
   }
   
   public short getX() {
