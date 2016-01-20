@@ -109,51 +109,51 @@ public class Parser {
    * Constructor
    */
   public Parser() {
-    this.calculationType = "batch";
-    this.islandDensityType = "COX_PRB";
-    this.listType = "linear";
-    this.perimeterType = "circle";
-    this.calculationMode = "Ag";
-    this.temperature = 135;
-    this.presure = 135;
-    this.flow = 135;
-    this.numberOfSimulations = 10;
-    this.cartSizeX = 256;
-    this.cartSizeY = 256;
-    this.binsLevels = 100;
-    this.extraLevels = 0;
-    this.coverage = 30;
-    this.multithreaded = true;
-    this.visualise = true;
-    this.withGui = true;
-    this.justCentralFlake = true;
-    this.printToImage = false;
-    this.psd = false;
-    this.outputData = false;
-    this.randomSeed = true;
-    this.useMaxPerimeter = false;
+    calculationType = "batch";
+    islandDensityType = "COX_PRB";
+    listType = "linear";
+    perimeterType = "circle";
+    calculationMode = "Ag";
+    temperature = 135;
+    presure = 135;
+    flow = 135;
+    numberOfSimulations = 10;
+    cartSizeX = 256;
+    cartSizeY = 256;
+    binsLevels = 100;
+    extraLevels = 0;
+    coverage = 30;
+    multithreaded = true;
+    visualise = true;
+    withGui = true;
+    justCentralFlake = true;
+    printToImage = false;
+    psd = false;
+    outputData = false;
+    randomSeed = true;
+    useMaxPerimeter = false;
     if (justCentralFlake) 
-      this.depositInAllArea = false;
+      depositInAllArea = false;
     else
-      this.depositInAllArea = true;
+      depositInAllArea = true;
     
-    this.evolutionaryAlgorithm = "original";
-    this.parallelEvaluator = false;
-    this.populationSize = 5;
-    this.offspringSize = 32;
-    this.populationReplacement = 5;
-    this.totalIterations = 100;
-    this.repetitions = 18;
-    this.readReference = true;
-    this.stopError = 0.022;
-    this.minValueGene = 0.1;
-    this.maxValueGene = 1e11;
-    this.expDistribution = true;
-    this.evaluatorType = new EvaluatorType();
-    this.numericStatusCode = 3;
-    this.hierarchyEvaluator = "basic";
-    this.evolutionarySearchType = "rates";
-    this.fixDiffusion = true;
+    evolutionaryAlgorithm = "original";
+    parallelEvaluator = false;
+    populationSize = 5;
+    offspringSize = 32;
+    populationReplacement = 5;
+    totalIterations = 100;
+    repetitions = 18;
+    readReference = true;
+    stopError = 0.022;
+    minValueGene = 0.1;
+    maxValueGene = 1e11;
+    expDistribution = true;
+    evaluatorType = new EvaluatorType();
+    numericStatusCode = 3;
+    hierarchyEvaluator = "basic";
+    evolutionarySearchType = "rates";
+    fixDiffusion = true;
   }
 
   /**
@@ -519,7 +519,7 @@ public class Parser {
   }
   
   public int getHexaSizeI() {
-    if (this.getCalculationMode().equals("Ag")) {
+    if (getCalculationMode().equals("Ag")) {
       return cartSizeX;
     } else {
       return (int) (cartSizeX/1.5f);
@@ -527,7 +527,7 @@ public class Parser {
   }
   
   public int getHexaSizeJ() {
-    return (int) (this.getCartSizeX() / AbstractGrowthLattice.Y_RATIO);
+    return (int) (getCartSizeX() / AbstractGrowthLattice.Y_RATIO);
   }
 
   int getBinsLevels() {
