@@ -26,9 +26,9 @@ public class SiSimulation extends AbstractEtchingSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.setRates(new SiRatesFactory());
-    this.siConfig = configKmc();
-    this.setKmc(new SiKmc(siConfig));
+    setRates(new SiRatesFactory());
+    siConfig = configKmc();
+    setKmc(new SiKmc(siConfig));
     initialiseRates(getRates(), getKmc(), getParser());
   }
 
@@ -44,7 +44,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
             .setSizeX_UC(96)
             .setSizeY_UC(96)
             .setSizeZ_UC(16)
-            .setListConfig(this.getConfig());
+            .setListConfig(getConfig());
     return tmpConfig;
   }
 
