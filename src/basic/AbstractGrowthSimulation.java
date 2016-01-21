@@ -48,6 +48,8 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       }
       if (getParser().visualise()) {
         frame.setVisible(true);
+        paintLoop p = new paintLoop();
+        p.start();
       }
     }
   }
@@ -67,5 +69,22 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   @Override
   protected void printToImage(int i) {
     frame.printToImage(i);
+  }
+  
+  /**
+   * Private class responsible to repaint every 100 ms the KMC frame.
+   */
+  final class paintLoop extends Thread {
+
+    @Override
+    public void run() {
+      while (true) {
+        frame.repaintKmc();
+        try {
+          paintLoop.sleep(100);
+        } catch (Exception e) {
+        }
+      }
+    }
   }
 }

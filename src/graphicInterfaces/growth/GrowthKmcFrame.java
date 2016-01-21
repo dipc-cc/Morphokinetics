@@ -50,9 +50,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
         jPanel1MouseDragged(evt);
       }
     });
-
-    paintLoop p = new paintLoop();
-    p.start();
   }
 
   public void repaintKmc() {
@@ -192,19 +189,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }//GEN-LAST:event_jPanel1MouseWheelMoved
 
-  final class paintLoop extends Thread {
-
-    @Override
-    public void run() {
-      while (true) {
-        repaintKmc();
-        try {
-          paintLoop.sleep(100);
-        } catch (Exception e) {
-        }
-      }
-    }
-  }
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel2;
   private javax.swing.JPanel jPanel1;
