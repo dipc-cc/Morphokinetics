@@ -33,7 +33,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   @Override
   protected void initialiseRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser parser) {
     double depositionRatePerSite;
-    if (parser.depositInAllArea()) {
+    if (parser.justCentralFlake() && parser.depositInAllArea()) {
       depositionRatePerSite = ratesFactory.getDepositionRatePerSite(parser.getTemperature());
     } else {
       depositionRatePerSite = ratesFactory.getDepositionRatePerSite();
