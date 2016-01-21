@@ -57,6 +57,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
 
   public void repaintKmc() {
     canvas1.performDraw();
+    canvas1.setBaseLocation(mouseX, mouseY);
+    noStartDragData = true;
+    mouseX = 0;
+    mouseY = 0;
   }
 
   public void printToImage(int i) {
@@ -196,10 +200,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
         repaintKmc();
         try {
           paintLoop.sleep(100);
-          canvas1.setBaseLocation(mouseX, mouseY);
-          noStartDragData = true;
-          mouseX = 0;
-          mouseY = 0;
         } catch (Exception e) {
         }
       }
