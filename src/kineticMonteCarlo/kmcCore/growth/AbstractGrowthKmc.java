@@ -105,6 +105,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public void reset() {
     lattice.reset();
     getList().reset();
+    freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
   }
   
   @Override
