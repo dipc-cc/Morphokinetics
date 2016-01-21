@@ -60,8 +60,21 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     mouseY = 0;
   }
 
+  /**
+   * Prints the current canvas to a png image in folder $PWD/results
+   * @param i simulation number
+   */
   public void printToImage(int i) {
     canvas1.performDrawToImage(i);
+  }
+
+  /**
+   * Prints the current canvas to a png image in folder $PWD/folder/results
+   * @param folder folder to save the current image
+   * @param i simulation number
+   */
+  public void printToImage(String folder, int i) {
+    canvas1.performDrawToImage(folder, i);
   }
 
   /**

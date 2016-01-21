@@ -77,6 +77,16 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   }
   
   /**
+   * Prints the current frame to a file
+   * @param folderName
+   * @param i simulation number
+   */
+  @Override
+  protected void printToImage(String folderName, int i) {
+    frame.printToImage(folderName, i);
+  }
+  
+  /**
    * Private class responsible to repaint every 100 ms the KMC frame.
    */
   final class paintLoop extends Thread {

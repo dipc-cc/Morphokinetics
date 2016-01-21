@@ -29,12 +29,11 @@ public abstract class AbstractSimulation {
   private AbstractKmc kmc;
   private IRatesFactory rates;
   private PsdSignature2D psd;
-
   private ListConfiguration config;
   private final Parser parser;
-
   private StaticRandom staticRandom;
-  
+  private String restartFolderName;
+
   public AbstractSimulation(Parser parser) {
     kmc = null;
     rates = null;
@@ -77,8 +76,8 @@ public abstract class AbstractSimulation {
     double totalTime = 0.0;
     float coverage = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
-    String folderName = "results/run"+System.currentTimeMillis();
-    Restart restart = new Restart(folderName);
+    restartFolderName = "results/run"+System.currentTimeMillis();
+    Restart restart = new Restart(restartFolderName);
     
     int sizes[] = new int[2];
     //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
@@ -90,7 +89,7 @@ public abstract class AbstractSimulation {
       psd.setRestart(restart); // All the output should go the same folder
     }
     System.out.println("    I\tSimul t\tCover.\tPNG output\tSurface output\t\t CPU ");
-    System.out.println("    \t(units)\t(%)\t(results/)\t"+folderName+" (ms)");
+    System.out.println("    \t(units)\t(%)\t(results/)\t"+restartFolderName+" (ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
     for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
@@ -102,7 +101,7 @@ public abstract class AbstractSimulation {
       System.out.format("\t%.3f",(double)kmc.getTime());
       System.out.format("\t%.3f",kmc.getCoverage());
       if (parser.printToImage()) {
-        printToImage(simulations);
+        printToImage(restartFolderName, simulations);
         System.out.format("\tsurface%03d.png", simulations);
       } else {
         System.out.print("\t none       ");
@@ -206,6 +205,15 @@ public abstract class AbstractSimulation {
   protected void printToImage(int i) {
     //Do nothing
   }
+  
+  /**
+   * Does nothing. Used to have a common interface
+   * @param folderName
+   * @param i 
+   */
+  protected void printToImage(String folderName, int i) {
+    //Do nothing
+  }
 
   public Parser getParser() {
     return parser;
@@ -213,5 +221,9 @@ public abstract class AbstractSimulation {
 
   public ListConfiguration getConfig() {
     return config;
+  }
+  
+  String getRestartFolderName() {
+    return restartFolderName;
   }
 }

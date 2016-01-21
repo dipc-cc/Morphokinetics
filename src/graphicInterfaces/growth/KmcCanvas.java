@@ -32,6 +32,7 @@ public class KmcCanvas extends Canvas {
   private BufferStrategy strategy;
   private AbstractGrowthLattice lattice;
   public int scale;
+  private String imageName;
   
   private final static Color gray = new Color (220,220,220);
   private final static Color whiteGray = new Color (230,230,230);
@@ -112,17 +113,35 @@ public class KmcCanvas extends Canvas {
   }
 
   /**
-   * This method prints the current canvas to a file
+   * This method prints the current canvas to a file.
    *
-   * @param i Simulation number
+   * @param i simulation number
    */
   public void performDrawToImage(int i) {
+    imageName = format("results/surface%03d.png",i);
+    performDrawToImage();
+  }
+  
+  /**
+   * This method prints the current canvas to a file.
+   *
+   * @param folder folder in which is going to be written
+   * @param i simulation number
+   */
+  public void performDrawToImage(String folder, int i) {
+    imageName = folder + format("/surface%03d.png", i);
+    performDrawToImage();
+  }
+  
+  /**
+   * Does the actual writing.
+   */
+  private void performDrawToImage() {
     BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
     Graphics2D graphics = image.createGraphics();
     paint(graphics);
     graphics.dispose();
     try {
-      String imageName = format("results/surface%03d.png",i);
       FileOutputStream out = new FileOutputStream(imageName);
       ImageIO.write(image, "png", out);
       out.close();    
