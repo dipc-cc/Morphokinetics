@@ -21,7 +21,7 @@ public class RealRecombination implements IRecombination {
    * Each gene of the child will be between the father and mother gene value +-15%.
    */
   public RealRecombination() {
-    this.outBounds = 0.1f;
+    outBounds = 0.1f;
   }
 
   /**
