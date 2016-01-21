@@ -22,8 +22,8 @@ public class AgSimulation extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.setRates(new AgRatesFactory());
-    this.setKmc(new AgKmc(getConfig(),
+    setRates(new AgRatesFactory());
+    setKmc(new AgKmc(getConfig(),
             getParser().getHexaSizeI(), 
             getParser().getHexaSizeJ(),
             getParser().justCentralFlake(),

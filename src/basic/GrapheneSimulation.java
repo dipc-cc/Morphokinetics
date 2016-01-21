@@ -22,12 +22,12 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    this.setRates(new GrapheneRatesFactory());
-    this.setKmc(new GrapheneKmc(getConfig(),
-            getParser().getHexaSizeI(), 
+    setRates(new GrapheneRatesFactory());
+    setKmc(new GrapheneKmc(getConfig(),
+            getParser().getHexaSizeI(),
             getParser().getHexaSizeJ(),
             getParser().justCentralFlake(),
-            (float) getParser().getCoverage()/100,
+            (float) getParser().getCoverage() / 100,
             getParser().useMaxPerimeter(),
             getParser().getPerimeterType(),
             getParser().depositInAllArea()));
