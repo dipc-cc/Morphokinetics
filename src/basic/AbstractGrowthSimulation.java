@@ -18,9 +18,14 @@ import ratesLibrary.IRatesFactory;
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
   private GrowthKmcFrame frame;
+  private double previousCoverage;
+  private final double printEvery;
+  private int savedImages;
   
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
+    savedImages = 1;
+    printEvery = 0.1;
   }
 
   @Override
@@ -82,6 +87,12 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         frame.repaintKmc();
         try {
           paintLoop.sleep(100);
+          // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
+          if (previousCoverage < (printEvery * savedImages) && getKmc().getCoverage() > (printEvery * savedImages)) {
+            frame.printToImage(1000 + savedImages);
+            savedImages++;
+          }
+          previousCoverage = getKmc().getCoverage();
         } catch (Exception e) {
         }
       }
