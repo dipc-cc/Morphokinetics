@@ -26,6 +26,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private final short iHexa;
   private final short jHexa;
   private int multiplier;
+  /**
+   * Stores when the atom has been deposited. It has to be moved with the corresponding diffusion.
+   */
+  private double depositionTime;
 
   public AbstractGrowthAtom(short iHexa, short jHexa, int numberOfNeighbours) {
 
@@ -234,5 +238,22 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     } else {
       return probability / getNumberOfNeighbours();
     }
+  }
+
+  /**
+   * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
+   * has to be moved with the corresponding diffusion.
+   * @param time deposition time or former time
+   */
+  public void setDepositionTime(double time) {
+    depositionTime = time;
+  }
+  
+  /**
+   * 
+   * @return when the atom has been deposited.
+   */
+  public double getDepositionTime() {
+    return depositionTime;
   }
 }
