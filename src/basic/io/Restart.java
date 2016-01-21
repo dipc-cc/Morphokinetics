@@ -162,12 +162,12 @@ public class Restart {
     int sizes[] = new int[2];
     sizes[0] = data.length;
     sizes[1] = data[0].length;
-    String fileName = format("%ssurface%03d.mko",folder,simulationNumber);
+    String fileName = format("%ssurface%03d.mko", folder, simulationNumber);
     writeLowBinary(2, sizes, data, fileName);
   }
 
   public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = format("%ssurface%03d.txt",folder,simulationNumber);
+    String fileName = format("%ssurface%03d.txt", folder, simulationNumber);
     writeLowText2D(data, fileName, false);
   }
 
@@ -176,6 +176,11 @@ public class Restart {
     writeLowText2D(data, fileName, false);
   }
 
+  public void writeSurfaceHexagonal(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
+    String fileName = format("%ssurfaceHexagonal%03d.txt", folder, simulationNumber);
+    writeLowTextHexagonal(data, fileName);
+  }
+  
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
     return readLowText2D(fileName, sizes);
   }
@@ -483,5 +488,26 @@ public class Restart {
       e.printStackTrace();
     }
     return data;
+  }
+  
+    private static void writeLowTextHexagonal(float[][] data, String fileName) {
+    try {
+      // create file descriptor
+      File file = new File(fileName);
+      PrintWriter printWriter = new PrintWriter(file);
+
+      // for each byte in the buffer
+      for (int i = 0; i < data.length; i++) {
+        for (int j = 0; j < data[0].length; j++) {
+          String s = format("%.3f", data[i][j]);
+          printWriter.write(i + " " + j + " " + s + "\n");
+        }
+      }
+      printWriter.flush();
+      printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
   }
 }
