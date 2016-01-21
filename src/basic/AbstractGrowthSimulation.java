@@ -99,7 +99,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
           paintLoop.sleep(100);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
           if (previousCoverage < (printEvery * savedImages) && getKmc().getCoverage() > (printEvery * savedImages)) {
-            frame.printToImage(1000 + savedImages);
+            frame.printToImage(getRestartFolderName(), 1000 + savedImages);
             savedImages++;
           }
           previousCoverage = getKmc().getCoverage();
