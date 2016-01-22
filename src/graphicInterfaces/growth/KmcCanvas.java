@@ -34,17 +34,17 @@ public class KmcCanvas extends Canvas {
   private int scale;
   private String imageName;
   
-  private final static Color gray = new Color (220,220,220);
-  private final static Color whiteGray = new Color (230,230,230);
+  private final static Color GRAY = new Color (220,220,220);
+  private final static Color WHITE_GRAY = new Color (230,230,230);
   // Colours from: https://github.com/Gnuplotting/gnuplot-palettes/blob/master/set3.pal
-  private final static Color teal = new Color (141,211,199);
-  private final static Color banana = new Color (255,255,179); 
-  private final static Color lilac = new Color (190,186,218);
-  private final static Color red = new Color (251,128,114);
-  private final static Color blue = new Color (128,177,211);
-  private final static Color orange = new Color (253,180,98);
-  private final static Color green = new Color (179,222,105);
-  private final static Color mauve = new Color (252,205,229);
+  private final static Color TEAL = new Color (141,211,199);
+  private final static Color BANANA = new Color (255,255,179); 
+  private final static Color LILAC = new Color (190,186,218);
+  private final static Color RED=  new Color (251,128,114);
+  private final static Color BLUE = new Color (128,177,211);
+  private final static Color ORANGE = new Color (253,180,98);
+  private final static Color GREEN = new Color (179,222,105);
+  private final static Color MAUVE = new Color (252,205,229);
   
   public KmcCanvas(AbstractGrowthLattice lattice) {
     this.lattice = lattice;
@@ -157,7 +157,7 @@ public class KmcCanvas extends Canvas {
 
     super.paint(g);
 
-    g.setColor(gray);
+    g.setColor(GRAY);
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int j = 0; j < lattice.getHexaSizeJ(); j++) {          //Y
@@ -167,13 +167,13 @@ public class KmcCanvas extends Canvas {
         byte type = lattice.getAtom(i, j).getType();
         switch (type) {
           case AbstractAtom.TERRACE:
-            g.setColor(whiteGray);
+            g.setColor(WHITE_GRAY);
             break;
           case AbstractAtom.CORNER:
-            g.setColor(red);
+            g.setColor(RED);
             break;
           case AbstractAtom.EDGE:
-            g.setColor(lilac);
+            g.setColor(LILAC);
             break;
           case AbstractAtom.ARMCHAIR_EDGE:
             g.setColor(Color.WHITE);
@@ -185,10 +185,10 @@ public class KmcCanvas extends Canvas {
             g.setColor(Color.BLUE);
             break;
           case AbstractAtom.KINK:
-            g.setColor(banana);
+            g.setColor(BANANA);
             break;
           case AbstractAtom.BULK:
-            g.setColor(green);
+            g.setColor(GREEN);
             break;
         }
 
