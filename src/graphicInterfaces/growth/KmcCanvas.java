@@ -31,7 +31,7 @@ public class KmcCanvas extends Canvas {
    */
   private BufferStrategy strategy;
   private AbstractGrowthLattice lattice;
-  public int scale;
+  private int scale;
   private String imageName;
   
   private final static Color gray = new Color (220,220,220);
