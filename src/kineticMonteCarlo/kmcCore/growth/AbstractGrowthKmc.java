@@ -180,7 +180,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     
-    System.out.println("new island count is "+islandCount);
     return 0;
   }
 

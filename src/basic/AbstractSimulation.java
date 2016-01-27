@@ -118,7 +118,7 @@ public abstract class AbstractSimulation {
       if (!printPsd) 
         System.out.print("\tnone\t\t\t");
       System.out.print(" "+(System.currentTimeMillis() - iterStartTime));
-      System.out.println(" "+kmc.getIslandCount());
+      System.out.print(" "+kmc.getIslandCount());
       System.out.println("");
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
