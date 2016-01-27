@@ -88,7 +88,7 @@ public abstract class AbstractSimulation {
       psd = new PsdSignature2D(sizes[0], sizes[1]);
       psd.setRestart(restart); // All the output should go the same folder
     }
-    System.out.println("    I\tSimul t\tCover.\tPNG output\tSurface output\t\t CPU ");
+    System.out.println("    I\tSimul t\tCover.\tPNG output\tSurface output\t\t CPU  \t Islands ");
     System.out.println("    \t(units)\t(%)\t(results/)\t"+restartFolderName+" (ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
@@ -118,6 +118,7 @@ public abstract class AbstractSimulation {
       if (!printPsd) 
         System.out.print("\tnone\t\t\t");
       System.out.print(" "+(System.currentTimeMillis() - iterStartTime));
+      System.out.println(" "+kmc.getIslandCount());
       System.out.println("");
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
