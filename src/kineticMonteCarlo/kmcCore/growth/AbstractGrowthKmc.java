@@ -190,7 +190,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   @Override
   public int getIslandCount() {
-    return islandCount;
+    return islandCount - 1; // it always count one more
   }
   
   /**
