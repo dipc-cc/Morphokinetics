@@ -184,6 +184,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return 0;
   }
   
+  /**
+   * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set
+   * all them the same island number.
+   *
+   * @param i i hexagonal coordinate
+   * @param j j hexagonal coordinate
+   * @param fromNeighbour whether is called from outside or recursively
+   */
   private void identifyIsland(int i, int j, boolean fromNeighbour) {
     AbstractGrowthAtom atom = lattice.getAtom(i, j);
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
