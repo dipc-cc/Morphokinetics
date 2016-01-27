@@ -10,6 +10,13 @@ import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.list.ListConfiguration;
 import java.awt.geom.Point2D;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -47,6 +54,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private double depositionRatePerSite;
   private int freeArea;
   private int islandCount;
+  private double previousTime;
+  private List<Double> deltaTimeBetweenTwoAttachments;
+  private List<Double> deltaTimePerAtom;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
@@ -67,6 +77,20 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     getList().autoCleanup(true);
     this.perimeterType = perimeterType;
     this.depositInAllArea = depositInAllArea;
+    previousTime = 0;
+    deltaTimeBetweenTwoAttachments = new ArrayList<>();
+    deltaTimePerAtom = new ArrayList<>();  
+    
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimeBetweenTwoAttachments.txt", true)))) {
+      out.println("Time difference between two attachments to the islands [coverage, time, min, max, average] ");
+    } catch (IOException e) {
+      //Do nothing, it doesn't matter if fails
+    }
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimePerAtom.txt", true)))) {
+      out.println("Time difference between deposition and attachment to the islands for a single atom[coverage, time, min, max, average] ");
+    } catch (IOException e) {
+      //Do nothing, it doesn't matter if fails
+    }
   }
 
   @Override
@@ -288,13 +312,44 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    double probabilityChange = -origin.getProbability();
-    getList().addTotalProbability(probabilityChange);
     lattice.extract(origin);
+
+    int oldType = destination.getType();
     lattice.deposit(destination, forceNucleation);
+    destination.setDepositionTime(origin.getDepositionTime());
+    origin.setDepositionTime(0);
+    if (oldType == TERRACE && destination.getType() != TERRACE) { // atom gets attached to the island
+      atomAttachedToIsland(destination);
+    }
     modifiedBuffer.updateAtoms(getList());
 
     return true;
+  }
+  
+  /**
+   * An atom has been attached to an island an so printing this to output files.
+   *
+   * @param destination destination atom is required to compute time difference
+   *
+   */
+  private void atomAttachedToIsland(AbstractGrowthAtom destination) {
+    deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimeBetweenTwoAttachments.txt", true)))) {
+      out.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble());
+    } catch (IOException e) {
+      //Do nothing, it doesn't matter if fails
+    }
+    previousTime = getTime();
+    deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimePerAtom.txt", true)))) {
+      out.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble());
+    } catch (IOException e) {
+      //Do nothing, it doesn't matter if fails
+    }
   }
 
   private AbstractGrowthAtom depositNewAtom() {
@@ -329,6 +384,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         }
       } while (!depositAtom(destinationAtom));
     }
+    destinationAtom.setDepositionTime(getTime());
     if (depositInAllArea) { // update the free area and the deposition rate counting just deposited atom
       freeArea--;
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
