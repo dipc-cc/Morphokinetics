@@ -46,6 +46,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final boolean depositInAllArea;
   private double depositionRatePerSite;
   private int freeArea;
+  private int islandCount;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
@@ -106,6 +107,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.reset();
     getList().reset();
     freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
+    
+    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+        lattice.getAtom(i, j).setVisited(false);
+      }
+    }
   }
   
   @Override
@@ -156,16 +163,42 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   @Override
   public int simulate() {
-    if (justCentralFlake){
+    if (justCentralFlake) {
       return super.simulate();
     } else {
       while (lattice.getCoverage() < maxCoverage) {
-      if (performSimulationStep()) {
-        break;
+        if (performSimulationStep()) {
+          break;
+        }
       }
     }
+    
+    islandCount = 0;
+    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+        identifyIsland(i, j, false);
+      }
     }
+    
+    System.out.println("new island count is "+islandCount);
     return 0;
+  }
+  
+  private void identifyIsland(int i, int j, boolean fromNeighbour) {
+    AbstractGrowthAtom atom = lattice.getAtom(i, j);
+    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
+      islandCount++;
+    }
+    atom.setVisited(true);
+    if (atom.isOccupied()) {
+      atom.setIslandNumber(islandCount);
+      for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
+        AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
+        if (!neighbour.isVisited()) {
+          identifyIsland(neighbour.getiHexa(), neighbour.getjHexa(), true);
+        }
+      }
+    }
   }
   
   @Deprecated
