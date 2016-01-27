@@ -30,7 +30,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * Stores when the atom has been deposited. It has to be moved with the corresponding diffusion.
    */
   private double depositionTime;
-
+  private int islandNumber;
+  private boolean visited;
+  
   public AbstractGrowthAtom(short iHexa, short jHexa, int numberOfNeighbours) {
 
     this.occupied = false;
@@ -41,6 +43,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     this.setNumberOfNeighbours(numberOfNeighbours);
     this.bondsProbability = new double[numberOfNeighbours];
     multiplier = 1;
+    islandNumber = 0;
+    visited = false;
   }
   
   @Override
@@ -256,4 +260,21 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public double getDepositionTime() {
     return depositionTime;
   }
+  
+  public void setIslandNumber(int islandNumber) {
+    this.islandNumber = islandNumber;
+  }
+  
+  public int getIslandNumber() {
+    return islandNumber;
+  }
+  
+  public boolean isVisited() {
+    return visited;
+  }
+
+  public void setVisited(boolean visited) {
+    this.visited = visited;
+  }
+  
 }
