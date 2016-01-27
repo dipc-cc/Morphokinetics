@@ -183,6 +183,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     System.out.println("new island count is "+islandCount);
     return 0;
   }
+
+  /**
+   * After having count them, returns the number of islands that the simulation has.
+   * @return number of islands of the simulation
+   */
+  @Override
+  public int getIslandCount() {
+    return islandCount;
+  }
   
   /**
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set
