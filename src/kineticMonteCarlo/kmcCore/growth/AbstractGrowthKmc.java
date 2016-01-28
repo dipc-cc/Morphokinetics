@@ -137,6 +137,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         lattice.getAtom(i, j).setVisited(false);
       }
     }
+    deltaTimeBetweenTwoAttachments.clear();
+    deltaTimePerAtom.clear();
   }
   
   @Override
