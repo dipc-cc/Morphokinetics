@@ -81,12 +81,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     deltaTimeBetweenTwoAttachments = new ArrayList<>();
     deltaTimePerAtom = new ArrayList<>();  
     
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimeBetweenTwoAttachments.txt", true)))) {
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimeBetweenTwoAttachments.txt", false)))) {
       out.println("Time difference between two attachments to the islands [coverage, time, min, max, average] ");
     } catch (IOException e) {
       //Do nothing, it doesn't matter if fails
     }
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimePerAtom.txt", true)))) {
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimePerAtom.txt", false)))) {
       out.println("Time difference between deposition and attachment to the islands for a single atom[coverage, time, min, max, average] ");
     } catch (IOException e) {
       //Do nothing, it doesn't matter if fails
