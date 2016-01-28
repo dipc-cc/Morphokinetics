@@ -269,16 +269,27 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return islandNumber;
   }
   
+  /**
+   * When counting islands, we have to keep track of the visited atoms.
+   * 
+   * @return whether current atoms has been previously visited
+   */
   public boolean isVisited() {
     return visited;
   }
 
+  /**
+   * When counting islands, we have to keep track of the visited atoms.
+   *
+   * @param visited whether current atoms is visited
+   */
   public void setVisited(boolean visited) {
     this.visited = visited;
   }
   
   /**
    * Checks if the current atom has occupied neighbours.
+   *
    * @return true if the current atoms has no any occupied neighbour, else otherwise.
    */
   public boolean isIsolated() {
