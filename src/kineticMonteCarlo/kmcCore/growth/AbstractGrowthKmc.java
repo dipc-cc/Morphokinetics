@@ -217,7 +217,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   @Override
   public int getIslandCount() {
-    return islandCount - 1; // it always counts one more
+    return islandCount; // it always counts one more
   }
   
   /**
@@ -230,7 +230,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private void identifyIsland(int i, int j, boolean fromNeighbour) {
     AbstractGrowthAtom atom = lattice.getAtom(i, j);
-    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
+    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour && !atom.isIsolated()) {
       islandCount++;
     }
     atom.setVisited(true);
