@@ -277,4 +277,16 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     this.visited = visited;
   }
   
+  /**
+   * Checks if the current atom has occupied neighbours.
+   * @return true if the current atoms has no any occupied neighbour, else otherwise.
+   */
+  public boolean isIsolated() {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      if (getNeighbour(i).isOccupied()) {
+        return false;
+      }
+    }
+    return true;
+  }
 }
