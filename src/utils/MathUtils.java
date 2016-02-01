@@ -65,20 +65,22 @@ public class MathUtils {
 
     int modified;
     int currentHeight = 0;
+    int maxI = surface.length;
+    int maxJ = surface[0].length;
     do {
       modified = 0;
-      for (int i = 1; i < surface.length - 1; i++) {
-        for (int j = 1; j < surface[0].length - 1; j++) {
-          if (surface[i + 1][j] < currentHeight) {
+      for (int i = 0; i < maxI; i++) {
+        for (int j = 0; j < maxJ; j++) {
+          if (surface[getIndex(i + 1, maxI)][j] < currentHeight) {
             continue;
           }
-          if (surface[i - 1][j] < currentHeight) {
+          if (surface[getIndex(i - 1, maxI)][j] < currentHeight) {
             continue;
           }
-          if (surface[i][j - 1] < currentHeight) {
+          if (surface[i][getIndex(j - 1, maxJ)] < currentHeight) {
             continue;
           }
-          if (surface[i][j + 1] < currentHeight) {
+          if (surface[i][getIndex(j + 1, maxJ)] < currentHeight) {
             continue;
           }
           surface[i][j] = currentHeight + 1;
@@ -89,6 +91,16 @@ public class MathUtils {
     } while (modified > 0);
   }
 
+  private static int getIndex(int x, int maxX) {
+    if (x == maxX) {
+      return 0;
+    }
+    if (x < 0) {
+      return maxX - 1;
+    }
+    return x;
+  }
+  
   public static float[][] avgFilter(float[][] surface, int radio) {
 
     int binY = surface.length;
