@@ -32,7 +32,15 @@ public class SyntheticRates implements IGrowthRates {
   public double getDepositionRatePerSite() {
     return depositionRateInMlSecond;
   }
-
+  
+  /**
+   * Returns the island density mono layer depending on the temperature. How many islands per area
+   * site are generated at current temperature. Usually with higher temperature less islands are
+   * created, and thus, island density is lower. And the other way around.
+   *
+   * @param temperature Not implemented yet: temperature in Kelvin.
+   * @return island density
+   */
   @Override
   public double getIslandsDensityMl(double temperature) {
     return islandDensityPerSite;
