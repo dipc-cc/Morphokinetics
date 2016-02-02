@@ -514,8 +514,16 @@ public class Parser {
     return cartSizeX;
   }
 
+  public void setCartSizeX(int sizeX) {
+    cartSizeX = sizeX;
+  }
+  
   public int getCartSizeY() {
     return cartSizeY;
+  }
+  
+  public void setCartSizeY(int sizeY) {
+    cartSizeY = sizeY;
   }
   
   public int getHexaSizeI() {
