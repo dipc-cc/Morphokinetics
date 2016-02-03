@@ -76,9 +76,9 @@ public class Parser {
   private boolean psd;
   private boolean outputData;
   private JSONArray outputDataFormat;
-  /** To have the possibility to choose between different output formats. For the moment TXT, MKO and PNG. */
+  /** To have the possibility to choose between different output formats. For the moment TXT, MKO, PNG and EXTRA. */
   private OutputType outputType;
-  /** This numbers reflect the power of two and gives the chance to choose between inclusively among TXT(0), MKO(1) and PNG(2). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
+  /** This numbers reflect the power of two and gives the chance to choose between inclusively among TXT(0), MKO(1), PNG(2) and EXTRA(3). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
   private long numericFormatCode;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
@@ -315,7 +315,10 @@ public class Parser {
           numericFormatCode += 2;
         }
         if (type.equals("png")){
-          numericFormatCode +=4;
+          numericFormatCode += 4;
+        }
+        if (type.equals("extra")){
+          numericFormatCode += 8;
         }
       }
     } catch (JSONException e) {
