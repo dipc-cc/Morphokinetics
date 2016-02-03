@@ -5,6 +5,7 @@
  */
 package basic;
 
+import basic.io.OutputType;
 import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
 import ratesLibrary.GrapheneRatesFactory;
 
@@ -23,6 +24,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
     super.initialiseKmc();
 
     setRates(new GrapheneRatesFactory());
+    boolean extraOutput = getParser().getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     setKmc(new GrapheneKmc(getConfig(),
             getParser().getHexaSizeI(),
             getParser().getHexaSizeJ(),
@@ -30,7 +32,8 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
             (float) getParser().getCoverage() / 100,
             getParser().useMaxPerimeter(),
             getParser().getPerimeterType(),
-            getParser().depositInAllArea()));
+            getParser().depositInAllArea(),
+            extraOutput));
     initialiseRates(getRates(), getKmc(), getParser());
   }
 

@@ -26,8 +26,9 @@ public class AgKmc extends AbstractGrowthKmc {
           float coverage,
           boolean useMaxPerimeter,
           short perimeterType,
-          boolean depositInAllArea) {
-    super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType, depositInAllArea);
+          boolean depositInAllArea,
+          boolean extraOutput) {
+    super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType, depositInAllArea, extraOutput);
 
     HopsPerStep distancePerStep = new HopsPerStep();
     setLattice(new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
@@ -43,7 +44,7 @@ public class AgKmc extends AbstractGrowthKmc {
           double depositionRate, 
           double islandDensity) {
 
-    this(config, hexaSizeI, hexaSizeJ, true, (float) -1, false, RoundPerimeter.CIRCLE, false);
+    this(config, hexaSizeI, hexaSizeJ, true, (float) -1, false, RoundPerimeter.CIRCLE, false, false);
     
     setDepositionRate(depositionRate, islandDensity);
   }

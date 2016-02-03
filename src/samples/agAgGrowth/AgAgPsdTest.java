@@ -69,7 +69,7 @@ public class AgAgPsdTest {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AbstractGrowthLattice.Y_RATIO);
 
-    AgKmc kmc = new AgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE, false);
+    AgKmc kmc = new AgKmc(config, sizeX, sizeY, true, (float) -1, false, RoundPerimeter.CIRCLE, false, false);
 
     return kmc;
   }
