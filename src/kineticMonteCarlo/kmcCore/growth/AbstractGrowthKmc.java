@@ -164,6 +164,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       destinationAtom = chooseRandomHop(originAtom);
       if (destinationAtom.isOutside()) {
         destinationAtom = perimeter.getPerimeterReentrance(originAtom);
+        // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
+        getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0, 0).getProbability(0, 0));
       }
       diffuseAtom(originAtom, destinationAtom);
     }
