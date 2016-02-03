@@ -5,6 +5,7 @@
  */
 package basic;
 
+import basic.io.OutputType.formatFlag;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -22,12 +23,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   private final double printEvery;
   private int savedImages;
   private int totalSavedImages;
+  private final boolean printIntermediatePngFiles;
   
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
     savedImages = 1;
     printEvery = 0.1;
     totalSavedImages = 0;
+    printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
   }
 
   @Override
@@ -102,7 +105,8 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         try {
           paintLoop.sleep(100);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-          if (previousCoverage < (printEvery * savedImages) && getKmc().getCoverage() > (printEvery * savedImages)) {
+          if (printIntermediatePngFiles &&
+                  previousCoverage < (printEvery * savedImages) && getKmc().getCoverage() > (printEvery * savedImages)) {
             frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
             savedImages++;
             totalSavedImages++;
