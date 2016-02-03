@@ -34,8 +34,13 @@ public abstract class AbstractSimulation {
   private StaticRandom staticRandom;
   private String restartFolderName;
   private long startTime;
+  private long iterationStartTime;
   private double totalTime;
   private float coverage;
+  private int simulations;
+  private float[][] sampledSurface;
+  private int[] sizes;
+  private Restart restart;
 
   public AbstractSimulation(Parser parser) {
     kmc = null;
@@ -74,15 +79,14 @@ public abstract class AbstractSimulation {
   public abstract void createFrame();
 
   public void doSimulation() {
-    float[][] sampledSurface = null;
     startTime = System.currentTimeMillis();
     totalTime = 0.0;
     coverage = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
     restartFolderName = "results/run"+System.currentTimeMillis();
-    Restart restart = new Restart(restartFolderName);
+    restart = new Restart(restartFolderName);
     
-    int sizes[] = new int[2];
+    sizes = new int[2];
     //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
     sizes[0] = parser.getCartSizeX() / 2;
     sizes[1] = parser.getCartSizeY() / 2;
@@ -103,28 +107,13 @@ public abstract class AbstractSimulation {
     System.out.println("    \t(units)\t(%)\t(ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
-    for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
-      long iterStartTime = System.currentTimeMillis();
+    for (simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
+      iterationStartTime = System.currentTimeMillis();
       kmc.reset();
       kmc.depositSeed();
       kmc.simulate();
-      System.out.format("    %03d", simulations);
-      System.out.format("\t%.3f",(double)kmc.getTime());
-      System.out.format("\t%.3f",kmc.getCoverage());
-      if (parser.printToImage()) {
-        printToImage(restartFolderName, simulations);
-      }
-      if (parser.doPsd()) {
-        sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]);
-        psd.addSurfaceSample(sampledSurface);
-        if (parser.outputData()) {
-          psd.printToFile(simulations);
-          restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
-        } 
-      }
-      System.out.print("\t"+(System.currentTimeMillis() - iterStartTime));
-      System.out.print("\t"+kmc.getIslandCount());
-      System.out.println("");
+      
+      printOutput();
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
     }
@@ -198,6 +187,27 @@ public abstract class AbstractSimulation {
     printHeader();
     System.out.println("Execution: " + message);
   }
+  
+  private void printOutput() {
+      System.out.format("    %03d", simulations);
+      System.out.format("\t%.3f",(double)kmc.getTime());
+      System.out.format("\t%.3f",kmc.getCoverage());
+      if (parser.printToImage()) {
+        printToImage(restartFolderName, simulations);
+      }
+      if (parser.doPsd()) {
+        sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]);
+        psd.addSurfaceSample(sampledSurface);
+        if (parser.outputData()) {
+          psd.printToFile(simulations);
+          restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
+        } 
+      }
+      System.out.print("\t"+(System.currentTimeMillis() - iterationStartTime));
+      System.out.print("\t"+kmc.getIslandCount());
+      System.out.println("");
+  }
+  
   private void printFooter() {
     System.out.println("\n\t__________________________________________________");
     System.out.println("\tAverage");
