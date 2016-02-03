@@ -29,6 +29,11 @@ public class RoundPerimeter {
   private AbstractGrowthAtom[] currentPerimeter;
   private AbstractPerimeterStatistics perimeterStatistics;
   private short type;
+  private int neededSteps;
+
+  public int getNeededSteps() {
+    return neededSteps;
+  }
 
   public RoundPerimeter(String statisticData) {
     perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
@@ -86,8 +91,8 @@ public class RoundPerimeter {
   public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom origin) {
 
     int angle = searchPerimeterOffsetReentrance();
-    int neededSteps = perimeterStatistics.getHopsCount(currentRadius, angle);
-
+    neededSteps = perimeterStatistics.getHopsCount(currentRadius, angle);
+    
     /* It randomly turns */
     if (utils.StaticRandom.raw() < 0.5) {
       angle = 360 - angle;
