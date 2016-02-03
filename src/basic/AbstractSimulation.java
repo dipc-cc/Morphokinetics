@@ -190,33 +190,38 @@ public abstract class AbstractSimulation {
   }
   
   private void printOutput() {
-      System.out.format("    %03d", simulations);
-      System.out.format("\t%.3f",(double)kmc.getTime());
-      System.out.format("\t%.3f",kmc.getCoverage());
-      
-      sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]); // get the just simulated surface
+    System.out.format("    %03d", simulations);
+    System.out.format("\t%.3f", (double) kmc.getTime());
+    System.out.format("\t%.3f", kmc.getCoverage());
+
+    sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]); // get the just simulated surface
+    if (parser.outputData()) {
+      if (parser.getOutputFormats().contains(formatFlag.MKO)) {
+        restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
+      }
+      if (parser.getOutputFormats().contains(formatFlag.TXT)) {
+        restart.writeSurfaceText2D(2, sizes, sampledSurface, simulations);
+      }
+      if (parser.getOutputFormats().contains(formatFlag.PNG)) {
+        printToImage(restartFolderName, simulations);
+      }
+    }
+
+    if (parser.doPsd()) {
+      psd.addSurfaceSample(sampledSurface);
       if (parser.outputData()) {
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-          restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
+          psd.writePsdBinary(simulations);
         }
         if (parser.getOutputFormats().contains(formatFlag.TXT)) {
-          restart.writeSurfaceText2D(2, sizes, sampledSurface, simulations);
-        }
-        if (parser.getOutputFormats().contains(formatFlag.PNG)) {
-          printToImage(restartFolderName, simulations);
+          psd.writePsdText(simulations);
         }
       }
-      
-      if (parser.doPsd()) {
-        psd.addSurfaceSample(sampledSurface);
-        if (parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG)) {
-          psd.printToFile(simulations);
-        }
-      }
-      
-      System.out.print("\t"+(System.currentTimeMillis() - iterationStartTime));
-      System.out.print("\t"+kmc.getIslandCount());
-      System.out.println("");
+    }
+
+    System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
+    System.out.print("\t" + kmc.getIslandCount());
+    System.out.println("");
   }
   
   private void printFooter() {
