@@ -56,7 +56,10 @@ public class Parser {
   private String calculationMode;
   private int temperature;
   private int presure;
-  private int flow;
+  /**
+   * @see getDepositionFlux()
+   */
+  private double depositionFlux;
   private int numberOfSimulations;
   private int cartSizeX;
   private int cartSizeY;
@@ -116,7 +119,7 @@ public class Parser {
     calculationMode = "Ag";
     temperature = 135;
     presure = 135;
-    flow = 135;
+    depositionFlux = 0.0035;
     numberOfSimulations = 10;
     cartSizeX = 256;
     cartSizeY = 256;
@@ -220,9 +223,9 @@ public class Parser {
       presure = 135;
     }
     try {
-      flow = json.getInt("flow");
+      depositionFlux = json.getInt("depositionFlux");
     } catch (JSONException e) {
-      flow = 135;
+      depositionFlux = 0.0035;
     }
     try {
       numberOfSimulations = json.getInt("numberOfSimulations");
@@ -433,7 +436,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
     System.out.printf("%32s: %s,\n", "\"presure\"", presure);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
-    System.out.printf("%32s: %s,\n", "\"flow\"", flow);
+    System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
     System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
@@ -502,8 +505,15 @@ public class Parser {
     return presure;
   }
 
-  public int getFlow() {
-    return flow;
+  /**
+   * Number of atoms that is coming per second and per area. Synonym of deposition rate and
+   * diffusionMl.
+   *
+   * @return deposition flux
+   * @see ratesLibrary.RatesFromPrbCox#getDepositionRatePerSite()
+   */
+  public double getDepositionFlux() {
+    return depositionFlux;
   }
 
   public int getNumberOfSimulations() {
