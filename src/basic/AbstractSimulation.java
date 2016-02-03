@@ -228,11 +228,12 @@ public abstract class AbstractSimulation {
     System.out.println("\n\t__________________________________________________");
     System.out.println("\tAverage");
     System.out.println("\tSimulation time\t\tCoverage\tCPU time");
-    System.out.println("\t(units)\t\t\t (%)\t\t (ms)");
+    System.out.println("\t(units)\t\t\t (%)\t\t (ms/s/min)");
     System.out.println("\t__________________________________________________");
-    System.out.print("\t"+ totalTime / parser.getNumberOfSimulations());
-    System.out.print("\t"+coverage/ parser.getNumberOfSimulations());
-    System.out.println("\t"+((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations())+"\n");
+    System.out.print("\t" + totalTime / parser.getNumberOfSimulations());
+    System.out.print("\t" + coverage / parser.getNumberOfSimulations());
+    long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
+    System.out.println("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60 + "\n");
   }
   
   /**
