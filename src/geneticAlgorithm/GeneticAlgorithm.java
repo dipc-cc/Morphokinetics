@@ -21,7 +21,8 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   }
   
   /**
-   * This method has only mining in @see geneticAlgorithm.GeneticAlgorithmDcmaEs#exitCondition()
+   * This method has only mining in 
+   * @see GeneticAlgorithmDcmaEs#exitCondition()
    * @return 
    */
   @Override
