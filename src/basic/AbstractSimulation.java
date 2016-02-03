@@ -88,8 +88,16 @@ public abstract class AbstractSimulation {
       psd = new PsdSignature2D(sizes[0], sizes[1]);
       psd.setRestart(restart); // All the output should go the same folder
     }
-    System.out.println("    I\tSimul t\tCover.\tPNG output\tSurface output\t\t CPU  \t Islands ");
-    System.out.println("    \t(units)\t(%)\t(results/)\t"+restartFolderName+" (ms)");
+    
+    System.out.println("_____________________________________________________________________________");
+    System.out.println("Surface output: " + parser.printToImage());
+    System.out.println("PSD     output: " + printPsd);
+    System.out.println("Output format : " + "mko");
+    System.out.println("Output folder is " + restartFolderName);
+    System.out.println("_____________________________________________________________________________");
+    
+    System.out.println("    I\tSimul t\tCover.\tCPU\tIslands");
+    System.out.println("    \t(units)\t(%)\t(ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
     for (int simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
@@ -102,9 +110,6 @@ public abstract class AbstractSimulation {
       System.out.format("\t%.3f",kmc.getCoverage());
       if (parser.printToImage()) {
         printToImage(restartFolderName, simulations);
-        System.out.format("\tsurface%03d.png", simulations);
-      } else {
-        System.out.print("\t none       ");
       }
       if (parser.doPsd()) {
         sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]);
@@ -112,13 +117,10 @@ public abstract class AbstractSimulation {
         if (parser.outputData()) {
           psd.printToFile(simulations);
           restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
-          System.out.format("\tpsd%03d.txt|surface%03d.txt", simulations, simulations);
         } 
       }
-      if (!printPsd) 
-        System.out.print("\tnone\t\t\t");
-      System.out.print(" "+(System.currentTimeMillis() - iterStartTime));
-      System.out.print(" "+kmc.getIslandCount());
+      System.out.print("\t"+(System.currentTimeMillis() - iterStartTime));
+      System.out.print("\t"+kmc.getIslandCount());
       System.out.println("");
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
