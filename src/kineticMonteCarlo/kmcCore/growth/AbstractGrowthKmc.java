@@ -206,12 +206,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     
-    islandCount = 0;
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        identifyIsland(i, j, false);
-      }
-    }
+    countIslands();
     
     return 0;
   }
