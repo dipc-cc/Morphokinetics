@@ -57,6 +57,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private double previousTime;
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
+  private int nucleations;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
@@ -91,6 +92,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } catch (IOException e) {
       //Do nothing, it doesn't matter if fails
     }
+    nucleations = 0;
   }
 
   @Override
@@ -141,6 +143,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     deltaTimeBetweenTwoAttachments.clear();
     deltaTimePerAtom.clear();
     previousTime = 0;
+    nucleations = 0;
   }
   
   @Override
@@ -318,6 +321,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    if (forceNucleation) {
+      nucleations++;
+    }
     lattice.extract(origin);
 
     int oldType = destination.getType();
