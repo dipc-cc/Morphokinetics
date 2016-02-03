@@ -139,9 +139,9 @@ public abstract class AbstractSimulation {
         new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
               .setLogScale(true)
               .setShift(true)
-              .performDrawToImage(1);
+              .printToImage(restartFolderName, 1);
 
-        new Frame2D("Sampled surface").setMesh(sampledSurface).performDrawToImage(2);
+        new Frame2D("Sampled surface").setMesh(sampledSurface).printToImage(restartFolderName, 2);
       }
       psd.printAvgToFile();
     }
