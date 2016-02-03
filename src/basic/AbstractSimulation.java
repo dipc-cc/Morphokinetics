@@ -33,6 +33,9 @@ public abstract class AbstractSimulation {
   private final Parser parser;
   private StaticRandom staticRandom;
   private String restartFolderName;
+  private long startTime;
+  private double totalTime;
+  private float coverage;
 
   public AbstractSimulation(Parser parser) {
     kmc = null;
@@ -72,9 +75,9 @@ public abstract class AbstractSimulation {
 
   public void doSimulation() {
     float[][] sampledSurface = null;
-    long startTime = System.currentTimeMillis();
-    double totalTime = 0.0;
-    float coverage = 0.0f;
+    startTime = System.currentTimeMillis();
+    totalTime = 0.0;
+    coverage = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
     restartFolderName = "results/run"+System.currentTimeMillis();
     Restart restart = new Restart(restartFolderName);
@@ -125,14 +128,8 @@ public abstract class AbstractSimulation {
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
     }
-    System.out.println("\n\t__________________________________________________");
-    System.out.println("\tAverage");
-    System.out.println("\tSimulation time\t\tCoverage\tCPU time");
-    System.out.println("\t(units)\t\t\t (%)\t\t (ms)");
-    System.out.println("\t__________________________________________________");
-    System.out.print("\t"+ totalTime / parser.getNumberOfSimulations());
-    System.out.print("\t"+coverage/ parser.getNumberOfSimulations());
-    System.out.println("\t"+((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations())+"\n");
+    
+    printFooter();
     
     if (parser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
@@ -196,9 +193,20 @@ public abstract class AbstractSimulation {
     }
   }
   
+  
   public static void printHeader(String message){
     printHeader();
     System.out.println("Execution: " + message);
+  }
+  private void printFooter() {
+    System.out.println("\n\t__________________________________________________");
+    System.out.println("\tAverage");
+    System.out.println("\tSimulation time\t\tCoverage\tCPU time");
+    System.out.println("\t(units)\t\t\t (%)\t\t (ms)");
+    System.out.println("\t__________________________________________________");
+    System.out.print("\t"+ totalTime / parser.getNumberOfSimulations());
+    System.out.print("\t"+coverage/ parser.getNumberOfSimulations());
+    System.out.println("\t"+((System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations())+"\n");
   }
   
   /**
