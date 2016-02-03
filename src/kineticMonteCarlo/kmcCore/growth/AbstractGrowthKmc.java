@@ -215,7 +215,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     return 0;
   }
-
+  
+  private int countIslands() { 
+    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+        lattice.getAtom(i, j).setVisited(false);
+      }
+    }  
+    islandCount = 0;
+    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+        identifyIsland(i, j, false);
+      }
+    }
+    return islandCount;
+  }
+    
   /**
    * After having count them, returns the number of islands that the simulation has.
    * @return number of islands of the simulation
