@@ -96,6 +96,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
       }
+      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", false)))) {
+        out.println("Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
+      } catch (IOException e) {
+        //Do nothing, it doesn't matter if fails
+      }
     }
     nucleations = 0;
   }
@@ -201,6 +206,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   @Override
   public int simulate() {
+    int k = 1;
     if (justCentralFlake) {
       return super.simulate();
     } else {
@@ -208,12 +214,24 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         if (performSimulationStep()) {
           break;
         }
+        if (extraOutput && getCoverage()*100 > k) {
+          k++;
+          printData();
+        }
       }
     }
     
     countIslands();
     
     return 0;
+  }
+  
+  private void printData() {
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", true)))) {
+      out.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + countIslands() + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+    } catch (IOException e) {
+      //Do nothing, it doesn't matter if fails
+    }
   }
   
   private int countIslands() { 
@@ -338,6 +356,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (forceNucleation) {
       nucleations++;
+      if (extraOutput) {
+        printData();
+      }
     }
     lattice.extract(origin);
 
