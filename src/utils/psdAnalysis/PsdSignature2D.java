@@ -27,7 +27,7 @@ public class PsdSignature2D {
   private boolean averaged = false;
   private int binsY;
   private int binsX;
-  private Restart myRestart;
+  private Restart restart;
   public static final int HORIZONTAL_SIMMETRY = 0;
   public static final int VERTICAL_SIMMETRY = 1;
 
@@ -42,7 +42,7 @@ public class PsdSignature2D {
     psdVector = new ArrayList<>();
     this.binsY = binsY;
     this.binsX = binsX;
-    myRestart = new Restart();
+    restart = new Restart();
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
@@ -121,7 +121,7 @@ public class PsdSignature2D {
     int sizes[] = new int[2];
     sizes[0] = binsY;
     sizes[1] = binsX;
-    myRestart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
+    restart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
   }
 
   public void printAvgToFile(){
@@ -129,11 +129,11 @@ public class PsdSignature2D {
     int sizes[] = new int[2];
     sizes[0] = binsY;
     sizes[1] = binsX;
-    myRestart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
-    myRestart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
+    restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
+    restart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
   }
   
   public void setRestart(Restart restart) {
-    myRestart = restart;
+    this.restart = restart;
   }
 }
