@@ -86,12 +86,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     this.extraOutput = extraOutput;
     if (extraOutput) {
-      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimeBetweenTwoAttachments.txt", false)))) {
+      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", false)))) {
         out.println("Time difference between two attachments to the islands [coverage, time, min, max, average] ");
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
       }
-      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimePerAtom.txt", false)))) {
+      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", false)))) {
         out.println("Time difference between deposition and attachment to the islands for a single atom[coverage, time, min, max, average] ");
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
@@ -364,7 +364,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
     countIslands();
     deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimeBetweenTwoAttachments.txt", true)))) {
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", true)))) {
       out.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
               + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
               + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " " + getList().getTotalProbabilityFromList()+" "+getIslandCount());
@@ -373,7 +373,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     previousTime = getTime();
     deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("deltaTimePerAtom.txt", true)))) {
+    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", true)))) {
       out.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
               + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
               + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble()+ " " + getList().getTotalProbabilityFromList());
