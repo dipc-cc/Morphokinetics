@@ -25,8 +25,10 @@ public class PsdSignature2D {
   private int measures;
   private Semaphore semaphore;
   private boolean averaged = false;
-  private int binsY;
-  private int binsX;
+  private final int binsY;
+  private final int binsX;
+  private final int[] sizes;
+  private final int dimensions;
   private Restart restart;
   public static final int HORIZONTAL_SIMMETRY = 0;
   public static final int VERTICAL_SIMMETRY = 1;
@@ -42,6 +44,10 @@ public class PsdSignature2D {
     psdVector = new ArrayList<>();
     this.binsY = binsY;
     this.binsX = binsX;
+    sizes = new int[2];
+    sizes[0] = binsY;
+    sizes[1] = binsX;
+    dimensions = 2;
     restart = new Restart();
   }
 
@@ -116,19 +122,27 @@ public class PsdSignature2D {
     }
   }
 
-  public void printToFile(int simulationNumber) {
-    int dimensions = 2;
-    int sizes[] = new int[2];
-    sizes[0] = binsY;
-    sizes[1] = binsX;
+  /**
+   * Writes the current PSD to a mko (binary) file. The file name will be given by the restart
+   * folder and simulationNumber.
+   *
+   * @param simulationNumber the number of simulation
+   */
+  public void writePsdBinary(int simulationNumber) {
     restart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
+  }
+    
+  /**
+   * Writes the current PSD to a text file. The file name will be given by the restart
+   * folder and simulationNumber.
+   *
+   * @param simulationNumber the number of simulation
+   */
+  public void writePsdText(int simulationNumber) {
+    restart.writePsdText2D(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
   }
 
   public void printAvgToFile(){
-    int dimensions = 2;
-    int sizes[] = new int[2];
-    sizes[0] = binsY;
-    sizes[1] = binsX;
     restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
     restart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
   }
