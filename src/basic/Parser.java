@@ -5,6 +5,8 @@
  */
 package basic;
 
+import basic.io.OutputType;
+import basic.io.OutputType.formatFlag;
 import geneticAlgorithm.evaluationFunctions.EvaluatorType;
 import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
 import java.io.IOException;
@@ -73,6 +75,11 @@ public class Parser {
   private boolean printToImage;
   private boolean psd;
   private boolean outputData;
+  private JSONArray outputDataFormat;
+  /** To have the possibility to choose between different output formats. For the moment TXT, MKO and PNG. */
+  private OutputType outputType;
+  /** This numbers reflect the power of two and gives the chance to choose between inclusively among TXT(0), MKO(1) and PNG(2). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
+  private long numericFormatCode;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
   /**
@@ -133,6 +140,8 @@ public class Parser {
     printToImage = false;
     psd = false;
     outputData = false;
+    numericFormatCode = 2;
+    outputType = new OutputType();
     randomSeed = true;
     useMaxPerimeter = false;
     if (justCentralFlake) 
@@ -293,6 +302,26 @@ public class Parser {
       outputData = false;
     }
     try {
+      numericFormatCode = 0;
+      outputDataFormat = json.getJSONArray("outputDataFormat");
+      for (int i = 0; i < outputDataFormat.length(); i++) {
+        JSONObject currentFormat = outputDataFormat.getJSONObject(i);
+        String type = currentFormat.getString("type");
+     	// This values must agree with those ones in outputFlag of file OutputType.java
+        if (type.equals("txt")) {
+          numericFormatCode += 1;
+        }
+        if (type.equals("mko")) {
+          numericFormatCode += 2;
+        }
+        if (type.equals("png")){
+          numericFormatCode +=4;
+        }
+      }
+    } catch (JSONException e) {
+        numericFormatCode = 2; // Only mko (binary) output by default
+    }
+    try {
       randomSeed = json.getBoolean("randomSeed");
     } catch (JSONException e) {
       randomSeed = true;
@@ -443,6 +472,17 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
     System.out.printf("%32s: %s,\n", "\"psd\"", psd);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
+    if (outputDataFormat != null) {
+      System.out.printf("%32s: [", "\"outputDataFormat\"");
+      
+      for (int i = 0; i < evaluator.length(); i++) {
+        JSONObject currentFormat = outputDataFormat.getJSONObject(i);
+        System.out.printf(" {%s: \"%s\"},", "\"type\"", currentFormat.getString("type"));
+      }
+      System.out.printf("],\n");
+    } else {
+      System.out.printf("%32s: [ {\"type\": \"mko\"},],\n", "\"outputDataFormat\"");
+    }
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"depositInAllArea\"", depositInAllArea);
@@ -597,7 +637,15 @@ public class Parser {
   public boolean outputData() {
     return outputData;
   }
-
+  
+  /**
+   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY.
+   * @return 
+   */
+  public EnumSet<formatFlag> getOutputFormats() {
+    return outputType.getStatusFlags(numericFormatCode);
+  }
+  
   public boolean randomSeed() {
     return randomSeed;
   }
