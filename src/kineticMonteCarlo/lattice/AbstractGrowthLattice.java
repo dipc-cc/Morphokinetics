@@ -49,15 +49,21 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public abstract void deposit(AbstractGrowthAtom atom, boolean forceNucleation);
 
   /**
-   * Extract the given atom from the lattice
+   * Extract the given atom from the lattice.
    * @param atom the atom to be extracted
    */
   public abstract void extract(AbstractGrowthAtom atom);
   
+  /**
+   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
+   * jump from terrace to edge.
+   *
+   * @param probabilities Default rates
+   */
   public void configure(double[][] probabilities) {
-    for (int iHexa = 0; iHexa < atoms[0].length; iHexa++) {
-      for (int jHexa = 0; jHexa < atoms.length; jHexa++) {
-        atoms[jHexa][iHexa].initialise(probabilities);
+    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
+      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+        atoms[iHexa][jHexa].initialise(probabilities);
       }
     }
   }
