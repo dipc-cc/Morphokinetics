@@ -365,15 +365,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         printData();
       }
     }
+    int oldType = origin.getType();
     lattice.extract(origin);
 
-    int oldType = destination.getType();
     lattice.deposit(destination, forceNucleation);
     destination.setDepositionTime(origin.getDepositionTime());
     origin.setDepositionTime(0);
     if (extraOutput) {
       if (oldType == TERRACE && destination.getType() != TERRACE) { // atom gets attached to the island
-      atomAttachedToIsland(destination);
+        atomAttachedToIsland(destination);
       }
     }
     modifiedBuffer.updateAtoms(getList());
