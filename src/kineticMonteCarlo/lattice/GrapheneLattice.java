@@ -39,7 +39,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     
     centralCartesianLocation = getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
-    setAtoms(createAtoms(hexaSizeI, hexaSizeJ, distancePerStep));
+    createAtoms(hexaSizeI, hexaSizeJ, distancePerStep);
     setAngles();
   }
 
