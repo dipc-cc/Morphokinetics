@@ -138,7 +138,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     double raw = StaticRandom.raw();
 
     if (getBondsProbability() == null) {
-      return neighbours[(int) raw * 12];
+      return neighbours[(int) (raw * 12)];
     }
 
     double linearSearch = raw * getProbability();
