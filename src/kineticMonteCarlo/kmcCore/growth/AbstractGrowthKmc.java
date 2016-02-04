@@ -347,33 +347,33 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   }
 
-  private boolean diffuseAtom(AbstractGrowthAtom origin, AbstractGrowthAtom destination) {
+  private boolean diffuseAtom(AbstractGrowthAtom originAtom, AbstractGrowthAtom destinationAtom) {
 
     //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
-    if (!origin.isEligible()) {
+    if (!originAtom.isEligible()) {
       return false;
     }
 
-    if (destination.isOccupied() && !origin.equals(destination)) {
+    if (destinationAtom.isOccupied() && !originAtom.equals(destinationAtom)) {
       return false;
     }
 
-    boolean forceNucleation = (!justCentralFlake && destination.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    boolean forceNucleation = (!justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (forceNucleation) {
       nucleations++;
       if (extraOutput) {
         printData();
       }
     }
-    int oldType = origin.getType();
-    lattice.extract(origin);
+    int oldType = originAtom.getType();
+    lattice.extract(originAtom);
 
-    lattice.deposit(destination, forceNucleation);
-    destination.setDepositionTime(origin.getDepositionTime());
-    origin.setDepositionTime(0);
+    lattice.deposit(destinationAtom, forceNucleation);
+    destinationAtom.setDepositionTime(originAtom.getDepositionTime());
+    originAtom.setDepositionTime(0);
     if (extraOutput) {
-      if (oldType == TERRACE && destination.getType() != TERRACE) { // atom gets attached to the island
-        atomAttachedToIsland(destination);
+      if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
+        atomAttachedToIsland(destinationAtom);
       }
     }
     modifiedBuffer.updateAtoms(getList());
