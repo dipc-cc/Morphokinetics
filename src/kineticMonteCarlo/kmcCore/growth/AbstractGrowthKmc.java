@@ -393,7 +393,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", true)))) {
       out.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
               + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " " + getList().getTotalProbabilityFromList()+" "+getIslandCount());
+              + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " " + getList().getTotalProbabilityFromList() + " " + getIslandCount() + " "
+              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b));
     } catch (IOException e) {
       //Do nothing, it doesn't matter if fails
     }
@@ -402,7 +403,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", true)))) {
       out.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
               + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble()+ " " + getList().getTotalProbabilityFromList());
+              + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " " + getList().getTotalProbabilityFromList() + " "
+              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b));
     } catch (IOException e) {
       //Do nothing, it doesn't matter if fails
     }
