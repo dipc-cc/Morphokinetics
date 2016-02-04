@@ -322,11 +322,18 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     getList().cleanup();
   }
 
-  private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom source) {
+  /**
+   * Selects the next step randomly. If there is not accelerator, an neighbour atom of originAtom is
+   * chosen. With Devita accelerator many steps far away atom can be chosen.
+   *
+   * @param originAtom atom that has to be moved
+   * @return destinationAtom
+   */
+  private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
     if (accelerator != null) {
-      return accelerator.chooseRandomHop(source);
+      return accelerator.chooseRandomHop(originAtom);
     }
-    return source.chooseRandomHop();
+    return originAtom.chooseRandomHop();
   }
 
   protected boolean depositAtom(int iHexa, int jHexa) {
