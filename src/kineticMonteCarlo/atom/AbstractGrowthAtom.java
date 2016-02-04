@@ -126,28 +126,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   }
 
   /**
-   * Returns i hexagonal, and not the X Cartesian coordinate.
-   *
-   * @return i hexagonal
-   * @deprecated use {@link #getiHexa()} instead.
-   */
-  @Deprecated
-  public short getX() {
-    return iHexa;
-  }
-  
-  /**
-   * Returns j hexagonal, and not the Y Cartesian coordinate.
-   *
-   * @return j hexagonal
-   * @deprecated use {@link #getjHexa()} instead.
-   */
-  @Deprecated
-  public short getY() {
-    return jHexa;
-  }
-
-  /**
    * 
    * @return hexagonal i coordinate
    */
