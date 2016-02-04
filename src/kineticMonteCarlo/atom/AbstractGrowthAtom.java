@@ -105,6 +105,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public abstract void clear();
   
+  /**
+   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
+   * jump from terrace to edge.
+   *
+   * @param probabilities Default rates
+   */
   public void initialise(double[][] probabilities) {
     this.probabilities = probabilities;
   }
