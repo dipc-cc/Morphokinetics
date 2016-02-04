@@ -185,7 +185,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
         getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0, 0).getProbability(0, 0));
       }
-      diffuseAtom(originAtom, destinationAtom);
+      while (!diffuseAtom(originAtom, destinationAtom));
     }
 
     if (perimeterMustBeEnlarged(destinationAtom)) {
@@ -347,6 +347,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   }
 
+  /**
+   * Moves an atom from origin to destination
+   * @param originAtom origin atom
+   * @param destinationAtom destination atom
+   * @return true if atom has moved, false otherwise
+   */
   private boolean diffuseAtom(AbstractGrowthAtom originAtom, AbstractGrowthAtom destinationAtom) {
 
     //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
