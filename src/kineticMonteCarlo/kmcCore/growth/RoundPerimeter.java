@@ -88,7 +88,7 @@ public class RoundPerimeter {
     currentRadius = 125;
   }
   
-  public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom origin) {
+  public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom originAtom) {
 
     int angle = searchPerimeterOffsetReentrance();
     neededSteps = perimeterStatistics.getHopsCount(currentRadius, angle);
@@ -98,7 +98,7 @@ public class RoundPerimeter {
       angle = 360 - angle;
     }
 
-    float destinationAngleDegree = (float) (angle + (origin.getAngle() * 180.0 / Math.PI));
+    float destinationAngleDegree = (float) (angle + (originAtom.getAngle() * 180.0 / Math.PI));
     if (destinationAngleDegree >= 360) {
       destinationAngleDegree = destinationAngleDegree - 360;
     }
@@ -106,7 +106,7 @@ public class RoundPerimeter {
     int initialLocation = (int) (destinationAngleDegree * currentPerimeter.length / 360.0);
     float destinationAngleRad = (float) (destinationAngleDegree * Math.PI / 180.0f);
 
-    AbstractGrowthAtom chosen = null;
+    AbstractGrowthAtom destinationAtom = null;
     int position = 0;
     float error = currentPerimeter[initialLocation].getAngle() - destinationAngleRad;
 
@@ -117,13 +117,13 @@ public class RoundPerimeter {
         if (Math.abs(errorTemp) < Math.abs(error)) {
           error = errorTemp;
         } else {
-          chosen = currentPerimeter[j + 1];
+          destinationAtom = currentPerimeter[j + 1];
           position = j + 1;
           break;
         }
       }
-      if (chosen == null) {
-        chosen = currentPerimeter[0];
+      if (destinationAtom == null) {
+        destinationAtom = currentPerimeter[0];
         position = 0;
       }
     } else {
@@ -133,28 +133,28 @@ public class RoundPerimeter {
         if (Math.abs(errorTemp) < Math.abs(error)) {
           error = errorTemp;
         } else {
-          chosen = currentPerimeter[j - 1];
+          destinationAtom = currentPerimeter[j - 1];
           position = j - 1;
           break;
         }
       }
 
-      if (chosen == null) {
-        chosen = currentPerimeter[currentPerimeter.length - 1];
+      if (destinationAtom == null) {
+        destinationAtom = currentPerimeter[currentPerimeter.length - 1];
         position = currentPerimeter.length - 1;
       }
     }
 
-    while (chosen.isOccupied() && chosen != origin) {
+    while (destinationAtom.isOccupied() && destinationAtom != originAtom) {
       position++;
       if (position == currentPerimeter.length) {
         position = 0;
       }
-      chosen = currentPerimeter[position];
+      destinationAtom = currentPerimeter[position];
     }
 
-    chosen.setMultiplier(neededSteps /*+((radius_por_paso[0]-1)*(radius_por_paso[0]-1))*/);
-    return chosen;
+    destinationAtom.setMultiplier(neededSteps /*+((radius_por_paso[0]-1)*(radius_por_paso[0]-1))*/);
+    return destinationAtom;
 
   }
 
