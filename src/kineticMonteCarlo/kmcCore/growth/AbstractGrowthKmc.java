@@ -179,13 +179,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       destinationAtom = depositNewAtom();
 
     } else {
-      destinationAtom = chooseRandomHop(originAtom);
-      if (destinationAtom.isOutside()) {
-        destinationAtom = perimeter.getPerimeterReentrance(originAtom);
-        // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
-        getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0, 0).getProbability(0, 0));
-      }
-      while (!diffuseAtom(originAtom, destinationAtom));
+      do {
+        destinationAtom = chooseRandomHop(originAtom);
+        if (destinationAtom.isOutside()) {
+          destinationAtom = perimeter.getPerimeterReentrance(originAtom);
+          // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
+          getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0, 0).getProbability(0, 0));
+        }
+      } while (!diffuseAtom(originAtom, destinationAtom));
     }
 
     if (perimeterMustBeEnlarged(destinationAtom)) {
@@ -367,7 +368,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       return false;
     }
 
-    if (destinationAtom.isOccupied() && !originAtom.equals(destinationAtom)) {
+    // if the destination atom is occupied do not diffuse (even if it is itself)
+    if (destinationAtom.isOccupied()) {
       return false;
     }
 
