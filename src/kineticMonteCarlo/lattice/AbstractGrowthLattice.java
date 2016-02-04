@@ -60,10 +60,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    *
    * @param probabilities Default rates
    */
-  public void configure(double[][] probabilities) {
+  public void initialiseRates(double[][] probabilities) {
     for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
       for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-        atoms[iHexa][jHexa].initialise(probabilities);
+        atoms[iHexa][jHexa].initialiseRates(probabilities);
       }
     }
   }

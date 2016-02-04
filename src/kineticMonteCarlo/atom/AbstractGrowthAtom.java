@@ -111,7 +111,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    *
    * @param probabilities Default rates
    */
-  public void initialise(double[][] probabilities) {
+  public void initialiseRates(double[][] probabilities) {
     this.probabilities = probabilities;
   }
   

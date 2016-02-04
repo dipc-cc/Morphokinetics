@@ -40,11 +40,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private final float maxCoverage; 
   /**
-   * Total area of a single flake simulation
+   * Total area of a single flake simulation.
    */
   private int area;
   /**
-   * 
+   * Attribute to store temporally the current area of the simulation.
    */
   private int currentArea;
   /**
@@ -105,6 +105,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     nucleations = 0;
   }
 
+  /**
+   * 
+   * @param depositionRateML deposition rate per site (synonyms: deposition flux and diffusion mono layer)
+   * @param islandDensitySite only used for single flake simulations to properly calculate deposition rate
+   */
   @Override
   public final void setDepositionRate(double depositionRateML, double islandDensitySite) {
     area = calculateAreaAsInLattice();
@@ -135,7 +140,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         processProbs2D[i][j] = rates[i * length + j];
       }
     }
-    lattice.configure(processProbs2D);
+    lattice.initialiseRates(processProbs2D);
   }
 
   @Override

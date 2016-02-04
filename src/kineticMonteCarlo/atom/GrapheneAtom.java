@@ -41,11 +41,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     }
   }
 
-  @Override
-  public void initialise(double[][] probabilities) {
-    super.initialise(probabilities);
-  }
-
   public void setNeighbours(GrapheneAtom[] neighbours) {
     this.neighbours = neighbours;
   }
