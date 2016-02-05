@@ -151,8 +151,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     for (int i = 0; i < lattice.getHexaSizeI(); i++) {
       for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        lattice.getAtom(i, j).setVisited(false);
-        lattice.getAtom(i, j).setDepositionTime(0);
+        lattice.getAtom(i, j).clear();
       }
     }
     deltaTimeBetweenTwoAttachments.clear();
