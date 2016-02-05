@@ -144,6 +144,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
     for (AbstractList bin : bins) {
       bin.reset();
     }
+    clean = false;
   }
 
   @Override

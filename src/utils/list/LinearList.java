@@ -60,6 +60,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   public void reset() {
     super.reset();
     surface.clear();
+    clean = false;
   }
 
   @Override
