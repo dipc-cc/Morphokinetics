@@ -109,10 +109,13 @@ public class AgAtom extends AbstractGrowthAtom {
     return typesTable.getType(nImmobile + addToImmobile, nMobile + addToMobile);
   }
   
+  /**
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
+   */
   @Override
   public void clear() {
     setType(TERRACE);
-    nImmobile = nMobile = 0;
+    nImmobile = nMobile = 0; // current atom has no neighbour
     setOccupied(false);
     setOutside(false);
     

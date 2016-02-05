@@ -96,11 +96,14 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     return neighbours[pos];
   }
 
+  /**
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
+   */
   @Override
   public void clear() {
 
     setType(TERRACE);
-    n1 = n2 = n3 = TERRACE;
+    n1 = n2 = n3 = 0; // current atom has no neighbour
     setOccupied(false);
     setOutside(false);
 
