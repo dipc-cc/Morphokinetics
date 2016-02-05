@@ -94,6 +94,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     time = 0;
     totalProbability = 0;
     totalAtoms = 0;
+    removalsSinceLastCleanup = 0;
   }
     
   public abstract AbstractAtom getAtomAt(int pos);
