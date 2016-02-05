@@ -114,12 +114,11 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   @Override
   public void clear() {
+    
+    super.clear();
     setType(TERRACE);
     nImmobile = nMobile = 0; // current atom has no neighbour
-    setOccupied(false);
-    setOutside(false);
     
-    resetProbability();
     for (int i = 0; i < getBondsProbability().length; i++) {
       getBondsProbability()[i] = 0;
     }

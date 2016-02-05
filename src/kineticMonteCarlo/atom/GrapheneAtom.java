@@ -102,12 +102,9 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   public void clear() {
 
+    super.clear();
     setType(TERRACE);
     n1 = n2 = n3 = 0; // current atom has no neighbour
-    setOccupied(false);
-    setOutside(false);
-
-    resetProbability();
 
     if (getBondsProbability() != null) {
       PStack.returnProbArray(getBondsProbability());

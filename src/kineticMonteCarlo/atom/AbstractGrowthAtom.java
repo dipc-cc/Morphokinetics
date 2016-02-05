@@ -102,8 +102,17 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public abstract AbstractGrowthAtom getNeighbour(int pos);
   
   public abstract double updateOneBound(int bond);
-
-  public abstract void clear();
+  
+  /**
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
+   */
+  public void clear(){
+    visited = false;
+    occupied = false;
+    outside = false;
+    probability = 0;
+    depositionTime = 0;
+  }
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
