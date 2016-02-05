@@ -46,7 +46,7 @@ public class GrapheneKmc extends AbstractGrowthKmc {
     getLattice().resetOccupied();
     if (isJustCentralFlake()) {
       setAtomPerimeter();
-      setCurrentOccupiedArea(6); // Seed will have 6 atoms
+      setCurrentOccupiedArea(7); // Seed will have 7 atoms
       
       int iCentre = getLattice().getHexaSizeJ() / 2;
       int jCentre = getLattice().getHexaSizeI() / 2;
