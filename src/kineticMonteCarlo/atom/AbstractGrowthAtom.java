@@ -35,13 +35,13 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   public AbstractGrowthAtom(short iHexa, short jHexa, int numberOfNeighbours) {
 
-    this.occupied = false;
-    this.outside = true;
+    occupied = false;
+    outside = true;
     this.iHexa = iHexa;
     this.jHexa = jHexa;
     
-    this.setNumberOfNeighbours(numberOfNeighbours);
-    this.bondsProbability = new double[numberOfNeighbours];
+    setNumberOfNeighbours(numberOfNeighbours);
+    bondsProbability = new double[numberOfNeighbours];
     multiplier = 1;
     islandNumber = 0;
     visited = false;
@@ -89,7 +89,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     double tmp = -getProbability();
     resetProbability();
 
-    if (this.isEligible()) {
+    if (isEligible()) {
       obtainRateFromNeighbours();
       tmp += getProbability();
     }
