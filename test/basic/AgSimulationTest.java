@@ -6,6 +6,7 @@
 package basic;
 
 import basic.io.Restart;
+import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -124,9 +125,14 @@ public class AgSimulationTest {
       }
     }
     
-    for (int i = 0; i < parser.getCartSizeY() / 2; i++) {
-      assertArrayEquals(ref[i], currentPsd[i], 1f);
-    }
+    AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(null,
+            0, 0,
+            parser.getCartSizeX() / 2, parser.getCartSizeY() / 2,
+            null, "Frobenius", null, parser.getTemperature());
+    evaluator.setPsd(ref);
+    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
+    System.out.println("Frobenius error is "+FrobeniusError);
+    assertEquals(0.016, FrobeniusError, 0.0015);
     
   }
 

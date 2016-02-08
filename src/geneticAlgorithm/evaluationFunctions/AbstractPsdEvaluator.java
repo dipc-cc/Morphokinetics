@@ -109,7 +109,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   protected abstract double calculateHierarchyErrorFromReference(Individual i);
   protected abstract double calculateHierarchyErrorDiscrete(Individual ind);
   
-  protected double calculateFrobeniusNormErrorMatrix(float[][] currentPsd) {
+  public double calculateFrobeniusNormErrorMatrix(float[][] currentPsd) {
     double FrobeniusError;
     double sum = 0.0f;
     difference = new float[psdSizeX][psdSizeY];
