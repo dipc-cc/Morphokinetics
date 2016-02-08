@@ -23,16 +23,27 @@ public class ModifiedBuffer {
     bufferL = new HashSet(8, 0.9f);
   }
 
-  public void addOwnAtom(AbstractGrowthAtom a) {
-    buffer.add(a);
+  /**
+   * Adds an atom to the current modified buffer list
+   * @param atom atom to be added
+   */
+  public void addOwnAtom(AbstractGrowthAtom atom) {
+    buffer.add(atom);
   }
 
-  public void addBondAtom(AbstractGrowthAtom a) {
-    bufferL.add(a);
+  /**
+   * Adds a bond atom to the current modified buffer list
+   * @param atom atom to be added
+   */
+  public void addBondAtom(AbstractGrowthAtom atom) {
+    bufferL.add(atom);
   }
-  
+
+  /**
+   * Update rates list with the current modified atoms list
+   * @param list list to be changed
+   */
   public void updateAtoms(AbstractList list) {
-    
     Iterator<AbstractGrowthAtom> it = buffer.iterator();
     while (it.hasNext()) {
       updateAllRates(it.next(), list);
@@ -65,6 +76,9 @@ public class ModifiedBuffer {
     }
   }
 
+  /**
+   * Empties current modified buffer
+   */
   public void clear() {
     buffer.clear();
     bufferL.clear();
