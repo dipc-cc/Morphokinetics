@@ -202,7 +202,7 @@ public abstract class AbstractSimulation {
       if (parser.getOutputFormats().contains(formatFlag.TXT)) {
         restart.writeSurfaceText2D(2, sizes, sampledSurface, simulations);
       }
-      if (parser.getOutputFormats().contains(formatFlag.PNG)) {
+      if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
         printToImage(restartFolderName, simulations);
       }
     }
