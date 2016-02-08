@@ -135,6 +135,32 @@ public class AgSimulationTest {
     assertEquals(0.016, FrobeniusError, 0.0015);
     
   }
+  
+  @Test
+  public void testAgMulti() {
+    AbstractSimulation.printHeader("Ag test");
+    Parser parser = new Parser();
+    parser.readFile("test/input/AgMultiParameters");
+
+    doAgTest(parser);
+
+    Restart restart = new Restart("test/references/");
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    float[][] ref0 = null;
+    float[][] ref1 = null;
+    float[][] ref2 = null;
+    try {
+      ref0 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface000.txt");
+      ref1 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface001.txt");
+      ref2 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface002.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    // For the moment only comparing the last surface
+    assertArrayEquals(ref2, currentSurface);
+    // TODO compare the number of islands and surface 0 and 1
+  }
 
   private void doAgTest(Parser parser) {
     AbstractSimulation simulation = new AgSimulation(parser);
