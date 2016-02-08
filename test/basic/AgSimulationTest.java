@@ -70,18 +70,18 @@ public class AgSimulationTest {
     AbstractSimulation.printHeader("Ag test");
     Parser parser = new Parser();
     parser.readFile("test/input/AgParameters");
-    
+
     float[][] surface = doAgTest(parser);
-    
+
     Restart restart = new Restart("test/references/");
-    int[] sizes = {parser.getCartSizeX()/2, parser.getCartSizeY()/2};
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
       ref = restart.readSurfaceText2D(2, sizes, "AgSurfaceRef");
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
-    
+
     assertArrayEquals(ref, surface);
   }
 
@@ -89,23 +89,23 @@ public class AgSimulationTest {
    * Really simple and quick test to ensure that runs correctly
    */
   @Test
-  public void testAgSimple(){
+  public void testAgSimple() {
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
     parser.readFile("test/input/AgSmallParameters");
-    
+
     doAgTest(parser);
   }
-  
-  private float[][] doAgTest(Parser parser){
+
+  private float[][] doAgTest(Parser parser) {
     AbstractSimulation simulation = new AgSimulation(parser);
 
     simulation.initialiseKmc();
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
-    
-    return simulation.getKmc().getSampledSurface(parser.getCartSizeX()/2, parser.getCartSizeY()/2);
+
+    return simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
   }
    
 }
