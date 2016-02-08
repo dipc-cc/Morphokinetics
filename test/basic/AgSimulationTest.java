@@ -117,9 +117,15 @@ public class AgSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-
+    for (int i = 0; i < ref.length; i++) {
+      for (int j = 0; j < ref[0].length; j++) {
+        currentPsd[i][j] = (float) Math.log(currentPsd[i][j]);
+        ref[i][j] = (float) Math.log(ref[i][j]);
+      }
+    }
+    
     for (int i = 0; i < parser.getCartSizeY() / 2; i++) {
-      assertArrayEquals(ref[i], currentPsd[i], 0.001f);
+      assertArrayEquals(ref[i], currentPsd[i], 1f);
     }
     
   }
