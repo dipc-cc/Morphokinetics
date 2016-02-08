@@ -112,6 +112,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     outside = false;
     probability = 0;
     depositionTime = 0;
+    setList(false);
   }
   
   /**
