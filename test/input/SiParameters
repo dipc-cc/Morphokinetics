@@ -13,5 +13,6 @@
   "extraLevels": 1,
   "outputData": true, 
   "randomSeed": false,
-  "useMaxPerimeter": false
+  "useMaxPerimeter": false,
+  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"},],
 }

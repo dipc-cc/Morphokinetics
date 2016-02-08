@@ -3,7 +3,7 @@
   "cartSizeX": 400,
   "cartSizeY": 400,
   "visualize": false, 
-  "withGui"  : false,
+  "withGui"  : true,
   "justCentralFlake": true,
   "listType": linear,
   "printToImage": false,
@@ -14,5 +14,6 @@
   "outputData": true, 
   "randomSeed": false,
   "useMaxPerimeter": false,
-  "perimeterType": circle
+  "perimeterType": circle,
+  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"},],
 }

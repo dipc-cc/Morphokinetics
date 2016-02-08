@@ -14,5 +14,6 @@
   "outputData": true, 
   "randomSeed": false,
   "useMaxPerimeter": false,
-  "perimeterType": circle
+  "perimeterType": circle,
+  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"},],
 }
