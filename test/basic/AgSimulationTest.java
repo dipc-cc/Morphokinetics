@@ -22,6 +22,9 @@ import org.junit.Test;
  * @author J. Alberdi-Rodriguez
  */
 public class AgSimulationTest {
+  
+  private float[][] currentSurface;
+  private float[][] currentPsd;
 
   public AgSimulationTest() {
   }
@@ -71,7 +74,7 @@ public class AgSimulationTest {
     Parser parser = new Parser();
     parser.readFile("test/input/AgParameters");
 
-    float[][] surface = doAgTest(parser);
+    doAgTest(parser);
 
     Restart restart = new Restart("test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
@@ -82,7 +85,7 @@ public class AgSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    assertArrayEquals(ref, surface);
+    assertArrayEquals(ref, currentSurface);
   }
 
   /**
@@ -96,8 +99,32 @@ public class AgSimulationTest {
 
     doAgTest(parser);
   }
+  
+  @Test
+  public void testAgPsd() {
+    AbstractSimulation.printHeader("Ag PSD test");
+    Parser parser = new Parser();
+    parser.readFile("test/input/AgPsdParameters");
+    
+    doAgTest(parser);
+    //TODO check that PSDs are equivalent
+    Restart restart = new Restart("test/references/");
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    float[][] ref = null;
+    try {
+      ref = restart.readPsdText2D(2, sizes, "AgPsdAvgRaw.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
 
-  private float[][] doAgTest(Parser parser) {
+
+    for (int i = 0; i < parser.getCartSizeY() / 2; i++) {
+      assertArrayEquals(ref[i], currentPsd[i], 0.001f);
+    }
+    
+  }
+
+  private void doAgTest(Parser parser) {
     AbstractSimulation simulation = new AgSimulation(parser);
 
     simulation.initialiseKmc();
@@ -105,7 +132,8 @@ public class AgSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    return simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    currentPsd = simulation.getPsd().getPsd();
   }
    
 }
