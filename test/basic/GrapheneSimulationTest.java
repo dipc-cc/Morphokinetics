@@ -70,25 +70,25 @@ public class GrapheneSimulationTest {
     AbstractSimulation.printHeader("Graphene test");
     Parser parser = new Parser();
     parser.readFile("test/input/GrapheneParameters");
-    
+
     AbstractSimulation simulation = new GrapheneSimulation(parser);
 
     simulation.initialiseKmc();
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
-    
+
     Restart restart = new Restart("test/references/");
-    int[] sizes = {parser.getCartSizeX()/2,parser.getCartSizeY()/2};
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
       ref = restart.readSurfaceText2D(2, sizes, "GrapheneSurfaceRef");
     } catch (FileNotFoundException ex) {
       Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
-    
-    float[][] surface = simulation.getKmc().getSampledSurface(parser.getCartSizeX()/2, parser.getCartSizeY()/2);
+
+    float[][] surface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     assertArrayEquals(ref, surface);
   }
-  
+
 }
