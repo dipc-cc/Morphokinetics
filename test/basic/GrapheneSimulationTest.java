@@ -87,6 +87,37 @@ public class GrapheneSimulationTest {
     assertArrayEquals(ref, currentSurface);
   }
 
+  @Test
+  public void testGrapheneMany() {
+    AbstractSimulation.printHeader("Graphene test many");
+    Parser parser = new Parser();
+    parser.readFile("test/input/GrapheneManyParameters.json");
+
+    doGrapheneTest(parser);
+
+    Restart restart = new Restart("test/references/");
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    float[][] ref0 = null;
+    float[][] ref1 = null;
+    float[][] ref2 = null;
+    float[][] ref3 = null;
+    float[][] ref4 = null;
+    try {
+      ref0 = restart.readSurfaceText2D(2, sizes, "GrapheneManySurface000.txt");
+      ref1 = restart.readSurfaceText2D(2, sizes, "GrapheneManySurface001.txt");
+      ref2 = restart.readSurfaceText2D(2, sizes, "GrapheneManySurface002.txt");
+      ref3 = restart.readSurfaceText2D(2, sizes, "GrapheneManySurface003.txt");
+      ref4 = restart.readSurfaceText2D(2, sizes, "GrapheneManySurface004.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    // For the moment only comparing the last surface
+    assertArrayEquals(ref4, currentSurface);
+    // TODO compare the rest of surfaces
+  }
+    
+    
   private void doGrapheneTest(Parser parser) {
     AbstractSimulation simulation = new GrapheneSimulation(parser);
 
