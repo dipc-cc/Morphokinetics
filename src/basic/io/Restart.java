@@ -27,7 +27,7 @@ import main.Morphokinetics;
 public class Restart {
 
   public static final int MAX_DIMS = 3;
-  private String folder; 
+  private String folder;
 
   private int sizeX;
   private int sizeY;
@@ -36,16 +36,16 @@ public class Restart {
     folder = "results/";
     createFolder(folder);
   }
-  
-  public Restart(String restartFolder){ 
+
+  public Restart(String restartFolder) {
     folder = restartFolder;
-    if (!folder.endsWith("/")){
+    if (!folder.endsWith("/")) {
       folder += "/";
     }
     createFolder(restartFolder);
   }
-  
-  private void createFolder(String restartFolder){
+
+  private void createFolder(String restartFolder) {
     try {
       File file = new File(restartFolder);
       file.mkdirs();
@@ -64,7 +64,8 @@ public class Restart {
 
   /**
    * Returns the base location of the JAR file (or the main executable instead).
-   * @return 
+   *
+   * @return
    */
   public static String getJarBaseDir() {
     final Class<?> referenceClass = Morphokinetics.class;
@@ -78,10 +79,10 @@ public class Restart {
     }
     return jarPath.toString();
   }
-  
+
   /**
-   * Writes float data to a file called "psd[number].mko". First of all calls to the header
-   * writing: look documentation there.
+   * Writes float data to a file called "psd[number].mko". First of all calls to the header writing:
+   * look documentation there.
    *
    * @param dimensions
    * @param sizes
@@ -89,13 +90,13 @@ public class Restart {
    * @param simulationNumber
    */
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = format("%spsd%03d.mko",folder,simulationNumber);
+    String fileName = format("%spsd%03d.mko", folder, simulationNumber);
     writePsdText2D(dimensions, sizes, data, simulationNumber);
     writeLowBinary(dimensions, sizes, data, fileName);
   }
 
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, String fileName) {
-    if (!fileName.startsWith(folder)){
+    if (!fileName.startsWith(folder)) {
       fileName = folder + fileName;
     }
     writePsdText2D(dimensions, sizes, data, fileName);
@@ -117,7 +118,7 @@ public class Restart {
    * @param simulationNumber
    */
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = format("%spsd%03d.txt",folder,simulationNumber);
+    String fileName = format("%spsd%03d.txt", folder, simulationNumber);
     writeLowText2D(data, fileName, true);
   }
 
@@ -128,9 +129,9 @@ public class Restart {
     }
     writeLowText2D(data, fileName, true);
   }
-  
+
   public void writeTextString(String data, String fileName) {
-    fileName = folder+fileName;
+    fileName = folder + fileName;
     try {
       // create file descriptor
       File file = new File(fileName);
@@ -154,10 +155,10 @@ public class Restart {
    * @param simulationNumber
    */
   public void writeSurfaceBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = format("%ssurface%03d.mko",folder,simulationNumber);
+    String fileName = format("%ssurface%03d.mko", folder, simulationNumber);
     writeLowBinary(dimensions, sizes, data, fileName);
   }
-  
+
   public void writeSurfaceBinary2D(float[][] data, int simulationNumber) {
     int sizes[] = new int[2];
     sizes[0] = data.length;
@@ -180,33 +181,35 @@ public class Restart {
     String fileName = format("%ssurfaceHexagonal%03d.txt", folder, simulationNumber);
     writeLowTextHexagonal(data, fileName);
   }
-  
+
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
     return readLowText2D(fileName, sizes, false);
   }
-  
+
   public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
-    return readLowBinary(fileName); 
+    return readLowBinary(fileName);
   }
-  
+
   public float[][] readPsdText2D(int dimensions, int[] sizes, String filename) throws FileNotFoundException {
     return readLowText2D(filename, sizes, true);
   }
-  
+
   /**
    * Reads a surface from a (binary) file and it reduces it surface by the given factor.
+   *
    * @param fileName
    * @param factor how much we want to reduce the surface. A number greater than one
    * @return reduced surface
-   * @throws FileNotFoundException 
+   * @throws FileNotFoundException
    */
   public float[][] readSurfaceBinary2D(String fileName, int factor) throws FileNotFoundException {
-    float[][] originalSurface = readLowBinary(fileName); 
+    float[][] originalSurface = readLowBinary(fileName);
     return scale(originalSurface, factor);
   }
-  
+
   /**
    * Given an original surface it reduces by the given factor.
+   *
    * @param originalSurface
    * @param factor
    * @return reduced surface
@@ -214,10 +217,10 @@ public class Restart {
   private float[][] scale(float[][] originalSurface, int factor) {
     int originalSizeX = originalSurface.length;
     int originalSizeY = originalSurface[0].length;
-    double scale = (double)1/ (double) factor;
+    double scale = (double) 1 / (double) factor;
     int reducedSizeX = (int) Math.ceil(originalSizeX * scale); // This is required to ensure that data properly fits afterwards
     int reducedSizeY = (int) Math.ceil(originalSizeY * scale);
-    
+
     float[][] reducedSurface = new float[reducedSizeX][reducedSizeY];
     if (scale > 1) {
       System.err.println("Error:scale must be less or equal to 1.");
@@ -226,14 +229,14 @@ public class Restart {
     // This is really simple interpolation; last position is visited, this value is assigned
     for (int x = 0; x < originalSizeX; x++) {
       for (int y = 0; y < originalSizeY; y++) {
-        int reducedX = (int)(x*scale);
-        int reducedY = (int)(y*scale);
+        int reducedX = (int) (x * scale);
+        int reducedY = (int) (y * scale);
         reducedSurface[reducedX][reducedY] = originalSurface[x][y];
       }
     }
     return reducedSurface;
   }
-  
+
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
     return readLowText2D(fileName);
   }
@@ -276,7 +279,8 @@ public class Restart {
       e.printStackTrace();
     }
   }
-/**
+
+  /**
    * This method reads the binary file
    *
    * @param dimensions
@@ -291,7 +295,7 @@ public class Restart {
     float[][] data = null;
     FileInputStream fis;
     DataInputStream dis;
-    int dimensions = -1; 
+    int dimensions = -1;
     int i = -1;
     int j = -1;
     int[] sizes = new int[3];
@@ -302,7 +306,7 @@ public class Restart {
       fis = new FileInputStream(fileName);
       // create data output stream
       dis = new DataInputStream(fis);
-     
+
       dis.skipBytes(14);
       // Read the dimensions of the file
       dimensions = dis.readInt();
@@ -318,11 +322,11 @@ public class Restart {
       for (j = 0; j < 8; j++) {
         tmp = dis.readInt();
       }
-      
+
       this.sizeX = sizes[0];
       this.sizeY = sizes[1];
-      data = new float [sizes[0]][sizes[1]];
-      
+      data = new float[sizes[0]][sizes[1]];
+
       // for each byte in the buffer
       for (i = 0; i < sizes[0]; i++) {
         for (j = 0; j < sizes[1]; j++) {
@@ -417,14 +421,14 @@ public class Restart {
       e.printStackTrace();
     }
   }
-   
+
   private float[][] readLowText2D(String fileName) throws FileNotFoundException {
     float[][] data = null;
-    System.out.println("Trying to read "+folder+ fileName + " file of unknown size ");
+    System.out.println("Trying to read " + folder + fileName + " file of unknown size ");
     int x = -1;
     int y = -1;
     try {
-      BufferedReader in = new BufferedReader(new FileReader(folder+fileName));
+      BufferedReader in = new BufferedReader(new FileReader(folder + fileName));
       String line;
       // <-- read whole line
       line = in.readLine();
@@ -439,24 +443,23 @@ public class Restart {
         data = new float[sizeX][sizeY];
       }
       line = in.readLine();
-      for (x=0; x<this.sizeX; x++) {
+      for (x = 0; x < this.sizeX; x++) {
         StringTokenizer tk = new StringTokenizer(line);
-        for (y=0; y<this.sizeY; y++) {
+        for (y = 0; y < this.sizeY; y++) {
           data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         }
         line = in.readLine();
       }
-    } catch (FileNotFoundException fe){
+    } catch (FileNotFoundException fe) {
       throw fe;
-    }
-      catch (Exception e) {
+    } catch (Exception e) {
       // if any I/O error occurs
       System.err.println("Point: " + x + " " + y);
       e.printStackTrace();
     }
-    
+
     return data;
-  }   
+  }
 
   private float[][] readLowText2D(String fileName, int[] sizes, boolean shift) throws FileNotFoundException {
     float[][] data = new float[sizes[0]][sizes[1]];
@@ -489,18 +492,17 @@ public class Restart {
         data[posX][posY] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         line = in.readLine();
       }
-    } catch (FileNotFoundException fe){
+    } catch (FileNotFoundException fe) {
       throw fe;
-    }
-      catch (Exception e) {
+    } catch (Exception e) {
       // if any I/O error occurs
       System.err.println("Point: " + i + " " + j);
       e.printStackTrace();
     }
     return data;
   }
-  
-    private static void writeLowTextHexagonal(float[][] data, String fileName) {
+
+  private static void writeLowTextHexagonal(float[][] data, String fileName) {
     try {
       // create file descriptor
       File file = new File(fileName);
