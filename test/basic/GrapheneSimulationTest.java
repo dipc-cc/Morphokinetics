@@ -23,6 +23,8 @@ import static org.junit.Assert.*;
  */
 public class GrapheneSimulationTest {
   
+  private float[][] currentSurface;
+  
   public GrapheneSimulationTest() {
   }
   
@@ -71,12 +73,7 @@ public class GrapheneSimulationTest {
     Parser parser = new Parser();
     parser.readFile("test/input/GrapheneParameters");
 
-    AbstractSimulation simulation = new GrapheneSimulation(parser);
-
-    simulation.initialiseKmc();
-    simulation.createFrame();
-    simulation.doSimulation();
-    simulation.finishSimulation();
+    doGrapheneTest(parser);
 
     Restart restart = new Restart("test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
@@ -87,8 +84,17 @@ public class GrapheneSimulationTest {
       Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    float[][] surface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
-    assertArrayEquals(ref, surface);
+    assertArrayEquals(ref, currentSurface);
   }
 
+  private void doGrapheneTest(Parser parser) {
+    AbstractSimulation simulation = new GrapheneSimulation(parser);
+
+    simulation.initialiseKmc();
+    simulation.createFrame();
+    simulation.doSimulation();
+    simulation.finishSimulation();
+    
+    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+  }
 }
