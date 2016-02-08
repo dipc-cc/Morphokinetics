@@ -182,11 +182,15 @@ public class Restart {
   }
   
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
-    return readLowText2D(fileName, sizes);
+    return readLowText2D(fileName, sizes, false);
   }
   
   public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
     return readLowBinary(fileName); 
+  }
+  
+  public float[][] readPsdText2D(int dimensions, int[] sizes, String filename) throws FileNotFoundException {
+    return readLowText2D(filename, sizes, true);
   }
   
   /**
@@ -454,7 +458,7 @@ public class Restart {
     return data;
   }   
 
-  private float[][] readLowText2D(String fileName, int[] sizes) throws FileNotFoundException {
+  private float[][] readLowText2D(String fileName, int[] sizes, boolean shift) throws FileNotFoundException {
     float[][] data = new float[sizes[0]][sizes[1]];
     String subfix = ".txt";
     if (!fileName.endsWith(subfix)) {
@@ -475,8 +479,14 @@ public class Restart {
         StringTokenizer tk = new StringTokenizer(line);
         i = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
         j = Integer.parseInt(tk.nextToken()); // <-- read single word on line and parse to int
+        int posX = i;
+        int posY = j;
+        if (shift) {
+          posX = (posX + data.length / 2) % data.length;
+          posY = (posY + data[0].length / 2) % data[0].length;
+        }
         trash = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
-        data[i][j] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+        data[posX][posY] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         line = in.readLine();
       }
     } catch (FileNotFoundException fe){
