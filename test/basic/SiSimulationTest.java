@@ -7,7 +7,6 @@ package basic;
 
 import basic.io.Restart;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -70,25 +69,25 @@ public class SiSimulationTest {
     AbstractSimulation.printHeader("Si test");
     Parser parser = new Parser();
     parser.readFile("test/input/SiParameters");
-    
+
     AbstractSimulation simulation = new SiSimulation(parser);
 
     simulation.initialiseKmc();
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
-    
+
     Restart restart = new Restart("test/references/");
-    int[] sizes = {parser.getCartSizeX()/2,parser.getCartSizeY()/2};
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
       ref = restart.readSurfaceText2D(2, sizes, "SiSurfaceRef");
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
-    
-    float[][] surface = simulation.getKmc().getSampledSurface(parser.getCartSizeX()/2, parser.getCartSizeY()/2);
-    for (int i = 0; i < parser.getCartSizeY()/2; i++) {
+
+    float[][] surface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    for (int i = 0; i < parser.getCartSizeY() / 2; i++) {
       assertArrayEquals(ref[i], surface[i], 0.001f);
     }
   }
