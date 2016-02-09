@@ -240,7 +240,7 @@ public class Parser {
       presure = 135;
     }
     try {
-      depositionFlux = json.getInt("depositionFlux");
+      depositionFlux = json.getDouble("depositionFlux");
     } catch (JSONException e) {
       depositionFlux = 0.0035;
     }
