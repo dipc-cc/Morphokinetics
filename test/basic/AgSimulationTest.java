@@ -138,7 +138,7 @@ public class AgSimulationTest {
   
   @Test
   public void testAgMulti() {
-    AbstractSimulation.printHeader("Ag test");
+    AbstractSimulation.printHeader("Ag multi test");
     Parser parser = new Parser();
     parser.readFile("test/input/AgMultiParameters");
 
