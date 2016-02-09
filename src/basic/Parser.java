@@ -305,6 +305,16 @@ public class Parser {
       psd = false;
     }
     try {
+      randomSeed = json.getBoolean("randomSeed");
+    } catch (JSONException e) {
+      randomSeed = true;
+    }
+    try {
+      useMaxPerimeter = json.getBoolean("useMaxPerimeter");
+    } catch (JSONException e) {
+      useMaxPerimeter = false;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -331,16 +341,6 @@ public class Parser {
       }
     } catch (JSONException e) {
         numericFormatCode = 2; // Only mko (binary) output by default
-    }
-    try {
-      randomSeed = json.getBoolean("randomSeed");
-    } catch (JSONException e) {
-      randomSeed = true;
-    }
-    try {
-      useMaxPerimeter = json.getBoolean("useMaxPerimeter");
-    } catch (JSONException e) {
-      useMaxPerimeter = false;
     }
     
     //  -------------- Evolutionary Algorithm ----------------------
