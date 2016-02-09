@@ -75,7 +75,7 @@ public abstract class AbstractKmc implements IKmc {
   @Override
   public void simulate(double endtime) {
     iterationsForLastSimulation = 0;
-    while (list.getTime() < endtime) {
+    while (getTime() < endtime) {
       if (performSimulationStep()) {
         break;
       }
