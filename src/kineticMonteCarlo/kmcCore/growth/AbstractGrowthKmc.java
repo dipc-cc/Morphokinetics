@@ -603,7 +603,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   void setAtomPerimeter() {
     if (useMaxPerimeter) {
-      perimeter.setMaxPerimeter();
+      perimeter.setMaxPerimeter(lattice.getCartSizeX(), lattice.getCartSizeY());
     } else {
       perimeter.setMinRadius();
     }

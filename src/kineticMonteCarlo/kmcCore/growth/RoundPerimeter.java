@@ -84,8 +84,8 @@ public class RoundPerimeter {
 
   }
 
-  public void setMaxPerimeter(){
-    currentRadius = 125;
+  public void setMaxPerimeter(float sizeX, float sizeY){
+    currentRadius = (int) Math.max(sizeX, sizeY)/2;
   }
   
   public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom originAtom) {
