@@ -84,26 +84,26 @@ public abstract class AbstractSimulation {
     totalTime = 0.0;
     coverage = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
-    restartFolderName = "results/run"+System.currentTimeMillis();
+    restartFolderName = "results/run" + System.currentTimeMillis();
     restart = new Restart(restartFolderName);
-    
+
     sizes = new int[2];
     //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
     sizes[0] = parser.getCartSizeX() / 2;
     sizes[1] = parser.getCartSizeY() / 2;
-    
+
     if (parser.doPsd()) {
       psd = new PsdSignature2D(sizes[0], sizes[1]);
       psd.setRestart(restart); // All the output should go the same folder
     }
-    
+
     System.out.println("_____________________________________________________________________________");
     System.out.println("Surface output: " + parser.printToImage());
     System.out.println("PSD     output: " + printPsd);
     System.out.println("Output format : " + "mko");
     System.out.println("Output folder : " + restartFolderName);
     System.out.println("_____________________________________________________________________________");
-    
+
     System.out.println("    I\tSimul t\tCover.\tCPU\tIslands");
     System.out.println("    \t(units)\t(%)\t(ms)");
     System.out.println("    _________________________________________________________________________");
@@ -113,22 +113,22 @@ public abstract class AbstractSimulation {
       kmc.reset();
       kmc.depositSeed();
       kmc.simulate();
-      
+
       printOutput();
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
     }
-    
+
     printFooter();
-    
+
     if (parser.doPsd()) {
       psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
       psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
-      if (parser.visualise()){
+      if (parser.visualise()) {
         new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
-              .setLogScale(true)
-              .setShift(true)
-              .printToImage(restartFolderName, 1);
+                .setLogScale(true)
+                .setShift(true)
+                .printToImage(restartFolderName, 1);
 
         new Frame2D("Sampled surface").setMesh(sampledSurface).printToImage(restartFolderName, 2);
       }
@@ -143,7 +143,7 @@ public abstract class AbstractSimulation {
   public void setKmc(AbstractKmc kmc) {
     this.kmc = kmc;
   }
-  
+
   public AbstractKmc getKmc() {
     return kmc;
   }
@@ -153,13 +153,13 @@ public abstract class AbstractSimulation {
   }
 
   public IRatesFactory getRates() {
-    return rates; 
+    return rates;
   }
-  
+
   public void setRates(IRatesFactory rates) {
     this.rates = rates;
   }
-  
+
   public IRatesFactory getRatesFactory() {
     return rates;
   }
@@ -182,13 +182,12 @@ public abstract class AbstractSimulation {
       Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
-  
-  
-  public static void printHeader(String message){
+
+  public static void printHeader(String message) {
     printHeader();
     System.out.println("Execution: " + message);
   }
-  
+
   private void printOutput() {
     System.out.format("    %03d", simulations);
     System.out.format("\t%.3f", (double) kmc.getTime());
@@ -223,7 +222,7 @@ public abstract class AbstractSimulation {
     System.out.print("\t" + kmc.getIslandCount());
     System.out.println("");
   }
-  
+
   private void printFooter() {
     System.out.println("\n\t__________________________________________________");
     System.out.println("\tAverage");
@@ -235,19 +234,21 @@ public abstract class AbstractSimulation {
     long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
     System.out.println("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60 + "\n");
   }
-  
+
   /**
    * Does nothing. Used to have a common interface
-   * @param i 
+   *
+   * @param i
    */
   protected void printToImage(int i) {
     //Do nothing
   }
-  
+
   /**
    * Does nothing. Used to have a common interface
+   *
    * @param folderName
-   * @param i 
+   * @param i
    */
   protected void printToImage(String folderName, int i) {
     //Do nothing
@@ -260,7 +261,7 @@ public abstract class AbstractSimulation {
   public ListConfiguration getConfig() {
     return config;
   }
-  
+
   String getRestartFolderName() {
     return restartFolderName;
   }
