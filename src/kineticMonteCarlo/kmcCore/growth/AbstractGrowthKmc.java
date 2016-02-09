@@ -190,9 +190,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     if (perimeterMustBeEnlarged(destinationAtom)) {
       int nextRadius = perimeter.goToNextRadius();
-      if (nextRadius > 0 && 
-              nextRadius < lattice.getCartSizeX()/2 &&
-              nextRadius < lattice.getCartSizeY()/2) {
+      if (nextRadius > 0
+              && nextRadius < lattice.getCartSizeX() / 2
+              && nextRadius < lattice.getCartSizeY() / 2) {
         if (perimeterType == RoundPerimeter.CIRCLE) {
           perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
           int newArea;
@@ -219,7 +219,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         if (performSimulationStep()) {
           break;
         }
-        if (extraOutput && getCoverage()*100 > k) {
+        if (extraOutput && getCoverage() * 100 > k) {
           k++;
           printData();
         }
