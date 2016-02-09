@@ -75,17 +75,24 @@ public class Parser {
   private boolean printToImage;
   private boolean psd;
   private boolean outputData;
-  private JSONArray outputDataFormat;
-  /** To have the possibility to choose between different output formats. For the moment TXT, MKO, PNG and EXTRA. */
-  private OutputType outputType;
-  /** This numbers reflect the power of two and gives the chance to choose between inclusively among TXT(0), MKO(1), PNG(2) and EXTRA(3). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
-  private long numericFormatCode;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
+  private JSONArray outputDataFormat;
+  /** To have the possibility to choose between different output formats. For the moment TXT, MKO,
+   * PNG and EXTRA.
+   */
+  private final OutputType outputType;
+  /** This numbers reflect the power of two and gives the chance to choose between inclusively among
+   * TXT(0), MKO(1), PNG(2) and EXTRA(3). So a number between 0 (no evaluator) and 7 (all the
+   * evaluators) has to be chosen.
+   */
+  private long numericFormatCode;
   
   // For evolutionary algorithm
-  private String evolutionaryAlgorithm; /** Can be original or dcma */
-  private boolean parallelEvaluator; /** Can be serial or threaded */
+  /** Can be original or dcma. */
+  private String evolutionaryAlgorithm;
+  /** Can be serial or threaded. */
+  private boolean parallelEvaluator; 
   private int populationSize;
   private int offspringSize;
   private int populationReplacement;
@@ -97,14 +104,23 @@ public class Parser {
   private double minValueGene;
   /** Maximum possible value that a gene can have. */
   private double maxValueGene;
-  /** Chooses between exponential distribution of the random genes (true) or linear distribution (false). */
+  /** Chooses between exponential distribution of the random genes (true) or linear distribution
+   * (false).
+   */
   private boolean expDistribution;
-  /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY. */
-  private EvaluatorType evaluatorType;
-  /** This numbers reflect the power of two and gives the chance to choose between inclusively among PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the evaluators) has to be chosen. */
+  /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
+   * and HIERARCHY.
+   */
+  private final EvaluatorType evaluatorType;
+  /** This numbers reflect the power of two and gives the chance to choose between inclusively among
+   * PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the
+   * evaluators) has to be chosen.
+   */
   private long numericStatusCode;
   private JSONArray evaluator;
-  /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options: "basic", "step", "reference" and "Frobenius". */
+  /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options:
+   * "basic", "step", "reference" and "Frobenius".
+   */
   private String hierarchyEvaluator;
   /** Search for "rates" or "energies". */
   private String evolutionarySearchType;
@@ -393,8 +409,7 @@ public class Parser {
     try {
       expDistribution = json.getBoolean("expDistribution");
     } catch (JSONException e) {
-      if (evolutionarySearchType.equals("energies")) expDistribution = false;
-      else expDistribution = true;
+      expDistribution = !evolutionarySearchType.equals("energies");
     }  
     try {
       hierarchyEvaluator = json.getString("hierarchyEvaluator");
@@ -458,6 +473,8 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
     System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
     System.out.printf("%32s: %s,\n", "\"psd\"", psd);
+    System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
+    System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -470,8 +487,6 @@ public class Parser {
     } else {
       System.out.printf("%32s: [ {\"type\": \"mko\"},],\n", "\"outputDataFormat\"");
     }
-    System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
-    System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
     System.out.printf("%32s: %s,\n", "\"parallelEvaluator\"", parallelEvaluator);
     System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
@@ -611,6 +626,8 @@ public class Parser {
   
   /**
    * Can be Si, Ag or graphene.
+   *
+   * @return
    */
   public String getCalculationMode() {
     return calculationMode;
@@ -625,8 +642,10 @@ public class Parser {
   }
   
   /**
-   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY.
-   * @return 
+   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME
+   * and HIERARCHY.
+   *
+   * @return
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);
@@ -666,15 +685,18 @@ public class Parser {
   
   /**
    * Number of repetitions or evaluations that a single Gene has to do.
-   * @return by default 18 
+   *
+   * @return by default 18
    */
   public int getRepetitions() {
     return repetitions;
   }
   
   /**
-   * Chooses between to read a reference PSD or doing an initial run to be the objective for the Evolutionary run
-   * @return 
+   * Chooses between to read a reference PSD or doing an initial run to be the objective for the
+   * Evolutionary run
+   *
+   * @return
    */
   public boolean getReadReference() {
     return readReference;
@@ -728,15 +750,19 @@ public class Parser {
   } 
   
   /**
-   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME and HIERARCHY.
-   * @return 
+   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME
+   * and HIERARCHY.
+   *
+   * @return
    */
   public EnumSet<evaluatorFlag> getEvaluatorTypes() {
     return evaluatorType.getStatusFlags(numericStatusCode);
   }
   
   /**
-   * If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options: "basic", "step", "reference" and "Frobenius".
+   * If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options:
+   * "basic", "step", "reference" and "Frobenius".
+   *
    * @return "basic", "step", "reference" or "Frobenius".
    */
   public String getHierarchyEvaluator() {
