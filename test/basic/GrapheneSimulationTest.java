@@ -47,7 +47,7 @@ public class GrapheneSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    parser.readFile("test/input/GrapheneParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
     assertEquals("graphene", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -71,11 +71,11 @@ public class GrapheneSimulationTest {
   public void testGraphene() {
     AbstractSimulation.printHeader("Graphene test");
     Parser parser = new Parser();
-    parser.readFile("test/input/GrapheneParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
 
     doGrapheneTest(parser);
 
-    Restart restart = new Restart("test/references/");
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
@@ -91,11 +91,11 @@ public class GrapheneSimulationTest {
   public void testGrapheneMany() {
     AbstractSimulation.printHeader("Graphene test many");
     Parser parser = new Parser();
-    parser.readFile("test/input/GrapheneManyParameters.json");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneManyParameters");
 
     doGrapheneTest(parser);
 
-    Restart restart = new Restart("test/references/");
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref0 = null;
     float[][] ref1 = null;

@@ -49,7 +49,7 @@ public class AgSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    parser.readFile("test/input/AgParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
     assertEquals("Ag", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -73,11 +73,11 @@ public class AgSimulationTest {
   public void testAg() {
     AbstractSimulation.printHeader("Ag test");
     Parser parser = new Parser();
-    parser.readFile("test/input/AgParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
 
     doAgTest(parser);
 
-    Restart restart = new Restart("test/references/");
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
@@ -96,7 +96,7 @@ public class AgSimulationTest {
   public void testAgSimple() {
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
-    parser.readFile("test/input/AgSmallParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgSmallParameters");
 
     doAgTest(parser);
   }
@@ -105,11 +105,11 @@ public class AgSimulationTest {
   public void testAgPsd() {
     AbstractSimulation.printHeader("Ag PSD test");
     Parser parser = new Parser();
-    parser.readFile("test/input/AgPsdParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgPsdParameters");
     
     doAgTest(parser);
     //TODO check that PSDs are equivalent
-    Restart restart = new Restart("test/references/");
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
@@ -140,11 +140,11 @@ public class AgSimulationTest {
   public void testAgMulti() {
     AbstractSimulation.printHeader("Ag multi test");
     Parser parser = new Parser();
-    parser.readFile("test/input/AgMultiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgMultiParameters");
 
     doAgTest(parser);
 
-    Restart restart = new Restart("test/references/");
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref0 = null;
     float[][] ref1 = null;

@@ -68,7 +68,7 @@ public class SiSimulationTest {
   public void testSi() {
     AbstractSimulation.printHeader("Si test");
     Parser parser = new Parser();
-    parser.readFile("test/input/SiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/SiParameters");
 
     AbstractSimulation simulation = new SiSimulation(parser);
 
@@ -77,7 +77,7 @@ public class SiSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    Restart restart = new Restart("test/references/");
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
     float[][] ref = null;
     try {
