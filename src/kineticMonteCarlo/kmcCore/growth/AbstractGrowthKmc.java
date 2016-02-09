@@ -414,25 +414,23 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   private AbstractGrowthAtom depositNewAtom() {
     AbstractGrowthAtom destinationAtom;
-    int i;
-    int j;
-    if (!justCentralFlake) {
-      do {
-        i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
-        j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
-        destinationAtom = lattice.getAtom(i, j);
-      } while (!depositAtom(destinationAtom));
-    } else {
+    if (justCentralFlake) {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
       } while (!depositAtom(destinationAtom));
-    }
-    destinationAtom.setDepositionTime(getTime());
-    if (!justCentralFlake) { // update the free area and the deposition rate counting just deposited atom
+    } else {
+      do {
+        int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
+        int j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
+        destinationAtom = lattice.getAtom(i, j);
+      } while (!depositAtom(destinationAtom));
+      // update the free area and the deposition rate counting just deposited atom
       freeArea--;
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
+    destinationAtom.setDepositionTime(getTime());
+    
     return destinationAtom;
   }
 
