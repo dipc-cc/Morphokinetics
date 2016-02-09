@@ -252,7 +252,7 @@ public class Parser {
     try {
       endTime = json.getDouble("endTime");
     } catch (JSONException e) {
-      endTime = 0.0035;
+      endTime = -1;
     }
     try {
       numberOfSimulations = json.getInt("numberOfSimulations");
