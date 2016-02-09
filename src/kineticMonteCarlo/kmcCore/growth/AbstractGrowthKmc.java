@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import utils.MathUtils;
@@ -437,6 +438,31 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return destinationAtom;
   }
 
+  private AbstractGrowthAtom depositInIslands() {
+      List<AbstractGrowthAtom> candidateAtoms = new ArrayList<>(100);
+      for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+        for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+          AbstractGrowthAtom atom = lattice.getAtom(i, j);
+          if (!atom.isOccupied() && atom.getType() != TERRACE && atom.getType() != BULK ) {
+            candidateAtoms.add(atom);
+          }
+        }
+      }
+      
+      int position = StaticRandom.rawInteger(candidateAtoms.size());
+      AbstractGrowthAtom perimeterAtom = candidateAtoms.get(position);
+      
+      for (int i = 0; i < perimeterAtom.getNumberOfNeighbours(); i++) {
+        if (!perimeterAtom.getNeighbour(i).isOccupied() && perimeterAtom.getNeighbour(i).getType() == TERRACE){
+          return perimeterAtom.getNeighbour(i);
+        }
+      }
+      return null; 
+      
+      //return candidateAtoms.get(position); //returns random island perimeter atom
+    }
+      
+      
   private boolean perimeterMustBeEnlarged(AbstractGrowthAtom destinationAtom) {
     
     if (perimeterType == RoundPerimeter.SQUARE) {
