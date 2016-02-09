@@ -32,7 +32,6 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
             (float) getParser().getCoverage() / 100,
             getParser().useMaxPerimeter(),
             getParser().getPerimeterType(),
-            getParser().depositInAllArea(),
             extraOutput));
     initialiseRates(getRates(), getKmc(), getParser());
   }

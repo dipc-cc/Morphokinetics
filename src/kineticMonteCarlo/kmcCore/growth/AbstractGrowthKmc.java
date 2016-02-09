@@ -47,10 +47,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Attribute to store temporally the current area of the simulation.
    */
   private int currentArea;
-  /**
-   * Chooses to deposit in all area in a single flake simulation.
-   */
-  private final boolean depositInAllArea;
   private double depositionRatePerSite;
   private int freeArea;
   private int islandCount;
@@ -65,7 +61,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           float coverage,
           boolean useMaxPerimeter,
           short perimeterType,
-          boolean depositInAllArea,
           boolean extraOutput) {
     super(config);
     this.justCentralFlake = justCentralFlake;
@@ -79,7 +74,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     modifiedBuffer = new ModifiedBuffer();
     getList().autoCleanup(true);
     this.perimeterType = perimeterType;
-    this.depositInAllArea = depositInAllArea;
     previousTime = 0;
     deltaTimeBetweenTwoAttachments = new ArrayList<>();
     deltaTimePerAtom = new ArrayList<>();  
@@ -116,13 +110,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     depositionRatePerSite = depositionRateML;
     
     if (justCentralFlake) {
-      if (depositInAllArea) {
-        currentArea = calculateAreaAsInKmcCanvas();
-        freeArea = currentArea;
-        getList().setDepositionProbability(depositionRatePerSite * calculateAreaAsInLattice());
-      } else {
-        getList().setDepositionProbability(depositionRateML / islandDensitySite);
-      }
+      getList().setDepositionProbability(depositionRateML / islandDensitySite);
     } else {
       freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
       getList().setDepositionProbability(depositionRatePerSite * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
@@ -436,28 +424,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } while (!depositAtom(destinationAtom));
     } else {
       do {
-        if (depositInAllArea) {
-          // Get random angle and radius 
-          double angle = StaticRandom.raw() * 2;
-          double randomRadius = StaticRandom.raw() * perimeter.getCurrentRadius();
-          // convert to Cartesian
-          double x = randomRadius * Math.cos(angle * Math.PI);
-          double y = randomRadius * Math.sin(angle * Math.PI);
-          // and, centre them
-          x += lattice.getCentralCartesianLocation().getX();
-          y += lattice.getCentralCartesianLocation().getY();
-          // Convert to lattice vector (hexagonal) coordinates
-          i = lattice.getiHexa(x, y);
-          j = lattice.getjHexa(y);
-
-          destinationAtom = lattice.getAtom(i, j);
-        } else { // old default case: deposit in the perimeter
-          destinationAtom = perimeter.getRandomPerimeterAtom();
-        }
+        // Deposit in the perimeter
+        destinationAtom = perimeter.getRandomPerimeterAtom();
       } while (!depositAtom(destinationAtom));
     }
     destinationAtom.setDepositionTime(getTime());
-    if (depositInAllArea) { // update the free area and the deposition rate counting just deposited atom
+    if (!justCentralFlake) { // update the free area and the deposition rate counting just deposited atom
       freeArea--;
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }

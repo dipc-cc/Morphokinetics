@@ -27,9 +27,8 @@ public class GrapheneKmc extends AbstractGrowthKmc {
           float coverage,
           boolean useMaxPerimeter,
           short perimeterType,
-          boolean depositInAllArea, 
           boolean extraOutput) {
-    super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType, depositInAllArea, extraOutput);
+    super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 

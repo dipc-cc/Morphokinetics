@@ -49,7 +49,7 @@ public class SimpleAgAgGrowthKmcSimulation {
     int sizeX = 256;
     int sizeY = (int) (sizeX / AbstractGrowthLattice.Y_RATIO);
 
-    AgKmc kmc = new AgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, (float) -1, false, RoundPerimeter.CIRCLE, false, false);
+    AgKmc kmc = new AgKmc(config, (int) (sizeX * 1.71), (int) (sizeY * 1.71), true, (float) -1, false, RoundPerimeter.CIRCLE, false);
 
     return kmc;
   }

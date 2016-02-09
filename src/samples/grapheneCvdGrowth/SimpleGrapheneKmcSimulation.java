@@ -55,7 +55,7 @@ public class SimpleGrapheneKmcSimulation {
     if ((sizeY & 1) != 0) {
       sizeY++;
     }
-    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, true, 0.3f, false, RoundPerimeter.CIRCLE, false, false);
+    GrapheneKmc kmc = new GrapheneKmc(config, sizeX, sizeY, true, 0.3f, false, RoundPerimeter.CIRCLE, false);
     return kmc;
   }
 
