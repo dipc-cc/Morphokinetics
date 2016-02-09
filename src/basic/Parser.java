@@ -62,6 +62,10 @@ public class Parser {
    * @see getDepositionFlux()
    */
   private double depositionFlux;
+  /**
+   * {@link getEndTime()}
+   */
+  private double endTime;
   private int numberOfSimulations;
   private int cartSizeX;
   private int cartSizeY;
@@ -139,6 +143,7 @@ public class Parser {
     temperature = 135;
     presure = 135;
     depositionFlux = 0.0035;
+    endTime = -1;
     numberOfSimulations = 10;
     cartSizeX = 256;
     cartSizeY = 256;
@@ -243,6 +248,11 @@ public class Parser {
       depositionFlux = json.getDouble("depositionFlux");
     } catch (JSONException e) {
       depositionFlux = 0.0035;
+    }
+    try {
+      endTime = json.getDouble("endTime");
+    } catch (JSONException e) {
+      endTime = 0.0035;
     }
     try {
       numberOfSimulations = json.getInt("numberOfSimulations");
@@ -468,6 +478,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"presure\"", presure);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
+    System.out.printf("%32s: %s,\n", "\"endTime\"", endTime);
     System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
@@ -557,6 +568,15 @@ public class Parser {
     return depositionFlux;
   }
 
+  /**
+   * Returns the maximum simulation time that each run has to do or -1 if there is no time limit.
+   *
+   * @return ending time of simulation or -1 (no time limit).
+   */
+  public double getEndTime() {
+    return endTime;
+  }
+  
   public int getNumberOfSimulations() {
     return numberOfSimulations;
   }
@@ -581,7 +601,7 @@ public class Parser {
     if (getCalculationMode().equals("Ag")) {
       return cartSizeX;
     } else {
-      return (int) (cartSizeX/1.5f);
+      return (int) (cartSizeX / 1.5f);
     }
   }
   
