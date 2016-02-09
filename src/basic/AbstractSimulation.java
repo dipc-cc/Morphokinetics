@@ -112,8 +112,12 @@ public abstract class AbstractSimulation {
       iterationStartTime = System.currentTimeMillis();
       kmc.reset();
       kmc.depositSeed();
-      kmc.simulate();
-
+      if (parser.getEndTime() > 0) { // simulate until fixed simulation end time
+        kmc.simulate(parser.getEndTime());
+      } else { // simulate until a given coverage or size (single flake)
+        kmc.simulate();
+      }
+      
       printOutput();
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
