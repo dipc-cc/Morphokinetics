@@ -27,9 +27,10 @@ java  -cp  .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../
 ant -f /home/jalberdi004/NetBeansProjectsGit/ekmc-project -Dnb.internal.action.name=test -Dignore.failing.tests=true test
 
 cd test/
-javac -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:/home/jalberdi004/software/netbeans-8.0.2/platform/modules/junit-4.10.jar:../src TestRunner.java
+javac -encoding "UTF-8" -cp .:../lib/colt.jar:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:/home/jalberdi004/software/netbeans-8.1/platform/modules/ext/junit-4.12.jar:../src TestRunner.java
 
-java -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:/home/jalberdi004/software/netbeans-8.0.2/platform/modules/junit-4.10.jar:../src TestRunner
+java -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:/home/jalberdi004/software/netbeans-8.1/platform/modules/ext/junit-4.12.jar:/home/jalberdi004/software/netbeans-8.1/platform/modules/ext/hamcrest-core-1.3.jar:../src TestRunner
+
 
 ==========================================
 ====== JAR                    ============
