@@ -66,12 +66,12 @@ public class Parser {
    * {@link getEndTime()}
    */
   private double endTime;
+  private double coverage;
   private int numberOfSimulations;
   private int cartSizeX;
   private int cartSizeY;
   private int binsLevels;
   private int extraLevels;
-  private int coverage;
   private boolean multithreaded;
   private boolean visualise;
   private boolean withGui;
@@ -143,13 +143,13 @@ public class Parser {
     temperature = 135;
     presure = 135;
     depositionFlux = 0.0035;
+    coverage = 30.0;
     endTime = -1;
     numberOfSimulations = 10;
     cartSizeX = 256;
     cartSizeY = 256;
     binsLevels = 100;
     extraLevels = 0;
-    coverage = 30;
     multithreaded = true;
     visualise = true;
     withGui = true;
@@ -255,6 +255,11 @@ public class Parser {
       endTime = -1;
     }
     try {
+      coverage = json.getDouble("coverage");
+    } catch (JSONException e) {
+      coverage = 30.0;
+    }
+    try {
       numberOfSimulations = json.getInt("numberOfSimulations");
     } catch (JSONException e) {
       numberOfSimulations = 10;
@@ -278,11 +283,6 @@ public class Parser {
       extraLevels = json.getInt("extraLevels");
     } catch (JSONException e) {
       extraLevels = 0;
-    }
-    try {
-      coverage = json.getInt("coverage");
-    } catch (JSONException e) {
-      coverage = 30;
     }
     try {
       multithreaded = json.getBoolean("multithreaded");
@@ -474,11 +474,11 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"cartSizeY\"", cartSizeY);
     System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
     System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
-    System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
     System.out.printf("%32s: %s,\n", "\"presure\"", presure);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
     System.out.printf("%32s: %s,\n", "\"endTime\"", endTime);
+    System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
     System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
@@ -577,6 +577,16 @@ public class Parser {
     return endTime;
   }
   
+  /**
+   * Returns the maximum coverage until a simulation is allowed to grow. Only valid for multi-flake
+   * simulations
+   *
+   * @return coverage
+   */
+  double getCoverage() {
+    return coverage;
+  }
+  
   public int getNumberOfSimulations() {
     return numberOfSimulations;
   }
@@ -615,10 +625,6 @@ public class Parser {
 
   int getExtraLevels() {
     return extraLevels;
-  }
-  
-  int getCoverage() {
-    return coverage;
   }
 
   public boolean isMultithreaded() {
