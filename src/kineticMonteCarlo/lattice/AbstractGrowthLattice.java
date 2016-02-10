@@ -190,9 +190,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
 
     AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
-      QuickSort.orderByAngle(perimeter, perimeter.length - 1);
+    QuickSort.orderByAngle(perimeter, perimeter.length - 1);
 
-      return perimeter;
+    return perimeter;
   }
 
   /**
@@ -222,22 +222,25 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           atoms[iHexa][jHexa].setOutside(false);
           if (abs(left - position.getX()) < 0.49
                   || abs(right - position.getX()) < 0.49
-                  || abs(top - position.getY()) < Y_RATIO/2
-                  || abs(bottom - position.getY()) < Y_RATIO/2) { 
-            if (abs(top - position.getY()) < Y_RATIO/2){
+                  || abs(top - position.getY()) < Y_RATIO / 2
+                  || abs(bottom - position.getY()) < Y_RATIO / 2) {
+            if (abs(top - position.getY()) < Y_RATIO / 2) {
               countTop++;
-              if (!includePerimeterList.contains(countTop)) continue;
+              if (!includePerimeterList.contains(countTop)) {
+                continue;
+              }
             }
-            if (abs(bottom - position.getY())< Y_RATIO/2) {
+            if (abs(bottom - position.getY()) < Y_RATIO / 2) {
               countBottom++;
-              if (!includePerimeterList.contains(countBottom)) continue;
+              if (!includePerimeterList.contains(countBottom)) {
+                continue;
+              }
             }
             perimeterList.add(atoms[iHexa][jHexa]);
           }
         } else {
           atoms[iHexa][jHexa].setOutside(true);
         }
-
       }
     }
 
