@@ -52,15 +52,17 @@ public abstract class AbstractPerimeterStatistics {
   }
 
   /**
-   * We increase the radius in 5 positions, 
-   * because statistics previously were done with this criteria
+   * We increase the radius in 1 position, because it should be the most precise and agrees the best
+   * with theory. Previously, it was added 5 by 5 because statistics were done with this criteria
+   *
    * @param radiusSize current radius size
-   * @return next radius size (current+5)
+   * @return next radius size (current+1)
    */
   public int getNextRadiusInSize(int radiusSize) {
-    radiusSize += 5; //increase in 5
-    if (radiusSize >= maxRadius) 
+    radiusSize += 1; //increase in 1
+    if (radiusSize >= maxRadius) {
       return -1;
+    }
     return radiusSize;
   }
 
