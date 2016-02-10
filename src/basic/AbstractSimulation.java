@@ -195,7 +195,7 @@ public abstract class AbstractSimulation {
   private void printOutput() {
     System.out.format("    %03d", simulations);
     System.out.format("\t%.3f", (double) kmc.getTime());
-    System.out.format("\t%.3f", kmc.getCoverage());
+    System.out.format("\t%.4f", kmc.getCoverage());
 
     sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]); // get the just simulated surface
     if (parser.outputData()) {
