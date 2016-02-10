@@ -17,7 +17,7 @@ cp ../scripts/perimeterStatistics/hopsPerAngleHexagonal* ../perimeterData/
 
 Run the code:
 In order to be able do a simulation with Morphokinetics, a file called "parameter" have to exits in the current directory. If there is not any file, default simulation is carried out.
-java  -cp  .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main.Morphokinetics
+java -Xss100M -cp  .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main.Morphokinetics
 
 
 ==========================================
