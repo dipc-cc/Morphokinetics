@@ -247,7 +247,11 @@ public class Parser {
     try {
       depositionFlux = json.getDouble("depositionFlux");
     } catch (JSONException e) {
-      depositionFlux = 0.0035;
+      if (calculationMode.equals("Ag")) {
+        depositionFlux = 0.0035;
+      } else { // Graphene (or etching, where it does not matter the deposition
+        depositionFlux = 0.000035;
+      }
     }
     try {
       endTime = json.getDouble("endTime");
