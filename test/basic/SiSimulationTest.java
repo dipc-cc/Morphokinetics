@@ -45,6 +45,7 @@ public class SiSimulationTest {
   public void testParameterFile() {
     Parser parser = new Parser();
     parser.readFile("test/input/SiParameters");
+    parser.print();
 
     assertEquals("Si", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
@@ -69,6 +70,7 @@ public class SiSimulationTest {
     AbstractSimulation.printHeader("Si test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/SiParameters");
+    parser.print();
 
     AbstractSimulation simulation = new SiSimulation(parser);
 

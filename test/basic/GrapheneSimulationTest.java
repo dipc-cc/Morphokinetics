@@ -48,6 +48,7 @@ public class GrapheneSimulationTest {
   public void testParameterFile() {
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
+    parser.print();
     assertEquals("graphene", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -72,6 +73,7 @@ public class GrapheneSimulationTest {
     AbstractSimulation.printHeader("Graphene test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
+    parser.print();
 
     doGrapheneTest(parser);
 
@@ -92,6 +94,7 @@ public class GrapheneSimulationTest {
     AbstractSimulation.printHeader("Graphene test many");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneManyParameters");
+    parser.print();
 
     doGrapheneTest(parser);
 

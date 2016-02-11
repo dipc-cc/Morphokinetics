@@ -50,6 +50,7 @@ public class AgSimulationTest {
   public void testParameterFile() {
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
+    parser.print();
     assertEquals("Ag", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
@@ -74,6 +75,7 @@ public class AgSimulationTest {
     AbstractSimulation.printHeader("Ag test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
+    parser.print();
 
     doAgTest(parser);
 
@@ -97,6 +99,7 @@ public class AgSimulationTest {
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgSmallParameters");
+    parser.print();
 
     doAgTest(parser);
   }
@@ -106,6 +109,7 @@ public class AgSimulationTest {
     AbstractSimulation.printHeader("Ag PSD test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgPsdParameters");
+    parser.print();
     
     doAgTest(parser);
     //TODO check that PSDs are equivalent
@@ -141,6 +145,7 @@ public class AgSimulationTest {
     AbstractSimulation.printHeader("Ag multi test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgMultiParameters");
+    parser.print();
 
     doAgTest(parser);
 
