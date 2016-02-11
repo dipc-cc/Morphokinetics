@@ -98,9 +98,16 @@ public class BasicKmc extends AbstractKmc {
   public int getIslandCount() {
     return -1;
   }
-
+  
+  /**
+   * Does nothing
+   *
+   * @param inputArea
+   * @param scale
+   * @return just in case, the input area
+   */
   @Override
   public float[][] increaseEmptyArea(float[][] inputArea, double scale) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return inputArea;
   }
 }
