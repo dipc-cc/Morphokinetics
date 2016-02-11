@@ -100,7 +100,7 @@ public class BasicKmc extends AbstractKmc {
   }
 
   @Override
-  public float[][] increaseEmptyArea(float[][] inputArea, int sizeX, int sizeY, double scale) {
+  public float[][] increaseEmptyArea(float[][] inputArea, double scale) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
