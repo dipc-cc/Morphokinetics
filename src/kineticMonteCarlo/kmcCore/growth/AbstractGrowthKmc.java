@@ -516,6 +516,21 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return surface;
   }
   
+  @Override
+  public float[][] increaseEmptyArea(float[][] inputArea, int sizeX, int sizeY, double scale){
+    float[][] outputArea = new float[(int) (sizeX * scale)][(int) (sizeY * scale)];
+    for (int x = 0; x < outputArea.length; x++) {
+      for (int y = 0; y < outputArea[0].length; y++) {
+        outputArea[x][y] = -1;
+      }
+    }
+    int padX = (int) ((outputArea.length - lattice.getHexaSizeI()) / 2);
+    int padY = (int) ((outputArea[0].length - lattice.getHexaSizeJ()) / 2);
+    for (int x = 0; x < inputArea.length; x++) {
+      System.arraycopy(inputArea[x], 0, outputArea[x + padX], padY, inputArea[0].length);
+    }
+    return outputArea;
+  }
   /**
    * Returns the coverage of the simulation. 
    * Thus, the number of occupied locations divided by the total number of locations

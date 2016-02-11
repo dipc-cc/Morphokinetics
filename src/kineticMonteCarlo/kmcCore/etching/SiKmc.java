@@ -112,4 +112,9 @@ public class SiKmc extends AbstractKmc {
   public int getIslandCount() {
     return -1;
   }
+
+  @Override
+  public float[][] increaseEmptyArea(float[][] inputArea, int sizeX, int sizeY, double scale) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 }
