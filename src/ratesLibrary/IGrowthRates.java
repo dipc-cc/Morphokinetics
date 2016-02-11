@@ -26,5 +26,7 @@ public interface IGrowthRates {
    */
   public double getIslandsDensityMl(double temperature);
 
-  public double getEnergy(int i, int j);
+  public double getEnergy(int i, int j);  
+  
+  public void setDiffusionMl(double diffusionMl);
 }

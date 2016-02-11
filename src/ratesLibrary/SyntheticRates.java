@@ -11,7 +11,7 @@ package ratesLibrary;
 public class SyntheticRates implements IGrowthRates {
 
   private double[][] rates;
-  private final double depositionRateInMlSecond = 0.000035;
+  private double diffusionMl = 0.000035;
   private final double islandDensityPerSite = 1 / 60000f;
 
   @Override
@@ -25,12 +25,12 @@ public class SyntheticRates implements IGrowthRates {
 
   @Override
   public double getDepositionRatePerSite(double temperature) {
-    return depositionRateInMlSecond;
+    return diffusionMl;
   }
 
   @Override
   public double getDepositionRatePerSite() {
-    return depositionRateInMlSecond;
+    return diffusionMl;
   }
   
   /**
@@ -126,5 +126,15 @@ public class SyntheticRates implements IGrowthRates {
   public double getEnergy(int i, int j) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-
+  
+  /**
+   * Diffusion Mono Layer (F). Utilised to calculate absorption rate. By default it F=0.000035 ML/s.
+   * The perimeter deposition is calculated multiplying F (this) and island density.
+   *
+   * @param diffusionMl diffusion mono layer (deposition flux)
+   */
+  @Override
+  public void setDiffusionMl(double diffusionMl) {
+    this.diffusionMl = diffusionMl;
+  }
 }

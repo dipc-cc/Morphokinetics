@@ -25,5 +25,6 @@ public interface IRatesFactory {
    * @return island density
    */
   public double getIslandDensity(double temperature);
-
+ 
+  public void setDepositionFlux(double depositionFlux);
 }

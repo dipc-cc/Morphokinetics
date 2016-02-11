@@ -28,7 +28,7 @@ public class RatesFromPrbCox implements IGrowthRates {
    * Diffusion Mono Layer (F). Utilised to calculate absorption rate. Cox et al. define to be 
    * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
    */
-  private final double diffusionMl;
+  private double diffusionMl;
   private double depositionRatePerSite;
   private final double P;
   private final double Pd;
@@ -300,4 +300,13 @@ public class RatesFromPrbCox implements IGrowthRates {
     return energies[i][j];
   }
 
+  /**
+   * Diffusion Mono Layer (F). Utilised to calculate absorption rate. Cox et al. define to be 
+   * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
+   * @param diffusionMl diffusion mono layer (deposition flux)
+   */
+  @Override
+  public void setDiffusionMl(double diffusionMl) {
+    this.diffusionMl = diffusionMl;
+  }
 }

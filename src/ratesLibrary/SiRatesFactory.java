@@ -45,5 +45,9 @@ public class SiRatesFactory implements IRatesFactory {
   public double getIslandDensity(double temperature) {
     throw new UnsupportedOperationException("This KMC does does not form islands.");
   }
-
+ 
+  @Override
+  public void setDepositionFlux(double depositionFlux) {
+    throw new UnsupportedOperationException("This KMC does does not form islands.");
+  }
 }
