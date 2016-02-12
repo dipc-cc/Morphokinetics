@@ -6,13 +6,13 @@ package basic.unitCell;
  */
 public class UnitCellAtom {
 
-//sólo para la creación de la unit cell
-  private short uc_x;
-  private short uc_y;
-  private short uc_z;
-  private UnitCellAtom[] neighs;
+  //sólo para la creación de la unit cell
+  private short ucX;
+  private short ucY;
+  private short ucZ;
+  private UnitCellAtom[] neighbours;
   private short num;
-  private int tipo;
+  private int type;
   private double posX, posY, posZ;
   private float posX_space, posY_space, posZ_space;
   private static float limitX, limitY, limitZ;
@@ -180,41 +180,41 @@ public class UnitCellAtom {
     this.posY = posY;
     this.posZ = posZ;
 
-    this.tipo = tipo;
-    neighs = new UnitCellAtom[4];
+    this.type = tipo;
+    neighbours = new UnitCellAtom[4];
 
     num = -1;
   }
 
   public void setUC(short uc_x, short uc_y, short uc_z) {
 
-    this.uc_x = uc_x;
-    this.uc_y = uc_y;
-    this.uc_z = uc_z;
+    this.ucX = uc_x;
+    this.ucY = uc_y;
+    this.ucZ = uc_z;
   }
 
   public short getUC_x() {
-    return uc_x;
+    return ucX;
   }
 
   public short getUC_y() {
-    return uc_y;
+    return ucY;
   }
 
   public short getUC_z() {
-    return uc_z;
+    return ucZ;
   }
 
   public int getTipo() {
-    return tipo;
+    return type;
   }
 
   public void setVecino(int vecino, UnitCellAtom v) {
-    neighs[vecino] = v;
+    neighbours[vecino] = v;
   }
 
   public UnitCellAtom getVecino(int vecino) {
-    return neighs[vecino];
+    return neighbours[vecino];
   }
 
   public short getNum() {

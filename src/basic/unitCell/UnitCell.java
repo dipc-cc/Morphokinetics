@@ -4,16 +4,16 @@ import java.util.ArrayList;
 
 /**
  *
- * @author
+ * @author Nestor
  */
 public class UnitCell {
 
-  private static final double LatticeDim = 5.430710f;
-  private static final double spaceCell = LatticeDim / 4.0f;
-  private static final int depth = 25;
+  private static final double LATTICE_DIM = 5.430710f;
+  private static final double SPACE_CELL = LATTICE_DIM / 4.0f;
+  private static final int DEPTH = 25;
   private double[][] g;
   private short[] neighs;
-  private byte[] n_block;
+  private byte[] nBlock;
   private double limitX, limitY, limitZ;
   private double limitXnt, limitYnt, limitZnt;
   private UnitCellAtom[][][] red0;
@@ -144,24 +144,24 @@ public class UnitCell {
 
     if (MillerZ >= 0) {
       limitI1 = 0;
-      limitI2 = depth;
+      limitI2 = DEPTH;
     } else {
-      limitI1 = depth;
+      limitI1 = DEPTH;
       limitI2 = 1;
     }
 
     for (int i = -limitI1; i < limitI2; i++) { //Eje Z
-      double posZ = LatticeDim * i;
-      for (int j = -depth; j < depth; j++) { //Y SC B
-        for (int k = -depth; k < depth; k++) { //X SC B
+      double posZ = LATTICE_DIM * i;
+      for (int j = -DEPTH; j < DEPTH; j++) { //Y SC B
+        for (int k = -DEPTH; k < DEPTH; k++) { //X SC B
           //posici�n X e Y en el SC C
 
           double posX = 0;
           double posY = 0;
-          posX = k * LatticeDim / 2;
-          posY = k * LatticeDim / 2;         //para X(B)
-          posX = posX + j * LatticeDim / 2;
-          posY = posY - j * LatticeDim / 2;    //para Y(B)
+          posX = k * LATTICE_DIM / 2;
+          posY = k * LATTICE_DIM / 2;         //para X(B)
+          posX = posX + j * LATTICE_DIM / 2;
+          posY = posY - j * LATTICE_DIM / 2;    //para Y(B)
 
           //ya tenemos las posiciones en el SC C del atomo, comprobamos si es parte del plano, y si lo es lo a�adimos a la lista    
           if (Math.abs(posX * MillerX + posY * MillerY + posZ * MillerZ) < 0.000001) {
@@ -181,17 +181,17 @@ public class UnitCell {
 
     //celula tipo 2 (altura 2)
     for (int i = -limitI1; i < limitI2; i++) { //Eje Z
-      double posZ = LatticeDim * i + (spaceCell * 2);
-      for (int j = -depth; j < depth; j++) { //Y SC B
-        for (int k = -depth; k < depth; k++) { //X SC B
+      double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
+      for (int j = -DEPTH; j < DEPTH; j++) { //Y SC B
+        for (int k = -DEPTH; k < DEPTH; k++) { //X SC B
           //posicion X e Y en el SC C
 
           double posX = 0;
           double posY = 0;
-          posX = (k + 0.5) * LatticeDim / 2;
-          posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-          posX = posX + (j + 0.5) * LatticeDim / 2;
-          posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
+          posX = (k + 0.5) * LATTICE_DIM / 2;
+          posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+          posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+          posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
 
           //ya tenemos las posiciones en el SC C del atomo, comprobamos si es parte del plano, y si lo es lo a�adimos a la lista    
           if (Math.abs(posX * MillerX + posY * MillerY + posZ * MillerZ) < 0.000001) {
@@ -314,9 +314,9 @@ public class UnitCell {
     double I_i, I_s, J_i, J_s, K_i, K_s;
     I_i = I_s = J_i = J_s = K_i = K_s = 0;
 
-    double tempI = P1_z / LatticeDim;
-    double tempK = (P1_x + P1_y) / (LatticeDim);
-    double tempJ = (P1_x - P1_y) / (LatticeDim);
+    double tempI = P1_z / LATTICE_DIM;
+    double tempK = (P1_x + P1_y) / (LATTICE_DIM);
+    double tempJ = (P1_x - P1_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -336,9 +336,9 @@ public class UnitCell {
       K_s = tempK;
     }
 
-    tempI = P2_z / LatticeDim;
-    tempK = (P2_x + P2_y) / (LatticeDim);
-    tempJ = (P2_x - P2_y) / (LatticeDim);
+    tempI = P2_z / LATTICE_DIM;
+    tempK = (P2_x + P2_y) / (LATTICE_DIM);
+    tempJ = (P2_x - P2_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -358,9 +358,9 @@ public class UnitCell {
       K_s = tempK;
     }
 
-    tempI = PZ_z / LatticeDim;
-    tempK = (PZ_x + PZ_y) / (LatticeDim);
-    tempJ = (PZ_x - PZ_y) / (LatticeDim);
+    tempI = PZ_z / LATTICE_DIM;
+    tempK = (PZ_x + PZ_y) / (LATTICE_DIM);
+    tempJ = (PZ_x - PZ_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -380,9 +380,9 @@ public class UnitCell {
       K_s = tempK;
     }
 //-------------------------------------------------------
-    tempI = (PZ_z + P1_z) / LatticeDim;
-    tempK = (PZ_x + PZ_y + P1_x + P1_y) / (LatticeDim);
-    tempJ = (PZ_x - PZ_y + P1_x - P1_y) / (LatticeDim);
+    tempI = (PZ_z + P1_z) / LATTICE_DIM;
+    tempK = (PZ_x + PZ_y + P1_x + P1_y) / (LATTICE_DIM);
+    tempJ = (PZ_x - PZ_y + P1_x - P1_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -402,9 +402,9 @@ public class UnitCell {
       K_s = tempK;
     }
 
-    tempI = (PZ_z + P2_z) / LatticeDim;
-    tempK = (PZ_x + PZ_y + P2_x + P2_y) / (LatticeDim);
-    tempJ = (PZ_x - PZ_y + P2_x - P2_y) / (LatticeDim);
+    tempI = (PZ_z + P2_z) / LATTICE_DIM;
+    tempK = (PZ_x + PZ_y + P2_x + P2_y) / (LATTICE_DIM);
+    tempJ = (PZ_x - PZ_y + P2_x - P2_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -424,9 +424,9 @@ public class UnitCell {
       K_s = tempK;
     }
 
-    tempI = (P1_z + P2_z) / LatticeDim;
-    tempK = (P1_x + P1_y + P2_x + P2_y) / (LatticeDim);
-    tempJ = (P1_x - P1_y + P2_x - P2_y) / (LatticeDim);
+    tempI = (P1_z + P2_z) / LATTICE_DIM;
+    tempK = (P1_x + P1_y + P2_x + P2_y) / (LATTICE_DIM);
+    tempJ = (P1_x - P1_y + P2_x - P2_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -447,9 +447,9 @@ public class UnitCell {
     }
 //----------------------------------------------------
 
-    tempI = (P1_z + P2_z + PZ_z) / LatticeDim;
-    tempK = (P1_x + P1_y + P2_x + P2_y + PZ_x + PZ_y) / (LatticeDim);
-    tempJ = (P1_x - P1_y + P2_x - P2_y + PZ_x - PZ_y) / (LatticeDim);
+    tempI = (P1_z + P2_z + PZ_z) / LATTICE_DIM;
+    tempK = (P1_x + P1_y + P2_x + P2_y + PZ_x + PZ_y) / (LATTICE_DIM);
+    tempJ = (P1_x - P1_y + P2_x - P2_y + PZ_x - PZ_y) / (LATTICE_DIM);
     if (I_i > tempI) {
       I_i = tempI;
     }
@@ -492,14 +492,14 @@ public class UnitCell {
       return -2;
     }
 
-    interconecta();
+    interconect();
 
     //----------------------------------------
     // Asignamos la celula origen y numeramos
     //----------------------------------------
     neighs = new short[4 * cuantos];
     Cells_Pointer = new UnitCellAtom[cuantos];
-    n_block = new byte[4 * cuantos];
+    nBlock = new byte[4 * cuantos];
 
 //--------------------------------------------------------------------------
 // Ahora debemos crear las matrices de neigh y n_block
@@ -539,11 +539,11 @@ public class UnitCell {
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
-          posX = k * LatticeDim / 2;
-          posY = k * LatticeDim / 2; //para X(B)
-          posX = posX + j * LatticeDim / 2;
-          posY = posY - j * LatticeDim / 2; //para Y(B)
-          double posZ = LatticeDim * i;
+          posX = k * LATTICE_DIM / 2;
+          posY = k * LATTICE_DIM / 2; //para X(B)
+          posX = posX + j * LATTICE_DIM / 2;
+          posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+          double posZ = LATTICE_DIM * i;
           //ahora hay que pasar al nuevo sistema de coordenadas
           double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
           double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -566,11 +566,11 @@ public class UnitCell {
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
-          posX = k * LatticeDim / 2;
-          posY = k * LatticeDim / 2; //para X(B)
-          posX = posX + (j + 0.5) * LatticeDim / 2;
-          posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-          double posZ = LatticeDim * i + spaceCell;
+          posX = k * LATTICE_DIM / 2;
+          posY = k * LATTICE_DIM / 2; //para X(B)
+          posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+          posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+          double posZ = LATTICE_DIM * i + SPACE_CELL;
 
           //ahora hay que pasar al nuevo sistema de coordenadas
           double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
@@ -594,11 +594,11 @@ public class UnitCell {
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
-          posX = (k + 0.5) * LatticeDim / 2;
-          posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-          posX = posX + (j + 0.5) * LatticeDim / 2;
-          posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-          double posZ = LatticeDim * i + (spaceCell * 2);
+          posX = (k + 0.5) * LATTICE_DIM / 2;
+          posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+          posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+          posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+          double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
           //ahora hay que pasar al nuevo sistema de coordenadas
           double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
@@ -623,11 +623,11 @@ public class UnitCell {
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
-          posX = (k + 0.5) * LatticeDim / 2;
-          posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-          posX = posX + j * LatticeDim / 2;
-          posY = posY - j * LatticeDim / 2; //para Y(B)
-          double posZ = LatticeDim * i + (spaceCell * 3);
+          posX = (k + 0.5) * LATTICE_DIM / 2;
+          posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+          posX = posX + j * LATTICE_DIM / 2;
+          posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+          double posZ = LATTICE_DIM * i + (SPACE_CELL * 3);
           //ahora hay que pasar al nuevo sistema de coordenadas
           double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
           double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -697,7 +697,7 @@ public class UnitCell {
     return -1;
   }
 
-  protected void interconecta() {
+  protected void interconect() {
     //celula tipo 0 (abajo del todo)
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
@@ -722,7 +722,7 @@ public class UnitCell {
       }
     }
 
-//celula tipo 1 
+    //celula tipo 1 
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
         for (int k = this.K_i; k < this.K_s; k++) { //X SC B
@@ -743,7 +743,7 @@ public class UnitCell {
       }
     }
 
-//celula tipo 2
+    //celula tipo 2
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
         for (int k = this.K_i; k < this.K_s; k++) { //X SC B
@@ -803,20 +803,20 @@ public class UnitCell {
           if (red0[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red0[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
             Cells_Pointer[num] = red0[i - this.I_i][j - this.J_i][k - this.K_i];
-                        //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
+            //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
             //para cada vecino...
 
             //cont++;
             if (red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {
               neighs[4 * num] = red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0).getNum();
-              n_block[4 * num] = 0;
+              nBlock[4 * num] = 0;
             } else {
 
-              double posX = k * LatticeDim / 2;
-              double posY = k * LatticeDim / 2; //para X(B)
-              posX = posX + (j - 0.5) * LatticeDim / 2;
-              posY = posY - (j - 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + spaceCell;
+              double posX = k * LATTICE_DIM / 2;
+              double posY = k * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j - 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j - 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + SPACE_CELL;
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -848,7 +848,7 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num] = (byte) n_bl;
+              nBlock[4 * num] = (byte) n_bl;
 
               neighs[4 * num] = findAtom(Xr, Yr, Zr);
             }
@@ -856,15 +856,15 @@ public class UnitCell {
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1) != null) {
               neighs[4 * num + 1] = red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1).getNum();
-              n_block[4 * num + 1] = 0;
+              nBlock[4 * num + 1] = 0;
               //System.out.println(num+" Vecino 1: "+red0[i-this.I_i][j-this.J_i][k-this.K_i].getVecino(1).getNum());
             } else {
 
-              double posX = k * LatticeDim / 2;
-              double posY = k * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 0.5) * LatticeDim / 2;
-              posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + spaceCell;
+              double posX = k * LATTICE_DIM / 2;
+              double posY = k * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + SPACE_CELL;
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -896,21 +896,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 //if (i==0 && j==0 && k==0) System.out.println(">>"+Xr+" "+Yr+" "+Zr);
-              n_block[4 * num + 1] = (byte) n_bl;
+              nBlock[4 * num + 1] = (byte) n_bl;
               neighs[4 * num + 1] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2) != null) {
               neighs[4 * num + 2] = red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2).getNum();
-              n_block[4 * num + 2] = 0;
+              nBlock[4 * num + 2] = 0;
             } else {
 
-              double posX = (k - 0.5) * LatticeDim / 2;
-              double posY = (k - 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + j * LatticeDim / 2;
-              posY = posY - j * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * (i - 1) + (spaceCell * 3);
+              double posX = (k - 0.5) * LATTICE_DIM / 2;
+              double posY = (k - 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + j * LATTICE_DIM / 2;
+              posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * (i - 1) + (SPACE_CELL * 3);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -942,21 +942,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 2] = (byte) n_bl;
+              nBlock[4 * num + 2] = (byte) n_bl;
               neighs[4 * num + 2] = findAtom(Xr, Yr, Zr);
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
             if (red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3) != null) {
               neighs[4 * num + 3] = red0[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3).getNum();
-              n_block[4 * num + 3] = 0;
+              nBlock[4 * num + 3] = 0;
             } else {
 
-              double posX = (k + 0.5) * LatticeDim / 2;
-              double posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + j * LatticeDim / 2;
-              posY = posY - j * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * (i - 1) + (spaceCell * 3);
+              double posX = (k + 0.5) * LATTICE_DIM / 2;
+              double posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + j * LATTICE_DIM / 2;
+              posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * (i - 1) + (SPACE_CELL * 3);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -987,7 +987,7 @@ public class UnitCell {
                 Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
-              n_block[4 * num + 3] = (byte) n_bl;
+              nBlock[4 * num + 3] = (byte) n_bl;
               neighs[4 * num + 3] = findAtom(Xr, Yr, Zr);
             }
           }
@@ -1012,14 +1012,14 @@ public class UnitCell {
             //   cont++;
             if (red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {
               neighs[4 * num] = red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0).getNum();
-              n_block[4 * num] = 0;
+              nBlock[4 * num] = 0;
             } else {
 
-              double posX = k * LatticeDim / 2;
-              double posY = k * LatticeDim / 2; //para X(B)
-              posX = posX + j * LatticeDim / 2;
-              posY = posY - j * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i;
+              double posX = k * LATTICE_DIM / 2;
+              double posY = k * LATTICE_DIM / 2; //para X(B)
+              posX = posX + j * LATTICE_DIM / 2;
+              posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i;
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1050,21 +1050,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num] = (byte) n_bl;
+              nBlock[4 * num] = (byte) n_bl;
               neighs[4 * num] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1) != null) {
               neighs[4 * num + 1] = red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1).getNum();
-              n_block[4 * num + 1] = 0;
+              nBlock[4 * num + 1] = 0;
             } else {
 
-              double posX = k * LatticeDim / 2;
-              double posY = k * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 1) * LatticeDim / 2;
-              posY = posY - (j + 1) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i;
+              double posX = k * LATTICE_DIM / 2;
+              double posY = k * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 1) * LATTICE_DIM / 2;
+              posY = posY - (j + 1) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i;
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1096,21 +1096,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 1] = (byte) n_bl;
+              nBlock[4 * num + 1] = (byte) n_bl;
               neighs[4 * num + 1] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2) != null) {
               neighs[4 * num + 2] = red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2).getNum();
-              n_block[4 * num + 2] = 0;
+              nBlock[4 * num + 2] = 0;
             } else {
 
-              double posX = (k - 0.5) * LatticeDim / 2;
-              double posY = (k - 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 0.5) * LatticeDim / 2;
-              posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + (spaceCell * 2);
+              double posX = (k - 0.5) * LATTICE_DIM / 2;
+              double posY = (k - 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1142,21 +1142,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 2] = (byte) n_bl;
+              nBlock[4 * num + 2] = (byte) n_bl;
               neighs[4 * num + 2] = findAtom(Xr, Yr, Zr);
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
             if (red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3) != null) {
               neighs[4 * num + 3] = red1[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3).getNum();
-              n_block[4 * num + 3] = 0;
+              nBlock[4 * num + 3] = 0;
             } else {
 
-              double posX = (k + 0.5) * LatticeDim / 2;
-              double posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 0.5) * LatticeDim / 2;
-              posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + (spaceCell * 2);
+              double posX = (k + 0.5) * LATTICE_DIM / 2;
+              double posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1187,7 +1187,7 @@ public class UnitCell {
                 Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
-              n_block[4 * num + 3] = (byte) n_bl;
+              nBlock[4 * num + 3] = (byte) n_bl;
               neighs[4 * num + 3] = findAtom(Xr, Yr, Zr);
             }
           }
@@ -1210,14 +1210,14 @@ public class UnitCell {
             //  cont++;
             if (red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {
               neighs[4 * num] = red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0).getNum();
-              n_block[4 * num] = 0;
+              nBlock[4 * num] = 0;
             } else {
 
-              double posX = (k + 0.5) * LatticeDim / 2;
-              double posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + j * LatticeDim / 2;
-              posY = posY - j * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + (spaceCell * 3);
+              double posX = (k + 0.5) * LATTICE_DIM / 2;
+              double posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + j * LATTICE_DIM / 2;
+              posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + (SPACE_CELL * 3);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1248,21 +1248,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num] = (byte) n_bl;
+              nBlock[4 * num] = (byte) n_bl;
               neighs[4 * num] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1) != null) {
               neighs[4 * num + 1] = red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1).getNum();
-              n_block[4 * num + 1] = 0;
+              nBlock[4 * num + 1] = 0;
             } else {
 
-              double posX = (k + 0.5) * LatticeDim / 2;
-              double posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 1) * LatticeDim / 2;
-              posY = posY - (j + 1) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + (spaceCell * 3);
+              double posX = (k + 0.5) * LATTICE_DIM / 2;
+              double posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 1) * LATTICE_DIM / 2;
+              posY = posY - (j + 1) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + (SPACE_CELL * 3);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1294,21 +1294,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 1] = (byte) n_bl;
+              nBlock[4 * num + 1] = (byte) n_bl;
               neighs[4 * num + 1] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2) != null) {
               neighs[4 * num + 2] = red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2).getNum();
-              n_block[4 * num + 2] = 0;
+              nBlock[4 * num + 2] = 0;
             } else {
 
-              double posX = k * LatticeDim / 2;
-              double posY = k * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 0.5) * LatticeDim / 2;
-              posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + spaceCell;
+              double posX = k * LATTICE_DIM / 2;
+              double posY = k * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + SPACE_CELL;
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1340,21 +1340,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 2] = (byte) n_bl;
+              nBlock[4 * num + 2] = (byte) n_bl;
               neighs[4 * num + 2] = findAtom(Xr, Yr, Zr);
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
             if (red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3) != null) {
               neighs[4 * num + 3] = red2[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3).getNum();
-              n_block[4 * num + 3] = 0;
+              nBlock[4 * num + 3] = 0;
             } else {
 
-              double posX = (k + 1) * LatticeDim / 2;
-              double posY = (k + 1) * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 0.5) * LatticeDim / 2;
-              posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + spaceCell;
+              double posX = (k + 1) * LATTICE_DIM / 2;
+              double posY = (k + 1) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + SPACE_CELL;
               //if (red2[i-this.I_i][j-this.J_i][k-this.K_i].getNum()==11) System.out.println(">"+posX+" "+posY+" "+posZ);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
@@ -1386,7 +1386,7 @@ public class UnitCell {
                 Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
-              n_block[4 * num + 3] = (byte) n_bl;
+              nBlock[4 * num + 3] = (byte) n_bl;
               neighs[4 * num + 3] = findAtom(Xr, Yr, Zr);
 
             }
@@ -1410,14 +1410,14 @@ public class UnitCell {
             cont++;
             if (red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0) != null) {
               neighs[4 * num] = red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(0).getNum();
-              n_block[4 * num] = 0;
+              nBlock[4 * num] = 0;
             } else {
 
-              double posX = (k + 0.5) * LatticeDim / 2;
-              double posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + (j - 0.5) * LatticeDim / 2;
-              posY = posY - (j - 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + (spaceCell * 2);
+              double posX = (k + 0.5) * LATTICE_DIM / 2;
+              double posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j - 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j - 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1448,21 +1448,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num] = (byte) n_bl;
+              nBlock[4 * num] = (byte) n_bl;
               neighs[4 * num] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1) != null) {
               neighs[4 * num + 1] = red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(1).getNum();
-              n_block[4 * num + 1] = 0;
+              nBlock[4 * num + 1] = 0;
             } else {
 
-              double posX = (k + 0.5) * LatticeDim / 2;
-              double posY = (k + 0.5) * LatticeDim / 2; //para X(B)
-              posX = posX + (j + 0.5) * LatticeDim / 2;
-              posY = posY - (j + 0.5) * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * i + (spaceCell * 2);
+              double posX = (k + 0.5) * LATTICE_DIM / 2;
+              double posY = (k + 0.5) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + (j + 0.5) * LATTICE_DIM / 2;
+              posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1494,21 +1494,21 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 1] = (byte) n_bl;
+              nBlock[4 * num + 1] = (byte) n_bl;
               neighs[4 * num + 1] = findAtom(Xr, Yr, Zr);
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
             if (red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2) != null) {
               neighs[4 * num + 2] = red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(2).getNum();
-              n_block[4 * num + 2] = 0;
+              nBlock[4 * num + 2] = 0;
             } else {
 
-              double posX = k * LatticeDim / 2;
-              double posY = k * LatticeDim / 2; //para X(B)
-              posX = posX + j * LatticeDim / 2;
-              posY = posY - j * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * (i + 1);
+              double posX = k * LATTICE_DIM / 2;
+              double posY = k * LATTICE_DIM / 2; //para X(B)
+              posX = posX + j * LATTICE_DIM / 2;
+              posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * (i + 1);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1540,7 +1540,7 @@ public class UnitCell {
                 n_bl = n_bl + 3 * 16;
               }
 
-              n_block[4 * num + 2] = (byte) n_bl;
+              nBlock[4 * num + 2] = (byte) n_bl;
               neighs[4 * num + 2] = findAtom(Xr, Yr, Zr);
 
             }
@@ -1548,14 +1548,14 @@ public class UnitCell {
 
             if (red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3) != null) {
               neighs[4 * num + 3] = red3[i - this.I_i][j - this.J_i][k - this.K_i].getVecino(3).getNum();
-              n_block[4 * num + 3] = 0;
+              nBlock[4 * num + 3] = 0;
             } else {
 
-              double posX = (k + 1) * LatticeDim / 2;
-              double posY = (k + 1) * LatticeDim / 2; //para X(B)
-              posX = posX + j * LatticeDim / 2;
-              posY = posY - j * LatticeDim / 2; //para Y(B)
-              double posZ = LatticeDim * (i + 1);
+              double posX = (k + 1) * LATTICE_DIM / 2;
+              double posY = (k + 1) * LATTICE_DIM / 2; //para X(B)
+              posX = posX + j * LATTICE_DIM / 2;
+              posY = posY - j * LATTICE_DIM / 2; //para Y(B)
+              double posZ = LATTICE_DIM * (i + 1);
 
               double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
               double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
@@ -1586,7 +1586,7 @@ public class UnitCell {
                 Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
-              n_block[4 * num + 3] = (byte) n_bl;
+              nBlock[4 * num + 3] = (byte) n_bl;
               neighs[4 * num + 3] = findAtom(Xr, Yr, Zr);
             }
           }
@@ -1601,6 +1601,6 @@ public class UnitCell {
   }
 
   public byte[] getNBlock() {
-    return n_block;
+    return nBlock;
   }
 }
