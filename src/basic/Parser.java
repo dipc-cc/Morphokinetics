@@ -66,11 +66,15 @@ public class Parser {
    * See {@link #getEndTime()}
    */
   private double endTime;
-  private double coverage;  
+  private double coverage;
   /**
    * See {@link #getPsdScale()}
    */
   private double psdScale;
+  /**
+   * See {@link #getPsdExtend()}
+   */
+  private double psdExtend;
   private int numberOfSimulations;
   private int cartSizeX;
   private int cartSizeY;
@@ -149,6 +153,7 @@ public class Parser {
     depositionFlux = 0.0035;
     coverage = 30.0;
     psdScale = 0.5;
+    psdExtend = 1;
     endTime = -1;
     numberOfSimulations = 10;
     cartSizeX = 256;
@@ -272,6 +277,11 @@ public class Parser {
       psdScale = json.getDouble("psdScale");
     } catch (JSONException e) {
       psdScale = 0.5;
+    }
+    try {
+      psdExtend = json.getDouble("psdExtend");
+    } catch (JSONException e) {
+      psdExtend = 1;
     }
     try {
       numberOfSimulations = json.getInt("numberOfSimulations");
@@ -494,6 +504,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"endTime\"", endTime);
     System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
     System.out.printf("%32s: %s,\n", "\"psdScale\"", psdScale);
+    System.out.printf("%32s: %s,\n", "\"psdExtend\"", psdExtend);
     System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
@@ -604,11 +615,117 @@ public class Parser {
   
   /**
    * Factor with which has to be multiplied the size of the surface to calculate the PSD.
+   * 
+   * Converts this island:
+         <pre> {@code                                                                 
+                       'H                                   
+       :H    ;HH;                                 
+        HH.   #HH                                 
+         HH`#HHH`     #HHHHH                      
+         .HHHHHH      ,HHHHH                      
+          #HHHH;H;`     #H'``              HHH`   
+              HHHHH#H`   HHHH`       #HHH#HHHHH   
+            :#HHHHHHH  ` :H;;#H   ;:`:#HHHHH;:    
+              #HHHHH :HH; :HHH   :HHHHHHHHHHH;    
+                HHHHHHHH` :#H;    HHHHHH;,HHHH;   
+                  #HHHHHHHHHHH #HHHHHH#H   HHHH`  
+                  :HHHHHHHHHHHHHHHHHH`      :H:`  
+                  :HH`  HHHHHHH HHHHHH            
+                  HH` :HHH::HHH:`#HHHH:`          
+                    HHHHHHH`#HHHH  #HHH`          
+                    HHH;#HH; HHH;                 
+                     HHHHHH                       
+                      #HHHH`                      
+                :#'`  :HH'                        
+                :HHH#HHHH;                        
+                 ;HHHHHHH`                        
+                  `.+HHHHH`                         
+        }  </pre>                                                                               
    *
+   * to this smaller one:
+   <pre>
+   {@code
+               H  H.                
+              `HHH   HHH           
+               ;HHH:  H';      ;H: 
+                ,HHH;;.H+; #`HHH,  
+                  +HHH +H .HH';HH' 
+                   +HHHHHHH#H   .. 
+                   + ,H'+# HH+     
+                    HHHH`+.        
+                     H+#           
+                  ;HHHH            
+                    ;HH    
+    } </pre>
    * @return psdScale
    */
   double getPsdScale() {
     return psdScale;
+  }
+  
+  /**
+   * Factor with which has to be added as empty area to the surface.
+   * Used to decide the scale from this island:
+   * <pre> {@code 
+:::::::::::::::::::::::::
+:::::::::::::::::::::::::
+::::@::@.::::::::::::::::
+::::`@@@:::@@@:::::::::::
+:::::;@@@:::@';::::::;@::
+::::::,@@@;;.@+;:#`@@@,::
+::::::::+@@@ +@:.@@';@@':
+:::::::::+@@@@@@@#@:::..:
+:::::::::+ ,@'+# @@+:::::
+::::::::::@@@@,+.::::::::
+:::::::::::@+#:::::::::::
+::::::::;@@@@::::::::::::
+::::::::::;@@::::::::::::
+:::::::::::::::::::::::::
+:::::::::::::::::::::::::
+:::::::::::::::::::::::::
+} </pre>
+    and this filled one:
+    * <pre> {@code
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::@::::::::::::::::::::::::::::::
+::::::::::::::::,@:;@:::::::::::::::::::::::::::::
+:::::::::::::::::'@@.:::+@::::::::,.::::::::::::::
+:::::::::::::::::::@@@@::@+@:::@@@@@::::::::::::::
+::::::::::::::::::::'@@@+ @.:@@@@'@.::::::::::::::
+::::::::::::::::::::::@@@@@;@@@:::#@::::::::::::::
+:::::::::::::::::::::.@ @@@@ @@@::::::::::::::::::
+::::::::::::::::::::::#@@@:@@::;::::::::::::::::::
+::::::::::::::::::::::::@@::::::::::::::::::::::::
+::::::::::::::::::::.@+@@:::::::::::::::::::::::::
+:::::::::::::::::::::'@@@,::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+  }</pre>
+   * @see kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc#increaseEmptyArea(float[][], double) 
+   * @return psdExtend
+   */
+  double getPsdExtend() {
+    return psdExtend;
   }
   
   public int getNumberOfSimulations() {
