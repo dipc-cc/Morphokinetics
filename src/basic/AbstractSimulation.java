@@ -89,8 +89,8 @@ public abstract class AbstractSimulation {
 
     sizes = new int[2];
     //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
-    sizes[0] = parser.getCartSizeX() / 2;
-    sizes[1] = parser.getCartSizeY() / 2;
+    sizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
+    sizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
 
     if (parser.doPsd()) {
       psd = new PsdSignature2D(sizes[0], sizes[1]);
