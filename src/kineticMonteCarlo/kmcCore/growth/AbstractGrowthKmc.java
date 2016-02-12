@@ -528,7 +528,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public float[][] increaseEmptyArea(float[][] inputArea, double scale){
     // ensure that scale is bigger than one
     if (scale <= 1 ) {
-      System.out.println("Warning: is not going to add any empty area");
       return inputArea;
     }
     
