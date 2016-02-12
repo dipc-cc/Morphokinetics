@@ -50,7 +50,7 @@ public class AgRatesFactory implements IRatesFactory {
    * Gene 4 from Ea   (2,2)
    * Gene 5 from Eb   (5,5)
    * @param temperature
-   * @return 
+   * @return rates[6]
    */
   public double[] getReduced6Rates(int temperature) {
     double[] rates = new double[6];

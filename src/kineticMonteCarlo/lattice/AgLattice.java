@@ -147,9 +147,10 @@ public class AgLattice extends AbstractGrowthLattice {
     
   /**
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * 
    * @param xCart Cartesian X coordinate
    * @param yCart Cartesian Y coordinate
-   * @return 
+   * @return i hexagonal position
    */
   @Override
   public int getiHexa(double xCart, double yCart) {
@@ -172,8 +173,9 @@ public class AgLattice extends AbstractGrowthLattice {
   
   /**
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * 
    * @param yCart Cartesian Y coordinate
-   * @return 
+   * @return j hexagonal position
    */
   @Override
   public int getjHexa(double yCart) {
@@ -189,11 +191,12 @@ public class AgLattice extends AbstractGrowthLattice {
   }
   
   /**
-   * The Cartesian X is the location I, plus the half of J.
-   * We have to do the module to ensure that fits in a rectangular Cartesian mesh
+   * The Cartesian X is the location I, plus the half of J. We have to do the module to ensure that
+   * fits in a rectangular Cartesian mesh.
+   *
    * @param iHexa
    * @param jHexa
-   * @return
+   * @return x Cartesian position
    */
   @Override
   public double getCartX(int iHexa, int jHexa) {
@@ -202,10 +205,10 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   /**
-   * Simple relation between Y (Cartesian) and J (hexagonal),
-   * with Y_RATIO (=sin 60º)
+   * Simple relation between Y (Cartesian) and J (hexagonal), with Y_RATIO (=sin 60º).
+   *
    * @param jHexa
-   * @return
+   * @return y Cartesian position
    */
   @Override
   public double getCartY(int jHexa) {

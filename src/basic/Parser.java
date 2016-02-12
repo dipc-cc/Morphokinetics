@@ -59,16 +59,16 @@ public class Parser {
   private int temperature;
   private int presure;
   /**
-   * See {@see getDepositionFlux()}
+   * See {@link #getDepositionFlux()}
    */
   private double depositionFlux;
   /**
-   * See {@see getEndTime()}
+   * See {@link #getEndTime()}
    */
   private double endTime;
   private double coverage;  
   /**
-   * See {@see getPsdScale}
+   * See {@link #getPsdScale()}
    */
   private double psdScale;
   private int numberOfSimulations;
@@ -677,7 +677,7 @@ public class Parser {
   /**
    * Can be Si, Ag or graphene.
    *
-   * @return
+   * @return calculation mode. Either: "Si", "Ag" or "graphene"
    */
   public String getCalculationMode() {
     return calculationMode;
@@ -692,10 +692,10 @@ public class Parser {
   }
   
   /**
-   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME
-   * and HIERARCHY.
+   * To have the possibility to output to different file formats. For the moment only TXT, PNG, MKO
+   * or EXTRA
    *
-   * @return
+   * @return output format. Either: TXT, PNG, MKO or EXTRA
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);
@@ -746,7 +746,7 @@ public class Parser {
    * Chooses between to read a reference PSD or doing an initial run to be the objective for the
    * Evolutionary run
    *
-   * @return
+   * @return read reference?
    */
   public boolean getReadReference() {
     return readReference;
@@ -800,10 +800,10 @@ public class Parser {
   } 
   
   /**
-   * To have the possibility to choose between different evaluators. For the moment only PSD, TIME
-   * and HIERARCHY.
+   * To have the possibility to choose between different evaluators in genetic algorithm runs. For
+   * the moment only PSD, TIME and HIERARCHY.
    *
-   * @return
+   * @return evaluator type. Either: PSD, TIME and HIERARCHY.
    */
   public EnumSet<evaluatorFlag> getEvaluatorTypes() {
     return evaluatorType.getStatusFlags(numericStatusCode);
@@ -835,7 +835,7 @@ public class Parser {
   /**
    * Decides if diffusion must be fixed.
    *
-   * @return
+   * @return true if fixed, false otherwise
    */
   public boolean isDiffusionFixed() {
     return fixDiffusion;

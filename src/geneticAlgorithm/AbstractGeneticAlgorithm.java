@@ -171,7 +171,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   /**
    * Evaluator evaluation
    *
-   * @return
+   * @return threaded or basic evaluator
    */
   private AbstractPsdEvaluator getAgMainEvaluator() {
     AbstractPsdEvaluator evaluatorTmp;
@@ -242,8 +242,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
 
   /**
-   * Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable
-   * @return 
+   * Break if fitness is good enough or condition exceeds 1e14. Better termination methods are advisable.
+   * 
+   * @return exit search or not
    */
   @Override
   public boolean exitCondition() {

@@ -235,9 +235,10 @@ public void setDiag(boolean b) {
 *
 * The random number generator.
 *
-* @returns a pseudo-random double in the range (0,1)
+* @return a pseudo-random double in the range (0,1)
 */
 
+@Override
 public final double raw() {
 
     int i,k,lp;

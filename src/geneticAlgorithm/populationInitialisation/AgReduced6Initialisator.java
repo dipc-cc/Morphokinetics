@@ -18,7 +18,7 @@ public class AgReduced6Initialisator extends AbstractInitialisator implements II
    * Initialises all the rates between 1 and 1e12
    *
    * @param populationSize
-   * @return
+   * @return new Population with 6 genes in the interval of 1 and 1e12
    */
   @Override
   public Population createRandomPopulation(int populationSize) {

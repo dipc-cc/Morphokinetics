@@ -17,7 +17,7 @@ public class AgInitialisator extends AbstractInitialisator implements IInitialis
    * similar to what is expected from a real system.
    *
    * @param populationSize
-   * @return
+   * @return new Population with given parameters
    */
   @Override
   public Population createRandomPopulation(int populationSize) {

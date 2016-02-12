@@ -105,8 +105,8 @@ public class SiKmc extends AbstractKmc {
   }
   
   /**
-   * Number of islands has no sense in etching
-   * @return 
+   * Number of islands has no sense in etching.
+   * @return -1 always
    */
   @Override
   public int getIslandCount() {
@@ -114,7 +114,7 @@ public class SiKmc extends AbstractKmc {
   }
 
   /**
-   * Does nothing
+   * Does nothing.
    *
    * @param inputArea
    * @param scale

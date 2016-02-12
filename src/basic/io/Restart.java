@@ -65,7 +65,7 @@ public class Restart {
   /**
    * Returns the base location of the JAR file (or the main executable instead).
    *
-   * @return
+   * @return base location of the executable
    */
   public static String getJarBaseDir() {
     final Class<?> referenceClass = Morphokinetics.class;
@@ -283,10 +283,8 @@ public class Restart {
   /**
    * This method reads the binary file
    *
-   * @param dimensions
-   * @param sizes
-   * @param data
-   * @param fileName
+   * @param fileName file name to be read
+   * @return read surface
    */
   private float[][] readLowBinary(String fileName) throws FileNotFoundException {
     System.out.println("Reading matrix of unknown sizes. "
@@ -355,7 +353,6 @@ public class Restart {
    *
    * @param dimensions
    * @param sizes
-   * @param simulationNumber
    */
   private static void writeHeaderBinary(int dimensions, int[] sizes, String fileName) {
     FileOutputStream fos;

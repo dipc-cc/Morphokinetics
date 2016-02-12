@@ -225,9 +225,7 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
-    /**
-   * @param args the command line arguments
-   */
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JScrollPane jScrollPane1;
   // End of variables declaration//GEN-END:variables

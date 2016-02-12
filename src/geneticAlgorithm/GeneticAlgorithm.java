@@ -21,9 +21,10 @@ public class GeneticAlgorithm extends AbstractGeneticAlgorithm implements IGenet
   }
   
   /**
-   * This method has only mining in 
-   * @see GeneticAlgorithmDcmaEs#exitCondition()
-   * @return 
+   * This method has only meaning in 
+   * {@link geneticAlgorithm.GeneticAlgorithmDcmaEs#exitCondition()}.
+   * 
+   * @return always false
    */
   @Override
   public boolean exitCondition() {

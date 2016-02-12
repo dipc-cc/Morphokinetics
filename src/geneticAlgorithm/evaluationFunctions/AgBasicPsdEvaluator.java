@@ -153,9 +153,10 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   
   /**
    * If the difference is lower than 1, error is not added; otherwise, 
-   * error is added by one
+   * error is added by one.
+   * 
    * @param ind
-   * @return 
+   * @return calculated error
    */
   @Override
   protected double calculateHierarchyErrorDiscrete(Individual ind) {
@@ -183,10 +184,11 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   }
   
   /**
+   * Adds the error if the next condition is not fulfilled:
    * E_f > E_b > E_a > E_d > E_e > E_c
    * g(3) > g(5) > g(4) > g(0) > g(2) > g(1)
    * @param ind
-   * @return 
+   * @return calculated error
    */
   protected double calculateHierarchyErrorOrder(Individual ind) {
     if ( ind.getGene(3) > ind.getGene(5) &&
@@ -281,7 +283,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * genes.
    *
    * @param genes
-   * @return
+   * @return rates
    */
   public double[] getRates(double[] genes) {
     double[] rates = new double[49];
@@ -323,7 +325,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
    * 4) E_a                    (2,2)
    * 5) E_b                    (5,5)
    * @param genes
-   * @return
+   * @return rates
    */
   public double[] getRates6(double[] genes) {
      /*genes[0] = 1.8485467015993025E7;

@@ -118,8 +118,8 @@ public abstract class AbstractKmc implements IKmc {
   }
   
   /**
-   * Coverage is not defined in the etching. So, by default is not defined and returns -1
-   * @return 
+   * Coverage is not defined in the etching. So, by default is not defined and returns -1.
+   * @return -1 always
    */
   public float getCoverage() {
     return -1;

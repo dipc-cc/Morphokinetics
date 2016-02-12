@@ -26,9 +26,10 @@ public class RealRecombination implements IRecombination {
 
   /**
    * Creates a new offspring population. The new population is usually smaller than whole population
+   *
    * @param population It is ignored
    * @param groups new individuals to be included in the offspring population
-   * @return 
+   * @return new Population
    */
   @Override
   public Population recombinate(Population population, IndividualGroup[] groups) {

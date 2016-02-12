@@ -38,7 +38,7 @@ public interface IKmc {
    *
    * @param binX
    * @param binY
-   * @return 
+   * @return calculated surface
    */
   public float[][] getSampledSurface(int binX, int binY);
   public float[][] increaseEmptyArea(float[][] inputArea, double scale);
@@ -47,7 +47,7 @@ public interface IKmc {
   
   /**
    * Only defined in growth simulations
-   * @return 
+   * @return number of island of simulation (or -1)
    */
   public int getIslandCount();
 

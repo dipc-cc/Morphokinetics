@@ -580,7 +580,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   /**
    * Calculates the total area of a single flake simulation. 
-   * @return 
+   * 
+   * @return total area
    */
   private int calculateAreaAsInLattice() {
     int totalArea = 0;
@@ -645,7 +646,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   /**
    * This has to be called only once from AgKmc or GrapheneKmc.
-   * @param occupied Size of the seed in atoms. Number to calculate free space. 
+   * @param occupiedSize Size of the seed in atoms. Number to calculate free space. 
    */
   void setCurrentOccupiedArea(int occupiedSize) {
     currentArea = calculateAreaAsInKmcCanvas();

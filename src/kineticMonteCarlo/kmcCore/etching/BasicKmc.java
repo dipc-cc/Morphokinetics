@@ -91,8 +91,8 @@ public class BasicKmc extends AbstractKmc {
   }
 
   /**
-   * Number of islands has no sense in etching
-   * @return 
+   * Number of islands has no sense in etching.
+   * @return -1 always
    */
   @Override
   public int getIslandCount() {

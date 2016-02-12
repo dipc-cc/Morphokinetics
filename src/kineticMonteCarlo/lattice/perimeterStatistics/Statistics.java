@@ -64,7 +64,8 @@ public class Statistics {
   /**
    * Returns the entire data matrix that is working on. 
    * This is the whole information about the atom re-entrance that the code has.
-   * @return 
+   * 
+   * @return all the data
    */
   protected int[][] getWholeData() {
     return data;

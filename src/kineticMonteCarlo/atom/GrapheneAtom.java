@@ -17,17 +17,17 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   
   /**
    * Total number of 1st neighbours.
-   * @return 0 <= value <= 3
+   * 0 <= n1 <= 3
    */
   private int n1;
   /**
    * Total number of 2nd neighbours.
-   * @return 0 <= value <= 6
+   * 0 <= n2 <= 6
    */
   private int n2;  
   /**
    * Total number of 3rd neighbours.
-   * @return 0 <= value <= 3
+   * 0 <= n3 <= 3
    */
   private int n3;
   private HopsPerStep distancePerStep;
@@ -125,8 +125,9 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   /**
-   * escogemos a que posición vamos a saltar
-   * @return 
+   * Decides to which position is going to jump.
+   * 
+   * @return destination atom
    */
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
@@ -159,9 +160,10 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
   /**
    * Calculates the new atom type when adding or removing a neighbour.
+   * 
    * @param neighbourPosition position of the neighbour. Must be 1, 2 or 3
    * @param addOrRemove add or remove one neighbour. Must be -1 or 1
-   * @return 
+   * @return new atom type
    */
   public byte getNewType(int neighbourPosition, int addOrRemove) {
     switch (neighbourPosition) {
@@ -252,10 +254,11 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   /**
-   * Probabilidad de saltar a cierta posicion vecina
+   * Probability to jump to given neighbour position. 
+   * 
    * @param originType
    * @param pos
-   * @return 
+   * @return probability
    */
   private double probJumpToNeighbour(int originType, int pos) {
 
@@ -294,7 +297,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * útil para saber el tipo de átomos que serás al saltar.
    * sabiendo el tipo de átomo origen y destino puedes sacar la probabilidad de éxito   origen ====> destino
    * @param originPos
-   * @return 
+   * @return atom type without neighbour
    */
   @Override
   public byte getTypeWithoutNeighbour(int originPos) {

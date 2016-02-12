@@ -18,8 +18,9 @@ public class GrapheneRatesFactory implements IRatesFactory {
 
   /**
    * We don't use the temperature by now.
+   *
    * @param temperature
-   * @return 
+   * @return rates[64]
    */ 
   @Override
   public double[] getRates(double temperature) {

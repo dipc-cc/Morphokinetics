@@ -66,8 +66,9 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   
   /**
    * Set the reference PSD matrix for future comparisons and starts its norms.
+   * 
    * @param experimentalPsd
-   * @return 
+   * @return this object
    */
   public AbstractPsdEvaluator setPsd(float[][] experimentalPsd) {
     this.experimentalPsd = experimentalPsd;
@@ -86,9 +87,11 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
   
   /**
-   * ||A||_F = (SUM(|A_ij|^2))^1/2
+   * It calculates Frobenius norm with the next formula: ||A||_F = (SUM(|A_ij|^2))^1/2 
+   * It is useful to measure the difference among two matrices.
+   *
    * @param matrix
-   * @return 
+   * @return Frobenius norm
    */
   private double calculateFrobeniusNorm(float[][] matrix) {
     double result = 0.0f;
@@ -316,8 +319,9 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
   
   /**
-   * Calculates the count (number) of the current simulation
-   * @return 
+   * Calculates the count (number) of the current simulation.
+   * 
+   * @return individual count
    */
   @Override
   public int getIndividualCount() {

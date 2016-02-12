@@ -15,7 +15,7 @@ public class ElitistAllReinsertion implements IReinsertion {
    * @param origin Original population
    * @param offpring Offspring population
    * @param substitutions Completely ignored
-   * @return
+   * @return new Population
    */
   @Override
   public Population Reinsert(Population origin, Population offpring, int substitutions) {

@@ -101,9 +101,10 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Calculates the new atom type when adding or removing a neighbour.
+   *
    * @param addToImmobile variation of the number of immobile neighbours. Must be -1, 0 or 1
    * @param addToMobile variation of the number of mobile neighbours. Must be -1, 0 or 1
-   * @return
+   * @return new type
    */
   public byte getNewType(int addToImmobile, int addToMobile) {
     return typesTable.getType(nImmobile + addToImmobile, nMobile + addToMobile);

@@ -81,20 +81,29 @@ public class Frame2D extends javax.swing.JFrame {
     return this;
   }
   
+  /**
+   * This method prints the current canvas to a file.
+   *
+   * @param i Simulation number
+   */
   public void printToImage(int i) {
     imageName = "results/psd" + i + ".png";
     performDrawToImage();
   }
   
+  /**
+   * This method prints the current canvas to a file.
+   *
+   * @param folder the folder to be written
+   * @param i Simulation number
+   */
   public void printToImage(String folder, int i) {
     imageName = folder + format("/psd%03d.png", i);
     performDrawToImage();    
   }
   
   /**
-   * This method prints the current canvas to a file
-   *
-   * @param i Simulation number
+   * This method does the printing of the current canvas to a file.
    */
   private void performDrawToImage() {
     BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);

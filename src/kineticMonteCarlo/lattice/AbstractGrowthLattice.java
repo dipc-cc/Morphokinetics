@@ -69,11 +69,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   /**
-   * We ignore the unitCellPos by now, we get directly the atom of i,j hexagonal location
+   * We ignore the unitCellPos by now, we get directly the atom of i,j hexagonal location.
    *
    * @param iHexa
    * @param jHexa
-   * @return
+   * @return required atom
    */
   public AbstractGrowthAtom getAtom(int iHexa, int jHexa) {
     return atoms[iHexa][jHexa];
@@ -93,11 +93,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   /**
    * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
-   * Returns the Cartesian position, given the hexagonal (lattice) location
+   * Returns the Cartesian position, given the hexagonal (lattice) location.
    *
    * @param iHexa i index in the hexagonal mesh
    * @param jHexa j index in the hexagonal mesh
-   * @return
+   * @return spatial location in Cartesian
    */
   public abstract Point2D getCartesianLocation(int iHexa, int jHexa);
 
@@ -115,14 +115,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
    * @param xCart Cartesian X coordinate
    * @param yCart Cartesian Y coordinate
-   * @return 
+   * @return i hexagonal position
    */
   public abstract int getiHexa(double xCart, double yCart);
 
   /**
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
    * @param yCart Cartesian Y coordinate
-   * @return 
+   * @return j hexagonal position
    */
   public abstract int getjHexa(double yCart);
 

@@ -124,10 +124,12 @@ public class DifferentialRecombination implements IRecombination {
   }
   
   /**
-   * Creates a new offspring population. The new population size has to be equal to the original population size.
-   * @param population original population. For the moment only used to get the fitness errors.
-   * @param groups new individuals.
-   * @return 
+   * Creates a new offspring population. The new population size has to be equal to the original
+   * population size.
+   *
+   * @param population original population. For the moment only used to get the fitness errors
+   * @param groups new individuals
+   * @return new Population
    */
   @Override
   public Population recombinate(Population population, IndividualGroup[] groups) {
@@ -238,7 +240,7 @@ public class DifferentialRecombination implements IRecombination {
   
   /**
    * Condition exceeds 1e14
-   * @return 
+   * @return true if D > 1e14
    */
   @Override
   public boolean isDtooLarge() {

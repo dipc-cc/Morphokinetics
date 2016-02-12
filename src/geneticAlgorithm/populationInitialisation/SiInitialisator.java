@@ -17,7 +17,7 @@ public class SiInitialisator extends AbstractInitialisator implements IInitialis
    * initialisation method, recommended.
    *
    * @param populationSize
-   * @return
+   * @return new Population with given parameters
    */
   @Override
   public Population createRandomPopulation(int populationSize) {

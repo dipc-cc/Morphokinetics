@@ -23,7 +23,7 @@ public abstract class AbstractInitialisator implements IInitialisator {
    * @param min minimum possible value
    * @param max maximum possible value
    * @param log are the variables order of magnitude different? If yes use exponential distribution
-   * @return
+   * @return new Population with given parameters
    */
   @Override
   public Population createRandomPopulation(int populationSize, int dimensions, double min, double max, boolean log) {
