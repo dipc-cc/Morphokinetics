@@ -12,8 +12,6 @@ public interface IGrowthRates {
 
   public double getRate(int i, int j, double temperature);
 
-  public double getDepositionRatePerSite(double temperature);
-
   public double getDepositionRatePerSite();
 
   /**

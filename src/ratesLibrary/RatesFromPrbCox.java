@@ -231,33 +231,6 @@ public class RatesFromPrbCox implements IGrowthRates {
   }
 
   /**
-   * We assume that the island density was calculated for an area of 256 x 295 = 75674 
-   * We did a simulation with this Cartesian rectangle and we got 56668 lattice points.
-   * I assume that the diffusionMl was calculated using 180K degrees. 
-   */
-  @Override
-  public double getDepositionRatePerSite(double temperature) { 
-    if (temperature < 135) {//120 degrees Kelvin
-      depositionRatePerSite = 0.0006176325;
-      return depositionRatePerSite;
-    }
-    if (temperature < 150) {//135 degrees Kelvin
-      depositionRatePerSite = 0.0012352651;
-      return depositionRatePerSite;
-    }
-    if (temperature < 165) {//150 degrees Kelvin
-      depositionRatePerSite = 0.0015440813;
-      return depositionRatePerSite;
-    }
-    if (temperature < 180) {//165 degrees Kelvin
-      depositionRatePerSite = 0.0020575986;
-      return depositionRatePerSite;
-    }
-    depositionRatePerSite = 0.0030881626; //180 degrees Kelvin
-    return depositionRatePerSite;
-  }
-
-  /**
    * In principle, deposition rate is constant to 0.0035 ML/s. What changes is island density.
    * Consequently, deposition rate in practice varies with the temperature.
    *

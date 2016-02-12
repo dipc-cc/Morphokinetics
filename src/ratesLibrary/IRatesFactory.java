@@ -12,8 +12,6 @@ public interface IRatesFactory {
 
   public double[] getRates(double temperature);
 
-  public double getDepositionRatePerSite(double temperature);
-  
   public double getDepositionRatePerSite();
   
   /**

@@ -24,11 +24,6 @@ public class SyntheticRates implements IGrowthRates {
   }
 
   @Override
-  public double getDepositionRatePerSite(double temperature) {
-    return diffusionMl;
-  }
-
-  @Override
   public double getDepositionRatePerSite() {
     return diffusionMl;
   }
