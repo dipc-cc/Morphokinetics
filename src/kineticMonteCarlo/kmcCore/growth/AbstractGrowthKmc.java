@@ -516,8 +516,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return surface;
   }
   
+  /**
+   * Adds an empty area, maintaining the island size. It is useful to compare different size
+   * simulations.
+   *
+   * @param inputArea input area
+   * @param scale how much is going to increase (must be > 1)
+   * @return output bigger area
+   */
   @Override
   public float[][] increaseEmptyArea(float[][] inputArea, double scale){
+    // ensure that scale is bigger than one
+    if (scale <= 1 ) {
+      System.out.println("Warning: is not going to add any empty area");
+      return inputArea;
+    }
+    
     int sizeX = inputArea.length;
     int sizeY = inputArea[0].length;
     float[][] outputArea = new float[(int) (sizeX * scale)][(int) (sizeY * scale)];
