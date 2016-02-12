@@ -59,14 +59,18 @@ public class Parser {
   private int temperature;
   private int presure;
   /**
-   * @see getDepositionFlux()
+   * See {@see getDepositionFlux()}
    */
   private double depositionFlux;
   /**
-   * {@link getEndTime()}
+   * See {@see getEndTime()}
    */
   private double endTime;
-  private double coverage;
+  private double coverage;  
+  /**
+   * See {@see getPsdScale}
+   */
+  private double psdScale;
   private int numberOfSimulations;
   private int cartSizeX;
   private int cartSizeY;
@@ -144,6 +148,7 @@ public class Parser {
     presure = 135;
     depositionFlux = 0.0035;
     coverage = 30.0;
+    psdScale = 0.5;
     endTime = -1;
     numberOfSimulations = 10;
     cartSizeX = 256;
@@ -262,6 +267,11 @@ public class Parser {
       coverage = json.getDouble("coverage");
     } catch (JSONException e) {
       coverage = 30.0;
+    }
+    try {
+      psdScale = json.getDouble("psdScale");
+    } catch (JSONException e) {
+      psdScale = 0.5;
     }
     try {
       numberOfSimulations = json.getInt("numberOfSimulations");
@@ -483,6 +493,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
     System.out.printf("%32s: %s,\n", "\"endTime\"", endTime);
     System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
+    System.out.printf("%32s: %s,\n", "\"psdScale\"", psdScale);
     System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
@@ -589,6 +600,15 @@ public class Parser {
    */
   double getCoverage() {
     return coverage;
+  }
+  
+  /**
+   * Factor with which has to be multiplied the size of the surface to calculate the PSD.
+   *
+   * @return psdScale
+   */
+  double getPsdScale() {
+    return psdScale;
   }
   
   public int getNumberOfSimulations() {
