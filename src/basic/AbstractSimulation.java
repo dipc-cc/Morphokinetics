@@ -198,12 +198,13 @@ public abstract class AbstractSimulation {
     System.out.format("\t%.4f", kmc.getCoverage());
 
     sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]); // get the just simulated surface
+    float[][] extentSurface = kmc.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
     if (parser.outputData()) {
       if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-        restart.writeSurfaceBinary(2, sizes, sampledSurface, simulations);
+        restart.writeSurfaceBinary(2, sizes, extentSurface, simulations);
       }
       if (parser.getOutputFormats().contains(formatFlag.TXT)) {
-        restart.writeSurfaceText2D(2, sizes, sampledSurface, simulations);
+        restart.writeSurfaceText2D(2, sizes, extentSurface, simulations);
       }
       if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
         printToImage(restartFolderName, simulations);
@@ -211,7 +212,7 @@ public abstract class AbstractSimulation {
     }
 
     if (parser.doPsd()) {
-      psd.addSurfaceSample(sampledSurface);
+      psd.addSurfaceSample(extentSurface);
       if (parser.outputData()) {
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
           psd.writePsdBinary(simulations);
