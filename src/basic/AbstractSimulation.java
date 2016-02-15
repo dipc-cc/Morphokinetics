@@ -93,7 +93,7 @@ public abstract class AbstractSimulation {
     sizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
 
     if (parser.doPsd()) {
-      psd = new PsdSignature2D(sizes[0], sizes[1]);
+      psd = new PsdSignature2D((int) (sizes[0] * parser.getPsdExtend()), (int) (sizes[1] * parser.getPsdExtend()));
       psd.setRestart(restart); // All the output should go the same folder
     }
 
