@@ -142,7 +142,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     double sum = 0;
     int cont = 0;
     while (true) {
-      sum += getBondsProbability()[cont++];
+      sum += getBondsProbability(cont++);
       if (sum >= linearSearch) {
         break;
       }
@@ -191,8 +191,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         setBondsProbability(PStack.getProbArray());
       }
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
-        getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
-        addProbability(getBondsProbability()[i]);
+        setBondsProbability(probJumpToNeighbour(getType(), i),i);
+        addProbability(getBondsProbability(i));
       }
     }
   }
@@ -224,18 +224,18 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         double independentProbability = getProbability() / 12.0;
         setBondsProbability(PStack.getProbArray());
         for (int a = 0; a < 12; a++) {
-          getBondsProbability()[a] = independentProbability;
+          setBondsProbability(independentProbability, a);
         }
-        getBondsProbability()[i] = newRate;
+        setBondsProbability(newRate, i);
         addProbability(newRate - independentProbability);
         probabilityChange += (newRate - independentProbability);
       }
     } else {
-      addProbability(-getBondsProbability()[i]);
-      probabilityChange -= getBondsProbability()[i];
-      getBondsProbability()[i] = probJumpToNeighbour(getType(), i);
-      addProbability(getBondsProbability()[i]);
-      probabilityChange += getBondsProbability()[i];
+      addProbability(-getBondsProbability(i));
+      probabilityChange -= getBondsProbability(i);
+      setBondsProbability(probJumpToNeighbour(getType(), i),i);
+      addProbability(getBondsProbability(i));
+      probabilityChange += getBondsProbability(i);
     }
 
     return probabilityChange;

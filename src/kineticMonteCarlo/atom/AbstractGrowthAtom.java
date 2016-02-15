@@ -198,12 +198,30 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public double[] getBondsProbability() {
     return bondsProbability;
   }
+  
+  /**
+   * Get probability in the given neighbour position
+   * @param i neighbour position
+   * @return probability (rate)
+   */
+  public double getBondsProbability(int i) {
+    return bondsProbability[i];
+  }
 
   /**
    * @param bondsProbability the bondsProbability to set
    */
   public void setBondsProbability(double[] bondsProbability) {
     this.bondsProbability = bondsProbability;
+  }
+  
+  /**
+   * Set the given probability in the given neighbour position
+   * @param value probability (rate)
+   * @param i neighbour position
+   */
+  public void setBondsProbability(double value, int i) {
+    bondsProbability[i] = value;
   }
 
   @Override
