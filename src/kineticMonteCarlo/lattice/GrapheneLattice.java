@@ -11,7 +11,6 @@ import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
-import kineticMonteCarlo.atom.ArrayStack;
 import utils.StaticRandom;
 
 /**
@@ -23,7 +22,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   private static int[] latticeNeighborhoodData;
   private static final double COS60 = Math.cos(60 * Math.PI / 180);
   private static final double COS30 = Math.cos(30 * Math.PI / 180);
-  private static final ArrayStack PStack = new ArrayStack(12);;
   private final Point2D centralCartesianLocation;
 
   public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
@@ -712,10 +710,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       addBondAtom(atom);
     }
 
-    if (atom.getBondsProbability() != null) {
-      PStack.returnProbArray(atom.getBondsProbability());
-      atom.setBondsProbability(null);
-    }
     atom.setList(false);
   }
       
