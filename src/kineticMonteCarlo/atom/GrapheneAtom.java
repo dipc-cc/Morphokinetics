@@ -146,7 +146,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       if (sum >= linearSearch) {
         break;
       }
-      if (cont == getBondsProbability().length) {
+      if (cont == getNumberOfNeighbours()) {
         break;
       }
     }
