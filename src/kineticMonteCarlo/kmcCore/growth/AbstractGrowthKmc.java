@@ -201,8 +201,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   @Override
   public int simulate() {
     int k = 1;
+    int returnValue = 0;
     if (justCentralFlake) {
-      return super.simulate();
+      returnValue = super.simulate();
     } else {
       while (lattice.getCoverage() < maxCoverage) {
         if (performSimulationStep()) {
@@ -217,7 +218,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     countIslands();
     
-    return 0;
+    return returnValue;
   }
   
   private void printData() {
