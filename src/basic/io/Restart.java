@@ -305,7 +305,7 @@ public class Restart {
       // create data output stream
       dis = new DataInputStream(fis);
 
-      dis.skipBytes(14);
+      dis.skipBytes(16);
       // Read the dimensions of the file
       dimensions = dis.readInt();
       // Read the sizes of the actual dimensions
@@ -329,7 +329,7 @@ public class Restart {
       for (i = 0; i < sizes[0]; i++) {
         for (j = 0; j < sizes[1]; j++) {
           // write float to the dos, reading an int
-          data[i][j] = (float) dis.readByte();
+          data[i][j] = (float) dis.readFloat();
         }
       }
       // releases all system resources from the streams
