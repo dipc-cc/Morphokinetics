@@ -710,6 +710,9 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       addBondAtom(atom);
     }
 
+    if (atom.getBondsProbability() != null) {
+      atom.setBondsProbability(null);
+      }
     atom.setList(false);
   }
       
