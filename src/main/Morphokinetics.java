@@ -140,7 +140,7 @@ public class Morphokinetics {
     PsdSignature2D psd = null;
     for (int i = 1; i <= numberOfFiles; i++) {
       try {
-        readSurface = restart.readSurfaceBinary2D(surfaceFileName+i+".mko",2);
+        readSurface = restart.readSurfaceBinary2D(surfaceFileName + i + ".mko", 2);
         if (psd == null) {
           sizes = new int[2];
           sizes[0] = restart.getSizeX();
@@ -150,7 +150,7 @@ public class Morphokinetics {
           psd = new PsdSignature2D(sizes[0], sizes[1]);
         }
       } catch (Exception e){
-        System.err.println("Provided filename ["+surfaceFileName+i+".mko] does not exist. Exiting");
+        System.err.println("Provided filename [" + surfaceFileName + i + ".mko] does not exist. Exiting");
         //throw e;
         continue;
       }
