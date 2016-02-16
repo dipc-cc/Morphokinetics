@@ -142,7 +142,7 @@ public class AgSimulationTest {
   
   @Test
   public void testAgMulti() {
-    AbstractSimulation.printHeader("Ag multi test");
+    AbstractSimulation.printHeader("Ag test multi-flake");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgMultiParameters");
     parser.print();
