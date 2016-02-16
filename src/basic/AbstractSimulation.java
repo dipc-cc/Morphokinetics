@@ -40,7 +40,8 @@ public abstract class AbstractSimulation {
   private float coverage;
   private int simulations;
   private float[][] sampledSurface;
-  private int[] sizes;
+  private int[] surfaceSizes;
+  private int[] extentSizes;
   private Restart restart;
 
   public AbstractSimulation(Parser parser) {
@@ -87,13 +88,16 @@ public abstract class AbstractSimulation {
     restartFolderName = "results/run" + System.currentTimeMillis();
     restart = new Restart(restartFolderName);
 
-    sizes = new int[2];
+    surfaceSizes = new int[2];
     //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
-    sizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
-    sizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
-
+    surfaceSizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
+    surfaceSizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
+    extentSizes = new int[2];
+    extentSizes[0] = (int) (surfaceSizes[0] * parser.getPsdExtend());
+    extentSizes[1] = (int) (surfaceSizes[1] * parser.getPsdExtend());
+    
     if (parser.doPsd()) {
-      psd = new PsdSignature2D((int) (sizes[0] * parser.getPsdExtend()), (int) (sizes[1] * parser.getPsdExtend()));
+      psd = new PsdSignature2D((int) (surfaceSizes[0] * parser.getPsdExtend()), (int) (surfaceSizes[1] * parser.getPsdExtend()));
       psd.setRestart(restart); // All the output should go the same folder
     }
 
@@ -197,14 +201,14 @@ public abstract class AbstractSimulation {
     System.out.format("\t%.3f", (double) kmc.getTime());
     System.out.format("\t%.4f", kmc.getCoverage());
 
-    sampledSurface = kmc.getSampledSurface(sizes[0], sizes[1]); // get the just simulated surface
+    sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface
     float[][] extentSurface = kmc.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
     if (parser.outputData()) {
       if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-        restart.writeSurfaceBinary(2, sizes, extentSurface, simulations);
+        restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
       }
       if (parser.getOutputFormats().contains(formatFlag.TXT)) {
-        restart.writeSurfaceText2D(2, sizes, extentSurface, simulations);
+        restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);
       }
       if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
         printToImage(restartFolderName, simulations);
