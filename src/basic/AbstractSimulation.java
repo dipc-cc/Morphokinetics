@@ -130,8 +130,8 @@ public abstract class AbstractSimulation {
     printFooter();
 
     if (parser.doPsd()) {
-      psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-      psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+      psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+      psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
       if (parser.visualise()) {
         new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
                 .setLogScale(true)

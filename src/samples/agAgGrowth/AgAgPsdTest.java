@@ -46,8 +46,8 @@ public class AgAgPsdTest {
       PSD.addSurfaceSample(sampledSurface);
       System.out.println("flake " + i);
     }
-    PSD.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    PSD.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    PSD.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+    PSD.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
     new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
 

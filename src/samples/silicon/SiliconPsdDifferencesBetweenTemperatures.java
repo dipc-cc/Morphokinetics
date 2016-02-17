@@ -81,8 +81,8 @@ public class SiliconPsdDifferencesBetweenTemperatures {
       }
     }
 
-    psd.applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    psd.applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+    psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
     return psd.getPsd();
   }

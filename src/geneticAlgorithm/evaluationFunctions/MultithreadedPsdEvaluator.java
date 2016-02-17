@@ -92,8 +92,8 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
     p.setIndividual(i, 0);
     calculatePsdOfPopulation(p);
 
-    psds[0].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    psds[0].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psds[0].applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+    psds[0].applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
     return psds[0].getPsd();
   }
@@ -107,8 +107,8 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   }
 
   private double evaluateIndividual(int individualPos) {
-    psds[individualPos].applySimmetryFold(PsdSignature2D.HORIZONTAL_SIMMETRY);
-    psds[individualPos].applySimmetryFold(PsdSignature2D.VERTICAL_SIMMETRY);
+    psds[individualPos].applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+    psds[individualPos].applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
     double error = calculateFrobeniusNormErrorMatrix(psds[individualPos].getPsd());
     return error * getWheight();

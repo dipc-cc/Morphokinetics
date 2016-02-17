@@ -30,8 +30,8 @@ public class PsdSignature2D {
   private final int[] sizes;
   private final int dimensions;
   private Restart restart;
-  public static final int HORIZONTAL_SIMMETRY = 0;
-  public static final int VERTICAL_SIMMETRY = 1;
+  public static final int HORIZONTAL_SYMMETRY = 0;
+  public static final int VERTICAL_SYMMETRY = 1;
 
   public PsdSignature2D(int binsY, int binsX) {
 
@@ -100,9 +100,9 @@ public class PsdSignature2D {
     psd = new float[binsY][binsX];
   }
 
-  public void applySimmetryFold(int simmetryType) {
-    switch (simmetryType) {
-      case HORIZONTAL_SIMMETRY:
+  public void applySymmetryFold(int symmetryType) {
+    switch (symmetryType) {
+      case HORIZONTAL_SYMMETRY:
         for (int i = 0; i < binsY; i++) {
           for (int j = 1; j < binsX / 2; j++) {
             float temp = (psd[i][j] + psd[i][binsX - j - 1]) * 0.5f;
@@ -111,7 +111,7 @@ public class PsdSignature2D {
         }
         break;
 
-      case VERTICAL_SIMMETRY:
+      case VERTICAL_SYMMETRY:
         for (int i = 1; i < binsY / 2; i++) {
           for (int j = 0; j < binsX; j++) {
             float temp = (psd[i][j] + psd[binsY - i - 1][j]) * 0.5f;
