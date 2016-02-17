@@ -100,6 +100,13 @@ public class PsdSignature2D {
     psd = new float[binsY][binsX];
   }
 
+  /**
+   * It does the average of two points (either vertically or horizontally) and assigns that value to
+   * both points. Those two points are separated from the centre by the same amount and it assumes
+   * that the centre is the Cartesian centre.
+   *
+   * @param symmetryType horizontal or vertical (HORIZONTAL_SYMMETRY or VERTICAL_SYMMETRY)
+   */
   public void applySymmetryFold(int symmetryType) {
     switch (symmetryType) {
       case HORIZONTAL_SYMMETRY:
