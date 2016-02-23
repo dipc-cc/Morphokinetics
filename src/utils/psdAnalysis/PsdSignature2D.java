@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import utils.MathUtils;
 
 /**
+ * Every surface is associated with a 2D map where each location represents a harmonic frequency and
+ * the associated/displayed value represents the squared sum of the real and imaginary amplitudes
+ * for that harmonic component (i.e., the power for that frequency). Low frequencies are correlated
+ * to large structures, such as hills or valleys, while large frequencies are related to small
+ * features, such as meandering steps. PSD maps are statistically equivalent for different images
+ * obtained under the same experimental conditions, while the maps change significantly when the
+ * conditions are modified. (From Ferrando, Gosalvez, Ayuela, JPC C, 2014, DOI: 10.1021/jp409812x)
  *
  * @author Nestor
  */
