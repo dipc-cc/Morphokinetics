@@ -8,6 +8,8 @@ package basic;
 import basic.io.Restart;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
@@ -135,9 +137,13 @@ public class AgSimulationTest {
             null, "Frobenius", null, parser.getTemperature());
     evaluator.setPsd(ref);
     double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
-    System.out.println("Frobenius error is "+FrobeniusError);
-    assertEquals(0.016, FrobeniusError, 0.0015);
-    
+    System.out.println("Frobenius error is " + FrobeniusError);
+    List<Double> results = new ArrayList();
+    results.add(FrobeniusError);
+    results.add(0.0175); // reference value is 0.016 and we allow a margin of 0.0015
+    results.sort((a, b) -> b.compareTo(a));
+    assertEquals(0.0175, results.get(0), 0.0); // ensure that the first value is 0.0175, and therefore, the current error is lower
+ 
   }
   
   @Test
