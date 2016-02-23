@@ -229,16 +229,33 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
   }
   
-  private int countIslands() { 
+  private int countIslands() {
+    // reset all the atoms
     for (int i = 0; i < lattice.getHexaSizeI(); i++) {
       for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
         lattice.getAtom(i, j).setVisited(false);
+        lattice.getAtom(i, j).setIslandNumber(0);
       }
-    }  
+    }
+    
+    // do the count
     islandCount = 0;
     for (int i = 0; i < lattice.getHexaSizeI(); i++) {
       for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
         identifyIsland(i, j, false);
+      }
+    }
+    
+    // create a histogram with the number of atoms per island
+    List<Integer> histogram = new ArrayList(islandCount + 1); // count also non occupied area
+    for (int i = 0; i < islandCount + 1; i++) {
+      histogram.add(0);
+    }
+    // iterate all atoms and add to the corresponding island
+    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
+      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
+        int island = lattice.getAtom(i, j).getIslandNumber();
+        histogram.set(island, histogram.get(island) + 1);
       }
     }
     return islandCount;
