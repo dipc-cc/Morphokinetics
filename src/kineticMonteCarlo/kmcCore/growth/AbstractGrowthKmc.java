@@ -491,7 +491,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     double scaleX = Math.abs(binX / (lattice.getCartSizeX()));
     double scaleY = Math.abs(binY / (lattice.getCartSizeY()));
 
-    if (scaleX > 1 || scaleY > 1) {
+    if (scaleX > 1.01 || scaleY > 1.01) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
       return null;
     }
