@@ -56,6 +56,10 @@ public class Parser {
    * Can be Si, Ag or graphene.
    */
   private String calculationMode;
+  /**
+   * See {@link #getSurfaceType()}
+   */
+  private String surfaceType;
   private int temperature;
   private int presure;
   /**
@@ -148,6 +152,7 @@ public class Parser {
     listType = "linear";
     perimeterType = "circle";
     calculationMode = "Ag";
+    surfaceType = "cartesian";
     temperature = 135;
     presure = 135;
     depositionFlux = 0.0035;
@@ -243,6 +248,11 @@ public class Parser {
       calculationMode = json.getString("calculationMode");
     } catch (JSONException e) {
       calculationMode = "Ag";
+    }
+    try {
+      surfaceType = json.getString("surfaceType");
+    } catch (JSONException e) {
+      surfaceType = "cartesian";
     }
     try {
       temperature = json.getInt("temperature");
@@ -509,6 +519,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
     System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
     System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
+    System.out.printf("%32s: %s,\n", "\"surfaceType\"", surfaceType);
     System.out.printf("%32s: %s,\n", "\"psd\"", psd);
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
@@ -800,6 +811,19 @@ public class Parser {
     return calculationMode;
   }
 
+  /**
+   * Can be "cartesian" or "periodic". If "cartesian" is chosen, the surface (islands) will have the
+   * same shape as in the GUI, but the periodicity will not be correct in top-bottom (they is a
+   * shift of 60º). If "periodic" is chosen, the shape will be shifted by 60º and periodicity will
+   * be correct in 2D. This option will change the PSD; "cartesian" will have vertical and
+   * horizontal symmetry and in "periodic" the symmetry will be shifted by 60º.
+   *
+   * @return surface type. Either: "cartesian" or "periodic"
+   */
+  public String getSurfaceType() {
+    return surfaceType;
+  }
+  
   public boolean doPsd() {
     return psd;
   }

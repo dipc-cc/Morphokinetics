@@ -33,6 +33,8 @@ public interface IKmc {
 
   public int getIterations();
 
+  public float[][] getHexagonalPeriodicSurface(int binX, int binY);
+  
   /**
    * Returns a sampled topological measurement of the KMC surface
    *
