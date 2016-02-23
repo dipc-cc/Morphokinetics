@@ -42,3 +42,11 @@ cd src
 jar cfm morphokinetics.jar manifest.txt . ../lib/jtransforms-2.4.jar ../lib/j3dcore.jar  ../lib/j3dutils.jar ../lib/vecmath.jar ../lib/colt.jar  ../lib/json-20141113.jar
 
 If you want to move the jar to another folder, you have to also move the lib folder.
+
+
+==========================================
+====== PROFILING              ============
+==========================================
+
+To profile this code within NetBeans 8.1 next line has to be added:
+-XX:+UseLinuxPosixThreadCPUClocks -agentpath:/home/jalberdi004/software/netbeans-8.1/profiler/lib/deployed/jdk16/linux-amd64/libprofilerinterface.so=/home/jalberdi004/software/netbeans-8.1/profiler/lib,5140
