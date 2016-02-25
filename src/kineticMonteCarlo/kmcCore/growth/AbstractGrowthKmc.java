@@ -258,6 +258,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         histogram.set(island, histogram.get(island) + 1);
       }
     }
+    System.out.println("histogram " + histogram.toString());
     return islandCount;
   }
     
