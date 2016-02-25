@@ -762,8 +762,13 @@ public class Parser {
   public int getHexaSizeI() {
     if (getCalculationMode().equals("Ag")) {
       return cartSizeX;
-    } else {
-      return (int) (cartSizeX / 1.5f);
+    } else { // graphene, always even number
+      int sizeI = (int) Math.ceil(cartSizeX / 1.5f);
+      if (sizeI % 2 == 0) {
+        return sizeI;
+      }  else {
+        return sizeI + 1;
+      }
     }
   }
   
