@@ -17,7 +17,6 @@ public class Frame2D extends javax.swing.JFrame {
 
   public Frame2D(String textInfo) {
     initComponents();
-    setVisible(true);
     ((Panel2D) jPanel1).setTextInfo(textInfo);
 
   }

@@ -49,10 +49,14 @@ public class AgAgPsdTest {
     PSD.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
     PSD.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
-    new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
+    Frame2D psdFrame = new Frame2D("PSD analysis");
+    psdFrame.setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
+    psdFrame.setLogScale(true)
+            .setShift(true);
+    psdFrame.setVisible(true);
 
-    new Frame2D("Sampled surface").setMesh(sampledSurface);
-
+    Frame2D surfaceFrame =new Frame2D("Sampled surface").setMesh(sampledSurface);
+    surfaceFrame.setVisible(true);
   }
 
   private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {

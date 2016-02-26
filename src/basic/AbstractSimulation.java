@@ -135,12 +135,17 @@ public abstract class AbstractSimulation {
         psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
       }
       if (parser.visualise()) {
-        new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
-                .setLogScale(true)
+        Frame2D psdFrame = new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
+        psdFrame.setLogScale(true)
                 .setShift(true)
                 .printToImage(restartFolderName, 1);
+        psdFrame.setVisible(true);
+        psdFrame.toBack();
 
-        new Frame2D("Sampled surface").setMesh(sampledSurface).printToImage(restartFolderName, 2);
+        Frame2D surfaceFrame = new Frame2D("Sampled surface");
+        surfaceFrame.setMesh(sampledSurface).printToImage(restartFolderName, 2);
+        surfaceFrame.setVisible(true);
+        surfaceFrame.toBack();
       }
       psd.printAvgToFile();
     }
