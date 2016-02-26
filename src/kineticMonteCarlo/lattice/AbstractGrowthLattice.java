@@ -170,7 +170,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param radius
    * @return An array with the atoms that are in the circumference (only the perimeter)
    */
-  public AbstractGrowthAtom[] setInsideCircle(int radius) {
+  public AbstractGrowthAtom[] setInsideCircle(int radius, boolean periodicSingleFlake) {
 
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
@@ -178,7 +178,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         double distance = getDistanceToCenter(iHexa, jHexa);
-        if (radius <= distance) {
+        if (radius <= distance && !periodicSingleFlake) {
           atoms[iHexa][jHexa].setOutside(true);
         } else {
           atoms[iHexa][jHexa].setOutside(false);

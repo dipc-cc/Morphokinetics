@@ -31,6 +31,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private AbstractGrowthLattice lattice;
   private final ModifiedBuffer modifiedBuffer;
   private final boolean justCentralFlake;
+  private final boolean periodicSingleFlake;
   private RoundPerimeter perimeter;
   private final boolean useMaxPerimeter;
   private final short perimeterType;
@@ -59,12 +60,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
+          boolean periodicSingleFlake,
           float coverage,
           boolean useMaxPerimeter,
           short perimeterType,
           boolean extraOutput) {
     super(config);
     this.justCentralFlake = justCentralFlake;
+    this.periodicSingleFlake = periodicSingleFlake;
     if ((!justCentralFlake) && ((0f > coverage) || (1f < coverage))) {
       System.err.println("Chosen coverage is not permitted. Selecting the default one: %30");
       maxCoverage = 0.3f;
@@ -183,7 +186,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
               && nextRadius < lattice.getCartSizeX() / 2
               && nextRadius < lattice.getCartSizeY() / 2) {
         if (perimeterType == RoundPerimeter.CIRCLE) {
-          perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius));
+          perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
           int newArea;
           newArea = calculateAreaAsInKmcCanvas();
           freeArea += newArea - currentArea;
@@ -760,7 +763,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       perimeter.setMinRadius();
     }
     if (perimeterType == RoundPerimeter.CIRCLE) {
-      perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius()));
+      perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius(), periodicSingleFlake));
     } else {
       perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
     }

@@ -94,6 +94,10 @@ public class Parser {
    * See {@link #getPsdSymmetry()}
    */
   private boolean psdSymmetry;
+  /**
+   * See {@link isPeriodicSingleFlake()}
+   */
+  private boolean periodicSingleFlake;
   private boolean outputData;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
@@ -359,6 +363,11 @@ public class Parser {
       psdSymmetry = true;
     }
     try {
+      periodicSingleFlake = json.getBoolean("periodicSingleFlake");
+    } catch (JSONException e) {
+      periodicSingleFlake = false;
+    }
+    try {
       randomSeed = json.getBoolean("randomSeed");
     } catch (JSONException e) {
       randomSeed = true;
@@ -532,6 +541,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"surfaceType\"", surfaceType);
     System.out.printf("%32s: %s,\n", "\"psd\"", psd);
     System.out.printf("%32s: %s,\n", "\"psdSymmetry\"", psdSymmetry);
+    System.out.printf("%32s: %s,\n", "\"periodicSingleFlake\"", periodicSingleFlake);
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
@@ -852,6 +862,17 @@ public class Parser {
     return psdSymmetry;
   }
 
+  /**
+   * Returns if single-flake simulation is periodic. If yes, a simulation size of selected size
+   * is created and it will be periodic. If not, a circular region will be created in the selected
+   * region and when current atom exits the perimeter it will be inserted by a prefixed statistics.
+   *
+   * @return
+   */
+  public boolean isPeriodicSingleFlake() {
+    return periodicSingleFlake;
+  }
+  
   public boolean outputData() {
     return outputData;
   }

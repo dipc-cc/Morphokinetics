@@ -24,11 +24,12 @@ public class GrapheneKmc extends AbstractGrowthKmc {
           int hexaSizeI, 
           int hexaSizeJ, 
           boolean justCentralFlake,
+          boolean periodicSingleFlake,
           float coverage,
           boolean useMaxPerimeter,
           short perimeterType,
           boolean extraOutput) {
-    super(config, justCentralFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
+    super(config, justCentralFlake, periodicSingleFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
