@@ -121,6 +121,9 @@ public class Restart {
   }
 
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, String fileName) {
+    if (!fileName.startsWith(folder)) {
+      fileName = folder + fileName;
+    }
     String subfix = ".txt";
     if (!fileName.endsWith(subfix)) {
       fileName = fileName + ".txt";
