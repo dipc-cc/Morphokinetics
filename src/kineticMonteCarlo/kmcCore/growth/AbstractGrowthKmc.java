@@ -651,7 +651,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   @Override
   public float getCoverage() {
-    if (justCentralFlake) {
+    if (justCentralFlake && !periodicSingleFlake) { // count only simulated places in the circle
       float occupied = (float) lattice.getOccupied();
       return occupied / area;
     } else {
