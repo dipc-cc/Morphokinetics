@@ -91,7 +91,6 @@ public class Restart {
    */
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
     String fileName = format("%spsd%03d.mko", folder, simulationNumber);
-    writePsdText2D(dimensions, sizes, data, simulationNumber);
     writeLowBinary(dimensions, sizes, data, fileName);
   }
 
@@ -99,7 +98,6 @@ public class Restart {
     if (!fileName.startsWith(folder)) {
       fileName = folder + fileName;
     }
-    writePsdText2D(dimensions, sizes, data, fileName);
 
     String subfix = ".mko";
     if (!fileName.endsWith(subfix)) {
