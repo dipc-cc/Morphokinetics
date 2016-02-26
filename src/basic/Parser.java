@@ -90,6 +90,10 @@ public class Parser {
   private boolean justCentralFlake;
   private boolean printToImage;
   private boolean psd;
+  /**
+   * See {@link #getPsdSymmetry()}
+   */
+  private boolean psdSymmetry;
   private boolean outputData;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
@@ -171,6 +175,7 @@ public class Parser {
     justCentralFlake = true;
     printToImage = false;
     psd = false;
+    psdSymmetry = true;
     outputData = false;
     numericFormatCode = 2;
     outputType = new OutputType();
@@ -349,6 +354,11 @@ public class Parser {
       psd = false;
     }
     try {
+      psdSymmetry = json.getBoolean("psdSymmetry");
+    } catch (JSONException e) {
+      psdSymmetry = true;
+    }
+    try {
       randomSeed = json.getBoolean("randomSeed");
     } catch (JSONException e) {
       randomSeed = true;
@@ -521,6 +531,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
     System.out.printf("%32s: %s,\n", "\"surfaceType\"", surfaceType);
     System.out.printf("%32s: %s,\n", "\"psd\"", psd);
+    System.out.printf("%32s: %s,\n", "\"psdSymmetry\"", psdSymmetry);
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
@@ -831,6 +842,14 @@ public class Parser {
   
   public boolean doPsd() {
     return psd;
+  }
+  
+  /**
+   * Returns if the PSD has to be symmetric. 
+   * @return psdSymmetry
+   */
+  public boolean isPsdSymmetric() {
+    return psdSymmetry;
   }
 
   public boolean outputData() {
