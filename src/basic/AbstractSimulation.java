@@ -137,15 +137,16 @@ public abstract class AbstractSimulation {
       if (parser.visualise()) {
         Frame2D psdFrame = new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
         psdFrame.setLogScale(true)
-                .setShift(true)
-                .printToImage(restartFolderName, 1);
+                .setShift(true);                
         psdFrame.setVisible(true);
         psdFrame.toBack();
+        psdFrame.printToImage(restartFolderName, 1);
 
         Frame2D surfaceFrame = new Frame2D("Sampled surface");
-        surfaceFrame.setMesh(sampledSurface).printToImage(restartFolderName, 2);
+        surfaceFrame.setMesh(sampledSurface);
         surfaceFrame.setVisible(true);
         surfaceFrame.toBack();
+        surfaceFrame.printToImage(restartFolderName, 2);
       }
       psd.printAvgToFile();
     }
