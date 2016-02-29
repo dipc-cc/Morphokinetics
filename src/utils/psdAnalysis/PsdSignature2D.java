@@ -158,7 +158,9 @@ public class PsdSignature2D {
 
   public void printAvgToFile(){
     restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
+    restart.writePsdText2D(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
     restart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
+    restart.writePsdText2D(dimensions, sizes, this.getPsd(), "psdAvgRaw");
   }
   
   public void setRestart(Restart restart) {
