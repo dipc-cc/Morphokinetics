@@ -29,7 +29,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
     setPsdSizeX(config.sizeX_UC * 2);
     setPsdSizeY(config.sizeY_UC * 2);
     kmc = new SiKmc(config);
-    psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
+    psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX(), 1);
     frame = new SiFrame();
   }
 

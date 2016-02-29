@@ -66,7 +66,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
   private static float[][] getPsdFromSimulation(SiKmc kmc, int temperature) {
 
-    PsdSignature2D psd = new PsdSignature2D(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2);
+    PsdSignature2D psd = new PsdSignature2D(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2, 1);
     float[][] surface;
 
     kmc.initialiseRates(new SiRatesFactory().getRates(temperature));

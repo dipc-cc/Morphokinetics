@@ -97,7 +97,7 @@ public abstract class AbstractSimulation {
     extentSizes[1] = (int) (surfaceSizes[1] * parser.getPsdExtend());
     
     if (parser.doPsd()) {
-      psd = new PsdSignature2D((int) (surfaceSizes[0] * parser.getPsdExtend()), (int) (surfaceSizes[1] * parser.getPsdExtend()));
+      psd = new PsdSignature2D(surfaceSizes[0], surfaceSizes[1], parser.getPsdExtend());
       psd.setRestart(restart); // All the output should go the same folder
     }
 

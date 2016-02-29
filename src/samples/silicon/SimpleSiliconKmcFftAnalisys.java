@@ -31,7 +31,7 @@ public class SimpleSiliconKmcFftAnalisys {
     kmc.depositSeed();
 
     float[][] surface;;
-    PsdSignature2D PSD = new PsdSignature2D(128, 128);
+    PsdSignature2D PSD = new PsdSignature2D(128, 128, 1);
 
     kmc.simulate(5000);
     for (int i = 0; i < 100; i++) {

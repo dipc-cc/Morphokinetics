@@ -32,7 +32,7 @@ public class AgAgPsdTest {
     AgKmc kmc = initialiseKmc();
 
     //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
-    PsdSignature2D PSD = new PsdSignature2D(128, 128);
+    PsdSignature2D PSD = new PsdSignature2D(128, 128, 1);
     float[][] sampledSurface = null;
 
     initialiseRates(ratesFactory, kmc);

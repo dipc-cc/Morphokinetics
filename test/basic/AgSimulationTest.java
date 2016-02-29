@@ -133,9 +133,9 @@ public class AgSimulationTest {
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
-    results.add(0.022); // the error must be lower than 0.022
+    results.add(0.038); // the error must be lower than 0.038
     results.sort((a, b) -> b.compareTo(a));
-    assertEquals(0.022, results.get(0), 0.0); // ensure that the first value is 0.022, and therefore, the current error is lower
+    assertEquals(0.038, results.get(0), 0.0); // ensure that the first value is 0.038, and therefore, the current error is lower
  
   }
   

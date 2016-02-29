@@ -49,7 +49,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     setPsdSizeY(psdSizeY);
 
     this.kmc = kmc;
-    psd = new PsdSignature2D(psdSizeY, psdSizeX);
+    psd = new PsdSignature2D(psdSizeY, psdSizeX, 1);
     if (evolutionarySearchType != null) {
       searchEnergies = evolutionarySearchType.equals("energies");
     }

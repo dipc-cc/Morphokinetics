@@ -32,28 +32,32 @@ public class PsdSignature2D {
   private int measures;
   private Semaphore semaphore;
   private boolean averaged = false;
-  private final int binsY;
-  private final int binsX;
+  private final int psdSizeY;
+  private final int psdSizeX;
+  private final int surfaceSizeY;
+  private final int surfaceSizeX;
   private final int[] sizes;
   private final int dimensions;
   private Restart restart;
   public static final int HORIZONTAL_SYMMETRY = 0;
   public static final int VERTICAL_SYMMETRY = 1;
 
-  public PsdSignature2D(int binsY, int binsX) {
+  public PsdSignature2D(int surfaceSizeY, int surfaceSizeX, double extent) {
 
-    fftCore = new FloatFFT_2D(binsY, binsX);
-    psd = new float[binsY][binsX];
-    psdTmp = new float[binsY][binsX];
-    buffer = new float[binsY][binsX * 2];
+    psdSizeY = (int) (surfaceSizeY * extent);
+    psdSizeX = (int) (surfaceSizeX * extent);
+    fftCore = new FloatFFT_2D(psdSizeY, psdSizeX);
+    psd = new float[psdSizeY][psdSizeX];
+    psdTmp = new float[psdSizeY][psdSizeX];
+    buffer = new float[psdSizeY][psdSizeX * 2];
     measures = 0;
     semaphore = new Semaphore(1);
     psdVector = new ArrayList<>();
-    this.binsY = binsY;
-    this.binsX = binsX;
+    this.surfaceSizeY = surfaceSizeY;
+    this.surfaceSizeX = surfaceSizeX;
     sizes = new int[2];
-    sizes[0] = binsY;
-    sizes[1] = binsX;
+    sizes[0] = psdSizeY;
+    sizes[1] = psdSizeX;
     dimensions = 2;
     restart = new Restart();
   }
@@ -76,9 +80,9 @@ public class PsdSignature2D {
 
     fftCore.realForwardFull(buffer);
 
-    for (int i = 0; i < binsY; i++) {
-      for (int j = 0; j < binsX; j++) {
-        psdTmp[i][j] = buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1];
+    for (int i = 0; i < psdSizeY; i++) {
+      for (int j = 0; j < psdSizeX; j++) {
+        psdTmp[i][j] = (buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1]) / (surfaceSizeX * surfaceSizeY);
         psd[i][j] += psdTmp[i][j];
       }
     }
@@ -91,8 +95,8 @@ public class PsdSignature2D {
   public float[][] getPsd() {
 
     if (!averaged) {
-      for (int i = 0; i < binsY; i++) {
-        for (int j = 0; j < binsX; j++) {
+      for (int i = 0; i < psdSizeY; i++) {
+        for (int j = 0; j < psdSizeX; j++) {
           psd[i][j] /= measures;
         }
       }
@@ -104,7 +108,7 @@ public class PsdSignature2D {
   public void reset() {
     averaged = false;
     measures = 0;
-    psd = new float[binsY][binsX];
+    psd = new float[psdSizeY][psdSizeX];
   }
 
   /**
@@ -117,19 +121,19 @@ public class PsdSignature2D {
   public void applySymmetryFold(int symmetryType) {
     switch (symmetryType) {
       case HORIZONTAL_SYMMETRY:
-        for (int i = 0; i < binsY; i++) {
-          for (int j = 1; j < binsX / 2; j++) {
-            float temp = (psd[i][j] + psd[i][binsX - j - 1]) * 0.5f;
-            psd[i][j] = psd[i][binsX - j - 1] = temp;
+        for (int i = 0; i < psdSizeY; i++) {
+          for (int j = 1; j < psdSizeX / 2; j++) {
+            float temp = (psd[i][j] + psd[i][psdSizeX - j - 1]) * 0.5f;
+            psd[i][j] = psd[i][psdSizeX - j - 1] = temp;
           }
         }
         break;
 
       case VERTICAL_SYMMETRY:
-        for (int i = 1; i < binsY / 2; i++) {
-          for (int j = 0; j < binsX; j++) {
-            float temp = (psd[i][j] + psd[binsY - i - 1][j]) * 0.5f;
-            psd[i][j] = psd[binsY - i - 1][j] = temp;
+        for (int i = 1; i < psdSizeY / 2; i++) {
+          for (int j = 0; j < psdSizeX; j++) {
+            float temp = (psd[i][j] + psd[psdSizeY - i - 1][j]) * 0.5f;
+            psd[i][j] = psd[psdSizeY - i - 1][j] = temp;
           }
         }
         break;

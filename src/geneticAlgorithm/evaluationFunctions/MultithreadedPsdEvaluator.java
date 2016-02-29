@@ -119,7 +119,7 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
     times = new double[p.size()];
     for (int i = 0; i < p.size(); i++) {
-      psds[i] = new PsdSignature2D(getPsdSizeY(), getPsdSizeX());
+      psds[i] = new PsdSignature2D(getPsdSizeY(), getPsdSizeX(), 1);
     }
 
     setCurrentPopulation(p);

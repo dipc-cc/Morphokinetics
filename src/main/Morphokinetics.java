@@ -147,7 +147,7 @@ public class Morphokinetics {
           sizes[0] = readSurface.length;
           sizes[1] = restart.getSizeY();
           sizes[1] = readSurface[0].length;
-          psd = new PsdSignature2D(sizes[0], sizes[1]);
+          psd = new PsdSignature2D(sizes[0], sizes[1], 1);
         }
       } catch (Exception e){
         System.err.println("Provided filename [" + surfaceFileName + i + ".mko] does not exist. Exiting");
