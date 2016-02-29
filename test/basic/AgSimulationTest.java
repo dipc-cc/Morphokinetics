@@ -123,13 +123,6 @@ public class AgSimulationTest {
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
-
-    for (int i = 0; i < ref.length; i++) {
-      for (int j = 0; j < ref[0].length; j++) {
-        currentPsd[i][j] = (float) Math.log(currentPsd[i][j]);
-        ref[i][j] = (float) Math.log(ref[i][j]);
-      }
-    }
     
     AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(null,
             0, 0,
@@ -140,9 +133,9 @@ public class AgSimulationTest {
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
-    results.add(0.0175); // reference value is 0.016 and we allow a margin of 0.0015
+    results.add(0.022); // the error must be lower than 0.022
     results.sort((a, b) -> b.compareTo(a));
-    assertEquals(0.0175, results.get(0), 0.0); // ensure that the first value is 0.0175, and therefore, the current error is lower
+    assertEquals(0.022, results.get(0), 0.0); // ensure that the first value is 0.022, and therefore, the current error is lower
  
   }
   
