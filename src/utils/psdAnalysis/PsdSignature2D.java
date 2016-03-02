@@ -78,8 +78,10 @@ public class PsdSignature2D {
       System.arraycopy(sampledSurface[i], 0, buffer[i], 0, sampledSurface[0].length);
     }
 
+    // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
     fftCore.realForwardFull(buffer);
 
+    // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
     for (int i = 0; i < psdSizeY; i++) {
       for (int j = 0; j < psdSizeX; j++) {
         psdTmp[i][j] = (buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1]) / (surfaceSizeX * surfaceSizeY);
