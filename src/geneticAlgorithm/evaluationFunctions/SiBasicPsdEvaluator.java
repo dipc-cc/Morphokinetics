@@ -52,7 +52,6 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
       setCurrentSimulation(getCurrentSimulation()+1);
     }
 
-    psd.doPsd();
     psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
     psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
     frame.drawKmc(kmc);

@@ -98,7 +98,6 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
     simulationCount = getRepeats() - 1;
  
     ind.setSimulationTime(time / getRepeats());
-    psd.doPsd();
     psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
     psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
     psd.printAvgToFile();

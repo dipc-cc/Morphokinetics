@@ -32,7 +32,7 @@ public class AgAgPsdTest {
     AgKmc kmc = initialiseKmc();
 
     //it is a good idea to divide the sample surface dimensions by two ( e.g. 256->128)
-    PsdSignature2D psd = new PsdSignature2D(128, 128, 1);
+    PsdSignature2D PSD = new PsdSignature2D(128, 128, 1);
     float[][] sampledSurface = null;
 
     initialiseRates(ratesFactory, kmc);
@@ -43,15 +43,14 @@ public class AgAgPsdTest {
 
       sampledSurface = kmc.getSampledSurface(128, 128);
 
-      psd.addSurfaceSample(sampledSurface);
+      PSD.addSurfaceSample(sampledSurface);
       System.out.println("flake " + i);
     }
-    psd.doPsd();
-    psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
-    psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
+    PSD.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+    PSD.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
     Frame2D psdFrame = new Frame2D("PSD analysis");
-    psdFrame.setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
+    psdFrame.setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
     psdFrame.setLogScale(true)
             .setShift(true);
     psdFrame.setVisible(true);
