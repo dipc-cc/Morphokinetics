@@ -159,6 +159,7 @@ public class Morphokinetics {
       psd.addSurfaceSample(readSurface);
     }
 
+    psd.doPsd();
     psd.printAvgToFile();
     return psd.getPsd();
   }

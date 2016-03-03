@@ -130,6 +130,7 @@ public abstract class AbstractSimulation {
     printFooter();
 
     if (parser.doPsd()) {
+      psd.doPsd();
       if (parser.isPsdSymmetric()) {
         psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
         psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);

@@ -27,6 +27,7 @@ public class PsdSignature2D {
   private FloatFFT_2D fftCore;
   private float[][] psd;
   private ArrayList<float[][]> psdVector;
+  private ArrayList<float[][]> surfaceVector;
   private float[][] psdTmp;
   private float[][] buffer;
   private int measures;
@@ -53,6 +54,7 @@ public class PsdSignature2D {
     measures = 0;
     semaphore = new Semaphore(1);
     psdVector = new ArrayList<>();
+    surfaceVector = new ArrayList<>();
     this.surfaceSizeY = surfaceSizeY;
     this.surfaceSizeX = surfaceSizeX;
     sizes = new int[2];
@@ -63,7 +65,6 @@ public class PsdSignature2D {
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
-
     if (averaged) {
       throw new RuntimeException("PSD measures averaged, new samples cannot be added without signature reset.");
     }
@@ -74,26 +75,31 @@ public class PsdSignature2D {
       System.err.println("Thread interrupted while writting PSD signature");
     }
 
-    for (int i = 0; i < sampledSurface.length; i++) {
-      System.arraycopy(sampledSurface[i], 0, buffer[i], 0, sampledSurface[0].length);
-    }
-
-    // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
-    fftCore.realForwardFull(buffer);
-
-    // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
-    for (int i = 0; i < psdSizeY; i++) {
-      for (int j = 0; j < psdSizeX; j++) {
-        psdTmp[i][j] = (buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1]) / (surfaceSizeX * surfaceSizeY);
-        psd[i][j] += psdTmp[i][j];
-      }
-    }
-    psdVector.add(psdTmp);
+    surfaceVector.add(sampledSurface);
     measures++;
     semaphore.release();
-
   }
 
+  public void doPsd() {
+    for (float[][] surface : surfaceVector) {
+      for (int i = 0; i < surface.length; i++) {
+        System.arraycopy(surface[i], 0, buffer[i], 0, surface[0].length);
+      }
+
+      // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
+      fftCore.realForwardFull(buffer);
+
+      // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
+      for (int i = 0; i < psdSizeY; i++) {
+        for (int j = 0; j < psdSizeX; j++) {
+          psdTmp[i][j] = (buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1]) / (surfaceSizeX * surfaceSizeY);
+          psd[i][j] += psdTmp[i][j];
+        }
+      }
+      psdVector.add(psdTmp);
+    }
+  }
+  
   public float[][] getPsd() {
 
     if (!averaged) {
@@ -149,7 +155,7 @@ public class PsdSignature2D {
    * @param simulationNumber the number of simulation
    */
   public void writePsdBinary(int simulationNumber) {
-    restart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
+    //restart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
   }
     
   /**
@@ -159,7 +165,7 @@ public class PsdSignature2D {
    * @param simulationNumber the number of simulation
    */
   public void writePsdText(int simulationNumber) {
-    restart.writePsdText2D(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
+    //restart.writePsdText2D(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
   }
 
   public void printAvgToFile(){

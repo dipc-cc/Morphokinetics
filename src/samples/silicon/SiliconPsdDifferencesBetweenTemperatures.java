@@ -28,8 +28,22 @@ public class SiliconPsdDifferencesBetweenTemperatures {
     SiKmc kmc = new SiKmc(config);
 
     float[][] psd300_1 = getPsdFromSimulation(kmc, 300);
+    Frame2D frame300_1 = new Frame2D("PSD 300K first").setMesh(psd300_1)
+            .setLogScale(true)
+            .setShift(true);
+    frame300_1.setVisible(true);
     float[][] psd300_2 = getPsdFromSimulation(kmc, 300);
+    Frame2D frame300_2 = new Frame2D("PSD 300K second").setMesh(psd300_2)
+            .setLogScale(true)
+            .setShift(true);;
+    frame300_2.setLocation(frame300_1.getWidth(), 0);
+    frame300_2.setVisible(true);
     float[][] psd400_1 = getPsdFromSimulation(kmc, 400);
+    Frame2D frame400_1 = new Frame2D("PSD 400K first").setMesh(psd400_1)
+            .setLogScale(true)
+            .setShift(true);;
+    frame400_1.setLocation(2 * frame300_1.getWidth(), 0);
+    frame400_1.setVisible(true);
 
     float[][] relativeError1
             = new float[psd300_1.length][psd300_1[0].length];
@@ -43,25 +57,28 @@ public class SiliconPsdDifferencesBetweenTemperatures {
       }
     }
 
-    Frame2D frame = new Frame2D("Relative difference between PSDs 400K vs 300K")
+    Frame2D frame400vs300 = new Frame2D("Relative difference between PSDs 400K vs 300K")
             .setLogScale(false)
             .setShift(true)
             .setMesh(MathUtils.avgFilter(relativeError1, 1));
 
-    frame.setLocation(frame.getWidth(), 0);
+    frame400vs300.setLocation(frame300_1.getWidth(), frame300_1.getHeight());
 
-    if (Math.abs(frame.getMax()) > Math.abs(frame.getMin())) {
-      frame.setMin(-frame.getMax());
+    if (Math.abs(frame400vs300.getMax()) > Math.abs(frame400vs300.getMin())) {
+      frame400vs300.setMin(-frame400vs300.getMax());
     } else {
-      frame.setMax(-frame.getMin());
+      frame400vs300.setMax(-frame400vs300.getMin());
     }
+    frame400vs300.setVisible(true);
 
-    new Frame2D("Relative difference between PSDs 300K vs 300K")
+    Frame2D frame300vs300 = new Frame2D("Relative difference between PSDs 300K vs 300K")
             .setLogScale(false)
             .setShift(true)
-            .setMax(frame.getMax())
-            .setMin(frame.getMin())
+            .setMax(frame400vs300.getMax())
+            .setMin(frame400vs300.getMin())
             .setMesh(MathUtils.avgFilter(relativeError2, 1));
+    frame300vs300.setLocation(0, frame300_1.getHeight());
+    frame300vs300.setVisible(true);
   }
 
   private static float[][] getPsdFromSimulation(SiKmc kmc, int temperature) {
@@ -73,14 +90,16 @@ public class SiliconPsdDifferencesBetweenTemperatures {
     for (int a = 0; a < 30; a++) {
       kmc.reset();
       kmc.depositSeed();
-      kmc.simulate(5000);
+      kmc.simulate();
       for (int i = 0; i < 10; i++) {
-        kmc.simulate(10000);
+        System.out.println(temperature + "K simulation " + a + " " + i);
+        kmc.simulate();
         surface = kmc.getSampledSurface(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2);
         psd.addSurfaceSample(surface);
       }
     }
 
+    psd.doPsd();
     psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
     psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 

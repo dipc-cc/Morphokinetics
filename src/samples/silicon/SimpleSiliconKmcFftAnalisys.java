@@ -31,20 +31,26 @@ public class SimpleSiliconKmcFftAnalisys {
     kmc.depositSeed();
 
     float[][] surface;;
-    PsdSignature2D PSD = new PsdSignature2D(128, 128, 1);
+    PsdSignature2D psd = new PsdSignature2D(128, 128, 1);
 
-    kmc.simulate(5000);
+    System.out.println("Simulation -1");
+    kmc.simulate();
     for (int i = 0; i < 100; i++) {
-      kmc.simulate(5000);
+      System.out.println("Simulation " + i);
+      kmc.simulate();
       surface = kmc.getSampledSurface(128, 128);
-      PSD.addSurfaceSample(surface);
+      psd.addSurfaceSample(surface);
     }
 
-    PSD.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
-    PSD.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
+    psd.doPsd();
+    psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+    psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
-    new Frame2D("PSD analysis")
-            .setMesh(MathUtils.avgFilter(PSD.getPsd(), 1));
+    Frame2D psdFrame = new Frame2D("PSD analysis")
+            .setMesh(MathUtils.avgFilter(psd.getPsd(), 1))
+            .setLogScale(true)
+            .setShift(true);
+    psdFrame.setVisible(true);
   }
 
   private static SiKmcConfig configKmc() {
