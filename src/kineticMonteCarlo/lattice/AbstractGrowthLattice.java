@@ -68,6 +68,22 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
   }
 
+  public int size() {
+    return getHexaSizeI() * getHexaSizeJ();
+  }
+  
+  /**
+   * Return the selected atom
+   * @param index
+   * @return 
+   */
+  public AbstractGrowthAtom getAtom(int index) {
+    int j = Math.floorDiv(index, getHexaSizeI());
+    int i = index - (j * getHexaSizeI());
+    
+    return atoms[i][j];
+  }
+  
   /**
    * We ignore the unitCellPos by now, we get directly the atom of i,j hexagonal location.
    *
