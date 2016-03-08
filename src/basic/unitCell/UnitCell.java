@@ -484,7 +484,7 @@ public class UnitCell {
     //-------------------------------------------------------------------------
     // Creamos los atomos
     //-------------------------------------------------------------------------
-    int cuantos = creaAtomos();
+    int cuantos = createAtoms();
     //-----------------------------------------------------------------------
     // Por ultimo, interconectamos las celulas
     //-----------------------------------------------------------------------
@@ -530,7 +530,7 @@ public class UnitCell {
     }
   }
 
-  protected int creaAtomos() {
+  protected int createAtoms() {
     int cont = 0;
     //celula tipo 0 (abajo del todo)
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
