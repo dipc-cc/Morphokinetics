@@ -86,7 +86,9 @@ public class GrapheneSimulationTest {
       Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    assertArrayEquals(ref, currentSurface);
+    for (int i = 0; i < ref.length; i++) {
+      assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
+    }
   }
 
   @Test
@@ -115,8 +117,10 @@ public class GrapheneSimulationTest {
       Logger.getLogger(GrapheneSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    // For the moment only comparing the last surface
-    assertArrayEquals(ref4, currentSurface);
+    // For the moment only comparing the last surface    
+    for (int i = 0; i < ref2.length; i++) {
+      assertArrayEquals(ref4[i], currentSurface[i], (float) 0.001);
+    }
     // TODO compare the rest of surfaces
   }
     
@@ -143,7 +147,9 @@ public class GrapheneSimulationTest {
     }
 
     // For the moment only comparing the last surface
-    assertArrayEquals(ref2, currentSurface);
+    for (int i = 0; i < ref2.length; i++) {
+      assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
+    }
     // TODO compare the rest of surfaces
   }
     

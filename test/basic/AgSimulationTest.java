@@ -90,7 +90,9 @@ public class AgSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    assertArrayEquals(ref, currentSurface);
+    for (int i = 0; i < ref.length; i++) {
+      assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
+    }
   }
 
   /**
@@ -133,9 +135,10 @@ public class AgSimulationTest {
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
-    results.add(0.038); // the error must be lower than 0.038
+    //0.031!!!
+    results.add(0.032); // the error must be lower than 0.032
     results.sort((a, b) -> b.compareTo(a));
-    assertEquals(0.038, results.get(0), 0.0); // ensure that the first value is 0.038, and therefore, the current error is lower
+    assertEquals(0.032, results.get(0), 0.0); // ensure that the first value is 0.032, and therefore, the current error is lower
  
   }
   
@@ -162,7 +165,10 @@ public class AgSimulationTest {
     }
 
     // For the moment only comparing the last surface
-    assertArrayEquals(ref2, currentSurface);
+    //assertArrayEquals(ref2, currentSurface, (float) 0.001);
+    for (int i = 0; i < ref2.length; i++) {
+      assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
+    }
     // TODO compare the number of islands and surface 0 and 1
   }
 

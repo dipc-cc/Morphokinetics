@@ -61,6 +61,12 @@ public class MathUtils {
     }
   }
 
+  /**
+   * Creates tents for the surface. Thus, will create more sinusoidal like input for the PSD, which
+   * will easier identify the frequencies of those tents.
+   *
+   * @param surface island surface
+   */
   public static void applyGrowthAccordingDistanceToPerimeter(float[][] surface) {
 
     int modified;
@@ -90,6 +96,38 @@ public class MathUtils {
       currentHeight++;
     } while (modified > 0);
   }
+  
+  /**
+   * Normalises the surface, to be able to easily compare surfaces with different tent heights.
+   * @param surface 
+   */
+  public static void normalise(float[][] surface) {
+    int binX = surface.length;
+    int binY = surface[0].length;
+    float max = 0;
+    float sum = 0;
+        
+    // Get the sum and max
+    for (int i = 0; i < binX; i++) {
+      for (int j = 0; j < binY; j++) {
+        sum += surface[i][j];
+        if (max < surface[i][j]) {
+          max = surface[i][j];
+        }
+      }
+    }
+    
+    // Calculate mean and update max
+    float mean = sum / (binX * binY);
+    max = max - mean; 
+    // Substract mean height and normalise the height field
+    for (int i = 0; i < binX; i++) {
+      for (int j = 0; j < binY; j++) {
+        surface[i][j] = (surface[i][j] - mean) / max;
+      }
+    }
+  }
+    
 
   private static int getIndex(int x, int maxX) {
     if (x == maxX) {

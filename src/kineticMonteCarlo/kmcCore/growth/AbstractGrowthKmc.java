@@ -521,6 +521,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
+    MathUtils.normalise(surface);
     return surface;
   }
   
@@ -555,6 +556,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
+    MathUtils.normalise(surface);
     return surface;
   }
   
