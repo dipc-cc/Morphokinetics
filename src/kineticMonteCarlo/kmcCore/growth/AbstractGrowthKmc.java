@@ -141,11 +141,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     getList().reset();
     freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
     
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        lattice.getAtom(i, j).clear();
-      }
+    for (int i = 0; i < lattice.size(); i++) {
+      lattice.getAtom(i).clear();
     }
+
     deltaTimeBetweenTwoAttachments.clear();
     deltaTimePerAtom.clear();
     previousTime = 0;
@@ -175,7 +174,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         if (destinationAtom.isOutside()) {
           destinationAtom = perimeter.getPerimeterReentrance(originAtom);
           // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
-          getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0, 0).getProbability(0, 0));
+          getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0).getProbability(0, 0));
         }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
@@ -234,11 +233,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private int countIslands() {
     // reset all the atoms
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        lattice.getAtom(i, j).setVisited(false);
-        lattice.getAtom(i, j).setIslandNumber(0);
-      }
+    
+    for (int i = 0; i < lattice.size(); i++) {
+      lattice.getAtom(i).setVisited(false);
+      lattice.getAtom(i).setIslandNumber(0);
     }
     
     // do the count
@@ -255,11 +253,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       histogram.add(0);
     }
     // iterate all atoms and add to the corresponding island
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        int island = lattice.getAtom(i, j).getIslandNumber();
-        histogram.set(island, histogram.get(island) + 1);
-      }
+    for (int i = 0; i < lattice.size(); i++) {
+      int island = lattice.getAtom(i).getIslandNumber();
+      histogram.set(island, histogram.get(island) + 1);
     }
     System.out.println("histogram " + histogram.toString());
     return islandCount;
