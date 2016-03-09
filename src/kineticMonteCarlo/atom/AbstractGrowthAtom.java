@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.awt.geom.Point2D;
+
 /**
  *
  * @author Nestor
@@ -46,7 +48,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     islandNumber = 0;
     visited = false;
   }
-  
+          
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -149,6 +151,15 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public short getjHexa() {
     return jHexa;
+  }
+  
+  /**
+   * Returns the position within the unit cell, (0,0) in this case.
+   * @param pos 0
+   * @return coordinates in unit cell
+   */
+  public Point2D getPos(int pos) {
+      return new Point2D.Double(0, 0);
   }
   
   public float getAngle() {

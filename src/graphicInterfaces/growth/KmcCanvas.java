@@ -18,6 +18,7 @@ import static java.lang.String.format;
 import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.unitCell.IUc;
 
 /**
  *
@@ -162,49 +163,52 @@ public class KmcCanvas extends Canvas {
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthAtom atom = lattice.getAtom(i);
-      int Y = (int) (Math.round(lattice.getCartY(atom.getjHexa()) * scale) + baseY);
-      int X = (int) Math.round(lattice.getCartX(atom.getiHexa(), atom.getjHexa()) * scale) + baseX;
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        int Y = (int) Math.round((atom.getPos(j).getY()+uc.getPos().getY()) * scale) + baseY;
+        int X = (int) Math.round((atom.getPos(j).getX()+uc.getPos().getX()) * scale) + baseX;
 
-      byte type = atom.getType();
-      switch (type) {
-        case AbstractAtom.TERRACE:
-          g.setColor(WHITE_GRAY);
-          break;
-        case AbstractAtom.CORNER:
-          g.setColor(RED);
-          break;
-        case AbstractAtom.EDGE:
-          g.setColor(LILAC);
-          break;
-        case AbstractAtom.ARMCHAIR_EDGE:
-          g.setColor(Color.WHITE);
-          break;
-        case AbstractAtom.ZIGZAG_WITH_EXTRA:
-          g.setColor(Color.CYAN);
-          break;
-        case AbstractAtom.SICK:
-          g.setColor(Color.BLUE);
-          break;
-        case AbstractAtom.KINK:
-          g.setColor(BANANA);
-          break;
-        case AbstractAtom.BULK:
-          g.setColor(GREEN);
-          break;
-      }
-
-      if (scale < 3) {
-        if (atom.isOccupied()) {
-          g.fillRect(X, Y, scale, scale);
-        } else if (!atom.isOutside()) {
-          g.drawRect(X, Y, scale, scale);
+        byte type = atom.getType();
+        switch (type) {
+          case AbstractAtom.TERRACE:
+            g.setColor(WHITE_GRAY);
+            break;
+          case AbstractAtom.CORNER:
+            g.setColor(RED);
+            break;
+          case AbstractAtom.EDGE:
+            g.setColor(LILAC);
+            break;
+          case AbstractAtom.ARMCHAIR_EDGE:
+            g.setColor(Color.WHITE);
+            break;
+          case AbstractAtom.ZIGZAG_WITH_EXTRA:
+            g.setColor(Color.CYAN);
+            break;
+          case AbstractAtom.SICK:
+            g.setColor(Color.BLUE);
+            break;
+          case AbstractAtom.KINK:
+            g.setColor(BANANA);
+            break;
+          case AbstractAtom.BULK:
+            g.setColor(GREEN);
+            break;
         }
 
-      } else if (atom.isOccupied()) {
-        g.fillOval(X, Y, scale, scale);
-      } else if (!atom.isOutside()) {
-        g.drawOval(X, Y, scale, scale);
+        if (scale < 3) {
+          if (atom.isOccupied()) {
+            g.fillRect(X, Y, scale, scale);
+          } else if (!atom.isOutside()) {
+            g.drawRect(X, Y, scale, scale);
+          }
+
+        } else if (atom.isOccupied()) {
+          g.fillOval(X, Y, scale, scale);
+        } else if (!atom.isOutside()) {
+          g.drawOval(X, Y, scale, scale);
+        }
       }
     }
     g.dispose();
