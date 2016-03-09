@@ -58,6 +58,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int nucleations;
   private final boolean extraOutput;
   
+  private double terraceToTerraceProbability;
+  
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
           boolean periodicSingleFlake,
@@ -174,7 +176,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         if (destinationAtom.isOutside()) {
           destinationAtom = perimeter.getPerimeterReentrance(originAtom);
           // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
-          getList().addTime(perimeter.getNeededSteps() / lattice.getAtom(0).getProbability(0, 0));
+          getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
         }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
@@ -204,6 +206,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public int simulate() {
     int k = 1;
     int returnValue = 0;
+    terraceToTerraceProbability = lattice.getAtom(0, 0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
     } else {
