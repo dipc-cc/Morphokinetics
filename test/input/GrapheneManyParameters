@@ -12,7 +12,7 @@
   "binsLevels": 100,
   "extraLevels": 0,
   "outputData": true, 
-  "outputDataFormat" : [ {"type": "png"},{"type": "txt"},{"type": "extra"},],
+  "outputDataFormat" : [ {"type": "png"},{"type": "txt"},],
   "randomSeed": false,
   "useMaxPerimeter": false,
   "perimeterType": circle,
