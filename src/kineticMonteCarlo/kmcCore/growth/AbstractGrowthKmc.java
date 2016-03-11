@@ -244,10 +244,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     // do the count
     islandCount = 0;
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        identifyIsland(i, j, false);
-      }
+    for (int i = 0; i < lattice.size(); i++) {
+      identifyIsland(i, false);
     }
     
     // create a histogram with the number of atoms per island
@@ -277,12 +275,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set
    * all them the same island number.
    *
-   * @param i i hexagonal coordinate
-   * @param j j hexagonal coordinate
+   * @param index hexagonal index coordinate
    * @param fromNeighbour whether is called from outside or recursively
    */
-  private void identifyIsland(int i, int j, boolean fromNeighbour) {
-    AbstractGrowthAtom atom = lattice.getAtom(i, j);
+  private void identifyIsland(int index, boolean fromNeighbour) {
+    AbstractGrowthAtom atom = lattice.getAtom(index);
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour && !atom.isIsolated()) {
       islandCount++;
     }
@@ -292,7 +289,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
         AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
         if (!neighbour.isVisited()) {
-          identifyIsland(neighbour.getiHexa(), neighbour.getjHexa(), true);
+          index = neighbour.getjHexa() * lattice.getHexaSizeI() + neighbour.getiHexa();
+          identifyIsland(index, true);
         }
       }
     }
@@ -351,7 +349,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return depositAtom(lattice.getAtom(index));
   }
 
-  private boolean depositAtom(AbstractGrowthAtom atom) {
+  boolean depositAtom(AbstractGrowthAtom atom) {
     if (atom.isOccupied()) {
       return false;
     }
