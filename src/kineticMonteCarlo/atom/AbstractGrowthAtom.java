@@ -27,6 +27,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private boolean outside;
   private final short iHexa;
   private final short jHexa;
+  /**
+   * Position within unit cell.
+   */
+  private final int pos;
   private int multiplier;
   /**
    * Stores when the atom has been deposited. It has to be moved with the corresponding diffusion.
@@ -47,8 +51,21 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     multiplier = 1;
     islandNumber = 0;
     visited = false;
+    pos = 0;
   }
-          
+  
+  /**
+   * Dummy constructor to be able to have a proper AgAtom(pos) constructor
+   * @param numberOfNeighbours number of neighbours that each atom has
+   */
+  public AbstractGrowthAtom(int numberOfNeighbours) {
+    this.pos = 0;
+    iHexa = 0;
+    jHexa = 0;
+    bondsProbability = new double[numberOfNeighbours];
+    setNumberOfNeighbours(numberOfNeighbours);
+  }
+  
   @Override
   public int hashCode() {
     final int prime = 31;
