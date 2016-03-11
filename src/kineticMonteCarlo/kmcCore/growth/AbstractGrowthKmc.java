@@ -553,10 +553,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       IUc uc = lattice.getUc(i);
       double posUcX = uc.getPos().getX();
       double posUcY = uc.getPos().getY();
-      for (int k = 0; k < uc.size(); k++) {
-        if (uc.getAtom(k).isOccupied()) {
-          double posAtomX = uc.getAtom(k).getPos(k).getX();
-          double posAtomY = uc.getAtom(k).getPos(k).getY();
+      for (int j = 0; j < uc.size(); j++) {
+        if (uc.getAtom(j).isOccupied()) {
+          double posAtomX = uc.getAtom(j).getPos().getX();
+          double posAtomY = uc.getAtom(j).getPos().getY();
           x = (int) ((posUcX + posAtomX - corner1.getX()) * scaleX);
           y = (int) ((posUcY + posAtomY - corner1.getY()) * scaleY);
 

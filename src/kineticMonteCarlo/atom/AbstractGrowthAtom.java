@@ -172,10 +172,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   /**
    * Returns the position within the unit cell, (0,0) in this case.
-   * @param pos 0
    * @return coordinates in unit cell
    */
-  public Point2D getPos(int pos) {
+  public Point2D getPos() {
       return new Point2D.Double(0, 0);
   }
   

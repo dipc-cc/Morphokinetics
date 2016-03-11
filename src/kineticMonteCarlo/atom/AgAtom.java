@@ -60,11 +60,10 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Returns the position within the unit cell
-   * @param pos selected atom: 0 or 1
    * @return coordinates in unit cell
    */
   @Override
-  public Point2D getPos(int pos) {
+  public Point2D getPos() {
     switch (pos) {
       case 0:
         return new Point2D.Double(0, 0);

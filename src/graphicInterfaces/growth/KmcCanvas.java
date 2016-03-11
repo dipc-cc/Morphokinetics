@@ -166,8 +166,8 @@ public class KmcCanvas extends Canvas {
       IUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
-        int Y = (int) Math.round((atom.getPos(j).getY()+uc.getPos().getY()) * scale) + baseY;
-        int X = (int) Math.round((atom.getPos(j).getX()+uc.getPos().getX()) * scale) + baseX;
+        int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
+        int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
 
         byte type = atom.getType();
         switch (type) {
