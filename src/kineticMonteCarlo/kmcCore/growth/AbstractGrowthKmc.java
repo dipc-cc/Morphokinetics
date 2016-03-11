@@ -206,7 +206,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public int simulate() {
     int k = 1;
     int returnValue = 0;
-    terraceToTerraceProbability = lattice.getAtom(0, 0).getProbability(0, 0);
+    terraceToTerraceProbability = lattice.getAtom(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
     } else {
@@ -347,7 +347,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
 
   protected boolean depositAtom(int iHexa, int jHexa) {
-    return depositAtom(lattice.getAtom(iHexa, jHexa));
+    int index = jHexa * lattice.getHexaSizeI() + iHexa;
+    return depositAtom(lattice.getAtom(index));
   }
 
   private boolean depositAtom(AbstractGrowthAtom atom) {
@@ -448,7 +449,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
         int j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
-        destinationAtom = lattice.getAtom(i, j);
+        int index = j * lattice.getHexaSizeI() + i;
+        destinationAtom = lattice.getAtom(index);
       } while (!depositAtom(destinationAtom));
       // update the free area and the deposition rate counting just deposited atom
       freeArea--;
@@ -667,11 +669,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private int calculateAreaAsInKmcCanvas() {
     int totalArea = 0;
-    for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-      for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-        if (lattice.getAtom(i, j).isOccupied() || !lattice.getAtom(i, j).isOutside()) {
-          totalArea++;
-        }
+    for (int i = 0; i < lattice.size(); i++) {
+      if (lattice.getAtom(i).isOccupied() || !lattice.getAtom(i).isOutside()) {
+        totalArea++;
       }
     }
     return totalArea;
