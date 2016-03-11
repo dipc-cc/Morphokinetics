@@ -246,7 +246,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     // do the count
     islandCount = 0;
     for (int i = 0; i < lattice.size(); i++) {
-      identifyIsland(i, false);
+      // visit all the atoms within the unit cell
+      IUc uc = lattice.getUc(i);
+      for (int j=0; j< uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        identifyIsland(atom, false);
+        
+      }
     }
     
     // create a histogram with the number of atoms per island
@@ -279,8 +285,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param index hexagonal index coordinate
    * @param fromNeighbour whether is called from outside or recursively
    */
-  private void identifyIsland(int index, boolean fromNeighbour) {
-    AbstractGrowthAtom atom = lattice.getAtom(index);
+  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour) {
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour && !atom.isIsolated()) {
       islandCount++;
     }
@@ -290,8 +295,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
         AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
         if (!neighbour.isVisited()) {
-          index = neighbour.getjHexa() * lattice.getHexaSizeI() + neighbour.getiHexa();
-          identifyIsland(index, true);
+          identifyIsland(neighbour, true);
         }
       }
     }
