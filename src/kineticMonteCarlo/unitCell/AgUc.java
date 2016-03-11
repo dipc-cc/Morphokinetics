@@ -30,10 +30,12 @@ public class AgUc extends AbstractUc {
     this.atoms = atoms;
   }
 
+  @Override
   public AgAtom getAtom(int pos) {
     return atoms.get(pos);
   }
 
+  @Override
   public Point2D getPos() {
     return new Point2D.Double(SIZE_X * posI, SIZE_Y * posJ );
   }
@@ -42,6 +44,7 @@ public class AgUc extends AbstractUc {
    * Number of elements.
    * @return quantity of unit cells
    */
+  @Override
   public int size() {
     return atoms.size(); // or size
   }
@@ -62,10 +65,12 @@ public class AgUc extends AbstractUc {
     return SIZE_Y;
   }
 
+  @Override
   public int getPosI() {
     return posI;
   }
 
+  @Override
   public int getPosJ() {
     return posJ;
   }

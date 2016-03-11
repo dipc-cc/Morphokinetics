@@ -9,6 +9,6 @@ package kineticMonteCarlo.unitCell;
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class AbstractUc implements IUc{
-  
+public abstract class AbstractUc implements IUc {
+
 }
