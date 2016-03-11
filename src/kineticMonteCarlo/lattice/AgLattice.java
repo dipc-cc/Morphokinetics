@@ -485,6 +485,7 @@ public class AgLattice extends AbstractGrowthLattice {
           if (i >= getHexaSizeI()) i = 0;
           j = jHexaOrigin - distance;
           if (j < 0) j = getHexaSizeJ() - 1;
+        index = j * getHexaSizeI() + i;
           return getAtom(index);
         }
     }
