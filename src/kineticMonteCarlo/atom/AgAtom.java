@@ -266,7 +266,7 @@ public class AgAtom extends AbstractGrowthAtom {
     return neighbours[cont];
   }
 
-  public AgAtom aheadCornerAtom(int cornerPosition) {
+  private AgAtom aheadCornerAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) {
 
       switch (cornerPosition) {
