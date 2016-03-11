@@ -19,6 +19,7 @@ import java.util.List;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
+import kineticMonteCarlo.unitCell.IUc;
 import utils.MathUtils;
 import utils.StaticRandom;
 
@@ -532,7 +533,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     double scaleX = Math.abs(binX / (lattice.getCartSizeX()));
     double scaleY = Math.abs(binY / (lattice.getCartSizeY()));
 
-    if (scaleX > 1.01 || scaleY > 1.01) {
+    if (scaleX > 1.01 || scaleY > 1.1) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
       return null;
     }
@@ -544,12 +545,17 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     int x;
     int y;
-    for (int i = 0; i < lattice.getHexaSizeJ(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeI(); j++) {
-        if (lattice.getAtom(j, i).isOccupied()) {
-          Point2D position = lattice.getCartesianLocation(j, i);
-          y = (int) ((position.getY() - corner1.getY()) * scaleY);
-          x = (int) ((position.getX() - corner1.getX()) * scaleX);
+    for (int i = 0; i < lattice.size(); i++) {
+      IUc uc = lattice.getUc(i);
+      double posUcX = uc.getPos().getX();
+      double posUcY = uc.getPos().getY();
+      for (int k = 0; k < uc.size(); k++) {
+        if (uc.getAtom(k).isOccupied()) {
+          double posAtomX = uc.getAtom(k).getPos(k).getX();
+          double posAtomY = uc.getAtom(k).getPos(k).getY();
+          x = (int) ((posUcX + posAtomX - corner1.getX()) * scaleX);
+          y = (int) ((posUcY + posAtomY - corner1.getY()) * scaleY);
+
           surface[x][y] = 0;
         }
       }
