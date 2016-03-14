@@ -5,6 +5,8 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
+import java.util.List;
+import java.util.TreeMap;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.lattice.perimeterStatistics.AbstractPerimeterStatistics;
 import kineticMonteCarlo.lattice.perimeterStatistics.PerimeterStatisticsFactory;
@@ -26,7 +28,8 @@ public class RoundPerimeter {
   /**
    * Atoms vector belonging to the perimeter.
    */
-  private AbstractGrowthAtom[] currentPerimeter;
+  private List<AbstractGrowthAtom> currentPerimeter;
+  private TreeMap<Integer, AbstractGrowthAtom> currentPerimeterTreeMap;
   private AbstractPerimeterStatistics perimeterStatistics;
   private short type;
   private int neededSteps;
@@ -66,8 +69,18 @@ public class RoundPerimeter {
    * 
    * @return atoms vector belonging to the perimeter.
    */
-  public AbstractGrowthAtom[] getCurrentPerimeter(){
+  public List<AbstractGrowthAtom> getCurrentPerimeter(){
     return currentPerimeter;
+  }
+  
+  public void setCurrentPerimeter(List<AbstractGrowthAtom> perimeter) {
+    currentPerimeter = perimeter;
+    currentPerimeterTreeMap = new TreeMap<>();
+    perimeter.stream().forEach(atom -> currentPerimeterTreeMap.put(atom.getId(), atom));
+  }
+  
+  public boolean contains(AbstractGrowthAtom atom) {
+    return currentPerimeterTreeMap.containsKey(atom.getId());
   }
   
   /**
@@ -77,11 +90,6 @@ public class RoundPerimeter {
   public int goToNextRadius() {
     currentRadius = perimeterStatistics.getNextRadiusInSize(currentRadius);
     return currentRadius;
-  }
-
-  public void setAtomPerimeter(AbstractGrowthAtom[] perimeter) {
-    currentPerimeter = perimeter;
-
   }
 
   public void setMaxPerimeter(float sizeX, float sizeY) {
@@ -103,54 +111,54 @@ public class RoundPerimeter {
       destinationAngleDegree = destinationAngleDegree - 360;
     }
 
-    int initialLocation = (int) (destinationAngleDegree * currentPerimeter.length / 360.0);
+    int initialLocation = (int) (destinationAngleDegree * currentPerimeter.size() / 360.0);
     float destinationAngleRad = (float) (destinationAngleDegree * Math.PI / 180.0f);
 
     AbstractGrowthAtom destinationAtom = null;
     int position = 0;
-    float error = currentPerimeter[initialLocation].getAngle() - destinationAngleRad;
+    float error = currentPerimeter.get(initialLocation).getAngle() - destinationAngleRad;
 
     if (error > 0) {
 
       for (int j = initialLocation - 1; j >= 0; j--) {
-        float errorTemp = currentPerimeter[j].getAngle() - destinationAngleRad;
+        float errorTemp = currentPerimeter.get(j).getAngle() - destinationAngleRad;
         if (Math.abs(errorTemp) < Math.abs(error)) {
           error = errorTemp;
         } else {
-          destinationAtom = currentPerimeter[j + 1];
+          destinationAtom = currentPerimeter.get(j + 1);
           position = j + 1;
           break;
         }
       }
       if (destinationAtom == null) {
-        destinationAtom = currentPerimeter[0];
+        destinationAtom = currentPerimeter.get(0);
         position = 0;
       }
     } else {
 
-      for (int j = initialLocation + 1; j < currentPerimeter.length; j++) {
-        float errorTemp = currentPerimeter[j].getAngle() - destinationAngleRad;
+      for (int j = initialLocation + 1; j < currentPerimeter.size(); j++) {
+        float errorTemp = currentPerimeter.get(j).getAngle() - destinationAngleRad;
         if (Math.abs(errorTemp) < Math.abs(error)) {
           error = errorTemp;
         } else {
-          destinationAtom = currentPerimeter[j - 1];
+          destinationAtom = currentPerimeter.get(j - 1);
           position = j - 1;
           break;
         }
       }
 
       if (destinationAtom == null) {
-        destinationAtom = currentPerimeter[currentPerimeter.length - 1];
-        position = currentPerimeter.length - 1;
+        destinationAtom = currentPerimeter.get(currentPerimeter.size() - 1);
+        position = currentPerimeter.size() - 1;
       }
     }
 
     while (destinationAtom.isOccupied() && destinationAtom != originAtom) {
       position++;
-      if (position == currentPerimeter.length) {
+      if (position == currentPerimeter.size()) {
         position = 0;
       }
-      destinationAtom = currentPerimeter[position];
+      destinationAtom = currentPerimeter.get(position);
     }
 
     destinationAtom.setMultiplier(neededSteps /*+((radius_por_paso[0]-1)*(radius_por_paso[0]-1))*/);
@@ -173,8 +181,8 @@ public class RoundPerimeter {
     return angle;
   }
 
-   public AbstractGrowthAtom getRandomPerimeterAtom() {
-    return currentPerimeter[(int) (utils.StaticRandom.raw() * currentPerimeter.length)];
+  public AbstractGrowthAtom getRandomPerimeterAtom() {
+    return currentPerimeter.get(utils.StaticRandom.rawInteger(currentPerimeter.size()));
   }
 
 }

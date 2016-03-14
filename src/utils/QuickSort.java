@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /** 
@@ -7,27 +8,27 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  */
 public class QuickSort {
 
-  public static void orderByAngle(AbstractGrowthAtom[] a, int sizeEvent) {
+  public static void orderByAngle(List<AbstractGrowthAtom> a, int sizeEvent) {
     //quicksort(a, 0, a.length - 1);
     orderByAngle(a, 0, sizeEvent);
   }
 
-  private static void orderByAngle(AbstractGrowthAtom[] atom, int left, int right) {
+  private static void orderByAngle(List<AbstractGrowthAtom> atom, int left, int right) {
     int i = left;
     int j = right;
     AbstractGrowthAtom aux;
-    double pivote = atom[(left + right) / 2].getAngle();
+    double pivote = atom.get((left + right) / 2).getAngle();
     do {
-      while (atom[i].getAngle() < pivote) {
+      while (atom.get(i).getAngle() < pivote) {
         i++;
       }
-      while (atom[j].getAngle() > pivote) {
+      while (atom.get(j).getAngle() > pivote) {
         j--;
       }
       if (i <= j) {
-        aux = atom[i];
-        atom[i] = atom[j];
-        atom[j] = aux;
+        aux = atom.get(i);
+        atom.set(i, atom.get(j));
+        atom.set(j, aux);
         i++;
         j--;
       }

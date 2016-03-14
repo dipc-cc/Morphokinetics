@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
 import static java.lang.Math.abs;
+import java.util.List;
 import kineticMonteCarlo.unitCell.IUc;
 
 /**
@@ -198,7 +199,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public double getDistanceToCenter(int iHexa, int jHexa) {
     return middle.distance(getCartesianLocation(iHexa, jHexa));
   }
-
+  
   /**
    * Defines which atoms are inside from the current position (centre) and given radius.
    *
@@ -208,7 +209,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param radius
    * @return An array with the atoms that are in the circumference (only the perimeter)
    */
-  public AbstractGrowthAtom[] setInsideCircle(int radius, boolean periodicSingleFlake) {
+  public List<AbstractGrowthAtom> setInsideCircle(int radius, boolean periodicSingleFlake) {
 
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
@@ -227,10 +228,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       }
     }
 
-    AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
-    QuickSort.orderByAngle(perimeter, perimeter.length - 1);
+    QuickSort.orderByAngle(perimeterList, perimeterList.size() - 1);
 
-    return perimeter;
+    return perimeterList;
   }
 
   /**
@@ -240,7 +240,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param radius is the half of the square side
    * @return An array with the atoms that are in the perimeter
    */
-  public AbstractGrowthAtom[] setInsideSquare(int radius) {
+  public List<AbstractGrowthAtom> setInsideSquare(int radius) {
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
     Point2D centreCart = getCentralCartesianLocation();
@@ -282,11 +282,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       }
     }
 
-    AbstractGrowthAtom[] perimeter = perimeterList.toArray(new AbstractGrowthAtom[perimeterList.size()]);
+    QuickSort.orderByAngle(perimeterList, perimeterList.size() - 1);
 
-    QuickSort.orderByAngle(perimeter, perimeter.length - 1);
-
-    return perimeter;
+    return perimeterList;
   }
 
   /**

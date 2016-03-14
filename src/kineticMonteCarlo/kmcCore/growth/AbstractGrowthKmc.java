@@ -182,19 +182,19 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
 
-    if (perimeterMustBeEnlarged(destinationAtom)) {
+    if (justCentralFlake && perimeterMustBeEnlarged(destinationAtom)) {
       int nextRadius = perimeter.goToNextRadius();
       if (nextRadius > 0
               && nextRadius < lattice.getCartSizeX() / 2
               && nextRadius < lattice.getCartSizeY() / 2) {
         if (perimeterType == RoundPerimeter.CIRCLE) {
-          perimeter.setAtomPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
+          perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
           int newArea;
           newArea = calculateAreaAsInKmcCanvas();
           freeArea += newArea - currentArea;
           currentArea = newArea;
         } else {
-          perimeter.setAtomPerimeter(lattice.setInsideSquare(nextRadius));
+          perimeter.setCurrentPerimeter(lattice.setInsideSquare(nextRadius));
         }
       } else {
         return true;
@@ -504,7 +504,16 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
               || Math.abs(top - position.getY()) < 2
               || Math.abs(bottom - position.getY()) < 2);
     } else {
-      return destinationAtom.getType() > 0 && justCentralFlake && lattice.getDistanceToCenter(destinationAtom.getiHexa(), destinationAtom.getjHexa()) >= (perimeter.getCurrentRadius() - 2);
+      //return false;
+      boolean atomType = destinationAtom.getType() > 0;
+      //AbstractGrowthAtom[] currentPerimeter 
+      List<AbstractGrowthAtom> listPerimeter = perimeter.getCurrentPerimeter();
+   
+      //boolean distance =  lattice.getDistanceToCenter(destinationAtom.getiHexa(), destinationAtom.getjHexa()) >= (perimeter.getCurrentRadius() - 2);
+      //distance = lattice.getDistanceToCenter(destinationAtom.getCartesianPosition().getX(), destinationAtom.getCartesianPosition().getY())  >= (perimeter.getCurrentRadius() - 2);
+      //boolean distance = listPerimeter.contains(destinationAtom);
+      boolean distance = perimeter.contains(destinationAtom);
+      return atomType && distance;
     }
   }
 
@@ -772,9 +781,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       perimeter.setMinRadius();
     }
     if (perimeterType == RoundPerimeter.CIRCLE) {
-      perimeter.setAtomPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius(), periodicSingleFlake));
+      perimeter.setCurrentPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius(), periodicSingleFlake));
     } else {
-      perimeter.setAtomPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
+      perimeter.setCurrentPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
     }
   }
 }
