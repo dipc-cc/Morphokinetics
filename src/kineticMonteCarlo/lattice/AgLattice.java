@@ -32,12 +32,16 @@ public class AgLattice extends AbstractGrowthLattice {
     setAngles();
   }
 
+  private int createId(int i, int j) {
+    return j * getHexaSizeI() + i;
+  }
+  
   private AgAtom[][] createAtoms() {
     //Instantiate atoms
     AgAtom[][] atoms = new AgAtom[getHexaSizeI()][getHexaSizeJ()];
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new AgAtom((short) i, (short) j);
+        atoms[i][j] = new AgAtom(createId(i, j), (short) i, (short) j);
       }
     }
     

@@ -38,9 +38,18 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private double depositionTime;
   private int islandNumber;
   private boolean visited;
-  
-  public AbstractGrowthAtom(short iHexa, short jHexa, int numberOfNeighbours) {
+  /**
+   * Unique identifier
+   */
+  private final int id;
 
+  public int getId() {
+    return id;
+  }
+  
+  
+  public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
+    this.id = id;
     occupied = false;
     outside = true;
     this.iHexa = iHexa;
@@ -58,7 +67,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * Dummy constructor to be able to have a proper AgAtom(pos) constructor
    * @param numberOfNeighbours number of neighbours that each atom has
    */
-  public AbstractGrowthAtom(int numberOfNeighbours) {
+  public AbstractGrowthAtom(int id, int numberOfNeighbours) {
+    this.id = id;
     this.pos = 0;
     iHexa = 0;
     jHexa = 0;

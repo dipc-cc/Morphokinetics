@@ -60,6 +60,10 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     latticeNeighborhoodData[11] = (-1 & 0xFFFF) + (0 << 16);
   }
 
+  private int createId(int i, int j) {
+    return j * getHexaSizeI() + i;
+  }
+    
   /**
    * Creates the atom array for graphene. It only allows even parameters
    *
@@ -79,20 +83,20 @@ public class GrapheneLattice extends AbstractGrowthLattice {
         //para cada unit cell
 
         //atomo 0 de la unit cell, tipo 0
-        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
         iHexa++;
         //atomo 1 de la unit cell, tipo 1
-        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
         iHexa--;
         jHexa++;
         //atomo 2 de la unit cell, tipo 1   
-        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
         iHexa++;
         //atomo 3 de la unit cell, tipo 0
-        atoms[iHexa][jHexa] = new GrapheneAtom((short) iHexa, (short) jHexa, distancePerStep);
+        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
         iHexa--;
         jHexa--;

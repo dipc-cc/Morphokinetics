@@ -37,8 +37,8 @@ public class AgAtom extends AbstractGrowthAtom {
   public static final byte EDGE = EDGE_A;
   public static final byte KINK = KINK_A;
   
-  public AgAtom(short iHexa, short jHexa) {
-    super(iHexa, jHexa, 6);
+  public AgAtom(int id, short iHexa, short jHexa) {
+    super(id, iHexa, jHexa, 6);
     if (typesTable == null) {
       typesTable = new AgTypesTable();
     }
@@ -51,8 +51,8 @@ public class AgAtom extends AbstractGrowthAtom {
    * Constructor for unit cell
    * @param pos position within the unit cell
    */
-  public AgAtom(int pos) {
-    super(6);
+  public AgAtom(int id, int pos) {
+    super(id, 6);
     this.pos = pos;
     nImmobile = 0;
     nMobile   = 0;
@@ -86,11 +86,11 @@ public class AgAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return isOccupied() && (getType() < KINK_A);
+    return isOccupied() && getType() < KINK_A;
   }
 
   public boolean isPartOfImmobilSubstrate() {
-    return isOccupied() && (getType() == ISLAND);
+    return isOccupied() && getType() == ISLAND;
   }
 
   /**
