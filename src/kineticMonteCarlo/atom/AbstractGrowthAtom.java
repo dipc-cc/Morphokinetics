@@ -39,6 +39,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private int islandNumber;
   private boolean visited;
   /**
+   * I would say that this should not be here
+   */
+  private Point2D cartesianPosition;
+  /**
    * Unique identifier
    */
   private final int id;
@@ -348,5 +352,20 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
       }
     }
     return true;
+  }
+  
+  public void setCartesianPosition(Point2D cartesianPosition) {
+    this.cartesianPosition = cartesianPosition;
+  }
+
+  /**
+   * The usage of this method should be avoid as much as possible. To get the Cartesian position of
+   * the current atom it is advised to use position of the unit cell that contains this atom and the
+   * position of the current atom within the unit cell.
+   *
+   * @return
+   */
+  public Point2D getCartesianPosition() {
+    return cartesianPosition;
   }
 }
