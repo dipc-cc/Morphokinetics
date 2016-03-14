@@ -504,15 +504,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
               || Math.abs(top - position.getY()) < 2
               || Math.abs(bottom - position.getY()) < 2);
     } else {
-      //return false;
       boolean atomType = destinationAtom.getType() > 0;
-      //AbstractGrowthAtom[] currentPerimeter 
-      List<AbstractGrowthAtom> listPerimeter = perimeter.getCurrentPerimeter();
-   
-      //boolean distance =  lattice.getDistanceToCenter(destinationAtom.getiHexa(), destinationAtom.getjHexa()) >= (perimeter.getCurrentRadius() - 2);
-      //distance = lattice.getDistanceToCenter(destinationAtom.getCartesianPosition().getX(), destinationAtom.getCartesianPosition().getY())  >= (perimeter.getCurrentRadius() - 2);
-      //boolean distance = listPerimeter.contains(destinationAtom);
-      boolean distance = perimeter.contains(destinationAtom);
+      boolean distance = lattice.getDistanceToCenter(destinationAtom.getiHexa(), destinationAtom.getjHexa()) >= (perimeter.getCurrentRadius() - 2);
       return atomType && distance;
     }
   }
