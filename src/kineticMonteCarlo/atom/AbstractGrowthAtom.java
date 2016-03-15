@@ -22,7 +22,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private double[][] probabilities;
   private double probability;
   private double[] bondsProbability;
-  private float angle;
+  private double angle;
   private boolean occupied;
   private boolean outside;
   private final short iHexa;
@@ -188,11 +188,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
       return new Point2D.Double(0, 0);
   }
   
-  public float getAngle() {
+  public double getAngle() {
     return angle;
   }
 
-  public void setAngle(float angle) {
+  public void setAngle(double angle) {
     this.angle = angle;
   }
 

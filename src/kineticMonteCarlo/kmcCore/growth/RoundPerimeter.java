@@ -107,21 +107,21 @@ public class RoundPerimeter {
     }
 
     float destinationAngleDegree = (float) (angle + (originAtom.getAngle() * 180.0 / Math.PI));
-    if (destinationAngleDegree >= 360) {
+    while (destinationAngleDegree >= 360) {
       destinationAngleDegree = destinationAngleDegree - 360;
     }
 
     int initialLocation = (int) (destinationAngleDegree * currentPerimeter.size() / 360.0);
-    float destinationAngleRad = (float) (destinationAngleDegree * Math.PI / 180.0f);
+    double destinationAngleRad = destinationAngleDegree * Math.PI / 180.0f;
 
     AbstractGrowthAtom destinationAtom = null;
     int position = 0;
-    float error = currentPerimeter.get(initialLocation).getAngle() - destinationAngleRad;
+    double error = currentPerimeter.get(initialLocation).getAngle() - destinationAngleRad;
 
     if (error > 0) {
 
       for (int j = initialLocation - 1; j >= 0; j--) {
-        float errorTemp = currentPerimeter.get(j).getAngle() - destinationAngleRad;
+        double errorTemp = currentPerimeter.get(j).getAngle() - destinationAngleRad;
         if (Math.abs(errorTemp) < Math.abs(error)) {
           error = errorTemp;
         } else {
@@ -137,7 +137,7 @@ public class RoundPerimeter {
     } else {
 
       for (int j = initialLocation + 1; j < currentPerimeter.size(); j++) {
-        float errorTemp = currentPerimeter.get(j).getAngle() - destinationAngleRad;
+        double errorTemp = currentPerimeter.get(j).getAngle() - destinationAngleRad;
         if (Math.abs(errorTemp) < Math.abs(error)) {
           error = errorTemp;
         } else {
