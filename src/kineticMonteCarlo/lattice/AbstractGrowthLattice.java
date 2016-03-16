@@ -8,7 +8,6 @@ import kineticMonteCarlo.unitCell.SimpleUc;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import java.awt.geom.Point2D;
-import static java.lang.Math.abs;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
