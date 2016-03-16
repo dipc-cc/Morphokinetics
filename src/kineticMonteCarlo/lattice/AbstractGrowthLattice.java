@@ -167,9 +167,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   @Override
   public void reset() {
-    for (int i = 0; i < getHexaSizeI(); i++) { //X
-      for (int j = 0; j < getHexaSizeJ(); j++) { //Y   
-        ucArray[i][j].getAtom(0).clear();
+    for (int i = 0; i < size(); i++) {
+      IUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        atom.clear();
       }
     }
   }
