@@ -1,0 +1,24 @@
+Is there a quick git command to see an old version of a file?
+ git show REVISION:path/to/file
+
+How to have git log show filenames like svn log -v
+ git log --name-status
+or
+ git log --name-only
+or
+ git log --stat
+
+Show diff after the add is done
+ git diff --cached 
+
+Remove from commit
+ git reset HEAD path/to/unwanted_file
+
+View only modified files
+  git ls-files -m
+
+Go to the last version
+  git co dcma-es
+
+View a specific Git commit
+  git show <revhash>
