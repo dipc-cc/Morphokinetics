@@ -5,6 +5,7 @@
  */
 package main;
 
+import basic.AgUcSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.GrapheneSimulation;
@@ -68,6 +69,9 @@ public class Morphokinetics {
     switch (parser.getCalculationMode()) {
       case "Ag":
         simulation = new AgSimulation(parser);
+        break;
+      case "AgUc":
+        simulation = new AgUcSimulation(parser);
         break;
       case "graphene":
         simulation = new GrapheneSimulation(parser);

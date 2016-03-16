@@ -276,7 +276,7 @@ public class Parser {
     try {
       depositionFlux = json.getDouble("depositionFlux");
     } catch (JSONException e) {
-      if (calculationMode.equals("Ag")) {
+      if (calculationMode.equals("Ag") || calculationMode.equals("AgUc")) {
         depositionFlux = 0.0035;
       } else { // Graphene (or etching, where it does not matter the deposition
         depositionFlux = 0.000035;
@@ -781,7 +781,7 @@ public class Parser {
   }
   
   public int getHexaSizeI() {
-    if (getCalculationMode().equals("Ag")) {
+    if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc")) {
       return cartSizeX;
     } else { // graphene, always even number
       int sizeI = (int) Math.ceil(cartSizeX / 1.5f);
@@ -794,7 +794,11 @@ public class Parser {
   }
   
   public int getHexaSizeJ() {
-    return (int) (getCartSizeX() / AbstractGrowthLattice.Y_RATIO);
+    if (getCalculationMode().equals("AgUc")) {
+      return (int) (getCartSizeX() / (2 * AbstractGrowthLattice.Y_RATIO));
+    } else {
+      return (int) (getCartSizeX() / AbstractGrowthLattice.Y_RATIO);
+    }
   }
 
   int getBinsLevels() {
@@ -831,7 +835,7 @@ public class Parser {
   /**
    * Can be Si, Ag or graphene.
    *
-   * @return calculation mode. Either: "Si", "Ag" or "graphene"
+   * @return calculation mode. Either: "Si", "Ag", "AgUc" or "graphene"
    */
   public String getCalculationMode() {
     return calculationMode;
@@ -839,7 +843,7 @@ public class Parser {
 
   /**
    * Can be "cartesian" or "periodic". If "cartesian" is chosen, the surface (islands) will have the
-   * same shape as in the GUI, but the periodicity will not be correct in top-bottom (they is a
+   * same shape as in the GUI, but the periodicity will not be correct in top-bottom (there is a
    * shift of 60º). If "periodic" is chosen, the shape will be shifted by 60º and periodicity will
    * be correct in 2D. This option will change the PSD; "cartesian" will have vertical and
    * horizontal symmetry and in "periodic" the symmetry will be shifted by 60º.
