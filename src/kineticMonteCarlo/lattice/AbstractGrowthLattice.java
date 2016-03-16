@@ -174,13 +174,16 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
   }
 
-  protected final void setAngles() {
-    middle = getCentralCartesianLocation();
-    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-        Point2D cartPosition = getCartesianLocation(iHexa, jHexa);
-        double xDif = cartPosition.getX() - middle.getX();
-        double yDif = cartPosition.getY() - middle.getY();
+  protected final void setAngles() {   
+    for (int i = 0; i < size(); i++) {
+      IUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        double posY = atom.getPos().getY() + uc.getPos().getY();
+        double posX = atom.getPos().getX() + uc.getPos().getX();
+
+        double xDif = posX - getCentralCartesianLocation().getX();
+        double yDif = posY - getCentralCartesianLocation().getY();
         if (xDif == 0) {
           xDif = 1e-8;
         }
@@ -191,13 +194,13 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         if (xDif >= 0 && yDif < 0) {
           angle = 2 * Math.PI + angle;
         }
-        ucArray[iHexa][jHexa].getAtom(0).setAngle((float) angle);
+        atom.setAngle(angle);
       }
     }
   }
 
   public double getDistanceToCenter(int iHexa, int jHexa) {
-    return middle.distance(getCartesianLocation(iHexa, jHexa));
+    return getCentralCartesianLocation().distance(getCartesianLocation(iHexa, jHexa));
   }
   
   /**
