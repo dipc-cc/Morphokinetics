@@ -699,14 +699,19 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     // Get the maximum radius multiple of 5
     float radius = ((float) Math.floor(minRadius/5f)*5f);
     
-    for (int jHexa = 0; jHexa < lattice.getHexaSizeJ(); jHexa++) {
-      for (int iHexa = 0; iHexa < lattice.getHexaSizeI(); iHexa++) {
-        double distance = lattice.getDistanceToCenter(iHexa, jHexa);
+    for (int i = 0; i < lattice.size(); i++) {
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        double x = atom.getPos().getX() + uc.getPos().getX();
+        double y = atom.getPos().getY() + uc.getPos().getY();
+        double distance = lattice.getDistanceToCenter(x, y);
         if (radius > distance) {
           totalArea++;
         } 
       }
     }
+
     return totalArea;
   }
 
