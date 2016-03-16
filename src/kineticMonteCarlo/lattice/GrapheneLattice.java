@@ -174,11 +174,12 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public int getAvailableDistance(int atomType, short iHexa, short jHexa, int thresholdDistance) {
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
 
-    int[] point = new int[2];
     int[] index = new int[1];
-    switch (atomType) {
+    short iHexa = atom.getiHexa();
+    short jHexa = atom.getjHexa();
+    switch (atom.getType()) {
       case 0:
         return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
       case 2:
@@ -191,11 +192,12 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
 
-    int[] point = new int[2];
     int[] index = new int[1];
-    switch (originType) {
+    short iHexa = atom.getiHexa();
+    short jHexa = atom.getjHexa();
+    switch (atom.getType()) {
       case 0:
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
       case 2:

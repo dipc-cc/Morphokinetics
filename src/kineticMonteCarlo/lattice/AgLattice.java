@@ -93,8 +93,10 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public int getAvailableDistance(int atomType, short iHexa, short jHexa, int thresholdDistance) {
-    switch (atomType) {
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+    short iHexa = atom.getiHexa();
+    short jHexa = atom.getjHexa();
+    switch (atom.getType()) {
       case TERRACE:
         return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
       case EDGE:
@@ -105,8 +107,10 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthAtom getFarSite(int originType, short iHexa, short jHexa, int distance) {
-    switch (originType) {
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+    short iHexa = atom.getiHexa();
+    short jHexa = atom.getjHexa();
+    switch (atom.getType()) {
       case TERRACE:
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
       case EDGE:

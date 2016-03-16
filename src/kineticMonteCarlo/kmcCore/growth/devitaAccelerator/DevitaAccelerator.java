@@ -51,13 +51,13 @@ public class DevitaAccelerator {
     AbstractGrowthAtom destination;
 
     int remainingDistance = (int) Math.sqrt(remainingHops);
-    int possibleDistance = lattice.getAvailableDistance(sourceAtomType, source.getiHexa(), source.getjHexa(), remainingDistance);
+    int possibleDistance = lattice.getAvailableDistance(source, remainingDistance);
 
     if (possibleDistance <= 0) {
       destination = source.chooseRandomHop();
       possibleDistance = 1;
     } else {
-      destination = lattice.getFarSite(sourceAtomType, source.getiHexa(), source.getjHexa(), possibleDistance);
+      destination = lattice.getFarSite(source, possibleDistance);
     }
 
     remainingHops -= possibleDistance * possibleDistance;

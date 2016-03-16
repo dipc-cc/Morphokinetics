@@ -13,8 +13,8 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  */
 public interface IDevitaLattice {
 
-  public int getAvailableDistance(int atomType, short Xpos, short Ypos, int thresholdDistance);
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance);
 
-  public AbstractGrowthAtom getFarSite(int originType, short iHexa, short jHexa, int distance);
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance);
 
 }
