@@ -32,7 +32,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private final SimpleUc[][] ucArray;
 
   private final ModifiedBuffer modified;
-  private static Point2D middle;
   private final ArrayList<Integer> includePerimeterList; 
   private final int hexaArea;
   private int occupied;
@@ -216,7 +215,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
-    middle = getCentralCartesianLocation();
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         double distance = getDistanceToCenter(iHexa, jHexa);
