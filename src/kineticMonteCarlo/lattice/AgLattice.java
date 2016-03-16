@@ -24,13 +24,14 @@ public class AgLattice extends AbstractGrowthLattice {
   private final Point2D centralCartesianLocation;
 
   public AgLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
-
     super(hexaSizeI, hexaSizeJ, modified);
-
     centralCartesianLocation = new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() * Y_RATIO / 2.0f));
+  }
+  
+  public void init() {
     setAtoms(createAtoms());
     setAngles();
-  }
+  }    
 
   private int createId(int i, int j) {
     return j * getHexaSizeI() + i;

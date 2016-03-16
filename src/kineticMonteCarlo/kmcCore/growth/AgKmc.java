@@ -31,7 +31,9 @@ public class AgKmc extends AbstractGrowthKmc {
     super(config, justCentralFlake, periodicSingleFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    setLattice(new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
+    AgLattice agLattice = new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep);
+    agLattice.init();
+    setLattice(agLattice);
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
       setPerimeter(new RoundPerimeter("Ag"));
