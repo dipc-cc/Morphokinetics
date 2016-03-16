@@ -23,18 +23,15 @@ public class StaticRandom {
       rand = new Ranecu(System.nanoTime());
     } else {
       // for testing purposes
-      rand = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Randoom" numbers
+      rand = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Random" numbers
     }
   }
   
   public static double raw() {
-
     return rand.raw();
-
   }
 
   public static int rawInteger(int max) {
-
     return (int) (rand.raw() * max);
   }
 
