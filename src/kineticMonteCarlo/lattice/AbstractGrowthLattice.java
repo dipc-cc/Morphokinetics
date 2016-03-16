@@ -203,6 +203,16 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   /**
+   * Returns the distance of the given x,y point to the centre
+   * @param x Cartesian coordinate
+   * @param y Cartesian coordinate
+   * @return distance
+   */
+  public double getDistanceToCenter(double x, double y) {
+    return getCentralCartesianLocation().distance(new Point2D.Double(x,y));
+  }
+  
+  /**
    * Defines which atoms are inside from the current position (centre) and given radius.
    *
    * Define como átomos inside a los átomos dentro de dicho rádio Devuelve un array de átomos que es
@@ -212,28 +222,32 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @return An array with the atoms that are in the circumference (only the perimeter)
    */
   public List<AbstractGrowthAtom> setInsideCircle(int radius, boolean periodicSingleFlake) {
-
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
-    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-        double distance = getDistanceToCenter(iHexa, jHexa);
-        if (radius <= distance && !periodicSingleFlake) {
-          ucArray[iHexa][jHexa].getAtom(0).setOutside(true);
+    for (int i = 0; i < size(); i++) {
+      IUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        double x = atom.getPos().getX() + uc.getPos().getX();
+        double y = atom.getPos().getY() + uc.getPos().getY();
+        double distance = getDistanceToCenter(x, y);
+      
+        if (radius < distance && !periodicSingleFlake) {
+          atom.setOutside(true);
         } else {
-          ucArray[iHexa][jHexa].getAtom(0).setOutside(false);
+          atom.setOutside(false);
           if (distance > radius - 1) {
-            perimeterList.add(ucArray[iHexa][jHexa].getAtom(0));
+            perimeterList.add(atom);
           }
         }
       }
     }
-
+    
     QuickSort.orderByAngle(perimeterList, perimeterList.size() - 1);
 
     return perimeterList;
   }
-
+  
   /**
    * Defines which atoms are inside from the current position.
    *
