@@ -221,7 +221,7 @@ public class AgLattice extends AbstractGrowthLattice {
     return jHexa * Y_RATIO;
   }
 
-  public int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
+  private int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
 
     int possibleDistance = 1;
 
@@ -298,7 +298,7 @@ public class AgLattice extends AbstractGrowthLattice {
     return -1;
   }
 
-  public AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
+  private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
     int tmp = (int) (raw * (distance * 6));
 
@@ -359,7 +359,7 @@ public class AgLattice extends AbstractGrowthLattice {
     return null;
   }
 
-  public int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
+  private int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
 
     int distance = 1;
     int i;
@@ -439,7 +439,7 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
 
-  public AbstractGrowthAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
+  private AbstractGrowthAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
     int i;
     int j;
