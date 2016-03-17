@@ -9,9 +9,13 @@ import kineticMonteCarlo.unitCell.AgUc;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
+import static kineticMonteCarlo.atom.AgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
+import utils.StaticRandom;
 
 /**
  * Ag lattice with unit cell
@@ -21,21 +25,25 @@ public class AgUcLattice extends AgLattice {
   
   private final Point2D centralCartesianLocation;
   /**
-   * How many unit cells are in X axis
+   * How many unit cells are in X axis.
    */
   private int sizeI;
   /**
-   * How many unit cells are in Y axis
+   * How many unit cells are in Y axis.
    */
   private int sizeJ;
   /**
-   * Unit cell list
+   * Unit cell list.
    */
   private List<AgUc> ucList;
   /**
-   * Unit cell array
+   * Unit cell array.
    */
   private AgUc[][] ucArray;
+  /**
+   * List to store free area that current atom has.
+   */
+  List<AbstractGrowthAtom> clearAreaList;
   
   public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
@@ -185,6 +193,125 @@ public class AgUcLattice extends AgLattice {
       return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));
     } else {
       return centralCartesianLocation;
+    }
+  }
+  
+  @Override
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+    clearAreaList = new ArrayList<>();
+    clearAreaList.clear();
+    switch (atom.getType()) {
+      case TERRACE:
+        return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
+      case EDGE:
+        return getClearAreaStep(atom, thresholdDistance);
+      default:
+        return 0;
+    }
+  }
+  
+  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance, boolean changeLevel, int currentLevel, int position, int turnDirection, byte errorCode) {
+    int possibleDistance = 1; // = currentLevel
+    AbstractGrowthAtom currentAtom;
+    if (changeLevel) {
+      currentAtom = atom.getNeighbour(0).getNeighbour(2); // Skip the first possition, to avoid counting more than once
+      if (currentLevel == 0) {
+        turnDirection = 3; // in the first level there are no more neighbours in 2 direction
+      } else {
+        turnDirection = 2; // go to the 2 direction (right).
+      }
+      currentLevel++;
+      position = 1;
+      changeLevel = false;
+    } else {
+     
+      // choose the next atom 
+      currentAtom = atom.getNeighbour(turnDirection);
+      position++;
+      if (position >= currentLevel)  { // time to turn
+        position=0;
+        turnDirection++;
+        if (turnDirection == 6) {
+          turnDirection = 0;
+        }
+        
+        if (turnDirection == 2) { // we arrived to the end of the current level
+          if ((errorCode & 1) != 0) {
+            return currentLevel;
+          }
+          changeLevel = true;
+        } else {
+          changeLevel = false;
+        }
+      }
+    }
+
+    if (currentAtom.isOutside()) {
+      errorCode |= 1;
+    }
+    if (currentAtom.isOccupied()) {
+      errorCode |= 2;
+      return currentLevel - 1;
+    } else {
+      clearAreaList.add(currentAtom);
+    }
+    if (currentLevel >= thresholdDistance) {
+      return possibleDistance;
+    }
+            
+    return getClearAreaTerrace(currentAtom, thresholdDistance, changeLevel, currentLevel, position, turnDirection, errorCode);
+    
+  }
+  
+  @Override
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+    int randomNumber = StaticRandom.rawInteger(clearAreaList.size());
+    return clearAreaList.get(randomNumber);
+  }
+  
+  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
+    
+    int distance = 1;
+    clearAreaList.add(atom);
+    AbstractGrowthAtom currentAtom;
+    int right = -1;
+    int left = -1;
+    // select the neighbours depending on the orientation of the source atom
+    switch (atom.getOrientation()) {
+      case 0:
+      case 3:
+        right = 2;
+        left = 5;
+        break;
+      case 1:
+      case 4:
+        right = 3;
+        left = 0;
+        break;
+      case 2:
+      case 5:
+        right = 4;
+        left = 1;
+        break;
+    }
+    
+    while (true) { // check if the last and firsts neighbours are occupied
+      currentAtom = clearAreaList.get(clearAreaList.size() - 1).getNeighbour(right);
+      if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
+        return distance - 1;
+      }
+      clearAreaList.add(currentAtom);
+
+      currentAtom = clearAreaList.get(0).getNeighbour(left);
+      if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
+        return distance - 1;
+      }
+      clearAreaList.add(0, currentAtom);
+
+      if (distance == thresholdDistance) {
+        return distance;
+      }
+      distance++;
     }
   }
 }

@@ -39,7 +39,7 @@ public class AgUcKmc extends AbstractGrowthKmc {
     agLattice.init();
     setLattice(agLattice);
     if (justCentralFlake) {
-      //configureDevitaAccelerator(distancePerStep);
+      configureDevitaAccelerator(distancePerStep);
       setPerimeter(new RoundPerimeter("Ag"));
     }      
   }
