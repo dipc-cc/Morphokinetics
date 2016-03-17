@@ -273,8 +273,8 @@ public class AgUcLattice extends AgLattice {
     int distance = 1;
     clearAreaList.add(atom);
     AbstractGrowthAtom currentAtom;
-    int right = -1;
-    int left = -1;
+    int right;
+    int left;
     // select the neighbours depending on the orientation of the source atom
     switch (atom.getOrientation()) {
       case 0:
@@ -292,6 +292,8 @@ public class AgUcLattice extends AgLattice {
         right = 4;
         left = 1;
         break;
+      default:
+        return -1;
     }
     
     while (true) { // check if the last and firsts neighbours are occupied
