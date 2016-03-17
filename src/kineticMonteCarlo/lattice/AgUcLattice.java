@@ -224,17 +224,17 @@ public class AgUcLattice extends AgLattice {
       position = 1;
       changeLevel = false;
     } else {
-     
+
       // choose the next atom 
       currentAtom = atom.getNeighbour(turnDirection);
       position++;
-      if (position >= currentLevel)  { // time to turn
-        position=0;
+      if (position >= currentLevel) { // time to turn
+        position = 0;
         turnDirection++;
         if (turnDirection == 6) {
           turnDirection = 0;
         }
-        
+
         if (turnDirection == 2) { // we arrived to the end of the current level
           if ((errorCode & 1) != 0) {
             return currentLevel;
@@ -258,9 +258,8 @@ public class AgUcLattice extends AgLattice {
     if (currentLevel >= thresholdDistance) {
       return possibleDistance;
     }
-            
+
     return getClearAreaTerrace(currentAtom, thresholdDistance, changeLevel, currentLevel, position, turnDirection, errorCode);
-    
   }
   
   @Override
