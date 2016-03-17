@@ -304,7 +304,7 @@ public class AgLattice extends AbstractGrowthLattice {
 
   private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
 
-    int tmp = (int) (raw * (distance * 6));
+    int randomNumber = (int) (raw * (distance * 6));
 
     int i = iHexaOrigin;
     int j = jHexaOrigin - distance;
@@ -316,21 +316,21 @@ public class AgLattice extends AbstractGrowthLattice {
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > tmp) return getAtom(index);
+      if (counter > randomNumber) return getAtom(index);
       i++;
       if (i == getHexaSizeI()) i = 0;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > tmp) return getAtom(index);
+      if (counter > randomNumber) return getAtom(index);
       j++;
       if (j == getHexaSizeJ()) j = 0;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > tmp) return getAtom(index);
+      if (counter > randomNumber) return getAtom(index);
       j++;
       i--;
       if (j == getHexaSizeJ()) j = 0;
@@ -339,21 +339,21 @@ public class AgLattice extends AbstractGrowthLattice {
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > tmp) return getAtom(index);
+      if (counter > randomNumber) return getAtom(index);
       i--;
       if (i < 0) i = getHexaSizeI() - 1;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > tmp) return getAtom(index);
+      if (counter > randomNumber) return getAtom(index);
       j--;
       if (j < 0) j = getHexaSizeJ() - 1;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > tmp) return getAtom(index);
+      if (counter > randomNumber) return getAtom(index);
       j--;
       i++;
       if (j < 0) j = getHexaSizeJ() - 1;
