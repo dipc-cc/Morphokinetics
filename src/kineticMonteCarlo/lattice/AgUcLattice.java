@@ -202,7 +202,8 @@ public class AgUcLattice extends AgLattice {
     clearAreaList.clear();
     switch (atom.getType()) {
       case TERRACE:
-        return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
+        //return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
+        return getClearAreaTerrace(atom, thresholdDistance);
       case EDGE:
         return getClearAreaStep(atom, thresholdDistance);
       default:
@@ -262,6 +263,87 @@ public class AgUcLattice extends AgLattice {
     return getClearAreaTerrace(currentAtom, thresholdDistance, changeLevel, currentLevel, position, turnDirection, errorCode);
   }
   
+  /**
+   * We only care about the largest possible distance atoms.
+   * @param atom
+   * @param thresholdDistance
+   * @return clear distance
+   */
+  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
+    boolean changeLevel = true;
+    int currentLevel = 0;
+    int position = 0;
+    int turnDirection = 0;
+    byte errorCode = 0;
+    int possibleDistance = 1; 
+    AbstractGrowthAtom currentAtom;
+    List<AbstractGrowthAtom> listCurrentLevel = new ArrayList<>();
+    List<AbstractGrowthAtom> listPreviousLevel = new ArrayList<>();
+    
+    listCurrentLevel.add(atom);
+    
+    while (true) {
+      if (changeLevel) {
+        listPreviousLevel = new ArrayList<>(listCurrentLevel);
+        listCurrentLevel.clear();
+        
+        currentAtom = atom.getNeighbour(0).getNeighbour(2); // Skip the first possition, to avoid counting more than once
+        if (currentLevel == 0) {
+          turnDirection = 3; // in the first level there are no more neighbours in 2 direction
+        } else {
+          turnDirection = 2; // go to the 2 direction (right).
+        }
+        currentLevel++;
+        position = 1;
+        changeLevel = false;
+        if (currentLevel > thresholdDistance) {
+          clearAreaList = new ArrayList<>(listPreviousLevel);
+          return possibleDistance;
+        }
+      } else {
+
+        // choose the next atom 
+        currentAtom = atom.getNeighbour(turnDirection);
+        position++;
+        if (position >= currentLevel) { // time to turn
+          position = 0;
+          turnDirection++;
+          if (turnDirection == 6) {
+            turnDirection = 0;
+          }
+
+          if (turnDirection == 2) { // we arrived to the end of the current level
+            if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
+              // it is missing the current atom in the list
+              listCurrentLevel.add(currentAtom);
+              clearAreaList = new ArrayList<>(listCurrentLevel);
+              return currentLevel;
+            }
+            changeLevel = true;
+          } else {
+            changeLevel = false;
+          }
+        }
+      }
+
+      if (currentAtom.isOutside()) {
+        errorCode |= 1;
+      }
+      if (currentAtom.isOccupied()) { // we have touched an occupied atom, break
+        errorCode |= 2;
+        break;
+      } else {
+        listCurrentLevel.add(currentAtom);
+      }
+      atom = currentAtom; // go to the next atom
+    }
+    if ((errorCode & 2) != 0) { // we have touched an occupied atom, exit and store previous level atoms
+      clearAreaList = new ArrayList<>(listPreviousLevel);
+      return possibleDistance - 1;
+    }
+    return -1; // never should happen
+  }
+  
   @Override
   public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
     int randomNumber = StaticRandom.rawInteger(clearAreaList.size());
@@ -292,7 +374,7 @@ public class AgUcLattice extends AgLattice {
         right = 4;
         left = 1;
         break;
-      default:
+      default: // it is possible that the current atom does not have a proper orientation, skip the method
         return -1;
     }
     
