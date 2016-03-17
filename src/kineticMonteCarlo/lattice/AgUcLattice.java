@@ -354,6 +354,7 @@ public class AgUcLattice extends AgLattice {
     
     int distance = 1;
     clearAreaList.add(atom);
+    clearAreaList.add(atom);
     AbstractGrowthAtom currentAtom;
     int right;
     int left;
@@ -383,13 +384,13 @@ public class AgUcLattice extends AgLattice {
       if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
         return distance - 1;
       }
-      clearAreaList.add(currentAtom);
+      clearAreaList.set(1, currentAtom);
 
       currentAtom = clearAreaList.get(0).getNeighbour(left);
       if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
         return distance - 1;
       }
-      clearAreaList.add(0, currentAtom);
+      clearAreaList.set(0, currentAtom);
 
       if (distance == thresholdDistance) {
         return distance;
