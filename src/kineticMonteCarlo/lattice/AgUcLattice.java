@@ -198,8 +198,6 @@ public class AgUcLattice extends AgLattice {
   
   @Override
   public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-    clearAreaList = new ArrayList<>();
-    clearAreaList.clear();
     switch (atom.getType()) {
       case TERRACE:
         //return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
@@ -275,17 +273,17 @@ public class AgUcLattice extends AgLattice {
     int position = 0;
     int turnDirection = 0;
     byte errorCode = 0;
-    int possibleDistance = 1; 
+    int possibleDistance = 1;
+    int fromPreviousLevel = 0;
+    int from = 1;
+    int to = 1;
     AbstractGrowthAtom currentAtom;
-    List<AbstractGrowthAtom> listCurrentLevel = new ArrayList<>();
-    List<AbstractGrowthAtom> listPreviousLevel = new ArrayList<>();
+    List<AbstractGrowthAtom> currentList= new ArrayList<>();
     
-    listCurrentLevel.add(atom);
+    currentList.add(atom);
     
     while (true) {
       if (changeLevel) {
-        listPreviousLevel = new ArrayList<>(listCurrentLevel);
-        listCurrentLevel.clear();
         
         currentAtom = atom.getNeighbour(0).getNeighbour(2); // Skip the first possition, to avoid counting more than once
         if (currentLevel == 0) {
@@ -294,10 +292,13 @@ public class AgUcLattice extends AgLattice {
           turnDirection = 2; // go to the 2 direction (right).
         }
         currentLevel++;
+        fromPreviousLevel = from;
+        from = to;
+        to = currentLevel * 6 + from;
         position = 1;
         changeLevel = false;
         if (currentLevel > thresholdDistance) {
-          clearAreaList = new ArrayList<>(listPreviousLevel);
+          clearAreaList = new ArrayList<>(currentList.subList(fromPreviousLevel, from));
           return possibleDistance;
         }
       } else {
@@ -315,8 +316,8 @@ public class AgUcLattice extends AgLattice {
           if (turnDirection == 2) { // we arrived to the end of the current level
             if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
               // it is missing the current atom in the list
-              listCurrentLevel.add(currentAtom);
-              clearAreaList = new ArrayList<>(listCurrentLevel);
+              currentList.add(currentAtom);
+              clearAreaList = new ArrayList<>(currentList.subList(from, to)); // gaizki (bat falta da)
               return currentLevel;
             }
             changeLevel = true;
@@ -333,12 +334,12 @@ public class AgUcLattice extends AgLattice {
         errorCode |= 2;
         break;
       } else {
-        listCurrentLevel.add(currentAtom);
+        currentList.add(currentAtom);
       }
       atom = currentAtom; // go to the next atom
     }
     if ((errorCode & 2) != 0) { // we have touched an occupied atom, exit and store previous level atoms
-      clearAreaList = new ArrayList<>(listPreviousLevel);
+      clearAreaList = new ArrayList<>(currentList.subList(fromPreviousLevel, from));
       return possibleDistance - 1;
     }
     return -1; // never should happen
@@ -352,6 +353,7 @@ public class AgUcLattice extends AgLattice {
   
   private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
     
+    clearAreaList = new ArrayList<>(2);
     int distance = 1;
     clearAreaList.add(atom);
     clearAreaList.add(atom);
