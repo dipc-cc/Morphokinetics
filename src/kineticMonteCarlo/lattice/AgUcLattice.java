@@ -43,7 +43,7 @@ public class AgUcLattice extends AgLattice {
   /**
    * List to store free area that current atom has.
    */
-  List<AbstractGrowthAtom> clearAreaList;
+  private List<AbstractGrowthAtom> clearAreaList;
   
   public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
