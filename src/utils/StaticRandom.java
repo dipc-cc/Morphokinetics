@@ -31,6 +31,12 @@ public class StaticRandom {
     return rand.raw();
   }
 
+  /**
+   * Returns an integer random number between 0 (inclusive) and given number (exclusive)
+   *
+   * @param max maximum integer to be considered
+   * @return 0 <= result < max
+   */
   public static int rawInteger(int max) {
     return (int) (rand.raw() * max);
   }
