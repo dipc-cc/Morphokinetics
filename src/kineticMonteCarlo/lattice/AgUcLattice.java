@@ -43,7 +43,7 @@ public class AgUcLattice extends AgLattice {
   /**
    * List to store free area that current atom has.
    */
-  private List<AbstractGrowthAtom> clearAreaList;
+  private final int[] shift = {2,3,4,5,0,1};
   
   public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
@@ -252,7 +252,7 @@ public class AgUcLattice extends AgLattice {
       errorCode |= 2;
       return currentLevel - 1;
     } else {
-      clearAreaList.add(currentAtom);
+      //clearAreaList.add(currentAtom);
     }
     if (currentLevel >= thresholdDistance) {
       return possibleDistance;
@@ -278,9 +278,6 @@ public class AgUcLattice extends AgLattice {
     int from = 1;
     int to = 1;
     AbstractGrowthAtom currentAtom;
-    List<AbstractGrowthAtom> currentList= new ArrayList<>();
-    
-    currentList.add(atom);
     
     while (true) {
       if (changeLevel) {
@@ -298,7 +295,6 @@ public class AgUcLattice extends AgLattice {
         position = 1;
         changeLevel = false;
         if (currentLevel > thresholdDistance) {
-          clearAreaList = new ArrayList<>(currentList.subList(fromPreviousLevel, from));
           return possibleDistance;
         }
       } else {
@@ -315,9 +311,6 @@ public class AgUcLattice extends AgLattice {
 
           if (turnDirection == 2) { // we arrived to the end of the current level
             if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
-              // it is missing the current atom in the list
-              currentList.add(currentAtom);
-              clearAreaList = new ArrayList<>(currentList.subList(from, to)); // gaizki (bat falta da)
               return currentLevel;
             }
             changeLevel = true;
@@ -330,34 +323,54 @@ public class AgUcLattice extends AgLattice {
       if (currentAtom.isOutside()) {
         errorCode |= 1;
       }
-      if (currentAtom.isOccupied()) { // we have touched an occupied atom, break
+      if (currentAtom.isOccupied()) { // we have touched an occupied atom, exit
         errorCode |= 2;
-        break;
-      } else {
-        currentList.add(currentAtom);
+        return possibleDistance - 1;
       }
       atom = currentAtom; // go to the next atom
     }
-    if ((errorCode & 2) != 0) { // we have touched an occupied atom, exit and store previous level atoms
-      clearAreaList = new ArrayList<>(currentList.subList(fromPreviousLevel, from));
-      return possibleDistance - 1;
-    }
-    return -1; // never should happen
   }
   
   @Override
   public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-    int randomNumber = StaticRandom.rawInteger(clearAreaList.size());
-    return clearAreaList.get(randomNumber);
+    switch (atom.getType()) {
+      case TERRACE:
+        return chooseClearAreaTerrace(atom, distance);
+      case EDGE:
+        return chooseClearAreaStep(atom, distance);
+      default:
+        return null;
+    }
   }
   
+  /**
+   * 
+   * @param atom
+   * @param distance how far we have to move
+   * @return 
+   */
+  private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
+    int sizeOfPerimeter = distance * 6;
+    int randomNumber = StaticRandom.rawInteger(sizeOfPerimeter);
+    int quotient = randomNumber / distance; // far direction
+    int mod = randomNumber % distance; // perimeter direction
+    
+    for (int i = 0; i < distance; i++) {
+      atom = atom.getNeighbour(quotient);
+    }
+    
+    for (int i = 0; i < mod; i++) {
+      atom = atom.getNeighbour(shift[quotient]);
+    }
+    
+    return atom;
+  }
   private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
     
-    clearAreaList = new ArrayList<>(2);
     int distance = 1;
-    clearAreaList.add(atom);
-    clearAreaList.add(atom);
     AbstractGrowthAtom currentAtom;
+    AbstractGrowthAtom lastRight = atom;
+    AbstractGrowthAtom lastLeft = atom;
     int right;
     int left;
     // select the neighbours depending on the orientation of the source atom
@@ -382,17 +395,17 @@ public class AgUcLattice extends AgLattice {
     }
     
     while (true) { // check if the last and firsts neighbours are occupied
-      currentAtom = clearAreaList.get(clearAreaList.size() - 1).getNeighbour(right);
+      currentAtom = lastRight.getNeighbour(right);
       if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
         return distance - 1;
       }
-      clearAreaList.set(1, currentAtom);
+      lastRight = currentAtom;
 
-      currentAtom = clearAreaList.get(0).getNeighbour(left);
+      currentAtom = lastLeft.getNeighbour(left);
       if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
         return distance - 1;
       }
-      clearAreaList.set(0, currentAtom);
+      lastLeft = currentAtom;
 
       if (distance == thresholdDistance) {
         return distance;
@@ -400,6 +413,44 @@ public class AgUcLattice extends AgLattice {
       distance++;
     }
   }
+  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {
+    double randomNumber = StaticRandom.raw();
+    int neighbour = 0;
+    switch (atom.getOrientation()) {
+      case 0:
+      case 3:
+        if (randomNumber > 0.5) {
+          neighbour = 5;
+          break;
+        } else {
+          neighbour = 2;
+          break;
+        }
+      case 1:
+      case 4:
+        if (randomNumber > 0.5) {
+          neighbour = 0;
+          break;
+        } else {
+          neighbour = 3;
+        }
+      case 2:
+      case 5:
+        if (randomNumber > 0.5) {
+          neighbour = 1;
+          break;
+        } else {
+          neighbour = 4;
+          break;
+        }
+    }
+    for (int i = 0; i < distance; i++) {
+      atom = atom.getNeighbour(neighbour);
+    }
+    return atom;
+  }
+    
+    
   /**
    * The area is the number of cells * 2.
    * @return the coverage of the lattice
