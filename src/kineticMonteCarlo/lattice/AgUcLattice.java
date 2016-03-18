@@ -400,4 +400,12 @@ public class AgUcLattice extends AgLattice {
       distance++;
     }
   }
+  /**
+   * The area is the number of cells * 2.
+   * @return the coverage of the lattice
+   */
+  @Override
+  public float getCoverage() {
+    return (float) getOccupied() / (float) (sizeI * sizeJ * 2);
+  }
 }
