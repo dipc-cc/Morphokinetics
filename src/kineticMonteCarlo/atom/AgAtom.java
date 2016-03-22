@@ -5,8 +5,6 @@
 package kineticMonteCarlo.atom;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.StaticRandom;
 
@@ -17,7 +15,7 @@ import utils.StaticRandom;
 public class AgAtom extends AbstractGrowthAtom {
 
   private static AgTypesTable typesTable;
-  private final List<AgAtom> neighbours = new ArrayList(6);
+  private final AgAtom[] neighbours = new AgAtom[6];
   /** Number of immobile neighbours. */
   private int nImmobile;
   /** Number of mobile neighbours. */
@@ -47,9 +45,6 @@ public class AgAtom extends AbstractGrowthAtom {
     nImmobile = 0;
     nMobile   = 0;
     pos = 0;
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      neighbours.add(null);
-    }
   }
 
   /**
@@ -61,9 +56,6 @@ public class AgAtom extends AbstractGrowthAtom {
     this.pos = pos;
     nImmobile = 0;
     nMobile   = 0;
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      neighbours.add(null);
-    }
   }
 
   /**
@@ -84,12 +76,12 @@ public class AgAtom extends AbstractGrowthAtom {
 
   @Override
   public void setNeighbour(AbstractGrowthAtom a, int pos) {
-    neighbours.set(pos, (AgAtom) a);
+    neighbours[pos] = (AgAtom) a;
   }
 
   @Override
   public AgAtom getNeighbour(int pos) {
-    return neighbours.get(pos);
+    return neighbours[pos];
   }
 
   @Override
@@ -172,7 +164,7 @@ public class AgAtom extends AbstractGrowthAtom {
     // Create the occupation code shifting the number of positions with the neighbours of the current atom
     int occupationCode = 0;
     for (int i = 0; i < 6; i++) {
-      if (getNeighbour(i).isOccupied()) {
+      if (neighbours[i].isOccupied()) {
         occupationCode |= (1 << i);
       }
     }
@@ -267,11 +259,11 @@ public class AgAtom extends AbstractGrowthAtom {
     }
     cont--;
 
-    if (getType() == EDGE_A && getNeighbour(cont).getType() == CORNER) {
+    if (getType() == EDGE_A && neighbours[cont].getType() == CORNER) {
       return aheadCornerAtom(cont);
     }
 
-    return getNeighbour(cont);
+    return neighbours[cont];
   }
 
   private AgAtom aheadCornerAtom(int cornerPosition) {
@@ -279,33 +271,33 @@ public class AgAtom extends AbstractGrowthAtom {
 
       switch (cornerPosition) {
         case 0:
-          return getNeighbour(5).getNeighbour(0);
+          return neighbours[5].getNeighbour(0);
         case 1:
-          return getNeighbour(2).getNeighbour(1);
+          return neighbours[2].getNeighbour(1);
         case 2:
-          return getNeighbour(1).getNeighbour(2);
+          return neighbours[1].getNeighbour(2);
         case 3:
-          return getNeighbour(4).getNeighbour(3);
+          return neighbours[4].getNeighbour(3);
         case 4:
-          return getNeighbour(3).getNeighbour(4);
+          return neighbours[3].getNeighbour(4);
         case 5:
-          return getNeighbour(0).getNeighbour(5);
+          return neighbours[0].getNeighbour(5);
       }
     } else {
 
       switch (cornerPosition) {
         case 0:
-          return getNeighbour(1).getNeighbour(0);
+          return neighbours[1].getNeighbour(0);
         case 1:
-          return getNeighbour(0).getNeighbour(1);
+          return neighbours[0].getNeighbour(1);
         case 2:
-          return getNeighbour(3).getNeighbour(2);
+          return neighbours[3].getNeighbour(2);
         case 3:
-          return getNeighbour(2).getNeighbour(3);
+          return neighbours[2].getNeighbour(3);
         case 4:
-          return getNeighbour(5).getNeighbour(4);
+          return neighbours[5].getNeighbour(4);
         case 5:
-          return getNeighbour(4).getNeighbour(5);
+          return neighbours[4].getNeighbour(5);
       }
     }
     return null;
@@ -321,8 +313,8 @@ public class AgAtom extends AbstractGrowthAtom {
     int cont = 0;
     int i = 0;
     while (cont < 2 && i < getNumberOfNeighbours()) {
-      if (getNeighbour(i).isOccupied()) {
-        if (getNeighbour(i).getType() != TERRACE) {
+      if (neighbours[i].isOccupied()) {
+        if (neighbours[i].getType() != TERRACE) {
           return false;
         }
         cont++;
@@ -359,7 +351,7 @@ public class AgAtom extends AbstractGrowthAtom {
 
   private double probJumpToNeighbour(int position) {
 
-    if (getNeighbour(position).isOccupied()) {
+    if (neighbours[position].isOccupied()) {
       return 0;
     }
 
@@ -367,7 +359,7 @@ public class AgAtom extends AbstractGrowthAtom {
     if (getType() == EDGE_A && (getOrientation() & 1) == 0) originType = EDGE_B;
     if (getType() == KINK_A && (getOrientation() & 1) == 0) originType = KINK_B;
     int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
-    byte destination = getNeighbour(position).getTypeWithoutNeighbour(myPositionForNeighbour);
+    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     if (getType() == EDGE_A && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
       int otherCorner = 0;
@@ -376,7 +368,7 @@ public class AgAtom extends AbstractGrowthAtom {
       return getProbability(originType, otherCorner);
     } else {
       destination = (byte) Math.min(destination, 2);
-      if (destination == EDGE_A && (getNeighbour(position).getOrientation() & 1) == 0) {
+      if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
         destination = EDGE_B;
       }
 
@@ -387,9 +379,9 @@ public class AgAtom extends AbstractGrowthAtom {
   @Override
   public byte getTypeWithoutNeighbour(int posNeighbour) {
 
-    if (!getNeighbour(posNeighbour).isOccupied()) return getType();
+    if (!neighbours[posNeighbour].isOccupied()) return getType();
 
-    if (getNeighbour(posNeighbour).getType() < KINK_A) {
+    if (neighbours[posNeighbour].getType() < KINK_A) {
       return typesTable.getType(nImmobile, nMobile - 1);
     } else {
       return typesTable.getType(nImmobile - 1, nMobile);
