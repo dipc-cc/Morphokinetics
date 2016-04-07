@@ -88,6 +88,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param index
    * @return 
    */
+  @Deprecated
   public AbstractGrowthAtom getAtom(int index) {
     return getUc(index).getAtom(0);
   }
