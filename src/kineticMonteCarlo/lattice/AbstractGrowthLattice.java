@@ -39,7 +39,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     setHexaSizeI(hexaSizeI);
     setHexaSizeJ(hexaSizeJ);
     setHexaSizeK(1);
-    setUnitCellSize(4);
+    setUnitCellSize(1);
     this.modified = modified;
     hexaArea = hexaSizeI * hexaSizeJ;
     occupied = 0;

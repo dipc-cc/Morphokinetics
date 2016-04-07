@@ -47,6 +47,7 @@ public class AgUcLattice extends AgLattice {
   
   public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
+    setUnitCellSize(2);
     ucList = new ArrayList<>();
     createAtoms();
     
