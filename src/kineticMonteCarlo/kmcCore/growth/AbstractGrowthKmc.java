@@ -145,7 +145,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
     
     for (int i = 0; i < lattice.size(); i++) {
-      lattice.getAtom(i).clear();
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        uc.getAtom(j).clear();
+      }
     }
 
     deltaTimeBetweenTwoAttachments.clear();
@@ -207,7 +210,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public int simulate() {
     int k = 1;
     int returnValue = 0;
-    terraceToTerraceProbability = lattice.getAtom(0).getProbability(0, 0);
+    terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
     } else {
@@ -239,8 +242,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     // reset all the atoms
     
     for (int i = 0; i < lattice.size(); i++) {
-      lattice.getAtom(i).setVisited(false);
-      lattice.getAtom(i).setIslandNumber(0);
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        uc.getAtom(j).setVisited(false);
+        uc.getAtom(j).setIslandNumber(0);
+      }
     }
     
     // do the count
@@ -262,8 +268,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     // iterate all atoms and add to the corresponding island
     for (int i = 0; i < lattice.size(); i++) {
-      int island = lattice.getAtom(i).getIslandNumber();
-      histogram.set(island, histogram.get(island) + 1);
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        int island = uc.getAtom(j).getIslandNumber();
+        histogram.set(island, histogram.get(island) + 1);
+      }
     }
     System.out.println("histogram " + histogram.toString());
     return islandCount;
@@ -351,7 +360,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   protected boolean depositAtom(int iHexa, int jHexa) {
     int index = jHexa * lattice.getHexaSizeI() + iHexa;
-    return depositAtom(lattice.getAtom(index));
+    return depositAtom(lattice.getUc(index).getAtom(0));
   }
 
   boolean depositAtom(AbstractGrowthAtom atom) {
@@ -453,6 +462,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
         int j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
         int index = j * lattice.getHexaSizeI() + i;
+        // Possible bug here
+        // Possible solution select a random number 0 <= number < lattice.size()*uc.size()
         destinationAtom = lattice.getAtom(index);
       } while (!depositAtom(destinationAtom));
       // update the free area and the deposition rate counting just deposited atom
@@ -680,8 +691,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int calculateAreaAsInKmcCanvas() {
     int totalArea = 0;
     for (int i = 0; i < lattice.size(); i++) {
-      if (lattice.getAtom(i).isOccupied() || !lattice.getAtom(i).isOutside()) {
-        totalArea++;
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        if (uc.getAtom(j).isOccupied() || !uc.getAtom(j).isOutside()) {
+          totalArea++;
+        }
       }
     }
     return totalArea;

@@ -142,7 +142,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       jHexa -= getHexaSizeJ();
     }
     int index = jHexa * getHexaSizeI() + iHexa;
-    return (GrapheneAtom) getAtom(index);
+    return (GrapheneAtom) getUc(index).getAtom(0);
   }
 
   public int getHexaPosI(int iHexa, int jHexa, int pos, boolean type0) {
@@ -202,10 +202,10 @@ public class GrapheneLattice extends AbstractGrowthLattice {
         return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
       case 2:
         getClearAreaZigzag(iHexa, jHexa, distance, index, StaticRandom.raw());
-        return getAtom(index[0]);
+        return getUc(index[0]).getAtom(0);
       case 3:
         getClearAreaArmchair(iHexa, jHexa, distance, index, StaticRandom.raw());
-        return getAtom(index[0]);
+        return getUc(index[0]).getAtom(0);
       default:
         return null;
     }
@@ -229,7 +229,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       counter++;
       if (counter > temp) {
         index = jHexa * getHexaSizeI() + iHexa;
-        return getAtom(index);
+        return getUc(index).getAtom(0);
       }
       if (type0) {
         iHexa = getHexaPosI(iHexa, jHexa, 0, true);
@@ -244,7 +244,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       counter++;
       if (counter > temp) {
         index = jHexa * getHexaSizeI() + iHexa;
-        return getAtom(index);
+        return getUc(index).getAtom(0);
       }
       if (type0) {
         iHexa = getHexaPosI(iHexa, jHexa, 2, true);
@@ -259,7 +259,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       counter++;
       if (counter > temp) {
         index = jHexa * getHexaSizeI() + iHexa;
-        return getAtom(index);
+        return getUc(index).getAtom(0);
       }
       if (type0) {
         iHexa = getHexaPosI(iHexa, jHexa, 2, true);
@@ -274,7 +274,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       counter++;
       if (counter > temp) {
         index = jHexa * getHexaSizeI() + iHexa;
-        return getAtom(index);
+        return getUc(index).getAtom(0);
       }
       if (type0) {
         iHexa = getHexaPosI(iHexa, jHexa, 1, true);
@@ -289,7 +289,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       counter++;
       if (counter > temp) {
         index = jHexa * getHexaSizeI() + iHexa;
-        return getAtom(index);
+        return getUc(index).getAtom(0);
       }
       if (type0) {
         iHexa = getHexaPosI(iHexa, jHexa, 1, true);
@@ -304,7 +304,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       counter++;
       if (counter > temp) {
         index = jHexa * getHexaSizeI() + iHexa;
-        return getAtom(index);
+        return getUc(index).getAtom(0);
       }
       if (type0) {
         iHexa = getHexaPosI(iHexa, jHexa, 0, true);
@@ -476,7 +476,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
     int distance = 1;
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
-    int orientation = getAtom(index).getOrientation();
+    int orientation = getUc(index).getAtom(0).getOrientation();
 
     int iHexa1 = iHexaOrigin;
     int jHexa1 = jHexaOrigin;
@@ -511,21 +511,21 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       jHexa1 = getHexaPosJ(iHexa1, jHexa1, neighbour1, true);
       jHexa2 = getHexaPosJ(iHexa2, jHexa2, neighbour2, true);
       index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
-      if (distance == 1 && getAtom(index).isOccupied()) {
+      if (distance == 1 && getUc(index).getAtom(0).isOccupied()) {
         index = jHexa1 * getHexaSizeI() + iHexa1;
-        type1 = getAtom(index).getTypeWithoutNeighbour(neighbour1);
+        type1 = getUc(index).getAtom(0).getTypeWithoutNeighbour(neighbour1);
         index = jHexa2 * getHexaSizeI() + iHexa2;
-        type2 = getAtom(index).getTypeWithoutNeighbour(neighbour2);
+        type2 = getUc(index).getAtom(0).getTypeWithoutNeighbour(neighbour2);
       } else {
         index = jHexa1 * getHexaSizeI() + iHexa1;
-        type1 = getAtom(index).getType();
+        type1 = getUc(index).getAtom(0).getType();
         index = jHexa2 * getHexaSizeI() + iHexa2;
-        type2 = getAtom(index).getType();
+        type2 = getUc(index).getAtom(0).getType();
       }
 
         index = jHexa1 * getHexaSizeI() + iHexa1;
         int index2 = jHexa2 * getHexaSizeI() + iHexa2;
-      if (getAtom(index).isOccupied() || getAtom(index2).isOccupied() || type2 != 2 || type1 != 2) {
+      if (getUc(index).getAtom(0).isOccupied() || getUc(index2).getAtom(0).isOccupied() || type2 != 2 || type1 != 2) {
         return distance - 1;
       }
 
@@ -547,7 +547,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     int distance = 1;
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
-    int orientacion = getAtom(index).getOrientation();
+    int orientacion = getUc(index).getAtom(0).getOrientation();
 
     int iHexa1 = iHexaOrigin;
     int jHexa1 = jHexaOrigin;
@@ -597,16 +597,16 @@ public class GrapheneLattice extends AbstractGrowthLattice {
         jHexa1 = getHexaPosJ(iHexa1, jHexa1, neighbour1, true);
         jHexa2 = getHexaPosJ(iHexa2, jHexa2, neighbour2, true);
         index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
-        if (distance == 1 && getAtom(index).isOccupied()) {
+        if (distance == 1 && getUc(index).getAtom(0).isOccupied()) {
           index = jHexa1 * getHexaSizeI() + iHexa1;
-          type1 = getAtom(index).getTypeWithoutNeighbour(neighbour1);
+          type1 = getUc(index).getAtom(0).getTypeWithoutNeighbour(neighbour1);
           index = jHexa2 * getHexaSizeI() + iHexa2;
-          type2 = getAtom(index).getTypeWithoutNeighbour(neighbour2);
+          type2 = getUc(index).getAtom(0).getTypeWithoutNeighbour(neighbour2);
         } else {
           index = jHexa1 * getHexaSizeI() + iHexa1;
-          type1 = getAtom(index).getType();
+          type1 = getUc(index).getAtom(0).getType();
           index = jHexa2 * getHexaSizeI() + iHexa2;
-          type2 = getAtom(index).getType();
+          type2 = getUc(index).getAtom(0).getType();
         }
       } else {
         iHexa1 = getHexaPosI(iHexa1, jHexa1, neighbour2, false);
@@ -614,22 +614,22 @@ public class GrapheneLattice extends AbstractGrowthLattice {
         jHexa1 = getHexaPosJ(iHexa1, jHexa1, neighbour2, false);
         jHexa2 = getHexaPosJ(iHexa2, jHexa2, neighbour1, false);
         index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
-        if (distance == 1 && getAtom(index).isOccupied()) {
+        if (distance == 1 && getUc(index).getAtom(0).isOccupied()) {
           index = jHexa1 * getHexaSizeI() + iHexa1;
-          type1 = getAtom(index).getTypeWithoutNeighbour(neighbour2);
+          type1 = getUc(index).getAtom(0).getTypeWithoutNeighbour(neighbour2);
           index = jHexa2 * getHexaSizeI() + iHexa2;
-          type2 = getAtom(index).getTypeWithoutNeighbour(neighbour1);
+          type2 = getUc(index).getAtom(0).getTypeWithoutNeighbour(neighbour1);
         } else {
           index = jHexa1 * getHexaSizeI() + iHexa1;
-          type1 = getAtom(index).getType();
+          type1 = getUc(index).getAtom(0).getType();
           index = jHexa2 * getHexaSizeI() + iHexa2;
-          type2 = getAtom(index).getType();
+          type2 = getUc(index).getAtom(0).getType();
         }
       }
 
       index = jHexa1 * getHexaSizeI() + iHexa1;
       int index2 = jHexa2 * getHexaSizeI() + iHexa2;
-      if (getAtom(index).isOccupied() || getAtom(index2).isOccupied() || type2 != 3 || type1 != 3) {
+      if (getUc(index).getAtom(0).isOccupied() || getUc(index2).getAtom(0).isOccupied() || type2 != 3 || type1 != 3) {
         return distance - 1;
       }
 
