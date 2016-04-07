@@ -17,6 +17,10 @@ public abstract class AbstractLattice {
   private int hexaSizeK;
   private int unitCellSize;
 
+  public int size() {
+    return hexaSizeI * hexaSizeJ * hexaSizeK;
+  }
+  
   public final int getHexaSizeI() {
     return hexaSizeI;
   }
