@@ -78,6 +78,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
   }
 
+  @Override
   public int size() {
     return getHexaSizeI() * getHexaSizeJ();
   }
