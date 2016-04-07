@@ -99,6 +99,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param jHexa
    * @return required atom
    */
+  @Deprecated
   public AbstractGrowthAtom getAtom(int iHexa, int jHexa) {
     return ucArray[iHexa][jHexa].getAtom(0);
   }
