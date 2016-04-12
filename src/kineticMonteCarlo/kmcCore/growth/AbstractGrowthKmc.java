@@ -88,17 +88,17 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     this.extraOutput = extraOutput;
     if (extraOutput) {
       try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", false)))) {
-        out.println("Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
+        out.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
       }
       try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", false)))) {
-        out.println("Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
+        out.println("# Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
       }
       try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", false)))) {
-        out.println("Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
+        out.println("# Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
       }
