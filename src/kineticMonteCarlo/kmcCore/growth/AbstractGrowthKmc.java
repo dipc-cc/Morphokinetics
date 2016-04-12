@@ -119,8 +119,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (justCentralFlake) {
       getList().setDepositionProbability(depositionRateML / islandDensitySite);
     } else {
-      freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
-      getList().setDepositionProbability(depositionRatePerSite * lattice.getHexaSizeI() * lattice.getHexaSizeJ());
+      freeArea = calculateAreaAsInKmcCanvas();
+      getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
   }
 
@@ -142,7 +142,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public void reset() {
     lattice.reset();
     getList().reset();
-    freeArea = lattice.getHexaSizeI() * lattice.getHexaSizeJ();
+    freeArea = calculateAreaAsInKmcCanvas();
     
     for (int i = 0; i < lattice.size(); i++) {
       IUc uc = lattice.getUc(i);
