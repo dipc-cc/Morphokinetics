@@ -51,7 +51,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
     occupied = false;
-    outside = true;
+    outside = false;
     this.iHexa = iHexa;
     this.jHexa = jHexa;
     
