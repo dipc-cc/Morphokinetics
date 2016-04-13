@@ -459,12 +459,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } while (!depositAtom(destinationAtom));
     } else {
       do {
-        int i = (int) (StaticRandom.raw() * lattice.getHexaSizeI());
-        int j = (int) (StaticRandom.raw() * lattice.getHexaSizeJ());
-        int index = j * lattice.getHexaSizeI() + i;
-        // Possible bug here
-        // Possible solution select a random number 0 <= number < lattice.size()*uc.size()
-        destinationAtom = lattice.getAtom(index);
+          if (lattice.size() != lattice.getHexaSizeI()*lattice.getHexaSizeJ())
+            System.out.println("Size "+lattice.size()+ " "+lattice.getHexaSizeI()*lattice.getHexaSizeJ());
+        int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
+        int ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
+        int atomIndex = random % lattice.getUnitCellSize();
+        destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);
       } while (!depositAtom(destinationAtom));
       // update the free area and the deposition rate counting just deposited atom
       freeArea--;
