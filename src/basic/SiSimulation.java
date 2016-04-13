@@ -69,5 +69,15 @@ public class SiSimulation extends AbstractEtchingSimulation {
         throw e;
       }
     }
+  } 
+  
+  @Override
+  public void printRates(Parser parser) {
+    double[] rates = getRates().getRates(parser.getTemperature());
+
+    for (int i = 0; i < rates.length; i++) {
+      System.out.printf("%1.3E  ", rates[i]);
+    }
+    System.out.println("");
   }
 }

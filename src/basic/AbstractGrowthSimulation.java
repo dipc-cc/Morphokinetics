@@ -114,4 +114,20 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       }
     }
   }
+  
+  @Override
+  public void printRates(Parser parser) {
+    double[] rates = getRates().getRates(parser.getTemperature());
+    double depositionRatePerSite = getRates().getDepositionRatePerSite();
+    //we modify the 1D array into a 2D array;
+    int length = (int) Math.sqrt(rates.length);
+
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        System.out.printf("%1.3E  ", rates[i * length + j]);
+      }
+      System.out.println(" ");
+    }
+    System.out.println("Deposition rate (per site): "+ depositionRatePerSite);
+  }
 }

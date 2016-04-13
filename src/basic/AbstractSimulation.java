@@ -102,6 +102,10 @@ public abstract class AbstractSimulation {
     }
 
     System.out.println("_____________________________________________________________________________");
+    System.out.println("These are simulation rates: ");
+    printRates(parser);
+    
+    System.out.println("_____________________________________________________________________________");
     System.out.println("Surface output: " + parser.printToImage());
     System.out.println("PSD     output: " + printPsd);
     System.out.println("Output format : " + "mko");
@@ -286,4 +290,6 @@ public abstract class AbstractSimulation {
   String getRestartFolderName() {
     return restartFolderName;
   }
+  
+  public abstract void printRates(Parser parser);
 }
