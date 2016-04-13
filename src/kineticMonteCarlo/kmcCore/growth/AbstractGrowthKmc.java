@@ -459,8 +459,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } while (!depositAtom(destinationAtom));
     } else {
       do {
-          if (lattice.size() != lattice.getHexaSizeI()*lattice.getHexaSizeJ())
-            System.out.println("Size "+lattice.size()+ " "+lattice.getHexaSizeI()*lattice.getHexaSizeJ());
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
         int ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
