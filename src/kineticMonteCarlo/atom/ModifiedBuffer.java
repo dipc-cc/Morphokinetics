@@ -59,7 +59,7 @@ public class ModifiedBuffer {
   private void updateAllRates(AbstractGrowthAtom atom, AbstractList list) {
     double probabilityChange = atom.updateRate();
     if (list != null) {
-      if (atom.isEligible()&& !atom.isOnList()) {
+      if (atom.isEligible() && !atom.isOnList()) {
         list.addAtom(atom);
       }
       list.addTotalProbability(probabilityChange);
