@@ -89,6 +89,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public boolean equals(Object obj) {
 
     AbstractGrowthAtom other = (AbstractGrowthAtom) obj;
+    if (getId() != other.getId()) {
+      return false;
+    }
     if (iHexa != other.iHexa) {
       return false;
     }
@@ -112,7 +115,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    *
    * If the current atom is eligible, update its probability with its neighbours.
    *
-   * @return a probability change
+   * @return probability change
    */
   public double updateRate() {
     double tmp = -getProbability();
