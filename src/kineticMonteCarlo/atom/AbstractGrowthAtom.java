@@ -87,7 +87,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   @Override
   public boolean equals(Object obj) {
-
+    if (obj == null) {
+      return false;
+    }
+    if (!(obj instanceof AbstractGrowthAtom)) {
+      return false;
+    }
     AbstractGrowthAtom other = (AbstractGrowthAtom) obj;
     if (getId() != other.getId()) {
       return false;
