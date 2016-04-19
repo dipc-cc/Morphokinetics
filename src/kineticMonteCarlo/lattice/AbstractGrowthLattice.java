@@ -59,8 +59,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   /**
    * Extract the given atom from the lattice.
    * @param atom the atom to be extracted
+   * @return probability change (positive value)
    */
-  public abstract void extract(AbstractGrowthAtom atom);
+  public abstract double extract(AbstractGrowthAtom atom);
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to

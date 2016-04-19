@@ -520,9 +520,10 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public void extract(AbstractGrowthAtom a) {
+  public double extract(AbstractGrowthAtom a) {
     AgAtom atom = (AgAtom) a;
     atom.setOccupied(false);
+    double probabilityChange = a.getProbability();
     
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
@@ -536,6 +537,7 @@ public class AgLattice extends AbstractGrowthLattice {
 
     atom.resetProbability();
     atom.setList(false);
+    return probabilityChange;
   }
 
   private void removeImmobilAddMobile(AgAtom atom) {

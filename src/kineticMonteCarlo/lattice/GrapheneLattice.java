@@ -733,9 +733,10 @@ public class GrapheneLattice extends AbstractGrowthLattice {
    * si cambia algún tipo, recalcula probabilidades)
    */
   @Override
-  public void extract(AbstractGrowthAtom a) {
+  public double extract(AbstractGrowthAtom a) {
     GrapheneAtom atom = (GrapheneAtom) a;
     atom.setOccupied(false);
+    double probabilityChange = -a.getProbability();
 
     int i = 0;
     for (; i < 3; i++) {
@@ -756,6 +757,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       atom.setBondsProbability(null);
       }
     atom.setList(false);
+    atom.resetProbability();
+    return probabilityChange;
   }
       
   private void add1stNeighbour(GrapheneAtom atom, boolean forceNucleation) {
