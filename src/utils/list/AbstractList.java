@@ -25,6 +25,8 @@ public abstract class AbstractList implements IProbabilityHolder {
   }
 
   public abstract void addAtom(AbstractAtom a);
+  
+  public abstract void deleteAtom(AbstractAtom a);
 
   public abstract AbstractAtom nextEvent();
 

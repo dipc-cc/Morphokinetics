@@ -85,6 +85,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     atom.setList(true);
     setTotalAtoms(getTotalAtoms() + 1);
   }
+  
+  @Override
+  public void deleteAtom(AbstractAtom atom) {
+    surface.remove(atom);
+  }
 
   @Override
   public AbstractAtom nextEvent() {

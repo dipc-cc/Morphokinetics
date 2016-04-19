@@ -63,6 +63,18 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
   
   /**
+   * Not tested. Might fail.There might be a problem between selected bin and current atom.
+   *
+   * @param atom atom to be deleted.
+   */
+  @Override
+  public void deleteAtom(AbstractAtom atom) {
+    updateCurrentList();
+    setTotalAtoms(getTotalAtoms() - 1);
+    bins[currentBin].deleteAtom(atom);
+  }
+  
+  /**
    * Updates the total probability 
    * @param probabilityChange probability change
    */
