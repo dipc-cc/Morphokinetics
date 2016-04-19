@@ -69,20 +69,22 @@ public class AgUcLattice extends AgLattice {
     sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
     ucArray = new AgUc[sizeI][sizeJ];
+    int id = -1;
     for (int i = 0; i < sizeI; i++) {
       for (int j = 0; j < sizeJ; j++) {
         List<AgAtom> atomsList = new ArrayList<>(2);
-        int index = j * sizeI + i;
-        AgAtom atom0 = new AgAtom(index, 0);
+        id++;
+        AgAtom atom0 = new AgAtom(id, 0);
         atomsList.add(atom0);
-        AgAtom atom1 = new AgAtom(index, 1);
+        id++;
+        AgAtom atom1 = new AgAtom(id, 1);
         atomsList.add(atom1);
         AgUc uc = new AgUc(2, i, j, atomsList);
         ucList.add(uc);
         ucArray[i][j] = uc;
       }
     }
-
+    
     //Interconect atoms (go through all unit cells)
     for (int k = 0; k < size(); k++) {
       AgUc uc = ucList.get(k);
