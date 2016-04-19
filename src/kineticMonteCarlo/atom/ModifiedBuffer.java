@@ -62,7 +62,13 @@ public class ModifiedBuffer {
       if (atom.isEligible() && !atom.isOnList()) {
         list.addAtom(atom);
       }
-      list.addTotalProbability(probabilityChange);
+      if (atom.isOnList()) {
+        list.addTotalProbability(probabilityChange);
+      }
+      if (!atom.isEligible()) {
+        atom.setList(false);
+        list.deleteAtom(atom);
+      }
     }
   }
 
