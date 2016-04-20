@@ -795,9 +795,9 @@ public class Parser {
   
   public int getHexaSizeJ() {
     if (getCalculationMode().equals("AgUc")) {
-      return (int) (getCartSizeX() / (2 * AbstractGrowthLattice.Y_RATIO));
+      return (int) (getCartSizeY() / (2 * AbstractGrowthLattice.Y_RATIO));
     } else {
-      return (int) (getCartSizeX() / AbstractGrowthLattice.Y_RATIO);
+      return (int) (getCartSizeY() / AbstractGrowthLattice.Y_RATIO);
     }
   }
 
