@@ -38,6 +38,7 @@ public abstract class AbstractSimulation {
   private long iterationStartTime;
   private double totalTime;
   private float coverage;
+  private int islands;
   private int simulations;
   private float[][] sampledSurface;
   private int[] surfaceSizes;
@@ -84,6 +85,7 @@ public abstract class AbstractSimulation {
     startTime = System.currentTimeMillis();
     totalTime = 0.0;
     coverage = 0.0f;
+    islands = 0;
     boolean printPsd = (parser.doPsd() && parser.outputData());
     restartFolderName = "results/run" + System.currentTimeMillis();
     restart = new Restart(restartFolderName);
@@ -129,6 +131,7 @@ public abstract class AbstractSimulation {
       printOutput();
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
+      islands += kmc.getIslandCount();
     }
 
     printFooter();
@@ -251,13 +254,14 @@ public abstract class AbstractSimulation {
   private void printFooter() {
     System.out.println("\n\t__________________________________________________");
     System.out.println("\tAverage");
-    System.out.println("\tSimulation time\t\tCoverage\tCPU time");
+    System.out.println("\tSimulation time\t\tCoverage\tCPU time\tIsland avg.");
     System.out.println("\t(units)\t\t\t (%)\t\t (ms/s/min)");
     System.out.println("\t__________________________________________________");
     System.out.print("\t" + totalTime / parser.getNumberOfSimulations());
     System.out.print("\t" + coverage / parser.getNumberOfSimulations());
     long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
-    System.out.println("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60 + "\n");
+    System.out.print("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60);
+    System.out.println("\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations()));
   }
 
   /**
