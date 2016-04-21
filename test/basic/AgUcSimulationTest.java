@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import org.junit.After;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
@@ -47,14 +46,14 @@ public class AgUcSimulationTest {
   @After
   public void tearDown() {
   }
-  
+
   @Test
   public void testAgUcPsd() {
     AbstractSimulation.printHeader("AgUc PSD test");
     Parser parser = new Parser();
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUcPsdParameters");
     parser.print();
-    
+
     doAgTest(parser);
     //TODO check that PSDs are equivalent
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
@@ -65,7 +64,7 @@ public class AgUcSimulationTest {
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
-    
+
     AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(null,
             0, 0,
             parser.getCartSizeX() / 2, parser.getCartSizeY() / 2,
@@ -79,7 +78,7 @@ public class AgUcSimulationTest {
     results.add(0.032); // the error must be lower than 0.032
     results.sort((a, b) -> b.compareTo(a));
     assertEquals(0.032, results.get(0), 0.0); // ensure that the first value is 0.032, and therefore, the current error is lower
- 
+
   }
 
   private void doAgTest(Parser parser) {
@@ -93,5 +92,5 @@ public class AgUcSimulationTest {
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     currentPsd = simulation.getPsd().getPsd();
   }
-   
+
 }
