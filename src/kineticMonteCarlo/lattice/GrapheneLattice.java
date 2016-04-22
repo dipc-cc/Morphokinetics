@@ -731,12 +731,15 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   /**
    * Extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos,
    * si cambia algún tipo, recalcula probabilidades)
+   * 
+   * @param a atom to be extracted.
+   * @return the previous probability of the extracted atom (in positive).
    */
   @Override
   public double extract(AbstractGrowthAtom a) {
     GrapheneAtom atom = (GrapheneAtom) a;
     atom.setOccupied(false);
-    double probabilityChange = -a.getProbability();
+    double probabilityChange = a.getProbability();
 
     int i = 0;
     for (; i < 3; i++) {
