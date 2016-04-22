@@ -99,9 +99,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability());
+    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
 
-    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbabilityFromList() + getDepositionProbability()));
+    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo

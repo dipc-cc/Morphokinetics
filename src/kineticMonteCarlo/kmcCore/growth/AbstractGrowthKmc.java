@@ -403,7 +403,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     int oldType = originAtom.getType();
-    lattice.extract(originAtom);
+		double probabilityChange = lattice.extract(originAtom);
+    getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
     lattice.deposit(destinationAtom, forceNucleation);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
