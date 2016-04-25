@@ -93,7 +93,33 @@ public class PsdSignature2D {
     semaphore.release();
 
   }
+  
+  /**
+   * Does the PSD of the given surface.
+   * @param sampledSurface given surface
+   * @return PSD 
+   */
+  public static float[][] doOnePsd(float[][] sampledSurface) {
+    int sizeY = sampledSurface[0].length;
+    int sizeX = sampledSurface.length;
+    float[][] bufferTmp = new float[sizeY][sizeX * 2];
+    float[][] result = new float[sizeY][sizeX];
+    FloatFFT_2D fftCoreTmp = new FloatFFT_2D(sizeY, sizeX);
 
+    for (int i = 0; i < sampledSurface.length; i++) {
+      System.arraycopy(sampledSurface[i], 0, bufferTmp[i], 0, sizeY);
+    } // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
+    fftCoreTmp.realForwardFull(bufferTmp);
+
+    // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
+    for (int i = 0; i < sampledSurface[0].length; i++) {
+      for (int j = 0; j < sampledSurface.length; j++) {
+        result[i][j] = (bufferTmp[i][j * 2] * bufferTmp[i][j * 2] + bufferTmp[i][j * 2 + 1] * bufferTmp[i][j * 2 + 1]) / (sizeX * sizeY);
+      }
+    }
+    return result;
+  }
+ 
   public float[][] getPsd() {
 
     if (!averaged) {
