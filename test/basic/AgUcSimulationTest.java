@@ -57,7 +57,7 @@ public class AgUcSimulationTest {
     doAgTest(parser);
     //TODO check that PSDs are equivalent
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    int[] sizes = {(int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale())};
     float[][] ref = null;
     try {
       ref = restart.readPsdText2D(2, sizes, "AgPsdAvgRaw.txt");
@@ -67,17 +67,16 @@ public class AgUcSimulationTest {
 
     AgBasicPsdEvaluator evaluator = new AgBasicPsdEvaluator(null,
             0, 0,
-            parser.getCartSizeX() / 2, parser.getCartSizeY() / 2,
+            (int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()),
             null, "Frobenius", null, parser.getTemperature());
     evaluator.setPsd(ref);
     double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
-    //0.031!!!
-    results.add(0.032); // the error must be lower than 0.032
+    results.add(0.04); // the error must be lower than 0.04
     results.sort((a, b) -> b.compareTo(a));
-    assertEquals(0.032, results.get(0), 0.0); // ensure that the first value is 0.032, and therefore, the current error is lower
+    assertEquals(0.04, results.get(0), 0.0); // ensure that the first value is 0.04, and therefore, the current error is lower
 
   }
 
@@ -89,7 +88,7 @@ public class AgUcSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    currentSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
     currentPsd = simulation.getPsd().getPsd();
   }
 

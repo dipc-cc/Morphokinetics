@@ -15,4 +15,5 @@
   "randomSeed": true,
   "useMaxPerimeter": false,
   "perimeterType": circle,
+  "psdScale": 1,
 }
