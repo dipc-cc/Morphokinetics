@@ -244,6 +244,9 @@ public class RatesFromPrbCox implements IGrowthRates {
   /**
    * Returns the island density mono layer depending on the temperature. 
    * These values are taken from section 4 of the paper of Cox et al.
+   * 
+   * (But are not consistent with, for example, the multi-flake
+   * simulations: 180K, 250x250)
    * @param temperature
    * @return a double value from 1e-4 to 2e-5
    */
