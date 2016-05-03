@@ -130,7 +130,14 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
       }
     }
     
-    FrobeniusError = Math.sqrt(sum)/frobeniusNormOfMatrix;
+    FrobeniusError = Math.sqrt(sum)/frobeniusNormOfMatrix; 
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        // Apply the log_e and calculate the difference
+        difference[i][j] = (float)Math.log(currentPsd[i][j]) - experimentalPsd[
+      }
+    }
+
     return FrobeniusError;
   }
   
