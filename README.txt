@@ -6,7 +6,7 @@ This is Morphokinetics software developed at the Donostia International Physics 
 
 Simple instructions to "compile" the code 
 cd src/
-javac -source 7 -target 7 -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main/Morphokinetics.java
+javac -source 8 -target 8 -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main/Morphokinetics.java
 mkdir ../perimeterData
 cp ../scripts/perimeterStatistics/reentrancesPerAngleHexagonal* ../perimeterData/
 cp ../scripts/perimeterStatistics/hopsPerAngleHexagonal* ../perimeterData/
