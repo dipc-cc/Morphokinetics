@@ -18,7 +18,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import utils.psdAnalysis.PsdSignature2D;
 
 /**
  *
@@ -72,42 +71,7 @@ public class AgUcSimulationTest {
             null, "Frobenius", null, parser.getTemperature());
     evaluator.setPsd(ref);
     double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
-    System.out.println("Writing difference");
-    float[][] differencePsd = PsdSignature2D.doOnePsd(evaluator.getCurrentDifference());
-    
-    restart.writeSurfaceText2D(2, sizes, evaluator.getCurrentDifference(), "difference");
-    restart.writeSurfaceText2D(2, sizes, differencePsd, "differencePsd");
-    int count = 0;
-    int countLog = 0;
-    List<Float> list = new ArrayList<>();
-    for (int i = 0; i < differencePsd[0].length; i++) {
-      for (int j = 0; j < differencePsd.length; j++) {
-        if (differencePsd[i][j] > 0) {
-          count++;
-        }
-        if (Math.log(differencePsd[i][j]) > 0) {
-          countLog++;
-          list.add(differencePsd[i][j]);
-          if (i == 0 && j == 0) {
-            System.out.println("0 0  is different, we are not going to count it");
-            countLog--;
-          }
-        }
-      }
-    }
-    if (countLog > 0) {
-      System.out.println("------------> Two simulations are NOT equal!!");
-    } else {
-      System.out.println("------------> Two simulations are EQUAL!!");
-    }
-    System.out.println("Count "+count);
-    System.out.println("CountLog "+countLog);
-    for (int i = 0; i < list.size(); i++) {
-      System.out.print(" "+list.get(i)+" "+Math.log(list.get(i))+" |");
-    }
-    System.out.println("");
     System.out.println("Frobenius error is " + FrobeniusError);
-    
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
     results.add(0.04); // the error must be lower than 0.04
