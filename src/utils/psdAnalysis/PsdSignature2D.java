@@ -26,11 +26,8 @@ public class PsdSignature2D {
 
   private FloatFFT_2D fftCore;
   private float[][] psd;
-  private float[][] psd2;
   private ArrayList<float[][]> psdVector;
-  private ArrayList<float[][]> psd2Vector;
   private float[][] psdTmp;
-  private float[][] psd2Tmp;
   private float[][] buffer;
   private int measures;
   private Semaphore semaphore;
@@ -63,11 +60,6 @@ public class PsdSignature2D {
     sizes[1] = psdSizeX;
     dimensions = 2;
     restart = new Restart();
-    
-    // Atributtes to do the PSD of the PSDs
-    psd2 = new float[psdSizeY][psdSizeX];
-    psd2Tmp = new float[psdSizeY][psdSizeX];
-    psd2Vector = new ArrayList<>();
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
@@ -97,24 +89,6 @@ public class PsdSignature2D {
       }
     }
     psdVector.add(psdTmp);
-    
-    // do the second FFT
-    for (int i = 0; i < sampledSurface.length; i++) {
-      System.arraycopy(psdTmp[i], 0, buffer[i], 0, psdTmp[0].length);
-    }
-
-    // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
-    fftCore.realForwardFull(buffer);
-
-    // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
-    for (int i = 0; i < psdSizeY; i++) {
-      for (int j = 0; j < psdSizeX; j++) {
-        psd2Tmp[i][j] = (buffer[i][j * 2] * buffer[i][j * 2] + buffer[i][j * 2 + 1] * buffer[i][j * 2 + 1]) / (surfaceSizeX * surfaceSizeY);
-        psd2[i][j] += psd2Tmp[i][j];
-      }
-    }
-    psd2Vector.add(psdTmp);
-    
     measures++;
     semaphore.release();
 
@@ -157,19 +131,6 @@ public class PsdSignature2D {
       averaged = true;
     }
     return psd;
-  }
-
-  public float[][] getPsd2() {
-
-    if (!averaged) {
-      for (int i = 0; i < psdSizeY; i++) {
-        for (int j = 0; j < psdSizeX; j++) {
-          psd2[i][j] /= measures;
-        }
-      }
-      averaged = true;
-    }
-    return psd2;
   }
 
   public void reset() {
@@ -215,8 +176,6 @@ public class PsdSignature2D {
    */
   public void writePsdBinary(int simulationNumber) {
     restart.writePsdBinary(dimensions, sizes, psdVector.get(simulationNumber), simulationNumber);
-    restart.writePsdBinary(dimensions, sizes, psd2Vector.get(simulationNumber), simulationNumber+1000);
-    
   }
     
   /**
@@ -234,8 +193,6 @@ public class PsdSignature2D {
     restart.writePsdText2D(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
     restart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
     restart.writePsdText2D(dimensions, sizes, this.getPsd(), "psdAvgRaw");
-    restart.writePsdBinary(dimensions, sizes, this.getPsd2(), "psd2");
-    restart.writePsdText2D(dimensions, sizes, this.getPsd2(), "psd2");
   }
   
   public void setRestart(Restart restart) {
