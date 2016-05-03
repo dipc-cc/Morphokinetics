@@ -32,6 +32,8 @@ public interface IAtom {
   public double remove();
   
   public byte getType();
+  
+  public byte getRealType();
 
   public int getNumberOfNeighbours();
 

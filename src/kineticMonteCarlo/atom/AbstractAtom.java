@@ -78,4 +78,13 @@ public abstract class AbstractAtom implements IAtom {
   public void setNeighbour(AbstractAtom lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+  
+  /**
+   * If not overridden, returns directly the type of current atom.
+   * @return atom type of current atom. 
+   */
+  @Override
+  public byte getRealType() {
+    return getType();
+  }
 }
