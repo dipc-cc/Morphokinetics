@@ -182,9 +182,9 @@ public class AgAtom extends AbstractGrowthAtom {
    * This atom is an edge (it has two neighbours). There are 6 possible positions for the edge,
    * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
    * its neighbours:                 
-   *    4  3
-   *   5 [] 2
    *    0  1
+   *   5 [] 2
+   *    4  3
    * A proper image of the positions is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    * @param code binary code with the occupied neighbours.
@@ -213,9 +213,9 @@ public class AgAtom extends AbstractGrowthAtom {
    * This atom is a kink (it has three neighbours). There are 6 possible positions for the kink,
    * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
    * its neighbours:                 
-   *    4  3
-   *   5 [] 2
    *    0  1
+   *   5 [] 2
+   *    4  3
    * A proper image of the positions is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    * @param code binary code with the occupied neighbours.
@@ -266,6 +266,13 @@ public class AgAtom extends AbstractGrowthAtom {
     return neighbours[cont];
   }
 
+  /**
+   * When the current atom's destination is a corner, it jumps over it to the different type edge.
+   * 
+   * @bug Destination can be other corner
+   * @param cornerPosition position of the neighbour, from current atom
+   * @return other type edge
+   */
   private AgAtom aheadCornerAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) {
 
