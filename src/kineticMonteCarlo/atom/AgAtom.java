@@ -310,6 +310,52 @@ public class AgAtom extends AbstractGrowthAtom {
     return null;
   }
 
+  /**
+   * This should be called when a edge jumps to a corner (instead of
+   * expected edge).  It happens when a sharp vertex is found in the
+   * island geometry and the atom has to jump over two corners and
+   * finish in the same type of edge (or any other type: ISLAND, KINK)
+   * 
+   * @param cornerPosition position of the neighbour, from current atom
+   * @return any other type (EDGE, KINK or BULK)
+   */
+  private AgAtom ahead2CornersAtom(int cornerPosition) {
+    if ((getOrientation() & 1) != 0) {
+
+      switch (cornerPosition) {
+        case 0:
+          return neighbours[5].getNeighbour(0).getNeighbour(4); // Directions: west + northwest + southwest
+        case 1:
+	  return neighbours[2].getNeighbour(1).getNeighbour(3); // Directions: east + northeast + southeast
+        case 2:
+          return neighbours[1].getNeighbour(2).getNeighbour(0); // Directions: northeast + east + northwest
+        case 3:
+          return neighbours[4].getNeighbour(3).getNeighbour(5); // Directions: southwest + southeast + west
+        case 4:
+          return neighbours[3].getNeighbour(4).getNeighbour(2); // Directions: southeast + southwest + east
+        case 5:
+          return neighbours[0].getNeighbour(5).getNeighbour(1); // Directions: nortwest + west + northeast
+      }
+    } else {
+
+      switch (cornerPosition) {
+        case 0:
+          return neighbours[1].getNeighbour(0).getNeighbour(2); // Directions: northeast + northwest + east
+        case 1:
+          return neighbours[0].getNeighbour(1).getNeighbour(5); // Directions: northwest + northeast + east
+        case 2:
+          return neighbours[3].getNeighbour(2).getNeighbour(4); // Directions: southeast + east + southwest
+        case 3:
+          return neighbours[2].getNeighbour(3).getNeighbour(1); // Directions: east + southeast + northeast
+        case 4:
+          return neighbours[5].getNeighbour(4).getNeighbour(0); // Directions: west + southwest + northwest
+        case 5:
+          return neighbours[4].getNeighbour(5).getNeighbour(3); // Directions: southwest + west + southeast
+      }
+    }
+    return null;
+  }
+
   @Override
   public boolean areTwoTerracesTogether() {
 
