@@ -378,19 +378,16 @@ public class AgAtom extends AbstractGrowthAtom {
     int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
-    if (getType() == EDGE_A && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
-      int otherCorner = 0;
-      if (originType == EDGE_A) otherCorner = EDGE_B;
-      if (originType == EDGE_B) otherCorner = EDGE_A;
-      return getProbability(originType, otherCorner);
+    if (getType() == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
+      if (originType == EDGE_A) destination = EDGE_B;
+      if (originType == EDGE_B) destination = EDGE_A;
     } else {
       destination = (byte) Math.min(destination, 2);
       if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
         destination = EDGE_B;
       }
-
-      return getProbability(originType, destination);
     }
+    return getProbability(originType, destination);
   }
 
   @Override
