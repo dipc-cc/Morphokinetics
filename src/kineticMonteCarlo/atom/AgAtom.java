@@ -425,9 +425,7 @@ public class AgAtom extends AbstractGrowthAtom {
       return 0;
     }
 
-    byte originType = getType();
-    if (getType() == EDGE_A && (getOrientation() & 1) == 0) originType = EDGE_B;
-    if (getType() == KINK_A && (getOrientation() & 1) == 0) originType = KINK_B;
+    byte originType = getRealType();
     int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
