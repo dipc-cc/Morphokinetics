@@ -274,7 +274,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @return other type edge
    */
   private AgAtom aheadCornerAtom(int cornerPosition) {
-    if ((getOrientation() & 1) != 0) {
+    if ((getOrientation() & 1) != 0) { // B type edge
 
       switch (cornerPosition) {
         case 0:
@@ -290,9 +290,9 @@ public class AgAtom extends AbstractGrowthAtom {
         case 5:
           return neighbours[0].getNeighbour(5);
       }
-    } else {
+    } else { // A type edge
 
-      switch (cornerPosition) {
+      switch (cornerPosition) { 
         case 0:
           return neighbours[1].getNeighbour(0);
         case 1:
