@@ -260,9 +260,15 @@ public class AgAtom extends AbstractGrowthAtom {
     cont--;
 
     if (getType() == EDGE_A && neighbours[cont].getType() == CORNER) {
-      return aheadCornerAtom(cont);
+      AbstractGrowthAtom destination = aheadCornerAtom(cont);
+      if (destination.getType() == CORNER) {
+        System.out.print("Something extrange happened. From " + getRealType() + " ");
+        destination = ahead2CornersAtom(cont);
+        System.out.println(" to " + destination.getRealType());
+      }
+      return destination;
     }
-
+    
     return neighbours[cont];
   }
 
