@@ -18,12 +18,14 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
    * Stores if the current totalProbability and the probability calculated from the list are the same.
    */
   private boolean clean;
+  private double Ri_DeltaI;
   
   public LinearList() {
     super();
     surface = new ArrayList();
     this.setLevel(-1);
     clean = false;
+    Ri_DeltaI = 0.0;
   }
 
   @Override
@@ -61,6 +63,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     super.reset();
     surface.clear();
     clean = false;
+    Ri_DeltaI = 0.0;
   }
 
   @Override
@@ -101,11 +104,13 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
     double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
 
-    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
-
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
     }
+
+    double time = 1 / (getTotalProbability());
+    Ri_DeltaI += getTotalProbability() * time;
+    addTime(time);
     position -= getDepositionProbability();
     double currentProbability = 0;
 
@@ -146,4 +151,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     return surface.listIterator();
   }
 
+  public double getRi_DeltaI() {
+    return Ri_DeltaI;
+  }
 }
