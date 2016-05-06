@@ -169,8 +169,7 @@ public class KmcCanvas extends Canvas {
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
 
-        byte type = atom.getType();
-        switch (type) {
+        switch (atom.getType()) { // the cases are for graphene
           case AbstractAtom.TERRACE:
             g.setColor(WHITE_GRAY);
             break;
@@ -180,10 +179,10 @@ public class KmcCanvas extends Canvas {
           case AbstractAtom.EDGE:
             g.setColor(LILAC);
             break;
-          case AbstractAtom.ARMCHAIR_EDGE:
+          case AbstractAtom.ARMCHAIR_EDGE: // == Ag KINK
             g.setColor(Color.WHITE);
             break;
-          case AbstractAtom.ZIGZAG_WITH_EXTRA:
+          case AbstractAtom.ZIGZAG_WITH_EXTRA: // == Ag ISLAND
             g.setColor(Color.CYAN);
             break;
           case AbstractAtom.SICK:
