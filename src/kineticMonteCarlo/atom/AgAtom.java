@@ -159,6 +159,18 @@ public class AgAtom extends AbstractGrowthAtom {
     }
   }
 
+  /**
+   * Computes the orientation with respect to the surface, for edges and kinks.
+   * <pre>
+   * A type: _
+   *        \ /
+   * B type:
+   *        /_\
+   * (central area would be island)
+   * </pre>
+   *
+   * @return a number between 0 and 5 inclusive. Even number if A type or odd if B type.
+   */
   @Override
   public int getOrientation() {
     // Create the occupation code shifting the number of positions with the neighbours of the current atom
@@ -181,10 +193,12 @@ public class AgAtom extends AbstractGrowthAtom {
   /**
    * This atom is an edge (it has two neighbours). There are 6 possible positions for the edge,
    * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
-   * its neighbours:                 
+   * its neighbours:   
+   * <pre>
    *    0  1
    *   5 [] 2
    *    4  3
+   * </pre>
    * A proper image of the positions is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    * @param code binary code with the occupied neighbours.
@@ -212,10 +226,12 @@ public class AgAtom extends AbstractGrowthAtom {
   /**
    * This atom is a kink (it has three neighbours). There are 6 possible positions for the kink,
    * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
-   * its neighbours:                 
+   * its neighbours:  
+   * <pre>               
    *    0  1
    *   5 [] 2
    *    4  3
+   * </pre>
    * A proper image of the positions is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    * @param code binary code with the occupied neighbours.
@@ -430,7 +446,7 @@ public class AgAtom extends AbstractGrowthAtom {
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     // the current atom is an edge and destination is a corner. 
-    // We will skip over the corner and go to the next edge.
+    // We will skip over the corner and go to the next edge (but instead of a corner might be another corner).
     if (getType() == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
       if (originType == EDGE_A) destination = EDGE_B;
       if (originType == EDGE_B) destination = EDGE_A;
@@ -451,7 +467,7 @@ public class AgAtom extends AbstractGrowthAtom {
   @Override
   public byte getTypeWithoutNeighbour(int posNeighbour) {
 
-    if (!neighbours[posNeighbour].isOccupied()) return getType();
+    if (!neighbours[posNeighbour].isOccupied()) return getType(); // impossible to happen
 
     if (neighbours[posNeighbour].getType() < KINK_A) {
       // current atom is mobile
