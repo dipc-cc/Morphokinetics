@@ -551,6 +551,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     if (scaleX > 1.01 || scaleY > 1.02) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
+      System.err.println("X scale is " + scaleX + " Y scale is " + scaleY);
       return null;
     }
 
