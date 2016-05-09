@@ -551,6 +551,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     if (scaleX > 1.01 || scaleY > 1.02) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
+      System.err.println("The size of the surface should be " + binX + " and it is " + lattice.getCartSizeX() + "/" + scaleX+" (hexagonal size is "+lattice.getHexaSizeI()+")");
+      System.err.println("The size of the surface should be " + binY + " and it is " + lattice.getCartSizeY() + "/" + scaleY+" (hexagonal size is "+lattice.getHexaSizeJ()+")");
       System.err.println("X scale is " + scaleX + " Y scale is " + scaleY);
       return null;
     }
