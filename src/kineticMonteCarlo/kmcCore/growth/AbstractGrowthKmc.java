@@ -546,8 +546,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     float[][] surface = new float[binX][binY];
     
     Point2D corner1 = lattice.getCartesianLocation(0, 0);
-    double scaleX = Math.abs(binX / (lattice.getCartSizeX()));
-    double scaleY = Math.abs(binY / (lattice.getCartSizeY()));
+    double scaleX = binX / lattice.getCartSizeX();
+    double scaleY = binY / lattice.getCartSizeY();
 
     if (scaleX > 1.01 || scaleY > 1.02) {
       System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
