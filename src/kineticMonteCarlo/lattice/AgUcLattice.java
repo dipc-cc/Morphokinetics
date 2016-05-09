@@ -174,6 +174,10 @@ public class AgUcLattice extends AgLattice {
     return ucList.get(pos);
   }
   
+  public AgUc getUc(int i, int j) {
+    return ucArray[i][j];
+  }
+  
   @Override
   public AgAtom getAtom(int iHexa, int jHexa) {
     return null;

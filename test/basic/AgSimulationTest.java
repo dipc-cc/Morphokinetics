@@ -96,7 +96,7 @@ public class AgSimulationTest {
   }
 
   /**
-   * Really simple and quick test to ensure that runs correctly
+   * Really simple and quick test to ensure that runs correctly. No further checks.
    */
   @Test
   public void testAgSimple() {
