@@ -173,18 +173,36 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   @Override
   public int getOrientation() {
+    return getOrientation(null);
+  }
+
+  /**
+   * See {@link #getOrientation()}
+   * @param atom atom to be excluded to compute the orientation. If null, none is excluded.
+   * @return 
+   */
+  public int getOrientation(AgAtom atom) {
+    byte type = getType();
+    int neighbourPosition = 0;
     // Create the occupation code shifting the number of positions with the neighbours of the current atom
     int occupationCode = 0;
-    for (int i = 0; i < 6; i++) {
-      if (neighbours[i].isOccupied()) {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      if (neighbours[i].isOccupied() && !neighbours[i].equals(atom)) {
         occupationCode |= (1 << i);
+      }
+      if (neighbours[i].equals(atom)) {
+        neighbourPosition = i;
       }
     }
 
-    if (getType() == EDGE_A) {
+    if (atom != null) {
+      type = getTypeWithoutNeighbour(neighbourPosition);
+    }
+          
+    if (type == EDGE_A) {
       return calculateEdgeType(occupationCode);
     }
-    if (getType() == KINK_A) {
+    if (type == KINK_A) {
       return calculateKinkType(occupationCode);
     }
     return -1;
