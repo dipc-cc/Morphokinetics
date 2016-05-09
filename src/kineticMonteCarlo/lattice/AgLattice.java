@@ -603,36 +603,36 @@ public class AgLattice extends AbstractGrowthLattice {
    
   /**
    * Éste lo ejecutan los primeros vecinos
-   * @param atom neighbour atom of the original atom
+   * @param neighbourAtom neighbour atom of the original atom
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(AgAtom atom, byte originType, boolean forceNucleation) {
+  private void addOccupiedNeighbour(AgAtom neighbourAtom, byte originType, boolean forceNucleation) {
     byte newType;
 
-    if (originType < KINK_A) {
-      newType = atom.getNewType(0, 1); //nImmobile, ++nMobile
-      atom.addNMobile(1);
-    } else {
-      newType = atom.getNewType(1, 0); //++nImmobile, nMobile
-      atom.addNImmobile(1);
+    if (originType < KINK_A) { // was a TERRACE, CORNER or EDGE
+      newType = neighbourAtom.getNewType(0, 1); //nImmobile, ++nMobile
+      neighbourAtom.addNMobile(1);
+    } else { // was a KINK or ISLAND
+      newType = neighbourAtom.getNewType(1, 0); //++nImmobile, nMobile
+      neighbourAtom.addNImmobile(1);
     }
 
     if (forceNucleation) {
       newType = ISLAND;
     }
 
-    if (atom.getType() != newType) {
-      boolean mobileToImmobile = (atom.getType() < KINK_A && newType >= KINK_A);
-      atom.setType(newType);
-      addAtom(atom);
-      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
-        addBondAtom(atom);
+    if (neighbourAtom.getType() != newType) {
+      boolean mobileToImmobile = (neighbourAtom.getType() < KINK_A && newType >= KINK_A);
+      neighbourAtom.setType(newType);
+      addAtom(neighbourAtom);
+      if (neighbourAtom.getNMobile() > 0 && !neighbourAtom.isOccupied()) {
+        addBondAtom(neighbourAtom);
       }
-      if (mobileToImmobile && atom.isOccupied()) {
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeMobileAddImmobile(atom.getNeighbour(i), forceNucleation);
+      if (mobileToImmobile && neighbourAtom.isOccupied()) {
+        for (int i = 0; i < neighbourAtom.getNumberOfNeighbours(); i++) {
+          if (!neighbourAtom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeMobileAddImmobile(neighbourAtom.getNeighbour(i), forceNucleation);
           }
         }
       }
@@ -640,25 +640,26 @@ public class AgLattice extends AbstractGrowthLattice {
   }
    
   /**
+   * Computes the removal of one mobile atom.
    * 
-   * @param atom neighbour atom of the original atom
+   * @param neighbourAtom neighbour atom of the original atom
    */
-  private void removeMobileOccupied(AgAtom atom) {
+  private void removeMobileOccupied(AgAtom neighbourAtom) {
 
-    byte newType = atom.getNewType(0, -1); //nImmobile, --nMobile
-    atom.addNMobile(-1); // remove one mobile atom (original atom has been extracted)
+    byte newType = neighbourAtom.getNewType(0, -1); //nImmobile, --nMobile
+    neighbourAtom.addNMobile(-1); // remove one mobile atom (original atom has been extracted)
 
-    if (atom.getType() != newType) {
-      boolean immobileToMobile = (atom.getType() >= KINK_A && newType < KINK_A);
-      atom.setType(newType);
-      addAtom(atom);
-      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
-        addBondAtom(atom);
+    if (neighbourAtom.getType() != newType) {
+      boolean immobileToMobile = (neighbourAtom.getType() >= KINK_A && newType < KINK_A);
+      neighbourAtom.setType(newType);
+      addAtom(neighbourAtom);
+      if (neighbourAtom.getNMobile() > 0 && !neighbourAtom.isOccupied()) {
+        addBondAtom(neighbourAtom);
       }
-      if (immobileToMobile && atom.isOccupied()) {
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeImmobilAddMobile(atom.getNeighbour(i));
+      if (immobileToMobile && neighbourAtom.isOccupied()) {
+        for (int i = 0; i < neighbourAtom.getNumberOfNeighbours(); i++) {
+          if (!neighbourAtom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeImmobilAddMobile(neighbourAtom.getNeighbour(i));
           }
         }
       }
