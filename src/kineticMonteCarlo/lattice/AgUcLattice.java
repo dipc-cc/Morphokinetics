@@ -420,6 +420,7 @@ public class AgUcLattice extends AgLattice {
       distance++;
     }
   }
+  
   private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {
     double randomNumber = StaticRandom.raw();
     int neighbour = 0;
@@ -440,6 +441,7 @@ public class AgUcLattice extends AgLattice {
           break;
         } else {
           neighbour = 3;
+          break;
         }
       case 2:
       case 5:
