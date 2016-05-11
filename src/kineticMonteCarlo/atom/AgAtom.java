@@ -437,20 +437,22 @@ public class AgAtom extends AbstractGrowthAtom {
   }
  
   /**
-   * Returns the real type of the current atom. This means, that is able to determine whether edge
-   * or kink is of type A or B
+   * Returns the real type of the current atom. This means, that is
+   * able to determine whether edge or kink is of type A or B. If the
+   * orientation number is odd the type is B.
    *
    * @return real type of the current atom.
    */
   @Override
   public byte getRealType() {
-    if (getType() == EDGE_A && (getOrientation() & 1) == 0) {
+    byte type = getType();
+    if (type == EDGE_A && (getOrientation() & 1) != 0) {
       return EDGE_B;
     }
-    if (getType() == KINK_A && (getOrientation() & 1) == 0) {
+    if (type == KINK_A && (getOrientation() & 1) != 0) {
       return KINK_B;
     }
-    return getType();
+    return type;
   }
     
   private double probJumpToNeighbour(int position) {
