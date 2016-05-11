@@ -303,7 +303,7 @@ public class AgAtom extends AbstractGrowthAtom {
   /**
    * When the current atom's destination is a corner, it jumps over it to the different type edge.
    * 
-   * @bug Destination can be other corner
+   * @bug Destination can be any other type (TERRACE, CORNER, same type EDGE or KINK 
    * @param cornerPosition position of the neighbour, from current atom
    * @return other type edge
    */
