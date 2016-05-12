@@ -224,20 +224,20 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   private int calculateEdgeType(int code) {
     switch (code) {
-      case 3: //1+2 positions    (0+1 neighbours)
-        return 3;
-      case 6: //2+4 positions    (1+2 neighbours)
+      case 3: //1+2 positions    (0+1 neighbours)  B type in principle \ /
+        return 3; //                                                    º   /_      
+      case 6: //2+4 positions    (1+2 neighbours)  A type in principle     º 
         return 4;
-      case 12: //4+8positions    (2+3 neighbours)
-        return 5;
-      case 24: //8+16 positions  (3+4 neighbours)
-        return 0;
-      case 48: //16+32 positions (4+5 neighbours)
-        return 1;
-      case 33: //1+32 positions  (5+0 neighbours)
-        return 2;
+      case 12: //4+8positions    (2+3 neighbours)  B type in principle  ._ 
+        return 5; //                                                     \ 
+      case 24: //8+16 positions  (3+4 neighbours)  A type in principle  . 
+        return 0; //                                                   / \
+      case 48: //16+32 positions (4+5 neighbours)  B type in principle      _.
+        return 1; //                                                        /
+      case 33: //1+32 positions  (5+0 neighbours)  A type in principle _\
+        return 2; //                                                     º 
       default:
-        return -1;
+        return -1; // Unknown
     }
   }
 
