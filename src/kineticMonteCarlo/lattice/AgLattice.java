@@ -622,7 +622,7 @@ public class AgLattice extends AbstractGrowthLattice {
       newType = ISLAND;
     }
 
-    if (neighbourAtom.getType() != newType) {
+    if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
       boolean mobileToImmobile = (neighbourAtom.getType() < KINK_A && newType >= KINK_A);
       neighbourAtom.setType(newType);
       addAtom(neighbourAtom);
