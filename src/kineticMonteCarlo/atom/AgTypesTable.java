@@ -12,7 +12,8 @@ public class AgTypesTable {
   private final byte[][] tableFuture;
 
   /**
-   * Returns the type of the atom between TERRACE, CORNER, EDGE, KINK and ISLAND.
+   * Returns the type of the atom between TERRACE, CORNER, EDGE, KINK and ISLAND. An image can be
+   * found in https://bitbucket.org/Nesferjo/ekmc-project/wiki/Process%20types
    *
    * @param immobile Number of immobile neighbours
    * @param mobile Number of mobile neighbours
@@ -50,7 +51,11 @@ public class AgTypesTable {
   }
 
       
-
+  /**
+   * All predefined type of atom (current if the atom is occupied and future if the atom is not
+   * occupied). A proper image of these types is in
+   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Process%20types
+   */
   public AgTypesTable() {
 
     tablePresent = new byte[7][7];
