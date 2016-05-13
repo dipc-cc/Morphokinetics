@@ -141,7 +141,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @return new type
    */
   public byte getNewType(int addToImmobile, int addToMobile) {
-    return typesTable.getType(nImmobile + addToImmobile, nMobile + addToMobile);
+    return typesTable.getCurrentType(nImmobile + addToImmobile, nMobile + addToMobile);
   }
   
   /**
@@ -493,10 +493,10 @@ public class AgAtom extends AbstractGrowthAtom {
 
     if (neighbours[posNeighbour].getType() < KINK_A) {
       // current atom is mobile
-      return typesTable.getType(nImmobile, nMobile - 1);
+      return typesTable.getCurrentType(nImmobile, nMobile - 1);
     } else {
       // current atom is immobile
-      return typesTable.getType(nImmobile - 1, nMobile);
+      return typesTable.getCurrentType(nImmobile - 1, nMobile);
     }
   }
 }
