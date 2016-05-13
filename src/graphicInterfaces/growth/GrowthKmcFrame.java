@@ -172,15 +172,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
-      if (noStartDragData) {
-        startMouseX = evt.getX();
-        startMouseY = evt.getY();
-        noStartDragData = false;
-      } else {
-        mouseX = evt.getX() - startMouseX;
-        mouseY = evt.getY() - startMouseY;
-      }
-      
+
     }//GEN-LAST:event_jPanel1MouseDragged
 
   private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel1MouseWheelMoved
