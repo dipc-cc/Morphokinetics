@@ -471,9 +471,11 @@ public class AgAtom extends AbstractGrowthAtom {
       if (originType == EDGE_A) destination = EDGE_B;
       if (originType == EDGE_B) destination = EDGE_A;
     } else {
-      destination = (byte) Math.min(destination, 2);
       if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
         destination = EDGE_B;
+      }
+      if (destination == KINK && (neighbours[position].getOrientation() & 1) != 0) {
+        destination = KINK_B;
       }
     }
     return getProbability(originType, destination);
