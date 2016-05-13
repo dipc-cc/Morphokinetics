@@ -199,10 +199,10 @@ public class AgAtom extends AbstractGrowthAtom {
       type = getTypeWithoutNeighbour(neighbourPosition);
     }
           
-    if (type == EDGE_A) {
+    if (type == EDGE) { // can be either A or B
       return calculateEdgeType(occupationCode);
     }
-    if (type == KINK_A) {
+    if (type == KINK) { // can be either A or B
       return calculateKinkType(occupationCode);
     }
     return -1;
