@@ -18,7 +18,16 @@ public class AgTypesTable {
    * @return type of the atom (byte)
    */
   public byte getType(int immobile, int mobile) {
-    return table[immobile][mobile];
+    byte type;
+
+    try {
+      type = table[immobile][mobile];
+    } catch (ArrayIndexOutOfBoundsException exception) {
+      System.err.println("Catched error getting the type of Ag atom "+exception);
+      System.err.println("Trying to access "+immobile+" "+mobile);
+      type = TERRACE;
+    }
+    return type;
   }
 
   public AgTypesTable() {
