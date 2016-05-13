@@ -14,11 +14,9 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import static java.lang.String.format;
 import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.ModifiedBuffer;
 import static kineticMonteCarlo.lattice.AbstractGrowthLattice.Y_RATIO;
 import kineticMonteCarlo.lattice.AgUcLattice;
 import kineticMonteCarlo.unitCell.IUc;
@@ -209,6 +207,9 @@ public class KmcCanvas extends Canvas {
 
         } else if (atom.isOccupied()) {
           g.fillOval(X, Y, scale, scale);
+          if (scale > 8) {
+            g.drawString(Integer.toString(atom.getId()), X, Y);
+          }
         } else if (!atom.isOutside()) {
           g.drawOval(X, Y, scale, scale);
         }
