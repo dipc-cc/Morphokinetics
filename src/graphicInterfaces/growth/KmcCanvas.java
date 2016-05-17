@@ -245,7 +245,7 @@ public class KmcCanvas extends Canvas {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = ((AgUcLattice) lattice).getUc(iLattice, jLattice).getAtom(pos);
+    AbstractGrowthAtom atom = ((AbstractGrowthLattice) lattice).getUc(iLattice, jLattice).getAtom(pos);
 
     if (atom.isOccupied()) {
       lattice.extract(atom);

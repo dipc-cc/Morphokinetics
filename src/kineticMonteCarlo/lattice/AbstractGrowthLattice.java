@@ -353,4 +353,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   void addBondAtom(AbstractGrowthAtom atom) {
     modified.addBondAtom(atom);
   }
+
+  public IUc getUc(int iLattice, int jLattice) {
+    return ucArray[iLattice][jLattice];
+  }
 }
