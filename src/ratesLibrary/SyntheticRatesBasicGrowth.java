@@ -5,6 +5,11 @@
  */
 package ratesLibrary;
 
+import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
+import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
+import static kineticMonteCarlo.atom.BasicGrowthAtom.KINK;
+import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
+
 /**
  *
  * @author J. Alberdi-Rodriguez
@@ -49,25 +54,25 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
 
   private void initialiseRates() {
 
-    rates[0][0] = 1e9;
-    rates[0][1] = 1e9;
-    rates[0][2] = 1e9;
-    rates[0][3] = 1e9;
+    rates[TERRACE][TERRACE] = 1e9;
+    rates[TERRACE][EDGE] = 1e9;
+    rates[TERRACE][KINK] = 1e9;
+    rates[TERRACE][ISLAND] = 1e9;
 
-    rates[1][0] = 0;
-    rates[1][1] = 100;
-    rates[1][2] = 100;
-    rates[1][3] = 100;
+    rates[EDGE][TERRACE] = 0;
+    rates[EDGE][EDGE] = 100;
+    rates[EDGE][2] = 100;
+    rates[EDGE][3] = 100;
 
-    rates[2][0] = 0;
-    rates[2][1] = 100;
-    rates[2][2] = 100;
-    rates[2][3] = 100;
+    rates[KINK][TERRACE] = 0;
+    rates[KINK][EDGE] = 100;
+    rates[KINK][KINK] = 100;
+    rates[KINK][ISLAND] = 100;
 
-    rates[3][0] = 0;
-    rates[3][1] = 10;
-    rates[3][2] = 10;
-    rates[3][3] = 10;
+    rates[ISLAND][TERRACE] = 0;
+    rates[ISLAND][EDGE] = 10;
+    rates[ISLAND][KINK] = 10;
+    rates[ISLAND][ISLAND] = 10;
   }
 
   @Override
