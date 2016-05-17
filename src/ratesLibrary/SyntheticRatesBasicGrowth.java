@@ -61,18 +61,18 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
 
     rates[EDGE][TERRACE] = 0;
     rates[EDGE][EDGE] = 100;
-    rates[EDGE][2] = 100;
-    rates[EDGE][3] = 100;
+    rates[EDGE][KINK] = 100;
+    rates[EDGE][ISLAND] = 100;
 
     rates[KINK][TERRACE] = 0;
-    rates[KINK][EDGE] = 100;
+    rates[KINK][EDGE] = 1;
     rates[KINK][KINK] = 100;
     rates[KINK][ISLAND] = 100;
 
     rates[ISLAND][TERRACE] = 0;
-    rates[ISLAND][EDGE] = 10;
-    rates[ISLAND][KINK] = 10;
-    rates[ISLAND][ISLAND] = 10;
+    rates[ISLAND][EDGE] = 0;
+    rates[ISLAND][KINK] = 0;
+    rates[ISLAND][ISLAND] = 0;
   }
 
   @Override
