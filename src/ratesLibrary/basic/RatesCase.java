@@ -5,11 +5,13 @@
  */
 package ratesLibrary.basic;
 
+import ratesLibrary.IRatesFactory;
+
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class RatesCase implements IBasicRates {
+public abstract class RatesCase implements IBasicRates, IRatesFactory {
 
   private double E0;
   private double E1;
@@ -45,6 +47,7 @@ public abstract class RatesCase implements IBasicRates {
     return energies[i];
   }
   
+  @Override
   public double[] getRates(double temperature) {
 
     double[] rates = new double[4];
@@ -53,5 +56,20 @@ public abstract class RatesCase implements IBasicRates {
       rates[i] = (getPrefactor(i) * Math.exp(-getEnergy(i) / (kB * temperature)));
     }
     return rates;
+  }
+  
+  @Override
+  public double getDepositionRatePerSite() {
+    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
+  }
+  
+  @Override
+  public double getIslandDensity(double temperature) {
+    throw new UnsupportedOperationException("This KMC does does not form islands.");
+  }
+  
+  @Override
+  public void setDepositionFlux(double depositionFlux) {
+    throw new UnsupportedOperationException("This KMC does does not form islands.");
   }
 }
