@@ -19,8 +19,8 @@ public class BasicKmc extends AbstractKmc {
 
   private double minHeight;
 
-  public BasicKmc(ListConfiguration listCconfig, int sizeX, int sizeY, boolean randomise) {
-    super(listCconfig);
+  public BasicKmc(ListConfiguration listConfig, int sizeX, int sizeY, boolean randomise) {
+    super(listConfig);
     setLattice(new BasicLattice(sizeX, sizeY));
 
   }
