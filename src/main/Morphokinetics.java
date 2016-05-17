@@ -8,6 +8,7 @@ package main;
 import basic.AgUcSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
+import basic.BasicGrowthSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
@@ -78,6 +79,9 @@ public class Morphokinetics {
         break;
       case "Si":
         simulation = new SiSimulation(parser);
+        break;
+      case "basic":
+        simulation = new BasicGrowthSimulation(parser);
         break;
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");

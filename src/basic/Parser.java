@@ -781,6 +781,9 @@ public class Parser {
   }
   
   public int getHexaSizeI() {
+    if (calculationMode.equals("basic")) {
+      return cartSizeX;
+    }
     if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc")) {
       return cartSizeX;
     } else { // graphene, always even number
@@ -794,6 +797,9 @@ public class Parser {
   }
   
   public int getHexaSizeJ() {
+    if (calculationMode.equals("basic")) {
+      return cartSizeY;
+    }
     if (getCalculationMode().equals("AgUc")) {
       return Math.round(getCartSizeY() / (2 * AbstractGrowthLattice.Y_RATIO));
     } else {
