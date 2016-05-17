@@ -7,7 +7,6 @@ package kineticMonteCarlo.unitCell;
 
 import java.awt.geom.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
  * Really simple unit cell, which will contain only one atom
