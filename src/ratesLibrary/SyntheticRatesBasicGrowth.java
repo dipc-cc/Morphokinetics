@@ -14,12 +14,10 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
   private double[][] rates;
   private double diffusionMl;
   private final double islandDensityPerSite;
-  private static IGrowthRates experiments;
 
   public SyntheticRatesBasicGrowth()  {
     diffusionMl = 0.000035;
     islandDensityPerSite = 1 / 60000f;
-    experiments = new RatesFromPrbCox();
   }
   
   @Override
