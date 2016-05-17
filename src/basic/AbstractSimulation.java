@@ -159,7 +159,7 @@ public abstract class AbstractSimulation {
     }
   }
 
-  protected abstract void initialiseRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser myParser);
+  protected abstract void initialiseRates(IRatesFactory ratesFactory, Parser myParser);
 
   public abstract void finishSimulation();
 

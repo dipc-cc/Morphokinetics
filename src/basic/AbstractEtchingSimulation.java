@@ -20,7 +20,7 @@ public abstract class AbstractEtchingSimulation extends AbstractSimulation {
   }
 
   @Override
-  protected void initialiseRates(IRatesFactory ratesFactory, AbstractKmc kmc, Parser parser) {
+  protected void initialiseRates(IRatesFactory ratesFactory, Parser parser) {
     getKmc().initialiseRates(new SiRatesFactory().getRates(getParser().getTemperature()));
   }
 

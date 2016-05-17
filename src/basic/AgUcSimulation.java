@@ -44,6 +44,6 @@ public class AgUcSimulation  extends AbstractGrowthSimulation {
             getParser().useMaxPerimeter(),
             getParser().getPerimeterType(),
             extraOutput));
-    initialiseRates(getRates(), getKmc(), getParser());
+    initialiseRates(getRates(), getParser());
   }
 }

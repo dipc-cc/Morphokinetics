@@ -29,7 +29,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
     setRates(new SiRatesFactory());
     siConfig = configKmc();
     setKmc(new SiKmc(siConfig));
-    initialiseRates(getRates(), getKmc(), getParser());
+    initialiseRates(getRates(), getParser());
   }
 
   /**
