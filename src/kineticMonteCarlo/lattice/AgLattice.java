@@ -665,4 +665,38 @@ public class AgLattice extends AbstractGrowthLattice {
       }
     }
   }
+  
+  /**
+   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
+   * experimental and only works with AgUc simulation mode. If fails, the execution continues
+   * normally.
+   *
+   * @param xMouse absolute X location of the pressed point
+   * @param yMouse absolute Y location of the pressed point
+   * @param scale zoom level
+   */
+  @Override
+  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
+    int iLattice;
+    int jLattice;
+    // scale the position with respect to the current scale.
+    double xCanvas = xMouse / scale;
+    double yCanvas = yMouse / scale;
+    // choose the correct lattice
+    jLattice = (int) Math.floor(yCanvas / Y_RATIO);
+    iLattice = (int) Math.floor(xCanvas - 0.5*jLattice);
+    double j = yCanvas / Y_RATIO;
+    int pos = 0;
+
+    // for debugging
+    System.out.println("scale " + scale + " " + (jLattice - j));
+    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
+    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+
+    if (atom.isOccupied()) {
+      extract(atom);
+    } else {
+      deposit(atom, false);
+    }
+  }
 }

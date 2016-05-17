@@ -217,7 +217,7 @@ public class KmcCanvas extends Canvas {
     }
     g.dispose();
   }
- 
+  
   /**
    * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
    * experimental and only works with AgUc simulation mode. If fails, the execution continues
@@ -227,30 +227,6 @@ public class KmcCanvas extends Canvas {
    * @param yMouse absolute Y location of the pressed point
    */
   public void changeOccupationByHand(double xMouse, double yMouse) {
-    int iLattice;
-    int jLattice;
-    // scale the position with respect to the current scale.
-    double xCanvas = xMouse / scale;
-    double yCanvas = yMouse / scale;
-    // choose the correct lattice
-    iLattice = (int) Math.floor(xCanvas);
-    jLattice = (int) Math.floor(yCanvas / (2 * Y_RATIO));
-    double j = yCanvas / (2 * Y_RATIO);
-    int pos = 0;
-    // choose the atom within the lattice
-    if (j - jLattice > 0.5) {
-      pos = 1;
-    }
-
-    // for debugging
-    System.out.println("scale " + scale + " " + (jLattice - j));
-    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = ((AbstractGrowthLattice) lattice).getUc(iLattice, jLattice).getAtom(pos);
-
-    if (atom.isOccupied()) {
-      lattice.extract(atom);
-    } else {
-      lattice.deposit(atom, false);
-    }
+    lattice.changeOccupationByHand(xMouse, yMouse, scale);
   }
 }

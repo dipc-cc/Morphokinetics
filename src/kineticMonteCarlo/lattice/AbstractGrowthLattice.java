@@ -357,4 +357,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public IUc getUc(int iLattice, int jLattice) {
     return ucArray[iLattice][jLattice];
   }
+
+  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
 }
