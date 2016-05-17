@@ -8,7 +8,6 @@ package basic;
 import basic.io.OutputType.formatFlag;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
-import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.IRatesFactory;
 
