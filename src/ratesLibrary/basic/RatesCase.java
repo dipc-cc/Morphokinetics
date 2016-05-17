@@ -13,17 +13,6 @@ import ratesLibrary.IRatesFactory;
  */
 public abstract class RatesCase implements IBasicRates, IRatesFactory {
 
-  private double E0;
-  private double E1;
-  private double E2;
-  private double E3;
-
-  private double P0;
-  private double P1;
-  private double P2;
-
-  private double P3;
-
   private double[] prefactors = new double[4];
   private double[] energies = new double[4];
   private static double kB = 8.617332e-5;
@@ -49,7 +38,6 @@ public abstract class RatesCase implements IBasicRates, IRatesFactory {
   
   @Override
   public double[] getRates(double temperature) {
-
     double[] rates = new double[4];
 
     for (int i = 0; i < 4; i++) {
