@@ -17,7 +17,7 @@ public abstract class RatesCase implements IBasicRates, IRatesFactory {
   private double[] energies = new double[4];
   private static double kB = 8.617332e-5;
   
-  public void setRates(double newEnergies[], double newPrefactors[]) {
+  public final void setRates(double newEnergies[], double newPrefactors[]) {
     assert(newEnergies.length == 4);
     assert(newPrefactors.length == 4);
     for (int i = 0; i < 4; i++) {
