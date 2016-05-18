@@ -6,12 +6,8 @@
 package basic;
 
 import basic.io.OutputType;
-import graphicInterfaces.basic.BasicFrame;
-import kineticMonteCarlo.kmcCore.etching.BasicKmc;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.BasicGrowthRatesFactory;
-import ratesLibrary.IRatesFactory;
-import ratesLibrary.basic.RatesCaseOther;
 
 /**
  *
