@@ -75,17 +75,31 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
   }
   
   /**
-   * Returns the island density mono layer depending on the temperature. How many islands per area
-   * site are generated at current temperature. Usually with higher temperature less islands are
-   * created, and thus, island density is lower. And the other way around.
-   *
-   * @param temperature Not implemented yet: temperature in Kelvin.
-   * @return island density
+   * Returns the island density mono layer depending on the temperature. 
+   * These values are taken from section 4 of the paper of Cox et al.
+   * 
+   * (But are not consistent with, for example, the multi-flake
+   * simulations: 180K, 250x250)
+   * @param temperature
+   * @return a double value from 1e-4 to 2e-5
    */
   @Override
   public double getIslandsDensityMl(double temperature) {
-    return islandDensityPerSite;
+    if (temperature < 135) {//120 degrees Kelvin
+      return 1e-4;
+    }
+    if (temperature < 150) {//135 degrees Kelvin
+      return 5e-5;
+    }
+    if (temperature < 165) {//150 degrees Kelvin
+      return 4e-5;
+    }
+    if (temperature < 180) {//165 degrees Kelvin
+      return 3e-5;
+    }
+    return 2e-5; //180 degrees Kelvin
   }
+
 
   @Override
   public double getEnergy(int i, int j) {
