@@ -31,6 +31,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     }
     numberOfNeighbours = 0;
   }
+  
   @Override
   public byte getTypeWithoutNeighbour(int neighPos) {
     if (!neighbours[neighPos].isOccupied()) return getType(); // impossible to happen
