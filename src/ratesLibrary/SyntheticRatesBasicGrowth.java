@@ -25,6 +25,8 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
    */
   private final double kB;
   private final double Ea;
+  private final double Eb;
+  private final double Ec;
   private final double Ed;
   private final double Ef;
   private final double Einf;
@@ -36,8 +38,10 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
     islandDensityPerSite = 1 / 60000f;
     
     Ed = 0.100;
-    Ea = 0.275;
     Ef = 0.360;
+    Ea = 0.350;
+    Eb = 0.435;
+    Ec = 0.5;
     Einf = 9999999;
     
     prefactor = 1e13;
@@ -48,15 +52,15 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
     energies[TERRACE][KINK] = Ed;
     energies[TERRACE][ISLAND] = Ed;
 
-    energies[EDGE][TERRACE] = Einf;
+    energies[EDGE][TERRACE] = Ec;
     energies[EDGE][EDGE] = Ef;
-    energies[EDGE][KINK] = Ef;
-    energies[EDGE][ISLAND] = Ef;
+    energies[EDGE][KINK] = Ea;
+    energies[EDGE][ISLAND] = Ea;
 
-    energies[KINK][TERRACE] = Einf;
-    energies[KINK][EDGE] = Ef;
-    energies[KINK][KINK] = Ef;
-    energies[KINK][ISLAND] = Ef;
+    energies[KINK][TERRACE] = Ec;
+    energies[KINK][EDGE] = Eb;
+    energies[KINK][KINK] = Eb;
+    energies[KINK][ISLAND] = Eb;
 
     energies[ISLAND][TERRACE] = Einf;
     energies[ISLAND][EDGE] = Einf;
@@ -86,18 +90,18 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
   @Override
   public double getIslandsDensityMl(double temperature) {
     if (temperature < 135) {//120 degrees Kelvin
-      return 1e-4;
+      return 1e-2;
     }
     if (temperature < 150) {//135 degrees Kelvin
-      return 5e-5;
+      return 5e-3;
     }
     if (temperature < 165) {//150 degrees Kelvin
-      return 4e-5;
+      return 4e-3;
     }
     if (temperature < 180) {//165 degrees Kelvin
-      return 3e-5;
+      return 3e-3;
     }
-    return 2e-5; //180 degrees Kelvin
+    return 2e-3; //180 degrees Kelvin
   }
 
 
