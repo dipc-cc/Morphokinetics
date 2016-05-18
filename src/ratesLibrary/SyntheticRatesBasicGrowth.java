@@ -16,22 +16,57 @@ import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
  */
 public class SyntheticRatesBasicGrowth implements IGrowthRates {
 
-  private double[][] rates;
+  private final double[][] energies;
   private double diffusionMl;
   private final double islandDensityPerSite;
+  
+  /**
+   * Boltzmann constant.
+   */
+  private final double kB;
+  private final double Ea;
+  private final double Ed;
+  private final double Ef;
+  private final double Einf;
+  private final double prefactor;
 
-  public SyntheticRatesBasicGrowth()  {
+  public SyntheticRatesBasicGrowth()  { 
+    kB = 8.617332e-5;
     diffusionMl = 0.000035;
     islandDensityPerSite = 1 / 60000f;
+    
+    Ed = 0.100;
+    Ea = 0.275;
+    Ef = 0.360;
+    Einf = 9999999;
+    
+    prefactor = 1e13;
+    
+    energies = new double[4][4];
+    energies[TERRACE][TERRACE] = Ed;
+    energies[TERRACE][EDGE] = Ed;
+    energies[TERRACE][KINK] = Ed;
+    energies[TERRACE][ISLAND] = Ed;
+
+    energies[EDGE][TERRACE] = Einf;
+    energies[EDGE][EDGE] = Ef;
+    energies[EDGE][KINK] = Ef;
+    energies[EDGE][ISLAND] = Ef;
+
+    energies[KINK][TERRACE] = Einf;
+    energies[KINK][EDGE] = Ef;
+    energies[KINK][KINK] = Ef;
+    energies[KINK][ISLAND] = Ef;
+
+    energies[ISLAND][TERRACE] = Einf;
+    energies[ISLAND][EDGE] = Einf;
+    energies[ISLAND][KINK] = Einf;
+    energies[ISLAND][ISLAND] = Einf;
   }
   
   @Override
   public double getRate(int sourceType, int destinationType, double temperature) {
-    if (rates == null) {
-      rates = new double[4][4];
-      initialiseRates();
-    }
-    return rates[sourceType][destinationType];
+    return prefactor * Math.exp(-energies[sourceType][destinationType] / (kB * temperature));
   }
 
   @Override
@@ -50,29 +85,6 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
   @Override
   public double getIslandsDensityMl(double temperature) {
     return islandDensityPerSite;
-  }
-
-  private void initialiseRates() {
-
-    rates[TERRACE][TERRACE] = 1e9;
-    rates[TERRACE][EDGE] = 1e9;
-    rates[TERRACE][KINK] = 1e9;
-    rates[TERRACE][ISLAND] = 1e9;
-
-    rates[EDGE][TERRACE] = 0;
-    rates[EDGE][EDGE] = 100;
-    rates[EDGE][KINK] = 100;
-    rates[EDGE][ISLAND] = 100;
-
-    rates[KINK][TERRACE] = 0;
-    rates[KINK][EDGE] = 1;
-    rates[KINK][KINK] = 100;
-    rates[KINK][ISLAND] = 100;
-
-    rates[ISLAND][TERRACE] = 0;
-    rates[ISLAND][EDGE] = 0;
-    rates[ISLAND][KINK] = 0;
-    rates[ISLAND][ISLAND] = 0;
   }
 
   @Override
