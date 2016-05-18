@@ -145,7 +145,7 @@ public class AgAtom extends AbstractGrowthAtom {
   }
   
   /**
-   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability.
    */
   @Override
   public void clear() {
