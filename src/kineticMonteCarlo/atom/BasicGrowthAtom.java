@@ -40,6 +40,9 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean areTwoTerracesTogether() {
+    if (numberOfNeighbours != 2) {
+      return false;
+    }
     int cont = 0;
     int i = 0;
     while (cont < 2 && i < getNumberOfNeighbours()) {

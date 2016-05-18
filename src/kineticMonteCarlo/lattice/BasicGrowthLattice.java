@@ -84,6 +84,9 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
     BasicGrowthAtom atom = (BasicGrowthAtom) a;
     atom.setOccupied(true);
+    if (forceNucleation) {
+      atom.setType(ISLAND);
+    }
     byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
@@ -105,7 +108,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     neighbourAtom.addOccupiedNeighbour(1);
     
     
-    if (forceNucleation) {
+    if (forceNucleation && neighbourAtom.isOccupied()) {
       newType = ISLAND;
     }
 
