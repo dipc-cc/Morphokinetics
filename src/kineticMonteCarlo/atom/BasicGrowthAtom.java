@@ -98,7 +98,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     }
 
     byte originType = getType();
-    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
+    int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     if (destination > 3) {
@@ -136,7 +136,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return isOccupied() && getType() < KINK;
+    return isOccupied() && getType() < ISLAND;
   }
   
   public boolean isPartOfImmobilSubstrate() {
