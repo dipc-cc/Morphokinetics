@@ -20,7 +20,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
 
   private static BasicGrowthTypesTable typesTable;
 
-  private int numberOfNeighbours;
+  private int occupiedNeighbours;
   private final BasicGrowthAtom[] neighbours = new BasicGrowthAtom[4];
 
   public BasicGrowthAtom(int id, short iHexa, short jHexa) {
@@ -29,19 +29,19 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     if (typesTable == null) {
       typesTable = new BasicGrowthTypesTable();
     }
-    numberOfNeighbours = 0;
+    occupiedNeighbours = 0;
   }
   
   @Override
   public byte getTypeWithoutNeighbour(int neighPos) {
     if (!neighbours[neighPos].isOccupied()) return getType(); // impossible to happen
 
-    return typesTable.getCurrentType(numberOfNeighbours - 1);
+    return typesTable.getCurrentType(occupiedNeighbours - 1);
   }
 
   @Override
   public boolean areTwoTerracesTogether() {
-    if (numberOfNeighbours != 2) {
+    if (occupiedNeighbours != 2) {
       return false;
     }
     int cont = 0;
@@ -150,15 +150,15 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
    * @return new type
    */
   public byte getNewType(int addToNeighbour) {
-    return typesTable.getCurrentType(numberOfNeighbours+addToNeighbour);
+    return typesTable.getCurrentType(occupiedNeighbours+addToNeighbour);
   }
   
   public int getOccupiedNeighbours(){
-    return numberOfNeighbours;
+    return occupiedNeighbours;
   }
   
   public void addOccupiedNeighbour(int value) {
-    numberOfNeighbours += value;
+    occupiedNeighbours += value;
   }
   
   /**
@@ -169,7 +169,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     
     super.clear();
     setType(TERRACE);
-    numberOfNeighbours = 0; // current atom has no neighbour
+    occupiedNeighbours = 0; // current atom has no neighbour
     
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       setBondsProbability(0, i);
