@@ -46,10 +46,10 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
         // get current atom
         BasicGrowthAtom atom = (BasicGrowthAtom) atoms[iHexa][jHexa];
         
-        // left neighbour
-        int i = iHexa;
-        int j = jHexa - 1;
-        if (j < 0) j = getHexaSizeJ() - 1;
+        // top neighbour
+        int i = iHexa + 1;
+        int j = jHexa;
+        if (i == getHexaSizeI()) i = 0;
         atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 0);
 
         // right neighbour
@@ -58,16 +58,16 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
         if (j == getHexaSizeI()) j = 0;
         atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 1);
 
-        // top neighbour
-        i = iHexa + 1;
-        j = jHexa;
-        if (i == getHexaSizeI()) i = 0;
-        atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 2);
-
         // bottom neighbour
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
+        atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 2);
+        
+        // left neighbour
+        i = iHexa;
+        j = jHexa - 1;
+        if (j < 0) j = getHexaSizeJ() - 1;
         atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 3);
       }
     }
