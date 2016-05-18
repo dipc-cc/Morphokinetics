@@ -157,4 +157,19 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     numberOfNeighbours += value;
   }
   
+  /**
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability.
+   */
+  @Override
+  public void clear() {
+    
+    super.clear();
+    setType(TERRACE);
+    numberOfNeighbours = 0; // current atom has no neighbour
+    
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      setBondsProbability(0, i);
+    }
+  }
+ 
 }
