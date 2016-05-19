@@ -37,7 +37,7 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
     diffusionMl = 0.000035;
     islandDensityPerSite = 1 / 60000f;
     
-    Ed = 0.100;
+    Ed = 0.200;
     Ef = 0.360;
     Ea = 0.350;
     Eb = 0.435;
