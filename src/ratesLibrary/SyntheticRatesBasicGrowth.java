@@ -41,7 +41,7 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
     Ef = 0.360;
     Ea = 0.350;
     Eb = 0.435;
-    Ec = 0.5;
+    Ec = 0.45;
     Einf = 9999999;
     
     prefactor = 1e13;
@@ -57,7 +57,7 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
     energies[EDGE][KINK] = Ea;
     energies[EDGE][ISLAND] = Ea;
 
-    energies[KINK][TERRACE] = Ec;
+    energies[KINK][TERRACE] = Einf;
     energies[KINK][EDGE] = Eb;
     energies[KINK][KINK] = Eb;
     energies[KINK][ISLAND] = Eb;
