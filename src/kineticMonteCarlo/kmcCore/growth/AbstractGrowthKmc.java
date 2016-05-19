@@ -22,6 +22,7 @@ import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.unitCell.IUc;
 import utils.MathUtils;
 import utils.StaticRandom;
+import utils.list.LinearList;
 
 /**
  *
@@ -210,6 +211,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public int simulate() {
     int k = 1;
     int returnValue = 0;
+    int simulatedSteps = 0;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
@@ -218,15 +220,20 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         if (performSimulationStep()) {
           break;
         }
+        simulatedSteps++;
         if (extraOutput && getCoverage() * 100 > k) {
           k++;
           printData();
         }
       }
     }
-    
+    if (extraOutput) {
+      double ri = ((LinearList) getList()).getRi_DeltaI();
+      double time = getList().getTime();
+      System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
+    }
     countIslands();
-    
+
     return returnValue;
   }
   
