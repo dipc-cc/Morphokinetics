@@ -24,24 +24,24 @@ public class ModifiedBuffer {
   }
 
   /**
-   * Adds an atom to the current modified buffer list
-   * @param atom atom to be added
+   * Adds an atom to the current modified buffer list.
+   * @param atom atom to be added.
    */
   public void addOwnAtom(AbstractGrowthAtom atom) {
     buffer.add(atom); 
   }
 
   /**
-   * Adds a bond atom to the current modified buffer list
-   * @param atom atom to be added
+   * Adds a bond atom to the current modified buffer list.
+   * @param atom atom to be added.
    */
   public void addBondAtom(AbstractGrowthAtom atom) {
     bufferL.add(atom);
   }
 
   /**
-   * Update rates list with the current modified atoms list
-   * @param list list to be changed
+   * Update rates list with the current modified atoms list.
+   * @param list list to be changed.
    */
   public void updateAtoms(AbstractList list) {
     Iterator<AbstractGrowthAtom> it = buffer.iterator();
@@ -83,7 +83,7 @@ public class ModifiedBuffer {
   }
 
   /**
-   * Empties current modified buffer
+   * Empties current modified buffer.
    */
   public void clear() {
     buffer.clear();
