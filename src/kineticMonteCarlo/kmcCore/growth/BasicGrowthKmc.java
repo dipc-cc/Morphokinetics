@@ -4,11 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
-import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.BasicAtom;
 import utils.list.ListConfiguration;
-import java.util.ListIterator;
-import kineticMonteCarlo.atom.BasicGrowthAtom;
 import kineticMonteCarlo.lattice.BasicGrowthLattice;
 import utils.StaticRandom;
 
@@ -17,8 +13,6 @@ import utils.StaticRandom;
  * @author Nestor
  */
 public class BasicGrowthKmc extends AbstractGrowthKmc {
-
-  private double minHeight;
 
   public BasicGrowthKmc(ListConfiguration config, 
           int hexaSizeI, 
@@ -70,69 +64,8 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     }
   }
 
-  
-  // Kentzeko
-  /*
-  @Override
-  protected boolean performSimulationStep() {
-    BasicGrowthAtom atom = (BasicGrowthAtom) getList().nextEvent();
-    if (atom == null) return false;
-    if (atom.getY() > getLattice().getHexaSizeJ() - minHeight) {
-      return true;
-    }
-
-    atom.remove();
-    atom.setList(null);
-    for (int k = 0; k < 4; k++) {
-      if (atom.getNeighbour(k).getType() == 3) {
-        getList().addAtom(atom.getNeighbour(k));
-        getList().addTotalProbability(atom.getProbability());
-      }
-    }
-    return false;
-
-  }*/
-
   @Override
   public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
     return getSampledSurface(binX, binY);
-  }
-  
-  /*@Override
-  public float[][] getSampledSurface(int binX, int binY) {
-    float[][] surface = new float[binX][binY];
-
-    double scaleX = binX / (float) getLattice().getHexaSizeI();
-    ListIterator<AbstractAtom> iterator = getList().getIterator();
-
-    while (iterator.hasNext()) {
-      BasicAtom atom = (BasicAtom) iterator.next();
-      int sampledPosX = (int) (atom.getX() * scaleX);
-      if (surface[0][sampledPosX] < atom.getY()) {
-        surface[0][sampledPosX] = atom.getY();
-      }
-    }
-    return surface;
-  }*/
-
-  /**
-   * Number of islands has no sense in etching.
-   * @return -1 always
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
-  
-  /**
-   * Does nothing
-   *
-   * @param inputArea
-   * @param scale
-   * @return just in case, the input area
-   */
-  @Override
-  public float[][] increaseEmptyArea(float[][] inputArea, double scale) {
-    return inputArea;
   }
 }
