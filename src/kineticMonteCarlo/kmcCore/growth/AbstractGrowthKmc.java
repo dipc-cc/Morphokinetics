@@ -245,20 +245,20 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
       printHistogram();
     }
-    countIslands();
+    countIslands(true);
 
     return returnValue;
   }
   
   private void printData() {
     try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", true)))) {
-      out.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + countIslands() + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+      out.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + countIslands(false) + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
     } catch (IOException e) {
       //Do nothing, it doesn't matter if fails
     }
   }
   
-  private int countIslands() {
+  private int countIslands(boolean print) {
     // reset all the atoms
     
     for (int i = 0; i < lattice.size(); i++) {
@@ -294,7 +294,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         histogram.set(island, histogram.get(island) + 1);
       }
     }
-    System.out.println("histogram " + histogram.toString());
+    if (print) {
+      System.out.println("histogram " + histogram.toString());
+    }
     return islandCount;
   }
     
@@ -447,7 +449,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    *
    */
   private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
-    countIslands();
+    countIslands(false);
     deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
     try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", true)))) {
       out.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
