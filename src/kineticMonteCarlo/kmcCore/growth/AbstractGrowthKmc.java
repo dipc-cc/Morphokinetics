@@ -61,6 +61,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final boolean extraOutput;
   
   private double terraceToTerraceProbability;
+  /**
+   * Attribute to count processes that happened. Used to compute activation energy per each rate.
+   */
+  private int[][] histogramSuccess;
   
   public AbstractGrowthKmc(ListConfiguration config, 
           boolean justCentralFlake, 
@@ -107,6 +111,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     nucleations = 0;
   }
 
+  void initHistogramSucces(int numberOfNeighbours) {
+    histogramSuccess = new  int[numberOfNeighbours][numberOfNeighbours];
+  }
+    
   /**
    * 
    * @param depositionRateML deposition rate per site (synonyms: deposition flux and diffusion mono layer)
@@ -231,6 +239,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double ri = ((LinearList) getList()).getRi_DeltaI();
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
+      printHistogram();
     }
     countIslands();
 
@@ -410,7 +419,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     int oldType = originAtom.getType();
-		double probabilityChange = lattice.extract(originAtom);
+    double probabilityChange = lattice.extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
     lattice.deposit(destinationAtom, forceNucleation);
@@ -420,6 +429,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
       }
+      histogramSuccess[oldType][destinationAtom.getType()]++;
     }
     modifiedBuffer.updateAtoms(getList());
 
@@ -805,6 +815,16 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       perimeter.setCurrentPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius(), periodicSingleFlake));
     } else {
       perimeter.setCurrentPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
+    }
+  }
+  
+  public void printHistogram() {
+    for (int i = 0; i < histogramSuccess.length; i++) {
+      System.out.print("Success ");
+      for (int j = 0; j < histogramSuccess[0].length; j++) {
+        System.out.print(histogramSuccess[i][j] + " ");
+      }
+      System.out.println("");
     }
   }
 }
