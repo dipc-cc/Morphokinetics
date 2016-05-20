@@ -111,8 +111,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     nucleations = 0;
   }
 
-  void initHistogramSucces(int numberOfNeighbours) {
-    histogramSuccess = new  int[numberOfNeighbours][numberOfNeighbours];
+  /**
+   * Initialises histogram to store the happened transition from atom type to atom type.
+   * @param atomTypes number of different atom types
+   */
+  void initHistogramSucces(int atomTypes) {
+    histogramSuccess = new  int[atomTypes][atomTypes];
   }
     
   /**
@@ -418,7 +422,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         printData();
       }
     }
-    int oldType = originAtom.getType();
+    int oldType = originAtom.getRealType();
     double probabilityChange = lattice.extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
@@ -429,7 +433,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
       }
-      histogramSuccess[oldType][destinationAtom.getType()]++;
+      histogramSuccess[oldType][destinationAtom.getRealType()]++;
     }
     modifiedBuffer.updateAtoms(getList());
 

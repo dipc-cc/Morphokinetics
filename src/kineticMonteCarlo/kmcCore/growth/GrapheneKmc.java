@@ -39,6 +39,7 @@ public class GrapheneKmc extends AbstractGrowthKmc {
       setPerimeter(new RoundPerimeter("graphene"));
       configureDevitaAccelerator(distancePerStep);
     }
+    super.initHistogramSucces(8);
   }
 
   @Override

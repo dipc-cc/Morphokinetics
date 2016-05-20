@@ -38,6 +38,7 @@ public class AgKmc extends AbstractGrowthKmc {
       configureDevitaAccelerator(distancePerStep);
       setPerimeter(new RoundPerimeter("Ag"));
     }
+    super.initHistogramSucces(7);
   }
 
   public AgKmc(ListConfiguration config, 

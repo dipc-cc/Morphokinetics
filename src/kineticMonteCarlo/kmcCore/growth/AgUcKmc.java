@@ -41,7 +41,8 @@ public class AgUcKmc extends AbstractGrowthKmc {
     if (justCentralFlake) {
       configureDevitaAccelerator(distancePerStep);
       setPerimeter(new RoundPerimeter("Ag"));
-    }      
+    }
+    super.initHistogramSucces(7);
   }
 
   @Override

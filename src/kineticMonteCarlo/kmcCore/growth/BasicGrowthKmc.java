@@ -31,6 +31,7 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     if (justCentralFlake) {
       setPerimeter(new RoundPerimeter("Ag"));
     }
+    super.initHistogramSucces(4);
   }
     
   @Override
