@@ -60,6 +60,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private List<Double> deltaTimePerAtom;
   private int nucleations;
   private final boolean extraOutput;
+  /**
+   * If two terraces are together freeze them, in multi-flake simulation mode.
+   */
+  private final boolean forceNucleation;
   
   private double terraceToTerraceProbability;
   /**
@@ -79,6 +83,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       maxCoverage = coverage;
     }
     useMaxPerimeter = parser.useMaxPerimeter();
+    forceNucleation = parser.forceNucleation();
     modifiedBuffer = new ModifiedBuffer();
     getList().autoCleanup(true);
     perimeterType = parser.getPerimeterType();
@@ -386,8 +391,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       return false;
     }
 
-    boolean forceNucleation = (!justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    lattice.deposit(atom, forceNucleation);
+    boolean force = (forceNucleation && !justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    lattice.deposit(atom, force);
     lattice.addOccupied();
     modifiedBuffer.updateAtoms(getList());
     
@@ -413,8 +418,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       return false;
     }
 
-    boolean forceNucleation = (!justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    if (forceNucleation) {
+    boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    if (force) {
       nucleations++;
       if (extraOutput) {
         printData();
@@ -424,7 +429,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     double probabilityChange = lattice.extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
-    lattice.deposit(destinationAtom, forceNucleation);
+    lattice.deposit(destinationAtom, force);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
     originAtom.setDepositionTime(0);
     if (extraOutput) {

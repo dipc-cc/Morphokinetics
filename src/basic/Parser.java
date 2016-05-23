@@ -105,6 +105,10 @@ public class Parser {
   private boolean outputData;
   private boolean randomSeed;
   private boolean useMaxPerimeter;
+  /**
+   * See {@link forceNucleation()}
+   */
+  private boolean forceNucleation;
   private JSONArray outputDataFormat;
   /** To have the possibility to choose between different output formats. For the moment TXT, MKO,
    * PNG and EXTRA.
@@ -193,6 +197,7 @@ public class Parser {
     outputType = new OutputType();
     randomSeed = true;
     useMaxPerimeter = false;
+    forceNucleation = true;
 
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -406,6 +411,11 @@ public class Parser {
       useMaxPerimeter = false;
     }
     try {
+      forceNucleation = json.getBoolean("forceNucleation");
+    } catch (JSONException e) {
+      forceNucleation = false;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -576,6 +586,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"periodicSingleFlake\"", periodicSingleFlake);
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
+    System.out.printf("%32s: %s,\n", "\"forceNucleation\"", forceNucleation);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -983,6 +994,14 @@ public class Parser {
 
   public boolean useMaxPerimeter() {
     return useMaxPerimeter;
+  }
+  
+  /**
+   * If two terraces are together freeze them, in multi-flake simulation mode.
+   * @return 
+   */
+  public boolean forceNucleation() {
+    return forceNucleation;
   }
   
   public String getEvolutionaryAlgorithm() {
