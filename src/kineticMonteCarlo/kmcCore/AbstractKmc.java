@@ -23,10 +23,10 @@ public abstract class AbstractKmc implements IKmc {
   public AbstractKmc(Parser parser) {
     switch (parser.getListType()) {
       case "linear":
-        list = new LinearList();
+        list = new LinearList(parser);
         break;
       case "binned":
-        list = new BinnedList(parser.getBinsLevels(), parser.getExtraLevels());
+        list = new BinnedList(parser, parser.getBinsLevels(), parser.getExtraLevels());
         break;
       default:
         System.err.println("listType is not properly set");

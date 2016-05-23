@@ -1,15 +1,15 @@
 package utils.list;
 
+import basic.Parser;
+import basic.io.OutputType;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.BasicGrowthAtom;
 import utils.StaticRandom;
 
 /**
- *
- *
- * Linked list basic implementation
- *
+ * Linked list basic implementation.
  */
 public class LinearList extends AbstractList implements IProbabilityHolder{
 
@@ -20,14 +20,29 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private boolean clean;
   private double Ri_DeltaI;
   
-  public LinearList() {
+  private boolean extraOutput;
+  private boolean doActivationEnergyStudy;
+  private double[][] histogramPossible;
+  private int[][] histogramPossibleCounter;
+  
+  public LinearList(Parser parser) {
     super();
     surface = new ArrayList();
     this.setLevel(-1);
     clean = false;
     Ri_DeltaI = 0.0;
+    
+    extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
+    doActivationEnergyStudy = false;
+    if (extraOutput) {
+      if (parser.getCalculationMode().equals("basic")) {
+        doActivationEnergyStudy = true;
+        histogramPossible = new double[4][4];
+        histogramPossibleCounter = new int[4][4];
+      }
+    }
   }
-
+  
   @Override
   public double getTotalProbabilityFromList() {
     if (clean) {
@@ -68,7 +83,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
   @Override
   public int cleanup() {
-
     int tmp = getTotalAtoms();
     ListIterator<AbstractAtom> li = surface.listIterator();
     while (li.hasNext()) {
@@ -104,14 +118,36 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
     double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
 
-    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
+    if (!doActivationEnergyStudy) { // normal case
+      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
+    }
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
     }
 
-    double time = 1 / (getTotalProbability());
-    Ri_DeltaI += getTotalProbability() * time;
+    if (doActivationEnergyStudy) {
+      // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
+      for (int i = 0; i < surface.size(); i++) {
+        BasicGrowthAtom atom = (BasicGrowthAtom) surface.get(i);
+        for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
+          BasicGrowthAtom neighbourAtom = atom.getNeighbour(pos);
+          if (!neighbourAtom.isPartOfImmobilSubstrate()) {
+            int myPositionForNeighbour = (pos + 2) % atom.getNumberOfNeighbours();
+            byte destination = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
+            byte origin = atom.getRealType();
+            if (atom.probJumpToNeighbour(1, pos) > 0) {
+              histogramPossible[origin][destination] += 1 / getTotalProbability();
+              histogramPossibleCounter[origin][destination]++;
+            }
+          }       
+        }
+      }
+
+      double time = 1 / (getTotalProbability());
+      Ri_DeltaI += getTotalProbability() * time;
+      addTime(time);
+    }
     position -= getDepositionProbability();
     double currentProbability = 0;
 
@@ -154,5 +190,14 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
   public double getRi_DeltaI() {
     return Ri_DeltaI;
+  }  
+  
+  public double[][] getHistogramPossible() {
+    return histogramPossible;
   }
+  
+  public int[][] getHistogramPossibleCounter() {
+    return histogramPossibleCounter;
+  }
+  
 }
