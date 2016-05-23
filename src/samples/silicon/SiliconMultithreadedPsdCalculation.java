@@ -4,13 +4,12 @@
  */
 package samples.silicon;
 
+import basic.Parser;
 import geneticAlgorithm.evaluationFunctions.AbstractEvaluator;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
-import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
 import utils.StaticRandom;
 
@@ -24,9 +23,19 @@ public class SiliconMultithreadedPsdCalculation {
 
     System.out.println("Multithreaded PSD calculation from a KMC configuration");
 
-    SiKmcConfig config = configKmc();
+    new StaticRandom();
+    Parser parser = new Parser();
+    parser.setListType("binned");
+    parser.setBinsLevels(12);
+    parser.setExtraLevels(1);
+    parser.setMillerX(1);
+    parser.setMillerY(0);
+    parser.setMillerZ(0);
+    parser.setCartSizeX(32);
+    parser.setCartSizeY(32);
+    parser.setCartSizeZ(64);
 
-    AbstractEvaluator evaluation = new SiThreadedPsdEvaluator(config, 20, 10000, 4, null);
+    AbstractEvaluator evaluation = new SiThreadedPsdEvaluator(parser, 10000, 4);
     evaluation.setWheight(1.0f);
     evaluation.setShowGraphics(false);
 
@@ -39,23 +48,5 @@ public class SiliconMultithreadedPsdCalculation {
             .setLogScale(true)
             .setShift(true)
             .setMesh(psd);
-  }
-
-  private static SiKmcConfig configKmc() {
-    new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(12)
-            .setExtraLevels(1);
-
-    SiKmcConfig config = new SiKmcConfig()
-            .setMillerX(1)
-            .setMillerY(0)
-            .setMillerZ(0)
-            .setSizeX_UC(32)
-            .setSizeY_UC(32)
-            .setSizeZ_UC(64)
-            .setListConfig(listConfig);
-    return config;
   }
 }

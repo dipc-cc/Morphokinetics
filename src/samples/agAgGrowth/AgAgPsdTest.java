@@ -5,13 +5,12 @@
  */
 package samples.agAgGrowth;
 
+import basic.Parser;
 import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
-import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import utils.list.ListConfiguration;
 import ratesLibrary.AgRatesFactory;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -67,19 +66,20 @@ public class AgAgPsdTest {
   private static AgKmc initialiseKmc() {
 
     new StaticRandom();
-    ListConfiguration config = new ListConfiguration()
-            .setListType(ListConfiguration.LINEAR_LIST);
 
     int sizeX = 256;
     int sizeY = (int) (sizeX / AbstractGrowthLattice.Y_RATIO);
-
-    AgKmc kmc = new AgKmc(config, sizeX, sizeY, true, false, (float) -1, false, RoundPerimeter.CIRCLE, false);
+    Parser parser = new Parser();
+    parser.setCartSizeX(sizeX);
+    parser.setCartSizeY(sizeY);
+    parser.setListType("linear");
+    
+    AgKmc kmc = new AgKmc(parser);
 
     return kmc;
   }
 
   private static void initialiseRates(AgRatesFactory reatesFactory, AgKmc kmc) {
-
     double depositionRatePerSite = reatesFactory.getDepositionRatePerSite();
     double islandDensity = reatesFactory.getIslandDensity(135);
     kmc.setDepositionRate(depositionRatePerSite, islandDensity);

@@ -31,10 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import ratesLibrary.AgRatesFactory;
 import utils.akting.operations.OperationFactory;
-import utils.list.ListConfiguration;
 
 /**
  *
@@ -191,10 +189,11 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     
   private AbstractPsdEvaluator getSiMainEvaluators() {
     AbstractPsdEvaluator evaluatorTmp;
+    configureSiKmc();
     if (parser.isEvaluatorParallel()) {
-      evaluatorTmp = new SiThreadedPsdEvaluator(localSiKmc(), parser.getRepetitions(), 10000, 8, parser.getEvaluatorTypes());
+      evaluatorTmp = new SiThreadedPsdEvaluator(parser, 10000, 8);
     } else {
-      evaluatorTmp = new SiBasicPsdEvaluator(localSiKmc(), parser.getRepetitions(), 1000, parser.getEvaluatorTypes());
+      evaluatorTmp = new SiBasicPsdEvaluator(parser, 1000);
     }
 
     evaluatorTmp.setWheight(1.0f);
@@ -203,21 +202,16 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     return evaluatorTmp;
   }
   
-  private static SiKmcConfig localSiKmc() {
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(20)
-            .setExtraLevels(1);
-
-    SiKmcConfig config = new SiKmcConfig()
-            .setMillerX(1)
-            .setMillerY(0)
-            .setMillerZ(0)
-            .setSizeX_UC(32)
-            .setSizeY_UC(32)
-            .setSizeZ_UC(48)
-            .setListConfig(listConfig);
-    return config;
+  private void configureSiKmc() {
+    parser.setListType("binned");
+    parser.setBinsLevels(20);
+    parser.setExtraLevels(1);
+    parser.setMillerX(1);
+    parser.setMillerY(0);
+    parser.setMillerZ(0);
+    parser.setCartSizeX(32);
+    parser.setCartSizeY(32);
+    parser.setCartSizeZ(48);
   }
   
   @Override 

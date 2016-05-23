@@ -1,9 +1,8 @@
 package samples.silicon;
 
+import basic.Parser;
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
-import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
 import utils.StaticRandom;
 
@@ -21,9 +20,19 @@ public class SimpleSiliconKmcSimulation {
 
     System.out.println("Simple simulation of the Silicon etching KMC");
 
-    SiKmcConfig config = configKmc();
+    new StaticRandom();
+    Parser parser = new Parser();
+    parser.setListType("binned");
+    parser.setBinsLevels(20);
+    parser.setExtraLevels(1);
+    parser.setMillerX(0);
+    parser.setMillerY(1);
+    parser.setMillerZ(1);
+    parser.setCartSizeX(96);
+    parser.setCartSizeY(96);
+    parser.setCartSizeZ(16);
 
-    SiKmc kmc = new SiKmc(config);
+    SiKmc kmc = new SiKmc(parser);
 
     long start = System.nanoTime();
     kmc.reset();
@@ -35,23 +44,4 @@ public class SimpleSiliconKmcSimulation {
 
     new SiFrame().drawKmc(kmc);
   }
-
-  private static SiKmcConfig configKmc() {
-    new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(20)
-            .setExtraLevels(1);
-
-    SiKmcConfig config = new SiKmcConfig()
-            .setMillerX(0)
-            .setMillerY(1)
-            .setMillerZ(1)
-            .setSizeX_UC(96)
-            .setSizeY_UC(96)
-            .setSizeZ_UC(16)
-            .setListConfig(listConfig);
-    return config;
-  }
-
 }

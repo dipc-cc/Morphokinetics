@@ -4,6 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.etching;
 
+import basic.Parser;
 import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.lattice.SiLattice;
@@ -19,10 +20,10 @@ public class SiKmc extends AbstractKmc {
 
   private final double minHeight;
 
-  public SiKmc(SiKmcConfig config) {
-    super(config.listConfig);
-    setLattice(new SiLattice(config.millerX, config.millerY, config.millerZ, config.sizeX_UC, config.sizeY_UC, config.sizeZ_UC));
-
+  public SiKmc(Parser parser) {
+    super(parser);
+    setLattice(new SiLattice(parser.getMillerX(), parser.getMillerY(), parser.getMillerZ(), parser.getCartSizeX(), parser.getCartSizeY(), parser.getCartSizeZ()));
+    
     minHeight = ((SiLattice) getLattice()).getUnitCell().getLimitZ();
   }
 

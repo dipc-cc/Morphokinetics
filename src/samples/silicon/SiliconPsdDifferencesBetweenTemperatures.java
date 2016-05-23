@@ -1,10 +1,9 @@
 package samples.silicon;
 
+import basic.Parser;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import ratesLibrary.SiRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
-import utils.list.ListConfiguration;
 import utils.MathUtils;
 import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
@@ -23,9 +22,20 @@ public class SiliconPsdDifferencesBetweenTemperatures {
 
     System.out.println("Showing PSD differences between two temperatures ");
 
-    SiKmcConfig config = configKmc();
+    new StaticRandom();
+    Parser parser = new Parser();
+    parser.setListType("binned");
+    parser.setBinsLevels(100);
+    parser.setExtraLevels(0);
+    parser.setMillerX(1);
+    parser.setMillerY(0);
+    parser.setMillerZ(0);
+    parser.setCartSizeX(48);
+    parser.setCartSizeY(48);
+    parser.setCartSizeZ(16);
 
-    SiKmc kmc = new SiKmc(config);
+    SiKmc kmc = new SiKmc(parser);
+    
 
     float[][] psd300_1 = getPsdFromSimulation(kmc, 300);
     Frame2D frame300_1 = new Frame2D("PSD 300K first").setMesh(psd300_1)
@@ -103,22 +113,5 @@ public class SiliconPsdDifferencesBetweenTemperatures {
     psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
 
     return psd.getPsd();
-  }
-
-  private static SiKmcConfig configKmc() {
-    new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(100)
-            .setExtraLevels(0);
-    SiKmcConfig config = new SiKmcConfig()
-            .setMillerX(1)
-            .setMillerY(0)
-            .setMillerZ(0)
-            .setSizeX_UC(48)
-            .setSizeY_UC(48)
-            .setSizeZ_UC(16)
-            .setListConfig(listConfig);
-    return config;
   }
 }

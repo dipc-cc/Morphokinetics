@@ -4,11 +4,12 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
+import basic.Parser;
+import basic.io.OutputType;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import utils.list.ListConfiguration;
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -66,31 +67,26 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private int[][] histogramSuccess;
   
-  public AbstractGrowthKmc(ListConfiguration config, 
-          boolean justCentralFlake, 
-          boolean periodicSingleFlake,
-          float coverage,
-          boolean useMaxPerimeter,
-          short perimeterType,
-          boolean extraOutput) {
-    super(config);
-    this.justCentralFlake = justCentralFlake;
-    this.periodicSingleFlake = periodicSingleFlake;
+  public AbstractGrowthKmc(Parser parser) {
+    super(parser);
+    justCentralFlake = parser.justCentralFlake();
+    periodicSingleFlake = parser.isPeriodicSingleFlake();
+    float coverage = (float) parser.getCoverage() / 100;
     if ((!justCentralFlake) && ((0f > coverage) || (1f < coverage))) {
       System.err.println("Chosen coverage is not permitted. Selecting the default one: %30");
       maxCoverage = 0.3f;
     } else {
       maxCoverage = coverage;
     }
-    this.useMaxPerimeter = useMaxPerimeter;
+    useMaxPerimeter = parser.useMaxPerimeter();
     modifiedBuffer = new ModifiedBuffer();
     getList().autoCleanup(true);
-    this.perimeterType = perimeterType;
+    perimeterType = parser.getPerimeterType();
     previousTime = 0;
     deltaTimeBetweenTwoAttachments = new ArrayList<>();
     deltaTimePerAtom = new ArrayList<>();  
     
-    this.extraOutput = extraOutput;
+    extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     if (extraOutput) {
       try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", false)))) {
         out.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");

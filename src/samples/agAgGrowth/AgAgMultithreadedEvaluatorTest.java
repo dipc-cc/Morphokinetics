@@ -5,12 +5,12 @@
  */
 package samples.agAgGrowth;
 
+import basic.Parser;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import utils.list.ListConfiguration;
 import ratesLibrary.AgRatesFactory;
 import utils.StaticRandom;
 
@@ -42,14 +42,17 @@ public class AgAgMultithreadedEvaluatorTest {
   }
   
   private static AgKmc localAgAgKmc(float experimentalTemp) {
-
     new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
     double depositionRatePerSite = new AgRatesFactory().getDepositionRatePerSite();
     double islandDensity = new AgRatesFactory().getIslandDensity(experimentalTemp);
+    
+    Parser parser = new Parser();
+    parser.setCartSizeX(256);
+    parser.setCartSizeY((int) (256 / AbstractGrowthLattice.Y_RATIO));
 
-    return new AgKmc(listConfig, 256, (int) (256 / AbstractGrowthLattice.Y_RATIO), depositionRatePerSite, islandDensity);
-
+    AgKmc kmc = new AgKmc(parser);
+    kmc.setDepositionRate(depositionRatePerSite, islandDensity);
+    return kmc;
   }
 
 }

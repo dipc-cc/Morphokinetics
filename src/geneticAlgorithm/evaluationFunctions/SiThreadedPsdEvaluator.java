@@ -4,11 +4,10 @@
  */
 package geneticAlgorithm.evaluationFunctions;
 
+import basic.Parser;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.etching.SiFrame;
-import java.util.Set;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
@@ -22,16 +21,16 @@ public class SiThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
   private SiFrame frame;
   private long timeLastRender;
 
-  public SiThreadedPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, int numThreads, Set flags) {
+  public SiThreadedPsdEvaluator(Parser parser, int measureInterval, int numThreads) {
 
-    super(repeats, measureInterval, numThreads, flags);
+    super(parser.getRepetitions(), measureInterval, numThreads, parser.getEvaluatorTypes());
 
     for (int i = 0; i < numThreads; i++) {
-      workers[i] = new KmcWorker(new SiKmc(config), i);
+      workers[i] = new KmcWorker(new SiKmc(parser), i);
       workers[i].start();
     }
-    setPsdSizeX(config.sizeX_UC * 2);
-    setPsdSizeY(config.sizeY_UC * 2);
+    setPsdSizeX(parser.getCartSizeX() * 2);
+    setPsdSizeY(parser.getCartSizeY() * 2);
   }
 
   @Override

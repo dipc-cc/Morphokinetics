@@ -1,8 +1,8 @@
 package samples.basic;
 
+import basic.Parser;
 import graphicInterfaces.basic.BasicFrame;
 import kineticMonteCarlo.kmcCore.etching.BasicKmc;
-import utils.list.ListConfiguration;
 import ratesLibrary.basic.RatesCaseOther;
 import utils.StaticRandom;
 import utils.Wait;
@@ -22,27 +22,25 @@ public class SimpleBasicKmcSimulation {
     System.out.println("Simple simulation of the Basic KMC");
 
     new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(100)
-            .setExtraLevels(0);
+    Parser parser = new Parser();
+    parser.setCartSizeX(512);
+    parser.setCartSizeY(128);
+    parser.setListType("binned");
+    parser.setBinsLevels(100);
+    parser.setExtraLevels(0);
 
-    BasicKmc KMC = new BasicKmc(listConfig, 512, 128, true);
+    BasicKmc kmc = new BasicKmc(parser);
 
     BasicFrame panel = new BasicFrame(3);
 
-    //KMC.initializeRates(new BasicEtchRatesFactory().getRates("Basic_OTHER", 350));
-    KMC.reset();
-    KMC.initialiseRates(new RatesCaseOther().getRates(350));
-    KMC.depositSeed();
+    kmc.reset();
+    kmc.initialiseRates(new RatesCaseOther().getRates(350));
+    kmc.depositSeed();
 
     for (int i = 0; i < 1000; i++) {
-
-      KMC.simulate(500);
-      panel.drawKmc(KMC);
+      kmc.simulate(500);
+      panel.drawKmc(kmc);
       Wait.manyMilliSec(300);
     }
-
   }
-
 }

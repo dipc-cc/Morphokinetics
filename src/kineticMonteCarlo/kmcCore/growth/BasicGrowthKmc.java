@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
-import utils.list.ListConfiguration;
+import basic.Parser;
 import kineticMonteCarlo.lattice.BasicGrowthLattice;
 import utils.StaticRandom;
 
@@ -14,21 +14,13 @@ import utils.StaticRandom;
  */
 public class BasicGrowthKmc extends AbstractGrowthKmc {
 
-  public BasicGrowthKmc(ListConfiguration config, 
-          int hexaSizeI, 
-          int hexaSizeJ, 
-          boolean justCentralFlake,
-          boolean periodicSingleFlake,
-          float coverage,
-          boolean useMaxPerimeter,
-          short perimeterType,
-          boolean extraOutput) {
-    super(config, justCentralFlake, periodicSingleFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
+  public BasicGrowthKmc(Parser parser) {
+    super(parser);
      
-    BasicGrowthLattice basicLattice = new BasicGrowthLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer());
+    BasicGrowthLattice basicLattice = new BasicGrowthLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     basicLattice.init();
     setLattice(basicLattice); 
-    if (justCentralFlake) {
+    if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
     }
     super.initHistogramSucces(4);

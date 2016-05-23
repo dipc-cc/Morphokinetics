@@ -1,10 +1,9 @@
 package samples.silicon;
 
+import basic.Parser;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import ratesLibrary.SiRatesFactory;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
-import utils.list.ListConfiguration;
 import utils.MathUtils;
 import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
@@ -23,9 +22,19 @@ public class SimpleSiliconKmcFftAnalisys {
 
     System.out.println("Simple 2D FFT analisys of an etched silicon surface");
 
-    SiKmcConfig config = configKmc();
+    new StaticRandom();
+    Parser parser = new Parser();
+    parser.setListType("binned");
+    parser.setBinsLevels(16);
+    parser.setExtraLevels(0);
+    parser.setMillerX(1);
+    parser.setMillerY(1);
+    parser.setMillerZ(0);
+    parser.setCartSizeX(64);
+    parser.setCartSizeY(64);
+    parser.setCartSizeZ(256);
 
-    SiKmc kmc = new SiKmc(config);
+    SiKmc kmc = new SiKmc(parser);
     kmc.reset();
     kmc.initialiseRates(new SiRatesFactory().getRates(350));
     kmc.depositSeed();
@@ -50,22 +59,5 @@ public class SimpleSiliconKmcFftAnalisys {
             .setLogScale(true)
             .setShift(true);
     psdFrame.setVisible(true);
-  }
-
-  private static SiKmcConfig configKmc() {
-    new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(16)
-            .setExtraLevels(0);
-    SiKmcConfig config = new SiKmcConfig()
-            .setMillerX(1)
-            .setMillerY(1)
-            .setMillerZ(0)
-            .setSizeX_UC(64)
-            .setSizeY_UC(64)
-            .setSizeZ_UC(256)
-            .setListConfig(listConfig);
-    return config;
   }
 }

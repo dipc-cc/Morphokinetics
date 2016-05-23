@@ -4,6 +4,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
+import basic.Parser;
 import static kineticMonteCarlo.atom.AbstractAtom.ARMCHAIR_EDGE;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
@@ -11,7 +12,6 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.GrapheneLattice;
-import utils.list.ListConfiguration;
 import utils.StaticRandom;
 
 /**
@@ -20,22 +20,14 @@ import utils.StaticRandom;
  */
 public class GrapheneKmc extends AbstractGrowthKmc {
 
-  public GrapheneKmc(ListConfiguration config, 
-          int hexaSizeI, 
-          int hexaSizeJ, 
-          boolean justCentralFlake,
-          boolean periodicSingleFlake,
-          float coverage,
-          boolean useMaxPerimeter,
-          short perimeterType,
-          boolean extraOutput) {
-    super(config, justCentralFlake, periodicSingleFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
+  public GrapheneKmc(Parser parser) {
+    super(parser);
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    setLattice(new GrapheneLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep));
+    setLattice(new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep));
 
-    if (justCentralFlake) {
+    if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("graphene"));
       configureDevitaAccelerator(distancePerStep);
     }

@@ -4,12 +4,11 @@
  */
 package samples.worker;
 
+import basic.Parser;
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
-import utils.list.ListConfiguration;
 import ratesLibrary.SiRatesFactory;
 import utils.StaticRandom;
 
@@ -25,13 +24,23 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
 
     System.out.println("Simple simulation of a KMC using a non-blocking threaded worker");
 
-    int worker_ID = 0;
+    int workerId = 0;
     int work_ID = 0;
 
-    SiKmcConfig config = configKmc();
+    new StaticRandom();
+    Parser parser = new Parser();
+    parser.setListType("binned");
+    parser.setBinsLevels(16);
+    parser.setExtraLevels(1);
+    parser.setMillerX(1);
+    parser.setMillerY(0);
+    parser.setMillerZ(0);
+    parser.setCartSizeX(128);
+    parser.setCartSizeY(128);
+    parser.setCartSizeZ(32);
 
-    worker = new KmcWorker(new SiKmc(config),
-            worker_ID);
+    worker = new KmcWorker(new SiKmc(parser),
+            workerId);
     worker.start();
 
     worker.initialise(new SiRatesFactory().getRates(350));
@@ -41,29 +50,10 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
     System.out.println("Continuing execution.");
   }
 
-  private static SiKmcConfig configKmc() {
-    new StaticRandom();
-    ListConfiguration listConfig = new ListConfiguration()
-            .setListType(ListConfiguration.BINNED_LIST)
-            .setBinsPerLevel(16)
-            .setExtraLevels(1);
-    SiKmcConfig config = new SiKmcConfig()
-            .setMillerX(1)
-            .setMillerY(0)
-            .setMillerZ(0)
-            .setSizeX_UC(128)
-            .setSizeY_UC(128)
-            .setSizeZ_UC(32)
-            .setListConfig(listConfig);
-    return config;
-  }
-
   @Override
-  public void handleSimulationFinish(int workerID, int work_ID) {
+  public void handleSimulationFinish(int workerId, int workId) {
     System.out.println("Worker simulation finished.");
     new SiFrame().drawKmc(worker.getKmc());
     worker.destroyWorker();
-
   }
-
 }

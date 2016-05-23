@@ -5,7 +5,6 @@
  */
 package basic;
 
-import basic.io.OutputType;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.BasicGrowthRatesFactory;
 
@@ -24,16 +23,7 @@ public class BasicGrowthSimulation extends AbstractGrowthSimulation{
     super.initialiseKmc();
 
     setRates(new BasicGrowthRatesFactory());
-    boolean extraOutput = getParser().getOutputFormats().contains(OutputType.formatFlag.EXTRA);
-    setKmc(new BasicGrowthKmc(getConfig(),
-            getParser().getHexaSizeI(), 
-            getParser().getHexaSizeJ(),
-            getParser().justCentralFlake(),
-            getParser().isPeriodicSingleFlake(),
-            (float) getParser().getCoverage()/100,
-            getParser().useMaxPerimeter(),
-            getParser().getPerimeterType(),
-            extraOutput));
+    setKmc(new BasicGrowthKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
 }

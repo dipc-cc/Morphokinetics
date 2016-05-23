@@ -4,9 +4,11 @@
  */
 package kineticMonteCarlo.kmcCore;
 
+import basic.Parser;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.list.AbstractList;
-import utils.list.ListConfiguration;
+import utils.list.BinnedList;
+import utils.list.LinearList;
 
 /**
  *
@@ -18,8 +20,20 @@ public abstract class AbstractKmc implements IKmc {
   private AbstractLattice lattice;
   private int iterationsForLastSimulation;
 
-  public AbstractKmc(ListConfiguration config) {
-    list = config.createList();
+  public AbstractKmc(Parser parser) {
+    switch (parser.getListType()) {
+      case "linear":
+        list = new LinearList();
+        break;
+      case "binned":
+        list = new BinnedList(parser.getBinsLevels(), parser.getExtraLevels());
+        break;
+      default:
+        System.err.println("listType is not properly set");
+        System.err.println("listType currently is " + parser.getListType());
+        System.err.println("Available options are \"linear\" and \"binned\" ");
+        list = null;
+    }
   }
 
   /**

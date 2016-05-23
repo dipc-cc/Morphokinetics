@@ -4,11 +4,10 @@
  */
 package geneticAlgorithm.evaluationFunctions;
 
+import basic.Parser;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.etching.SiFrame;
-import java.util.Set;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import kineticMonteCarlo.kmcCore.etching.SiKmcConfig;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -22,13 +21,12 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
   private PsdSignature2D psd;
   private float[][] sampledSurface;
 
-  public SiBasicPsdEvaluator(SiKmcConfig config, int repeats, int measureInterval, Set flags) {
+  public SiBasicPsdEvaluator(Parser parser, int measureInterval) {
+    super(parser.getRepetitions(), measureInterval, parser.getEvaluatorTypes(), null);
 
-    super(repeats, measureInterval, flags, null);
-
-    setPsdSizeX(config.sizeX_UC * 2);
-    setPsdSizeY(config.sizeY_UC * 2);
-    kmc = new SiKmc(config);
+    setPsdSizeX(parser.getCartSizeX() * 2);
+    setPsdSizeY(parser.getCartSizeY() * 2);
+    kmc = new SiKmc(parser);
     psd = new PsdSignature2D(getPsdSizeY(), getPsdSizeX(), 1);
     frame = new SiFrame();
   }

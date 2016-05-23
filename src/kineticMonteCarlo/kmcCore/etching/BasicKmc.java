@@ -4,10 +4,10 @@
  */
 package kineticMonteCarlo.kmcCore.etching;
 
+import basic.Parser;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.lattice.BasicLattice;
-import utils.list.ListConfiguration;
 import java.util.ListIterator;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 
@@ -19,9 +19,9 @@ public class BasicKmc extends AbstractKmc {
 
   private double minHeight;
 
-  public BasicKmc(ListConfiguration listConfig, int sizeX, int sizeY, boolean randomise) {
-    super(listConfig);
-    setLattice(new BasicLattice(sizeX, sizeY));
+  public BasicKmc(Parser parser) {
+    super(parser);
+    setLattice(new BasicLattice(parser.getCartSizeX(), parser.getCartSizeY()));
 
   }
 

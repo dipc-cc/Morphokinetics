@@ -18,7 +18,6 @@ import kineticMonteCarlo.kmcCore.AbstractKmc;
 import ratesLibrary.IRatesFactory;
 import utils.MathUtils;
 import utils.StaticRandom;
-import utils.list.ListConfiguration;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -30,7 +29,6 @@ public abstract class AbstractSimulation {
   private AbstractKmc kmc;
   private IRatesFactory rates;
   private PsdSignature2D psd;
-  private ListConfiguration config;
   private final Parser parser;
   private StaticRandom staticRandom;
   private String restartFolderName;
@@ -57,21 +55,6 @@ public abstract class AbstractSimulation {
    * Initialises Kmc, the basic simulation class
    */
   public void initialiseKmc() {
-    switch (parser.getListType()) {
-      case "linear":
-        this.config = new ListConfiguration().setListType(ListConfiguration.LINEAR_LIST);
-        break;
-      case "binned":
-        this.config = new ListConfiguration().setListType(ListConfiguration.BINNED_LIST)
-                .setBinsPerLevel(parser.getBinsLevels())
-                .setExtraLevels(parser.getExtraLevels());
-        break;
-      default:
-        System.err.println("listType is not properly set");
-        System.err.println("listType currently is " + parser.getListType());
-        System.err.println("Available options are \"linear\" and \"binned\" ");
-        this.config = null;
-    }
     this.kmc = null;
     this.rates = null;
   }
@@ -285,10 +268,6 @@ public abstract class AbstractSimulation {
 
   public Parser getParser() {
     return parser;
-  }
-
-  public ListConfiguration getConfig() {
-    return config;
   }
 
   String getRestartFolderName() {

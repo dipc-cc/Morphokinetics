@@ -4,13 +4,13 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
+import basic.Parser;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AgLattice;
-import utils.list.ListConfiguration;
 import utils.StaticRandom;
 
 /**
@@ -19,37 +19,18 @@ import utils.StaticRandom;
  */
 public class AgKmc extends AbstractGrowthKmc {
 
-  public AgKmc(ListConfiguration config, 
-          int hexaSizeI, 
-          int hexaSizeJ, 
-          boolean justCentralFlake,
-          boolean periodicSingleFlake,
-          float coverage,
-          boolean useMaxPerimeter,
-          short perimeterType,
-          boolean extraOutput) {
-    super(config, justCentralFlake, periodicSingleFlake, coverage, useMaxPerimeter, perimeterType, extraOutput);
+  public AgKmc(Parser parser) {
+    super(parser);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    AgLattice agLattice = new AgLattice(hexaSizeI, hexaSizeJ, getModifiedBuffer(), distancePerStep);
+    AgLattice agLattice = new AgLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
     agLattice.init();
     setLattice(agLattice);
-    if (justCentralFlake) {
+    if (parser.justCentralFlake()) {
       configureDevitaAccelerator(distancePerStep);
       setPerimeter(new RoundPerimeter("Ag"));
     }
     super.initHistogramSucces(7);
-  }
-
-  public AgKmc(ListConfiguration config, 
-          int hexaSizeI, 
-          int hexaSizeJ, 
-          double depositionRate, 
-          double islandDensity) {
-
-    this(config, hexaSizeI, hexaSizeJ, true, false, (float) -1, false, RoundPerimeter.CIRCLE, false);
-    
-    setDepositionRate(depositionRate, islandDensity);
   }
 
   @Override

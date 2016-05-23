@@ -82,6 +82,10 @@ public class Parser {
   private int numberOfSimulations;
   private int cartSizeX;
   private int cartSizeY;
+  private int cartSizeZ;
+  private int millerX;
+  private int millerY;
+  private int millerZ;
   private int binsLevels;
   private int extraLevels;
   private boolean multithreaded;
@@ -171,6 +175,10 @@ public class Parser {
     numberOfSimulations = 10;
     cartSizeX = 256;
     cartSizeY = 256;
+    cartSizeZ = 256;
+    millerX = 0;
+    millerY = 1;
+    millerZ = 1;
     binsLevels = 100;
     extraLevels = 0;
     multithreaded = true;
@@ -316,6 +324,26 @@ public class Parser {
       cartSizeY = json.getInt("cartSizeY");
     } catch (JSONException e) {
       cartSizeY = cartSizeX;
+    }
+    try {
+      cartSizeZ = json.getInt("cartSizeZ");
+    } catch (JSONException e) {
+      cartSizeZ = cartSizeX;
+    }
+   try {
+      millerX = json.getInt("millerX");
+    } catch (JSONException e) {
+      millerX = 0;
+    }  
+    try {
+      millerY = json.getInt("millerY");
+    } catch (JSONException e) {
+      millerY = 1;
+    }
+    try {
+      millerZ = json.getInt("millerZ");
+    } catch (JSONException e) {
+      millerZ = 1;
     }
     try {
       binsLevels = json.getInt("binsLevels");
@@ -525,6 +553,10 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"numberOfSimulations\"", numberOfSimulations);
     System.out.printf("%32s: %s,\n", "\"cartSizeX\"", cartSizeX);
     System.out.printf("%32s: %s,\n", "\"cartSizeY\"", cartSizeY);
+    System.out.printf("%32s: %s,\n", "\"cartSizeZ\"", cartSizeZ);
+    System.out.printf("%32s: %s,\n", "\"millerX\"", millerX);
+    System.out.printf("%32s: %s,\n", "\"millerY\"", millerY);
+    System.out.printf("%32s: %s,\n", "\"millerZ\"", millerZ);
     System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
     System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
     System.out.printf("%32s: %s,\n", "\"presure\"", presure);
@@ -596,6 +628,10 @@ public class Parser {
   public String getListType() {
     return listType;
   }
+  
+  public void setListType(String listType) {
+    this.listType = listType;
+  }
 
   public short getPerimeterType() {
     switch (perimeterType) {
@@ -641,7 +677,7 @@ public class Parser {
    *
    * @return coverage
    */
-  double getCoverage() {
+  public double getCoverage() {
     return coverage;
   }
   
@@ -775,10 +811,46 @@ public class Parser {
   public int getCartSizeY() {
     return cartSizeY;
   }
-  
+    
   public void setCartSizeY(int sizeY) {
     cartSizeY = sizeY;
   }
+  
+  /**
+   * Next methods are only meaningful in etching, ignored in 2D surface growth.
+   * @return size in Z axis.
+   */
+  public int getCartSizeZ() {
+    return cartSizeZ;
+  }
+  
+  public void setCartSizeZ(int sizeZ) {
+    cartSizeZ = sizeZ;
+  }
+  
+  public int getMillerX() {
+    return millerX;
+  }
+
+  public void setMillerX(int sizeX) {
+    millerX = sizeX;
+  }
+  
+  public int getMillerY() {
+    return millerY;
+  }
+    
+  public void setMillerY(int sizeY) {
+    millerY = sizeY;
+  }
+  
+  public int getMillerZ() {
+    return millerZ;
+  }
+  
+  public void setMillerZ(int sizeZ) {
+    millerZ = sizeZ;
+  }  
   
   public int getHexaSizeI() {
     if (calculationMode.equals("basic")) {
@@ -807,12 +879,20 @@ public class Parser {
     }
   }
 
-  int getBinsLevels() {
+  public int getBinsLevels() {
     return binsLevels;
   }
+  
+  public void setBinsLevels(int binsLevels) {
+    this.binsLevels = binsLevels;
+  }
 
-  int getExtraLevels() {
+  public int getExtraLevels() {
     return extraLevels;
+  }
+  
+  public void setExtraLevels(int extraLevels) {
+    this.extraLevels = extraLevels;
   }
 
   public boolean isMultithreaded() {

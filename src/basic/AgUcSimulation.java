@@ -1,6 +1,5 @@
 package basic;
 
-import basic.io.OutputType;
 import kineticMonteCarlo.kmcCore.growth.AgUcKmc;
 import ratesLibrary.AgRatesFactory;
 
@@ -34,16 +33,7 @@ public class AgUcSimulation  extends AbstractGrowthSimulation {
       getParser().setCartSizeY(sizeY);
       System.out.println("Automatic size of the island is " + area + " " + sizeX + "x" + sizeY);
     }
-    boolean extraOutput = getParser().getOutputFormats().contains(OutputType.formatFlag.EXTRA);
-    setKmc(new AgUcKmc(getConfig(),
-            getParser().getHexaSizeI(), 
-            getParser().getHexaSizeJ(),
-            getParser().justCentralFlake(),
-            getParser().isPeriodicSingleFlake(),
-            (float) getParser().getCoverage()/100,
-            getParser().useMaxPerimeter(),
-            getParser().getPerimeterType(),
-            extraOutput));
+    setKmc(new AgUcKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
 }

@@ -50,8 +50,9 @@ public class SiSimulationTest {
     assertEquals("Si", parser.getCalculationMode());
     assertEquals(135, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
-    assertEquals(256, parser.getCartSizeX());
-    assertEquals(256, parser.getCartSizeY());
+    assertEquals(96, parser.getCartSizeX());
+    assertEquals(96, parser.getCartSizeY());
+    assertEquals(16, parser.getCartSizeZ());
     assertEquals(true, parser.justCentralFlake());
     assertEquals("binned", parser.getListType());
     assertEquals(true, parser.doPsd());
