@@ -413,7 +413,7 @@ public class Parser {
     try {
       forceNucleation = json.getBoolean("forceNucleation");
     } catch (JSONException e) {
-      forceNucleation = false;
+      forceNucleation = true;
     }
     try {
       outputData = json.getBoolean("outputData");
@@ -997,7 +997,9 @@ public class Parser {
   }
   
   /**
-   * If two terraces are together freeze them, in multi-flake simulation mode.
+   * If two terraces are together freeze them, in multi-flake
+   * simulation mode. Should be only disabled for debugging purposes
+   * because slows down significantly the execution time.
    * @return 
    */
   public boolean forceNucleation() {
