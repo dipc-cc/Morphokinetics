@@ -140,6 +140,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   }
   public abstract void obtainRateFromNeighbours();
   
+  public abstract double probJumpToNeighbour(int originType, int position);
+  
   public abstract void setNeighbour(AbstractGrowthAtom a, int pos);
 
   public abstract AbstractGrowthAtom getNeighbour(int pos);

@@ -260,7 +260,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * @param pos
    * @return probability
    */
-  private double probJumpToNeighbour(int originType, int pos) {
+  @Override
+  public double probJumpToNeighbour(int originType, int pos) {
 
     AbstractGrowthAtom atom = neighbours[pos];
     if (atom.isOccupied()) {

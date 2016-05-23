@@ -86,12 +86,13 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   @Override
   public void obtainRateFromNeighbours() {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      setBondsProbability(probJumpToNeighbour(i), i);
+      setBondsProbability(probJumpToNeighbour(1, i), i);
       addProbability(getBondsProbability(i));
     }
   }
   
-  private double probJumpToNeighbour(int position) {
+  @Override
+  public double probJumpToNeighbour(int ignored, int position) {
 
     if (neighbours[position].isOccupied()) {
       return 0;
@@ -127,7 +128,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     // Store previous probability
     double probabilityChange = -getBondsProbability(pos);
     // Update to the new probability and save
-    setBondsProbability(probJumpToNeighbour(pos), pos);
+    setBondsProbability(probJumpToNeighbour(1, pos), pos);
     probabilityChange += getBondsProbability(pos);
     addProbability(probabilityChange);
 
