@@ -90,7 +90,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-        addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
+        int originalPosition = (i + 2) % 4;
+        addOccupiedNeighbour(atom.getNeighbour(i), originalPosition, forceNucleation);
       }
     }
 
@@ -101,34 +102,46 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     atom.resetProbability();
   }
   
-  private void addOccupiedNeighbour(BasicGrowthAtom neighbourAtom, byte originType, boolean forceNucleation) {
+  /**
+   * A new occupied atom was added before calling this method, here, updating the first and the
+   * second neighbourhood.
+   *
+   * @param neighbourAtom current atom
+   * @param originType atom type of the original deposited atom
+   * @param forceNucleation
+   */
+  private void addOccupiedNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
     byte newType;
 
     newType = neighbourAtom.getNewType(1); 
     neighbourAtom.addOccupiedNeighbour(1);
-    
     
     if (forceNucleation && neighbourAtom.isOccupied()) {
       newType = ISLAND;
     }
 
     if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
-      boolean mobileToImmobile = (neighbourAtom.getType() < KINK && newType >= KINK);
       neighbourAtom.setType(newType);
       addAtom(neighbourAtom);
       if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
         addBondAtom(neighbourAtom);
       }
-      /*if (mobileToImmobile && neighbourAtom.isOccupied()) {
-        for (int i = 0; i < neighbourAtom.getNumberOfNeighbours(); i++) {
-          if (!neighbourAtom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeMobileAddImmobile(neighbourAtom.getNeighbour(i), forceNucleation);
-          }
+      // update second neighbours 
+      for (int pos = 0; pos < neighbourAtom.getNumberOfNeighbours(); pos++) {
+        // skip if the neighbour is the original atom or it is an island.
+        if (neighbourPosition != pos && !neighbourAtom.getNeighbour(pos).isPartOfImmobilSubstrate()) {
+          updateSecondNeighbour(neighbourAtom.getNeighbour(pos));
         }
-      }*/
+      }
     }
   }
 
+  private void updateSecondNeighbour(BasicGrowthAtom secondNeighbourAtom) {
+    if (secondNeighbourAtom.isOccupied()) {
+      addAtom(secondNeighbourAtom);
+    }
+  }
+  
   @Override
   public double extract(AbstractGrowthAtom a) {
     BasicGrowthAtom atom = (BasicGrowthAtom) a;
@@ -136,7 +149,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     double probabilityChange = a.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-        removeOccupied(atom.getNeighbour(i));
+        int originalPosition = (i + 2) % 4;
+        removeOccupied(atom.getNeighbour(i), originalPosition);
       }
     }
 
@@ -150,29 +164,28 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
 
   /**
-   * Computes the removal of one mobile atom.
+   * Computes the removal of one atom.
    * 
    * @param neighbourAtom neighbour atom of the original atom
    */
-  private void removeOccupied(BasicGrowthAtom neighbourAtom) {
-
+  private void removeOccupied(BasicGrowthAtom neighbourAtom, int neighbourPosition) {
     byte newType = neighbourAtom.getNewType(-1); // one less atom
     neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 
     if (neighbourAtom.getType() != newType) {
-      boolean immobileToMobile = (neighbourAtom.getType() >= KINK && newType < KINK);
       neighbourAtom.setType(newType);
       addAtom(neighbourAtom);
       if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
         addBondAtom(neighbourAtom);
       }
-      /*if (immobileToMobile && neighbourAtom.isOccupied()) {
-        for (int i = 0; i < neighbourAtom.getNumberOfNeighbours(); i++) {
-          if (!neighbourAtom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeImmobilAddMobile(neighbourAtom.getNeighbour(i));
-          }
+      
+      // update second neighbours 
+      for (int pos = 0; pos < neighbourAtom.getNumberOfNeighbours(); pos++) {
+        // skip if the neighbour is the original atom or is an island.
+        if (neighbourPosition != pos && !neighbourAtom.getNeighbour(pos).isPartOfImmobilSubstrate()) {
+          updateSecondNeighbour(neighbourAtom.getNeighbour(pos));
         }
-      }*/
+      }
     }
   }
   
