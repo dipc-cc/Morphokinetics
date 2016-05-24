@@ -825,9 +825,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
   }
   
-  public void printHistogram() {
+  private void printHistogram() {
     for (int origin = 0; origin < histogramSuccess.length; origin++) {
-      System.out.print("Success ");
+      System.out.print("AeSuccess ");
       for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
         System.out.print(histogramSuccess[origin][destination] + " ");
       }
@@ -837,7 +837,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     histogramPossible = ((LinearList) getList()).getHistogramPossible();
     System.out.println();
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      System.out.print("PossibleFromList ");
+      System.out.print("AePossibleFromList ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         System.out.print(histogramPossible[origin][destination] + " ");
       }
@@ -847,7 +847,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
     System.out.println();
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
-      System.out.print("PossibleDiscrete ");
+      System.out.print("AePossibleDiscrete ");
       for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
         System.out.print(histogramPossibleCounter[origin][destination] + " ");
       }
@@ -857,7 +857,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
     System.out.println();
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      System.out.print("RatioTimesPossible ");
+      System.out.print("AeRatioTimesPossible ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         ratioTimesPossible[origin][destination] = lattice.getUc(0).getAtom(0).getProbability(origin, destination) * histogramPossible[origin][destination];
         System.out.print(ratioTimesPossible[origin][destination] + " ");
@@ -868,7 +868,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
     System.out.println();
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      System.out.print("Multiplicity ");
+      System.out.print("AeMultiplicity ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
         System.out.print(multiplicity[origin][destination] + " ");
