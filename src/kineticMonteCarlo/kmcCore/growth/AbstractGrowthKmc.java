@@ -826,30 +826,30 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
   
   public void printHistogram() {
-    for (int i = 0; i < histogramSuccess.length; i++) {
+    for (int origin = 0; origin < histogramSuccess.length; origin++) {
       System.out.print("Success ");
-      for (int j = 0; j < histogramSuccess[0].length; j++) {
-        System.out.print(histogramSuccess[i][j] + " ");
+      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
+        System.out.print(histogramSuccess[origin][destination] + " ");
       }
       System.out.println("");
     }
-    double[][] tmp;
-    tmp = ((LinearList) getList()).getHistogramPossible();
+    double[][] histogramPossible;
+    histogramPossible = ((LinearList) getList()).getHistogramPossible();
     System.out.println("");
-    for (int i = 0; i < tmp.length; i++) {
-      System.out.print("PossibleFromList ");  
-      for (int j = 0; j < tmp[0].length; j++) {
-        System.out.print(tmp[i][j] + " ");
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      System.out.print("PossibleFromList ");
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        System.out.print(histogramPossible[origin][destination] + " ");
       }
       System.out.println("");
     }
-    
-    int[][] tmpInt = ((LinearList) getList()).getHistogramPossibleCounter();
+
+    int[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
     System.out.println("");
-    for (int i = 0; i < tmpInt.length; i++) {
-      System.out.print("PossibleDiscrete ");  
-      for (int j = 0; j < tmpInt[0].length; j++) {
-        System.out.print(tmpInt[i][j] + " ");
+    for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
+      System.out.print("PossibleDiscrete ");
+      for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
+        System.out.print(histogramPossibleCounter[origin][destination] + " ");
       }
       System.out.println("");
     }
