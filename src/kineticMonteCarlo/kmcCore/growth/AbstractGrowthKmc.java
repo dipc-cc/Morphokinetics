@@ -853,5 +853,27 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
       System.out.println();
     }
+    
+    double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
+    System.out.println();
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      System.out.print("RatioTimesPossible ");
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        ratioTimesPossible[origin][destination] = lattice.getUc(0).getAtom(0).getProbability(origin, destination) * histogramPossible[origin][destination];
+        System.out.print(ratioTimesPossible[origin][destination] + " ");
+      }
+      System.out.println();
+    }
+    
+    double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
+    System.out.println();
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      System.out.print("Multiplicity ");
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
+        System.out.print(multiplicity[origin][destination] + " ");
+      }
+      System.out.println();
+    }
   }
 }
