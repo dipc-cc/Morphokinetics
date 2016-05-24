@@ -831,27 +831,27 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
         System.out.print(histogramSuccess[origin][destination] + " ");
       }
-      System.out.println("");
+      System.out.println();
     }
     double[][] histogramPossible;
     histogramPossible = ((LinearList) getList()).getHistogramPossible();
-    System.out.println("");
+    System.out.println();
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       System.out.print("PossibleFromList ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         System.out.print(histogramPossible[origin][destination] + " ");
       }
-      System.out.println("");
+      System.out.println();
     }
 
     int[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
-    System.out.println("");
+    System.out.println();
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
       System.out.print("PossibleDiscrete ");
       for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
         System.out.print(histogramPossibleCounter[origin][destination] + " ");
       }
-      System.out.println("");
+      System.out.println();
     }
   }
 }
