@@ -441,6 +441,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
       }
+    }
+    if (aeOutput) {
       histogramSuccess[oldType][destinationAtom.getRealType()]++;
     }
     modifiedBuffer.updateAtoms(getList());
