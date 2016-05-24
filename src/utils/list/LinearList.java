@@ -20,7 +20,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private boolean clean;
   private double Ri_DeltaI;
   
-  private boolean extraOutput;
+  private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
   private double[][] histogramPossible;
   private int[][] histogramPossibleCounter;
@@ -32,9 +32,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     clean = false;
     Ri_DeltaI = 0.0;
     
-    extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
+    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     doActivationEnergyStudy = false;
-    if (extraOutput) {
+    if (aeOutput) {
       if (parser.getCalculationMode().equals("basic")) {
         doActivationEnergyStudy = true;
         histogramPossible = new double[4][4];

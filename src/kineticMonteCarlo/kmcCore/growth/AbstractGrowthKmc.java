@@ -61,6 +61,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int nucleations;
   private final boolean extraOutput;
   /**
+   * Activation energy output at the end of execution
+   */
+  private final boolean aeOutput;
+  /**
    * If two terraces are together freeze them, in multi-flake simulation mode.
    */
   private final boolean forceNucleation;
@@ -92,6 +96,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     deltaTimePerAtom = new ArrayList<>();  
     
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
+    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     if (extraOutput) {
       try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", false)))) {
         out.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
@@ -240,7 +245,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         }
       }
     }
-    if (extraOutput) {
+    if (aeOutput) {
       double ri = ((LinearList) getList()).getRi_DeltaI();
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
@@ -835,7 +840,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     double[][] histogramPossible;
     histogramPossible = ((LinearList) getList()).getHistogramPossible();
-    System.out.println();
+    System.out.println("Ae");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       System.out.print("AePossibleFromList ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -845,7 +850,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     int[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
-    System.out.println();
+    System.out.println("Ae");
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
       System.out.print("AePossibleDiscrete ");
       for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
@@ -855,7 +860,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     
     double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
-    System.out.println();
+    System.out.println("Ae");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       System.out.print("AeRatioTimesPossible ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -866,7 +871,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     
     double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
-    System.out.println();
+    System.out.println("Ae");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       System.out.print("AeMultiplicity ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
