@@ -19,6 +19,12 @@ import java.util.ArrayList;
 import java.util.List;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import kineticMonteCarlo.atom.AgAtom;
+import static kineticMonteCarlo.atom.AgAtom.CORNER;
+import static kineticMonteCarlo.atom.AgAtom.EDGE;
+import static kineticMonteCarlo.atom.AgAtom.EDGE_A;
+import static kineticMonteCarlo.atom.AgAtom.EDGE_B;
+import static kineticMonteCarlo.atom.AgAtom.KINK;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.unitCell.IUc;
 import utils.MathUtils;
@@ -70,10 +76,24 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final boolean forceNucleation;
   
   private double terraceToTerraceProbability;
+  
+  private int[][] counter;
+  private int currentSimulation;
+  int step = 0;
+  
   /**
    * Attribute to count processes that happened. Used to compute activation energy per each rate.
    */
   private int[][] histogramSuccess;
+  /**
+   * Attribute to count all possible transition types. It will store 1/R where R is the total
+   * probability.
+   */
+  private double[][] histogramPossible;
+  /**
+   * Attribute to count all possible transition types.
+   */
+  private int[][] histogramPossibleCounter;
   
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
@@ -113,8 +133,18 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } catch (IOException e) {
         //Do nothing, it doesn't matter if fails
       }
+      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/countAtomTypes.txt", false)))) {
+        out.println("# Number of atoms per type. [1. Identifier, 2. Count] ");
+      } catch (IOException e) {
+        //Do nothing, it doesn't matter if fails
+    }
     }
     nucleations = 0;
+    counter = new int[7][100];
+    currentSimulation = 0;
+    histogramSuccess = new int[7][7];
+    histogramPossible = new double[7][7];
+    histogramPossibleCounter = new int[7][7];
   }
 
   /**
@@ -201,9 +231,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
           getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
         }
+        //System.out.println("Step "+step);
+        step++;
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
-
+    
     if (justCentralFlake && perimeterMustBeEnlarged(destinationAtom)) {
       int nextRadius = perimeter.goToNextRadius();
       if (nextRadius > 0
@@ -415,6 +447,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
     if (!originAtom.isEligible()) {
+      getList().addTotalProbability(-originAtom.getProbability());
+      originAtom.resetProbability();
+      
       return false;
     }
 
@@ -422,7 +457,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (destinationAtom.isOccupied()) {
       return false;
     }
-
+    
+    double probabilityBeforeDiffusion = getList().getTotalProbability();
+    //computeHistogram(originAtom);
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (force) {
       nucleations++;
@@ -430,10 +467,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         printData();
       }
     }
-    int oldType = originAtom.getRealType();
+    int oldType = originAtom.getType();
+    int oldRealType = originAtom.getRealType();
     double probabilityChange = lattice.extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
-
+    
     lattice.deposit(destinationAtom, force);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
     originAtom.setDepositionTime(0);
@@ -441,6 +479,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
       }
+      histogramSuccess[oldRealType][destinationAtom.getRealType()]++;
+      computeHistogram(destinationAtom, getList().getTotalProbability()); //zuzenagoa
+      //computeHistogram(destinationAtom, probabilityBeforeDiffusion); // okerragoa
     }
     if (aeOutput) {
       histogramSuccess[oldType][destinationAtom.getRealType()]++;
@@ -450,6 +491,40 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return true;
   }
   
+  /**
+   * One try to compute all possible transitions at every deposition. I'm almost sure that it
+   * doesn't work properly and it is much better to compute this at every step in LinearList.java
+   *
+   * @param atom
+   * @param probabilityBeforeDiffusion
+   */
+  private void computeHistogram(AbstractGrowthAtom atom, double probabilityBeforeDiffusion) {
+        // compute all possible hops of the origin atom (not only destinationAtom)
+    AgAtom a = (AgAtom) atom;
+    for (int pos = 0; pos < a.getNumberOfNeighbours(); pos++) {
+      AgAtom neighbourAtom = a.getNeighbour(pos);
+      if (!neighbourAtom.isPartOfImmobilSubstrate()) {
+        int myPositionForNeighbour = (pos + 3) % a.getNumberOfNeighbours();
+        byte destination = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
+        byte origin = a.getRealType();
+        int orientation = neighbourAtom.getOrientation(a);
+        double prob = a.probJumpToNeighbour(1, pos);
+        if (prob > 0) {
+          if ((origin == EDGE_A || origin == EDGE_B) && destination == CORNER) {
+            AgAtom aheadAtom = a.aheadCornerAtom(pos);
+            if (aheadAtom != null) {
+              destination = aheadAtom.getRealType();
+            }
+          }
+          if ((destination == EDGE || destination == KINK) && (orientation & 1) != 0) {
+            destination += 3; //convert EDGE_A to EDGE_B or KINK_A to KINK_B
+          }
+          histogramPossible[origin][destination] += 1/probabilityBeforeDiffusion;
+          histogramPossibleCounter[origin][destination]++;
+        }
+      }
+    }
+  }
   /**
    * An atom has been attached to an island an so printing this to output files.
    *
@@ -840,6 +915,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
       System.out.println();
     }
+    System.out.println("");
+    for (int i = 0; i < histogramPossible.length; i++) {
+      System.out.print("PossibleNormalised ");  
+      for (int j = 0; j < histogramPossible[0].length; j++) {
+        System.out.print(histogramPossible[i][j] + " ");
+      }
+      System.out.println("");
+    }
+    System.out.println("");
+    for (int i = 0; i < histogramPossibleCounter.length; i++) {
+      System.out.print("PossibleDiscrete ");  
+      for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
+        System.out.print(histogramPossibleCounter[i][j] + " ");
+      }
+      System.out.println("");
+    }
     double[][] histogramPossible;
     histogramPossible = ((LinearList) getList()).getHistogramPossible();
     System.out.println("Ae");
@@ -850,7 +941,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
       System.out.println();
     }
-
+    
     int[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
     System.out.println("Ae");
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
@@ -879,8 +970,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
         System.out.print(multiplicity[origin][destination] + " ");
-      }
+  }
       System.out.println();
-    }
+}
   }
 }

@@ -5,9 +5,9 @@
 package kineticMonteCarlo.atom;
 
 import utils.list.AbstractList;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -15,12 +15,12 @@ import java.util.List;
  */
 public class ModifiedBuffer {
 
-  private final List<AbstractGrowthAtom> buffer;
-  private final List<AbstractGrowthAtom> bufferL;
+  private final Set<AbstractGrowthAtom> buffer;
+  private final Set<AbstractGrowthAtom> bufferL;
 
   public ModifiedBuffer() {
-    buffer = new ArrayList<>(8);
-    bufferL = new ArrayList<>(8);
+    buffer = new HashSet(8, 0.9f);
+    bufferL = new HashSet(8, 0.9f);
   }
 
   /**

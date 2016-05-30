@@ -72,9 +72,9 @@ public class AgTypesTable {
     // [Number of immobile neighbours][Number of mobile neighbours] = atom type
     //we don't differenciate here between A edge and B edge, this table is just for obtaining the atom type without orientation differences.
     tablePresent[0][0] = TERRACE;
-    tablePresent[0][1] = TERRACE; //nucleación!!, intocable, algoritmos óptimos de difustion pensados para que no cambie el tipo de los vecinos al difundirse
-    tablePresent[0][2] = TERRACE;
-    tablePresent[0][3] = TERRACE; //casos enfermizos
+    tablePresent[0][1] = CORNER; //nucleación!!, intocable, algoritmos óptimos de difustion pensados para que no cambie el tipo de los vecinos al difundirse
+    tablePresent[0][2] = EDGE;
+    tablePresent[0][3] = KINK; //casos enfermizos
     tablePresent[0][4] = ISLAND;
     tablePresent[0][5] = ISLAND;
     tablePresent[0][6] = ISLAND;
