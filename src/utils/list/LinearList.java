@@ -5,13 +5,7 @@ import basic.io.OutputType;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
-import static kineticMonteCarlo.atom.AgAtom.CORNER;
-import static kineticMonteCarlo.atom.AgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAtom.KINK;
-import static kineticMonteCarlo.atom.AgAtom.EDGE_A;
-import static kineticMonteCarlo.atom.AgAtom.EDGE_B;
-import kineticMonteCarlo.atom.AgAtom;
-import static kineticMonteCarlo.atom.AgAtom.TERRACE;
+import kineticMonteCarlo.atom.BasicGrowthAtom;
 import utils.StaticRandom;
 
 /**
@@ -30,15 +24,14 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private boolean doActivationEnergyStudy;
   private double[][] histogramPossible;
   private int[][] histogramPossibleCounter;
-  private int[][] histogramPossibleSimple;
-
+  
   public LinearList(Parser parser) {
     super();
     surface = new ArrayList();
     this.setLevel(-1);
     clean = false;
     Ri_DeltaI = 0.0;
-
+    
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     doActivationEnergyStudy = false;
     if (aeOutput) {
@@ -46,11 +39,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
         doActivationEnergyStudy = true;
         histogramPossible = new double[4][4];
         histogramPossibleCounter = new int[4][4];
-      }
-      if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
-        doActivationEnergyStudy = true;
-        histogramPossible = new double[7][7];
-        histogramPossibleCounter = new int[7][7];
       }
     }
   }
@@ -130,72 +118,36 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
     double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
 
-    addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
+    if (!doActivationEnergyStudy) { // normal case
+      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
+    }
+
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
     }
 
-    int[][] histograma = new int[7][7];
-    double[][] histograma2 = new double[7][7];
-    // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
-    for (int i = 0; i < surface.size(); i++) {
-      AgAtom atom = (AgAtom) surface.get(i);
-      for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
-        AgAtom neighbourAtom = atom.getNeighbour(pos);
-        if (!neighbourAtom.isPartOfImmobilSubstrate()) {
-          int myPositionForNeighbour = (pos + 3) % atom.getNumberOfNeighbours();
-          byte destination = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
-          destination = neighbourAtom.getRealType();
-          byte origin = atom.getRealType();
-          double prob = atom.probJumpToNeighbour(1, pos);
-          if (prob > 0) {
-            if ((origin == EDGE_A || origin == EDGE_B) && destination == CORNER) {
-              //byte originalDestination  = destination;
-              //AgAtom aheadAtom = a.aheadCornerAtom(pos);
-              //if (aheadAtom != null) {
-                //destination = aheadAtom.getRealType();
-                if (origin == EDGE_A) destination =EDGE_B;
-                if (origin == EDGE_B) destination =EDGE_A;
-              //}
-            } else {
-
-              int orientation = neighbourAtom.getOrientation(atom);
-              if ((destination == EDGE_A || destination == KINK) && (orientation & 1) != 0) {
-                destination += 3; //convert EDGE_A to EDGE_B or KINK_A to KINK_B
-              }
+    if (doActivationEnergyStudy) {
+      // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
+      for (int i = 0; i < surface.size(); i++) {
+        BasicGrowthAtom atom = (BasicGrowthAtom) surface.get(i);
+        for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
+          BasicGrowthAtom neighbourAtom = atom.getNeighbour(pos);
+          if (!neighbourAtom.isPartOfImmobilSubstrate()) {
+            int myPositionForNeighbour = (pos + 2) % atom.getNumberOfNeighbours();
+            byte destination = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
+            byte origin = atom.getRealType();
+            if (atom.probJumpToNeighbour(1, pos) > 0) {
+              histogramPossible[origin][destination] += 1 / getTotalProbability();
+              histogramPossibleCounter[origin][destination]++;
             }
-            /*if (origin == EDGE) {
-              System.out.print("From A");
-              byte newDest = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
-              System.out.println(" to "+newDest+"("+destination+") "+orientation);
-            }*/
-            histogramPossible[origin][destination] += 1/getTotalProbability();
-            histogramPossibleCounter[origin][destination]++;
-            histograma[origin][destination]++;
-            histograma2[origin][destination] += ((AgAtom) surface.get(0)).getProbability(origin, destination);
-            if (atom.getBondsProbability(pos) != ((AgAtom) surface.get(0)).getProbability(origin, destination)) {
-              System.out.println("error! origin "+origin +" dest. "+destination+" stored probability "+atom.getBondsProbability(pos) +" calculated probability "+ ((AgAtom) surface.get(0)).getProbability(origin, destination));// " id "+atom.getId());
-              int tmpType = atom.getRealType();
-            } else {
-              System.out.println("OK");
-            }
-          }
-        }       
+          }       
+        }
       }
-    }
-    
-    double tmpProbability = 0.0;
-    double histograma2suma = 0.0;
-    for (int i = 0; i < histograma.length; i++) {
-      for (int j = 0; j < histograma[0].length; j++) {
-        tmpProbability += histograma[i][j]*((AgAtom) surface.get(0)).getProbability(i, j);
-        histograma2suma += histograma2[i][j];
-      }
-    }
-    System.out.println("probability "+getTotalProbability()+" from list " + getTotalProbabilityFromList()+ " hist1 "+tmpProbability+" hist2 "+histograma2suma);
 
-    double time = 1 / (getTotalProbability());
-    Ri_DeltaI += getTotalProbability() * time;
+      double time = 1 / (getTotalProbability());
+      Ri_DeltaI += getTotalProbability() * time;
+      addTime(time);
+    }
     position -= getDepositionProbability();
     double currentProbability = 0;
 
@@ -238,11 +190,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
   public double getRi_DeltaI() {
     return Ri_DeltaI;
-  }
+  }  
   
   public double[][] getHistogramPossible() {
     return histogramPossible;
-}
+  }
   
   public int[][] getHistogramPossibleCounter() {
     return histogramPossibleCounter;

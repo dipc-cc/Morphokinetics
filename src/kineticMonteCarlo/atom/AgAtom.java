@@ -141,12 +141,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @return new type
    */
   public byte getNewType(int addToImmobile, int addToMobile) {
-    //return typesTable.getCurrentType(nImmobile + addToImmobile, nMobile + addToMobile);
-    if (this.isOccupied()) {
-      return typesTable.getCurrentType(nImmobile + addToImmobile, nMobile + addToMobile);
-    } else {
-      return typesTable.getFutureType(nImmobile + addToImmobile, nMobile + addToMobile);
-    }
+    return typesTable.getCurrentType(nImmobile + addToImmobile, nMobile + addToMobile);
   }
   
   /**
@@ -202,7 +197,6 @@ public class AgAtom extends AbstractGrowthAtom {
 
     if (atom != null) {
       type = getTypeWithoutNeighbour(neighbourPosition);
-      //type = typesTable.getFutureType(nImmobile, nMobile);
     }
           
     if (type == EDGE) { // can be either A or B
@@ -313,16 +307,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param cornerPosition position of the neighbour, from current atom
    * @return other type edge
    */
-  public AgAtom aheadCornerAtom(int cornerPosition) {
-  /*  AgAtom cornerAtom = neighbours[cornerPosition];
-    AgAtom returnAtom = null;
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      AgAtom neighbour = cornerAtom.neighbours[i];
-      if (!neighbour.isOccupied() && !neighbour.isPartOfImmobilSubstrate() && neighbour.getType() != TERRACE){
-       returnAtom = neighbour;
-      }
-    }
-    return returnAtom;*/
+  private AgAtom aheadCornerAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) { // B type edge
 
       switch (cornerPosition) {
@@ -479,7 +464,6 @@ public class AgAtom extends AbstractGrowthAtom {
 
     byte originType = getRealType();
     int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
-    //byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
 
     // the current atom is an edge and destination is a corner. 
@@ -508,15 +492,12 @@ public class AgAtom extends AbstractGrowthAtom {
 
     if (!neighbours[posNeighbour].isOccupied()) return getType(); // impossible to happen
 
-    return getType();
-    //return typesTable.getFutureType(nImmobile, nMobile);
-    /*
     if (neighbours[posNeighbour].getType() < KINK_A) {
       // current atom is mobile
-      return typesTable.getPresentType(nImmobile, nMobile - 1);
+      return typesTable.getCurrentType(nImmobile, nMobile - 1);
     } else {
       // current atom is immobile
-      return typesTable.getPresentType(nImmobile - 1, nMobile);
-    }*/
+      return typesTable.getCurrentType(nImmobile - 1, nMobile);
+    }
   }
 }
