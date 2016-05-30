@@ -1,5 +1,6 @@
 package kineticMonteCarlo.atom;
 
+import java.util.Arrays;
 import static kineticMonteCarlo.atom.AgAtom.CORNER;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.ISLAND;
@@ -28,9 +29,13 @@ public class AgTypesTable {
     try {
       type = tablePresent[immobile][mobile];
     } catch (ArrayIndexOutOfBoundsException exception) {
-      System.err.println("Catched error getting the type of Ag atom "+exception);
-      System.err.println("Trying to access "+immobile+" "+mobile);
-      type = TERRACE;
+      System.err.println("Catched error getting type of Ag atom " + exception);
+      System.err.println("Trying to access " + immobile + " " + mobile);
+      if (mobile < 0) {
+        type = tablePresent[immobile][0];
+      } else {
+        type = TERRACE;
+      }
     }
     return type;
   }
@@ -38,12 +43,16 @@ public class AgTypesTable {
   public byte getFutureType(int immobile, int mobile) {
     byte type;
     if (mobile == 0) {
-      throw new ArrayIndexOutOfBoundsException("No mobile neighbours (mobile == 0), which is in practice impossible");
+      //throw new ArrayIndexOutOfBoundsException("No mobile neighbours (mobile == 0), which is in practice impossible");
+    }
+    if (immobile + mobile > 6) {
+      throw new ArrayIndexOutOfBoundsException("The sum of mobile and immobile neighbours is >6, which is in practice impossible");
     }
     try {
       type = tableFuture[immobile][mobile];
     } catch (ArrayIndexOutOfBoundsException exception) {
-      System.err.println("Catched error getting the type of Ag atom " + exception);
+      System.err.println("Catched error getting future type of Ag atom " + exception);
+      System.err.println("" + Arrays.toString(exception.getStackTrace()));
       System.err.println("Trying to access " + immobile + " " + mobile);
       type = TERRACE;
     }
