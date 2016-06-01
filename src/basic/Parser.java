@@ -127,6 +127,9 @@ public class Parser {
   private int populationSize;
   private int offspringSize;
   private int populationReplacement;
+  /**
+   *  See {@link getTotalIterations()}.
+   */
   private int totalIterations;
   private int repetitions;
   private boolean readReference;
@@ -1028,6 +1031,10 @@ public class Parser {
     return populationReplacement;
   }
   
+  /**
+   * Total number of iterations that the evolutionary algorithm has to do.
+   * @return 
+   */
   public int getTotalIterations() {
     return totalIterations;
   }
