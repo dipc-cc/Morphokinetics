@@ -1,0 +1,13 @@
+{ "calculationMode": basic,
+  "temperature": 180,
+  "numberOfSimulations": 1,
+  "cartSizeX": 100,
+  "cartSizeY": 100,
+  "justCentralFlake": false,
+  "coverage": 10,
+  "outputData": true,
+  "outputDataFormat": [ {"type": "txt"},],
+  "randomSeed": false,
+  "depositionFlux": 3.5E-3,
+  "psdScale": 1,
+}
