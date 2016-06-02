@@ -24,8 +24,8 @@ import graphicInterfaces.growth.KmcCanvas;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import kineticMonteCarlo.kmcCore.growth.AgKmc;
-import kineticMonteCarlo.lattice.AgLattice;
+import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.AgRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
@@ -108,8 +108,8 @@ public class Morphokinetics {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    AgKmc myKmc = (AgKmc) ga.getKmc();
-    AgLattice myLattice = (AgLattice) myKmc.getLattice();
+    AbstractGrowthKmc myKmc = (AbstractGrowthKmc) ga.getKmc();
+    AbstractGrowthLattice myLattice = myKmc.getLattice();
     KmcCanvas myCanvas = new KmcCanvas(myLattice);
     MainInterface mainInterface = null;
     if (parser.withGui()) mainInterface = new MainInterface(myCanvas);
