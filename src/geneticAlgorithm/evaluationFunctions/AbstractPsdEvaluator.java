@@ -74,7 +74,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
     this.experimentalPsd = experimentalPsd;
     for (int i = 0; i < experimentalPsd.length; i++) {
       for (int j = 0; j < experimentalPsd[0].length; j++) {
-        this.experimentalPsd[i][j] = (float) Math.log(experimentalPsd[i][j]);        
+        this.experimentalPsd[i][j] = (float)Math.log(experimentalPsd[i][j]);        
       }
     }
     frobeniusNormOfMatrix = calculateFrobeniusNorm(experimentalPsd);
