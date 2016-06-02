@@ -883,4 +883,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       System.out.println();
     }
   }
+  
+  public void setTerraceToTerraceProbability(double terraceToTerraceProbability) {
+    this.terraceToTerraceProbability = terraceToTerraceProbability;
+  }
 }
