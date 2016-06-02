@@ -743,7 +743,7 @@ public class Parser {
     } </pre>
    * @return psdScale
    */
-  double getPsdScale() {
+  public double getPsdScale() {
     return psdScale;
   }
   
@@ -935,9 +935,9 @@ public class Parser {
   }
   
   /**
-   * Can be Si, Ag or graphene.
+   * Can be Si, Ag, AgUc, basic or graphene.
    *
-   * @return calculation mode. Either: "Si", "Ag", "AgUc" or "graphene"
+   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic" or "graphene"
    */
   public String getCalculationMode() {
     return calculationMode;
