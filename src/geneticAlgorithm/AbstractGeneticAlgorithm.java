@@ -114,7 +114,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         initialisation = new AgReduced6Initialisator();
         restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
         if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();
-        mainEvaluator = getAgMainEvaluator();
+        mainEvaluator = createMainEvaluator();
         break;
       case "Si":
         simulation = new SiSimulation(parser);
@@ -171,14 +171,15 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
    *
    * @return threaded or basic evaluator
    */
-  private AbstractPsdEvaluator getAgMainEvaluator() {
+  private AbstractPsdEvaluator createMainEvaluator() {
     AbstractPsdEvaluator evaluatorTmp;
-    int sizeX = parser.getCartSizeX() / 2;
-    int sizeY = parser.getCartSizeY() / 2;
+    int sizeX = (int) (parser.getCartSizeX() * parser.getPsdScale());
+    int sizeY = (int) (parser.getCartSizeY() * parser.getPsdScale());
     if (parser.isEvaluatorParallel()) {
       evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
     } else {
       evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType(), parser.getTemperature());
+    }
     }
 
     evaluatorTmp.setWheight(1.0f);
