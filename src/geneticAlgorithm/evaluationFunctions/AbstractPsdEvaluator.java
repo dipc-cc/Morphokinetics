@@ -83,7 +83,7 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
   }
   
   public void setExpectedSimulationTime(double expectedSimulationTime) {
-    expectedSimulationTime = Math.log(expectedSimulationTime);
+    this.expectedSimulationTime = Math.log(expectedSimulationTime);
   }
   
   /**
