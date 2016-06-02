@@ -52,7 +52,7 @@ public class MainInterface extends JFrame {
 
   private JLabel statusbar;
   private JPanel mainPanel;
-  private SurfaceViewerPanel2D experimentalPanel2d;
+  private SurfaceViewerPanel2D experimentalPsdPanel2d;
   private SurfaceViewerPanel2D simulationPanel2d;
   private SurfaceViewerPanel2D diffPanel2d;
   private SurfaceViewerPanel2D surfacePanel2d;
@@ -92,8 +92,8 @@ public class MainInterface extends JFrame {
   private void createMainJPanel() {
     mainPanel = new JPanel();
     
-    experimentalPanel2d = new SurfaceViewerPanel2D("Experimental");
-    experimentalPanel2d.setLogScale(true)
+    experimentalPsdPanel2d = new SurfaceViewerPanel2D("Experimental PSD");
+    experimentalPsdPanel2d.setLogScale(true)
             .setShift(true);
     simulationPanel2d = new SurfaceViewerPanel2D("Simulation");
     simulationPanel2d.setLogScale(true)
@@ -111,7 +111,7 @@ public class MainInterface extends JFrame {
     JPanel psdPanel = new JPanel();
     JPanel psdNorth = new JPanel();
     JPanel psdSouth = new JPanel();
-    psdNorth.add(experimentalPanel2d);
+    psdNorth.add(experimentalPsdPanel2d);
     psdNorth.add(simulationPanel2d);
     psdSouth.add(diffPanel2d);
     psdSouth.add(surfacePanel2d);
@@ -130,9 +130,9 @@ public class MainInterface extends JFrame {
   }
   
   public void setExperimentalMesh(float[][] mesh){
-    experimentalPanel2d.setMesh(mesh);
-    simulationPanel2d.setMin(experimentalPanel2d.getMin())
-            .setMax(experimentalPanel2d.getMax());
+    experimentalPsdPanel2d.setMesh(mesh);
+    simulationPanel2d.setMin(experimentalPsdPanel2d.getMin())
+            .setMax(experimentalPsdPanel2d.getMax());
   }
   
   public void setSimulationMesh(float[][] mesh) {
@@ -252,12 +252,12 @@ public class MainInterface extends JFrame {
       public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           simulationPanel2d.setColorMap(COLOR_HSV);
-          experimentalPanel2d.setColorMap(COLOR_HSV);
+          experimentalPsdPanel2d.setColorMap(COLOR_HSV);
           surfacePanel2d.setColorMap(COLOR_HSV);
           diffPanel2d.setColorMap(COLOR_HSV);
         } else {
           simulationPanel2d.setColorMap(COLOR_BW);
-          experimentalPanel2d.setColorMap(COLOR_BW);
+          experimentalPsdPanel2d.setColorMap(COLOR_BW);
           surfacePanel2d.setColorMap(COLOR_BW);
           diffPanel2d.setColorMap(COLOR_BW);
         }
@@ -269,12 +269,12 @@ public class MainInterface extends JFrame {
       public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           simulationPanel2d.setShift(true);
-          experimentalPanel2d.setShift(true);
+          experimentalPsdPanel2d.setShift(true);
           surfacePanel2d.setShift(true);
           diffPanel2d.setShift(true);
         } else {
           simulationPanel2d.setShift(false);
-          experimentalPanel2d.setShift(false);
+          experimentalPsdPanel2d.setShift(false);
           surfacePanel2d.setShift(false);
           diffPanel2d.setShift(false);
         }
@@ -286,12 +286,12 @@ public class MainInterface extends JFrame {
       public void itemStateChanged(ItemEvent e) {
         if (e.getStateChange() == ItemEvent.SELECTED) {
           simulationPanel2d.setLogScale(true);
-          experimentalPanel2d.setLogScale(true);
+          experimentalPsdPanel2d.setLogScale(true);
           surfacePanel2d.setLogScale(true);
           diffPanel2d.setLogScale(true);
         } else {
           simulationPanel2d.setLogScale(false);
-          experimentalPanel2d.setLogScale(false);
+          experimentalPsdPanel2d.setLogScale(false);
           surfacePanel2d.setLogScale(false);
           diffPanel2d.setLogScale(false);
         }
