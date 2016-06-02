@@ -74,7 +74,7 @@ public abstract class AbstractSimulation {
     restart = new Restart(restartFolderName);
 
     surfaceSizes = new int[2];
-    //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
+    // More precise (more points) the PSD better precision we get
     surfaceSizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
     surfaceSizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
     extentSizes = new int[2];
