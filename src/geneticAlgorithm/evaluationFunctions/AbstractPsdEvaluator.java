@@ -107,11 +107,14 @@ public abstract class AbstractPsdEvaluator extends AbstractEvaluator {
 
   public abstract float[][] calculatePsdFromIndividual(Individual i);
   
+  abstract public void setHierarchy(double[] genes);
+
   protected abstract double calculateHierarchyError(Individual i);
-  
+
   protected abstract double calculateHierarchyErrorFromReference(Individual i);
+
   protected abstract double calculateHierarchyErrorDiscrete(Individual ind);
-  
+
   public double calculateFrobeniusNormErrorMatrix(float[][] currentPsd) {
     double FrobeniusError;
     double sum = 0.0f;
