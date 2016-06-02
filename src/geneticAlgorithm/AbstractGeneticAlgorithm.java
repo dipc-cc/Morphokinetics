@@ -6,17 +6,20 @@ package geneticAlgorithm;
 
 import basic.AbstractSimulation;
 import basic.AgSimulation;
+import basic.BasicGrowthSimulation;
 import basic.Parser;
 import basic.SiSimulation;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgThreadedPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.BasicEvaluator;
+import geneticAlgorithm.evaluationFunctions.BasicGrowthPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.IEvaluation;
 import geneticAlgorithm.evaluationFunctions.SiBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.mutation.IMutation;
 import geneticAlgorithm.populationInitialisation.AgReduced6Initialisator;
+import geneticAlgorithm.populationInitialisation.BasicGrowthInitialisator;
 import geneticAlgorithm.populationInitialisation.IInitialisator;
 import geneticAlgorithm.populationInitialisation.SiInitialisator;
 import geneticAlgorithm.recombination.IRecombination;
@@ -25,13 +28,16 @@ import geneticAlgorithm.restrictions.RestrictionOperator;
 import geneticAlgorithm.restrictions.SiRestriction;
 import graphicInterfaces.MainInterface;
 import geneticAlgorithm.restrictions.AgReduced6Restriction;
+import geneticAlgorithm.restrictions.BasicGrowthRestriction;
 import geneticAlgorithm.selection.ISelection;
 import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
+import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.AgRatesFactory;
+import ratesLibrary.BasicGrowthRatesFactory;
 import utils.akting.operations.OperationFactory;
 
 /**
@@ -104,6 +110,15 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     expDistribution = parser.isExpDistribution();
     
     switch (parser.getCalculationMode()) {
+      case "basic":
+        simulation = new BasicGrowthSimulation(parser);
+        simulation.initialiseKmc();
+        depositionRatePerSite = new BasicGrowthRatesFactory().getDepositionRatePerSite();
+        islandDensity = new BasicGrowthRatesFactory().getIslandDensity(parser.getTemperature());
+        simulation.getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
+        initialisation = new BasicGrowthInitialisator();
+        restriction = new BasicGrowthRestriction(dimensions, 1e-6, 1e9, parser.isEnergySearch());
+        break;
       case "Ag":
         simulation = new AgSimulation(parser);
         simulation.initialiseKmc();
@@ -175,6 +190,9 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     int sizeY = (int) (parser.getCartSizeY() * parser.getPsdScale());
     
     switch (parser.getCalculationMode()) {
+      case "basic":
+        evaluatorTmp = new BasicGrowthPsdEvaluator((BasicGrowthKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType(), parser.getTemperature());
+        break;
       case "Ag":
         if (parser.isEvaluatorParallel()) {
           evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
@@ -247,7 +265,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     boolean cond2 = recombination.isDtooLarge();
     if (cond1 || cond2) {
       System.out.println("Exiting for an unknown reason " + cond1 + " " + cond2);
-      return true;
+      return false;
     }
     return false;
   }    

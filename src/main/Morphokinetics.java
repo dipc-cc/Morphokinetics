@@ -27,6 +27,7 @@ import java.util.Date;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.AgRatesFactory;
+import ratesLibrary.BasicGrowthRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
 import utils.Wait;
@@ -180,6 +181,10 @@ public class Morphokinetics {
     double[] energies = null;
     double[] genes = null;
     switch (parser.getCalculationMode()) {
+      case "basic":
+        rates = new BasicGrowthRatesFactory().getReduced5Rates(parser.getTemperature());
+        energies = new BasicGrowthRatesFactory().getReduced5Energies();
+        break;
       case "Ag":
         //rates = new AgRatesFactory().getRates(parser.getTemperature());
         rates = new AgRatesFactory().getReduced6Rates(parser.getTemperature());
