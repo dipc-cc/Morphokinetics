@@ -173,7 +173,6 @@ public class Morphokinetics {
   }
   
   private static float[][] createExperimentalData(Parser parser, AbstractGeneticAlgorithm ga) {
-    
     AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
     evaluator.setRepeats(50);
     
