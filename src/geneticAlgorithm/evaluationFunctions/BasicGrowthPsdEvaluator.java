@@ -57,8 +57,8 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
   public float[][] calculatePsdFromIndividual(Individual ind) {
     psd.reset();
     double time = 0.0;
-    int avgSteps= 0;
-    String folderName = "gaResults/population"+getCurrentIteration()+"/individual"+getIndividualCount();
+    int avgSteps = 0;
+    String folderName = "gaResults/population" + getCurrentIteration() + "/individual" + getIndividualCount();
     Restart restart = new Restart(folderName);
     psd.setRestart(restart);
     kmc.initialiseRates(getRates5(ind.getGenes()));
@@ -95,8 +95,8 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
     }
     simulationCount = getRepeats() - 1;
     avgSteps = (avgSteps / getRepeats());
-    System.out.println("Average number of steps "+avgSteps);
- 
+    System.out.println("Average number of steps " + avgSteps);
+
     ind.setSimulationTime(time / getRepeats());
     psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
     psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
