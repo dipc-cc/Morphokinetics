@@ -90,7 +90,6 @@ public class SurfaceViewerPanel2D extends JPanel {
   }
 
   public SurfaceViewerPanel2D setMin(double min) {
-    
     String minString = formatter.format(min);
     minTextField.setText(minString);
     jTextField1ActionPerformed();
