@@ -114,21 +114,19 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         initialisation = new AgReduced6Initialisator();
         restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
         if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();
-        mainEvaluator = createMainEvaluator();
         break;
       case "Si":
         simulation = new SiSimulation(parser);
         simulation.initialiseKmc();
         initialisation = new SiInitialisator();
         restriction = new SiRestriction();
-        mainEvaluator = getSiMainEvaluators();
         break;
       default:
         System.err.println("This calculation mode is not implemented for evolutionary algorithm");
         System.err.println("Current calculation mode is " + parser.getCalculationMode());
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-
+    mainEvaluator = createMainEvaluator();
   }
   
   @Override
@@ -175,25 +173,26 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
     AbstractPsdEvaluator evaluatorTmp;
     int sizeX = (int) (parser.getCartSizeX() * parser.getPsdScale());
     int sizeY = (int) (parser.getCartSizeY() * parser.getPsdScale());
-    if (parser.isEvaluatorParallel()) {
-      evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
-    } else {
-      evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType(), parser.getTemperature());
-    }
-
-    evaluatorTmp.setWheight(1.0f);
-    evaluatorTmp.setShowGraphics(true);
-
-    return evaluatorTmp;
-  }
     
-  private AbstractPsdEvaluator getSiMainEvaluators() {
-    AbstractPsdEvaluator evaluatorTmp;
-    configureSiKmc();
-    if (parser.isEvaluatorParallel()) {
-      evaluatorTmp = new SiThreadedPsdEvaluator(parser, 10000, 8);
-    } else {
-      evaluatorTmp = new SiBasicPsdEvaluator(parser, 1000);
+    switch (parser.getCalculationMode()) {
+      case "Ag":
+        if (parser.isEvaluatorParallel()) {
+          evaluatorTmp = new AgThreadedPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, 2, sizeX, sizeY, parser.getEvaluatorTypes());
+        } else {
+          evaluatorTmp = new AgBasicPsdEvaluator((AgKmc) simulation.getKmc(), parser.getRepetitions(), Integer.MAX_VALUE, sizeX, sizeY, parser.getEvaluatorTypes(), parser.getHierarchyEvaluator(), parser.getEvolutionarySearchType(), parser.getTemperature());
+        }
+        break;
+      case "Si":
+        configureSiKmc(); // to be changed => directly select these parameters from the parser
+        if (parser.isEvaluatorParallel()) {
+          evaluatorTmp = new SiThreadedPsdEvaluator(parser, 10000, 8);
+        } else {
+          evaluatorTmp = new SiBasicPsdEvaluator(parser, 1000);
+        }
+        break;
+      default:
+        evaluatorTmp = null;// no error handling here. It is called from AbstractGeneticAlgorithm, where is checked that the calculation mode is correct.
+        break;
     }
 
     evaluatorTmp.setWheight(1.0f);
