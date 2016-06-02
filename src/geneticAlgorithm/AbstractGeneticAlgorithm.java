@@ -338,7 +338,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   }
     
   public void setHierarchy(double[] rates) {
-    ((AgBasicPsdEvaluator) mainEvaluator).setHierarchy(rates);
+    mainEvaluator.setHierarchy(rates);
   }
 
   protected double getStopError() {
