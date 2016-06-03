@@ -104,12 +104,11 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
     return 2e-3; //180 degrees Kelvin
   }
 
-
   @Override
   public double getEnergy(int i, int j) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return energies[i][j];
   }
-  
+
   /**
    * Diffusion Mono Layer (F). Utilised to calculate absorption rate. By default it F=0.000035 ML/s.
    * The perimeter deposition is calculated multiplying F (this) and island density.

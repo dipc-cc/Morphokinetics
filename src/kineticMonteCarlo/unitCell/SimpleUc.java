@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import java.awt.geom.Point2D;
+import basic.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /**
@@ -68,7 +68,7 @@ public class SimpleUc extends AbstractUc {
    *
    * @return size in X
    */
-  public static float getSizeX() {
+  public float getSizeX() {
     return SIZE_X;
   }
 
@@ -77,7 +77,7 @@ public class SimpleUc extends AbstractUc {
    *
    * @return size in Y
    */
-  public static float getSizeY() {
+  public float getSizeY() {
     return SIZE_Y;
   }
 

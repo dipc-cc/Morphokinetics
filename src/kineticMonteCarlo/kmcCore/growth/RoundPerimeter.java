@@ -76,7 +76,11 @@ public class RoundPerimeter {
   public void setCurrentPerimeter(List<AbstractGrowthAtom> perimeter) {
     currentPerimeter = perimeter;
     currentPerimeterTreeMap = new TreeMap<>();
-    perimeter.stream().forEach(atom -> currentPerimeterTreeMap.put(atom.getId(), atom));
+    for (int i = 0; i < perimeter.size() ; i++) {
+      AbstractGrowthAtom atom = perimeter.get(i);
+      currentPerimeterTreeMap.put(atom.getId(), atom);
+    }
+    //*// perimeter.stream().forEach(atom -> currentPerimeterTreeMap.put(atom.getId(), atom));
   }
   
   public boolean contains(AbstractGrowthAtom atom) {

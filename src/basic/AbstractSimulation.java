@@ -7,7 +7,6 @@ package basic;
 
 import basic.io.OutputType.formatFlag;
 import basic.io.Restart;
-import graphicInterfaces.surfaceViewer2D.Frame2D;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -74,7 +73,7 @@ public abstract class AbstractSimulation {
     restart = new Restart(restartFolderName);
 
     surfaceSizes = new int[2];
-    //it is a good idea to divide the sample surface dimensions by two (e.g. 256->128)
+    // More precise (more points) the PSD better precision we get
     surfaceSizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
     surfaceSizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
     extentSizes = new int[2];
@@ -125,18 +124,6 @@ public abstract class AbstractSimulation {
         psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
       }
       if (parser.visualise()) {
-        Frame2D psdFrame = new Frame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
-        psdFrame.setLogScale(true)
-                .setShift(true);                
-        psdFrame.setVisible(true);
-        psdFrame.toBack();
-        psdFrame.printToImage(restartFolderName, 1);
-
-        Frame2D surfaceFrame = new Frame2D("Sampled surface");
-        surfaceFrame.setMesh(sampledSurface);
-        surfaceFrame.setVisible(true);
-        surfaceFrame.toBack();
-        surfaceFrame.printToImage(restartFolderName, 2);
       }
       psd.printAvgToFile();
     }
@@ -181,12 +168,12 @@ public abstract class AbstractSimulation {
     Date date = new Date();
     System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48
     java.net.InetAddress localMachine;
-    try {
+    /*try {
       localMachine = java.net.InetAddress.getLocalHost();
       System.out.println(" in " + localMachine.getHostName());
     } catch (UnknownHostException ex) {
       Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
-    }
+    }*/
   }
 
   public static void printHeader(String message) {
@@ -234,17 +221,20 @@ public abstract class AbstractSimulation {
     System.out.println("");
   }
 
-  private void printFooter() {
-    System.out.println("\n\t__________________________________________________");
-    System.out.println("\tAverage");
-    System.out.println("\tSimulation time\t\tCoverage\tCPU time\tIsland avg.");
-    System.out.println("\t(units)\t\t\t (%)\t\t (ms/s/min)");
-    System.out.println("\t__________________________________________________");
-    System.out.print("\t" + totalTime / parser.getNumberOfSimulations());
-    System.out.print("\t" + coverage / parser.getNumberOfSimulations());
+  public String printFooter() {
+    String kmcResult = "";
+    kmcResult += "\tAverage\n";
+    kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIslands\n";
+    kmcResult += "\t(units)\t\t\t (%)\t\t (ms/s/min)\n";
+    kmcResult += "\t_____________________________________________\n";
+    kmcResult += "\t" + totalTime / parser.getNumberOfSimulations();
+    kmcResult += "\t" + coverage / parser.getNumberOfSimulations();
     long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
-    System.out.print("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60);
-    System.out.println("\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations()));
+    kmcResult += "\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60;
+    kmcResult += "\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations());
+
+    System.out.println(kmcResult);
+    return kmcResult;
   }
 
   /**

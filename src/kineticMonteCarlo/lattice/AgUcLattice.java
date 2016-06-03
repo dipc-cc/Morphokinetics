@@ -6,7 +6,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.unitCell.AgUc;
-import java.awt.geom.Point2D;
+import basic.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -65,8 +65,8 @@ public class AgUcLattice extends AgLattice {
    */
   private void createAtoms() {
     
-    sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
-    sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
+    sizeI = Math.round(getCartSizeX() / 1);
+    sizeJ = Math.round(getCartSizeY() / 2 * AbstractGrowthLattice.Y_RATIO);
     // Initialise unit cells (with atoms)
     ucArray = new AgUc[sizeI][sizeJ];
     int id = -1;

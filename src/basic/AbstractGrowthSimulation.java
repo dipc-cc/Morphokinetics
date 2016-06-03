@@ -6,8 +6,6 @@
 package basic;
 
 import basic.io.OutputType.formatFlag;
-import graphicInterfaces.growth.GrowthKmcFrame;
-import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.IRatesFactory;
 
@@ -17,7 +15,6 @@ import ratesLibrary.IRatesFactory;
  */
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
-  private GrowthKmcFrame frame;
   private double previousCoverage;
   private final double printEvery;
   private int savedImages;
@@ -46,14 +43,12 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   public void createFrame() {
     if (getParser().withGui()) {
       try {
-        frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()));
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
         System.err.println("Finishing");
         throw e;
       }
       if (getParser().visualise()) {
-        frame.setVisible(true);
         paintLoop p = new paintLoop();
         p.start();
       }
@@ -74,7 +69,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    */
   @Override
   protected void printToImage(int i) {
-    frame.printToImage(i);
+
   }
   
   /**
@@ -84,7 +79,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    */
   @Override
   protected void printToImage(String folderName, int i) {
-    frame.printToImage(folderName, i);
     // reset saved images for current simulation
     savedImages = 1;
   }
@@ -97,13 +91,11 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     @Override
     public void run() {
       while (true) {
-        frame.repaintKmc();
         try {
           paintLoop.sleep(100);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
           if (printIntermediatePngFiles &&
                   previousCoverage < (printEvery * savedImages) && getKmc().getCoverage() > (printEvery * savedImages)) {
-            frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
             savedImages++;
             totalSavedImages++;
           }

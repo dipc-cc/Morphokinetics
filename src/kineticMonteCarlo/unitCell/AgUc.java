@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import java.awt.geom.Point2D;
+import basic.Point2D;
 import java.util.List;
 import kineticMonteCarlo.atom.AgAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
@@ -53,7 +53,7 @@ public class AgUc extends AbstractUc {
    * Cartesian size of the unit cell in X axis
    * @return size in X
    */
-  public static float getSizeX() {
+  public float getSizeX() {
     return SIZE_X;
   }
 
@@ -61,7 +61,7 @@ public class AgUc extends AbstractUc {
    * Cartesian size of the unit cell in Y axis
    * @return size in Y
    */
-  public static float getSizeY() {
+  public float getSizeY() {
     return SIZE_Y;
   }
 

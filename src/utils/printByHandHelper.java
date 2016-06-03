@@ -5,8 +5,6 @@
  */
 package utils;
 
-import graphicInterfaces.growth.GrowthKmcFrame;
-import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AgUcLattice;
 
@@ -16,7 +14,6 @@ import kineticMonteCarlo.lattice.AgUcLattice;
  */
 public class printByHandHelper {
 
-  private final GrowthKmcFrame frame;
   private final paintLoop p;
 
   public printByHandHelper() {
@@ -24,9 +21,6 @@ public class printByHandHelper {
     ModifiedBuffer modified = new ModifiedBuffer();
     AgUcLattice lattice = new AgUcLattice(30, 13, modified, null);
     lattice.init();
-    KmcCanvas canvas = new KmcCanvas(lattice);
-    frame = new GrowthKmcFrame(canvas);
-    frame.setVisible(true);
     p = new paintLoop();
   }
 
@@ -41,7 +35,6 @@ public class printByHandHelper {
     @Override
     public void run() {
       while (true) {
-        frame.repaintKmc();
         try {
           paintLoop.sleep(100);
         } catch (Exception e) {

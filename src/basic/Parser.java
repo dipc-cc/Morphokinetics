@@ -7,14 +7,12 @@ package basic;
 
 import basic.io.OutputType;
 import basic.io.OutputType.formatFlag;
-import geneticAlgorithm.evaluationFunctions.EvaluatorType;
-import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+//import java.nio.file.Files;
+//import java.nio.file.Path;
+//import java.nio.file.Paths;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
@@ -127,6 +125,9 @@ public class Parser {
   private int populationSize;
   private int offspringSize;
   private int populationReplacement;
+  /**
+   *  See {@link getTotalIterations()}.
+   */
   private int totalIterations;
   private int repetitions;
   private boolean readReference;
@@ -139,10 +140,6 @@ public class Parser {
    * (false).
    */
   private boolean expDistribution;
-  /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
-   * and HIERARCHY.
-   */
-  private final EvaluatorType evaluatorType;
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among
    * PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the
    * evaluators) has to be chosen.
@@ -175,10 +172,10 @@ public class Parser {
     psdScale = 0.5;
     psdExtend = 1;
     endTime = -1;
-    numberOfSimulations = 10;
-    cartSizeX = 256;
-    cartSizeY = 256;
-    cartSizeZ = 256;
+    numberOfSimulations = 3;
+    cartSizeX = 50;
+    cartSizeY = 50;
+    cartSizeZ = 25;
     millerX = 0;
     millerY = 1;
     millerZ = 1;
@@ -187,7 +184,7 @@ public class Parser {
     multithreaded = true;
     visualise = true;
     withGui = true;
-    justCentralFlake = true;
+    justCentralFlake = false;
     printToImage = false;
     psd = false;
     psdSymmetry = true;
@@ -210,7 +207,7 @@ public class Parser {
     minValueGene = 0.1;
     maxValueGene = 1e11;
     expDistribution = true;
-    evaluatorType = new EvaluatorType();
+    //*//evaluatorType = new EvaluatorType();
     numericStatusCode = 3;
     hierarchyEvaluator = "basic";
     evolutionarySearchType = "rates";
@@ -224,7 +221,7 @@ public class Parser {
    * @param filename
    * @return 0 if success, negative otherwise
    */
-  public int readFile(String filename) {
+  public int readFile(String filename) throws JSONException {
     List<String> readList = null;
     try {
       //read the parameters file
@@ -548,14 +545,15 @@ public class Parser {
   }
 
   private List<String> readSmallTextFile(String aFileName) throws IOException {
-    Path path = Paths.get(aFileName);
-    return Files.readAllLines(path, ENCODING);
+    //Path path = Paths.get(aFileName);
+    //return Files.readAllLines(path, ENCODING);
+      return null;
   }
 
   /**
    * Prints all the parameters; either read from "parameter" file or the default value.
    */
-  public void print() {
+  public void print() throws JSONException {
     System.out.printf("%32s: %s,\n", "\"calculationType\"", calculationType);
     System.out.printf("%32s: %s,\n", "\"islandDensityType\"", islandDensityType);
     System.out.printf("%32s: %s,\n", "\"justCentralFlake\"", justCentralFlake);
@@ -592,7 +590,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
-      
+
       for (int i = 0; i < outputDataFormat.length(); i++) {
         JSONObject currentFormat = outputDataFormat.getJSONObject(i);
         System.out.printf(" {%s: \"%s\"},", "\"type\"", currentFormat.getString("type"));
@@ -740,7 +738,7 @@ public class Parser {
     } </pre>
    * @return psdScale
    */
-  double getPsdScale() {
+  public double getPsdScale() {
     return psdScale;
   }
   
@@ -932,9 +930,9 @@ public class Parser {
   }
   
   /**
-   * Can be Si, Ag or graphene.
+   * Can be Si, Ag, AgUc, basic or graphene.
    *
-   * @return calculation mode. Either: "Si", "Ag", "AgUc" or "graphene"
+   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic" or "graphene"
    */
   public String getCalculationMode() {
     return calculationMode;
@@ -1028,6 +1026,10 @@ public class Parser {
     return populationReplacement;
   }
   
+  /**
+   * Total number of iterations that the evolutionary algorithm has to do.
+   * @return 
+   */
   public int getTotalIterations() {
     return totalIterations;
   }
@@ -1096,16 +1098,6 @@ public class Parser {
    */
   public boolean isExpDistribution() {
     return expDistribution;
-  } 
-  
-  /**
-   * To have the possibility to choose between different evaluators in genetic algorithm runs. For
-   * the moment only PSD, TIME and HIERARCHY.
-   *
-   * @return evaluator type. Either: PSD, TIME and HIERARCHY.
-   */
-  public EnumSet<evaluatorFlag> getEvaluatorTypes() {
-    return evaluatorType.getStatusFlags(numericStatusCode);
   }
   
   /**

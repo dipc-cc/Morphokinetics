@@ -7,7 +7,7 @@ package kineticMonteCarlo.lattice;
 import kineticMonteCarlo.unitCell.SimpleUc;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import java.awt.geom.Point2D;
+import basic.Point2D;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
@@ -107,7 +107,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   public IUc getUc(int pos) {
-    int j = Math.floorDiv(pos, getHexaSizeI());
+    int j = Math.round(pos / getHexaSizeI());
     int i = pos - (j * getHexaSizeI());
 
     return ucArray[i][j];

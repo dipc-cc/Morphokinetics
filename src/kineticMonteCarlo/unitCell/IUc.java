@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import java.awt.geom.Point2D;
+import basic.Point2D;
 import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
@@ -33,17 +33,13 @@ public interface IUc {
    * Cartesian size of the unit cell in X axis
    * @return size in X
    */
-  public static float getSizeX() {
-    return SIZE_X;
-  }
+  public float getSizeX();
 
   /**
    * Cartesian size of the unit cell in Y axis
    * @return size in Y
    */
-  public static float getSizeY() {
-    return SIZE_Y;
-  }
+  public float getSizeY();
 
   public int getPosI();
   public int getPosJ();

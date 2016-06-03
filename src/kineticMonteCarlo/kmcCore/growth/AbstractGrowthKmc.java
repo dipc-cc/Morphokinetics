@@ -10,7 +10,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import java.awt.geom.Point2D;
+import basic.Point2D;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -459,27 +459,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
     countIslands(false);
     deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", true)))) {
-      out.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-              + getList().getTotalProbabilityFromList() + " "
-              + getIslandCount());
-    } catch (IOException e) {
-      //Do nothing, it doesn't matter if fails
-    }
     previousTime = getTime();
     deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", true)))) {
-      out.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-              + +getList().getTotalProbabilityFromList());
-    } catch (IOException e) {
-      //Do nothing, it doesn't matter if fails
-    }
   }
 
   private AbstractGrowthAtom depositNewAtom() {
@@ -492,7 +473,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
-        int ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
+        int ucIndex = Math.round(random / lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
         destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);
       } while (!depositAtom(destinationAtom));
@@ -882,5 +863,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
       System.out.println();
     }
+  }
+  
+  public void setTerraceToTerraceProbability(double terraceToTerraceProbability) {
+    this.terraceToTerraceProbability = terraceToTerraceProbability;
   }
 }

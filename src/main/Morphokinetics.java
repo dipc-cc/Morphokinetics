@@ -5,6 +5,8 @@
  */
 package main;
 
+import org.json.JSONException;
+
 import basic.AgUcSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
@@ -13,20 +15,13 @@ import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
 import basic.io.Restart;
-import geneticAlgorithm.GeneticAlgorithm;
-import geneticAlgorithm.AbstractGeneticAlgorithm;
-import geneticAlgorithm.GeneticAlgorithmDcmaEs;
-import geneticAlgorithm.IGeneticAlgorithm;
-import geneticAlgorithm.Individual;
-import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
-import graphicInterfaces.MainInterface;
-import graphicInterfaces.growth.KmcCanvas;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import kineticMonteCarlo.kmcCore.growth.AgKmc;
-import kineticMonteCarlo.lattice.AgLattice;
+import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.AgRatesFactory;
+import ratesLibrary.BasicGrowthRatesFactory;
 import ratesLibrary.SiRatesFactory;
 import utils.MathUtils;
 import utils.Wait;
@@ -40,7 +35,7 @@ public class Morphokinetics {
 
   private static double simulationTime;
   
-  public static void main(String[] args) {
+  public static void main(String[] args) throws JSONException {
     AbstractSimulation.printHeader();
 
     Parser parser = new Parser();
@@ -50,9 +45,6 @@ public class Morphokinetics {
     switch (parser.getCalculationType()) {
       case "batch":
         batchSimulation(parser);
-        break;
-      case "evolutionary":
-        evoluationarySimulation(parser);
         break;
       default:
         System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
@@ -93,50 +85,6 @@ public class Morphokinetics {
     simulation.finishSimulation();
   }
 
-  private static void evoluationarySimulation(Parser parser) {
-    AbstractGeneticAlgorithm ga;
-    switch (parser.getEvolutionaryAlgorithm()) {
-      case "original":
-        ga = new GeneticAlgorithm(parser);
-        break;
-      case "dcma":
-        ga = new GeneticAlgorithmDcmaEs(parser);
-        break;
-      default:
-        System.err.println("Error: Default evolutionary algorithm. This evolutionary algorithm is not implemented!");
-        System.err.println("Current value: "+parser.getEvolutionaryAlgorithm());
-        throw new IllegalArgumentException("This simulation mode is not implemented");
-    }
-
-    AgKmc myKmc = (AgKmc) ga.getKmc();
-    AgLattice myLattice = (AgLattice) myKmc.getLattice();
-    KmcCanvas myCanvas = new KmcCanvas(myLattice);
-    MainInterface mainInterface = null;
-    if (parser.withGui()) mainInterface = new MainInterface(myCanvas);
-    if (parser.withGui() && parser.visualise()) {
-      mainInterface.setVisible(true);
-      ga.setMainInterface(mainInterface);
-    }
-    float[][] experimentalPsd;
-    if (parser.getReadReference())
-      experimentalPsd = readExperimentalData();
-    else {
-      experimentalPsd = createExperimentalData(parser, ga);
-      ga.setExpectedSimulationTime(simulationTime);
-    }
-    
-    if (parser.withGui() && parser.visualise()) {
-      Wait.manyMilliSec(250);
-      mainInterface.setExperimentalMesh(experimentalPsd);
-      Wait.manyMilliSec(250);
-    }
-    ga.setExperimentalPsd(experimentalPsd);
-    ga.initialise();
-    
-    ga.iterate();
-    printResult(parser, ga);
-    if (parser.withGui() && parser.visualise()) mainInterface.setStatusBar("Finished");
-  }
   
   private static float[][] readExperimentalData() {
     Restart restart = new Restart();
@@ -169,73 +117,6 @@ public class Morphokinetics {
 
     psd.printAvgToFile();
     return psd.getPsd();
-  }
-  
-  private static float[][] createExperimentalData(Parser parser, AbstractGeneticAlgorithm ga) {
-    
-    AbstractPsdEvaluator evaluator = ga.getMainEvaluator();
-    evaluator.setRepeats(50);
-    
-    double[] rates = null;
-    double[] energies = null;
-    double[] genes = null;
-    switch (parser.getCalculationMode()) {
-      case "Ag":
-        //rates = new AgRatesFactory().getRates(parser.getTemperature());
-        rates = new AgRatesFactory().getReduced6Rates(parser.getTemperature());
-        energies = new AgRatesFactory().getReduced6Energies();
-        break;
-      case "Si":
-        rates = new SiRatesFactory().getRates(parser.getTemperature());
-        break;
-      default:
-        System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
-        System.err.println("Current value: "+parser.getCalculationMode());
-        throw new IllegalArgumentException("This simulation mode is not implemented");
-    }
-    Individual individual;
-    switch (parser.getEvolutionarySearchType()) {
-      case "rates" :
-        genes = rates;
-        ga.setHierarchy(rates);
-        individual = new Individual(rates);
-        break;
-      case "energies" :
-        genes = energies;
-        ga.setHierarchy(energies);
-        individual = new Individual(energies);
-        break;
-      default :
-        individual = null;
-    }
-    float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
-    simulationTime = individual.getSimulationTime();
-    System.out.println("Experimental (objective) simulation time " + simulationTime);
-    System.out.print("Experimental (objective) genes");
-    for (int i = 0; i < genes.length; i++) {
-      System.out.print(" " + genes[i]);;
-    }
-    System.out.println(" ");
-    evaluator.setRepeats(parser.getRepetitions());
-    return experimentalPsd;
-  }
-  
-  private static void printResult(Parser parser, IGeneticAlgorithm ga) {
-    Individual individual = ga.getIndividual(0);
-    
-    System.out.println("These are the results: ");
-    System.out.println("Total error is:" + individual.getTotalError());
-    System.out.print("Genes: ");
-    for (int gene = 0; gene < individual.getGeneSize(); gene++) {
-      System.out.print(individual.getGene(gene) + " ");
-    }
-    System.out.println();
-    double kB = 8.617332e-5; // Boltzmann constant
-    System.out.print("Energies: ");
-    for (int gene = 0; gene < individual.getGeneSize(); gene++) {
-      System.out.print(-kB * parser.getTemperature() * Math.log(individual.getGene(gene) / 1e13) + " ");
-    }
-    System.out.println();
   }
 
   private static void printEnd() {
