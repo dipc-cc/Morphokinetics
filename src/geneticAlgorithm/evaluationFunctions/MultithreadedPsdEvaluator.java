@@ -39,7 +39,6 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   @Override
   public synchronized void handleSimulationFinish(int workerID, int workID) {
-
     finishedSimulation++;
     if (getCurrentSimulation() < getCurrentPopulation().size() * getRepeats()) {
       assignNewWork(workerID);
@@ -52,7 +51,6 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
 
   @Override
   public void handleSimulationIntervalFinish(int workerId, int workId) {
-
     float[][] surface = workers[workerId].getSampledSurface(getPsdSizeY(), getPsdSizeX());
     times[workId] += workers[workerId].getKmc().getTime();
     addToPsd(workId, surface);
@@ -64,7 +62,6 @@ public abstract class MultithreadedPsdEvaluator extends AbstractPsdEvaluator imp
   }
 
   private void assignNewWork(int workerId) {
-
     int individual = getCurrentSimulation() / getRepeats();
 
     workers[workerId].initialise(getCurrentPopulation().getIndividual(individual).getGenes());
