@@ -7,6 +7,8 @@ package geneticAlgorithm.evaluationFunctions;
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.AgRatesFactory;
 import utils.psdAnalysis.PsdSignature2D;
@@ -37,6 +39,11 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
   /** Temperature of the simulation. Useful when searching for energies. */
   private final int temperature;
   
+  /**
+   * Current thread, responsible to run many KMCs to compute a PSD.
+   */
+  private Runner currentRun;
+  
   public BasicGrowthPsdEvaluator(BasicGrowthKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType, int temperature) {
     super(repeats, measureInterval, flags, hierarchyEvaluator);
 
@@ -53,55 +60,107 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
     kmc.setTerraceToTerraceProbability(kmc.getLattice().getUc(0).getAtom(0).getProbability(0, 0));
   }
   
+   /**
+   * Inner class responsible to update the interface.
+   */
+  final class Runner extends Thread {
+    private Individual ind;
+    float[][] resultPsd;
+    public Runner() {
+      //resultPsd = new float[1][1];
+    }
+
+    public void setIndividual(Individual ind) {
+      this.ind = ind;
+    }
+    
+    public float[][] getResultPsd() {
+      if (resultPsd == null) {
+        return new float[getPsdSizeX()][getPsdSizeY()];
+      }
+      return resultPsd;
+    }
+    
+    /**
+     * Every 100 ms updates the interface with the current progress.
+     */
+    @Override
+    public void run() {
+      psd.reset();
+      double time = 0.0;
+      int avgSteps = 0;
+      String folderName = "gaResults/population" + getCurrentIteration() + "/individual" + getIndividualCount();
+      Restart restart = new Restart(folderName);
+      psd.setRestart(restart);
+      kmc.initialiseRates(getRates5(ind.getGenes()));
+      kmcError = 0;
+      for (simulationCount = 0; simulationCount < getRepeats(); simulationCount++) {
+        kmc.reset();
+        kmc.depositSeed();
+        int max = (int) getMaxIteration();
+        while (true) {
+          int kmcReturn = kmc.simulate(max);
+          sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
+          if (kmcReturn == -1) {
+            kmcError++;
+          } else {
+            psd.addSurfaceSample(sampledSurface);
+          }
+          avgSteps += kmcReturn;
+          restart.writeSurfaceBinary2D(sampledSurface, simulationCount);
+          if (kmcError > 2) { // Allow 3 errors or strange surfaces. Exit individual with more
+            System.out.println("Skipping individual");
+            kmcError = -1;
+            time = Integer.MAX_VALUE;
+            break;
+          }
+          if (kmc.getCoverage() < 0.05) {
+            continue;
+          }
+          if (kmc.getIterations() < getMeasureInterval()) {
+            time += kmc.getTime();
+            break;
+          }
+        }
+        if (kmcError == -1) {
+          setCurrentSimulation(getCurrentSimulation() + getRepeats() - simulationCount);
+          kmcHasFailed();
+          break;
+        }
+        setCurrentSimulation(getCurrentSimulation() + 1);
+      }
+      simulationCount = getRepeats() - 1;
+      avgSteps = (avgSteps / getRepeats());
+      System.out.println("Average number of steps " + avgSteps);
+
+      ind.setSimulationTime(time / getRepeats());
+      psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
+      psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
+      psd.printAvgToFile();
+      resultPsd = psd.getPsd();
+    }
+  }
+  
   @Override
   public float[][] calculatePsdFromIndividual(Individual ind) {
-    psd.reset();
-    double time = 0.0;
-    int avgSteps = 0;
-    String folderName = "gaResults/population" + getCurrentIteration() + "/individual" + getIndividualCount();
-    Restart restart = new Restart(folderName);
-    psd.setRestart(restart);
-    kmc.initialiseRates(getRates5(ind.getGenes()));
-    kmcError = 0;
-    for (simulationCount = 0; simulationCount < getRepeats(); simulationCount++) {
-      kmc.reset();
-      kmc.depositSeed();
-      int max = (int)getMaxIteration();
-      while (true) {
-        int kmcReturn = kmc.simulate(max);
-        sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
-        if (kmcReturn == -1) kmcError++;
-        else psd.addSurfaceSample(sampledSurface);
-        avgSteps+=kmcReturn;
-        restart.writeSurfaceBinary2D(sampledSurface, simulationCount);
-        if (kmcError > 2) { // Allow 3 errors or strange surfaces. Exit individual with more
-          System.out.println("Skipping individual");
-          kmcError = -1;
-          time = Integer.MAX_VALUE;
-          break;
-        }
-        if (kmc.getCoverage() < 0.05) continue;
-        if (kmc.getIterations() < getMeasureInterval()) {
-          time += kmc.getTime();
-          break;
-        }
-      }
-      if (kmcError == -1) {
-        setCurrentSimulation(getCurrentSimulation() + getRepeats() - simulationCount);
-        kmcHasFailed();
-        break;
-      }
-      setCurrentSimulation(getCurrentSimulation() + 1);
+    int timeLimit = 10000; // wait at most one minute per individual
+    currentRun = new Runner();
+    currentRun.setIndividual(ind);
+    currentRun.start();
+    try {
+      currentRun.join(timeLimit);
+    } catch (InterruptedException ex) {
+      System.out.println("Current individual could not finish withing " + timeLimit / 1000 + "s");
+      Logger.getLogger(BasicGrowthPsdEvaluator.class.getName()).log(Level.SEVERE, null, ex);
     }
-    simulationCount = getRepeats() - 1;
-    avgSteps = (avgSteps / getRepeats());
-    System.out.println("Average number of steps " + avgSteps);
+    System.out.println("Finished individual ");
+    currentRun.interrupt();
+    System.out.println("is alive? " + currentRun.isAlive());
+    return currentRun.getResultPsd();
+  }
 
-    ind.setSimulationTime(time / getRepeats());
-    psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
-    psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
-    psd.printAvgToFile();
-    return psd.getPsd();
+  public void killThread() {
+    currentRun.interrupt();
   }
 
   @Override
@@ -305,7 +364,7 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
   
   private double getMaxIteration() {
     if (temperature == 120) 
-      return 1e5;
+      return 1e10;
     return 1e10; 
   }
 }
