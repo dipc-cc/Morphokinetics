@@ -31,7 +31,7 @@ import org.json.JSONObject;
  */
 public class Parser {
 
-  final static Charset ENCODING = StandardCharsets.UTF_8;
+  //final static Charset ENCODING = StandardCharsets.UTF_8;
 
   private enum ratesLibrary {
     basic, gosalvez
@@ -173,8 +173,8 @@ public class Parser {
     psdExtend = 1;
     endTime = -1;
     numberOfSimulations = 3;
-    cartSizeX = 50;
-    cartSizeY = 50;
+    cartSizeX = 25;
+    cartSizeY = 25;
     cartSizeZ = 25;
     millerX = 0;
     millerY = 1;
@@ -654,6 +654,9 @@ public class Parser {
     }
   }
 
+    public void setTemperature(int temperature) {
+        this.temperature = temperature;
+    }
   public int getTemperature() {
     return temperature;
   }
@@ -806,7 +809,11 @@ public class Parser {
   double getPsdExtend() {
     return psdExtend;
   }
-  
+
+    public void setNumberOfSimulations(int numberOfSimulations){
+        this.numberOfSimulations = numberOfSimulations;
+    }
+
   public int getNumberOfSimulations() {
     return numberOfSimulations;
   }
