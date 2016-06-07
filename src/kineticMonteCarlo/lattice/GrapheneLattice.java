@@ -25,7 +25,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   private final Point2D centralCartesianLocation;
 
   public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
-
     super(hexaSizeI, hexaSizeJ, modified);
 
     // j axis has to be multiple of two
@@ -42,7 +41,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private static void initialiseNeighborHoodCache() {
-
     latticeNeighborhoodData = new int[12];
     latticeNeighborhoodData[0] = (1 & 0xFFFF) + (0 << 16);
     latticeNeighborhoodData[1] = (-1 << 16);
@@ -75,7 +73,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
    * @return
    */
   private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep) {
-
     //Instantiate atoms
     GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
     for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
@@ -121,7 +118,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public GrapheneAtom getNeighbour(int xCart, int yCart, int neighbour) {
-
     int vec = latticeNeighborhoodData[neighbour];                      //esto define el tipo de atomo
     int vec_X = (short) (vec & 0xFFFF); // bitwise and for all the bits
     int vec_Y = ((vec >> 16)); // shift 16 positions to right
@@ -819,6 +815,39 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       if (atom.getNeighbourCount() > 1 && !atom.isOccupied()) {
         addBondAtom(atom);
       }
+    }
+  }
+  
+  /**
+   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
+   * experimental. If fails, the execution continues normally.
+   *
+   * @param xMouse absolute X location of the pressed point
+   * @param yMouse absolute Y location of the pressed point
+   * @param scale zoom level
+   */
+  @Override
+  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
+    int iLattice;
+    int jLattice;
+    // scale the position with respect to the current scale.
+    double xCanvas = xMouse / scale;
+    double yCanvas = yMouse / scale;
+    // choose the correct lattice
+    jLattice = (int) Math.floor(yCanvas / Y_RATIO);
+    iLattice = (int) Math.floor((2 * xCanvas - 1) / 3); // the inverse of getCart
+    double j = yCanvas;
+    int pos = 0;
+
+    // for debugging
+    System.out.println("scale " + scale + " " + (jLattice - j));
+    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
+    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+
+    if (atom.isOccupied()) {
+      extract(atom);
+    } else {
+      deposit(atom, false);
     }
   }
 }
