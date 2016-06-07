@@ -8,7 +8,6 @@ package kineticMonteCarlo.lattice;
 import java.awt.geom.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.BasicGrowthAtom;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.KINK;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 
