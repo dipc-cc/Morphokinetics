@@ -12,27 +12,26 @@ package ratesLibrary;
  */
 public class RatesFromPreGosalvez implements ISiRates {
 
-  private double E0 = 0;
-  private double E1 = 0.526;
-  private double E2A = 0.42;//0.525;
-  private double E2B = 0.0;
-  private double E2C = 0.35;//0.395;
-  private double E3A = 0.541;
-  private double E3B = 0.382;
+  private final double E0 = 0;
+  private final double E1 = 0.526;
+  private final double E2A = 0.42;//0.525;
+  private final double E2B = 0.0;
+  private final double E2C = 0.35;//0.395;
+  private final double E3A = 0.541;
+  private final double E3B = 0.382;
 
-  private double P0 = 1;
-  private double P1 = 1.47e+004;
-  private double P2A = 3.43e+004;
-  private double P2B = 0.11;
-  private double P2C = 3.059e+004;
-  private double P3A = 3.63;
-  private double P3B = 113.7;
+  private final double P0 = 1;
+  private final double P1 = 1.47e+004;
+  private final double P2A = 3.43e+004;
+  private final double P2B = 0.11;
+  private final double P2C = 3.059e+004;
+  private final double P3A = 3.63;
+  private final double P3B = 113.7;
 
-  private double[][] prefactors = new double[4][16];
-  private double[][] energies = new double[4][16];
+  private final double[][] prefactors = new double[4][16];
+  private final double[][] energies = new double[4][16];
 
   public RatesFromPreGosalvez() {
-
     energies[0][0] = E0;
     energies[0][1] = E0;
     energies[0][2] = E0;
