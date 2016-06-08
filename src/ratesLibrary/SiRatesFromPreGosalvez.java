@@ -10,7 +10,7 @@ package ratesLibrary;
  * 
  * @author Nestor
  */
-public class RatesFromPreGosalvez implements ISiRates {
+public class SiRatesFromPreGosalvez implements ISiRates {
 
   private final double E0 = 0;
   private final double E1 = 0.526;
@@ -31,7 +31,7 @@ public class RatesFromPreGosalvez implements ISiRates {
   private final double[][] prefactors = new double[4][16];
   private final double[][] energies = new double[4][16];
 
-  public RatesFromPreGosalvez() {
+  public SiRatesFromPreGosalvez() {
     energies[0][0] = E0;
     energies[0][1] = E0;
     energies[0][2] = E0;

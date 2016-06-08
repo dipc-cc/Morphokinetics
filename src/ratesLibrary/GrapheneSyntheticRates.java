@@ -8,7 +8,7 @@ package ratesLibrary;
  *
  * @author Nestor
  */
-public class SyntheticRates implements IGrowthRates {
+public class GrapheneSyntheticRates implements IGrowthRates {
 
   private double[][] rates;
   private double diffusionMl = 0.000035;

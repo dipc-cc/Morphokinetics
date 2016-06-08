@@ -13,7 +13,7 @@ public class AgRatesFactory implements IRatesFactory {
   private static IGrowthRates experiments;
 
   public AgRatesFactory() {
-    experiments = new RatesFromPrbCox();
+    experiments = new AgRatesFromPrbCox();
   }
 
   @Override

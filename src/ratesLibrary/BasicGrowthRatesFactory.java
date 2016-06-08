@@ -14,7 +14,7 @@ public class BasicGrowthRatesFactory implements IRatesFactory {
   private static IGrowthRates experiments;
 
   public BasicGrowthRatesFactory() {
-    experiments = new SyntheticRatesBasicGrowth();
+    experiments = new BasicGrowthSyntheticRates();
   }
 
   /**

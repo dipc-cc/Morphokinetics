@@ -14,7 +14,7 @@ public class SiRatesFactory implements IRatesFactory {
   private static double kB = 8.617332e-5;
 
   public SiRatesFactory() {
-    experiments = new RatesFromPreGosalvez();
+    experiments = new SiRatesFromPreGosalvez();
   }
 
   @Override

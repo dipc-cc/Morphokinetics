@@ -13,7 +13,7 @@ public class GrapheneRatesFactory implements IRatesFactory {
   private static IGrowthRates experiments;
 
   public GrapheneRatesFactory() {
-    experiments = new SyntheticRates();
+    experiments = new GrapheneSyntheticRates();
   }
 
   /**

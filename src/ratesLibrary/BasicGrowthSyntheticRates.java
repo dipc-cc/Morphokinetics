@@ -14,7 +14,7 @@ import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class SyntheticRatesBasicGrowth implements IGrowthRates {
+public class BasicGrowthSyntheticRates implements IGrowthRates {
 
   private final double[][] energies;
   private double diffusionMl;
@@ -32,7 +32,7 @@ public class SyntheticRatesBasicGrowth implements IGrowthRates {
   private final double Einf;
   private final double prefactor;
 
-  public SyntheticRatesBasicGrowth()  { 
+  public BasicGrowthSyntheticRates()  { 
     kB = 8.617332e-5;
     diffusionMl = 0.000035;
     islandDensityPerSite = 1 / 60000f;
