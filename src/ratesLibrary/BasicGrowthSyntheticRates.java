@@ -18,12 +18,7 @@ public class BasicGrowthSyntheticRates implements IRates {
 
   private final double[][] energies;
   private double diffusionMl;
-  private final double islandDensityPerSite;
   
-  /**
-   * Boltzmann constant.
-   */
-  private final double kB;
   private final double Ea;
   private final double Eb;
   private final double Ec;
@@ -33,9 +28,7 @@ public class BasicGrowthSyntheticRates implements IRates {
   private final double prefactor;
 
   public BasicGrowthSyntheticRates()  { 
-    kB = 8.617332e-5;
     diffusionMl = 0.000035;
-    islandDensityPerSite = 1 / 60000f;
     
     Ed = 0.200;
     Ef = 0.360;

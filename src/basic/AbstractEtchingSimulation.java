@@ -5,7 +5,6 @@
  */
 package basic;
 
-import kineticMonteCarlo.kmcCore.AbstractKmc;
 import ratesLibrary.IRates;
 import ratesLibrary.SiRatesFromPreGosalvez;
 

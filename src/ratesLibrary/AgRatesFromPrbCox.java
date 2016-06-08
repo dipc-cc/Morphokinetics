@@ -25,7 +25,6 @@ public class AgRatesFromPrbCox implements IRates {
    * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
    */
   private double diffusionMl;
-  private double depositionRatePerSite;
   private final double P;
   private final double Pd;
   /**
