@@ -14,8 +14,6 @@ public interface IRates {
    */
   static double kB = 8.617332e-5;
   
-  public double getRate(int i, int j, double temperature);
-  
   public double[] getRates(double temperature);
 
   public double getEnergy(int i, int j);  

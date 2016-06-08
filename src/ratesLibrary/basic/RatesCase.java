@@ -44,12 +44,7 @@ public abstract class RatesCase implements IBasicRates, IRates {
     }
     return rates;
   }
-  
-  @Override
-  public double getRate(int sourceType, int destinationType, double temperature) {
-    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
-  }
-  
+    
   @Override
   public double getDepositionRatePerSite() {
     throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");

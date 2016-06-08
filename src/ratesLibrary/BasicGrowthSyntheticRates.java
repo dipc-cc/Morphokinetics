@@ -61,8 +61,7 @@ public class BasicGrowthSyntheticRates implements IRates {
     energies[ISLAND][ISLAND] = Einf;
   }
   
-  @Override
-  public double getRate(int sourceType, int destinationType, double temperature) {
+  private double getRate(int sourceType, int destinationType, double temperature) {
     return prefactor * Math.exp(-energies[sourceType][destinationType] / (kB * temperature));
   }
 

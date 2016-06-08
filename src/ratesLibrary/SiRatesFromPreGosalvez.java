@@ -190,11 +190,6 @@ public class SiRatesFromPreGosalvez implements IRates {
   }
 
   @Override
-  public double getRate(int i, int j, double temperature) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
   public double[] getRates(double temperature) {
     double[] rates = new double[64];
     for (int i = 0; i < 4; i++) {

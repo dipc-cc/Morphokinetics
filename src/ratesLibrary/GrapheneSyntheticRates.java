@@ -14,8 +14,7 @@ public class GrapheneSyntheticRates implements IRates {
   private double diffusionMl = 0.000035;
   private final double islandDensityPerSite = 1 / 60000f;
 
-  @Override
-  public double getRate(int sourceType, int destinationType, double temperature) {
+  private double getRate(int sourceType, int destinationType, double temperature) {
     if (rates == null) {
       rates = new double[8][8];
       initialiseRates();

@@ -219,8 +219,7 @@ public class AgRatesFromPrbCox implements IRates {
     prefactors[KINK_B][KINK_B] = P;
   }
 
-  @Override
-  public double getRate(int i, int j, double temperature) {
+  private double getRate(int i, int j, double temperature) {
     return (prefactors[i][j] * Math.exp(-energies[i][j] / (kB * temperature)));
   }
   
