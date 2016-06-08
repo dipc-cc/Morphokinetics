@@ -13,8 +13,6 @@ public interface IRates {
    * Boltzmann constant.
    */
   static double kB = 8.617332e-5;
-
-  public double getPrefactor(int i, int j);
   
   public double getRate(int i, int j, double temperature);
   

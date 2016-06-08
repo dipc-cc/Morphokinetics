@@ -40,7 +40,7 @@ public abstract class RatesCase implements IBasicRates, IRates {
     double[] rates = new double[4];
 
     for (int i = 0; i < 4; i++) {
-      rates[i] = (getPrefactor(i) * Math.exp(-getEnergy(i) / (kB * temperature)));
+      rates[i] = (prefactors[i] * Math.exp(-energies[i] / (kB * temperature)));
     }
     return rates;
   }
@@ -48,11 +48,6 @@ public abstract class RatesCase implements IBasicRates, IRates {
   @Override
   public double getRate(int sourceType, int destinationType, double temperature) {
     throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
-  }
-  
-  @Override
-  public double getPrefactor(int i, int j) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   @Override

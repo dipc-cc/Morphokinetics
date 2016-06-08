@@ -149,9 +149,4 @@ public class GrapheneSyntheticRates implements IRates {
     }
     return ratesVector;
   }
-
-  @Override
-  public double getPrefactor(int i, int j) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 }

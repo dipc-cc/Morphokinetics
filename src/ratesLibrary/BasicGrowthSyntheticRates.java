@@ -114,11 +114,6 @@ public class BasicGrowthSyntheticRates implements IRates {
   }
 
   @Override
-  public double getPrefactor(int i, int j) {
-    return prefactor;
-  }
-
-  @Override
   public double[] getRates(double temperature) {
     double[] rates = new double[16];
 

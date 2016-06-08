@@ -293,11 +293,6 @@ public class AgRatesFromPrbCox implements IRates {
   }
 
   @Override
-  public double getPrefactor(int i, int j) {
-    return prefactors[i][j];
-  }
-
-  @Override
   public double[] getRates(double temperature) {
     double[] rates = new double[49];
 

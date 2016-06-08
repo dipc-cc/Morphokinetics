@@ -170,11 +170,6 @@ public class SiRatesFromPreGosalvez implements IRates {
   }
 
   @Override
-  public double getPrefactor(int i, int j) {
-    return prefactors[i][j];
-  }
-
-  @Override
   public double getEnergy(int i, int j) {
     return energies[i][j];
   }
