@@ -9,7 +9,7 @@ import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.GrapheneRatesFactory;
+import ratesLibrary.GrapheneSyntheticRates;
 import utils.StaticRandom;
 
 /**
@@ -24,7 +24,7 @@ public class SimpleGrapheneKmcSimulation {
 
     System.out.println("Simple simulation of the Graphene KMC");
 
-    GrapheneRatesFactory ratesFactory = new GrapheneRatesFactory();
+    GrapheneSyntheticRates ratesFactory = new GrapheneSyntheticRates();
     GrapheneKmc kmc = initialiseKmc();
     GrowthKmcFrame frame = createGraphicsFrame(kmc);
 
@@ -58,7 +58,7 @@ public class SimpleGrapheneKmcSimulation {
     return kmc;
   }
 
-  private static void initializeRates(GrapheneRatesFactory ratesFactory, GrapheneKmc kmc) {
+  private static void initializeRates(GrapheneSyntheticRates ratesFactory, GrapheneKmc kmc) {
     double depositionRatePerSite = ratesFactory.getDepositionRatePerSite();
     double islandDensity = ratesFactory.getIslandDensity(0);
     kmc.setDepositionRate(depositionRatePerSite, islandDensity);

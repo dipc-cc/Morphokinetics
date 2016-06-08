@@ -9,7 +9,7 @@ import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.AgRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
 import utils.StaticRandom;
 
 /**
@@ -22,7 +22,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
     System.out.println("Simple simulation of the Ag/Ag growth KMC");
 
-    AgRatesFactory ratesFactory = new AgRatesFactory();
+    AgRatesFromPrbCox ratesFactory = new AgRatesFromPrbCox();
 
     AgKmc kmc = initialiseKmc();
 
@@ -55,13 +55,13 @@ public class SimpleAgAgGrowthKmcSimulation {
     return kmc;
   }
 
-  private static void initialiseRates(AgRatesFactory reatesFactory, AgKmc kmc) {
+  private static void initialiseRates(AgRatesFromPrbCox rates, AgKmc kmc) {
 
-    double depositionRatePerSite = reatesFactory.getDepositionRatePerSite();
-    double islandDensity = reatesFactory.getIslandDensity(135);
+    double depositionRatePerSite = rates.getDepositionRatePerSite();
+    double islandDensity = rates.getIslandDensity(135);
     kmc.setDepositionRate(depositionRatePerSite, islandDensity);
     kmc.reset();
-    kmc.initialiseRates(reatesFactory.getRates(135));
+    kmc.initialiseRates(rates.getRates(135));
     kmc.depositSeed();
   }
 

@@ -10,7 +10,7 @@ package ratesLibrary;
  * 
  * @author Nestor
  */
-public class SiRatesFromPreGosalvez implements ISiRates {
+public class SiRatesFromPreGosalvez implements IRates {
 
   private final double E0 = 0;
   private final double E1 = 0.526;
@@ -177,5 +177,36 @@ public class SiRatesFromPreGosalvez implements ISiRates {
   @Override
   public double getEnergy(int i, int j) {
     return energies[i][j];
+  }
+  
+  @Override
+  public double getDepositionRatePerSite() {
+    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
+  }
+
+  @Override
+  public double getIslandDensity(double temperature) {
+    throw new UnsupportedOperationException("This KMC does does not form islands.");
+  }
+ 
+  @Override
+  public void setDepositionFlux(double depositionFlux) {
+    throw new UnsupportedOperationException("This KMC does does not form islands.");
+  }
+
+  @Override
+  public double getRate(int i, int j, double temperature) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public double[] getRates(double temperature) {
+    double[] rates = new double[64];
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 16; j++) {
+        rates[i * 16 + j] = (prefactors[i][j] * Math.exp(-energies[i][j] / (kB * temperature)));
+      }
+    }
+    return rates;
   }
 }

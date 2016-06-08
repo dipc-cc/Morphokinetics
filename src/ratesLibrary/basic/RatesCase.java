@@ -5,17 +5,16 @@
  */
 package ratesLibrary.basic;
 
-import ratesLibrary.IRatesFactory;
+import ratesLibrary.IRates;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class RatesCase implements IBasicRates, IRatesFactory {
+public abstract class RatesCase implements IBasicRates, IRates {
 
   private double[] prefactors = new double[4];
   private double[] energies = new double[4];
-  private static double kB = 8.617332e-5;
   
   public final void setRates(double newEnergies[], double newPrefactors[]) {
     assert(newEnergies.length == 4);
@@ -47,6 +46,16 @@ public abstract class RatesCase implements IBasicRates, IRatesFactory {
   }
   
   @Override
+  public double getRate(int sourceType, int destinationType, double temperature) {
+    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
+  }
+  
+  @Override
+  public double getPrefactor(int i, int j) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  @Override
   public double getDepositionRatePerSite() {
     throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms.");
   }
@@ -60,4 +69,10 @@ public abstract class RatesCase implements IBasicRates, IRatesFactory {
   public void setDepositionFlux(double depositionFlux) {
     throw new UnsupportedOperationException("This KMC does does not form islands.");
   }
+  
+  @Override
+  public double getEnergy(int i, int j) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
 }

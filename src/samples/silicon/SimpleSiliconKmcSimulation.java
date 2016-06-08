@@ -3,7 +3,7 @@ package samples.silicon;
 import basic.Parser;
 import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import utils.StaticRandom;
 
 /*
@@ -36,7 +36,7 @@ public class SimpleSiliconKmcSimulation {
 
     long start = System.nanoTime();
     kmc.reset();
-    kmc.initialiseRates(new SiRatesFactory().getRates(350));
+    kmc.initialiseRates(new SiRatesFromPreGosalvez().getRates(350));
     kmc.depositSeed();
     kmc.simulate();
 

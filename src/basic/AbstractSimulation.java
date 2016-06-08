@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import ratesLibrary.IRatesFactory;
+import ratesLibrary.IRates;
 import utils.MathUtils;
 import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
@@ -27,7 +27,7 @@ import utils.psdAnalysis.PsdSignature2D;
 public abstract class AbstractSimulation {
 
   private AbstractKmc kmc;
-  private IRatesFactory rates;
+  private IRates rates;
   private PsdSignature2D psd;
   private final Parser parser;
   private StaticRandom staticRandom;
@@ -142,7 +142,7 @@ public abstract class AbstractSimulation {
     }
   }
 
-  protected abstract void initialiseRates(IRatesFactory ratesFactory, Parser myParser);
+  protected abstract void initialiseRates(IRates ratesFactory, Parser myParser);
 
   public abstract void finishSimulation();
 
@@ -158,15 +158,15 @@ public abstract class AbstractSimulation {
     return psd;
   }
 
-  public IRatesFactory getRates() {
+  public IRates getRates() {
     return rates;
   }
 
-  public void setRates(IRatesFactory rates) {
+  public void setRates(IRates rates) {
     this.rates = rates;
   }
 
-  public IRatesFactory getRatesFactory() {
+  public IRates getRatesFactory() {
     return rates;
   }
 

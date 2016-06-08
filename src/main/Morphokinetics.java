@@ -26,9 +26,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.AgRatesFactory;
-import ratesLibrary.BasicGrowthRatesFactory;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
+import ratesLibrary.BasicGrowthSyntheticRates;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import utils.MathUtils;
 import utils.Wait;
 import utils.psdAnalysis.PsdSignature2D;
@@ -181,16 +181,16 @@ public class Morphokinetics {
     double[] genes = null;
     switch (parser.getCalculationMode()) {
       case "basic":
-        rates = new BasicGrowthRatesFactory().getReduced5Rates(parser.getTemperature());
-        energies = new BasicGrowthRatesFactory().getReduced5Energies();
+        rates = new BasicGrowthSyntheticRates().getReduced5Rates(parser.getTemperature());
+        energies = new BasicGrowthSyntheticRates().getReduced5Energies();
         break;
       case "Ag":
         //rates = new AgRatesFactory().getRates(parser.getTemperature());
-        rates = new AgRatesFactory().getReduced6Rates(parser.getTemperature());
-        energies = new AgRatesFactory().getReduced6Energies();
+        rates = new AgRatesFromPrbCox().getReduced6Rates(parser.getTemperature());
+        energies = new AgRatesFromPrbCox().getReduced6Energies();
         break;
       case "Si":
-        rates = new SiRatesFactory().getRates(parser.getTemperature());
+        rates = new SiRatesFromPreGosalvez().getRates(parser.getTemperature());
         break;
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");

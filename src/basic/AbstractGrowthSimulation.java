@@ -9,7 +9,7 @@ import basic.io.OutputType.formatFlag;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.IRatesFactory;
+import ratesLibrary.IRates;
 
 /**
  *
@@ -33,13 +33,13 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   }
 
   @Override
-  protected void initialiseRates(IRatesFactory ratesFactory, Parser parser) {
+  protected void initialiseRates(IRates rates, Parser parser) {
     double depositionRatePerSite;
-    ratesFactory.setDepositionFlux(parser.getDepositionFlux());
-    depositionRatePerSite = ratesFactory.getDepositionRatePerSite();
-    double islandDensity = ratesFactory.getIslandDensity(parser.getTemperature());
+    rates.setDepositionFlux(parser.getDepositionFlux());
+    depositionRatePerSite = rates.getDepositionRatePerSite();
+    double islandDensity = rates.getIslandDensity(parser.getTemperature());
     getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
-    getKmc().initialiseRates(ratesFactory.getRates(parser.getTemperature()));
+    getKmc().initialiseRates(rates.getRates(parser.getTemperature()));
   }
   
   @Override

@@ -8,12 +8,22 @@ package ratesLibrary;
  *
  * @author Nestor
  */
-public interface IRatesFactory {
+public interface IRates {
+  /**
+   * Boltzmann constant.
+   */
+  static double kB = 8.617332e-5;
 
+  public double getPrefactor(int i, int j);
+  
+  public double getRate(int i, int j, double temperature);
+  
   public double[] getRates(double temperature);
 
-  public double getDepositionRatePerSite();
+  public double getEnergy(int i, int j);  
   
+  public double getDepositionRatePerSite();
+
   /**
    * Returns the island density mono layer depending on the temperature. How many islands per area
    * site are generated at current temperature. Usually with higher temperature less islands are
@@ -23,6 +33,6 @@ public interface IRatesFactory {
    * @return island density
    */
   public double getIslandDensity(double temperature);
- 
-  public void setDepositionFlux(double depositionFlux);
+  
+  public void setDepositionFlux(double diffusionMl);
 }

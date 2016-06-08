@@ -14,7 +14,7 @@ import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class BasicGrowthSyntheticRates implements IGrowthRates {
+public class BasicGrowthSyntheticRates implements IRates {
 
   private final double[][] energies;
   private double diffusionMl;
@@ -88,7 +88,7 @@ public class BasicGrowthSyntheticRates implements IGrowthRates {
    * @return a double value from 1e-4 to 2e-5
    */
   @Override
-  public double getIslandsDensityMl(double temperature) {
+  public double getIslandDensity(double temperature) {
     if (temperature < 135) {//120 degrees Kelvin
       return 1e-2;
     }
@@ -116,7 +116,57 @@ public class BasicGrowthSyntheticRates implements IGrowthRates {
    * @param diffusionMl diffusion mono layer (deposition flux)
    */
   @Override
-  public void setDiffusionMl(double diffusionMl) {
+  public void setDepositionFlux(double diffusionMl) {
     this.diffusionMl = diffusionMl;
+  }
+
+  @Override
+  public double getPrefactor(int i, int j) {
+    return prefactor;
+  }
+
+  @Override
+  public double[] getRates(double temperature) {
+    double[] rates = new double[16];
+
+    for (int i = 0; i < 4; i++) {
+      for (int j = 0; j < 4; j++) {
+        rates[i * 4 + j] = (getRate(i, j, temperature));
+      }
+    }
+    return rates;
+  }
+  
+  /**
+   * Calculates rates from the genes. Some of the rates are 0, the rest is calculated from the given
+   * genes.
+   *
+   * Ratio (energy type) | ratio index
+   * 0) E_d                    (0,j) Terrace to any 
+   * 1) E_c                    (1,0) Edge to terrace
+   * 2) E_f                    (1,1) Edge to edge
+   * 3) E_a                    (1,2)=(1,3) Edge to kink or island
+   * 4) E_b                    (2,1)=(2,2)=(2,3) Kink to any (but terrace)
+   * @param temperature 
+   * @return rates[5]
+   */
+  public double[] getReduced5Rates(int temperature) {
+    double[] rates = new double[5];
+    rates[0] = getRate(0, 0, temperature);
+    rates[1] = getRate(1, 0, temperature);
+    rates[2] = getRate(1, 1, temperature);
+    rates[3] = getRate(1, 2, temperature);
+    rates[4] = getRate(2, 1, temperature);
+    return rates;
+  }
+  
+  public double[] getReduced5Energies() {
+    double[] rates = new double[5];
+    rates[0] = getEnergy(0, 0);
+    rates[1] = getEnergy(1, 0);
+    rates[2] = getEnergy(1, 1);
+    rates[3] = getEnergy(1, 2);
+    rates[4] = getEnergy(2, 1);
+    return rates;
   }
 }

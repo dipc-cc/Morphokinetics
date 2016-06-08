@@ -2,7 +2,7 @@ package samples.silicon;
 
 import basic.Parser;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -36,7 +36,7 @@ public class SimpleSiliconKmcFftAnalisys {
 
     SiKmc kmc = new SiKmc(parser);
     kmc.reset();
-    kmc.initialiseRates(new SiRatesFactory().getRates(350));
+    kmc.initialiseRates(new SiRatesFromPreGosalvez().getRates(350));
     kmc.depositSeed();
 
     float[][] surface;;

@@ -8,7 +8,7 @@ import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
-import ratesLibrary.AgRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -377,7 +377,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   
   private double getRate(double gene) {
     if (searchEnergies) {
-      return AgRatesFactory.getRate(temperature, gene);
+      return AgRatesFromPrbCox.getRate(temperature, gene);
     }
     return gene;
   }

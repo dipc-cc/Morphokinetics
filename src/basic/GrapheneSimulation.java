@@ -6,7 +6,7 @@
 package basic;
 
 import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
-import ratesLibrary.GrapheneRatesFactory;
+import ratesLibrary.GrapheneSyntheticRates;
 
 /**
  *
@@ -22,7 +22,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    setRates(new GrapheneRatesFactory());
+    setRates(new GrapheneSyntheticRates());
     setKmc(new GrapheneKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }

@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
-import ratesLibrary.AgRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
@@ -357,7 +357,7 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
   
   private double getRate(double gene) {
     if (searchEnergies) {
-      return AgRatesFactory.getRate(temperature, gene);
+      return AgRatesFromPrbCox.getRate(temperature, gene);
     }
     return gene;
   }

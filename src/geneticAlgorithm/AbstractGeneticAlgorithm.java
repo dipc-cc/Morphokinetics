@@ -36,8 +36,8 @@ import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
-import ratesLibrary.AgRatesFactory;
-import ratesLibrary.BasicGrowthRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
+import ratesLibrary.BasicGrowthSyntheticRates;
 import utils.akting.operations.OperationFactory;
 
 /**
@@ -113,8 +113,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
       case "basic":
         simulation = new BasicGrowthSimulation(parser);
         simulation.initialiseKmc();
-        depositionRatePerSite = new BasicGrowthRatesFactory().getDepositionRatePerSite();
-        islandDensity = new BasicGrowthRatesFactory().getIslandDensity(parser.getTemperature());
+        depositionRatePerSite = new BasicGrowthSyntheticRates().getDepositionRatePerSite();
+        islandDensity = new BasicGrowthSyntheticRates().getIslandDensity(parser.getTemperature());
         simulation.getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
         initialisation = new BasicGrowthInitialisator();
         restriction = new BasicGrowthRestriction(dimensions, 1e-6, 1e9, parser.isEnergySearch());
@@ -123,8 +123,8 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         simulation = new AgSimulation(parser);
         simulation.initialiseKmc();
         float experitentalTemp = parser.getTemperature();
-        depositionRatePerSite = new AgRatesFactory().getDepositionRatePerSite();
-        islandDensity = new AgRatesFactory().getIslandDensity(experitentalTemp);
+        depositionRatePerSite = new AgRatesFromPrbCox().getDepositionRatePerSite();
+        islandDensity = new AgRatesFromPrbCox().getIslandDensity(experitentalTemp);
         simulation.getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
         initialisation = new AgReduced6Initialisator();
         restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());

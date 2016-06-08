@@ -18,12 +18,8 @@ import static kineticMonteCarlo.atom.AgAtom.ISLAND;
  *
  * @author Nestor
  */
-public class AgRatesFromPrbCox implements IGrowthRates {
+public class AgRatesFromPrbCox implements IRates {
 
-  /**
-   * Boltzmann constant.
-   */
-  private final double kB;
   /**
    * Diffusion Mono Layer (F). Utilised to calculate absorption rate. Cox et al. define to be 
    * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
@@ -91,7 +87,6 @@ public class AgRatesFromPrbCox implements IGrowthRates {
    *                               edge                 island       edge
    */
   public AgRatesFromPrbCox() { 
-    kB = 8.617332e-5;
     diffusionMl = 0.0035;
     P = 1e13;
     Pd = 1e11; //no lo sabemos
@@ -229,7 +224,19 @@ public class AgRatesFromPrbCox implements IGrowthRates {
   public double getRate(int i, int j, double temperature) {
     return (prefactors[i][j] * Math.exp(-energies[i][j] / (kB * temperature)));
   }
-
+  
+  /**
+   *  Giving energy it returns a rate with a prefactor of 1e13
+   * 
+   * @param temperature system temperature
+   * @param energy input energy
+   * @return rate
+   */
+  public static double getRate(double temperature, double energy) {
+      double kB = 8.617332e-5;;
+      return (1e13 * Math.exp(-energy / (kB * temperature)));
+  }
+  
   /**
    * In principle, deposition rate is constant to 0.0035 ML/s. What changes is island density.
    * Consequently, deposition rate in practice varies with the temperature.
@@ -251,7 +258,7 @@ public class AgRatesFromPrbCox implements IGrowthRates {
    * @return a double value from 1e-4 to 2e-5
    */
   @Override
-  public double getIslandsDensityMl(double temperature) {
+  public double getIslandDensity(double temperature) {
     if (temperature < 135) {//120 degrees Kelvin
       return 1e-4;
     }
@@ -282,7 +289,57 @@ public class AgRatesFromPrbCox implements IGrowthRates {
    * @param diffusionMl diffusion mono layer (deposition flux)
    */
   @Override
-  public void setDiffusionMl(double diffusionMl) {
+  public void setDepositionFlux(double diffusionMl) {
     this.diffusionMl = diffusionMl;
+  }
+
+  @Override
+  public double getPrefactor(int i, int j) {
+    return prefactors[i][j];
+  }
+
+  @Override
+  public double[] getRates(double temperature) {
+    double[] rates = new double[49];
+
+    for (int i = 0; i < 7; i++) {
+      for (int j = 0; j < 7; j++) {
+        rates[i * 7 + j] = (getRate(i, j, temperature));
+      }
+    }
+    return rates;
+  }
+  
+  /**
+   * This is tuned to work with only 6 "genes".
+   * Gene 0 from Ed   (0,j)
+   * Gene 1 from Ec   (1,1)(1,2)(1,6)
+   * Gene 2 from Ee   (1,3)(1,5)
+   * Gene 3 from Ef   (2,3)(5,2)(5,3)(5,4)(5,6)
+   * Gene 4 from Ea   (2,2)
+   * Gene 5 from Eb   (5,5)
+   * @param temperature
+   * @return rates[6]
+   */
+  public double[] getReduced6Rates(int temperature) {
+    double[] rates = new double[6];
+    rates[0] = getRate(0, 0, temperature);
+    rates[1] = getRate(1, 1, temperature);
+    rates[2] = getRate(1, 3, temperature);
+    rates[3] = getRate(2, 3, temperature);
+    rates[4] = getRate(2, 2, temperature);
+    rates[5] = getRate(5, 5, temperature);
+    return rates;
+  }
+  
+  public double[] getReduced6Energies() {
+    double[] rates = new double[6];
+    rates[0] = getEnergy(0, 0);
+    rates[1] = getEnergy(1, 1);
+    rates[2] = getEnergy(1, 3);
+    rates[3] = getEnergy(2, 3);
+    rates[4] = getEnergy(2, 2);
+    rates[5] = getEnergy(5, 5);
+    return rates;
   }
 }

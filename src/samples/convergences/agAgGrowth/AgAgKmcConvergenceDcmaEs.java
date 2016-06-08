@@ -11,7 +11,7 @@ import geneticAlgorithm.GeneticAlgorithmDcmaEs;
 import geneticAlgorithm.IGeneticAlgorithm;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.gaConvergence.GaProgressFrame;
-import ratesLibrary.AgRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
 import utils.StaticRandom;
 
 /**
@@ -35,7 +35,7 @@ public class AgAgKmcConvergenceDcmaEs {
 
     //--------------------------------
     evaluator.setRepeats(evaluator.getRepeats() * 5);
-    Individual individual = new Individual(new AgRatesFactory().getRates(experitentalTemp));
+    Individual individual = new Individual(new AgRatesFromPrbCox().getRates(experitentalTemp));
     float[][] experimentalPsd = evaluator.calculatePsdFromIndividual(individual);
     double simulationTime = individual.getSimulationTime();
     evaluator.setRepeats(evaluator.getRepeats() / 5);

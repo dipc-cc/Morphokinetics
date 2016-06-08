@@ -10,7 +10,7 @@ import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.SiThreadedPsdEvaluator;
 import geneticAlgorithm.Individual;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import utils.StaticRandom;
 
 /**
@@ -40,7 +40,7 @@ public class SiliconMultithreadedPsdCalculation {
     evaluation.setShowGraphics(false);
 
     float[][] psd = ((AbstractPsdEvaluator) evaluation).calculatePsdFromIndividual(new Individual(
-            new SiRatesFactory().getRates(350)));
+            new SiRatesFromPreGosalvez().getRates(350)));
 
     evaluation.dispose();
 

@@ -2,7 +2,7 @@ package samples.silicon;
 
 import basic.Parser;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -96,7 +96,7 @@ public class SiliconPsdDifferencesBetweenTemperatures {
     PsdSignature2D psd = new PsdSignature2D(kmc.getLattice().getHexaSizeJ() * 2, kmc.getLattice().getHexaSizeI() * 2, 1);
     float[][] surface;
 
-    kmc.initialiseRates(new SiRatesFactory().getRates(temperature));
+    kmc.initialiseRates(new SiRatesFromPreGosalvez().getRates(temperature));
     for (int a = 0; a < 30; a++) {
       kmc.reset();
       kmc.depositSeed();

@@ -8,7 +8,7 @@ package ratesLibrary;
  *
  * @author Nestor
  */
-public class GrapheneSyntheticRates implements IGrowthRates {
+public class GrapheneSyntheticRates implements IRates {
 
   private double[][] rates;
   private double diffusionMl = 0.000035;
@@ -37,12 +37,11 @@ public class GrapheneSyntheticRates implements IGrowthRates {
    * @return island density
    */
   @Override
-  public double getIslandsDensityMl(double temperature) {
+  public double getIslandDensity(double temperature) {
     return islandDensityPerSite;
   }
 
   private void initialiseRates() {
-
     rates[0][0] = 1e9;
     rates[0][1] = 1e9;
     rates[0][2] = 1e9;
@@ -129,7 +128,30 @@ public class GrapheneSyntheticRates implements IGrowthRates {
    * @param diffusionMl diffusion mono layer (deposition flux)
    */
   @Override
-  public void setDiffusionMl(double diffusionMl) {
+  public void setDepositionFlux(double diffusionMl) {
     this.diffusionMl = diffusionMl;
+  }
+    /**
+   * We don't use the temperature by now.
+   *
+   * @param temperature
+   * @return rates[64]
+   */ 
+  
+  @Override
+  public double[] getRates(double temperature) {
+    double[] ratesVector = new double[64];
+
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 8; j++) {
+        ratesVector[i * 8 + j] = (getRate(i, j, temperature));
+      }
+    }
+    return ratesVector;
+  }
+
+  @Override
+  public double getPrefactor(int i, int j) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

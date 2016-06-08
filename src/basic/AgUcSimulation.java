@@ -1,7 +1,7 @@
 package basic;
 
 import kineticMonteCarlo.kmcCore.growth.AgUcKmc;
-import ratesLibrary.AgRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
 
 
 /*
@@ -24,7 +24,7 @@ public class AgUcSimulation  extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    setRates(new AgRatesFactory());
+    setRates(new AgRatesFromPrbCox());
     if (getParser().getHexaSizeI() == -1 || getParser().getHexaSizeJ() == -1) {
       double area = 1 / getRates().getIslandDensity(getParser().getTemperature()); // the inverse of the density is the area of the island
       int sizeX = (int) Math.ceil(Math.sqrt(area));

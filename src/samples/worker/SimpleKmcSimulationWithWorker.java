@@ -9,7 +9,7 @@ import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import utils.StaticRandom;
 
 /**
@@ -43,7 +43,7 @@ public class SimpleKmcSimulationWithWorker implements IFinishListener {
             workerId);
     worker.start();
 
-    worker.initialise(new SiRatesFactory().getRates(350));
+    worker.initialise(new SiRatesFromPreGosalvez().getRates(350));
 
     System.out.println("Launching worker...");
     worker.simulate(new SimpleKmcSimulationWithWorker(), work_ID);
