@@ -109,6 +109,11 @@ public class Restart {
     RestartLow.writeLowText2D(data, fileName, true);
   }
 
+  public void writePsdText1D(float[] data, String fileName) {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    RestartLow.writeLowText1D(data, fileName);
+  }
+    
   public void writePsdText2D(int dimensions, int[] sizes, float[][] data, String fileName) {
     fileName = addFolderAndSuffix(fileName, ".txt");
     RestartLow.writeLowText2D(data, fileName, true);

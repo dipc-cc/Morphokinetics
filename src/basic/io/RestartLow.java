@@ -177,6 +177,24 @@ class RestartLow {
     }
   }
   
+  static void writeLowText1D(float[] data, String fileName) {
+    try {
+      // create file descriptor
+      File file = new File(fileName);
+      PrintWriter printWriter = new PrintWriter(file);
+      // for each byte in the buffer
+      for (int i = 0; i < data.length; i++) {
+          String s = format("%.3f", data[i]);
+          printWriter.write(i + " " + s + "\n");
+        }
+      printWriter.flush();
+      printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  }
+  
   static void writeLowText2D(float[][] data, String fileName, boolean shift) {
     try {
       // create file descriptor

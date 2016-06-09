@@ -6,6 +6,7 @@ package utils.psdAnalysis;
 
 import basic.io.Restart;
 import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
+import java.awt.geom.Point2D;
 import java.util.concurrent.Semaphore;
 
 import java.util.ArrayList;
@@ -186,10 +187,25 @@ public class PsdSignature2D {
   }
 
   public void printAvgToFile(){
-    restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
-    restart.writePsdText2D(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
-    restart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
-    restart.writePsdText2D(dimensions, sizes, this.getPsd(), "psdAvgRaw");
+    restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(getPsd(), 1), "psdAvgFil");
+    restart.writePsdText2D(dimensions, sizes, MathUtils.avgFilter(getPsd(), 1), "psdAvgFil");
+    restart.writePsdBinary(dimensions, sizes, getPsd(), "psdAvgRaw");
+    restart.writePsdText2D(dimensions, sizes, getPsd(), "psdAvgRaw");
+    
+    float[] psd1D = new float[getPsd().length];
+    Point2D centre = new Point2D.Double(getPsd().length / 2, getPsd()[0].length / 2);
+     // Do the average per each radius from the centre, and create 1D PSD
+    for (int i = 0; i < getPsd().length; i++) {
+      for (int j = 0; j < getPsd()[0].length; j++) {
+        int posX = (i + getPsd().length / 2) % getPsd().length;
+        int posY = (j + getPsd()[0].length / 2) % getPsd()[0].length;
+        Point2D point = new Point2D.Double((double) posX, (double) posY);
+        int radius = (int) Math.ceil(centre.distance(point));
+        psd1D[radius] += getPsd()[i][j];
+      }
+    }
+    
+    restart.writePsdText1D(psd1D, "psd1D");
   }
   
   public void setRestart(Restart restart) {
