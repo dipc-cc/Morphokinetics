@@ -152,9 +152,7 @@ public class Morphokinetics {
         readSurface = restart.readSurfaceBinary2D(surfaceFileName + i + ".mko", 2);
         if (psd == null) {
           sizes = new int[2];
-          sizes[0] = restart.getSizeX();
           sizes[0] = readSurface.length;
-          sizes[1] = restart.getSizeY();
           sizes[1] = readSurface[0].length;
           psd = new PsdSignature2D(sizes[0], sizes[1], 1);
         }
