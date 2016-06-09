@@ -8,12 +8,10 @@ public class GrapheneTypesTable {
   private final byte[][][] table;
 
   public byte getType(int neigh1st, int neigh2nd, int neigh3rd) {
-
     return table[neigh1st][neigh2nd][neigh3rd];
   }
 
   public GrapheneTypesTable() {
-
     table = new byte[4][7][4];
 
     table[0][0][0] = AbstractAtom.TERRACE;
