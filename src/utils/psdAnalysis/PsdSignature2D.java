@@ -43,7 +43,6 @@ public class PsdSignature2D {
   public static final int VERTICAL_SYMMETRY = 1;
 
   public PsdSignature2D(int surfaceSizeY, int surfaceSizeX, double extent) {
-
     psdSizeY = (int) (surfaceSizeY * extent);
     psdSizeX = (int) (surfaceSizeX * extent);
     fftCore = new FloatFFT_2D(psdSizeY, psdSizeX);
@@ -63,7 +62,6 @@ public class PsdSignature2D {
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
-
     if (averaged) {
       throw new RuntimeException("PSD measures averaged, new samples cannot be added without signature reset.");
     }
@@ -121,7 +119,6 @@ public class PsdSignature2D {
   }
  
   public float[][] getPsd() {
-
     if (!averaged) {
       for (int i = 0; i < psdSizeY; i++) {
         for (int j = 0; j < psdSizeX; j++) {
