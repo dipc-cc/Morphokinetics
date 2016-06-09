@@ -93,7 +93,7 @@ public abstract class AbstractSimulation {
     System.out.println("_____________________________________________________________________________");
     System.out.println("Surface output: " + parser.printToImage());
     System.out.println("PSD     output: " + printPsd);
-    System.out.println("Output format : " + "mko");
+    System.out.println("Output format : " + parser.getOutputFormats());
     System.out.println("Output folder : " + restartFolderName);
     System.out.println("_____________________________________________________________________________");
 
