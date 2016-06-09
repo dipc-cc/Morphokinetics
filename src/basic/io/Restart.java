@@ -35,15 +35,6 @@ public class Restart {
     createFolder(restartFolder);
   }
 
-  private void createFolder(String restartFolder) {
-    try {
-      File file = new File(restartFolder);
-      file.mkdirs();
-    } catch (Exception e) {
-      System.err.println("Error creating folder: " + restartFolder);
-    }
-  }
-
   /**
    * Returns the base location of the JAR file (or the main executable instead).
    *
@@ -79,42 +70,8 @@ public class Restart {
   public void writePsdBinary(int dimensions, int[] sizes, float[][] data, String fileName) {
     fileName = addFolderAndSuffix(fileName, ".mko");
     RestartLow.writeLowBinary(dimensions, sizes, data, fileName);
-  }
-
-  /**
-   * Function to print to text file each PSD result. Mainly thought to plot it with gnuplot
-   * Instructions to plot: > set dgrid3d 30,30 > splot "psd000.txt" u 1:2:3 w l
-   *
-   * @param dimensions
-   * @param sizes
-   * @param data
-   * @param simulationNumber
-   */
-  public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
-    String fileName = format("%spsd%03d.txt", folder, simulationNumber);
-    RestartLow.writeLowText2D(data, fileName, true);
-  }
-
-  public void writePsdText2D(int dimensions, int[] sizes, float[][] data, String fileName) {
-    fileName = addFolderAndSuffix(fileName, ".txt");
-    RestartLow.writeLowText2D(data, fileName, true);
-  }
-
-  public void writeTextString(String data, String fileName) {
-    fileName = folder + fileName;
-    try {
-      // create file descriptor
-      File file = new File(fileName);
-      PrintWriter printWriter = new PrintWriter(file);
-      printWriter.write(data + "\n");
-      printWriter.flush();
-      printWriter.close();
-    } catch (Exception e) {
-      // if any I/O error occurs
-      e.printStackTrace();
-    }
-  }
-
+  }  
+  
   /**
    * Writes float data to a file called "surface[number].mko". First of all calls to the header
    * writing: look documentation there.
@@ -137,6 +94,25 @@ public class Restart {
     RestartLow.writeLowBinary(2, sizes, data, fileName);
   }
 
+  /**
+   * Function to print to text file each PSD result. Mainly thought to plot it with gnuplot
+   * Instructions to plot: > set dgrid3d 30,30 > splot "psd000.txt" u 1:2:3 w l
+   *
+   * @param dimensions
+   * @param sizes
+   * @param data
+   * @param simulationNumber
+   */
+  public void writePsdText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
+    String fileName = format("%spsd%03d.txt", folder, simulationNumber);
+    RestartLow.writeLowText2D(data, fileName, true);
+  }
+
+  public void writePsdText2D(int dimensions, int[] sizes, float[][] data, String fileName) {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    RestartLow.writeLowText2D(data, fileName, true);
+  }
+
   public void writeSurfaceText2D(int dimensions, int[] sizes, float[][] data, int simulationNumber) {
     String fileName = format("%ssurface%03d.txt", folder, simulationNumber);
     RestartLow.writeLowText2D(data, fileName, false);
@@ -152,20 +128,21 @@ public class Restart {
     RestartLow.writeLowTextHexagonal(data, fileName);
   }
 
-  public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
+  public void writeTextString(String data, String fileName) {
     fileName = addFolderAndSuffix(fileName, ".txt");
-    return RestartLow.readLowText2D(fileName, sizes, false);
+    try {
+      // create file descriptor
+      File file = new File(fileName);
+      PrintWriter printWriter = new PrintWriter(file);
+      printWriter.write(data + "\n");
+      printWriter.flush();
+      printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
   }
-
-  public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
-    return RestartLow.readLowBinary(fileName);
-  }
-
-  public float[][] readPsdText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
-    fileName = addFolderAndSuffix(fileName, ".txt");
-    return RestartLow.readLowText2D(fileName, sizes, true);
-  }
-
+  
   /**
    * Reads a surface from a (binary) file and it reduces it surface by the given factor.
    *
@@ -178,10 +155,33 @@ public class Restart {
     float[][] originalSurface = RestartLow.readLowBinary(fileName);
     return RestartLow.scale(originalSurface, factor);
   }
+  
+  public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
+    return RestartLow.readLowBinary(fileName);
+  }
+  
+  public float[][] readPsdText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    return RestartLow.readLowText2D(fileName, sizes, true);
+  }
+  
+  public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    return RestartLow.readLowText2D(fileName, sizes, false);
+  }
 
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
     fileName = addFolderAndSuffix(fileName, ".txt");
     return RestartLow.readLowText2D(fileName);
+  }
+  
+  private void createFolder(String restartFolder) {
+    try {
+      File file = new File(restartFolder);
+      file.mkdirs();
+    } catch (Exception e) {
+      System.err.println("Error creating folder: " + restartFolder);
+    }
   }
   
   /**
