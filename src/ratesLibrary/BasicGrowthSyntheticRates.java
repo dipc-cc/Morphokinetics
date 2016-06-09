@@ -19,23 +19,17 @@ public class BasicGrowthSyntheticRates implements IRates {
   private final double[][] energies;
   private double diffusionMl;
   
-  private final double Ea;
-  private final double Eb;
-  private final double Ec;
-  private final double Ed;
-  private final double Ef;
-  private final double Einf;
   private final double prefactor;
 
   public BasicGrowthSyntheticRates()  { 
     diffusionMl = 0.000035;
     
-    Ed = 0.200;
-    Ef = 0.360;
-    Ea = 0.350;
-    Eb = 0.435;
-    Ec = 0.45;
-    Einf = 9999999;
+    double Ed = 0.200;
+    double Ef = 0.360;
+    double Ea = 0.350;
+    double Eb = 0.435;
+    double Ec = 0.45;
+    double Einf = 9999999;
     
     prefactor = 1e13;
     
