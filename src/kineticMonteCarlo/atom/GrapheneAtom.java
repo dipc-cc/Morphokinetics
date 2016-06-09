@@ -101,7 +101,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public void clear() {
-
     super.clear();
     setType(TERRACE);
     n1 = n2 = n3 = 0; // current atom has no neighbour
@@ -199,7 +198,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   
   @Override
   public double updateOneBound(int posNeighbour) {
-
     double probabilityChange = 0;
 
     int i = posNeighbour; //eres el vecino 1 de tu 1º vecino. Eres el vecino 2 de tu 2º vecino. eres el 3º Vecino de tu vecino 3.
@@ -262,7 +260,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public double probJumpToNeighbour(int originType, int pos) {
-
     AbstractGrowthAtom atom = neighbours[pos];
     if (atom.isOccupied()) {
       return 0;
@@ -302,7 +299,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public byte getTypeWithoutNeighbour(int originPos) {
-
     if (originPos < 3) {
       return typesTable.getType(n1 - 1, n2, n3);
     }
