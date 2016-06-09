@@ -212,6 +212,9 @@ public abstract class AbstractSimulation {
       if (parser.getOutputFormats().contains(formatFlag.TXT)) {
         restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);
       }
+      if (parser.getOutputFormats().contains(formatFlag.XYZ)) {
+        restart.writeXyz(simulations, getKmc().getLattice());
+      }
       if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
         printToImage(restartFolderName, simulations);
       }

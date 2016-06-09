@@ -115,7 +115,7 @@ public class Parser {
    */
   private final OutputType outputType;
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among
-   * TXT(0), MKO(1), PNG(2), EXTRA(3) and AE(4). So a number between 0 and 15 has to be chosen.
+   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4) and XYZ(5). So a number between 0 and 15 has to be chosen.
    */
   private long numericFormatCode;
   
@@ -443,6 +443,9 @@ public class Parser {
         }
         if (type.equals("ae")){
           numericFormatCode += 16;
+        }
+        if (type.equals("xyz")){
+          numericFormatCode += 32;
         }
       }
     } catch (JSONException e) {
@@ -985,9 +988,9 @@ public class Parser {
   
   /**
    * To have the possibility to output to different file formats. For the moment only TXT, PNG, MKO,
-   * EXTRA or AE (extra information for activation energy runs).
+   * EXTRA, AE (extra information for activation energy runs) or XYZ.
    *
-   * @return output format. Either: TXT, PNG, MKO, EXTRA or AE
+   * @return output format. Either: TXT, PNG, MKO, EXTRA, AE or XYZ
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);

@@ -17,6 +17,13 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.StringTokenizer;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.IAtom;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.lattice.AbstractLattice;
+import kineticMonteCarlo.lattice.AgLattice;
+import kineticMonteCarlo.lattice.GrapheneLattice;
+import kineticMonteCarlo.unitCell.IUc;
 
 /**
  * Class responsible to do the actual writings and readings. Only has to be used from Restart class.
@@ -326,5 +333,60 @@ class RestartLow {
       }
     }
     return reducedSurface;
+  }
+
+  /**
+   * Writes a XYZ format file 
+   * @param fileName
+   * @param lattice 
+   */
+  static void writeXyz(String fileName, AbstractLattice lattice) {
+    // Check that is growth simulation, in etching are missing getUc in AbstractLattice and getPos and isOccupied in AbstractAtom
+    boolean execute = (lattice instanceof AbstractGrowthLattice);
+    if (!execute) {
+      System.out.println("\nWriting to XYZ is not implemented for etching. Skipping.");
+      return;
+    }
+    
+    int numberOfAtoms = lattice.size();
+    double scale = 1; // default distance in Anstroms
+    String element = "H";
+    // Setup
+    if (lattice instanceof GrapheneLattice){
+      scale = 10; 
+      element = "C";
+    } else if (lattice instanceof AgLattice) {
+      scale = 2.892; 
+      element = "Ag";
+    }
+    try {
+      // create file descriptor
+      File file = new File(fileName);
+      PrintWriter printWriter = new PrintWriter(file);
+      String s;
+      s = format("%d", numberOfAtoms);
+      printWriter.write(s +"\n simple XYZ file made with Morphokinetics\n");
+      
+      // for each atom in the uc
+      for (int i = 0; i < lattice.size(); i++) {
+        IUc uc = ((AbstractGrowthLattice) lattice).getUc(i);
+        for (int j = 0; j < uc.size(); j++) {
+          IAtom atom = uc.getAtom(j);
+          double posX = (uc.getPos().getX() + ((AbstractGrowthAtom) atom).getPos().getX()) * scale;
+          double posY = (uc.getPos().getY() + ((AbstractGrowthAtom) atom).getPos().getY()) * scale;
+          s = format("%s %.3f %.3f 0", element, posX, posY);
+          if (((AbstractGrowthAtom) atom).isOccupied()) {
+            printWriter.write(s + "\n");
+          }
+        }
+
+        //printWriter.write("\n");
+      }
+      printWriter.flush();
+      printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
   }
 }

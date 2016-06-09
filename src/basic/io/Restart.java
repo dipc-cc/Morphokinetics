@@ -11,6 +11,7 @@ import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.net.URISyntaxException;
 import java.net.URL;
+import kineticMonteCarlo.lattice.AbstractLattice;
 import main.Morphokinetics;
 
 /**
@@ -141,6 +142,11 @@ public class Restart {
       // if any I/O error occurs
       e.printStackTrace();
     }
+  }
+  
+  public void writeXyz(int simulationNumber, AbstractLattice lattice) {
+    String fileName = format("%ssurface%03d.xyz", folder, simulationNumber);
+    RestartLow.writeXyz(fileName, lattice);
   }
   
   /**
