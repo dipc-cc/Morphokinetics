@@ -49,6 +49,8 @@ public abstract class AbstractSimulation {
     psd = null;
     this.parser = parser;
     staticRandom = new StaticRandom(parser.randomSeed());
+    restartFolderName = "results/run" + System.currentTimeMillis();
+    restart = new Restart(restartFolderName);
   }
 
   /**
@@ -70,8 +72,6 @@ public abstract class AbstractSimulation {
     coverage = 0.0f;
     islands = 0;
     boolean printPsd = (parser.doPsd() && parser.outputData());
-    restartFolderName = "results/run" + System.currentTimeMillis();
-    restart = new Restart(restartFolderName);
 
     surfaceSizes = new int[2];
     // More precise (more points) the PSD better precision we get
