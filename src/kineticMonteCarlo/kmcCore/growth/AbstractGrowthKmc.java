@@ -12,11 +12,14 @@ import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.geom.Point2D;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -75,6 +78,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private int[][] histogramSuccess;
   
+  private PrintWriter outDeltaAttachments;
+  private PrintWriter outPerAtom;
+  private PrintWriter outData;
+
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
     justCentralFlake = parser.justCentralFlake();
@@ -98,19 +105,25 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     if (extraOutput) {
-      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", false)))) {
-        out.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
+      try {
+        File file = new File("results/deltaTimeBetweenTwoAttachments.txt");
+        outDeltaAttachments = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
+        outDeltaAttachments.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
       } catch (IOException e) {
+        Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
+      }
+      try {
+        outPerAtom = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", false)));
+        outPerAtom.println("# Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
+      } catch (IOException e) {
+        Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
         //Do nothing, it doesn't matter if fails
       }
-      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", false)))) {
-        out.println("# Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
+      try {
+        outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", false)));
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
       } catch (IOException e) {
-        //Do nothing, it doesn't matter if fails
-      }
-      try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", false)))) {
-        out.println("# Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
-      } catch (IOException e) {
+        Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
         //Do nothing, it doesn't matter if fails
       }
     }
@@ -252,16 +265,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       printHistogram();
     }
     countIslands(true);
-
+          outData.flush();
+          outDeltaAttachments.flush();
+          outPerAtom.flush();
     return returnValue;
   }
   
   private void printData() {
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", true)))) {
-      out.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + countIslands(false) + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
-    } catch (IOException e) {
-      //Do nothing, it doesn't matter if fails
-    }
+    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + countIslands(false) + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
   }
   
   private int countIslands(boolean print) {
@@ -459,27 +470,19 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
     countIslands(false);
     deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimeBetweenTwoAttachments.txt", true)))) {
-      out.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-              + getList().getTotalProbabilityFromList() + " "
-              + getIslandCount());
-    } catch (IOException e) {
-      //Do nothing, it doesn't matter if fails
-    }
+    outDeltaAttachments.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
+            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
+            + getList().getTotalProbabilityFromList() + " "
+            + getIslandCount());
     previousTime = getTime();
     deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
-    try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", true)))) {
-      out.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
-              + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-              + +getList().getTotalProbabilityFromList());
-    } catch (IOException e) {
-      //Do nothing, it doesn't matter if fails
-    }
+    outPerAtom.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
+            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
+            + getList().getTotalProbabilityFromList());
   }
 
   private AbstractGrowthAtom depositNewAtom() {
