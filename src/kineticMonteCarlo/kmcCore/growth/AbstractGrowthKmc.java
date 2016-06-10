@@ -265,9 +265,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       printHistogram();
     }
     countIslands(true);
-    outData.flush();
-    outDeltaAttachments.flush();
-    outPerAtom.flush();
+    if (extraOutput) {
+      outData.flush();
+      outDeltaAttachments.flush();
+      outPerAtom.flush();
+    }
     return returnValue;
   }
   
