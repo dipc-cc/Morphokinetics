@@ -184,9 +184,9 @@ class RestartLow {
       PrintWriter printWriter = new PrintWriter(file);
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
-          String s = format("%.3f", data[i]);
-          printWriter.write(i + " " + s + "\n");
-        }
+        String s = format("%.3f", data[i]);
+        printWriter.write(i + " " + s + "\n");
+      }
       printWriter.flush();
       printWriter.close();
     } catch (Exception e) {
