@@ -4,6 +4,15 @@
  */
 package ratesLibrary;
 
+import static kineticMonteCarlo.atom.AbstractAtom.ARMCHAIR_EDGE;
+import static kineticMonteCarlo.atom.AbstractAtom.BULK;
+import static kineticMonteCarlo.atom.AbstractAtom.CORNER;
+import static kineticMonteCarlo.atom.AbstractAtom.KINK;
+import static kineticMonteCarlo.atom.AbstractAtom.SICK;
+import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
+import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_WITH_EXTRA;
+
 /**
  *
  * @author Nestor
@@ -47,77 +56,77 @@ public class GrapheneSyntheticRates implements IRates {
   }
 
   private void initialiseRates() {
-    rates[0][0] = 1e9;
-    rates[0][1] = 1e9;
-    rates[0][2] = 1e9;
-    rates[0][3] = 1e9;
-    rates[0][4] = 1e9;
-    rates[0][5] = 1e9;
-    rates[0][6] = 1e9;
-    rates[0][7] = 1e9;
+    rates[TERRACE][TERRACE] = 1e9;
+    rates[TERRACE][CORNER] = 1e9;
+    rates[TERRACE][ZIGZAG_EDGE] = 1e9;
+    rates[TERRACE][ARMCHAIR_EDGE] = 1e9;
+    rates[TERRACE][ZIGZAG_WITH_EXTRA] = 1e9;
+    rates[TERRACE][SICK] = 1e9;
+    rates[TERRACE][KINK] = 1e9;
+    rates[TERRACE][BULK] = 1e9;
 
-    rates[1][0] = 0;
-    rates[1][1] = 100;
-    rates[1][2] = 100;
-    rates[1][3] = 100;
-    rates[1][4] = 100;
-    rates[1][5] = 100;
-    rates[1][6] = 100;
-    rates[1][7] = 100;
+    rates[CORNER][TERRACE] = 0;
+    rates[CORNER][CORNER] = 100;
+    rates[CORNER][ZIGZAG_EDGE] = 100;
+    rates[CORNER][ARMCHAIR_EDGE] = 100;
+    rates[CORNER][ZIGZAG_WITH_EXTRA] = 100;
+    rates[CORNER][SICK] = 100;
+    rates[CORNER][KINK] = 100;
+    rates[CORNER][BULK] = 100;
 
-    rates[2][0] = 0;
-    rates[2][1] = 100;
-    rates[2][2] = 100;
-    rates[2][3] = 100;
-    rates[2][4] = 100;
-    rates[2][5] = 100;
-    rates[2][6] = 100;
-    rates[2][7] = 100;
+    rates[ZIGZAG_EDGE][TERRACE] = 0;
+    rates[ZIGZAG_EDGE][CORNER] = 100;
+    rates[ZIGZAG_EDGE][ZIGZAG_EDGE] = 100;
+    rates[ZIGZAG_EDGE][ARMCHAIR_EDGE] = 100;
+    rates[ZIGZAG_EDGE][ZIGZAG_WITH_EXTRA] = 100;
+    rates[ZIGZAG_EDGE][SICK] = 100;
+    rates[ZIGZAG_EDGE][KINK] = 100;
+    rates[ZIGZAG_EDGE][BULK] = 100;
 
-    rates[3][0] = 0;
-    rates[3][1] = 10;
-    rates[3][2] = 10;
-    rates[3][3] = 10;
-    rates[3][4] = 10;
-    rates[3][5] = 10;
-    rates[3][6] = 10;
-    rates[3][7] = 10;
+    rates[ARMCHAIR_EDGE][TERRACE] = 0;
+    rates[ARMCHAIR_EDGE][CORNER] = 10;
+    rates[ARMCHAIR_EDGE][ZIGZAG_EDGE] = 10;
+    rates[ARMCHAIR_EDGE][ARMCHAIR_EDGE] = 10;
+    rates[ARMCHAIR_EDGE][ZIGZAG_WITH_EXTRA] = 10;
+    rates[ARMCHAIR_EDGE][SICK] = 10;
+    rates[ARMCHAIR_EDGE][KINK] = 10;
+    rates[ARMCHAIR_EDGE][BULK] = 10;
 
-    rates[4][0] = 0;
-    rates[4][1] = 0.01;
-    rates[4][2] = 0.01;
-    rates[4][3] = 0.01;
-    rates[4][4] = 0.01;
-    rates[4][5] = 0.01;
-    rates[4][6] = 0.01;
-    rates[4][7] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][TERRACE] = 0;
+    rates[ZIGZAG_WITH_EXTRA][CORNER] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][ZIGZAG_EDGE] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][ARMCHAIR_EDGE] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][ZIGZAG_WITH_EXTRA] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][SICK] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][KINK] = 0.01;
+    rates[ZIGZAG_WITH_EXTRA][BULK] = 0.01;
 
-    rates[5][0] = 0;
-    rates[5][1] = 0.00001;
-    rates[5][2] = 0.00001;
-    rates[5][3] = 0.00001;
-    rates[5][4] = 0.00001;
-    rates[5][5] = 0.00001;
-    rates[5][6] = 0.00001;
-    rates[5][7] = 0.00001;
+    rates[SICK][TERRACE] = 0;
+    rates[SICK][CORNER] = 0.00001;
+    rates[SICK][ZIGZAG_EDGE] = 0.00001;
+    rates[SICK][ARMCHAIR_EDGE] = 0.00001;
+    rates[SICK][ZIGZAG_WITH_EXTRA] = 0.00001;
+    rates[SICK][SICK] = 0.00001;
+    rates[SICK][KINK] = 0.00001;
+    rates[SICK][BULK] = 0.00001;
 
-    rates[6][0] = 0;
-    rates[6][1] = 0;
-    rates[6][2] = 0;
-    rates[6][3] = 0;
-    rates[6][4] = 0;
-    rates[6][5] = 0;
-    rates[6][6] = 0;
-    rates[6][7] = 0;
+    rates[KINK][TERRACE] = 0;
+    rates[KINK][CORNER] = 0;
+    rates[KINK][ZIGZAG_EDGE] = 0;
+    rates[KINK][ARMCHAIR_EDGE] = 0;
+    rates[KINK][ZIGZAG_WITH_EXTRA] = 0;
+    rates[KINK][SICK] = 0;
+    rates[KINK][KINK] = 0;
+    rates[KINK][BULK] = 0;
 
-    rates[7][0] = 0;
-    rates[7][1] = 0;
-    rates[7][2] = 0;
-    rates[7][3] = 0;
-    rates[7][4] = 0;
-    rates[7][5] = 0;
-    rates[7][6] = 0;
-    rates[7][7] = 0;
+    rates[BULK][TERRACE] = 0;
+    rates[BULK][CORNER] = 0;
+    rates[BULK][ZIGZAG_EDGE] = 0;
+    rates[BULK][ARMCHAIR_EDGE] = 0;
+    rates[BULK][ZIGZAG_WITH_EXTRA] = 0;
+    rates[BULK][SICK] = 0;
+    rates[BULK][KINK] = 0;
+    rates[BULK][BULK] = 0;
 
   }
 
@@ -135,77 +144,77 @@ public class GrapheneSyntheticRates implements IRates {
     double Ef = 4.0414471169;
     double Einf = 9999999;
     
-    energies[0][0] = Ed;
-    energies[0][1] = Ed;
-    energies[0][2] = Ed;
-    energies[0][3] = Ed;
-    energies[0][4] = Ed;
-    energies[0][5] = Ed;
-    energies[0][6] = Ed;
-    energies[0][7] = Ed;
+    energies[TERRACE][TERRACE] = Ed;
+    energies[TERRACE][CORNER] = Ed;
+    energies[TERRACE][ZIGZAG_EDGE] = Ed;
+    energies[TERRACE][ARMCHAIR_EDGE] = Ed;
+    energies[TERRACE][ZIGZAG_WITH_EXTRA] = Ed;
+    energies[TERRACE][SICK] = Ed;
+    energies[TERRACE][KINK] = Ed;
+    energies[TERRACE][BULK] = Ed;
 
-    energies[1][0] = Einf;
-    energies[1][1] = Ea;
-    energies[1][2] = Ea;
-    energies[1][3] = Ea;
-    energies[1][4] = Ea;
-    energies[1][5] = Ea;
-    energies[1][6] = Ea;
-    energies[1][7] = Ea;
+    energies[CORNER][TERRACE] = Einf;
+    energies[CORNER][CORNER] = Ea;
+    energies[CORNER][ZIGZAG_EDGE] = Ea;
+    energies[CORNER][ARMCHAIR_EDGE] = Ea;
+    energies[CORNER][ZIGZAG_WITH_EXTRA] = Ea;
+    energies[CORNER][SICK] = Ea;
+    energies[CORNER][KINK] = Ea;
+    energies[CORNER][BULK] = Ea;
 
-    energies[2][0] = Einf;
-    energies[2][1] = Ea;
-    energies[2][2] = Ea;
-    energies[2][3] = Ea;
-    energies[2][4] = Ea;
-    energies[2][5] = Ea;
-    energies[2][6] = Ea;
-    energies[2][7] = Ea;
+    energies[ZIGZAG_EDGE][TERRACE] = Einf;
+    energies[ZIGZAG_EDGE][CORNER] = Ea;
+    energies[ZIGZAG_EDGE][ZIGZAG_EDGE] = Ea;
+    energies[ZIGZAG_EDGE][ARMCHAIR_EDGE] = Ea;
+    energies[ZIGZAG_EDGE][ZIGZAG_WITH_EXTRA] = Ea;
+    energies[ZIGZAG_EDGE][SICK] = Ea;
+    energies[ZIGZAG_EDGE][KINK] = Ea;
+    energies[ZIGZAG_EDGE][BULK] = Ea;
 
-    energies[3][0] = Einf;
-    energies[3][1] = Eb;
-    energies[3][2] = Eb;
-    energies[3][3] = Eb;
-    energies[3][4] = Eb;
-    energies[3][5] = Eb;
-    energies[3][6] = Eb;
-    energies[3][7] = Eb;
+    energies[ARMCHAIR_EDGE][TERRACE] = Einf;
+    energies[ARMCHAIR_EDGE][CORNER] = Eb;
+    energies[ARMCHAIR_EDGE][ZIGZAG_EDGE] = Eb;
+    energies[ARMCHAIR_EDGE][ARMCHAIR_EDGE] = Eb;
+    energies[ARMCHAIR_EDGE][ZIGZAG_WITH_EXTRA] = Eb;
+    energies[ARMCHAIR_EDGE][SICK] = Eb;
+    energies[ARMCHAIR_EDGE][KINK] = Eb;
+    energies[ARMCHAIR_EDGE][BULK] = Eb;
 
-    energies[4][0] = Einf;
-    energies[4][1] = Ec;
-    energies[4][2] = Ec;
-    energies[4][3] = Ec;
-    energies[4][4] = Ec;
-    energies[4][5] = Ec;
-    energies[4][6] = Ec;
-    energies[4][7] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][TERRACE] = Einf;
+    energies[ZIGZAG_WITH_EXTRA][CORNER] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][ZIGZAG_EDGE] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][ARMCHAIR_EDGE] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][ZIGZAG_WITH_EXTRA] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][SICK] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][KINK] = Ec;
+    energies[ZIGZAG_WITH_EXTRA][BULK] = Ec;
 
-    energies[5][0] = Einf;
-    energies[5][1] = Ef;
-    energies[5][2] = Ef;
-    energies[5][3] = Ef;
-    energies[5][4] = Ef;
-    energies[5][5] = Ef;
-    energies[5][6] = Ef;
-    energies[5][7] = Ef;
+    energies[SICK][TERRACE] = Einf;
+    energies[SICK][CORNER] = Ef;
+    energies[SICK][ZIGZAG_EDGE] = Ef;
+    energies[SICK][ARMCHAIR_EDGE] = Ef;
+    energies[SICK][ZIGZAG_WITH_EXTRA] = Ef;
+    energies[SICK][SICK] = Ef;
+    energies[SICK][KINK] = Ef;
+    energies[SICK][BULK] = Ef;
 
-    energies[6][0] = Einf;
-    energies[6][1] = Einf;
-    energies[6][2] = Einf;
-    energies[6][3] = Einf;
-    energies[6][4] = Einf;
-    energies[6][5] = Einf;
-    energies[6][6] = Einf;
-    energies[6][7] = Einf;
+    energies[KINK][TERRACE] = Einf;
+    energies[KINK][CORNER] = Einf;
+    energies[KINK][ZIGZAG_EDGE] = Einf;
+    energies[KINK][ARMCHAIR_EDGE] = Einf;
+    energies[KINK][ZIGZAG_WITH_EXTRA] = Einf;
+    energies[KINK][SICK] = Einf;
+    energies[KINK][KINK] = Einf;
+    energies[KINK][BULK] = Einf;
 
-    energies[7][0] = Einf;
-    energies[7][1] = Einf;
-    energies[7][2] = Einf;
-    energies[7][3] = Einf;
-    energies[7][4] = Einf;
-    energies[7][5] = Einf;
-    energies[7][6] = Einf;
-    energies[7][7] = Einf;
+    energies[BULK][TERRACE] = Einf;
+    energies[BULK][CORNER] = Einf;
+    energies[BULK][ZIGZAG_EDGE] = Einf;
+    energies[BULK][ARMCHAIR_EDGE] = Einf;
+    energies[BULK][ZIGZAG_WITH_EXTRA] = Einf;
+    energies[BULK][SICK] = Einf;
+    energies[BULK][KINK] = Einf;
+    energies[BULK][BULK] = Einf;
   }
   
   @Override
