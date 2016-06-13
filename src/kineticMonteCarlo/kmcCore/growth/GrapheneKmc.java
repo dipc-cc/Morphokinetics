@@ -31,7 +31,6 @@ public class GrapheneKmc extends AbstractGrowthKmc {
       lattice = new GrapheneLatticeGaillard(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
     } else {
       lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
-      System.out.println("Size I J "+lattice.getHexaSizeI()+" "+lattice.getHexaSizeJ());
     }
     setLattice(lattice);
 
