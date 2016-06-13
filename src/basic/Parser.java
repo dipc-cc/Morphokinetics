@@ -452,7 +452,7 @@ public class Parser {
     try {
       evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
     } catch (JSONException e) {
-      ratesLibrary = "original";
+      evolutionaryAlgorithm = "original";
     }    
     try {
       parallelEvaluator = json.getBoolean("parallelEvaluator");
