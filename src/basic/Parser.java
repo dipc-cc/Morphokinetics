@@ -257,7 +257,7 @@ public class Parser {
     try {
       listType = json.getString("listType");
     } catch (JSONException e) {
-      ratesLibrary = "linear";
+      listType = "linear";
     }
     try {
       perimeterType = json.getString("perimeterType");
