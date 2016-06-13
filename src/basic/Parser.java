@@ -40,9 +40,9 @@ public class Parser {
    */
   private String calculationType;
   /**
-   * Can be COX_PRB or synthetic. Currently not used.
+   * See {@link #getRatesLibrary()}
    */
-  private String islandDensityType;
+  private String ratesLibrary;
   /**
    * Can be linear or binned.
    */
@@ -162,7 +162,7 @@ public class Parser {
    */
   public Parser() {
     calculationType = "batch";
-    islandDensityType = "COX_PRB";
+    ratesLibrary = "COX_PRB";
     listType = "linear";
     perimeterType = "circle";
     calculationMode = "Ag";
@@ -250,14 +250,14 @@ public class Parser {
       calculationType = "batch";
     }    
     try {
-      islandDensityType = json.getString("islandDensityType");
+      ratesLibrary = json.getString("ratesLibrary");
     } catch (JSONException e) {
-      islandDensityType = "COX_PRB";
+      ratesLibrary = "COX_PRB";
     }
     try {
       listType = json.getString("listType");
     } catch (JSONException e) {
-      islandDensityType = "linear";
+      ratesLibrary = "linear";
     }
     try {
       perimeterType = json.getString("perimeterType");
@@ -452,7 +452,7 @@ public class Parser {
     try {
       evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
     } catch (JSONException e) {
-      islandDensityType = "original";
+      ratesLibrary = "original";
     }    
     try {
       parallelEvaluator = json.getBoolean("parallelEvaluator");
@@ -559,7 +559,7 @@ public class Parser {
    */
   public void print() {
     System.out.printf("%32s: %s,\n", "\"calculationType\"", calculationType);
-    System.out.printf("%32s: %s,\n", "\"islandDensityType\"", islandDensityType);
+    System.out.printf("%32s: %s,\n", "\"islandDensityType\"", ratesLibrary);
     System.out.printf("%32s: %s,\n", "\"justCentralFlake\"", justCentralFlake);
     System.out.printf("%32s: %s,\n", "\"listType\"", listType);
     System.out.printf("%32s: %s,\n", "\"perimeterType\"", perimeterType);
@@ -636,8 +636,13 @@ public class Parser {
     return calculationType;
   }
   
-  public String getIslandDensityType() {
-    return islandDensityType;
+  /**
+   * Selects which rates are used for the simulation. For the moment, there is no any option.
+   *
+   * @return
+   */
+  public String getRatesLibrary() {
+    return ratesLibrary;
   }
 
   public String getListType() {
