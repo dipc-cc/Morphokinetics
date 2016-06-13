@@ -559,7 +559,7 @@ public class Parser {
    */
   public void print() {
     System.out.printf("%32s: %s,\n", "\"calculationType\"", calculationType);
-    System.out.printf("%32s: %s,\n", "\"islandDensityType\"", ratesLibrary);
+    System.out.printf("%32s: %s,\n", "\"ratesLibrary\"", ratesLibrary);
     System.out.printf("%32s: %s,\n", "\"justCentralFlake\"", justCentralFlake);
     System.out.printf("%32s: %s,\n", "\"listType\"", listType);
     System.out.printf("%32s: %s,\n", "\"perimeterType\"", perimeterType);
