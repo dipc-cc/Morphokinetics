@@ -34,10 +34,6 @@ import org.json.JSONObject;
 public class Parser {
 
   final static Charset ENCODING = StandardCharsets.UTF_8;
-
-  private enum ratesLibrary {
-    basic, gosalvez
-  };
   
   /** 
    * Can be batch or evolutionary.
@@ -53,7 +49,7 @@ public class Parser {
   private String listType;
   private String perimeterType;
   /**
-   * Can be Si, Ag or graphene.
+   * See {@link #getCalculationMode()}
    */
   private String calculationMode;
   /**
