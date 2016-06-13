@@ -12,6 +12,7 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.GrapheneLattice;
+import kineticMonteCarlo.lattice.GrapheneLatticeGaillard;
 import utils.StaticRandom;
 
 /**
@@ -25,7 +26,14 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    setLattice(new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep));
+    GrapheneLattice lattice; 
+    if (parser.getRatesLibrary().equals("Gaillard2Neighbours")) {
+      lattice = new GrapheneLatticeGaillard(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
+    } else {
+      lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
+      System.out.println("Size I J "+lattice.getHexaSizeI()+" "+lattice.getHexaSizeJ());
+    }
+    setLattice(lattice);
 
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("graphene"));
