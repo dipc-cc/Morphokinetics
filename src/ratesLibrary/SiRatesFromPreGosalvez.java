@@ -5,33 +5,32 @@
 package ratesLibrary;
 
 /**
+ * Etch rates data obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604.
  *
- * Etch rates data obtained from Gosalvez Et al - Physical Review E 68 (2003) 031604
- * 
  * @author Nestor
  */
 public class SiRatesFromPreGosalvez implements IRates {
-
-  private final double E0 = 0;
-  private final double E1 = 0.526;
-  private final double E2A = 0.42;//0.525;
-  private final double E2B = 0.0;
-  private final double E2C = 0.35;//0.395;
-  private final double E3A = 0.541;
-  private final double E3B = 0.382;
-
-  private final double P0 = 1;
-  private final double P1 = 1.47e+004;
-  private final double P2A = 3.43e+004;
-  private final double P2B = 0.11;
-  private final double P2C = 3.059e+004;
-  private final double P3A = 3.63;
-  private final double P3B = 113.7;
 
   private final double[][] prefactors = new double[4][16];
   private final double[][] energies = new double[4][16];
 
   public SiRatesFromPreGosalvez() {
+    double E0 = 0;
+    double E1 = 0.526;
+    double E2A = 0.42;//0.525;
+    double E2B = 0.0;
+    double E2C = 0.35;//0.395;
+    double E3A = 0.541;
+    double E3B = 0.382;
+
+    double P0 = 1;
+    double P1 = 1.47e+004;
+    double P2A = 3.43e+004;
+    double P2B = 0.11;
+    double P2C = 3.059e+004;
+    double P3A = 3.63;
+    double P3B = 113.7;
+    
     energies[0][0] = E0;
     energies[0][1] = E0;
     energies[0][2] = E0;
