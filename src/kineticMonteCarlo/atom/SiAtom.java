@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import javafx.geometry.Point3D;
+
 /**
  *
  * @author U010531
@@ -18,9 +20,9 @@ public class SiAtom extends AbstractAtom {
 
   private byte n1;
   private byte n2;
-  private float x;
-  private float y;
-  private float z;
+  private final float x;
+  private final float y;
+  private final float z;
 
   public SiAtom(float x, float y, float z) {
     this.x = x;
@@ -40,6 +42,11 @@ public class SiAtom extends AbstractAtom {
   public float getZ() {
     return z;
   }
+  
+  @Override
+  public Point3D getPos() {
+    return new Point3D(x, y, z);
+  }    
 
   public SiAtom getNeighbour(int pos) {
     switch (pos) {

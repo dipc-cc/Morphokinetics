@@ -4,8 +4,6 @@
  */
 package kineticMonteCarlo.atom;
 
-import javafx.geometry.Point3D;
-
 /**
  *
  * @author Nestor
@@ -188,14 +186,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public short getjHexa() {
     return jHexa;
-  }
-  
-  /**
-   * Returns the position within the unit cell, (0,0) in this case.
-   * @return coordinates in unit cell
-   */
-  public Point3D getPos() {
-    return new Point3D(0, 0, 0);
   }
   
   public double getAngle() {
