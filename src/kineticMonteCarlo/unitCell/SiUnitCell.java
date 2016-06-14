@@ -69,7 +69,7 @@ public class SiUnitCell {
 
   }
 
-  public double getCos3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+  private double getCos3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
     double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
     double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
     double temp = prod / mag;
@@ -81,7 +81,7 @@ public class SiUnitCell {
     return temp;
   }
 
-  public double getSin3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+  private double getSin3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
     double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
     double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
     double temp = prod / mag;
@@ -94,19 +94,19 @@ public class SiUnitCell {
 
   }
 
-  protected double getAreaXY(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+  private double getAreaXY(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
     double mag1 = Math.sqrt(v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
     double mag2 = Math.sqrt(v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
     return mag1 * mag2;
   }
 
-  protected double getAreaXYPower(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+  private double getAreaXYPower(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
     double mag1 = (v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
     double mag2 = (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
     return mag1 * mag2;
   }
 
-  protected double truncate(double valor, int decimales) {
+  private double truncate(double valor, int decimales) {
     int desp = 1;
     for (int i = 0; i < decimales; i++) {
       desp = desp * 10;
