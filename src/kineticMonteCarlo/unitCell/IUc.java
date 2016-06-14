@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import java.awt.geom.Point2D;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /**
@@ -19,7 +19,7 @@ public interface IUc {
   
   public AbstractGrowthAtom getAtom(int pos);
   
-  public Point2D getPos();
+  public Point3D getPos();
 
   /**
    * Number of elements.

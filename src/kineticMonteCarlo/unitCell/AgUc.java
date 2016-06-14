@@ -5,8 +5,8 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import java.awt.geom.Point2D;
 import java.util.List;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AgAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
@@ -35,8 +35,8 @@ public class AgUc extends AbstractUc implements IUc {
   }
 
   @Override
-  public Point2D getPos() {
-    return new Point2D.Double(SIZE_X * posI, SIZE_Y * posJ );
+  public Point3D getPos() {
+    return new Point3D(SIZE_X * posI, SIZE_Y * posJ, 0);
   }
 
   /**
