@@ -175,12 +175,12 @@ public class UnitCellSiAtom {
   /**
    * Creates a new instance of Atomo
    */
-  public UnitCellSiAtom(double posX, double posY, double posZ, int tipo) {
+  public UnitCellSiAtom(double posX, double posY, double posZ, int type) {
     this.posX = posX;
     this.posY = posY;
     this.posZ = posZ;
 
-    this.type = tipo;
+    this.type = type;
     neighbours = new UnitCellSiAtom[4];
 
     num = -1;
@@ -205,7 +205,7 @@ public class UnitCellSiAtom {
     return ucZ;
   }
 
-  public int getTipo() {
+  public int getType() {
     return type;
   }
 
