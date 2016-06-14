@@ -6,7 +6,6 @@
 package kineticMonteCarlo.unitCell;
 
 import java.awt.geom.Point2D;
-import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /**
@@ -15,7 +14,6 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  */
 public interface IUc {
   
-  //public IUc(int size, int posI, int posJ, List<AbstractGrowthAtom> atoms);
   static final float SIZE_X = 1; // Cartesian size X
   static final float SIZE_Y = 1; // Cartesian size Y
   
@@ -46,5 +44,6 @@ public interface IUc {
   }
 
   public int getPosI();
+
   public int getPosJ();
 }
