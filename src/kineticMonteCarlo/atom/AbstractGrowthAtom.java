@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
-import java.awt.geom.Point2D;
+import javafx.geometry.Point3D;
 
 /**
  *
@@ -194,8 +194,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * Returns the position within the unit cell, (0,0) in this case.
    * @return coordinates in unit cell
    */
-  public Point2D getPos() {
-      return new Point2D.Double(0, 0);
+  public Point3D getPos() {
+    return new Point3D(0, 0, 0);
   }
   
   public double getAngle() {

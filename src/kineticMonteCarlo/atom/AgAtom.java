@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
-import java.awt.geom.Point2D;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.StaticRandom;
 
@@ -60,15 +60,16 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Returns the position within the unit cell
+   *
    * @return coordinates in unit cell
    */
   @Override
-  public Point2D getPos() {
+  public Point3D getPos() {
     switch (pos) {
       case 0:
-        return new Point2D.Double(0, 0);
+        return new Point3D(0, 0, 0);
       case 1:
-        return new Point2D.Double(0.5, AbstractGrowthLattice.Y_RATIO);
+        return new Point3D(0.5, AbstractGrowthLattice.Y_RATIO, 0);
       default:
         throw new UnsupportedOperationException("Trying to acces to an atom within the unit cell that doesn't exists");
     }
