@@ -21,7 +21,7 @@ public class UnitCell {
   private UnitCellAtom[][][] red2;
   private UnitCellAtom[][][] red3;
   private int I_i, I_s, J_i, J_s, K_i, K_s;
-  private UnitCellAtom[] Cells_Pointer;
+  private UnitCellAtom[] cellsPointer;
 
   public UnitCell() {
     this.g = new double[3][3];
@@ -32,7 +32,7 @@ public class UnitCell {
   }
 
   public UnitCellAtom[] getCellsP() {
-    return Cells_Pointer;
+    return cellsPointer;
   }
 
   public double getLimitX() {
@@ -47,8 +47,7 @@ public class UnitCell {
     return limitZ;
   }
 
-  protected void SetRotacion(double[] m) {
-
+  private void setRotacion(double[] m) {
     double M, N;
 
     M = Math.sqrt((double) m[0] * (double) m[0] + (double) m[1] * (double) m[1]
@@ -71,12 +70,10 @@ public class UnitCell {
   }
 
   public double getCos3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-
     double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
-
     double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
-
     double temp = prod / mag;
+    
     if (temp > 1.0) {
       temp = 1.0;
     }
@@ -85,12 +82,10 @@ public class UnitCell {
   }
 
   public double getSin3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-
     double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
-
     double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
-
     double temp = prod / mag;
+
     if (temp > 1.0) {
       temp = 1.0;
     }
@@ -100,14 +95,12 @@ public class UnitCell {
   }
 
   protected double getAreaXY(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-
     double mag1 = Math.sqrt(v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
     double mag2 = Math.sqrt(v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
     return mag1 * mag2;
   }
 
   protected double getAreaXYPower(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-
     double mag1 = (v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
     double mag2 = (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
     return mag1 * mag2;
@@ -122,8 +115,7 @@ public class UnitCell {
     return (((double) temp) / desp);
   }
 
-  public int createUnitCell(int MillerX, int MillerY, int MillerZ) {
-
+  public int createUnitCell(int millerX, int millerY, int millerZ) {
     limitX = 0;
     limitY = 0;
     limitZ = 0;
@@ -142,7 +134,7 @@ public class UnitCell {
 
     int limitI1, limitI2;
 
-    if (MillerZ >= 0) {
+    if (millerZ >= 0) {
       limitI1 = 0;
       limitI2 = DEPTH;
     } else {
@@ -164,12 +156,12 @@ public class UnitCell {
           posY = posY - j * LATTICE_DIM / 2;    //para Y(B)
 
           //ya tenemos las posiciones en el SC C del atomo, comprobamos si es parte del plano, y si lo es lo a�adimos a la lista    
-          if (Math.abs(posX * MillerX + posY * MillerY + posZ * MillerZ) < 0.000001) {
+          if (Math.abs(posX * millerX + posY * millerY + posZ * millerZ) < 0.000001) {
             xs.add(posX);
             ys.add(posY);
             zs.add(posZ);
           }
-          double ang = getCos3D(MillerX, MillerY, MillerZ, posX, posY, posZ);
+          double ang = getCos3D(millerX, millerY, millerZ, posX, posY, posZ);
           if (ang > 0.999999999) {
             z_xs.add(posX);
             z_ys.add(posY);
@@ -194,12 +186,12 @@ public class UnitCell {
           posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
 
           //ya tenemos las posiciones en el SC C del atomo, comprobamos si es parte del plano, y si lo es lo a�adimos a la lista    
-          if (Math.abs(posX * MillerX + posY * MillerY + posZ * MillerZ) < 0.000001) {
+          if (Math.abs(posX * millerX + posY * millerY + posZ * millerZ) < 0.000001) {
             xs.add(posX);
             ys.add(posY);
             zs.add(posZ);
           }
-          double ang = getCos3D(MillerX, MillerY, MillerZ, posX, posY, posZ);
+          double ang = getCos3D(millerX, millerY, millerZ, posX, posY, posZ);
           if (ang > 0.999999999) {
             z_xs.add(posX);
             z_ys.add(posY);
@@ -307,7 +299,7 @@ public class UnitCell {
     }
 
 //fijamos el angulo de rotaci�n con respecto SC C
-    SetRotacion(rot);
+    setRotacion(rot);
 
     //System.out.println(g[1][0]+" "+g[1][1]+" "+g[1][2]);
     //si sabemos los limites de X, Y y Z, a partir de ellos sabemos los limites en X, Y y Z pero del sistema de coordenadas de la matriz
@@ -498,7 +490,7 @@ public class UnitCell {
     // Asignamos la celula origen y numeramos
     //----------------------------------------
     neighs = new short[4 * cuantos];
-    Cells_Pointer = new UnitCellAtom[cuantos];
+    cellsPointer = new UnitCellAtom[cuantos];
     nBlock = new byte[4 * cuantos];
 
 //--------------------------------------------------------------------------
@@ -515,8 +507,8 @@ public class UnitCell {
     red2 = null;
     red3 = null;
 
-    for (int i = 0; i < Cells_Pointer.length; i++) {
-      Cells_Pointer[i].isOrth_u_cell(limitX, limitY, limitZ, i == 0);
+    for (int i = 0; i < cellsPointer.length; i++) {
+      cellsPointer[i].isOrth_u_cell(limitX, limitY, limitZ, i == 0);
     }
 
     return (cuantos);
@@ -530,7 +522,7 @@ public class UnitCell {
     }
   }
 
-  protected int createAtoms() {
+  private int createAtoms() {
     int cont = 0;
     //celula tipo 0 (abajo del todo)
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
@@ -644,8 +636,7 @@ public class UnitCell {
     return cont;
   }
 
-  protected short findAtom(double Px, double Py, double Pz) {
-
+  private short findAtom(double Px, double Py, double Pz) {
     //celula tipo 0 (abajo del todo)
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
@@ -659,7 +650,7 @@ public class UnitCell {
       }
     }
 
-//celula tipo 1
+    //celula tipo 1
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
         for (int k = this.K_i; k < this.K_s; k++) { //X SC B
@@ -671,7 +662,7 @@ public class UnitCell {
       }
     }
 
-//celula tipo 2
+    //celula tipo 2
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
         for (int k = this.K_i; k < this.K_s; k++) { //X SC B
@@ -697,7 +688,7 @@ public class UnitCell {
     return -1;
   }
 
-  protected void interconect() {
+  private void interconect() {
     //celula tipo 0 (abajo del todo)
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
@@ -791,9 +782,8 @@ public class UnitCell {
 
   }
 
-  protected void setArraysNeigh() {
-
-//System.out.println("-----------");
+  private void setArraysNeigh() {
+    //System.out.println("-----------");
     //celula tipo 0 (abajo del todo)
     for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
       //  int cont=0;
@@ -802,7 +792,7 @@ public class UnitCell {
 
           if (red0[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red0[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
-            Cells_Pointer[num] = red0[i - this.I_i][j - this.J_i][k - this.K_i];
+            cellsPointer[num] = red0[i - this.I_i][j - this.J_i][k - this.K_i];
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
             //para cada vecino...
 
@@ -1005,7 +995,7 @@ public class UnitCell {
 
           if (red1[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red1[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
-            Cells_Pointer[num] = red1[i - this.I_i][j - this.J_i][k - this.K_i];
+            cellsPointer[num] = red1[i - this.I_i][j - this.J_i][k - this.K_i];
 
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
@@ -1204,7 +1194,7 @@ public class UnitCell {
 
           if (red2[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red2[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
-            Cells_Pointer[num] = red2[i - this.I_i][j - this.J_i][k - this.K_i];
+            cellsPointer[num] = red2[i - this.I_i][j - this.J_i][k - this.K_i];
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             //  cont++;
@@ -1404,7 +1394,7 @@ public class UnitCell {
 
           if (red3[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red3[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
-            Cells_Pointer[num] = red3[i - this.I_i][j - this.J_i][k - this.K_i];
+            cellsPointer[num] = red3[i - this.I_i][j - this.J_i][k - this.K_i];
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             cont++;
