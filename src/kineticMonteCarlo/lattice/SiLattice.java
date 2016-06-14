@@ -5,7 +5,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.SiAtom;
-import kineticMonteCarlo.unitCell.UnitCell;
+import kineticMonteCarlo.unitCell.SiUnitCell;
 
 /**
  *
@@ -13,7 +13,7 @@ import kineticMonteCarlo.unitCell.UnitCell;
  */
 public class SiLattice extends AbstractLattice {
 
-  private UnitCell unitCell;
+  private SiUnitCell unitCell;
   private SiAtom[] atoms;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
@@ -26,7 +26,7 @@ public class SiLattice extends AbstractLattice {
     setHexaSizeJ(sizeY);
     setHexaSizeK(sizeZ);
 
-    unitCell = new UnitCell();
+    unitCell = new SiUnitCell();
     setUnitCellSize(unitCell.createUnitCell(millerX, millerY, millerZ));
     if (getUnitCellSize() < 4 || getUnitCellSize() > 127) {
       System.out.println("UC size inappropiate: " + getUnitCellSize());
@@ -68,7 +68,7 @@ public class SiLattice extends AbstractLattice {
     }
   }
 
-  public UnitCell getUnitCell() {
+  public SiUnitCell getUnitCell() {
     return unitCell;
   }
 
@@ -119,7 +119,7 @@ public class SiLattice extends AbstractLattice {
    * @param coords
    * @param UC 
    */
-  private void createAtoms(float[] coords, UnitCell UC) {
+  private void createAtoms(float[] coords, SiUnitCell UC) {
     int cont = 0;
     for (int a = 0; a < getHexaSizeK(); a++) {
       for (int b = 0; b < getHexaSizeJ(); b++) {

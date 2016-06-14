@@ -4,13 +4,13 @@ package kineticMonteCarlo.unitCell;
  *
  * @author Nestor
  */
-public class UnitCellAtom {
+public class UnitCellSiAtom {
 
   //sólo para la creación de la unit cell
   private short ucX;
   private short ucY;
   private short ucZ;
-  private UnitCellAtom[] neighbours;
+  private UnitCellSiAtom[] neighbours;
   private short num;
   private int type;
   private double posX, posY, posZ;
@@ -175,13 +175,13 @@ public class UnitCellAtom {
   /**
    * Creates a new instance of Atomo
    */
-  public UnitCellAtom(double posX, double posY, double posZ, int tipo) {
+  public UnitCellSiAtom(double posX, double posY, double posZ, int tipo) {
     this.posX = posX;
     this.posY = posY;
     this.posZ = posZ;
 
     this.type = tipo;
-    neighbours = new UnitCellAtom[4];
+    neighbours = new UnitCellSiAtom[4];
 
     num = -1;
   }
@@ -209,11 +209,11 @@ public class UnitCellAtom {
     return type;
   }
 
-  public void setVecino(int vecino, UnitCellAtom v) {
+  public void setVecino(int vecino, UnitCellSiAtom v) {
     neighbours[vecino] = v;
   }
 
-  public UnitCellAtom getVecino(int vecino) {
+  public UnitCellSiAtom getVecino(int vecino) {
     return neighbours[vecino];
   }
 

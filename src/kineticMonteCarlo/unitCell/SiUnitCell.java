@@ -6,7 +6,7 @@ import java.util.ArrayList;
  *
  * @author Nestor
  */
-public class UnitCell {
+public class SiUnitCell {
 
   private static final double LATTICE_DIM = 5.430710f;
   private static final double SPACE_CELL = LATTICE_DIM / 4.0f;
@@ -16,14 +16,14 @@ public class UnitCell {
   private byte[] nBlock;
   private double limitX, limitY, limitZ;
   private double limitXnt, limitYnt, limitZnt;
-  private UnitCellAtom[][][] red0;
-  private UnitCellAtom[][][] red1;
-  private UnitCellAtom[][][] red2;
-  private UnitCellAtom[][][] red3;
+  private UnitCellSiAtom[][][] red0;
+  private UnitCellSiAtom[][][] red1;
+  private UnitCellSiAtom[][][] red2;
+  private UnitCellSiAtom[][][] red3;
   private int I_i, I_s, J_i, J_s, K_i, K_s;
-  private UnitCellAtom[] cellsPointer;
+  private UnitCellSiAtom[] cellsPointer;
 
-  public UnitCell() {
+  public SiUnitCell() {
     this.g = new double[3][3];
   }
 
@@ -31,7 +31,7 @@ public class UnitCell {
     return g;
   }
 
-  public UnitCellAtom[] getCellsP() {
+  public UnitCellSiAtom[] getCellsP() {
     return cellsPointer;
   }
 
@@ -468,10 +468,10 @@ public class UnitCell {
     this.K_i = (int) Math.round(K_i) - 2;
     this.K_s = (int) Math.round(K_s) + 2;
 
-    red0 = new UnitCellAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
-    red1 = new UnitCellAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
-    red2 = new UnitCellAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
-    red3 = new UnitCellAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
+    red0 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
+    red1 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
+    red2 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
+    red3 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
 
     //-------------------------------------------------------------------------
     // Creamos los atomos
@@ -490,7 +490,7 @@ public class UnitCell {
     // Asignamos la celula origen y numeramos
     //----------------------------------------
     neighs = new short[4 * cuantos];
-    cellsPointer = new UnitCellAtom[cuantos];
+    cellsPointer = new UnitCellSiAtom[cuantos];
     nBlock = new byte[4 * cuantos];
 
 //--------------------------------------------------------------------------
@@ -542,7 +542,7 @@ public class UnitCell {
           double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
 
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red0[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellAtom(Xr, Yr, Zr, 0);
+            red0[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellSiAtom(Xr, Yr, Zr, 0);
             //System.out.println(">"+posX+" "+posY+" "+posZ+"|new|"+Xr+" "+Yr+" "+Zr);
             red0[i - this.I_i][j - this.J_i][k - this.K_i].setNum((short) cont);
             cont++;
@@ -570,7 +570,7 @@ public class UnitCell {
           double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red1[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellAtom(Xr, Yr, Zr, 1);
+            red1[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellSiAtom(Xr, Yr, Zr, 1);
 
             red1[i - this.I_i][j - this.J_i][k - this.K_i].setNum((short) cont);
             cont++;
@@ -599,7 +599,7 @@ public class UnitCell {
 
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red2[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellAtom(Xr, Yr, Zr, 0);
+            red2[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellSiAtom(Xr, Yr, Zr, 0);
 
             red2[i - this.I_i][j - this.J_i][k - this.K_i].setNum((short) cont);
             cont++;
@@ -626,7 +626,7 @@ public class UnitCell {
           double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red3[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellAtom(Xr, Yr, Zr, 1);
+            red3[i - this.I_i][j - this.J_i][k - this.K_i] = new UnitCellSiAtom(Xr, Yr, Zr, 1);
             red3[i - this.I_i][j - this.J_i][k - this.K_i].setNum((short) cont);
             cont++;
           }//else System.out.println(Math.abs(Xr-limitX)+Math.abs(Zr-limitZ)+Math.abs(Yr-limitY) );
