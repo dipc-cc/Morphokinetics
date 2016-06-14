@@ -371,7 +371,7 @@ class RestartLow {
     String element = "H";
     // Setup
     if (lattice instanceof GrapheneLattice){
-      scale = 10; 
+      scale = 1.42; 
       element = "C";
     } else if (lattice instanceof AgLattice) {
       scale = 2.892; 
