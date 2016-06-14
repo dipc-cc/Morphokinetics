@@ -14,13 +14,22 @@ public class SiUnitCell {
   private double[][] g;
   private short[] neighs;
   private byte[] nBlock;
-  private double limitX, limitY, limitZ;
-  private double limitXnt, limitYnt, limitZnt;
+  private double limitX;
+  private double limitY;
+  private double limitZ;
+  private double limitXnt;
+  private double limitYnt;
+  private double limitZnt;
   private UnitCellSiAtom[][][] red0;
   private UnitCellSiAtom[][][] red1;
   private UnitCellSiAtom[][][] red2;
   private UnitCellSiAtom[][][] red3;
-  private int I_i, I_s, J_i, J_s, K_i, K_s;
+  private int I_i;
+  private int I_s;
+  private int J_i;
+  private int J_s;
+  private int K_i;
+  private int K_s;
   private UnitCellSiAtom[] cellsPointer;
 
   public SiUnitCell() {
