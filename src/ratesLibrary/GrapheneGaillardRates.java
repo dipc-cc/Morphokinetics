@@ -17,7 +17,6 @@ import static ratesLibrary.IRates.kB;
  * @author Nestor, J. Alberdi-Rodriguez
  */
 public class GrapheneGaillardRates implements IRates {
-  private final double[][] energies;
   private double diffusionMl = 0.000035;
   private final double islandDensityPerSite = 1 / 60000f;
   private final double prefactor;
@@ -25,7 +24,6 @@ public class GrapheneGaillardRates implements IRates {
   private final double eDiff;
   private final double eNn;
   private final double eNnn;
-  //private final double eBar = xxx; n_NN*E_NN + n_NNN*E_NNN
   private final double eInc;
   
   public GrapheneGaillardRates() {
@@ -33,19 +31,28 @@ public class GrapheneGaillardRates implements IRates {
     eNn = 1.3;
     eNnn = 0.6;
     eInc = 1.0;
-    energies = new double[8][8];
     prefactor = 1e6;
   }
   
+  /**
+   * Rate is calculated with the formulas 8, 9 and 10 of the paper.
+   *
+   * @param originN1
+   * @param originN2
+   * @param destinationN1
+   * @param destinationN2
+   * @param temperature
+   * @return
+   */
   public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, double temperature) {
     double energy;
-    if (originN1 == 0) {
+    if (originN1 == 0) { // diffusion events
       energy = eDiff;
     } else if ((originN1 == 1 && originN2 == 0 && destinationN1 == 2 && destinationN2 == 3)
             || (originN1 == 1 && originN2 == 1 && destinationN1 == 1 && destinationN2 == 3)
-            || (originN1 == 1 && originN2 == 3 && destinationN1 == 1 && destinationN2 == 1)) {
+            || (originN1 == 1 && originN2 == 3 && destinationN1 == 1 && destinationN2 == 1)) { // events 4 reversed and 6
       energy = eInc;
-    } else {
+    } else { // general case
       energy = originN1 * eNn + originN2 * eNnn;
     }
     return prefactor * Math.exp(-energy / (kB * temperature));
