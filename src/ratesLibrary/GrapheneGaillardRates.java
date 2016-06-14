@@ -9,7 +9,7 @@ import static ratesLibrary.IRates.kB;
 /**
  * Rates based on paper Gaillard, P., Chanier, T., Henrard, L., Moskovkin, P., & Lucas, S. (2015).
  * Multiscale simulations of the early stages of the growth of graphene on copper. Surface Science,
- * 637, 11-18.
+ * 637, 11-18, http://dx.doi.org/10.1016/j.susc.2015.02.014.
  *
  * Only the first neighbour of {@link kineticMonteCarlo.atom.AbstractAtom} and
  * {@link kineticMonteCarlo.atom.GrapheneTypesTable} are considered.
