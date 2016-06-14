@@ -5,7 +5,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.SiAtom;
-import basic.unitCell.UnitCell;
+import kineticMonteCarlo.unitCell.UnitCell;
 
 /**
  *

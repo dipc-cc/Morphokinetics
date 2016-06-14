@@ -1,4 +1,4 @@
-package basic.unitCell;
+package kineticMonteCarlo.unitCell;
 
 /**
  *
