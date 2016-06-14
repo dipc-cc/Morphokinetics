@@ -514,7 +514,7 @@ public class SiUnitCell {
     return (cuantos);
   }
 
-  public int getSize() {
+  public int size() {
     if (neighs == null) {
       return 0;
     } else {
