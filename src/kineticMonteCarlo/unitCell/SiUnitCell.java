@@ -25,11 +25,11 @@ public class SiUnitCell {
   private UnitCellSiAtom[][][] red2;
   private UnitCellSiAtom[][][] red3;
   private int I_i;
-  private int I_s;
+  private int iSize;
   private int J_i;
-  private int J_s;
+  private int jSize;
   private int K_i;
-  private int K_s;
+  private int kSize;
   private UnitCellSiAtom[] cellsPointer;
 
   public SiUnitCell() {
@@ -471,16 +471,16 @@ public class SiUnitCell {
     }
 //----------------------------------------------------
     this.I_i = (int) Math.round(I_i) - 2;
-    this.I_s = (int) Math.round(I_s) + 2;
+    this.iSize = (int) Math.round(I_s) + 2;
     this.J_i = (int) Math.round(J_i) - 2;
-    this.J_s = (int) Math.round(J_s) + 2;
+    this.jSize = (int) Math.round(J_s) + 2;
     this.K_i = (int) Math.round(K_i) - 2;
-    this.K_s = (int) Math.round(K_s) + 2;
+    this.kSize = (int) Math.round(K_s) + 2;
 
-    red0 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
-    red1 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
-    red2 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
-    red3 = new UnitCellSiAtom[this.I_s - this.I_i][this.J_s - this.J_i][this.K_s - this.K_i];
+    red0 = new UnitCellSiAtom[this.iSize - this.I_i][this.jSize - this.J_i][this.kSize - this.K_i];
+    red1 = new UnitCellSiAtom[this.iSize - this.I_i][this.jSize - this.J_i][this.kSize - this.K_i];
+    red2 = new UnitCellSiAtom[this.iSize - this.I_i][this.jSize - this.J_i][this.kSize - this.K_i];
+    red3 = new UnitCellSiAtom[this.iSize - this.I_i][this.jSize - this.J_i][this.kSize - this.K_i];
 
     //-------------------------------------------------------------------------
     // Creamos los atomos
@@ -534,9 +534,9 @@ public class SiUnitCell {
   private int createAtoms() {
     int cont = 0;
     //celula tipo 0 (abajo del todo)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
@@ -561,9 +561,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 1 (altura 1)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
@@ -589,9 +589,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 2 (altura 2)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
@@ -618,9 +618,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 3 (altura 3)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
           //posici�n X e Y en el SC C
           double posX = 0;
           double posY = 0;
@@ -647,9 +647,9 @@ public class SiUnitCell {
 
   private short findAtom(double Px, double Py, double Pz) {
     //celula tipo 0 (abajo del todo)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red0[i - this.I_i][j - this.J_i][k - this.K_i] != null && red0[i - this.I_i][j - this.J_i][k - this.K_i].getX_uc() == Px && red0[i - this.I_i][j - this.J_i][k - this.K_i].getY_uc() == Py && red0[i - this.I_i][j - this.J_i][k - this.K_i].getZ_uc() == Pz) {
             return (red0[i - this.I_i][j - this.J_i][k - this.K_i].getNum());
@@ -660,9 +660,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 1
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red1[i - this.I_i][j - this.J_i][k - this.K_i] != null && red1[i - this.I_i][j - this.J_i][k - this.K_i].getX_uc() == Px && red1[i - this.I_i][j - this.J_i][k - this.K_i].getY_uc() == Py && red1[i - this.I_i][j - this.J_i][k - this.K_i].getZ_uc() == Pz) {
             return (red1[i - this.I_i][j - this.J_i][k - this.K_i].getNum());
@@ -672,9 +672,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 2
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red2[i - this.I_i][j - this.J_i][k - this.K_i] != null && red2[i - this.I_i][j - this.J_i][k - this.K_i].getX_uc() == Px && red2[i - this.I_i][j - this.J_i][k - this.K_i].getY_uc() == Py && red2[i - this.I_i][j - this.J_i][k - this.K_i].getZ_uc() == Pz) {
             return (red2[i - this.I_i][j - this.J_i][k - this.K_i].getNum());
@@ -684,9 +684,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 3
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red3[i - this.I_i][j - this.J_i][k - this.K_i] != null && red3[i - this.I_i][j - this.J_i][k - this.K_i].getX_uc() == Px && red3[i - this.I_i][j - this.J_i][k - this.K_i].getY_uc() == Py && red3[i - this.I_i][j - this.J_i][k - this.K_i].getZ_uc() == Pz) {
             return (red3[i - this.I_i][j - this.J_i][k - this.K_i].getNum());
@@ -699,9 +699,9 @@ public class SiUnitCell {
 
   private void interconect() {
     //celula tipo 0 (abajo del todo)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
           if (red0[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
@@ -723,14 +723,14 @@ public class SiUnitCell {
     }
 
     //celula tipo 1 
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red1[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             red1[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(0, red0[i - this.I_i][j - this.J_i][k - this.K_i]);
-            if (j < this.J_s - 1) {
+            if (j < this.jSize - 1) {
               red1[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(1, red0[i - this.I_i][j + 1 - this.J_i][k - this.K_i]);
             }
 
@@ -744,19 +744,19 @@ public class SiUnitCell {
     }
 
     //celula tipo 2
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red2[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             red2[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(0, red3[i - this.I_i][j - this.J_i][k - this.K_i]);
-            if (j < this.J_s - 1) {
+            if (j < this.jSize - 1) {
               red2[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(1, red3[i - this.I_i][j - this.J_i + 1][k - this.K_i]);
             }
 
             red2[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(2, red1[i - this.I_i][j - this.J_i][k - this.K_i]);
-            if (k < this.K_s - 1) {
+            if (k < this.kSize - 1) {
               red2[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(3, red1[i - this.I_i][j - this.J_i][k - this.K_i + 1]);
             }
           }
@@ -765,9 +765,9 @@ public class SiUnitCell {
     }
 
     //celula tipo 3
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red3[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
@@ -776,10 +776,10 @@ public class SiUnitCell {
             }
             red3[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(1, red2[i - this.I_i][j - this.J_i][k - this.K_i]);
 
-            if (i < this.I_s - 1) {
+            if (i < this.iSize - 1) {
               red3[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(2, red0[i - this.I_i + 1][j - this.J_i][k - this.K_i]);
             }
-            if (i < this.I_s - 1 && k < this.K_s - 1) {
+            if (i < this.iSize - 1 && k < this.kSize - 1) {
               red3[i - this.I_i][j - this.J_i][k - this.K_i].setVecino(3, red0[i - this.I_i + 1][j - this.J_i][k - this.K_i + 1]);
             }
 
@@ -794,10 +794,10 @@ public class SiUnitCell {
   private void setArraysNeigh() {
     //System.out.println("-----------");
     //celula tipo 0 (abajo del todo)
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
       //  int cont=0;
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red0[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red0[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
@@ -997,10 +997,10 @@ public class SiUnitCell {
 
     // System.out.println();
     //celula tipo 1 
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
       // int cont=0;
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red1[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red1[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
@@ -1196,10 +1196,10 @@ public class SiUnitCell {
     }
 
     //celula tipo 2 
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
       // int cont=0;
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red2[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red2[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
@@ -1396,10 +1396,10 @@ public class SiUnitCell {
 
     //System.out.println();
     //celula tipo 3 
-    for (int i = this.I_i; i < this.I_s; i++) { //Eje Z
+    for (int i = this.I_i; i < this.iSize; i++) { //Eje Z
       int cont = 0;
-      for (int j = this.J_i; j < this.J_s; j++) { //Y SC B
-        for (int k = this.K_i; k < this.K_s; k++) { //X SC B
+      for (int j = this.J_i; j < this.jSize; j++) { //Y SC B
+        for (int k = this.K_i; k < this.kSize; k++) { //X SC B
 
           if (red3[i - this.I_i][j - this.J_i][k - this.K_i] != null) {
             int num = red3[i - this.I_i][j - this.J_i][k - this.K_i].getNum();
