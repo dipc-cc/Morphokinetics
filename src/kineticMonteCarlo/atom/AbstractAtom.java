@@ -14,6 +14,7 @@ public abstract class AbstractAtom implements IAtom {
   private double[] probabilities;
   private int numberOfNeighbours;
   private boolean removed = false;
+  private boolean occupied;
 
   // Atoms types
   public static final byte TERRACE = 0;
@@ -57,11 +58,22 @@ public abstract class AbstractAtom implements IAtom {
   @Override
   public void unRemove() {
     removed = false;
+    occupied = !removed;
   }
   
   @Override
   public void setRemoved() {
     removed = true;
+    occupied = !removed;
+  }
+
+  public final boolean isOccupied() {
+    return occupied;
+  }
+  
+  public final void setOccupied(boolean occupied) {
+    this.occupied = occupied;
+    removed = !occupied;
   }
 
   @Override

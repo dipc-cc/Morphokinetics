@@ -23,7 +23,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private double probability;
   private double[] bondsProbability;
   private double angle;
-  private boolean occupied;
   private boolean outside;
   private final short iHexa;
   private final short jHexa;
@@ -50,7 +49,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
-    occupied = false;
+    setOccupied(false);
     outside = false;
     this.iHexa = iHexa;
     this.jHexa = jHexa;
@@ -153,7 +152,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public void clear(){
     visited = false;
-    occupied = false;
+    setOccupied(false);
     outside = false;
     probability = 0;
     depositionTime = 0;
@@ -173,11 +172,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   @Override
   public double remove() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean isRemoved() {
-    return !occupied;
   }
 
   /**
@@ -218,14 +212,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   public void setOutside(boolean outside) {
     this.outside = outside;
-  }
-
-  public boolean isOccupied() {
-    return occupied;
-  }
-  
-  public void setOccupied(boolean occupied) {
-    this.occupied = occupied;
   }
 
   @Override
