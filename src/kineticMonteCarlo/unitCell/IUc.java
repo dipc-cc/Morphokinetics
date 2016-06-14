@@ -14,8 +14,8 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  */
 public interface IUc {
   
-  static final float SIZE_X = 1; // Cartesian size X
-  static final float SIZE_Y = 1; // Cartesian size Y
+  static final float SIZE_X = 1; // Cartesian size X per unit
+  static final float SIZE_Y = 1; // Cartesian size Y per unit
   
   public AbstractGrowthAtom getAtom(int pos);
   

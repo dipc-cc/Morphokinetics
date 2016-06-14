@@ -125,8 +125,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
         AbstractGrowthAtom atom = atoms[i][j];
-        ucArray[i][j] = new SimpleUc(1, i, j, atom);
-        ucArray[i][j].setSizeI(getHexaSizeI());
+        ucArray[i][j] = new SimpleUc(i, j, atom);
         
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));

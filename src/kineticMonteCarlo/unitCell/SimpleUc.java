@@ -9,32 +9,25 @@ import java.awt.geom.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /**
- * Really simple unit cell, which will contain only one atom
+ * Really simple unit cell, which will contain only one atom.
  *
  * @author J. Alberdi-Rodriguez
  */
-public class SimpleUc extends AbstractUc {
+public class SimpleUc extends AbstractUc implements IUc{
 
   private final AbstractGrowthAtom atom;
   private final int size; // how many atoms
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
-  private static final float SIZE_X = 1; // Cartesian size X per unit
-  private static final float SIZE_Y = 1; // Cartesian size Y per unit
   
-  private int sizeI;
   private double posX;
   private double posY;
 
-  public SimpleUc(int size, int posI, int posJ, AbstractGrowthAtom atom) {
+  public SimpleUc(int posI, int posJ, AbstractGrowthAtom atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
     this.atom = atom;
-  }
-  
-  public final void setSizeI(int sizeI) {
-    this.sizeI = sizeI;
   }
 
   /**

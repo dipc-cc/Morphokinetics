@@ -79,7 +79,7 @@ public class AgUcLattice extends AgLattice {
         id++;
         AgAtom atom1 = new AgAtom(id, 1);
         atomsList.add(atom1);
-        AgUc uc = new AgUc(2, i, j, atomsList);
+        AgUc uc = new AgUc(i, j, atomsList);
         ucList.add(uc);
         ucArray[i][j] = uc;
       }

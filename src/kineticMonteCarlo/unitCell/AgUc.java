@@ -12,19 +12,18 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
  * Unit cell of Ag (Silver) lattice
+ *
  * @author J. Alberdi-Rodriguez
  */
-public class AgUc extends AbstractUc {
+public class AgUc extends AbstractUc implements IUc {
 
   private final List<AgAtom> atoms;
-  private final int size; // how many atoms
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
   private static final float SIZE_X = 1; // Cartesian size X
   private static final float SIZE_Y = 2 * AbstractGrowthLattice.Y_RATIO; // Cartesian size Y
 
-  public AgUc(int size, int posI, int posJ, List<AgAtom> atoms) {
-    this.size = size;
+  public AgUc(int posI, int posJ, List<AgAtom> atoms) {
     this.posI = posI;
     this.posJ = posJ;
     this.atoms = atoms;
@@ -41,16 +40,18 @@ public class AgUc extends AbstractUc {
   }
 
   /**
-   * Number of elements.
+   * Number of elements per unit cell.
+   *
    * @return quantity of unit cells
    */
   @Override
   public int size() {
-    return atoms.size(); // or size
+    return atoms.size();
   }
 
   /**
    * Cartesian size of the unit cell in X axis
+   *
    * @return size in X
    */
   public static float getSizeX() {
@@ -59,6 +60,7 @@ public class AgUc extends AbstractUc {
 
   /**
    * Cartesian size of the unit cell in Y axis
+   *
    * @return size in Y
    */
   public static float getSizeY() {
