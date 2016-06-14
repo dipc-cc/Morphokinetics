@@ -17,7 +17,6 @@ public class SiLattice extends AbstractLattice {
   private SiAtom[] atoms;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
-
     if (millerX == 0 && millerY == 0 && millerZ == 0) {
       System.exit(-1);
     }
