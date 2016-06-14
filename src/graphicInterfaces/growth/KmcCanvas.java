@@ -158,7 +158,6 @@ public class KmcCanvas extends Canvas {
   
   @Override
   public void paint(Graphics g) { //real drawing method
-
     super.paint(g);
 
     g.setColor(GRAY);
