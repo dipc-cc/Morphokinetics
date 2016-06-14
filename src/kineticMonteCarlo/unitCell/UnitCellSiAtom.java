@@ -213,7 +213,7 @@ public class UnitCellSiAtom {
     neighbours[vecino] = v;
   }
 
-  public UnitCellSiAtom getVecino(int vecino) {
+  public UnitCellSiAtom getNeighbour(int vecino) {
     return neighbours[vecino];
   }
 

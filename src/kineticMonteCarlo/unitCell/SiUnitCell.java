@@ -806,8 +806,8 @@ public class SiUnitCell {
             //para cada vecino...
 
             //cont++;
-            if (red0[i - iInit][j - jInit][k - kInit].getVecino(0) != null) {
-              neighs[4 * num] = red0[i - iInit][j - jInit][k - kInit].getVecino(0).getNum();
+            if (red0[i - iInit][j - jInit][k - kInit].getNeighbour(0) != null) {
+              neighs[4 * num] = red0[i - iInit][j - jInit][k - kInit].getNeighbour(0).getNum();
               nBlock[4 * num] = 0;
             } else {
 
@@ -853,8 +853,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red0[i - iInit][j - jInit][k - kInit].getVecino(1) != null) {
-              neighs[4 * num + 1] = red0[i - iInit][j - jInit][k - kInit].getVecino(1).getNum();
+            if (red0[i - iInit][j - jInit][k - kInit].getNeighbour(1) != null) {
+              neighs[4 * num + 1] = red0[i - iInit][j - jInit][k - kInit].getNeighbour(1).getNum();
               nBlock[4 * num + 1] = 0;
               //System.out.println(num+" Vecino 1: "+red0[i-I_i][j-J_i][k-K_i].getVecino(1).getNum());
             } else {
@@ -900,8 +900,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red0[i - iInit][j - jInit][k - kInit].getVecino(2) != null) {
-              neighs[4 * num + 2] = red0[i - iInit][j - jInit][k - kInit].getVecino(2).getNum();
+            if (red0[i - iInit][j - jInit][k - kInit].getNeighbour(2) != null) {
+              neighs[4 * num + 2] = red0[i - iInit][j - jInit][k - kInit].getNeighbour(2).getNum();
               nBlock[4 * num + 2] = 0;
             } else {
 
@@ -946,8 +946,8 @@ public class SiUnitCell {
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
-            if (red0[i - iInit][j - jInit][k - kInit].getVecino(3) != null) {
-              neighs[4 * num + 3] = red0[i - iInit][j - jInit][k - kInit].getVecino(3).getNum();
+            if (red0[i - iInit][j - jInit][k - kInit].getNeighbour(3) != null) {
+              neighs[4 * num + 3] = red0[i - iInit][j - jInit][k - kInit].getNeighbour(3).getNum();
               nBlock[4 * num + 3] = 0;
             } else {
 
@@ -1009,8 +1009,8 @@ public class SiUnitCell {
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             //   cont++;
-            if (red1[i - iInit][j - jInit][k - kInit].getVecino(0) != null) {
-              neighs[4 * num] = red1[i - iInit][j - jInit][k - kInit].getVecino(0).getNum();
+            if (red1[i - iInit][j - jInit][k - kInit].getNeighbour(0) != null) {
+              neighs[4 * num] = red1[i - iInit][j - jInit][k - kInit].getNeighbour(0).getNum();
               nBlock[4 * num] = 0;
             } else {
 
@@ -1054,8 +1054,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red1[i - iInit][j - jInit][k - kInit].getVecino(1) != null) {
-              neighs[4 * num + 1] = red1[i - iInit][j - jInit][k - kInit].getVecino(1).getNum();
+            if (red1[i - iInit][j - jInit][k - kInit].getNeighbour(1) != null) {
+              neighs[4 * num + 1] = red1[i - iInit][j - jInit][k - kInit].getNeighbour(1).getNum();
               nBlock[4 * num + 1] = 0;
             } else {
 
@@ -1100,8 +1100,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red1[i - iInit][j - jInit][k - kInit].getVecino(2) != null) {
-              neighs[4 * num + 2] = red1[i - iInit][j - jInit][k - kInit].getVecino(2).getNum();
+            if (red1[i - iInit][j - jInit][k - kInit].getNeighbour(2) != null) {
+              neighs[4 * num + 2] = red1[i - iInit][j - jInit][k - kInit].getNeighbour(2).getNum();
               nBlock[4 * num + 2] = 0;
             } else {
 
@@ -1146,8 +1146,8 @@ public class SiUnitCell {
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
-            if (red1[i - iInit][j - jInit][k - kInit].getVecino(3) != null) {
-              neighs[4 * num + 3] = red1[i - iInit][j - jInit][k - kInit].getVecino(3).getNum();
+            if (red1[i - iInit][j - jInit][k - kInit].getNeighbour(3) != null) {
+              neighs[4 * num + 3] = red1[i - iInit][j - jInit][k - kInit].getNeighbour(3).getNum();
               nBlock[4 * num + 3] = 0;
             } else {
 
@@ -1207,8 +1207,8 @@ public class SiUnitCell {
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             //  cont++;
-            if (red2[i - iInit][j - jInit][k - kInit].getVecino(0) != null) {
-              neighs[4 * num] = red2[i - iInit][j - jInit][k - kInit].getVecino(0).getNum();
+            if (red2[i - iInit][j - jInit][k - kInit].getNeighbour(0) != null) {
+              neighs[4 * num] = red2[i - iInit][j - jInit][k - kInit].getNeighbour(0).getNum();
               nBlock[4 * num] = 0;
             } else {
 
@@ -1252,8 +1252,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red2[i - iInit][j - jInit][k - kInit].getVecino(1) != null) {
-              neighs[4 * num + 1] = red2[i - iInit][j - jInit][k - kInit].getVecino(1).getNum();
+            if (red2[i - iInit][j - jInit][k - kInit].getNeighbour(1) != null) {
+              neighs[4 * num + 1] = red2[i - iInit][j - jInit][k - kInit].getNeighbour(1).getNum();
               nBlock[4 * num + 1] = 0;
             } else {
 
@@ -1298,8 +1298,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red2[i - iInit][j - jInit][k - kInit].getVecino(2) != null) {
-              neighs[4 * num + 2] = red2[i - iInit][j - jInit][k - kInit].getVecino(2).getNum();
+            if (red2[i - iInit][j - jInit][k - kInit].getNeighbour(2) != null) {
+              neighs[4 * num + 2] = red2[i - iInit][j - jInit][k - kInit].getNeighbour(2).getNum();
               nBlock[4 * num + 2] = 0;
             } else {
 
@@ -1344,8 +1344,8 @@ public class SiUnitCell {
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
-            if (red2[i - iInit][j - jInit][k - kInit].getVecino(3) != null) {
-              neighs[4 * num + 3] = red2[i - iInit][j - jInit][k - kInit].getVecino(3).getNum();
+            if (red2[i - iInit][j - jInit][k - kInit].getNeighbour(3) != null) {
+              neighs[4 * num + 3] = red2[i - iInit][j - jInit][k - kInit].getNeighbour(3).getNum();
               nBlock[4 * num + 3] = 0;
             } else {
 
@@ -1407,8 +1407,8 @@ public class SiUnitCell {
             //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
             //para cada vecino...
             cont++;
-            if (red3[i - iInit][j - jInit][k - kInit].getVecino(0) != null) {
-              neighs[4 * num] = red3[i - iInit][j - jInit][k - kInit].getVecino(0).getNum();
+            if (red3[i - iInit][j - jInit][k - kInit].getNeighbour(0) != null) {
+              neighs[4 * num] = red3[i - iInit][j - jInit][k - kInit].getNeighbour(0).getNum();
               nBlock[4 * num] = 0;
             } else {
 
@@ -1452,8 +1452,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red3[i - iInit][j - jInit][k - kInit].getVecino(1) != null) {
-              neighs[4 * num + 1] = red3[i - iInit][j - jInit][k - kInit].getVecino(1).getNum();
+            if (red3[i - iInit][j - jInit][k - kInit].getNeighbour(1) != null) {
+              neighs[4 * num + 1] = red3[i - iInit][j - jInit][k - kInit].getNeighbour(1).getNum();
               nBlock[4 * num + 1] = 0;
             } else {
 
@@ -1498,8 +1498,8 @@ public class SiUnitCell {
             }
 
 //-------------------------------------------------------------------------------------------------------------------------------------  
-            if (red3[i - iInit][j - jInit][k - kInit].getVecino(2) != null) {
-              neighs[4 * num + 2] = red3[i - iInit][j - jInit][k - kInit].getVecino(2).getNum();
+            if (red3[i - iInit][j - jInit][k - kInit].getNeighbour(2) != null) {
+              neighs[4 * num + 2] = red3[i - iInit][j - jInit][k - kInit].getNeighbour(2).getNum();
               nBlock[4 * num + 2] = 0;
             } else {
 
@@ -1545,8 +1545,8 @@ public class SiUnitCell {
             }
 //-------------------------------------------------------------------------------------------------------------------------------------  
 
-            if (red3[i - iInit][j - jInit][k - kInit].getVecino(3) != null) {
-              neighs[4 * num + 3] = red3[i - iInit][j - jInit][k - kInit].getVecino(3).getNum();
+            if (red3[i - iInit][j - jInit][k - kInit].getNeighbour(3) != null) {
+              neighs[4 * num + 3] = red3[i - iInit][j - jInit][k - kInit].getNeighbour(3).getNum();
               nBlock[4 * num + 3] = 0;
             } else {
 
