@@ -279,7 +279,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private int countIslands(boolean print) {
     // reset all the atoms
-    
     for (int i = 0; i < lattice.size(); i++) {
       IUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
@@ -294,9 +293,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       // visit all the atoms within the unit cell
       IUc uc = lattice.getUc(i);
       for (int j=0; j< uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
-        identifyIsland(atom, false);
-        
+        identifyIsland(uc.getAtom(j), false);
       }
     }
     
