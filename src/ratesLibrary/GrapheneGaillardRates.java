@@ -31,7 +31,7 @@ public class GrapheneGaillardRates implements IRates {
     eNn = 1.3;
     eNnn = 0.6;
     eInc = 1.0;
-    prefactor = 1e6;
+    prefactor = 1e4;
   }
   
   /**
