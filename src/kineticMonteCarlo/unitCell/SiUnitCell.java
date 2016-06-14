@@ -706,15 +706,15 @@ public class SiUnitCell {
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
           if (red0[i - iInit][j - jInit][k - kInit] != null) {
             if (j > jInit) {
-              red0[i - iInit][j - jInit][k - kInit].setVecino(0, red1[i - iInit][j - 1 - jInit][k - kInit]);
+              red0[i - iInit][j - jInit][k - kInit].setNeighbour(0, red1[i - iInit][j - 1 - jInit][k - kInit]);
             }
-            red0[i - iInit][j - jInit][k - kInit].setVecino(1, red1[i - iInit][j - jInit][k - kInit]);
+            red0[i - iInit][j - jInit][k - kInit].setNeighbour(1, red1[i - iInit][j - jInit][k - kInit]);
 
             if (k > -kInit && i > -iInit) {
-              red0[i - iInit][j - jInit][k - kInit].setVecino(2, red3[i - iInit - 1][j - jInit][k - kInit - 1]);
+              red0[i - iInit][j - jInit][k - kInit].setNeighbour(2, red3[i - iInit - 1][j - jInit][k - kInit - 1]);
             }
             if (i > iInit) {
-              red0[i - iInit][j - jInit][k - kInit].setVecino(3, red3[i - iInit - 1][j - jInit][k - kInit]);
+              red0[i - iInit][j - jInit][k - kInit].setNeighbour(3, red3[i - iInit - 1][j - jInit][k - kInit]);
             }
           }
 
@@ -729,15 +729,15 @@ public class SiUnitCell {
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red1[i - iInit][j - jInit][k - kInit] != null) {
-            red1[i - iInit][j - jInit][k - kInit].setVecino(0, red0[i - iInit][j - jInit][k - kInit]);
+            red1[i - iInit][j - jInit][k - kInit].setNeighbour(0, red0[i - iInit][j - jInit][k - kInit]);
             if (j < jSize - 1) {
-              red1[i - iInit][j - jInit][k - kInit].setVecino(1, red0[i - iInit][j + 1 - jInit][k - kInit]);
+              red1[i - iInit][j - jInit][k - kInit].setNeighbour(1, red0[i - iInit][j + 1 - jInit][k - kInit]);
             }
 
             if (k > kInit) {
-              red1[i - iInit][j - jInit][k - kInit].setVecino(2, red2[i - iInit][j + -jInit][k - kInit - 1]);
+              red1[i - iInit][j - jInit][k - kInit].setNeighbour(2, red2[i - iInit][j + -jInit][k - kInit - 1]);
             }
-            red1[i - iInit][j - jInit][k - kInit].setVecino(3, red2[i - iInit][j - jInit][k - kInit]);
+            red1[i - iInit][j - jInit][k - kInit].setNeighbour(3, red2[i - iInit][j - jInit][k - kInit]);
           }
         }
       }
@@ -750,14 +750,14 @@ public class SiUnitCell {
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red2[i - iInit][j - jInit][k - kInit] != null) {
-            red2[i - iInit][j - jInit][k - kInit].setVecino(0, red3[i - iInit][j - jInit][k - kInit]);
+            red2[i - iInit][j - jInit][k - kInit].setNeighbour(0, red3[i - iInit][j - jInit][k - kInit]);
             if (j < jSize - 1) {
-              red2[i - iInit][j - jInit][k - kInit].setVecino(1, red3[i - iInit][j - jInit + 1][k - kInit]);
+              red2[i - iInit][j - jInit][k - kInit].setNeighbour(1, red3[i - iInit][j - jInit + 1][k - kInit]);
             }
 
-            red2[i - iInit][j - jInit][k - kInit].setVecino(2, red1[i - iInit][j - jInit][k - kInit]);
+            red2[i - iInit][j - jInit][k - kInit].setNeighbour(2, red1[i - iInit][j - jInit][k - kInit]);
             if (k < kSize - 1) {
-              red2[i - iInit][j - jInit][k - kInit].setVecino(3, red1[i - iInit][j - jInit][k - kInit + 1]);
+              red2[i - iInit][j - jInit][k - kInit].setNeighbour(3, red1[i - iInit][j - jInit][k - kInit + 1]);
             }
           }
         }
@@ -772,15 +772,15 @@ public class SiUnitCell {
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red3[i - iInit][j - jInit][k - kInit] != null) {
             if (j > -jInit) {
-              red3[i - iInit][j - jInit][k - kInit].setVecino(0, red2[i - iInit][j - jInit - 1][k - kInit]);
+              red3[i - iInit][j - jInit][k - kInit].setNeighbour(0, red2[i - iInit][j - jInit - 1][k - kInit]);
             }
-            red3[i - iInit][j - jInit][k - kInit].setVecino(1, red2[i - iInit][j - jInit][k - kInit]);
+            red3[i - iInit][j - jInit][k - kInit].setNeighbour(1, red2[i - iInit][j - jInit][k - kInit]);
 
             if (i < iSize - 1) {
-              red3[i - iInit][j - jInit][k - kInit].setVecino(2, red0[i - iInit + 1][j - jInit][k - kInit]);
+              red3[i - iInit][j - jInit][k - kInit].setNeighbour(2, red0[i - iInit + 1][j - jInit][k - kInit]);
             }
             if (i < iSize - 1 && k < kSize - 1) {
-              red3[i - iInit][j - jInit][k - kInit].setVecino(3, red0[i - iInit + 1][j - jInit][k - kInit + 1]);
+              red3[i - iInit][j - jInit][k - kInit].setNeighbour(3, red0[i - iInit + 1][j - jInit][k - kInit + 1]);
             }
 
           }

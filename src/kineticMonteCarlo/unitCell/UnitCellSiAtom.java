@@ -209,12 +209,12 @@ public class UnitCellSiAtom {
     return type;
   }
 
-  public void setVecino(int vecino, UnitCellSiAtom v) {
-    neighbours[vecino] = v;
+  public void setNeighbour(int pos, UnitCellSiAtom atom) {
+    neighbours[pos] = atom;
   }
 
-  public UnitCellSiAtom getNeighbour(int vecino) {
-    return neighbours[vecino];
+  public UnitCellSiAtom getNeighbour(int pos) {
+    return neighbours[pos];
   }
 
   public short getNum() {
