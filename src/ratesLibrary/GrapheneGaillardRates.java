@@ -34,22 +34,22 @@ public class GrapheneGaillardRates implements IRates {
     eNnn = 0.6;
     eInc = 1.0;
     energies = new double[8][8];
-    prefactor = 1e11;
+    prefactor = 1e6;
   }
   
-  public double getRate(int noFirstNeighbours, int noSecondNeighbours, double temperature) {
+  public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, double temperature) {
     double energy;
-    if (noFirstNeighbours == 0) {
+    if (originN1 == 0) {
       energy = eDiff;
+    } else if ((originN1 == 1 && originN2 == 0 && destinationN1 == 2 && destinationN2 == 3)
+            || (originN1 == 1 && originN2 == 1 && destinationN1 == 1 && destinationN2 == 3)
+            || (originN1 == 1 && originN2 == 3 && destinationN1 == 1 && destinationN2 == 1)) {
+      energy = eInc;
     } else {
-      energy = noFirstNeighbours * eNn + noSecondNeighbours * eNnn;
+      energy = originN1 * eNn + originN2 * eNnn;
     }
     return prefactor * Math.exp(-energy / (kB * temperature));
   }
-  
-  /*private double getRate(int sourceType, int destinationType, double temperature) {
-    return prefactor * Math.exp(-energies[sourceType][destinationType] / (kB * temperature));
-  }*/
 
   @Override
   public double getDepositionRatePerSite() {
