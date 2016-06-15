@@ -36,10 +36,6 @@ public class SiUnitCell {
     g = new double[3][3];
   }
 
-  public double[][] getRotation() {
-    return g;
-  }
-
   public UnitCellSiAtom[] getCellsP() {
     return cellsPointer;
   }
