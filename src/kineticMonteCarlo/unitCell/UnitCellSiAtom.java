@@ -6,10 +6,6 @@ package kineticMonteCarlo.unitCell;
  */
 public class UnitCellSiAtom {
 
-  //sólo para la creación de la unit cell
-  private short ucX;
-  private short ucY;
-  private short ucZ;
   private UnitCellSiAtom[] neighbours;
   private short num;
   private int type;
@@ -179,24 +175,6 @@ public class UnitCellSiAtom {
     neighbours = new UnitCellSiAtom[4];
 
     num = -1;
-  }
-
-  public void setUC(short uc_x, short uc_y, short uc_z) {
-    this.ucX = uc_x;
-    this.ucY = uc_y;
-    this.ucZ = uc_z;
-  }
-
-  public short getUC_x() {
-    return ucX;
-  }
-
-  public short getUC_y() {
-    return ucY;
-  }
-
-  public short getUC_z() {
-    return ucZ;
   }
 
   public int getType() {
