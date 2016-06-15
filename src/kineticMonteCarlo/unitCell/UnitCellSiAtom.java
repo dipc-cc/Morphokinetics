@@ -11,9 +11,6 @@ public class UnitCellSiAtom {
   private final double posX;
   private final double posY;
   private final double posZ;
-  private float posX_space;
-  private float posY_space;
-  private float posZ_space;
   private float limitX;
   private float limitY;
   private float limitZ;
@@ -61,24 +58,18 @@ public class UnitCellSiAtom {
       limitY = (float) limitY_a;
       limitZ = (float) limitZ_a;
     }
-
-    posX_space = (float) posX;
-    posY_space = (float) posY;
-    posZ_space = (float) posZ;
   }
 
   public float getPosX(int uc_x, int uc_y, int uc_z) {
-    float temp = posX_space + uc_x * limitX;
-    return temp;
+    return (float) (posX + uc_x * limitX);
   }
 
   public float getPosY(int uc_x, int uc_y, int uc_z) {
-    float temp = posY_space + uc_y * limitY;
-    return temp;
+    return (float) (posY + uc_y * limitY);
   }
 
   public float getPosZ(int uc_x, int uc_y, int uc_z) {
-    return posZ_space - uc_z * limitZ;
+    return (float) (posZ - uc_z * limitZ);
   }
   
   public void setNeighbour(int pos, UnitCellSiAtom atom) {
