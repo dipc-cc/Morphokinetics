@@ -18,7 +18,7 @@ import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static java.lang.String.format;
-import kineticMonteCarlo.unitCell.AbstractUc;
+import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
 /**
  *
@@ -162,7 +162,7 @@ public class KmcCanvas extends Canvas {
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
     for (int i = 0; i < lattice.size(); i++) {
-      AbstractUc uc = lattice.getUc(i);
+      AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;

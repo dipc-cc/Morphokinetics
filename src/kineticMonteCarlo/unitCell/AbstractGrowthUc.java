@@ -11,7 +11,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class AbstractUc implements IUc {
+public abstract class AbstractGrowthUc implements IUc {
   
   @Override
   public abstract AbstractGrowthAtom getAtom(int pos);

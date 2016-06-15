@@ -13,7 +13,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class SimpleUc extends AbstractUc implements IUc{
+public class SimpleUc extends AbstractGrowthUc implements IUc{
 
   private final AbstractGrowthAtom atom;
   private final int size; // how many atoms

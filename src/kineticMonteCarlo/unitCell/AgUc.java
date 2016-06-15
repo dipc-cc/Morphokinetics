@@ -15,7 +15,7 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgUc extends AbstractUc implements IUc {
+public class AgUc extends AbstractGrowthUc implements IUc {
 
   private final List<AgAtom> atoms;
   private final int posI; // index in X axis

@@ -13,8 +13,9 @@ import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
 import static java.lang.Math.abs;
 import java.util.List;
-import kineticMonteCarlo.unitCell.AbstractUc;
+import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.IUc;
+import static java.lang.Math.abs;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -72,7 +73,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public void initialiseRates(double[][] probabilities) {
     for (int i = 0; i < size(); i++) {
-      AbstractUc uc = getUc(i);
+      AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         atom.initialiseRates(probabilities);
@@ -108,7 +109,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   @Override
-  public AbstractUc getUc(int pos) {
+  public AbstractGrowthUc getUc(int pos) {
     int j = Math.floorDiv(pos, getHexaSizeI());
     int i = pos - (j * getHexaSizeI());
 
@@ -173,7 +174,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   @Override
   public void reset() {
     for (int i = 0; i < size(); i++) {
-      AbstractUc uc = getUc(i);
+      AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         atom.clear();
@@ -183,7 +184,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   protected final void setAngles() {   
     for (int i = 0; i < size(); i++) {
-      AbstractUc uc = getUc(i);
+      AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         double posY = atom.getPos().getY() + uc.getPos().getY();
@@ -233,7 +234,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
 
     for (int i = 0; i < size(); i++) {
-      AbstractUc uc = getUc(i);
+      AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
@@ -355,7 +356,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     modified.addBondAtom(atom);
   }
 
-  public AbstractUc getUc(int iLattice, int jLattice) {
+  public AbstractGrowthUc getUc(int iLattice, int jLattice) {
     return ucArray[iLattice][jLattice];
   }
 
