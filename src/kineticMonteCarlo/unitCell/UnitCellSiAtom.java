@@ -17,9 +17,6 @@ public class UnitCellSiAtom {
   private float limitX;
   private float limitY;
   private float limitZ;
-  private float desp_x_y;
-  private float desp_x_z;
-  private float desp_y_z;
     
   /**
    * Creates a new instance of Atomo.
@@ -60,9 +57,6 @@ public class UnitCellSiAtom {
    */
   public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstOne) {
     if (firstOne) {
-      desp_x_y = 0;
-      desp_x_z = 0;
-      desp_y_z = 0;
       limitX = (float) limitX_a;
       limitY = (float) limitY_a;
       limitZ = (float) limitZ_a;
@@ -74,12 +68,12 @@ public class UnitCellSiAtom {
   }
 
   public float getPosX(int uc_x, int uc_y, int uc_z) {
-    float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
+    float temp = posX_space + uc_x * limitX;
     return temp;
   }
 
   public float getPosY(int uc_x, int uc_y, int uc_z) {
-    float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
+    float temp = posY_space + uc_y * limitY;
     return temp;
   }
 
