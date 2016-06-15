@@ -11,7 +11,7 @@ public class SiUnitCell {
   private static final double LATTICE_DIM = 5.430710f;
   private static final double SPACE_CELL = LATTICE_DIM / 4.0f;
   private static final int DEPTH = 25;
-  private double[][] g;
+  private double[][] rotation;
   private short[] neighs;
   private byte[] nBlock;
   private double limitX;
@@ -33,7 +33,7 @@ public class SiUnitCell {
   private UnitCellSiAtom[] cellsPointer;
 
   public SiUnitCell() {
-    g = new double[3][3];
+    rotation = new double[3][3];
   }
 
   public UnitCellSiAtom[] getCellsP() {
@@ -60,17 +60,17 @@ public class SiUnitCell {
     N = Math.sqrt((double) m[3] * (double) m[3] + (double) m[4] * (double) m[4]
             + (double) m[5] * (double) m[5]);
 
-    g[0][0] = (double) m[3] / (double) N;
-    g[1][0] = (double) m[4] / (double) N;
-    g[2][0] = (double) m[5] / (double) N;
+    rotation[0][0] = (double) m[3] / (double) N;
+    rotation[1][0] = (double) m[4] / (double) N;
+    rotation[2][0] = (double) m[5] / (double) N;
 
-    g[0][1] = (double) (((double) m[1] * (double) m[5] - (double) m[2] * (double) m[4]) / (M * N));
-    g[1][1] = (double) (((double) m[2] * (double) m[3] - (double) m[0] * (double) m[5]) / (M * N));
-    g[2][1] = (double) (((double) m[0] * (double) m[4] - (double) m[1] * (double) m[3]) / (M * N));
+    rotation[0][1] = (double) (((double) m[1] * (double) m[5] - (double) m[2] * (double) m[4]) / (M * N));
+    rotation[1][1] = (double) (((double) m[2] * (double) m[3] - (double) m[0] * (double) m[5]) / (M * N));
+    rotation[2][1] = (double) (((double) m[0] * (double) m[4] - (double) m[1] * (double) m[3]) / (M * N));
 
-    g[0][2] = (double) m[0] / (double) M;
-    g[1][2] = (double) m[1] / (double) M;
-    g[2][2] = (double) m[2] / (double) M;
+    rotation[0][2] = (double) m[0] / (double) M;
+    rotation[1][2] = (double) m[1] / (double) M;
+    rotation[2][2] = (double) m[2] / (double) M;
 
   }
 
@@ -542,9 +542,9 @@ public class SiUnitCell {
           posY = posY - j * LATTICE_DIM / 2; //para Y(B)
           double posZ = LATTICE_DIM * i;
           //ahora hay que pasar al nuevo sistema de coordenadas
-          double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-          double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-          double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+          double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+          double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+          double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
             red0[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
@@ -570,9 +570,9 @@ public class SiUnitCell {
           double posZ = LATTICE_DIM * i + SPACE_CELL;
 
           //ahora hay que pasar al nuevo sistema de coordenadas
-          double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-          double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-          double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+          double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+          double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+          double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
             red1[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
@@ -598,9 +598,9 @@ public class SiUnitCell {
           double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
           //ahora hay que pasar al nuevo sistema de coordenadas
-          double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-          double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-          double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+          double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+          double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+          double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
@@ -626,9 +626,9 @@ public class SiUnitCell {
           posY = posY - j * LATTICE_DIM / 2; //para Y(B)
           double posZ = LATTICE_DIM * i + (SPACE_CELL * 3);
           //ahora hay que pasar al nuevo sistema de coordenadas
-          double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-          double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-          double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+          double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+          double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+          double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
             red3[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
@@ -813,33 +813,33 @@ public class SiUnitCell {
               posY = posY - (j - 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + SPACE_CELL;
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -861,33 +861,33 @@ public class SiUnitCell {
               posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + SPACE_CELL;
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 //if (i==0 && j==0 && k==0) System.out.println(">>"+Xr+" "+Yr+" "+Zr);
@@ -907,33 +907,33 @@ public class SiUnitCell {
               posY = posY - j * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * (i - 1) + (SPACE_CELL * 3);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -953,33 +953,33 @@ public class SiUnitCell {
               posY = posY - j * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * (i - 1) + (SPACE_CELL * 3);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
               nBlock[4 * num + 3] = (byte) n_bl;
@@ -1016,32 +1016,32 @@ public class SiUnitCell {
               posY = posY - j * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i;
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1061,33 +1061,33 @@ public class SiUnitCell {
               posY = posY - (j + 1) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i;
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1107,33 +1107,33 @@ public class SiUnitCell {
               posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1153,33 +1153,33 @@ public class SiUnitCell {
               posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
               nBlock[4 * num + 3] = (byte) n_bl;
@@ -1214,32 +1214,32 @@ public class SiUnitCell {
               posY = posY - j * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + (SPACE_CELL * 3);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1259,33 +1259,33 @@ public class SiUnitCell {
               posY = posY - (j + 1) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + (SPACE_CELL * 3);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1305,33 +1305,33 @@ public class SiUnitCell {
               posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + SPACE_CELL;
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1352,33 +1352,33 @@ public class SiUnitCell {
               double posZ = LATTICE_DIM * i + SPACE_CELL;
               //if (red2[i-I_i][j-J_i][k-K_i].getNum()==11) System.out.println(">"+posX+" "+posY+" "+posZ);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
               nBlock[4 * num + 3] = (byte) n_bl;
@@ -1414,32 +1414,32 @@ public class SiUnitCell {
               posY = posY - (j - 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1459,33 +1459,33 @@ public class SiUnitCell {
               posY = posY - (j + 0.5) * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * i + (SPACE_CELL * 2);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1505,33 +1505,33 @@ public class SiUnitCell {
               posY = posY - j * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * (i + 1);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
 
@@ -1552,33 +1552,33 @@ public class SiUnitCell {
               posY = posY - j * LATTICE_DIM / 2; //para Y(B)
               double posZ = LATTICE_DIM * (i + 1);
 
-              double Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]), 5);
-              double Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]), 5);
-              double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
+              double Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]), 5);
+              double Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]), 5);
+              double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
               int n_bl = 0;
               if (Xr < 0) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) + limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) + limitXnt, 5);
                 n_bl = n_bl + 3 * 4;
               }
               if (Xr >= limitX) {
-                Xr = truncate((posX * g[0][0] + posY * g[1][0] + posZ * g[2][0]) - limitXnt, 5);
+                Xr = truncate((posX * rotation[0][0] + posY * rotation[1][0] + posZ * rotation[2][0]) - limitXnt, 5);
                 n_bl = n_bl + 1 * 4;
               }
               if (Yr < 0) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) + limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) + limitYnt, 5);
                 n_bl = n_bl + 3;
               }
               if (Yr >= limitY) {
-                Yr = truncate((posX * g[0][1] + posY * g[1][1] + posZ * g[2][1]) - limitYnt, 5);
+                Yr = truncate((posX * rotation[0][1] + posY * rotation[1][1] + posZ * rotation[2][1]) - limitYnt, 5);
                 n_bl = n_bl + 1;
               }
               if (Zr < 0) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) + limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) + limitZnt, 5);
                 n_bl = n_bl + 1 * 16;
               }
               if (Zr >= limitZ) {
-                Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]) - limitZnt, 5);
+                Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]) - limitZnt, 5);
                 n_bl = n_bl + 3 * 16;
               }
               nBlock[4 * num + 3] = (byte) n_bl;
