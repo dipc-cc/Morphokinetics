@@ -45,19 +45,16 @@ public class UnitCellSiAtom {
   }
 
   /**
-   * Inicializa las variables de posicionamiento.
+   * Initialises limits in X, Y and Z.
    * 
    * @param limitX_a
    * @param limitY_a
    * @param limitZ_a
-   * @param firstOne whether is the first time calling to this method
    */
-  public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstOne) {
-    if (firstOne) {
-      limitX = (float) limitX_a;
-      limitY = (float) limitY_a;
-      limitZ = (float) limitZ_a;
-    }
+  public void initialiseLimits(double limitX_a, double limitY_a, double limitZ_a) {
+    limitX = (float) limitX_a;
+    limitY = (float) limitY_a;
+    limitZ = (float) limitZ_a;
   }
 
   public float getPosX(int uc_x, int uc_y, int uc_z) {

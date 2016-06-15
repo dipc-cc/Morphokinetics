@@ -512,9 +512,7 @@ public class SiUnitCell {
     red2 = null;
     red3 = null;
 
-    for (int i = 0; i < cellsPointer.length; i++) {
-      cellsPointer[i].isOrth_u_cell(limitX, limitY, limitZ, i == 0);
-    }
+    cellsPointer[0].initialiseLimits(limitX, limitY, limitZ);
 
     return (cuantos);
   }
