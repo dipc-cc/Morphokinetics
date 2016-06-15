@@ -55,15 +55,6 @@ public class UnitCellSiAtom {
     return topY;
   }
 
-  protected double truncate(double valor, int decimales) {
-    int desp = 1;
-    for (int i = 0; i < decimales; i++) {
-      desp = desp * 10;
-    }
-    long temp = Math.round(valor * desp);
-    return (((double) temp) / desp);
-  }
-
   //Inicializa las variables de posicionamiento
   public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstone) {
     if (firstone) {
