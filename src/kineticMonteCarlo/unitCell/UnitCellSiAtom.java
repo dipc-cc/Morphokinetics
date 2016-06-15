@@ -47,14 +47,6 @@ public class UnitCellSiAtom {
     return desp_y_z;
   }
 
-  public static float getTopX() {
-    return topX;
-  }
-
-  public static float getTopY() {
-    return topY;
-  }
-
   //Inicializa las variables de posicionamiento
   public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstone) {
     if (firstone) {
