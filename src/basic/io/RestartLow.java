@@ -17,12 +17,11 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.StringTokenizer;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.IAtom;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
+import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.unitCell.IUc;
 
 /**
@@ -360,12 +359,7 @@ class RestartLow {
    */
   static void writeXyz(String fileName, AbstractLattice lattice) {
     // Check that is growth simulation, in etching are missing getUc in AbstractLattice and getPos and isOccupied in AbstractAtom
-    boolean execute = (lattice instanceof AbstractGrowthLattice);
-    if (!execute) {
-      System.out.println("\nWriting to XYZ is not implemented for etching. Skipping.");
-      return;
-    }
-    
+       
     int numberOfAtoms = lattice.size();
     double scale = 1; // default distance in Anstroms
     String element = "H";
@@ -376,6 +370,9 @@ class RestartLow {
     } else if (lattice instanceof AgLattice) {
       scale = 2.892; 
       element = "Ag";
+    } else if (lattice instanceof SiLattice) {
+      scale = 1; // I don't know
+      element = "Si";
     }
     try {
       // create file descriptor
@@ -387,13 +384,14 @@ class RestartLow {
       
       // for each atom in the uc
       for (int i = 0; i < lattice.size(); i++) {
-        IUc uc = ((AbstractGrowthLattice) lattice).getUc(i);
+        IUc uc = lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           IAtom atom = uc.getAtom(j);
-          double posX = (uc.getPos().getX() + ((AbstractGrowthAtom) atom).getPos().getX()) * scale;
-          double posY = (uc.getPos().getY() + ((AbstractGrowthAtom) atom).getPos().getY()) * scale;
-          s = format("%s %.3f %.3f 0", element, posX, posY);
-          if (((AbstractGrowthAtom) atom).isOccupied()) {
+          double posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
+          double posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
+          double posZ = (uc.getPos().getZ() + atom.getPos().getZ()) * scale;
+          s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
+          if (atom.isOccupied()) {
             printWriter.write(s + "\n");
           }
         }
