@@ -8,10 +8,18 @@ public class UnitCellSiAtom {
 
   private UnitCellSiAtom[] neighbours;
   private short num;
-  private double posX, posY, posZ;
-  private float posX_space, posY_space, posZ_space;
-  private static float limitX, limitY, limitZ;
-  private static float desp_x_y, desp_x_z, desp_y_z;
+  private final double posX;
+  private final double posY;
+  private final double posZ;
+  private float posX_space;
+  private float posY_space;
+  private float posZ_space;
+  private static float limitX;
+  private static float limitY;
+  private static float limitZ;
+  private static float desp_x_y;
+  private static float desp_x_z;
+  private static float desp_y_z;
 
   public static float getLimitX() {
     return limitX;
