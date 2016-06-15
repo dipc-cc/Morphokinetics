@@ -645,7 +645,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red0[i - iInit][j - jInit][k - kInit] != null && red0[i - iInit][j - jInit][k - kInit].getX_uc() == Px && red0[i - iInit][j - jInit][k - kInit].getY_uc() == Py && red0[i - iInit][j - jInit][k - kInit].getZ_uc() == Pz) {
+          if (red0[i - iInit][j - jInit][k - kInit] != null && red0[i - iInit][j - jInit][k - kInit].getPosX() == Px && red0[i - iInit][j - jInit][k - kInit].getPosY() == Py && red0[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
             return (red0[i - iInit][j - jInit][k - kInit].getNum());
           }
 
@@ -658,7 +658,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red1[i - iInit][j - jInit][k - kInit] != null && red1[i - iInit][j - jInit][k - kInit].getX_uc() == Px && red1[i - iInit][j - jInit][k - kInit].getY_uc() == Py && red1[i - iInit][j - jInit][k - kInit].getZ_uc() == Pz) {
+          if (red1[i - iInit][j - jInit][k - kInit] != null && red1[i - iInit][j - jInit][k - kInit].getPosX() == Px && red1[i - iInit][j - jInit][k - kInit].getPosY() == Py && red1[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
             return (red1[i - iInit][j - jInit][k - kInit].getNum());
           }
         }
@@ -670,7 +670,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red2[i - iInit][j - jInit][k - kInit] != null && red2[i - iInit][j - jInit][k - kInit].getX_uc() == Px && red2[i - iInit][j - jInit][k - kInit].getY_uc() == Py && red2[i - iInit][j - jInit][k - kInit].getZ_uc() == Pz) {
+          if (red2[i - iInit][j - jInit][k - kInit] != null && red2[i - iInit][j - jInit][k - kInit].getPosX() == Px && red2[i - iInit][j - jInit][k - kInit].getPosY() == Py && red2[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
             return (red2[i - iInit][j - jInit][k - kInit].getNum());
           }
         }
@@ -682,7 +682,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red3[i - iInit][j - jInit][k - kInit] != null && red3[i - iInit][j - jInit][k - kInit].getX_uc() == Px && red3[i - iInit][j - jInit][k - kInit].getY_uc() == Py && red3[i - iInit][j - jInit][k - kInit].getZ_uc() == Pz) {
+          if (red3[i - iInit][j - jInit][k - kInit] != null && red3[i - iInit][j - jInit][k - kInit].getPosX() == Px && red3[i - iInit][j - jInit][k - kInit].getPosY() == Py && red3[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
             return (red3[i - iInit][j - jInit][k - kInit].getNum());
           }
         }

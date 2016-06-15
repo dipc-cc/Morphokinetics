@@ -73,15 +73,15 @@ public class UnitCellSiAtom {
     this.num = num;
   }
 
-  public double getX_uc() {
+  public double getPosX() {
     return posX;
   }
 
-  public double getY_uc() {
+  public double getPosY() {
     return posY;
   }
 
-  public double getZ_uc() {
+  public double getPosZ() {
     return posZ;
   }
 }
