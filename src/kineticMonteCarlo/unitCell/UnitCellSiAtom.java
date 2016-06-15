@@ -33,9 +33,16 @@ public class UnitCellSiAtom {
     return limitZ;
   }
 
-  //Inicializa las variables de posicionamiento
-  public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstone) {
-    if (firstone) {
+  /**
+   * Inicializa las variables de posicionamiento.
+   * 
+   * @param limitX_a
+   * @param limitY_a
+   * @param limitZ_a
+   * @param firstOne whether is the first time calling to this method
+   */
+  public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstOne) {
+    if (firstOne) {
       desp_x_y = 0;
       desp_x_z = 0;
       desp_y_z = 0;
@@ -64,7 +71,11 @@ public class UnitCellSiAtom {
   }
     
   /**
-   * Creates a new instance of Atomo
+   * Creates a new instance of Atomo.
+   * 
+   * @param posX
+   * @param posY
+   * @param posZ
    */
   public UnitCellSiAtom(double posX, double posY, double posZ) {
     this.posX = posX;
