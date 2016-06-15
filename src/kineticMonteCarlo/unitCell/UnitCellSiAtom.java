@@ -20,7 +20,24 @@ public class UnitCellSiAtom {
   private float desp_x_y;
   private float desp_x_z;
   private float desp_y_z;
+    
+  /**
+   * Creates a new instance of Atomo.
+   * 
+   * @param posX
+   * @param posY
+   * @param posZ
+   */
+  public UnitCellSiAtom(double posX, double posY, double posZ) {
+    this.posX = posX;
+    this.posY = posY;
+    this.posZ = posZ;
 
+    neighbours = new UnitCellSiAtom[4];
+
+    num = -1;
+  }
+  
   public float getLimitX() {
     return limitX;
   }
@@ -68,23 +85,6 @@ public class UnitCellSiAtom {
 
   public float getPosZ(int uc_x, int uc_y, int uc_z) {
     return posZ_space - uc_z * limitZ;
-  }
-    
-  /**
-   * Creates a new instance of Atomo.
-   * 
-   * @param posX
-   * @param posY
-   * @param posZ
-   */
-  public UnitCellSiAtom(double posX, double posY, double posZ) {
-    this.posX = posX;
-    this.posY = posY;
-    this.posZ = posZ;
-
-    neighbours = new UnitCellSiAtom[4];
-
-    num = -1;
   }
   
   public void setNeighbour(int pos, UnitCellSiAtom atom) {
