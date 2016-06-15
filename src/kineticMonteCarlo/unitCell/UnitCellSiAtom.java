@@ -13,7 +13,6 @@ public class UnitCellSiAtom {
   private static float limitX, limitY, limitZ;
   private static float desp_x_y, desp_x_z, desp_y_z;
   private static float offset_X, offset_Y;
-  private static float topX, topY, topXinv, topYinv;
 
   public static float getLimitX() {
     return limitX;
@@ -66,23 +65,11 @@ public class UnitCellSiAtom {
 
   public float getPosX(int uc_x, int uc_y, int uc_z) {
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
-
-    int desvio = (int) Math.floor(temp * topXinv);
-    if (desvio != 0) {
-      temp -= topX * desvio;
-    }
-
     return temp;
-
   }
 
   public float getPosY(int uc_x, int uc_y, int uc_z) {
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
-
-    int desvio = (int) Math.floor(temp * topYinv);
-    if (desvio != 0) {
-      temp -= topY * desvio;
-    }
     return temp;
   }
 
