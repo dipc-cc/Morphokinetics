@@ -90,26 +90,6 @@ public class UnitCellSiAtom {
     return posZ_space - uc_z * limitZ;
   }
 
-  public float getPosXOffset(int uc_x, int uc_y, int uc_z) {
-    float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
-
-    int desvio = (int) Math.floor(temp * topXinv);
-    if (desvio != 0) {
-      temp -= topX * desvio;
-    }
-    return temp - offset_X;
-  }
-
-  public float getPosYOffset(int uc_x, int uc_y, int uc_z) {
-    float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
-
-    int desvio = (int) Math.floor(temp * topYinv);
-    if (desvio != 0) {
-      temp -= topY * desvio;
-    }
-    return temp - offset_Y;
-  }
-
   public float getPosXPure(int uc_x, int uc_y, int uc_z) {
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
     return temp;
@@ -119,11 +99,7 @@ public class UnitCellSiAtom {
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
     return temp;
   }
-
-  public float getPosZNobase() {
-    return posZ_space;
-  }
-  
+    
   /**
    * Creates a new instance of Atomo
    */
