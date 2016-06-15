@@ -5,6 +5,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.unitCell.IUc;
 
 /**
  *
@@ -59,8 +60,10 @@ public abstract class AbstractLattice {
     this.unitCellSize = unitCellSize;
   }
 
-
+  @Deprecated
   public abstract AbstractAtom getAtom(int i, int j, int k, int unitCellPos);
+  
+  public abstract IUc getUc(int pos);
 
   public abstract void reset();
 

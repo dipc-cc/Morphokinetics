@@ -5,10 +5,15 @@
  */
 package kineticMonteCarlo.unitCell;
 
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
+
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
 public abstract class AbstractUc implements IUc {
-
+  
+  @Override
+  public abstract AbstractGrowthAtom getAtom(int pos);
+  
 }

@@ -5,6 +5,8 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.BasicAtom;
+import kineticMonteCarlo.unitCell.IUc;
+import kineticMonteCarlo.unitCell.Simple3dUc;
 
 /**
  *
@@ -13,6 +15,7 @@ import kineticMonteCarlo.atom.BasicAtom;
 public class BasicLattice extends AbstractLattice {
 
   private BasicAtom[] atoms;
+  private Simple3dUc[] ucList;
   
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
     setHexaSizeI(hexaSizeI);
@@ -21,6 +24,7 @@ public class BasicLattice extends AbstractLattice {
     setUnitCellSize(1);
     
     atoms = new BasicAtom[hexaSizeI * hexaSizeJ];
+    ucList = new Simple3dUc[hexaSizeI * hexaSizeJ];
     createAtoms(hexaSizeI, hexaSizeJ);
     interconnectAtoms();
   }
@@ -65,6 +69,7 @@ public class BasicLattice extends AbstractLattice {
     for (short i = 0; i < hexaSizeJ; i++) {
       for (short j = 0; j < hexaSizeI; j++) {
         atoms[i * hexaSizeI + j] = new BasicAtom(j, i);
+        ucList[i * hexaSizeI + j] = new Simple3dUc(j, i, atoms[i * hexaSizeI + j]);
       }
     }
   }
@@ -84,5 +89,10 @@ public class BasicLattice extends AbstractLattice {
         atoms[i * getHexaSizeI() + j].setNeighbour(atoms[i * getHexaSizeI() + ((j + 1) % getHexaSizeI())], 3); //right       
       }
     }
+  }
+
+  @Override
+  public IUc getUc(int pos) {
+    return ucList[pos];
   }
 }

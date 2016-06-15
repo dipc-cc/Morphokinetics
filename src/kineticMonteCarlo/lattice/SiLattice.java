@@ -6,6 +6,7 @@ package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.SiAtom;
 import kineticMonteCarlo.unitCell.SiUnitCell;
+import kineticMonteCarlo.unitCell.Simple3dUc;
 
 /**
  *
@@ -15,6 +16,7 @@ public class SiLattice extends AbstractLattice {
 
   private SiUnitCell unitCell;
   private SiAtom[] atoms;
+  private Simple3dUc[] ucList;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
     if (millerX == 0 && millerY == 0 && millerZ == 0) {
@@ -55,6 +57,7 @@ public class SiLattice extends AbstractLattice {
     }
 
     atoms = new SiAtom[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
+    ucList = new Simple3dUc[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
 
     createAtoms(coords, unitCell);
     interconnectAtoms(ucNeighbours, block);
@@ -76,6 +79,11 @@ public class SiLattice extends AbstractLattice {
     return atoms[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
   }
 
+  @Override
+  public Simple3dUc getUc(int pos) {
+    return ucList[pos];
+  }
+  
   @Override
   public void reset() {
     //Unremove atoms and set to bulk mode (4,12)
@@ -129,6 +137,10 @@ public class SiLattice extends AbstractLattice {
             float z = -coords[j * 3 + 2] + (a + 1) * (float) uc.getLimitZ();
 
             atoms[cont] = new SiAtom(x, y, z);
+            ucList[cont] = new Simple3dUc(a, b, c, atoms[cont]);
+            ucList[cont].setPosX(x);
+            ucList[cont].setPosY(y);
+            ucList[cont].setPosZ(z);
             cont++;
           }
         }

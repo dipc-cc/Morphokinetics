@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.unitCell.IUc;
+import kineticMonteCarlo.unitCell.AbstractUc;
 import utils.MathUtils;
 import utils.StaticRandom;
 import utils.list.LinearList;
@@ -177,7 +177,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     freeArea = calculateAreaAsInKmcCanvas();
     
     for (int i = 0; i < lattice.size(); i++) {
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         uc.getAtom(j).clear();
       }
@@ -280,7 +280,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int countIslands(boolean print) {
     // reset all the atoms
     for (int i = 0; i < lattice.size(); i++) {
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         uc.getAtom(j).setVisited(false);
         uc.getAtom(j).setIslandNumber(0);
@@ -291,7 +291,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     islandCount = 0;
     for (int i = 0; i < lattice.size(); i++) {
       // visit all the atoms within the unit cell
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       for (int j=0; j< uc.size(); j++) {
         identifyIsland(uc.getAtom(j), false);
       }
@@ -304,7 +304,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     // iterate all atoms and add to the corresponding island
     for (int i = 0; i < lattice.size(); i++) {
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         int island = uc.getAtom(j).getIslandNumber();
         histogram.set(island, histogram.get(island) + 1);
@@ -598,7 +598,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int x;
     int y;
     for (int i = 0; i < lattice.size(); i++) {
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       double posUcX = uc.getPos().getX();
       double posUcY = uc.getPos().getY();
       for (int j = 0; j < uc.size(); j++) {
@@ -726,7 +726,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int calculateAreaAsInKmcCanvas() {
     int totalArea = 0;
     for (int i = 0; i < lattice.size(); i++) {
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         if (uc.getAtom(j).isOccupied() || !uc.getAtom(j).isOutside()) {
           totalArea++;
@@ -749,7 +749,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     float radius = ((float) Math.floor(minRadius/5f)*5f);
     
     for (int i = 0; i < lattice.size(); i++) {
-      IUc uc = lattice.getUc(i);
+      AbstractUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
