@@ -116,17 +116,17 @@ public class SiLattice extends AbstractLattice {
   /**
    * Atoms creation.
    * @param coords
-   * @param UC 
+   * @param uc 
    */
-  private void createAtoms(float[] coords, SiUnitCell UC) {
+  private void createAtoms(float[] coords, SiUnitCell uc) {
     int cont = 0;
     for (int a = 0; a < getHexaSizeK(); a++) {
       for (int b = 0; b < getHexaSizeJ(); b++) {
         for (int c = 0; c < getHexaSizeI(); c++) {
           for (int j = 0; j < getUnitCellSize(); j++) {
-            float x = coords[j * 3] + c * (float) UC.getLimitX();
-            float y = coords[j * 3 + 1] + b * (float) UC.getLimitY();
-            float z = -coords[j * 3 + 2] + (a + 1) * (float) UC.getLimitZ();
+            float x = coords[j * 3] + c * (float) uc.getLimitX();
+            float y = coords[j * 3 + 1] + b * (float) uc.getLimitY();
+            float z = -coords[j * 3 + 2] + (a + 1) * (float) uc.getLimitZ();
 
             atoms[cont] = new SiAtom(x, y, z);
             cont++;
