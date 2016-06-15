@@ -371,7 +371,7 @@ class RestartLow {
       scale = 2.892; 
       element = "Ag";
     } else if (lattice instanceof SiLattice) {
-      scale = 1; // I don't know
+      scale = .177083; // I don't know
       element = "Si";
     }
     try {
