@@ -263,8 +263,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
       printHistogram();
-    }
-    countIslands(true);
+    } 
+    
+    // Dirty mode to have only one interface of countIslands
+    PrintWriter standardOutputWriter = new PrintWriter(System.out);
+    countIslands(standardOutputWriter);
+    standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();
       outDeltaAttachments.flush();
@@ -274,10 +278,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
   
   private void printData() {
-    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + countIslands(false) + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+    countIslands(outData);
+    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
   }
   
-  private int countIslands(boolean print) {
+  private int countIslands(PrintWriter print) {
     // reset all the atoms
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
@@ -310,8 +315,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         histogram.set(island, histogram.get(island) + 1);
       }
     }
-    if (print) {
-      System.out.println("histogram " + histogram.toString());
+    if (print != null) {
+      print.println("histogram " + histogram.toString());
     }
     return islandCount;
   }
@@ -467,7 +472,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    *
    */
   private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
-    countIslands(false);
+    countIslands(null);
     deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
     outDeltaAttachments.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
             + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
