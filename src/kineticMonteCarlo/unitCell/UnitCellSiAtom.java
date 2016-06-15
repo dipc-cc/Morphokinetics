@@ -14,22 +14,22 @@ public class UnitCellSiAtom {
   private float posX_space;
   private float posY_space;
   private float posZ_space;
-  private static float limitX;
-  private static float limitY;
-  private static float limitZ;
-  private static float desp_x_y;
-  private static float desp_x_z;
-  private static float desp_y_z;
+  private float limitX;
+  private float limitY;
+  private float limitZ;
+  private float desp_x_y;
+  private float desp_x_z;
+  private float desp_y_z;
 
-  public static float getLimitX() {
+  public float getLimitX() {
     return limitX;
   }
 
-  public static float getLimitY() {
+  public float getLimitY() {
     return limitY;
   }
 
-  public static float getLimitZ() {
+  public float getLimitZ() {
     return limitZ;
   }
 
