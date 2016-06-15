@@ -551,7 +551,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
 
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red0[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr, 0);
+            red0[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
             //System.out.println(">"+posX+" "+posY+" "+posZ+"|new|"+Xr+" "+Yr+" "+Zr);
             red0[i - iInit][j - jInit][k - kInit].setNum((short) cont);
             cont++;
@@ -579,7 +579,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red1[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr, 1);
+            red1[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
 
             red1[i - iInit][j - jInit][k - kInit].setNum((short) cont);
             cont++;
@@ -608,7 +608,7 @@ public class SiUnitCell {
 
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red2[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr, 0);
+            red2[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
 
             red2[i - iInit][j - jInit][k - kInit].setNum((short) cont);
             cont++;
@@ -635,7 +635,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * g[0][2] + posY * g[1][2] + posZ * g[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red3[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr, 1);
+            red3[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
             red3[i - iInit][j - jInit][k - kInit].setNum((short) cont);
             cont++;
           }//else System.out.println(Math.abs(Xr-limitX)+Math.abs(Zr-limitZ)+Math.abs(Yr-limitY) );

@@ -8,7 +8,6 @@ public class UnitCellSiAtom {
 
   private UnitCellSiAtom[] neighbours;
   private short num;
-  private int type;
   private double posX, posY, posZ;
   private float posX_space, posY_space, posZ_space;
   private static float limitX, limitY, limitZ;
@@ -166,21 +165,16 @@ public class UnitCellSiAtom {
   /**
    * Creates a new instance of Atomo
    */
-  public UnitCellSiAtom(double posX, double posY, double posZ, int type) {
+  public UnitCellSiAtom(double posX, double posY, double posZ) {
     this.posX = posX;
     this.posY = posY;
     this.posZ = posZ;
 
-    this.type = type;
     neighbours = new UnitCellSiAtom[4];
 
     num = -1;
   }
-
-  public int getType() {
-    return type;
-  }
-
+  
   public void setNeighbour(int pos, UnitCellSiAtom atom) {
     neighbours[pos] = atom;
   }
