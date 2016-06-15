@@ -13,7 +13,6 @@ public class UnitCellSiAtom {
   private static float limitX, limitY, limitZ;
   private static float desp_x_y, desp_x_z, desp_y_z;
   private static float offset_X, offset_Y;
-  private static int sX, sY;
   private static float topX, topY, topXinv, topYinv;
 
   public static float getLimitX() {
@@ -141,27 +140,7 @@ public class UnitCellSiAtom {
   public float getPosZNobase() {
     return posZ_space;
   }
-
-  public static void initializeSizeVariables(int sX_a, int sY_a) {
-    sX = sX_a;
-    sY = sY_a;
-    offset_X = (limitX * sX) / 2.0f;
-    offset_Y = (limitY * sY) / 2.0f;
-    topX = (limitX * sX);
-    topY = (limitY * sY);
-    topXinv = 1.0f / topX;
-    topYinv = 1.0f / topY;
-
-  }
-
-  public int getsX() {
-    return sX;
-  }
-
-  public int getsY() {
-    return sY;
-  }
-
+  
   /**
    * Creates a new instance of Atomo
    */
