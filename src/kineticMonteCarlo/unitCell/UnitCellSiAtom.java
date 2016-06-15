@@ -72,7 +72,6 @@ public class UnitCellSiAtom {
 
   //Inicializa las variables de posicionamiento
   public void isOrth_u_cell(double limitX_a, double limitY_a, double limitZ_a, boolean firstone) {
-
     if (firstone) {
       desp_x_y = 0;
       desp_x_z = 0;
@@ -89,7 +88,6 @@ public class UnitCellSiAtom {
   }
 
   public float getPosX(int uc_x, int uc_y, int uc_z) {
-
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
 
     int desvio = (int) Math.floor(temp * topXinv);
@@ -102,7 +100,6 @@ public class UnitCellSiAtom {
   }
 
   public float getPosY(int uc_x, int uc_y, int uc_z) {
-
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
 
     int desvio = (int) Math.floor(temp * topYinv);
@@ -117,7 +114,6 @@ public class UnitCellSiAtom {
   }
 
   public float getPosXOffset(int uc_x, int uc_y, int uc_z) {
-
     float temp = posX_space + uc_x * limitX + desp_x_y * uc_y - uc_z * desp_x_z;
 
     int desvio = (int) Math.floor(temp * topXinv);
@@ -128,7 +124,6 @@ public class UnitCellSiAtom {
   }
 
   public float getPosYOffset(int uc_x, int uc_y, int uc_z) {
-
     float temp = posY_space + uc_y * limitY - desp_y_z * uc_z;
 
     int desvio = (int) Math.floor(temp * topYinv);
@@ -187,7 +182,6 @@ public class UnitCellSiAtom {
   }
 
   public void setUC(short uc_x, short uc_y, short uc_z) {
-
     this.ucX = uc_x;
     this.ucY = uc_y;
     this.ucZ = uc_z;
