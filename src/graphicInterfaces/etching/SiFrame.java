@@ -202,7 +202,7 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
     jScrollPane1 = new javax.swing.JScrollPane();
 
-    setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setTitle("Silicon KMC surface viewer");
     setResizable(false);
 
