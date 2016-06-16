@@ -18,7 +18,13 @@ public class SiAtom extends AbstractAtom {
   private SiAtom neighbour2;
   private SiAtom neighbour3;
 
+  /**
+   * Number of 1st neighbours.
+   */
   private byte n1;
+  /**
+   * Number of 2nd neighbours.
+   */
   private byte n2;
   private final float x;
   private final float y;
@@ -84,10 +90,18 @@ public class SiAtom extends AbstractAtom {
     return (byte) ((n1 << 4) + n2);
   }
 
+  /**
+   * Number of 1st neighbours.
+   * @return number of 1st neighbours.
+   */
   public byte getN1() {
     return n1;
   }
 
+  /**
+   * Number of 2nd neighbours.
+   * @return number of 2nd neighbours.
+   */
   public byte getN2() {
     return n2;
   }
