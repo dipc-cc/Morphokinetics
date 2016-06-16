@@ -7,7 +7,7 @@ package kineticMonteCarlo.unitCell;
 public class UnitCellSiAtom {
 
   private UnitCellSiAtom[] neighbours;
-  private short num;
+  private short id;
   private final double posX;
   private final double posY;
   private final double posZ;
@@ -29,7 +29,7 @@ public class UnitCellSiAtom {
 
     neighbours = new UnitCellSiAtom[4];
 
-    num = -1;
+    id = -1;
   }
   
   public float getLimitX() {
@@ -65,12 +65,12 @@ public class UnitCellSiAtom {
     return neighbours[pos];
   }
 
-  public short getNum() {
-    return num;
+  public short getId() {
+    return id;
   }
 
-  public void setNum(short num) {
-    this.num = num;
+  public void setId(short id) {
+    this.id = id;
   }
 
   public double getPosX() {
