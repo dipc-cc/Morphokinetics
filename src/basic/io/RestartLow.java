@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.StringTokenizer;
 import kineticMonteCarlo.atom.IAtom;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
@@ -353,7 +354,7 @@ class RestartLow {
   }
 
   /**
-   * Writes a XYZ format file 
+   * Writes a XYZ format file. 
    * @param fileName
    * @param lattice 
    */
@@ -364,6 +365,9 @@ class RestartLow {
     double scale = 1; // default distance in Anstroms
     String element = "H";
     // Setup
+    if (lattice instanceof AbstractGrowthLattice) { // get the exact number of atoms
+      numberOfAtoms = ((AbstractGrowthLattice) lattice).getOccupied();
+    }
     if (lattice instanceof GrapheneLattice){
       scale = 1.42; 
       element = "C";
