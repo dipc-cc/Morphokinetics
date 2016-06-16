@@ -11,10 +11,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
-import static java.lang.Math.abs;
 import java.util.List;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import kineticMonteCarlo.unitCell.IUc;
 import static java.lang.Math.abs;
 
 /**
