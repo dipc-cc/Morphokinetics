@@ -102,7 +102,7 @@ public class SiKmc extends AbstractKmc {
       }
 
       if (surface[sampledPosY][sampledPosX] == 0 || surface[sampledPosY][sampledPosX] < atom.getZ()) {
-        surface[sampledPosY][sampledPosX] = atom.getZ();
+        surface[sampledPosY][sampledPosX] = (float) atom.getZ();
       }
     }
 

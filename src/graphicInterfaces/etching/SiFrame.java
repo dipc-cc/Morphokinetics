@@ -173,12 +173,12 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
     float max_Z = 0;
     for (int i = 0; i < surface.getSize(); i++) {
       SiAtom atom = (SiAtom) surface.getAtomAt(i);
-      surfacePoints[i * 3] = atom.getX();
-      sizeX = Math.max(atom.getX(), sizeX);
-      surfacePoints[i * 3 + 1] = atom.getY();
-      sizeY = Math.max(atom.getY(), sizeY);
-      max_Z = Math.max(max_Z, atom.getZ());
-      surfacePoints[i * 3 + 2] = -atom.getZ();
+      surfacePoints[i * 3] = (float) atom.getX();
+      sizeX = (float) Math.max(atom.getX(), sizeX);
+      surfacePoints[i * 3 + 1] = (float) atom.getY();
+      sizeY = (float) Math.max(atom.getY(), sizeY);
+      max_Z = (float) Math.max(max_Z, atom.getZ());
+      surfacePoints[i * 3 + 2] = (float) -atom.getZ();
     }
 
     for (int i = 0; i < surface.getSize(); i++) {

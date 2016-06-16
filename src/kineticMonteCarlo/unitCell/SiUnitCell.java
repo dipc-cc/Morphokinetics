@@ -1,6 +1,7 @@
 package kineticMonteCarlo.unitCell;
 
 import java.util.ArrayList;
+import kineticMonteCarlo.atom.SiAtom;
 
 /**
  *
@@ -20,23 +21,23 @@ public class SiUnitCell {
   private double limitXnt;
   private double limitYnt;
   private double limitZnt;
-  private UnitCellSiAtom[][][] red0;
-  private UnitCellSiAtom[][][] red1;
-  private UnitCellSiAtom[][][] red2;
-  private UnitCellSiAtom[][][] red3;
+  private SiAtom[][][] red0;
+  private SiAtom[][][] red1;
+  private SiAtom[][][] red2;
+  private SiAtom[][][] red3;
   private int iInit;
   private int iSize;
   private int jInit;
   private int jSize;
   private int kInit;
   private int kSize;
-  private UnitCellSiAtom[] cellsPointer;
+  private SiAtom[] cellsPointer;
 
   public SiUnitCell() {
     rotation = new double[3][3];
   }
 
-  public UnitCellSiAtom[] getCellsP() {
+  public SiAtom[] getCellsP() {
     return cellsPointer;
   }
 
@@ -473,10 +474,10 @@ public class SiUnitCell {
     kInit = (int) Math.round(K_i) - 2;
     kSize = (int) Math.round(K_s) + 2;
 
-    red0 = new UnitCellSiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
-    red1 = new UnitCellSiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
-    red2 = new UnitCellSiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
-    red3 = new UnitCellSiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
+    red0 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
+    red1 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
+    red2 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
+    red3 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
 
     //-------------------------------------------------------------------------
     // Creamos los atomos
@@ -495,7 +496,7 @@ public class SiUnitCell {
     // Asignamos la celula origen y numeramos
     //----------------------------------------
     neighs = new short[4 * cuantos];
-    cellsPointer = new UnitCellSiAtom[cuantos];
+    cellsPointer = new SiAtom[cuantos];
     nBlock = new byte[4 * cuantos];
 
 //--------------------------------------------------------------------------
@@ -545,7 +546,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red0[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
+            red0[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
             //System.out.println(">"+posX+" "+posY+" "+posZ+"|new|"+Xr+" "+Yr+" "+Zr);
             red0[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
@@ -573,7 +574,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red1[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
+            red1[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
 
             red1[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
@@ -602,7 +603,7 @@ public class SiUnitCell {
 
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red2[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
+            red2[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
 
             red2[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
@@ -629,7 +630,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red3[i - iInit][j - jInit][k - kInit] = new UnitCellSiAtom(Xr, Yr, Zr);
+            red3[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
             red3[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
           }//else System.out.println(Math.abs(Xr-limitX)+Math.abs(Zr-limitZ)+Math.abs(Yr-limitY) );
@@ -645,7 +646,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red0[i - iInit][j - jInit][k - kInit] != null && red0[i - iInit][j - jInit][k - kInit].getPosX() == Px && red0[i - iInit][j - jInit][k - kInit].getPosY() == Py && red0[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
+          if (red0[i - iInit][j - jInit][k - kInit] != null && red0[i - iInit][j - jInit][k - kInit].getX() == Px && red0[i - iInit][j - jInit][k - kInit].getY() == Py && red0[i - iInit][j - jInit][k - kInit].getZ() == Pz) {
             return (red0[i - iInit][j - jInit][k - kInit].getId());
           }
 
@@ -658,7 +659,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red1[i - iInit][j - jInit][k - kInit] != null && red1[i - iInit][j - jInit][k - kInit].getPosX() == Px && red1[i - iInit][j - jInit][k - kInit].getPosY() == Py && red1[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
+          if (red1[i - iInit][j - jInit][k - kInit] != null && red1[i - iInit][j - jInit][k - kInit].getX() == Px && red1[i - iInit][j - jInit][k - kInit].getY() == Py && red1[i - iInit][j - jInit][k - kInit].getZ() == Pz) {
             return (red1[i - iInit][j - jInit][k - kInit].getId());
           }
         }
@@ -670,7 +671,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red2[i - iInit][j - jInit][k - kInit] != null && red2[i - iInit][j - jInit][k - kInit].getPosX() == Px && red2[i - iInit][j - jInit][k - kInit].getPosY() == Py && red2[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
+          if (red2[i - iInit][j - jInit][k - kInit] != null && red2[i - iInit][j - jInit][k - kInit].getX() == Px && red2[i - iInit][j - jInit][k - kInit].getY() == Py && red2[i - iInit][j - jInit][k - kInit].getZ() == Pz) {
             return (red2[i - iInit][j - jInit][k - kInit].getId());
           }
         }
@@ -682,7 +683,7 @@ public class SiUnitCell {
       for (int j = jInit; j < jSize; j++) { //Y SC B
         for (int k = kInit; k < kSize; k++) { //X SC B
 
-          if (red3[i - iInit][j - jInit][k - kInit] != null && red3[i - iInit][j - jInit][k - kInit].getPosX() == Px && red3[i - iInit][j - jInit][k - kInit].getPosY() == Py && red3[i - iInit][j - jInit][k - kInit].getPosZ() == Pz) {
+          if (red3[i - iInit][j - jInit][k - kInit] != null && red3[i - iInit][j - jInit][k - kInit].getX() == Px && red3[i - iInit][j - jInit][k - kInit].getY() == Py && red3[i - iInit][j - jInit][k - kInit].getZ() == Pz) {
             return (red3[i - iInit][j - jInit][k - kInit].getId());
           }
         }
@@ -700,15 +701,15 @@ public class SiUnitCell {
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (Z-1,X-1) Vec 3 (Z-1,X+1)
           if (red0[i - iInit][j - jInit][k - kInit] != null) {
             if (j > jInit) {
-              red0[i - iInit][j - jInit][k - kInit].setNeighbour(0, red1[i - iInit][j - 1 - jInit][k - kInit]);
+              red0[i - iInit][j - jInit][k - kInit].setNeighbour(red1[i - iInit][j - 1 - jInit][k - kInit], 0);
             }
-            red0[i - iInit][j - jInit][k - kInit].setNeighbour(1, red1[i - iInit][j - jInit][k - kInit]);
+            red0[i - iInit][j - jInit][k - kInit].setNeighbour(red1[i - iInit][j - jInit][k - kInit], 1);
 
             if (k > -kInit && i > -iInit) {
-              red0[i - iInit][j - jInit][k - kInit].setNeighbour(2, red3[i - iInit - 1][j - jInit][k - kInit - 1]);
+              red0[i - iInit][j - jInit][k - kInit].setNeighbour(red3[i - iInit - 1][j - jInit][k - kInit - 1], 2);
             }
             if (i > iInit) {
-              red0[i - iInit][j - jInit][k - kInit].setNeighbour(3, red3[i - iInit - 1][j - jInit][k - kInit]);
+              red0[i - iInit][j - jInit][k - kInit].setNeighbour(red3[i - iInit - 1][j - jInit][k - kInit], 3);
             }
           }
 
@@ -723,15 +724,15 @@ public class SiUnitCell {
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red1[i - iInit][j - jInit][k - kInit] != null) {
-            red1[i - iInit][j - jInit][k - kInit].setNeighbour(0, red0[i - iInit][j - jInit][k - kInit]);
+            red1[i - iInit][j - jInit][k - kInit].setNeighbour(red0[i - iInit][j - jInit][k - kInit], 0);
             if (j < jSize - 1) {
-              red1[i - iInit][j - jInit][k - kInit].setNeighbour(1, red0[i - iInit][j + 1 - jInit][k - kInit]);
+              red1[i - iInit][j - jInit][k - kInit].setNeighbour(red0[i - iInit][j + 1 - jInit][k - kInit], 1);
             }
 
             if (k > kInit) {
-              red1[i - iInit][j - jInit][k - kInit].setNeighbour(2, red2[i - iInit][j + -jInit][k - kInit - 1]);
+              red1[i - iInit][j - jInit][k - kInit].setNeighbour(red2[i - iInit][j + -jInit][k - kInit - 1], 2);
             }
-            red1[i - iInit][j - jInit][k - kInit].setNeighbour(3, red2[i - iInit][j - jInit][k - kInit]);
+            red1[i - iInit][j - jInit][k - kInit].setNeighbour(red2[i - iInit][j - jInit][k - kInit], 3);
           }
         }
       }
@@ -744,14 +745,14 @@ public class SiUnitCell {
 
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red2[i - iInit][j - jInit][k - kInit] != null) {
-            red2[i - iInit][j - jInit][k - kInit].setNeighbour(0, red3[i - iInit][j - jInit][k - kInit]);
+            red2[i - iInit][j - jInit][k - kInit].setNeighbour(red3[i - iInit][j - jInit][k - kInit], 0);
             if (j < jSize - 1) {
-              red2[i - iInit][j - jInit][k - kInit].setNeighbour(1, red3[i - iInit][j - jInit + 1][k - kInit]);
+              red2[i - iInit][j - jInit][k - kInit].setNeighbour(red3[i - iInit][j - jInit + 1][k - kInit], 1);
             }
 
-            red2[i - iInit][j - jInit][k - kInit].setNeighbour(2, red1[i - iInit][j - jInit][k - kInit]);
+            red2[i - iInit][j - jInit][k - kInit].setNeighbour(red1[i - iInit][j - jInit][k - kInit], 2);
             if (k < kSize - 1) {
-              red2[i - iInit][j - jInit][k - kInit].setNeighbour(3, red1[i - iInit][j - jInit][k - kInit + 1]);
+              red2[i - iInit][j - jInit][k - kInit].setNeighbour(red1[i - iInit][j - jInit][k - kInit + 1], 3);
             }
           }
         }
@@ -766,15 +767,15 @@ public class SiUnitCell {
           //vecino 0, (Y-1) Vec 1 (Y+1) Vec 2 (X-1) Vec 3 (X+1)
           if (red3[i - iInit][j - jInit][k - kInit] != null) {
             if (j > -jInit) {
-              red3[i - iInit][j - jInit][k - kInit].setNeighbour(0, red2[i - iInit][j - jInit - 1][k - kInit]);
+              red3[i - iInit][j - jInit][k - kInit].setNeighbour(red2[i - iInit][j - jInit - 1][k - kInit], 0);
             }
-            red3[i - iInit][j - jInit][k - kInit].setNeighbour(1, red2[i - iInit][j - jInit][k - kInit]);
+            red3[i - iInit][j - jInit][k - kInit].setNeighbour(red2[i - iInit][j - jInit][k - kInit], 1);
 
             if (i < iSize - 1) {
-              red3[i - iInit][j - jInit][k - kInit].setNeighbour(2, red0[i - iInit + 1][j - jInit][k - kInit]);
+              red3[i - iInit][j - jInit][k - kInit].setNeighbour(red0[i - iInit + 1][j - jInit][k - kInit], 2);
             }
             if (i < iSize - 1 && k < kSize - 1) {
-              red3[i - iInit][j - jInit][k - kInit].setNeighbour(3, red0[i - iInit + 1][j - jInit][k - kInit + 1]);
+              red3[i - iInit][j - jInit][k - kInit].setNeighbour(red0[i - iInit + 1][j - jInit][k - kInit + 1], 3);
             }
 
           }

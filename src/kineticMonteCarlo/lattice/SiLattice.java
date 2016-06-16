@@ -38,9 +38,9 @@ public class SiLattice extends AbstractLattice {
 
     float[] coords = new float[getUnitCellSize() * 3 + 3];
     for (int i = 0; i < getUnitCellSize(); i++) {
-      coords[i * 3] = (float) unitCell.getCellsP()[i].getPosX();
-      coords[i * 3 + 1] = (float) unitCell.getCellsP()[i].getPosY();
-      coords[i * 3 + 2] = (float) unitCell.getCellsP()[i].getPosZ();
+      coords[i * 3] = (float) unitCell.getCellsP()[i].getX();
+      coords[i * 3 + 1] = (float) unitCell.getCellsP()[i].getY();
+      coords[i * 3 + 2] = (float) unitCell.getCellsP()[i].getZ();
     }
 
     coords[getUnitCellSize() * 3] = (float) unitCell.getLimitX();

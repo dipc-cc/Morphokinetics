@@ -26,26 +26,30 @@ public class SiAtom extends AbstractAtom {
    * Number of 2nd neighbours.
    */
   private byte n2;
-  private final float x;
-  private final float y;
-  private final float z;
+  private final double x;
+  private final double y;
+  private final double z;
+  private float limitX;
+  private float limitY;
+  private float limitZ;
+  private short id;
 
-  public SiAtom(float x, float y, float z) {
+  public SiAtom(double x, double y, double z) {
     this.x = x;
     this.y = y;
     this.z = z;
     setNumberOfNeighbours(4);
   }
 
-  public float getX() {
+  public double getX() {
     return x;
   }
 
-  public float getY() {
+  public double getY() {
     return y;
   }
 
-  public float getZ() {
+  public double getZ() {
     return z;
   }
   
@@ -180,5 +184,38 @@ public class SiAtom extends AbstractAtom {
   @Override
   public boolean isEligible() {
     return getProbabilities()[n1 * 16 + n2] > 0 && getProbabilities()[n1 * 16 + n2] < 4;
+  }
+  
+  /**
+   * Initialises limits in X, Y and Z.
+   * 
+   * @param limitX_a
+   * @param limitY_a
+   * @param limitZ_a
+   */
+  public void initialiseLimits(double limitX_a, double limitY_a, double limitZ_a) {
+    limitX = (float) limitX_a;
+    limitY = (float) limitY_a;
+    limitZ = (float) limitZ_a;
+  }
+  
+  public float getLimitX() {
+    return limitX;
+  }
+
+  public float getLimitY() {
+    return limitY;
+  }
+
+  public float getLimitZ() {
+    return limitZ;
+  }
+  
+  public short getId() {
+    return id;
+  }
+
+  public void setId(short id) {
+    this.id = id;
   }
 }
