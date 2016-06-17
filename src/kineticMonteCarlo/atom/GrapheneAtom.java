@@ -243,7 +243,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     if ((n1 + n2 + n3) != TERRACE) {
       return false;
     }
-    for (int i = 11; i >= 3; i--) {
+    for (int i = getNumberOfNeighbours() - 1; i >= 3; i--) {
       if (neighbours[i].getType() != TERRACE) {
         return false;
       }
