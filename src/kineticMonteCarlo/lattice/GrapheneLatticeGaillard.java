@@ -74,8 +74,8 @@ public class GrapheneLatticeGaillard extends GrapheneLattice {
     for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
       for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
         // Get and all 12 neighbours of current graphene atom
-        GrapheneAtomGaillard[] neighbours = new GrapheneAtomGaillard[12];
-        for (int i = 0; i < 12; i++) {
+        GrapheneAtomGaillard[] neighbours = new GrapheneAtomGaillard[9];
+        for (int i = 0; i < 9; i++) {
           neighbours[i] = (GrapheneAtomGaillard) getNeighbour(iHexa, jHexa, i);
         }
         atoms[iHexa][jHexa].setNeighbours(neighbours);
