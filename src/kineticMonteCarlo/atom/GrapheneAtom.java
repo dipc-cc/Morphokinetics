@@ -133,7 +133,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     double raw = StaticRandom.raw();
 
     if (getBondsProbability() == null) {
-      return neighbours[(int) (raw * 12)];
+      return neighbours[(int) (raw * getNumberOfNeighbours())];
     }
 
     double linearSearch = raw * getProbability();
@@ -184,7 +184,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   public void obtainRateFromNeighbours() {
     if (areAllRatesTheSame()) {
-      addProbability(probJumpToNeighbour(getType(), 0) * 12.0);
+      addProbability(probJumpToNeighbour(getType(), 0) * getNumberOfNeighbours()); // it was 12.0
     } else {
       if (getBondsProbability() == null) {
         setBondsProbability(PStack.getProbArray());
@@ -218,10 +218,10 @@ public class GrapheneAtom extends AbstractGrowthAtom {
 
     if (getBondsProbability() == null) {
       double newRate = probJumpToNeighbour(getType(), i);
-      if (newRate * 12 != getProbability()) {
-        double independentProbability = getProbability() / 12.0;
+      if (newRate * getNumberOfNeighbours() != getProbability()) {
+        double independentProbability = getProbability() / getNumberOfNeighbours(); // it was 12.0
         setBondsProbability(PStack.getProbArray());
-        for (int a = 0; a < 12; a++) {
+        for (int a = 0; a < getNumberOfNeighbours(); a++) {
           setBondsProbability(independentProbability, a);
         }
         setBondsProbability(newRate, i);
