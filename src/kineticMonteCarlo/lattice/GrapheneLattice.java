@@ -660,7 +660,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public final Point2D getCartesianLocation(int iHexa, int jHexa) {
-
     double xCart;
     if ((iHexa & 1) == 0) { //even
       xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) + COS60;
@@ -713,7 +712,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     for (; i < 9; i++) {
       add2ndNeighbour(atom.getNeighbour(i));
     }
-    for (; i < 12; i++) {
+    for (; i < atom.getNumberOfNeighbours(); i++) {
       add3rdNeighbour(atom.getNeighbour(i));
     }
 
@@ -744,7 +743,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     for (; i < 9; i++) {
       remove2ndNeighbour(atom.getNeighbour(i));
     }
-    for (; i < 12; i++) {
+    for (; i < atom.getNumberOfNeighbours(); i++) {
       remove3rdNeighbour(atom.getNeighbour(i));
     }
 
