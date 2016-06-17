@@ -73,6 +73,7 @@ public class MathUtils {
     int currentHeight = 0;
     int maxI = surface.length;
     int maxJ = surface[0].length;
+    int maxHeight = 1000;
     do {
       modified = 0;
       for (int i = 0; i < maxI; i++) {
@@ -94,7 +95,7 @@ public class MathUtils {
         }
       }
       currentHeight++;
-    } while (modified > 0);
+    } while (modified > 0 && currentHeight < maxHeight);
   }
   
   /**
