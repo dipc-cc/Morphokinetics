@@ -20,7 +20,7 @@ public class GrapheneAtomGaillard extends GrapheneAtom {
 
   public GrapheneAtomGaillard(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);
-    
+    setNumberOfNeighbours(9);
     rates = new GrapheneGaillardRates();
   }
   
