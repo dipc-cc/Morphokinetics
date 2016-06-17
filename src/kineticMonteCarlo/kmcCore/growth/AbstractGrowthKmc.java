@@ -107,24 +107,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         File file = new File("results/deltaTimeBetweenTwoAttachments.txt");
-        outDeltaAttachments = new PrintWriter(new BufferedWriter(new FileWriter(file,true)));
+        outDeltaAttachments = new PrintWriter(new BufferedWriter(new FileWriter(file)));
         outDeltaAttachments.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
       try {
-        outPerAtom = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt", false)));
+        outPerAtom = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt")));
         outPerAtom.println("# Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
-        //Do nothing, it doesn't matter if fails
       }
       try {
-        outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt", false)));
+        outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
         outData.println("# Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
-        //Do nothing, it doesn't matter if fails
       }
     }
     nucleations = 0;
