@@ -280,6 +280,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private void printData() {
     countIslands(outData);
     outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+    outData.flush();
+    outDeltaAttachments.flush();
+    outPerAtom.flush();
   }
   
   private int countIslands(PrintWriter print) {
