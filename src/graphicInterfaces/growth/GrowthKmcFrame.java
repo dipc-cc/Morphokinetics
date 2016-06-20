@@ -161,16 +161,16 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
       startMouseX = evt.getX();
       startMouseY = evt.getY();        // TODO add your handling code here:
-      canvas1.changeOccupationByHand(startMouseX, startMouseY);
     }//GEN-LAST:event_jPanel1MousePressed
 
     private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseReleased
-      mouseX = mouseY = startMouseX = startMouseY = 0;
-
+      if (evt.getX() == startMouseX && evt.getY() == startMouseY) {
+        canvas1.changeOccupationByHand(startMouseX, startMouseY);
+      }
     }//GEN-LAST:event_jPanel1MouseReleased
 
     private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseDragged
-
+        
     }//GEN-LAST:event_jPanel1MouseDragged
 
   private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_jPanel1MouseWheelMoved
