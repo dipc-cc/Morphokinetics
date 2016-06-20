@@ -702,7 +702,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     GrapheneAtom atom = (GrapheneAtom) a;
     atom.setOccupied(true);
     if (forceNucleation) {
-      atom.setType(TERRACE);
+      atom.setType(BULK);
     }
     int i = 0;
 
