@@ -102,22 +102,17 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jLabelScale.setText("Scale");
     pauseButton.setText("Pause");
 
-    jSpinnerScale.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1), Integer.valueOf(1), null, Integer.valueOf(1)));
+    jSpinnerScale.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
     jSpinnerScale.setFocusCycleRoot(true);
     jSpinnerScale.setFocusable(false);
-    jSpinnerScale.addChangeListener(new javax.swing.event.ChangeListener() {
-      @Override
-      public void stateChanged(javax.swing.event.ChangeEvent evt) {
-        jSpinnerScaleStateChanged(evt);
-      }
+    jSpinnerScale.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+      jSpinnerScaleStateChanged(evt);
     });
 
-    jPanel1.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-      @Override
-      public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
-        jPanel1MouseWheelMoved(evt);
-      }
+    jPanel1.addMouseWheelListener((java.awt.event.MouseWheelEvent evt) -> {
+      jPanel1MouseWheelMoved(evt);
     });
+    
     jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
       @Override
       public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -129,19 +124,11 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
         jPanel1MouseReleased(evt);
       }
     });
-    pauseButton.addActionListener(new java.awt.event.ActionListener() {
-      @Override
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        pauseButton.setText("Resume");
-        System.out.println("Button pressed");
-      }
+    pauseButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+      pauseButton.setText("Resume");
     });
-    bwButton.addActionListener(new java.awt.event.ActionListener() {
-      @Override
-      public void actionPerformed(java.awt.event.ActionEvent evt) {
-        System.out.println("Other Button pressed");
-        canvas1.changeBlackAndWhite();
-      }
+    bwButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+      canvas1.changeBlackAndWhite();
     });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
