@@ -35,6 +35,7 @@ public class KmcCanvas extends Canvas {
   private AbstractGrowthLattice lattice;
   private int scale;
   private String imageName;
+  private boolean blackAndWhite; 
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -53,6 +54,7 @@ public class KmcCanvas extends Canvas {
     baseX = 0;
     baseY = 0;
     scale = 2;
+    blackAndWhite = false;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -76,12 +78,16 @@ public class KmcCanvas extends Canvas {
     this.scale = scale;
   }
 
+  public void changeBlackAndWhite() {
+    blackAndWhite = !blackAndWhite;
+  }
+
   public KmcCanvas() {   //constructor
-    setIgnoreRepaint(true); //we repaint manually
-    setFocusable(false);
   }
 
   public void dispose() {
+    setIgnoreRepaint(true); //we repaint manually
+    setFocusable(false);
     strategy.dispose();
   }
 
@@ -167,32 +173,40 @@ public class KmcCanvas extends Canvas {
         AbstractGrowthAtom atom = uc.getAtom(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
-
-        switch (atom.getType()) { // the cases are for graphene
-          case AbstractAtom.TERRACE:
+        
+        if (blackAndWhite) {
+          if (atom.getType() ==  AbstractAtom.TERRACE) {
             g.setColor(WHITE_GRAY);
-            break;
-          case AbstractAtom.CORNER:
-            g.setColor(RED);
-            break;
-          case AbstractAtom.EDGE:
-            g.setColor(LILAC);
-            break;
-          case AbstractAtom.ARMCHAIR_EDGE: // == Ag KINK
-            g.setColor(Color.WHITE);
-            break;
-          case AbstractAtom.ZIGZAG_WITH_EXTRA: // == Ag ISLAND
-            g.setColor(Color.CYAN);
-            break;
-          case AbstractAtom.SICK:
-            g.setColor(Color.BLUE);
-            break;
-          case AbstractAtom.KINK:
-            g.setColor(BANANA);
-            break;
-          case AbstractAtom.BULK:
-            g.setColor(GREEN);
-            break;
+          } else {
+            g.setColor(BLUE);
+          }
+        } else {
+          switch (atom.getType()) { // the cases are for graphene
+            case AbstractAtom.TERRACE:
+              g.setColor(WHITE_GRAY);
+              break;
+            case AbstractAtom.CORNER:
+              g.setColor(RED);
+              break;
+            case AbstractAtom.EDGE:
+              g.setColor(LILAC);
+              break;
+            case AbstractAtom.ARMCHAIR_EDGE: // == Ag KINK
+              g.setColor(Color.WHITE);
+              break;
+            case AbstractAtom.ZIGZAG_WITH_EXTRA: // == Ag ISLAND
+              g.setColor(Color.CYAN);
+              break;
+            case AbstractAtom.SICK:
+              g.setColor(Color.BLUE);
+              break;
+            case AbstractAtom.KINK:
+              g.setColor(BANANA);
+              break;
+            case AbstractAtom.BULK:
+              g.setColor(GREEN);
+              break;
+          }
         }
 
         if (scale < 3) {
