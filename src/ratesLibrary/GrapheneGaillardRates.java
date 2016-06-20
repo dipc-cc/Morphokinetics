@@ -48,9 +48,8 @@ public class GrapheneGaillardRates implements IRates {
     double energy;
     int n1 = originN1;
     int n2 = originN2;
-    if (n1 <0 || n2 <0) {
-      System.err.println("Number of occupied neighbours can't be negative. Exiting");
-      System.exit(-1);
+    if (n1 < 0 || n2 < 0) {
+      throw new IllegalArgumentException("Number of occupied neighbours can't be negative. Exiting");
     }
     if ((n1 == 0 && n2 == 0) || (n1 == 0 && destinationN2 == 0)) { // diffusion events
       energy = eDiff;
