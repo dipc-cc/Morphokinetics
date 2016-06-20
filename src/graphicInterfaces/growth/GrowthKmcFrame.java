@@ -10,6 +10,7 @@
  */
 package graphicInterfaces.growth;
 
+import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -41,7 +42,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jPanel1.add(canvas1);
     canvas1.initialise();
     jSpinnerScale.setValue(((KmcCanvas) canvas1).getScale());
-    setResizable(true);
     setSize(canvas1.getSizeX() + 50, canvas1.getSizeY() + 100);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -97,7 +97,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     JScrollPane scrollPane = new javax.swing.JScrollPane(jPanel1);
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setTitle("Morphoniketics");
-    setResizable(false);
+    setResizable(true);
+    setMinimumSize(new Dimension(300, 110));
 
     jLabelScale.setText("Scale");
     pauseButton.setText("Pause");
