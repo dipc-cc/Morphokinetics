@@ -113,17 +113,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
       jPanel1MouseWheelMoved(evt);
     });
     
-    jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-      @Override
-      public void mousePressed(java.awt.event.MouseEvent evt) {
-        jPanel1MousePressed(evt);
-      }
-
-      @Override
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
-        jPanel1MouseReleased(evt);
-      }
-    });
     pauseButton.addActionListener((java.awt.event.ActionEvent evt) -> {
       pauseButton.setText("Resume");
     });
