@@ -31,7 +31,7 @@ public class GrapheneGaillardRates implements IRates {
     eNn = 1.3;
     eNnn = 0.6;
     eInc = 1.0;
-    prefactor = 1e4;
+    prefactor = 1e13;
   }
   
   /**
@@ -46,16 +46,21 @@ public class GrapheneGaillardRates implements IRates {
    */
   public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, double temperature) {
     double energy;
-    if (originN1 == 0) { // diffusion events
+    int n1 = originN1;
+    int n2 = originN2;
+    if (n1 <0 || n2 <0) {
+      System.err.println("Number of occupied neighbours can't be negative. Exiting");
+      System.exit(-1);
+    }
+    if ((n1 == 0 && n2 == 0) || (n1 == 0 && destinationN2 == 0)) { // diffusion events
       energy = eDiff;
-    } else if ((originN1 == 1 && originN2 == 0 && destinationN1 == 2 && destinationN2 == 3)
-            || (originN1 == 1 && originN2 == 1 && destinationN1 == 1 && destinationN2 == 3)
-            || (originN1 == 1 && originN2 == 3 && destinationN1 == 1 && destinationN2 == 1)) { // events 4 reversed and 6
+    } else if ((destinationN1 > originN1)) { // events 4 reversed and 6
       energy = eInc;
     } else { // general case
-      energy = originN1 * eNn + originN2 * eNnn;
+      energy = n1 * eNn + n2 * eNnn;
     }
-    return prefactor * Math.exp(-energy / (kB * temperature));
+    double rate = prefactor * Math.exp(-energy / (kB * temperature));
+    return rate;
   }
 
   @Override

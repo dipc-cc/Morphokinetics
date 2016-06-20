@@ -45,11 +45,9 @@ public class GrapheneAtomGaillard extends GrapheneAtom {
     int n3 = getN3(); // in this model we ignore 3rd neighbours
     // Remove neighbour atom
     if (pos < 3) {
-      originN1--;
-      destinationN1++;
+      destinationN1--;
     } else if (pos < 9) {
-      originN2--;
-      destinationN2++;
+      destinationN2--;
     }
     
     return rates.getRate(originN1, originN2, destinationN1, destinationN2, 1273);
