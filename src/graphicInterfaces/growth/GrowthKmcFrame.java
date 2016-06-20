@@ -14,7 +14,6 @@ import javax.swing.JScrollPane;
 
 public class GrowthKmcFrame extends javax.swing.JFrame {
 
-  private boolean noStartDragData = false;
   private int mouseX, mouseY;
   private int startMouseX = 0;
   private int startMouseY = 0;
@@ -55,7 +54,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   public void repaintKmc() {
     canvas1.performDraw();
     canvas1.setBaseLocation(mouseX, mouseY);
-    noStartDragData = true;
     mouseX = 0;
     mouseY = 0;
   }
