@@ -175,10 +175,10 @@ public class KmcCanvas extends Canvas {
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
         
         if (blackAndWhite) {
-          if (atom.getType() ==  AbstractAtom.TERRACE) {
-            g.setColor(WHITE_GRAY);
-          } else {
+          if (atom.isOccupied()) {
             g.setColor(BLUE);
+          } else {
+            g.setColor(WHITE_GRAY);
           }
         } else {
           switch (atom.getType()) { // the cases are for graphene
