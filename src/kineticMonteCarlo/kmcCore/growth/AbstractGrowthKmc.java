@@ -152,6 +152,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       freeArea = calculateAreaAsInKmcCanvas();
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
+    if (extraOutput) {
+      outData.println("0\t0\t0\t0\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+    }
   }
 
   @Override
