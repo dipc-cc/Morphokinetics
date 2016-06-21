@@ -8,11 +8,12 @@ import basic.Parser;
 import static kineticMonteCarlo.atom.AbstractAtom.ARMCHAIR_EDGE;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
+import kineticMonteCarlo.atom.GrapheneAtom;
+import kineticMonteCarlo.atom.GrapheneAtomGaillard;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.GrapheneLattice;
-import kineticMonteCarlo.lattice.GrapheneLatticeGaillard;
 import utils.StaticRandom;
 
 /**
@@ -28,9 +29,9 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     GrapheneLattice lattice; 
     if (parser.getRatesLibrary().equals("Gaillard2Neighbours")) {
-      lattice = new GrapheneLatticeGaillard(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
+      lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillard.class);
     } else {
-      lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
+      lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtom.class);
     }
     setLattice(lattice);
 

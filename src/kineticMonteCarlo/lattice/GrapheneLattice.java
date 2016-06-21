@@ -9,8 +9,13 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import kineticMonteCarlo.atom.GrapheneAtomGaillard;
 import utils.StaticRandom;
 
 /**
@@ -24,7 +29,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   private static final double COS30 = Math.cos(30 * Math.PI / 180);
   private final Point2D centralCartesianLocation;
 
-  public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
+  public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep, Class<?> inputClass) {
     super(hexaSizeI, hexaSizeJ, modified);
 
     // j axis has to be multiple of two
@@ -36,7 +41,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     
     centralCartesianLocation = getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
-    createAtoms(hexaSizeI, hexaSizeJ, distancePerStep);
+    createAtoms(hexaSizeI, hexaSizeJ, distancePerStep, inputClass);
     setAngles();
   }
 
@@ -72,32 +77,44 @@ public class GrapheneLattice extends AbstractGrowthLattice {
    * @param distancePerStep
    * @return
    */
-  private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep) {
-    //Instantiate atoms
-    GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
-    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
-      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
-        //para cada unit cell
-
-        //atomo 0 de la unit cell, tipo 0
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa++;
-        //atomo 1 de la unit cell, tipo 1
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa--;
-        jHexa++;
-        //atomo 2 de la unit cell, tipo 1   
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa++;
-        //atomo 3 de la unit cell, tipo 0
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa--;
-        jHexa--;
+  private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep, Class<?> inputClass) {
+    GrapheneAtom[][] atoms = null; // = new GrapheneAtom[hexaSizeI][hexaSizeJ];
+    try{
+      // create atoms array. Class depends on the input class
+      if (inputClass == GrapheneAtomGaillard.class) {
+        atoms = new GrapheneAtomGaillard[hexaSizeI][hexaSizeJ];
+      } else if (inputClass == GrapheneAtom.class) {
+        atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
       }
+
+      Constructor<?>[] constructor = inputClass.getConstructors();//createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+      //Instantiate atoms
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
+        for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
+          //para cada unit cell
+
+          //atomo 0 de la unit cell, tipo 0
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa++;
+          //atomo 1 de la unit cell, tipo 1
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa--;
+          jHexa++;
+          //atomo 2 de la unit cell, tipo 1   
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa++;
+          //atomo 3 de la unit cell, tipo 0
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa--;
+          jHexa--;
+        }
+      }
+    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException ex) {
+      Logger.getLogger(GrapheneLattice.class.getName()).log(Level.SEVERE, null, ex);
     }
     
     setAtoms(atoms);
