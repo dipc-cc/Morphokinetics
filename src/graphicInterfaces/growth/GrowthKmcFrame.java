@@ -23,6 +23,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   private int mouseX, mouseY;
   private int startMouseX = 0;
   private int startMouseY = 0;
+  private boolean paused;
   private KmcCanvas canvas1;
   private JButton pauseButton;
   private JToggleButton bwButton;
@@ -55,6 +56,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
         jPanel1MousePressed(evt);
       }
     });
+    paused = false;
   }
 
   public void repaintKmc() {
@@ -115,7 +117,13 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     });
     
     pauseButton.addActionListener((java.awt.event.ActionEvent evt) -> {
-      pauseButton.setText("Resume");
+      paused = !paused;
+      canvas1.setPaused(paused);
+      if (paused) {
+        pauseButton.setText("Resume");
+      } else {
+        pauseButton.setText("Pause");
+      }
     });
     bwButton.addActionListener((java.awt.event.ActionEvent evt) -> {
       canvas1.changeBlackAndWhite();

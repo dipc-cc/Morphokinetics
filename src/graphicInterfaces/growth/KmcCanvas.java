@@ -36,6 +36,7 @@ public class KmcCanvas extends Canvas {
   private int scale;
   private String imageName;
   private boolean blackAndWhite; 
+  private boolean paused;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -55,6 +56,7 @@ public class KmcCanvas extends Canvas {
     baseY = 0;
     scale = 2;
     blackAndWhite = false;
+    paused = false;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -81,7 +83,16 @@ public class KmcCanvas extends Canvas {
   public void changeBlackAndWhite() {
     blackAndWhite = !blackAndWhite;
   }
-
+  
+  public void setPaused(boolean pause) {
+    this.paused = pause;
+    lattice.setPaused(pause);
+  }
+  
+  public boolean isPaused() {
+    return paused;
+  }
+  
   public KmcCanvas() {   //constructor
   }
 

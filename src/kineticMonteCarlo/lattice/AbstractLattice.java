@@ -17,6 +17,7 @@ public abstract class AbstractLattice {
   private int hexaSizeJ;
   private int hexaSizeK;
   private int unitCellSize;
+  private boolean paused;
 
   public int size() {
     return hexaSizeI * hexaSizeJ * hexaSizeK;
@@ -70,6 +71,12 @@ public abstract class AbstractLattice {
   public void setProbabilities(double[] rates) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-
-
+ 
+  public void setPaused(boolean pause) {
+    this.paused = pause;
+  }
+  
+  public boolean isPaused() {
+    return paused;
+  }
 }

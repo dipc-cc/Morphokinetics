@@ -249,13 +249,21 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       returnValue = super.simulate();
     } else {
       while (lattice.getCoverage() < maxCoverage) {
-        if (performSimulationStep()) {
-          break;
-        }
-        simulatedSteps++;
-        if (extraOutput && getCoverage() * 100 > k) {
-          k++;
-          printData();
+        if (lattice.isPaused()) {
+          try {
+            Thread.sleep(250);
+          } catch (InterruptedException ex) {
+            Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
+          }
+        } else {
+          if (performSimulationStep()) {
+            break;
+          }
+          simulatedSteps++;
+          if (extraOutput && getCoverage() * 100 > k) {
+            k++;
+            printData();
+          }
         }
       }
     }
