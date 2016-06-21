@@ -25,8 +25,8 @@ public class GrapheneAtomGaillard extends GrapheneAtom {
   }
   
   /**
-   * Probability to jump to given neighbour position. 
-   * 
+   * Probability to jump to given neighbour position. Only allowed to jump to first neighbours.
+   *
    * @param originType
    * @param pos
    * @return probability
@@ -47,7 +47,7 @@ public class GrapheneAtomGaillard extends GrapheneAtom {
     if (pos < 3) {
       destinationN1--;
     } else if (pos < 9) {
-      destinationN2--;
+      return 0;
     }
     
     return rates.getRate(originN1, originN2, destinationN1, destinationN2, 1273);
