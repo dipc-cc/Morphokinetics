@@ -638,8 +638,8 @@ public class Parser {
   
   /**
    * Selects which rates are used for the simulation. For the moment only works for the graphene.
-   * Available options are: "Gaillard1Neighbour", "Gaillard2Neighbours", or anything else for
-   * synthetic rates.
+   * Available options are: "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything
+   * else for synthetic rates.
    *
    * @return
    */

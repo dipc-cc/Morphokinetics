@@ -8,6 +8,7 @@ package basic;
 import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
 import ratesLibrary.GrapheneGaillardOneNeighbourRates;
 import ratesLibrary.GrapheneGaillardRates;
+import ratesLibrary.GrapheneSchoenhalzRates;
 import ratesLibrary.GrapheneSyntheticRates;
 import ratesLibrary.IRates;
 
@@ -36,6 +37,9 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
         break;
       case "Gaillard2Neighbours":
         rates = new GrapheneGaillardRates();
+        break;
+      case "Schoenhalz":
+        rates = new GrapheneSchoenhalzRates();
         break;
       default:
         rates = new GrapheneSyntheticRates();

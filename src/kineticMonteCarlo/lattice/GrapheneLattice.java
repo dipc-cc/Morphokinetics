@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.atom.GrapheneAtomGaillard;
+import kineticMonteCarlo.atom.GrapheneAtomSchoenhalz;
 import utils.StaticRandom;
 
 /**
@@ -83,6 +84,8 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       // create atoms array. Class depends on the input class
       if (inputClass == GrapheneAtomGaillard.class) {
         atoms = new GrapheneAtomGaillard[hexaSizeI][hexaSizeJ];
+      } else if (inputClass == GrapheneAtomSchoenhalz.class) {
+        atoms = new GrapheneAtomSchoenhalz[hexaSizeI][hexaSizeJ];
       } else if (inputClass == GrapheneAtom.class) {
         atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
       }

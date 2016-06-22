@@ -10,6 +10,7 @@ import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.GrapheneAtomGaillard;
+import kineticMonteCarlo.atom.GrapheneAtomSchoenhalz;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
@@ -27,9 +28,11 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     HopsPerStep distancePerStep = new HopsPerStep();
 
-    GrapheneLattice lattice; 
+    GrapheneLattice lattice;
     if (parser.getRatesLibrary().equals("Gaillard2Neighbours")) {
       lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillard.class);
+    } else if (parser.getRatesLibrary().equals("Schoenhalz")) {
+      lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomSchoenhalz.class);
     } else {
       lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtom.class);
     }
