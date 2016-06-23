@@ -21,7 +21,7 @@ public class GrapheneAtomGaillard1Neighbour extends GrapheneAtom {
   }
   
   /**
-   * Only BULK atom types are considered immobile atoms.
+   * Only BULK atom types are considered immobile atoms. From page 15 of the paper.
    * 
    * @return 
    */
