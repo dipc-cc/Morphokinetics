@@ -45,10 +45,15 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     this.neighbours = neighbours;
   }
   
+  /**
+   * KINK and BULK atom types are considered immobile atoms.
+   * 
+   * @return 
+   */
   @Override
   public boolean isEligible() {
     return isOccupied() && (getType() < KINK);
-  } // KINK and BULK atoms types are considered immobil atoms
+  }
 
   /**
    * Total number of 1st neighbours.
