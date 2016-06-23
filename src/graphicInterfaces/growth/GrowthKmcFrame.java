@@ -11,12 +11,16 @@
 package graphicInterfaces.growth;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
+import javax.swing.KeyStroke;
 
 public class GrowthKmcFrame extends javax.swing.JFrame {
 
@@ -57,6 +61,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
       }
     });
     paused = false;
+    jLabelScale.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
+    jLabelScale.getActionMap().put("pause", new Pause());
   }
 
   public void repaintKmc() {
@@ -117,13 +123,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     });
     
     pauseButton.addActionListener((java.awt.event.ActionEvent evt) -> {
-      paused = !paused;
-      canvas1.setPaused(paused);
-      if (paused) {
-        pauseButton.setText("Resume");
-      } else {
-        pauseButton.setText("Pause");
-      }
+      pause();
     });
     bwButton.addActionListener((java.awt.event.ActionEvent evt) -> {
       canvas1.changeBlackAndWhite();
@@ -198,5 +198,26 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     canvas1.setScale(zoom);
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
     setSize(canvas1.getSizeX() + 50, canvas1.getSizeY() + 100);
+  }
+  
+  private void pause() {
+    paused = !paused;
+    canvas1.setPaused(paused);
+    if (paused) {
+      pauseButton.setText("Resume");
+    } else {
+      pauseButton.setText("Pause");
+    }
+  }
+
+  private class Pause extends AbstractAction {
+
+    public Pause() {
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+      pause();
+    }
   }
 }
