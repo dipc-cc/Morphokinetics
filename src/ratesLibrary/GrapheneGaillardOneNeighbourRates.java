@@ -36,7 +36,7 @@ public class GrapheneGaillardOneNeighbourRates implements IRates {
     diffusionMl = 5e-4;
     energies = new double[8][8];
     initialiseEnergies();
-    prefactor = 1e11; 
+    prefactor = 1e13; // s^-1
   }
   
   private double getRate(int sourceType, int destinationType, double temperature) {
