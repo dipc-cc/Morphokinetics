@@ -14,9 +14,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
-import kineticMonteCarlo.atom.GrapheneAtomGaillard;
-import kineticMonteCarlo.atom.GrapheneAtomSchoenhalz;
 import utils.StaticRandom;
 
 /**
@@ -79,18 +76,9 @@ public class GrapheneLattice extends AbstractGrowthLattice {
    * @return
    */
   private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep, Class<?> inputClass) {
-    GrapheneAtom[][] atoms = null; // = new GrapheneAtom[hexaSizeI][hexaSizeJ];
+    GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
     try{
-      // create atoms array. Class depends on the input class
-      if (inputClass == GrapheneAtomGaillard.class) {
-        atoms = new GrapheneAtomGaillard[hexaSizeI][hexaSizeJ];
-      } else if (inputClass == GrapheneAtomSchoenhalz.class) {
-        atoms = new GrapheneAtomSchoenhalz[hexaSizeI][hexaSizeJ];
-      } else if (inputClass == GrapheneAtom.class) {
-        atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
-      }
-
-      Constructor<?>[] constructor = inputClass.getConstructors();//createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+      Constructor<?>[] constructor = inputClass.getConstructors();
       //Instantiate atoms
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
         for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
