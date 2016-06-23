@@ -65,13 +65,13 @@ public class GrapheneGaillardOneNeighbourRates implements IRates {
     
     // 0 neighbours to any. "E_Diff is the activation energy for free diffusion or to attach to an island
     // (event 1 and reversed events 2, 3 and 5)"
-    energies[TERRACE][TERRACE] =                     eDiff;
-    energies[TERRACE][CORNER] =                      eDiff;
-    energies[TERRACE][ZIGZAG_EDGE] =                 eDiff;
-    energies[TERRACE][ARMCHAIR_EDGE] =               eDiff;
-    energies[TERRACE][ZIGZAG_WITH_EXTRA] =           eDiff;
-    energies[TERRACE][SICK] =                        eDiff;
-    energies[TERRACE][KINK] =                        eDiff;
+    energies[TERRACE][TERRACE] =                     eDiff; // 0 -> 0
+    energies[TERRACE][CORNER] =                      eDiff; // 0 -> 1
+    energies[TERRACE][ZIGZAG_EDGE] =                 eDiff; // 0 -> 1
+    energies[TERRACE][ARMCHAIR_EDGE] =               eDiff; // 0 -> 1
+    energies[TERRACE][ZIGZAG_WITH_EXTRA] =           eDiff; // 0 -> 1
+    energies[TERRACE][SICK] =                        eDiff; // 0 -> 1
+    energies[TERRACE][KINK] =                        eDiff; // 0 -> 2 
     energies[TERRACE][BULK] =                        eDiff;// imposible to happen
 
     energies[CORNER][TERRACE] =                      eDec; // 1 -> 0
