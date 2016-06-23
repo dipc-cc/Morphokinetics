@@ -19,4 +19,14 @@ public class GrapheneAtomGaillard1Neighbour extends GrapheneAtom {
     super(id, iHexa, jHexa, distancePerStep);
     setNumberOfNeighbours(3);
   }
+  
+  /**
+   * Only BULK atom types are considered immobile atoms.
+   * 
+   * @return 
+   */
+  @Override
+  public boolean isEligible() {
+    return isOccupied() && (getType() <= KINK);
+  }
 }

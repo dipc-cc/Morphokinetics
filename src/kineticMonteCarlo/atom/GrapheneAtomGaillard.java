@@ -52,4 +52,14 @@ public class GrapheneAtomGaillard extends GrapheneAtom {
     
     return rates.getRate(originN1, originN2, destinationN1, destinationN2, 1273);
   }
+  
+  /**
+   * Only BULK atom types are considered immobile atoms.
+   * 
+   * @return 
+   */
+  @Override
+  public boolean isEligible() {
+    return isOccupied() && (getType() <= KINK);
+  }
 }
