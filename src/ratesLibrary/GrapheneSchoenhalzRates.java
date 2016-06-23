@@ -43,7 +43,7 @@ public class GrapheneSchoenhalzRates implements IRates {
     if (nn < 0 || nnn < 0) {
       throw new IllegalArgumentException("Number of occupied neighbours can't be negative. Exiting");
     }
-    if (nn == 0) {
+    if (nn == 0 && destinationN1 == 0) {
       energy = 0.5; // event 0
       event = 0;
     } else if (nn == 1 && nnn == 2 && destinationN1 == 1 && destinationN2 == 2) { // my own invention
