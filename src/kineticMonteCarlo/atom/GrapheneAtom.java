@@ -265,12 +265,12 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return 0;
     }
 
-    byte lastTemp = atom.getTypeWithoutNeighbour(pos);
+    byte destinationType = atom.getTypeWithoutNeighbour(pos);
 
     double rate;
     int multiplier = super.getMultiplier();
     if (multiplier != 1) {
-      rate = getProbability(originType, lastTemp) / multiplier;
+      rate = getProbability(originType, destinationType) / multiplier;
       super.setMultiplier(1);
     } else {
       int hops = distancePerStep.getDistancePerStep(originType, originType);
@@ -279,10 +279,10 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         case TERRACE:
         case ZIGZAG_EDGE:
         case ARMCHAIR_EDGE:
-          rate = getProbability(originType, lastTemp) / (hops * hops);
+          rate = getProbability(originType, destinationType) / (hops * hops);
           break;
         default:
-          rate = getProbability(originType, lastTemp);
+          rate = getProbability(originType, destinationType);
           break;
       }
     }
