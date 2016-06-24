@@ -179,7 +179,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   
   @Override
   public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-
     int[] index = new int[1];
     short iHexa = atom.getiHexa();
     short jHexa = atom.getjHexa();
@@ -197,7 +196,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-
     int[] index = new int[1];
     short iHexa = atom.getiHexa();
     short jHexa = atom.getjHexa();
@@ -216,9 +214,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, double raw) {
-
     int temp = (int) (raw * (thresholdDistance * 2 * 6));
-
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
     int iHexa = iHexaOrigin;
     int jHexa = (jHexaOrigin - thresholdDistance * 2);
@@ -228,7 +224,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
     int counter = 0;
     int index;
-
     for (int i = 0; i < thresholdDistance * 2; i++) {
       counter++;
       if (counter > temp) {
@@ -323,14 +318,10 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
-
     int distance = 1;
-
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
-
     short iHexa;
     iHexa = iHexaOrigin;
-
     short jHexa = (short) (jHexaOrigin - 2);
     if (jHexa < 0) {
       jHexa += getHexaSizeJ();
@@ -477,11 +468,9 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaZigzag(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, int[] destinationIndex, double raw) {
-
     int distance = 1;
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
     int orientation = getUc(index).getAtom(0).getOrientation();
-
     int iHexa1 = iHexaOrigin;
     int jHexa1 = jHexaOrigin;
     int iHexa2 = iHexaOrigin;
@@ -547,17 +536,14 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaArmchair(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, int[] destinationIndex, double raw) {
-
     int distance = 1;
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
     int orientacion = getUc(index).getAtom(0).getOrientation();
-
     int iHexa1 = iHexaOrigin;
     int jHexa1 = jHexaOrigin;
     int iHexa2 = iHexaOrigin;
     int jHexa2 = jHexaOrigin;
-
     int neighbour1;
     int neighbour2;
 
