@@ -7,6 +7,7 @@ package graphicInterfaces.growth;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
@@ -174,7 +175,7 @@ public class KmcCanvas extends Canvas {
   @Override
   public void paint(Graphics g) { //real drawing method
     super.paint(g);
-
+    g.setFont(new Font("Arial", Font.PLAIN, 10)); 
     g.setColor(GRAY);
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
 
@@ -230,7 +231,8 @@ public class KmcCanvas extends Canvas {
         } else if (atom.isOccupied()) {
           g.fillOval(X, Y, scale, scale);
           if (scale > 8) {
-            g.drawString(Integer.toString(atom.getId()), X, Y);
+            g.setColor(getContrastColor(g.getColor()));
+            g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
           }
         } else if (!atom.isOutside()) {
           g.drawOval(X, Y, scale, scale);
@@ -250,5 +252,16 @@ public class KmcCanvas extends Canvas {
    */
   public void changeOccupationByHand(double xMouse, double yMouse) {
     lattice.changeOccupationByHand(xMouse, yMouse, scale);
+  }
+  
+  /**
+   * Method taken from http://stackoverflow.com/questions/4672271/reverse-opposing-colors
+   *
+   * @param colour base colour
+   * @return
+   */
+  private Color getContrastColor(Color colour) {
+    double y = (299 * colour.getRed() + 587 * colour.getGreen() + 114 * colour.getBlue()) / 1000;
+    return y >= 128 ? Color.black : Color.white;
   }
 }
