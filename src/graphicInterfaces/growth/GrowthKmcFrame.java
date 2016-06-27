@@ -328,21 +328,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
       canvas1.changePrintId();
     });
     
-    islandsMi.addItemListener(new ItemListener() {
-      @Override
-      public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-          /*simulationPanel2d.setLogScale(true);
-          experimentalPsdPanel2d.setLogScale(true);
-          surfacePanel2d.setLogScale(true);
-          diffPanel2d.setLogScale(true);/*/
-        } else {
-         /* simulationPanel2d.setLogScale(false);
-          experimentalPsdPanel2d.setLogScale(false);
-          surfacePanel2d.setLogScale(false);
-          diffPanel2d.setLogScale(false);/*/
-        }
-      }
+    islandsMi.addItemListener((ItemEvent e) -> {
+      canvas1.changePrintIslandNumber();
     });
   }
 }

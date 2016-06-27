@@ -39,6 +39,7 @@ public class KmcCanvas extends Canvas {
   private boolean blackAndWhite; 
   private boolean paused;
   private boolean printId;
+  private boolean printIslandNumber;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -60,6 +61,7 @@ public class KmcCanvas extends Canvas {
     blackAndWhite = false;
     paused = false;
     printId = true;
+    printIslandNumber = false;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -94,6 +96,12 @@ public class KmcCanvas extends Canvas {
   
   public void changePrintId() {
     printId = !printId;
+    //printIslandNumber = !printId;
+  }
+  
+  public void changePrintIslandNumber() {
+    printIslandNumber = !printIslandNumber;
+    //printId = !printIslandNumber;
   }
   
   public boolean isPaused() {
@@ -236,9 +244,15 @@ public class KmcCanvas extends Canvas {
 
         } else if (atom.isOccupied()) {
           g.fillOval(X, Y, scale, scale);
-          if (scale > 8 && printId) {
+          if (scale > 8) {
             g.setColor(getContrastColor(g.getColor()));
-            g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            if (printId) {
+              g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            }
+            if (printIslandNumber) {
+              String text = Integer.toString(atom.getIslandNumber());
+              g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            }
           }
         } else if (!atom.isOutside()) {
           g.drawOval(X, Y, scale, scale);
