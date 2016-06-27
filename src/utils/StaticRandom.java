@@ -13,6 +13,9 @@ import utils.edu.cornell.lassp.houle.rngPack.Ranecu;
 public class StaticRandom {
 
   private static Ranecu rand;
+  private static double[] randomNumbersVector;
+  private static int currentPosition;
+  private static int limit;
 
   public StaticRandom() {
     rand = new Ranecu(System.nanoTime());
@@ -25,11 +28,19 @@ public class StaticRandom {
       // for testing purposes
       rand = new Ranecu(1234512345, 678967890); // Joseba: To create allways the same "Random" numbers
     }
-
+    limit = 10000000;// 10M
+    initVector();
   }
 
   public static double raw() {
-    return rand.raw();
+    //return rand.raw();/*
+    if (currentPosition < limit - 1) {
+      currentPosition++;
+      return randomNumbersVector[currentPosition];
+    } else {
+      initVector();
+      return randomNumbersVector[currentPosition];
+    }//*/
   }
 
   /**
@@ -39,7 +50,13 @@ public class StaticRandom {
    * @return 0 <= result < max
    */
   public static int rawInteger(int max) {
-    return (int) (rand.raw() * max);
+    return (int) (raw() * max);
   }
 
+  private static void initVector() {
+    randomNumbersVector = new double[limit];
+    rand.raw(randomNumbersVector, limit);
+    currentPosition = 0;
+  }
+    
 }
