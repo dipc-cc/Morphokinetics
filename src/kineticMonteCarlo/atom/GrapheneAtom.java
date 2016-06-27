@@ -11,7 +11,7 @@ import utils.StaticRandom;
 
 public class GrapheneAtom extends AbstractGrowthAtom {
 
-  private static final ArrayStack PStack = new ArrayStack(12);
+  private boolean allRatesTheSame;
   private static GrapheneTypesTable typesTable;
   private GrapheneAtom[] neighbours = new GrapheneAtom[12];
   
@@ -39,6 +39,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
+    allRatesTheSame = false;
   }
 
   public void setNeighbours(GrapheneAtom[] neighbours) {
@@ -110,10 +111,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     setType(TERRACE);
     n1 = n2 = n3 = 0; // current atom has no neighbour
 
-    if (getBondsProbability() != null) {
-      PStack.returnProbArray(getBondsProbability());
-      setBondsProbability(null);
-    }
   }
 
   @Override
@@ -137,7 +134,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   public AbstractGrowthAtom chooseRandomHop() {
     double raw = StaticRandom.raw();
 
-    if (getBondsProbability() == null) {
+    if (allRatesTheSame) {
       return neighbours[(int) (raw * getNumberOfNeighbours())];
     }
 
@@ -189,11 +186,12 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   public void obtainRateFromNeighbours() {
     if (areAllRatesTheSame()) {
+      //double prob = probJumpToNeighbour(getType(), 0);
       addProbability(probJumpToNeighbour(getType(), 0) * getNumberOfNeighbours()); // it was 12.0
+      /*for (int i = 0; i < getNumberOfNeighbours(); i++) {
+        setBondsProbability(prob, i);
+      }*/
     } else {
-      if (getBondsProbability() == null) {
-        setBondsProbability(PStack.getProbArray());
-      }
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         setBondsProbability(probJumpToNeighbour(getType(), i), i);
         addProbability(getBondsProbability(i));
@@ -221,38 +219,27 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         break;
     }
 
-    if (getBondsProbability() == null) {
-      double newRate = probJumpToNeighbour(getType(), i);
-      if (newRate * getNumberOfNeighbours() != getProbability()) {
-        double independentProbability = getProbability() / getNumberOfNeighbours(); // it was 12.0
-        setBondsProbability(PStack.getProbArray());
-        for (int a = 0; a < getNumberOfNeighbours(); a++) {
-          setBondsProbability(independentProbability, a);
-        }
-        setBondsProbability(newRate, i);
-        addProbability(newRate - independentProbability);
-        probabilityChange += (newRate - independentProbability);
-      }
-    } else {
-      addProbability(-getBondsProbability(i));
-      probabilityChange -= getBondsProbability(i);
-      setBondsProbability(probJumpToNeighbour(getType(), i), i);
-      addProbability(getBondsProbability(i));
-      probabilityChange += getBondsProbability(i);
-    }
+    addProbability(-getBondsProbability(i));
+    probabilityChange -= getBondsProbability(i);
+    setBondsProbability(probJumpToNeighbour(getType(), i), i);
+    addProbability(getBondsProbability(i));
+    probabilityChange += getBondsProbability(i);
 
     return probabilityChange;
   }
   
-  boolean areAllRatesTheSame() {
+  private boolean areAllRatesTheSame() {
     if ((n1 + n2 + n3) != TERRACE) {
+      allRatesTheSame = false;
       return false;
     }
     for (int i = getNumberOfNeighbours() - 1; i >= 3; i--) {
       if (neighbours[i].getType() != TERRACE) {
+      allRatesTheSame = false;
         return false;
       }
     }
+    allRatesTheSame = true;
     return true;
   }
 
