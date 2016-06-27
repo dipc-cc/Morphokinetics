@@ -17,16 +17,17 @@ public class StaticRandom {
   public StaticRandom() {
     rand = new Ranecu(System.nanoTime());
   }
-  
-  public StaticRandom(boolean randomSeed){
-     if (randomSeed) {
+
+  public StaticRandom(boolean randomSeed) {
+    if (randomSeed) {
       rand = new Ranecu(System.nanoTime());
     } else {
       // for testing purposes
-      rand = new Ranecu(1234512345,678967890); // Joseba: To create allways the same "Random" numbers
+      rand = new Ranecu(1234512345, 678967890); // Joseba: To create allways the same "Random" numbers
     }
+
   }
-  
+
   public static double raw() {
     return rand.raw();
   }
