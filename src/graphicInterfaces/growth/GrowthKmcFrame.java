@@ -58,7 +58,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jPanel1.add(canvas1);
     canvas1.initialise();
     jSpinnerScale.setValue(((KmcCanvas) canvas1).getScale());
-    setSize(canvas1.getSizeX() + 50, canvas1.getSizeY() + 100);
+    setSize(canvas1.getSizeX() + 70, canvas1.getSizeY() + 120);
 
     canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
       @Override
@@ -179,8 +179,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
 
   private void jSpinnerScaleStateChanged(javax.swing.event.ChangeEvent evt) {
     canvas1.setScale((Integer) jSpinnerScale.getValue());
-    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    setSize(canvas1.getSizeX() + 50, canvas1.getSizeY() + 100);
+    increaseSize();
   }
 
   private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {
@@ -209,10 +208,14 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     }
     jSpinnerScale.setValue(zoom);
     canvas1.setScale(zoom);
-    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    setSize(canvas1.getSizeX() + 50, canvas1.getSizeY() + 100);
+    increaseSize();
   }
   
+  private void increaseSize() {
+    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
+    setSize(canvas1.getSizeX() + 70, canvas1.getSizeY() + 120);
+  }
+    
   private void pause() {
     paused = !paused;
     canvas1.setPaused(paused);
