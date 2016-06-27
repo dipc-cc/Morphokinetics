@@ -18,10 +18,25 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
 
   private GrapheneSchoenhalzRates rates;
 
+  private GrapheneAtomSchoenhalz[] neighbours = new GrapheneAtomSchoenhalz[12];
+  
   public GrapheneAtomSchoenhalz(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);
     setNumberOfNeighbours(9);
     rates = new GrapheneSchoenhalzRates();
+  }
+  
+  @Override
+  public void setNeighbours(GrapheneAtom[] neighbours) {
+    super.setNeighbours(neighbours);
+    for (int i = 0; i < neighbours.length; i++) {
+      this.neighbours[i] = (GrapheneAtomSchoenhalz) neighbours[i];
+    }
+  }  
+  
+  @Override
+  public GrapheneAtomSchoenhalz getNeighbour(int pos) {
+    return neighbours[pos];
   }
 
   /**
@@ -34,7 +49,7 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
    */
   @Override
   public double probJumpToNeighbour(int originType, int pos) {
-    GrapheneAtomSchoenhalz atom = (GrapheneAtomSchoenhalz) getNeighbour(pos);
+    GrapheneAtomSchoenhalz atom = neighbours[pos];
     if (atom.isOccupied()) {
       return 0;
     }
