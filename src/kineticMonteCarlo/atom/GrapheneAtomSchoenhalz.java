@@ -58,19 +58,32 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
     int originN2 = getN2();
     int destinationN1 = atom.getN1();
     int destinationN2 = atom.getN2();
+    boolean secondNeighbour = false;
     int n3 = getN3(); // in this model we ignore 3rd neighbours
     // Remove neighbour atom
     if (pos < 3) {
       destinationN1--;
     } else if (pos < 9) {
-      if (originN1 == 1 && originN2 == 2 && destinationN1 == 1 && destinationN2 == 2) { // zigzag edge diffusion
-        destinationN2--;
+      if (originN1 == 1 && originN2 == 2 && destinationN1 == 1 && destinationN2 == 3) { // probable zigzag edge diffusion
+        boolean zigzag = false;
+        for (int i = 0; i < 3; i++) {
+          GrapheneAtomSchoenhalz tmpAtom = neighbours[i];
+          if (tmpAtom.getN1() == 3) {
+            zigzag = true;
+            break;
+          }
+        }
+        if (zigzag) { // is a zigzag
+          secondNeighbour = true;
+          destinationN2--;
+        }
       } else {
         return 0;
       }
     }
 
-    return rates.getRate(originN1, originN2, destinationN1, destinationN2, 1273);
+    return rates.getRate(originN1, originN2, destinationN1, destinationN2, secondNeighbour, 873);
+  }  
   
   /**
    * Only BULK atom types are considered immobile atoms.

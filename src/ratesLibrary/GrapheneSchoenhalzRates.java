@@ -5,6 +5,7 @@
  */
 package ratesLibrary;
 
+import java.util.HashMap;
 import static ratesLibrary.IRates.kB;
 
 /**
@@ -19,12 +20,20 @@ public class GrapheneSchoenhalzRates implements IRates {
   private double diffusionMl;
   private final double islandDensityPerSite = 1 / 60000f;
   private final double prefactor;
+  private final HashMap<Double, Double> rateMap;
+  private final double[] ratesVector;
   
   public GrapheneSchoenhalzRates() {
     diffusionMl = 5e-4;
     energies = new double[8][8];
     prefactor = 1e13; // s^-1
+    rateMap = new HashMap<Double, Double>(20);
+    ratesVector = new double[23];
+    if (rateMap.isEmpty()) {
+      initRateEnergyMap(1273);
+    }
   }
+  
   /**
    * Rate is calculated with the supporting info.
    *
@@ -32,10 +41,11 @@ public class GrapheneSchoenhalzRates implements IRates {
    * @param originN2
    * @param destinationN1
    * @param destinationN2
+   * @param secondNeighbour
    * @param temperature
    * @return
    */
-  public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, double temperature) {
+  public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, boolean secondNeighbour, double temperature) {
     double energy = -1;
     int nn = originN1;
     int nnn = originN2;
@@ -46,10 +56,10 @@ public class GrapheneSchoenhalzRates implements IRates {
     if (nn == 0 && destinationN1 == 0) {
       energy = 0.5; // event 0
       event = 0;
-    } else if (nn == 1 && nnn == 2 && destinationN1 == 1 && destinationN2 == 2) { // my own invention
+    } else if (nn == 1 && nnn == 2 && destinationN1 == 1 && destinationN2 >= 2 && secondNeighbour) { // my own invention Zigzag edge diffusion
       energy = 0.61; // event 20
       event = 20;
-    } else if (nn == 1 && nnn == 3 && destinationN1 == 1 && destinationN2 == 3) { // my own invention
+    } else if (nn == 1 && nnn >= 3 && destinationN1 == 1 && destinationN2 >= 3) { // my own invention Armchair edge diffusion
       energy = 0.3; // event 22
       event = 22;
     } else if (nn == 1 && destinationN1 == 2) {
@@ -84,8 +94,7 @@ public class GrapheneSchoenhalzRates implements IRates {
       System.err.println("nn "+nn+" nnn "+nnn+" destinationN1 "+destinationN1+" destinationN2 "+destinationN2);
       throw new IllegalArgumentException("Illegal energy. Exiting");
     }
-    double rate = prefactor * Math.exp(-energy / (kB * temperature));
-    return rate;
+    return ratesVector[event];
   }
   
   @Override
@@ -133,6 +142,7 @@ public class GrapheneSchoenhalzRates implements IRates {
   @Override
   public double[] getRates(double temperature) {
     double[] ratesVector = new double[64];
+    initRateEnergyMap(temperature);
 /*
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
@@ -145,5 +155,57 @@ public class GrapheneSchoenhalzRates implements IRates {
   @Override
   public double getEnergy(int i, int j) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  private void initRateEnergyMap(double temperature) {
+    double energy;
+    energy = 0.5; // event 0
+    double rate = prefactor * Math.exp(-energy / (kB * temperature));
+    rateMap.put(energy, rate);
+    ratesVector[0] = rate;
+    energy = 0.61; // event 20
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[20] = rate;
+    rateMap.put(energy, rate);
+    energy = 0.3; // event 22
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[22] = rate;
+    rateMap.put(energy, rate);
+    energy = 1.8; // event 3
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[3] = rate;
+    rateMap.put(energy, rate);
+    energy = 3.9; // event 5
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[5] = rate;
+    rateMap.put(energy, rate);
+    energy = 2.7; // event 7
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[7] = rate;
+    rateMap.put(energy, rate);
+    energy = 2.5; // event 9
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[9] = rate;
+    rateMap.put(energy, rate);
+    energy = 0.1; // event 10
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[10] = rate;
+    rateMap.put(energy, rate);
+    energy = 1.1; // event 11
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[11] = rate;
+    rateMap.put(energy, rate);
+    energy = 1.3; // event 13
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[13] = rate;
+    rateMap.put(energy, rate);
+    energy = 2.3; // event 15
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[15] = rate;
+    rateMap.put(energy, rate);
+    energy = 3.2; // event 17
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[17] = rate;
+    rateMap.put(energy, rate);
   }
 }
