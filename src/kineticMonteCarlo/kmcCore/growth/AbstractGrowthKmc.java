@@ -454,10 +454,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (force) {
-      nucleations++;
       if (extraOutput) {
         printData();
       }
+      nucleations++;
     }
     int oldType = originAtom.getRealType();
     double probabilityChange = lattice.extract(originAtom);
