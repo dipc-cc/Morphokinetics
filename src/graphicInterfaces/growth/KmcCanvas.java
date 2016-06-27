@@ -38,6 +38,7 @@ public class KmcCanvas extends Canvas {
   private String imageName;
   private boolean blackAndWhite; 
   private boolean paused;
+  private boolean printId;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -58,6 +59,7 @@ public class KmcCanvas extends Canvas {
     scale = 2;
     blackAndWhite = false;
     paused = false;
+    printId = true;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -88,6 +90,10 @@ public class KmcCanvas extends Canvas {
   public void setPaused(boolean pause) {
     this.paused = pause;
     lattice.setPaused(pause);
+  }
+  
+  public void changePrintId() {
+    printId = !printId;
   }
   
   public boolean isPaused() {
@@ -230,7 +236,7 @@ public class KmcCanvas extends Canvas {
 
         } else if (atom.isOccupied()) {
           g.fillOval(X, Y, scale, scale);
-          if (scale > 8) {
+          if (scale > 8 && printId) {
             g.setColor(getContrastColor(g.getColor()));
             g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
           }

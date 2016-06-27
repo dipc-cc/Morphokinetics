@@ -295,7 +295,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     JCheckBoxMenuItem idMi = new JCheckBoxMenuItem("Show atom identifiers");
     idMi.setMnemonic(KeyEvent.VK_S);
     idMi.setDisplayedMnemonicIndex(0);
-    idMi.setSelected(false);
+    idMi.setSelected(true);
         
     JCheckBoxMenuItem islandsMi = new JCheckBoxMenuItem("Show island numbers");
     islandsMi.setMnemonic(KeyEvent.VK_L);
@@ -327,21 +327,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
       bwButton.setSelected(!bwButton.isSelected());
     });
 
-    idMi.addItemListener(new ItemListener() {
-      @Override
-      public void itemStateChanged(ItemEvent e) {
-        if (e.getStateChange() == ItemEvent.SELECTED) {
-          /*simulationPanel2d.setShift(true);
-          experimentalPsdPanel2d.setShift(true);
-          surfacePanel2d.setShift(true);
-          diffPanel2d.setShift(true);*/
-        } else {
-          /*simulationPanel2d.setShift(false);
-          experimentalPsdPanel2d.setShift(false);
-          surfacePanel2d.setShift(false);
-          diffPanel2d.setShift(false);*/
-        }
-      }
+    idMi.addItemListener((ItemEvent e) -> {
+      canvas1.changePrintId();
     });
     
     islandsMi.addItemListener(new ItemListener() {
