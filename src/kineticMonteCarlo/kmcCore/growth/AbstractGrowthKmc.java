@@ -353,6 +353,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour && !atom.isIsolated()) {
       islandCount++;
     }
+    if (atom.isVisited())
+      return;
     atom.setVisited(true);
     if (atom.isOccupied()) {
       atom.setIslandNumber(islandCount);
