@@ -267,11 +267,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     exitMi.setToolTipText("Exit application");
     exitMi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
 
-    exitMi.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(ActionEvent event) {
-        System.exit(0);
-      }
+    exitMi.addActionListener((ActionEvent event) -> {
+      System.exit(0);
     });
 
     fileMenu.add(newMi);
