@@ -10,13 +10,25 @@
  */
 package graphicInterfaces.growth;
 
+import static graphicInterfaces.surfaceViewer2D.Panel2D.COLOR_BW;
+import static graphicInterfaces.surfaceViewer2D.Panel2D.COLOR_HSV;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
@@ -34,6 +46,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   private JLabel jLabelScale;
   private JPanel jPanel1;
   private JSpinner jSpinnerScale;
+  private JLabel statusbar;
+  private JCheckBoxMenuItem bwMi;
 
   /**
    * Creates new form NewJFrame
@@ -41,6 +55,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
    * @param canvas1
    */
   public GrowthKmcFrame(KmcCanvas canvas1) {
+    createMenuBar();
     initComponents();
     this.canvas1 = canvas1;
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
@@ -70,6 +85,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     canvas1.setBaseLocation(mouseX, mouseY);
     mouseX = 0;
     mouseY = 0;
+    
+    validate();
   }
 
   /**
@@ -126,8 +143,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
       pause();
     });
     bwButton.addActionListener((java.awt.event.ActionEvent evt) -> {
-      canvas1.changeBlackAndWhite();
-    });
+      bwMi.setSelected(!bwMi.isSelected());
+      });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -219,5 +236,129 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     public void actionPerformed(ActionEvent e) {
       pause();
     }
+  }
+  
+  private void createMenuBar() {
+    JMenuBar menubar = new JMenuBar();
+
+    ImageIcon iconNew = new ImageIcon("new.png");
+    ImageIcon iconOpen = new ImageIcon("open.png");
+    ImageIcon iconSave = new ImageIcon("save.png");
+    ImageIcon iconExit = new ImageIcon("exit.png");
+
+    JMenu fileMenu = new JMenu("File");
+    JMenu viewMenu = new JMenu("View");
+
+    JMenu impMenu = new JMenu("Import");
+
+    JMenuItem newsfMi = new JMenuItem("Import newsfeed list...");
+    JMenuItem bookmMi = new JMenuItem("Import bookmarks...");
+    JMenuItem mailMi = new JMenuItem("Import mail...");
+
+    impMenu.add(newsfMi);
+    impMenu.add(bookmMi);
+    impMenu.add(mailMi);
+
+    JMenuItem newMi = new JMenuItem("New", iconNew);
+    JMenuItem openMi = new JMenuItem("Open", iconOpen);
+    JMenuItem saveMi = new JMenuItem("Save", iconSave);
+
+    JMenuItem exitMi = new JMenuItem("Exit", iconExit);
+    exitMi.setToolTipText("Exit application");
+    exitMi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
+
+    exitMi.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+        System.exit(0);
+      }
+    });
+
+    fileMenu.add(newMi);
+    fileMenu.add(openMi);
+    fileMenu.add(saveMi);
+    fileMenu.addSeparator();
+    fileMenu.add(impMenu);
+    fileMenu.addSeparator();
+    fileMenu.add(exitMi);
+    
+    JCheckBoxMenuItem sbarMi = new JCheckBoxMenuItem("Show statubar");
+    sbarMi.setMnemonic(KeyEvent.VK_S);
+    sbarMi.setDisplayedMnemonicIndex(5);
+    sbarMi.setSelected(true);
+    
+    bwMi = new JCheckBoxMenuItem("B/W output");
+    bwMi.setMnemonic(KeyEvent.VK_C);
+    bwMi.setDisplayedMnemonicIndex(0);
+    bwMi.setSelected(false);
+    
+    JCheckBoxMenuItem idMi = new JCheckBoxMenuItem("Show atom identifiers");
+    idMi.setMnemonic(KeyEvent.VK_S);
+    idMi.setDisplayedMnemonicIndex(0);
+    idMi.setSelected(false);
+        
+    JCheckBoxMenuItem islandsMi = new JCheckBoxMenuItem("Show island numbers");
+    islandsMi.setMnemonic(KeyEvent.VK_L);
+    islandsMi.setDisplayedMnemonicIndex(0);
+    islandsMi.setSelected(false);
+    
+    viewMenu.add(sbarMi);
+    viewMenu.add(bwMi);
+    viewMenu.add(idMi);
+    viewMenu.add(islandsMi);
+    menubar.add(fileMenu);
+    menubar.add(viewMenu);
+
+    setJMenuBar(menubar);
+    
+    sbarMi.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          statusbar.setVisible(true);
+        } else {
+          statusbar.setVisible(false);
+        }
+      }
+    });    
+    
+    bwMi.addItemListener((ItemEvent e) -> {
+      canvas1.changeBlackAndWhite();
+      bwButton.setSelected(!bwButton.isSelected());
+    });
+
+    idMi.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          /*simulationPanel2d.setShift(true);
+          experimentalPsdPanel2d.setShift(true);
+          surfacePanel2d.setShift(true);
+          diffPanel2d.setShift(true);*/
+        } else {
+          /*simulationPanel2d.setShift(false);
+          experimentalPsdPanel2d.setShift(false);
+          surfacePanel2d.setShift(false);
+          diffPanel2d.setShift(false);*/
+        }
+      }
+    });
+    
+    islandsMi.addItemListener(new ItemListener() {
+      @Override
+      public void itemStateChanged(ItemEvent e) {
+        if (e.getStateChange() == ItemEvent.SELECTED) {
+          /*simulationPanel2d.setLogScale(true);
+          experimentalPsdPanel2d.setLogScale(true);
+          surfacePanel2d.setLogScale(true);
+          diffPanel2d.setLogScale(true);/*/
+        } else {
+         /* simulationPanel2d.setLogScale(false);
+          experimentalPsdPanel2d.setLogScale(false);
+          surfacePanel2d.setLogScale(false);
+          diffPanel2d.setLogScale(false);/*/
+        }
+      }
+    });
   }
 }
