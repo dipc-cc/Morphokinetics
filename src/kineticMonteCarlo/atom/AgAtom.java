@@ -90,6 +90,7 @@ public class AgAtom extends AbstractGrowthAtom {
     return isOccupied() && getType() < KINK_A;
   }
 
+  @Override
   public boolean isPartOfImmobilSubstrate() {
     return isOccupied() && getType() == ISLAND;
   }

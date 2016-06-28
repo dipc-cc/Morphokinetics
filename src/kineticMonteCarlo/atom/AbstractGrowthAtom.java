@@ -341,4 +341,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
     return true;
   }
+  
+  abstract public boolean isPartOfImmobilSubstrate();
 }

@@ -55,6 +55,11 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   public boolean isEligible() {
     return isOccupied() && (getType() < KINK);
   }
+   
+  @Override
+  public boolean isPartOfImmobilSubstrate() {
+    return isOccupied() && getType() == BULK;
+  }
 
   /**
    * Total number of 1st neighbours.

@@ -140,6 +140,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     return isOccupied() && getType() < ISLAND;
   }
   
+  @Override
   public boolean isPartOfImmobilSubstrate() {
     return isOccupied() && getType() == ISLAND;
   }
