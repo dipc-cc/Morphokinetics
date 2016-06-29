@@ -191,11 +191,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   public void obtainRateFromNeighbours() {
     if (areAllRatesTheSame()) {
-      //double prob = probJumpToNeighbour(getType(), 0);
       addProbability(probJumpToNeighbour(getType(), 0) * getNumberOfNeighbours()); // it was 12.0
-      /*for (int i = 0; i < getNumberOfNeighbours(); i++) {
-        setBondsProbability(prob, i);
-      }*/
     } else {
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         setBondsProbability(probJumpToNeighbour(getType(), i), i);
