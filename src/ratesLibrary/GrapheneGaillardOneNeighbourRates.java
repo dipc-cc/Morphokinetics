@@ -72,7 +72,7 @@ public class GrapheneGaillardOneNeighbourRates implements IRates {
     energies[TERRACE][ZIGZAG_WITH_EXTRA] =           eDiff; // 0 -> 1
     energies[TERRACE][SICK] =                        eDiff; // 0 -> 1
     energies[TERRACE][KINK] =                        eDiff; // 0 -> 2 
-    energies[TERRACE][BULK] =                        eDiff;// imposible to happen
+    energies[TERRACE][BULK] =                        Einf;// imposible to happen
 
     energies[CORNER][TERRACE] =                      eDec; // 1 -> 0
     energies[CORNER][CORNER] =                       eInc; // 1 -> 1
