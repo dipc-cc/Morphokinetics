@@ -5,7 +5,7 @@ import basic.io.OutputType;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.BasicGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import utils.StaticRandom;
 
 /**
@@ -39,6 +39,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
         doActivationEnergyStudy = true;
         histogramPossible = new double[4][4];
         histogramPossibleCounter = new int[4][4];
+      }
+      if (parser.getCalculationMode().equals("graphene")) {
+        doActivationEnergyStudy = true;
+        histogramPossible = new double[8][8];
+        histogramPossibleCounter = new int[8][8];
       }
     }
   }
@@ -129,9 +134,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     if (doActivationEnergyStudy) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       for (int i = 0; i < surface.size(); i++) {
-        BasicGrowthAtom atom = (BasicGrowthAtom) surface.get(i);
+        AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
         for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
-          BasicGrowthAtom neighbourAtom = atom.getNeighbour(pos);
+          AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
           if (!neighbourAtom.isPartOfImmobilSubstrate()) {
             int myPositionForNeighbour = (pos + 2) % atom.getNumberOfNeighbours();
             byte destination = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
