@@ -331,7 +331,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   /**
    * Checks if the current atom has occupied neighbours.
    *
-   * @return true if the current atoms has no any occupied neighbour, else otherwise.
+   * @return true if the current atoms has no any occupied neighbour, false otherwise.
    */
   public boolean isIsolated() {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
