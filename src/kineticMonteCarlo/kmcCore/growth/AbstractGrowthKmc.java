@@ -241,7 +241,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   @Override
   public int simulate() {
-    int k = 1;
+    int coverageThreshold = 1;
     int returnValue = 0;
     int simulatedSteps = 0;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
@@ -260,8 +260,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             break;
           }
           simulatedSteps++;
-          if (extraOutput && getCoverage() * 100 > k) {
-            k++;
+          if (extraOutput && getCoverage() * 100 > coverageThreshold) { // print extra data every 1% of coverage
+            coverageThreshold++;
             printData();
           }
         }
