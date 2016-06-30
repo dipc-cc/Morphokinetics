@@ -15,7 +15,7 @@ import java.util.Set;
 public class OutputType {
 
   public enum formatFlag {
-    TXT(1 << 0), MKO(1 << 1), PNG(1 << 2), EXTRA(1 << 3), AE(1 << 4), XYZ(1 << 5);
+    TXT(1 << 0), MKO(1 << 1), PNG(1 << 2), EXTRA(1 << 3), AE(1 << 4), XYZ(1 << 5), EXTRA2(1 << 6);
 
     public static final EnumSet<formatFlag> ALL_OPTS = EnumSet.allOf(formatFlag.class);
     private final long statusFlagValue;

@@ -40,7 +40,7 @@ public class Parser {
    */
   private String calculationType;
   /**
-   * See {@link #getRatesLibrary()}
+   * See {@link #getRatesLibrary()}.
    */
   private String ratesLibrary;
   /**
@@ -49,30 +49,30 @@ public class Parser {
   private String listType;
   private String perimeterType;
   /**
-   * See {@link #getCalculationMode()}
+   * See {@link #getCalculationMode()}.
    */
   private String calculationMode;
   /**
-   * See {@link #getSurfaceType()}
+   * See {@link #getSurfaceType()}.
    */
   private String surfaceType;
   private int temperature;
   private int presure;
   /**
-   * See {@link #getDepositionFlux()}
+   * See {@link #getDepositionFlux()}.
    */
   private double depositionFlux;
   /**
-   * See {@link #getEndTime()}
+   * See {@link #getEndTime()}.
    */
   private double endTime;
   private double coverage;
   /**
-   * See {@link #getPsdScale()}
+   * See {@link #getPsdScale()}.
    */
   private double psdScale;
   /**
-   * See {@link #getPsdExtend()}
+   * See {@link #getPsdExtend()}.
    */
   private double psdExtend;
   private int numberOfSimulations;
@@ -91,11 +91,11 @@ public class Parser {
   private boolean printToImage;
   private boolean psd;
   /**
-   * See {@link #getPsdSymmetry()}
+   * See {@link #isPsdSymmetric()}.
    */
   private boolean psdSymmetry;
   /**
-   * See {@link isPeriodicSingleFlake()}
+   * See {@link #isPeriodicSingleFlake()}.
    */
   private boolean periodicSingleFlake;
   private boolean outputData;
@@ -106,12 +106,13 @@ public class Parser {
    */
   private boolean forceNucleation;
   private JSONArray outputDataFormat;
-  /** To have the possibility to choose between different output formats. For the moment TXT, MKO,
-   * PNG, EXTRA and AE .
+  /**
+   * See {@link #getOutputFormats()}.
    */
   private final OutputType outputType;
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among
-   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4) and XYZ(5). So a number between 0 and 15 has to be chosen.
+   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4), XYZ(5) and EXTRA2(6). So a number between 0 and 63 has
+   * to be chosen.
    */
   private long numericFormatCode;
   
@@ -124,7 +125,7 @@ public class Parser {
   private int offspringSize;
   private int populationReplacement;
   /**
-   *  See {@link getTotalIterations()}.
+   *  See {@link #getTotalIterations()}.
    */
   private int totalIterations;
   private int repetitions;
@@ -443,6 +444,9 @@ public class Parser {
         if (type.equals("xyz")){
           numericFormatCode += 32;
         }
+        if (type.equals("extra2")){
+          numericFormatCode += 64;
+        }
       }
     } catch (JSONException e) {
         numericFormatCode = 2; // Only mko (binary) output by default
@@ -678,7 +682,7 @@ public class Parser {
    * diffusionMl.
    *
    * @return deposition flux
-   * @see ratesLibrary.RatesFromPrbCox#getDepositionRatePerSite()
+   * @see ratesLibrary.IRates#getDepositionRatePerSite()
    */
   public double getDepositionFlux() {
     return depositionFlux;
@@ -967,7 +971,8 @@ public class Parser {
   }
   
   /**
-   * Returns if the PSD has to be symmetric. 
+   * Returns if the PSD has to be symmetric.
+   *
    * @return psdSymmetry
    */
   public boolean isPsdSymmetric() {
@@ -990,10 +995,10 @@ public class Parser {
   }
   
   /**
-   * To have the possibility to output to different file formats. For the moment only TXT, PNG, MKO,
-   * EXTRA, AE (extra information for activation energy runs) or XYZ.
+   * To have the possibility to output to different file formats. Available options are: TXT, PNG,
+   * MKO, EXTRA, EXTRA2, AE (extra information for activation energy runs) or XYZ.
    *
-   * @return output format. Either: TXT, PNG, MKO, EXTRA, AE or XYZ
+   * @return output format. Either: TXT, PNG, MKO, EXTRA, EXTRA2, AE or XYZ
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);

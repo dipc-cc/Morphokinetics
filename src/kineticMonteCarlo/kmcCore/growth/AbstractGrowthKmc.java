@@ -62,7 +62,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
   private int nucleations;
+  /**
+   * Attribute to control the output of data every 1% and nucleation.
+   */
   private final boolean extraOutput;
+  /**
+   * Attribute to control the output of extra data of delta time between two attachments and between
+   * an atom is deposited and attached to an island.
+   */
+  private final boolean extraOutput2;
   /**
    * Activation energy output at the end of execution
    */
@@ -102,9 +110,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     deltaTimeBetweenTwoAttachments = new ArrayList<>();
     deltaTimePerAtom = new ArrayList<>();  
     
-    extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
+    extraOutput2 = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA2);
+    if (extraOutput2) {
+      extraOutput = extraOutput2;
+    } else {
+      extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
+    }
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
-    if (extraOutput) {
+    if (extraOutput2) {
       try {
         File file = new File("results/deltaTimeBetweenTwoAttachments.txt");
         outDeltaAttachments = new PrintWriter(new BufferedWriter(new FileWriter(file)));
@@ -118,6 +131,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
+    }
+    if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
         outData.println("# Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
@@ -280,6 +295,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();
+    }
+    if (extraOutput2) {
       outDeltaAttachments.flush();
       outPerAtom.flush();
     }
@@ -290,8 +307,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     countIslands(outData);
     outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
     outData.flush();
-    outDeltaAttachments.flush();
-    outPerAtom.flush();
+    if (extraOutput2) {
+      outDeltaAttachments.flush();
+      outPerAtom.flush();
+    }
   }
   
   private int countIslands(PrintWriter print) {
@@ -466,7 +485,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.deposit(destinationAtom, force);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
     originAtom.setDepositionTime(0);
-    if (extraOutput) {
+    if (extraOutput2) {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
       }
