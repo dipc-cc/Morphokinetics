@@ -154,17 +154,6 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    /*if (getType() == KINK) {
-      int neighbourPositions = 0;
-      for (int i = 0; i < neighbours.length; i++) {
-        if (neighbours[i].isOccupied()) {
-          neighbourPositions += i;
-        }
-      }
-      if (neighbourPositions % 2 == 0) {
-        return false;
-      }
-    }//*/
     return isOccupied() && getType() < ISLAND;
   }
   
