@@ -96,7 +96,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     periodicSingleFlake = parser.isPeriodicSingleFlake();
     float coverage = (float) parser.getCoverage() / 100;
     if ((!justCentralFlake) && ((0f > coverage) || (1f < coverage))) {
-      System.err.println("Chosen coverage is not permitted. Selecting the default one: %30");
+      System.err.println("Chosen coverage is not permitted. Selecting the default one: 30%");
       maxCoverage = 0.3f;
     } else {
       maxCoverage = coverage;
