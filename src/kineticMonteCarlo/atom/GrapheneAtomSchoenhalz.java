@@ -77,7 +77,15 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
           secondNeighbour = true;
           destinationN2--;
         }
-      } else {
+      } 
+      //  dimmer diffusion
+      else if (originN1 == 1 && destinationN1 == 1) {
+        if (originN2 == 0 && destinationN2 == 1) {
+          System.out.println("happened");
+        }
+      }
+      
+      else {
         return 0;
       }
     }

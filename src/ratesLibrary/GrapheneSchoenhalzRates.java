@@ -62,6 +62,9 @@ public class GrapheneSchoenhalzRates implements IRates {
     } else if (nn == 1 && nnn >= 3 && destinationN1 == 1 && destinationN2 >= 3) { // my own invention Armchair edge diffusion
       energy = 0.3; // event 22
       event = 22;
+    } else if (nn == 1 && destinationN1 == 1 && nnn == 0 && destinationN2 == 0) {
+      energy = 0.39; // event 18 C-C dimer diffusion
+      event = 18;
     } else if (nn == 1 && destinationN1 == 2) {
       energy = 1.8; // event 3
       event = 3;
@@ -170,6 +173,10 @@ public class GrapheneSchoenhalzRates implements IRates {
     energy = 0.3; // event 22
     rate = prefactor * Math.exp(-energy / (kB * temperature));
     ratesVector[22] = rate;
+    rateMap.put(energy, rate);
+    energy = 0.39; // event 18
+    rate = prefactor * Math.exp(-energy / (kB * temperature));
+    ratesVector[18] = rate;
     rateMap.put(energy, rate);
     energy = 1.8; // event 3
     rate = prefactor * Math.exp(-energy / (kB * temperature));
