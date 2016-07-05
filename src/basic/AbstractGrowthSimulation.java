@@ -18,8 +18,6 @@ import ratesLibrary.IRates;
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
   private GrowthKmcFrame frame;
-  private double previousCoverage;
-  private final double printEvery;
   private int savedImages;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
@@ -27,7 +25,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
     savedImages = 1;
-    printEvery = 0.1;
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
   }
@@ -106,7 +103,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
             savedImages++;
             totalSavedImages++;
           }
-          previousCoverage = getKmc().getCoverage();
         } catch (Exception e) {
         }
       }
