@@ -114,6 +114,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jPanel1 = new JPanel();
     pauseButton = new JButton();
     bwButton = new JToggleButton("B/W");
+    statusbar = new JLabel("Running");
 
     JScrollPane scrollPane = new javax.swing.JScrollPane(jPanel1);
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -149,6 +150,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(statusbar)
                             .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabelScale)
@@ -171,7 +173,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
                             .addComponent(jSpinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap())
+                    .addContainerGap()
+                    .addComponent(statusbar))
     );
 
     pack();
@@ -221,8 +224,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     canvas1.setPaused(paused);
     if (paused) {
       pauseButton.setText("Resume");
+      statusbar.setText("Paused");
     } else {
       pauseButton.setText("Pause");
+      statusbar.setText("Running");
     }
   }
 
