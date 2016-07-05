@@ -18,7 +18,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * jump from terrace to edge.
    */
   private double[][] probabilities;
-  private double probability;
+  public double probability;
   private double[] bondsProbability;
   private double angle;
   private boolean outside;
@@ -129,10 +129,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     double tmp = -getProbability();
     resetProbability();
 
-    if (isEligible()) {
+    //if (isEligible()) {
       obtainRateFromNeighbours();
       tmp += getProbability();
-    }
+    //}
     return tmp;
   }
   public abstract void obtainRateFromNeighbours();

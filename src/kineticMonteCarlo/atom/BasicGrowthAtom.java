@@ -89,32 +89,10 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
       setBondsProbability(probJumpToNeighbour(1, i), i);
       addProbability(getBondsProbability(i));
     }
-    // check if it is really a kink
-    if (getType() == KINK) {
-      int neighbourPositions = 0;
-      for (int i = 0; i < neighbours.length; i++) {
-        if (neighbours[i].isOccupied()) {
-          neighbourPositions += i;
-        }
-      }
-      // make immobile, if two neighbours of the kink are not consecutive
-      if (neighbourPositions % 2 == 0) { 
-        for (int i = 0; i < neighbours.length; i++) {
-          neighbourPositions += i;
-          addProbability(-getBondsProbability(i)); 
-          setBondsProbability(0, i);
-        }
-        setType(ISLAND);
-      }
-    }
   }
   
   @Override
   public double probJumpToNeighbour(int ignored, int position) {
-    if (neighbours[position].isOccupied()) {
-      return 0;
-    }
-
     byte originType = getType();
     int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
     byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
@@ -122,7 +100,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     if (destination > 3) {
       System.out.println("error! ");
     }
-    return getProbability(originType, destination);
+    return getProbability(originType, originType);
   }
 
   @Override

@@ -55,7 +55,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Attribute to store temporally the current area of the simulation.
    */
   private int currentArea;
-  private double depositionRatePerSite;
+  double depositionRatePerSite;
   private int freeArea;
   private int islandCount;
   private double previousTime;

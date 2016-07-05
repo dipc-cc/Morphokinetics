@@ -94,7 +94,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
       }
     }
 
-    addAtom(atom);
+    //addAtom(atom);
     if (atom.getOccupiedNeighbours()> 0) {
       addBondAtom(atom);
     }

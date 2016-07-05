@@ -49,17 +49,17 @@ public class ModifiedBuffer {
       updateAllRates(it.next(), list);
     }
 
-    it = bufferL.iterator();
+    /*it = bufferL.iterator();
     while (it.hasNext()) {
       updateAllNeighbours(it.next(), list);
-    }
+    }*/
     clear();
   }
 
   private void updateAllRates(AbstractGrowthAtom atom, AbstractList list) {
     double probabilityChange = atom.updateRate();
     if (list != null) {
-      if (atom.isEligible() && !atom.isOnList()) {
+      /*if (atom.isEligible() && !atom.isOnList()) {
         list.addAtom(atom);
       }
       if (atom.isOnList()) {
@@ -68,6 +68,12 @@ public class ModifiedBuffer {
       if (!atom.isEligible()) {
         atom.setList(false);
         list.deleteAtom(atom);
+      }*/
+      if (atom.isOccupied()) {
+        atom.resetProbability();
+        list.deleteAtom(atom);
+      } else if(!atom.isOnList()) {
+        list.addAtom(atom);
       }
     }
   }

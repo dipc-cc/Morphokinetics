@@ -5,7 +5,9 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
+import kineticMonteCarlo.atom.BasicGrowthAtom;
 import kineticMonteCarlo.lattice.BasicGrowthLattice;
+import kineticMonteCarlo.unitCell.IUc;
 import utils.StaticRandom;
 
 /**
@@ -20,6 +22,7 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     BasicGrowthLattice basicLattice = new BasicGrowthLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     basicLattice.init();
     setLattice(basicLattice); 
+    initList();
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
     }
@@ -60,5 +63,40 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
   @Override
   public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
     return getSampledSurface(binX, binY);
+  }
+  
+  /**
+   * Performs a simulation step.
+   * @return true if a stop condition happened (all atom etched, all surface covered)
+   */
+  @Override
+  protected boolean performSimulationStep() {
+    BasicGrowthAtom destinationAtom = (BasicGrowthAtom) getList().nextEvent();
+
+    if (destinationAtom == null) {
+      System.out.println("error");
+    }
+    depositAtom(destinationAtom);
+
+    return false;
+  }
+  
+  private void initList(){
+    BasicGrowthLattice lattice = (BasicGrowthLattice) getLattice();
+    for (int i = 0; i < lattice.size(); i++) {
+      IUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        BasicGrowthAtom atom = (BasicGrowthAtom) uc.getAtom(j);
+        atom.probability = this.depositionRatePerSite;
+        getList().addAtom(atom);
+      }
+    }
+    System.out.println("init finished");
+  }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    initList();
   }
 }

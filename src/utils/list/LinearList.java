@@ -50,6 +50,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   
   @Override
   public double getTotalProbabilityFromList() {
+    clean= false;
     if (clean) {
       return getTotalProbability();
     } else {
@@ -58,9 +59,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
       ListIterator<AbstractAtom> li = surface.listIterator();
       while (li.hasNext()) {
         AbstractAtom atom = li.next();
-        if (atom.isEligible()) {
+        //if (atom.isEligible()) {
           totalProbability += atom.getProbability();
-        }
+        //}
       }
       clean = true;
       setTotalProbability(totalProbability);
@@ -116,6 +117,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   @Override
   public AbstractAtom nextEvent() {
     addRemovalsSinceLastCleanup();
+    getTotalProbabilityFromList();
     if (autoCleanup() && getRemovalsSinceLastCleanup() > EVENTS_PER_CLEANUP) {
       this.cleanup();
       resetRemovalsSinceLastCleanup();
