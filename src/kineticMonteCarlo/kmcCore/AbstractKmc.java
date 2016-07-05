@@ -161,11 +161,4 @@ public abstract class AbstractKmc implements IKmc {
   public final AbstractList getList() {
     return list;
   }
-
-  /**
-   * @param list the list to set
-   */
-  public void setList(AbstractList list) {
-    this.list = list;
-  }
 }
