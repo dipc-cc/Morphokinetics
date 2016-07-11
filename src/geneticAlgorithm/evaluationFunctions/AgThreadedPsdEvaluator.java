@@ -39,7 +39,7 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
   }
 
   private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
+    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()),1);
     return frame;
   }
 

@@ -16,6 +16,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
+import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -25,6 +26,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
@@ -44,14 +46,18 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   private JSpinner jSpinnerScale;
   private JLabel statusbar;
   private JCheckBoxMenuItem bwMi;
+  private JProgressBar progressBar;
+  private final int maxCoverage;
 
   /**
-   * Creates new form NewJFrame
+   * Creates new form frame for growth.
    *
    * @param canvas1
+   * @param max maximum value for the progress bar
    */
-  public GrowthKmcFrame(KmcCanvas canvas1) {
+  public GrowthKmcFrame(KmcCanvas canvas1, int max) {
     createMenuBar();
+    maxCoverage = max;
     initComponents();
     this.canvas1 = canvas1;
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
@@ -103,6 +109,16 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   public void printToImage(String folder, int i) {
     canvas1.performDrawToImage(folder, i);
   }
+  
+  /**
+   * Updated the progress bar of the bottom of the frame.
+   * 
+   * @param coverage 
+   */
+  public void updateProgressBar(int coverage) {
+    progressBar.setValue(coverage);
+    statusbar.setText(Integer.toString(coverage) + "/" + maxCoverage);
+  }
 
   /**
    * This method is called from within the constructor to initialize the form. WARNING: Do NOT
@@ -115,6 +131,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     pauseButton = new JButton();
     bwButton = new JToggleButton("B/W");
     statusbar = new JLabel("Running");
+    progressBar = new JProgressBar(0, maxCoverage);
 
     JScrollPane scrollPane = new javax.swing.JScrollPane(jPanel1);
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -150,7 +167,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(statusbar)
+                            .addGroup(layout.createSequentialGroup()
+                                    .addComponent(statusbar)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(progressBar))
                             .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabelScale)
@@ -174,8 +194,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()
-                    .addComponent(statusbar))
-    );
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                              .addComponent(statusbar)
+                    .addComponent(progressBar))
+            ));
 
     pack();
   }

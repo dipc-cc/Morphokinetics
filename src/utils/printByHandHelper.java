@@ -25,7 +25,7 @@ public class printByHandHelper {
     AgUcLattice lattice = new AgUcLattice(30, 13, modified, null);
     lattice.init();
     KmcCanvas canvas = new KmcCanvas(lattice);
-    frame = new GrowthKmcFrame(canvas);
+    frame = new GrowthKmcFrame(canvas, 1);
     frame.setVisible(true);
     p = new paintLoop();
   }

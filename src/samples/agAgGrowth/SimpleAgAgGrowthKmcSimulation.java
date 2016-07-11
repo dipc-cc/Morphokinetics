@@ -17,6 +17,8 @@ import utils.StaticRandom;
  * @author Nestor
  */
 public class SimpleAgAgGrowthKmcSimulation {
+  private static GrowthKmcFrame  frame;
+  private static paintLoop p;
 
   public static void main(String args[]) {
 
@@ -26,8 +28,7 @@ public class SimpleAgAgGrowthKmcSimulation {
 
     AgKmc kmc = initialiseKmc();
 
-    GrowthKmcFrame frame = createGraphicsFrame(kmc);
-    frame.setVisible(true);
+    createGraphicsFrame(kmc);
 
     for (int simulations = 0; simulations < 10; simulations++) {
       initialiseRates(ratesFactory, kmc);
@@ -35,9 +36,11 @@ public class SimpleAgAgGrowthKmcSimulation {
     }
   }
 
-  private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
-    return frame;
+  private static void createGraphicsFrame(AgKmc kmc) {
+    frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()), 1);
+    frame.setVisible(true);
+    p = new paintLoop();
+    p.start();
   }
 
   private static AgKmc initialiseKmc() {
@@ -63,6 +66,23 @@ public class SimpleAgAgGrowthKmcSimulation {
     kmc.reset();
     kmc.initialiseRates(rates.getRates(135));
     kmc.depositSeed();
+  }
+  
+   /**
+   * Private class responsible to repaint every 100 ms the KMC frame.
+   */
+  static final class paintLoop extends Thread {
+
+    @Override
+    public void run() {
+      while (true) {
+        frame.repaintKmc();
+        try {
+          paintLoop.sleep(250);
+        } catch (Exception e) {
+        }
+      }
+    }
   }
 
 }

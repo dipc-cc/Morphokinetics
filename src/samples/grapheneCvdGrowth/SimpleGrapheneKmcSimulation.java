@@ -19,6 +19,8 @@ import utils.StaticRandom;
 public class SimpleGrapheneKmcSimulation {
 
   private static final double COS30 = Math.cos(30 * Math.PI / 180);
+  private static GrowthKmcFrame  frame;
+  private static paintLoop p;
 
   public static void main(String args[]) {
 
@@ -26,11 +28,10 @@ public class SimpleGrapheneKmcSimulation {
 
     GrapheneSyntheticRates ratesFactory = new GrapheneSyntheticRates();
     GrapheneKmc kmc = initialiseKmc();
-    GrowthKmcFrame frame = createGraphicsFrame(kmc);
+    createGraphicsFrame(kmc);
 
-    frame.setVisible(true);
     for (int i = 0; i < 10; i++) {
-      initializeRates(ratesFactory, kmc);
+      initialiseRates(ratesFactory, kmc);
       kmc.simulate();
     }
 
@@ -38,9 +39,11 @@ public class SimpleGrapheneKmcSimulation {
 
   }
 
-  private static GrowthKmcFrame createGraphicsFrame(GrapheneKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()));
-    return frame;
+  private static void createGraphicsFrame(GrapheneKmc kmc) {
+    frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()),1);
+    frame.setVisible(true);
+    p = new paintLoop();
+    p.start();
   }
 
   private static GrapheneKmc initialiseKmc() {
@@ -58,13 +61,30 @@ public class SimpleGrapheneKmcSimulation {
     return kmc;
   }
 
-  private static void initializeRates(GrapheneSyntheticRates ratesFactory, GrapheneKmc kmc) {
+  private static void initialiseRates(GrapheneSyntheticRates ratesFactory, GrapheneKmc kmc) {
     double depositionRatePerSite = ratesFactory.getDepositionRatePerSite();
     double islandDensity = ratesFactory.getIslandDensity(0);
     kmc.setDepositionRate(depositionRatePerSite, islandDensity);
     kmc.reset();
     kmc.initialiseRates(ratesFactory.getRates(0));
     kmc.depositSeed(); //might not be needed, it is a multiflake simulation
-
   }
+     
+  /**
+   * Private class responsible to repaint every 100 ms the KMC frame.
+   */
+  static final class paintLoop extends Thread {
+
+    @Override
+    public void run() {
+      while (true) {
+        frame.repaintKmc();
+        try {
+          paintLoop.sleep(250);
+        } catch (Exception e) {
+        }
+      }
+    }
+  }
+
 }

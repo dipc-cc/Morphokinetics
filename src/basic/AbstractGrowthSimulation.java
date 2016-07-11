@@ -18,13 +18,13 @@ import ratesLibrary.IRates;
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
   private GrowthKmcFrame frame;
-  private int savedImages;
+  private int previousDiscreteCoverage;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
   
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
-    savedImages = 1;
+    previousDiscreteCoverage = 1;
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
   }
@@ -43,7 +43,13 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   public void createFrame() {
     if (getParser().withGui()) {
       try {
-        frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()));
+        int max;
+        if (getParser().justCentralFlake()) {
+          max = (int) (getParser().getCartSizeX() / 2) - 10;
+        } else {
+          max = (int) getParser().getCoverage();
+        }
+        frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()), max);
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
         System.err.println("Finishing");
@@ -83,7 +89,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   protected void printToImage(String folderName, int i) {
     frame.printToImage(folderName, i);
     // reset saved images for current simulation
-    savedImages = 1;
+    previousDiscreteCoverage = 1;
   }
   
   /**
@@ -98,9 +104,12 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         try {
           paintLoop.sleep(100);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-          if (printIntermediatePngFiles && getKmc().getCoverage() * 100 > savedImages) {
-            frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
-            savedImages++;
+          if ( getKmc().getCoverage() * 100 > previousDiscreteCoverage) {
+            if (printIntermediatePngFiles) {
+              frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
+            }
+            frame.updateProgressBar(previousDiscreteCoverage);
+            previousDiscreteCoverage++;
             totalSavedImages++;
           }
         } catch (Exception e) {
