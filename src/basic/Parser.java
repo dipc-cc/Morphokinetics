@@ -27,7 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * This class will read an input file with all the parameters for the execution
+ * This class will read an input file called "parameters" with all the parameters for the execution.
+ * The format of this file is JSON.
  *
  * @author J. Alberdi-Rodriguez
  */
@@ -36,7 +37,7 @@ public class Parser {
   final static Charset ENCODING = StandardCharsets.UTF_8;
   
   /** 
-   * Can be batch or evolutionary.
+   * See {@link #getCalculationType()}.
    */
   private String calculationType;
   /**
@@ -44,9 +45,12 @@ public class Parser {
    */
   private String ratesLibrary;
   /**
-   * Can be linear or binned.
+   * See {@link #getListType()}.
    */
   private String listType;
+  /**
+   * See {@link #getPerimeterType()}.
+   */
   private String perimeterType;
   /**
    * See {@link #getCalculationMode()}.
@@ -56,6 +60,9 @@ public class Parser {
    * See {@link #getSurfaceType()}.
    */
   private String surfaceType;
+  /**
+   * See {@link #getTemperature()}.
+   */
   private int temperature;
   private int presure;
   /**
@@ -66,6 +73,9 @@ public class Parser {
    * See {@link #getEndTime()}.
    */
   private double endTime;
+  /**
+   * See {@link #getCoverage()}.
+   */
   private double coverage;
   /**
    * See {@link #getPsdScale()}.
@@ -75,20 +85,53 @@ public class Parser {
    * See {@link #getPsdExtend()}.
    */
   private double psdExtend;
+  /**
+   * See {@link #getNumberOfSimulations() }.
+   */
   private int numberOfSimulations;
+  /**
+   * See {@link #getCartSizeX()}.
+   */
   private int cartSizeX;
+  /**
+   * See {@link #getCartSizeY()}.
+   */
   private int cartSizeY;
+  /**
+   * See {@link #getCartSizeZ()}.
+   */
   private int cartSizeZ;
   private int millerX;
   private int millerY;
   private int millerZ;
+  /**
+   * See {@link #getBinsLevels()}.
+   */
   private int binsLevels;
+  /**
+   * See {@link #getExtraLevels()}.
+   */
   private int extraLevels;
   private boolean multithreaded;
+  /**
+   * See {@link #visualise()}.
+   */
   private boolean visualise;
+  /**
+   * See {@link #withGui()}.
+   */
   private boolean withGui;
+  /**
+   * See {@link #justCentralFlake()}.
+   */
   private boolean justCentralFlake;
+  /**
+   * See {@link #printToImage()}.
+   */
   private boolean printToImage;
+  /**
+   * See {@link #doPsd()}.
+   */
   private boolean psd;
   /**
    * See {@link #isPsdSymmetric()}.
@@ -98,8 +141,17 @@ public class Parser {
    * See {@link #isPeriodicSingleFlake()}.
    */
   private boolean periodicSingleFlake;
+  /**
+   * See {@link #outputData()} and {@link #getOutputFormats()}.
+   */
   private boolean outputData;
+  /**
+   * See {@link #randomSeed()}.
+   */
   private boolean randomSeed;
+  /**
+   * See {@link #useMaxPerimeter()}.
+   */
   private boolean useMaxPerimeter;
   /**
    * See {@link forceNucleation()}
@@ -636,6 +688,15 @@ public class Parser {
     
   }
 
+  /**
+   * Morphokinetics has two main calculation modes: one called batch, for arbitrarily chosen input
+   * parameters, and the other called evolutionary, which tries to find the best input parameters
+   * for a target system.
+   * 
+   * Input "parameters" variable: {@code calculationType}.
+   *
+   * @return "batch" or "evolutionary".
+   */
   public String getCalculationType() {
     return calculationType;
   }
@@ -644,21 +705,41 @@ public class Parser {
    * Selects which rates are used for the simulation. For the moment only works for the graphene.
    * Available options are: "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything
    * else for synthetic rates.
+   * 
+   * Input "parameters" variable: {@code ratesLibrary}.
    *
-   * @return
+   * @return "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else for
+   * synthetic rates.
    */
   public String getRatesLibrary() {
     return ratesLibrary;
   }
 
+  /**
+   * Selects the internal list type to be used between linear and binned.
+   *
+   * Input "parameters" variable: {@code listType}.
+   *
+   * @return "linear" or "binned".
+   */
   public String getListType() {
     return listType;
   }
-  
+
+  /**
+   * Sets the internal list type to be used. Should be linear or binned.
+   *
+   * @param listType linear or binned.
+   */
   public void setListType(String listType) {
     this.listType = listType;
   }
 
+  /**
+   * Input "parameters" variable: {@code perimeterType}.
+   *
+   * @return properly formated "SQUARE" or "CIRCLE" (default option).
+   */
   public short getPerimeterType() {
     switch (perimeterType) {
       case "square":
@@ -669,10 +750,22 @@ public class Parser {
     }
   }
 
+  /**
+   * Simulation temperature.
+   * 
+   * Input "parameters" variable: {@code temperature}.
+   * 
+   * @return temperature
+   */
   public int getTemperature() {
     return temperature;
   }
 
+  /**
+   * Not used for the moment. 
+   * 
+   * @return nothing
+   */
   public int getPresure() {
     return presure;
   }
@@ -681,6 +774,8 @@ public class Parser {
    * Number of atoms that is coming per second and per area. Synonym of deposition rate and
    * diffusionMl.
    *
+   * Input "parameters" variable: {@code depositionFlux}.
+   * 
    * @return deposition flux
    * @see ratesLibrary.IRates#getDepositionRatePerSite()
    */
@@ -690,6 +785,8 @@ public class Parser {
 
   /**
    * Returns the maximum simulation time that each run has to do or -1 if there is no time limit.
+   *
+   * Input "parameters" variable: {@code endTime}.
    *
    * @return ending time of simulation or -1 (no time limit).
    */
@@ -701,7 +798,9 @@ public class Parser {
    * Returns the maximum coverage until a simulation is allowed to grow. Only valid for multi-flake
    * simulations
    *
-   * @return coverage
+   * Input "parameters" variable: {@code coverage}.
+   *
+   * @return final coverage.
    */
   public double getCoverage() {
     return coverage;
@@ -758,7 +857,7 @@ public class Parser {
   }
   
   /**
-   * Factor with which has to be added as empty area to the surface.
+   * Factor which has to be added as empty area to the surface.
    * Used to decide the scale from this island:
    * <pre> {@code 
 :::::::::::::::::::::::::
@@ -822,10 +921,24 @@ public class Parser {
     return psdExtend;
   }
   
+  /**
+   * Selects the number of simulations that has to be done with the same parameters.
+   * 
+   * Input "parameters" variable: {@code numberOfSimulations}.
+   * 
+   * @return number of simulations.
+   */
   public int getNumberOfSimulations() {
     return numberOfSimulations;
   }
 
+  /**
+   * Selects the Cartesian size in X direction. 
+   * 
+   * Input "parameters" variable: {@code cartSizeX}.
+   * 
+   * @return Cartesian size in X direction. 
+   */
   public int getCartSizeX() {
     return cartSizeX;
   }
@@ -834,6 +947,13 @@ public class Parser {
     cartSizeX = sizeX;
   }
   
+  /**
+   * Selects the Cartesian size in Y direction. 
+   * 
+   * Input "parameters" variable: {@code cartSizeY}.
+   * 
+   * @return Cartesian size in Y direction. 
+   */
   public int getCartSizeY() {
     return cartSizeY;
   }
@@ -843,8 +963,12 @@ public class Parser {
   }
   
   /**
-   * Next methods are only meaningful in etching, ignored in 2D surface growth.
-   * @return size in Z axis.
+   * Selects the Cartesian size in Z direction. Next methods are only meaningful in etching,
+   * ignored in 2D surface growth.
+   *
+   * Input "parameters" variable: {@code cartSizeZ}.
+   *
+   * @return Cartesian size in Z direction.
    */
   public int getCartSizeZ() {
     return cartSizeZ;
@@ -878,6 +1002,13 @@ public class Parser {
     millerZ = sizeZ;
   }  
   
+  /**
+   * Selects the lattice size in I direction. 
+   * 
+   * Can not be directly set from "parameters" file.
+   * 
+   * @return lattice size in I direction. 
+   */
   public int getHexaSizeI() {
     if (calculationMode.equals("basic")) {
       return cartSizeX;
@@ -893,7 +1024,14 @@ public class Parser {
       }
     }
   }
-  
+   
+  /**
+   * Selects the lattice size in J direction. 
+   * 
+   * Can not be directly set from "parameters" file.
+   * 
+   * @return lattice size in J direction. 
+   */
   public int getHexaSizeJ() {
     if (calculationMode.equals("basic")) {
       return cartSizeY;
@@ -905,10 +1043,17 @@ public class Parser {
     }
   }
 
+  /**
+   * Selects the number of bin levels. Useful only if binned list is selected.
+   *
+   * Input "parameters" variable: {@code binsLevels}.
+   *
+   * @return number of levels of the bin.
+   */
   public int getBinsLevels() {
     return binsLevels;
   }
-  
+
   public void setBinsLevels(int binsLevels) {
     this.binsLevels = binsLevels;
   }
@@ -925,18 +1070,50 @@ public class Parser {
     return multithreaded;
   }
 
+  /**
+   * If GUI is enabled (see {@link #withGui()}), selects to visualise the GUI.
+   *
+   * Input "parameters" variable: {@code visualise}.
+   *
+   * @return whether to show the GUI.
+   */
   public boolean visualise() {
     return visualise;
   }
 
+  /**
+   * Selects to run a single flake simulation (faster and usually with Devita acceleration) or not.
+   * If not selected, usually a multi-flake simulation will happen in a periodic simulation box.
+   *
+   * Input "parameters" variable: {@code justCentralFlake}.
+   * 
+   * @return whether to simulate just a single flake.
+   */
   public boolean justCentralFlake() {
     return justCentralFlake;
   }
 
+  /**
+   * Selects to enable all the GUI with its windows.
+   *
+   * Input "parameters" variable: {@code withGui}.
+   *
+   * See also {@link #visualise()} to also show the GUI.
+   *
+   * @return whether to enable GUI.
+   */
   public boolean withGui() {
     return withGui;
   }
 
+  /**
+   * Selects to print the simulated system (the canvas of the frame) to a PNG file. Can be only be
+   * used if GUI is enabled (see {@link #withGui()}).
+   *
+   * Input "parameters" variable: {@code printToImage}.
+   *
+   * @return whether to print to a PNG file.
+   */
   public boolean printToImage() {
     if (!withGui) {
       return false;
@@ -945,7 +1122,15 @@ public class Parser {
   }
   
   /**
-   * Can be Si, Ag, AgUc, basic or graphene.
+   * Selects the type of system to be calculated. Can be Si (for silicon etching), Ag (2D Ag/Ag
+   * growth in former mode), AgUc (same as previous Ag/Ag growth, with correct periodicity), basic
+   * (synthetic simulation mode in a square lattice) or graphene (graphene 2D growth simulation).
+   * For the graphene pay attention to the used rates library with {@link #getRatesLibrary()}.
+   *
+   * The temperature ({@link #getTemperature()}) has to be between 120 and 180 for Ag, between 120
+   * and 220 for basic and 1273 for graphene.
+   *
+   * Input "parameters" variable: {@code calculationMode}.
    *
    * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic" or "graphene"
    */
@@ -966,12 +1151,26 @@ public class Parser {
     return surfaceType;
   }
   
+  /**
+   * Selects to do a PSD analysis of the simulated system. If many repetitions are used (see
+   * {@link #getNumberOfSimulations()}), the PSD will be smoother and better defined. I recommend to
+   * use {@link #getPsdScale()} == 1 and {@link #getPsdExtend()} == 1.
+   *
+   * Input "parameters" variable: {@code doPsd}.
+   *
+   * @return whether to do a PSD.
+   */
   public boolean doPsd() {
     return psd;
   }
-  
+
   /**
-   * Returns if the PSD has to be symmetric.
+   * Returns if the PSD ({@link #doPsd()}) has to be symmetrised. If the periodicity is correctly
+   * implemented, the PSD tents to be symmetric circularly. If this option is enabled, helps to that
+   * symmetry. Or, the other way around, one can obtain properly defined PSD with less repetitions
+   * ({@link #getNumberOfSimulations()})
+   *
+   * Input "parameters" variable: {@code isPsdSymmetric}.
    *
    * @return psdSymmetry
    */
@@ -984,12 +1183,22 @@ public class Parser {
    * is created and it will be periodic. If not, a circular region will be created in the selected
    * region and when current atom exits the perimeter it will be inserted by a prefixed statistics.
    *
-   * @return
+   * Input "parameters" variable: {@code periodicSingleFlake}.
+   * 
+   * @return whether periodic in single flake.
    */
   public boolean isPeriodicSingleFlake() {
     return periodicSingleFlake;
   }
   
+  /**
+   * Chooses to output data or not.
+   *
+   * Input "parameters" variable: {@code outputData}. It has to be used in combination with
+   * {@link #getOutputFormats()} to chose the proper format for the output.
+   *
+   * @return whether to output data.
+   */
   public boolean outputData() {
     return outputData;
   }
@@ -998,16 +1207,33 @@ public class Parser {
    * To have the possibility to output to different file formats. Available options are: TXT, PNG,
    * MKO, EXTRA, EXTRA2, AE (extra information for activation energy runs) or XYZ.
    *
+   * Input "parameters" variable: {@code outputDataFormat}.
+   * 
    * @return output format. Either: TXT, PNG, MKO, EXTRA, EXTRA2, AE or XYZ
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);
   }
   
+  /**
+   * Selects to use randomSeed, based on the current time in ms.
+   *
+   * Input "parameters" variable: {@code randomSeed}.
+   *
+   * @return whether to use random seed.
+   */
   public boolean randomSeed() {
     return randomSeed;
   }
 
+  /**
+   * In single flake simulation mode ({@link #justCentralFlake()}) selects the initial size of the
+   * simulation area. If this option is enabled, biggest possible area is used since the beginning.
+   *
+   * Input "parameters" variable: {@code useMaxPerimeter}.
+   *
+   * @return whether to use maximum possible perimeter.
+   */
   public boolean useMaxPerimeter() {
     return useMaxPerimeter;
   }
@@ -1016,7 +1242,10 @@ public class Parser {
    * If two terraces are together freeze them, in multi-flake
    * simulation mode. Should be only disabled for debugging purposes
    * because slows down significantly the execution time.
-   * @return 
+   * 
+   * Input "parameters" variable: {@code forceNucleation}.
+   *
+   * @return whether to force nucleation.
    */
   public boolean forceNucleation() {
     return forceNucleation;
