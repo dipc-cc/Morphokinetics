@@ -154,7 +154,7 @@ public class Parser {
    */
   private boolean useMaxPerimeter;
   /**
-   * See {@link forceNucleation()}
+   * See {@link #forceNucleation()}
    */
   private boolean forceNucleation;
   private JSONArray outputDataFormat;
@@ -1273,7 +1273,8 @@ public class Parser {
   
   /**
    * Total number of iterations that the evolutionary algorithm has to do.
-   * @return 
+   *
+   * @return total number of iterations.
    */
   public int getTotalIterations() {
     return totalIterations;
@@ -1282,7 +1283,7 @@ public class Parser {
   /**
    * Number of repetitions or evaluations that a single Gene has to do.
    *
-   * @return by default 18
+   * @return by default 18.
    */
   public int getRepetitions() {
     return repetitions;
