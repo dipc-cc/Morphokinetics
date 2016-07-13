@@ -277,8 +277,8 @@ public class KmcCanvas extends Canvas {
   /**
    * Method taken from http://stackoverflow.com/questions/4672271/reverse-opposing-colors
    *
-   * @param colour base colour
-   * @return
+   * @param colour base colour.
+   * @return black or white; the one with highest contrast.
    */
   private Color getContrastColor(Color colour) {
     double y = (299 * colour.getRed() + 587 * colour.getGreen() + 114 * colour.getBlue()) / 1000;

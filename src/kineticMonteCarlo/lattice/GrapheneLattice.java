@@ -66,14 +66,14 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
     
   /**
-   * Creates the atom array for graphene. It only allows even parameters
+   * Creates the atom array for graphene. It only allows even parameters.
    *
    * @param hexaSizeI even number of the size in hexagonal lattice points. Currently it is
    * represented vertically starting from the top
    * @param hexaSizeJ even number of the size in hexagonal lattice points. Currently it is
    * represented horizontally starting from the left
    * @param distancePerStep
-   * @return
+   * @return just created atoms in a 2D matrix.
    */
   private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep, Class<?> inputClass) {
     GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];

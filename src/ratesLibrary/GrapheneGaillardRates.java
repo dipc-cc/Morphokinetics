@@ -42,7 +42,7 @@ public class GrapheneGaillardRates implements IRates {
    * @param destinationN1
    * @param destinationN2
    * @param temperature
-   * @return
+   * @return current rate.
    */
   public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, double temperature) {
     double energy;

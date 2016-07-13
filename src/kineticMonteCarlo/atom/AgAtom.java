@@ -180,8 +180,9 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * See {@link #getOrientation()}
+   *
    * @param atom atom to be excluded to compute the orientation. If null, none is excluded.
-   * @return 
+   * @return a number between 0 and 5 inclusive. Even number if A type or odd if B type.
    */
   public int getOrientation(AgAtom atom) {
     byte type = getType();

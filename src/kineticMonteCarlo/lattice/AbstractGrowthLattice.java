@@ -85,9 +85,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   /**
-   * Return the selected atom
+   * Return the selected atom.
+   *
    * @param index
-   * @return 
+   * @return selected atom.
    */
   @Deprecated
   public AbstractGrowthAtom getAtom(int index) {

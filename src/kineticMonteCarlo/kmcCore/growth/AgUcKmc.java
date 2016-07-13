@@ -67,11 +67,12 @@ public class AgUcKmc extends AbstractGrowthKmc {
   }
  
   /**
-   * 
-   * @param iHexa unit cell coordinate
-   * @param jHexa unit cell coordinate
-   * @param pos position within the unit cell
-   * @return 
+   * Tries to deposit an atom in the given coordinates.
+   *
+   * @param iHexa unit cell coordinate.
+   * @param jHexa unit cell coordinate.
+   * @param pos position within the unit cell.
+   * @return true if deposited and false otherwise.
    */
   protected boolean depositAtom(int iHexa, int jHexa, int pos) {
     AbstractGrowthAtom atom = ((AgUcLattice) getLattice()).getAtom(iHexa, jHexa, pos);

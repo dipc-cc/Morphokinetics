@@ -45,11 +45,11 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   public void setNeighbours(GrapheneAtom[] neighbours) {
     this.neighbours = neighbours;
   }
-  
+
   /**
    * KINK and BULK atom types are considered immobile atoms.
-   * 
-   * @return 
+   *
+   * @return true if current atom can be moved, false otherwise.
    */
   @Override
   public boolean isEligible() {

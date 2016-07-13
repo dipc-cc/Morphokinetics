@@ -197,9 +197,9 @@ public class Restart {
   
   /**
    * Normalises fileName with the folder and proper suffix. 
-   * @param fileName
-   * @param suffix
-   * @return 
+   * @param fileName input file name.
+   * @param suffix suffix to be added.
+   * @return complete file name.
    */
   private String addFolderAndSuffix(String fileName, String suffix) {
     if (!fileName.startsWith(folder)) {

@@ -23,7 +23,7 @@ public class GrapheneAtomGaillard1Neighbour extends GrapheneAtom {
   /**
    * Only BULK atom types are considered immobile atoms. From page 15 of the paper.
    * 
-   * @return 
+   * @return  true if current atom can be moved, false otherwise.
    */
   @Override
   public boolean isEligible() {

@@ -85,8 +85,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
 
   /**
    * In general two atoms are equal if the have the same Id.
+   *
    * @param obj the other object. Should be atom, but can be any object.
-   * @return 
+   * @return true if equals, false otherwise.
    */
   @Override
   public boolean equals(Object obj) {

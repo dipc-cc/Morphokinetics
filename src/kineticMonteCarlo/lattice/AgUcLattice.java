@@ -57,14 +57,12 @@ public class AgUcLattice extends AgLattice {
   }
 
   /**
-   * Creates all atoms and asings it neighbours. How are computed the neighbours is documented
-   * here:
+   * Creates all atoms and asings it neighbours. How are computed the neighbours is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    *
-   * @return
    */
   private void createAtoms() {
-    
+
     sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
     sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
@@ -185,10 +183,11 @@ public class AgUcLattice extends AgLattice {
   
   /**
    * Returns an atom of given unit cell and lattice position.
+   *
    * @param iHexa
    * @param jHexa
    * @param pos
-   * @return 
+   * @return an atom.
    */
   public AgAtom getAtom(int iHexa, int jHexa, int pos) {
     return ucArray[iHexa][jHexa].getAtom(pos);
@@ -352,9 +351,9 @@ public class AgUcLattice extends AgLattice {
   
   /**
    * 
-   * @param atom
-   * @param distance how far we have to move
-   * @return 
+   * @param atom origin atom.
+   * @param distance how far we have to move.
+   * @return destination atom.
    */
   private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
     int sizeOfPerimeter = distance * 6;

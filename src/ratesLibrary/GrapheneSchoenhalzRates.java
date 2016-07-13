@@ -43,7 +43,7 @@ public class GrapheneSchoenhalzRates implements IRates {
    * @param destinationN2
    * @param secondNeighbour
    * @param temperature
-   * @return
+   * @return current rate.
    */
   public double getRate(int originN1, int originN2, int destinationN1, int destinationN2, boolean secondNeighbour, double temperature) {
     double energy = -1;

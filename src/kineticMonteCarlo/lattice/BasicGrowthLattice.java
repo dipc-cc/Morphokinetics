@@ -105,8 +105,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * A new occupied atom was added before calling this method, here, updating the first and the
    * second neighbourhood.
    *
-   * @param neighbourAtom current atom
-   * @param originType atom type of the original deposited atom
+   * @param neighbourAtom current atom.
+   * @param neighbourPosition the position of the neighbour.
    * @param forceNucleation
    */
   private void addOccupiedNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
