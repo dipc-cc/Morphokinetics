@@ -55,11 +55,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         System.err.println("Finishing");
         throw e;
       }
+      Thread p;
       if (getParser().visualise()) {
         frame.setVisible(true);
-        paintLoop p = new paintLoop();
-        p.start();
+        p = new paintLoop();
+      } else {
+        p = new terminalLoop();
       }
+      p.start();
     }
   }
   
@@ -109,6 +112,40 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
             frame.updateProgressBar(getCurrentCoverage());
             setCurrentCoverage(getCurrentCoverage() + 1);
             totalSavedImages++;
+          }
+        } catch (Exception e) {
+        }
+      }
+    }
+  }
+  
+  /**
+   * Private class responsible to repaint every 1000 ms the progress bar to the terminal.
+   */
+  final class terminalLoop extends Thread {
+
+    @Override
+    public void run() {
+      final int width = (int) getParser().getCoverage(); // progress bar width in chars
+      while (true) {
+        try {
+          paintLoop.sleep(1000);
+          // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
+          if (getKmc().getCoverage() * 100 > getCurrentCoverage()) {
+
+
+            System.out.print("\r[");
+            int i = 0;
+            for (; i <= getCurrentCoverage(); i++) {
+              System.out.print(".");
+            }
+            for (; i < width; i++) {
+              System.out.print(" ");
+            }
+            System.out.print("] ");
+            //System.out.println(" 1 " + getCurrentCoverage());
+            setCurrentCoverage(getCurrentCoverage() + 1);
+
           }
         } catch (Exception e) {
         }
