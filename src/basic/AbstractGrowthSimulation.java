@@ -30,7 +30,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   }
 
   @Override
-  protected void initialiseRates(IRates rates, Parser parser) {
+  void initialiseRates(IRates rates, Parser parser) {
     double depositionRatePerSite;
     rates.setDepositionFlux(parser.getDepositionFlux());
     depositionRatePerSite = rates.getDepositionRatePerSite();
