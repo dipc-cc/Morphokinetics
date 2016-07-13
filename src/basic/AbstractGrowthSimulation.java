@@ -76,7 +76,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    * @param i simulation number
    */
   @Override
-  protected void printToImage(int i) {
+  void printToImage(int i) {
     frame.printToImage(i);
   }
   
@@ -86,7 +86,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    * @param i simulation number
    */
   @Override
-  protected void printToImage(String folderName, int i) {
+  void printToImage(String folderName, int i) {
     frame.printToImage(folderName, i);
     // reset saved images for current simulation
     previousDiscreteCoverage = 1;

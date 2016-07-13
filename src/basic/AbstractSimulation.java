@@ -142,7 +142,7 @@ public abstract class AbstractSimulation {
     }
   }
 
-  protected abstract void initialiseRates(IRates ratesFactory, Parser myParser);
+  abstract void initialiseRates(IRates ratesFactory, Parser myParser);
 
   public abstract void finishSimulation();
 
@@ -255,7 +255,7 @@ public abstract class AbstractSimulation {
    *
    * @param i
    */
-  protected void printToImage(int i) {
+  void printToImage(int i) {
     //Do nothing
   }
 
@@ -265,7 +265,7 @@ public abstract class AbstractSimulation {
    * @param folderName
    * @param i
    */
-  protected void printToImage(String folderName, int i) {
+  void printToImage(String folderName, int i) {
     //Do nothing
   }
 
