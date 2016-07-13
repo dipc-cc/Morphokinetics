@@ -28,7 +28,10 @@ import org.json.JSONObject;
 
 /**
  * This class will read an input file called "parameters" with all the parameters for the execution.
- * The format of this file is JSON.
+ * The format of this file is JSON. If "parameters" file is missing in the launch directory, default
+ * values are taken. Only desired options can be specified, default ones are used for the rest. In
+ * all cases, the used options are printed to the main screen and they can be copied to a
+ * "parameters" file.
  *
  * @author J. Alberdi-Rodriguez
  */
