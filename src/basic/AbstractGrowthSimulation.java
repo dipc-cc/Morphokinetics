@@ -88,8 +88,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   @Override
   void printToImage(String folderName, int i) {
     frame.printToImage(folderName, i);
-    // reset saved images for current simulation
-    previousDiscreteCoverage = 1;
   }
   
   /**
@@ -104,12 +102,12 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         try {
           paintLoop.sleep(100);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-          if ( getKmc().getCoverage() * 100 > previousDiscreteCoverage) {
+          if ( getKmc().getCoverage() * 100 > getCurrentCoverage()) {
             if (printIntermediatePngFiles) {
               frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
             }
-            frame.updateProgressBar(previousDiscreteCoverage);
-            previousDiscreteCoverage++;
+            frame.updateProgressBar(getCurrentCoverage());
+            setCurrentCoverage(getCurrentCoverage() + 1);
             totalSavedImages++;
           }
         } catch (Exception e) {
