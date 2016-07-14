@@ -58,6 +58,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private double depositionRatePerSite;
   private int freeArea;
   private int islandCount;
+  private int monomerCount;
   private double previousTime;
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
@@ -305,7 +306,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private void printData() {
     countIslands(outData);
-    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + monomerCount);
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();
@@ -325,6 +326,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     // do the count
     islandCount = 0;
+    monomerCount = 0;
     for (int i = 0; i < lattice.size(); i++) {
       // visit all the atoms within the unit cell
       AbstractGrowthUc uc = lattice.getUc(i);
@@ -343,7 +345,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         int island = uc.getAtom(j).getIslandNumber();
-        histogram.set(island, histogram.get(island) + 1);
+        if (island >= 0) 
+          histogram.set(island, histogram.get(island) + 1);
       }
     }
     if (print != null) {
@@ -354,7 +357,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
   /**
    * After having count them, returns the number of islands that the simulation has.
-   * @return number of islands of the simulation
+   * @return number of islands of the simulation.
    */
   @Override
   public int getIslandCount() {
@@ -365,12 +368,18 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set
    * all them the same island number.
    *
-   * @param index hexagonal index coordinate
-   * @param fromNeighbour whether is called from outside or recursively
+   * @param atom atom to be classified.
+   * @param fromNeighbour whether is called from outside or recursively.
    */
   private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour) {
-    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour && !atom.isIsolated()) {
-      islandCount++;
+    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
+      if (atom.isIsolated()) {
+        monomerCount--;
+        atom.setIslandNumber(monomerCount);
+        atom.setVisited(true);
+      } else {
+        islandCount++;
+      }
     }
     if (atom.isVisited())
       return;
