@@ -227,7 +227,7 @@ public class Parser {
     presure = 135;
     depositionFlux = 0.0035;
     coverage = 30.0;
-    psdScale = 0.5;
+    psdScale = 1;
     psdExtend = 1;
     endTime = -1;
     numberOfSimulations = 10;
@@ -362,7 +362,7 @@ public class Parser {
     try {
       psdScale = json.getDouble("psdScale");
     } catch (JSONException e) {
-      psdScale = 0.5;
+      psdScale = 1;
     }
     try {
       psdExtend = json.getDouble("psdExtend");
@@ -810,8 +810,9 @@ public class Parser {
   }
   
   /**
-   * Factor with which has to be multiplied the size of the surface to calculate the PSD.
-   * 
+   * Factor with which has to be multiplied the size of the surface to calculate the PSD. I
+   * recommend to be 1.
+   *
    * Converts this island:
          <pre> {@code                                                                 
                        'H                                   
