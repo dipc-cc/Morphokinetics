@@ -1081,7 +1081,11 @@ public class Parser {
    * @return whether to show the GUI.
    */
   public boolean visualise() {
-    return visualise;
+    if (withGui()) {
+      return visualise;
+    } else {
+      return false;
+    }
   }
 
   /**
