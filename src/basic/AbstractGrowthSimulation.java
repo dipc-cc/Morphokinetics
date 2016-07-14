@@ -55,15 +55,15 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         System.err.println("Finishing");
         throw e;
       }
-      Thread p;
-      if (getParser().visualise()) {
-        frame.setVisible(true);
-        p = new paintLoop();
-      } else {
-        p = new terminalLoop();
-      }
-      p.start();
     }
+    Thread p;
+    if (getParser().visualise()) {
+      frame.setVisible(true);
+      p = new paintLoop();
+    } else {
+      p = new terminalLoop();
+    }
+    p.start();
   }
   
   /**
