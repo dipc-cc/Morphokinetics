@@ -24,6 +24,7 @@ import static org.junit.Assert.*;
 public class GrapheneSimulationTest {
   
   private float[][] currentSurface;
+  private int currentIslandCount;
   
   public GrapheneSimulationTest() {
   }
@@ -150,6 +151,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref2.length; i++) {
       assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
     }
+    assertEquals(currentIslandCount, 1);
     // TODO compare the rest of surfaces
   }
     
@@ -164,5 +166,6 @@ public class GrapheneSimulationTest {
     simulation.finishSimulation();
     
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    currentIslandCount = simulation.getKmc().getIslandCount();
   }
 }

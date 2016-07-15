@@ -26,6 +26,7 @@ import org.junit.Test;
  */
 public class AgSimulationTest {
   
+  private int currentIslandCount;
   private float[][] currentSurface;
   private float[][] currentPsd;
 
@@ -98,7 +99,7 @@ public class AgSimulationTest {
   /**
    * Really simple and quick test to ensure that runs correctly. No further checks.
    */
-  @Test
+  //@Test
   public void testAgSimple() {
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
@@ -168,7 +169,8 @@ public class AgSimulationTest {
     for (int i = 0; i < ref2.length; i++) {
       assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
     }
-    // TODO compare the number of islands and surface 0 and 1
+    assertEquals(currentIslandCount, 3);
+    // TODO compare surfaces 0 and 1
   }
 
   private void doAgTest(Parser parser) {
@@ -181,6 +183,7 @@ public class AgSimulationTest {
 
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     currentPsd = simulation.getPsd().getPsd();
+    currentIslandCount = simulation.getKmc().getIslandCount();
   }
    
 }

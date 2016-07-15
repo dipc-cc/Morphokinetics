@@ -24,6 +24,7 @@ public class BasicSimulationTest {
   
   private float[][] currentSurface;
   private float[][] currentPsd;
+  private int currentIslandCount;
 
   public BasicSimulationTest() {
   }
@@ -64,7 +65,7 @@ public class BasicSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
     }
-    
+    assertEquals(currentIslandCount, 14);
   }
   
   @Test
@@ -87,6 +88,7 @@ public class BasicSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
     }
+    assertEquals(currentIslandCount, 1);
     
   }
   
@@ -102,6 +104,7 @@ public class BasicSimulationTest {
     if (parser.doPsd()) {
       currentPsd = simulation.getPsd().getPsd();
     }
+    currentIslandCount = simulation.getKmc().getIslandCount();
   }
 
 }
