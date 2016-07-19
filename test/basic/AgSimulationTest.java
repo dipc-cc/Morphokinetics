@@ -99,7 +99,7 @@ public class AgSimulationTest {
   /**
    * Really simple and quick test to ensure that runs correctly. No further checks.
    */
-  //@Test
+  @Test
   public void testAgSimple() {
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
