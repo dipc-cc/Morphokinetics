@@ -60,7 +60,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
         // south neighbour
         i = iHexa;
         j = jHexa + 1;
-        if (j == getHexaSizeI()) j = 0;
+        if (j == getHexaSizeJ()) j = 0;
         atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 2);
         
         // west neighbour
