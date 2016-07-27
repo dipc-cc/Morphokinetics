@@ -694,11 +694,12 @@ public class Parser {
   /**
    * Morphokinetics has two main calculation modes: one called batch, for arbitrarily chosen input
    * parameters, and the other called evolutionary, which tries to find the best input parameters
-   * for a target system.
-   * 
+   * for a target system. Additionally, it has an utility which does PSD analysis from given
+   * surfaces.
+   *
    * Input "parameters" variable: {@code calculationType}.
    *
-   * @return "batch" or "evolutionary".
+   * @return "batch", "evolutionary" or "psd".
    */
   public String getCalculationType() {
     return calculationType;
@@ -1147,13 +1148,20 @@ public class Parser {
   }
 
   /**
+   * The options below are for "Ag" calculationMode (see {@link #getCalculationMode()}). Instead of
+   * using this calculation mode, it is recommended to use "AgUc" calculation mode, which has the
+   * correct periodicity and shape.
+   *
    * Can be "cartesian" or "periodic". If "cartesian" is chosen, the surface (islands) will have the
    * same shape as in the GUI, but the periodicity will not be correct in top-bottom (there is a
    * shift of 60º). If "periodic" is chosen, the shape will be shifted by 60º and periodicity will
    * be correct in 2D. This option will change the PSD; "cartesian" will have vertical and
    * horizontal symmetry and in "periodic" the symmetry will be shifted by 60º.
+   * 
+   * This variable can be also used for the PSD utility (see {@link #getCalculationType()}) to
+   * choose between to do the tents for the surfaces or not.
    *
-   * @return surface type. Either: "cartesian" or "periodic"
+   * @return surface type. For "Ag" either: "cartesian" or "periodic". For PSD utility: "tent" or "plane".
    */
   public String getSurfaceType() {
     return surfaceType;

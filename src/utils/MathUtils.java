@@ -97,6 +97,18 @@ public class MathUtils {
       currentHeight++;
     } while (modified > 0 && currentHeight < maxHeight);
   }
+    
+  public static void planeSurface(float[][] surface) {
+    int maxI = surface.length;
+    int maxJ = surface[0].length;
+    for (int i = 0; i < maxI; i++) {
+      for (int j = 0; j < maxJ; j++) {
+        if (surface[i][j] > -1) {
+          surface[i][j] = 0;
+        }
+      }
+    }
+  } 
   
   /**
    * Normalises the surface, to be able to easily compare surfaces with different tent heights.

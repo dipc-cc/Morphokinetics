@@ -54,6 +54,36 @@ public class Restart {
     return jarPath.toString();
   }
 
+  public String getPsdScript(String inputFileName, String outputFileName, float min, float max, int sizeX, int sizeY) {
+    String base = "reset\n"
+            + "set term postscript enhanced color \"Arial\" 20\n"
+            + "set output \"" + folder + outputFileName + ".eps\"\n"
+            + "\n"
+            + "set zrange[" + min + ":" + max + "]; set xrange[0:" + (sizeX - 1) + "]; set yrange[0:" + (sizeY - 1) + "]\n"
+            + "set isosample 500,500\n"
+            + "set table \"" + folder + "imagePsdAvgFil.dat\"\n"
+            + "splot \"" + folder + inputFileName + ".txt\" u 1:2:3\n"
+            + "unset table\n"
+            + "\n"
+            + "set contour\n"
+            + "set cntrparam level incremental 4, 0.5, 16\n"
+            + "set dgrid3d 128,128\n"
+            + "unset surface\n"
+            + "set view 0,0\n"
+            + "set table \"" + folder + "contourPsdAvgFil.dat\"\n"
+            + "splot \"" + folder + inputFileName + ".txt\" u 1:2:3 w l lt -1 notitle\n"
+            + "unset table\n"
+            + "\n"
+            + "reset\n"
+            + "set xrange[0:" + (sizeX - 1) + "]; set yrange[0:" + (sizeY - 1) + "]\n"
+            + "set palette rgbformulae 33,13,10\n"
+            + "unset key\n"
+            + "set size square\n"
+            + "set cbrange[" + min + ":" + max + "]\n"
+            + "plot \"<sort -n -k1,1 -k2 " + folder + "imagePsdAvgFil.dat\" with image, \"" + folder + "contourPsdAvgFil.dat\" w l lt -1 lw 1.5";
+    return base;
+  }
+  
   /**
    * Writes float data to a file called "psd[number].mko". First of all calls to the header writing:
    * look documentation there.

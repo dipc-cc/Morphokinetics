@@ -58,6 +58,9 @@ public class Morphokinetics {
       case "evolutionary":
         evoluationarySimulation(parser);
         break;
+      case "psd":
+        psdFromSurfaces(parser);
+        break;
       default:
         System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
         System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are batch or evolutionary");
@@ -140,6 +143,10 @@ public class Morphokinetics {
     ga.iterate();
     printResult(parser, ga);
     if (parser.withGui() && parser.visualise()) mainInterface.setStatusBar("Finished");
+  }
+  
+  private static void psdFromSurfaces(Parser parser) {
+    PsdFromSurfaces psd = new PsdFromSurfaces(parser);
   }
   
   private static float[][] readExperimentalData() {

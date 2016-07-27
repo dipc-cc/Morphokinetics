@@ -211,4 +211,30 @@ public class PsdSignature2D {
   public void setRestart(Restart restart) {
     this.restart = restart;
   }
+
+  public float getMin() {
+    float min = Integer.MAX_VALUE;
+    float[][] tmpPsd = MathUtils.avgFilter(psd, 1);
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        if (Math.log(tmpPsd[i][j]) < min) {
+          min = (float) Math.log(tmpPsd[i][j]);
+        }
+      }
+    }
+    return min;
+  }
+
+  public float getMax() {
+    float max = Integer.MIN_VALUE;
+    float[][] tmpPsd = MathUtils.avgFilter(psd, 1);
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        if (Math.log(tmpPsd[i][j]) > max) {
+          max = (float) Math.log(tmpPsd[i][j]);
+        }
+      }
+    }
+    return max;
+  }
 }
