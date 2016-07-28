@@ -136,7 +136,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[coverage, time, nucleations, islands, depositionProbability, totalProbability] ");
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
