@@ -31,7 +31,7 @@ public abstract class AbstractSimulation {
   private PsdSignature2D psd;
   private final Parser parser;
   private StaticRandom staticRandom;
-  private String restartFolderName;
+  private final String restartFolderName;
   private long startTime;
   private long iterationStartTime;
   private double totalTime;
@@ -42,7 +42,7 @@ public abstract class AbstractSimulation {
   private float[][] sampledSurface;
   private int[] surfaceSizes;
   private int[] extentSizes;
-  private Restart restart;
+  private final Restart restart;
 
   public AbstractSimulation(Parser parser) {
     kmc = null;
