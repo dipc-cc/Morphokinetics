@@ -42,6 +42,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final boolean useMaxPerimeter;
   private final short perimeterType;
   private DevitaAccelerator accelerator;
+  private int simulatedSteps;
   
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
@@ -232,6 +233,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
         }
       } while (!diffuseAtom(originAtom, destinationAtom));
+      simulatedSteps++;
     }
 
     if (justCentralFlake && perimeterMustBeEnlarged(destinationAtom)) {
@@ -259,7 +261,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public int simulate() {
     int coverageThreshold = 1;
     int returnValue = 0;
-    int simulatedSteps = 0;
+    simulatedSteps = 0;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
@@ -275,7 +277,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           if (performSimulationStep()) {
             break;
           }
-          simulatedSteps++;
           if (extraOutput && getCoverage() * 100 > coverageThreshold) { // print extra data every 1% of coverage
             coverageThreshold++;
             printData();
@@ -306,7 +307,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private void printData() {
     countIslands(outData);
-    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + monomerCount);
+    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + monomerCount+"\t" + simulatedSteps);
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();
