@@ -32,7 +32,6 @@ public class PsdFromSurfaces {
     showGui = parser.withGui() && parser.visualise();
     doTent = !parser.getSurfaceType().equals("plane");
 
-    System.out.println("doTent "+doTent);
     Restart restart = new Restart();
     int[] sizes = null;
     float[][] surface = null;
