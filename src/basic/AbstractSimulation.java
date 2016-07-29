@@ -116,7 +116,7 @@ public abstract class AbstractSimulation {
       printOutput();
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
-      islands += kmc.getIslandCount();
+      islands += kmc.getLattice().getIslandCount();
     }
 
     printFooter();
@@ -235,7 +235,7 @@ public abstract class AbstractSimulation {
     }
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
-    System.out.print("\t" + kmc.getIslandCount());
+    System.out.print("\t" + kmc.getLattice().getIslandCount());
     System.out.println("");
   }
 

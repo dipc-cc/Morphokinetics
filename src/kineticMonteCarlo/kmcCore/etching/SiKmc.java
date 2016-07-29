@@ -109,15 +109,6 @@ public class SiKmc extends AbstractKmc {
     MathUtils.fillSurfaceHoles(surface);
     return surface;
   }
-  
-  /**
-   * Number of islands has no sense in etching.
-   * @return -1 always
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
 
   /**
    * Does nothing.

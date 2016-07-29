@@ -94,18 +94,9 @@ public class BasicKmc extends AbstractKmc {
     }
     return surface;
   }
-
-  /**
-   * Number of islands has no sense in etching.
-   * @return -1 always
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
   
   /**
-   * Does nothing
+   * Does nothing.
    *
    * @param inputArea
    * @param scale

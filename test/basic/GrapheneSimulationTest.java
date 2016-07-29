@@ -166,6 +166,6 @@ public class GrapheneSimulationTest {
     simulation.finishSimulation();
     
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
-    currentIslandCount = simulation.getKmc().getIslandCount();
+    currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
   }
 }

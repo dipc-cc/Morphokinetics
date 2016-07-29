@@ -214,4 +214,14 @@ public class SiLattice extends AbstractLattice {
       }
     }
   }
+
+  /**
+   * Number of islands has no sense in etching.
+   *
+   * @return -1 always
+   */
+  @Override
+  public int getIslandCount() {
+    return -1;
+  }
 }

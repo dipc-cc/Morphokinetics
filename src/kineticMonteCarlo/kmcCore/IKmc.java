@@ -43,14 +43,9 @@ public interface IKmc {
    * @return calculated surface
    */
   public float[][] getSampledSurface(int binX, int binY);
+
   public float[][] increaseEmptyArea(float[][] inputArea, double scale);
-  
+
   public void setDepositionRate(double depositionRatePerSite, double islandDensity);
-  
-  /**
-   * Only defined in growth simulations
-   * @return number of island of simulation (or -1)
-   */
-  public int getIslandCount();
 
 }

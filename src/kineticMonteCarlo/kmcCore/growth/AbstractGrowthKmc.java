@@ -57,8 +57,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int currentArea;
   private double depositionRatePerSite;
   private int freeArea;
-  private int islandCount;
-  private int monomerCount;
   private double previousTime;
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
@@ -292,7 +290,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     // Dirty mode to have only one interface of countIslands
     PrintWriter standardOutputWriter = new PrintWriter(System.out);
-    countIslands(standardOutputWriter);
+    lattice.countIslands(standardOutputWriter);
     standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();
@@ -514,14 +512,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    *
    */
   private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
-    countIslands(null);
+    lattice.countIslands(null);
     deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
     outDeltaAttachments.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
             + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
             + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
             + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
             + getList().getTotalProbabilityFromList() + " "
-            + getIslandCount());
+            + lattice.getIslandCount());
     previousTime = getTime();
     deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
     outPerAtom.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "

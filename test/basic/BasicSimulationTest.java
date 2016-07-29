@@ -104,7 +104,7 @@ public class BasicSimulationTest {
     if (parser.doPsd()) {
       currentPsd = simulation.getPsd().getPsd();
     }
-    currentIslandCount = simulation.getKmc().getIslandCount();
+    currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
   }
 
 }

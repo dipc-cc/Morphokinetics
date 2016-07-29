@@ -183,7 +183,7 @@ public class AgSimulationTest {
 
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     currentPsd = simulation.getPsd().getPsd();
-    currentIslandCount = simulation.getKmc().getIslandCount();
+    currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
   }
    
 }

@@ -79,4 +79,11 @@ public abstract class AbstractLattice {
   public boolean isPaused() {
     return paused;
   }
+
+  /**
+   * Only defined in growth lattice
+   *
+   * @return number of island of simulation (or -1)
+   */
+  public abstract int getIslandCount();
 }
