@@ -303,93 +303,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
   
   private void printData() {
-    countIslands(outData);
-    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + monomerCount);
+    lattice.countIslands(outData);
+    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + lattice.getIslandCount() + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + lattice.getMonomerCount());
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();
       outPerAtom.flush();
-    }
-  }
-  
-  private int countIslands(PrintWriter print) {
-    // reset all the atoms
-    for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        uc.getAtom(j).setVisited(false);
-        uc.getAtom(j).setIslandNumber(0);
-      }
-    }
-    
-    // do the count
-    islandCount = 0;
-    monomerCount = 0;
-    for (int i = 0; i < lattice.size(); i++) {
-      // visit all the atoms within the unit cell
-      AbstractGrowthUc uc = lattice.getUc(i);
-      for (int j=0; j< uc.size(); j++) {
-        identifyIsland(uc.getAtom(j), false);
-      }
-    }
-    
-    // create a histogram with the number of atoms per island
-    List<Integer> histogram = new ArrayList(islandCount + 1); // count also non occupied area
-    for (int i = 0; i < islandCount + 1; i++) {
-      histogram.add(0);
-    }
-    // iterate all atoms and add to the corresponding island
-    for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        int island = uc.getAtom(j).getIslandNumber();
-        if (island >= 0) 
-          histogram.set(island, histogram.get(island) + 1);
-      }
-    }
-    if (print != null) {
-      print.println("histogram " + histogram.toString());
-    }
-    return islandCount;
-  }
-    
-  /**
-   * After having count them, returns the number of islands that the simulation has.
-   * @return number of islands of the simulation.
-   */
-  @Override
-  public int getIslandCount() {
-    return islandCount;
-  }
-  
-  /**
-   * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set
-   * all them the same island number.
-   *
-   * @param atom atom to be classified.
-   * @param fromNeighbour whether is called from outside or recursively.
-   */
-  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour) {
-    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
-      if (atom.isIsolated()) {
-        monomerCount--;
-        atom.setIslandNumber(monomerCount);
-        atom.setVisited(true);
-      } else {
-        islandCount++;
-      }
-    }
-    if (atom.isVisited())
-      return;
-    atom.setVisited(true);
-    if (atom.isOccupied()) {
-      atom.setIslandNumber(islandCount);
-      for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
-        AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
-        if (!neighbour.isVisited()) {
-          identifyIsland(neighbour, true);
-        }
-      }
     }
   }
   
