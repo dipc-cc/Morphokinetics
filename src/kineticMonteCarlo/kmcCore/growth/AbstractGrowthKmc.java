@@ -291,6 +291,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     // Dirty mode to have only one interface of countIslands
     PrintWriter standardOutputWriter = new PrintWriter(System.out);
     lattice.countIslands(standardOutputWriter);
+    lattice.getCentreOfMass();
     standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();

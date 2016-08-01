@@ -15,6 +15,7 @@ import utils.QuickSort;
 import java.util.List;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import static java.lang.Math.abs;
+import kineticMonteCarlo.unitCell.IUc;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -37,6 +38,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int occupied;
   private int islandCount;
   private int monomerCount;
+  private Point2D centres[];
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -449,5 +451,61 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   public int getMonomerCount() {
     return islandCount;
+  }
+  
+  /**
+   * Calculates the centre of mass of each island. The result is stored in "centres" vector. The way
+   * to compute the distances is considering periodic boundary conditions and the algorithm is taken
+   * from Wikipedia
+   * (https://en.wikipedia.org/wiki/Center_of_mass#Systems_with_periodic_boundary_conditions).
+   */
+  public void getCentreOfMass() {
+    int islandAmount = getIslandCount();
+    int counter[] = new int[islandAmount];
+    double valueTheta;
+    double xiX[] = new double[islandAmount];
+    double zetaX[] = new double[islandAmount];
+    double xiY[] = new double[islandAmount];
+    double zetaY[] = new double[islandAmount];
+    centres = new Point2D[islandAmount];
+    // count the island with their coordinates and translate them
+    for (int i = 0; i < size(); i++) {
+      IUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
+        int islandNumber = atom.getIslandNumber();
+        // atom belongs to an island
+        if (islandNumber > 0) {
+          valueTheta = ((double) atom.getiHexa() / getHexaSizeI()) * 2.0 * Math.PI;
+          xiX[islandNumber - 1] += Math.cos(valueTheta);
+          zetaX[islandNumber - 1] += Math.sin(valueTheta);
+
+          valueTheta = ((double) atom.getjHexa() * 2.0 * Math.PI) / getHexaSizeJ();
+          xiY[islandNumber - 1] += Math.cos(valueTheta);
+          zetaY[islandNumber - 1] += Math.sin(valueTheta);
+
+          counter[islandNumber - 1]++;
+        }
+      }
+    }
+
+    // get centres
+    for (int i = 0; i < islandAmount; i++) {
+      // values lower than 1e-10 are considered -0
+      double centreX = (getHexaSizeI() * (Math.atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
+      double centreY = (getHexaSizeJ() * (Math.atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
+      centres[i] = new Point2D.Double(centreX, centreY);
+    }
+  }
+  
+  private double toZeroIfTooClose(double value) {
+    return Math.abs(value) < 1e-10 ? -0.0d : value;
+  }
+  
+  public Point2D getCentreOfMass(int i) {
+    if (centres == null) {
+      return new Point2D.Float(-1,-1);
+    }
+    return centres[i];
   }
 }

@@ -7,9 +7,11 @@ package graphicInterfaces.growth;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
+import static java.awt.Color.BLACK;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -40,6 +42,7 @@ public class KmcCanvas extends Canvas {
   private boolean paused;
   private boolean printId;
   private boolean printIslandNumber;
+  private boolean printIslandCentres;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -62,6 +65,7 @@ public class KmcCanvas extends Canvas {
     paused = false;
     printId = true;
     printIslandNumber = false;
+    printIslandCentres = false;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -102,6 +106,10 @@ public class KmcCanvas extends Canvas {
   public void changePrintIslandNumber() {
     printIslandNumber = !printIslandNumber;
     //printId = !printIslandNumber;
+  }
+  
+  public void changePrintIslandCentres() {
+    printIslandCentres = !printIslandCentres;
   }
   
   public boolean isPaused() {
@@ -257,6 +265,16 @@ public class KmcCanvas extends Canvas {
         } else if (!atom.isOutside()) {
           g.drawOval(X, Y, scale, scale);
         }
+      }
+    }
+
+    if (printIslandCentres) {
+      for (int i = 0; i < lattice.getIslandCount(); i++) {
+        Point2D point = lattice.getCentreOfMass(i);
+        int Y = (int) Math.round((point.getY()) * scale) + baseY;
+        int X = (int) Math.round((point.getX()) * scale) + baseX;
+        g.setColor(BLACK);
+        g.drawRect(X, Y, 10, 10);
       }
     }
     g.dispose();

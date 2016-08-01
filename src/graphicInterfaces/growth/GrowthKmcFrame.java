@@ -306,7 +306,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     fileMenu.add(exitMi);
     
     JCheckBoxMenuItem sbarMi = new JCheckBoxMenuItem("Show statubar");
-    sbarMi.setMnemonic(KeyEvent.VK_S);
+    sbarMi.setMnemonic(KeyEvent.VK_T);
     sbarMi.setDisplayedMnemonicIndex(5);
     sbarMi.setSelected(true);
     
@@ -325,10 +325,16 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     islandsMi.setDisplayedMnemonicIndex(0);
     islandsMi.setSelected(false);
     
+    JCheckBoxMenuItem centresMi = new JCheckBoxMenuItem("Show island centres");
+    islandsMi.setMnemonic(KeyEvent.VK_D);
+    islandsMi.setDisplayedMnemonicIndex(0);
+    islandsMi.setSelected(false);
+    
     viewMenu.add(sbarMi);
     viewMenu.add(bwMi);
     viewMenu.add(idMi);
     viewMenu.add(islandsMi);
+    viewMenu.add(centresMi);
     menubar.add(fileMenu);
     menubar.add(viewMenu);
 
@@ -356,6 +362,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     
     islandsMi.addItemListener((ItemEvent e) -> {
       canvas1.changePrintIslandNumber();
+    });
+    
+    centresMi.addItemListener((ItemEvent e) -> {
+      canvas1.changePrintIslandCentres();
     });
   }
 }
