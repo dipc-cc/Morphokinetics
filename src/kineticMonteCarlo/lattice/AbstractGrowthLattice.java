@@ -476,11 +476,13 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         int islandNumber = atom.getIslandNumber();
         // atom belongs to an island
         if (islandNumber > 0) {
-          valueTheta = ((double) atom.getiHexa() / getHexaSizeI()) * 2.0 * Math.PI;
+          double posX = atom.getPos().getX() + uc.getPos().getX();
+          valueTheta = (posX / getCartSizeX()) * 2.0 * Math.PI;
           xiX[islandNumber - 1] += Math.cos(valueTheta);
           zetaX[islandNumber - 1] += Math.sin(valueTheta);
 
-          valueTheta = ((double) atom.getjHexa() * 2.0 * Math.PI) / getHexaSizeJ();
+          double posY = atom.getPos().getY() + uc.getPos().getY();
+          valueTheta = (posY / getCartSizeY()) * 2.0 * Math.PI;
           xiY[islandNumber - 1] += Math.cos(valueTheta);
           zetaY[islandNumber - 1] += Math.sin(valueTheta);
 
@@ -492,8 +494,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     // get centres
     for (int i = 0; i < islandAmount; i++) {
       // values lower than 1e-10 are considered -0
-      double centreX = (getHexaSizeI() * (Math.atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
-      double centreY = (getHexaSizeJ() * (Math.atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
+      double centreX = (getCartSizeX() * (Math.atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
+      double centreY = (getCartSizeY() * (Math.atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
       centres[i] = new Point2D.Double(centreX, centreY);
     }
   }
