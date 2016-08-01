@@ -307,34 +307,36 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     
     JCheckBoxMenuItem sbarMi = new JCheckBoxMenuItem("Show statubar");
     sbarMi.setMnemonic(KeyEvent.VK_T);
-    sbarMi.setDisplayedMnemonicIndex(5);
+    sbarMi.setDisplayedMnemonicIndex(6);
     sbarMi.setSelected(true);
     
     bwMi = new JCheckBoxMenuItem("B/W output");
-    bwMi.setMnemonic(KeyEvent.VK_C);
+    bwMi.setMnemonic(KeyEvent.VK_B);
     bwMi.setDisplayedMnemonicIndex(0);
     bwMi.setSelected(false);
     
     JCheckBoxMenuItem idMi = new JCheckBoxMenuItem("Show atom identifiers");
-    idMi.setMnemonic(KeyEvent.VK_S);
-    idMi.setDisplayedMnemonicIndex(0);
+    idMi.setMnemonic(KeyEvent.VK_I);
+    idMi.setDisplayedMnemonicIndex(10);
     idMi.setSelected(true);
         
     JCheckBoxMenuItem islandsMi = new JCheckBoxMenuItem("Show island numbers");
-    islandsMi.setMnemonic(KeyEvent.VK_L);
-    islandsMi.setDisplayedMnemonicIndex(0);
+    islandsMi.setMnemonic(KeyEvent.VK_N);
+    islandsMi.setDisplayedMnemonicIndex(12);
     islandsMi.setSelected(false);
     
     JCheckBoxMenuItem centresMi = new JCheckBoxMenuItem("Show island centres");
-    islandsMi.setMnemonic(KeyEvent.VK_D);
-    islandsMi.setDisplayedMnemonicIndex(0);
-    islandsMi.setSelected(false);
+    centresMi.setMnemonic(KeyEvent.VK_C);
+    centresMi.setDisplayedMnemonicIndex(12);
+    centresMi.setSelected(false);
     
     viewMenu.add(sbarMi);
     viewMenu.add(bwMi);
     viewMenu.add(idMi);
     viewMenu.add(islandsMi);
     viewMenu.add(centresMi);
+    viewMenu.setMnemonic(KeyEvent.VK_V);
+    viewMenu.setDisplayedMnemonicIndex(0);
     menubar.add(fileMenu);
     menubar.add(viewMenu);
 
