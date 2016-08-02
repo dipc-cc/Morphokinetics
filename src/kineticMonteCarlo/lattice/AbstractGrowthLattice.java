@@ -537,11 +537,17 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   public void printDistances() {
+    double sumAvg = 0.0d;
+    double sumMax = 0.0d;
     for (int i = 0; i < getIslandCount(); i++) {
       System.out.println("For island "+i+" centre is "+islands[i].getCentreOfMass()+" max distance "+islands[i].getMaxDistance()+" avg "+islands[i].getAvgDistance());
+      sumAvg += islands[i].getAvgDistance();
+      sumMax += islands[i].getMaxDistance();
     }
+    System.out.println("--\n Average of average distances " + sumAvg / getIslandCount() + " Average of maximum distances " + sumMax / getIslandCount());
+    System.out.println(" Fractal dimension "+1/(sumAvg / getIslandCount())+"\n--");
   }
-  
+
   public Island getIsland(int i) {
     if (islands != null) {
       return islands[i];
