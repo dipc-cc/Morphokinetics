@@ -510,4 +510,32 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
     return centres[i];
   }
+
+  public void getDistancesToCentre() {
+    // count the island with their coordinates and translate them
+    for (int i = 0; i < size(); i++) {
+      IUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
+        int islandNumber = atom.getIslandNumber();
+        // atom belongs to an island
+        if (islandNumber > 0) {
+          double posX = atom.getPos().getX() + uc.getPos().getX();
+          double distanceX = Math.abs(posX - centres[islandNumber - 1].getX());
+          if (distanceX > getCartSizeX() / 2) {
+            distanceX = getCartSizeX()-distanceX;
+          }
+          
+          double posY = atom.getPos().getY() + uc.getPos().getY();
+          double distanceY = Math.abs(posY - centres[islandNumber - 1].getY());
+          if (distanceY > getCartSizeY() / 2) {
+            distanceY = getCartSizeY()-distanceY;
+          }
+          
+          System.out.println("for atom (" +atom.getId()+") "+posX+" "+posY+" distance "+distanceX+" "+distanceY+" "+(Math.sqrt(distanceX*distanceX+distanceY*distanceY)));
+        }
+      }
+    }
+    
+  }
 }
