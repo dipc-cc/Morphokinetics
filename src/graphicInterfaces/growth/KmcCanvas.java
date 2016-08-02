@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static java.lang.String.format;
+import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
 /**
@@ -270,11 +271,22 @@ public class KmcCanvas extends Canvas {
 
     if (printIslandCentres) {
       for (int i = 0; i < lattice.getIslandCount(); i++) {
-        Point2D point = lattice.getCentreOfMass(i);
+        Island island = lattice.getIsland(i);
+        Point2D point = island.getCentreOfMass();
         int Y = (int) Math.round((point.getY()) * scale) + baseY;
         int X = (int) Math.round((point.getX()) * scale) + baseX;
         g.setColor(BLACK);
-        g.drawRect(X, Y, 10, 10);
+        g.drawLine(X - 5, Y - 5, X + 5, Y + 5);
+        g.drawLine(X - 5, Y + 5, X + 5, Y - 5);
+        g.drawOval(X - 5, Y - 5, 10, 10);
+        g.setColor(RED);
+        int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
+        int radius = (int) Math.round(scale * island.getMaxDistance());
+        g.drawOval(X - radius, Y - radius, diameter, diameter);
+        g.setColor(GREEN);
+        diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
+        radius = (int) Math.round(scale * island.getAvgDistance());
+        g.drawOval(X - radius, Y - radius, diameter, diameter);
       }
     }
     g.dispose();

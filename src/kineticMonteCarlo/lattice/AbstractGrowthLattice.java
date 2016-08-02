@@ -16,6 +16,7 @@ import java.util.List;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import static java.lang.Math.abs;
 import kineticMonteCarlo.unitCell.IUc;
+import java.util.Arrays;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -38,7 +39,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int occupied;
   private int islandCount;
   private int monomerCount;
-  private Point2D centres[];
+  private Island islands[];
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -467,7 +468,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     double zetaX[] = new double[islandAmount];
     double xiY[] = new double[islandAmount];
     double zetaY[] = new double[islandAmount];
-    centres = new Point2D[islandAmount];
+    islands = new Island[islandAmount];
+    Arrays.setAll(islands, i -> new Island(i));
     // count the island with their coordinates and translate them
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);
@@ -496,19 +498,12 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       // values lower than 1e-10 are considered -0
       double centreX = (getCartSizeX() * (Math.atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
       double centreY = (getCartSizeY() * (Math.atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
-      centres[i] = new Point2D.Double(centreX, centreY);
+      islands[i].setCentreOfMass(new Point2D.Double(centreX, centreY));
     }
   }
   
   private double toZeroIfTooClose(double value) {
     return Math.abs(value) < 1e-10 ? -0.0d : value;
-  }
-  
-  public Point2D getCentreOfMass(int i) {
-    if (centres == null) {
-      return new Point2D.Float(-1,-1);
-    }
-    return centres[i];
   }
 
   public void getDistancesToCentre() {
@@ -521,21 +516,37 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         // atom belongs to an island
         if (islandNumber > 0) {
           double posX = atom.getPos().getX() + uc.getPos().getX();
-          double distanceX = Math.abs(posX - centres[islandNumber - 1].getX());
+          double distanceX = Math.abs(posX - islands[islandNumber - 1].getCentreOfMass().getX());
           if (distanceX > getCartSizeX() / 2) {
             distanceX = getCartSizeX()-distanceX;
           }
           
           double posY = atom.getPos().getY() + uc.getPos().getY();
-          double distanceY = Math.abs(posY - centres[islandNumber - 1].getY());
+          double distanceY = Math.abs(posY - islands[islandNumber - 1].getCentreOfMass().getY());
           if (distanceY > getCartSizeY() / 2) {
             distanceY = getCartSizeY()-distanceY;
           }
           
-          System.out.println("for atom (" +atom.getId()+") "+posX+" "+posY+" distance "+distanceX+" "+distanceY+" "+(Math.sqrt(distanceX*distanceX+distanceY*distanceY)));
+          islands[islandNumber - 1].update(distanceX, distanceY);
+          //System.out.println("for atom (" +atom.getId()+") "+posX+" "+posY+" distance "+distanceX+" "+distanceY+" "+(Math.sqrt(distanceX*distanceX+distanceY*distanceY)));
         }
       }
     }
     
+  }
+
+  public void printDistances() {
+    int islandAmount = getIslandCount();
+    // get centres
+    for (int i = 0; i < islandAmount; i++) {
+      System.out.println("For island "+i+" centre is "+islands[i].getCentreOfMass()+" max distance "+islands[i].getMaxDistance()+" avg "+islands[i].getAvgDistance());
+    }
+  }
+  
+  public Island getIsland(int i) {
+    if (islands != null) {
+      return islands[i];
+    }
+    return null;
   }
 }
