@@ -506,8 +506,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return Math.abs(value) < 1e-10 ? -0.0d : value;
   }
 
+  /**
+   * Computes each atoms distance to the centre of mass.
+   */
   public void getDistancesToCentre() {
-    // count the island with their coordinates and translate them
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
@@ -528,7 +530,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           }
           
           islands[islandNumber - 1].update(distanceX, distanceY);
-          //System.out.println("for atom (" +atom.getId()+") "+posX+" "+posY+" distance "+distanceX+" "+distanceY+" "+(Math.sqrt(distanceX*distanceX+distanceY*distanceY)));
         }
       }
     }
@@ -536,9 +537,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   public void printDistances() {
-    int islandAmount = getIslandCount();
-    // get centres
-    for (int i = 0; i < islandAmount; i++) {
+    for (int i = 0; i < getIslandCount(); i++) {
       System.out.println("For island "+i+" centre is "+islands[i].getCentreOfMass()+" max distance "+islands[i].getMaxDistance()+" avg "+islands[i].getAvgDistance());
     }
   }
