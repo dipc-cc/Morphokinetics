@@ -10,6 +10,7 @@
  */
 package graphicInterfaces.growth;
 
+import basic.io.Restart;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -48,6 +49,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   private JProgressBar progressBar;
   private final int maxCoverage;
 
+  private ImageIcon pauseIcon;
+  private ImageIcon resumeIcon;
   /**
    * Creates new form frame for growth.
    *
@@ -127,7 +130,11 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     jSpinnerScale = new JSpinner();
     jPanel1 = new JPanel();
     pauseButton = new JButton();
-    bwButton = new JToggleButton("B/W");
+    pauseIcon = new ImageIcon(Restart.getJarBaseDir() + "/resources/png/pause.png");
+    resumeIcon = new ImageIcon(Restart.getJarBaseDir() + "/resources/png/resume.png");
+    pauseButton.setIcon(pauseIcon);
+    bwButton = new JToggleButton();
+    bwButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/bw.png"));
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
 
@@ -138,7 +145,6 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     setMinimumSize(new Dimension(300, 110));
 
     jLabelScale.setText("Scale");
-    pauseButton.setText("Pause");
 
     jSpinnerScale.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
     jSpinnerScale.setFocusCycleRoot(true);
@@ -175,9 +181,9 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jSpinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, 80)
+                                    .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, 80)
+                                    .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                                     .addGap(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
     );
@@ -186,8 +192,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabelScale)
-                            .addComponent(pauseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bwButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
+                            .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                             .addComponent(jSpinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -243,10 +249,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     paused = !paused;
     canvas1.setPaused(paused);
     if (paused) {
-      pauseButton.setText("Resume");
+      pauseButton.setIcon(resumeIcon);
       statusbar.setText("Paused");
     } else {
-      pauseButton.setText("Pause");
+      pauseButton.setIcon(pauseIcon);
       statusbar.setText("Running");
     }
   }

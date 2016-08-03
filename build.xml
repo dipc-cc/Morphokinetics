@@ -79,6 +79,9 @@
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb1million.txt" todir="${build.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonalHoneycomb10million.txt" todir="${build.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb10million.txt" todir="${build.dir}/perimeterData"/>
+      <copy file="resources/png/bw.png" todir="${build.dir}/resources/png/"/>
+      <copy file="resources/png/resume.png" todir="${build.dir}/resources/png/"/>
+      <copy file="resources/png/pause.png" todir="${build.dir}/resources/png/"/>
     </target>
     <target name="-post-jar">
       <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonal10million.txt" todir="${dist.dir}/perimeterData"/>
@@ -89,5 +92,8 @@
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb1million.txt" todir="${dist.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/reentrancesPerAngleHexagonalHoneycomb10million.txt" todir="${dist.dir}/perimeterData"/>
       <copy file="scripts/perimeterStatistics/hopsPerAngleHexagonalHoneycomb10million.txt" todir="${dist.dir}/perimeterData"/>
+      <copy file="resources/png/bw.png" todir="${dist.dir}/resources/png/"/>
+      <copy file="resources/png/resume.png" todir="${dist.dir}/resources/png/"/>
+      <copy file="resources/png/pause.png" todir="${dist.dir}/resources/png/"/>
     </target> 
 </project>
