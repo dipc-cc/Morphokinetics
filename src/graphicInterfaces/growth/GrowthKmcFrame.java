@@ -41,6 +41,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
   private KmcCanvas canvas1;
   private JButton pauseButton;
   private JToggleButton bwButton;
+  private JButton pngSaveButton;
   private JLabel jLabelScale;
   private JPanel jPanel1;
   private JSpinner jSpinnerScale;
@@ -135,6 +136,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     pauseButton.setIcon(pauseIcon);
     bwButton = new JToggleButton();
     bwButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/bw.png"));
+    pngSaveButton = new JButton();
+    pngSaveButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/save.png"));
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
 
@@ -162,7 +165,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     });
     bwButton.addActionListener((java.awt.event.ActionEvent evt) -> {
       bwMi.setSelected(!bwMi.isSelected());
-      });
+    });
+    pngSaveButton.addActionListener((ActionEvent evt) -> {
+      pngSave();
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -184,6 +190,8 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
                                     .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(pngSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                                     .addGap(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
     );
@@ -194,6 +202,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
                             .addComponent(jLabelScale)
                             .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                             .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
+                            .addComponent(pngSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
                             .addComponent(jSpinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -268,6 +277,12 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     }
   }
   
+  private void pngSave() {
+    paused = true;
+    canvas1.setPaused(true);
+    canvas1.performDrawToImage(-111);
+  }
+  
   private void createMenuBar() {
     JMenuBar menubar = new JMenuBar();
 
@@ -291,7 +306,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
 
     JMenuItem newMi = new JMenuItem("New", iconNew);
     JMenuItem openMi = new JMenuItem("Open", iconOpen);
-    JMenuItem saveMi = new JMenuItem("Save", iconSave);
+    JMenuItem saveMi = new JMenuItem("Save PNG image...", iconSave);
 
     JMenuItem exitMi = new JMenuItem("Exit", iconExit);
     exitMi.setToolTipText("Exit application");
@@ -345,6 +360,10 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     menubar.add(viewMenu);
 
     setJMenuBar(menubar);
+    
+    saveMi.addActionListener((ActionEvent e)-> {
+      pngSave();
+    });
     
     sbarMi.addItemListener((ItemEvent e) -> {
       if (e.getStateChange() == ItemEvent.SELECTED) {
