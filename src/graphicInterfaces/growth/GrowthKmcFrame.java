@@ -15,8 +15,15 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
+import static javax.swing.GroupLayout.Alignment.BASELINE;
+import static javax.swing.GroupLayout.Alignment.LEADING;
+import static javax.swing.GroupLayout.Alignment.TRAILING;
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -31,6 +38,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
 
 public class GrowthKmcFrame extends javax.swing.JFrame {
 
@@ -142,72 +152,72 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     progressBar = new JProgressBar(0, maxCoverage);
 
     JScrollPane scrollPane = new javax.swing.JScrollPane(jPanel1);
-    setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+    setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle("Morphoniketics");
     setResizable(true);
     setMinimumSize(new Dimension(300, 110));
 
     jLabelScale.setText("Scale");
 
-    jSpinnerScale.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+    jSpinnerScale.setModel(new SpinnerNumberModel(1, 1, null, 1));
     jSpinnerScale.setFocusCycleRoot(true);
     jSpinnerScale.setFocusable(false);
-    jSpinnerScale.addChangeListener((javax.swing.event.ChangeEvent evt) -> {
+    jSpinnerScale.addChangeListener((ChangeEvent evt) -> {
       jSpinnerScaleStateChanged(evt);
     });
 
-    jPanel1.addMouseWheelListener((java.awt.event.MouseWheelEvent evt) -> {
+    jPanel1.addMouseWheelListener((MouseWheelEvent evt) -> {
       jPanel1MouseWheelMoved(evt);
     });
     
-    pauseButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+    pauseButton.addActionListener((ActionEvent evt) -> {
       pause();
     });
-    bwButton.addActionListener((java.awt.event.ActionEvent evt) -> {
+    bwButton.addActionListener((ActionEvent evt) -> {
       bwMi.setSelected(!bwMi.isSelected());
     });
     pngSaveButton.addActionListener((ActionEvent evt) -> {
       pngSave();
     });
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+    GroupLayout layout = new GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(LEADING)
             .addGroup(layout.createSequentialGroup()
                     .addContainerGap()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(LEADING)
                             .addGroup(layout.createSequentialGroup()
                                     .addComponent(statusbar)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addPreferredGap(RELATED)
                                     .addComponent(progressBar))
-                            .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabelScale)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jSpinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(pngSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(jSpinnerScale, PREFERRED_SIZE, 61, PREFERRED_SIZE)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(pauseButton, PREFERRED_SIZE, 40, 40)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(bwButton, PREFERRED_SIZE, 40, 40)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(pngSaveButton, PREFERRED_SIZE, 40, 40)
                                     .addGap(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
     );
     layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+            layout.createParallelGroup(LEADING)
+            .addGroup(TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createParallelGroup(BASELINE)
                             .addComponent(jLabelScale)
-                            .addComponent(pauseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
-                            .addComponent(bwButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
-                            .addComponent(pngSaveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, 40)
-                            .addComponent(jSpinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(scrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(pauseButton, PREFERRED_SIZE, 40, 40)
+                            .addComponent(bwButton, PREFERRED_SIZE, 40, 40)
+                            .addComponent(pngSaveButton, PREFERRED_SIZE, 40, 40)
+                            .addComponent(jSpinnerScale, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
+                    .addPreferredGap(RELATED)
+                    .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()
-                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(LEADING)
                               .addComponent(statusbar)
                     .addComponent(progressBar))
             ));
@@ -215,23 +225,23 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     pack();
   }
 
-  private void jSpinnerScaleStateChanged(javax.swing.event.ChangeEvent evt) {
+  private void jSpinnerScaleStateChanged(ChangeEvent evt) {
     canvas1.setScale((Integer) jSpinnerScale.getValue());
     increaseSize();
   }
 
-  private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {
+  private void jPanel1MousePressed(MouseEvent evt) {
     startMouseX = evt.getX();
     startMouseY = evt.getY();
   }
 
-  private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseReleased(MouseEvent evt) {
     if (evt.getX() == startMouseX && evt.getY() == startMouseY) {
       canvas1.changeOccupationByHand(startMouseX, startMouseY);
     }
   }
 
-  private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+  private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
     int zoom = (Integer) jSpinnerScale.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
