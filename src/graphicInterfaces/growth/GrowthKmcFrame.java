@@ -181,6 +181,10 @@ public class GrowthKmcFrame extends JFrame {
       pngSave();
     });
 
+    pauseButton.setToolTipText("Pauses the execution");
+    bwButton.setToolTipText("Changes between mono colour and all colours");
+    pngSaveButton.setToolTipText("Saves current view to PNG image");
+    
     GroupLayout layout = new GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(
