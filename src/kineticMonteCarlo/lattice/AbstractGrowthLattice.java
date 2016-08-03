@@ -371,7 +371,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * Counts the number of islands that the simulation has.
    *
    * @param print to where should print the output: null (nowhere), standard output or a file.
-   * @return number of islands
+   * @return number of islands.
    */
   public int countIslands(PrintWriter print) {
     // reset all the atoms
