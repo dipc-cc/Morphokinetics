@@ -75,8 +75,9 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   }
   
   /**
-   * Prints the current frame to a file
-   * @param i simulation number
+   * Prints the current frame to a file.
+   *
+   * @param i simulation number.
    */
   @Override
   void printToImage(int i) {
@@ -84,9 +85,10 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   }
   
   /**
-   * Prints the current frame to a file
+   * Prints the current frame to a file.
+   *
    * @param folderName
-   * @param i simulation number
+   * @param i simulation number.
    */
   @Override
   void printToImage(String folderName, int i) {
