@@ -293,7 +293,8 @@ public class GrowthKmcFrame extends JFrame {
   }
   
   private void pngSave() {
-    paused = true;
+    paused = false; // pauses the execution
+    pause();
     canvas1.setPaused(true);
     canvas1.performDrawToImage(-111);
   }
