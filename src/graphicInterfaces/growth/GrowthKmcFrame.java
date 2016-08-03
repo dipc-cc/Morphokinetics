@@ -302,29 +302,12 @@ public class GrowthKmcFrame extends JFrame {
   private void createMenuBar() {
     JMenuBar menubar = new JMenuBar();
 
-    ImageIcon iconNew = new ImageIcon("new.png");
-    ImageIcon iconOpen = new ImageIcon("open.png");
-    ImageIcon iconSave = new ImageIcon("save.png");
-    ImageIcon iconExit = new ImageIcon("exit.png");
-
     JMenu fileMenu = new JMenu("File");
     JMenu viewMenu = new JMenu("View");
 
-    JMenu impMenu = new JMenu("Import");
+    JMenuItem saveMi = new JMenuItem("Save PNG image");
 
-    JMenuItem newsfMi = new JMenuItem("Import newsfeed list...");
-    JMenuItem bookmMi = new JMenuItem("Import bookmarks...");
-    JMenuItem mailMi = new JMenuItem("Import mail...");
-
-    impMenu.add(newsfMi);
-    impMenu.add(bookmMi);
-    impMenu.add(mailMi);
-
-    JMenuItem newMi = new JMenuItem("New", iconNew);
-    JMenuItem openMi = new JMenuItem("Open", iconOpen);
-    JMenuItem saveMi = new JMenuItem("Save PNG image...", iconSave);
-
-    JMenuItem exitMi = new JMenuItem("Exit", iconExit);
+    JMenuItem exitMi = new JMenuItem("Exit");
     exitMi.setToolTipText("Exit application");
     exitMi.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK));
 
@@ -332,11 +315,7 @@ public class GrowthKmcFrame extends JFrame {
       System.exit(0);
     });
 
-    fileMenu.add(newMi);
-    fileMenu.add(openMi);
     fileMenu.add(saveMi);
-    fileMenu.addSeparator();
-    fileMenu.add(impMenu);
     fileMenu.addSeparator();
     fileMenu.add(exitMi);
     
