@@ -28,6 +28,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -42,7 +43,7 @@ import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 
-public class GrowthKmcFrame extends javax.swing.JFrame {
+public class GrowthKmcFrame extends JFrame {
 
   private int mouseX, mouseY;
   private int startMouseX = 0;
@@ -151,7 +152,7 @@ public class GrowthKmcFrame extends javax.swing.JFrame {
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
 
-    JScrollPane scrollPane = new javax.swing.JScrollPane(jPanel1);
+    JScrollPane scrollPane = new JScrollPane(jPanel1);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle("Morphoniketics");
     setResizable(true);
