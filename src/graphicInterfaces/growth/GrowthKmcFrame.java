@@ -17,6 +17,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.GroupLayout;
 import static javax.swing.GroupLayout.Alignment.BASELINE;
@@ -28,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -42,6 +44,8 @@ import javax.swing.KeyStroke;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class GrowthKmcFrame extends JFrame {
 
@@ -293,11 +297,15 @@ public class GrowthKmcFrame extends JFrame {
   }
   
   private void pngSave() {
+    pngSave("results/tmp-surface-111.png");
+  }
+  
+  private void pngSave(String filename) {
     paused = false; // pauses the execution
     pause();
     canvas1.setPaused(true);
-    canvas1.performDrawToImage(-111);
-  }
+    canvas1.performDrawToImage(filename);
+  }    
   
   private void createMenuBar() {
     JMenuBar menubar = new JMenuBar();
@@ -306,6 +314,7 @@ public class GrowthKmcFrame extends JFrame {
     JMenu viewMenu = new JMenu("View");
 
     JMenuItem saveMi = new JMenuItem("Save PNG image");
+    JMenuItem saveAsMi = new JMenuItem("Save PNG image as...");
 
     JMenuItem exitMi = new JMenuItem("Exit");
     exitMi.setToolTipText("Exit application");
@@ -316,6 +325,7 @@ public class GrowthKmcFrame extends JFrame {
     });
 
     fileMenu.add(saveMi);
+    fileMenu.add(saveAsMi);
     fileMenu.addSeparator();
     fileMenu.add(exitMi);
     
@@ -356,8 +366,18 @@ public class GrowthKmcFrame extends JFrame {
 
     setJMenuBar(menubar);
     
-    saveMi.addActionListener((ActionEvent e)-> {
+    saveMi.addActionListener((ActionEvent e) -> {
       pngSave();
+    });
+
+    saveAsMi.addActionListener((ActionEvent e) -> {
+      FileFilter imageFilter = new FileNameExtensionFilter("Image files", ImageIO.getReaderFileSuffixes());
+      JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+      fileChooser.addChoosableFileFilter(imageFilter);
+      int returnVal = fileChooser.showOpenDialog(saveAsMi);
+      if (returnVal == JFileChooser.APPROVE_OPTION) {
+        pngSave(fileChooser.getSelectedFile().getAbsolutePath());
+      }
     });
     
     sbarMi.addItemListener((ItemEvent e) -> {

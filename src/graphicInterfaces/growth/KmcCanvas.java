@@ -158,7 +158,21 @@ public class KmcCanvas extends Canvas {
   /**
    * This method prints the current canvas to a file.
    *
-   * @param i simulation number
+   * @param fileName filename to which is going to be written.
+   */
+  public void performDrawToImage(String fileName) {
+    
+    if (!fileName.endsWith(".png")) {
+      fileName = fileName + ".png";
+    }
+    imageName = fileName;
+    performDrawToImage();
+  }
+
+  /**
+   * This method prints the current canvas to a file.
+   *
+   * @param i simulation number.
    */
   public void performDrawToImage(int i) {
     imageName = format("results/surface%03d.png",i);
@@ -168,8 +182,8 @@ public class KmcCanvas extends Canvas {
   /**
    * This method prints the current canvas to a file.
    *
-   * @param folder folder in which is going to be written
-   * @param i simulation number
+   * @param folder folder in which is going to be written.
+   * @param i simulation number.
    */
   public void performDrawToImage(String folder, int i) {
     imageName = folder + format("/surface%03d.png", i);
