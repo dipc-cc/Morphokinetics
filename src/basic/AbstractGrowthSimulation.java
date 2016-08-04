@@ -49,6 +49,9 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         } else {
           max = (int) getParser().getCoverage();
         }
+        if (max <= 0) {
+          max = 1;
+        }
         frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()), max);
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
