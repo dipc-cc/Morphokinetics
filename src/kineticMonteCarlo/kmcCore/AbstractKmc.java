@@ -5,6 +5,7 @@
 package kineticMonteCarlo.kmcCore;
 
 import basic.Parser;
+import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.list.AbstractList;
 import utils.list.BinnedList;
@@ -160,5 +161,14 @@ public abstract class AbstractKmc implements IKmc {
   @Override
   public final AbstractList getList() {
     return list;
+  }
+
+  /**
+   * It only makes sence in {@link AbstractGrowthKmc#getCurrentRadius()}. Used to have a common interface
+   *
+   * @return nothing meaningful
+   */
+  public int getCurrentRadius() {
+    return -1;
   }
 }

@@ -38,7 +38,7 @@ public abstract class AbstractSimulation {
   private float coverage;
   private int islands;
   private int simulations;
-  private int currentCoverage;
+  private int currentProgress;
   private float[][] sampledSurface;
   private int[] surfaceSizes;
   private int[] extentSizes;
@@ -103,7 +103,7 @@ public abstract class AbstractSimulation {
     System.out.println("    _________________________________________________________________________");
     // Main loop
     for (simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
-      currentCoverage = 0;
+      currentProgress = 0;
       iterationStartTime = System.currentTimeMillis();
       kmc.reset();
       kmc.depositSeed();
@@ -281,11 +281,15 @@ public abstract class AbstractSimulation {
   
   public abstract void printRates(Parser parser);
 
-  public int getCurrentCoverage() {
-    return currentCoverage;
+  public int getCurrentProgress() {
+    return currentProgress;
   }
 
-  public void setCurrentCoverage(float currentCoverage) {
-    this.currentCoverage = (int) Math.floor(currentCoverage * 100);
+  public void updateCurrentProgress() {
+    if (parser.justCentralFlake()) {
+      currentProgress = kmc.getCurrentRadius();
+    } else {
+      currentProgress = (int) Math.floor(kmc.getCoverage() * 100);
+    }
   }
 }

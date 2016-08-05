@@ -45,12 +45,9 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       try {
         int max;
         if (getParser().justCentralFlake()) {
-          max = (int) (getParser().getCartSizeX() / 2) - 10;
+          max = (int) (getParser().getCartSizeX() / 2);
         } else {
           max = (int) getParser().getCoverage();
-        }
-        if (max <= 0) {
-          max = 1;
         }
         frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()), max);
       } catch (Exception e) {
@@ -109,13 +106,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         frame.repaintKmc();
         try {
           PaintLoop.sleep(100);
-          // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-          if (getKmc().getCoverage() * 100 >= getCurrentCoverage()) {
+          if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
+                  || // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
+                  (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
             if (printIntermediatePngFiles) {
               frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
             }
-            frame.updateProgressBar(getCurrentCoverage());
-            setCurrentCoverage(getKmc().getCoverage());
+            frame.updateProgressBar(getCurrentProgress());
+            updateCurrentProgress();
             totalSavedImages++;
           }
         } catch (Exception e) {
@@ -131,23 +129,28 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
     @Override
     public void run() {
-      final int width = (int) getParser().getCoverage(); // progress bar width in chars
+      final int width; // progress bar width in chars
+      if (getParser().justCentralFlake()) {
+        width = (int) Math.max(getKmc().getLattice().getHexaSizeI() / 2, getKmc().getLattice().getHexaSizeJ() / 2);
+      } else {
+        width = (int) getParser().getCoverage();
+      }
       while (true) {
         try {
           TerminalLoop.sleep(1000);
-          if (getKmc().getCoverage() * 100 >= getCurrentCoverage()) {
-
+          if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
+                  || (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
 
             System.out.print("\r[");
             int i = 0;
-            for (; i <= getCurrentCoverage(); i++) {
+            for (; i <= getCurrentProgress(); i++) {
               System.out.print(".");
             }
             for (; i < width; i++) {
               System.out.print(" ");
             }
             System.out.print("] ");
-            setCurrentCoverage(getKmc().getCoverage());
+            updateCurrentProgress();
 
           }
         } catch (Exception e) {

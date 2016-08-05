@@ -856,4 +856,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public void setTerraceToTerraceProbability(double terraceToTerraceProbability) {
     this.terraceToTerraceProbability = terraceToTerraceProbability;
   }
+  
+  /**
+   * Takes the current radius from the perimeter attribute.
+   * 
+   * @return current radius of the single flake simulation.
+   */
+  @Override
+  public int getCurrentRadius() {
+    return perimeter.getCurrentRadius();
+  }
 }
