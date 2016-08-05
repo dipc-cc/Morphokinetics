@@ -99,10 +99,20 @@ public class BasicLattice extends AbstractLattice {
   /**
    * Number of islands has no sense in etching.
    *
-   * @return -1 always
+   * @return -1 always.
    */
   @Override
   public int getIslandCount() {
     return -1;
+  }
+  
+  /**
+   * Fractal dimension not implemented in etching.
+   *
+   * @return -1.0 always.
+   */
+  @Override
+  public float getFractalDimension() {
+    return -1.0f;
   }
 }

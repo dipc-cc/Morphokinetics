@@ -81,9 +81,16 @@ public abstract class AbstractLattice {
   }
 
   /**
-   * Only defined in growth lattice
+   * Only defined in growth lattice.
    *
    * @return number of island of simulation (or -1)
    */
   public abstract int getIslandCount();
+
+  /**
+   * Only defined in growth lattice.
+   *
+   * @return fractal dimension of simulation (or -1)
+   */
+  public abstract float getFractalDimension();
 }

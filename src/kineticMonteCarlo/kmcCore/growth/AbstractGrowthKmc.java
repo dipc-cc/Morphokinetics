@@ -293,7 +293,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.countIslands(standardOutputWriter);
     lattice.getCentreOfMass();
     lattice.getDistancesToCentre();
-    lattice.printDistances();
     standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();

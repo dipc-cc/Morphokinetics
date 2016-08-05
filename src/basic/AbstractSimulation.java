@@ -37,6 +37,7 @@ public abstract class AbstractSimulation {
   private double totalTime;
   private float coverage;
   private int islands;
+  private float fractalD;
   private int simulations;
   private int currentProgress;
   private float[][] sampledSurface;
@@ -72,6 +73,7 @@ public abstract class AbstractSimulation {
     totalTime = 0.0;
     coverage = 0.0f;
     islands = 0;
+    fractalD = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
 
     surfaceSizes = new int[2];
@@ -98,7 +100,7 @@ public abstract class AbstractSimulation {
     System.out.println("Output folder : " + restartFolderName);
     System.out.println("_____________________________________________________________________________");
 
-    System.out.println("    I\tSimul t\tCover.\tCPU\tIslands");
+    System.out.println("    I\tSimul t\tCover.\tCPU\tIslands\tFractal d.");
     System.out.println("    \t(units)\t(%)\t(ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
@@ -117,6 +119,7 @@ public abstract class AbstractSimulation {
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
       islands += kmc.getLattice().getIslandCount();
+      fractalD += kmc.getLattice().getFractalDimension();
     }
 
     printFooter();
@@ -236,20 +239,22 @@ public abstract class AbstractSimulation {
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
     System.out.print("\t" + kmc.getLattice().getIslandCount());
+    System.out.format("\t%.4f", kmc.getLattice().getFractalDimension());
     System.out.println("");
   }
 
   private void printFooter() {
     System.out.println("\n\t__________________________________________________");
     System.out.println("\tAverage");
-    System.out.println("\tSimulation time\t\tCoverage\tCPU time\tIsland avg.");
+    System.out.println("\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tFractal d.");
     System.out.println("\t(units)\t\t\t (%)\t\t (ms/s/min)");
     System.out.println("\t__________________________________________________");
     System.out.print("\t" + totalTime / parser.getNumberOfSimulations());
     System.out.print("\t" + coverage / parser.getNumberOfSimulations());
     long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
     System.out.print("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60);
-    System.out.println("\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations()));
+    System.out.print("\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations()));
+    System.out.println("\t" + fractalD / (float) parser.getNumberOfSimulations());
   }
 
   /**
