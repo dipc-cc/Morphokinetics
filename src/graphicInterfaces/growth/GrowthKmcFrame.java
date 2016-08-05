@@ -55,39 +55,39 @@ public class GrowthKmcFrame extends JFrame {
   private int startMouseX = 0;
   private int startMouseY = 0;
   private boolean paused;
-  private KmcCanvas canvas1;
+  private KmcCanvas canvas;
   private JButton pauseButton;
   private JToggleButton bwButton;
   private JButton pngSaveButton;
-  private JLabel jLabelScale;
-  private JPanel jPanel1;
-  private JSpinner jSpinnerScale;
+  private JLabel labelScale;
+  private JPanel panel;
+  private JSpinner spinnerScale;
   private JLabel statusbar;
   private JCheckBoxMenuItem bwMi;
   private JProgressBar progressBar;
   private final int maxCoverage;
-private JCheckBoxMenuItem idMi;
-private JCheckBoxMenuItem islandsMi;
+  private JCheckBoxMenuItem idMi;
+  private JCheckBoxMenuItem islandsMi;
   private ImageIcon pauseIcon;
   private ImageIcon resumeIcon;
   /**
    * Creates new form frame for growth.
    *
-   * @param canvas1
+   * @param canvas
    * @param max maximum value for the progress bar
    */
-  public GrowthKmcFrame(KmcCanvas canvas1, int max) {
+  public GrowthKmcFrame(KmcCanvas canvas, int max) {
     createMenuBar();
     maxCoverage = max;
     initComponents();
-    this.canvas1 = canvas1;
-    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    jPanel1.add(canvas1);
-    canvas1.initialise();
-    jSpinnerScale.setValue(((KmcCanvas) canvas1).getScale());
-    setSize(canvas1.getSizeX() + 70, canvas1.getSizeY() + 120);
+    this.canvas = canvas;
+    canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
+    panel.add(canvas);
+    canvas.initialise();
+    spinnerScale.setValue(((KmcCanvas) canvas).getScale());
+    setSize(canvas.getSizeX() + 70, canvas.getSizeY() + 120);
 
-    canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
+    canvas.addMouseListener(new java.awt.event.MouseAdapter() {
       @Override
       public void mouseReleased(java.awt.event.MouseEvent evt) {
         jPanel1MouseReleased(evt);
@@ -99,13 +99,13 @@ private JCheckBoxMenuItem islandsMi;
       }
     });
     paused = false;
-    jLabelScale.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
-    jLabelScale.getActionMap().put("pause", new Pause());
+    labelScale.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
+    labelScale.getActionMap().put("pause", new Pause());
   }
 
   public void repaintKmc() {
-    canvas1.performDraw();
-    canvas1.setBaseLocation(mouseX, mouseY);
+    canvas.performDraw();
+    canvas.setBaseLocation(mouseX, mouseY);
     mouseX = 0;
     mouseY = 0;
     
@@ -118,7 +118,7 @@ private JCheckBoxMenuItem islandsMi;
    * @param i simulation number
    */
   public void printToImage(int i) {
-    canvas1.performDrawToImage(i);
+    canvas.performDrawToImage(i);
   }
 
   /**
@@ -128,7 +128,7 @@ private JCheckBoxMenuItem islandsMi;
    * @param i simulation number
    */
   public void printToImage(String folder, int i) {
-    canvas1.performDrawToImage(folder, i);
+    canvas.performDrawToImage(folder, i);
   }
   
   /**
@@ -145,9 +145,9 @@ private JCheckBoxMenuItem islandsMi;
    * This method is called from within the constructor to initialise the form. 
    */ 
   private void initComponents() {
-    jLabelScale = new JLabel();
-    jSpinnerScale = new JSpinner();
-    jPanel1 = new JPanel();
+    labelScale = new JLabel();
+    spinnerScale = new JSpinner();
+    panel = new JPanel();
     pauseButton = new JButton();
     pauseIcon = new ImageIcon(Restart.getJarBaseDir() + "/resources/png/pause.png");
     resumeIcon = new ImageIcon(Restart.getJarBaseDir() + "/resources/png/resume.png");
@@ -159,22 +159,22 @@ private JCheckBoxMenuItem islandsMi;
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
 
-    JScrollPane scrollPane = new JScrollPane(jPanel1);
+    JScrollPane scrollPane = new JScrollPane(panel);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle("Morphoniketics");
     setResizable(true);
     setMinimumSize(new Dimension(300, 110));
 
-    jLabelScale.setText("Scale");
+    labelScale.setText("Scale");
 
-    jSpinnerScale.setModel(new SpinnerNumberModel(1, 1, null, 1));
-    jSpinnerScale.setFocusCycleRoot(true);
-    jSpinnerScale.setFocusable(false);
-    jSpinnerScale.addChangeListener((ChangeEvent evt) -> {
+    spinnerScale.setModel(new SpinnerNumberModel(1, 1, null, 1));
+    spinnerScale.setFocusCycleRoot(true);
+    spinnerScale.setFocusable(false);
+    spinnerScale.addChangeListener((ChangeEvent evt) -> {
       jSpinnerScaleStateChanged(evt);
     });
 
-    jPanel1.addMouseWheelListener((MouseWheelEvent evt) -> {
+    panel.addMouseWheelListener((MouseWheelEvent evt) -> {
       jPanel1MouseWheelMoved(evt);
     });
     
@@ -205,9 +205,9 @@ private JCheckBoxMenuItem islandsMi;
                                     .addComponent(progressBar))
                             .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabelScale)
+                                    .addComponent(labelScale)
                                     .addPreferredGap(RELATED)
-                                    .addComponent(jSpinnerScale, PREFERRED_SIZE, 61, PREFERRED_SIZE)
+                                    .addComponent(spinnerScale, PREFERRED_SIZE, 61, PREFERRED_SIZE)
                                     .addPreferredGap(RELATED)
                                     .addComponent(pauseButton, PREFERRED_SIZE, 20, 20)
                                     .addPreferredGap(RELATED)
@@ -221,11 +221,11 @@ private JCheckBoxMenuItem islandsMi;
             layout.createParallelGroup(LEADING)
             .addGroup(TRAILING, layout.createSequentialGroup()
                     .addGroup(layout.createParallelGroup(BASELINE)
-                            .addComponent(jLabelScale)
+                            .addComponent(labelScale)
                             .addComponent(pauseButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(bwButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(pngSaveButton, PREFERRED_SIZE, 20, 20)
-                            .addComponent(jSpinnerScale, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
+                            .addComponent(spinnerScale, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
                     .addPreferredGap(RELATED)
                     .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                     .addContainerGap()
@@ -238,7 +238,7 @@ private JCheckBoxMenuItem islandsMi;
   }
 
   private void jSpinnerScaleStateChanged(ChangeEvent evt) {
-    canvas1.setScale((Integer) jSpinnerScale.getValue());
+    canvas.setScale((Integer) spinnerScale.getValue());
     increaseSize();
   }
 
@@ -249,12 +249,12 @@ private JCheckBoxMenuItem islandsMi;
 
   private void jPanel1MouseReleased(MouseEvent evt) {
     if (evt.getX() == startMouseX && evt.getY() == startMouseY) {
-      canvas1.changeOccupationByHand(startMouseX, startMouseY);
+      canvas.changeOccupationByHand(startMouseX, startMouseY);
     }
   }
 
   private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
-    int zoom = (Integer) jSpinnerScale.getValue();
+    int zoom = (Integer) spinnerScale.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
     } else {
@@ -266,19 +266,19 @@ private JCheckBoxMenuItem islandsMi;
     if (zoom >= 32) {
       zoom = 32;
     }
-    jSpinnerScale.setValue(zoom);
-    canvas1.setScale(zoom);
+    spinnerScale.setValue(zoom);
+    canvas.setScale(zoom);
     increaseSize();
   }
   
   private void increaseSize() {
-    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    setSize(canvas1.getSizeX() + 70, canvas1.getSizeY() + 120);
+    canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
+    setSize(canvas.getSizeX() + 70, canvas.getSizeY() + 120);
   }
     
   private void pause() {
     paused = !paused;
-    canvas1.setPaused(paused);
+    canvas.setPaused(paused);
     if (paused) {
       pauseButton.setIcon(resumeIcon);
       statusbar.setText("Paused");
@@ -306,8 +306,8 @@ private JCheckBoxMenuItem islandsMi;
   private void pngSave(String filename) {
     paused = false; // pauses the execution
     pause();
-    canvas1.setPaused(true);
-    canvas1.performDrawToImage(filename);
+    canvas.setPaused(true);
+    canvas.performDrawToImage(filename);
   }    
   
   private void createMenuBar() {
@@ -394,7 +394,7 @@ private JCheckBoxMenuItem islandsMi;
     });    
     
     bwMi.addItemListener((ItemEvent e) -> {
-      canvas1.changeBlackAndWhite();
+      canvas.changeBlackAndWhite();
       bwButton.setSelected(!bwButton.isSelected());
     });
 
@@ -402,7 +402,7 @@ private JCheckBoxMenuItem islandsMi;
     islandsMi.addItemListener(new MenuItemHandler());
     
     centresMi.addItemListener((ItemEvent e) -> {
-      canvas1.changePrintIslandCentres();
+      canvas.changePrintIslandCentres();
     });
   }
 
@@ -427,8 +427,8 @@ private JCheckBoxMenuItem islandsMi;
           idMi.setSelected(false);
         }
       }
-      canvas1.setPrintId(idMi.isSelected());
-      canvas1.setPrintIslandNumber(islandsMi.isSelected());
+      canvas.setPrintId(idMi.isSelected());
+      canvas.setPrintIslandNumber(islandsMi.isSelected());
     }
   }
 }

@@ -32,33 +32,34 @@ import javax.swing.event.ChangeListener;
 public class GrowthKmcPanel extends JPanel {
 
   private boolean noStartDragData = false;
-  private int mouseX, mouseY;
+  private int mouseX;
+  private int mouseY;
   private int startMouseX = 0;
   private int startMouseY = 0;
-  private KmcCanvas canvas1;
+  private KmcCanvas canvas;
   
-  private JLabel jLabel2;
-  private JSpinner jSpinner2;
+  private JLabel labelScale;
+  private JSpinner spinnerScale;
 
   /**
    * Creates new JPanel
    *
-   * @param canvas1
+   * @param canvas
    */
-  public GrowthKmcPanel(KmcCanvas canvas1) {
+  public GrowthKmcPanel(KmcCanvas canvas) {
 
     initComponents();
-    this.canvas1 = canvas1;
+    this.canvas = canvas;
     //canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());    
-    System.out.println("peer? "+canvas1.getPeer());
-    add(canvas1);
-    System.out.println("peer? "+canvas1.getPeer());
+    System.out.println("peer? "+canvas.getPeer());
+    add(canvas);
+    System.out.println("peer? "+canvas.getPeer());
     //canvas1.initialize();
-    jSpinner2.setValue(((KmcCanvas) canvas1).getScale());
+    spinnerScale.setValue(((KmcCanvas) canvas).getScale());
     //setResizable(true);
-    setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
+    setSize(canvas.getSizeX() + 25, canvas.getSizeY() + 50);
 
-    canvas1.addMouseListener(new MouseAdapter() {
+    canvas.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
@@ -69,7 +70,7 @@ public class GrowthKmcPanel extends JPanel {
         jPanel1MousePressed(evt);
       }
     });
-    canvas1.addMouseMotionListener(new MouseMotionAdapter() {
+    canvas.addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
@@ -81,32 +82,32 @@ public class GrowthKmcPanel extends JPanel {
   }
   
   public void initCanvas(){
-    canvas1.initialise();
+    canvas.initialise();
   }
 
   public void repaintKmc() {
-    canvas1.performDraw();
+    canvas.performDraw();
   }
 
   public void printToImage(int i) {
-    canvas1.performDrawToImage(i);
+    canvas.performDrawToImage(i);
   }
 
   /**
-   * This method is called from within the constructor to initialize the form.
+   * This method is called from within the constructor to initialise the form.
    * 
    */
   private void initComponents() {
 
-    jLabel2 = new JLabel();
-    jSpinner2 = new JSpinner();
+    labelScale = new JLabel();
+    spinnerScale = new JSpinner();
 
-    jLabel2.setText("Scale");
+    labelScale.setText("Scale");
 
-    jSpinner2.setModel(new SpinnerNumberModel(1, 1, null, 1));
-    jSpinner2.setFocusCycleRoot(true);
-    jSpinner2.setFocusable(false);
-    jSpinner2.addChangeListener(new ChangeListener() {
+    spinnerScale.setModel(new SpinnerNumberModel(1, 1, null, 1));
+    spinnerScale.setFocusCycleRoot(true);
+    spinnerScale.setFocusable(false);
+    spinnerScale.addChangeListener(new ChangeListener() {
       @Override
       public void stateChanged(ChangeEvent evt) {
         jSpinner2StateChanged(evt);
@@ -155,9 +156,9 @@ public class GrowthKmcPanel extends JPanel {
         .addContainerGap()
         .addGroup(layout.createParallelGroup(LEADING)
           .addGroup(layout.createSequentialGroup()
-            .addComponent(jLabel2)
+            .addComponent(labelScale)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(spinnerScale, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(0, 0, Short.MAX_VALUE)))
         .addContainerGap())
     );
@@ -165,8 +166,8 @@ public class GrowthKmcPanel extends JPanel {
       layout.createParallelGroup(LEADING)
       .addGroup(TRAILING, layout.createSequentialGroup()
         .addGroup(layout.createParallelGroup(BASELINE)
-          .addComponent(jLabel2)
-          .addComponent(jSpinner2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
+          .addComponent(labelScale)
+          .addComponent(spinnerScale, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
         .addPreferredGap(RELATED)
         .addContainerGap())
     );
@@ -174,9 +175,9 @@ public class GrowthKmcPanel extends JPanel {
   }
 
   private void jSpinner2StateChanged(ChangeEvent evt) {
-    canvas1.setScale((Integer) jSpinner2.getValue());
-    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
+    canvas.setScale((Integer) spinnerScale.getValue());
+    canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
+    setSize(canvas.getSizeX() + 25, canvas.getSizeY() + 50);
   }
 
   private void jPanel1MousePressed(MouseEvent evt) {
@@ -201,7 +202,7 @@ public class GrowthKmcPanel extends JPanel {
   }
 
   private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
-    int zoom = (Integer) jSpinner2.getValue();
+    int zoom = (Integer) spinnerScale.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
     } else {
@@ -213,10 +214,10 @@ public class GrowthKmcPanel extends JPanel {
     if (zoom >= 32) {
       zoom = 32;
     }
-    jSpinner2.setValue(zoom);
-    canvas1.setScale(zoom);
-    canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
-    setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
+    spinnerScale.setValue(zoom);
+    canvas.setScale(zoom);
+    canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
+    setSize(canvas.getSizeX() + 25, canvas.getSizeY() + 50);
   }
  
   final class paintLoop extends Thread {
@@ -227,7 +228,7 @@ public class GrowthKmcPanel extends JPanel {
         repaintKmc();
         try {
           paintLoop.sleep(100);
-          canvas1.setBaseLocation(mouseX, mouseY);
+          canvas.setBaseLocation(mouseX, mouseY);
           noStartDragData = true;
           mouseX = 0;
           mouseY = 0;
