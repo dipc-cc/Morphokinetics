@@ -62,9 +62,9 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     Thread p;
     if (getParser().visualise()) {
       frame.setVisible(true);
-      p = new progressBarLoop();
+      p = new PaintLoop();
     } else {
-      p = new terminalLoop();
+      p = new TerminalLoop();
     }
     p.start();
   }
@@ -101,14 +101,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   /**
    * Private class responsible to repaint every 100 ms the KMC frame.
    */
-  final class progressBarLoop extends Thread {
+  final class PaintLoop extends Thread {
 
     @Override
     public void run() {
       while (true) {
         frame.repaintKmc();
         try {
-          progressBarLoop.sleep(100);
+          PaintLoop.sleep(100);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
           if ( getKmc().getCoverage() * 100 > getCurrentCoverage()) {
             if (printIntermediatePngFiles) {
@@ -127,14 +127,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   /**
    * Private class responsible to repaint every 1000 ms the progress bar to the terminal.
    */
-  final class terminalLoop extends Thread {
+  final class TerminalLoop extends Thread {
 
     @Override
     public void run() {
       final int width = (int) getParser().getCoverage(); // progress bar width in chars
       while (true) {
         try {
-          terminalLoop.sleep(1000);
+          TerminalLoop.sleep(1000);
           // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
           if (getKmc().getCoverage() * 100 > getCurrentCoverage()) {
 
