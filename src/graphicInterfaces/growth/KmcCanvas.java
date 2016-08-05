@@ -99,14 +99,12 @@ public class KmcCanvas extends Canvas {
     lattice.setPaused(pause);
   }
   
-  public void changePrintId() {
-    printId = !printId;
-    //printIslandNumber = !printId;
+  public void setPrintId(boolean printId) {
+    this.printId = printId;
   }
   
-  public void changePrintIslandNumber() {
-    printIslandNumber = !printIslandNumber;
-    //printId = !printIslandNumber;
+  public void setPrintIslandNumber(boolean printIslandNumber) {
+    this.printIslandNumber = printIslandNumber;
   }
   
   public void changePrintIslandCentres() {
@@ -116,7 +114,7 @@ public class KmcCanvas extends Canvas {
   public boolean isPaused() {
     return paused;
   }
-  
+    
   public KmcCanvas() {   //constructor
   }
 

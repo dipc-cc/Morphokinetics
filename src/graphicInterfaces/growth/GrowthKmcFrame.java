@@ -14,11 +14,13 @@ import basic.io.Restart;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.AbstractButton;
 import javax.swing.GroupLayout;
 import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
@@ -64,7 +66,8 @@ public class GrowthKmcFrame extends JFrame {
   private JCheckBoxMenuItem bwMi;
   private JProgressBar progressBar;
   private final int maxCoverage;
-
+private JCheckBoxMenuItem idMi;
+private JCheckBoxMenuItem islandsMi;
   private ImageIcon pauseIcon;
   private ImageIcon resumeIcon;
   /**
@@ -339,12 +342,12 @@ public class GrowthKmcFrame extends JFrame {
     bwMi.setDisplayedMnemonicIndex(0);
     bwMi.setSelected(false);
     
-    JCheckBoxMenuItem idMi = new JCheckBoxMenuItem("Show atom identifiers");
+    idMi = new JCheckBoxMenuItem("Show atom identifiers");
     idMi.setMnemonic(KeyEvent.VK_I);
     idMi.setDisplayedMnemonicIndex(10);
     idMi.setSelected(true);
         
-    JCheckBoxMenuItem islandsMi = new JCheckBoxMenuItem("Show island numbers");
+    islandsMi = new JCheckBoxMenuItem("Show island numbers");
     islandsMi.setMnemonic(KeyEvent.VK_N);
     islandsMi.setDisplayedMnemonicIndex(12);
     islandsMi.setSelected(false);
@@ -395,16 +398,37 @@ public class GrowthKmcFrame extends JFrame {
       bwButton.setSelected(!bwButton.isSelected());
     });
 
-    idMi.addItemListener((ItemEvent e) -> {
-      canvas1.changePrintId();
-    });
-    
-    islandsMi.addItemListener((ItemEvent e) -> {
-      canvas1.changePrintIslandNumber();
-    });
+    idMi.addItemListener(new MenuItemHandler());
+    islandsMi.addItemListener(new MenuItemHandler());
     
     centresMi.addItemListener((ItemEvent e) -> {
       canvas1.changePrintIslandCentres();
     });
+  }
+
+  public class MenuItemHandler implements ItemListener {
+
+    /**
+     * Do not allow to have both id and island number at the same time selected.
+     * 
+     * @param e 
+     */
+    @Override
+    public void itemStateChanged(ItemEvent e) {
+      AbstractButton button = (AbstractButton) e.getItem();
+      
+      if (idMi.equals(button)){
+        if (idMi.isSelected() && islandsMi.isSelected()) {
+          islandsMi.setSelected(false);
+        }
+      }
+      if (islandsMi.equals(button)){
+        if (idMi.isSelected() && islandsMi.isSelected()) {
+          idMi.setSelected(false);
+        }
+      }
+      canvas1.setPrintId(idMi.isSelected());
+      canvas1.setPrintIslandNumber(islandsMi.isSelected());
+    }
   }
 }
