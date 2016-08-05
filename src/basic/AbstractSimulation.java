@@ -285,7 +285,7 @@ public abstract class AbstractSimulation {
     return currentCoverage;
   }
 
-  public void setCurrentCoverage(int currentCoverage) {
-    this.currentCoverage = currentCoverage;
+  public void setCurrentCoverage(float currentCoverage) {
+    this.currentCoverage = (int) Math.floor(currentCoverage * 100);
   }
 }
