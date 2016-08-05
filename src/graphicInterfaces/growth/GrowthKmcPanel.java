@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import javax.swing.GroupLayout;
 import static javax.swing.GroupLayout.Alignment.BASELINE;
 import static javax.swing.GroupLayout.Alignment.LEADING;
@@ -27,7 +26,6 @@ import javax.swing.JSpinner;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 public class GrowthKmcPanel extends JPanel {
 
@@ -36,7 +34,7 @@ public class GrowthKmcPanel extends JPanel {
   private int mouseY;
   private int startMouseX = 0;
   private int startMouseY = 0;
-  private KmcCanvas canvas;
+  private final KmcCanvas canvas;
   
   private JLabel labelScale;
   private JSpinner spinnerScale;
@@ -62,22 +60,22 @@ public class GrowthKmcPanel extends JPanel {
     canvas.addMouseListener(new MouseAdapter() {
       @Override
       public void mouseReleased(MouseEvent evt) {
-        jPanel1MouseReleased(evt);
+        panelMouseReleased(evt);
       }
 
       @Override
       public void mousePressed(MouseEvent evt) {
-        jPanel1MousePressed(evt);
+        panelMousePressed(evt);
       }
     });
     canvas.addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseDragged(MouseEvent evt) {
-        jPanel1MouseDragged(evt);
+        panelMouseDragged(evt);
       }
     });
 
-    paintLoop p = new paintLoop();
+    PaintLoop p = new PaintLoop();
     p.start();
   }
   
@@ -107,33 +105,28 @@ public class GrowthKmcPanel extends JPanel {
     spinnerScale.setModel(new SpinnerNumberModel(1, 1, null, 1));
     spinnerScale.setFocusCycleRoot(true);
     spinnerScale.setFocusable(false);
-    spinnerScale.addChangeListener(new ChangeListener() {
-      @Override
-      public void stateChanged(ChangeEvent evt) {
-        jSpinner2StateChanged(evt);
-      }
+    spinnerScale.addChangeListener((ChangeEvent evt) -> {
+      spinnerStateChanged(evt);
     });
 
     addMouseMotionListener(new MouseMotionAdapter() {
       @Override
       public void mouseDragged(MouseEvent evt) {
-        jPanel1MouseDragged(evt);
+        panelMouseDragged(evt);
       }
     });
-    addMouseWheelListener(new MouseWheelListener() {
-      @Override
-      public void mouseWheelMoved(MouseWheelEvent evt) {
-        jPanel1MouseWheelMoved(evt);
-      }
+    addMouseWheelListener((MouseWheelEvent evt) -> {
+      panelMouseWheelMoved(evt);
     });
+    
     addMouseListener(new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent evt) {
-        jPanel1MousePressed(evt);
+        panelMousePressed(evt);
       }
       @Override
       public void mouseReleased(MouseEvent evt) {
-        jPanel1MouseReleased(evt);
+        panelMouseReleased(evt);
       }
     });
 
@@ -174,22 +167,22 @@ public class GrowthKmcPanel extends JPanel {
 
   }
 
-  private void jSpinner2StateChanged(ChangeEvent evt) {
+  private void spinnerStateChanged(ChangeEvent evt) {
     canvas.setScale((Integer) spinnerScale.getValue());
     canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
     setSize(canvas.getSizeX() + 25, canvas.getSizeY() + 50);
   }
 
-  private void jPanel1MousePressed(MouseEvent evt) {
+  private void panelMousePressed(MouseEvent evt) {
     startMouseX = evt.getX();
-    startMouseY = evt.getY();        // TODO add your handling code here:
+    startMouseY = evt.getY();
   }
 
-  private void jPanel1MouseReleased(MouseEvent evt) {
+  private void panelMouseReleased(MouseEvent evt) {
     mouseX = mouseY = startMouseX = startMouseY = 0;
   }
 
-  private void jPanel1MouseDragged(MouseEvent evt) {
+  private void panelMouseDragged(MouseEvent evt) {
     if (noStartDragData) {
       startMouseX = evt.getX();
       startMouseY = evt.getY();
@@ -201,7 +194,7 @@ public class GrowthKmcPanel extends JPanel {
 
   }
 
-  private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
+  private void panelMouseWheelMoved(MouseWheelEvent evt) {
     int zoom = (Integer) spinnerScale.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
@@ -220,14 +213,14 @@ public class GrowthKmcPanel extends JPanel {
     setSize(canvas.getSizeX() + 25, canvas.getSizeY() + 50);
   }
  
-  final class paintLoop extends Thread {
+  final class PaintLoop extends Thread {
 
     @Override
     public void run() {
       while (true) {
         repaintKmc();
         try {
-          paintLoop.sleep(100);
+          PaintLoop.sleep(100);
           canvas.setBaseLocation(mouseX, mouseY);
           noStartDragData = true;
           mouseX = 0;

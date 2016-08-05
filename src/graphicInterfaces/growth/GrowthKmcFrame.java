@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import javax.imageio.ImageIO;
@@ -30,7 +31,7 @@ import static javax.swing.GroupLayout.PREFERRED_SIZE;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JComponent;
+import static javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,7 +56,7 @@ public class GrowthKmcFrame extends JFrame {
   private int startMouseX = 0;
   private int startMouseY = 0;
   private boolean paused;
-  private KmcCanvas canvas;
+  private final KmcCanvas canvas;
   private JButton pauseButton;
   private JToggleButton bwButton;
   private JButton pngSaveButton;
@@ -87,19 +88,19 @@ public class GrowthKmcFrame extends JFrame {
     spinnerScale.setValue(((KmcCanvas) canvas).getScale());
     setSize(canvas.getSizeX() + 70, canvas.getSizeY() + 120);
 
-    canvas.addMouseListener(new java.awt.event.MouseAdapter() {
+    canvas.addMouseListener(new MouseAdapter() {
       @Override
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
-        jPanel1MouseReleased(evt);
+      public void mouseReleased(MouseEvent evt) {
+        panelMouseReleased(evt);
       }
 
       @Override
-      public void mousePressed(java.awt.event.MouseEvent evt) {
-        jPanel1MousePressed(evt);
+      public void mousePressed(MouseEvent evt) {
+        panelMousePressed(evt);
       }
     });
     paused = false;
-    labelScale.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
+    labelScale.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
     labelScale.getActionMap().put("pause", new Pause());
   }
 
@@ -171,11 +172,11 @@ public class GrowthKmcFrame extends JFrame {
     spinnerScale.setFocusCycleRoot(true);
     spinnerScale.setFocusable(false);
     spinnerScale.addChangeListener((ChangeEvent evt) -> {
-      jSpinnerScaleStateChanged(evt);
+      spinnerScaleStateChanged(evt);
     });
 
     panel.addMouseWheelListener((MouseWheelEvent evt) -> {
-      jPanel1MouseWheelMoved(evt);
+      panelMouseWheelMoved(evt);
     });
     
     pauseButton.addActionListener((ActionEvent evt) -> {
@@ -237,23 +238,23 @@ public class GrowthKmcFrame extends JFrame {
     pack();
   }
 
-  private void jSpinnerScaleStateChanged(ChangeEvent evt) {
+  private void spinnerScaleStateChanged(ChangeEvent evt) {
     canvas.setScale((Integer) spinnerScale.getValue());
     increaseSize();
   }
 
-  private void jPanel1MousePressed(MouseEvent evt) {
+  private void panelMousePressed(MouseEvent evt) {
     startMouseX = evt.getX();
     startMouseY = evt.getY();
   }
 
-  private void jPanel1MouseReleased(MouseEvent evt) {
+  private void panelMouseReleased(MouseEvent evt) {
     if (evt.getX() == startMouseX && evt.getY() == startMouseY) {
       canvas.changeOccupationByHand(startMouseX, startMouseY);
     }
   }
 
-  private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
+  private void panelMouseWheelMoved(MouseWheelEvent evt) {
     int zoom = (Integer) spinnerScale.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
