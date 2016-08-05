@@ -135,8 +135,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       while (true) {
         try {
           TerminalLoop.sleep(1000);
-          // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-          if (getKmc().getCoverage() * 100 > getCurrentCoverage()) {
+          if (getKmc().getCoverage() * 100 >= getCurrentCoverage()) {
 
 
             System.out.print("\r[");
@@ -148,7 +147,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
               System.out.print(" ");
             }
             System.out.print("] ");
-            //System.out.println(" 1 " + getCurrentCoverage());
             setCurrentCoverage(getKmc().getCoverage());
 
           }
