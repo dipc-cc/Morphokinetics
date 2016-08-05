@@ -10,13 +10,35 @@
  */
 package graphicInterfaces.growth;
 
-public class GrowthKmcPanel extends javax.swing.JPanel {
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import javax.swing.GroupLayout;
+import static javax.swing.GroupLayout.Alignment.BASELINE;
+import static javax.swing.GroupLayout.Alignment.LEADING;
+import static javax.swing.GroupLayout.Alignment.TRAILING;
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class GrowthKmcPanel extends JPanel {
 
   private boolean noStartDragData = false;
   private int mouseX, mouseY;
   private int startMouseX = 0;
   private int startMouseY = 0;
   private KmcCanvas canvas1;
+  
+  private JLabel jLabel2;
+  private JSpinner jSpinner2;
 
   /**
    * Creates new JPanel
@@ -36,17 +58,20 @@ public class GrowthKmcPanel extends javax.swing.JPanel {
     //setResizable(true);
     setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
 
-    canvas1.addMouseListener(new java.awt.event.MouseAdapter() {
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
+    canvas1.addMouseListener(new MouseAdapter() {
+      @Override
+      public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
 
-      public void mousePressed(java.awt.event.MouseEvent evt) {
+      @Override
+      public void mousePressed(MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
     });
-    canvas1.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-      public void mouseDragged(java.awt.event.MouseEvent evt) {
+    canvas1.addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
@@ -73,57 +98,62 @@ public class GrowthKmcPanel extends javax.swing.JPanel {
    */
   private void initComponents() {
 
-    jLabel2 = new javax.swing.JLabel();
-    jSpinner2 = new javax.swing.JSpinner();
+    jLabel2 = new JLabel();
+    jSpinner2 = new JSpinner();
 
     jLabel2.setText("Scale");
 
-    jSpinner2.setModel(new javax.swing.SpinnerNumberModel(1, 1, null, 1));
+    jSpinner2.setModel(new SpinnerNumberModel(1, 1, null, 1));
     jSpinner2.setFocusCycleRoot(true);
     jSpinner2.setFocusable(false);
-    jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
-      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+    jSpinner2.addChangeListener(new ChangeListener() {
+      @Override
+      public void stateChanged(ChangeEvent evt) {
         jSpinner2StateChanged(evt);
       }
     });
 
-    addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-      public void mouseDragged(java.awt.event.MouseEvent evt) {
+    addMouseMotionListener(new MouseMotionAdapter() {
+      @Override
+      public void mouseDragged(MouseEvent evt) {
         jPanel1MouseDragged(evt);
       }
     });
-    addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-      public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+    addMouseWheelListener(new MouseWheelListener() {
+      @Override
+      public void mouseWheelMoved(MouseWheelEvent evt) {
         jPanel1MouseWheelMoved(evt);
       }
     });
-    addMouseListener(new java.awt.event.MouseAdapter() {
-      public void mousePressed(java.awt.event.MouseEvent evt) {
+    addMouseListener(new MouseAdapter() {
+      @Override
+      public void mousePressed(MouseEvent evt) {
         jPanel1MousePressed(evt);
       }
-      public void mouseReleased(java.awt.event.MouseEvent evt) {
+      @Override
+      public void mouseReleased(MouseEvent evt) {
         jPanel1MouseReleased(evt);
       }
     });
 
-    javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(this);
+    GroupLayout jPanel1Layout = new GroupLayout(this);
     setLayout(jPanel1Layout);
     jPanel1Layout.setHorizontalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGap(0, 0, Short.MAX_VALUE)
     );
     jPanel1Layout.setVerticalGroup(
-      jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      jPanel1Layout.createParallelGroup(GroupLayout.Alignment.LEADING)
       .addGap(0, 0, Short.MAX_VALUE)
     );
 
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+    GroupLayout layout = new GroupLayout(this);
     setLayout(layout);
     layout.setHorizontalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+      layout.createParallelGroup(LEADING)
       .addGroup(layout.createSequentialGroup()
         .addContainerGap()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(layout.createParallelGroup(LEADING)
           .addGroup(layout.createSequentialGroup()
             .addComponent(jLabel2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -132,33 +162,33 @@ public class GrowthKmcPanel extends javax.swing.JPanel {
         .addContainerGap())
     );
     layout.setVerticalGroup(
-      layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-      .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+      layout.createParallelGroup(LEADING)
+      .addGroup(TRAILING, layout.createSequentialGroup()
+        .addGroup(layout.createParallelGroup(BASELINE)
           .addComponent(jLabel2)
-          .addComponent(jSpinner2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+          .addComponent(jSpinner2, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
+        .addPreferredGap(RELATED)
         .addContainerGap())
     );
 
   }
 
-  private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {
+  private void jSpinner2StateChanged(ChangeEvent evt) {
     canvas1.setScale((Integer) jSpinner2.getValue());
     canvas1.setSize(canvas1.getSizeX(), canvas1.getSizeY());
     setSize(canvas1.getSizeX() + 25, canvas1.getSizeY() + 50);
   }
 
-  private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {
+  private void jPanel1MousePressed(MouseEvent evt) {
     startMouseX = evt.getX();
     startMouseY = evt.getY();        // TODO add your handling code here:
   }
 
-  private void jPanel1MouseReleased(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseReleased(MouseEvent evt) {
     mouseX = mouseY = startMouseX = startMouseY = 0;
   }
 
-  private void jPanel1MouseDragged(java.awt.event.MouseEvent evt) {
+  private void jPanel1MouseDragged(MouseEvent evt) {
     if (noStartDragData) {
       startMouseX = evt.getX();
       startMouseY = evt.getY();
@@ -170,7 +200,7 @@ public class GrowthKmcPanel extends javax.swing.JPanel {
 
   }
 
-  private void jPanel1MouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+  private void jPanel1MouseWheelMoved(MouseWheelEvent evt) {
     int zoom = (Integer) jSpinner2.getValue();
     if ((Integer) evt.getWheelRotation() == -1) {
       zoom *= 2;
@@ -206,8 +236,4 @@ public class GrowthKmcPanel extends javax.swing.JPanel {
       }
     }
   }
-  
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JSpinner jSpinner2;
-  
 }
