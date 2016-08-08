@@ -88,6 +88,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
   private PrintWriter outData;
+  int simulatedSteps;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
@@ -134,7 +135,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability] ");
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -257,7 +258,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public int simulate() {
     int coverageThreshold = 1;
     int returnValue = 0;
-    int simulatedSteps = 0;
+    simulatedSteps = 0;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
@@ -306,7 +307,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private void printData() {
     int islandCount = lattice.countIslands(outData);
-    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + lattice.getMonomerCount());
+    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + lattice.getMonomerCount()+"\t"+simulatedSteps);
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();

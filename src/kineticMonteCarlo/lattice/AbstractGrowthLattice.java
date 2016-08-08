@@ -450,10 +450,16 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return islandCount;
   }
 
+  /**
+   * Monomers are atoms without neighbours. After have counted them with
+   * {@link #countIslands(java.io.PrintWriter)}, the number of monomers is available.
+   *
+   * @return number of monomers
+   */
   public int getMonomerCount() {
-    return islandCount;
+    return -monomerCount;
   }
-  
+
   /**
    * Calculates the centre of mass of each island. The result is stored in "centres" vector. The way
    * to compute the distances is considering periodic boundary conditions and the algorithm is taken
