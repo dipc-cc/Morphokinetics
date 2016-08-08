@@ -23,7 +23,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
   private double[][] histogramPossible;
-  private int[][] histogramPossibleCounter;
+  private long[][] histogramPossibleCounter;
   
   public LinearList(Parser parser) {
     super();
@@ -38,12 +38,12 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
       if (parser.getCalculationMode().equals("basic")) {
         doActivationEnergyStudy = true;
         histogramPossible = new double[4][4];
-        histogramPossibleCounter = new int[4][4];
+        histogramPossibleCounter = new long[4][4];
       }
       if (parser.getCalculationMode().equals("graphene")) {
         doActivationEnergyStudy = true;
         histogramPossible = new double[8][8];
-        histogramPossibleCounter = new int[8][8];
+        histogramPossibleCounter = new long[8][8];
       }
     }
   }
@@ -201,7 +201,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     return histogramPossible;
   }
   
-  public int[][] getHistogramPossibleCounter() {
+  public long[][] getHistogramPossibleCounter() {
     return histogramPossibleCounter;
   }
   

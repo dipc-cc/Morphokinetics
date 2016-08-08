@@ -819,7 +819,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       System.out.println();
     }
 
-    int[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
+    long[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
     System.out.println("Ae");
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
       System.out.print("AePossibleDiscrete ");
