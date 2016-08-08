@@ -45,6 +45,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
         histogramPossible = new double[8][8];
         histogramPossibleCounter = new long[8][8];
       }
+      if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
+        doActivationEnergyStudy = true;
+        histogramPossible = new double[7][7];
+        histogramPossibleCounter = new long[7][7];
+      }
     }
   }
   
