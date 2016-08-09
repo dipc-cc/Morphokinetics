@@ -88,8 +88,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
   private PrintWriter outData;
-  int simulatedSteps;
-  double sumProbabilities;
+  private int simulatedSteps;
+  private double sumProbabilities;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
