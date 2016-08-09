@@ -18,13 +18,11 @@ import ratesLibrary.IRates;
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
   private GrowthKmcFrame frame;
-  private int previousDiscreteCoverage;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
   
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
-    previousDiscreteCoverage = 1;
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
   }
