@@ -1,0 +1,15 @@
+reset
+set term svg
+set output "OUTPUT.svg"
+#set term pngcairo
+#set output "OUTPUT.png"
+# set term postscript enhanced color "Arial" 20
+# set output "OUTPUT.eps"
+unset colorbox
+unset xtics
+#set ytics ("YTIC" 50) rotate by 90 #bug in gnuplot 5.0.1
+unset ytics
+#unset border
+set palette rgbformulae 0,1,2
+set size square
+plot "INPUT.txt" u 1:2:3 w image failsafe t ""
