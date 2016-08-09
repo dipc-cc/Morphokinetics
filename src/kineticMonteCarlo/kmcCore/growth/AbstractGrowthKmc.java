@@ -89,6 +89,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private PrintWriter outPerAtom;
   private PrintWriter outData;
   int simulatedSteps;
+  double sumProbabilities;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
@@ -135,7 +136,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents] ");
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -259,6 +260,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int coverageThreshold = 1;
     int returnValue = 0;
     simulatedSteps = 0;
+    sumProbabilities = 0.0d;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
@@ -275,9 +277,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             break;
           }
           simulatedSteps++;
+          sumProbabilities += getList().getTotalProbabilityFromList();
           if (extraOutput && getCoverage() * 100 > coverageThreshold) { // print extra data every 1% of coverage
+            printData(coverageThreshold);
             coverageThreshold++;
-            printData();
           }
         }
       }
@@ -305,9 +308,27 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return returnValue;
   }
   
-  private void printData() {
+  /**
+   * Print current information to extra file.
+   *
+   * @param coverage used to have exactly the coverage and to be easily greppable.
+   */
+  private void printData(Integer coverage) {
     int islandCount = lattice.countIslands(outData);
-    outData.println(getCoverage() + "\t" + getTime() + "\t" + nucleations + "\t" + islandCount + "\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList() + "\t" + lattice.getMonomerCount()+"\t"+simulatedSteps);
+    float printCoverage;
+    String coverageFormat;
+    if (coverage != null) {
+      printCoverage = (float) (coverage) / 100;
+      coverageFormat = "%2.2f";
+    } else {
+      printCoverage = getCoverage();
+      coverageFormat = "%f";
+    }
+
+    outData.format(coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\n", printCoverage, getTime(),
+            nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
+            getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities);
+    sumProbabilities = 0.0d;
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();
@@ -403,7 +424,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (force) {
       if (extraOutput) {
-        printData();
+        printData(null);
       }
       nucleations++;
     }
