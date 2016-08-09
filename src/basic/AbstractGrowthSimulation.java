@@ -60,6 +60,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       p = new PaintLoop();
     } else {
       p = new TerminalLoop();
+      p.setDaemon(true); // make the progress bar finish, when main program fails
     }
     p.start();
   }
