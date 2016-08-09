@@ -8,14 +8,16 @@
 #
 # Author: J. Alberdi-Rodriguez
 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 chunk=40
-coverage=29
+coverage=31
 mkdir -p islandDistribution
 out=islandDistribution/allDistributions.gp
 if [ $# -lt 2 ]
 then
     echo "using default chunk size $chunk"
-    echo "using default coverage 29%"
+    echo "using default coverage $coverage"
 else
     chunk=$1
     coverage=$2
@@ -27,8 +29,8 @@ echo "plot \\" >> $out
 for ((i=1;i<$coverage;i++))
 do 
     echo $i
-    plot_island_distribution_from_file.sh $chunk $i
-    plot_island_distribution_get_island_number.sh $chunk $i
+    $script_dir/plot_island_distribution_from_file.sh $chunk $i
+    #$script_dir/plot_island_distribution_get_island_number.sh $chunk $i
     mv islandDistribution/occurrences islandDistribution/occurrences_$i
     mv islandDistribution/average islandDistribution/average_$i
     mv islandDistribution/execTime islandDistribution/execTime_$i
