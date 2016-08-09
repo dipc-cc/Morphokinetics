@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Calculates the island distribution with the given chunk size and
 # coverage from the input file
@@ -37,10 +37,6 @@ grep ^0.$coverage dataEvery1percentAndNucleation.txt > islandDistribution/times
 #count the occurrences of each atom number per island
 coverage=$(echo "$coverage/10000" | bc -l)
 awk -v chk=$chunk -v coverage=$coverage '
-function ceil(valor)
-   {
-      return (valor == int(valor)) ? valor : int(valor)+1
-   }
 {
 split($0,islands," ")
 for (i=3;i<length($0);i++) 
