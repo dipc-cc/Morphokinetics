@@ -139,11 +139,11 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         try {
           TerminalLoop.sleep(1000);
           if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
-                  || (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
+                  || (getKmc().getCoverage() * 100 > getCurrentProgress())) {
 
             System.out.print("\r[");
             int i = 0;
-            for (; i <= getCurrentProgress(); i++) {
+            for (; i < getCurrentProgress(); i++) {
               System.out.print(".");
             }
             for (; i < width; i++) {

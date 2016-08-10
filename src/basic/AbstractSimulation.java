@@ -287,7 +287,7 @@ public abstract class AbstractSimulation {
   public abstract void printRates(Parser parser);
 
   public int getCurrentProgress() {
-    return currentProgress;
+    return currentProgress + 1;
   }
 
   public void updateCurrentProgress() {
