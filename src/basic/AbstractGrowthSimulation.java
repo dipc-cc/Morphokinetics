@@ -39,6 +39,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   
   @Override
   public void createFrame() {
+    boolean error = false;
     if (getParser().withGui()) {
       try {
         int max;
@@ -49,13 +50,13 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         }
         frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) getKmc().getLattice()), max);
       } catch (Exception e) {
-        System.err.println("Error: The execution is not able to create the X11 frame");
-        System.err.println("Finishing");
-        throw e;
+        System.err.println("Error: Execution is not able to create the X11 frame.");
+        System.err.println("Continuing without any graphic...");
+        error = true;
       }
     }
     Thread p;
-    if (getParser().visualise()) {
+    if (getParser().visualise() && !error) {
       frame.setVisible(true);
       p = new PaintLoop();
     } else {
