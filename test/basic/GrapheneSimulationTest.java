@@ -25,6 +25,7 @@ public class GrapheneSimulationTest {
   
   private float[][] currentSurface;
   private int currentIslandCount;
+  private double currentSimulatedTime;
   
   public GrapheneSimulationTest() {
   }
@@ -90,6 +91,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref.length; i++) {
       assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
     }
+    assertEquals(34539.64416617914, currentSimulatedTime, 0.0);
   }
 
   @Test
@@ -122,6 +124,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref2.length; i++) {
       assertArrayEquals(ref4[i], currentSurface[i], (float) 0.001);
     }
+    assertEquals(662.236404782772, currentSimulatedTime, 0.0);
     // TODO compare the rest of surfaces
   }
     
@@ -152,6 +155,7 @@ public class GrapheneSimulationTest {
       assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
     }
     assertEquals(currentIslandCount, 1);
+    assertEquals(10001.725060521605, currentSimulatedTime, 0.0);
     // TODO compare the rest of surfaces
   }
     
@@ -167,5 +171,6 @@ public class GrapheneSimulationTest {
     
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
+    currentSimulatedTime = simulation.getSimulatedTime();
   }
 }

@@ -297,4 +297,8 @@ public abstract class AbstractSimulation {
       currentProgress = (int) Math.floor(kmc.getCoverage() * 100);
     }
   }
+  
+  public double getSimulatedTime() {
+    return totalTime / parser.getNumberOfSimulations();
+  }
 }

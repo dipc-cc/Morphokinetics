@@ -25,6 +25,7 @@ public class BasicSimulationTest {
   private float[][] currentSurface;
   private float[][] currentPsd;
   private int currentIslandCount;
+  private double currentSimulatedTime;
 
   public BasicSimulationTest() {
   }
@@ -66,6 +67,7 @@ public class BasicSimulationTest {
       assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
     }
     assertEquals(currentIslandCount, 14);
+    assertEquals(28.556960969829433, currentSimulatedTime, 0.0);
   }
   
   @Test
@@ -89,7 +91,7 @@ public class BasicSimulationTest {
       assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
     }
     assertEquals(currentIslandCount, 1);
-    
+    assertEquals(29.712285617279285, currentSimulatedTime, 0.0);
   }
   
   private void doAgTest(Parser parser) {
@@ -105,6 +107,7 @@ public class BasicSimulationTest {
       currentPsd = simulation.getPsd().getPsd();
     }
     currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
+    currentSimulatedTime = simulation.getSimulatedTime();
   }
 
 }

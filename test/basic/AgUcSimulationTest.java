@@ -27,6 +27,7 @@ public class AgUcSimulationTest {
   
   private float[][] currentSurface;
   private float[][] currentPsd;
+  private double currentSimulatedTime;
 
   public AgUcSimulationTest() {
   }
@@ -67,6 +68,7 @@ public class AgUcSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
     }
+    assertEquals(6.711708473939679, currentSimulatedTime, 0.0);
     
   }
   
@@ -100,6 +102,7 @@ public class AgUcSimulationTest {
     results.add(0.04); // the error must be lower than 0.04
     results.sort((a, b) -> b.compareTo(a));
     assertEquals(0.04, results.get(0), 0.0); // ensure that the first value is 0.04, and therefore, the current error is lower
+    assertEquals(350939.25839387067, currentSimulatedTime, 1000.0);
 
   }
 
@@ -113,6 +116,7 @@ public class AgUcSimulationTest {
 
     currentSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
     currentPsd = simulation.getPsd().getPsd();
+    currentSimulatedTime = simulation.getSimulatedTime();
   }
 
 }

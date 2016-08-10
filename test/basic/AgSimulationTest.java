@@ -27,6 +27,7 @@ import org.junit.Test;
 public class AgSimulationTest {
   
   private int currentIslandCount;
+  private double currentSimulatedTime;
   private float[][] currentSurface;
   private float[][] currentPsd;
 
@@ -94,6 +95,7 @@ public class AgSimulationTest {
     for (int i = 0; i < ref.length; i++) {
       assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
     }
+    assertEquals(198.99123314622588, currentSimulatedTime, 0.0);
   }
 
   /**
@@ -139,7 +141,7 @@ public class AgSimulationTest {
     results.add(0.04); // the error must be lower than 0.032
     results.sort((a, b) -> b.compareTo(a));
     assertEquals(0.04, results.get(0), 0.0); // ensure that the first value is 0.04, and therefore, the current error is lower
- 
+    assertEquals(350939.25839387067, currentSimulatedTime, 1000.0);
   }
   
   @Test
@@ -170,6 +172,7 @@ public class AgSimulationTest {
       assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
     }
     assertEquals(currentIslandCount, 3);
+    assertEquals(14.381566300521941, currentSimulatedTime, 0.0);
     // TODO compare surfaces 0 and 1
   }
 
@@ -184,6 +187,7 @@ public class AgSimulationTest {
     currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     currentPsd = simulation.getPsd().getPsd();
     currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
+    currentSimulatedTime = simulation.getSimulatedTime();
   }
    
 }
