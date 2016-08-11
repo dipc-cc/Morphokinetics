@@ -20,10 +20,6 @@ public class DevitaAccelerator {
   private final Map<Integer, Integer> remainingHopsMap;
   private final Map<Integer, DevitaHopsConfig> devitaConfig;
   private HopsPerStep hopsPerStep;
-  private static final int MAX_ACCUMULATED_STEPS = 100;
-  private static final int MIN_ACCUMULATED_STEPS = 30;
-  private static final int MAX_DISTANCE_HOPS = 5;
-  private static final int MIN_DISTANCE_HOPS = 1;
 
   public DevitaAccelerator(IDevitaLattice lattice, HopsPerStep hopsPerSteps) {
     this.lattice = lattice;
