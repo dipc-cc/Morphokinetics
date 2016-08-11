@@ -8,6 +8,7 @@ package basic;
 import basic.io.Restart;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import java.io.FileNotFoundException;
+import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +31,7 @@ public class AgSimulationTest {
   private double currentSimulatedTime;
   private float[][] currentSurface;
   private float[][] currentPsd;
+  private float[][][] currentSurfaces;
 
   public AgSimulationTest() {
   }
@@ -155,25 +157,25 @@ public class AgSimulationTest {
 
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
-    float[][] ref0 = null;
-    float[][] ref1 = null;
-    float[][] ref2 = null;
+   
     try {
-      ref0 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface000.txt");
-      ref1 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface001.txt");
-      ref2 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface002.txt");
+      // read reference surfaces and compare them with simulated ones
+      for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
+        String fileName = format("%s/AgMultiSurface%03d.txt", TestHelper.getBaseDir() + "/test/references/", i);
+
+        float[][] tmpSurface = restart.readSurfaceText2D(2, sizes, fileName);
+        for (int j = 0; j < sizes[0]; j++) {
+          for (int k = 0; k < sizes[1]; k++) {
+            assertEquals(currentSurfaces[i][j][k], tmpSurface[j][k], 0.001f);
+          }
+        }
+      }
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    // For the moment only comparing the last surface
-    //assertArrayEquals(ref2, currentSurface, (float) 0.001);
-    for (int i = 0; i < ref2.length; i++) {
-      assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
-    }
     assertEquals(currentIslandCount, 3);
     assertEquals(14.381566300521941, currentSimulatedTime, 0.0);
-    // TODO compare surfaces 0 and 1
   }
 
   private void doAgTest(Parser parser) {
@@ -188,6 +190,21 @@ public class AgSimulationTest {
     currentPsd = simulation.getPsd().getPsd();
     currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
     currentSimulatedTime = simulation.getSimulatedTime();
+    Restart readResults = new Restart(simulation.getRestartFolderName());
+    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
+    currentSurfaces = new float[parser.getNumberOfSimulations()][sizes[0]][sizes[1]];
+    for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
+      String fileName = format("%s/surface%03d.mko", simulation.getRestartFolderName(), i);
+      try {
+        float[][] tmpSurface = readResults.readSurfaceBinary2D(fileName);
+        for (int j = 0; j < sizes[0]; j++) {
+          for (int k = 0; k < sizes[1]; k++) {
+            currentSurfaces[i][j][k] = tmpSurface[j][k];
+          }
+        }
+      } catch (FileNotFoundException ex) {
+        Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
   }
-   
 }
