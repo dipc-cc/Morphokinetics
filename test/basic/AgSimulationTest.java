@@ -84,7 +84,7 @@ public class AgSimulationTest {
     doAgTest(parser);
 
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
     float[][] ref = null;
     try {
       ref = restart.readSurfaceText2D(2, sizes, "AgSurfaceRef");
@@ -154,7 +154,7 @@ public class AgSimulationTest {
     doAgTest(parser);
 
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
     float[][] ref0 = null;
     float[][] ref1 = null;
     float[][] ref2 = null;
@@ -184,7 +184,7 @@ public class AgSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX(), parser.getCartSizeY());
     currentPsd = simulation.getPsd().getPsd();
     currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
     currentSimulatedTime = simulation.getSimulatedTime();
