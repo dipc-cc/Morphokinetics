@@ -37,41 +37,6 @@ public class SiKmc extends AbstractKmc {
   }
   
   @Override
-  public void depositSeed() {
-    for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
-      for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
-        for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
-          for (int l = 0; l < getLattice().getUnitCellSize(); l++) {
-            SiAtom atom = (SiAtom) getLattice().getAtom(i, j, k, l);
-            if (atom.getN1() < 4 && atom.getN1() > 0 && !atom.isRemoved()) {
-              getList().addAtom(atom);
-              //getList().addTotalProbability(atom.getProbability());
-            }
-          }
-        }
-      }
-    }
-  }
-
-  @Override
-  protected boolean performSimulationStep() {
-    SiAtom atom = (SiAtom) getList().nextEvent();
-    // I am not sure that the next line is correct (Joseba). However,
-    if (atom == null) return false; // next even can be null and we should be ready to handle this
-    double probabilityChange = atom.remove();
-    getList().addTotalProbability(probabilityChange);
-    atom.setList(null);
-    for (int k = 0; k < 4; k++) {
-      SiAtom neighbour = atom.getNeighbour(k);
-      if (neighbour.getN1() == 3) {
-        getList().addAtom(neighbour);
-        //getList().addTotalProbability(atom.getProbability());
-      }
-    }
-    return atom.getZ() < minHeight * 2;
-  }
-
-  @Override
   public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
     return getSampledSurface(binX, binY);
   }
@@ -108,6 +73,41 @@ public class SiKmc extends AbstractKmc {
 
     MathUtils.fillSurfaceHoles(surface);
     return surface;
+  }
+
+  @Override
+  public void depositSeed() {
+    for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
+      for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
+        for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
+          for (int l = 0; l < getLattice().getUnitCellSize(); l++) {
+            SiAtom atom = (SiAtom) getLattice().getAtom(i, j, k, l);
+            if (atom.getN1() < 4 && atom.getN1() > 0 && !atom.isRemoved()) {
+              getList().addAtom(atom);
+              //getList().addTotalProbability(atom.getProbability());
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  protected boolean performSimulationStep() {
+    SiAtom atom = (SiAtom) getList().nextEvent();
+    // I am not sure that the next line is correct (Joseba). However,
+    if (atom == null) return false; // next even can be null and we should be ready to handle this
+    double probabilityChange = atom.remove();
+    getList().addTotalProbability(probabilityChange);
+    atom.setList(null);
+    for (int k = 0; k < 4; k++) {
+      SiAtom neighbour = atom.getNeighbour(k);
+      if (neighbour.getN1() == 3) {
+        getList().addAtom(neighbour);
+        //getList().addTotalProbability(atom.getProbability());
+      }
+    }
+    return atom.getZ() < minHeight * 2;
   }
 
   /**

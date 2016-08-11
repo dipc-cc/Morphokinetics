@@ -26,28 +26,6 @@ public class Island {
     numberOfAtoms = 0;
   }
   
-  /**
-   * Updates the average and max distances.
-   * @param distanceX Cartesian distance in X coordinate.
-   * @param distanceY Cartesian distance in Y coordinate.
-   */
-  public void update(double distanceX, double distanceY) {
-    double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
-    numberOfAtoms++;
-    updateAvg(distance);
-    updateMax(distance);
-  }
-
-  private void updateAvg(double distance) {
-    sumDistance += distance;
-  }
-
-  private void updateMax(double distance) {
-    if (distance > maxDistance) {
-      maxDistance = distance;
-    }
-  }
-
   public int getIslandNumber() {
     return islandNumber;
   }
@@ -86,5 +64,27 @@ public class Island {
 
   public void setCentreOfMass(Point2D centreOfMass) {
     this.centreOfMass = centreOfMass;
+  }
+  
+  /**
+   * Updates the average and max distances.
+   * @param distanceX Cartesian distance in X coordinate.
+   * @param distanceY Cartesian distance in Y coordinate.
+   */
+  public void update(double distanceX, double distanceY) {
+    double distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+    numberOfAtoms++;
+    updateAvg(distance);
+    updateMax(distance);
+  }
+
+  private void updateAvg(double distance) {
+    sumDistance += distance;
+  }
+
+  private void updateMax(double distance) {
+    if (distance > maxDistance) {
+      maxDistance = distance;
+    }
   }
 }

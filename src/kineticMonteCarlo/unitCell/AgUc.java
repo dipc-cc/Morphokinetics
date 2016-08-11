@@ -29,26 +29,6 @@ public class AgUc extends AbstractGrowthUc implements IUc {
     this.atoms = atoms;
   }
 
-  @Override
-  public AgAtom getAtom(int pos) {
-    return atoms.get(pos);
-  }
-
-  @Override
-  public Point3D getPos() {
-    return new Point3D(SIZE_X * posI, SIZE_Y * posJ, 0);
-  }
-
-  /**
-   * Number of elements per unit cell.
-   *
-   * @return quantity of unit cells
-   */
-  @Override
-  public int size() {
-    return atoms.size();
-  }
-
   /**
    * Cartesian size of the unit cell in X axis
    *
@@ -77,4 +57,24 @@ public class AgUc extends AbstractGrowthUc implements IUc {
     return posJ;
   }
   
+  @Override
+  public AgAtom getAtom(int pos) {
+    return atoms.get(pos);
+  }
+
+  @Override
+  public Point3D getPos() {
+    return new Point3D(SIZE_X * posI, SIZE_Y * posJ, 0);
+  }
+
+  /**
+   * Number of elements per unit cell.
+   *
+   * @return quantity of unit cells
+   */
+  @Override
+  public int size() {
+    return atoms.size();
+  }
+
 }

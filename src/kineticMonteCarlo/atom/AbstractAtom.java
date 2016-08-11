@@ -12,12 +12,6 @@ import javafx.geometry.Point3D;
  */
 public abstract class AbstractAtom implements IAtom {
 
-  private Boolean list = false;
-  private double[] probabilities;
-  private int numberOfNeighbours;
-  private boolean removed = false;
-  private boolean occupied;
-
   // Atoms types
   public static final byte TERRACE = 0;
   public static final byte CORNER = 1;
@@ -28,6 +22,13 @@ public abstract class AbstractAtom implements IAtom {
   public static final byte SICK = 5;
   public static final byte KINK = 6;
   public static final byte BULK = 7;
+  
+  // Attributes
+  private Boolean list = false;
+  private double[] probabilities;
+  private int numberOfNeighbours;
+  private boolean removed = false;
+  private boolean occupied;
   
   @Override
   public void setProbabilities(double[] probabilities) {
@@ -69,6 +70,7 @@ public abstract class AbstractAtom implements IAtom {
     occupied = !removed;
   }
 
+  @Override
   public final boolean isOccupied() {
     return occupied;
   }
@@ -106,6 +108,7 @@ public abstract class AbstractAtom implements IAtom {
    * Returns the position within the unit cell, (0,0) in this case.
    * @return coordinates in unit cell
    */
+  @Override
   public Point3D getPos() {
     return new Point3D(0, 0, 0);
   }

@@ -133,50 +133,6 @@ class RestartLow {
     return data;
   }
   
-  /**
-   * The header of the file has to have the following structure: - The "Morphokinetics" keyword -
-   * The number of dimensions (int) - The size of each dimension (3 x int) - Trash to fill 64 bytes
-   * (in case we need some more space for the future) Right now is 32. Has to be adapted in the
-   * future
-   *
-   * @param dimensions
-   * @param sizes
-   */
-  private static void writeHeaderBinary(int dimensions, int[] sizes, String fileName) {
-    FileOutputStream fos;
-    DataOutputStream dos;
-    try {
-      // create file output stream
-      fos = new FileOutputStream(fileName);
-      // create data output stream
-      dos = new DataOutputStream(fos);
-
-      // write header to the dos
-      dos.writeUTF("Morphokinetics");
-      dos.writeInt(dimensions);
-      int i;
-      for (i = 0; i < dimensions; i++) {
-        dos.writeInt(sizes[i]);
-      }
-      for (int j = i; j < MAX_DIMS; j++) {
-        dos.writeInt(0);
-      }
-
-      for (int j = 0; j < 8; j++) {
-        dos.writeInt(-1);
-      }
-      dos.size();
-      // force bytes to the underlying stream
-      dos.flush();
-      // releases all system resources from the streams
-      fos.close();
-      dos.close();
-    } catch (Exception e) {
-      // if any I/O error occurs
-      e.printStackTrace();
-    }
-  }
-  
   static void writeLowText1D(float[] data, String fileName) {
     try {
       // create file descriptor
@@ -404,6 +360,50 @@ class RestartLow {
       }
       printWriter.flush();
       printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  } 
+  
+  /**
+   * The header of the file has to have the following structure: - The "Morphokinetics" keyword -
+   * The number of dimensions (int) - The size of each dimension (3 x int) - Trash to fill 64 bytes
+   * (in case we need some more space for the future) Right now is 32. Has to be adapted in the
+   * future
+   *
+   * @param dimensions
+   * @param sizes
+   */
+  private static void writeHeaderBinary(int dimensions, int[] sizes, String fileName) {
+    FileOutputStream fos;
+    DataOutputStream dos;
+    try {
+      // create file output stream
+      fos = new FileOutputStream(fileName);
+      // create data output stream
+      dos = new DataOutputStream(fos);
+
+      // write header to the dos
+      dos.writeUTF("Morphokinetics");
+      dos.writeInt(dimensions);
+      int i;
+      for (i = 0; i < dimensions; i++) {
+        dos.writeInt(sizes[i]);
+      }
+      for (int j = i; j < MAX_DIMS; j++) {
+        dos.writeInt(0);
+      }
+
+      for (int j = 0; j < 8; j++) {
+        dos.writeInt(-1);
+      }
+      dos.size();
+      // force bytes to the underlying stream
+      dos.flush();
+      // releases all system resources from the streams
+      fos.close();
+      dos.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();

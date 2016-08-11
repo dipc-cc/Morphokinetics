@@ -11,8 +11,8 @@ import utils.StaticRandom;
 
 public class GrapheneAtom extends AbstractGrowthAtom {
 
-  private boolean allRatesTheSame;
   private static GrapheneTypesTable typesTable;
+  private boolean allRatesTheSame;
   private GrapheneAtom[] neighbours = new GrapheneAtom[12];
   
   /**
@@ -107,17 +107,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     return neighbours[pos];
   }
 
-  /**
-   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
-   */
-  @Override
-  public void clear() {
-    super.clear();
-    setType(TERRACE);
-    n1 = n2 = n3 = 0; // current atom has no neighbour
-
-  }
-
   @Override
   public int getOrientation() {
     if (n1 == 1) {
@@ -128,6 +117,17 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       }
     }
     return -1;
+  }
+
+  /**
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
+   */
+  @Override
+  public void clear() {
+    super.clear();
+    setType(TERRACE);
+    n1 = n2 = n3 = 0; // current atom has no neighbour
+
   }
 
   /**
@@ -229,21 +229,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     return probabilityChange;
   }
   
-  private boolean areAllRatesTheSame() {
-    if ((n1 + n2 + n3) != TERRACE) {
-      allRatesTheSame = false;
-      return false;
-    }
-    for (int i = getNumberOfNeighbours() - 1; i >= 3; i--) {
-      if (neighbours[i].getType() != TERRACE) {
-      allRatesTheSame = false;
-        return false;
-      }
-    }
-    allRatesTheSame = true;
-    return true;
-  }
-
   /**
    * Probability to jump to given neighbour position. 
    * 
@@ -299,5 +284,20 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return typesTable.getType(n1, n2 - 1, n3);
     }
     return typesTable.getType(n1, n2, n3 - 1);
+  }
+  
+  private boolean areAllRatesTheSame() {
+    if ((n1 + n2 + n3) != TERRACE) {
+      allRatesTheSame = false;
+      return false;
+    }
+    for (int i = getNumberOfNeighbours() - 1; i >= 3; i--) {
+      if (neighbours[i].getType() != TERRACE) {
+      allRatesTheSame = false;
+        return false;
+      }
+    }
+    allRatesTheSame = true;
+    return true;
   }
 }

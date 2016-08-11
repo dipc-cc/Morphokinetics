@@ -37,29 +37,6 @@ public abstract class AbstractKmc implements IKmc {
     }
   }
 
-  /**
-   * Initialises the rates of the simulation. It has to be called once, and only once (not within a loop.
-   * @param rates 
-   */
-  @Override
-  public abstract void initialiseRates(double[] rates);
-
-  /**
-   * Resets the lattice and the list of atoms. This method has to be called just before
-   * depositSeed() and simulate().
-   */
-  @Override
-  public void reset() {
-    lattice.reset();
-    list.reset();
-  }
-  
-  /**
-   * Performs a simulation step.
-   * @return true if a stop condition happened (all atom etched, all surface covered)
-   */
-  protected abstract boolean performSimulationStep();
-
   @Override
   public int getIterations() {
     return iterationsForLastSimulation;
@@ -69,6 +46,56 @@ public abstract class AbstractKmc implements IKmc {
     iterationsForLastSimulation = iterations;
   }
 
+  @Override
+  public double getTime() {
+    return list.getTime();
+  }
+
+  @Override
+  public void setDepositionRate(double depositionRatePerSite, double islandDensity) {
+    throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  /**
+   * Coverage is not defined in the etching. So, by default is not defined and returns -1.
+   * @return -1 always
+   */
+  public float getCoverage() {
+    return -1;
+  }
+
+  /**
+   * @return the lattice
+   */
+  @Override
+  public AbstractLattice getLattice() {
+    return lattice;
+  }
+
+  /**
+   * @param lattice the lattice to set
+   */
+  public final void setLattice(AbstractLattice lattice) {
+    this.lattice = lattice;
+  }
+
+  /**
+   * @return the list
+   */
+  @Override
+  public final AbstractList getList() {
+    return list;
+  }
+
+  /**
+   * It only makes sence in {@link AbstractGrowthKmc#getCurrentRadius()}. Used to have a common interface
+   *
+   * @return nothing meaningful
+   */
+  public int getCurrentRadius() {
+    return -1;
+  }
+  
   /**
    * Does the actual simulation. It has to be called after reset() and depositSeed().
    * @return number of iterations that simulation took
@@ -122,53 +149,27 @@ public abstract class AbstractKmc implements IKmc {
     return iterationsForLastSimulation;
   }
 
+  /**
+   * Initialises the rates of the simulation. It has to be called once, and only once (not within a loop.
+   * @param rates 
+   */
   @Override
-  public double getTime() {
-    return list.getTime();
-  }
+  public abstract void initialiseRates(double[] rates);
 
+  /**
+   * Resets the lattice and the list of atoms. This method has to be called just before
+   * depositSeed() and simulate().
+   */
   @Override
-  public void setDepositionRate(double depositionRatePerSite, double islandDensity) {
-    throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
+  public void reset() {
+    lattice.reset();
+    list.reset();
   }
   
   /**
-   * Coverage is not defined in the etching. So, by default is not defined and returns -1.
-   * @return -1 always
+   * Performs a simulation step.
+   * @return true if a stop condition happened (all atom etched, all surface covered)
    */
-  public float getCoverage() {
-    return -1;
-  }
+  protected abstract boolean performSimulationStep();
 
-  /**
-   * @return the lattice
-   */
-  @Override
-  public AbstractLattice getLattice() {
-    return lattice;
-  }
-
-  /**
-   * @param lattice the lattice to set
-   */
-  public final void setLattice(AbstractLattice lattice) {
-    this.lattice = lattice;
-  }
-
-  /**
-   * @return the list
-   */
-  @Override
-  public final AbstractList getList() {
-    return list;
-  }
-
-  /**
-   * It only makes sence in {@link AbstractGrowthKmc#getCurrentRadius()}. Used to have a common interface
-   *
-   * @return nothing meaningful
-   */
-  public int getCurrentRadius() {
-    return -1;
-  }
 }

@@ -55,6 +55,76 @@ public abstract class AbstractSimulation {
     restart = new Restart(restartFolderName);
   }
 
+  public static void printHeader() {
+    System.out.println("This is morphokinetics software");
+    System.out.println(" _  _   __  ____  ____  _  _   __  __ _  __  __ _  ____  ____  __  ___  ____");
+    System.out.println("( \\/ ) /  \\(  _ \\(  _ \\/ )( \\ /  \\(  / )(  )(  ( \\(  __)(_  _)(  )/ __)/ ___)");
+    System.out.println("/ \\/ \\(  O ))   / ) __/) __ ((  O ))  (  )( /    / ) _)   )(   )(( (__ \\___ \\");
+    System.out.println("\\_)(_/ \\__/(__\\_)(__)  \\_)(_/ \\__/(__\\_)(__)\\_)__)(____) (__) (__)\\___)(____/");
+    System.out.println("");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Date date = new Date();
+    System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48
+    java.net.InetAddress localMachine;
+    try {
+      localMachine = java.net.InetAddress.getLocalHost();
+      System.out.println(" in " + localMachine.getHostName());
+    } catch (UnknownHostException ex) {
+      Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+  public static void printHeader(String message) {
+    printHeader();
+    System.out.println("Execution: " + message);
+  }
+  
+  public void setKmc(AbstractKmc kmc) {
+    this.kmc = kmc;
+  }
+
+  public AbstractKmc getKmc() {
+    return kmc;
+  }
+
+  public PsdSignature2D getPsd() {
+    return psd;
+  }
+
+  public IRates getRates() {
+    return rates;
+  }
+
+  public void setRates(IRates rates) {
+    this.rates = rates;
+  }
+
+  public IRates getRatesFactory() {
+    return rates;
+  }
+
+  public Parser getParser() {
+    return parser;
+  }
+  
+  public int getCurrentProgress() {
+    return currentProgress + 1;
+  }
+  
+  String getRestartFolderName() {
+    return restartFolderName;
+  }
+  
+  public abstract void printRates(Parser parser);
+
+  public abstract void finishSimulation();
+
+  /**
+   * Creates the simulation frame.
+   */
+  public abstract void createFrame();
+
+  abstract void initialiseRates(IRates ratesFactory, Parser myParser);
   /**
    * Initialises Kmc, the basic simulation class
    */
@@ -62,11 +132,6 @@ public abstract class AbstractSimulation {
     this.kmc = null;
     this.rates = null;
   }
-
-  /**
-   * Creates the simulation frame.
-   */
-  public abstract void createFrame();
 
   public void doSimulation() {
     startTime = System.currentTimeMillis();
@@ -147,56 +212,35 @@ public abstract class AbstractSimulation {
     }
   }
 
-  abstract void initialiseRates(IRates ratesFactory, Parser myParser);
 
-  public abstract void finishSimulation();
-
-  public void setKmc(AbstractKmc kmc) {
-    this.kmc = kmc;
-  }
-
-  public AbstractKmc getKmc() {
-    return kmc;
-  }
-
-  public PsdSignature2D getPsd() {
-    return psd;
-  }
-
-  public IRates getRates() {
-    return rates;
-  }
-
-  public void setRates(IRates rates) {
-    this.rates = rates;
-  }
-
-  public IRates getRatesFactory() {
-    return rates;
-  }
-
-  public static void printHeader() {
-    System.out.println("This is morphokinetics software");
-    System.out.println(" _  _   __  ____  ____  _  _   __  __ _  __  __ _  ____  ____  __  ___  ____");
-    System.out.println("( \\/ ) /  \\(  _ \\(  _ \\/ )( \\ /  \\(  / )(  )(  ( \\(  __)(_  _)(  )/ __)/ ___)");
-    System.out.println("/ \\/ \\(  O ))   / ) __/) __ ((  O ))  (  )( /    / ) _)   )(   )(( (__ \\___ \\");
-    System.out.println("\\_)(_/ \\__/(__\\_)(__)  \\_)(_/ \\__/(__\\_)(__)\\_)__)(____) (__) (__)\\___)(____/");
-    System.out.println("");
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    Date date = new Date();
-    System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48
-    java.net.InetAddress localMachine;
-    try {
-      localMachine = java.net.InetAddress.getLocalHost();
-      System.out.println(" in " + localMachine.getHostName());
-    } catch (UnknownHostException ex) {
-      Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
+  public void updateCurrentProgress() {
+    if (parser.justCentralFlake()) {
+      currentProgress = kmc.getCurrentRadius();
+    } else {
+      currentProgress = (int) Math.floor(kmc.getCoverage() * 100);
     }
   }
+  
+  public double getSimulatedTime() {
+    return totalTime / parser.getNumberOfSimulations();
+  }
+  /**
+   * Does nothing. Used to have a common interface
+   *
+   * @param i
+   */
+  void printToImage(int i) {
+    //Do nothing
+  }
 
-  public static void printHeader(String message) {
-    printHeader();
-    System.out.println("Execution: " + message);
+  /**
+   * Does nothing. Used to have a common interface
+   *
+   * @param folderName
+   * @param i
+   */
+  void printToImage(String folderName, int i) {
+    //Do nothing
   }
 
   private void printOutput() {
@@ -255,50 +299,5 @@ public abstract class AbstractSimulation {
     System.out.print("\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60);
     System.out.print("\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations()));
     System.out.println("\t" + fractalD / (float) parser.getNumberOfSimulations());
-  }
-
-  /**
-   * Does nothing. Used to have a common interface
-   *
-   * @param i
-   */
-  void printToImage(int i) {
-    //Do nothing
-  }
-
-  /**
-   * Does nothing. Used to have a common interface
-   *
-   * @param folderName
-   * @param i
-   */
-  void printToImage(String folderName, int i) {
-    //Do nothing
-  }
-
-  public Parser getParser() {
-    return parser;
-  }
-
-  String getRestartFolderName() {
-    return restartFolderName;
-  }
-  
-  public abstract void printRates(Parser parser);
-
-  public int getCurrentProgress() {
-    return currentProgress + 1;
-  }
-
-  public void updateCurrentProgress() {
-    if (parser.justCentralFlake()) {
-      currentProgress = kmc.getCurrentRadius();
-    } else {
-      currentProgress = (int) Math.floor(kmc.getCoverage() * 100);
-    }
-  }
-  
-  public double getSimulatedTime() {
-    return totalTime / parser.getNumberOfSimulations();
   }
 }

@@ -7,10 +7,6 @@ public class GrapheneTypesTable {
   
   private final byte[][][] table;
 
-  public byte getType(int neigh1st, int neigh2nd, int neigh3rd) {
-    return table[neigh1st][neigh2nd][neigh3rd];
-  }
-
   public GrapheneTypesTable() {
     table = new byte[4][7][4];
 
@@ -154,5 +150,8 @@ public class GrapheneTypesTable {
     table[3][6][2] = AbstractAtom.BULK;
     table[3][6][3] = AbstractAtom.BULK;
   }
-
+  
+  public byte getType(int neigh1st, int neigh2nd, int neigh3rd) {
+    return table[neigh1st][neigh2nd][neigh3rd];
+  }
 }

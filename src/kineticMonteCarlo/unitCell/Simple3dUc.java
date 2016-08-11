@@ -45,10 +45,10 @@ public class Simple3dUc implements IUc{
   }
 
   /**
-   * Always returns the current atom
+   * Always returns the current atom.
    *
-   * @param pos ignored
-   * @return current atom
+   * @param pos ignored.
+   * @return current atom.
    */
   @Override
   public AbstractAtom getAtom(int pos) {
@@ -58,16 +58,6 @@ public class Simple3dUc implements IUc{
   @Override
   public Point3D getPos() {
     return new Point3D(SIZE_X * posX, SIZE_Y * posY, SIZE_Z * posZ);
-  }
-
-  /**
-   * Number of elements.
-   *
-   * @return quantity of unit cells
-   */
-  @Override
-  public int size() {
-    return size;
   }
 
   @Override
@@ -90,5 +80,15 @@ public class Simple3dUc implements IUc{
   
   public void setPosZ(double z) {
     posZ = z;
+  }
+  
+  /**
+   * Number of elements.
+   *
+   * @return quantity of unit cells.
+   */
+  @Override
+  public int size() {
+    return size;
   }
 }

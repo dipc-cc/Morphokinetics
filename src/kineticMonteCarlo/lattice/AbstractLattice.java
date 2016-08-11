@@ -18,10 +18,6 @@ public abstract class AbstractLattice {
   private int hexaSizeK;
   private int unitCellSize;
   private boolean paused;
-
-  public int size() {
-    return hexaSizeI * hexaSizeJ * hexaSizeK;
-  }
   
   public final int getHexaSizeI() {
     return hexaSizeI;
@@ -66,18 +62,16 @@ public abstract class AbstractLattice {
   
   public abstract IUc getUc(int pos);
 
-  public abstract void reset();
-
-  public void setProbabilities(double[] rates) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
- 
   public void setPaused(boolean pause) {
     this.paused = pause;
   }
   
   public boolean isPaused() {
     return paused;
+  }
+  
+  public int size() {
+    return hexaSizeI * hexaSizeJ * hexaSizeK;
   }
 
   /**
@@ -93,4 +87,11 @@ public abstract class AbstractLattice {
    * @return fractal dimension of simulation (or -1)
    */
   public abstract float getFractalDimension();
+  
+  public abstract void reset();
+
+  public void setProbabilities(double[] rates) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+ 
 }

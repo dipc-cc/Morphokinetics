@@ -25,7 +25,12 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     }
     super.initHistogramSucces(4);
   }
-    
+
+  @Override
+  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
+    return getSampledSurface(binX, binY);
+  }
+  
   @Override
   public void depositSeed() {
     getLattice().resetOccupied();
@@ -55,10 +60,5 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
         depositAtom(I, J);
       }
     }
-  }
-
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
   }
 }

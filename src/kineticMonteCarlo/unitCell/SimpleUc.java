@@ -47,28 +47,18 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
   }
 
   /**
-   * Number of elements.
+   * Cartesian size of the unit cell in X axis.
    *
-   * @return quantity of unit cells
-   */
-  @Override
-  public int size() {
-    return size;
-  }
-
-  /**
-   * Cartesian size of the unit cell in X axis
-   *
-   * @return size in X
+   * @return size in X.
    */
   public static float getSizeX() {
     return SIZE_X;
   }
 
   /**
-   * Cartesian size of the unit cell in Y axis
+   * Cartesian size of the unit cell in Y axis.
    *
-   * @return size in Y
+   * @return size in Y.
    */
   public static float getSizeY() {
     return SIZE_Y;
@@ -90,5 +80,14 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
   
   public void setPosY(double y) {
     posY = y;
+  }
+  /**
+   * Number of elements.
+   *
+   * @return quantity of unit cells.
+   */
+  @Override
+  public int size() {
+    return size;
   }
 }

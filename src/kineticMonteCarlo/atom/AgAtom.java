@@ -14,6 +14,19 @@ import utils.StaticRandom;
  */
 public class AgAtom extends AbstractGrowthAtom {
 
+  // Redefined atom types
+  public static final byte TERRACE = 0;
+  public static final byte CORNER = 1;
+  public static final byte EDGE_A = 2;
+  public static final byte KINK_A = 3;
+  public static final byte ISLAND = 4;
+  public static final byte EDGE_B = 5;
+  public static final byte KINK_B = 6;
+  // Before we actually know the value of those, we simply use A type
+  public static final byte EDGE = EDGE_A;
+  public static final byte KINK = KINK_A;
+  
+  // Attributes
   private static AgTypesTable typesTable;
   private final AgAtom[] neighbours = new AgAtom[6];
   /** Number of immobile neighbours. */
@@ -24,18 +37,6 @@ public class AgAtom extends AbstractGrowthAtom {
    * Position within unit cell.
    */
   private final int pos;
-  
-  public static final byte TERRACE = 0;
-  public static final byte CORNER = 1;
-  public static final byte EDGE_A = 2;
-  public static final byte KINK_A = 3;
-  public static final byte ISLAND = 4;
-  public static final byte EDGE_B = 5;
-  public static final byte KINK_B = 6;
-  
-  // Before we actually know the value of those, we simply use A type
-  public static final byte EDGE = EDGE_A;
-  public static final byte KINK = KINK_A;
   
   public AgAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 6);
@@ -49,6 +50,8 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Constructor for unit cell
+   *
+   * @param id atom identifier.
    * @param pos position within the unit cell
    */
   public AgAtom(int id, int pos) {
@@ -179,7 +182,7 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   /**
-   * See {@link #getOrientation()}
+   * See {@link #getOrientation()}.
    *
    * @param atom atom to be excluded to compute the orientation. If null, none is excluded.
    * @return a number between 0 and 5 inclusive. Even number if A type or odd if B type.
@@ -211,73 +214,6 @@ public class AgAtom extends AbstractGrowthAtom {
     return -1;
   }
 
-  /**
-   * This atom is an edge (it has two neighbours). There are 6 possible positions for the edge,
-   * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
-   * its neighbours:   
-   * <pre>
-   *    0  1
-   *   5 [] 2
-   *    4  3
-   * </pre>
-   * A proper image of the positions is documented here:
-   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
-   * @param code binary code with the occupied neighbours.
-   * @return orientation (a number between 0 and 5 inclusive).
-   */
-  private int calculateEdgeType(int code) {
-    switch (code) {
-      case 3: //1+2 positions    (0+1 neighbours)  B type in principle \ /
-        return 3; //                                                    º   /_      
-      case 6: //2+4 positions    (1+2 neighbours)  A type in principle     º 
-        return 4;
-      case 12: //4+8positions    (2+3 neighbours)  B type in principle  ._ 
-        return 5; //                                                     \ 
-      case 24: //8+16 positions  (3+4 neighbours)  A type in principle  . 
-        return 0; //                                                   / \
-      case 48: //16+32 positions (4+5 neighbours)  B type in principle      _.
-        return 1; //                                                        /
-      case 33: //1+32 positions  (5+0 neighbours)  A type in principle _\
-        return 2; //                                                     º 
-      default:
-        return -1; // Unknown
-    }
-  }
-
-  /**
-   * This atom is a kink (it has three neighbours). There are 6 possible positions for the kink,
-   * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
-   * its neighbours:  
-   * <pre>               
-   *    0  1
-   *   5 [] 2
-   *    4  3
-   * </pre>
-   * A proper image of the positions is documented here:
-   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
-   * @param code binary code with the occupied neighbours.
-   * @return  orientation (a number between 0 and 5 inclusive).
-   */
-  private int calculateKinkType(int code) {
-
-    switch (code) {
-      case 7:  //1 + 2 + 4   (0+1+2 neighbours)
-        return 0;
-      case 14: //2 + 4 + 8   (1+2+3 neighbours)
-        return 1;
-      case 28: //4 + 8 + 16  (2+3+4 neighbours)
-        return 2;
-      case 56: //8 + 16 + 32 (3+4+5 neighbours)
-        return 3;
-      case 49: //16 + 32 + 1 (4+5+0 neighbours)
-        return 4;
-      case 35: //32 + 1 + 2  (5+0+1 neighbours)
-        return 5;
-      default:
-        return -1;
-    }
-  }
-
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
 
@@ -301,96 +237,6 @@ public class AgAtom extends AbstractGrowthAtom {
     }
 
     return neighbours[cont];
-  }
-
-  /**
-   * When the current atom's destination is a corner, it jumps over it to the different type edge.
-   * 
-   * @bug Destination can be any other type (TERRACE, CORNER, same type EDGE or KINK 
-   * @param cornerPosition position of the neighbour, from current atom
-   * @return other type edge
-   */
-  private AgAtom aheadCornerAtom(int cornerPosition) {
-    if ((getOrientation() & 1) != 0) { // B type edge
-
-      switch (cornerPosition) {
-        case 0:
-          return neighbours[5].getNeighbour(0);
-        case 1:
-          return neighbours[2].getNeighbour(1);
-        case 2:
-          return neighbours[1].getNeighbour(2);
-        case 3:
-          return neighbours[4].getNeighbour(3);
-        case 4:
-          return neighbours[3].getNeighbour(4);
-        case 5:
-          return neighbours[0].getNeighbour(5);
-      }
-    } else { // A type edge
-
-      switch (cornerPosition) { 
-        case 0:
-          return neighbours[1].getNeighbour(0);
-        case 1:
-          return neighbours[0].getNeighbour(1);
-        case 2:
-          return neighbours[3].getNeighbour(2);
-        case 3:
-          return neighbours[2].getNeighbour(3);
-        case 4:
-          return neighbours[5].getNeighbour(4);
-        case 5:
-          return neighbours[4].getNeighbour(5);
-      }
-    }
-    return null;
-  }
-
-  /**
-   * This should be called when a edge jumps to a corner (instead of
-   * expected edge).  It happens when a sharp vertex is found in the
-   * island geometry and the atom has to jump over two corners and
-   * finish in the same type of edge (or any other type: ISLAND, KINK)
-   * 
-   * @param cornerPosition position of the neighbour, from current atom
-   * @return any other type (EDGE, KINK or BULK)
-   */
-  private AgAtom ahead2CornersAtom(int cornerPosition) {
-    if ((getOrientation() & 1) != 0) {
-
-      switch (cornerPosition) {
-        case 0:
-          return neighbours[5].getNeighbour(0).getNeighbour(4); // Directions: west + northwest + southwest
-        case 1:
-	  return neighbours[2].getNeighbour(1).getNeighbour(3); // Directions: east + northeast + southeast
-        case 2:
-          return neighbours[1].getNeighbour(2).getNeighbour(0); // Directions: northeast + east + northwest
-        case 3:
-          return neighbours[4].getNeighbour(3).getNeighbour(5); // Directions: southwest + southeast + west
-        case 4:
-          return neighbours[3].getNeighbour(4).getNeighbour(2); // Directions: southeast + southwest + east
-        case 5:
-          return neighbours[0].getNeighbour(5).getNeighbour(1); // Directions: nortwest + west + northeast
-      }
-    } else {
-
-      switch (cornerPosition) {
-        case 0:
-          return neighbours[1].getNeighbour(0).getNeighbour(2); // Directions: northeast + northwest + east
-        case 1:
-          return neighbours[0].getNeighbour(1).getNeighbour(5); // Directions: northwest + northeast + east
-        case 2:
-          return neighbours[3].getNeighbour(2).getNeighbour(4); // Directions: southeast + east + southwest
-        case 3:
-          return neighbours[2].getNeighbour(3).getNeighbour(1); // Directions: east + southeast + northeast
-        case 4:
-          return neighbours[5].getNeighbour(4).getNeighbour(0); // Directions: west + southwest + northwest
-        case 5:
-          return neighbours[4].getNeighbour(5).getNeighbour(3); // Directions: southwest + west + southeast
-      }
-    }
-    return null;
   }
 
   @Override
@@ -487,6 +333,7 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Returns the type of the neighbour atom if current one would not exist.
+   *
    * @param posNeighbour current atom.
    * @return the type.
    */
@@ -502,5 +349,162 @@ public class AgAtom extends AbstractGrowthAtom {
       // current atom is immobile
       return typesTable.getCurrentType(nImmobile - 1, nMobile);
     }
+  }
+  
+  /**
+   * This atom is an edge (it has two neighbours). There are 6 possible positions for the edge,
+   * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
+   * its neighbours:
+   * <pre>
+   *    0  1
+   *   5 [] 2
+   *    4  3
+   * </pre> A proper image of the positions is documented here:
+   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
+   *
+   * @param code binary code with the occupied neighbours.
+   * @return orientation (a number between 0 and 5 inclusive).
+   */
+  private int calculateEdgeType(int code) {
+    switch (code) {
+      case 3: //1+2 positions    (0+1 neighbours)  B type in principle \ /
+        return 3; //                                                    º   /_      
+      case 6: //2+4 positions    (1+2 neighbours)  A type in principle     º 
+        return 4;
+      case 12: //4+8positions    (2+3 neighbours)  B type in principle  ._ 
+        return 5; //                                                     \ 
+      case 24: //8+16 positions  (3+4 neighbours)  A type in principle  . 
+        return 0; //                                                   / \
+      case 48: //16+32 positions (4+5 neighbours)  B type in principle      _.
+        return 1; //                                                        /
+      case 33: //1+32 positions  (5+0 neighbours)  A type in principle _\
+        return 2; //                                                     º 
+      default:
+        return -1; // Unknown
+    }
+  }
+
+  /**
+   * This atom is a kink (it has three neighbours). There are 6 possible positions for the kink,
+   * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
+   * its neighbours:
+   * <pre>
+   *    0  1
+   *   5 [] 2
+   *    4  3
+   * </pre> A proper image of the positions is documented here:
+   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
+   *
+   * @param code binary code with the occupied neighbours.
+   * @return orientation (a number between 0 and 5 inclusive).
+   */
+  private int calculateKinkType(int code) {
+
+    switch (code) {
+      case 7:  //1 + 2 + 4   (0+1+2 neighbours)
+        return 0;
+      case 14: //2 + 4 + 8   (1+2+3 neighbours)
+        return 1;
+      case 28: //4 + 8 + 16  (2+3+4 neighbours)
+        return 2;
+      case 56: //8 + 16 + 32 (3+4+5 neighbours)
+        return 3;
+      case 49: //16 + 32 + 1 (4+5+0 neighbours)
+        return 4;
+      case 35: //32 + 1 + 2  (5+0+1 neighbours)
+        return 5;
+      default:
+        return -1;
+    }
+  }
+
+  /**
+   * When the current atom's destination is a corner, it jumps over it to the different type edge.
+   * 
+   * @bug Destination can be any other type (TERRACE, CORNER, same type EDGE or KINK 
+   * @param cornerPosition position of the neighbour, from current atom
+   * @return other type edge
+   */
+  private AgAtom aheadCornerAtom(int cornerPosition) {
+    if ((getOrientation() & 1) != 0) { // B type edge
+
+      switch (cornerPosition) {
+        case 0:
+          return neighbours[5].getNeighbour(0);
+        case 1:
+          return neighbours[2].getNeighbour(1);
+        case 2:
+          return neighbours[1].getNeighbour(2);
+        case 3:
+          return neighbours[4].getNeighbour(3);
+        case 4:
+          return neighbours[3].getNeighbour(4);
+        case 5:
+          return neighbours[0].getNeighbour(5);
+      }
+    } else { // A type edge
+
+      switch (cornerPosition) { 
+        case 0:
+          return neighbours[1].getNeighbour(0);
+        case 1:
+          return neighbours[0].getNeighbour(1);
+        case 2:
+          return neighbours[3].getNeighbour(2);
+        case 3:
+          return neighbours[2].getNeighbour(3);
+        case 4:
+          return neighbours[5].getNeighbour(4);
+        case 5:
+          return neighbours[4].getNeighbour(5);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * This should be called when a edge jumps to a corner (instead of
+   * expected edge).  It happens when a sharp vertex is found in the
+   * island geometry and the atom has to jump over two corners and
+   * finish in the same type of edge (or any other type: ISLAND, KINK)
+   * 
+   * @param cornerPosition position of the neighbour, from current atom
+   * @return any other type (EDGE, KINK or BULK)
+   */
+  private AgAtom ahead2CornersAtom(int cornerPosition) {
+    if ((getOrientation() & 1) != 0) {
+
+      switch (cornerPosition) {
+        case 0:
+          return neighbours[5].getNeighbour(0).getNeighbour(4); // Directions: west + northwest + southwest
+        case 1:
+	  return neighbours[2].getNeighbour(1).getNeighbour(3); // Directions: east + northeast + southeast
+        case 2:
+          return neighbours[1].getNeighbour(2).getNeighbour(0); // Directions: northeast + east + northwest
+        case 3:
+          return neighbours[4].getNeighbour(3).getNeighbour(5); // Directions: southwest + southeast + west
+        case 4:
+          return neighbours[3].getNeighbour(4).getNeighbour(2); // Directions: southeast + southwest + east
+        case 5:
+          return neighbours[0].getNeighbour(5).getNeighbour(1); // Directions: nortwest + west + northeast
+      }
+    } else {
+
+      switch (cornerPosition) {
+        case 0:
+          return neighbours[1].getNeighbour(0).getNeighbour(2); // Directions: northeast + northwest + east
+        case 1:
+          return neighbours[0].getNeighbour(1).getNeighbour(5); // Directions: northwest + northeast + east
+        case 2:
+          return neighbours[3].getNeighbour(2).getNeighbour(4); // Directions: southeast + east + southwest
+        case 3:
+          return neighbours[2].getNeighbour(3).getNeighbour(1); // Directions: east + southeast + northeast
+        case 4:
+          return neighbours[5].getNeighbour(4).getNeighbour(0); // Directions: west + southwest + northwest
+        case 5:
+          return neighbours[4].getNeighbour(5).getNeighbour(3); // Directions: southwest + west + southeast
+      }
+    }
+    return null;
   }
 }

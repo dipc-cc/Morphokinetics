@@ -42,6 +42,31 @@ public class BasicLattice extends AbstractLattice {
   }
 
   @Override
+  public IUc getUc(int pos) {
+    return ucList[pos];
+  }
+
+  /**
+   * Number of islands has no sense in etching.
+   *
+   * @return -1 always.
+   */
+  @Override
+  public int getIslandCount() {
+    return -1;
+  }
+  
+  /**
+   * Fractal dimension not implemented in etching.
+   *
+   * @return -1.0 always.
+   */
+  @Override
+  public float getFractalDimension() {
+    return -1.0f;
+  }
+  
+  @Override
   public void reset() {
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
@@ -91,28 +116,4 @@ public class BasicLattice extends AbstractLattice {
     }
   }
 
-  @Override
-  public IUc getUc(int pos) {
-    return ucList[pos];
-  }
-
-  /**
-   * Number of islands has no sense in etching.
-   *
-   * @return -1 always.
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
-  
-  /**
-   * Fractal dimension not implemented in etching.
-   *
-   * @return -1.0 always.
-   */
-  @Override
-  public float getFractalDimension() {
-    return -1.0f;
-  }
 }

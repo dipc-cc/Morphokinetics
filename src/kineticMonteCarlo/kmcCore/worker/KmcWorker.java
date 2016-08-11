@@ -34,16 +34,53 @@ public class KmcWorker extends Thread {
     active = true;
   }
 
+  public AbstractKmc getKmc() {
+    return kmc;
+  }
+
+  public int getWorkerId() {
+    return workerId;
+  }
+  
+  public double getTime() {
+    return kmc.getTime();
+  }
+
+  public int getIterations() {
+    return kmc.getIterations();
+  }
+
+  public float[][] getSampledSurface(int binX, int binY) {
+    return kmc.getSampledSurface(binX, binY);
+  }
+  
+  public AbstractList getSurfaceList() {
+    return kmc.getList();
+  }
+
+  public AbstractLattice getLattice() {
+    return kmc.getLattice();
+  }
+
+  public void initialise(double[] rates) {
+    try {
+      receiveCommandsLock.acquire();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+      return;
+    }
+    kmc.reset();
+    kmc.initialiseRates(rates);
+    kmc.depositSeed();
+    receiveCommandsLock.release();
+  }
+
   public void destroyWorker() {
     active = false;
     performSimulationLock.release();
     kmc = null;
   }
-
-  public AbstractKmc getKmc() {
-    return kmc;
-  }
-
+  
   @Override
   public void run() {
 
@@ -83,27 +120,6 @@ public class KmcWorker extends Thread {
       } catch (InterruptedException e) {
       }
     }
-  }
-
-  public int getWorkerId() {
-    return workerId;
-  }
-
-  public void initialise(double[] rates) {
-    try {
-      receiveCommandsLock.acquire();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      return;
-    }
-    kmc.reset();
-    kmc.initialiseRates(rates);
-    kmc.depositSeed();
-    receiveCommandsLock.release();
-  }
-
-  public AbstractLattice getLattice() {
-    return kmc.getLattice();
   }
 
   public void simulate(IFinishListener toAdd, int workID) {
@@ -159,21 +175,5 @@ public class KmcWorker extends Thread {
     this.workId = workId;
     this.intervalSteps = intervalSteps;
     performSimulationLock.release();
-  }
-
-  public AbstractList getSurfaceList() {
-    return kmc.getList();
-  }
-
-  public double getTime() {
-    return kmc.getTime();
-  }
-
-  public int getIterations() {
-    return kmc.getIterations();
-  }
-
-  public float[][] getSampledSurface(int binX, int binY) {
-    return kmc.getSampledSurface(binX, binY);
   }
 }

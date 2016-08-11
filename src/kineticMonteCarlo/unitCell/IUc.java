@@ -21,20 +21,6 @@ public interface IUc {
   public AbstractAtom getAtom(int pos);
   
   /**
-   * Cartesian position of the origin of the unit cell.
-   *
-   * @return a point with 3 coordinates.
-   */
-  public Point3D getPos();
-
-  /**
-   * Number of elements.
-   *
-   * @return quantity of unit cells
-   */
-  public int size();
-
-  /**
    * Cartesian size of the unit cell in X axis
    *
    * @return size in X
@@ -64,4 +50,18 @@ public interface IUc {
   public int getPosI();
 
   public int getPosJ();
+  
+  /**
+   * Cartesian position of the origin of the unit cell.
+   *
+   * @return a point with 3 coordinates.
+   */
+  public Point3D getPos();
+
+  /**
+   * Number of elements.
+   *
+   * @return quantity of unit cells
+   */
+  public int size();
 }

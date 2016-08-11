@@ -38,7 +38,17 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
   public GrapheneAtomSchoenhalz getNeighbour(int pos) {
     return neighbours[pos];
   }
-
+ 
+  /**
+   * Only BULK atom types are considered immobile atoms.
+   *
+   * @return true if current atom can be moved, false otherwise.
+   */
+  @Override
+  public boolean isEligible() {
+    return isOccupied() && (getType() <= KINK);
+  }
+  
   /**
    * Probability to jump to given neighbour position. Only zigzag edge diffusion is a jump to second
    * neighbour.
@@ -92,14 +102,5 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
 
     return rates.getRate(originN1, originN2, destinationN1, destinationN2, secondNeighbour, 873);
   }  
-  
-  /**
-   * Only BULK atom types are considered immobile atoms.
-   *
-   * @return true if current atom can be moved, false otherwise.
-   */
-  @Override
-  public boolean isEligible() {
-    return isOccupied() && (getType() <= KINK);
-  }
+ 
 }

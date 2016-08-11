@@ -13,28 +13,14 @@ import utils.list.AbstractList;
  */
 public interface IKmc {
 
-  public void initialiseRates(double[] rates);
-  
-  public void reset();
-  
-  public void depositSeed();
-
-  public AbstractLattice getLattice();
-
-  public int simulate();
-
-  public void simulate(double endtime);
-
-  public int simulate(int iterations);
-
-  public AbstractList getList();
+  public int getIterations();
 
   public double getTime();
 
-  public int getIterations();
+  public void setDepositionRate(double depositionRatePerSite, double islandDensity);
 
   public float[][] getHexagonalPeriodicSurface(int binX, int binY);
-  
+
   /**
    * Returns a sampled topological measurement of the KMC surface
    *
@@ -44,8 +30,22 @@ public interface IKmc {
    */
   public float[][] getSampledSurface(int binX, int binY);
 
-  public float[][] increaseEmptyArea(float[][] inputArea, double scale);
+  public int simulate();
 
-  public void setDepositionRate(double depositionRatePerSite, double islandDensity);
+  public void simulate(double endtime);
+
+  public int simulate(int iterations);
+    
+  public void initialiseRates(double[] rates);
+  
+  public void reset();
+  
+  public void depositSeed();
+
+  public AbstractLattice getLattice();
+
+  public AbstractList getList();
+
+  public float[][] increaseEmptyArea(float[][] inputArea, double scale);
 
 }

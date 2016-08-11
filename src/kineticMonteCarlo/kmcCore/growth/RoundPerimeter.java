@@ -34,10 +34,6 @@ public class RoundPerimeter {
   private short type;
   private int neededSteps;
 
-  public int getNeededSteps() {
-    return neededSteps;
-  }
-
   public RoundPerimeter(String statisticData) {
     perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
     currentRadius = perimeterStatistics.getMinRadiusInSize();
@@ -47,6 +43,10 @@ public class RoundPerimeter {
   public RoundPerimeter(String statisticData, short type){
    this(statisticData);
    this.type = type;
+  }
+  
+  public int getNeededSteps() {
+    return neededSteps;
   }
   
   public short getType() {
@@ -79,12 +79,17 @@ public class RoundPerimeter {
     perimeter.stream().forEach(atom -> currentPerimeterTreeMap.put(atom.getId(), atom));
   }
   
+  public void setMaxPerimeter(float sizeX, float sizeY) {
+    currentRadius = (int) Math.max(sizeX, sizeY) / 2;
+  }
+  
   public boolean contains(AbstractGrowthAtom atom) {
     return currentPerimeterTreeMap.containsKey(atom.getId());
   }
   
   /**
    * Enlarge the perimeter; i.e. go to the next radius in the perimeter.
+   * 
    * @return the new value of the perimeter.
    */
   public int goToNextRadius() {
@@ -92,10 +97,6 @@ public class RoundPerimeter {
     return currentRadius;
   }
 
-  public void setMaxPerimeter(float sizeX, float sizeY) {
-    currentRadius = (int) Math.max(sizeX, sizeY) / 2;
-  }
-  
   public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom originAtom) {
 
     int angle = searchPerimeterOffsetReentrance();
@@ -166,7 +167,11 @@ public class RoundPerimeter {
 
   }
 
-   protected int searchPerimeterOffsetReentrance() {
+  public AbstractGrowthAtom getRandomPerimeterAtom() {
+    return currentPerimeter.get(utils.StaticRandom.rawInteger(currentPerimeter.size()));
+  }
+
+  int searchPerimeterOffsetReentrance() {
     int linearSearch = (int) (perimeterStatistics.getTotalCount(currentRadius) * StaticRandom.raw());
     int actualCount = 0;
     int angle = 0;
@@ -180,9 +185,4 @@ public class RoundPerimeter {
 
     return angle;
   }
-
-  public AbstractGrowthAtom getRandomPerimeterAtom() {
-    return currentPerimeter.get(utils.StaticRandom.rawInteger(currentPerimeter.size()));
-  }
-
 }

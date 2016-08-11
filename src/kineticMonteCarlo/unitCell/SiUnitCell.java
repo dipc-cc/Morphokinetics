@@ -53,72 +53,12 @@ public class SiUnitCell {
     return limitZ;
   }
 
-  private void setRotacion(double[] m) {
-    double M, N;
-
-    M = Math.sqrt((double) m[0] * (double) m[0] + (double) m[1] * (double) m[1]
-            + (double) m[2] * (double) m[2]);
-    N = Math.sqrt((double) m[3] * (double) m[3] + (double) m[4] * (double) m[4]
-            + (double) m[5] * (double) m[5]);
-
-    rotation[0][0] = (double) m[3] / (double) N;
-    rotation[1][0] = (double) m[4] / (double) N;
-    rotation[2][0] = (double) m[5] / (double) N;
-
-    rotation[0][1] = (double) (((double) m[1] * (double) m[5] - (double) m[2] * (double) m[4]) / (M * N));
-    rotation[1][1] = (double) (((double) m[2] * (double) m[3] - (double) m[0] * (double) m[5]) / (M * N));
-    rotation[2][1] = (double) (((double) m[0] * (double) m[4] - (double) m[1] * (double) m[3]) / (M * N));
-
-    rotation[0][2] = (double) m[0] / (double) M;
-    rotation[1][2] = (double) m[1] / (double) M;
-    rotation[2][2] = (double) m[2] / (double) M;
-
+  public short[] getNeighs() {
+    return neighs;
   }
 
-  private double getCos3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-    double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
-    double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
-    double temp = prod / mag;
-    
-    if (temp > 1.0) {
-      temp = 1.0;
-    }
-
-    return temp;
-  }
-
-  private double getSin3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-    double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
-    double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
-    double temp = prod / mag;
-
-    if (temp > 1.0) {
-      temp = 1.0;
-    }
-
-    return Math.sqrt(1 - (temp * temp));
-
-  }
-
-  private double getAreaXY(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-    double mag1 = Math.sqrt(v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
-    double mag2 = Math.sqrt(v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
-    return mag1 * mag2;
-  }
-
-  private double getAreaXYPower(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
-    double mag1 = (v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
-    double mag2 = (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
-    return mag1 * mag2;
-  }
-
-  private double truncate(double valor, int decimales) {
-    int desp = 1;
-    for (int i = 0; i < decimales; i++) {
-      desp = desp * 10;
-    }
-    long temp = Math.round(valor * desp);
-    return (((double) temp) / desp);
+  public byte[] getNBlock() {
+    return nBlock;
   }
 
   public int createUnitCell(int millerX, int millerY, int millerZ) {
@@ -524,6 +464,74 @@ public class SiUnitCell {
     } else {
       return neighs.length / 4;
     }
+  }
+
+  private void setRotacion(double[] m) {
+    double M, N;
+
+    M = Math.sqrt((double) m[0] * (double) m[0] + (double) m[1] * (double) m[1]
+            + (double) m[2] * (double) m[2]);
+    N = Math.sqrt((double) m[3] * (double) m[3] + (double) m[4] * (double) m[4]
+            + (double) m[5] * (double) m[5]);
+
+    rotation[0][0] = (double) m[3] / (double) N;
+    rotation[1][0] = (double) m[4] / (double) N;
+    rotation[2][0] = (double) m[5] / (double) N;
+
+    rotation[0][1] = (double) (((double) m[1] * (double) m[5] - (double) m[2] * (double) m[4]) / (M * N));
+    rotation[1][1] = (double) (((double) m[2] * (double) m[3] - (double) m[0] * (double) m[5]) / (M * N));
+    rotation[2][1] = (double) (((double) m[0] * (double) m[4] - (double) m[1] * (double) m[3]) / (M * N));
+
+    rotation[0][2] = (double) m[0] / (double) M;
+    rotation[1][2] = (double) m[1] / (double) M;
+    rotation[2][2] = (double) m[2] / (double) M;
+
+  }
+
+  private double getCos3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+    double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
+    double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
+    double temp = prod / mag;
+    
+    if (temp > 1.0) {
+      temp = 1.0;
+    }
+
+    return temp;
+  }
+
+  private double getSin3D(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+    double prod = v1_X * v2_X + v1_Y * v2_Y + v1_Z * v2_Z;
+    double mag = Math.sqrt((v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z) * (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z));
+    double temp = prod / mag;
+
+    if (temp > 1.0) {
+      temp = 1.0;
+    }
+
+    return Math.sqrt(1 - (temp * temp));
+
+  }
+
+  private double getAreaXY(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+    double mag1 = Math.sqrt(v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
+    double mag2 = Math.sqrt(v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
+    return mag1 * mag2;
+  }
+
+  private double getAreaXYPower(double v1_X, double v1_Y, double v1_Z, double v2_X, double v2_Y, double v2_Z) {
+    double mag1 = (v1_X * v1_X + v1_Y * v1_Y + v1_Z * v1_Z);
+    double mag2 = (v2_X * v2_X + v2_Y * v2_Y + v2_Z * v2_Z);
+    return mag1 * mag2;
+  }
+
+  private double truncate(double valor, int decimales) {
+    int desp = 1;
+    for (int i = 0; i < decimales; i++) {
+      desp = desp * 10;
+    }
+    long temp = Math.round(valor * desp);
+    return (((double) temp) / desp);
   }
 
   private int createAtoms() {
@@ -1588,13 +1596,5 @@ public class SiUnitCell {
       }
     }
 
-  }
-
-  public short[] getNeighs() {
-    return neighs;
-  }
-
-  public byte[] getNBlock() {
-    return nBlock;
   }
 }

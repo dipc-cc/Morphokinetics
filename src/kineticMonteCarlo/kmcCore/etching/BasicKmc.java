@@ -25,8 +25,31 @@ public class BasicKmc extends AbstractKmc {
 
   }
 
+  @Override
+  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
+    return getSampledSurface(binX, binY);
+  }
+  
+  @Override
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
+
+    double scaleX = binX / (float) getLattice().getHexaSizeI();
+    ListIterator<AbstractAtom> iterator = getList().getIterator();
+
+    while (iterator.hasNext()) {
+      BasicAtom atom = (BasicAtom) iterator.next();
+      int sampledPosX = (int) (atom.getX() * scaleX);
+      if (surface[0][sampledPosX] < atom.getY()) {
+        surface[0][sampledPosX] = atom.getY();
+      }
+    }
+    return surface;
+  }
+  
   /**
    * This model ignores the deposition rate.
+   * 
    * @param rates
    */ 
   @Override
@@ -73,28 +96,6 @@ public class BasicKmc extends AbstractKmc {
 
   }
 
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
-  }
-  
-  @Override
-  public float[][] getSampledSurface(int binX, int binY) {
-    float[][] surface = new float[binX][binY];
-
-    double scaleX = binX / (float) getLattice().getHexaSizeI();
-    ListIterator<AbstractAtom> iterator = getList().getIterator();
-
-    while (iterator.hasNext()) {
-      BasicAtom atom = (BasicAtom) iterator.next();
-      int sampledPosX = (int) (atom.getX() * scaleX);
-      if (surface[0][sampledPosX] < atom.getY()) {
-        surface[0][sampledPosX] = atom.getY();
-      }
-    }
-    return surface;
-  }
-  
   /**
    * Does nothing.
    *

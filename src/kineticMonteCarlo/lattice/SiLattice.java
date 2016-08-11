@@ -84,6 +84,26 @@ public class SiLattice extends AbstractLattice {
     return ucList[pos];
   }
   
+  /**
+   * Number of islands has no sense in etching.
+   *
+   * @return -1 always.
+   */
+  @Override
+  public int getIslandCount() {
+    return -1;
+  }
+  
+  /**
+   * Fractal dimension not implemented in etching.
+   *
+   * @return -1.0 always.
+   */
+  @Override
+  public float getFractalDimension() {
+    return -1.0f;
+  }
+  
   @Override
   public void reset() {
     //Unremove atoms and set to bulk mode (4,12)
@@ -123,6 +143,7 @@ public class SiLattice extends AbstractLattice {
 
   /**
    * Atoms creation.
+   * 
    * @param coords
    * @param uc 
    */
@@ -150,6 +171,7 @@ public class SiLattice extends AbstractLattice {
 
   /**
    * Atoms inter-connection.
+   * 
    * @param neihbourUnitCell
    * @param block 
    */
@@ -213,25 +235,5 @@ public class SiLattice extends AbstractLattice {
         }
       }
     }
-  }
-
-  /**
-   * Number of islands has no sense in etching.
-   *
-   * @return -1 always.
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
-  
-  /**
-   * Fractal dimension not implemented in etching.
-   *
-   * @return -1.0 always.
-   */
-  @Override
-  public float getFractalDimension() {
-    return -1.0f;
   }
 }

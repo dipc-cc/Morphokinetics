@@ -33,96 +33,8 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   }
   
   @Override
-  public byte getTypeWithoutNeighbour(int neighPos) {
-    if (!neighbours[neighPos].isOccupied()) return getType(); // impossible to happen
-
-    return typesTable.getCurrentType(occupiedNeighbours - 1);
-  }
-
-  @Override
-  public boolean areTwoTerracesTogether() {
-    if (occupiedNeighbours != 2) {
-      return false;
-    }
-    int cont = 0;
-    int i = 0;
-    while (cont < 2 && i < getNumberOfNeighbours()) {
-      if (neighbours[i].isOccupied()) {
-        if (neighbours[i].getType() != TERRACE) {
-          return false;
-        }
-        cont++;
-      }
-      i++;
-    }
-    return true;
-  }
-
-  @Override
-  public AbstractGrowthAtom chooseRandomHop() {
-    double linearSearch = StaticRandom.raw() * getProbability();
-
-    double sum = 0;
-    int cont = 0;
-    while (true) {
-      sum += getBondsProbability(cont++);
-      if (sum >= linearSearch) {
-        break;
-      }
-      if (cont == getNumberOfNeighbours()) {
-        break;
-      }
-    }
-    cont--;
-
-    return neighbours[cont];
-  }
-
-  @Override
   public int getOrientation() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void obtainRateFromNeighbours() {
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      setBondsProbability(probJumpToNeighbour(1, i), i);
-      addProbability(getBondsProbability(i));
-    }
-    // check if it is really a kink
-    if (getType() == KINK) {
-      int neighbourPositions = 0;
-      for (int i = 0; i < neighbours.length; i++) {
-        if (neighbours[i].isOccupied()) {
-          neighbourPositions += i;
-        }
-      }
-      // make immobile, if two neighbours of the kink are not consecutive
-      if (neighbourPositions % 2 == 0) { 
-        for (int i = 0; i < neighbours.length; i++) {
-          neighbourPositions += i;
-          addProbability(-getBondsProbability(i)); 
-          setBondsProbability(0, i);
-        }
-        setType(ISLAND);
-      }
-    }
-  }
-  
-  @Override
-  public double probJumpToNeighbour(int ignored, int position) {
-    if (neighbours[position].isOccupied()) {
-      return 0;
-    }
-
-    byte originType = getType();
-    int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
-    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
-
-    if (destination > 3) {
-      System.out.println("error! ");
-    }
-    return getProbability(originType, destination);
   }
 
   @Override
@@ -180,6 +92,94 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     occupiedNeighbours += value;
   }
   
+  @Override
+  public byte getTypeWithoutNeighbour(int neighPos) {
+    if (!neighbours[neighPos].isOccupied()) return getType(); // impossible to happen
+
+    return typesTable.getCurrentType(occupiedNeighbours - 1);
+  }
+
+  @Override
+  public boolean areTwoTerracesTogether() {
+    if (occupiedNeighbours != 2) {
+      return false;
+    }
+    int cont = 0;
+    int i = 0;
+    while (cont < 2 && i < getNumberOfNeighbours()) {
+      if (neighbours[i].isOccupied()) {
+        if (neighbours[i].getType() != TERRACE) {
+          return false;
+        }
+        cont++;
+      }
+      i++;
+    }
+    return true;
+  }
+
+  @Override
+  public AbstractGrowthAtom chooseRandomHop() {
+    double linearSearch = StaticRandom.raw() * getProbability();
+
+    double sum = 0;
+    int cont = 0;
+    while (true) {
+      sum += getBondsProbability(cont++);
+      if (sum >= linearSearch) {
+        break;
+      }
+      if (cont == getNumberOfNeighbours()) {
+        break;
+      }
+    }
+    cont--;
+
+    return neighbours[cont];
+  }
+
+  @Override
+  public void obtainRateFromNeighbours() {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      setBondsProbability(probJumpToNeighbour(1, i), i);
+      addProbability(getBondsProbability(i));
+    }
+    // check if it is really a kink
+    if (getType() == KINK) {
+      int neighbourPositions = 0;
+      for (int i = 0; i < neighbours.length; i++) {
+        if (neighbours[i].isOccupied()) {
+          neighbourPositions += i;
+        }
+      }
+      // make immobile, if two neighbours of the kink are not consecutive
+      if (neighbourPositions % 2 == 0) { 
+        for (int i = 0; i < neighbours.length; i++) {
+          neighbourPositions += i;
+          addProbability(-getBondsProbability(i)); 
+          setBondsProbability(0, i);
+        }
+        setType(ISLAND);
+      }
+    }
+  }
+  
+  @Override
+  public double probJumpToNeighbour(int ignored, int position) {
+    if (neighbours[position].isOccupied()) {
+      return 0;
+    }
+
+    byte originType = getType();
+    int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
+    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
+
+    if (destination > 3) {
+      System.out.println("error! ");
+    }
+    return getProbability(originType, destination);
+  }
+
   /**
    * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability.
    */

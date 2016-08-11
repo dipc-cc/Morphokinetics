@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class Statistics {
   
   private int[][] data;
-  private Restart restart;
+  private final Restart restart;
   
   public Statistics(String statisticsFile) {
     restart = new Restart(Restart.getJarBaseDir() + "/perimeterData");
@@ -57,7 +57,7 @@ public class Statistics {
    * To properly initialise in the not abstract constructor
    * @param rawData 
    */
-  protected void setData(int[][] rawData){
+  void setData(int[][] rawData){
     data = rawData;
   }
   
@@ -67,10 +67,10 @@ public class Statistics {
    * 
    * @return all the data
    */
-  protected int[][] getWholeData() {
+  int[][] getWholeData() {
     return data;
   }
-     
+
   private void readAndSetStatistics(String fileName) {
     
     float[][] tmp;
