@@ -22,10 +22,9 @@ import org.junit.Test;
  */
 public class BasicSimulationTest {
   
-  private float[][] currentSurface;
-  private float[][] currentPsd;
-  private int currentIslandCount;
-  private double currentSimulatedTime;
+  private float[][] simulatedSurface;
+  private int simulatedIslands;
+  private double simulatedTime;
 
   public BasicSimulationTest() {
   }
@@ -64,10 +63,10 @@ public class BasicSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }    
     for (int i = 0; i < ref0.length; i++) {
-      assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(currentIslandCount, 14);
-    assertEquals(28.556960969829433, currentSimulatedTime, 0.0);
+    assertEquals(simulatedIslands, 14);
+    assertEquals(28.556960969829433, simulatedTime, 0.0);
   }
   
   @Test
@@ -88,10 +87,10 @@ public class BasicSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }    
     for (int i = 0; i < ref0.length; i++) {
-      assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(currentIslandCount, 1);
-    assertEquals(29.712285617279285, currentSimulatedTime, 0.0);
+    assertEquals(simulatedIslands, 1);
+    assertEquals(29.712285617279285, simulatedTime, 0.0);
   }
   
   private void doAgTest(Parser parser) {
@@ -102,12 +101,9 @@ public class BasicSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    currentSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
-    if (parser.doPsd()) {
-      currentPsd = simulation.getPsd().getPsd();
-    }
-    currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
-    currentSimulatedTime = simulation.getSimulatedTime();
+    simulatedSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
+    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedTime = simulation.getSimulatedTime();
   }
 
 }

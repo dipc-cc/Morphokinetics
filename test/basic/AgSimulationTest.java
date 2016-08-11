@@ -27,11 +27,11 @@ import org.junit.Test;
  */
 public class AgSimulationTest {
   
-  private int currentIslandCount;
-  private double currentSimulatedTime;
-  private float[][] currentSurface;
-  private float[][] currentPsd;
-  private float[][][] currentSurfaces;
+  private int simulatedIslands;
+  private double simulatedTime;
+  private float[][] simulatedSurface;
+  private float[][] simulatedPsd;
+  private float[][][] simulatedSurfaces;
 
   public AgSimulationTest() {
   }
@@ -95,9 +95,9 @@ public class AgSimulationTest {
     }
 
     for (int i = 0; i < ref.length; i++) {
-      assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(198.99123314622588, currentSimulatedTime, 0.0);
+    assertEquals(198.99123314622588, simulatedTime, 0.0);
   }
 
   /**
@@ -136,14 +136,14 @@ public class AgSimulationTest {
             (int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()),
             null, "Frobenius", null, parser.getTemperature());
     evaluator.setPsd(ref);
-    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
+    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(simulatedPsd);
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
     results.add(0.04); // the error must be lower than 0.032
     results.sort((a, b) -> b.compareTo(a));
     assertEquals(0.04, results.get(0), 0.0); // ensure that the first value is 0.04, and therefore, the current error is lower
-    assertEquals(350939.25839387067, currentSimulatedTime, 1000.0);
+    assertEquals(350939.25839387067, simulatedTime, 1000.0);
   }
   
   @Test
@@ -166,7 +166,7 @@ public class AgSimulationTest {
         float[][] tmpSurface = restart.readSurfaceText2D(2, sizes, fileName);
         for (int j = 0; j < sizes[0]; j++) {
           for (int k = 0; k < sizes[1]; k++) {
-            assertEquals(currentSurfaces[i][j][k], tmpSurface[j][k], 0.001f);
+            assertEquals(simulatedSurfaces[i][j][k], tmpSurface[j][k], 0.001f);
           }
         }
       }
@@ -174,8 +174,8 @@ public class AgSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    assertEquals(currentIslandCount, 3);
-    assertEquals(14.381566300521941, currentSimulatedTime, 0.0);
+    assertEquals(simulatedIslands, 3);
+    assertEquals(14.381566300521941, simulatedTime, 0.0);
   }
 
   private void doAgTest(Parser parser) {
@@ -186,20 +186,20 @@ public class AgSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX(), parser.getCartSizeY());
-    currentPsd = simulation.getPsd().getPsd();
-    currentIslandCount = simulation.getKmc().getLattice().getIslandCount();
-    currentSimulatedTime = simulation.getSimulatedTime();
+    simulatedSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX(), parser.getCartSizeY());
+    simulatedPsd = simulation.getPsd().getPsd();
+    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedTime = simulation.getSimulatedTime();
     Restart readResults = new Restart(simulation.getRestartFolderName());
     int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
-    currentSurfaces = new float[parser.getNumberOfSimulations()][sizes[0]][sizes[1]];
+    simulatedSurfaces = new float[parser.getNumberOfSimulations()][sizes[0]][sizes[1]];
     for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
       String fileName = format("%s/surface%03d.mko", simulation.getRestartFolderName(), i);
       try {
         float[][] tmpSurface = readResults.readSurfaceBinary2D(fileName);
         for (int j = 0; j < sizes[0]; j++) {
           for (int k = 0; k < sizes[1]; k++) {
-            currentSurfaces[i][j][k] = tmpSurface[j][k];
+            simulatedSurfaces[i][j][k] = tmpSurface[j][k];
           }
         }
       } catch (FileNotFoundException ex) {
