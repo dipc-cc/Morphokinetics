@@ -229,10 +229,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   @Override
   public float getFractalDimension() {
     float sumAvg = 0.0f;
-    for (int i = 0; i < getIslandCount(); i++) {
+    for (int i = 0; i < islandCount; i++) {
       sumAvg += islands[i].getAvgDistance();
     }
-    return (float) (1.0 / (sumAvg / getIslandCount()));
+    return (float) (1.0 / (sumAvg / islandCount));
   }
   
   @Override
