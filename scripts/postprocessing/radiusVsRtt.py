@@ -1,10 +1,6 @@
-# Calculates the island distribution with the given chunk size and
-# coverage from the input file
-# "dataEvery1percentAndNucleation.txt". The output is "occurrences"
-# and the plot "islandDistribution.png" It also calculates the average
-# island size (regardless of the chunk size) to the same files.
 #
-# Additionally, also computes the average simulated time.
+# Compares in a graph the average island size (or its square root)
+# growth with r_tt (rate to do a transition from terrace to terrace).
 #
 # Author: J. Alberdi-Rodriguez
 
