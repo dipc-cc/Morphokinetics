@@ -27,7 +27,6 @@ workingPath = os.getcwd()
 results=[]
 temperatures=list(range(120, 221, 5))
 for i in range(-6,5):
-#for i in ([-4, -1]):
     folder="flux3.5e"+str(i)
     flux=float("3.5e"+str(i))
     print(folder)
