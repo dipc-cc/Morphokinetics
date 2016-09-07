@@ -1,6 +1,7 @@
 import re
 import os
 import math
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -25,11 +26,15 @@ def getAllValues(f, maxCoverage, sqrt=True):
             next(iterList) # Skip the first and second entries
             next(iterList)
             j = next(iterList)
-            while j != '\n': #save the current values to an array
+            while j != '\n': #save the current values (island sizes) to an array
                 islandSizesList[cov].append(int(j))
                 islandRadiusList[cov].append(int(math.sqrt(float(j))))
                 timeList[cov].append(time)
                 j = next(iterList)
+            myList = re.split('\t|\n', previousLine)
+            if (len(myList) > 10):
+                print(myList)
+                gyradiusList[cov].append(float(myList[9]))
             cov=0
         if re.match(regExpression, line):
             cov=int(line[2]+line[3])
@@ -38,9 +43,9 @@ def getAllValues(f, maxCoverage, sqrt=True):
         previousLine = line
 
     if (sqrt):
-        return islandRadiusList, timeList
+        return islandRadiusList, timeList, gyradiusList
     else:
-        return islandSizesList, timeList
+        return islandSizesList, timeList, gyradiusList
 
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
     """reads the input file and makes the histogram and the average
@@ -58,7 +63,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
     i=0
     histog = []
-    islandSizesList, timeList = getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList = getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
@@ -87,6 +92,10 @@ island size. It returns the slope of the fit, which is the growth rate."""
                     yValues.append(halfBin/averageSizes[-1])
                     xValues.append(value*averageSizes[-1]*averageSizes[-1]/cov)
                     halfBin += chunk
+    averageGyradius = []
+    for gyradius in gyradiusList:
+        if gyradius: #ensure that it is not null
+            averageGyradius.append(np.mean(gyradius))
 
     x = np.array(times)
     a, b = np.polyfit(x, averageSizes, 1)
@@ -99,7 +108,23 @@ island size. It returns the slope of the fit, which is the growth rate."""
         plt.plot(x,y)
         plt.savefig("tmpFig.png")
         plt.close()
-    return a
+    growthSlope = a
+
+    if averageGyradius:
+        a, b = np.polyfit(x, averageGyradius, 1)
+        #a = averageGyradius[-1]#/times[-1]
+        #b = 0
+        if verbose:
+            print("fit a*x+b, a={} b={}".format(a, b))
+            plt.plot(x,averageGyradius)
+            y = a*np.array(x)+b
+            plt.plot(x,y)
+            plt.savefig("tmpFig2.png")
+            plt.close()
+        gyradiusSlope = a
+    else:
+        gyradiusSlope = 0
+    return growthSlope, gyradiusSlope
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
 def getRtt(index):
@@ -148,20 +173,25 @@ def getIslandDistribution(sqrt=True):
     chunk=40
     coverage=31
     verbose=False
-    slopes = []
+    growthSlopes = []
+    gyradiusSlopes = []
     allNe = []
     workingPath = os.getcwd()
     for temperature in range(120, 221, 5):
         try:
             os.chdir(str(temperature))
-            slope = openAndRead(chunk, coverage, sqrt, verbose)
-            slopes.append(slope)
+            growthSlope, gyradiusSlope = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlopes.append(growthSlope)
+            gyradiusSlopes.append(gyradiusSlope)
             numberOfEvents, simulatedTime = getNumberOfEvents()
             allNe.append(numberOfEvents/simulatedTime)
-            print("For temperature {} slope {}. Total rate {} ".format(temperature,slope, numberOfEvents/simulatedTime))
+            try:
+                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature,growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
+            except ValueError:
+                a=0 # skip the writing
         except OSError:
             print ("error changing to directory {}".format(temperature))
             a=0 #do nothing
         os.chdir(workingPath)
 
-    return slopes, allNe
+    return growthSlopes, allNe, gyradiusSlopes
