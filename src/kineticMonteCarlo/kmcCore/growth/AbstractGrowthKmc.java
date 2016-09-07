@@ -136,7 +136,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities] ");
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -696,9 +696,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       coverageFormat = "%f";
     }
 
-    outData.format(coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\n", printCoverage, getTime(),
+    lattice.getCentreOfMass();
+    lattice.getDistancesToCentre();
+    //compute the average distances to centre.
+    float avgDistance = (float) (1.0 / (lattice.getFractalDimension()));
+    outData.format(coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\n", printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
-            getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities);
+            getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance);
     sumProbabilities = 0.0d;
     outData.flush();
     if (extraOutput2) {
