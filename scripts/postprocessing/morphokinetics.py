@@ -2,6 +2,7 @@ import re
 import os
 import math
 import sys
+import glob
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -137,7 +138,7 @@ def getNumberOfEvents():
     simulatedTime = []
     count = 0
     regExpression=("Need")
-    fileName = "output"
+    fileName=glob.glob("output*")[-1]
     fail = False
     try:
         f=open(fileName)
