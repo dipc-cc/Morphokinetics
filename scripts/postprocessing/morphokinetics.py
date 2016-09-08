@@ -98,17 +98,20 @@ island size. It returns the slope of the fit, which is the growth rate."""
             averageGyradius.append(np.mean(gyradius))
 
     x = np.array(times)
-    a, b = np.polyfit(x, averageSizes, 1)
-    #a = averageSizes[-1]#/times[-1]
-    #b = 0
-    if verbose:
-        print("fit a*x+b, a={} b={}".format(a, b))
-        plt.plot(x,averageSizes)
-        y = a*np.array(x)+b
-        plt.plot(x,y)
-        plt.savefig("tmpFig.png")
-        plt.close()
-    growthSlope = a
+    if averageSizes:
+        a, b = np.polyfit(x, averageSizes, 1)
+        #a = averageSizes[-1]#/times[-1]
+        #b = 0
+        if verbose:
+            print("fit a*x+b, a={} b={}".format(a, b))
+            plt.plot(x,averageSizes)
+            y = a*np.array(x)+b
+            plt.plot(x,y)
+            plt.savefig("tmpFig.png")
+            plt.close()
+        growthSlope = a
+    else:
+        growthSlope = 0
 
     if averageGyradius:
         a, b = np.polyfit(x, averageGyradius, 1)
