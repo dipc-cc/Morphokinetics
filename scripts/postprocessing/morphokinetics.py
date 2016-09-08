@@ -5,6 +5,7 @@ import sys
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 def getAllValues(f, maxCoverage, sqrt=True):
     """ reads all the values for the corresponding coverage """
@@ -46,6 +47,10 @@ def getAllValues(f, maxCoverage, sqrt=True):
         return islandRadiusList, timeList, gyradiusList
     else:
         return islandSizesList, timeList, gyradiusList
+
+def powerFunc(x, a, b):
+    """ a*x^b function """
+    return a*x**b
 
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
     """reads the input file and makes the histogram and the average
@@ -103,31 +108,55 @@ island size. It returns the slope of the fit, which is the growth rate."""
     x = np.array(times)
     if averageSizes:
         a, b = np.polyfit(x, averageSizes, 1)
+        popt = curve_fit(powerFunc, x, averageSizes)
+        aPower = popt[0][0]
+        bPower = popt[0][1]
         #a = averageSizes[-1]#/times[-1]
         #b = 0
         if verbose:
-            print("fit a*x+b, a={} b={}".format(a, b))
+            plt.close()
+            label="{}x+{}".format(a, b)
+            print(label)
             plt.plot(x,averageSizes)
             y = a*np.array(x)+b
-            plt.plot(x,y)
+            plt.plot(x,y, label=label)
+            label="{}x^{}".format(aPower, bPower)
+            y = powerFunc(x, aPower, bPower)
+            plt.plot(x,y, label=label)
+            plt.legend(loc='upper left',prop={'size':6})
             plt.savefig("tmpFig.png")
             plt.close()
-        growthSlope = a
+
+        if sqrt:
+            growthSlope = aPower
+        else:
+            growthSlope = a
     else:
         growthSlope = 0
 
     if averageGyradius:
         a, b = np.polyfit(x, averageGyradius, 1)
+        popt = curve_fit(powerFunc, x, averageGyradius)
+        aPower = popt[0][0]
+        bPower = popt[0][1]
         #a = averageGyradius[-1]#/times[-1]
         #b = 0
         if verbose:
-            print("fit a*x+b, a={} b={}".format(a, b))
+            label="{}x+{}".format(a, b)
+            print(label)
             plt.plot(x,averageGyradius)
             y = a*np.array(x)+b
-            plt.plot(x,y)
+            plt.plot(x,y, label=label)
+            y = powerFunc(x, aPower, bPower)
+            label="{}x^{}".format(aPower, bPower)
+            plt.plot(x,y, label=label)
+            plt.legend(loc='upper left',prop={'size':6})
             plt.savefig("tmpFig2.png")
             plt.close()
-        gyradiusSlope = a
+        if sqrt:
+            gyradiusSlope = aPower
+        else:
+            gyradiusSlope = a
     else:
         gyradiusSlope = 0
     return growthSlope, gyradiusSlope
