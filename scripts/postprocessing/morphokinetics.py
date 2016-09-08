@@ -88,17 +88,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             times.append(np.mean(np.array(timeList[index]).astype(np.float)))
             if verbose:
                 print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
-            #normalise
-            for kk in histogMatrix[index]:
-                currentHistogram = kk[0]
-                halfBin = chunk
-                cov = index/100
-                yValues = []
-                xValues = []
-                for value in currentHistogram:
-                    yValues.append(halfBin/averageSizes[-1])
-                    xValues.append(value*averageSizes[-1]*averageSizes[-1]/cov)
-                    halfBin += chunk
+
     averageGyradius = []
     for gyradius in gyradiusList:
         if gyradius: #ensure that it is not null
