@@ -59,7 +59,9 @@ island size. It returns the slope of the fit, which is the growth rate."""
             f=open("results/"+fileName)
         except OSError:
             print("Input file {} can not be openned. Exiting! ".format(fileName))
-            sys.exit()
+            growthSlope = 0
+            gyradiusSlope = 0
+            return growthSlope, gyradiusSlope
 
     i=0
     histog = []
@@ -80,7 +82,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             averageSizes.append(np.mean(islandSizes))
             times.append(np.mean(np.array(timeList[index]).astype(np.float)))
             if verbose:
-                print("  coverage {}% is {}. Time is {}".format(index,averageSizes[-1],times[-1]))
+                print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
             #normalise
             for kk in histogMatrix[index]:
                 currentHistogram = kk[0]
@@ -97,6 +99,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
         if gyradius: #ensure that it is not null
             averageGyradius.append(np.mean(gyradius))
 
+    # Curve fitting
     x = np.array(times)
     if averageSizes:
         a, b = np.polyfit(x, averageSizes, 1)
@@ -141,9 +144,10 @@ def getNumberOfEvents():
     simulatedTime = []
     count = 0
     regExpression=("Need")
-    fileName=glob.glob("output*")[-1]
     fail = False
+    fileName="unknown"
     try:
+        fileName=glob.glob("output*")[-1]
         f=open(fileName)
         # if found the coverage, save the next line
         for line in f:
@@ -163,7 +167,7 @@ def getNumberOfEvents():
                 line = next(f)
                 time = float(re.split('\t',line)[1])
                 simulatedTime.append(time)
-    except OSError:
+    except (OSError,IndexError):
         print("input file {} can not be openned. Exiting! ".format(fileName))
         #sys.exit()
 
