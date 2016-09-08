@@ -96,13 +96,14 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
     # Curve fitting
     x = np.array(times)
-    if averageSizes:
+    try:
         a, b = np.polyfit(x, averageSizes, 1)
         popt = curve_fit(powerFunc, x, averageSizes)
         aPower = popt[0][0]
         bPower = popt[0][1]
         #a = averageSizes[-1]#/times[-1]
         #b = 0
+            
         if verbose:
             plt.close()
             label="{}x+{}".format(a, b)
@@ -121,10 +122,10 @@ island size. It returns the slope of the fit, which is the growth rate."""
             growthSlope = aPower
         else:
             growthSlope = a
-    else:
+    except TypeError:
         growthSlope = 0
 
-    if averageGyradius:
+    try:
         a, b = np.polyfit(x, averageGyradius, 1)
         popt = curve_fit(powerFunc, x, averageGyradius)
         aPower = popt[0][0]
@@ -147,7 +148,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             gyradiusSlope = aPower
         else:
             gyradiusSlope = a
-    else:
+    except TypeError:
         gyradiusSlope = 0
     return growthSlope, gyradiusSlope
 
