@@ -33,7 +33,6 @@ def getAllValues(f, maxCoverage, sqrt=True):
                 j = next(iterList)
             myList = re.split('\t|\n', previousLine)
             if (len(myList) > 10):
-                print(myList)
                 gyradiusList[cov].append(float(myList[9]))
             cov=0
         if re.match(regExpression, line):
