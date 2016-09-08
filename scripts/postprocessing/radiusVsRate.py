@@ -34,7 +34,7 @@ for i in range(-6,5):
         a=0 #do nothing
     os.chdir(workingPath)
     plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][0])/(flux**yPower),  label=folder)
-    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][2])/flux**yPower, label="gyradius")
+    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][2])/flux**yPower, '--', label="gyradius "+str(flux))
     plt.legend(loc='upper left',prop={'size':6})
     plt.savefig("radiusVsRate.png")
     
