@@ -22,18 +22,19 @@ def radiusVsRate(flux, folder="."):
     plt.grid(True)
 
     results=[]
+    sqrt = True
 
     print(folder)
     try:
         os.chdir(folder)
-        oneResult=mk.getIslandDistribution()
+        oneResult=mk.getIslandDistribution(sqrt)
         results.append(oneResult)
     except OSError:
         print ("error changing to {}".format(folder))
         a=0 #do nothing
-    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][0])/(flux**yPower),  label=folder)
-    plt.legend(loc='upper left',prop={'size':6})
+    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][0])/(flux**yPower),  label="growth"+folder)
     plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][2])/flux**yPower, label="gyradius")
+    plt.legend(loc='upper left',prop={'size':6})
 
 
 if __name__ == '__main__':
