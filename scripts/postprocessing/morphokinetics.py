@@ -150,7 +150,8 @@ island size. It returns the slope of the fit, which is the growth rate."""
             gyradiusSlope = a
     except TypeError:
         gyradiusSlope = 0
-    return growthSlope, gyradiusSlope
+    time30cov = np.mean(np.array(timeList[30]).astype(np.float))
+    return growthSlope, gyradiusSlope, time30cov
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
 def getRtt(index):
@@ -159,7 +160,7 @@ def getRtt(index):
 def getAllRtt():
     return Rtt
 
-def getNumberOfEvents():
+def getNumberOfEvents(time30cov):
     numberOfEvents = []
     simulatedTime = []
     count = 0
@@ -174,7 +175,7 @@ def getNumberOfEvents():
             if re.search(regExpression, line):
                 numberOfEvents.append(float(re.split(' ', line)[-5]))
                 count +=1
-            if re.match("    00", line) and not fail:
+            if re.match("    0", line) and not fail:
                 time = float(re.split('\t',line)[1])
                 if time == 0:
                     fail = True
@@ -193,7 +194,9 @@ def getNumberOfEvents():
 
     if all(v == 0 for v in simulatedTime):
         print("all values are zero")
-    return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime))
+        return np.mean(np.array(numberOfEvents)), time30cov
+    else:
+        return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime))
 
 def getIslandDistribution(sqrt=True):
     """ computes the island distribution """
@@ -207,10 +210,10 @@ def getIslandDistribution(sqrt=True):
     for temperature in range(120, 221, 5):
         try:
             os.chdir(str(temperature))
-            growthSlope, gyradiusSlope = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlope, gyradiusSlope, time30cov = openAndRead(chunk, coverage, sqrt, verbose)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
-            numberOfEvents, simulatedTime = getNumberOfEvents()
+            numberOfEvents, simulatedTime = getNumberOfEvents(time30cov)
             allNe.append(numberOfEvents/simulatedTime)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature,growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
