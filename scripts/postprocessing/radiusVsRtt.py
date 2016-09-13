@@ -9,13 +9,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 
-yPower=0.88
-xPower=1/3
+yPower=0.3
+xPower=0
 
 #plt.title("Average island growth")
 plt.grid(True)
 plt.xlabel(r"$\frac{{ r_{{tt}} }} {{ F^{{ {} }} }}$".format(xPower))
 plt.ylabel(r'Average radius growth rate/flux $\frac{{ \sqrt{{ \dot{{r}} }} }}{{F^{{ {} }} }} }}$'.format(yPower))
+plt.ylim(8,100)
 
 workingPath = os.getcwd()
 results=[]

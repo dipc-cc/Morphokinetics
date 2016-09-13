@@ -9,13 +9,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 
-    
-xPower=0.431
-yPower=0.75
+yPower=0.3
 
 plt.title("Average island growth")
 plt.ylabel("Average radius growth rate/flux^{}".format(yPower))
 plt.xlabel("1/$k_B $temperature")
+plt.ylim(10,100)
 plt.xlim(50,100)
 plt.grid(True)
 

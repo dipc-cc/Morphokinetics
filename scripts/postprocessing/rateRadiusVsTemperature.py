@@ -12,6 +12,7 @@ import morphokinetics as mk
 plt.title("Average island growth")
 plt.ylabel("Average area growth rate")
 plt.xlabel("1/$k_B $temperature")
+plt.ylim(1e3,1e8)
 plt.xlim(50,100)
 plt.grid(True)
 
@@ -30,8 +31,8 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a=0 #do nothing
     os.chdir(workingPath)
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), 4e4*np.array(results[-1][0]), label="4e4*area "+folder)
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), np.array(results[-1][1]), "--", label="rate "+folder)
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), 4e4*np.array(results[-1][0]), label="growth "+str(i))
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), np.array(results[-1][1]), "--", label="t. ratio "+str(i))
     plt.legend(loc='lower left',prop={'size':6})
     plt.savefig("rateRadiusVsTemperature.png")
     
