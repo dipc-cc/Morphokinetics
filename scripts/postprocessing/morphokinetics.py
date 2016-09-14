@@ -56,6 +56,7 @@ def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
 
+    numberOfIsland = 0
     fileName = "dataEvery1percentAndNucleation.txt"
     try:
         f=open(fileName)
@@ -66,8 +67,8 @@ island size. It returns the slope of the fit, which is the growth rate."""
             print("Input file {} can not be openned. Exiting! ".format(fileName))
             growthSlope = 0
             gyradiusSlope = 0
-            time30cov = 0
-            return growthSlope, gyradiusSlope, time30cov
+            time30cov = 1
+            return growthSlope, gyradiusSlope, time30cov, numberOfIsland
 
     i=0
     histog = []
@@ -78,13 +79,14 @@ island size. It returns the slope of the fit, which is the growth rate."""
     times = []
     if verbose:
         print("Average island size for")
-        
+
     for index, islandSizes in enumerate(islandSizesList):
         if islandSizes: #ensure that it is not null
             # do histogram
             histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk,chunk), density=False))
             # average
             averageSize = np.mean(islandSizes)
+            numberOfIsland += len(islandSizes)
             averageSizes.append(np.mean(islandSizes))
             times.append(np.mean(np.array(timeList[index]).astype(np.float)))
             if verbose:
@@ -152,7 +154,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
     except TypeError:
         gyradiusSlope = 0
     time30cov = np.mean(np.array(timeList[30]).astype(np.float))
-    return growthSlope, gyradiusSlope, time30cov
+    return growthSlope, gyradiusSlope, time30cov, numberOfIsland
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
 def getRtt(index):
@@ -194,8 +196,13 @@ def getNumberOfEvents(time30cov):
         #sys.exit()
 
     if all(v == 0 for v in simulatedTime):
-        print("all values are zero")
-        return np.mean(np.array(numberOfEvents)), time30cov
+        print("all values are zero ")
+        averageNumberOfEvents = np.mean(np.array(numberOfEvents))
+        if (math.isnan(averageNumberOfEvents)):
+            averageNumberOfEvents = 1
+        if (math.isnan(time30cov)):
+            time30cov = 1
+        return averageNumberOfEvents, time30cov
     else:
         return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime))
 
@@ -206,15 +213,21 @@ def getIslandDistribution(sqrt=True):
     verbose=False
     growthSlopes = []
     gyradiusSlopes = []
+    numberOfIslands = []
     allNe = []
     workingPath = os.getcwd()
     for temperature in range(120, 221, 5):
         try:
             os.chdir(str(temperature))
-            growthSlope, gyradiusSlope, time30cov = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlope, gyradiusSlope, time30cov, numberOfIsland = openAndRead(chunk, coverage, sqrt, verbose)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
+            numberOfIslands.append(numberOfIsland)
             numberOfEvents, simulatedTime = getNumberOfEvents(time30cov)
+            if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
+                print("something went wrong")
+                print("\t"+str(numberOfEvents))
+                print("\t"+str(simulatedTime))
             allNe.append(numberOfEvents/simulatedTime)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature,growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
@@ -225,4 +238,4 @@ def getIslandDistribution(sqrt=True):
             a=0 #do nothing
         os.chdir(workingPath)
 
-    return growthSlopes, allNe, gyradiusSlopes
+    return growthSlopes, allNe, gyradiusSlopes, numberOfIslands
