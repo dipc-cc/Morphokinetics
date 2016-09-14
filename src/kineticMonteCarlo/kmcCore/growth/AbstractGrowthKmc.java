@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
@@ -700,7 +701,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.getDistancesToCentre();
     //compute the average distances to centre.
     float avgDistance = (float) (1.0 / (lattice.getFractalDimension()));
-    outData.format(coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\n", printCoverage, getTime(),
+    outData.format(Locale.US, coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\n", printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
             getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance);
     sumProbabilities = 0.0d;
