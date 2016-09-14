@@ -66,7 +66,8 @@ island size. It returns the slope of the fit, which is the growth rate."""
             print("Input file {} can not be openned. Exiting! ".format(fileName))
             growthSlope = 0
             gyradiusSlope = 0
-            return growthSlope, gyradiusSlope
+            time30cov = 0
+            return growthSlope, gyradiusSlope, time30cov
 
     i=0
     histog = []
