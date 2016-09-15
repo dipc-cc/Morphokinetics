@@ -146,7 +146,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
             int myPositionForNeighbour = (pos + 2) % atom.getNumberOfNeighbours();
             byte destination = neighbourAtom.getTypeWithoutNeighbour(myPositionForNeighbour);
             byte origin = atom.getRealType();
-            if (atom.probJumpToNeighbour(1, pos) > 0) {
+            if (atom.probJumpToNeighbour(origin, pos) > 0) {
               histogramPossible[origin][destination] += 1 / getTotalProbability();
               histogramPossibleCounter[origin][destination]++;
             }
