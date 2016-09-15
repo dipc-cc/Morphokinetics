@@ -12,6 +12,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   /** TODO document the types and change them to constants
    * 
    */
+  /**
+   * Type of the atom. Some examples are; TERRACE, EDGE, KINK, ISLAND... Precise types are defined
+   * in child classes.
+   */
   private byte type;
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
