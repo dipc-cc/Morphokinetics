@@ -7,6 +7,7 @@ package basic.io;
 
 import static basic.io.Restart.MAX_DIMS;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -14,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.StringTokenizer;
@@ -154,9 +156,10 @@ class RestartLow {
   static void writeLowText2D(float[][] data, String fileName, boolean shift) {
     try {
       // create file descriptor
-      File file = new File(fileName);
-      PrintWriter printWriter = new PrintWriter(file);
-
+      FileWriter fstream = new FileWriter(fileName);
+      BufferedWriter printWriter = new BufferedWriter(fstream);
+      String s ;
+      String sLog;
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
         for (int j = 0; j < data[0].length; j++) {
@@ -166,8 +169,8 @@ class RestartLow {
             posX = (posX + data.length / 2) % data.length;
             posY = (posY + data[0].length / 2) % data[0].length;
           }
-          String s = format("%.3f", data[i][j]);
-          String sLog = format("%.3f", Math.log(data[i][j]));
+          s = format("%.3f", data[i][j]);
+          sLog = format("%.3f", Math.log(data[i][j]));
           printWriter.write(posX + " " + posY + " " + sLog + " " + s + "\n");
         }
 
@@ -175,6 +178,7 @@ class RestartLow {
       }
       printWriter.flush();
       printWriter.close();
+      fstream.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
@@ -189,7 +193,8 @@ class RestartLow {
     int sizeY = 0;
     int sizeX = 0;
     try {
-      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      FileReader fstream = new FileReader(fileName);
+      BufferedReader in = new BufferedReader(fstream);
       String line;
       // <-- read whole line
       line = in.readLine();
@@ -211,6 +216,8 @@ class RestartLow {
         }
         line = in.readLine();
       }
+      in.close();
+      fstream.close();
     } catch (FileNotFoundException fe) {
       throw fe;
     } catch (Exception e) {
@@ -229,8 +236,8 @@ class RestartLow {
     int j = -1;
     float trash;
     try {
-
-      BufferedReader in = new BufferedReader(new FileReader(fileName));
+      FileReader fstream = new FileReader(fileName);
+      BufferedReader in = new BufferedReader(fstream);
       String line;
       // <-- read whole line
       line = in.readLine();
@@ -248,6 +255,8 @@ class RestartLow {
         data[posX][posY] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         line = in.readLine();
       }
+      in.close();
+      fstream.close();
     } catch (FileNotFoundException fe) {
       throw fe;
     } catch (Exception e) {
@@ -341,15 +350,18 @@ class RestartLow {
       String s;
       s = format("%d", numberOfAtoms);
       printWriter.write(s +"\n simple XYZ file made with Morphokinetics\n");
-      
+      IUc uc;
+      double posX;
+      double posY;
+      double posZ;
       // for each atom in the uc
       for (int i = 0; i < lattice.size(); i++) {
-        IUc uc = lattice.getUc(i);
+        uc = lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           IAtom atom = uc.getAtom(j);
-          double posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
-          double posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
-          double posZ = (uc.getPos().getZ() + atom.getPos().getZ()) * scale;
+          posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
+          posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
+          posZ = (uc.getPos().getZ() + atom.getPos().getZ()) * scale;
           s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
           if (atom.isOccupied()) {
             printWriter.write(s + "\n");
