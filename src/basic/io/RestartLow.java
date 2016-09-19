@@ -359,11 +359,11 @@ class RestartLow {
         uc = lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           IAtom atom = uc.getAtom(j);
-          posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
-          posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
-          posZ = (uc.getPos().getZ() + atom.getPos().getZ()) * scale;
-          s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
           if (atom.isOccupied()) {
+            posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
+            posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
+            posZ = (uc.getPos().getZ() + atom.getPos().getZ()) * scale;
+            s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
             printWriter.write(s + "\n");
           }
         }
