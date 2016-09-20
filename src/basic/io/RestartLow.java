@@ -44,19 +44,19 @@ class RestartLow {
   static void writeLowBinary(int dimensions, int[] sizes, float[][] data, String fileName) {
     writeHeaderBinary(dimensions, sizes, fileName);
     // create data output stream with its file output stream
-    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileName, true))) {
+    try (DataOutputStream out = new DataOutputStream(new FileOutputStream(fileName, true))) {
       // for each byte in the buffer
       for (int i = 0; i < sizes[0]; i++) {
         for (int j = 0; j < sizes[1]; j++) {
           // write float to the dos
-          dos.writeFloat(data[i][j]);
+          out.writeFloat(data[i][j]);
         }
       }
 
       // force bytes to the underlying stream
-      dos.flush();
+      out.flush();
       // releases all system resources from the streams
-      dos.close();
+      out.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
@@ -79,21 +79,21 @@ class RestartLow {
     int j = -1;
     int[] sizes = new int[3];
     // create data input stream with its file input stream
-    try (DataInputStream dis = new DataInputStream(new FileInputStream(fileName))) {
-      dis.skipBytes(16);
+    try (DataInputStream in = new DataInputStream(new FileInputStream(fileName))) {
+      in.skipBytes(16);
       // Read the dimensions of the file
-      dimensions = dis.readInt();
+      dimensions = in.readInt();
       // Read the sizes of the actual dimensions
       for (i = 0; i < dimensions; i++) {
-        sizes[i] = dis.readInt();
+        sizes[i] = in.readInt();
       }
       // Skip the rest of the dimensions
       for (j = i; j < MAX_DIMS; j++) {
-        dis.readInt();
+        in.readInt();
       }
       // Skip the rest of the header
       for (j = 0; j < 8; j++) {
-        dis.readInt();
+        in.readInt();
       }
 
       data = new float[sizes[0]][sizes[1]];
@@ -102,11 +102,11 @@ class RestartLow {
       for (i = 0; i < sizes[0]; i++) {
         for (j = 0; j < sizes[1]; j++) {
           // write float to the dos, reading an int
-          data[i][j] = (float) dis.readFloat();
+          data[i][j] = (float) in.readFloat();
         }
       }
       // releases all system resources from the streams
-      dis.close();
+      in.close();
     } catch (FileNotFoundException fe) {
       throw fe;
     } catch (Exception e) {
@@ -119,14 +119,14 @@ class RestartLow {
   
   static void writeLowText1D(float[] data, String fileName) {
     // create file descriptor. It will be automatically closed.
-    try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))) {
+    try (PrintWriter out = new PrintWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
         String s = format("%.3f", data[i]);
-        printWriter.write(i + " " + s + "\n");
+        out.write(i + " " + s + "\n");
       }
-      printWriter.flush();
-      printWriter.close();
+      out.flush();
+      out.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
@@ -135,7 +135,7 @@ class RestartLow {
   
   static void writeLowText2D(float[][] data, String fileName, boolean shift) {
     // create file descriptor. It will be automatically closed.
-    try (BufferedWriter printWriter = new BufferedWriter(new FileWriter(fileName))) {
+    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       String s;
       String sLog;
       // for each byte in the buffer
@@ -149,7 +149,7 @@ class RestartLow {
           }
           s = format("%.3f", data[i][j]);
           sLog = format("%.3f", Math.log(data[i][j]));
-          printWriter.write(posX + " " + posY + " " + sLog + " " + s + "\n");
+          out.write(posX + " " + posY + " " + sLog + " " + s + "\n");
         }
       }
     } catch (Exception e) {
@@ -237,16 +237,16 @@ class RestartLow {
 
   static void writeLowTextHexagonal(float[][] data, String fileName) {
     // create file descriptor. It will be automatically closed.
-    try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))) {
+    try (PrintWriter out = new PrintWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
         for (int j = 0; j < data[0].length; j++) {
           String s = format("%.3f", data[i][j]);
-          printWriter.write(i + " " + j + " " + s + "\n");
+          out.write(i + " " + j + " " + s + "\n");
         }
       }
-      printWriter.flush();
-      printWriter.close();
+      out.flush();
+      out.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
@@ -349,26 +349,26 @@ class RestartLow {
    */
   private static void writeHeaderBinary(int dimensions, int[] sizes, String fileName) {
     // create data output stream with its file output stream
-    try (DataOutputStream dos = new DataOutputStream(new FileOutputStream(fileName))) {
+    try (DataOutputStream out = new DataOutputStream(new FileOutputStream(fileName))) {
       // write header to the dos
-      dos.writeUTF("Morphokinetics");
-      dos.writeInt(dimensions);
+      out.writeUTF("Morphokinetics");
+      out.writeInt(dimensions);
       int i;
       for (i = 0; i < dimensions; i++) {
-        dos.writeInt(sizes[i]);
+        out.writeInt(sizes[i]);
       }
         for (int j = i; j < MAX_DIMS; j++) {
-        dos.writeInt(0);
+        out.writeInt(0);
       }
 
       for (int j = 0; j < 8; j++) {
-        dos.writeInt(-1);
+        out.writeInt(-1);
       }
-      dos.size();
+      out.size();
       // force bytes to the underlying stream
-      dos.flush();
+      out.flush();
       // releases all system resources from the streams
-      dos.close();
+      out.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
