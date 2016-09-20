@@ -30,7 +30,7 @@ public abstract class AbstractSimulation {
   private IRates rates;
   private PsdSignature2D psd;
   private final Parser parser;
-  private StaticRandom staticRandom;
+  private final StaticRandom staticRandom;
   private final String restartFolderName;
   private long startTime;
   private long iterationStartTime;
