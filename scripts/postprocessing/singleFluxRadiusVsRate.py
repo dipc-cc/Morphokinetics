@@ -9,14 +9,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 
-def radiusVsRate(flux, folder="."):
-    yPower=2/3
-    xPower=0
+def radiusVsRate(folder="."):
     
     plt.title("Average island growth")
-    label=r'Average island radius growth rate / flux $\frac{{ \sqrt{{ \dot{{r}} }} }}{{F^{{ {} }} }} }}$'.format(yPower)
+    label=r'Average island radius growth rate  $ \sqrt{{ \dot{{r}} }}$'
     plt.ylabel(label)
-    label=r'Time-averaged total rate $\frac{{ < R >_t }}{{ F ^{{ {} }} }}$'.format(xPower)
+    label=r'Time-averaged total rate $< R >_t }}$'
     plt.xlabel(label)
     plt.legend(loc='upper left',prop={'size':6})
     plt.grid(True)
@@ -32,8 +30,9 @@ def radiusVsRate(flux, folder="."):
     except OSError:
         print ("error changing to {}".format(folder))
         a=0 #do nothing
-    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][0])/(flux**yPower),  label="growth"+folder)
-    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][2])/flux**yPower, label="gyradius")
+    print(results)
+    plt.loglog(np.array(results[-1][1]), np.array(results[-1][0]),  label="growth"+folder)
+    plt.loglog(np.array(results[-1][1]), np.array(results[-1][2]), label="gyradius")
     plt.legend(loc='upper left',prop={'size':6})
 
 
