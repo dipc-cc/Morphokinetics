@@ -136,10 +136,8 @@ class RestartLow {
   }
   
   static void writeLowText1D(float[] data, String fileName) {
-    try {
-      // create file descriptor
-      File file = new File(fileName);
-      PrintWriter printWriter = new PrintWriter(file);
+    // create file descriptor. It will be automatically closed.
+    try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
         String s = format("%.3f", data[i]);
@@ -154,11 +152,9 @@ class RestartLow {
   }
   
   static void writeLowText2D(float[][] data, String fileName, boolean shift) {
-    try {
-      // create file descriptor
-      FileWriter fstream = new FileWriter(fileName);
-      BufferedWriter printWriter = new BufferedWriter(fstream);
-      String s ;
+    // create file descriptor. It will be automatically closed.
+    try (BufferedWriter printWriter = new BufferedWriter(new FileWriter(fileName))) {
+      String s;
       String sLog;
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
@@ -173,12 +169,7 @@ class RestartLow {
           sLog = format("%.3f", Math.log(data[i][j]));
           printWriter.write(posX + " " + posY + " " + sLog + " " + s + "\n");
         }
-
-        //printWriter.write("\n");
       }
-      printWriter.flush();
-      printWriter.close();
-      fstream.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
@@ -192,9 +183,8 @@ class RestartLow {
     int y = -1;
     int sizeY = 0;
     int sizeX = 0;
-    try {
-      FileReader fstream = new FileReader(fileName);
-      BufferedReader in = new BufferedReader(fstream);
+    // create file descriptor. It will be automatically closed.
+    try (BufferedReader in = new BufferedReader(new FileReader(fileName));) {
       String line;
       // <-- read whole line
       line = in.readLine();
@@ -217,7 +207,6 @@ class RestartLow {
         line = in.readLine();
       }
       in.close();
-      fstream.close();
     } catch (FileNotFoundException fe) {
       throw fe;
     } catch (Exception e) {
@@ -234,10 +223,8 @@ class RestartLow {
     System.out.println("Trying to read " + fileName + " file of size " + sizes[0] + "x" + sizes[1]);
     int i = -1;
     int j = -1;
-    float trash;
-    try {
-      FileReader fstream = new FileReader(fileName);
-      BufferedReader in = new BufferedReader(fstream);
+    // create file descriptor. It will be automatically closed.
+    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
       String line;
       // <-- read whole line
       line = in.readLine();
@@ -251,12 +238,11 @@ class RestartLow {
           posX = (posX + data.length / 2) % data.length;
           posY = (posY + data[0].length / 2) % data[0].length;
         }
-        trash = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+        Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         data[posX][posY] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
         line = in.readLine();
       }
       in.close();
-      fstream.close();
     } catch (FileNotFoundException fe) {
       throw fe;
     } catch (Exception e) {
@@ -268,11 +254,8 @@ class RestartLow {
   }
 
   static void writeLowTextHexagonal(float[][] data, String fileName) {
-    try {
-      // create file descriptor
-      File file = new File(fileName);
-      PrintWriter printWriter = new PrintWriter(file);
-
+    // create file descriptor. It will be automatically closed.
+    try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       for (int i = 0; i < data.length; i++) {
         for (int j = 0; j < data[0].length; j++) {
