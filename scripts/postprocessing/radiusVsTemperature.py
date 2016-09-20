@@ -11,6 +11,7 @@ import morphokinetics as mk
 
 yPower=0.3
 
+fig1 = plt.figure(1)
 plt.title("Average island growth")
 plt.ylabel("Average radius growth rate/flux^{}".format(yPower))
 plt.xlabel("1/$k_B $temperature")
@@ -22,6 +23,7 @@ workingPath = os.getcwd()
 results=[]
 temperatures=list(range(120, 221, 5))
 for i in range(-6,5):
+    fig1 = plt.figure(1)
     folder="flux3.5e"+str(i)
     flux=float("3.5e"+str(i))
     print(folder)
@@ -34,10 +36,13 @@ for i in range(-6,5):
     os.chdir(workingPath)
     plt.loglog(1/(np.array(temperatures)*8.62e-5), np.array(results[-1][0])/(flux**yPower), label=folder)
     plt.legend(loc='upper right',prop={'size':6})
-    plt.savefig("radiusVsTemperature.png")
+    fig1.savefig("radiusVsTemperature.png")
+    fig2 = plt.figure(2)
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), results[-1][3])
+    fig2.savefig("fig2.png")
     
 plt.close()
 
-
+#plot number of islands per temperature
 print("Good bye!")
           
