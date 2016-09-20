@@ -48,6 +48,8 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("graphene"));
+    }
+    if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
     super.initHistogramSucces(8);

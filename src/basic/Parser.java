@@ -160,6 +160,10 @@ public class Parser {
    * See {@link #forceNucleation()}
    */
   private boolean forceNucleation;
+  /**
+   * See {@link #useDevita()}
+   */
+  private boolean devita;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -252,6 +256,7 @@ public class Parser {
     randomSeed = true;
     useMaxPerimeter = false;
     forceNucleation = true;
+    devita = true;
 
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -470,6 +475,11 @@ public class Parser {
       forceNucleation = true;
     }
     try {
+      devita = json.getBoolean("devita");
+    } catch (JSONException e) {
+      devita = justCentralFlake; // By default Devita works with single-flake simulations only
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -650,6 +660,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"forceNucleation\"", forceNucleation);
+    System.out.printf("%32s: %s,\n", "\"devita\"", devita);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1265,6 +1276,16 @@ public class Parser {
    */
   public boolean forceNucleation() {
     return forceNucleation;
+  }
+  
+  /**
+   * Devita accelerator makes execution much faster, it may change results a bit. It is tested for
+   * single-flake simulations and seems to work fine. Nothing tried yet for multi-flake simulations.
+   *
+   * @return whether to use Devita accelerator.
+   */
+  public boolean useDevita() {
+    return devita;
   }
   
   public String getEvolutionaryAlgorithm() {
