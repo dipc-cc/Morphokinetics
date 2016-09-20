@@ -1,7 +1,6 @@
 import re
 import os
 import math
-import sys
 import glob
 import numpy as np
 import matplotlib.pyplot as plt
@@ -70,8 +69,6 @@ island size. It returns the slope of the fit, which is the growth rate."""
             time30cov = 1
             return growthSlope, gyradiusSlope, time30cov, numberOfIsland
 
-    i=0
-    histog = []
     islandSizesList, timeList, gyradiusList = getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
@@ -85,7 +82,6 @@ island size. It returns the slope of the fit, which is the growth rate."""
             # do histogram
             histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk,chunk), density=False))
             # average
-            averageSize = np.mean(islandSizes)
             numberOfIsland += len(islandSizes)
             averageSizes.append(np.mean(islandSizes))
             times.append(np.mean(np.array(timeList[index]).astype(np.float)))
@@ -166,7 +162,6 @@ def getAllRtt():
 def getNumberOfEvents(time30cov):
     numberOfEvents = []
     simulatedTime = []
-    count = 0
     regExpression=("Need")
     fail = False
     fileName="unknown"
@@ -177,7 +172,6 @@ def getNumberOfEvents(time30cov):
         for line in f:
             if re.search(regExpression, line):
                 numberOfEvents.append(float(re.split(' ', line)[-5]))
-                count +=1
             if re.match("    0", line) and not fail:
                 time = float(re.split('\t',line)[1])
                 if time == 0:
