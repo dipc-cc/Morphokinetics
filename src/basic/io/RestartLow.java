@@ -85,13 +85,11 @@ class RestartLow {
     float[][] data = null;
     FileInputStream fis;
     DataInputStream dis;
-    int dimensions = -1;
+    int dimensions;
     int i = -1;
     int j = -1;
     int[] sizes = new int[3];
-    int tmp = -99;
     try {
-      //readHeaderBinary(dimensions, sizes, fileName);
       // create file output stream
       fis = new FileInputStream(fileName);
       // create data output stream
@@ -106,11 +104,11 @@ class RestartLow {
       }
       // Skip the rest of the dimensions
       for (j = i; j < MAX_DIMS; j++) {
-        tmp = dis.readInt();
+        dis.readInt();
       }
       // Skip the rest of the header
       for (j = 0; j < 8; j++) {
-        tmp = dis.readInt();
+        dis.readInt();
       }
 
       data = new float[sizes[0]][sizes[1]];
