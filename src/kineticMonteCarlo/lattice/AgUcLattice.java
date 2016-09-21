@@ -284,64 +284,33 @@ public class AgUcLattice extends AgLattice {
    * @return clear distance.
    */
   private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
-    boolean changeLevel = true;
-    int currentLevel = 0;
-    int levelPosition = 0;
-    int turnDirection = 0;
+    int currentLevel = 1;
     byte errorCode = 0;
     int possibleDistance = 1;
-    int from = 1;
-    int to = 1;
-    AbstractGrowthAtom currentAtom;
-    
+    int direction;
     while (true) {
-      if (changeLevel) {
-        
-        currentAtom = atom.getNeighbour(0).getNeighbour(2); // Skip the first possition, to avoid counting more than once
-        if (currentLevel == 0) {
-          turnDirection = 3; // in the first level there are no more neighbours in 2 direction
-        } else {
-          turnDirection = 2; // go to the 2 direction (right).
-        }
-        currentLevel++;
-        from = to;
-        to = currentLevel * 6 + from;
-        levelPosition = 1;
-        changeLevel = false;
-        if (currentLevel > thresholdDistance) {
-          return possibleDistance;
-        }
-      } else {
-
-        // choose the next atom 
-        currentAtom = atom.getNeighbour(turnDirection);
-        levelPosition++;
-        if (levelPosition >= currentLevel) { // time to turn
-          levelPosition = 0;
-          turnDirection++;
-          if (turnDirection == 6) {
-            turnDirection = 0;
+      atom = atom.getNeighbour(4); // get the first neighbour
+      direction = 0;
+      for (int i = 0; i < 6; i++) {
+        for (int j = 0; j < currentLevel; j++) {
+          atom = atom.getNeighbour(direction);
+          if (atom.isOutside()) {
+            errorCode |= 1;
           }
-
-          if (turnDirection == 2) { // we arrived to the end of the current level
-            if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
-              return currentLevel;
-            }
-            changeLevel = true;
-          } else {
-            changeLevel = false;
+          if (atom.isOccupied()) { // we have touched an occupied atom, exit
+            errorCode |= 2;
+            return possibleDistance - 1;
           }
         }
+        direction++;
       }
-
-      if (currentAtom.isOutside()) {
-        errorCode |= 1;
+      if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
+        return currentLevel;
       }
-      if (currentAtom.isOccupied()) { // we have touched an occupied atom, exit
-        errorCode |= 2;
-        return possibleDistance - 1;
+      currentLevel++;
+      if (currentLevel > thresholdDistance) {
+        return possibleDistance;
       }
-      atom = currentAtom; // go to the next atom
     }
   }
   
