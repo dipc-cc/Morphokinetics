@@ -314,7 +314,7 @@ public class AgLattice extends AbstractGrowthLattice {
       j = getHexaSizeJ() - 1;
     }
     
-    // This while follows this iteration pattern:
+    // This 'while' follows this iteration pattern:
     // go right, up, left up, left, down, right down (-1), jump down and increment
     //
     // This implementation is clearly not efficient (simple profiling is enough to demonstrate)
