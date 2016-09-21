@@ -286,7 +286,7 @@ public class AgUcLattice extends AgLattice {
   private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
     boolean changeLevel = true;
     int currentLevel = 0;
-    int position = 0;
+    int levelPosition = 0;
     int turnDirection = 0;
     byte errorCode = 0;
     int possibleDistance = 1;
@@ -308,7 +308,7 @@ public class AgUcLattice extends AgLattice {
         fromPreviousLevel = from;
         from = to;
         to = currentLevel * 6 + from;
-        position = 1;
+        levelPosition = 1;
         changeLevel = false;
         if (currentLevel > thresholdDistance) {
           return possibleDistance;
@@ -317,9 +317,9 @@ public class AgUcLattice extends AgLattice {
 
         // choose the next atom 
         currentAtom = atom.getNeighbour(turnDirection);
-        position++;
-        if (position >= currentLevel) { // time to turn
-          position = 0;
+        levelPosition++;
+        if (levelPosition >= currentLevel) { // time to turn
+          levelPosition = 0;
           turnDirection++;
           if (turnDirection == 6) {
             turnDirection = 0;
