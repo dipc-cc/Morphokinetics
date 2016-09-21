@@ -9,7 +9,9 @@ import java.awt.geom.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.BasicGrowthAtom;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
+import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
 import kineticMonteCarlo.atom.ModifiedBuffer;
+import utils.StaticRandom;
 
 /**
  *
@@ -69,12 +71,26 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
 
   @Override
   public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    switch (atom.getType()) {
+      case TERRACE:
+        return getClearAreaTerrace(atom, thresholdDistance);
+      //case EDGE:
+        //return getClearAreaStep(atom, thresholdDistance);
+      default:
+        return 0;
+    }
   }
 
   @Override
   public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    switch (atom.getType()) {
+      case TERRACE:
+        return chooseClearAreaTerrace(atom, distance);
+      //case EDGE:
+        //return chooseClearAreaStep(atom, distance);
+      default:
+        return null;
+    }
   }
   
   public void init() {
@@ -205,7 +221,79 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     }
     return atoms;
   }
-
+  
+  /**
+   * We only care about the largest possible distance atoms.
+   * 
+   * @param atom
+   * @param thresholdDistance
+   * @return clear distance.
+   */
+  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
+    int currentLevel = 0;
+    byte errorCode = 0;
+    int possibleDistance = 1;
+    
+    int quantity;
+    int direction;
+    while (true) {
+      atom = atom.getNeighbour(2).getNeighbour(3); // get the first neighbour
+      direction = 0;
+      quantity = (currentLevel * 2 + 2);
+      for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < quantity; j++) {
+          atom = atom.getNeighbour(direction);
+          if (atom.isOutside()) {
+            errorCode |= 1;
+          }
+          if (atom.isOccupied()) { // we have touched an occupied atom, exit
+            errorCode |= 2;
+            return possibleDistance - 1;
+          }
+        }
+        direction++;
+      }
+      if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
+        return currentLevel;
+      }
+      currentLevel++;
+      if (currentLevel > thresholdDistance) {
+        return possibleDistance;
+      }
+    }
+  }
+  
+  /**
+   * 
+   * @param atom origin atom.
+   * @param distance how far we have to move.
+   * @return destination atom.
+   */
+  private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
+    int sizeOfPerimeter = distance * 2 * 4;
+    int randomNumber = StaticRandom.rawInteger(sizeOfPerimeter);
+    int quotient = randomNumber / (distance*2); // far direction
+    int mod = randomNumber % (distance*2); // perimeter direction
+    
+    for (int i = 0; i < distance; i++) { // go far direction
+      atom = atom.getNeighbour(quotient);
+    }
+    
+    int direction;
+    if (mod > distance) {
+      direction = (quotient + 3) % 4;
+      mod = mod - distance;
+    }
+    else {
+      direction = (quotient + 1) % 4;
+    }
+    for (int i = 0; i < mod; i++) { // go throw perimeter (if required)
+      atom = atom.getNeighbour(direction);
+    }
+    
+    return atom;
+  }
+  
   /**
    * A new occupied atom was added before calling this method, here, updating the first and the
    * second neighbourhood.
