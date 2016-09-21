@@ -290,7 +290,6 @@ public class AgUcLattice extends AgLattice {
     int turnDirection = 0;
     byte errorCode = 0;
     int possibleDistance = 1;
-    int fromPreviousLevel = 0;
     int from = 1;
     int to = 1;
     AbstractGrowthAtom currentAtom;
@@ -305,7 +304,6 @@ public class AgUcLattice extends AgLattice {
           turnDirection = 2; // go to the 2 direction (right).
         }
         currentLevel++;
-        fromPreviousLevel = from;
         from = to;
         to = currentLevel * 6 + from;
         levelPosition = 1;
