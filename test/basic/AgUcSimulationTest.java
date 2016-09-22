@@ -58,18 +58,16 @@ public class AgUcSimulationTest {
     doAgTest(parser);
     
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
     float[][] ref0 = null;
     try {
-      ref0 = restart.readSurfaceText2D(2, sizes, "AgUc180Surface000.txt");
+      ref0 = restart.readSurfaceBinary2D("AgUc180Surface000.mko");
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }    
     for (int i = 0; i < ref0.length; i++) {
-      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.001);
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(6.711708473939679, simulatedTime, 0.0);
-    
+    assertEquals(6.984985037594816, simulatedTime, 0.0);
   }
   
   @Test
