@@ -262,7 +262,13 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return true;
   }
 
-  public abstract byte getTypeWithoutNeighbour(int neighPos);
+  /**
+   * Returns the type of the neighbour atom if current one would not exist.
+   *
+   * @param posNeighbour current atom.
+   * @return the type.
+   */
+  public abstract byte getTypeWithoutNeighbour(int posNeighbour);
 
   public abstract boolean areTwoTerracesTogether();
 

@@ -92,9 +92,15 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     occupiedNeighbours += value;
   }
   
+  /**
+   * Returns the type of the neighbour atom if current one would not exist.
+   *
+   * @param posNeighbour current atom.
+   * @return the type.
+   */
   @Override
-  public byte getTypeWithoutNeighbour(int neighPos) {
-    if (!neighbours[neighPos].isOccupied()) return getType(); // impossible to happen
+  public byte getTypeWithoutNeighbour(int posNeighbour) {
+    if (!neighbours[posNeighbour].isOccupied()) return getType(); // impossible to happen
 
     return typesTable.getCurrentType(occupiedNeighbours - 1);
   }
