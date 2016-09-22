@@ -198,6 +198,7 @@ public class Restart {
   }
   
   public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
+    fileName = addFolderAndSuffix(fileName, ".mko");
     return RestartLow.readLowBinary(fileName);
   }
   
