@@ -95,12 +95,13 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
-   * @param posNeighbour current atom.
+   * @param position position is the original one; has to be inverted.
    * @return the type.
    */
   @Override
-  public byte getTypeWithoutNeighbour(int posNeighbour) {
-    if (!neighbours[posNeighbour].isOccupied()) return getType(); // impossible to happen
+  public byte getTypeWithoutNeighbour(int position) {
+    int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
+    if (!neighbours[myPositionForNeighbour].isOccupied()) return getType(); // impossible to happen
 
     return typesTable.getCurrentType(occupiedNeighbours - 1);
   }
@@ -177,8 +178,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     }
 
     byte originType = getType();
-    int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
-    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
+    byte destination = neighbours[position].getTypeWithoutNeighbour(position);
 
     if (destination > 3) {
       System.out.println("error! ");

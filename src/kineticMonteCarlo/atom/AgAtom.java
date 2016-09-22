@@ -312,8 +312,7 @@ public class AgAtom extends AbstractGrowthAtom {
     }
 
     byte originType = getRealType();
-    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
-    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
+    byte destination = neighbours[position].getTypeWithoutNeighbour(position);
 
     // the current atom is an edge and destination is a corner. 
     // We will skip over the corner and go to the next edge (but instead of a corner might be another corner).
@@ -334,15 +333,15 @@ public class AgAtom extends AbstractGrowthAtom {
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
-   * @param posNeighbour current atom.
+   * @param position this position is the original one; has to be inverted.
    * @return the type.
    */
   @Override
-  public byte getTypeWithoutNeighbour(int posNeighbour) {
+  public byte getTypeWithoutNeighbour(int position) {
+    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
+    if (!neighbours[myPositionForNeighbour].isOccupied()) return getType(); // impossible to happen
 
-    if (!neighbours[posNeighbour].isOccupied()) return getType(); // impossible to happen
-
-    if (neighbours[posNeighbour].getType() < KINK_A) {
+    if (neighbours[myPositionForNeighbour].getType() < KINK_A) {
       // current atom is mobile
       return typesTable.getCurrentType(nImmobile, nMobile - 1);
     } else {
