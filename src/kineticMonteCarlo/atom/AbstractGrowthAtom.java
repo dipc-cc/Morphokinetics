@@ -22,18 +22,38 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * jump from terrace to edge.
    */
   private double[][] probabilities;
+  /**
+   * Should be the sum of neighbour probabilities.
+   */
   private double probability;
+  /**
+   * Current probabilities to jump to neighbour position.
+   */
   private double[] bondsProbability;
   private double angle;
   private boolean outside;
+  /**
+   * Hexagonal i coordinate.
+   */
   private final short iHexa;
+  /**
+   * Hexagonal j coordinate.
+   */
   private final short jHexa;
   private int multiplier;
   /**
-   * Stores when the atom has been deposited. It has to be moved with the corresponding diffusion.
+   * Stores when the atom has been deposited. It has to be moved with the
+   * corresponding diffusion.
    */
   private double depositionTime;
+  /**
+   * If current atom belong to an island, its number is stored, otherwise is 0.
+   */
   private int islandNumber;
+  /**
+   * Helper attribute used when counting islands, to check if current atom has
+   * been already visited.
+   */
   private boolean visited;
   /**
    * Unique identifier.
