@@ -280,4 +280,35 @@ public class MathUtils {
     }
     return outputArea;
   }
+
+  /**
+   * Given an original surface it reduces by the given factor.
+   *
+   * @param originalSurface
+   * @param factor
+   * @return reduced surface
+   */
+  public static float[][] scale(float[][] originalSurface, int factor) {
+    int originalSizeX = originalSurface.length;
+    int originalSizeY = originalSurface[0].length;
+    double scale = (double) 1 / (double) factor;
+    int reducedSizeX = (int) Math.ceil(originalSizeX * scale); // This is required to ensure that data properly fits afterwards
+    int reducedSizeY = (int) Math.ceil(originalSizeY * scale);
+
+    float[][] reducedSurface = new float[reducedSizeX][reducedSizeY];
+    if (scale > 1) {
+      System.err.println("Error:scale must be less or equal to 1.");
+      return originalSurface;
+    }
+    // This is really simple interpolation; last position is visited, this value is assigned
+    for (int x = 0; x < originalSizeX; x++) {
+      for (int y = 0; y < originalSizeY; y++) {
+        int reducedX = (int) (x * scale);
+        int reducedY = (int) (y * scale);
+        reducedSurface[reducedX][reducedY] = originalSurface[x][y];
+      }
+    }
+    return reducedSurface;
+  }
+
 }

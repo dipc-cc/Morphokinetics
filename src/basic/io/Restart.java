@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import main.Morphokinetics;
+import utils.MathUtils;
 
 /**
  *
@@ -194,7 +195,7 @@ public class Restart {
    */
   public float[][] readSurfaceBinary2D(String fileName, int factor) throws FileNotFoundException {
     float[][] originalSurface = RestartLow.readLowBinary(fileName);
-    return RestartLow.scale(originalSurface, factor);
+    return MathUtils.scale(originalSurface, factor);
   }
   
   public float[][] readSurfaceBinary2D(String fileName) throws FileNotFoundException {
