@@ -389,8 +389,8 @@ public class AgUcLattice extends AgLattice {
     
     return atom;
   }
+  
   private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
-    
     int distance = 1;
     AbstractGrowthAtom currentAtom;
     AbstractGrowthAtom lastRight = atom;
