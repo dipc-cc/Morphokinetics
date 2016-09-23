@@ -32,7 +32,7 @@ public class PsdFromSurfaces {
     showGui = parser.withGui() && parser.visualise();
     doTent = !parser.getSurfaceType().equals("plane");
 
-    Restart restart = new Restart();
+    Restart restart = new Restart("./");
     int[] sizes = null;
     float[][] surface = null;
     PsdSignature2D psd = null;
