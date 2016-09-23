@@ -231,14 +231,13 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * @return clear distance.
    */
   private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
-    int currentLevel = 0;
     byte errorCode = 0;
-    int possibleDistance = 1;
+    int possibleDistance = 0;
     
     int quantity;
     while (true) {
       atom = atom.getNeighbour(2).getNeighbour(3); // get the first neighbour
-      quantity = (currentLevel * 2 + 2);
+      quantity = (possibleDistance * 2 + 2);
       for (int direction = 0; direction < 4; direction++) {
         for (int j = 0; j < quantity; j++) {
           atom = atom.getNeighbour(direction);
@@ -247,16 +246,16 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
           }
           if (atom.isOccupied()) { // we have touched an occupied atom, exit
             errorCode |= 2;
-            return possibleDistance - 1;
+            return possibleDistance;
           }
         }
       }
+      possibleDistance++;
       if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
-        return currentLevel;
-      }
-      currentLevel++;
-      if (currentLevel > thresholdDistance) {
         return possibleDistance;
+      }
+      if (possibleDistance > thresholdDistance) {
+        return thresholdDistance;
       }
     }
   }
