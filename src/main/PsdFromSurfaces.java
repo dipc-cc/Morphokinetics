@@ -36,15 +36,16 @@ public class PsdFromSurfaces {
     int[] sizes = null;
     float[][] surface = null;
     PsdSignature2D psd = null;
-    int factor = 1;
+    double scale = parser.getPsdScale();
     for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
       try {
-        surfaceFileName = format("surface%03d.mko", i);
+        surfaceFileName = format("surface%03d", i);
         surface = restart.readSurfaceBinary2D(surfaceFileName);
+        surface = MathUtils.scale(surface, scale);
         if (psd == null) {
           sizes = new int[2];
-          sizes[0] = (int) (surface.length / factor);
-          sizes[1] = (int) (surface[0].length / factor);
+          sizes[0] = (int) (surface.length);
+          sizes[1] = (int) (surface[0].length);
           psd = new PsdSignature2D(sizes[0], sizes[1], 1);
         }
       } catch (Exception e){
