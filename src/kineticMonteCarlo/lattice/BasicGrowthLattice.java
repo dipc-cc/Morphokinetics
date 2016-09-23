@@ -236,12 +236,10 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     int possibleDistance = 1;
     
     int quantity;
-    int direction;
     while (true) {
       atom = atom.getNeighbour(2).getNeighbour(3); // get the first neighbour
-      direction = 0;
       quantity = (currentLevel * 2 + 2);
-      for (int i = 0; i < 4; i++) {
+      for (int direction = 0; direction < 4; direction++) {
         for (int j = 0; j < quantity; j++) {
           atom = atom.getNeighbour(direction);
           if (atom.isOutside()) {
@@ -252,7 +250,6 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
             return possibleDistance - 1;
           }
         }
-        direction++;
       }
       if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
         return currentLevel;
