@@ -289,9 +289,20 @@ public class MathUtils {
    * @return reduced surface
    */
   public static float[][] scale(float[][] originalSurface, int factor) {
+    double scale = (double) 1 / (double) factor;
+    return scale(originalSurface, scale);
+  }
+  
+  /**
+   * See {@link #scale(float[][], int) }
+   * 
+   * @param originalSurface
+   * @param scale
+   * @return 
+   */
+  public static float[][] scale(float[][] originalSurface, double scale) {
     int originalSizeX = originalSurface.length;
     int originalSizeY = originalSurface[0].length;
-    double scale = (double) 1 / (double) factor;
     int reducedSizeX = (int) Math.ceil(originalSizeX * scale); // This is required to ensure that data properly fits afterwards
     int reducedSizeY = (int) Math.ceil(originalSizeY * scale);
 
