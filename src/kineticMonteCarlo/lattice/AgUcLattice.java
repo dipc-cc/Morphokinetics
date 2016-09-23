@@ -284,29 +284,28 @@ public class AgUcLattice extends AgLattice {
    * @return clear distance.
    */
   private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
-    int currentLevel = 1;
     byte errorCode = 0;
-    int possibleDistance = 1;
+    int possibleDistance = 0;
     while (true) {
       atom = atom.getNeighbour(4); // get the first neighbour
       for (int direction = 0; direction < 6; direction++) {
-        for (int j = 0; j < currentLevel; j++) {
+        for (int j = 0; j <= possibleDistance; j++) {
           atom = atom.getNeighbour(direction);
           if (atom.isOutside()) {
             errorCode |= 1;
           }
           if (atom.isOccupied()) { // we have touched an occupied atom, exit
             errorCode |= 2;
-            return possibleDistance - 1;
+            return possibleDistance;
           }
         }
       }
+      possibleDistance++;
       if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
-        return currentLevel;
-      }
-      currentLevel++;
-      if (currentLevel > thresholdDistance) {
         return possibleDistance;
+      }
+      if (possibleDistance > thresholdDistance) {
+        return thresholdDistance;
       }
     }
   }
