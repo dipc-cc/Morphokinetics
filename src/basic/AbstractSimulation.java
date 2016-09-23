@@ -253,7 +253,7 @@ public abstract class AbstractSimulation {
     } else { // "periodic"
       sampledSurface = kmc.getHexagonalPeriodicSurface(surfaceSizes[0], surfaceSizes[1]);
     }
-    float[][] extentSurface = kmc.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
+    float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
     if (parser.outputData()) {
       if (parser.getOutputFormats().contains(formatFlag.MKO)) {
         restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);

@@ -45,7 +45,4 @@ public interface IKmc {
   public AbstractLattice getLattice();
 
   public AbstractList getList();
-
-  public float[][] increaseEmptyArea(float[][] inputArea, double scale);
-
 }

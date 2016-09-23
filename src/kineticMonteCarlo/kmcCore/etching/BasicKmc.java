@@ -95,16 +95,4 @@ public class BasicKmc extends AbstractKmc {
     return false;
 
   }
-
-  /**
-   * Does nothing.
-   *
-   * @param inputArea
-   * @param scale
-   * @return just in case, the input area
-   */
-  @Override
-  public float[][] increaseEmptyArea(float[][] inputArea, double scale) {
-    return inputArea;
-  }
 }
