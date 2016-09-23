@@ -1282,6 +1282,8 @@ public class Parser {
    * Devita accelerator makes execution much faster, it may change results a bit. It is tested for
    * single-flake simulations and seems to work fine. Nothing tried yet for multi-flake simulations.
    *
+   * Input "parameters" variable: {@code devita}.
+   * 
    * @return whether to use Devita accelerator.
    */
   public boolean useDevita() {
