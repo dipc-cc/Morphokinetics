@@ -287,11 +287,9 @@ public class AgUcLattice extends AgLattice {
     int currentLevel = 1;
     byte errorCode = 0;
     int possibleDistance = 1;
-    int direction;
     while (true) {
       atom = atom.getNeighbour(4); // get the first neighbour
-      direction = 0;
-      for (int i = 0; i < 6; i++) {
+      for (int direction = 0; direction < 6; direction++) {
         for (int j = 0; j < currentLevel; j++) {
           atom = atom.getNeighbour(direction);
           if (atom.isOutside()) {
@@ -302,7 +300,6 @@ public class AgUcLattice extends AgLattice {
             return possibleDistance - 1;
           }
         }
-        direction++;
       }
       if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
         return currentLevel;
