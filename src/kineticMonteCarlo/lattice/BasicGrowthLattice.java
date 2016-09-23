@@ -10,6 +10,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.BasicGrowthAtom;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
+import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.StaticRandom;
 
@@ -74,8 +75,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     switch (atom.getType()) {
       case TERRACE:
         return getClearAreaTerrace(atom, thresholdDistance);
-      //case EDGE:
-        //return getClearAreaStep(atom, thresholdDistance);
+      case EDGE:
+        return getClearAreaStep(atom, thresholdDistance);
       default:
         return 0;
     }
@@ -86,8 +87,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     switch (atom.getType()) {
       case TERRACE:
         return chooseClearAreaTerrace(atom, distance);
-      //case EDGE:
-        //return chooseClearAreaStep(atom, distance);
+      case EDGE:
+        return chooseClearAreaStep(atom, distance);
       default:
         return null;
     }
@@ -291,6 +292,74 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
       atom = atom.getNeighbour(direction);
     }
     
+    return atom;
+  }
+  
+  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
+    int distance = 1;
+    AbstractGrowthAtom currentAtom;
+    AbstractGrowthAtom lastRight = atom;
+    AbstractGrowthAtom lastLeft = atom;
+    int right;
+    int left;
+    // select the neighbours depending on the orientation of the source atom
+    switch (atom.getOrientation()) {
+      case 0:
+        right = 1;
+        left = 3;
+        break;
+      case 1:
+        right = 2;
+        left = 0;
+        break;
+      default: // it is possible that the current atom does not have a proper orientation, skip the method
+        return -1;
+    }
+    
+    while (true) { // check if the last and firsts neighbours are occupied
+      currentAtom = lastRight.getNeighbour(right);
+      if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
+        return distance - 1;
+      }
+      lastRight = currentAtom;
+
+      currentAtom = lastLeft.getNeighbour(left);
+      if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
+        return distance - 1;
+      }
+      lastLeft = currentAtom;
+
+      if (distance == thresholdDistance) {
+        return distance;
+      }
+      distance++;
+    }
+  }
+  
+  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {
+    double randomNumber = StaticRandom.raw();
+    int neighbour = 0;
+    switch (atom.getOrientation()) {
+      case 0:
+        if (randomNumber > 0.5) {
+          neighbour = 1;
+          break;
+        } else {
+          neighbour = 3;
+          break;
+        }
+      case 1:
+        if (randomNumber > 0.5) {
+          neighbour = 0;
+          break;
+        } else {
+          neighbour = 2;
+          break;
+        }
+    }
+    for (int i = 0; i < distance; i++) {
+      atom = atom.getNeighbour(neighbour);
+    }
     return atom;
   }
   

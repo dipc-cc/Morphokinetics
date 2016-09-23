@@ -32,9 +32,20 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     occupiedNeighbours = 0;
   }
   
+  /**
+   * For the orientation they are only available two position. Orientation is either | or _. It is
+   * assumed that current atom is of type EDGE.
+   *
+   * @return horizontal (0) or vertical (1).
+   */
   @Override
   public int getOrientation() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      if (neighbours[i].isOccupied()) {
+        return i % 2;
+      }
+    }
+    return -1;
   }
 
   @Override
