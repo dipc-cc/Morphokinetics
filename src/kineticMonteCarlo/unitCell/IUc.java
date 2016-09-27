@@ -39,9 +39,9 @@ public interface IUc {
   }
 
   /**
-   * Cartesian size of the unit cell in Y axis
+   * Cartesian size of the unit cell in Z axis
    *
-   * @return size in Y
+   * @return size in Z
    */
   public static float getSizeZ() {
     return SIZE_Z;
