@@ -211,6 +211,7 @@ public abstract class AbstractSimulation {
   public double getSimulatedTime() {
     return totalTime / parser.getNumberOfSimulations();
   }
+
   /**
    * Does nothing. Used to have a common interface
    *
@@ -274,7 +275,7 @@ public abstract class AbstractSimulation {
     System.out.println("");
   }
 
-  private void printFooter() {
+  public String printFooter() {
     String kmcResult = "";
     kmcResult += "\n\t__________________________________________________\n";
     kmcResult += "\tAverage\n";
@@ -282,20 +283,12 @@ public abstract class AbstractSimulation {
     kmcResult += "\t(units)\t\t\t (%)\t\t (ms/s/min)\n";
     kmcResult += "\t__________________________________________________\n";
     kmcResult += "\t" + totalTime / parser.getNumberOfSimulations();
-		kmcResult += "\t" + coverage / parser.getNumberOfSimulations();
+    kmcResult += "\t" + coverage / parser.getNumberOfSimulations();
     long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
     kmcResult += "\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60;
     kmcResult += "\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations());
-    kmcResult += "\t" + fractalD / (float) parser.getNumberOfSimulations()+"\n";
+    kmcResult += "\t" + fractalD / (float) parser.getNumberOfSimulations() + "\n";
     System.out.println(kmcResult);
     return kmcResult;
-
-  /**
-   * Does nothing. Used to have a common interface
-   *
-   * @param i
-   */
-  protected void printToImage(int i) {
-    //Do nothing
   }
 }

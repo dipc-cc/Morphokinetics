@@ -87,11 +87,6 @@ public class Morphokinetics {
     simulation.doSimulation();
     simulation.finishSimulation();
   }
-
-  
-  private static void psdFromSurfaces(Parser parser) {
-    PsdFromSurfaces psd = new PsdFromSurfaces(parser);
-  }
   
   private static float[][] readExperimentalData() {
     Restart restart = new Restart();

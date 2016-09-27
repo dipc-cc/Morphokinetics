@@ -15,9 +15,6 @@ import ratesLibrary.IRates;
  */
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
-  private double previousCoverage;
-  private final double printEvery;
-  private int savedImages;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
   
@@ -50,7 +47,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     }
     Thread p;
     if (getParser().visualise() && !error) {
-      frame.setVisible(true);
       p = new PaintLoop();
     } else {
       p = new TerminalLoop();
@@ -85,8 +81,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    */
   @Override
   void printToImage(String folderName, int i) {
-    // reset saved images for current simulation
-    savedImages = 1;
+
   }
   
   /**
@@ -102,10 +97,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
           if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
                   || // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
                   (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
-            if (printIntermediatePngFiles) {
-              frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
-            }
-            frame.updateProgressBar(getCurrentProgress());
             updateCurrentProgress();
             totalSavedImages++;
           }

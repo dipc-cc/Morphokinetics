@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import basic.Point2D;
+import java.awt.geom.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.BasicGrowthAtom;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;

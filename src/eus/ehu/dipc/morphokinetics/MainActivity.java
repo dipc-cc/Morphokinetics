@@ -30,6 +30,7 @@ import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.BasicAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.IUc;
 
 import static android.R.color.darker_gray;
@@ -169,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
 
         System.out.println("Created a bitmap of "+(int) (lattice.getCartSizeX() * scale) +"x"+ (int) (lattice.getCartSizeY() * scale));
         for (int i = 0; i < lattice.size(); i++) {
-            IUc uc = lattice.getUc(i);
+            AbstractGrowthUc uc = lattice.getUc(i);
             for (int j = 0; j < uc.size(); j++) {
                 AbstractGrowthAtom atom = uc.getAtom(j);
                 int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;

@@ -6,7 +6,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.unitCell.AgUc;
-import basic.Point2D;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;

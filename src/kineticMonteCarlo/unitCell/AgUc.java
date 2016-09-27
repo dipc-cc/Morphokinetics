@@ -5,7 +5,6 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import basic.Point2D;
 import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AgAtom;
@@ -35,7 +34,7 @@ public class AgUc extends AbstractGrowthUc implements IUc {
    *
    * @return size in X
    */
-  public float getSizeX() {
+  public static float getSizeX() {
     return SIZE_X;
   }
 
@@ -44,7 +43,7 @@ public class AgUc extends AbstractGrowthUc implements IUc {
    *
    * @return size in Y
    */
-  public float getSizeY() {
+  public static float getSizeY() {
     return SIZE_Y;
   }
 
@@ -57,7 +56,7 @@ public class AgUc extends AbstractGrowthUc implements IUc {
   public int getPosJ() {
     return posJ;
   }
-  
+
   @Override
   public AgAtom getAtom(int pos) {
     return atoms.get(pos);

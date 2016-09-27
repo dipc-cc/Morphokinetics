@@ -8,7 +8,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
-import basic.Point2D;
+import java.awt.geom.Point2D;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.ISLAND;
 import static kineticMonteCarlo.atom.AgAtom.KINK_A;

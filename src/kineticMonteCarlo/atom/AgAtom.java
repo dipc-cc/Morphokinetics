@@ -4,7 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
-import basic.Point2D;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.StaticRandom;
 

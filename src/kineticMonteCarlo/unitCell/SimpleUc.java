@@ -5,7 +5,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import basic.Point2D;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
 /**
@@ -64,6 +64,9 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
     return SIZE_Y;
   }
 
+  public float getSizeZ() {
+    return 1; // it only has two dimensions
+  }
   @Override
   public int getPosI() {
     return posI;

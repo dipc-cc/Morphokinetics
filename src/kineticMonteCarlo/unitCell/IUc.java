@@ -5,35 +5,38 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import basic.Point2D;
-import java.util.List;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import javafx.geometry.Point3D;
+import kineticMonteCarlo.atom.AbstractAtom;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
 public interface IUc {
-  
+
   static final float SIZE_X = 1; // Cartesian size X per unit
   static final float SIZE_Y = 1; // Cartesian size Y per unit
   static final float SIZE_Z = 1; // Cartesian size Z per unit
-  
+
   public AbstractAtom getAtom(int pos);
-  
+
   /**
    * Cartesian size of the unit cell in X axis
    *
    * @return size in X
    */
-  public float getSizeX();
+  public static float getSizeX() {
+    return SIZE_X;
+  }
 
   /**
    * Cartesian size of the unit cell in Y axis
    *
    * @return size in Y
    */
-  public float getSizeY();
+  public static float getSizeY() {
+    return SIZE_Y;
+  }
 
   /**
    * Cartesian size of the unit cell in Y axis
@@ -47,7 +50,7 @@ public interface IUc {
   public int getPosI();
 
   public int getPosJ();
-  
+
   /**
    * Cartesian position of the origin of the unit cell.
    *
