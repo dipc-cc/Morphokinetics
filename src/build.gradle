@@ -23,6 +23,8 @@ android {
     sourceSets {
         main {
             java.srcDirs = ['.']
+            java.exclude 'geneticAlgorithm/'
+            java.exclude 'graficInterfaces/'
             manifest.srcFile 'android/AndroidManifest.xml'
             res.srcDirs = ['android/res']
         }
