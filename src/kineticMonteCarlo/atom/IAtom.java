@@ -5,6 +5,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import javafx.geometry.Point3D;
+
 /**
  * This interface defines the minimum methods that an atom class have to have.
  * @author J. Alberdi-Rodriguez
@@ -24,6 +26,8 @@ public interface IAtom {
   public boolean isEligible();
 
   public boolean isRemoved();
+  
+  public boolean isOccupied();
 
   public void unRemove();
   
@@ -40,5 +44,7 @@ public interface IAtom {
   public void setNumberOfNeighbours(int numberOfNeighbours);
 
   public void setNeighbour(AbstractAtom atom, int i);
+  
+  public Point3D getPos();
   
 }

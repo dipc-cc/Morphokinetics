@@ -5,9 +5,8 @@
  */
 package basic;
 
-import kineticMonteCarlo.kmcCore.AbstractKmc;
-import ratesLibrary.IRatesFactory;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.IRates;
+import ratesLibrary.SiRatesFromPreGosalvez;
 
 /**
  *
@@ -20,8 +19,8 @@ public abstract class AbstractEtchingSimulation extends AbstractSimulation {
   }
 
   @Override
-  protected void initialiseRates(IRatesFactory ratesFactory, Parser parser) {
-    getKmc().initialiseRates(new SiRatesFactory().getRates(getParser().getTemperature()));
+  void initialiseRates(IRates rates, Parser parser) {
+    getKmc().initialiseRates(new SiRatesFromPreGosalvez().getRates(getParser().getTemperature()));
   }
 
 }

@@ -37,6 +37,45 @@ public class SiKmc extends AbstractKmc {
   }
   
   @Override
+  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
+    return getSampledSurface(binX, binY);
+  }
+  
+  @Override
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
+    
+    double scaleX = binX / (getLattice().getHexaSizeI() * ((SiLattice) getLattice()).getUnitCell().getLimitX());
+    double scaleY = binY / (getLattice().getHexaSizeJ() * ((SiLattice) getLattice()).getUnitCell().getLimitY());
+    ListIterator<AbstractAtom> iterator = getList().getIterator();
+
+    for (int i = 0; i < binY; i++) {
+      for (int j = 0; j < binX; j++) {
+        surface[i][j] = 0;
+      }
+    }
+
+    while (iterator.hasNext()) {
+      SiAtom atom = (SiAtom) iterator.next();
+      int sampledPosX = (int) MathUtils.truncate(atom.getX() * scaleX, 3);
+      if (sampledPosX == binX) {
+        sampledPosX--;
+      }
+      int sampledPosY = (int) MathUtils.truncate(atom.getY() * scaleY, 3);
+      if (sampledPosY == binY) {
+        sampledPosY--;
+      }
+
+      if (surface[sampledPosY][sampledPosX] == 0 || surface[sampledPosY][sampledPosX] < atom.getZ()) {
+        surface[sampledPosY][sampledPosX] = (float) atom.getZ();
+      }
+    }
+
+    MathUtils.fillSurfaceHoles(surface);
+    return surface;
+  }
+
+  @Override
   public void depositSeed() {
     for (int i = 0; i < getLattice().getHexaSizeI(); i++) {
       for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
@@ -69,65 +108,5 @@ public class SiKmc extends AbstractKmc {
       }
     }
     return atom.getZ() < minHeight * 2;
-  }
-
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
-  }
-  
-  @Override
-  public float[][] getSampledSurface(int binX, int binY) {
-    float[][] surface = new float[binX][binY];
-    
-    double scaleX = binX / (getLattice().getHexaSizeI() * ((SiLattice) getLattice()).getUnitCell().getLimitX());
-    double scaleY = binY / (getLattice().getHexaSizeJ() * ((SiLattice) getLattice()).getUnitCell().getLimitY());
-    ListIterator<AbstractAtom> iterator = getList().getIterator();
-
-    for (int i = 0; i < binY; i++) {
-      for (int j = 0; j < binX; j++) {
-        surface[i][j] = 0;
-      }
-    }
-
-    while (iterator.hasNext()) {
-      SiAtom atom = (SiAtom) iterator.next();
-      int sampledPosX = (int) MathUtils.truncate(atom.getX() * scaleX, 3);
-      if (sampledPosX == binX) {
-        sampledPosX--;
-      }
-      int sampledPosY = (int) MathUtils.truncate(atom.getY() * scaleY, 3);
-      if (sampledPosY == binY) {
-        sampledPosY--;
-      }
-
-      if (surface[sampledPosY][sampledPosX] == 0 || surface[sampledPosY][sampledPosX] < atom.getZ()) {
-        surface[sampledPosY][sampledPosX] = atom.getZ();
-      }
-    }
-
-    MathUtils.fillSurfaceHoles(surface);
-    return surface;
-  }
-  
-  /**
-   * Number of islands has no sense in etching.
-   * @return -1 always
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
-
-  /**
-   * Does nothing.
-   *
-   * @param inputArea
-   * @param scale
-   * @return just in case, the input area
-   */
-  @Override
-  public float[][] increaseEmptyArea(float[][] inputArea, double scale) {
-    return inputArea;
   }
 }

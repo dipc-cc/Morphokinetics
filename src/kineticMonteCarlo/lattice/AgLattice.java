@@ -28,98 +28,6 @@ public class AgLattice extends AbstractGrowthLattice {
     centralCartesianLocation = new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() * Y_RATIO / 2.0f));
   }
   
-  public void init() {
-    setAtoms(createAtoms());
-    setAngles();
-  }    
-
-  private int createId(int i, int j) {
-    return j * getHexaSizeI() + i;
-  }
-  
-  private AgAtom[][] createAtoms() {
-    //Instantiate atoms
-    AgAtom[][] atoms = new AgAtom[getHexaSizeI()][getHexaSizeJ()];
-    for (int i = 0; i < getHexaSizeI(); i++) {
-      for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new AgAtom(createId(i, j), (short) i, (short) j);
-      }
-    }
-    
-    //Interconect atoms
-    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-        AgAtom atom = (AgAtom) atoms[iHexa][jHexa];
-        int i = iHexa;
-        int j = jHexa - 1;
-        if (j < 0) j = getHexaSizeJ() - 1;
-
-        atom.setNeighbour((AgAtom) atoms[i][j], 0);
-        i = iHexa + 1;
-        j = jHexa - 1;
-        if (i == getHexaSizeI()) i = 0;
-        if (j < 0) j = getHexaSizeJ() - 1;
-
-        atom.setNeighbour((AgAtom) atoms[i][j], 1);
-        i = iHexa + 1;
-        j = jHexa;
-        if (i == getHexaSizeI()) i = 0;
-
-        atom.setNeighbour((AgAtom) atoms[i][j], 2);
-        i = iHexa;
-        j = jHexa + 1;
-        if (j == getHexaSizeJ()) j = 0;
-
-        atom.setNeighbour((AgAtom) atoms[i][j], 3);
-        i = iHexa - 1;
-        j = jHexa + 1;
-        if (i < 0) i = getHexaSizeI() - 1;
-        if (j == getHexaSizeJ()) j = 0;
-
-        atom.setNeighbour((AgAtom) atoms[i][j], 4);
-        i = iHexa - 1;
-        j = jHexa;
-        if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((AgAtom) atoms[i][j], 5);
-      }
-    }
-    return atoms;
-  }
-
-  @Override
-  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
-    int index = jHexa * getHexaSizeI() + iHexa;
-    return ((AgAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
-  }
-
-  @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-    short iHexa = atom.getiHexa();
-    short jHexa = atom.getjHexa();
-    switch (atom.getType()) {
-      case TERRACE:
-        return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
-      case EDGE:
-        return getClearAreaStep(iHexa, jHexa, thresholdDistance);
-      default:
-        return 0;
-    }
-  }
-
-  @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-    short iHexa = atom.getiHexa();
-    short jHexa = atom.getjHexa();
-    switch (atom.getType()) {
-      case TERRACE:
-        return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
-      case EDGE:
-        return chooseClearAreaStep(iHexa, jHexa, distance, StaticRandom.raw());
-      default:
-        return null;
-    }
-  }
-
   @Override
   public Point2D getCentralCartesianLocation() {
     return centralCartesianLocation;
@@ -225,6 +133,175 @@ public class AgLattice extends AbstractGrowthLattice {
     return jHexa * Y_RATIO;
   }
 
+  @Override
+  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+    int index = jHexa * getHexaSizeI() + iHexa;
+    return ((AgAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
+  }
+
+  @Override
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+    short iHexa = atom.getiHexa();
+    short jHexa = atom.getjHexa();
+    switch (atom.getType()) {
+      case TERRACE:
+        return getClearAreaTerrace(iHexa, jHexa, thresholdDistance);
+      case EDGE:
+        return getClearAreaStep(iHexa, jHexa, thresholdDistance);
+      default:
+        return 0;
+    }
+  }
+
+  @Override
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+    short iHexa = atom.getiHexa();
+    short jHexa = atom.getjHexa();
+    switch (atom.getType()) {
+      case TERRACE:
+        return chooseClearAreaTerrace(iHexa, jHexa, distance, StaticRandom.raw());
+      case EDGE:
+        return chooseClearAreaStep(iHexa, jHexa, distance, StaticRandom.raw());
+      default:
+        return null;
+    }
+  }
+
+  public void init() {
+    setAtoms(createAtoms());
+    setAngles();
+  }    
+
+  @Override
+  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
+    AgAtom atom = (AgAtom) a;
+    atom.setOccupied(true);
+    if (forceNucleation) {
+      atom.setType(ISLAND);
+    }
+
+    byte originalType = atom.getType();
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+        addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
+      }
+    }
+
+    addAtom(atom);
+    if (atom.getNMobile() > 0) {
+      addBondAtom(atom);
+    }
+    atom.resetProbability();
+  }
+
+  @Override
+  public double extract(AbstractGrowthAtom a) {
+    AgAtom atom = (AgAtom) a;
+    atom.setOccupied(false);
+    double probabilityChange = a.getProbability();
+    
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+        removeMobileOccupied(atom.getNeighbour(i));
+      }
+    }
+
+    if (atom.getNMobile() > 0) {
+      addBondAtom(atom);
+    }
+
+    atom.resetProbability();
+    atom.setList(false);
+    return probabilityChange;
+  }
+
+  /**
+   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
+   * experimental and only works with AgUc simulation mode. If fails, the execution continues
+   * normally.
+   *
+   * @param xMouse absolute X location of the pressed point
+   * @param yMouse absolute Y location of the pressed point
+   * @param scale zoom level
+   */
+  @Override
+  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
+    int iLattice;
+    int jLattice;
+    // scale the position with respect to the current scale.
+    double xCanvas = xMouse / scale;
+    double yCanvas = yMouse / scale;
+    // choose the correct lattice
+    jLattice = (int) Math.floor(yCanvas / Y_RATIO);
+    iLattice = (int) Math.floor(xCanvas - 0.5*jLattice);
+    double j = yCanvas / Y_RATIO;
+    int pos = 0;
+
+    // for debugging
+    System.out.println("scale " + scale + " " + (jLattice - j));
+    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
+    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+
+    if (atom.isOccupied()) {
+      extract(atom);
+    } else {
+      deposit(atom, false);
+    }
+  }
+      
+  private AgAtom[][] createAtoms() {
+    //Instantiate atoms
+    AgAtom[][] atoms = new AgAtom[getHexaSizeI()][getHexaSizeJ()];
+    for (int i = 0; i < getHexaSizeI(); i++) {
+      for (int j = 0; j < getHexaSizeJ(); j++) {
+        atoms[i][j] = new AgAtom(createId(i, j), (short) i, (short) j);
+      }
+    }
+    
+    //Interconect atoms
+    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
+        AgAtom atom = (AgAtom) atoms[iHexa][jHexa];
+        int i = iHexa;
+        int j = jHexa - 1;
+        if (j < 0) j = getHexaSizeJ() - 1;
+
+        atom.setNeighbour((AgAtom) atoms[i][j], 0);
+        i = iHexa + 1;
+        j = jHexa - 1;
+        if (i == getHexaSizeI()) i = 0;
+        if (j < 0) j = getHexaSizeJ() - 1;
+
+        atom.setNeighbour((AgAtom) atoms[i][j], 1);
+        i = iHexa + 1;
+        j = jHexa;
+        if (i == getHexaSizeI()) i = 0;
+
+        atom.setNeighbour((AgAtom) atoms[i][j], 2);
+        i = iHexa;
+        j = jHexa + 1;
+        if (j == getHexaSizeJ()) j = 0;
+
+        atom.setNeighbour((AgAtom) atoms[i][j], 3);
+        i = iHexa - 1;
+        j = jHexa + 1;
+        if (i < 0) i = getHexaSizeI() - 1;
+        if (j == getHexaSizeJ()) j = 0;
+
+        atom.setNeighbour((AgAtom) atoms[i][j], 4);
+        i = iHexa - 1;
+        j = jHexa;
+        if (i < 0) i = getHexaSizeI() - 1;
+        atom.setNeighbour((AgAtom) atoms[i][j], 5);
+      }
+    }
+    return atoms;
+  }
+  
+  private int createId(int i, int j) {
+    return j * getHexaSizeI() + i;
+  }
+    
   private int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
 
     int possibleDistance = 1;
@@ -237,7 +314,7 @@ public class AgLattice extends AbstractGrowthLattice {
       j = getHexaSizeJ() - 1;
     }
     
-    // This while follows this iteration pattern:
+    // This 'while' follows this iteration pattern:
     // go right, up, left up, left, down, right down (-1), jump down and increment
     //
     // This implementation is clearly not efficient (simple profiling is enough to demonstrate)
@@ -497,49 +574,6 @@ public class AgLattice extends AbstractGrowthLattice {
     return null;
   }
   
-  @Override
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    AgAtom atom = (AgAtom) a;
-    atom.setOccupied(true);
-    if (forceNucleation) {
-      atom.setType(ISLAND);
-    }
-
-    byte originalType = atom.getType();
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-        addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
-      }
-    }
-
-    addAtom(atom);
-    if (atom.getNMobile() > 0) {
-      addBondAtom(atom);
-    }
-    atom.resetProbability();
-  }
-
-  @Override
-  public double extract(AbstractGrowthAtom a) {
-    AgAtom atom = (AgAtom) a;
-    atom.setOccupied(false);
-    double probabilityChange = a.getProbability();
-    
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-        removeMobileOccupied(atom.getNeighbour(i));
-      }
-    }
-
-    if (atom.getNMobile() > 0) {
-      addBondAtom(atom);
-    }
-
-    atom.resetProbability();
-    atom.setList(false);
-    return probabilityChange;
-  }
-
   private void removeImmobilAddMobile(AgAtom atom) {
     if (atom.getNImmobile() == 0) {  //estado de transición
       atom.addNMobile(1); // nMobile++;
@@ -666,37 +700,4 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
   
-  /**
-   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
-   * experimental and only works with AgUc simulation mode. If fails, the execution continues
-   * normally.
-   *
-   * @param xMouse absolute X location of the pressed point
-   * @param yMouse absolute Y location of the pressed point
-   * @param scale zoom level
-   */
-  @Override
-  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
-    int iLattice;
-    int jLattice;
-    // scale the position with respect to the current scale.
-    double xCanvas = xMouse / scale;
-    double yCanvas = yMouse / scale;
-    // choose the correct lattice
-    jLattice = (int) Math.floor(yCanvas / Y_RATIO);
-    iLattice = (int) Math.floor(xCanvas - 0.5*jLattice);
-    double j = yCanvas / Y_RATIO;
-    int pos = 0;
-
-    // for debugging
-    System.out.println("scale " + scale + " " + (jLattice - j));
-    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
-
-    if (atom.isOccupied()) {
-      extract(atom);
-    } else {
-      deposit(atom, false);
-    }
-  }
 }

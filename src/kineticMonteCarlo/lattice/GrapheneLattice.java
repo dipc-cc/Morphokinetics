@@ -9,8 +9,11 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import basic.Point2D;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import utils.StaticRandom;
 
 /**
@@ -24,8 +27,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   private static final double COS30 = Math.cos(30 * Math.PI / 180);
   private final Point2D centralCartesianLocation;
 
-  public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
-
+  public GrapheneLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep, Class<?> inputClass) {
     super(hexaSizeI, hexaSizeJ, modified);
 
     // j axis has to be multiple of two
@@ -37,91 +39,12 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     
     centralCartesianLocation = getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
-    createAtoms(hexaSizeI, hexaSizeJ, distancePerStep);
+    createAtoms(hexaSizeI, hexaSizeJ, distancePerStep, inputClass);
     setAngles();
-  }
-
-  private static void initialiseNeighborHoodCache() {
-
-    latticeNeighborhoodData = new int[12];
-    latticeNeighborhoodData[0] = (1 & 0xFFFF) + (0 << 16);
-    latticeNeighborhoodData[1] = (-1 << 16);
-    latticeNeighborhoodData[2] = (1 << 16);
-
-    latticeNeighborhoodData[3] = (1 & 0xFFFF) + (1 << 16);
-    latticeNeighborhoodData[4] = (1 & 0xFFFF) + (-1 << 16);
-    latticeNeighborhoodData[5] = (-2 << 16);
-    latticeNeighborhoodData[6] = (-1 & 0xFFFF) + (-1 << 16);
-    latticeNeighborhoodData[7] = (-1 & 0xFFFF) + (1 << 16);
-    latticeNeighborhoodData[8] = (2 << 16);
-
-    latticeNeighborhoodData[9] = (1 & 0xFFFF) + (2 << 16);
-    latticeNeighborhoodData[10] = (1 & 0xFFFF) + (-2 << 16);
-    latticeNeighborhoodData[11] = (-1 & 0xFFFF) + (0 << 16);
-  }
-
-  private int createId(int i, int j) {
-    return j * getHexaSizeI() + i;
-  }
-    
-  /**
-   * Creates the atom array for graphene. It only allows even parameters
-   *
-   * @param hexaSizeI even number of the size in hexagonal lattice points. Currently it is
-   * represented vertically starting from the top
-   * @param hexaSizeJ even number of the size in hexagonal lattice points. Currently it is
-   * represented horizontally starting from the left
-   * @param distancePerStep
-   * @return
-   */
-  private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep) {
-
-    //Instantiate atoms
-    GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
-    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
-      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
-        //para cada unit cell
-
-        //atomo 0 de la unit cell, tipo 0
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa++;
-        //atomo 1 de la unit cell, tipo 1
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa--;
-        jHexa++;
-        //atomo 2 de la unit cell, tipo 1   
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa++;
-        //atomo 3 de la unit cell, tipo 0
-        atoms[iHexa][jHexa] = new GrapheneAtom(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
-
-        iHexa--;
-        jHexa--;
-      }
-    }
-    
-    setAtoms(atoms);
-    
-    //Interconect atoms
-    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-        // Get and all 12 neighbours of current graphene atom
-        GrapheneAtom[] neighbours = new GrapheneAtom[12];
-        for (int i = 0; i < 12; i++) {
-          neighbours[i] = getNeighbour(iHexa, jHexa, i);
-        }
-        atoms[iHexa][jHexa].setNeighbours(neighbours);
-      }
-    }
-    return atoms;
   }
 
   @Override
   public GrapheneAtom getNeighbour(int xCart, int yCart, int neighbour) {
-
     int vec = latticeNeighborhoodData[neighbour];                      //esto define el tipo de atomo
     int vec_X = (short) (vec & 0xFFFF); // bitwise and for all the bits
     int vec_Y = ((vec >> 16)); // shift 16 positions to right
@@ -175,7 +98,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   
   @Override
   public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-
     int[] index = new int[1];
     short iHexa = atom.getiHexa();
     short jHexa = atom.getjHexa();
@@ -193,7 +115,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
   @Override
   public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-
     int[] index = new int[1];
     short iHexa = atom.getiHexa();
     short jHexa = atom.getjHexa();
@@ -211,10 +132,235 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
   }
 
+  @Override
+  public float getCartSizeX() {
+    return getHexaSizeI() * 1.5f;
+  }
+
+  @Override
+  public float getCartSizeY() {
+    return getHexaSizeJ() * Y_RATIO;
+  }
+
+  @Override
+  public Point2D getCentralCartesianLocation() {
+    return centralCartesianLocation;
+  }
+
+  @Override
+  public final Point2D getCartesianLocation(int iHexa, int jHexa) {
+    double xCart;
+    if ((iHexa & 1) == 0) { //even
+      xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) + COS60;
+    } else { //odd
+      xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) * (1 + 2 * COS60);
+    }
+    double yCart = (jHexa >> 1) * (2 * COS30) + (1 & jHexa) * COS30;
+    return new Point2D.Double(xCart, yCart);
+
+  }
+  
+  @Override
+  public double getCartX(int iHexa, int jHexa) {
+    double xCart;
+    if ((jHexa & 1) == 0) { //j even
+      xCart = (iHexa >> 1) + iHexa + 0.5;
+    } else { // odd
+      xCart = (iHexa + 1 >> 1) + iHexa;
+    }
+    return xCart;
+  }
+  
+  @Override
+  public double getCartY(int jHexa) {
+    return jHexa * Y_RATIO;
+  }
+  
+  @Override
+  public int getiHexa(double xCart, double yCart) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public int getjHexa(double yCart) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  @Override
+  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
+    GrapheneAtom atom = (GrapheneAtom) a;
+    atom.setOccupied(true);
+    if (forceNucleation) {
+      atom.setType(BULK);
+    }
+    int i = 0;
+
+    for (; i < 3; i++) {
+      add1stNeighbour(atom.getNeighbour(i), forceNucleation);
+    }
+    for (; i < 9; i++) {
+      add2ndNeighbour(atom.getNeighbour(i));
+    }
+    for (; i < atom.getNumberOfNeighbours(); i++) {
+      add3rdNeighbour(atom.getNeighbour(i));
+    }
+
+    addAtom(atom);
+    if (atom.getNeighbourCount() > 0) {
+      addBondAtom(atom);
+    }
+    atom.resetProbability();
+  }
+    
+  /**
+   * Extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos,
+   * si cambia algún tipo, recalcula probabilidades)
+   * 
+   * @param a atom to be extracted.
+   * @return the previous probability of the extracted atom (in positive).
+   */
+  @Override
+  public double extract(AbstractGrowthAtom a) {
+    GrapheneAtom atom = (GrapheneAtom) a;
+    atom.setOccupied(false);
+    double probabilityChange = a.getProbability();
+
+    int i = 0;
+    for (; i < 3; i++) {
+      remove1stNeighbour(atom.getNeighbour(i));
+    }
+    for (; i < 9; i++) {
+      remove2ndNeighbour(atom.getNeighbour(i));
+    }
+    for (; i < atom.getNumberOfNeighbours(); i++) {
+      remove3rdNeighbour(atom.getNeighbour(i));
+    }
+
+    if (atom.getNeighbourCount() > 0) {
+      addBondAtom(atom);
+    }
+
+    atom.setList(false);
+    atom.resetProbability();
+    return probabilityChange;
+  }
+  
+  /**
+   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
+   * experimental. If fails, the execution continues normally.
+   *
+   * @param xMouse absolute X location of the pressed point
+   * @param yMouse absolute Y location of the pressed point
+   * @param scale zoom level
+   */
+  @Override
+  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
+    int iLattice;
+    int jLattice;
+    // scale the position with respect to the current scale.
+    double xCanvas = xMouse / scale;
+    double yCanvas = yMouse / scale;
+    // choose the correct lattice
+    jLattice = (int) Math.floor(yCanvas / Y_RATIO);
+    iLattice = (int) Math.floor((2 * xCanvas - 1) / 3); // the inverse of getCart
+    double j = yCanvas;
+    int pos = 0;
+
+    // for debugging
+    System.out.println("scale " + scale + " " + (jLattice - j));
+    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
+    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+
+    if (atom.isOccupied()) {
+      extract(atom);
+    } else {
+      deposit(atom, false);
+    }
+  }
+  
+  private static void initialiseNeighborHoodCache() {
+    latticeNeighborhoodData = new int[12];
+    latticeNeighborhoodData[0] = (1 & 0xFFFF) + (0 << 16);
+    latticeNeighborhoodData[1] = (-1 << 16);
+    latticeNeighborhoodData[2] = (1 << 16);
+
+    latticeNeighborhoodData[3] = (1 & 0xFFFF) + (1 << 16);
+    latticeNeighborhoodData[4] = (1 & 0xFFFF) + (-1 << 16);
+    latticeNeighborhoodData[5] = (-2 << 16);
+    latticeNeighborhoodData[6] = (-1 & 0xFFFF) + (-1 << 16);
+    latticeNeighborhoodData[7] = (-1 & 0xFFFF) + (1 << 16);
+    latticeNeighborhoodData[8] = (2 << 16);
+
+    latticeNeighborhoodData[9] = (1 & 0xFFFF) + (2 << 16);
+    latticeNeighborhoodData[10] = (1 & 0xFFFF) + (-2 << 16);
+    latticeNeighborhoodData[11] = (-1 & 0xFFFF) + (0 << 16);
+  }
+
+  private int createId(int i, int j) {
+    return j * getHexaSizeI() + i;
+  }
+    
+  /**
+   * Creates the atom array for graphene. It only allows even parameters.
+   *
+   * @param hexaSizeI even number of the size in hexagonal lattice points. Currently it is
+   * represented vertically starting from the top
+   * @param hexaSizeJ even number of the size in hexagonal lattice points. Currently it is
+   * represented horizontally starting from the left
+   * @param distancePerStep
+   * @return just created atoms in a 2D matrix.
+   */
+  private GrapheneAtom[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep, Class<?> inputClass) {
+    GrapheneAtom[][] atoms = new GrapheneAtom[hexaSizeI][hexaSizeJ];
+    try{
+      Constructor<?>[] constructor = inputClass.getConstructors();
+      //Instantiate atoms
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
+        for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
+          //para cada unit cell
+
+          //atomo 0 de la unit cell, tipo 0
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa++;
+          //atomo 1 de la unit cell, tipo 1
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa--;
+          jHexa++;
+          //atomo 2 de la unit cell, tipo 1   
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa++;
+          //atomo 3 de la unit cell, tipo 0
+          atoms[iHexa][jHexa] = (GrapheneAtom) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+
+          iHexa--;
+          jHexa--;
+        }
+      }
+    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | SecurityException ex) {
+      Logger.getLogger(GrapheneLattice.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    
+    setAtoms(atoms);
+    
+    //Interconect atoms
+    for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
+      for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+        // Get and all 12 neighbours of current graphene atom
+        GrapheneAtom[] neighbours = new GrapheneAtom[12];
+        for (int i = 0; i < 12; i++) {
+          neighbours[i] = getNeighbour(iHexa, jHexa, i);
+        }
+        atoms[iHexa][jHexa].setNeighbours(neighbours);
+      }
+    }
+    return atoms;
+  }
+
   private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, double raw) {
-
     int temp = (int) (raw * (thresholdDistance * 2 * 6));
-
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
     int iHexa = iHexaOrigin;
     int jHexa = (jHexaOrigin - thresholdDistance * 2);
@@ -224,7 +370,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
 
     int counter = 0;
     int index;
-
     for (int i = 0; i < thresholdDistance * 2; i++) {
       counter++;
       if (counter > temp) {
@@ -319,14 +464,10 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
-
     int distance = 1;
-
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
-
     short iHexa;
     iHexa = iHexaOrigin;
-
     short jHexa = (short) (jHexaOrigin - 2);
     if (jHexa < 0) {
       jHexa += getHexaSizeJ();
@@ -473,11 +614,9 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaZigzag(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, int[] destinationIndex, double raw) {
-
     int distance = 1;
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
     int orientation = getUc(index).getAtom(0).getOrientation();
-
     int iHexa1 = iHexaOrigin;
     int jHexa1 = jHexaOrigin;
     int iHexa2 = iHexaOrigin;
@@ -543,17 +682,14 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaArmchair(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, int[] destinationIndex, double raw) {
-
     int distance = 1;
     boolean type0 = (((iHexaOrigin + jHexaOrigin) & 1) == 0);
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
     int orientacion = getUc(index).getAtom(0).getOrientation();
-
     int iHexa1 = iHexaOrigin;
     int jHexa1 = jHexaOrigin;
     int iHexa2 = iHexaOrigin;
     int jHexa2 = jHexaOrigin;
-
     int neighbour1;
     int neighbour2;
 
@@ -646,124 +782,7 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       distance++;
     }
   }
-
-  @Override
-  public float getCartSizeX() {
-    return getHexaSizeI() * 1.5f;
-  }
-
-  @Override
-  public float getCartSizeY() {
-    return getHexaSizeJ() * Y_RATIO;
-  }
-
-  @Override
-  public Point2D getCentralCartesianLocation() {
-    return centralCartesianLocation;
-  }
-
-  @Override
-  public final Point2D getCartesianLocation(int iHexa, int jHexa) {
-
-    double xCart;
-    if ((iHexa & 1) == 0) { //even
-      xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) + COS60;
-    } else { //odd
-      xCart = (iHexa >> 1) * (2 + 2 * COS60) + 0.5 + (1 & iHexa) * (1 + 2 * COS60);
-    }
-    double yCart = (jHexa >> 1) * (2 * COS30) + (1 & jHexa) * COS30;
-    return new Point2D.Double(xCart, yCart);
-
-  }
   
-  @Override
-  public double getCartX(int iHexa, int jHexa) {
-    double xCart;
-    if ((jHexa & 1) == 0) { //j even
-      xCart = (iHexa >> 1) + iHexa + 0.5;
-    } else { // odd
-      xCart = (iHexa + 1 >> 1) + iHexa;
-    }
-    return xCart;
-  }
-  
-  @Override
-  public double getCartY(int jHexa) {
-    return jHexa * Y_RATIO;
-  }
-  
-  @Override
-  public int getiHexa(double xCart, double yCart) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public int getjHexa(double yCart) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  @Override
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    GrapheneAtom atom = (GrapheneAtom) a;
-    atom.setOccupied(true);
-    if (forceNucleation) {
-      atom.setType(TERRACE);
-    }
-    int i = 0;
-
-    for (; i < 3; i++) {
-      add1stNeighbour(atom.getNeighbour(i), forceNucleation);
-    }
-    for (; i < 9; i++) {
-      add2ndNeighbour(atom.getNeighbour(i));
-    }
-    for (; i < 12; i++) {
-      add3rdNeighbour(atom.getNeighbour(i));
-    }
-
-    addAtom(atom);
-    if (atom.getNeighbourCount() > 0) {
-      addBondAtom(atom);
-    }
-    atom.resetProbability();
-  }
-    
-  /**
-   * Extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos,
-   * si cambia algún tipo, recalcula probabilidades)
-   * 
-   * @param a atom to be extracted.
-   * @return the previous probability of the extracted atom (in positive).
-   */
-  @Override
-  public double extract(AbstractGrowthAtom a) {
-    GrapheneAtom atom = (GrapheneAtom) a;
-    atom.setOccupied(false);
-    double probabilityChange = a.getProbability();
-
-    int i = 0;
-    for (; i < 3; i++) {
-      remove1stNeighbour(atom.getNeighbour(i));
-    }
-    for (; i < 9; i++) {
-      remove2ndNeighbour(atom.getNeighbour(i));
-    }
-    for (; i < 12; i++) {
-      remove3rdNeighbour(atom.getNeighbour(i));
-    }
-
-    if (atom.getNeighbourCount() > 0) {
-      addBondAtom(atom);
-    }
-
-    if (atom.getBondsProbability() != null) {
-      atom.setBondsProbability(null);
-      }
-    atom.setList(false);
-    atom.resetProbability();
-    return probabilityChange;
-  }
-      
   private void add1stNeighbour(GrapheneAtom atom, boolean forceNucleation) {
     byte newType = atom.getNewType(1, 1);
     //set type is missing!

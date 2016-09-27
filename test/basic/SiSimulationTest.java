@@ -93,6 +93,8 @@ public class SiSimulationTest {
     for (int i = 0; i < parser.getCartSizeY() / 2; i++) {
       assertArrayEquals(ref[i], surface[i], 0.001f);
     }
+    double simulatedTime = simulation.getSimulatedTime();
+    assertEquals(1.0779838516773791E13, simulatedTime, 0.0);
   }
   
 }

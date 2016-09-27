@@ -25,8 +25,9 @@ import org.junit.Test;
  */
 public class AgUcSimulationTest {
   
-  private float[][] currentSurface;
-  private float[][] currentPsd;
+  private float[][] simulatedSurface;
+  private float[][] simulatedPsd;
+  private double simulatedTime;
 
   public AgUcSimulationTest() {
   }
@@ -57,17 +58,16 @@ public class AgUcSimulationTest {
     doAgTest(parser);
     
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
     float[][] ref0 = null;
     try {
-      ref0 = restart.readSurfaceText2D(2, sizes, "AgUc180Surface000.txt");
+      ref0 = restart.readSurfaceBinary2D("AgUc180Surface000.mko");
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }    
     for (int i = 0; i < ref0.length; i++) {
-      assertArrayEquals(ref0[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    
+    assertEquals(8.67671908481585, simulatedTime, 0.0);
   }
   
   @Test
@@ -93,13 +93,14 @@ public class AgUcSimulationTest {
             (int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()),
             null, "Frobenius", null, parser.getTemperature());
     evaluator.setPsd(ref);
-    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
+    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(simulatedPsd);
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
     results.add(0.04); // the error must be lower than 0.04
     results.sort((a, b) -> b.compareTo(a));
     assertEquals(0.04, results.get(0), 0.0); // ensure that the first value is 0.04, and therefore, the current error is lower
+    assertEquals(350939.25839387067, simulatedTime, 52649); // tolerance is 15%. It is too big but the simulation time varies a lot.
 
   }
 
@@ -111,8 +112,9 @@ public class AgUcSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    currentSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
-    currentPsd = simulation.getPsd().getPsd();
+    simulatedSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
+    simulatedPsd = simulation.getPsd().getPsd();
+    simulatedTime = simulation.getSimulatedTime();
   }
 
 }

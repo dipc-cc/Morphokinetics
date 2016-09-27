@@ -6,6 +6,7 @@ package utils.psdAnalysis;
 
 import basic.io.Restart;
 //*//import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
+import java.awt.geom.Point2D;
 import java.util.concurrent.Semaphore;
 
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class PsdSignature2D {
   public static final int VERTICAL_SYMMETRY = 1;
 
   public PsdSignature2D(int surfaceSizeY, int surfaceSizeX, double extent) {
-
     psdSizeY = (int) (surfaceSizeY * extent);
     psdSizeX = (int) (surfaceSizeX * extent);
     //*//fftCore = new FloatFFT_2D(psdSizeY, psdSizeX);
@@ -63,7 +63,6 @@ public class PsdSignature2D {
   }
 
   public void addSurfaceSample(float[][] sampledSurface) {
-
     if (averaged) {
       throw new RuntimeException("PSD measures averaged, new samples cannot be added without signature reset.");
     }
@@ -121,7 +120,6 @@ public class PsdSignature2D {
   }
  
   public float[][] getPsd() {
-
     if (!averaged) {
       for (int i = 0; i < psdSizeY; i++) {
         for (int j = 0; j < psdSizeX; j++) {
@@ -189,13 +187,54 @@ public class PsdSignature2D {
   }
 
   public void printAvgToFile(){
-    restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
-    restart.writePsdText2D(dimensions, sizes, MathUtils.avgFilter(this.getPsd(), 1), "psdAvgFil");
-    restart.writePsdBinary(dimensions, sizes, this.getPsd(), "psdAvgRaw");
-    restart.writePsdText2D(dimensions, sizes, this.getPsd(), "psdAvgRaw");
+    restart.writePsdBinary(dimensions, sizes, MathUtils.avgFilter(getPsd(), 1), "psdAvgFil");
+    restart.writePsdText2D(dimensions, sizes, MathUtils.avgFilter(getPsd(), 1), "psdAvgFil");
+    restart.writePsdBinary(dimensions, sizes, getPsd(), "psdAvgRaw");
+    restart.writePsdText2D(dimensions, sizes, getPsd(), "psdAvgRaw");
+    
+    float[] psd1D = new float[getPsd().length];
+    Point2D centre = new Point2D.Double(getPsd().length / 2, getPsd()[0].length / 2);
+     // Do the average per each radius from the centre, and create 1D PSD
+    for (int i = 0; i < getPsd().length; i++) {
+      for (int j = 0; j < getPsd()[0].length; j++) {
+        int posX = (i + getPsd().length / 2) % getPsd().length;
+        int posY = (j + getPsd()[0].length / 2) % getPsd()[0].length;
+        Point2D point = new Point2D.Double((double) posX, (double) posY);
+        int radius = (int) Math.ceil(centre.distance(point));
+        psd1D[radius] += getPsd()[i][j];
+      }
+    }
+    
+    restart.writePsdText1D(psd1D, "psd1D");
   }
   
   public void setRestart(Restart restart) {
     this.restart = restart;
+  }
+
+  public float getMin() {
+    float min = Integer.MAX_VALUE;
+    float[][] tmpPsd = MathUtils.avgFilter(psd, 1);
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        if (Math.log(tmpPsd[i][j]) < min) {
+          min = (float) Math.log(tmpPsd[i][j]);
+        }
+      }
+    }
+    return min;
+  }
+
+  public float getMax() {
+    float max = Integer.MIN_VALUE;
+    float[][] tmpPsd = MathUtils.avgFilter(psd, 1);
+    for (int i = 0; i < psdSizeX; i++) {
+      for (int j = 0; j < psdSizeY; j++) {
+        if (Math.log(tmpPsd[i][j]) > max) {
+          max = (float) Math.log(tmpPsd[i][j]);
+        }
+      }
+    }
+    return max;
   }
 }

@@ -73,6 +73,7 @@ public class MathUtils {
     int currentHeight = 0;
     int maxI = surface.length;
     int maxJ = surface[0].length;
+    int maxHeight = 1000;
     do {
       modified = 0;
       for (int i = 0; i < maxI; i++) {
@@ -94,8 +95,20 @@ public class MathUtils {
         }
       }
       currentHeight++;
-    } while (modified > 0);
+    } while (modified > 0 && currentHeight < maxHeight);
   }
+    
+  public static void planeSurface(float[][] surface) {
+    int maxI = surface.length;
+    int maxJ = surface[0].length;
+    for (int i = 0; i < maxI; i++) {
+      for (int j = 0; j < maxJ; j++) {
+        if (surface[i][j] > -1) {
+          surface[i][j] = 0;
+        }
+      }
+    }
+  } 
   
   /**
    * Normalises the surface, to be able to easily compare surfaces with different tent heights.
@@ -181,4 +194,132 @@ public class MathUtils {
     }
     return filtered;
   }
+  
+  /**
+   * Adds an empty area, maintaining the island size. It is useful to compare different size
+   * simulations.
+   *
+   * Converts this island:
+   * <pre> {@code 
+:::::::::::::::::::::::::
+:::::::::::::::::::::::::
+::::@::@.::::::::::::::::
+::::`@@@:::@@@:::::::::::
+:::::;@@@:::@';::::::;@::
+::::::,@@@;;.@+;:#`@@@,::
+::::::::+@@@ +@:.@@';@@':
+:::::::::+@@@@@@@#@:::..:
+:::::::::+ ,@'+# @@+:::::
+::::::::::@@@@,+.::::::::
+:::::::::::@+#:::::::::::
+::::::::;@@@@::::::::::::
+::::::::::;@@::::::::::::
+:::::::::::::::::::::::::
+:::::::::::::::::::::::::
+:::::::::::::::::::::::::
+} </pre>
+    into this filled one:
+    * <pre> {@code
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+:::::::::::::::::::@::::::::::::::::::::::::::::::
+::::::::::::::::,@:;@:::::::::::::::::::::::::::::
+:::::::::::::::::'@@.:::+@::::::::,.::::::::::::::
+:::::::::::::::::::@@@@::@+@:::@@@@@::::::::::::::
+::::::::::::::::::::'@@@+ @.:@@@@'@.::::::::::::::
+::::::::::::::::::::::@@@@@;@@@:::#@::::::::::::::
+:::::::::::::::::::::.@ @@@@ @@@::::::::::::::::::
+::::::::::::::::::::::#@@@:@@::;::::::::::::::::::
+::::::::::::::::::::::::@@::::::::::::::::::::::::
+::::::::::::::::::::.@+@@:::::::::::::::::::::::::
+:::::::::::::::::::::'@@@,::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::::
+  }</pre>
+   * @param inputArea input area
+   * @param scale how much is going to increase (must be > 1)
+   * @return output bigger area
+   */
+  public static float[][] increaseEmptyArea(float[][] inputArea, double scale){
+    // ensure that scale is bigger than one
+    if (scale <= 1 ) {
+      return inputArea;
+    }
+    
+    int sizeX = inputArea.length;
+    int sizeY = inputArea[0].length;
+    float[][] outputArea = new float[(int) (sizeX * scale)][(int) (sizeY * scale)];
+    for (int x = 0; x < outputArea.length; x++) {
+      for (int y = 0; y < outputArea[0].length; y++) {
+        outputArea[x][y] = -1;
+      }
+    }
+    int padX = (int) ((outputArea.length - sizeX) / 2);
+    int padY = (int) ((outputArea[0].length - sizeY) / 2);
+    for (int x = 0; x < sizeX; x++) {
+      System.arraycopy(inputArea[x], 0, outputArea[x + padX], padY, sizeY);
+    }
+    return outputArea;
+  }
+
+  /**
+   * Given an original surface it reduces by the given factor.
+   *
+   * @param originalSurface
+   * @param factor
+   * @return reduced surface
+   */
+  public static float[][] scale(float[][] originalSurface, int factor) {
+    double scale = (double) 1 / (double) factor;
+    return scale(originalSurface, scale);
+  }
+  
+  /**
+   * See {@link #scale(float[][], int) }
+   * 
+   * @param originalSurface
+   * @param scale
+   * @return 
+   */
+  public static float[][] scale(float[][] originalSurface, double scale) {
+    int originalSizeX = originalSurface.length;
+    int originalSizeY = originalSurface[0].length;
+    int reducedSizeX = (int) Math.ceil(originalSizeX * scale); // This is required to ensure that data properly fits afterwards
+    int reducedSizeY = (int) Math.ceil(originalSizeY * scale);
+
+    float[][] reducedSurface = new float[reducedSizeX][reducedSizeY];
+    if (scale > 1) {
+      System.err.println("Error:scale must be less or equal to 1.");
+      return originalSurface;
+    }
+    // This is really simple interpolation; last position is visited, this value is assigned
+    for (int x = 0; x < originalSizeX; x++) {
+      for (int y = 0; y < originalSizeY; y++) {
+        int reducedX = (int) (x * scale);
+        int reducedY = (int) (y * scale);
+        reducedSurface[reducedX][reducedY] = originalSurface[x][y];
+      }
+    }
+    return reducedSurface;
+  }
+
 }

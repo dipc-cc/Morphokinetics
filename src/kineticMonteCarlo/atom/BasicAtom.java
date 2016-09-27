@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import javafx.geometry.Point3D;
+
 /**
  *
  * @author Nestor
@@ -12,8 +14,8 @@ public class BasicAtom extends AbstractAtom {
 
   private BasicAtom[] neighbours;
   private byte type;
-  private short x;
-  private short y;
+  private final short x;
+  private final short y;
 
   public BasicAtom(short x, short y) {
     this.x = x;
@@ -28,6 +30,11 @@ public class BasicAtom extends AbstractAtom {
 
   public short getY() {
     return y;
+  }
+  
+  @Override
+  public Point3D getPos() {
+    return new Point3D(x, y, 0);
   }
 
   @Override

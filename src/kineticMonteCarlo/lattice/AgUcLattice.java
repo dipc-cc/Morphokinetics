@@ -56,17 +56,139 @@ public class AgUcLattice extends AgLattice {
     setAngles();
   }
 
+  @Override
+  public float getCartSizeX() {
+    return getHexaSizeI();
+}
+
+  @Override
+  public float getCartSizeY() {
+    return getHexaSizeJ() * Y_RATIO * 2;
+  }
+  
+  @Override
+  public AgUc getUc(int pos) {
+    return ucList.get(pos);
+  }
+  
+  @Override
+  public AgUc getUc(int i, int j) {
+    return ucArray[i][j];
+  }
+  
   /**
-   * Creates all atoms and asings it neighbours. How are computed the neighbours is documented
-   * here:
+   * The area is the number of cells * 2.
+   * @return the coverage of the lattice.
+   */
+  @Override
+  public float getCoverage() {
+    return (float) getOccupied() / (float) (sizeI * sizeJ * 2);
+  }
+  
+  
+  @Override
+  public int size() {
+    return ucList.size();
+  }
+  
+  @Override
+  public AgAtom getAtom(int iHexa, int jHexa) {
+    return null;
+  }
+  
+  /**
+   * Returns an atom of given unit cell and lattice position.
+   *
+   * @param iHexa
+   * @param jHexa
+   * @param pos
+   * @return an atom.
+   */
+  public AgAtom getAtom(int iHexa, int jHexa, int pos) {
+    return ucArray[iHexa][jHexa].getAtom(pos);
+  }
+  
+  @Override
+  public Point2D getCentralCartesianLocation() {
+    if (centralCartesianLocation == null) {
+      return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));
+    } else {
+      return centralCartesianLocation;
+    }
+  }
+  
+  @Override
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+    switch (atom.getType()) {
+      case TERRACE:
+        //return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
+        return getClearAreaTerrace(atom, thresholdDistance);
+      case EDGE:
+        return getClearAreaStep(atom, thresholdDistance);
+      default:
+        return 0;
+    }
+  }
+  
+  @Override
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+    switch (atom.getType()) {
+      case TERRACE:
+        return chooseClearAreaTerrace(atom, distance);
+      case EDGE:
+        return chooseClearAreaStep(atom, distance);
+      default:
+        return null;
+    }
+  }
+    
+  /**
+   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
+   * experimental and only works with AgUc simulation mode. If fails, the execution continues
+   * normally.
+   *
+   * @param xMouse absolute X location of the pressed point
+   * @param yMouse absolute Y location of the pressed point
+   * @param scale zoom level
+   */
+  @Override
+  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
+    int iLattice;
+    int jLattice;
+    // scale the position with respect to the current scale.
+    double xCanvas = xMouse / scale;
+    double yCanvas = yMouse / scale;
+    // choose the correct lattice
+    iLattice = (int) Math.floor(xCanvas);
+    jLattice = (int) Math.floor(yCanvas / (2 * Y_RATIO));
+    double j = yCanvas / (2 * Y_RATIO);
+    int pos = 0;
+    // choose the atom within the lattice
+    if (j - jLattice > 0.5) {
+      pos = 1;
+    }
+
+    // for debugging
+    System.out.println("scale " + scale + " " + (jLattice - j));
+    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
+    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+
+    if (atom.isOccupied()) {
+      extract(atom);
+    } else {
+      deposit(atom, false);
+    }
+  }
+  
+  /**
+   * Creates all atoms and asings it neighbours. How are computed the neighbours is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    *
-   * @return
    */
   private void createAtoms() {
-    
-    sizeI = Math.round(getCartSizeX() / 1);
-    sizeJ = Math.round(getCartSizeY() / 2 * AbstractGrowthLattice.Y_RATIO);
+
+    sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
+    sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
     ucArray = new AgUc[sizeI][sizeJ];
     int id = -1;
@@ -79,7 +201,7 @@ public class AgUcLattice extends AgLattice {
         id++;
         AgAtom atom1 = new AgAtom(id, 1);
         atomsList.add(atom1);
-        AgUc uc = new AgUc(2, i, j, atomsList);
+        AgUc uc = new AgUc(i, j, atomsList);
         ucList.add(uc);
         ucArray[i][j] = uc;
       }
@@ -153,66 +275,38 @@ public class AgUcLattice extends AgLattice {
     }
 
   }
-   
-  @Override
-  public float getCartSizeX() {
-    return getHexaSizeI();
-}
-
-  @Override
-  public float getCartSizeY() {
-    return getHexaSizeJ() * Y_RATIO * 2;
-  }
-  
-  @Override
-  public int size() {
-    return ucList.size();
-  }
-  
-  @Override
-  public AgUc getUc(int pos) {
-    return ucList.get(pos);
-  }
-  
-  public AgUc getUc(int i, int j) {
-    return ucArray[i][j];
-  }
-  
-  @Override
-  public AgAtom getAtom(int iHexa, int jHexa) {
-    return null;
-  }
   
   /**
-   * Returns an atom of given unit cell and lattice position.
-   * @param iHexa
-   * @param jHexa
-   * @param pos
-   * @return 
+   * We only care about the largest possible distance atoms.
+   * 
+   * @param atom
+   * @param thresholdDistance
+   * @return clear distance.
    */
-  public AgAtom getAtom(int iHexa, int jHexa, int pos) {
-    return ucArray[iHexa][jHexa].getAtom(pos);
-  }
-  
-  @Override
-  public Point2D getCentralCartesianLocation() {
-    if (centralCartesianLocation == null) {
-      return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));
-    } else {
-      return centralCartesianLocation;
-    }
-  }
-  
-  @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-    switch (atom.getType()) {
-      case TERRACE:
-        //return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
-        return getClearAreaTerrace(atom, thresholdDistance);
-      case EDGE:
-        return getClearAreaStep(atom, thresholdDistance);
-      default:
-        return 0;
+  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
+    byte errorCode = 0;
+    int possibleDistance = 0;
+    while (true) {
+      atom = atom.getNeighbour(4); // get the first neighbour
+      for (int direction = 0; direction < 6; direction++) {
+        for (int j = 0; j <= possibleDistance; j++) {
+          atom = atom.getNeighbour(direction);
+          if (atom.isOutside()) {
+            errorCode |= 1;
+          }
+          if (atom.isOccupied()) { // we have touched an occupied atom, exit
+            errorCode |= 2;
+            return possibleDistance;
+          }
+        }
+      }
+      possibleDistance++;
+      if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
+        return possibleDistance;
+      }
+      if (possibleDistance > thresholdDistance) {
+        return thresholdDistance;
+      }
     }
   }
   
@@ -268,93 +362,12 @@ public class AgUcLattice extends AgLattice {
     return getClearAreaTerrace(currentAtom, thresholdDistance, changeLevel, currentLevel, position, turnDirection, errorCode);
   }
   
-  /**
-   * We only care about the largest possible distance atoms.
-   * @param atom
-   * @param thresholdDistance
-   * @return clear distance
-   */
-  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
-    boolean changeLevel = true;
-    int currentLevel = 0;
-    int position = 0;
-    int turnDirection = 0;
-    byte errorCode = 0;
-    int possibleDistance = 1;
-    int fromPreviousLevel = 0;
-    int from = 1;
-    int to = 1;
-    AbstractGrowthAtom currentAtom;
     
-    while (true) {
-      if (changeLevel) {
-        
-        currentAtom = atom.getNeighbour(0).getNeighbour(2); // Skip the first possition, to avoid counting more than once
-        if (currentLevel == 0) {
-          turnDirection = 3; // in the first level there are no more neighbours in 2 direction
-        } else {
-          turnDirection = 2; // go to the 2 direction (right).
-        }
-        currentLevel++;
-        fromPreviousLevel = from;
-        from = to;
-        to = currentLevel * 6 + from;
-        position = 1;
-        changeLevel = false;
-        if (currentLevel > thresholdDistance) {
-          return possibleDistance;
-        }
-      } else {
-
-        // choose the next atom 
-        currentAtom = atom.getNeighbour(turnDirection);
-        position++;
-        if (position >= currentLevel) { // time to turn
-          position = 0;
-          turnDirection++;
-          if (turnDirection == 6) {
-            turnDirection = 0;
-          }
-
-          if (turnDirection == 2) { // we arrived to the end of the current level
-            if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
-              return currentLevel;
-            }
-            changeLevel = true;
-          } else {
-            changeLevel = false;
-          }
-        }
-      }
-
-      if (currentAtom.isOutside()) {
-        errorCode |= 1;
-      }
-      if (currentAtom.isOccupied()) { // we have touched an occupied atom, exit
-        errorCode |= 2;
-        return possibleDistance - 1;
-      }
-      atom = currentAtom; // go to the next atom
-    }
-  }
-  
-  @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-    switch (atom.getType()) {
-      case TERRACE:
-        return chooseClearAreaTerrace(atom, distance);
-      case EDGE:
-        return chooseClearAreaStep(atom, distance);
-      default:
-        return null;
-    }
-  }
-  
   /**
    * 
-   * @param atom
-   * @param distance how far we have to move
-   * @return 
+   * @param atom origin atom.
+   * @param distance how far we have to move.
+   * @return destination atom.
    */
   private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
     int sizeOfPerimeter = distance * 6;
@@ -372,8 +385,8 @@ public class AgUcLattice extends AgLattice {
     
     return atom;
   }
+  
   private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
-    
     int distance = 1;
     AbstractGrowthAtom currentAtom;
     AbstractGrowthAtom lastRight = atom;
@@ -457,53 +470,5 @@ public class AgUcLattice extends AgLattice {
       atom = atom.getNeighbour(neighbour);
     }
     return atom;
-  }
-    
-    
-  /**
-   * The area is the number of cells * 2.
-   * @return the coverage of the lattice
-   */
-  @Override
-  public float getCoverage() {
-    return (float) getOccupied() / (float) (sizeI * sizeJ * 2);
-  }
-  
-  /**
-   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
-   * experimental and only works with AgUc simulation mode. If fails, the execution continues
-   * normally.
-   *
-   * @param xMouse absolute X location of the pressed point
-   * @param yMouse absolute Y location of the pressed point
-   * @param scale zoom level
-   */
-  @Override
-  public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
-    int iLattice;
-    int jLattice;
-    // scale the position with respect to the current scale.
-    double xCanvas = xMouse / scale;
-    double yCanvas = yMouse / scale;
-    // choose the correct lattice
-    iLattice = (int) Math.floor(xCanvas);
-    jLattice = (int) Math.floor(yCanvas / (2 * Y_RATIO));
-    double j = yCanvas / (2 * Y_RATIO);
-    int pos = 0;
-    // choose the atom within the lattice
-    if (j - jLattice > 0.5) {
-      pos = 1;
-    }
-
-    // for debugging
-    System.out.println("scale " + scale + " " + (jLattice - j));
-    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
-
-    if (atom.isOccupied()) {
-      extract(atom);
-    } else {
-      deposit(atom, false);
-    }
   }
 }

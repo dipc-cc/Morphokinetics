@@ -7,7 +7,7 @@ package basic;
 
 import basic.io.OutputType.formatFlag;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.IRatesFactory;
+import ratesLibrary.IRates;
 
 /**
  *
@@ -23,36 +23,40 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
-    savedImages = 1;
-    printEvery = 0.1;
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
   }
 
   @Override
-  protected void initialiseRates(IRatesFactory ratesFactory, Parser parser) {
+  void initialiseRates(IRates rates, Parser parser) {
     double depositionRatePerSite;
-    ratesFactory.setDepositionFlux(parser.getDepositionFlux());
-    depositionRatePerSite = ratesFactory.getDepositionRatePerSite();
-    double islandDensity = ratesFactory.getIslandDensity(parser.getTemperature());
+    rates.setDepositionFlux(parser.getDepositionFlux());
+    depositionRatePerSite = rates.getDepositionRatePerSite();
+    double islandDensity = rates.getIslandDensity(parser.getTemperature());
     getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
-    getKmc().initialiseRates(ratesFactory.getRates(parser.getTemperature()));
+    getKmc().initialiseRates(rates.getRates(parser.getTemperature()));
   }
   
   @Override
   public void createFrame() {
+    boolean error = false;
     if (getParser().withGui()) {
       try {
       } catch (Exception e) {
-        System.err.println("Error: The execution is not able to create the X11 frame");
-        System.err.println("Finishing");
-        throw e;
-      }
-      if (getParser().visualise()) {
-        paintLoop p = new paintLoop();
-        p.start();
+        System.err.println("Error: Execution is not able to create the X11 frame.");
+        System.err.println("Continuing without any graphic...");
+        error = true;
       }
     }
+    Thread p;
+    if (getParser().visualise() && !error) {
+      frame.setVisible(true);
+      p = new PaintLoop();
+    } else {
+      p = new TerminalLoop();
+      p.setDaemon(true); // make the progress bar finish, when main program fails
+    }
+    p.start();
   }
   
   /**
@@ -64,21 +68,23 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   }
   
   /**
-   * Prints the current frame to a file
-   * @param i simulation number
+   * Prints the current frame to a file.
+   *
+   * @param i simulation number.
    */
   @Override
-  protected void printToImage(int i) {
+  void printToImage(int i) {
 
   }
   
   /**
-   * Prints the current frame to a file
+   * Prints the current frame to a file.
+   *
    * @param folderName
-   * @param i simulation number
+   * @param i simulation number.
    */
   @Override
-  protected void printToImage(String folderName, int i) {
+  void printToImage(String folderName, int i) {
     // reset saved images for current simulation
     savedImages = 1;
   }
@@ -86,26 +92,66 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
   /**
    * Private class responsible to repaint every 100 ms the KMC frame.
    */
-  final class paintLoop extends Thread {
+  final class PaintLoop extends Thread {
 
     @Override
     public void run() {
       while (true) {
         try {
-          paintLoop.sleep(100);
-          // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-          if (printIntermediatePngFiles &&
-                  previousCoverage < (printEvery * savedImages) && getKmc().getCoverage() > (printEvery * savedImages)) {
-            savedImages++;
+          PaintLoop.sleep(100);
+          if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
+                  || // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
+                  (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
+            if (printIntermediatePngFiles) {
+              frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
+            }
+            frame.updateProgressBar(getCurrentProgress());
+            updateCurrentProgress();
             totalSavedImages++;
           }
-          previousCoverage = getKmc().getCoverage();
         } catch (Exception e) {
         }
       }
     }
   }
   
+  /**
+   * Private class responsible to repaint every 1000 ms the progress bar to the terminal.
+   */
+  final class TerminalLoop extends Thread {
+
+    @Override
+    public void run() {
+      final int width; // progress bar width in chars
+      if (getParser().justCentralFlake()) {
+        width = (int) Math.max(getKmc().getLattice().getHexaSizeI() / 2, getKmc().getLattice().getHexaSizeJ() / 2);
+      } else {
+        width = (int) getParser().getCoverage();
+      }
+      while (true) {
+        try {
+          TerminalLoop.sleep(1000);
+          if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
+                  || (getKmc().getCoverage() * 100 > getCurrentProgress())) {
+
+            System.out.print("\r[");
+            int i = 0;
+            for (; i < getCurrentProgress(); i++) {
+              System.out.print(".");
+            }
+            for (; i < width; i++) {
+              System.out.print(" ");
+            }
+            System.out.print("] ");
+            updateCurrentProgress();
+
+          }
+        } catch (Exception e) {
+        }
+      }
+    }
+  }
+
   @Override
   public void printRates(Parser parser) {
     double[] rates = getRates().getRates(parser.getTemperature());

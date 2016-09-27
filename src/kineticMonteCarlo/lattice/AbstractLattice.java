@@ -5,6 +5,7 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.unitCell.IUc;
 
 /**
  *
@@ -16,10 +17,7 @@ public abstract class AbstractLattice {
   private int hexaSizeJ;
   private int hexaSizeK;
   private int unitCellSize;
-
-  public int size() {
-    return hexaSizeI * hexaSizeJ * hexaSizeK;
-  }
+  private boolean paused;
   
   public final int getHexaSizeI() {
     return hexaSizeI;
@@ -59,14 +57,41 @@ public abstract class AbstractLattice {
     this.unitCellSize = unitCellSize;
   }
 
-
+  @Deprecated
   public abstract AbstractAtom getAtom(int i, int j, int k, int unitCellPos);
+  
+  public abstract IUc getUc(int pos);
 
+  public void setPaused(boolean pause) {
+    this.paused = pause;
+  }
+  
+  public boolean isPaused() {
+    return paused;
+  }
+  
+  public int size() {
+    return hexaSizeI * hexaSizeJ * hexaSizeK;
+  }
+
+  /**
+   * Only defined in growth lattice.
+   *
+   * @return number of island of simulation (or -1)
+   */
+  public abstract int getIslandCount();
+
+  /**
+   * Only defined in growth lattice.
+   *
+   * @return fractal dimension of simulation (or -1)
+   */
+  public abstract float getFractalDimension();
+  
   public abstract void reset();
 
   public void setProbabilities(double[] rates) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-
-
+ 
 }

@@ -6,7 +6,7 @@
 package basic;
 
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
-import ratesLibrary.BasicGrowthRatesFactory;
+import ratesLibrary.BasicGrowthSyntheticRates;
 
 /**
  *
@@ -22,7 +22,7 @@ public class BasicGrowthSimulation extends AbstractGrowthSimulation{
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    setRates(new BasicGrowthRatesFactory());
+    setRates(new BasicGrowthSyntheticRates());
     setKmc(new BasicGrowthKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }

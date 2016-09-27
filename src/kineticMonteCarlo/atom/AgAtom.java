@@ -14,6 +14,19 @@ import utils.StaticRandom;
  */
 public class AgAtom extends AbstractGrowthAtom {
 
+  // Redefined atom types
+  public static final byte TERRACE = 0;
+  public static final byte CORNER = 1;
+  public static final byte EDGE_A = 2;
+  public static final byte KINK_A = 3;
+  public static final byte ISLAND = 4;
+  public static final byte EDGE_B = 5;
+  public static final byte KINK_B = 6;
+  // Before we actually know the value of those, we simply use A type
+  public static final byte EDGE = EDGE_A;
+  public static final byte KINK = KINK_A;
+  
+  // Attributes
   private static AgTypesTable typesTable;
   private final AgAtom[] neighbours = new AgAtom[6];
   /** Number of immobile neighbours. */
@@ -24,18 +37,6 @@ public class AgAtom extends AbstractGrowthAtom {
    * Position within unit cell.
    */
   private final int pos;
-  
-  public static final byte TERRACE = 0;
-  public static final byte CORNER = 1;
-  public static final byte EDGE_A = 2;
-  public static final byte KINK_A = 3;
-  public static final byte ISLAND = 4;
-  public static final byte EDGE_B = 5;
-  public static final byte KINK_B = 6;
-  
-  // Before we actually know the value of those, we simply use A type
-  public static final byte EDGE = EDGE_A;
-  public static final byte KINK = KINK_A;
   
   public AgAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 6);
@@ -49,6 +50,8 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Constructor for unit cell
+   *
+   * @param id atom identifier.
    * @param pos position within the unit cell
    */
   public AgAtom(int id, int pos) {
@@ -60,15 +63,16 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * Returns the position within the unit cell
+   *
    * @return coordinates in unit cell
    */
   @Override
-  public Point2D getPos() {
+  public Point3D getPos() {
     switch (pos) {
       case 0:
-        return new Point2D.Double(0, 0);
+        return new Point3D(0, 0, 0);
       case 1:
-        return new Point2D.Double(0.5, AbstractGrowthLattice.Y_RATIO);
+        return new Point3D(0.5, AbstractGrowthLattice.Y_RATIO, 0);
       default:
         throw new UnsupportedOperationException("Trying to acces to an atom within the unit cell that doesn't exists");
     }
@@ -89,6 +93,7 @@ public class AgAtom extends AbstractGrowthAtom {
     return isOccupied() && getType() < KINK_A;
   }
 
+  @Override
   public boolean isPartOfImmobilSubstrate() {
     return isOccupied() && getType() == ISLAND;
   }
@@ -177,9 +182,10 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   /**
-   * See {@link #getOrientation()}
+   * See {@link #getOrientation()}.
+   *
    * @param atom atom to be excluded to compute the orientation. If null, none is excluded.
-   * @return 
+   * @return a number between 0 and 5 inclusive. Even number if A type or odd if B type.
    */
   public int getOrientation(AgAtom atom) {
     byte type = getType();
@@ -208,17 +214,153 @@ public class AgAtom extends AbstractGrowthAtom {
     return -1;
   }
 
+  @Override
+  public AbstractGrowthAtom chooseRandomHop() {
+
+    double linearSearch = StaticRandom.raw() * getProbability();
+
+    double sum = 0;
+    int cont = 0;
+    while (true) {
+      sum += getBondsProbability(cont++);
+      if (sum >= linearSearch) {
+        break;
+      }
+      if (cont == getNumberOfNeighbours()) {
+        break;
+      }
+    }
+    cont--;
+
+    if (getType() == EDGE_A && neighbours[cont].getType() == CORNER) {
+      return aheadCornerAtom(cont);
+    }
+
+    return neighbours[cont];
+  }
+
+  @Override
+  public boolean areTwoTerracesTogether() {
+
+    if (nMobile != 2 || nImmobile != 0) {
+      return false;
+    }
+
+    int cont = 0;
+    int i = 0;
+    while (cont < 2 && i < getNumberOfNeighbours()) {
+      if (neighbours[i].isOccupied()) {
+        if (neighbours[i].getType() != TERRACE) {
+          return false;
+        }
+        cont++;
+      }
+      i++;
+    }
+    return true;
+  }
+
+  @Override
+  public void obtainRateFromNeighbours() {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      setBondsProbability(probJumpToNeighbour(1, i), i);
+      addProbability(getBondsProbability(i));
+    }
+  }
+
+  /**
+   * 
+   * @param pos position of the neighbour
+   * @return change in the probability
+   */
+  @Override
+  public double updateOneBound(int pos) {
+    // Store previous probability
+    double probabilityChange = -getBondsProbability(pos);
+    // Update to the new probability and save
+    setBondsProbability(probJumpToNeighbour(1, pos), pos);
+    probabilityChange += getBondsProbability(pos);
+    addProbability(probabilityChange);
+
+    return probabilityChange;
+  }
+ 
+  /**
+   * Returns the real type of the current atom. This means, that is
+   * able to determine whether edge or kink is of type A or B. If the
+   * orientation number is odd the type is B.
+   *
+   * @return real type of the current atom.
+   */
+  @Override
+  public byte getRealType() {
+    byte type = getType();
+    if (type == EDGE_A && (getOrientation() & 1) != 0) {
+      return EDGE_B;
+    }
+    if (type == KINK_A && (getOrientation() & 1) != 0) {
+      return KINK_B;
+    }
+    return type;
+  }
+    
+  @Override
+  public double probJumpToNeighbour(int ignored, int position) {
+
+    if (neighbours[position].isOccupied()) {
+      return 0;
+    }
+
+    byte originType = getRealType();
+    byte destination = neighbours[position].getTypeWithoutNeighbour(position);
+
+    // the current atom is an edge and destination is a corner. 
+    // We will skip over the corner and go to the next edge (but instead of a corner might be another corner).
+    if (getType() == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
+      if (originType == EDGE_A) destination = EDGE_B;
+      if (originType == EDGE_B) destination = EDGE_A;
+    } else {
+      if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
+        destination = EDGE_B;
+      }
+      if (destination == KINK && (neighbours[position].getOrientation() & 1) != 0) {
+        destination = KINK_B;
+      }
+    }
+    return getProbability(originType, destination);
+  }
+
+  /**
+   * Returns the type of the neighbour atom if current one would not exist.
+   *
+   * @param position this position is the original one; has to be inverted.
+   * @return the type.
+   */
+  @Override
+  public byte getTypeWithoutNeighbour(int position) {
+    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
+    if (!neighbours[myPositionForNeighbour].isOccupied()) return getType(); // impossible to happen
+
+    if (neighbours[myPositionForNeighbour].getType() < KINK_A) {
+      // current atom is mobile
+      return typesTable.getCurrentType(nImmobile, nMobile - 1);
+    } else {
+      // current atom is immobile
+      return typesTable.getCurrentType(nImmobile - 1, nMobile);
+    }
+  }
+  
   /**
    * This atom is an edge (it has two neighbours). There are 6 possible positions for the edge,
    * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
-   * its neighbours:   
+   * its neighbours:
    * <pre>
    *    0  1
    *   5 [] 2
    *    4  3
-   * </pre>
-   * A proper image of the positions is documented here:
+   * </pre> A proper image of the positions is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
+   *
    * @param code binary code with the occupied neighbours.
    * @return orientation (a number between 0 and 5 inclusive).
    */
@@ -244,16 +386,16 @@ public class AgAtom extends AbstractGrowthAtom {
   /**
    * This atom is a kink (it has three neighbours). There are 6 possible positions for the kink,
    * depending on its neighbours. In the next "figure" the current atom is [] and the numbers are
-   * its neighbours:  
-   * <pre>               
+   * its neighbours:
+   * <pre>
    *    0  1
    *   5 [] 2
    *    4  3
-   * </pre>
-   * A proper image of the positions is documented here:
+   * </pre> A proper image of the positions is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
+   *
    * @param code binary code with the occupied neighbours.
-   * @return  orientation (a number between 0 and 5 inclusive).
+   * @return orientation (a number between 0 and 5 inclusive).
    */
   private int calculateKinkType(int code) {
 
@@ -273,31 +415,6 @@ public class AgAtom extends AbstractGrowthAtom {
       default:
         return -1;
     }
-  }
-
-  @Override
-  public AbstractGrowthAtom chooseRandomHop() {
-
-    double linearSearch = StaticRandom.raw() * getProbability();
-
-    double sum = 0;
-    int cont = 0;
-    while (true) {
-      sum += getBondsProbability(cont++);
-      if (sum >= linearSearch) {
-        break;
-      }
-      if (cont == getNumberOfNeighbours()) {
-        break;
-      }
-    }
-    cont--;
-
-    if (getType() == EDGE_A && neighbours[cont].getType() == CORNER) {
-      return aheadCornerAtom(cont);
-    }
-
-    return neighbours[cont];
   }
 
   /**
@@ -388,116 +505,5 @@ public class AgAtom extends AbstractGrowthAtom {
       }
     }
     return null;
-  }
-
-  @Override
-  public boolean areTwoTerracesTogether() {
-
-    if (nMobile != 2 || nImmobile != 0) {
-      return false;
-    }
-
-    int cont = 0;
-    int i = 0;
-    while (cont < 2 && i < getNumberOfNeighbours()) {
-      if (neighbours[i].isOccupied()) {
-        if (neighbours[i].getType() != TERRACE) {
-          return false;
-        }
-        cont++;
-      }
-      i++;
-    }
-    return true;
-  }
-
-  @Override
-  public void obtainRateFromNeighbours() {
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      setBondsProbability(probJumpToNeighbour(1, i), i);
-      addProbability(getBondsProbability(i));
-    }
-  }
-
-  /**
-   * 
-   * @param pos position of the neighbour
-   * @return change in the probability
-   */
-  @Override
-  public double updateOneBound(int pos) {
-    // Store previous probability
-    double probabilityChange = -getBondsProbability(pos);
-    // Update to the new probability and save
-    setBondsProbability(probJumpToNeighbour(1, pos), pos);
-    probabilityChange += getBondsProbability(pos);
-    addProbability(probabilityChange);
-
-    return probabilityChange;
-  }
- 
-  /**
-   * Returns the real type of the current atom. This means, that is
-   * able to determine whether edge or kink is of type A or B. If the
-   * orientation number is odd the type is B.
-   *
-   * @return real type of the current atom.
-   */
-  @Override
-  public byte getRealType() {
-    byte type = getType();
-    if (type == EDGE_A && (getOrientation() & 1) != 0) {
-      return EDGE_B;
-    }
-    if (type == KINK_A && (getOrientation() & 1) != 0) {
-      return KINK_B;
-    }
-    return type;
-  }
-    
-  @Override
-  public double probJumpToNeighbour(int ignored, int position) {
-
-    if (neighbours[position].isOccupied()) {
-      return 0;
-    }
-
-    byte originType = getRealType();
-    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
-    byte destination = neighbours[position].getTypeWithoutNeighbour(myPositionForNeighbour);
-
-    // the current atom is an edge and destination is a corner. 
-    // We will skip over the corner and go to the next edge (but instead of a corner might be another corner).
-    if (getType() == EDGE && destination == CORNER) { //soy un edge y el vecino es un corner, eso significa que podemos girar, a ver a donde
-      if (originType == EDGE_A) destination = EDGE_B;
-      if (originType == EDGE_B) destination = EDGE_A;
-    } else {
-      if (destination == EDGE_A && (neighbours[position].getOrientation() & 1) == 0) {
-        destination = EDGE_B;
-      }
-      if (destination == KINK && (neighbours[position].getOrientation() & 1) != 0) {
-        destination = KINK_B;
-      }
-    }
-    return getProbability(originType, destination);
-  }
-
-  /**
-   * Returns the type of the neighbour atom if current one would not exist.
-   * @param posNeighbour current atom.
-   * @return the type.
-   */
-  @Override
-  public byte getTypeWithoutNeighbour(int posNeighbour) {
-
-    if (!neighbours[posNeighbour].isOccupied()) return getType(); // impossible to happen
-
-    if (neighbours[posNeighbour].getType() < KINK_A) {
-      // current atom is mobile
-      return typesTable.getCurrentType(nImmobile, nMobile - 1);
-    } else {
-      // current atom is immobile
-      return typesTable.getCurrentType(nImmobile - 1, nMobile);
-    }
   }
 }

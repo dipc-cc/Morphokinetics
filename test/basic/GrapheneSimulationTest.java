@@ -23,7 +23,9 @@ import static org.junit.Assert.*;
  */
 public class GrapheneSimulationTest {
   
-  private float[][] currentSurface;
+  private float[][] simulatedSurface;
+  private int simulatedIslands;
+  private double simulatedTime;
   
   public GrapheneSimulationTest() {
   }
@@ -50,7 +52,7 @@ public class GrapheneSimulationTest {
     parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
     parser.print();
     assertEquals("graphene", parser.getCalculationMode());
-    assertEquals(135, parser.getTemperature());
+    assertEquals(1273, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
     assertEquals(400, parser.getCartSizeX());
     assertEquals(400, parser.getCartSizeY());
@@ -87,8 +89,9 @@ public class GrapheneSimulationTest {
     }
 
     for (int i = 0; i < ref.length; i++) {
-      assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
+    assertEquals(34539.64416617914, simulatedTime, 0.0);
   }
 
   @Test
@@ -119,8 +122,9 @@ public class GrapheneSimulationTest {
 
     // For the moment only comparing the last surface    
     for (int i = 0; i < ref2.length; i++) {
-      assertArrayEquals(ref4[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref4[i], simulatedSurface[i], (float) 0.001);
     }
+    assertEquals(662.236404782772, simulatedTime, 0.0);
     // TODO compare the rest of surfaces
   }
     
@@ -148,8 +152,10 @@ public class GrapheneSimulationTest {
 
     // For the moment only comparing the last surface
     for (int i = 0; i < ref2.length; i++) {
-      assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref2[i], simulatedSurface[i], (float) 0.001);
     }
+    assertEquals(simulatedIslands, 1);
+    assertEquals(10001.725060521605, simulatedTime, 0.0);
     // TODO compare the rest of surfaces
   }
     
@@ -163,6 +169,8 @@ public class GrapheneSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
     
-    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    simulatedSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
+    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedTime = simulation.getSimulatedTime();
   }
 }

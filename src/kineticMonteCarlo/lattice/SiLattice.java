@@ -5,7 +5,8 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.atom.SiAtom;
-import basic.unitCell.UnitCell;
+import kineticMonteCarlo.unitCell.SiUnitCell;
+import kineticMonteCarlo.unitCell.Simple3dUc;
 
 /**
  *
@@ -13,11 +14,11 @@ import basic.unitCell.UnitCell;
  */
 public class SiLattice extends AbstractLattice {
 
-  private UnitCell unitCell;
+  private SiUnitCell unitCell;
   private SiAtom[] atoms;
+  private Simple3dUc[] ucList;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
-
     if (millerX == 0 && millerY == 0 && millerZ == 0) {
       System.exit(-1);
     }
@@ -26,7 +27,7 @@ public class SiLattice extends AbstractLattice {
     setHexaSizeJ(sizeY);
     setHexaSizeK(sizeZ);
 
-    unitCell = new UnitCell();
+    unitCell = new SiUnitCell();
     setUnitCellSize(unitCell.createUnitCell(millerX, millerY, millerZ));
     if (getUnitCellSize() < 4 || getUnitCellSize() > 127) {
       System.out.println("UC size inappropiate: " + getUnitCellSize());
@@ -37,9 +38,9 @@ public class SiLattice extends AbstractLattice {
 
     float[] coords = new float[getUnitCellSize() * 3 + 3];
     for (int i = 0; i < getUnitCellSize(); i++) {
-      coords[i * 3] = unitCell.getCellsP()[i].getPosX(0, 0, 0);
-      coords[i * 3 + 1] = unitCell.getCellsP()[i].getPosY(0, 0, 0);
-      coords[i * 3 + 2] = unitCell.getCellsP()[i].getPosZ(0, 0, 0);
+      coords[i * 3] = (float) unitCell.getCellsP()[i].getX();
+      coords[i * 3 + 1] = (float) unitCell.getCellsP()[i].getY();
+      coords[i * 3 + 2] = (float) unitCell.getCellsP()[i].getZ();
     }
 
     coords[getUnitCellSize() * 3] = (float) unitCell.getLimitX();
@@ -56,6 +57,7 @@ public class SiLattice extends AbstractLattice {
     }
 
     atoms = new SiAtom[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
+    ucList = new Simple3dUc[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
 
     createAtoms(coords, unitCell);
     interconnectAtoms(ucNeighbours, block);
@@ -68,7 +70,7 @@ public class SiLattice extends AbstractLattice {
     }
   }
 
-  public UnitCell getUnitCell() {
+  public SiUnitCell getUnitCell() {
     return unitCell;
   }
 
@@ -77,6 +79,31 @@ public class SiLattice extends AbstractLattice {
     return atoms[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
   }
 
+  @Override
+  public Simple3dUc getUc(int pos) {
+    return ucList[pos];
+  }
+  
+  /**
+   * Number of islands has no sense in etching.
+   *
+   * @return -1 always.
+   */
+  @Override
+  public int getIslandCount() {
+    return -1;
+  }
+  
+  /**
+   * Fractal dimension not implemented in etching.
+   *
+   * @return -1.0 always.
+   */
+  @Override
+  public float getFractalDimension() {
+    return -1.0f;
+  }
+  
   @Override
   public void reset() {
     //Unremove atoms and set to bulk mode (4,12)
@@ -116,20 +143,25 @@ public class SiLattice extends AbstractLattice {
 
   /**
    * Atoms creation.
+   * 
    * @param coords
-   * @param UC 
+   * @param uc 
    */
-  private void createAtoms(float[] coords, UnitCell UC) {
+  private void createAtoms(float[] coords, SiUnitCell uc) {
     int cont = 0;
     for (int a = 0; a < getHexaSizeK(); a++) {
       for (int b = 0; b < getHexaSizeJ(); b++) {
         for (int c = 0; c < getHexaSizeI(); c++) {
           for (int j = 0; j < getUnitCellSize(); j++) {
-            float x = coords[j * 3] + c * (float) UC.getLimitX();
-            float y = coords[j * 3 + 1] + b * (float) UC.getLimitY();
-            float z = -coords[j * 3 + 2] + (a + 1) * (float) UC.getLimitZ();
+            float x = coords[j * 3] + c * (float) uc.getLimitX();
+            float y = coords[j * 3 + 1] + b * (float) uc.getLimitY();
+            float z = -coords[j * 3 + 2] + (a + 1) * (float) uc.getLimitZ();
 
             atoms[cont] = new SiAtom(x, y, z);
+            ucList[cont] = new Simple3dUc(a, b, c, atoms[cont]);
+            ucList[cont].setPosX(x);
+            ucList[cont].setPosY(y);
+            ucList[cont].setPosZ(z);
             cont++;
           }
         }
@@ -139,6 +171,7 @@ public class SiLattice extends AbstractLattice {
 
   /**
    * Atoms inter-connection.
+   * 
    * @param neihbourUnitCell
    * @param block 
    */

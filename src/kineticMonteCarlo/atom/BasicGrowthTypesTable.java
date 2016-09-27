@@ -11,6 +11,29 @@ public class BasicGrowthTypesTable {
   private final byte[] tableFuture;
 
   /**
+   * All predefined type of atom (current if the atom is occupied and future if the atom is not
+   * occupied). A proper image of these types is in
+   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Process%20types
+   */
+  public BasicGrowthTypesTable() {
+
+    tablePresent = new byte[5];
+
+    // [numberOfNeighbourAtoms] = atom type
+   
+    tablePresent[0] = TERRACE;
+    tablePresent[1] = EDGE;
+    tablePresent[2] = KINK;
+    tablePresent[3] = ISLAND; 
+    tablePresent[4] = ISLAND; 
+
+    //tableFuture = new byte[4];
+    
+    tableFuture = tablePresent;
+
+  }
+  
+  /**
    * Returns the type of the atom between TERRACE, EDGE, KINK and ISLAND. 
    *
    * @param numberOfNeighbourAtoms number of occupied neighbours
@@ -42,29 +65,5 @@ public class BasicGrowthTypesTable {
       type = TERRACE;
     }
     return type;
-  }
-
-      
-  /**
-   * All predefined type of atom (current if the atom is occupied and future if the atom is not
-   * occupied). A proper image of these types is in
-   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Process%20types
-   */
-  public BasicGrowthTypesTable() {
-
-    tablePresent = new byte[5];
-
-    // [numberOfNeighbourAtoms] = atom type
-   
-    tablePresent[0] = TERRACE;
-    tablePresent[1] = EDGE;
-    tablePresent[2] = KINK;
-    tablePresent[3] = ISLAND; 
-    tablePresent[4] = ISLAND; 
-
-    //tableFuture = new byte[4];
-    
-    tableFuture = tablePresent;
-
   }
 }

@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import ratesLibrary.IRatesFactory;
+import ratesLibrary.IRates;
 import utils.MathUtils;
 import utils.StaticRandom;
 import utils.psdAnalysis.PsdSignature2D;
@@ -26,21 +26,23 @@ import utils.psdAnalysis.PsdSignature2D;
 public abstract class AbstractSimulation {
 
   private AbstractKmc kmc;
-  private IRatesFactory rates;
+  private IRates rates;
   private PsdSignature2D psd;
   private final Parser parser;
-  private StaticRandom staticRandom;
-  private String restartFolderName;
+  private final StaticRandom staticRandom;
+  private final String restartFolderName;
   private long startTime;
   private long iterationStartTime;
   private double totalTime;
   private float coverage;
   private int islands;
+  private float fractalD;
   private int simulations;
+  private int currentProgress;
   private float[][] sampledSurface;
   private int[] surfaceSizes;
   private int[] extentSizes;
-  private Restart restart;
+  private final Restart restart;
 
   public AbstractSimulation(Parser parser) {
     kmc = null;
@@ -48,8 +50,80 @@ public abstract class AbstractSimulation {
     psd = null;
     this.parser = parser;
     staticRandom = new StaticRandom(parser.randomSeed());
+    restartFolderName = "results/run" + System.currentTimeMillis();
+    restart = new Restart(restartFolderName);
   }
 
+  public static void printHeader() {
+    System.out.println("This is morphokinetics software");
+    System.out.println(" _  _   __  ____  ____  _  _   __  __ _  __  __ _  ____  ____  __  ___  ____");
+    System.out.println("( \\/ ) /  \\(  _ \\(  _ \\/ )( \\ /  \\(  / )(  )(  ( \\(  __)(_  _)(  )/ __)/ ___)");
+    System.out.println("/ \\/ \\(  O ))   / ) __/) __ ((  O ))  (  )( /    / ) _)   )(   )(( (__ \\___ \\");
+    System.out.println("\\_)(_/ \\__/(__\\_)(__)  \\_)(_/ \\__/(__\\_)(__)\\_)__)(____) (__) (__)\\___)(____/");
+    System.out.println("");
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    Date date = new Date();
+    System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48
+    java.net.InetAddress localMachine;
+    try {
+      localMachine = java.net.InetAddress.getLocalHost();
+      System.out.println(" in " + localMachine.getHostName());
+    } catch (UnknownHostException ex) {
+      Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
+
+  public static void printHeader(String message) {
+    printHeader();
+    System.out.println("Execution: " + message);
+  }
+  
+  public void setKmc(AbstractKmc kmc) {
+    this.kmc = kmc;
+  }
+
+  public AbstractKmc getKmc() {
+    return kmc;
+  }
+
+  public PsdSignature2D getPsd() {
+    return psd;
+  }
+
+  public IRates getRates() {
+    return rates;
+  }
+
+  public void setRates(IRates rates) {
+    this.rates = rates;
+  }
+
+  public IRates getRatesFactory() {
+    return rates;
+  }
+
+  public Parser getParser() {
+    return parser;
+  }
+  
+  public int getCurrentProgress() {
+    return currentProgress + 1;
+  }
+  
+  String getRestartFolderName() {
+    return restartFolderName;
+  }
+  
+  public abstract void printRates(Parser parser);
+
+  public abstract void finishSimulation();
+
+  /**
+   * Creates the simulation frame.
+   */
+  public abstract void createFrame();
+
+  abstract void initialiseRates(IRates ratesFactory, Parser myParser);
   /**
    * Initialises Kmc, the basic simulation class
    */
@@ -58,19 +132,13 @@ public abstract class AbstractSimulation {
     this.rates = null;
   }
 
-  /**
-   * Creates the simulation frame.
-   */
-  public abstract void createFrame();
-
   public void doSimulation() {
     startTime = System.currentTimeMillis();
     totalTime = 0.0;
     coverage = 0.0f;
     islands = 0;
+    fractalD = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
-    restartFolderName = "results/run" + System.currentTimeMillis();
-    restart = new Restart(restartFolderName);
 
     surfaceSizes = new int[2];
     // More precise (more points) the PSD better precision we get
@@ -92,15 +160,16 @@ public abstract class AbstractSimulation {
     System.out.println("_____________________________________________________________________________");
     System.out.println("Surface output: " + parser.printToImage());
     System.out.println("PSD     output: " + printPsd);
-    System.out.println("Output format : " + "mko");
+    System.out.println("Output format : " + parser.getOutputFormats());
     System.out.println("Output folder : " + restartFolderName);
     System.out.println("_____________________________________________________________________________");
 
-    System.out.println("    I\tSimul t\tCover.\tCPU\tIslands");
+    System.out.println("    I\tSimul t\tCover.\tCPU\tIslands\tFractal d.");
     System.out.println("    \t(units)\t(%)\t(ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
     for (simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
+      currentProgress = 0;
       iterationStartTime = System.currentTimeMillis();
       kmc.reset();
       kmc.depositSeed();
@@ -113,7 +182,8 @@ public abstract class AbstractSimulation {
       printOutput();
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
-      islands += kmc.getIslandCount();
+      islands += kmc.getLattice().getIslandCount();
+      fractalD += kmc.getLattice().getFractalDimension();
     }
 
     printFooter();
@@ -129,56 +199,35 @@ public abstract class AbstractSimulation {
     }
   }
 
-  protected abstract void initialiseRates(IRatesFactory ratesFactory, Parser myParser);
 
-  public abstract void finishSimulation();
-
-  public void setKmc(AbstractKmc kmc) {
-    this.kmc = kmc;
+  public void updateCurrentProgress() {
+    if (parser.justCentralFlake()) {
+      currentProgress = kmc.getCurrentRadius();
+    } else {
+      currentProgress = (int) Math.floor(kmc.getCoverage() * 100);
+    }
+  }
+  
+  public double getSimulatedTime() {
+    return totalTime / parser.getNumberOfSimulations();
+  }
+  /**
+   * Does nothing. Used to have a common interface
+   *
+   * @param i
+   */
+  void printToImage(int i) {
+    //Do nothing
   }
 
-  public AbstractKmc getKmc() {
-    return kmc;
-  }
-
-  public PsdSignature2D getPsd() {
-    return psd;
-  }
-
-  public IRatesFactory getRates() {
-    return rates;
-  }
-
-  public void setRates(IRatesFactory rates) {
-    this.rates = rates;
-  }
-
-  public IRatesFactory getRatesFactory() {
-    return rates;
-  }
-
-  public static void printHeader() {
-    System.out.println("This is morphokinetics software");
-    System.out.println(" _  _   __  ____  ____  _  _   __  __ _  __  __ _  ____  ____  __  ___  ____");
-    System.out.println("( \\/ ) /  \\(  _ \\(  _ \\/ )( \\ /  \\(  / )(  )(  ( \\(  __)(_  _)(  )/ __)/ ___)");
-    System.out.println("/ \\/ \\(  O ))   / ) __/) __ ((  O ))  (  )( /    / ) _)   )(   )(( (__ \\___ \\");
-    System.out.println("\\_)(_/ \\__/(__\\_)(__)  \\_)(_/ \\__/(__\\_)(__)\\_)__)(____) (__) (__)\\___)(____/");
-    System.out.println("");
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    Date date = new Date();
-    System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48
-    java.net.InetAddress localMachine;
-    /*try {
-      localMachine = java.net.InetAddress.getLocalHost();
-      System.out.println(" in " + localMachine.getHostName());
-    } catch (UnknownHostException ex) {
-      Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
-    }*/
-  }
-
-  public static void printHeader(String message) {
-    printHeader();
-    System.out.println("Execution: " + message);
+  /**
+   * Does nothing. Used to have a common interface
+   *
+   * @param folderName
+   * @param i
+   */
+  void printToImage(String folderName, int i) {
+    //Do nothing
   }
 
   private void printOutput() {
@@ -191,13 +240,16 @@ public abstract class AbstractSimulation {
     } else { // "periodic"
       sampledSurface = kmc.getHexagonalPeriodicSurface(surfaceSizes[0], surfaceSizes[1]);
     }
-    float[][] extentSurface = kmc.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
+    float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
     if (parser.outputData()) {
       if (parser.getOutputFormats().contains(formatFlag.MKO)) {
         restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
       }
       if (parser.getOutputFormats().contains(formatFlag.TXT)) {
         restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);
+      }
+      if (parser.getOutputFormats().contains(formatFlag.XYZ)) {
+        restart.writeXyz(simulations, getKmc().getLattice());
       }
       if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
         printToImage(restartFolderName, simulations);
@@ -217,25 +269,26 @@ public abstract class AbstractSimulation {
     }
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
-    System.out.print("\t" + kmc.getIslandCount());
+    System.out.print("\t" + kmc.getLattice().getIslandCount());
+    System.out.format("\t%.4f", kmc.getLattice().getFractalDimension());
     System.out.println("");
   }
 
-  public String printFooter() {
+  private void printFooter() {
     String kmcResult = "";
+    kmcResult += "\n\t__________________________________________________\n";
     kmcResult += "\tAverage\n";
-    kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIslands\n";
+    kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tFractal d.\n";
     kmcResult += "\t(units)\t\t\t (%)\t\t (ms/s/min)\n";
-    kmcResult += "\t_____________________________________________\n";
+    kmcResult += "\t__________________________________________________\n";
     kmcResult += "\t" + totalTime / parser.getNumberOfSimulations();
-    kmcResult += "\t" + coverage / parser.getNumberOfSimulations();
+		kmcResult += "\t" + coverage / parser.getNumberOfSimulations();
     long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
     kmcResult += "\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60;
     kmcResult += "\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations());
-
+    kmcResult += "\t" + fractalD / (float) parser.getNumberOfSimulations()+"\n";
     System.out.println(kmcResult);
     return kmcResult;
-  }
 
   /**
    * Does nothing. Used to have a common interface
@@ -245,24 +298,4 @@ public abstract class AbstractSimulation {
   protected void printToImage(int i) {
     //Do nothing
   }
-
-  /**
-   * Does nothing. Used to have a common interface
-   *
-   * @param folderName
-   * @param i
-   */
-  protected void printToImage(String folderName, int i) {
-    //Do nothing
-  }
-
-  public Parser getParser() {
-    return parser;
-  }
-
-  String getRestartFolderName() {
-    return restartFolderName;
-  }
-  
-  public abstract void printRates(Parser parser);
 }

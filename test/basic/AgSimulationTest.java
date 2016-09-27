@@ -8,6 +8,7 @@ package basic;
 import basic.io.Restart;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import java.io.FileNotFoundException;
+import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,8 +27,11 @@ import org.junit.Test;
  */
 public class AgSimulationTest {
   
-  private float[][] currentSurface;
-  private float[][] currentPsd;
+  private int simulatedIslands;
+  private double simulatedTime;
+  private float[][] simulatedSurface;
+  private float[][] simulatedPsd;
+  private float[][][] simulatedSurfaces;
 
   public AgSimulationTest() {
   }
@@ -82,7 +86,7 @@ public class AgSimulationTest {
     doAgTest(parser);
 
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
     float[][] ref = null;
     try {
       ref = restart.readSurfaceText2D(2, sizes, "AgSurfaceRef");
@@ -91,8 +95,9 @@ public class AgSimulationTest {
     }
 
     for (int i = 0; i < ref.length; i++) {
-      assertArrayEquals(ref[i], currentSurface[i], (float) 0.001);
+      assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
+    assertEquals(198.99123314622588, simulatedTime, 0.0);
   }
 
   /**
@@ -131,14 +136,14 @@ public class AgSimulationTest {
             (int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()),
             null, "Frobenius", null, parser.getTemperature());
     evaluator.setPsd(ref);
-    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(currentPsd);
+    double FrobeniusError = evaluator.calculateFrobeniusNormErrorMatrix(simulatedPsd);
     System.out.println("Frobenius error is " + FrobeniusError);
     List<Double> results = new ArrayList();
     results.add(FrobeniusError);
     results.add(0.04); // the error must be lower than 0.032
     results.sort((a, b) -> b.compareTo(a));
     assertEquals(0.04, results.get(0), 0.0); // ensure that the first value is 0.04, and therefore, the current error is lower
- 
+    assertEquals(350939.25839387067, simulatedTime, 52649); // tolerance is 15%. It is too big but the simulation time varies a lot.
   }
   
   @Test
@@ -151,24 +156,26 @@ public class AgSimulationTest {
     doAgTest(parser);
 
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
-    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
-    float[][] ref0 = null;
-    float[][] ref1 = null;
-    float[][] ref2 = null;
+    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
+   
     try {
-      ref0 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface000.txt");
-      ref1 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface001.txt");
-      ref2 = restart.readSurfaceText2D(2, sizes, "AgMultiSurface002.txt");
+      // read reference surfaces and compare them with simulated ones
+      for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
+        String fileName = format("%s/AgMultiSurface%03d.txt", TestHelper.getBaseDir() + "/test/references/", i);
+
+        float[][] tmpSurface = restart.readSurfaceText2D(2, sizes, fileName);
+        for (int j = 0; j < sizes[0]; j++) {
+          for (int k = 0; k < sizes[1]; k++) {
+            assertEquals(simulatedSurfaces[i][j][k], tmpSurface[j][k], 0.001f);
+          }
+        }
+      }
     } catch (FileNotFoundException ex) {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    // For the moment only comparing the last surface
-    //assertArrayEquals(ref2, currentSurface, (float) 0.001);
-    for (int i = 0; i < ref2.length; i++) {
-      assertArrayEquals(ref2[i], currentSurface[i], (float) 0.001);
-    }
-    // TODO compare the number of islands and surface 0 and 1
+    assertEquals(simulatedIslands, 3);
+    assertEquals(14.381566300521941, simulatedTime, 0.0);
   }
 
   private void doAgTest(Parser parser) {
@@ -179,8 +186,25 @@ public class AgSimulationTest {
     simulation.doSimulation();
     simulation.finishSimulation();
 
-    currentSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
-    currentPsd = simulation.getPsd().getPsd();
+    simulatedSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX(), parser.getCartSizeY());
+    simulatedPsd = simulation.getPsd().getPsd();
+    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedTime = simulation.getSimulatedTime();
+    Restart readResults = new Restart(simulation.getRestartFolderName());
+    int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
+    simulatedSurfaces = new float[parser.getNumberOfSimulations()][sizes[0]][sizes[1]];
+    for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
+      String fileName = format("%s/surface%03d.mko", simulation.getRestartFolderName(), i);
+      try {
+        float[][] tmpSurface = readResults.readSurfaceBinary2D(fileName);
+        for (int j = 0; j < sizes[0]; j++) {
+          for (int k = 0; k < sizes[1]; k++) {
+            simulatedSurfaces[i][j][k] = tmpSurface[j][k];
+          }
+        }
+      } catch (FileNotFoundException ex) {
+        Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }
   }
-   
 }

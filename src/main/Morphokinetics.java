@@ -20,14 +20,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.AgRatesFactory;
-import ratesLibrary.BasicGrowthRatesFactory;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.AgRatesFromPrbCox;
+import ratesLibrary.BasicGrowthSyntheticRates;
+import ratesLibrary.SiRatesFromPreGosalvez;
 import utils.MathUtils;
 import utils.Wait;
 import utils.psdAnalysis.PsdSignature2D;
 
 /**
+ * Morphokinetics is a software to simulate kinetics Monte Carlo (KMC) processes. It can simulate
+ * etching and CVD growing processes. To specify simulation mode "parameters" file must be present
+ * in the current working directory (more details in {@link Parser}).
  *
  * @author J. Alberdi-Rodriguez
  */
@@ -86,6 +89,10 @@ public class Morphokinetics {
   }
 
   
+  private static void psdFromSurfaces(Parser parser) {
+    PsdFromSurfaces psd = new PsdFromSurfaces(parser);
+  }
+  
   private static float[][] readExperimentalData() {
     Restart restart = new Restart();
     int[] sizes = null;
@@ -99,9 +106,7 @@ public class Morphokinetics {
         readSurface = restart.readSurfaceBinary2D(surfaceFileName + i + ".mko", 2);
         if (psd == null) {
           sizes = new int[2];
-          sizes[0] = restart.getSizeX();
           sizes[0] = readSurface.length;
-          sizes[1] = restart.getSizeY();
           sizes[1] = readSurface[0].length;
           psd = new PsdSignature2D(sizes[0], sizes[1], 1);
         }

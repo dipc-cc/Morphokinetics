@@ -27,8 +27,10 @@ public class AgKmc extends AbstractGrowthKmc {
     agLattice.init();
     setLattice(agLattice);
     if (parser.justCentralFlake()) {
-      configureDevitaAccelerator(distancePerStep);
       setPerimeter(new RoundPerimeter("Ag"));
+    }
+    if (parser.useDevita()) {
+      configureDevitaAccelerator(distancePerStep);
     }
     super.initHistogramSucces(7);
   }

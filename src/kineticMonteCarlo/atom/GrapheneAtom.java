@@ -11,8 +11,8 @@ import utils.StaticRandom;
 
 public class GrapheneAtom extends AbstractGrowthAtom {
 
-  private static final ArrayStack PStack = new ArrayStack(12);
   private static GrapheneTypesTable typesTable;
+  private boolean allRatesTheSame;
   private GrapheneAtom[] neighbours = new GrapheneAtom[12];
   
   /**
@@ -39,16 +39,27 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     if (typesTable == null) {
       typesTable = new GrapheneTypesTable();
     }
+    allRatesTheSame = false;
   }
 
   public void setNeighbours(GrapheneAtom[] neighbours) {
     this.neighbours = neighbours;
   }
-  
+
+  /**
+   * KINK and BULK atom types are considered immobile atoms.
+   *
+   * @return true if current atom can be moved, false otherwise.
+   */
   @Override
   public boolean isEligible() {
     return isOccupied() && (getType() < KINK);
-  } // KINK and BULK atoms types are considered immobil atoms
+  }
+   
+  @Override
+  public boolean isPartOfImmobilSubstrate() {
+    return isOccupied() && getType() == BULK;
+  }
 
   /**
    * Total number of 1st neighbours.
@@ -96,22 +107,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     return neighbours[pos];
   }
 
-  /**
-   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability
-   */
-  @Override
-  public void clear() {
-
-    super.clear();
-    setType(TERRACE);
-    n1 = n2 = n3 = 0; // current atom has no neighbour
-
-    if (getBondsProbability() != null) {
-      PStack.returnProbArray(getBondsProbability());
-      setBondsProbability(null);
-    }
-  }
-
   @Override
   public int getOrientation() {
     if (n1 == 1) {
@@ -125,6 +120,17 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
 
   /**
+   * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability.
+   */
+  @Override
+  public void clear() {
+    super.clear();
+    setType(TERRACE);
+    n1 = n2 = n3 = 0; // current atom has no neighbour
+
+  }
+
+  /**
    * Decides to which position is going to jump.
    * 
    * @return destination atom
@@ -133,8 +139,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   public AbstractGrowthAtom chooseRandomHop() {
     double raw = StaticRandom.raw();
 
-    if (getBondsProbability() == null) {
-      return neighbours[(int) (raw * 12)];
+    if (allRatesTheSame) {
+      return neighbours[(int) (raw * getNumberOfNeighbours())];
     }
 
     double linearSearch = raw * getProbability();
@@ -185,11 +191,8 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   @Override
   public void obtainRateFromNeighbours() {
     if (areAllRatesTheSame()) {
-      addProbability(probJumpToNeighbour(getType(), 0) * 12.0);
+      addProbability(probJumpToNeighbour(getType(), 0) * getNumberOfNeighbours()); // it was 12.0
     } else {
-      if (getBondsProbability() == null) {
-        setBondsProbability(PStack.getProbArray());
-      }
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
         setBondsProbability(probJumpToNeighbour(getType(), i), i);
         addProbability(getBondsProbability(i));
@@ -199,7 +202,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   
   @Override
   public double updateOneBound(int posNeighbour) {
-
     double probabilityChange = 0;
 
     int i = posNeighbour; //eres el vecino 1 de tu 1º vecino. Eres el vecino 2 de tu 2º vecino. eres el 3º Vecino de tu vecino 3.
@@ -218,41 +220,15 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         break;
     }
 
-    if (getBondsProbability() == null) {
-      double newRate = probJumpToNeighbour(getType(), i);
-      if (newRate * 12 != getProbability()) {
-        double independentProbability = getProbability() / 12.0;
-        setBondsProbability(PStack.getProbArray());
-        for (int a = 0; a < 12; a++) {
-          setBondsProbability(independentProbability, a);
-        }
-        setBondsProbability(newRate, i);
-        addProbability(newRate - independentProbability);
-        probabilityChange += (newRate - independentProbability);
-      }
-    } else {
-      addProbability(-getBondsProbability(i));
-      probabilityChange -= getBondsProbability(i);
-      setBondsProbability(probJumpToNeighbour(getType(), i), i);
-      addProbability(getBondsProbability(i));
-      probabilityChange += getBondsProbability(i);
-    }
+    addProbability(-getBondsProbability(i));
+    probabilityChange -= getBondsProbability(i);
+    setBondsProbability(probJumpToNeighbour(getType(), i), i);
+    addProbability(getBondsProbability(i));
+    probabilityChange += getBondsProbability(i);
 
     return probabilityChange;
   }
   
-  boolean areAllRatesTheSame() {
-    if ((n1 + n2 + n3) != TERRACE) {
-      return false;
-    }
-    for (int i = 11; i >= 3; i--) {
-      if (neighbours[i].getType() != TERRACE) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   /**
    * Probability to jump to given neighbour position. 
    * 
@@ -262,18 +238,17 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public double probJumpToNeighbour(int originType, int pos) {
-
     AbstractGrowthAtom atom = neighbours[pos];
     if (atom.isOccupied()) {
       return 0;
     }
 
-    byte lastTemp = atom.getTypeWithoutNeighbour(pos);
+    byte destinationType = atom.getTypeWithoutNeighbour(pos);
 
     double rate;
     int multiplier = super.getMultiplier();
     if (multiplier != 1) {
-      rate = getProbability(originType, lastTemp) / multiplier;
+      rate = getProbability(originType, destinationType) / multiplier;
       super.setMultiplier(1);
     } else {
       int hops = distancePerStep.getDistancePerStep(originType, originType);
@@ -282,10 +257,10 @@ public class GrapheneAtom extends AbstractGrowthAtom {
         case TERRACE:
         case ZIGZAG_EDGE:
         case ARMCHAIR_EDGE:
-          rate = getProbability(originType, lastTemp) / (hops * hops);
+          rate = getProbability(originType, destinationType) / (hops * hops);
           break;
         default:
-          rate = getProbability(originType, lastTemp);
+          rate = getProbability(originType, destinationType);
           break;
       }
     }
@@ -302,7 +277,6 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public byte getTypeWithoutNeighbour(int originPos) {
-
     if (originPos < 3) {
       return typesTable.getType(n1 - 1, n2, n3);
     }
@@ -310,5 +284,20 @@ public class GrapheneAtom extends AbstractGrowthAtom {
       return typesTable.getType(n1, n2 - 1, n3);
     }
     return typesTable.getType(n1, n2, n3 - 1);
+  }
+  
+  private boolean areAllRatesTheSame() {
+    if ((n1 + n2 + n3) != TERRACE) {
+      allRatesTheSame = false;
+      return false;
+    }
+    for (int i = getNumberOfNeighbours() - 1; i >= 3; i--) {
+      if (neighbours[i].getType() != TERRACE) {
+      allRatesTheSame = false;
+        return false;
+      }
+    }
+    allRatesTheSame = true;
+    return true;
   }
 }

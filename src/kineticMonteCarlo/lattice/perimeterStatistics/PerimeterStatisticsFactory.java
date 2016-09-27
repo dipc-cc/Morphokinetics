@@ -10,7 +10,7 @@ package kineticMonteCarlo.lattice.perimeterStatistics;
  */
 public class PerimeterStatisticsFactory {
 
-  private AbstractPerimeterStatistics perimeterStatistics;
+  private final AbstractPerimeterStatistics perimeterStatistics;
   
   public PerimeterStatisticsFactory(String statisticsName) {
 

@@ -6,7 +6,7 @@
 package basic;
 
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
-import ratesLibrary.SiRatesFactory;
+import ratesLibrary.SiRatesFromPreGosalvez;
 
 /**
  *
@@ -22,7 +22,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    setRates(new SiRatesFactory());
+    setRates(new SiRatesFromPreGosalvez());
     setKmc(new SiKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
