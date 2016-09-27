@@ -24,7 +24,7 @@ android {
         main {
             java.srcDirs = ['.']
             java.exclude 'geneticAlgorithm/'
-            java.exclude 'graficInterfaces/'
+            java.exclude 'graphicInterfaces/'
             manifest.srcFile 'android/AndroidManifest.xml'
             res.srcDirs = ['android/res']
         }
