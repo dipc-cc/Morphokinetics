@@ -1392,8 +1392,8 @@ public class Parser {
    */
   public boolean isExpDistribution() {
     return expDistribution;
-  }
-
+  } 
+  
   /**
    * To have the possibility to choose between different evaluators in genetic algorithm runs. For
    * the moment only PSD, TIME and HIERARCHY.
@@ -1403,7 +1403,7 @@ public class Parser {
   public EnumSet<evaluatorFlag> getEvaluatorTypes() {
     return evaluatorType.getStatusFlags(numericStatusCode);
   }
-
+  
   /**
    * If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options:
    * "basic", "step", "reference" and "Frobenius".
