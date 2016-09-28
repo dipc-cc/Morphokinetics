@@ -7,8 +7,7 @@ package basic;
 
 import basic.io.OutputType;
 import basic.io.OutputType.formatFlag;
-import geneticAlgorithm.evaluationFunctions.EvaluatorType;
-import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
+import basic.EvaluatorType.evaluatorFlag;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
