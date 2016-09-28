@@ -665,7 +665,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
-
+      
       for (int i = 0; i < outputDataFormat.length(); i++) {
         JSONObject currentFormat = outputDataFormat.getJSONObject(i);
         System.out.printf(" {%s: \"%s\"},", "\"type\"", currentFormat.getString("type"));
