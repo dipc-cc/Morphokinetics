@@ -8,19 +8,10 @@ package basic;
 import basic.io.OutputType;
 import basic.io.OutputType.formatFlag;
 import basic.EvaluatorType.evaluatorFlag;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-//import java.nio.file.Files;
-//import java.nio.file.Path;
-//import java.nio.file.Paths;
+import basic.io.Restart;
 import java.util.EnumSet;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import main.Morphokinetics;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,9 +26,11 @@ import org.json.JSONObject;
  * @author J. Alberdi-Rodriguez
  */
 public class Parser {
-
-  final static Charset ENCODING = StandardCharsets.UTF_8;
   
+  /**
+   * Restart object to read "parameters" file
+   */
+  private final Restart restart;
   /** 
    * See {@link #getCalculationType()}.
    */
@@ -275,33 +268,19 @@ public class Parser {
     hierarchyEvaluator = "basic";
     evolutionarySearchType = "rates";
     fixDiffusion = true;
+    
+    restart = new Restart(".");
   }
 
   /**
    * Read the execution parameters from the given file. If nothing found, default values are
    * assigned.
    *
-   * @param filename
+   * @param fileName
    * @return 0 if success, negative otherwise
    */
-  public int readFile(String filename) throws JSONException {
-    List<String> readList = null;
-    try {
-      //read the parameters file
-      readList = readSmallTextFile(filename);
-    } catch (IOException exception) {
-      System.err.println("Could not read file " + filename);
-      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
-      return -1;
-    }
-
-    int lines = readList.size();
-    String str = new String();
-    for (int i = 0; i < lines; i++) {
-      str += String.valueOf(readList.get(i));
-    }
-
-    System.out.println("Parser read " + lines + " lines from " + filename);
+  public int readFile(String fileName) throws JSONException {
+    String str = restart.readFile(fileName);
 
     // Once the file is read, proceed to read the parameters
     JSONObject json = new JSONObject(str);
@@ -616,12 +595,6 @@ public class Parser {
       fixDiffusion = true;
     }
     return 0;
-  }
-
-  private List<String> readSmallTextFile(String aFileName) throws IOException {
-    //Path path = Paths.get(aFileName);
-    //return Files.readAllLines(path, ENCODING);
-      return null;
   }
 
   /**

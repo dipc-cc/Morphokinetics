@@ -7,10 +7,16 @@ package basic.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import main.Morphokinetics;
 import utils.MathUtils;
@@ -23,6 +29,7 @@ public class Restart {
 
   public static final int MAX_DIMS = 3;
   private String folder;
+  final static Charset ENCODING = StandardCharsets.UTF_8;
 
   public Restart() {
     folder = "results/";
@@ -216,6 +223,27 @@ public class Restart {
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
     fileName = addFolderAndSuffix(fileName, ".txt");
     return RestartLow.readLowText2D(fileName);
+  }
+  
+  public String readFile(String fileName) {
+    List<String> readList = null;
+    try {
+      //read the parameters file
+      readList = RestartLow.readSmallTextFile(fileName);
+    } catch (IOException exception) {
+      System.err.println("Could not read file " + fileName);
+      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
+    }
+
+    int lines = readList.size();
+    String str = new String();
+    for (int i = 0; i < lines; i++) {
+      str += String.valueOf(readList.get(i));
+    }
+    
+    System.out.println("Parser read " + lines + " lines from " + fileName);
+
+    return str;
   }
   
   private void createFolder(String restartFolder) {
