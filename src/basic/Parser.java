@@ -283,7 +283,7 @@ public class Parser {
    * @param filename
    * @return 0 if success, negative otherwise
    */
-  public int readFile(String filename) {
+  public int readFile(String filename) throws JSONException {
     List<String> readList = null;
     try {
       //read the parameters file
@@ -625,7 +625,7 @@ public class Parser {
   /**
    * Prints all the parameters; either read from "parameter" file or the default value.
    */
-  public void print() {
+  public void print() throws JSONException {
     System.out.printf("%32s: %s,\n", "\"calculationType\"", calculationType);
     System.out.printf("%32s: %s,\n", "\"ratesLibrary\"", ratesLibrary);
     System.out.printf("%32s: %s,\n", "\"justCentralFlake\"", justCentralFlake);
@@ -764,6 +764,10 @@ public class Parser {
     }
   }
 
+  public void setTemperature(int temperature) {
+    this.temperature = temperature;
+  }
+  
   /**
    * Simulation temperature.
    * 
@@ -934,6 +938,10 @@ public class Parser {
    */
   double getPsdExtend() {
     return psdExtend;
+  }
+  
+  public void setNumberOfSimulations(int numberOfSimulations){
+    this.numberOfSimulations = numberOfSimulations;
   }
   
   /**
