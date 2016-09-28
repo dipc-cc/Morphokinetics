@@ -7,6 +7,7 @@ package basic;
 
 import basic.io.OutputType;
 import basic.io.OutputType.formatFlag;
+import basic.EvaluatorType.evaluatorFlag;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -196,6 +197,11 @@ public class Parser {
    * (false).
    */
   private boolean expDistribution;
+  /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
+  * and HIERARCHY.
+  */
+  private final EvaluatorType evaluatorType;
+
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among
    * PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the
    * evaluators) has to be chosen.
@@ -264,7 +270,7 @@ public class Parser {
     minValueGene = 0.1;
     maxValueGene = 1e11;
     expDistribution = true;
-    //*//evaluatorType = new EvaluatorType();
+    evaluatorType = new EvaluatorType();
     numericStatusCode = 3;
     hierarchyEvaluator = "basic";
     evolutionarySearchType = "rates";
@@ -760,9 +766,9 @@ public class Parser {
     }
   }
 
-	public void setTemperature(int temperature) {
-		this.temperature = temperature;
-	}
+  public void setTemperature(int temperature) {
+    this.temperature = temperature;
+  }
 
   /**
    * Simulation temperature.
@@ -936,9 +942,9 @@ public class Parser {
     return psdExtend;
   }
 
-	public void setNumberOfSimulations(int numberOfSimulations){
-		this.numberOfSimulations = numberOfSimulations;
-	}
+  public void setNumberOfSimulations(int numberOfSimulations){
+    this.numberOfSimulations = numberOfSimulations;
+  }
 
   /**
    * Selects the number of simulations that has to be done with the same parameters.
