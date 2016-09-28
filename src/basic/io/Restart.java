@@ -7,10 +7,17 @@ package basic.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import main.Morphokinetics;
 import utils.MathUtils;
@@ -23,6 +30,7 @@ public class Restart {
 
   public static final int MAX_DIMS = 3;
   private String folder;
+  final static Charset ENCODING = StandardCharsets.UTF_8;
 
   public Restart() {
     folder = "results/";
@@ -216,6 +224,18 @@ public class Restart {
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
     fileName = addFolderAndSuffix(fileName, ".txt");
     return RestartLow.readLowText2D(fileName);
+  }
+  
+  /**
+   * Only used to read input "parameters" file.
+   * 
+   * @param aFileName
+   * @return
+   * @throws IOException 
+   */
+  public List<String> readSmallTextFile(String aFileName) throws IOException {
+    Path path = Paths.get(aFileName);
+    return Files.readAllLines(path, ENCODING);
   }
   
   private void createFolder(String restartFolder) {

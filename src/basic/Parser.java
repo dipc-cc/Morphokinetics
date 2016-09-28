@@ -8,12 +8,8 @@ package basic;
 import basic.io.OutputType;
 import basic.io.OutputType.formatFlag;
 import basic.EvaluatorType.evaluatorFlag;
+import basic.io.Restart;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,9 +31,11 @@ import org.json.JSONObject;
  * @author J. Alberdi-Rodriguez
  */
 public class Parser {
-
-  final static Charset ENCODING = StandardCharsets.UTF_8;
   
+  /**
+   * Restart object to read "parameters" file
+   */
+  private final Restart restart;
   /** 
    * See {@link #getCalculationType()}.
    */
@@ -274,6 +272,8 @@ public class Parser {
     hierarchyEvaluator = "basic";
     evolutionarySearchType = "rates";
     fixDiffusion = true;
+    
+    restart = new Restart(".");
   }
 
   /**
@@ -287,7 +287,7 @@ public class Parser {
     List<String> readList = null;
     try {
       //read the parameters file
-      readList = readSmallTextFile(filename);
+      readList = restart.readSmallTextFile(filename);
     } catch (IOException exception) {
       System.err.println("Could not read file " + filename);
       Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
@@ -615,11 +615,6 @@ public class Parser {
       fixDiffusion = true;
     }
     return 0;
-  }
-
-  private List<String> readSmallTextFile(String aFileName) throws IOException {
-    Path path = Paths.get(aFileName);
-    return Files.readAllLines(path, ENCODING);
   }
 
   /**
