@@ -51,7 +51,7 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
    *
    * @return size in X.
    */
-  public float getSizeX() {
+  public static float getSizeX() {
     return SIZE_X;
   }
 
@@ -60,13 +60,10 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
    *
    * @return size in Y.
    */
-  public float getSizeY() {
+  public static float getSizeY() {
     return SIZE_Y;
   }
 
-  public float getSizeZ() {
-    return 1; // it only has two dimensions
-  }
   @Override
   public int getPosI() {
     return posI;

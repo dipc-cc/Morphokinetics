@@ -4,8 +4,6 @@
  */
 package kineticMonteCarlo.lattice;
 
-import android.os.Build;
-
 import kineticMonteCarlo.unitCell.SimpleUc;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -124,12 +122,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   @Override
   public AbstractGrowthUc getUc(int pos) {
-    int j = 0;
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-      j = Math.floorDiv(pos, getHexaSizeI());
-    } else {
-      j = Math.round(pos / getHexaSizeI());
-    }
+    int j = Math.floorDiv(pos, getHexaSizeI());
     int i = pos - (j * getHexaSizeI());
 
     return ucArray[i][j];
@@ -334,13 +327,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     double xiY[] = new double[islandAmount];
     double zetaY[] = new double[islandAmount];
     islands = new Island[islandAmount];
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      Arrays.setAll(islands, i -> new Island(i));
-    } else {
-        for (int i = 0; i < islandAmount; i++) {
-            islands[i] = new Island(i);
-        }
-    }
+    Arrays.setAll(islands, i -> new Island(i));
     // count the island with their coordinates and translate them
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);

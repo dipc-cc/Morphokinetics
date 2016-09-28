@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="j3dcore">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/j3dcore.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

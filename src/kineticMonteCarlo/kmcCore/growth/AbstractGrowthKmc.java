@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -537,7 +538,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
     if (accelerator != null) {
-      return accelerator.chooseRandomHop(originAtom);
+      int possibleDistance = 0; 
+      Pair<AbstractGrowthAtom, Integer> pair = accelerator.chooseRandomHop(originAtom, possibleDistance);
+      AbstractGrowthAtom returnAtom = pair.getKey();
+      possibleDistance = pair.getValue();
+      //simulatedSteps += (possibleDistance-1) * (possibleDistance-1);
+      simulatedSteps += possibleDistance;
+      return returnAtom;
     }
     return originAtom.chooseRandomHop();
   }
@@ -753,7 +760,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
-        int ucIndex = Math.round(random / lattice.getUnitCellSize());
+        int ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
         destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);
       } while (!depositAtom(destinationAtom));
