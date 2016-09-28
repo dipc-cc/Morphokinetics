@@ -5,7 +5,6 @@
  */
 package basic.io;
 
-import static basic.io.Restart.ENCODING;
 import static basic.io.Restart.MAX_DIMS;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,9 +18,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.String.format;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 import kineticMonteCarlo.atom.IAtom;
@@ -322,8 +319,24 @@ class RestartLow {
    * @throws IOException 
    */
   static List<String> readSmallTextFile(String fileName) throws IOException {
-    Path path = Paths.get(fileName);
-    return Files.readAllLines(path, ENCODING);
+    List<String> readText = new ArrayList<>();
+    // create file descriptor. It will be automatically closed.
+    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
+      String line;
+      // <-- read whole line
+      line = in.readLine();
+      while (line != null) {
+                readText.add(line);
+        line = in.readLine();
+      }
+      in.close();
+    } catch (FileNotFoundException fe) {
+      throw fe;
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+    return readText;
   }
   
   /**
