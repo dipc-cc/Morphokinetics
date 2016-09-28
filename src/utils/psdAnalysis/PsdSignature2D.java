@@ -5,7 +5,7 @@
 package utils.psdAnalysis;
 
 import basic.io.Restart;
-//*//import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
+import edu.emory.mathcs.jtransforms.fft.FloatFFT_2D;
 import java.awt.geom.Point2D;
 import java.util.concurrent.Semaphore;
 
@@ -25,7 +25,7 @@ import utils.MathUtils;
  */
 public class PsdSignature2D {
 
-  //*//private FloatFFT_2D fftCore;
+  private FloatFFT_2D fftCore;
   private float[][] psd;
   private ArrayList<float[][]> psdVector;
   private float[][] psdTmp;
@@ -46,7 +46,7 @@ public class PsdSignature2D {
   public PsdSignature2D(int surfaceSizeY, int surfaceSizeX, double extent) {
     psdSizeY = (int) (surfaceSizeY * extent);
     psdSizeX = (int) (surfaceSizeX * extent);
-    //*//fftCore = new FloatFFT_2D(psdSizeY, psdSizeX);
+    fftCore = new FloatFFT_2D(psdSizeY, psdSizeX);
     psd = new float[psdSizeY][psdSizeX];
     psdTmp = new float[psdSizeY][psdSizeX];
     buffer = new float[psdSizeY][psdSizeX * 2];
@@ -78,7 +78,7 @@ public class PsdSignature2D {
     }
 
     // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
-    //*//fftCore.realForwardFull(buffer);
+    fftCore.realForwardFull(buffer);
 
     // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
     for (int i = 0; i < psdSizeY; i++) {
@@ -103,12 +103,12 @@ public class PsdSignature2D {
     int sizeX = sampledSurface.length;
     float[][] bufferTmp = new float[sizeY][sizeX * 2];
     float[][] result = new float[sizeY][sizeX];
-    //*//FloatFFT_2D fftCoreTmp = new FloatFFT_2D(sizeY, sizeX);
+    FloatFFT_2D fftCoreTmp = new FloatFFT_2D(sizeY, sizeX);
 
     for (int i = 0; i < sampledSurface.length; i++) {
       System.arraycopy(sampledSurface[i], 0, bufferTmp[i], 0, sizeY);
     } // Do DFT (discrete Fourier Transfrom). [Equation 1 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
-    //*//fftCoreTmp.realForwardFull(bufferTmp);
+    fftCoreTmp.realForwardFull(bufferTmp);
 
     // Do the PSD. [Equation 2 of Czifra Á. Sensitivity of PSD... 2009 (pp. 505-517). Springer].
     for (int i = 0; i < sampledSurface[0].length; i++) {

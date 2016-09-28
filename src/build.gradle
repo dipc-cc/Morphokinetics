@@ -36,6 +36,18 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/INDEX.LIST'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'javax/LICENSE.txt'
+        exclude 'javax/COPYRIGHT.txt'
+    }
+
 }
 
 dependencies {
@@ -46,5 +58,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     testCompile 'junit:junit:4.12'
-    compile files('/home/jalberdi004/ownCloud/Morphokinetics/lib/colt.jar')
+    compile fileTree(dir: '../lib/', include: '*.jar')
 }
