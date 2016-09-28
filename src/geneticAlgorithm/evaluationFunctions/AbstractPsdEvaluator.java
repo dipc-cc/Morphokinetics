@@ -4,7 +4,8 @@
  */
 package geneticAlgorithm.evaluationFunctions;
 
-import geneticAlgorithm.evaluationFunctions.EvaluatorType.evaluatorFlag;
+import basic.EvaluatorType;
+import basic.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import geneticAlgorithm.Individual;
 import geneticAlgorithm.Population;
