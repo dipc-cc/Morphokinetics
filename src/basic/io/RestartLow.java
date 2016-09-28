@@ -5,6 +5,7 @@
  */
 package basic.io;
 
+import static basic.io.Restart.ENCODING;
 import static basic.io.Restart.MAX_DIMS;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -15,8 +16,13 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.String.format;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.StringTokenizer;
 import kineticMonteCarlo.atom.IAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
@@ -306,7 +312,19 @@ class RestartLow {
       // if any I/O error occurs
       e.printStackTrace();
     }
-  } 
+  }   
+  
+  /**
+   * Only used to read input "parameters" file.
+   * 
+   * @param fileName
+   * @return
+   * @throws IOException 
+   */
+  static List<String> readSmallTextFile(String fileName) throws IOException {
+    Path path = Paths.get(fileName);
+    return Files.readAllLines(path, ENCODING);
+  }
   
   /**
    * The header of the file has to have the following structure: - The "Morphokinetics" keyword -
