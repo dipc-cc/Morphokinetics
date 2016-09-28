@@ -769,7 +769,7 @@ public class Parser {
   public void setTemperature(int temperature) {
     this.temperature = temperature;
   }
-
+  
   /**
    * Simulation temperature.
    * 
@@ -941,11 +941,11 @@ public class Parser {
   double getPsdExtend() {
     return psdExtend;
   }
-
+  
   public void setNumberOfSimulations(int numberOfSimulations){
     this.numberOfSimulations = numberOfSimulations;
   }
-
+  
   /**
    * Selects the number of simulations that has to be done with the same parameters.
    * 
