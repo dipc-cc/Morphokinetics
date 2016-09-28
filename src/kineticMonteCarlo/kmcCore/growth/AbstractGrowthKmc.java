@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.util.Pair;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -538,13 +537,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
     if (accelerator != null) {
-      int possibleDistance = 0; 
-      Pair<AbstractGrowthAtom, Integer> pair = accelerator.chooseRandomHop(originAtom, possibleDistance);
-      AbstractGrowthAtom returnAtom = pair.getKey();
-      possibleDistance = pair.getValue();
-      //simulatedSteps += (possibleDistance-1) * (possibleDistance-1);
-      simulatedSteps += possibleDistance;
-      return returnAtom;
+      return accelerator.chooseRandomHop(originAtom);
     }
     return originAtom.chooseRandomHop();
   }
