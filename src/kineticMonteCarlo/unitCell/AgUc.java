@@ -56,7 +56,7 @@ public class AgUc extends AbstractGrowthUc implements IUc {
   public int getPosJ() {
     return posJ;
   }
-
+  
   @Override
   public AgAtom getAtom(int pos) {
     return atoms.get(pos);
