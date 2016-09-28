@@ -198,8 +198,8 @@ public class Parser {
    */
   private boolean expDistribution;
   /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
-  * and HIERARCHY.
-  */
+   * and HIERARCHY.
+   */
   private final EvaluatorType evaluatorType;
 
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among
