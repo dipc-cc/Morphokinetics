@@ -57,7 +57,7 @@ public class Morphokinetics {
         batchSimulation(parser);
         break;
       case "evolutionary":
-        evoluationarySimulation(parser);
+        evolutionarySimulation(parser);
         break;
       case "psd":
         psdFromSurfaces(parser);
@@ -101,7 +101,7 @@ public class Morphokinetics {
     simulation.finishSimulation();
   }
 
-  private static void evoluationarySimulation(Parser parser) {
+  private static void evolutionarySimulation(Parser parser) {
     AbstractGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {
       case "original":
