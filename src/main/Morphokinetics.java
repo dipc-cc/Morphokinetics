@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import org.json.JSONException;
 import ratesLibrary.AgRatesFromPrbCox;
 import ratesLibrary.BasicGrowthSyntheticRates;
 import ratesLibrary.SiRatesFromPreGosalvez;
@@ -44,7 +45,7 @@ public class Morphokinetics {
 
   private static double simulationTime;
   
-  public static void main(String[] args) {
+  public static void main(String[] args) throws JSONException {
     AbstractSimulation.printHeader();
 
     Parser parser = new Parser();
