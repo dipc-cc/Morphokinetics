@@ -208,7 +208,7 @@ def getIslandDistribution(sqrt=True):
     growthSlopes = []
     gyradiusSlopes = []
     numberOfIslands = []
-    allNe = []
+    totalRatio = []
     workingPath = os.getcwd()
     for temperature in range(120, 221, 5):
         try:
@@ -222,7 +222,7 @@ def getIslandDistribution(sqrt=True):
                 print("something went wrong")
                 print("\t"+str(numberOfEvents))
                 print("\t"+str(simulatedTime))
-            allNe.append(numberOfEvents/simulatedTime)
+            totalRatio.append(numberOfEvents/simulatedTime)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature,growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
             except ValueError:
@@ -232,4 +232,4 @@ def getIslandDistribution(sqrt=True):
             a=0 #do nothing
         os.chdir(workingPath)
 
-    return growthSlopes, allNe, gyradiusSlopes, numberOfIslands
+    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands
