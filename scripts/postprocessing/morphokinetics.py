@@ -16,6 +16,7 @@ def getAllValues(f, maxCoverage, sqrt=True):
     islandRadiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
     gyradiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
     timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
+    neList = [[0 for x in range(w)] for y in range(maxCoverage)]
     cov = 0
     previousLine = ""
     dataLine = ""
@@ -31,14 +32,14 @@ def getAllValues(f, maxCoverage, sqrt=True):
                 islandSizesList[cov].append(int(j))
                 islandRadiusList[cov].append(int(math.sqrt(float(j))))
                 j = next(iterList)
-            timeList[cov].append(time) 
-            dataList = re.split('\t|\n', previousLine)
-            if (len(dataList) > 10):
-                gyradiusList[cov].append(float(dataList[9]))
             cov = 0
-        if re.match(regExpression, line):
-            cov = int(line[2]+line[3])
-            time = re.split('\t', line)[1]
+        if re.match(regExpression, line):      # just hit a coverage
+            cov = int(line[2]+line[3])         # get coverage
+            dataList = re.split('\t|\n', line) # split line into a list
+            timeList[cov].append(dataList[1])  # get the time and store it in a list
+            neList[cov].append(dataList[7])    # get number of events and store it in a list
+            if (len(dataList) > 10):           # if gyradius was calculated store it
+                gyradiusList[cov].append(float(dataList[9]))
             dataLine = previousLine
         previousLine = line
 
