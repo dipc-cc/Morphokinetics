@@ -19,22 +19,22 @@ def getAllValues(f, maxCoverage, sqrt=True):
     cov = 0
     previousLine = ""
     dataLine = ""
-    # if found the coverage, save the next line
+    # if found the coverage, save the next line (with the histogram)
     for line in f:
         if cov:
-            myList = re.split(',|\[|\]', dataLine)
-            iterList = iter(myList)
-            next(iterList) # Skip the first and second entries
+            dataList = re.split(',|\[|\]', dataLine)
+            iterList = iter(dataList) # get island histogram
+            next(iterList) # skip the first and second entries of histogram ("histogram" word and value of unoccupied positions)
             next(iterList)
             j = next(iterList)
-            while j != '\n': #save the current values (island sizes) to an array
+            while j != '\n': # save the current values (island sizes) to an array
                 islandSizesList[cov].append(int(j))
                 islandRadiusList[cov].append(int(math.sqrt(float(j))))
                 timeList[cov].append(time)
                 j = next(iterList)
-            myList = re.split('\t|\n', previousLine)
-            if (len(myList) > 10):
-                gyradiusList[cov].append(float(myList[9]))
+            dataList = re.split('\t|\n', previousLine)
+            if (len(dataList) > 10):
+                gyradiusList[cov].append(float(dataList[9]))
             cov = 0
         if re.match(regExpression, line):
             cov = int(line[2]+line[3])
