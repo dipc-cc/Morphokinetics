@@ -30,8 +30,8 @@ def getAllValues(f, maxCoverage, sqrt=True):
             while j != '\n': # save the current values (island sizes) to an array
                 islandSizesList[cov].append(int(j))
                 islandRadiusList[cov].append(int(math.sqrt(float(j))))
-                timeList[cov].append(time)
                 j = next(iterList)
+            timeList[cov].append(time) 
             dataList = re.split('\t|\n', previousLine)
             if (len(dataList) > 10):
                 gyradiusList[cov].append(float(dataList[9]))
