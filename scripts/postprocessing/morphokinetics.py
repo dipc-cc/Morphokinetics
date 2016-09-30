@@ -10,7 +10,7 @@ def getAllValues(f, maxCoverage, sqrt=True):
     """ reads all the values for the corresponding coverage """
     
     #get something like 0.05000 expression to be grepped 
-    regExpression='(0\...00)|(^0\...\s)' # corresponds to 0.??00 expression or 0.??[:spaces:] expression
+    regExpression = '(0\...00)|(^0\...\s)' # corresponds to 0.??00 expression or 0.??[:spaces:] expression
     w = 0
     islandSizesList = [[0 for x in range(w)] for y in range(maxCoverage)]
     islandRadiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
@@ -35,9 +35,9 @@ def getAllValues(f, maxCoverage, sqrt=True):
             myList = re.split('\t|\n', previousLine)
             if (len(myList) > 10):
                 gyradiusList[cov].append(float(myList[9]))
-            cov=0
+            cov = 0
         if re.match(regExpression, line):
-            cov=int(line[2]+line[3])
+            cov = int(line[2]+line[3])
             time = re.split('\t', line)[1]
             dataLine = previousLine
         previousLine = line
@@ -58,10 +58,10 @@ island size. It returns the slope of the fit, which is the growth rate."""
     numberOfIsland = 0
     fileName = "dataEvery1percentAndNucleation.txt"
     try:
-        f=open(fileName)
+        f = open(fileName)
     except OSError:
         try:
-            f=open("results/"+fileName)
+            f = open("results/"+fileName)
         except OSError:
             print("Input file {} can not be openned. Exiting! ".format(fileName))
             growthSlope = 0
@@ -80,7 +80,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
     for index, islandSizes in enumerate(islandSizesList):
         if islandSizes: #ensure that it is not null
             # do histogram
-            histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk,chunk), density=False))
+            histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk, chunk), density=False))
             # average
             numberOfIsland += len(islandSizes)
             averageSizes.append(np.mean(islandSizes))
@@ -105,15 +105,15 @@ island size. It returns the slope of the fit, which is the growth rate."""
             
         if verbose:
             plt.close()
-            label="{}x+{}".format(a, b)
+            label = "{}x+{}".format(a, b)
             print(label)
             plt.plot(x,averageSizes)
             y = a*np.array(x)+b
             plt.plot(x,y, label=label)
-            label="{}x^{}".format(aPower, bPower)
+            label = "{}x^{}".format(aPower, bPower)
             y = powerFunc(x, aPower, bPower)
-            plt.plot(x,y, label=label)
-            plt.legend(loc='upper left',prop={'size':6})
+            plt.plot(x, y, label=label)
+            plt.legend(loc='upper left', prop={'size':6})
             plt.savefig("tmpFig.png")
             plt.close()
 
@@ -132,15 +132,15 @@ island size. It returns the slope of the fit, which is the growth rate."""
         #a = averageGyradius[-1]#/times[-1]
         #b = 0
         if verbose:
-            label="{}x+{}".format(a, b)
+            label = "{}x+{}".format(a, b)
             print(label)
             plt.plot(x,averageGyradius)
             y = a*np.array(x)+b
             plt.plot(x,y, label=label)
             y = powerFunc(x, aPower, bPower)
-            label="{}x^{}".format(aPower, bPower)
-            plt.plot(x,y, label=label)
-            plt.legend(loc='upper left',prop={'size':6})
+            label = "{}x^{}".format(aPower, bPower)
+            plt.plot(x, y, label=label)
+            plt.legend(loc='upper left', prop={'size':6})
             plt.savefig("tmpFig2.png")
             plt.close()
         if sqrt:
@@ -162,12 +162,12 @@ def getAllRtt():
 def getNumberOfEvents(time30cov):
     numberOfEvents = []
     simulatedTime = []
-    regExpression=("Need")
+    regExpression = ("Need")
     fail = False
-    fileName="unknown"
+    fileName = "unknown"
     try:
-        fileName=glob.glob("output*")[-1]
-        f=open(fileName)
+        fileName = glob.glob("output*")[-1]
+        f = open(fileName)
         # if found the coverage, save the next line
         for line in f:
             if re.search(regExpression, line):
@@ -202,9 +202,9 @@ def getNumberOfEvents(time30cov):
 
 def getIslandDistribution(sqrt=True):
     """ computes the island distribution """
-    chunk=40
-    coverage=31
-    verbose=False
+    chunk = 40
+    coverage = 31
+    verbose = False
     growthSlopes = []
     gyradiusSlopes = []
     numberOfIslands = []
@@ -224,12 +224,12 @@ def getIslandDistribution(sqrt=True):
                 print("\t"+str(simulatedTime))
             totalRatio.append(numberOfEvents/simulatedTime)
             try:
-                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature,growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
+                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
             except ValueError:
-                a=0 # skip the writing
+                a = 0 # skip the writing
         except OSError:
             print ("error changing to directory {}".format(temperature))
-            a=0 #do nothing
+            a = 0 #do nothing
         os.chdir(workingPath)
 
     return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands
