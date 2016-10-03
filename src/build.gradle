@@ -29,6 +29,8 @@ android {
             java.exclude 'utils/akting/'
             java.exclude 'main/PsdFromSurfaces.java'
             java.exclude 'main/PcConfigurator.java'
+            java.exclude 'main/printByHand.java'
+            java.exclude 'utils/printByHandHelper.java'
             manifest.srcFile 'android/AndroidManifest.xml'
             res.srcDirs = ['android/res']
         }

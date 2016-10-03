@@ -30,6 +30,8 @@ import org.json.JSONException;
 public class Morphokinetics {
   
   public static void main(String[] args) throws JSONException {
+    AbstractSimulation.printHeader();
+
     Parser parser = new Parser();
     parser.readFile("parameters");
     parser.print();

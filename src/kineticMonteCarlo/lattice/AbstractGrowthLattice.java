@@ -512,21 +512,22 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       }
     }
     
-    // create a histogram with the number of atoms per island
-    List<Integer> histogram = new ArrayList(islandCount + 1); // count also non occupied area
-    for (int i = 0; i < islandCount + 1; i++) {
-      histogram.add(0);
-    }
-    // iterate all atoms and add to the corresponding island
-    for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        int island = uc.getAtom(j).getIslandNumber();
-        if (island >= 0) 
-          histogram.set(island, histogram.get(island) + 1);
-      }
-    }
     if (print != null) {
+      // create a histogram with the number of atoms per island
+      List<Integer> histogram = new ArrayList(islandCount + 1); // count also non occupied area
+      for (int i = 0; i < islandCount + 1; i++) {
+        histogram.add(0);
+      }
+      // iterate all atoms and add to the corresponding island
+      for (int i = 0; i < size(); i++) {
+        AbstractGrowthUc uc = getUc(i);
+        for (int j = 0; j < uc.size(); j++) {
+          int island = uc.getAtom(j).getIslandNumber();
+          if (island >= 0) {
+            histogram.set(island, histogram.get(island) + 1);
+          }
+        }
+      }
       print.println("histogram " + histogram.toString());
     }
     return islandCount;

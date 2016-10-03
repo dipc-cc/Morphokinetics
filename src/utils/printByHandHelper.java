@@ -5,6 +5,7 @@
  */
 package utils;
 
+import graphicInterfaces.growth.GrowthKmcFrame;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AgUcLattice;
 
@@ -21,6 +22,8 @@ public class printByHandHelper {
     ModifiedBuffer modified = new ModifiedBuffer();
     AgUcLattice lattice = new AgUcLattice(30, 13, modified, null);
     lattice.init();
+    frame = new GrowthKmcFrame(lattice, 1);
+    frame.setVisible(true);
     p = new paintLoop();
   }
 
