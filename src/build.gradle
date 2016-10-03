@@ -28,6 +28,7 @@ android {
             java.exclude 'samples/'
             java.exclude 'utils/akting/'
             java.exclude 'main/PsdFromSurfaces.java'
+            java.exclude 'main/PcConfigurator.java'
             manifest.srcFile 'android/AndroidManifest.xml'
             res.srcDirs = ['android/res']
         }

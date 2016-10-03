@@ -5,8 +5,6 @@
  */
 package main;
 
-import org.json.JSONException;
-
 import basic.AgUcSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
@@ -14,18 +12,13 @@ import basic.BasicGrowthSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
-import basic.io.Restart;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
-import ratesLibrary.AgRatesFromPrbCox;
-import ratesLibrary.BasicGrowthSyntheticRates;
-import ratesLibrary.SiRatesFromPreGosalvez;
-import utils.MathUtils;
-import utils.Wait;
-import utils.psdAnalysis.PsdSignature2D;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.json.JSONException;
 
 /**
  * Morphokinetics is a software to simulate kinetics Monte Carlo (KMC) processes. It can simulate
@@ -35,28 +28,44 @@ import utils.psdAnalysis.PsdSignature2D;
  * @author J. Alberdi-Rodriguez
  */
 public class Morphokinetics {
-
-  private static double simulationTime;
   
   public static void main(String[] args) throws JSONException {
-    AbstractSimulation.printHeader();
-
     Parser parser = new Parser();
     parser.readFile("parameters");
     parser.print();
+    try {
+      // check we whether are in android or not
+      String className;
+      if (System.getProperty("java.vm.name").equals("Dalvik")) {
+        className = "main.AndroidConfigurator";
+      } else {
+        className = "main.PcConfigurator";
+      }
+      Class<?> genericClass = Class.forName(className);
+      IConfigurator configuration = (IConfigurator) genericClass.getConstructors()[0].newInstance();
+      AbstractSimulation.printHeader();
 
-    switch (parser.getCalculationType()) {
-      case "batch":
-        batchSimulation(parser);
-        break;
-      default:
-        System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
-        System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are batch or evolutionary");
-        throw new IllegalArgumentException("This simulation mode is not implemented");
-    }
-    printEnd();
-    if (!parser.withGui() || !parser.visualise()) {
-      System.exit(0);
+      switch (parser.getCalculationType()) {
+        case "batch":
+          batchSimulation(parser);
+          break;
+        case "evolutionary":
+          configuration.evolutionarySimulation(parser);
+          break;
+        case "psd":
+          configuration.psdFromSurfaces(parser);
+          break;
+        default:
+          System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
+          System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are batch or evolutionary");
+          throw new IllegalArgumentException("This simulation mode is not implemented");
+      }
+      printEnd();
+      if (!parser.withGui() || !parser.visualise()) {
+        System.exit(0);
+      }
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, ex);
     }
   }
 
@@ -86,38 +95,7 @@ public class Morphokinetics {
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
-  }
-  
-  private static float[][] readExperimentalData() {
-    Restart restart = new Restart();
-    int[] sizes = null;
-    float[][] readSurface = null;
-    int islandCount = 0;
-    int numberOfFiles = 43;
-    String surfaceFileName = "psdFromImage/islands/3.OuterIsolatedSmall/island";
-    PsdSignature2D psd = null;
-    for (int i = 1; i <= numberOfFiles; i++) {
-      try {
-        readSurface = restart.readSurfaceBinary2D(surfaceFileName + i + ".mko", 2);
-        if (psd == null) {
-          sizes = new int[2];
-          sizes[0] = readSurface.length;
-          sizes[1] = readSurface[0].length;
-          psd = new PsdSignature2D(sizes[0], sizes[1], 1);
-        }
-      } catch (Exception e){
-        System.err.println("Provided filename [" + surfaceFileName + i + ".mko] does not exist. Exiting");
-        //throw e;
-        continue;
-      }
-      islandCount++;
-      MathUtils.applyGrowthAccordingDistanceToPerimeter(readSurface);
-      psd.addSurfaceSample(readSurface);
-    }
-
-    psd.printAvgToFile();
-    return psd.getPsd();
-  }
+  }  
 
   private static void printEnd() {
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
