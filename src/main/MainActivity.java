@@ -1,4 +1,4 @@
-package eus.ehu.dipc.morphokinetics;
+package main;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.util.Enumeration;
+import java.util.Properties;
+
 import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.AgUcSimulation;
@@ -26,6 +29,7 @@ import basic.BasicGrowthSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
+import eus.ehu.dipc.morphokinetics.R;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.BasicAtom;
@@ -63,7 +67,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void runSimulation(View v) {
+      Properties p = System.getProperties();
+      Enumeration keys = p.keys();
+      while (keys.hasMoreElements()) {
+        String key = (String) keys.nextElement();
+        String value = (String) p.get(key);
+        System.out.println(key + " >>>> " + value);
+      }
 
+      System.out.println("kkk "+System.getProperty("java.vm.name"));
+      String className;
+      if (System.getProperty("java.vm.name").equals("Dalvik")) {
+        className = "main.AndroidConfigurator";
+      } else {
+        className = "main.PcConfigurator";
+      }
+      System.out.println(className);
         TextView tv = (TextView) findViewById(R.id.outputText);
         tv.setText("Starting simulation " + count);
         System.out.println("hello " + count + " times ");

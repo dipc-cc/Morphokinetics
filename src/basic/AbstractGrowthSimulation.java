@@ -5,7 +5,12 @@
  */
 package basic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import basic.io.OutputType.formatFlag;
+import graphicInterfacesCommon.growth.IGrowthKmcFrame;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.IRates;
 
@@ -15,6 +20,7 @@ import ratesLibrary.IRates;
  */
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
+  private IGrowthKmcFrame frame;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
   
@@ -39,7 +45,23 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     boolean error = false;
     if (getParser().withGui()) {
       try {
+        int max;
+        if (getParser().justCentralFlake()) {
+          max = (int) (getParser().getCartSizeX() / 2);
+        } else {
+          max = (int) getParser().getCoverage();
+        }
+        // check we whether are in android or not
+        String className;
+        if (System.getProperty("java.vm.name").equals("Dalvik")) {
+          className = "android.fakeGraphicInterfaces.growth.GrowthKmcFrame";
+        } else {
+          className = "graphicInterfaces.growth.GrowthKmcFrame";
+        }
+        Class<?> genericClass = Class.forName(className);
+        frame = (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance();
       } catch (Exception e) {
+        Logger.getLogger(AbstractGrowthSimulation.class.getName()).log(Level.SEVERE, null, e);
         System.err.println("Error: Execution is not able to create the X11 frame.");
         System.err.println("Continuing without any graphic...");
         error = true;
@@ -47,6 +69,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     }
     Thread p;
     if (getParser().visualise() && !error) {
+      frame.setVisible(true);
       p = new PaintLoop();
     } else {
       p = new TerminalLoop();
@@ -70,7 +93,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    */
   @Override
   void printToImage(int i) {
-
+    frame.printToImage(i);
   }
   
   /**
@@ -81,7 +104,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
    */
   @Override
   void printToImage(String folderName, int i) {
-
+    frame.printToImage(folderName, i);
   }
   
   /**
@@ -92,11 +115,16 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
     @Override
     public void run() {
       while (true) {
+        frame.repaintKmc();
         try {
           PaintLoop.sleep(100);
           if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
                   || // If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
                   (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
+            if (printIntermediatePngFiles) {
+              frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
+            }
+            frame.updateProgressBar(getCurrentProgress());
             updateCurrentProgress();
             totalSavedImages++;
           }

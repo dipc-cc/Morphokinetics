@@ -11,6 +11,7 @@
 package graphicInterfaces.growth;
 
 import basic.io.Restart;
+import graphicInterfacesCommon.growth.IGrowthKmcFrame;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ItemEvent;
@@ -49,8 +50,9 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
-public class GrowthKmcFrame extends JFrame {
+public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
 
   private int mouseX, mouseY;
   private int startMouseX = 0;
@@ -74,14 +76,14 @@ public class GrowthKmcFrame extends JFrame {
   /**
    * Creates new form frame for growth.
    *
-   * @param canvas
+   * @param lattice
    * @param max maximum value for the progress bar
    */
-  public GrowthKmcFrame(KmcCanvas canvas, int max) {
+  public GrowthKmcFrame(AbstractGrowthLattice lattice, int max) {
     createMenuBar();
     maxCoverage = max;
     initComponents();
-    this.canvas = canvas;
+    canvas = new KmcCanvas(lattice);
     canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
     panel.add(canvas);
     canvas.initialise();
@@ -104,6 +106,7 @@ public class GrowthKmcFrame extends JFrame {
     labelScale.getActionMap().put("pause", new Pause());
   }
 
+  @Override
   public void repaintKmc() {
     canvas.performDraw();
     canvas.setBaseLocation(mouseX, mouseY);
@@ -118,6 +121,7 @@ public class GrowthKmcFrame extends JFrame {
    *
    * @param i simulation number
    */
+  @Override
   public void printToImage(int i) {
     canvas.performDrawToImage(i);
   }
@@ -128,6 +132,7 @@ public class GrowthKmcFrame extends JFrame {
    * @param folder folder to save the current image
    * @param i simulation number
    */
+  @Override
   public void printToImage(String folder, int i) {
     canvas.performDrawToImage(folder, i);
   }
@@ -137,6 +142,7 @@ public class GrowthKmcFrame extends JFrame {
    * 
    * @param coverage 
    */
+  @Override
   public void updateProgressBar(int coverage) {
     progressBar.setValue(coverage);
     statusbar.setText(Integer.toString(coverage) + "/" + maxCoverage);

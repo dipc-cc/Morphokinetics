@@ -7,6 +7,9 @@ package basic;
 
 import basic.io.OutputType.formatFlag;
 import basic.io.Restart;
+import graphicInterfacesCommon.surfaceViewer2D.IFrame2D;
+
+import java.lang.reflect.InvocationTargetException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -194,6 +197,33 @@ public abstract class AbstractSimulation {
         psd.applySymmetryFold(PsdSignature2D.VERTICAL_SYMMETRY);
       }
       if (parser.visualise()) {
+        try {
+          // check we whether are in android or not
+          String className;
+          if (System.getProperty("java.vm.name").equals("Dalvik")) {
+            className = "android.fakeGraphicInterfaces.surfaceViewer2D.Frame2D";
+          } else {
+            className = "graphicInterfaces.surfaceViewer2D.Frame2D";
+          }
+          Class<?> genericClass = Class.forName(className);
+          IFrame2D psdFrame = (IFrame2D) genericClass.getConstructors()[0].newInstance();
+          //new IFrame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
+          psdFrame.setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
+          psdFrame.setLogScale(true)
+              .setShift(true);
+          psdFrame.setVisible(true);
+          psdFrame.toBack();
+          psdFrame.printToImage(restartFolderName, 1);
+
+          IFrame2D surfaceFrame = (IFrame2D) genericClass.getConstructors()[0].newInstance();
+          //new Frame2D("Sampled surface");
+          surfaceFrame.setMesh(sampledSurface);
+          surfaceFrame.setVisible(true);
+          surfaceFrame.toBack();
+          surfaceFrame.printToImage(restartFolderName, 2);
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+          Logger.getLogger(AbstractSimulation.class.getName()).log(Level.SEVERE, null, ex);
+        }
       }
       psd.printAvgToFile();
     }
