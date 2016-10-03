@@ -6,7 +6,6 @@
 package basic;
 
 import basic.io.OutputType.formatFlag;
-import graphicInterfaces.growth.GrowthKmcFrame;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.IRates;
 
@@ -16,7 +15,7 @@ import ratesLibrary.IRates;
  */
 public abstract class AbstractGrowthSimulation extends AbstractSimulation {
 
-  private GrowthKmcFrame frame;
+  private graphicInterfaces.growth.GrowthKmcFrame frame;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
   
@@ -47,7 +46,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         } else {
           max = (int) getParser().getCoverage();
         }
-        frame = new GrowthKmcFrame((AbstractGrowthLattice) getKmc().getLattice(), max);
+        frame = new graphicInterfaces.growth.GrowthKmcFrame((AbstractGrowthLattice) getKmc().getLattice(), max);
       } catch (Exception e) {
         System.err.println("Error: Execution is not able to create the X11 frame.");
         System.err.println("Continuing without any graphic...");

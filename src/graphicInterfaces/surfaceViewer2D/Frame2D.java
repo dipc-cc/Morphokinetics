@@ -1,5 +1,6 @@
 package graphicInterfaces.surfaceViewer2D;
 
+import graphicInterfacesCommon.surfaceViewer2D.IFrame2D;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
@@ -9,7 +10,7 @@ import static java.lang.String.format;
 import javax.imageio.ImageIO;
 import utils.MathUtils;
 
-public class Frame2D extends javax.swing.JFrame {
+public class Frame2D extends javax.swing.JFrame implements IFrame2D {
 
   public static int COLOR_BW = 0;
   public static int COLOR_HSV = 1;
