@@ -59,7 +59,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
           className = "graphicInterfaces.growth.GrowthKmcFrame";
         }
         Class<?> genericClass = Class.forName(className);
-        frame = (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance();
+        frame = (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance(getKmc().getLattice(), max);
       } catch (Exception e) {
         Logger.getLogger(AbstractGrowthSimulation.class.getName()).log(Level.SEVERE, null, e);
         System.err.println("Error: Execution is not able to create the X11 frame.");

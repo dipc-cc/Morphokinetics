@@ -206,8 +206,7 @@ public abstract class AbstractSimulation {
             className = "graphicInterfaces.surfaceViewer2D.Frame2D";
           }
           Class<?> genericClass = Class.forName(className);
-          IFrame2D psdFrame = (IFrame2D) genericClass.getConstructors()[0].newInstance();
-          //new IFrame2D("PSD analysis").setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
+          IFrame2D psdFrame = (IFrame2D) genericClass.getConstructors()[0].newInstance("PSD analysis");
           psdFrame.setMesh(MathUtils.avgFilter(psd.getPsd(), 1));
           psdFrame.setLogScale(true)
               .setShift(true);
@@ -215,8 +214,7 @@ public abstract class AbstractSimulation {
           psdFrame.toBack();
           psdFrame.printToImage(restartFolderName, 1);
 
-          IFrame2D surfaceFrame = (IFrame2D) genericClass.getConstructors()[0].newInstance();
-          //new Frame2D("Sampled surface");
+          IFrame2D surfaceFrame = (IFrame2D) genericClass.getConstructors()[0].newInstance("Sampled surface");
           surfaceFrame.setMesh(sampledSurface);
           surfaceFrame.setVisible(true);
           surfaceFrame.toBack();

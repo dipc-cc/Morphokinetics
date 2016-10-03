@@ -15,6 +15,7 @@ import kineticMonteCarlo.lattice.AgUcLattice;
  */
 public class printByHandHelper {
 
+  private final GrowthKmcFrame frame;
   private final paintLoop p;
 
   public printByHandHelper() {
@@ -38,6 +39,7 @@ public class printByHandHelper {
     @Override
     public void run() {
       while (true) {
+        frame.repaintKmc();
         try {
           paintLoop.sleep(100);
         } catch (Exception e) {
