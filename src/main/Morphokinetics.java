@@ -45,7 +45,6 @@ public class Morphokinetics {
       }
       Class<?> genericClass = Class.forName(className);
       IConfigurator configuration = (IConfigurator) genericClass.getConstructors()[0].newInstance();
-      AbstractSimulation.printHeader();
 
       switch (parser.getCalculationType()) {
         case "batch":
