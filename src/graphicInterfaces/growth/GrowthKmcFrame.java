@@ -49,6 +49,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 public class GrowthKmcFrame extends JFrame {
 
@@ -74,14 +75,14 @@ public class GrowthKmcFrame extends JFrame {
   /**
    * Creates new form frame for growth.
    *
-   * @param canvas
+   * @param lattice
    * @param max maximum value for the progress bar
    */
-  public GrowthKmcFrame(KmcCanvas canvas, int max) {
+  public GrowthKmcFrame(AbstractGrowthLattice lattice, int max) {
     createMenuBar();
     maxCoverage = max;
     initComponents();
-    this.canvas = canvas;
+    canvas = new KmcCanvas(lattice);
     canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
     panel.add(canvas);
     canvas.initialise();

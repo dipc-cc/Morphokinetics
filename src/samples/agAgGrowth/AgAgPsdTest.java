@@ -6,7 +6,6 @@
 package samples.agAgGrowth;
 
 import basic.Parser;
-import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfaces.surfaceViewer2D.Frame2D;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
@@ -59,7 +58,7 @@ public class AgAgPsdTest {
   }
 
   private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()), 1);
+    GrowthKmcFrame frame = new GrowthKmcFrame(kmc.getLattice(), 1);
     return frame;
   }
 

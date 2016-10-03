@@ -6,9 +6,7 @@ package samples.grapheneCvdGrowth;
 
 import basic.Parser;
 import graphicInterfaces.growth.GrowthKmcFrame;
-import graphicInterfaces.growth.KmcCanvas;
 import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import ratesLibrary.GrapheneSyntheticRates;
 import utils.StaticRandom;
 
@@ -40,7 +38,7 @@ public class SimpleGrapheneKmcSimulation {
   }
 
   private static void createGraphicsFrame(GrapheneKmc kmc) {
-    frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()),1);
+    frame = new GrowthKmcFrame(kmc.getLattice(), 1);
     frame.setVisible(true);
     p = new paintLoop();
     p.start();

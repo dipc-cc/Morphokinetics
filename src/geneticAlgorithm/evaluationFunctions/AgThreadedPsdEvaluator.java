@@ -5,14 +5,12 @@
 package geneticAlgorithm.evaluationFunctions;
 
 import geneticAlgorithm.Individual;
-import graphicInterfaces.growth.KmcCanvas;
 import graphicInterfaces.growth.GrowthKmcFrame;
 import java.util.Set;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.worker.IFinishListener;
 import kineticMonteCarlo.kmcCore.worker.IIntervalListener;
 import kineticMonteCarlo.kmcCore.worker.KmcWorker;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
  *
@@ -39,7 +37,7 @@ public class AgThreadedPsdEvaluator extends MultithreadedPsdEvaluator implements
   }
 
   private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(new KmcCanvas((AbstractGrowthLattice) kmc.getLattice()),1);
+    GrowthKmcFrame frame = new GrowthKmcFrame(kmc.getLattice(), 1);
     return frame;
   }
 
