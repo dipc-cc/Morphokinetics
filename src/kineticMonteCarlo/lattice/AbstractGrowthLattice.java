@@ -507,7 +507,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
       AbstractGrowthUc uc = getUc(i);
-      for (int j=0; j< uc.size(); j++) {
+      for (int j = 0; j < uc.size(); j++) {
         identifyIsland(uc.getAtom(j), false);
       }
     }
