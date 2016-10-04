@@ -44,7 +44,7 @@ public class SiSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    parser.readFile("test/input/SiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/SiParameters");
     parser.print();
 
     assertEquals("Si", parser.getCalculationMode());
