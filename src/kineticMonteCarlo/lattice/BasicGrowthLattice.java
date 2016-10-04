@@ -261,6 +261,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   /**
+   * Chooses the randomly a far atom. Firstly, it goes to the given distance and secondly, it
+   * navigates throw the perimeter.
    * 
    * @param atom origin atom.
    * @param distance how far we have to move.
