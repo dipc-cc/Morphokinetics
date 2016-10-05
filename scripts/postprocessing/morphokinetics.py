@@ -17,6 +17,8 @@ def getAllValues(f, maxCoverage, sqrt=True):
     gyradiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
     timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
     neList = [[0 for x in range(w)] for y in range(maxCoverage)]
+    innerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
+    outerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
     timeList[0].append(0)
     neList[0].append(0)
     cov = 0
@@ -42,13 +44,16 @@ def getAllValues(f, maxCoverage, sqrt=True):
             neList[cov].append(dataList[7])    # get number of events and store it in a list
             if (len(dataList) > 10):           # if gyradius was calculated store it
                 gyradiusList[cov].append(float(dataList[9]))
+            if (len(dataList) > 11):           # if perimeter was calculated store it
+                innerPerimeterList.append(int(dataList[10]))
+                outerPerimeterList.append(int(dataList[11]))
             dataLine = previousLine
         previousLine = line
 
     if (sqrt):
-        return islandRadiusList, timeList, gyradiusList, neList
+        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList
     else:
-        return islandSizesList, timeList, gyradiusList, neList
+        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList
 
 def powerFunc(x, a, b):
     """ a*x^b function """
@@ -72,7 +77,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             time30cov = 1
             return growthSlope, gyradiusSlope, time30cov, numberOfIsland
 
-    islandSizesList, timeList, gyradiusList, neList = getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList = getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
