@@ -3,61 +3,8 @@ import os
 import math
 import glob
 import numpy as np
-import matplotlib.pyplot as plt
-from scipy.optimize import curve_fit
+import morphokineticsLow as mk
 
-def getAllValues(f, maxCoverage, sqrt=True):
-    """ reads all the values for the corresponding coverage """
-    
-    #get something like 0.05000 expression to be grepped 
-    regExpression = '(0\...00)|(^0\...\s)' # corresponds to 0.??00 expression or 0.??[:spaces:] expression
-    w = 0
-    islandSizesList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    islandRadiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    gyradiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    neList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    innerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    outerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    timeList[0].append(0)
-    neList[0].append(0)
-    cov = 0
-    previousLine = ""
-    dataLine = ""
-    # if found the coverage, save the next line (with the histogram)
-    for line in f:
-        if cov:
-            dataList = re.split(',|\[|\]', dataLine)
-            iterList = iter(dataList) # get island histogram
-            next(iterList) # skip the first and second entries of histogram ("histogram" word and value of unoccupied positions)
-            next(iterList)
-            j = next(iterList)
-            while j != '\n': # save the current values (island sizes) to an array
-                islandSizesList[cov].append(int(j))
-                islandRadiusList[cov].append(int(math.sqrt(float(j))))
-                j = next(iterList)
-            cov = 0
-        if re.match(regExpression, line):      # just hit a coverage
-            cov = int(line[2]+line[3])         # get coverage
-            dataList = re.split('\t|\n', line) # split line into a list
-            timeList[cov].append(dataList[1])  # get the time and store it in a list
-            neList[cov].append(dataList[7])    # get number of events and store it in a list
-            if (len(dataList) > 10):           # if gyradius was calculated store it
-                gyradiusList[cov].append(float(dataList[9]))
-            if (len(dataList) > 11):           # if perimeter was calculated store it
-                innerPerimeterList.append(int(dataList[10]))
-                outerPerimeterList.append(int(dataList[11]))
-            dataLine = previousLine
-        previousLine = line
-
-    if (sqrt):
-        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList
-    else:
-        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList
-
-def powerFunc(x, a, b):
-    """ a*x^b function """
-    return a*x**b
 
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
     """reads the input file and makes the histogram and the average
@@ -77,7 +24,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             time30cov = 1
             return growthSlope, gyradiusSlope, time30cov, numberOfIsland
 
-    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList = getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList = mk.getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
@@ -96,67 +43,10 @@ island size. It returns the slope of the fit, which is the growth rate."""
             if verbose:
                 print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
 
-    averageGyradius = []
-    for gyradius in gyradiusList:
-        if gyradius: #ensure that it is not null
-            averageGyradius.append(np.mean(gyradius))
-
     # Curve fitting
-    x = np.array(times)
-    try:
-        a, b = np.polyfit(x, averageSizes, 1)
-        popt = curve_fit(powerFunc, x, averageSizes)
-        aPower = popt[0][0]
-        bPower = popt[0][1]
-        #a = averageSizes[-1]#/times[-1]
-        #b = 0
-            
-        if verbose:
-            plt.close()
-            label = "{}x+{}".format(a, b)
-            print(label)
-            plt.plot(x,averageSizes)
-            y = a*np.array(x)+b
-            plt.plot(x,y, label=label)
-            label = "{}x^{}".format(aPower, bPower)
-            y = powerFunc(x, aPower, bPower)
-            plt.plot(x, y, label=label)
-            plt.legend(loc='upper left', prop={'size':6})
-            plt.savefig("tmpFig.png")
-            plt.close()
+    growthSlope = mk.getAverageGrowth(times, averageSizes, sqrt, verbose, "tmpFig.png")
+    gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpFig2.png")
 
-        if sqrt:
-            growthSlope = aPower
-        else:
-            growthSlope = a
-    except TypeError:
-        growthSlope = 0
-
-    try:
-        a, b = np.polyfit(x, averageGyradius, 1)
-        popt = curve_fit(powerFunc, x, averageGyradius)
-        aPower = popt[0][0]
-        bPower = popt[0][1]
-        #a = averageGyradius[-1]#/times[-1]
-        #b = 0
-        if verbose:
-            label = "{}x+{}".format(a, b)
-            print(label)
-            plt.plot(x,averageGyradius)
-            y = a*np.array(x)+b
-            plt.plot(x,y, label=label)
-            y = powerFunc(x, aPower, bPower)
-            label = "{}x^{}".format(aPower, bPower)
-            plt.plot(x, y, label=label)
-            plt.legend(loc='upper left', prop={'size':6})
-            plt.savefig("tmpFig2.png")
-            plt.close()
-        if sqrt:
-            gyradiusSlope = aPower
-        else:
-            gyradiusSlope = a
-    except TypeError:
-        gyradiusSlope = 0
     return growthSlope, gyradiusSlope, timeList, numberOfIsland, neList
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
