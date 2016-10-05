@@ -17,6 +17,8 @@ def getAllValues(f, maxCoverage, sqrt=True):
     gyradiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
     timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
     neList = [[0 for x in range(w)] for y in range(maxCoverage)]
+    timeList[0].append(0)
+    neList[0].append(0)
     cov = 0
     previousLine = ""
     dataLine = ""
@@ -44,9 +46,9 @@ def getAllValues(f, maxCoverage, sqrt=True):
         previousLine = line
 
     if (sqrt):
-        return islandRadiusList, timeList, gyradiusList
+        return islandRadiusList, timeList, gyradiusList, neList
     else:
-        return islandSizesList, timeList, gyradiusList
+        return islandSizesList, timeList, gyradiusList, neList
 
 def powerFunc(x, a, b):
     """ a*x^b function """
@@ -70,7 +72,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             time30cov = 1
             return growthSlope, gyradiusSlope, time30cov, numberOfIsland
 
-    islandSizesList, timeList, gyradiusList = getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList, neList = getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
@@ -150,8 +152,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             gyradiusSlope = a
     except TypeError:
         gyradiusSlope = 0
-    time30cov = np.mean(np.array(timeList[30]).astype(np.float))
-    return growthSlope, gyradiusSlope, time30cov, numberOfIsland
+    return growthSlope, gyradiusSlope, timeList, numberOfIsland, neList
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
 def getRtt(index):
@@ -201,7 +202,7 @@ def getNumberOfEvents(time30cov):
     else:
         return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime))
 
-def getIslandDistribution(sqrt=True):
+def getIslandDistribution(sqrt=True, interval=False):
     """ computes the island distribution """
     chunk = 40
     coverage = 31
@@ -214,15 +215,27 @@ def getIslandDistribution(sqrt=True):
     for temperature in range(120, 221, 5):
         try:
             os.chdir(str(temperature))
-            growthSlope, gyradiusSlope, time30cov, numberOfIsland = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlope, gyradiusSlope, timeList, numberOfIsland, neList = openAndRead(chunk, coverage, sqrt, verbose)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
             numberOfIslands.append(numberOfIsland)
-            numberOfEvents, simulatedTime = getNumberOfEvents(time30cov)
-            if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
-                print("something went wrong")
-                print("\t"+str(numberOfEvents))
-                print("\t"+str(simulatedTime))
+            if (interval):
+                time2 = np.mean(np.array(timeList[30]).astype(np.float)) # get time at 30% of coverage
+                time1 = np.mean(np.array(timeList[20]).astype(np.float)) # get time at 20% of coverage
+                neList30 = [item for item in neList[30] if (float(item) >= 0)]  # remove negative values
+                ne2 = np.mean(np.array(neList30).astype(np.float))
+                neList20 = [item for item in neList[20] if (float(item) >= 0)]
+                ne1 = np.mean(np.array(neList20).astype(np.float))
+
+                numberOfEvents = ne2-ne1
+                simulatedTime = time2-time1
+            else:
+                time30cov = np.mean(np.array(timeList[30]).astype(np.float))
+                numberOfEvents, simulatedTime = getNumberOfEvents(time30cov)
+                if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
+                    print("something went wrong")
+                    print("\t"+str(numberOfEvents))
+                    print("\t"+str(simulatedTime))
             totalRatio.append(numberOfEvents/simulatedTime)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
