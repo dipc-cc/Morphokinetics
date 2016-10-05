@@ -40,6 +40,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int islandCount;
   private int monomerCount;
   private Island islands[];
+  private int innerPerimeter;
+  private int outerPerimeter;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -56,6 +58,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       includePerimeterList.add(Math.round(2 * Y_RATIO + 2 * i * Y_RATIO));
     }
     ucArray = new SimpleUc[hexaSizeI][hexaSizeJ];
+    innerPerimeter = 0;
+    outerPerimeter = 0;
   }
 
   public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
@@ -141,14 +145,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       for (int j = 0; j < getHexaSizeJ(); j++) {
         AbstractGrowthAtom atom = atoms[i][j];
         ucArray[i][j] = new SimpleUc(i, j, atom);
-        
+
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
       }
     }
   }
-  
-  final void setAngles() {   
+
+  final void setAngles() {
     for (int i = 0; i < size(); i++) {
       AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
@@ -171,6 +175,25 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         atom.setAngle(angle);
       }
     }
+  }
+
+  /**
+   * Inner perimeter is the sum of atoms that are occupied and have some neighbour not occupied.
+   * Thus, are in the limit of the island.
+   *
+   * @return number of atoms that are in the inner perimeter.
+   */
+  public int getInnerPerimeterLenght() {
+    return innerPerimeter;
+  }
+
+  /**
+   * Outer perimeter is the sum of atoms that are not occupied and are touching an occupied one.
+   *
+   * @return number of atoms that are in the outer perimeter.
+   */
+  public int getOuterPerimeterLenght() {
+    return outerPerimeter;
   }
 
   /**
@@ -507,7 +530,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
       AbstractGrowthUc uc = getUc(i);
-      for (int j=0; j< uc.size(); j++) {
+      for (int j = 0; j < uc.size(); j++) {
         identifyIsland(uc.getAtom(j), false);
       }
     }
@@ -531,6 +554,41 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       print.println("histogram " + histogram.toString());
     }
     return islandCount;
+  }
+  
+  /**
+   * Counts the sum of all islands perimeters. Results are saved in private attributes; call to
+   * {@link #getInnerPerimeterLenght()} and {@link #getOuterPerimeterLenght()} to get them.
+   *
+   * @param print to where should print the output: null (nowhere), standard output or a file.
+   */
+  public void countPerimeter(PrintWriter print) {
+    int occupiedNeighbours;
+    innerPerimeter = 0;
+    outerPerimeter = 0;
+    for (int i = 0; i < size(); i++) {
+      // visit all the atoms within the unit cell
+      AbstractGrowthUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        occupiedNeighbours = 0;
+        for (int k = 0; k < atom.getNumberOfNeighbours(); k++) {
+          if (atom.getNeighbour(k).isOccupied()) {
+            occupiedNeighbours++;
+          } 
+        }
+        if (atom.isOccupied() && occupiedNeighbours < atom.getNumberOfNeighbours()) {
+          innerPerimeter++;
+        }
+        if (!atom.isOccupied() && occupiedNeighbours > 0) {
+          outerPerimeter++;
+        }
+      }
+    }
+
+    if (print != null) {
+      print.println("Inner perimeter atoms " + innerPerimeter + " outer perimeter atoms " + outerPerimeter);
+    }
   }
   
   public void printDistances() {
