@@ -21,11 +21,12 @@ def radiusVsRate(folder="."):
 
     results = []
     sqrt = True
+    interval = True
 
     print(folder)
     try:
         os.chdir(folder)
-        oneResult = mk.getIslandDistribution(sqrt)
+        oneResult = mk.getIslandDistribution(sqrt, interval)
         results.append(oneResult)
     except OSError:
         print ("error changing to {}".format(folder))
@@ -33,6 +34,7 @@ def radiusVsRate(folder="."):
     print(results)
     plt.loglog(np.array(results[-1][1]), np.array(results[-1][0]),  label="growth"+folder)
     plt.loglog(np.array(results[-1][1]), np.array(results[-1][2]), label="gyradius")
+    plt.loglog(np.array(results[-1][1]), 1000/np.array(results[-1][4]), label="perimeter")
     plt.legend(loc='upper left', prop={'size':6})
 
 
@@ -40,7 +42,7 @@ if __name__ == '__main__':
     print("Why am I here?")
 workingPath = os.getcwd()
 flux = 3.5e-3
-radiusVsRate(flux)
+radiusVsRate()
 plt.savefig("singleFluxRadiusVsRate.png")
 
 print("Good bye!")

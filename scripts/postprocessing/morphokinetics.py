@@ -46,8 +46,9 @@ island size. It returns the slope of the fit, which is the growth rate."""
     # Curve fitting
     growthSlope = mk.getAverageGrowth(times, averageSizes, sqrt, verbose, "tmpFig.png")
     gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpFig2.png")
+    perimeterSlope = mk.getAverageGrowth(times, outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
 
-    return growthSlope, gyradiusSlope, timeList, numberOfIsland, neList
+    return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
 def getRtt(index):
@@ -104,15 +105,17 @@ def getIslandDistribution(sqrt=True, interval=False):
     verbose = False
     growthSlopes = []
     gyradiusSlopes = []
+    perimeterSlopes = []
     numberOfIslands = []
     totalRatio = []
     workingPath = os.getcwd()
     for temperature in range(120, 221, 5):
         try:
             os.chdir(str(temperature))
-            growthSlope, gyradiusSlope, timeList, numberOfIsland, neList = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList = openAndRead(chunk, coverage, sqrt, verbose)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
+            perimeterSlopes.append(perimeterSlope)
             numberOfIslands.append(numberOfIsland)
             if (interval):
                 time2 = np.mean(np.array(timeList[30]).astype(np.float)) # get time at 30% of coverage
@@ -141,4 +144,4 @@ def getIslandDistribution(sqrt=True, interval=False):
             a = 0 #do nothing
         os.chdir(workingPath)
 
-    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands
+    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes

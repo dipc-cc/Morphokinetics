@@ -48,8 +48,8 @@ def getAllValues(f, maxCoverage, sqrt=True):
             if (len(dataList) > 10):           # if gyradius was calculated store it
                 gyradiusList[cov].append(float(dataList[9]))
             if (len(dataList) > 11):           # if perimeter was calculated store it
-                innerPerimeterList.append(int(dataList[10]))
-                outerPerimeterList.append(int(dataList[11]))
+                innerPerimeterList[cov].append(int(dataList[10]))
+                outerPerimeterList[cov].append(int(dataList[11]))
             dataLine = previousLine
         previousLine = line
 
