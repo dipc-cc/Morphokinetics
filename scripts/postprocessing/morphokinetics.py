@@ -21,8 +21,10 @@ island size. It returns the slope of the fit, which is the growth rate."""
             print("Input file {} can not be openned. Exiting! ".format(fileName))
             growthSlope = 0
             gyradiusSlope = 0
+            perimeterSlope = 0
             time30cov = 1
-            return growthSlope, gyradiusSlope, time30cov, numberOfIsland
+            neList = 0
+            return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList
 
     islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList = mk.getAllValues(f, maxCoverage, sqrt)
     w = 0
@@ -112,6 +114,9 @@ def getIslandDistribution(sqrt=True, interval=False):
     for temperature in range(120, 221, 5):
         try:
             os.chdir(str(temperature))
+        except OSError:
+            print ("error changing to directory {}".format(temperature)) #do nothing
+        else:
             growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList = openAndRead(chunk, coverage, sqrt, verbose)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
@@ -139,9 +144,7 @@ def getIslandDistribution(sqrt=True, interval=False):
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
             except ValueError:
                 a = 0 # skip the writing
-        except OSError:
-            print ("error changing to directory {}".format(temperature))
-            a = 0 #do nothing
+
         os.chdir(workingPath)
 
     return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes
