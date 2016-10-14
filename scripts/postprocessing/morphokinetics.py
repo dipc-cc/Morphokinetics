@@ -26,7 +26,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             neList = 0
             return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList
 
-    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList = mk.getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines = mk.getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
@@ -39,17 +39,17 @@ island size. It returns the slope of the fit, which is the growth rate."""
             # do histogram
             histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk, chunk), density=False))
             # average
-            numberOfIsland += len(islandSizes)
             averageSizes.append(np.mean(islandSizes))
             times.append(np.mean(np.array(timeList[index]).astype(np.float)))
             if verbose:
                 print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
-
+            if index == 30: # only count islands in 30% of coverage
+                numberOfIsland = len(islandSizes)/(readLines/30) # divide all islands by number of iterations
+                
     # Curve fitting
     growthSlope = mk.getAverageGrowth(times, averageSizes, sqrt, verbose, "tmpFig.png")
     gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpFig2.png")
     perimeterSlope = mk.getAverageGrowth(times, outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
-
     return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])

@@ -27,9 +27,11 @@ def getAllValues(f, maxCoverage, sqrt=True):
     cov = 0
     previousLine = ""
     dataLine = ""
+    readLines = 0
     # if found the coverage, save the next line (with the histogram)
     for line in f:
         if cov:
+            readLines += 1
             dataList = re.split(',|\[|\]', dataLine)
             iterList = iter(dataList) # get island histogram
             next(iterList) # skip the first and second entries of histogram ("histogram" word and value of unoccupied positions)
@@ -54,9 +56,9 @@ def getAllValues(f, maxCoverage, sqrt=True):
         previousLine = line
 
     if (sqrt):
-        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList
+        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines
     else:
-        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList
+        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines
 
     
 def getAverageGrowth(times, gyradiusList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
