@@ -15,8 +15,9 @@ label = r'Average island radius growth rate $\sqrt{{ \dot{{r}} }} $'
 plt.ylabel(label)
 label = r'Time-averaged total rate $ < R >_t $'
 plt.xlabel(label)
-plt.legend(loc='upper left', prop={'size':6})
-plt.grid(True)
+fig, ax1 = plt.subplots()
+ax2 = ax1.twinx()
+ax1.grid(True)
 
 workingPath = os.getcwd()
 results = []
@@ -37,13 +38,13 @@ for i in range(-3,-2):
         a = 0 #do nothing
     os.chdir(workingPath)
     axes = plt.gca()
-    axes.set_ylim([1e5,1e7])
-    plt.semilogy(1/(kb*np.array(temperatures)), 1e5*np.array(results[-1][0]),  "x-", label=folder)
-    plt.semilogy(1/(kb*np.array(temperatures)), np.array(results[-1][1]),  "s-", label=folder)
-    plt.semilogy(1/(kb*np.array(temperatures)), 1e-5*np.array(Rtt),  "1", label=folder)
-    plt.semilogy(1/(kb*np.array(temperatures)), 2e-2*np.array(Rstep),  "1", label=folder)
+    lng3 = ax2.semilogy(1/(kb*np.array(temperatures)), np.array(results[-1][3]),  "-r", label="islands"+folder)
+    lng1 = ax1.semilogy(1/(kb*np.array(temperatures)), 1e5*np.array(results[-1][0]),  "x-", label="growth "+folder)
+    lng2 = ax1.semilogy(1/(kb*np.array(temperatures)), np.array(results[-1][1]),  "s-", label="ratio "+folder)
+    lng = lng1 + lng2 + lng3
+    labs = [l.get_label() for l in lng]
+    plt.legend(lng, labs, loc='upper right', prop={'size':6})
     
-    plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("radiusVsRate.png")
     
 plt.close()
