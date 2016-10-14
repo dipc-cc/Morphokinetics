@@ -32,7 +32,7 @@ for i in range(-3,-2):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(False, False))
+        results.append(mk.getIslandDistribution(temperatures, False, False))
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing

@@ -100,7 +100,7 @@ def getNumberOfEvents(time30cov):
     else:
         return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime))
 
-def getIslandDistribution(sqrt=True, interval=False):
+def getIslandDistribution(temperatures, sqrt=True, interval=False):
     """ computes the island distribution """
     chunk = 40
     coverage = 31
@@ -111,7 +111,7 @@ def getIslandDistribution(sqrt=True, interval=False):
     numberOfIslands = []
     totalRatio = []
     workingPath = os.getcwd()
-    for temperature in range(120, 221, 5):
+    for temperature in temperatures:
         try:
             os.chdir(str(temperature))
         except OSError:
