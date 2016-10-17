@@ -44,11 +44,10 @@ def getAllValues(f, maxCoverage, sqrt=True):
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
             cov = int(line[2]+line[3])         # get coverage
-            if (cov >= maxCoverage):
-                cov = 0
+            if (cov >= maxCoverage):           
+                cov = 0                        # coverage is bigger than wanted, skip
             else:
                 dataList = re.split('\t|\n', line) # split line into a list
-                #print(cov)
                 timeList[cov].append(dataList[1])  # get the time and store it in a list
                 neList[cov].append(dataList[7])    # get number of events and store it in a list
                 if (len(dataList) > 10):           # if gyradius was calculated store it
