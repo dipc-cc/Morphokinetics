@@ -133,7 +133,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
                 numberOfEvents = ne2-ne1
                 simulatedTime = time2-time1
             else:
-                time30cov = np.mean(np.array(timeList[30]).astype(np.float))
+                time30cov = np.mean(np.array(timeList[coverage-1]).astype(np.float))
                 numberOfEvents, simulatedTime = getNumberOfEvents(time30cov)
                 if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
                     print("something went wrong")
