@@ -44,15 +44,19 @@ def getAllValues(f, maxCoverage, sqrt=True):
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
             cov = int(line[2]+line[3])         # get coverage
-            dataList = re.split('\t|\n', line) # split line into a list
-            timeList[cov].append(dataList[1])  # get the time and store it in a list
-            neList[cov].append(dataList[7])    # get number of events and store it in a list
-            if (len(dataList) > 10):           # if gyradius was calculated store it
-                gyradiusList[cov].append(float(dataList[9]))
-            if (len(dataList) > 11):           # if perimeter was calculated store it
-                innerPerimeterList[cov].append(int(dataList[10]))
-                outerPerimeterList[cov].append(int(dataList[11]))
-            dataLine = previousLine
+            if (cov >= maxCoverage):
+                cov = 0
+            else:
+                dataList = re.split('\t|\n', line) # split line into a list
+                #print(cov)
+                timeList[cov].append(dataList[1])  # get the time and store it in a list
+                neList[cov].append(dataList[7])    # get number of events and store it in a list
+                if (len(dataList) > 10):           # if gyradius was calculated store it
+                    gyradiusList[cov].append(float(dataList[9]))
+                if (len(dataList) > 11):           # if perimeter was calculated store it
+                    innerPerimeterList[cov].append(int(dataList[10]))
+                    outerPerimeterList[cov].append(int(dataList[11]))
+                dataLine = previousLine
         previousLine = line
 
     if (sqrt):
