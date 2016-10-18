@@ -283,26 +283,30 @@ public class KmcCanvas extends Canvas {
 
     // try/catch TODO
     if (printIslandCentres) {
-      for (int i = 0; i < lattice.getIslandCount(); i++) {
-        Island island = lattice.getIsland(i);
-        Point2D point = island.getCentreOfMass();
-        int Y = (int) Math.round((point.getY()) * scale) + baseY;
-        int X = (int) Math.round((point.getX()) * scale) + baseX;
-        g.setColor(BLACK);
-        g.drawLine(X - 5, Y - 5, X + 5, Y + 5);
-        g.drawLine(X - 5, Y + 5, X + 5, Y - 5);
-        g.drawOval(X - 5, Y - 5, 10, 10);
-        g.setColor(RED);
-        int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
-        int radius = (int) Math.round(scale * island.getMaxDistance());
-        g.drawOval(X - radius, Y - radius, diameter, diameter);
-        g.drawString(Double.toString(island.getMaxDistance()), X, Y + 40);
-        g.setColor(GREEN);
-        diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
-        radius = (int) Math.round(scale * island.getAvgDistance());
-        g.drawOval(X - radius, Y - radius, diameter, diameter);
-        g.setColor(BLACK);
-        g.drawString(Double.toString(island.getAvgDistance()), X, Y + 10);
+      try {
+        for (int i = 0; i < lattice.getIslandCount(); i++) {
+          Island island = lattice.getIsland(i);
+          Point2D point = island.getCentreOfMass();
+          int Y = (int) Math.round((point.getY()) * scale) + baseY;
+          int X = (int) Math.round((point.getX()) * scale) + baseX;
+          g.setColor(BLACK);
+          g.drawLine(X - 5, Y - 5, X + 5, Y + 5);
+          g.drawLine(X - 5, Y + 5, X + 5, Y - 5);
+          g.drawOval(X - 5, Y - 5, 10, 10);
+          g.setColor(RED);
+          int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
+          int radius = (int) Math.round(scale * island.getMaxDistance());
+          g.drawOval(X - radius, Y - radius, diameter, diameter);
+          g.drawString(Double.toString(island.getMaxDistance()), X, Y + 40);
+          g.setColor(GREEN);
+          diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
+          radius = (int) Math.round(scale * island.getAvgDistance());
+          g.drawOval(X - radius, Y - radius, diameter, diameter);
+          g.setColor(BLACK);
+          g.drawString(Double.toString(island.getAvgDistance()), X, Y + 10);
+        }
+      } catch (NullPointerException e) {
+        System.err.println("Some island centre or gyradius can not be printed. Ignoring and continuing... ");
       }
     }
     g.dispose();
