@@ -138,7 +138,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   }
   
   /**
-   * Updated the progress bar of the bottom of the frame.
+   * Updates the progress bar of the bottom of the frame.
    * 
    * @param coverage 
    */
