@@ -16,7 +16,6 @@ public class Island {
   private int islandNumber;
   private int numberOfAtoms;
   private double maxDistance;
-  private double avgDistance;
   private double sumDistance;
   private Point2D centreOfMass;
 
@@ -45,21 +44,13 @@ public class Island {
   public double getMaxDistance() {
     return Math.sqrt(maxDistance);
   }
-
-  public void setMaxDistance(double maxDistance) {
-    this.maxDistance = maxDistance;
-  }
-
+  
   /**
    * Equation (15) of Kinsner, A unified approach to fractal dimensions.
    * @return 
    */
   public double getAvgDistance() {
     return Math.sqrt(sumDistance / (double) numberOfAtoms);
-  }
-  
-  public void setAvgDistance(int avgDistance) {
-    this.avgDistance = avgDistance;
   }
 
   public Point2D getCentreOfMass() {
