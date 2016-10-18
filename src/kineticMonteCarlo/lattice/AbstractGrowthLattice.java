@@ -24,7 +24,6 @@ import static java.lang.Math.abs;
 import static java.lang.Math.atan;
 import static java.lang.Math.cos;
 import static java.lang.Math.floorDiv;
-import static java.lang.Math.pow;
 import static java.lang.Math.sin;
 
 /**
