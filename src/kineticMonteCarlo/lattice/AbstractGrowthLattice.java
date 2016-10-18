@@ -590,7 +590,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           innerPerimeter++;
         }
         if (!atom.isOccupied() && occupiedNeighbours > 0) {
-          outerPerimeter++;
+          outerPerimeter++; // it can also be +=occupiedNeighbours;
         }
       }
     }
