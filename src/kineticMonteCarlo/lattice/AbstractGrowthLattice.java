@@ -14,9 +14,18 @@ import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.QuickSort;
 import java.util.List;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import static java.lang.Math.abs;
 import kineticMonteCarlo.unitCell.IUc;
 import java.util.Arrays;
+import static java.lang.Math.PI;
+import static java.lang.Math.atan2;
+import static java.lang.Math.sqrt;
+import static java.lang.Math.round;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan;
+import static java.lang.Math.cos;
+import static java.lang.Math.floorDiv;
+import static java.lang.Math.pow;
+import static java.lang.Math.sin;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -26,7 +35,7 @@ import java.util.Arrays;
  */
 public abstract class AbstractGrowthLattice extends AbstractLattice implements IDevitaLattice {
 
-  public static final float Y_RATIO = (float) Math.sqrt(3) / 2.0F; // it is the same as: sin 60º
+  public static final float Y_RATIO = (float) sqrt(3) / 2.0F; // it is the same as: sin 60º
 
   /**
    * Unit cell array, where all the atoms are located.
@@ -55,7 +64,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     // Initialise the square perimeter include points. This is required because the number of points in the horizontal and vertical perimeters should be as equal as possible.
     includePerimeterList = new ArrayList<>();
     for (int i = 0; i < 256; i++) {
-      includePerimeterList.add(Math.round(2 * Y_RATIO + 2 * i * Y_RATIO));
+      includePerimeterList.add(round(2 * Y_RATIO + 2 * i * Y_RATIO));
     }
     ucArray = new SimpleUc[hexaSizeI][hexaSizeJ];
     innerPerimeter = 0;
@@ -126,7 +135,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   @Override
   public AbstractGrowthUc getUc(int pos) {
-    int j = Math.floorDiv(pos, getHexaSizeI());
+    int j = floorDiv(pos, getHexaSizeI());
     int i = pos - (j * getHexaSizeI());
 
     return ucArray[i][j];
@@ -165,12 +174,12 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         if (xDif == 0) {
           xDif = 1e-8;
         }
-        double angle = Math.atan(yDif / xDif);
+        double angle = atan(yDif / xDif);
         if (xDif < 0) {
-          angle = Math.PI + angle;
+          angle = PI + angle;
         }
         if (xDif >= 0 && yDif < 0) {
-          angle = 2 * Math.PI + angle;
+          angle = 2 * PI + angle;
         }
         atom.setAngle(angle);
       }
@@ -296,15 +305,15 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         // atom belongs to an island
         if (islandNumber > 0) {
           double posX = atom.getPos().getX() + uc.getPos().getX();
-          double distanceX = Math.abs(posX - islands[islandNumber - 1].getCentreOfMass().getX());
+          double distanceX = abs(posX - islands[islandNumber - 1].getCentreOfMass().getX());
           if (distanceX > getCartSizeX() / 2) {
-            distanceX = getCartSizeX()-distanceX;
+            distanceX = getCartSizeX() - distanceX;
           }
           
           double posY = atom.getPos().getY() + uc.getPos().getY();
-          double distanceY = Math.abs(posY - islands[islandNumber - 1].getCentreOfMass().getY());
+          double distanceY = abs(posY - islands[islandNumber - 1].getCentreOfMass().getY());
           if (distanceY > getCartSizeY() / 2) {
-            distanceY = getCartSizeY()-distanceY;
+            distanceY = getCartSizeY() - distanceY;
           }
           
           islands[islandNumber - 1].update(distanceX, distanceY);
@@ -344,7 +353,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public void getCentreOfMass() {
     int islandAmount = getIslandCount();
     int counter[] = new int[islandAmount];
-    double valueTheta;
+    double theta;
     double xiX[] = new double[islandAmount];
     double zetaX[] = new double[islandAmount];
     double xiY[] = new double[islandAmount];
@@ -360,14 +369,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         // atom belongs to an island
         if (islandNumber > 0) {
           double posX = atom.getPos().getX() + uc.getPos().getX();
-          valueTheta = (posX / getCartSizeX()) * 2.0 * Math.PI;
-          xiX[islandNumber - 1] += Math.cos(valueTheta);
-          zetaX[islandNumber - 1] += Math.sin(valueTheta);
+          theta = (posX / getCartSizeX()) * 2.0 * PI;
+          xiX[islandNumber - 1] += cos(theta);
+          zetaX[islandNumber - 1] += sin(theta);
 
           double posY = atom.getPos().getY() + uc.getPos().getY();
-          valueTheta = (posY / getCartSizeY()) * 2.0 * Math.PI;
-          xiY[islandNumber - 1] += Math.cos(valueTheta);
-          zetaY[islandNumber - 1] += Math.sin(valueTheta);
+          theta = (posY / getCartSizeY()) * 2.0 * PI;
+          xiY[islandNumber - 1] += cos(theta);
+          zetaY[islandNumber - 1] += sin(theta);
 
           counter[islandNumber - 1]++;
         }
@@ -377,8 +386,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     // get centres
     for (int i = 0; i < islandAmount; i++) {
       // values lower than 1e-10 are considered -0
-      double centreX = (getCartSizeX() * (Math.atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
-      double centreY = (getCartSizeY() * (Math.atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + Math.PI)) / (2 * Math.PI);
+      double centreX = (getCartSizeX() * (atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + PI)) / (2 * PI);
+      double centreY = (getCartSizeY() * (atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + PI)) / (2 * PI);
       islands[i].setCentreOfMass(new Point2D.Double(centreX, centreY));
     }
   }
@@ -604,7 +613,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   private double toZeroIfTooClose(double value) {
-    return Math.abs(value) < 1e-10 ? -0.0d : value;
+    return abs(value) < 1e-10 ? -0.0d : value;
   }
 
   /**
