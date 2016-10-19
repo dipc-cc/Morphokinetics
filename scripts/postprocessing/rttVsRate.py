@@ -64,19 +64,13 @@ for i in range(-6,1):
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = np.array(results[-1][1])/(flux**0.82)
     r = np.array(Rtt)/flux**0.39
-    #plt.loglog(totalRatio, vSlope, "-", label="slopes"+folder)
     plt.loglog(r, totalRatio, "-", label="inverse island"+folder)
-    #plt.loglog(np.array(results[-1][1]), np.array(results[-1][0]),  "x", label=folder)
-    #plt.semilogy(1/(kb*np.array(temperatures)), 1e5*np.array(results[-1][0]),  "x-", label=folder)
-    #plt.semilogy(1/(kb*np.array(temperatures)), np.array(results[-1][1]),  "s-", label=folder)
-    #plt.semilogy(1/(kb*np.array(temperatures)), 1e-5*np.array(Rtt),  "1", label=folder)
-    #plt.semilogy(1/(kb*np.array(temperatures)), 2e-2*np.array(Rstep),  "1", label=folder)
     if (i > -7):
         popt = curve_fit(powerFunc, r, totalRatio)
         a = popt[0][0]
         b = popt[0][1]
         a = 500
-        b = 0.6666
+        b = 0.6666 # The fit is either this or 1/3
         label = "{}x^{}".format(a, b)
         x = r
         y = powerFunc(x, a, b)
