@@ -30,7 +30,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             monomersList.append(0.0)
             return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList, monomersList
 
-    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList = mk.getAllValues(f, maxCoverage, sqrt, False)
+    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList = mk.getAllValues(f, maxCoverage, sqrt)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
