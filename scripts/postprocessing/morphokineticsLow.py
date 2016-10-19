@@ -9,7 +9,7 @@ def powerFunc(x, a, b):
     """ a*x^b function """
     return a*x**b
 
-def getAllValues(f, maxCoverage, sqrt=True):
+def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
     """ reads all the values for the corresponding coverage """
     
     #get something like 0.05000 expression to be grepped 
@@ -19,9 +19,11 @@ def getAllValues(f, maxCoverage, sqrt=True):
     islandRadiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
     gyradiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
     timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
+    monomersList = [[0 for x in range(w)] for y in range(maxCoverage)]
     neList = [[0 for x in range(w)] for y in range(maxCoverage)]
     innerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
     outerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
+    islandNumberList = [[0 for x in range(w)] for y in range(maxCoverage)]
     timeList[0].append(0)
     neList[0].append(0)
     cov = 0
@@ -30,7 +32,7 @@ def getAllValues(f, maxCoverage, sqrt=True):
     readLines = 0
     # if found the coverage, save the next line (with the histogram)
     for line in f:
-        if cov:
+        if cov and getSlopes:
             readLines += 1
             dataList = re.split(',|\[|\]', dataLine)
             iterList = iter(dataList) # get island histogram
@@ -49,19 +51,21 @@ def getAllValues(f, maxCoverage, sqrt=True):
             else:
                 dataList = re.split('\t|\n', line) # split line into a list
                 timeList[cov].append(dataList[1])  # get the time and store it in a list
+                monomersList[cov].append(dataList[6])  # get the number of monomers
                 neList[cov].append(dataList[7])    # get number of events and store it in a list
                 if (len(dataList) > 10):           # if gyradius was calculated store it
                     gyradiusList[cov].append(float(dataList[9]))
                 if (len(dataList) > 11):           # if perimeter was calculated store it
                     innerPerimeterList[cov].append(int(dataList[10]))
                     outerPerimeterList[cov].append(int(dataList[11]))
+                islandNumberList[cov].append(int(dataList[3]))
                 dataLine = previousLine
         previousLine = line
 
     if (sqrt):
-        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines
+        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList
     else:
-        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines
+        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList
 
     
 def getAverageGrowth(times, gyradiusList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
