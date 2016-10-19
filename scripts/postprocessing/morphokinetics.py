@@ -22,15 +22,20 @@ island size. It returns the slope of the fit, which is the growth rate."""
             growthSlope = 0
             gyradiusSlope = 0
             perimeterSlope = 0
-            time30cov = 1
+            time30cov = []
+            for i in range(0,maxCoverage):
+                time30cov.append(1)
             neList = 0
-            return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList
+            monomersList = []
+            monomersList.append(0.0)
+            return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList, monomersList
 
-    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines = mk.getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList = mk.getAllValues(f, maxCoverage, sqrt, False)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
     times = []
+    monomers = []
     if verbose:
         print("Average island size for")
 
@@ -41,16 +46,22 @@ island size. It returns the slope of the fit, which is the growth rate."""
             # average
             averageSizes.append(np.mean(islandSizes))
             times.append(np.mean(np.array(timeList[index]).astype(np.float)))
+            monomers.append(np.mean(np.array(monomersList[index]).astype(np.float)))
             if verbose:
                 print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
             if index == 30: # only count islands in 30% of coverage
                 numberOfIsland = len(islandSizes)/(readLines/30) # divide all islands by number of iterations
-                
+
+    numberOfIsland = np.mean(np.array(islandNumberList[30]))
+
     # Curve fitting
     growthSlope = mk.getAverageGrowth(times, averageSizes, sqrt, verbose, "tmpFig.png")
     gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpFig2.png")
+    mk.getAverageGrowth(averageSizes, gyradiusList, sqrt, verbose, "tmpFig4.png")
+    coverages = 400*400/100*np.arange(0.0,maxCoverage, 1)/(numberOfIsland+1)
+    mk.getAverageGrowth(times, coverages, sqrt, verbose, "tmpFig5.png")
     perimeterSlope = mk.getAverageGrowth(times, outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
-    return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList
+    return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList
 
 Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
 def getRtt(index):
@@ -110,6 +121,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
     perimeterSlopes = []
     numberOfIslands = []
     totalRatio = []
+    numberOfMonomers = []
     workingPath = os.getcwd()
     for temperature in temperatures:
         try:
@@ -117,11 +129,12 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
         except OSError:
             print ("error changing to directory {}".format(temperature)) #do nothing
         else:
-            growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList = openAndRead(chunk, coverage, sqrt, verbose)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
             perimeterSlopes.append(perimeterSlope)
             numberOfIslands.append(numberOfIsland)
+            numberOfMonomers.append(np.mean(np.array(monomersList[-1]).astype(np.float)))
             if (interval):
                 time2 = np.mean(np.array(timeList[30]).astype(np.float)) # get time at 30% of coverage
                 time1 = np.mean(np.array(timeList[20]).astype(np.float)) # get time at 20% of coverage
@@ -146,5 +159,4 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
                 a = 0 # skip the writing
 
         os.chdir(workingPath)
-
-    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes
+    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes, numberOfMonomers
