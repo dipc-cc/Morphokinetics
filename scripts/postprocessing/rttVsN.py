@@ -25,7 +25,7 @@ plt.grid(True)
 
 workingPath = os.getcwd()
 results = []
-temperatures = list(range(120,221,5))
+temperatures = list(range(120,321,5))
 kb = 8.6173324e-5
 
 for i in range(-6,1):
@@ -59,7 +59,7 @@ for i in range(-6,1):
         x = r
         y = powerFunc(x, a, b)
         plt.loglog(x, y, label=label)
-    plt.legend(loc='upper left', prop={'size':6})
+    plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("rttVsN.png")
     
 plt.close()
