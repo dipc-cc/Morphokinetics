@@ -63,9 +63,12 @@ island size. It returns the slope of the fit, which is the growth rate."""
     perimeterSlope = mk.getAverageGrowth(times, outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
     return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList
 
-Rtt = ([39840, 86370, 176400, 341700, 631400, 1118000, 1907000, 3141000, 5015000, 7784000, 11770000, 17390000, 25130000, 35610000, 49540000, 67760000, 91250000, 121100000, 158600000, 205000000, 262000000])
-def getRtt(index):
-    return Rtt[index]
+def getRtt(temperatures):
+    kb = 8.6173324e-5
+    Rtt = []
+    for index,i in enumerate(temperatures):
+        Rtt.append(1e13*np.exp(-0.2/(kb*i)))
+    return Rtt
 
 def getAllRtt():
     return Rtt
