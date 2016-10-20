@@ -17,6 +17,7 @@ label = r'Time-averaged total rate $ < R >_t $'
 plt.xlabel(label)
 plt.legend(loc='upper left', prop={'size':6})
 plt.grid(True)
+temperatures = list(range(120,221,5))
 
 workingPath = os.getcwd()
 results = []
@@ -26,7 +27,7 @@ for i in range(-6,5):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution())
+        results.append(mk.getIslandDistribution(temperatures, False, False))
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
