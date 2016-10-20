@@ -29,10 +29,14 @@ for i in range(-6,5):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution())
+        results.append(mk.getIslandDistribution(temperatures, True, False))
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
+    while(len(temperatures) > len(results[-1][0])):
+        results[-1][0].append(0)
+        results[-1][3].append(0)
+        
     os.chdir(workingPath)
     plt.loglog(1/(np.array(temperatures)*8.62e-5), np.array(results[-1][0])/(flux**yPower), label=folder)
     plt.legend(loc='upper right', prop={'size':6})
