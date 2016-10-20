@@ -15,7 +15,6 @@ label = r'Average island radius growth rate $\sqrt{{ \dot{{r}} }} $'
 plt.ylabel(label)
 label = r'Time-averaged total rate $ < R >_t $'
 plt.xlabel(label)
-plt.legend(loc='upper left', prop={'size':6})
 plt.grid(True)
 
 workingPath = os.getcwd()
@@ -23,8 +22,6 @@ results = []
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
-rAll = []
-nAll = []
 for i in range(-6,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
@@ -47,17 +44,13 @@ for i in range(-6,1):
         results[-1][3].append(0)
 
     v = 0.82*400*400/(np.array(results[-1][3]))*(flux**0.21)
-    #v = flux*0.7*400*400/(np.array(results[-1][3]))*(flux**0)
     n = np.array(results[-1][3])
-    nAll.append(n)
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = np.array(results[-1][1])/(flux**0.81)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    #plt.plot(x, y, ".")
     gyradius = (np.array(results[-1][2])/(flux**0.88))**((np.array(y)-1))
     r = np.array(mk.getRtt(temperatures))#/flux**0.36
-    #plt.loglog(totalRatio, vSlope, "-", label="slopes"+folder)
     plt.loglog(totalRatio, gyradius, "-", label="inverse island"+folder)
     if (i < -7):
         popt = curve_fit(mk.powerFunc, r, totalRatio)

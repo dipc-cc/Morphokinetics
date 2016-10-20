@@ -21,15 +21,7 @@ workingPath = os.getcwd()
 results = []
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
-Rtt = []
-Rstep = ([85941.5666677768, 185709.051983031, 378203.30334162, 730700.474287996, 1346871.73342121, 2380119.6620485, 4049377.66119581, 6657170.49755918, 10609590.0115993, 16437717.6779536, 24819933.7510902, 36604495.7633867, 52831748.04825, 74755336.5257832, 103861844.747233, 141888332.294831, 190837338.622147, 252989007.881088, 330910087.306819, 427459648.223626, 545791470.564676])
-for index,i in enumerate(temperatures):
-    Rtt.append(1e13*np.exp(-0.2/(kb*i)))
 
-#temp2 = list(range(205,221,5))
-#temperatures = temperatures + temp2 # concatenation
-rAll = []
-nAll = []
 for i in range(-6,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
@@ -41,10 +33,6 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    axes = plt.gca()
-    #axes.set_ylim([1e4,1e7])
-    #axes.set_xlim([3e6,1e9])
-    #adapt y to x size
     while(len(temperatures) > len(results[-1][0])):
         results[-1][0].append(0)
         results[-1][1].append(0)
@@ -52,18 +40,14 @@ for i in range(-6,1):
         results[-1][3].append(0)
 
     v = 0.82*400*400/(np.array(results[-1][3]))*(flux**0.21)
-    #v = flux*0.7*400*400/(np.array(results[-1][3]))*(flux**0)
     n = np.array(results[-1][3])
-    nAll.append(n)
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = (np.array(results[-1][1])/(flux**0.81))**(1)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    #plt.plot(x, y, ".")
     gyradius = 4e7*(np.array(results[-1][2])/(flux**0.88))**(3/4*(np.array(y)-1))
     gyradius = 1.3e5*(np.array(results[-1][2])/(flux**0.88))**(3*(np.array(y)-1))
     r = np.array(Rtt)/flux**0.36
-    #plt.loglog(totalRatio, vSlope, "-", label="slopes"+folder)
     inverseTemperature = 1/(kb*np.array(temperatures))
     plt.semilogy(inverseTemperature, gyradius, "-", label="gyradius "+folder)
     plt.semilogy(inverseTemperature, totalRatio, "--", label="total ratio "+folder)

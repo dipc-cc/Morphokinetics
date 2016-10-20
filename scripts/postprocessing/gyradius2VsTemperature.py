@@ -24,10 +24,6 @@ results = []
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
-#temp2 = list(range(205,221,5))
-#temperatures = temperatures + temp2 # concatenation
-rAll = []
-nAll = []
 for i in range(-6,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
@@ -39,10 +35,6 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    axes = plt.gca()
-    #axes.set_ylim([1e4,1e7])
-    #axes.set_xlim([3e6,1e9])
-    #adapt y to x size
     while(len(temperatures) > len(results[-1][0])):
         results[-1][0].append(0)
         results[-1][1].append(0)
@@ -52,12 +44,10 @@ for i in range(-6,1):
     v = 0.82*400*400/(np.array(results[-1][3]))*(flux**0.21)
     #v = flux*0.7*400*400/(np.array(results[-1][3]))*(flux**0)
     n = np.array(results[-1][3])
-    nAll.append(n)
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = (np.array(results[-1][1])/(flux**0.81))**(1)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    #plt.plot(x, y, ".")
     gyradius = np.array(results[-1][2])
     f = math.pi
     c = 4e-1
