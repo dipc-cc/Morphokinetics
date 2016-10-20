@@ -27,13 +27,7 @@ workingPath = os.getcwd()
 results = []
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
-Rtt = []
-Rstep = ([85941.5666677768, 185709.051983031, 378203.30334162, 730700.474287996, 1346871.73342121, 2380119.6620485, 4049377.66119581, 6657170.49755918, 10609590.0115993, 16437717.6779536, 24819933.7510902, 36604495.7633867, 52831748.04825, 74755336.5257832, 103861844.747233, 141888332.294831, 190837338.622147, 252989007.881088, 330910087.306819, 427459648.223626, 545791470.564676])
-for index,i in enumerate(temperatures):
-    Rtt.append(1e13*np.exp(-0.2/(kb*i)))
 
-#temp2 = list(range(205,221,5))
-#temperatures = temperatures + temp2 # concatenation
 rAll = []
 nAll = []
 for i in range(-6,1):
@@ -63,7 +57,7 @@ for i in range(-6,1):
     nAll.append(n)
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = np.array(results[-1][1])/(flux**0.82)
-    r = np.array(Rtt)/flux**0.39
+    r = np.array(mk.getRtt(temperatures))/flux**0.39
     plt.loglog(r, totalRatio, "-", label="inverse island"+folder)
     if (i > -7):
         popt = curve_fit(powerFunc, r, totalRatio)
