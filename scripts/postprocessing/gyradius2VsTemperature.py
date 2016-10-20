@@ -11,27 +11,7 @@ import matplotlib.pyplot as plt
 import morphokinetics as mk
 from scipy.optimize import curve_fit
 
-
-def powerFunc(x, a, b):
-    """ a*x^b function """
-    return a*x**b
-
-def fractalDFunc(x):
-    """"""
-    minD = 1.66
-    y = []
-    for i in range(len(x)):
-        if (x[i] <= 3e7):
-            y.append(minD)
-        else:
-            if (x[i] > 5e8):
-                y.append(2.0)
-            else:
-                #y.append(minD+(2-minD)/np.log(5e8/3e7)*np.log(x[i]))
-                y.append(minD+(2-minD)/(5e8-3e7)*(x[i]-3e7))
-    return y
-            
-    
+         
 label = r'total rate and gyradius'
 plt.ylabel(label)
 label = r'1/kbT'
@@ -76,7 +56,7 @@ for i in range(-6,1):
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = (np.array(results[-1][1])/(flux**0.81))**(1)
     x = totalRatio
-    y = fractalDFunc(x)
+    y = mk.fractalDFunc(x)
     #plt.plot(x, y, ".")
     gyradius = np.array(results[-1][2])
     f = math.pi
@@ -89,14 +69,14 @@ for i in range(-6,1):
     plt.semilogy(inverseTemperature, gyradius, "-", label="gyradius "+folder)
     plt.semilogy(inverseTemperature, gyradiusCalc, "--", label="gyradius calc "+folder)
     if (i < -7):
-        popt = curve_fit(powerFunc, r, totalRatio)
+        popt = curve_fit(mk.powerFunc, r, totalRatio)
         a = popt[0][0]
         b = popt[0][1]
         a = 8e-11
         b = 1.33
         label = "{}x^{}".format(a, b)
         x = r
-        y = powerFunc(x, a, b)
+        y = mk.powerFunc(x, a, b)
         plt.loglog(x, y, label=label)
     plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("gyradiusVsTemperature.png")

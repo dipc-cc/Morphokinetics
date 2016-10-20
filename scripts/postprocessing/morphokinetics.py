@@ -6,6 +6,25 @@ import numpy as np
 import morphokineticsLow as mk
 
 
+def powerFunc(x, a, b):
+    """ a*x^b function """
+    return a*x**b
+
+def fractalDFunc(x):
+    """"""
+    minD = 1.66
+    y = []
+    for i in range(len(x)):
+        if (x[i] <= 3e7):
+            y.append(minD)
+        else:
+            if (x[i] > 5e8):
+                y.append(2.0)
+            else:
+                #y.append(minD+(2-minD)/np.log(5e8/3e7)*np.log(x[i]))
+                y.append(minD+(2-minD)/(5e8-3e7)*(x[i]-3e7))
+    return y
+
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""

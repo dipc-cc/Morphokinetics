@@ -11,10 +11,6 @@ import morphokinetics as mk
 from scipy.optimize import curve_fit
 
 
-def powerFunc(x, a, b):
-    """ a*x^b function """
-    return a*x**b
-
 plt.title("Average island growth")
 label = r''
 plt.ylabel(label)
@@ -57,14 +53,14 @@ for i in range(-6,1):
     r = np.array( mk.getRtt(temperatures))#/flux**0.5
     plt.loglog(mtt, r, "-", label="N "+folder)
     if (i < -7):
-        popt = curve_fit(powerFunc, r, mtt)
+        popt = curve_fit(mk.powerFunc, r, mtt)
         a = popt[0][0]
         b = popt[0][1]
         x = r
         a = 2e2
         b = 2/3
         label = "{}x^{}".format(a, b)
-        y = powerFunc(x, a, b)
+        y = mk.powerFunc(x, a, b)
         plt.loglog(x, y, label=label)
     plt.legend(loc='lower right', prop={'size':6})
     plt.savefig("aeRatioVsRate.png")
