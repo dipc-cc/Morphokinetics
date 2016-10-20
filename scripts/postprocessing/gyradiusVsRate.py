@@ -31,7 +31,7 @@ def fractalDFunc(x):
     return y
             
     
-plt.title("Average island growth")
+plt.title("Average gyradius growth")
 label = r'Average island radius growth rate $\sqrt{{ \dot{{r}} }} $'
 plt.ylabel(label)
 label = r'Time-averaged total rate $ < R >_t $'
@@ -81,12 +81,12 @@ for i in range(-6,1):
     totalRatio = np.array(results[-1][1])/(flux**0.81)
     x = totalRatio
     y = fractalDFunc(x)
-    plt.plot(x, y, ".")
+    #plt.plot(x, y, ".")
     gyradius = (np.array(results[-1][2])/(flux**0.88))**((np.array(y)-1))
-    r = np.array(Rtt)/flux**0.36
+    r = np.array(Rtt)#/flux**0.36
     #plt.loglog(totalRatio, vSlope, "-", label="slopes"+folder)
     plt.loglog(totalRatio, gyradius, "-", label="inverse island"+folder)
-    if (i > -7):
+    if (i < -7):
         popt = curve_fit(powerFunc, r, totalRatio)
         a = popt[0][0]
         b = popt[0][1]
