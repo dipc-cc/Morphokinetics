@@ -23,6 +23,7 @@ plt.grid(True)
 
 sqrt = True
 workingPath = os.getcwd()
+temperatures = list(range(120,221,5))
 results = []
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
@@ -30,7 +31,7 @@ for i in range(-6,5):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(sqrt))
+        results.append(mk.getIslandDistribution(temperatures, sqrt))
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing

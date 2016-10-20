@@ -20,18 +20,21 @@ plt.ylim(8,100)
 
 workingPath = os.getcwd()
 results = []
+temperatures = list(range(120,221,5))
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution())
+        results.append(mk.getIslandDistribution(temperatures))
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
+    while(len(temperatures) > len(results[-1][0])):
+        results[-1][0].append(0)
     os.chdir(workingPath)
-    plt.loglog(np.array(mk.getAllRtt())/flux**xPower, np.array(results[-1][0])/(flux**yPower), label=folder)
+    plt.loglog(np.array(mk.getRtt(temperatures))/flux**xPower, np.array(results[-1][0])/(flux**yPower), label=folder)
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("radiusVsRtt.png")
     
