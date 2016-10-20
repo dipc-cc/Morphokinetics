@@ -74,13 +74,22 @@ def getNumberOfEvents(time30cov):
     numberOfEvents = []
     simulatedTime = []
     regExpression = ("Need")
+    aeExpression = ("AeRatioTimesPossible")
     fail = False
     fileName = "unknown"
+    aeRatioTimesPossible = 0
     try:
         fileName = glob.glob("output*")[-1]
         f = open(fileName)
         # if found the coverage, save the next line
         for line in f:
+            if re.search(aeExpression, line):
+                try:
+                    newValue = float(re.split(' ', line)[1])
+                    if (aeRatioTimesPossible < newValue):
+                        aeRatioTimesPossible = newValue
+                except ValueError:
+                    aeRatioTimesPossible = 0
             if re.search(regExpression, line):
                 numberOfEvents.append(float(re.split(' ', line)[-5]))
             if re.match("    0", line) and not fail:
@@ -107,9 +116,9 @@ def getNumberOfEvents(time30cov):
             averageNumberOfEvents = 1
         if (math.isnan(time30cov)):
             time30cov = 1
-        return averageNumberOfEvents, time30cov
+        return averageNumberOfEvents, time30cov, aeRatioTimesPossible
     else:
-        return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime))
+        return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime)), aeRatioTimesPossible
 
 def getIslandDistribution(temperatures, sqrt=True, interval=False):
     """ computes the island distribution """
@@ -123,6 +132,8 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
     totalRatio = []
     numberOfMonomers = []
     workingPath = os.getcwd()
+    aeRatioTimesPossible = 0
+    aeRatioTimesPossibleList = []
     for temperature in temperatures:
         try:
             os.chdir(str(temperature))
@@ -147,7 +158,8 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
                 simulatedTime = time2-time1
             else:
                 time30cov = np.mean(np.array(timeList[coverage-1]).astype(np.float))
-                numberOfEvents, simulatedTime = getNumberOfEvents(time30cov)
+                numberOfEvents, simulatedTime, aeRatioTimesPossible = getNumberOfEvents(time30cov)
+                aeRatioTimesPossibleList.append(aeRatioTimesPossible)
                 if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
                     print("something went wrong")
                     print("\t"+str(numberOfEvents))
@@ -159,4 +171,4 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False):
                 a = 0 # skip the writing
 
         os.chdir(workingPath)
-    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes, numberOfMonomers
+    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes, numberOfMonomers, aeRatioTimesPossibleList
