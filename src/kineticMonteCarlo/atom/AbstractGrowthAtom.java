@@ -60,6 +60,25 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   private final int id;
   
+  private int relativeX;
+  private int relativeY;
+
+  public int getRelativeX() {
+    return relativeX;
+  }
+
+  public void setRelativeX(int relativeX) {
+    this.relativeX = relativeX;
+  }
+
+  public int getRelativeY() {
+    return relativeY;
+  }
+
+  public void setRelativeY(int relativeY) {
+    this.relativeY = relativeY;
+  }
+  
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
     setOccupied(false);
@@ -72,6 +91,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     multiplier = 1;
     islandNumber = 0;
     visited = false;
+    relativeX = 0;
+    relativeY = 0;
   }
   
   /**
