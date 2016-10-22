@@ -281,7 +281,6 @@ public class KmcCanvas extends Canvas {
       }
     }
 
-    // try/catch TODO
     if (printIslandCentres) {
       try {
         for (int i = 0; i < lattice.getIslandCount(); i++) {
