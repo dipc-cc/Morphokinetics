@@ -15,7 +15,6 @@ import utils.QuickSort;
 import java.util.List;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.IUc;
-import java.util.Arrays;
 import static java.lang.Math.PI;
 import static java.lang.Math.atan2;
 import static java.lang.Math.sqrt;
@@ -47,7 +46,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int occupied;
   private int islandCount;
   private int monomerCount;
-  private Island islands[];
+  private ArrayList<Island> islands;
   private int innerPerimeter;
   private int outerPerimeter;
 
@@ -68,6 +67,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     ucArray = new SimpleUc[hexaSizeI][hexaSizeJ];
     innerPerimeter = 0;
     outerPerimeter = 0;
+    islands = new ArrayList<>();
   }
 
   public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
@@ -247,7 +247,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   public Island getIsland(int i) {
     if (islands != null) {
-      return islands[i];
+      return islands.get(i);
     }
     return null;
   }
@@ -261,7 +261,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public float getFractalDimension() {
     float sumAvg = 0.0f;
     for (int i = 0; i < islandCount; i++) {
-      sumAvg += islands[i].getAvgDistance();
+      sumAvg += islands.get(i).getAvgDistance();
     }
     return (float) (1.0 / (sumAvg / islandCount));
   }
@@ -304,18 +304,18 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         // atom belongs to an island
         if (islandNumber > 0) {
           double posX = atom.getPos().getX() + uc.getPos().getX();
-          double distanceX = abs(posX - islands[islandNumber - 1].getCentreOfMass().getX());
+          double distanceX = abs(posX - islands.get(islandNumber - 1).getCentreOfMass().getX());
           if (distanceX > getCartSizeX() / 2) {
             distanceX = getCartSizeX() - distanceX;
           }
           
           double posY = atom.getPos().getY() + uc.getPos().getY();
-          double distanceY = abs(posY - islands[islandNumber - 1].getCentreOfMass().getY());
+          double distanceY = abs(posY - islands.get(islandNumber - 1).getCentreOfMass().getY());
           if (distanceY > getCartSizeY() / 2) {
             distanceY = getCartSizeY() - distanceY;
           }
           
-          islands[islandNumber - 1].update(distanceX, distanceY);
+          islands.get(islandNumber - 1).update(distanceX, distanceY);
         }
       }
     }
@@ -357,8 +357,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     double zetaX[] = new double[islandAmount];
     double xiY[] = new double[islandAmount];
     double zetaY[] = new double[islandAmount];
-    islands = new Island[islandAmount];
-    Arrays.setAll(islands, i -> new Island(i));
     // count the island with their coordinates and translate them
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);
@@ -387,8 +385,22 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       // values lower than 1e-10 are considered -0
       double centreX = (getCartSizeX() * (atan2(-toZeroIfTooClose(zetaX[i] / counter[i]), -toZeroIfTooClose(xiX[i] / counter[i])) + PI)) / (2 * PI);
       double centreY = (getCartSizeY() * (atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + PI)) / (2 * PI);
-      islands[i].setCentreOfMass(new Point2D.Double(centreX, centreY));
+      islands.get(i).setCentreOfMass(new Point2D.Double(centreX, centreY));
     }
+  }
+  
+  /**
+   * Calculates arithmetic average of gyradius, iterating over all islands.
+   * 
+   * @return average gyradius
+   */
+  public double getAverageGyradius() {
+    double averageGyradius = 0.0;
+    int i;
+    for (i = 0; i < islands.size(); i++) {
+      averageGyradius += islands.get(i).calculateCentreOfMassAndGyradius();
+    }
+    return averageGyradius / (double) i;
   }
   
   /**
@@ -531,6 +543,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         uc.getAtom(j).setIslandNumber(0);
       }
     }
+    islands = new ArrayList<>(); // reset all islands to null
     
     // do the count
     islandCount = 0;
@@ -539,7 +552,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       // visit all the atoms within the unit cell
       AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        identifyIsland(uc.getAtom(j), false);
+        identifyIsland(uc.getAtom(j), false, 0, 0);
       }
     }
     
@@ -603,9 +616,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     double sumAvg = 0.0d;
     double sumMax = 0.0d;
     for (int i = 0; i < getIslandCount(); i++) {
-      System.out.println("For island " + i + " centre is " + islands[i].getCentreOfMass() + " max distance " + islands[i].getMaxDistance() + " avg " + islands[i].getAvgDistance());
-      sumAvg += islands[i].getAvgDistance();
-      sumMax += islands[i].getMaxDistance();
+      System.out.println("For island " + i + " centre is " + islands.get(i).getCentreOfMass() + " max distance " + islands.get(i).getMaxDistance() + " avg " + islands.get(i).getAvgDistance());
+      sumAvg += islands.get(i).getAvgDistance();
+      sumMax += islands.get(i).getMaxDistance();
     }
     System.out.println("--\n Average of average distances " + sumAvg / getIslandCount() + " Average of maximum distances " + sumMax / getIslandCount());
     System.out.println(" Fractal dimension " + 1 / (sumAvg / getIslandCount()) + "\n--");
@@ -622,13 +635,16 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param atom atom to be classified.
    * @param fromNeighbour whether is called from outside or recursively.
    */
-  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour) {
+  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
+    int xRef = xDiference;
+    int yRef = yDiference;
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
       if (atom.isIsolated()) {
         monomerCount--;
         atom.setIslandNumber(monomerCount);
         atom.setVisited(true);
       } else {
+        islands.add(new Island(islandCount));
         islandCount++;
       }
     }
@@ -637,10 +653,29 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     atom.setVisited(true);
     if (atom.isOccupied()) {
       atom.setIslandNumber(islandCount);
+      atom.setRelativeX(xDiference);
+      atom.setRelativeY(yDiference);
+      islands.get(islandCount-1).addAtom(atom);
       for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
         AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
         if (!neighbour.isVisited()) {
-          identifyIsland(neighbour, true);
+          if (pos == 0) {
+            xDiference = xRef;
+            yDiference = yRef - 1;
+          }
+          if (pos == 1) {
+            xDiference = xRef + 1;
+            yDiference = yRef;
+          }
+          if (pos == 2) {
+            xDiference = xRef;
+            yDiference = yRef + 1;
+          }
+          if (pos == 3) {
+            xDiference = xRef - 1;
+            yDiference = yRef;
+          }
+          identifyIsland(neighbour, true, xDiference, yDiference);
         }
       }
     }
