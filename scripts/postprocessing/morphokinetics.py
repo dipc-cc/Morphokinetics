@@ -27,6 +27,23 @@ def fractalDFunc(x):
                 y.append(minD+(2-minD)/(maxRatio-minRatio)*(x[i]-minRatio))
     return y
 
+def fractDFuncTemperature(temp):
+    maxD = 2.00
+    minD = 1.75
+    maxTemp = 62
+    minTemp = 55
+    y = []
+    for i in range(len(temp)):
+        if (temp[i] <= minTemp):
+            y.append(maxD)
+        else:
+            if (temp[i] > maxTemp):
+                y.append(minD)
+            else:
+                y.append(maxD-(maxD-minD)/(maxTemp-minTemp)*(temp[i]-minTemp))#    minD+(2-minD)/(maxTemp-minTemp)*(temp[i]-minTemp))
+    return y
+    
+
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
@@ -143,6 +160,23 @@ def getNumberOfEvents(time30cov):
         return averageNumberOfEvents, time30cov, aeRatioTimesPossible
     else:
         return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime)), aeRatioTimesPossible
+
+
+def getAllFractalDimensions(temperatures, verbose=False):
+    workingPath = os.getcwd()
+    fractalDimensions = []
+    for temperature in temperatures:
+        try:
+            os.chdir(str(temperature)+"/results")
+        except OSError:
+            print ("error changing to directory {}".format(temperature)) #do nothing
+        else:
+            fractalDimension = 0
+            fractalDimension = mk.getFractalDimension(verbose)
+            fractalDimensions.append(fractalDimension)
+            print(temperature, fractalDimension)
+        os.chdir(workingPath)
+    return fractalDimensions
 
 def getIslandDistribution(temperatures, sqrt=True, interval=False):
     """ computes the island distribution """
