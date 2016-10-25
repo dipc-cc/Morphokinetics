@@ -102,3 +102,93 @@ def getAverageGrowth(times, gyradiusList, sqrt=False, verbose=False, tmpFileName
         gyradiusSlope = 0
 
     return gyradiusSlope
+
+
+def getFractalDimension(verbose=False):
+    """returns fractal dimension of the current simulation. Takes only
+into account the regime where the islands are growing or steady. It
+requires to have matrix.txt file in results folder, matrix.sh script
+is useful to obtain this from dataEvery1percentAndNucleation.txt
+output file"""
+    matrix=np.loadtxt(fname="matrix.txt", delimiter="\t")
+    sumIsland = []
+    sumRg = []
+    for i in range(30):
+        sumIsland.append(0)
+        sumRg.append(0)
+        
+    i=0
+    while i < len(matrix):
+        for j in range(30):
+            sumIsland[j] += matrix[i][3]
+            sumRg[j] += matrix[i][9]
+            i += 1
+            if (i >= len(matrix)):
+                break
+
+    coverages = []
+    gyradius = []
+    islands = []
+    for k in range(30):
+        coverages.append(k/100+0.01)
+        gyradius.append(sumRg[k]/(i/30))
+        islands.append(sumIsland[k]/(i/30))
+        if (verbose):
+            print("\t",k/100+0.01, sumRg[k]/(i/30), sumIsland[k]/(i/30))
+
+    currentIsland = 0
+    index = 1
+    coveragesPlot = []
+    gyradiusPlot = []
+    islandsPlot = []
+
+    while np.float(islands[index]) >= np.float(currentIsland):
+        if (index+1 >= len(islands)):
+            break
+        #if np.float(islands[index]) == np.float(currentIsland):
+        #    index = index + 1
+        #    continue
+        coveragesPlot.append(coverages[index])
+        gyradiusPlot.append(gyradius[index])
+        islandsPlot.append(islands[index])
+        currentIsland = islands[index]
+        index = index + 1
+        if (index > 30):
+            break
+
+    secondDerivative = np.diff(np.diff(gyradiusPlot)/np.diff(np.array(coveragesPlot)/np.array(islandsPlot)))
+    print(secondDerivative)
+    slopeChangeIndexList = np.where(secondDerivative > 0)
+    print("lenght?", slopeChangeIndexList, len(slopeChangeIndexList), len(slopeChangeIndexList) == 0)
+    if len(slopeChangeIndexList[0]) == 0:
+        slopeChange = index
+    else:
+        slopeChange = slopeChangeIndexList[0][0]
+    print("slopechangeindexlist", slopeChange, len(islandsPlot))
+    #for i in range(slopeChange, len(islandsPlot)):
+    #    islandsPlot.pop()
+    #    gyradiusPlot.pop()
+    #    islandsPlot.pop()
+    coveragesPlot=[coverages[i] for i in range(0,slopeChange-1)]
+    gyradiusPlot=[gyradius[i] for i in range(0,slopeChange-1)]
+    islandsPlot=[islands[i] for i in range(0,slopeChange-1)]
+
+    print(coveragesPlot, gyradiusPlot, islandsPlot)
+    fractalDimension = float('nan')
+    if len(islandsPlot) > 2:
+        popt = curve_fit(powerFunc, gyradiusPlot, np.array(coveragesPlot)/np.array(islandsPlot))
+        a = popt[0][0]
+        b = popt[0][1]
+        fractalDimension = b
+        if (verbose):
+            label = "{}x^{}".format(a, b)
+            plt.grid(True)
+            plt.loglog(gyradiusPlot, np.array(coveragesPlot)/np.array(islandsPlot), ".")
+            plt.plot(gyradiusPlot, np.array(islandsPlot)/1e4, ".")
+            plt.loglog(gyradiusPlot, powerFunc(gyradiusPlot, a, b), label=label)
+            plt.xlabel("Gyradius")
+            plt.ylabel("Coverage/number of islands")
+            plt.legend(loc='upper left', prop={'size':6})
+            plt.savefig("figFractal.png")
+            plt.close()
+    return fractalDimension
