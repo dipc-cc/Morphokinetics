@@ -44,7 +44,7 @@ def fractDFuncTemperature(temp):
     return y
     
 
-def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
+def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
 
@@ -68,7 +68,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             monomersList.append(0.0)
             return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList, monomersList
 
-    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList = mk.getAllValues(f, maxCoverage, sqrt)
+    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList = mk.getAllValues(f, maxCoverage, sqrt, growth)
     w = 0
     histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
     averageSizes = []
@@ -178,7 +178,7 @@ def getAllFractalDimensions(temperatures, verbose=False):
         os.chdir(workingPath)
     return fractalDimensions
 
-def getIslandDistribution(temperatures, sqrt=True, interval=False):
+def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True):
     """ computes the island distribution """
     chunk = 40
     coverage = 31
