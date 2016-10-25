@@ -13,16 +13,18 @@ def powerFunc(x, a, b):
 def fractalDFunc(x):
     """"""
     minD = 1.66
+    maxRatio = 5e8
+    minRatio = 3e7
     y = []
     for i in range(len(x)):
-        if (x[i] <= 3e7):
+        if (x[i] <= minRatio):
             y.append(minD)
         else:
-            if (x[i] > 5e8):
+            if (x[i] > maxRatio):
                 y.append(2.0)
             else:
                 #y.append(minD+(2-minD)/np.log(5e8/3e7)*np.log(x[i]))
-                y.append(minD+(2-minD)/(5e8-3e7)*(x[i]-3e7))
+                y.append(minD+(2-minD)/(maxRatio-minRatio)*(x[i]-minRatio))
     return y
 
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True):
