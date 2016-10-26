@@ -94,7 +94,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
     # Curve fitting
     growthSlope = mk.getAverageGrowth(times, averageSizes, sqrt, verbose, "tmpFig.png")
-    gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpFig2.png")
+    gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
     mk.getAverageGrowth(averageSizes, gyradiusList, sqrt, verbose, "tmpFig4.png")
     coverages = 400*400/100*np.arange(0.0,maxCoverage, 1)/(numberOfIsland+1)
     mk.getAverageGrowth(times, coverages, sqrt, verbose, "tmpFig5.png")
@@ -178,11 +178,10 @@ def getAllFractalDimensions(temperatures, verbose=False):
         os.chdir(workingPath)
     return fractalDimensions
 
-def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True):
+def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False):
     """ computes the island distribution """
     chunk = 40
     coverage = 31
-    verbose = False
     growthSlopes = []
     gyradiusSlopes = []
     perimeterSlopes = []
