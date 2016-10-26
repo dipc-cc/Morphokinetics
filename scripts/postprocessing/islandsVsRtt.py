@@ -1,7 +1,3 @@
-#
-# Compares in a graph the average island size (or its square root)
-# growth with the total rate.
-#
 # Author: J. Alberdi-Rodriguez
 
 import os
