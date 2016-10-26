@@ -1,3 +1,5 @@
+# This plot is the same as inverseIslandVsRtt (scaled)
+#
 # Author: J. Alberdi-Rodriguez
 
 import os
