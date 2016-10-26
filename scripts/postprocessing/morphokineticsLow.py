@@ -68,24 +68,21 @@ def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
         return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList
 
     
-def getAverageGrowth(times, gyradiusList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
-    
+def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
     x = np.array(times)
-    averageGyradius = []
-    for gyradius in gyradiusList:
-        if gyradius: #ensure that it is not null
-            averageGyradius.append(np.mean(gyradius))
+    averageValues = []
+    for value in valueList:
+        if value: #ensure that it is not null
+            averageValues.append(np.mean(value))
     try:
-        a, b = np.polyfit(x, averageGyradius, 1)
-        popt = curve_fit(powerFunc, x, averageGyradius)
+        a, b = np.polyfit(x, averageValues, 1)
+        popt = curve_fit(powerFunc, x, averageValues)
         aPower = popt[0][0]
         bPower = popt[0][1]
-        #a = averageGyradius[-1]#/times[-1]
-        #b = 0
         if verbose:
             label = "{}x+{}".format(a, b)
             print(label)
-            plt.plot(x, averageGyradius)
+            plt.plot(x, averageValues)
             y = a*np.array(x)+b
             plt.plot(x, y, label=label)
             y = powerFunc(x, aPower, bPower)
@@ -95,13 +92,13 @@ def getAverageGrowth(times, gyradiusList, sqrt=False, verbose=False, tmpFileName
             plt.savefig(tmpFileName)
             plt.close()
         if sqrt:
-            gyradiusSlope = aPower
+            valueSlope = aPower
         else:
-            gyradiusSlope = a
+            valueSlope = a
     except TypeError:
-        gyradiusSlope = 0
+        valueSlope = 0
 
-    return gyradiusSlope
+    return valueSlope
 
 
 def getFractalDimension(verbose=False):
