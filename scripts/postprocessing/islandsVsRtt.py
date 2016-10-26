@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 import morphokinetics as mk
 from scipy.optimize import curve_fit
 
-plt.title("Average island growth")
 label = r'Number of islands (N)'
 plt.ylabel(label)
 label = r'r_tt/F'
@@ -28,7 +27,7 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False))
+        results.append(mk.getIslandDistribution(temperatures, False, False, False))
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
@@ -41,10 +40,9 @@ for i in range(-6,1):
 
     v = 0.82*400*400/(np.array(results[-1][3]))*(flux**0.21)
     n = np.array(results[-1][3])
-    nAll.append(n)
     vSlope = np.array(results[-1][0])/(flux**0.79)
     totalRatio = np.array(results[-1][1])/(flux**0.82)
-    r = np.array(Rtt)/flux
+    r = np.array(mk.getRtt(temperatures))/flux
     plt.loglog(r, n, ".", label="N "+folder)
     if (i > -3):
         popt = curve_fit(mk.powerFunc, r, n)
