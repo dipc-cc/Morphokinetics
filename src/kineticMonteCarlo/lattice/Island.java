@@ -101,13 +101,12 @@ public class Island {
       sumSquareX += currentX * currentX;
       sumSquareY += currentY * currentY;
     }
-    System.out.println(atoms.size());
-    System.out.println(islandNumber + " Centre of mass " + sumX / atoms.size() + " " + sumY / atoms.size());
+    double centreOfMassX = sumX / atoms.size();
+    double centreOfMassY = sumY / atoms.size();
     // gyradius
     double sigmaX = sumSquareX - Math.pow(sumX, 2.0) / atoms.size();
     double sigmaY = sumSquareY - Math.pow(sumY, 2.0) / atoms.size();
     double gyradius = Math.sqrt((sigmaX + sigmaY) / atoms.size());
-    System.out.println(islandNumber + " Gyradius " + gyradius);
     return gyradius;
   }
   
