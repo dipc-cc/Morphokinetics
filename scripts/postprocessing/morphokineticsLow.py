@@ -101,6 +101,23 @@ def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="t
     return valueSlope
 
 
+def getIslandSizeError(numberOfIslands, valueList):
+    numberOfIslands = numberOfIslands[1:31]
+    averageValues = []
+    averageNumberOfIslands = []
+    index = 0
+    for value in valueList:
+        if value: #ensure that it is not null
+            averageValues.append(np.mean(value))
+            numberOfIslandsCoverage = np.array(numberOfIslands[index]).astype(np.float)
+            if (len(numberOfIslandsCoverage) > 0):
+                averageNumberOfIslands.append(np.mean(numberOfIslandsCoverage)/(400*400))
+        index += 1
+    coverages = (np.arange(0.01, 0.31, 0.01))/averageNumberOfIslands
+    x = np.array(np.array(coverages))
+    return abs((averageValues/coverages)-1)
+    
+
 def getFractalDimension(verbose=False):
     """returns fractal dimension of the current simulation. Takes only
 into account the regime where the islands are growing or steady. It
