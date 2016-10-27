@@ -209,3 +209,17 @@ output file"""
             plt.savefig("figFractal.png")
             plt.close()
     return fractalDimension
+
+def plot(x, y):
+    maxCoverage = 31
+    #gyradiusList vs averageSizes
+    indexes = range(1, maxCoverage)
+    xPlot = np.array(x)[indexes]
+    xPlot = [np.mean(i) for i in xPlot]
+    yPlot = np.array(y)
+    plt.xlabel("Gyradius")
+    plt.ylabel("Island size")
+    plt.grid(True)
+    plt.loglog(xPlot, yPlot)
+    plt.savefig("gyradiusVsSize.png")
+    plt.close()

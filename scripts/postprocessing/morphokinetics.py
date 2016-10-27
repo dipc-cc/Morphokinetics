@@ -99,6 +99,8 @@ island size. It returns the slope of the fit, which is the growth rate."""
     coverages = 400*400/100*np.arange(0.0,maxCoverage, 1)/(numberOfIsland+1)
     mk.getAverageGrowth(times, coverages, sqrt, verbose, "tmpFig5.png")
     perimeterSlope = mk.getAverageGrowth(times, outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    #gyradiusList vs averageSizes
+    mk.plot(gyradiusList, averageSizes)
     return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList
 
 def getRtt(temperatures):
