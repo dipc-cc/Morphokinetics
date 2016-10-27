@@ -459,6 +459,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (nextRadius > 0
               && nextRadius < lattice.getCartSizeX() / 2
               && nextRadius < lattice.getCartSizeY() / 2) {
+        printData(null);
         if (perimeterType == RoundPerimeter.CIRCLE) {
           perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
           int newArea;
@@ -619,10 +620,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.countPerimeter(null);
     //compute the average distances to centre.
     float avgDistance = (float) (1.0 / (lattice.getFractalDimension()));
-    outData.format(Locale.US, coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\n", printCoverage, getTime(),
+    outData.format(Locale.US, coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%d\n", printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
             getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius);
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, lattice.getIsland(0).getNumberOfAtoms() );
     sumProbabilities = 0.0d;
     outData.flush();
     if (extraOutput2) {
