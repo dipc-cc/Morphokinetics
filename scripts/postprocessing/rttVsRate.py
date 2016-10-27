@@ -12,9 +12,9 @@ from scipy.optimize import curve_fit
 
 
 plt.title("Average island growth")
-label = r'Average island radius growth rate $\sqrt{{ \dot{{r}} }} $'
+label = r'$\frac{R}{F^{0.82}}$'
 plt.ylabel(label)
-label = r'Time-averaged total rate $ < R >_t $'
+label = r'$\frac{r_{tt}}{F^{0.39}}$'
 plt.xlabel(label)
 plt.legend(loc='upper left', prop={'size':6})
 plt.grid(True)
