@@ -102,6 +102,9 @@ def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="t
 
 
 def getIslandSizeError(numberOfIslands, valueList):
+    """On the one hand, all island's atoms are counted and divided by the
+    number of them. On the other hand, coverage is multiplied by
+    simulation sizes and divided by the number of islands. """
     numberOfIslands = numberOfIslands[1:31]
     averageValues = []
     averageNumberOfIslands = []
