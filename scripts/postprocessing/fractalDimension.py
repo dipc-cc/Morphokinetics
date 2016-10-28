@@ -20,7 +20,7 @@ temperatures = list(range(120,321,5))
 workingPath = os.getcwd()
 print(workingPath)
 results = []
-for i in range(-5,1):
+for i in range(-6,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
@@ -33,8 +33,8 @@ for i in range(-5,1):
     os.chdir(workingPath)
 
     while(len(temperatures) > len(results[-1])):
-        results[-1].append(float('nan'))
-    plt.plot(temperatures, np.array(results[-1]), label=folder)
+       results[-1].append(float('nan'))
+    plt.plot(temperatures, np.array(results[-1]), ".-", label=folder)
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("fractalDimension.png")
 
