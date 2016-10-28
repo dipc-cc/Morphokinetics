@@ -174,7 +174,7 @@ def getAllFractalDimensions(temperatures, verbose=False):
             print ("error changing to directory {}".format(temperature)) #do nothing
         else:
             fractalDimension = 0
-            fractalDimension = mk.getFractalDimension(verbose)
+            fractalDimension = mk.getFractalDimensionSingle(verbose)
             fractalDimensions.append(fractalDimension)
             print(temperature, fractalDimension)
         os.chdir(workingPath)
