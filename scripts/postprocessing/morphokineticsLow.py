@@ -236,6 +236,14 @@ def plot(x, y):
     plt.xlabel("Gyradius")
     plt.ylabel("Island size")
     plt.grid(True)
-    plt.loglog(xPlot, yPlot)
+    plt.loglog(xPlot, yPlot, ".")
+    # fit
+    popt = curve_fit(powerFunc, xPlot, yPlot)
+    aPower = popt[0][0]
+    bPower = popt[0][1]
+    label = "{}x^{}".format(aPower, bPower)
+    yPlot = powerFunc(xPlot, aPower, bPower)
+    plt.loglog(xPlot, yPlot, label=label)
+    plt.legend(loc='upper left', prop={'size':12})
     plt.savefig("gyradiusVsSize.png")
     plt.close()
