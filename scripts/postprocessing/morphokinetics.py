@@ -180,7 +180,7 @@ def getAllFractalDimensions(temperatures, verbose=False):
         os.chdir(workingPath)
     return fractalDimensions
 
-def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False):
+def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False, flux=-1):
     """ computes the island distribution """
     chunk = 40
     coverage = 31
@@ -199,7 +199,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
         except OSError:
             print ("error changing to directory {}".format(temperature)) #do nothing
         else:
-            growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList = openAndRead(chunk, coverage, sqrt, verbose)
+            growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
             growthSlopes.append(growthSlope)
             gyradiusSlopes.append(gyradiusSlope)
             perimeterSlopes.append(perimeterSlope)
