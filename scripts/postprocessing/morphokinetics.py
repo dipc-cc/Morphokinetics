@@ -177,7 +177,7 @@ def getNumberOfEvents(time30cov):
                 try:
                     time = float(re.split('\t',line)[1])
                     simulatedTime.append(time)
-                except IndexError:
+                except (ValueError,IndexError):
                     fail = True
 
             if fail and re.search("Average", line):
