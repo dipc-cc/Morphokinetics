@@ -218,6 +218,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
     workingPath = os.getcwd()
     aeRatioTimesPossible = 0
     aeRatioTimesPossibleList = []
+    simulatedTimes = []
     for temperature in temperatures:
         try:
             os.chdir(str(temperature))
@@ -248,6 +249,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
                     print("something went wrong")
                     print("\t"+str(numberOfEvents))
                     print("\t"+str(simulatedTime))
+            simulatedTimes.append(simulatedTime)
             totalRatio.append(numberOfEvents/simulatedTime)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
@@ -255,4 +257,4 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
                 a = 0 # skip the writing
 
         os.chdir(workingPath)
-    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes, numberOfMonomers, aeRatioTimesPossibleList
+    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes, numberOfMonomers, aeRatioTimesPossibleList, simulatedTimes
