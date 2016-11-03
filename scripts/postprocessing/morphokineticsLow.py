@@ -47,8 +47,11 @@ def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
             next(iterList)
             j = next(iterList)
             while j != '\n': # save the current values (island sizes) to an array
-                islandSizesList[cov].append(int(j))
-                islandRadiusList[cov].append(int(math.sqrt(float(j))))
+                try:
+                    islandSizesList[cov].append(int(j))
+                    islandRadiusList[cov].append(int(math.sqrt(float(j))))
+                except ValueError:
+                    pass # ignore if is not a number
                 j = next(iterList)
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
