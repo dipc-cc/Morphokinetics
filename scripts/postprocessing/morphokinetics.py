@@ -44,6 +44,31 @@ def fractDFuncTemperature(temp):
     return y
     
 
+def fractalDimensionFunc(x):
+    """returns fractal dimension, based on a fit of a study of single
+flake simulations. """
+    a=0.27
+    b=1.73
+    c=19
+    sigma=2
+    x0=np.exp(c)
+    d=b+a*(x**sigma)/(x**sigma+x0**sigma)
+    return np.array(d)
+
+def shapeFactorFunc(x):
+    """returns shape factor, based on a fit of a study of single flake
+simulations. """
+    a=5.5
+    b=3.5
+    c=18
+    sigma=1
+    x0=np.exp(c)
+    f=b+a*(x**sigma)/(x**sigma+x0**sigma)
+    max = 7.3
+    f=[max-(i-max)  if i > max else i for i in f]
+    return np.array(f)
+
+
 def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temperature=-1, flux=-1):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
