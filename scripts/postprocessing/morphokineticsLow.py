@@ -3,11 +3,18 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokineticsLow as mk
+import scipy.special
 from scipy.optimize import curve_fit
 
 def powerFunc(x, a, b):
     """ a*x^b function """
     return a*x**b
+
+def errFunc(x, a, b, c, sigma):
+    return a*scipy.special.erf(sigma*(x-c))+b
+
+def ourErrFunc(x, a, b, c, sigma):
+    return a*(np.exp(sigma*(x-c))/(1+np.exp(sigma*(x-c))))+b
 
 def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
     """ reads all the values for the corresponding coverage """
