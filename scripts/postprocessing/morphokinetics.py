@@ -44,7 +44,7 @@ def fractDFuncTemperature(temp):
     return y
     
 
-def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True):
+def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temperature=-1, flux=-1):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
 
