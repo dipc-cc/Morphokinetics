@@ -15,7 +15,6 @@ label = r'Average island radius growth rate $\sqrt{{ \dot{{r}} }} $'
 plt.ylabel(label)
 label = r'Time-averaged total rate $ < R >_t $'
 plt.xlabel(label)
-plt.legend(loc='upper left', prop={'size':6})
 plt.grid(True)
 temperatures = list(range(120,221,5))
 
