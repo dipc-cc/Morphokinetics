@@ -173,12 +173,13 @@ def getNumberOfEvents(time30cov):
                     aeRatioTimesPossible = 0
             if re.search(regExpression, line):
                 numberOfEvents.append(float(re.split(' ', line)[-5]))
-            if re.match("    0", line) and not fail:
-                time = float(re.split('\t',line)[1])
-                if time == 0:
-                    fail = True
-                else:
+            if re.match("    0", line):
+                try:
+                    time = float(re.split('\t',line)[1])
                     simulatedTime.append(time)
+                except IndexError:
+                    fail = True
+
             if fail and re.search("Average", line):
                 line = next(f)
                 line = next(f)
@@ -186,9 +187,8 @@ def getNumberOfEvents(time30cov):
                 line = next(f)
                 time = float(re.split('\t',line)[1])
                 simulatedTime.append(time)
-    except (OSError,IndexError):
-        print("input file {} can not be openned. Exiting! ".format(fileName))
-        #sys.exit()
+    except (OSError,IndexError) as ex:
+        print("Input file {} can not be openned. Exiting! ".format(fileName))
 
     if all(v == 0 for v in simulatedTime):
         print("all values are zero ")
