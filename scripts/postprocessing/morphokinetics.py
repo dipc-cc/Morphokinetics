@@ -106,7 +106,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
     if verbose:
         print("Average island size for")
 
-    filename = "outputFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
+    filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
     with open(filename, 'w', newline='') as csvfile:
         outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         outwriter.writerow(["%[index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1]]"])
