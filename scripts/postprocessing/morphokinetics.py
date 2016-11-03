@@ -108,7 +108,7 @@ def getRtt(temperatures):
     Rtt = []
     for index,i in enumerate(temperatures):
         Rtt.append(1e13*np.exp(-0.2/(kb*i)))
-    return Rtt
+    return np.array(Rtt)
 
 def getAllRtt():
     return Rtt
