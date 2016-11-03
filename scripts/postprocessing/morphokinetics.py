@@ -3,6 +3,7 @@ import os
 import math
 import glob
 import numpy as np
+import csv
 import morphokineticsLow as mk
 
 
@@ -99,21 +100,33 @@ island size. It returns the slope of the fit, which is the growth rate."""
     averageSizes = []
     times = []
     monomers = []
+    numberOfIslands = []
+    averageRatio = []
+    allGyradius = []
     if verbose:
         print("Average island size for")
 
-    for index, islandSizes in enumerate(islandSizesList):
-        if islandSizes: #ensure that it is not null
-            # do histogram
-            histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk, chunk), density=False))
-            # average
-            averageSizes.append(np.mean(islandSizes))
-            times.append(np.mean(np.array(timeList[index]).astype(np.float)))
-            monomers.append(np.mean(np.array(monomersList[index]).astype(np.float)))
-            if verbose:
-                print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
-            if index == 30: # only count islands in 30% of coverage
-                numberOfIsland = len(islandSizes)/(readLines/30) # divide all islands by number of iterations
+    filename = "outputFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
+    with open(filename, 'w', newline='') as csvfile:
+        outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+        outwriter.writerow(["%[index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1]]"])
+        for index, islandSizes in enumerate(islandSizesList):
+            if islandSizes: #ensure that it is not null
+                # do histogram
+                histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk, chunk), density=False))
+                # average
+                averageSizes.append(np.mean(islandSizes))
+                times.append(np.mean(np.array(timeList[index]).astype(np.float)))
+                monomers.append(np.mean(np.array(monomersList[index]).astype(np.float)))
+                numberOfIslands.append(np.mean(np.array(islandNumberList[index])))
+                averageRatio.append(np.mean(np.array(neList[index]).astype(np.float)))
+                allGyradius.append(np.mean(np.array(gyradiusList[index]).astype(np.float)))
+                if verbose:
+                    print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
+                if index == 30: # only count islands in 30% of coverage
+                    numberOfIsland = len(islandSizes)/(readLines/30) # divide all islands by number of iterations
+                outwriter.writerow([index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1]])
+                
 
     numberOfIsland = np.mean(np.array(islandNumberList[30]))
 
