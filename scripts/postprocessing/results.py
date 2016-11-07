@@ -135,13 +135,29 @@ class Results:
         return np.array(self.results[-1][0])
 
     def totalRatio(self):
-        """ returns total ratio for the last flux, for all temperatures """
+        """ returns average total ratio for the last flux, for all temperatures """
         return np.array(self.results[-1][1])
 
     def gyradius(self):
-        """ returns gyradius for the last flux, for all temperatures """
+        """ returns average gyradius for the last flux, for all temperatures """
         return np.array(self.results[-1][2])
         
     def islands(self):
-        """ returns number of islands for the last flux, for all temperatures """
+        """ returns average number of islands for the last flux, for all temperatures """
         return np.array(self.results[-1][3])
+
+    def perimeter(self):
+        """ returns average perimeter length growth for the last flux, for all temperatures """
+        return np.array(self.results[-1][4])
+    
+    def monomers(self):
+        """ returns average number of monomers for the last flux, for all temperatures """
+        return np.array(self.results[-1][5])
+
+    def aeRatioTimesPossible(self):
+        """  """
+        return np.array(self.results[-1][6])
+
+    def times(self):
+        """ returns average simulated times for the last flux, for all temperatures """
+        return np.array(self.results[-1][7])
