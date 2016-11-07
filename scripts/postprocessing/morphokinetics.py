@@ -110,12 +110,12 @@ island size. It returns the slope of the fit, which is the growth rate."""
     numberOfIsland = np.mean(np.array(currentData.islandNumberList[30]))
 
     # Curve fitting
-    slopes.growthSlope = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
-    slopes.gyradiusSlope = mk.getAverageGrowth(meanData.times, currentData.gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
+    slopes.growth = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
+    slopes.gyradius = mk.getAverageGrowth(meanData.times, currentData.gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
     mk.getAverageGrowth(meanData.averageSizes, currentData.gyradiusList, sqrt, verbose, "tmpFig4.png")
     coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(numberOfIsland+1)
     mk.getAverageGrowth(meanData.times, coverages, sqrt, verbose, "tmpFig5.png")
-    slopes.perimeterSlope = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    slopes.perimeter = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
     #gyradiusList vs averageSizes
     ####mk.plot(gyradiusList, averageSizes)
     return slopes, currentData, numberOfIsland
@@ -218,9 +218,9 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             print ("error changing to directory {}".format(temperature)) #do nothing
         else:
             slopes, currentData, numberOfIsland = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
-            growthSlopes.append(slopes.growthSlope)
-            gyradiusSlopes.append(slopes.gyradiusSlope)
-            perimeterSlopes.append(slopes.perimeterSlope)
+            growthSlopes.append(slopes.growth)
+            gyradiusSlopes.append(slopes.gyradius)
+            perimeterSlopes.append(slopes.perimeter)
             numberOfIslands.append(numberOfIsland)
             numberOfMonomers.append(np.mean(np.array(currentData.monomersList[-1]).astype(np.float)))
             if (interval):
@@ -244,7 +244,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             simulatedTimes.append(simulatedTime)
             totalRatio.append(numberOfEvents/simulatedTime)
             try:
-                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, slopes.growthSlope, slopes.gyradiusSlope, int(numberOfEvents/simulatedTime)))
+                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, slopes.growth, slopes.gyradius, int(numberOfEvents/simulatedTime)))
             except ValueError:
                 a = 0 # skip the writing
 

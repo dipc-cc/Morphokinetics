@@ -81,8 +81,8 @@ class Slopes:
     """ Stores fit slopes of several measurements"""
     
     def __init__(self):
-        self.growthSlope = 0
-        self.gyradiusSlope = 0
-        self.perimeterSlope = 0
+        self.growth = 0
+        self.gyradius = 0
+        self.perimeter = 0
         
     
