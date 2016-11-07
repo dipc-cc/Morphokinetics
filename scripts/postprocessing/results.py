@@ -114,21 +114,22 @@ class MeanValues:
 class Results:
     """ Stores results (mainly to be plotted)"""
 
-    def __init__(self, temperatures = []):
+    def __init__(self, temperatures = [], useNaN = True):
         self.results = []
         self.temperatures = temperatures
+        self.useNaN = useNaN
 
     def append(self, meanValues):
         self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes])
         while(len(self.temperatures) > len(self.results[-1][0])):
-            self.results[-1][0].append(np.nan)
-            self.results[-1][1].append(np.nan)
-            self.results[-1][2].append(np.nan)
-            self.results[-1][3].append(np.nan)
-            self.results[-1][4].append(np.nan)
-            self.results[-1][5].append(np.nan)
-            self.results[-1][6].append(np.nan)
-            self.results[-1][7].append(np.nan)
+            self.results[-1][0].append(self._addNull_())
+            self.results[-1][1].append(self._addNull_())
+            self.results[-1][2].append(self._addNull_())
+            self.results[-1][3].append(self._addNull_())
+            self.results[-1][4].append(self._addNull_())
+            self.results[-1][5].append(self._addNull_())
+            self.results[-1][6].append(self._addNull_())
+            self.results[-1][7].append(self._addNull_())
 
     def growthSlope(self):
         """ returns island size growth slopes for the last flux, for all temperatures """
@@ -161,3 +162,9 @@ class Results:
     def times(self):
         """ returns average simulated times for the last flux, for all temperatures """
         return np.array(self.results[-1][7])
+
+    def _addNull_(self):
+        if self.useNaN:
+            return np.nan
+        else:
+            return 0
