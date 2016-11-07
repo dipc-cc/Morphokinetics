@@ -85,4 +85,29 @@ class Slopes:
         self.gyradius = 0
         self.perimeter = 0
         
-    
+
+class MeanValues:
+    """ Stores means of slopes """
+
+    def __init__(self):
+        self.growthSlopes = []
+        self.gyradiusSlopes = []
+        self.perimeterSlopes = []
+        self.numberOfIslands = []
+        self.numberOfMonomers = []
+        self.simulatedTimes = []
+        self.totalRatio = []
+        self.aeRatioTimesPossibleList = []
+
+    def updateData(self, slopes, currentData, numberOfIsland):
+        self.growthSlopes.append(slopes.growth)
+        self.gyradiusSlopes.append(slopes.gyradius)
+        self.perimeterSlopes.append(slopes.perimeter)
+        self.numberOfIslands.append(numberOfIsland)
+        self.numberOfMonomers.append(np.mean(np.array(currentData.monomersList[-1]).astype(np.float)))
+
+    def updateTimeAndRatio(self, simulatedTime, numberOfEvents, aeRatioTimesPossible):
+        self.simulatedTimes.append(simulatedTime)
+        self.totalRatio.append(numberOfEvents/simulatedTime)
+        self.aeRatioTimesPossibleList.append(aeRatioTimesPossible)
+        

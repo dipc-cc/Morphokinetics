@@ -201,16 +201,8 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
     """ computes the island distribution """
     chunk = 40
     coverage = 31
-    growthSlopes = []
-    gyradiusSlopes = []
-    perimeterSlopes = []
-    numberOfIslands = []
-    totalRatio = []
-    numberOfMonomers = []
     workingPath = os.getcwd()
-    aeRatioTimesPossible = 0
-    aeRatioTimesPossibleList = []
-    simulatedTimes = []
+    meanValues = results.MeanValues()
     for temperature in temperatures:
         try:
             os.chdir(str(temperature))
@@ -218,11 +210,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             print ("error changing to directory {}".format(temperature)) #do nothing
         else:
             slopes, currentData, numberOfIsland = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
-            growthSlopes.append(slopes.growth)
-            gyradiusSlopes.append(slopes.gyradius)
-            perimeterSlopes.append(slopes.perimeter)
-            numberOfIslands.append(numberOfIsland)
-            numberOfMonomers.append(np.mean(np.array(currentData.monomersList[-1]).astype(np.float)))
+            meanValues.updateData(slopes, currentData, numberOfIsland)
             if (interval):
                 time2 = np.mean(np.array(currentData.timeList[30]).astype(np.float)) # get time at 30% of coverage
                 time1 = np.mean(np.array(currentData.timeList[20]).astype(np.float)) # get time at 20% of coverage
@@ -236,17 +224,15 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             else:
                 time30cov = np.mean(np.array(currentData.timeList[coverage-1]).astype(np.float))
                 numberOfEvents, simulatedTime, aeRatioTimesPossible = getNumberOfEvents(time30cov)
-                aeRatioTimesPossibleList.append(aeRatioTimesPossible)
                 if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
                     print("something went wrong")
                     print("\t"+str(numberOfEvents))
                     print("\t"+str(simulatedTime))
-            simulatedTimes.append(simulatedTime)
-            totalRatio.append(numberOfEvents/simulatedTime)
+            meanValues.updateTimeAndRatio(simulatedTime, numberOfEvents, aeRatioTimesPossible)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, slopes.growth, slopes.gyradius, int(numberOfEvents/simulatedTime)))
             except ValueError:
                 a = 0 # skip the writing
 
         os.chdir(workingPath)
-    return growthSlopes, totalRatio, gyradiusSlopes, numberOfIslands, perimeterSlopes, numberOfMonomers, aeRatioTimesPossibleList, simulatedTimes
+    return meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes
