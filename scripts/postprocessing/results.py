@@ -114,11 +114,21 @@ class MeanValues:
 class Results:
     """ Stores results (mainly to be plotted)"""
 
-    def __init__(self):
+    def __init__(self, temperatures = []):
         self.results = []
+        self.temperatures = temperatures
 
     def append(self, meanValues):
         self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes])
+        while(len(self.temperatures) > len(self.results[-1][0])):
+            self.results[-1][0].append(np.nan)
+            self.results[-1][1].append(np.nan)
+            self.results[-1][2].append(np.nan)
+            self.results[-1][3].append(np.nan)
+            self.results[-1][4].append(np.nan)
+            self.results[-1][5].append(np.nan)
+            self.results[-1][6].append(np.nan)
+            self.results[-1][7].append(np.nan)
 
     def growthSlope(self):
         """ returns island size growth slopes for the last flux, for all temperatures """
@@ -132,3 +142,6 @@ class Results:
         """ returns gyradius for the last flux, for all temperatures """
         return np.array(self.results[-1][2])
         
+    def islands(self):
+        """ returns number of islands for the last flux, for all temperatures """
+        return np.array(self.results[-1][3])
