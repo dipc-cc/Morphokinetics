@@ -111,3 +111,24 @@ class MeanValues:
         self.totalRatio.append(numberOfEvents/simulatedTime)
         self.aeRatioTimesPossibleList.append(aeRatioTimesPossible)
         
+class Results:
+    """ Stores results (mainly to be plotted)"""
+
+    def __init__(self):
+        self.results = []
+
+    def append(self, meanValues):
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes])
+
+    def growthSlope(self):
+        """ returns island size growth slopes for the last flux, for all temperatures """
+        return np.array(self.results[-1][0])
+
+    def totalRatio(self):
+        """ returns total ratio for the last flux, for all temperatures """
+        return np.array(self.results[-1][1])
+
+    def gyradius(self):
+        """ returns gyradius for the last flux, for all temperatures """
+        return np.array(self.results[-1][2])
+        
