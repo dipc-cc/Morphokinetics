@@ -8,6 +8,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
+import results
 
 yPower = 0.3
 
@@ -20,7 +21,7 @@ plt.xlim(50,100)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures=list(range(120, 221, 5))
 for i in range(-6,5):
     fig1 = plt.figure(1)
@@ -33,16 +34,13 @@ for i in range(-6,5):
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
-        results[-1][3].append(0)
         
     os.chdir(workingPath)
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), np.array(results[-1][0])/(flux**yPower), label=folder)
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), results.growthSlope()/(flux**yPower), label=folder)
     plt.legend(loc='upper right', prop={'size':6})
     fig1.savefig("radiusVsTemperature.png")
     fig2 = plt.figure(2)
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), results[-1][3])
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), results.islands())
     fig2.savefig("fig2.png")
     
 plt.close()

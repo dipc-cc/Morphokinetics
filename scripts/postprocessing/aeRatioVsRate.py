@@ -9,7 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 from scipy.optimize import curve_fit
-
+import results
 
 plt.title("Average island growth")
 label = r''
@@ -19,7 +19,7 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures = list(range(120,221,5))
 
 for i in range(-6,1):
@@ -33,15 +33,9 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
-        results[-1][1].append(0)
-        results[-1][2].append(0)
-        results[-1][3].append(0)
-        results[-1][6].append(0)
 
-    mtt = np.array(results[-1][6])#/flux**.063
-    r = np.array( mk.getRtt(temperatures))#/flux**0.5
+    mtt = results.aeRatioTimesPossible()#/flux**.063
+    r = np.array(mk.getRtt(temperatures))#/flux**0.5
     plt.loglog(mtt, r, "-", label="N "+folder)
     if (i < -7):
         popt = curve_fit(mk.powerFunc, r, mtt)

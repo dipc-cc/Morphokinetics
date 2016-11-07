@@ -9,7 +9,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 from scipy.optimize import curve_fit
-    
+import results
+
 plt.title("Average gyradius growth")
 label = r'Average island radius growth rate $\sqrt{{ \dot{{r}} }} $'
 plt.ylabel(label)
@@ -18,7 +19,7 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
@@ -36,20 +37,14 @@ for i in range(-6,1):
     axes = plt.gca()
     axes.set_ylim([1e0,1e2])
     axes.set_xlim([3e6,1e9])
-    #adapt y to x size
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
-        results[-1][1].append(0)
-        results[-1][2].append(0)
-        results[-1][3].append(0)
 
-    v = 0.82*400*400/(np.array(results[-1][3]))*(flux**0.21)
-    n = np.array(results[-1][3])
-    vSlope = np.array(results[-1][0])/(flux**0.79)
-    totalRatio = np.array(results[-1][1])/(flux**0.81)
+    v = 0.82*400*400/(results.islands())*(flux**0.21)
+    n = results.islands()
+    vSlope = results.growthSlope()/(flux**0.79)
+    totalRatio = results.totalRatio()/(flux**0.81)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    gyradius = (np.array(results[-1][2])/(flux**0.88))**((np.array(y)-1))
+    gyradius = (results.gyradius()/(flux**0.88))**((np.array(y)-1))
     r = np.array(mk.getRtt(temperatures))#/flux**0.36
     plt.loglog(totalRatio, gyradius, "-", label="inverse island"+folder)
     if (i < -7):

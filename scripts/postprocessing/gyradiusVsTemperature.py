@@ -9,16 +9,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 from scipy.optimize import curve_fit
+import results
 
 label = r'total rate and gyradius'
 plt.ylabel(label)
 label = r'1/kbT'
 plt.xlabel(label)
-plt.legend(loc='upper left', prop={'size':6})
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
@@ -33,21 +33,13 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
-        results[-1][1].append(0)
-        results[-1][2].append(0)
-        results[-1][3].append(0)
 
-    v = 0.82*400*400/(np.array(results[-1][3]))*(flux**0.21)
-    n = np.array(results[-1][3])
-    vSlope = np.array(results[-1][0])/(flux**0.79)
-    totalRatio = (np.array(results[-1][1])/(flux**0.81))**(1)
+    totalRatio = (results.totalRatio()/(flux**0.81))**(1)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    gyradius = 4e7*(np.array(results[-1][2])/(flux**0.88))**(3/4*(np.array(y)-1))
-    gyradius = 1.3e5*(np.array(results[-1][2])/(flux**0.88))**(3*(np.array(y)-1))
-    r = np.array(Rtt)/flux**0.36
+    gyradius = 4e7*(results.gyradius()/(flux**0.88))**(3/4*(np.array(y)-1))
+    gyradius = 1.3e5*(results.gyradius()/(flux**0.88))**(3*(np.array(y)-1))
+    r = mk.getRtt(temperatures)/flux**0.36
     inverseTemperature = 1/(kb*np.array(temperatures))
     plt.semilogy(inverseTemperature, gyradius, "-", label="gyradius "+folder)
     plt.semilogy(inverseTemperature, totalRatio, "--", label="total ratio "+folder)

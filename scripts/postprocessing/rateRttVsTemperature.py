@@ -8,7 +8,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
-
+import results
 
 plt.title("Average island growth")
 plt.ylabel("Average area growth rate")
@@ -17,7 +17,7 @@ plt.xlim(50,100)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures = list(range(120, 221, 5))
 for i in range(-6,0):
     folder = "flux3.5e"+str(i)
@@ -29,11 +29,10 @@ for i in range(-6,0):
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
     os.chdir(workingPath)
+
     plt.title("Average island growth")
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), 4e4*np.array(results[-1][0]), label="4e4*area "+folder)
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), 4e4*results.growthSlope(), label="4e4*area "+folder)
     plt.loglog(1/(np.array(temperatures)*8.62e-5), np.array(mk.getRtt(temperatures)), "--", label="rate "+folder)
     plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("rateRttVsTemperature.png")

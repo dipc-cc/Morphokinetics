@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import morphokinetics as mk
 import csv
 from scipy.optimize import curve_fit
+import results
 
 label = r'total rate and gyradius'
 plt.ylabel(label)
@@ -17,8 +18,8 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
 temperatures = list(range(120,321,5))
+results = results.Results(temperatures)
 kb = 8.6173324e-5
 
 for i in range(-6,1):
@@ -36,27 +37,18 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(float('nan'))
-        results[-1][1].append(float('nan'))
-        results[-1][2].append(float('nan'))
-        results[-1][3].append(float('nan'))
-        results[-1][4].append(float('nan'))
-        results[-1][5].append(float('nan'))
-        results[-1][6].append(float('nan'))
-        results[-1][7].append(float('nan'))
 
     rtt = mk.getRtt(temperatures)
-    growthSlope = np.array(results[-1][0])
-    totalRatio = np.array(results[-1][1])
+    growthSlope = results.growthSlope()
+    totalRatio = results.totalRatio()
     fractalD = mk.fractalDFunc(rtt/flux**0.5)
     shapeF = mk.shapeFactorFunc(rtt/flux**0.5)
-    gyradius = np.array(results[-1][2])
-    n = np.array(results[-1][3])
-    perimeterSlopes= np.array(results[-1][4])
-    numberOfMonomers= np.array(results[-1][5])
-    aeRatioTimesPossibleList= np.array(results[-1][6])
-    simulatedTimes= np.array(results[-1][7])
+    gyradius = results.gyradius()
+    n = results.islands()
+    perimeterSlopes= results.perimeter()
+    numberOfMonomers= results.monomers()
+    aeRatioTimesPossibleList= results.aeRatioTimesPossible()
+    simulatedTimes= results.times()
 
     filename = "outputFile"+'{:E}'.format(flux)+".txt"
     with open(filename, 'w', newline='') as csvfile:

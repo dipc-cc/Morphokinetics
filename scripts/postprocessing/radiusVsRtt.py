@@ -8,6 +8,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
+import results
 
 yPower = 0.3
 xPower = 0
@@ -19,7 +20,7 @@ plt.ylabel(r'Average radius growth rate/flux $\frac{{ \sqrt{{ \dot{{r}} }} }}{{F
 plt.ylim(8,100)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures = list(range(120,221,5))
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
@@ -31,10 +32,8 @@ for i in range(-6,5):
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
     os.chdir(workingPath)
-    plt.loglog(np.array(mk.getRtt(temperatures))/flux**xPower, np.array(results[-1][0])/(flux**yPower), label=folder)
+    plt.loglog(np.array(mk.getRtt(temperatures))/flux**xPower, results.growthSlope()/(flux**yPower), label=folder)
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("radiusVsRtt.png")
     

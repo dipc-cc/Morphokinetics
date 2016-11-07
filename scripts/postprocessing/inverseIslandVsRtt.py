@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 from scipy.optimize import curve_fit
+import results
 
 label = r'F^0.23/Number of islands (N)'
 plt.ylabel(label)
@@ -13,7 +14,7 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 temperatures = list(range(120,321,5))
 
 for i in range(-6,1):
@@ -27,13 +28,8 @@ for i in range(-6,1):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    while(len(temperatures) > len(results[-1][0])):
-        results[-1][0].append(0)
-        results[-1][1].append(0)
-        results[-1][2].append(0)
-        results[-1][3].append(0)
 
-    islands = np.array(results[-1][3])
+    islands = results.islands()
     indexes = np.where(islands > 0)
     islands = islands[indexes]
     t = np.array(temperatures)[indexes]

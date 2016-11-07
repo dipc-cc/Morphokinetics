@@ -235,4 +235,4 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
                 a = 0 # skip the writing
 
         os.chdir(workingPath)
-    return meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes
+    return meanValues

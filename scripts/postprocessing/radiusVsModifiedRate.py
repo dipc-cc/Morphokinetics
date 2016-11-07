@@ -9,6 +9,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
+import results
 
 yPower = 0.89
 xPower = 0.82
@@ -18,13 +19,12 @@ label = r'Average island radius growth rate / flux $\frac{{ \sqrt{{ \dot{{r}} }}
 plt.ylabel(label)
 label = r'Time-averaged total rate $\frac{{ < R >_t }}{{ F ^{{ {} }} }}$'.format(xPower)
 plt.xlabel(label)
-plt.legend(loc='upper left', prop={'size':6})
 plt.grid(True)
 
 sqrt = True
 workingPath = os.getcwd()
 temperatures = list(range(120,221,5))
-results = []
+results = results.Results()
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
@@ -36,8 +36,8 @@ for i in range(-6,5):
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][0])/flux**yPower, label=folder)
-    plt.loglog(np.array(results[-1][1])/flux**xPower, np.array(results[-1][2])/flux**yPower, '--', label="gyradius "+str(flux))
+    plt.loglog(results.totalRatio()/flux**xPower, results.growthSlope()/flux**yPower, label=folder)
+    plt.loglog(results.totalRatio()/flux**xPower, results.gyradius()/flux**yPower, '--', label="gyradius "+str(flux))
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("radiusVsModifiedRate.png")
     

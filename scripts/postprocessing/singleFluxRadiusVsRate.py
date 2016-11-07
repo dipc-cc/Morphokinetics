@@ -8,6 +8,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
+import results
 
 def radiusVsRate(folder="."):
     
@@ -19,7 +20,7 @@ def radiusVsRate(folder="."):
     plt.xlabel(label)
     plt.grid(True)
 
-    results = []
+    currentResults = results.Results()
     sqrt = True
     interval = True
 
@@ -27,13 +28,13 @@ def radiusVsRate(folder="."):
     try:
         os.chdir(folder)
         oneResult = mk.getIslandDistribution(temperatures, sqrt, interval)
-        results.append(oneResult)
+        currentResults.append(oneResult)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
-    plt.loglog(np.array(results[-1][1]), np.array(results[-1][0]),  label="growth"+folder)
-    plt.loglog(np.array(results[-1][1]), np.array(results[-1][2]), label="gyradius")
-    plt.loglog(np.array(results[-1][1]), 1000/np.array(results[-1][4]), label="perimeter")
+    plt.loglog(currentResults.totalRatio(), currentResults.growthSlope(),  label="growth"+folder)
+    plt.loglog(currentResults.totalRatio(), currentResults.gyradius(), label="gyradius")
+    plt.loglog(currentResults.totalRatio(), 1000/currentResults.perimeter(), label="perimeter")
     plt.legend(loc='upper left', prop={'size':6})
 
 

@@ -8,6 +8,7 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
+import results
 
 
 plt.title("Average island growth")
@@ -16,10 +17,10 @@ plt.ylabel(label)
 label = r'Time-averaged total rate $ < R >_t $'
 plt.xlabel(label)
 plt.grid(True)
-temperatures = list(range(120,221,5))
+temperatures = list(range(120,321,5))
 
 workingPath = os.getcwd()
-results = []
+results = results.Results()
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
@@ -29,10 +30,9 @@ for i in range(-6,5):
         results.append(mk.getIslandDistribution(temperatures, False, False))
     except OSError:
         print ("error changing to {}".format(folder))
-        a = 0 #do nothing
     os.chdir(workingPath)
-    plt.loglog(np.array(results[-1][1]), np.array(results[-1][0]),  label=folder)
-    plt.loglog(np.array(results[-1][1]), np.array(results[-1][2]), '--', label="gyradius "+str(flux))
+    plt.loglog(results.totalRatio(), results.growthSlope(),  label=folder)
+    plt.loglog(results.totalRatio(), results.gyradius(), '--', label="gyradius "+str(flux))
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("radiusVsRate.png")
     
