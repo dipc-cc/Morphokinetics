@@ -1,8 +1,7 @@
 import re
-import math
 import numpy as np
 import matplotlib.pyplot as plt
-import morphokineticsLow as mk
+import results
 import scipy.special
 from scipy.optimize import curve_fit
 
@@ -16,23 +15,12 @@ def errFunc(x, a, b, c, sigma):
 def ourErrFunc(x, a, b, c, sigma):
     return a*(np.exp(sigma*(x-c))/(1+np.exp(sigma*(x-c))))+b
 
-def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
+def getAllValues(f, maxCoverage, getSlopes=True):
     """ reads all the values for the corresponding coverage """
     
     #get something like 0.05000 expression to be grepped 
     regExpression = '(0\...00)|(^0\...\s)' # corresponds to 0.??00 expression or 0.??[:spaces:] expression
-    w = 0
-    islandSizesList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    islandRadiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    gyradiusList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    monomersList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    neList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    innerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    outerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    islandNumberList = [[0 for x in range(w)] for y in range(maxCoverage)]
-    timeList[0].append(0)
-    neList[0].append(0)
+    currentData = results.Data(maxCoverage) # init results class
     cov = 0
     previousLine = ""
     dataLine = ""
@@ -47,11 +35,7 @@ def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
             next(iterList)
             j = next(iterList)
             while j != '\n': # save the current values (island sizes) to an array
-                try:
-                    islandSizesList[cov].append(int(j))
-                    islandRadiusList[cov].append(int(math.sqrt(float(j))))
-                except ValueError:
-                    pass # ignore if is not a number
+                currentData.appendIslandSize(cov, j)
                 j = next(iterList)
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
@@ -59,23 +43,11 @@ def getAllValues(f, maxCoverage, sqrt=True, getSlopes=True):
             if (cov >= maxCoverage):           
                 cov = 0                        # coverage is bigger than wanted, skip
             else:
-                dataList = re.split('\t|\n', line) # split line into a list
-                timeList[cov].append(dataList[1])  # get the time and store it in a list
-                monomersList[cov].append(dataList[6])  # get the number of monomers
-                neList[cov].append(dataList[7])    # get number of events and store it in a list
-                if (len(dataList) > 10):           # if gyradius was calculated store it
-                    gyradiusList[cov].append(float(dataList[9]))
-                if (len(dataList) > 11):           # if perimeter was calculated store it
-                    innerPerimeterList[cov].append(int(dataList[10]))
-                    outerPerimeterList[cov].append(int(dataList[11]))
-                islandNumberList[cov].append(int(dataList[3]))
+                currentData.appendData(cov, line)
                 dataLine = previousLine
         previousLine = line
 
-    if (sqrt):
-        return islandRadiusList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList
-    else:
-        return islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList
+    return currentData
 
     
 def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):

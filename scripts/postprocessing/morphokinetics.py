@@ -1,10 +1,11 @@
-import re
 import os
+import re
 import math
 import glob
 import numpy as np
 import csv
 import morphokineticsLow as mk
+import results
 
 
 def powerFunc(x, a, b):
@@ -94,15 +95,12 @@ island size. It returns the slope of the fit, which is the growth rate."""
             monomersList.append(0.0)
             return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList, monomersList
 
-    islandSizesList, timeList, gyradiusList, neList, innerPerimeterList, outerPerimeterList, readLines, monomersList, islandNumberList = mk.getAllValues(f, maxCoverage, sqrt, growth)
-    w = 0
-    histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
-    averageSizes = []
-    times = []
-    monomers = []
-    numberOfIslands = []
-    averageRatio = []
-    allGyradius = []
+    currentData = mk.getAllValues(f, maxCoverage, growth)
+    if sqrt:
+        islandSizesList = currentData.islandRadiusList
+    else:
+        islandSizesList = currentData.islandSizesList
+    meanData = results.MeanData(maxCoverage, chunk)
     if verbose:
         print("Average island size for")
 
@@ -112,34 +110,22 @@ island size. It returns the slope of the fit, which is the growth rate."""
         outwriter.writerow(["%[index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1]]"])
         for index, islandSizes in enumerate(islandSizesList):
             if islandSizes: #ensure that it is not null
-                # do histogram
-                histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+chunk, chunk), density=False))
-                # average
-                averageSizes.append(np.mean(islandSizes))
-                times.append(np.mean(np.array(timeList[index]).astype(np.float)))
-                monomers.append(np.mean(np.array(monomersList[index]).astype(np.float)))
-                numberOfIslands.append(np.mean(np.array(islandNumberList[index])))
-                averageRatio.append(np.mean(np.array(neList[index]).astype(np.float)))
-                allGyradius.append(np.mean(np.array(gyradiusList[index]).astype(np.float)))
-                if verbose:
-                    print("  coverage {}%  {} time {}".format(index,averageSizes[-1],times[-1]))
-                if index == 30: # only count islands in 30% of coverage
-                    numberOfIsland = len(islandSizes)/(readLines/30) # divide all islands by number of iterations
-                outwriter.writerow([index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1]])
+                meanData.updateData(index, islandSizes, currentData)
+                outwriter.writerow([index, temperature, flux, meanData.monomers[-1], index/100, meanData.times[-1], meanData.numberOfIslands[-1], meanData.averageSizes[-1], meanData.averageRatio[-1]/meanData.times[-1], meanData.allGyradius[-1]])
                 
 
-    numberOfIsland = np.mean(np.array(islandNumberList[30]))
+    numberOfIsland = np.mean(np.array(currentData.islandNumberList[30]))
 
     # Curve fitting
-    growthSlope = mk.getAverageGrowth(times, averageSizes, sqrt, verbose, "tmpFig.png")
-    gyradiusSlope = mk.getAverageGrowth(times, gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
-    mk.getAverageGrowth(averageSizes, gyradiusList, sqrt, verbose, "tmpFig4.png")
-    coverages = 400*400/100*np.arange(0.0,maxCoverage, 1)/(numberOfIsland+1)
-    mk.getAverageGrowth(times, coverages, sqrt, verbose, "tmpFig5.png")
-    perimeterSlope = mk.getAverageGrowth(times, outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    growthSlope = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
+    gyradiusSlope = mk.getAverageGrowth(meanData.times, currentData.gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
+    mk.getAverageGrowth(meanData.averageSizes, currentData.gyradiusList, sqrt, verbose, "tmpFig4.png")
+    coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(numberOfIsland+1)
+    mk.getAverageGrowth(meanData.times, coverages, sqrt, verbose, "tmpFig5.png")
+    perimeterSlope = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
     #gyradiusList vs averageSizes
-    mk.plot(gyradiusList, averageSizes)
-    return growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList
+    ####mk.plot(gyradiusList, averageSizes)
+    return growthSlope, gyradiusSlope, perimeterSlope, currentData.timeList, numberOfIsland, currentData.neList, currentData.monomersList
 
 def getRtt(temperatures):
     kb = 8.6173324e-5
