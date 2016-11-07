@@ -76,6 +76,8 @@ def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temper
 island size. It returns the slope of the fit, which is the growth rate."""
 
     numberOfIsland = 0
+    slopes = results.Slopes()
+    currentData = results.Data(maxCoverage)
     fileName = "dataEvery1percentAndNucleation.txt"
     try:
         f = open(fileName)
@@ -84,16 +86,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             f = open("results/"+fileName)
         except OSError:
             print("Input file {} can not be openned. Exiting! ".format(fileName))
-            growthSlope = 0
-            gyradiusSlope = 0
-            perimeterSlope = 0
-            time30cov = []
-            for i in range(0,maxCoverage):
-                time30cov.append(1)
-            neList = 0
-            monomersList = []
-            monomersList.append(0.0)
-            return growthSlope, gyradiusSlope, perimeterSlope, time30cov, numberOfIsland, neList, monomersList
+            return slopes, currentData, numberOfIsland
 
     currentData = mk.getAllValues(f, maxCoverage, growth)
     if sqrt:
@@ -117,15 +110,15 @@ island size. It returns the slope of the fit, which is the growth rate."""
     numberOfIsland = np.mean(np.array(currentData.islandNumberList[30]))
 
     # Curve fitting
-    growthSlope = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
-    gyradiusSlope = mk.getAverageGrowth(meanData.times, currentData.gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
+    slopes.growthSlope = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
+    slopes.gyradiusSlope = mk.getAverageGrowth(meanData.times, currentData.gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
     mk.getAverageGrowth(meanData.averageSizes, currentData.gyradiusList, sqrt, verbose, "tmpFig4.png")
     coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(numberOfIsland+1)
     mk.getAverageGrowth(meanData.times, coverages, sqrt, verbose, "tmpFig5.png")
-    perimeterSlope = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    slopes.perimeterSlope = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
     #gyradiusList vs averageSizes
     ####mk.plot(gyradiusList, averageSizes)
-    return growthSlope, gyradiusSlope, perimeterSlope, currentData.timeList, numberOfIsland, currentData.neList, currentData.monomersList
+    return slopes, currentData, numberOfIsland
 
 def getRtt(temperatures):
     kb = 8.6173324e-5
@@ -224,24 +217,24 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
         except OSError:
             print ("error changing to directory {}".format(temperature)) #do nothing
         else:
-            growthSlope, gyradiusSlope, perimeterSlope, timeList, numberOfIsland, neList, monomersList = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
-            growthSlopes.append(growthSlope)
-            gyradiusSlopes.append(gyradiusSlope)
-            perimeterSlopes.append(perimeterSlope)
+            slopes, currentData, numberOfIsland = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
+            growthSlopes.append(slopes.growthSlope)
+            gyradiusSlopes.append(slopes.gyradiusSlope)
+            perimeterSlopes.append(slopes.perimeterSlope)
             numberOfIslands.append(numberOfIsland)
-            numberOfMonomers.append(np.mean(np.array(monomersList[-1]).astype(np.float)))
+            numberOfMonomers.append(np.mean(np.array(currentData.monomersList[-1]).astype(np.float)))
             if (interval):
-                time2 = np.mean(np.array(timeList[30]).astype(np.float)) # get time at 30% of coverage
-                time1 = np.mean(np.array(timeList[20]).astype(np.float)) # get time at 20% of coverage
-                neList30 = [item for item in neList[30] if (float(item) >= 0)]  # remove negative values
-                ne2 = np.mean(np.array(neList30).astype(np.float))
-                neList20 = [item for item in neList[20] if (float(item) >= 0)]
-                ne1 = np.mean(np.array(neList20).astype(np.float))
+                time2 = np.mean(np.array(currentData.timeList[30]).astype(np.float)) # get time at 30% of coverage
+                time1 = np.mean(np.array(currentData.timeList[20]).astype(np.float)) # get time at 20% of coverage
+                neList30 = [item for item in currentData.neList[30] if (float(item) >= 0)]  # remove negative values
+                ne2 = np.mean(np.array(currentData.neList30).astype(np.float))
+                neList20 = [item for item in currentData.neList[20] if (float(item) >= 0)]
+                ne1 = np.mean(np.array(currentData.neList20).astype(np.float))
 
                 numberOfEvents = ne2-ne1
                 simulatedTime = time2-time1
             else:
-                time30cov = np.mean(np.array(timeList[coverage-1]).astype(np.float))
+                time30cov = np.mean(np.array(currentData.timeList[coverage-1]).astype(np.float))
                 numberOfEvents, simulatedTime, aeRatioTimesPossible = getNumberOfEvents(time30cov)
                 aeRatioTimesPossibleList.append(aeRatioTimesPossible)
                 if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
@@ -251,7 +244,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             simulatedTimes.append(simulatedTime)
             totalRatio.append(numberOfEvents/simulatedTime)
             try:
-                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, growthSlope, gyradiusSlope, int(numberOfEvents/simulatedTime)))
+                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, slopes.growthSlope, slopes.gyradiusSlope, int(numberOfEvents/simulatedTime)))
             except ValueError:
                 a = 0 # skip the writing
 

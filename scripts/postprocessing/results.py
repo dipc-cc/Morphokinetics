@@ -76,3 +76,13 @@ class MeanData:
             print("  coverage {}%  {} time {}".format(index, averageSizes[-1], times[-1]))
         if index == 30: # only count islands in 30% of coverage
             self.numberOfIsland = len(islandSizes)/(data.readLines/30) # divide all islands by number of iterations
+
+class Slopes:
+    """ Stores fit slopes of several measurements"""
+    
+    def __init__(self):
+        self.growthSlope = 0
+        self.gyradiusSlope = 0
+        self.perimeterSlope = 0
+        
+    
