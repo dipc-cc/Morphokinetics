@@ -19,6 +19,10 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -130,6 +134,24 @@ public class MainActivity extends AppCompatActivity {
                 throw new IllegalArgumentException("This simulation mode is not implemented");
         }
 
+      // Dirty way to read a resource file
+      InputStream inputStream = getResources().openRawResource(R.raw.test);
+      InputStreamReader inputreader = new InputStreamReader(inputStream);
+      BufferedReader buffreader = new BufferedReader(inputreader);
+      String line;
+      StringBuilder text = new StringBuilder();
+
+      try {
+        while (( line = buffreader.readLine()) != null) {
+          System.out.println(line);
+          text.append(line);
+          text.append('\n');
+        }
+      } catch (IOException e) {
+        System.out.println("Error");
+      }
+
+      System.out.println("is this right?"+getApplicationInfo().sourceDir);
 
         System.out.println("Init");
         simulation.initialiseKmc();
