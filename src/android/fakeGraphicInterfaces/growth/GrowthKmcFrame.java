@@ -8,6 +8,10 @@ import graphicInterfacesCommon.growth.IGrowthKmcFrame;
 
 public class GrowthKmcFrame implements IGrowthKmcFrame {
 
+  public GrowthKmcFrame(Object lattice, int max) {
+    // do nothing
+  }
+
   @Override
   public void setVisible(boolean visible){
     // do nothing
