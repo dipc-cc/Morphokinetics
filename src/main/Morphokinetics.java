@@ -58,7 +58,7 @@ public class Morphokinetics {
           break;
         default:
           System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
-          System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are batch or evolutionary");
+          System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are 'batch', 'evolutionary' or 'psd'");
           throw new IllegalArgumentException("This simulation mode is not implemented");
       }
       printEnd();
