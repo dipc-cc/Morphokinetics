@@ -5,8 +5,6 @@
  */
 package basic;
 
-import android.content.Context;
-
 import basic.io.OutputType.formatFlag;
 import basic.io.Restart;
 import graphicInterfacesCommon.surfaceViewer2D.IFrame2D;
@@ -132,7 +130,7 @@ public abstract class AbstractSimulation {
   /**
    * Initialises Kmc, the basic simulation class
    */
-  public void initialiseKmc(Context context) {
+  public void initialiseKmc() {
     this.kmc = null;
     this.rates = null;
   }

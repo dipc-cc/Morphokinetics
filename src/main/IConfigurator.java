@@ -6,7 +6,6 @@
 package main;
 
 import basic.Parser;
-import android.content.Context;
 
 /**
  *

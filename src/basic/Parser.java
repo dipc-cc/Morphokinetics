@@ -194,7 +194,6 @@ public class Parser {
    * and HIERARCHY.
    */
   private final EvaluatorType evaluatorType;
-
   /** This numbers reflect the power of two and gives the chance to choose between inclusively among
    * PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the
    * evaluators) has to be chosen.
@@ -227,10 +226,10 @@ public class Parser {
     psdScale = 1;
     psdExtend = 1;
     endTime = -1;
-    numberOfSimulations = 3;
-    cartSizeX = 25;
-    cartSizeY = 25;
-    cartSizeZ = 25;
+    numberOfSimulations = 10;
+    cartSizeX = 256;
+    cartSizeY = 256;
+    cartSizeZ = 256;
     millerX = 0;
     millerY = 1;
     millerZ = 1;

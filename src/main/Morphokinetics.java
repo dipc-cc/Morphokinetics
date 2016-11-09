@@ -92,7 +92,7 @@ public class Morphokinetics {
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
-    simulation.initialiseKmc(null);
+    simulation.initialiseKmc();
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
