@@ -239,7 +239,7 @@ public class Parser {
     multithreaded = true;
     visualise = true;
     withGui = true;
-    justCentralFlake = false;
+    justCentralFlake = true;
     printToImage = false;
     psd = false;
     psdSymmetry = true;
