@@ -5,7 +5,6 @@
  */
 package basic.io;
 
-import android.content.Context;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.lattice.AbstractLattice;
-import main.AndroidConfigurator;
 import utils.MathUtils;
 
 /**
@@ -32,12 +30,9 @@ public class Restart {
   private String folder;
   final static Charset ENCODING = StandardCharsets.UTF_8;
 
-  private Context androidContext;
-
   public Restart() {
     folder = "results/";
-
-    init();
+    createFolder(folder);
   }
 
   public Restart(String restartFolder) {
@@ -45,14 +40,7 @@ public class Restart {
     if (!folder.endsWith("/")) {
       folder += "/";
     }
-    init();
-  }
-
-  private void init() {
-    createFolder(folder);
-    if (AndroidConfigurator.getConfigurator() != null) { //
-      androidContext = AndroidConfigurator.getConfigurator().getContext();
-    }
+    createFolder(restartFolder);
   }
 
   /**
@@ -238,7 +226,7 @@ public class Restart {
 
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
     fileName = addFolderAndSuffix(fileName, ".txt");
-    return RestartLow.readLowText2D(fileName, androidContext);
+    return RestartLow.readLowText2D(fileName);
   }
   
   public String readFile(String fileName) {

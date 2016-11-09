@@ -34,6 +34,7 @@ import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.unitCell.IUc;
+import main.AndroidConfigurator;
 
 /**
  * Class responsible to do the actual writings and readings. Only has to be used from Restart class.
@@ -167,50 +168,55 @@ class RestartLow {
     }
   }
 
-  static float[][] readLowText2D(String fileName, Context androidContext) throws FileNotFoundException {
+  static float[][] readLowText2D(String fileName) throws FileNotFoundException {
+    Context androidContext;
     float[][] data = null;
-    System.out.println("Trying to read " + fileName + " file of unknown size ");
-    InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
-    System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
-    InputStreamReader inputreader = new InputStreamReader(inputStream);
 
-    BufferedReader in = new BufferedReader(inputreader);
-    int x = -1;
-    int y = -1;
-    int sizeY = 0;
-    int sizeX = 0;
-    // create file descriptor. It will be automatically closed.
-    try {
-      String line;
-      // <-- read whole line
-      line = in.readLine();
-      if (line != null) {
-        StringTokenizer tk = new StringTokenizer(line);
-        if (!tk.nextToken().equals("#")) {
-          System.err.println("File format not valid. Should start with a line with # character");
-          throw new FileNotFoundException("Fix the file format");
-        }
-        sizeY = Integer.parseInt(tk.nextToken());
-        sizeX = Integer.parseInt(tk.nextToken());
-        data = new float[sizeX][sizeY];
-      }
-      line = in.readLine();
-      for (x = 0; x < sizeX; x++) {
-        StringTokenizer tk = new StringTokenizer(line);
-        for (y = 0; y < sizeY; y++) {
-          data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+    if (AndroidConfigurator.getConfigurator() != null) { //
+      androidContext = AndroidConfigurator.getConfigurator().getContext();
+
+      System.out.println("Trying to read " + fileName + " file of unknown size ");
+      InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
+      System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
+      InputStreamReader inputreader = new InputStreamReader(inputStream);
+
+      BufferedReader in = new BufferedReader(inputreader);
+      int x = -1;
+      int y = -1;
+      int sizeY = 0;
+      int sizeX = 0;
+      // create file descriptor. It will be automatically closed.
+      try {
+        String line;
+        // <-- read whole line
+        line = in.readLine();
+        if (line != null) {
+          StringTokenizer tk = new StringTokenizer(line);
+          if (!tk.nextToken().equals("#")) {
+            System.err.println("File format not valid. Should start with a line with # character");
+            throw new FileNotFoundException("Fix the file format");
+          }
+          sizeY = Integer.parseInt(tk.nextToken());
+          sizeX = Integer.parseInt(tk.nextToken());
+          data = new float[sizeX][sizeY];
         }
         line = in.readLine();
+        for (x = 0; x < sizeX; x++) {
+          StringTokenizer tk = new StringTokenizer(line);
+          for (y = 0; y < sizeY; y++) {
+            data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+          }
+          line = in.readLine();
+        }
+        in.close();
+      } catch (FileNotFoundException fe) {
+        throw fe;
+      } catch (Exception e) {
+        // if any I/O error occurs
+        System.err.println("Point: " + x + " " + y);
+        e.printStackTrace();
       }
-      in.close();
-    } catch (FileNotFoundException fe) {
-      throw fe;
-    } catch (Exception e) {
-      // if any I/O error occurs
-      System.err.println("Point: " + x + " " + y);
-      e.printStackTrace();
     }
-
     return data;
   }
 
