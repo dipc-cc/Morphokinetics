@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.lattice.AbstractLattice;
-import main.Morphokinetics;
 import utils.MathUtils;
 
 /**
@@ -50,7 +49,7 @@ public class Restart {
    * @return base location of the executable
    */
   public static String getJarBaseDir() {
-    final Class<?> referenceClass = Morphokinetics.class;
+    final Class<?> referenceClass = Restart.class;
     final URL url = referenceClass.getProtectionDomain().getCodeSource().getLocation();
     File jarPath;
     try {
@@ -232,7 +231,7 @@ public class Restart {
       readList = RestartLow.readSmallTextFile(fileName);
     } catch (IOException exception) {
       System.err.println("Could not read file " + fileName);
-      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
+      Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, exception);
     }
 
     int lines = readList.size();
