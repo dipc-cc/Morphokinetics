@@ -343,6 +343,23 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return -monomerCount;
   }
 
+  public void getCentreOfMassTry() {
+    int islandAmount = getIslandCount();
+    int minX[] = new int[islandAmount];
+    int maxX[] = new int[islandAmount];
+    int minY[] = new int[islandAmount];
+    int maxY[] = new int[islandAmount];
+    //islands = new Island[islandAmount];
+    //Arrays.setAll(islands, i -> new Island(i));
+    for (int i = 0; i < size(); i++) {
+      IUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
+        int islandNumber = atom.getIslandNumber();
+      }
+    }
+  }
+  
   /**
    * Calculates the centre of mass of each island. The result is stored in "centres" vector. The way
    * to compute the distances is considering periodic boundary conditions and the algorithm is taken

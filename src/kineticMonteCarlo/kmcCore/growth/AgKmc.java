@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
+import android.content.Context;
+
 import basic.Parser;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
@@ -19,7 +21,7 @@ import utils.StaticRandom;
  */
 public class AgKmc extends AbstractGrowthKmc {
 
-  public AgKmc(Parser parser) {
+  public AgKmc(Parser parser, Context context) {
     super(parser);
 
     HopsPerStep distancePerStep = new HopsPerStep();
@@ -27,7 +29,7 @@ public class AgKmc extends AbstractGrowthKmc {
     agLattice.init();
     setLattice(agLattice);
     if (parser.justCentralFlake()) {
-      setPerimeter(new RoundPerimeter("Ag"));
+      setPerimeter(new RoundPerimeter("Ag", context));
     }
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
