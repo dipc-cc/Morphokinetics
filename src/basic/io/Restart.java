@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.lattice.AbstractLattice;
-import main.Morphokinetics;
+import main.AndroidConfigurator;
 import utils.MathUtils;
 
 /**
@@ -36,7 +36,8 @@ public class Restart {
 
   public Restart() {
     folder = "results/";
-    createFolder(folder);
+
+    init();
   }
 
   public Restart(String restartFolder) {
@@ -44,14 +45,15 @@ public class Restart {
     if (!folder.endsWith("/")) {
       folder += "/";
     }
-    createFolder(restartFolder);
+    init();
   }
 
-  public Restart(Context context){
-    folder="";
-    androidContext = context;
+  private void init() {
+    createFolder(folder);
+    if (AndroidConfigurator.getConfigurator() != null) { //
+      androidContext = AndroidConfigurator.getConfigurator().getContext();
+    }
   }
-
   /**
    * Returns the base location of the JAR file (or the main executable instead).
    *
@@ -62,7 +64,7 @@ public class Restart {
       System.out.println("This is android");
       return "";
     } else {
-      final Class<?> referenceClass = Morphokinetics.class;
+      final Class<?> referenceClass = Restart.class;
       final URL url = referenceClass.getProtectionDomain().getCodeSource().getLocation();
       File jarPath;
       try {
@@ -245,7 +247,7 @@ public class Restart {
       readList = RestartLow.readSmallTextFile(fileName);
     } catch (IOException exception) {
       System.err.println("Could not read file " + fileName);
-      Logger.getLogger(Morphokinetics.class.getName()).log(Level.SEVERE, null, exception);
+      Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, exception);
     }
 
     int lines = readList.size();

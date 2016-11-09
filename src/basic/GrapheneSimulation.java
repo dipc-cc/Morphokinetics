@@ -5,8 +5,6 @@
  */
 package basic;
 
-import android.content.Context;
-
 import kineticMonteCarlo.kmcCore.growth.GrapheneKmc;
 import ratesLibrary.GrapheneGaillardOneNeighbourRates;
 import ratesLibrary.GrapheneGaillardRates;
@@ -29,8 +27,8 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
   }
 
   @Override
-  public void initialiseKmc(Context context) {
-    super.initialiseKmc(context);
+  public void initialiseKmc() {
+    super.initialiseKmc();
 
     IRates rates;
     switch (ratesLibrary) {
@@ -49,7 +47,7 @@ public class GrapheneSimulation extends AbstractGrowthSimulation {
     }
         
     setRates(rates);
-    setKmc(new GrapheneKmc(getParser(), context));
+    setKmc(new GrapheneKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
 

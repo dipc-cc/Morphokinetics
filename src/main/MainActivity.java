@@ -1,5 +1,6 @@
 package main;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,7 +30,6 @@ import basic.AgUcSimulation;
 import basic.BasicGrowthSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
-import basic.SiSimulation;
 import eus.ehu.dipc.morphokinetics.R;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -61,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
       System.out.println(key + " >>>> " + value);
     }
 
-    String className;
+    Context context;
+    AndroidConfigurator configurator;
     if (System.getProperty("java.vm.name").equals("Dalvik")) {
-      className = "main.AndroidConfigurator";
-    } else {
-      className = "main.PcConfigurator";
+      context = this;
+      configurator = AndroidConfigurator.getConfigurator(this);
     }
     TextView tv = (TextView) findViewById(R.id.outputText);
     tv.setText("Starting simulation " + count);
@@ -101,9 +101,6 @@ public class MainActivity extends AppCompatActivity {
       case "graphene":
         simulation = new GrapheneSimulation(parser);
         break;
-      case "Si":
-        simulation = new SiSimulation(parser);
-        break;
       case "basic":
         simulation = new BasicGrowthSimulation(parser);
         break;
@@ -112,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    simulation.initialiseKmc(this);
+    simulation.initialiseKmc();
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();

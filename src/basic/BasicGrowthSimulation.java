@@ -5,8 +5,6 @@
  */
 package basic;
 
-import android.content.Context;
-
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.BasicGrowthSyntheticRates;
 
@@ -21,11 +19,11 @@ public class BasicGrowthSimulation extends AbstractGrowthSimulation{
   }
 
   @Override
-  public void initialiseKmc(Context context) {
-    super.initialiseKmc(context);
+  public void initialiseKmc() {
+    super.initialiseKmc();
 
     setRates(new BasicGrowthSyntheticRates());
-    setKmc(new BasicGrowthKmc(getParser(), context));
+    setKmc(new BasicGrowthKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
 }

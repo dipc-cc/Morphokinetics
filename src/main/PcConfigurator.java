@@ -33,6 +33,11 @@ public class PcConfigurator implements IConfigurator{
   private static double simulationTime;
   
   @Override
+  public Object getContext(){
+    return null;
+  }
+  
+  @Override
   public void evolutionarySimulation(Parser parser) {
     AbstractGeneticAlgorithm ga;
     switch (parser.getEvolutionaryAlgorithm()) {

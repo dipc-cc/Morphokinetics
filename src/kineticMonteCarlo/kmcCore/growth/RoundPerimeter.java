@@ -5,8 +5,6 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
-import android.content.Context;
-
 import java.util.List;
 import java.util.TreeMap;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -36,14 +34,14 @@ public class RoundPerimeter {
   private short type;
   private int neededSteps;
 
-  public RoundPerimeter(String statisticData, Context context) {
-    perimeterStatistics = new PerimeterStatisticsFactory(statisticData, context).getStatistics();
+  public RoundPerimeter(String statisticData) {
+    perimeterStatistics = new PerimeterStatisticsFactory(statisticData).getStatistics();
     currentRadius = perimeterStatistics.getMinRadiusInSize();
     currentPerimeter = null;
   }
   
-  public RoundPerimeter(String statisticData, short type, Context context){
-   this(statisticData, context);
+  public RoundPerimeter(String statisticData, short type){
+   this(statisticData);
    this.type = type;
   }
   

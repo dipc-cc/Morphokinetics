@@ -6,12 +6,15 @@
 package main;
 
 import basic.Parser;
+import android.content.Context;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
 public interface IConfigurator {
+  
+  public Object getContext();
 
   public void evolutionarySimulation(Parser parser);
   

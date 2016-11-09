@@ -5,8 +5,7 @@
  */
 package basic;
 
-import android.content.Context;
-
+import graphicInterfaces.etching.SiFrame;
 import kineticMonteCarlo.kmcCore.etching.SiKmc;
 import ratesLibrary.SiRatesFromPreGosalvez;
 
@@ -21,8 +20,8 @@ public class SiSimulation extends AbstractEtchingSimulation {
   }
 
   @Override
-  public void initialiseKmc(Context context) {
-    super.initialiseKmc(context);
+  public void initialiseKmc() {
+    super.initialiseKmc();
 
     setRates(new SiRatesFromPreGosalvez());
     setKmc(new SiKmc(getParser()));
@@ -43,6 +42,7 @@ public class SiSimulation extends AbstractEtchingSimulation {
   public void finishSimulation() {
     if (getParser().visualise()) {
       try {
+        new SiFrame().drawKmc(getKmc());
       } catch (Exception e) {
         System.err.println("Error: The execution is not able to create the X11 frame");
         System.err.println("Finishing");
