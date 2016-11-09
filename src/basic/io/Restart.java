@@ -9,8 +9,6 @@ import android.content.Context;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.net.URISyntaxException;
@@ -20,8 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import eus.ehu.dipc.morphokinetics.R;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import main.Morphokinetics;
 import utils.MathUtils;
@@ -44,7 +40,6 @@ public class Restart {
   }
 
   public Restart(String restartFolder) {
-
     folder = restartFolder;
     if (!folder.endsWith("/")) {
       folder += "/";
@@ -234,37 +229,11 @@ public class Restart {
   }
   
   public float[][] readSurfaceText2D(int dimensions, int[] sizes, String fileName) throws FileNotFoundException {
-    if (androidContext != null) {
-      // Dirty way to read a resource file
-      InputStream inputStream = androidContext.getResources().openRawResource(R.raw.test);
-      System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
-    }
     fileName = addFolderAndSuffix(fileName, ".txt");
     return RestartLow.readLowText2D(fileName, sizes, false);
   }
 
   public float[][] readSurfaceText2D(String fileName) throws FileNotFoundException {
-    if (androidContext != null) {
-      // Dirty way to read a resource file
-      InputStream inputStream = androidContext.getResources().openRawResource(R.raw.test);
-      System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
-      InputStreamReader inputreader = new InputStreamReader(inputStream);
-      BufferedReader buffreader = new BufferedReader(inputreader);
-      String line;
-      StringBuilder text = new StringBuilder();
-
-      try {
-        while (( line = buffreader.readLine()) != null) {
-          System.out.println(line);
-          text.append(line);
-          text.append('\n');
-        }
-        System.out.println("File read correctly");
-      } catch (IOException e) {
-        System.out.println("Error");
-      }
-
-    }
     fileName = addFolderAndSuffix(fileName, ".txt");
     return RestartLow.readLowText2D(fileName, androidContext);
   }
