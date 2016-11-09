@@ -171,8 +171,8 @@ class RestartLow {
     float[][] data = null;
     System.out.println("Trying to read " + fileName + " file of unknown size ");
     InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
-      System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
-      InputStreamReader inputreader = new InputStreamReader(inputStream);
+    System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
+    InputStreamReader inputreader = new InputStreamReader(inputStream);
 
     BufferedReader in = new BufferedReader(inputreader);
     int x = -1;

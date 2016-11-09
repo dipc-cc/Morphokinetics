@@ -82,6 +82,23 @@ public class MainActivity extends AppCompatActivity {
       parser.setCalculationMode("graphene");
     }
 
+      // Dirty way to read a resource file
+      InputStream inputStream = getResources().openRawResource(R.raw.test);
+      InputStreamReader inputreader = new InputStreamReader(inputStream);
+      BufferedReader buffreader = new BufferedReader(inputreader);
+      String line;
+      StringBuilder text = new StringBuilder();
+
+      try {
+        while (( line = buffreader.readLine()) != null) {
+          System.out.println(line);
+          text.append(line);
+          text.append('\n');
+        }
+      } catch (IOException e) {
+        System.out.println("Error");
+      }
+
     parser.setTemperature(Integer.parseInt(String.valueOf(((EditText) findViewById(R.id.editTextTemperature)).getText())));
     parser.setCartSizeX(Integer.parseInt(String.valueOf(((EditText) findViewById(R.id.editTextSize)).getText())));
     parser.setCartSizeY(Integer.parseInt(String.valueOf(((EditText) findViewById(R.id.editTextSize)).getText())));
