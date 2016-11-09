@@ -1,5 +1,7 @@
 package basic;
 
+import android.content.Context;
+
 import kineticMonteCarlo.kmcCore.growth.AgUcKmc;
 import ratesLibrary.AgRatesFromPrbCox;
 
@@ -21,8 +23,8 @@ public class AgUcSimulation  extends AbstractGrowthSimulation {
   }
   
  @Override
-  public void initialiseKmc() {
-    super.initialiseKmc();
+  public void initialiseKmc(Context context) {
+    super.initialiseKmc(context);
 
     setRates(new AgRatesFromPrbCox());
     if (getParser().getHexaSizeI() == -1 || getParser().getHexaSizeJ() == -1) {
@@ -33,7 +35,7 @@ public class AgUcSimulation  extends AbstractGrowthSimulation {
       getParser().setCartSizeY(sizeY);
       System.out.println("Automatic size of the island is " + area + " " + sizeX + "x" + sizeY);
     }
-    setKmc(new AgUcKmc(getParser()));
+    setKmc(new AgUcKmc(getParser(), context));
     initialiseRates(getRates(), getParser());
   }
 }

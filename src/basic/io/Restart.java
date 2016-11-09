@@ -54,6 +54,7 @@ public class Restart {
       androidContext = AndroidConfigurator.getConfigurator().getContext();
     }
   }
+
   /**
    * Returns the base location of the JAR file (or the main executable instead).
    *

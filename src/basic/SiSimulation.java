@@ -20,8 +20,8 @@ public class SiSimulation extends AbstractEtchingSimulation {
   }
 
   @Override
-  public void initialiseKmc() {
-    super.initialiseKmc();
+  public void initialiseKmc(Context context) {
+    super.initialiseKmc(context);
 
     setRates(new SiRatesFromPreGosalvez());
     setKmc(new SiKmc(getParser()));
