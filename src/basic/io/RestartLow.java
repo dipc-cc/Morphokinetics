@@ -170,7 +170,7 @@ class RestartLow {
   static float[][] readLowText2D(String fileName, Context androidContext) throws FileNotFoundException {
     float[][] data = null;
     System.out.println("Trying to read " + fileName + " file of unknown size ");
-    InputStream inputStream = androidContext.getResources().openRawResource(R.raw.test);
+    InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
       System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
       InputStreamReader inputreader = new InputStreamReader(inputStream);
 
