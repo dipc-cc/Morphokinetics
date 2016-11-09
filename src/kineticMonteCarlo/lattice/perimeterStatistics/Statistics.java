@@ -24,7 +24,7 @@ public class Statistics {
   
   public Statistics(String statisticsFile, Context androidContext) {
     //restart = new Restart(Restart.getJarBaseDir() + "/perimeterData");
-    restart = new Restart(androidContext);
+    restart = new Restart();
     readAndSetStatistics(statisticsFile);
   }
   
