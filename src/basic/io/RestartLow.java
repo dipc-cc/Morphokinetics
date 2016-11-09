@@ -5,6 +5,8 @@
  */
 package basic.io;
 
+import android.content.Context;
+
 import static basic.io.Restart.MAX_DIMS;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,11 +18,15 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import eus.ehu.dipc.morphokinetics.R;
 import kineticMonteCarlo.atom.IAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
@@ -161,15 +167,20 @@ class RestartLow {
     }
   }
 
-  static float[][] readLowText2D(String fileName) throws FileNotFoundException {
+  static float[][] readLowText2D(String fileName, Context androidContext) throws FileNotFoundException {
     float[][] data = null;
     System.out.println("Trying to read " + fileName + " file of unknown size ");
+    InputStream inputStream = androidContext.getResources().openRawResource(R.raw.test);
+      System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
+      InputStreamReader inputreader = new InputStreamReader(inputStream);
+
+    BufferedReader in = new BufferedReader(inputreader);
     int x = -1;
     int y = -1;
     int sizeY = 0;
     int sizeX = 0;
     // create file descriptor. It will be automatically closed.
-    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
+    try {
       String line;
       // <-- read whole line
       line = in.readLine();

@@ -5,10 +5,13 @@
  */
 package kineticMonteCarlo.lattice.perimeterStatistics;
 
+import android.content.Context;
+
 import basic.io.Restart;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import eus.ehu.dipc.morphokinetics.R;
 
 /**
  *
@@ -19,8 +22,9 @@ public class Statistics {
   private int[][] data;
   private final Restart restart;
   
-  public Statistics(String statisticsFile) {
-    restart = new Restart(Restart.getJarBaseDir() + "/perimeterData");
+  public Statistics(String statisticsFile, Context androidContext) {
+    //restart = new Restart(Restart.getJarBaseDir() + "/perimeterData");
+    restart = new Restart(androidContext);
     readAndSetStatistics(statisticsFile);
   }
   
@@ -72,7 +76,8 @@ public class Statistics {
   }
 
   private void readAndSetStatistics(String fileName) {
-    
+
+
     float[][] tmp;
     int[][] result;
     try {
