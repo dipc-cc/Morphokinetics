@@ -378,13 +378,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       printHistogram();
     } 
     
-    // Dirty mode to have only one interface of countIslands
-    PrintWriter standardOutputWriter = new PrintWriter(System.out);
-    lattice.countIslands(standardOutputWriter);
-    lattice.countPerimeter(standardOutputWriter);
-    lattice.getCentreOfMass();
-    lattice.getAverageGyradius();
-    lattice.getDistancesToCentre();
+    // Dirty mode to have only one interface of countIslands
+    PrintWriter standardOutputWriter = new PrintWriter(System.out);
+    lattice.countIslands(standardOutputWriter);
+    lattice.countPerimeter(standardOutputWriter);
+    lattice.getCentreOfMass();
+    lattice.getAverageGyradius();
+    lattice.getDistancesToCentre();
     standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();
@@ -459,7 +459,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (nextRadius > 0
               && nextRadius < lattice.getCartSizeX() / 2
               && nextRadius < lattice.getCartSizeY() / 2) {
-        printData(null);
+        if (extraOutput) {
+	  printData(null);
+	}
         if (perimeterType == RoundPerimeter.CIRCLE) {
           perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
           int newArea;
