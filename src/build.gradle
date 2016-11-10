@@ -52,6 +52,11 @@ android {
         exclude 'javax/LICENSE.txt'
         exclude 'javax/COPYRIGHT.txt'
     }
+    dexOptions {
+        incremental true
+        maxProcessCount 4
+        javaMaxHeapSize "5g"
+    }
 
 }
 
