@@ -50,7 +50,7 @@ public class Restart {
    */
   public static String getJarBaseDir() {
     if (System.getProperty("java.vm.name").equals("Dalvik")) {
-      System.out.println("This is android");
+      // Return empty String. In Android fails this method and in any case, it is useless.
       return "";
     } else {
       final Class<?> referenceClass = Restart.class;
