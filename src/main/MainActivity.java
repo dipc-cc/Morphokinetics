@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    simulation.initialiseKmc(this);
+    simulation.initialiseKmc();
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
