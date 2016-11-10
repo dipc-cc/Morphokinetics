@@ -62,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     Context context;
-    AndroidConfigurator configurator;
+    Configurator configurator;
     if (System.getProperty("java.vm.name").equals("Dalvik")) {
       context = this;
-      configurator = AndroidConfigurator.getConfigurator(this);
+      Configurator.getConfigurator().setContext(context);
     }
     TextView tv = (TextView) findViewById(R.id.outputText);
     tv.setText("Starting simulation " + count);

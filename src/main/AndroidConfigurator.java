@@ -7,7 +7,12 @@ package main;
 
 import android.content.Context;
 
-import basic.Parser;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import eus.ehu.dipc.morphokinetics.R;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -15,30 +20,29 @@ import basic.Parser;
  */
 public class AndroidConfigurator implements IConfigurator{
 
-  private static AndroidConfigurator configurator;
-
   private Context androidContext;
 
-  private AndroidConfigurator(Context context){
-    androidContext = context;
-  }
-
-  public static AndroidConfigurator getConfigurator(Context context){
-    if (configurator == null){
-      configurator = new AndroidConfigurator(context);
-    }
-    return configurator;
-  }
-
-  public static AndroidConfigurator getConfigurator() {
-    if (configurator == null) {
-      System.err.println("You must instantiate configurator before trying to use it.");
-    }
-    return configurator;
-  }
-  
   @Override
-  public Context getContext(){
+  public void setContext(Object context) {
+    androidContext = (Context) context;
+  }
+
+  @Override
+  public Context getContext() {
     return androidContext;
-  }  
+  }
+
+  /**
+   * Returns proper reader for Android file.
+   * 
+   * @param fileName ignored for the moment, until I understand "@RawRes int id" syntax.
+   * @return BufferedReader
+   * @throws FileNotFoundException 
+   */
+  @Override
+  public BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
+    InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
+    InputStreamReader inputreader = new InputStreamReader(inputStream);
+    return new BufferedReader(inputreader);
+  }
 }

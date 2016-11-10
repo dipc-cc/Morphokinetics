@@ -5,14 +5,19 @@
  */
 package main;
 
-import basic.Parser;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 
 /**
+ * Common interface for Android/PC configurators.
  *
  * @author J. Alberdi-Rodriguez
  */
-public interface IConfigurator {
-  
-  public Object getContext();
-  
+interface IConfigurator {
+
+  void setContext(Object context);
+
+  Object getContext();
+
+  BufferedReader getBufferedReader(String fileName) throws FileNotFoundException;
 }

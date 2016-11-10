@@ -5,8 +5,6 @@
  */
 package basic.io;
 
-import android.content.Context;
-
 import static basic.io.Restart.MAX_DIMS;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,15 +16,12 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import eus.ehu.dipc.morphokinetics.R;
 import kineticMonteCarlo.atom.IAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
@@ -34,7 +29,7 @@ import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.unitCell.IUc;
-import main.AndroidConfigurator;
+import main.Configurator;
 
 /**
  * Class responsible to do the actual writings and readings. Only has to be used from Restart class.
@@ -169,18 +164,11 @@ class RestartLow {
   }
 
   static float[][] readLowText2D(String fileName) throws FileNotFoundException {
-    Context androidContext;
     float[][] data = null;
 
-    if (AndroidConfigurator.getConfigurator() != null) { //
-      androidContext = AndroidConfigurator.getConfigurator().getContext();
+    if (Configurator.getConfigurator() != null) { //
 
-      System.out.println("Trying to read " + fileName + " file of unknown size ");
-      InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
-      System.out.println("resources " + androidContext.getResources() + " is " + inputStream);
-      InputStreamReader inputreader = new InputStreamReader(inputStream);
-
-      BufferedReader in = new BufferedReader(inputreader);
+      BufferedReader in = Configurator.getConfigurator().getBufferedReader(fileName);
       int x = -1;
       int y = -1;
       int sizeY = 0;
