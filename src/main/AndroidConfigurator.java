@@ -40,16 +40,5 @@ public class AndroidConfigurator implements IConfigurator{
   @Override
   public Context getContext(){
     return androidContext;
-  }
-
-  @Override
-  public void evolutionarySimulation(Parser parser) {
-    throw new UnsupportedOperationException("Evolutionary mode is not yet supported in mobile devices."); 
-  }
-
-  @Override
-  public void psdFromSurfaces(Parser parser) {
-    throw new UnsupportedOperationException("PSD tool is not yet supported in mobile devices."); 
-  }
-  
+  }  
 }

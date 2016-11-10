@@ -14,8 +14,5 @@ import basic.Parser;
 public interface IConfigurator {
   
   public Object getContext();
-
-  public void evolutionarySimulation(Parser parser);
   
-  public void psdFromSurfaces(Parser parser);
 }
