@@ -34,14 +34,16 @@ public class AndroidConfigurator implements IConfigurator{
 
   /**
    * Returns proper reader for Android file.
-   * 
-   * @param fileName ignored for the moment, until I understand "@RawRes int id" syntax.
+   *
+   * @param fileName complete file name. It comes with a folder and extension that here is removed,
+   * it is also lowercased.
    * @return BufferedReader
-   * @throws FileNotFoundException 
+   * @throws FileNotFoundException
    */
   @Override
   public BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
-    InputStream inputStream = androidContext.getResources().openRawResource(R.raw.reentrancesperanglehexagonal10million);
+    int id = androidContext.getResources().getIdentifier(fileName.split("/")[2].split("[.]")[0].toLowerCase(), "raw", androidContext.getPackageName());
+    InputStream inputStream = androidContext.getResources().openRawResource(id);
     InputStreamReader inputreader = new InputStreamReader(inputStream);
     return new BufferedReader(inputreader);
   }
