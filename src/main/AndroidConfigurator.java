@@ -5,7 +5,14 @@
  */
 package main;
 
-import basic.Parser;
+import android.content.Context;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import eus.ehu.dipc.morphokinetics.R;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -13,14 +20,31 @@ import basic.Parser;
  */
 public class AndroidConfigurator implements IConfigurator{
 
+  private Context androidContext;
+
   @Override
-  public void evolutionarySimulation(Parser parser) {
-    throw new UnsupportedOperationException("Evolutionary mode is not yet supported in mobile devices."); 
+  public void setContext(Object context) {
+    androidContext = (Context) context;
   }
 
   @Override
-  public void psdFromSurfaces(Parser parser) {
-    throw new UnsupportedOperationException("PSD tool is not yet supported in mobile devices."); 
+  public Context getContext() {
+    return androidContext;
   }
-  
+
+  /**
+   * Returns proper reader for Android file.
+   *
+   * @param fileName complete file name. It comes with a folder and extension that here is removed,
+   * it is also lowercased.
+   * @return BufferedReader
+   * @throws FileNotFoundException
+   */
+  @Override
+  public BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
+    int id = androidContext.getResources().getIdentifier(fileName.split("/")[2].split("[.]")[0].toLowerCase(), "raw", androidContext.getPackageName());
+    InputStream inputStream = androidContext.getResources().openRawResource(id);
+    InputStreamReader inputreader = new InputStreamReader(inputStream);
+    return new BufferedReader(inputreader);
+  }
 }

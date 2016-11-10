@@ -49,16 +49,21 @@ public class Restart {
    * @return base location of the executable
    */
   public static String getJarBaseDir() {
-    final Class<?> referenceClass = Restart.class;
-    final URL url = referenceClass.getProtectionDomain().getCodeSource().getLocation();
-    File jarPath;
-    try {
-      jarPath = new File(url.toURI()).getParentFile(); // this is the path you want 
-    } catch (final URISyntaxException e) {
-      System.err.println("Could not find the base JAR directory. Probably something will go wrong");
-      jarPath = new File("./");
+    if (System.getProperty("java.vm.name").equals("Dalvik")) {
+      // Return empty String. In Android fails this method and in any case, it is useless.
+      return "";
+    } else {
+      final Class<?> referenceClass = Restart.class;
+      final URL url = referenceClass.getProtectionDomain().getCodeSource().getLocation();
+      File jarPath;
+      try {
+        jarPath = new File(url.toURI()).getParentFile(); // this is the path you want
+      } catch (final URISyntaxException e) {
+        System.err.println("Could not find the base JAR directory. Probably something will go wrong");
+        jarPath = new File("./");
+      }
+      return jarPath.toString();
     }
-    return jarPath.toString();
   }
 
   public String getPsdScript(String inputFileName, String outputFileName, float min, float max, int sizeX, int sizeY) {

@@ -21,6 +21,7 @@ import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
 import kineticMonteCarlo.atom.IAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
@@ -28,6 +29,7 @@ import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.unitCell.IUc;
+import main.Configurator;
 
 /**
  * Class responsible to do the actual writings and readings. Only has to be used from Restart class.
@@ -163,43 +165,46 @@ class RestartLow {
 
   static float[][] readLowText2D(String fileName) throws FileNotFoundException {
     float[][] data = null;
-    System.out.println("Trying to read " + fileName + " file of unknown size ");
-    int x = -1;
-    int y = -1;
-    int sizeY = 0;
-    int sizeX = 0;
-    // create file descriptor. It will be automatically closed.
-    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
-      String line;
-      // <-- read whole line
-      line = in.readLine();
-      if (line != null) {
-        StringTokenizer tk = new StringTokenizer(line);
-        if (!tk.nextToken().equals("#")) {
-          System.err.println("File format not valid. Should start with a line with # character");
-          throw new FileNotFoundException("Fix the file format");
-        }
-        sizeY = Integer.parseInt(tk.nextToken());
-        sizeX = Integer.parseInt(tk.nextToken());
-        data = new float[sizeX][sizeY];
-      }
-      line = in.readLine();
-      for (x = 0; x < sizeX; x++) {
-        StringTokenizer tk = new StringTokenizer(line);
-        for (y = 0; y < sizeY; y++) {
-          data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+
+    if (Configurator.getConfigurator() != null) { //
+
+      BufferedReader in = Configurator.getConfigurator().getBufferedReader(fileName);
+      int x = -1;
+      int y = -1;
+      int sizeY = 0;
+      int sizeX = 0;
+      // create file descriptor. It will be automatically closed.
+      try {
+        String line;
+        // <-- read whole line
+        line = in.readLine();
+        if (line != null) {
+          StringTokenizer tk = new StringTokenizer(line);
+          if (!tk.nextToken().equals("#")) {
+            System.err.println("File format not valid. Should start with a line with # character");
+            throw new FileNotFoundException("Fix the file format");
+          }
+          sizeY = Integer.parseInt(tk.nextToken());
+          sizeX = Integer.parseInt(tk.nextToken());
+          data = new float[sizeX][sizeY];
         }
         line = in.readLine();
+        for (x = 0; x < sizeX; x++) {
+          StringTokenizer tk = new StringTokenizer(line);
+          for (y = 0; y < sizeY; y++) {
+            data[x][y] = Float.parseFloat(tk.nextToken()); // <-- read single word on line and parse to float
+          }
+          line = in.readLine();
+        }
+        in.close();
+      } catch (FileNotFoundException fe) {
+        throw fe;
+      } catch (Exception e) {
+        // if any I/O error occurs
+        System.err.println("Point: " + x + " " + y);
+        e.printStackTrace();
       }
-      in.close();
-    } catch (FileNotFoundException fe) {
-      throw fe;
-    } catch (Exception e) {
-      // if any I/O error occurs
-      System.err.println("Point: " + x + " " + y);
-      e.printStackTrace();
     }
-
     return data;
   }
 

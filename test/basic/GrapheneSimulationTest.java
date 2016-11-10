@@ -7,6 +7,7 @@ package basic;
 
 import basic.io.Restart;
 import java.io.FileNotFoundException;
+import static java.lang.String.format;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
@@ -26,6 +27,7 @@ public class GrapheneSimulationTest {
   private float[][] simulatedSurface;
   private int simulatedIslands;
   private double simulatedTime;
+  private float[][][] simulatedSurfaces;
   
   public GrapheneSimulationTest() {
   }
@@ -157,6 +159,22 @@ public class GrapheneSimulationTest {
     assertEquals(simulatedIslands, 1);
     assertEquals(10001.725060521605, simulatedTime, 0.0);
     // TODO compare the rest of surfaces
+    /*try {
+      // read reference surfaces and compare them with simulated ones
+      for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
+        String fileName = format("%s/GrapheneMultiSurface%03d.txt", TestHelper.getBaseDir() + "/test/references/", i);
+
+        float[][] tmpSurface = restart.readSurfaceText2D(2, sizes, fileName);
+        for (int j = 0; j < sizes[0]; j++) {
+          for (int k = 0; k < sizes[1]; k++) {
+            System.out.println("i j "+j+" "+k+" "+simulatedSurfaces[i][j][k]+" "+tmpSurface[j][k]);
+            assertEquals(simulatedSurfaces[i][j][k], tmpSurface[j][k], 1.0f);
+          }
+        }
+      }
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }*/
   }
     
     
@@ -172,5 +190,21 @@ public class GrapheneSimulationTest {
     simulatedSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
     simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
     simulatedTime = simulation.getSimulatedTime();
+    /*Restart readResults = new Restart(simulation.getRestartFolderName());
+    int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};
+    simulatedSurfaces = new float[parser.getNumberOfSimulations()][sizes[0]][sizes[1]];
+    for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
+      String fileName = format("%s/surface%03d.mko", simulation.getRestartFolderName(), i);
+      try {
+        float[][] tmpSurface = readResults.readSurfaceBinary2D(fileName, 2);
+        for (int j = 0; j < sizes[0]; j++) {
+          for (int k = 0; k < sizes[1]; k++) {
+            simulatedSurfaces[i][j][k] = tmpSurface[j][k];
+          }
+        }
+      } catch (FileNotFoundException ex) {
+        Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+      }
+    }//*/
   }
 }

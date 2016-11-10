@@ -31,6 +31,8 @@ android {
             java.exclude 'main/PcConfigurator.java'
             java.exclude 'main/printByHand.java'
             java.exclude 'utils/printByHandHelper.java'
+            java.exclude 'basic/SiSimulation.java'
+            java.exclude 'main/Morphokinetics.java'
             manifest.srcFile 'android/AndroidManifest.xml'
             res.srcDirs = ['android/res']
         }
@@ -49,6 +51,11 @@ android {
         exclude 'META-INF/MANIFEST.MF'
         exclude 'javax/LICENSE.txt'
         exclude 'javax/COPYRIGHT.txt'
+    }
+    dexOptions {
+        incremental true
+        maxProcessCount 4
+        javaMaxHeapSize "5g"
     }
 
 }

@@ -1,5 +1,6 @@
 package main;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,6 +17,10 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Properties;
 
@@ -25,7 +30,6 @@ import basic.AgUcSimulation;
 import basic.BasicGrowthSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
-import basic.SiSimulation;
 import eus.ehu.dipc.morphokinetics.R;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -57,11 +61,11 @@ public class MainActivity extends AppCompatActivity {
       System.out.println(key + " >>>> " + value);
     }
 
-    String className;
+    Context context;
+    Configurator configurator;
     if (System.getProperty("java.vm.name").equals("Dalvik")) {
-      className = "main.AndroidConfigurator";
-    } else {
-      className = "main.PcConfigurator";
+      context = this;
+      Configurator.getConfigurator().setContext(context);
     }
     TextView tv = (TextView) findViewById(R.id.outputText);
     tv.setText("Starting simulation " + count);
@@ -96,9 +100,6 @@ public class MainActivity extends AppCompatActivity {
         break;
       case "graphene":
         simulation = new GrapheneSimulation(parser);
-        break;
-      case "Si":
-        simulation = new SiSimulation(parser);
         break;
       case "basic":
         simulation = new BasicGrowthSimulation(parser);
@@ -185,6 +186,8 @@ public class MainActivity extends AppCompatActivity {
             atomColor = "green";
             break;
         }
+        if (atom.isOutside())
+          atomColor = "white";
 
         int x = X;
         int y = Y;
