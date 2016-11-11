@@ -124,6 +124,14 @@ public class MainActivity extends AppCompatActivity {
         simulation.createFrame();
         simulation.doSimulation();
         simulation.finishSimulation();
+
+        TextView tv0 = (TextView) findViewById(R.id.textViewResults);
+        tv0.post(new Runnable() {
+          @Override
+          public void run() {
+            tv0.setText(simulation.printFooter());
+          }
+        });
         try {
           paintLoop.finish();
           paintLoop.join();
@@ -132,10 +140,7 @@ public class MainActivity extends AppCompatActivity {
         }
       }
     }).start();
-    TextView tv0 = (TextView) findViewById(R.id.textViewResults);
-    if (tv0 != null) {
-      tv0.setText(simulation.printFooter());
-    }
+
 
   }
 
