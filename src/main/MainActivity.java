@@ -23,6 +23,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.Handler;
 
 import basic.AbstractSimulation;
 import basic.AgSimulation;
@@ -41,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
   private int count = 0;
   private AbstractSimulation simulation = null;
   private Parser parser;
+  private Handler handler;
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -49,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
       parser = new Parser();
     } catch (Exception e) {
       System.out.println("ERROR!");
+    }
+
+    try {
+      ImageView iv = (ImageView) findViewById(R.id.imageView);
+      Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
+      iv.setImageBitmap(bm);
+    } catch (NullPointerException e){
+
     }
   }
 
@@ -109,17 +121,45 @@ public class MainActivity extends AppCompatActivity {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    simulation.initialiseKmc();
-    simulation.createFrame();
-    simulation.doSimulation();
-    simulation.finishSimulation();
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        simulation.initialiseKmc();
+        simulation.createFrame();
+        simulation.doSimulation();
+        simulation.finishSimulation();
+      }
+    }).start();
     TextView tv0 = (TextView) findViewById(R.id.textViewResults);
     if (tv0 != null) {
       tv0.setText(simulation.printFooter());
     }
-    ImageView iv = (ImageView) findViewById(R.id.imageView);
-    Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
-    iv.setImageBitmap(bm);
+
+    new Thread(new Runnable() {
+      @Override
+      public void run() {
+        new Timer().scheduleAtFixedRate(new TimerTask() {
+          @Override
+          public void run() {
+            try {
+              ImageView iv = (ImageView) findViewById(R.id.imageView);
+              Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
+              iv.post(new Runnable() {
+                @Override
+                public void run() {
+                  iv.setImageBitmap(bm);
+                }
+              });
+
+            } catch (NullPointerException e) {
+
+            }
+
+
+          }
+        }, 0, 1000);//put here time 1000 milliseconds=1 second
+      }
+    }).start();
   }
 
   @Override
