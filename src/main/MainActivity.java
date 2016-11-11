@@ -128,32 +128,36 @@ public class MainActivity extends AppCompatActivity {
       tv0.setText(simulation.printFooter());
     }
 
-    new Thread(new Runnable() {
-      @Override
-      public void run() {
-        new Timer().scheduleAtFixedRate(new TimerTask() {
-          @Override
-          public void run() {
-            try {
-              ImageView iv = (ImageView) findViewById(R.id.imageView);
-              Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
-              iv.post(new Runnable() {
-                @Override
-                public void run() {
-                  iv.setImageBitmap(bm);
-                }
-              });
+    PaintLoop paintLoop = new PaintLoop();
+    paintLoop.start();
+  }
 
-            } catch (NullPointerException e) {
+  private class PaintLoop extends Thread {
+    @Override
+    public void run() {
+      new Timer().scheduleAtFixedRate(new TimerTask() {
+        @Override
+        public void run() {
+          try {
+            ImageView iv = (ImageView) findViewById(R.id.imageView);
+            Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
+            iv.post(new Runnable() {
+              @Override
+              public void run() {
+                iv.setImageBitmap(bm);
+              }
+            });
 
-            }
-
+          } catch (NullPointerException e) {
 
           }
-        }, 0, 1000);//put here time 1000 milliseconds=1 second
-      }
-    }).start();
+
+
+        }
+      }, 0, 1000);//put here time 1000 milliseconds=1 second
+    }
   }
+
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
