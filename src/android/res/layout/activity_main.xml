@@ -52,8 +52,8 @@
                     android:layout_height="wrap_content"
                     android:text="Ag"
                     android:id="@+id/radioButtonAg"
-                    android:checked="false"
-                    android:layout_column="0" />
+                    android:layout_column="0"
+                    android:checked="true"/>
 
                 <RadioButton
                     android:layout_width="wrap_content"
@@ -108,7 +108,7 @@
                         android:ems="10"
                         android:id="@+id/editTextSize"
                         android:layout_column="1"
-                        android:text="25" />
+                        android:text="150" />
                 </TableRow>
 
             </TableLayout>
