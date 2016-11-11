@@ -2,7 +2,6 @@ package main;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -17,15 +16,10 @@ import android.widget.TextView;
 
 import org.json.JSONException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Enumeration;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
 
 import basic.AbstractSimulation;
 import basic.AgSimulation;
@@ -44,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
   private int count = 0;
   private AbstractSimulation simulation = null;
   private Parser parser;
-  private Handler handler;
 
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
