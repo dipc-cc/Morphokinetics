@@ -114,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
+    PaintLoop paintLoop = new PaintLoop();
+    paintLoop.start();
+
     new Thread(new Runnable() {
       @Override
       public void run() {
@@ -121,6 +124,12 @@ public class MainActivity extends AppCompatActivity {
         simulation.createFrame();
         simulation.doSimulation();
         simulation.finishSimulation();
+        try {
+          paintLoop.finish();
+          paintLoop.join();
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
       }
     }).start();
     TextView tv0 = (TextView) findViewById(R.id.textViewResults);
@@ -128,33 +137,36 @@ public class MainActivity extends AppCompatActivity {
       tv0.setText(simulation.printFooter());
     }
 
-    PaintLoop paintLoop = new PaintLoop();
-    paintLoop.start();
   }
 
   private class PaintLoop extends Thread {
+
+    private boolean running = true;
+
     @Override
     public void run() {
-      new Timer().scheduleAtFixedRate(new TimerTask() {
-        @Override
-        public void run() {
-          try {
-            ImageView iv = (ImageView) findViewById(R.id.imageView);
-            Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
-            iv.post(new Runnable() {
-              @Override
-              public void run() {
-                iv.setImageBitmap(bm);
-              }
-            });
-
-          } catch (NullPointerException e) {
-
-          }
-
-
+      while (running) {
+        try {
+          ImageView iv = (ImageView) findViewById(R.id.imageView);
+          Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
+          iv.post(new Runnable() {
+            @Override
+            public void run() {
+              iv.setImageBitmap(bm);
+            }
+          });
+        } catch (NullPointerException e) {
         }
-      }, 0, 1000);//put here time 1000 milliseconds=1 second
+      }
+      try {
+        PaintLoop.sleep(1000);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+    }
+
+    public void finish() {
+      running = false;
     }
   }
 
