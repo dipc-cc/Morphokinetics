@@ -82,7 +82,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   
   @Override
   public boolean isPartOfImmobilSubstrate() {
-    return isOccupied() && getType() == ISLAND;
+    return isOccupied() && getType() == ISLAND && getOccupiedNeighbours() == 4;
   }
   
   /**
@@ -135,7 +135,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     }
     return true;
   }
-
+  
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
     double linearSearch = StaticRandom.raw() * getProbability();

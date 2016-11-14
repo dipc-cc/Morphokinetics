@@ -127,10 +127,10 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+      //if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
         removeOccupied(atom.getNeighbour(i), originalPosition);
-      }
+      //}
     }
 
     if (atom.getOccupiedNeighbours()> 0) {
