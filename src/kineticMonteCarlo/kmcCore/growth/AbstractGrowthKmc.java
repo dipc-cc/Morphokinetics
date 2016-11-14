@@ -378,13 +378,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       printHistogram();
     } 
     
-    // Dirty mode to have only one interface of countIslands
-    PrintWriter standardOutputWriter = new PrintWriter(System.out);
-    lattice.countIslands(standardOutputWriter);
-    lattice.countPerimeter(standardOutputWriter);
-    lattice.getCentreOfMass();
-    lattice.getAverageGyradius();
-    lattice.getDistancesToCentre();
+    // Dirty mode to have only one interface of countIslands
+    PrintWriter standardOutputWriter = new PrintWriter(System.out);
+    lattice.countIslands(standardOutputWriter);
+    lattice.countPerimeter(standardOutputWriter);
+    lattice.getCentreOfMass();
+    lattice.getAverageGyradius();
+    lattice.getDistancesToCentre();
     standardOutputWriter.flush();
     if (extraOutput) {
       outData.flush();
@@ -605,7 +605,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
   private void printData(Integer coverage) {
-    /*int islandCount = lattice.countIslands(outData);
+    int islandCount = lattice.countIslands(outData);
     float printCoverage;
     String coverageFormat;
     if (coverage != null) {
@@ -631,7 +631,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput2) {
       outDeltaAttachments.flush();
       outPerAtom.flush();
-    }*/
+    }
   }
   
   /**
