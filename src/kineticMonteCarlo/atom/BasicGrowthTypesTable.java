@@ -12,22 +12,17 @@ public class BasicGrowthTypesTable {
 
   /**
    * All predefined type of atom (current if the atom is occupied and future if the atom is not
-   * occupied). A proper image of these types is in
-   * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Process%20types
+   * occupied).
    */
   public BasicGrowthTypesTable() {
 
     tablePresent = new byte[5];
-
-    // [numberOfNeighbourAtoms] = atom type
    
     tablePresent[0] = TERRACE;
     tablePresent[1] = EDGE;
     tablePresent[2] = KINK;
     tablePresent[3] = ISLAND; 
     tablePresent[4] = ISLAND; 
-
-    //tableFuture = new byte[4];
     
     tableFuture = tablePresent;
 
@@ -43,7 +38,7 @@ public class BasicGrowthTypesTable {
     byte type;
 
     if (numberOfNeighbourAtoms > 4) {
-      throw new ArrayIndexOutOfBoundsException("The sum of mobile and immobile neighbours is >6, which is in practice impossible");
+      throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >4, which is in practice impossible");
     }
     try {
       type = tablePresent[numberOfNeighbourAtoms];
