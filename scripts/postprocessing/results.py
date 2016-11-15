@@ -100,6 +100,7 @@ class MeanValues:
     def __init__(self):
         self.growthSlopes = []
         self.gyradiusSlopes = []
+        self.lastGyradius = []
         self.perimeterSlopes = []
         self.numberOfIslands = []
         self.numberOfMonomers = []
@@ -107,9 +108,10 @@ class MeanValues:
         self.totalRatio = []
         self.aeRatioTimesPossibleList = []
 
-    def updateData(self, slopes, currentData, numberOfIsland):
+    def updateData(self, slopes, currentData, numberOfIsland, gyradius):
         self.growthSlopes.append(slopes.growth)
         self.gyradiusSlopes.append(slopes.gyradius)
+        self.lastGyradius.append(gyradius)
         self.perimeterSlopes.append(slopes.perimeter)
         self.numberOfIslands.append(numberOfIsland)
         self.numberOfMonomers.append(np.mean(np.array(currentData.monomersList[-1]).astype(np.float)))
@@ -128,7 +130,7 @@ class Results:
         self.useNaN = useNaN
 
     def append(self, meanValues):
-        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes])
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius])
         while(len(self.temperatures) > len(self.results[-1][0])):
             self.results[-1][0].append(self._addNull_())
             self.results[-1][1].append(self._addNull_())
@@ -138,6 +140,7 @@ class Results:
             self.results[-1][5].append(self._addNull_())
             self.results[-1][6].append(self._addNull_())
             self.results[-1][7].append(self._addNull_())
+            self.results[-1][8].append(self._addNull_())
 
     def growthSlope(self):
         """ returns island size growth slopes for the last flux, for all temperatures """
@@ -148,8 +151,12 @@ class Results:
         return np.array(self.results[-1][1])
 
     def gyradius(self):
-        """ returns average gyradius for the last flux, for all temperatures """
+        """ returns average gyradius growth for the last flux, for all temperatures """
         return np.array(self.results[-1][2])
+
+    def lastGyradius(self):
+        """ returns average gyradius for the last coverage, last flux, for all temperatures """
+        return np.array(self.results[-1][8])
         
     def islands(self):
         """ returns average number of islands for the last flux, for all temperatures """

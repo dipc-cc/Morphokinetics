@@ -76,6 +76,7 @@ def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temper
 island size. It returns the slope of the fit, which is the growth rate."""
 
     numberOfIsland = 0
+    lastGyradius = 0
     slopes = results.Slopes()
     currentData = results.Data(maxCoverage)
     fileName = "dataEvery1percentAndNucleation.txt"
@@ -86,7 +87,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             f = open("results/"+fileName)
         except OSError:
             print("Input file {} can not be openned. Exiting! ".format(fileName))
-            return slopes, currentData, numberOfIsland
+            return slopes, currentData, numberOfIsland, lastGyradius
 
     currentData = mk.getAllValues(f, maxCoverage, growth)
     if sqrt:
@@ -108,6 +109,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
                 
 
     numberOfIsland = np.mean(np.array(currentData.islandNumberList[30]))
+    lastGyradius = np.mean(np.array(currentData.gyradiusList[30]))
 
     # Curve fitting
     slopes.growth = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
@@ -118,7 +120,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
     slopes.perimeter = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
     #gyradiusList vs averageSizes
     ####mk.plot(gyradiusList, averageSizes)
-    return slopes, currentData, numberOfIsland
+    return slopes, currentData, numberOfIsland, lastGyradius
 
 def getRtt(temperatures):
     kb = 8.6173324e-5
@@ -207,10 +209,12 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
         try:
             os.chdir(str(temperature))
         except OSError:
-            print ("error changing to directory {}".format(temperature)) #do nothing
+            print("error changing to temperature in directory {}".format(temperature), end="") #do nothing
+            print(", creating it...")
+            os.mkdir(str(temperature))
         else:
-            slopes, currentData, numberOfIsland = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
-            meanValues.updateData(slopes, currentData, numberOfIsland)
+            slopes, currentData, numberOfIsland, lastGyradius = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
+            meanValues.updateData(slopes, currentData, numberOfIsland, lastGyradius)
             if (interval):
                 time2 = np.mean(np.array(currentData.timeList[30]).astype(np.float)) # get time at 30% of coverage
                 time1 = np.mean(np.array(currentData.timeList[20]).astype(np.float)) # get time at 20% of coverage
