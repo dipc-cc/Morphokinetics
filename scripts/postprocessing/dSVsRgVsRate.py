@@ -5,6 +5,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
 import results
+import sys
+import traceback
 
 
 plt.title("$ R \propto d ( \\frac{s v_s}{r_g^2} )$")
@@ -17,7 +19,7 @@ temperatures = list(range(120,321,5))
 
 workingPath = os.getcwd()
 results = results.Results()
-for i in range(-6,1):
+for i in range(0,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
@@ -43,6 +45,7 @@ for i in range(-6,1):
         plt.legend(loc='upper left', prop={'size':6})
         plt.savefig("dSVsRgVsRate.png")
     except ValueError:
+        traceback.print_exc(file=sys.stdout)
         print("error plotting")
     
 plt.close()
