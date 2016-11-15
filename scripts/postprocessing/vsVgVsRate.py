@@ -33,7 +33,7 @@ for i in range(-6,1):
     x = results.totalRatio()  / flux**0.79
     plt.loglog(x, y,  label=folder)
     plt.legend(loc='upper left', prop={'size':6})
-    plt.savefig("vsVgVsRate.svg")
+    plt.savefig("vsVgVsRate.png")
     
 plt.close()
 
