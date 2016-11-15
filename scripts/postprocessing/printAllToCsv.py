@@ -1,4 +1,4 @@
-# Computes all possible measurements (averages them is needed) and
+# Computes all possible measurements (averages them if needed) and
 # prints them to CSV like files.
 #
 #Author: J. Alberdi-Rodriguez
@@ -18,11 +18,11 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-temperatures = list(range(120,321,5))
+temperatures = list(range(120,501,5))
 results = results.Results(temperatures)
 kb = 8.6173324e-5
 
-for i in range(-6,1):
+for i in range(-6,5):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     sqrt = False
