@@ -100,11 +100,11 @@ island size. It returns the slope of the fit, which is the growth rate."""
     filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
     with open(filename, 'w', newline='') as csvfile:
         outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        outwriter.writerow(["%[index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1]]"])
+        outwriter.writerow(["%","index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb"])
         for index, islandSizes in enumerate(islandSizesList):
             if islandSizes: #ensure that it is not null
                 meanData.updateData(index, islandSizes, currentData)
-                outwriter.writerow([index, temperature, flux, meanData.monomers[-1], index/100, meanData.times[-1], meanData.numberOfIslands[-1], meanData.averageSizes[-1], meanData.averageRatio[-1]/meanData.times[-1], meanData.allGyradius[-1]])
+                outwriter.writerow([index, temperature, flux, meanData.monomers[-1], index/100, meanData.times[-1], meanData.numberOfIslands[-1], meanData.averageSizes[-1], meanData.averageRatio[-1]/meanData.times[-1], meanData.allGyradius[-1], meanData.stdSizes[-1], meanData.stdGyradius[-1], meanData.sumProb[-1]])
                 
 
     numberOfIsland = np.mean(np.array(currentData.islandNumberList[30]))

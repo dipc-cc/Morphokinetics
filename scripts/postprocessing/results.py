@@ -17,6 +17,7 @@ class Data:
         self.timeList = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.monomersList = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.neList = [[0 for x in range(w)] for y in range(maxCoverage)]
+        self.sumProbList = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.innerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.outerPerimeterList = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.islandNumberList = [[0 for x in range(w)] for y in range(maxCoverage)]
@@ -37,6 +38,7 @@ class Data:
         self.timeList[cov].append(dataList[1])  # get the time and store it in a list
         self.monomersList[cov].append(dataList[6])  # get the number of monomers
         self.neList[cov].append(dataList[7])    # get number of events and store it in a list
+        self.sumProbList[cov].append(dataList[8])  # sum of probabilities
         if (len(dataList) > 10):           # if gyradius was calculated store it
             self.gyradiusList[cov].append(float(dataList[9]))
         if (len(dataList) > 11):           # if perimeter was calculated store it
@@ -59,6 +61,9 @@ class MeanData:
         self.numberOfIslands = []
         self.averageRatio = []
         self.allGyradius = []
+        self.stdSizes = []
+        self.stdGyradius = []
+        self.sumProb = []
         self.chunk = chunk
 
     def updateData(self, index, islandSizes, data):
@@ -72,6 +77,9 @@ class MeanData:
         self.numberOfIslands.append(np.mean(np.array(data.islandNumberList[index])))
         self.averageRatio.append(np.mean(np.array(data.neList[index]).astype(np.float)))
         self.allGyradius.append(np.mean(np.array(data.gyradiusList[index]).astype(np.float)))
+        self.stdSizes.append(np.std(islandSizes))
+        self.stdGyradius.append(np.std(np.array(data.gyradiusList[index]).astype(np.float)))
+        self.sumProb.append(np.mean(np.array(data.sumProbList[index]).astype(np.float)))
         if verbose:
             print("  coverage {}%  {} time {}".format(index, averageSizes[-1], times[-1]))
         if index == 30: # only count islands in 30% of coverage
