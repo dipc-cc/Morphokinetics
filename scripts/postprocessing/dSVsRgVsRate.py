@@ -26,7 +26,7 @@ for i in range(-6,1):
         results.append(mk.getIslandDistribution(temperatures, False, False))
     except OSError:
         print ("error changing to flux {}".format(folder))
-        #results.complete()
+
     os.chdir(workingPath)
     vs = results.growthSlope()
     s = (0.3*400*400)/results.islands()
@@ -38,12 +38,12 @@ for i in range(-6,1):
     y = d * ((s*vs)/rg**2)
     x = results.totalRatio()
     print(len(x),len(y))
-    #try:
-    plt.loglog(x, y,  label=folder)
-    plt.legend(loc='upper left', prop={'size':6})
-    plt.savefig("dSVsRgVsRate.png")
-    #except ValueError:
-    #    print("error plotting")
+    try:
+        plt.loglog(x, y,  label=folder)
+        plt.legend(loc='upper left', prop={'size':6})
+        plt.savefig("dSVsRgVsRate.png")
+    except ValueError:
+        print("error plotting")
     
 plt.close()
 
