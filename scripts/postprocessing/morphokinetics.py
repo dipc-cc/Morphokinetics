@@ -71,7 +71,7 @@ simulations. """
     return np.array(f)
 
 
-def openAndRead(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temperature=-1, flux=-1):
+def readData(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temperature=-1, flux=-1):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
 
@@ -213,7 +213,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             print(", creating it...")
             os.mkdir(str(temperature))
         else:
-            slopes, currentData, numberOfIsland, lastGyradius = openAndRead(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
+            slopes, currentData, numberOfIsland, lastGyradius = readData(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
             meanValues.updateData(slopes, currentData, numberOfIsland, lastGyradius)
             if (interval):
                 time2 = np.mean(np.array(currentData.timeList[30]).astype(np.float)) # get time at 30% of coverage
