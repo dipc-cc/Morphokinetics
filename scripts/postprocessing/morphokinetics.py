@@ -13,7 +13,7 @@ def powerFunc(x, a, b):
     return a*x**b
 
 def fractalDFunc(x):
-    """"""
+    """Fractal dimension for x (= rtt/flux)"""
     minD = 1.66
     maxRatio = 5e8
     minRatio = 3e7
