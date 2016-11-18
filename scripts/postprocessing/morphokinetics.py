@@ -77,8 +77,9 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
     numberOfIsland = 0
     lastGyradius = 0
+    averageData = results.AverageData(maxCoverage, chunk)
     slopes = results.Slopes()
-    currentData = results.Data(maxCoverage)
+    completeData = results.CompleteData(maxCoverage)
     fileName = "dataEvery1percentAndNucleation.txt"
     try:
         f = open(fileName)
@@ -87,40 +88,39 @@ island size. It returns the slope of the fit, which is the growth rate."""
             f = open("results/"+fileName)
         except OSError:
             print("Input file {} can not be openned. Exiting! ".format(fileName))
-            return slopes, currentData, numberOfIsland, lastGyradius
+            averageData.slopes = slopes
+            return averageData
 
-    currentData = mk.getAllValues(f, maxCoverage, growth)
+    completeData = mk.getAllValues(f, maxCoverage, growth)
     if sqrt:
-        islandSizesList = currentData.islandRadiusList
+        islandSizesList = completeData.islandSizesSqrt
     else:
-        islandSizesList = currentData.islandSizesList
-    meanData = results.MeanData(maxCoverage, chunk)
+        islandSizesList = completeData.islandSizes
+    averageData = results.AverageData(maxCoverage, chunk) # create object
     if verbose:
         print("Average island size for")
 
     filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
     with open(filename, 'w', newline='') as csvfile:
         outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        outwriter.writerow(["%","index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb"])
+        outwriter.writerow(["%","index, temperature, flux, monomers[-1], index/100, times[-1], numberOfIslands[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2"])
         for index, islandSizes in enumerate(islandSizesList):
             if islandSizes: #ensure that it is not null
-                meanData.updateData(index, islandSizes, currentData)
-                outwriter.writerow([index, temperature, flux, meanData.monomers[-1], index/100, meanData.times[-1], meanData.numberOfIslands[-1], meanData.averageSizes[-1], meanData.averageRatio[-1]/meanData.times[-1], meanData.allGyradius[-1], meanData.stdSizes[-1], meanData.stdGyradius[-1], meanData.sumProb[-1]])
+                averageData.updateData(index, islandSizes, completeData)
+                outwriter.writerow([index, temperature, flux, averageData.monomers[-1], index/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1]])
                 
 
-    numberOfIsland = np.mean(np.array(currentData.islandNumberList[30]))
-    lastGyradius = np.mean(np.array(currentData.gyradiusList[30]))
+    islandAmount = averageData.lastIslandAmount() 
 
     # Curve fitting
-    slopes.growth = mk.getAverageGrowth(meanData.times, meanData.averageSizes, sqrt, verbose, "tmpFig.png")
-    slopes.gyradius = mk.getAverageGrowth(meanData.times, currentData.gyradiusList, sqrt, verbose, "tmpTimeVsGyradius.png")
-    mk.getAverageGrowth(meanData.averageSizes, currentData.gyradiusList, sqrt, verbose, "tmpFig4.png")
-    coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(numberOfIsland+1)
-    mk.getAverageGrowth(meanData.times, coverages, sqrt, verbose, "tmpFig5.png")
-    slopes.perimeter = mk.getAverageGrowth(meanData.times, currentData.outerPerimeterList, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
-    #gyradiusList vs averageSizes
-    ####mk.plot(gyradiusList, averageSizes)
-    return slopes, currentData, numberOfIsland, lastGyradius
+    slopes.growth = mk.getAverageGrowth(averageData.times, averageData.sizes, sqrt, verbose, "tmpFig.png")
+    slopes.gyradius = mk.getAverageGrowth(averageData.times, completeData.gyradius, sqrt, verbose, "tmpTimeVsGyradius.png")
+    mk.getAverageGrowth(averageData.sizes, completeData.gyradius, sqrt, verbose, "tmpFig4.png")
+    coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(islandAmount+1)
+    mk.getAverageGrowth(averageData.times, coverages, sqrt, verbose, "tmpFig5.png")
+    slopes.perimeter = mk.getAverageGrowth(averageData.times, completeData.outerPerimeter, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    averageData.slopes = slopes
+    return averageData
 
 def getRtt(temperatures):
     kb = 8.6173324e-5
@@ -133,6 +133,7 @@ def getAllRtt():
     return Rtt
 
 def getNumberOfEvents(time30cov):
+    """ gets data from output* file """
     numberOfEvents = []
     simulatedTime = []
     regExpression = ("Need")
@@ -161,7 +162,7 @@ def getNumberOfEvents(time30cov):
                 except (ValueError,IndexError):
                     fail = True
 
-            if fail and re.search("Average", line):
+            if fail and re.search("Average", line): # if individual times are not found, try to get it from the end of the file.
                 line = next(f)
                 line = next(f)
                 line = next(f)
@@ -213,20 +214,18 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             print(", creating it...")
             os.mkdir(str(temperature))
         else:
-            slopes, currentData, numberOfIsland, lastGyradius = readData(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
-            meanValues.updateData(slopes, currentData, numberOfIsland, lastGyradius)
+            averageData = readData(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
+            meanValues.updateData(averageData) 
             if (interval):
-                time2 = np.mean(np.array(currentData.timeList[30]).astype(np.float)) # get time at 30% of coverage
-                time1 = np.mean(np.array(currentData.timeList[20]).astype(np.float)) # get time at 20% of coverage
-                neList30 = [item for item in currentData.neList[30] if (float(item) >= 0)]  # remove negative values
-                ne2 = np.mean(np.array(currentData.neList30).astype(np.float))
-                neList20 = [item for item in currentData.neList[20] if (float(item) >= 0)]
-                ne1 = np.mean(np.array(currentData.neList20).astype(np.float))
-
+                time2 = averageData.getTime(30)
+                time1 = averageData.getTime(20)
+                ne2 = averageData.getNe(30)
+                ne1 = averageData.getNe(20)
+                
                 numberOfEvents = ne2-ne1
                 simulatedTime = time2-time1
             else:
-                time30cov = np.mean(np.array(currentData.timeList[coverage-1]).astype(np.float))
+                time30cov = averageData.lastTime() 
                 numberOfEvents, simulatedTime, aeRatioTimesPossible = getNumberOfEvents(time30cov)
                 if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
                     print("something went wrong")
@@ -234,7 +233,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
                     print("\t"+str(simulatedTime))
             meanValues.updateTimeAndRatio(simulatedTime, numberOfEvents, aeRatioTimesPossible)
             try:
-                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, slopes.growth, slopes.gyradius, int(numberOfEvents/simulatedTime)))
+                print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, averageData.slopes.growth, averageData.slopes.gyradius, int(numberOfEvents/simulatedTime)))
             except ValueError:
                 a = 0 # skip the writing
 

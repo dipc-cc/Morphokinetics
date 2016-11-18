@@ -20,7 +20,7 @@ def getAllValues(f, maxCoverage, getSlopes=True):
     
     #get something like 0.05000 expression to be grepped 
     regExpression = '(0\...00)|(^0\...\s)' # corresponds to 0.??00 expression or 0.??[:spaces:] expression
-    currentData = results.Data(maxCoverage) # init results class
+    completeData = results.CompleteData(maxCoverage) # init results class
     cov = 0
     previousLine = ""
     dataLine = ""
@@ -35,7 +35,7 @@ def getAllValues(f, maxCoverage, getSlopes=True):
             next(iterList)
             j = next(iterList)
             while j != '\n': # save the current values (island sizes) to an array
-                currentData.appendIslandSize(cov, j)
+                completeData.appendIslandSize(cov, j)
                 j = next(iterList)
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
@@ -43,11 +43,11 @@ def getAllValues(f, maxCoverage, getSlopes=True):
             if (cov >= maxCoverage):           
                 cov = 0                        # coverage is bigger than wanted, skip
             else:
-                currentData.appendData(cov, line)
+                completeData.appendData(cov, line)
                 dataLine = previousLine
         previousLine = line
 
-    return currentData
+    return completeData
 
     
 def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
