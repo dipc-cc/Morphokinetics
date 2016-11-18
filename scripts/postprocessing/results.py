@@ -108,10 +108,16 @@ class AverageData:
             return float('nan')
 
     def lastSize(self):
-        return self.sizes[-1]
+        try:
+            return self.sizes[-1]
+        except IndexError:
+            return float('nan')
     
     def lastSize2(self):
-        return self.sizes2[-1]
+        try:
+            return self.sizes2[-1]
+        except IndexError:
+            return float('nan')
 
     def lastGyradius(self):
         try:
@@ -166,6 +172,8 @@ class MeanValues:
         self.numberOfMonomers = []
         self.simulatedTimes = []
         self.totalRatio = []
+        self.sizes = []
+        self.sizes2 = []
         self.aeRatioTimesPossibleList = []
 
     def updateData(self, averageData):
@@ -175,6 +183,8 @@ class MeanValues:
         self.perimeterSlopes.append(averageData.slopes.perimeter)
         self.numberOfIslands.append(averageData.lastIslandAmount())
         self.numberOfMonomers.append(averageData.lastMonomerAmount())
+        self.sizes.append(averageData.lastSize())
+        self.sizes2.append(averageData.lastSize2())
 
     def updateTimeAndRatio(self, simulatedTime, numberOfEvents, aeRatioTimesPossible):
         self.simulatedTimes.append(simulatedTime)
@@ -190,7 +200,7 @@ class Results:
         self.useNaN = useNaN
 
     def append(self, meanValues):
-        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius])
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2])
         while(len(self.temperatures) > len(self.results[-1][0])):
             self.results[-1][0].append(self._addNull_())
             self.results[-1][1].append(self._addNull_())
@@ -237,6 +247,14 @@ class Results:
     def times(self):
         """ returns average simulated times for the last flux, for all temperatures """
         return np.array(self.results[-1][7])
+
+    def sizes(self):
+        """ returns average island sizes for the last flux, for all temperatures """
+        return np.array(self.results[-1][9])
+
+    def sizes2(self):
+        """ returns average squared island sizes for the last flux, for all temperatures """
+        return np.array(self.results[-1][10])
 
     def _addNull_(self):
         if self.useNaN:
