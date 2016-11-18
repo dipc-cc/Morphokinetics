@@ -189,8 +189,8 @@ class Results:
         self.temperatures = temperatures
         self.useNaN = useNaN
 
-    def append(self, averageValues):
-        self.results.append([averageValues.growthSlopes, averageValues.totalRatio, averageValues.gyradiusSlopes, averageValues.numberOfIslands, averageValues.perimeterSlopes, averageValues.numberOfMonomers, averageValues.aeRatioTimesPossibleList, averageValues.simulatedTimes, averageValues.lastGyradius])
+    def append(self, meanValues):
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius])
         while(len(self.temperatures) > len(self.results[-1][0])):
             self.results[-1][0].append(self._addNull_())
             self.results[-1][1].append(self._addNull_())
