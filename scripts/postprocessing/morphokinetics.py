@@ -27,7 +27,7 @@ def fractalDFunc(x):
             else:
                 #y.append(minD+(2-minD)/np.log(5e8/3e7)*np.log(x[i]))
                 y.append(minD+(2-minD)/(maxRatio-minRatio)*(x[i]-minRatio))
-    return y
+    return np.array(y)
 
 def fractDFuncTemperature(temp):
     maxD = 2.00
