@@ -1,10 +1,18 @@
+import csv
 import re
 import numpy as np
 import matplotlib.pyplot as plt
 import results
 import scipy.special
+import traceback
+import sys
 from scipy.optimize import curve_fit
 
+def myPrint(vector):
+    for i in vector:
+        print(i, end=" ")
+    print()
+    
 def powerFunc(x, a, b):
     """ a*x^b function """
     return a*x**b
@@ -15,9 +23,34 @@ def errFunc(x, a, b, c, sigma):
 def ourErrFunc(x, a, b, c, sigma):
     return a*(np.exp(sigma*(x-c))/(1+np.exp(sigma*(x-c))))+b
 
-def getAllValues(f, maxCoverage, getSlopes=True):
+def readAllValues(maxCoverage, temperature, flux):
+    """ reads average data from previously computed data """
+    chunk = 1 # it is not used
+    averageData = results.AverageData(maxCoverage, chunk) # create return object
+    fileName = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
+    csvfile = open(fileName, newline='')
+    outreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    for row in outreader:
+        if row[0][0] != "%":
+            # average
+            averageData.appendData(row)
+    return averageData
+        
+
+def getAllValues(maxCoverage, getSlopes=True):
     """ reads all the values for the corresponding coverage """
-    
+
+    # read original morphokinetics output
+    fileName = "dataEvery1percentAndNucleation.txt"
+    try:
+        f = open(fileName)
+    except OSError:
+        try:
+            f = open("results/"+fileName)
+        except OSError:
+            print("Input file {} can not be openned. Exiting! ".format(fileName))
+            raise OSError("file not found")
+        
     #get something like 0.05000 expression to be grepped 
     regExpression = '(0\...00)|(^0\...\s)' # corresponds to 0.??00 expression or 0.??[:spaces:] expression
     completeData = results.CompleteData(maxCoverage) # init results class
@@ -49,13 +82,10 @@ def getAllValues(f, maxCoverage, getSlopes=True):
 
     return completeData
 
-    
-def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
+def getSlope(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
     x = np.array(times)
-    averageValues = []
-    for value in valueList:
-        if value: #ensure that it is not null
-            averageValues.append(np.mean(value))
+    x = np.array(times).astype(float)
+    averageValues = np.array(valueList).astype(float)
     try:
         a, b = np.polyfit(x, averageValues, 1)
         popt = curve_fit(powerFunc, x, averageValues)
@@ -78,6 +108,8 @@ def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="t
         else:
             valueSlope = a
     except (TypeError, RuntimeError):
+        print("Error fitting...") 
+        traceback.print_exc(file=sys.stdout)
         valueSlope = 0
 
     return valueSlope

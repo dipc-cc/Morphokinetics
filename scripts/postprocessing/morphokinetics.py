@@ -75,50 +75,47 @@ def readData(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temperatu
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
 
-    numberOfIsland = 0
-    lastGyradius = 0
-    averageData = results.AverageData(maxCoverage, chunk)
     slopes = results.Slopes()
-    completeData = results.CompleteData(maxCoverage)
-    fileName = "dataEvery1percentAndNucleation.txt"
     try:
-        f = open(fileName)
+        averageData = mk.readAllValues(maxCoverage, temperature, flux)    
     except OSError:
+        print("averaged data was not found. Trying to compute it...")
+        numberOfIsland = 0
+        lastGyradius = 0
+        averageData = results.AverageData(maxCoverage, chunk)
+        completeData = results.CompleteData(maxCoverage)
         try:
-            f = open("results/"+fileName)
+            completeData = mk.getAllValues(maxCoverage, growth)
         except OSError:
-            print("Input file {} can not be openned. Exiting! ".format(fileName))
             averageData.slopes = slopes
             return averageData
+        
+        if sqrt:
+            islandSizesList = completeData.islandSizesSqrt
+        else:
+            islandSizesList = completeData.islandSizes
+        averageData = results.AverageData(maxCoverage, chunk) # create object
+        if verbose:
+            print("Average island size for")
 
-    completeData = mk.getAllValues(f, maxCoverage, growth)
-    if sqrt:
-        islandSizesList = completeData.islandSizesSqrt
-    else:
-        islandSizesList = completeData.islandSizes
-    averageData = results.AverageData(maxCoverage, chunk) # create object
-    if verbose:
-        print("Average island size for")
-
-    filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
-    with open(filename, 'w', newline='') as csvfile:
-        outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-        outwriter.writerow(["%","index, temperature, flux, monomers[-1], index/100, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2"])
-        for index, islandSizes in enumerate(islandSizesList):
-            if islandSizes: #ensure that it is not null
-                averageData.updateData(index, islandSizes, completeData)
-                outwriter.writerow([index, temperature, flux, averageData.monomers[-1], index/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1]])
+        filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
+        with open(filename, 'w', newline='') as csvfile:
+            outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+            outwriter.writerow(["%","index, temperature, flux, monomers[-1], index/100, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2"])
+            for index, islandSizes in enumerate(islandSizesList):
+                if islandSizes: #ensure that it is not null
+                    averageData.updateData(index, islandSizes, completeData)
+                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], index/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1]])
                 
 
-    islandAmount = averageData.lastIslandAmount() 
-
+    islandAmount = float(averageData.lastIslandAmount())
     # Curve fitting
-    slopes.growth = mk.getAverageGrowth(averageData.times, averageData.sizes, sqrt, verbose, "tmpFig.png")
-    slopes.gyradius = mk.getAverageGrowth(averageData.times, completeData.gyradius, sqrt, verbose, "tmpTimeVsGyradius.png")
-    mk.getAverageGrowth(averageData.sizes, completeData.gyradius, sqrt, verbose, "tmpFig4.png")
+    slopes.growth = mk.getSlope(averageData.times, averageData.sizes, sqrt, verbose, "tmpFig.png")
+    slopes.gyradius = mk.getSlope(averageData.times, averageData.gyradius, sqrt, verbose, "tmpTimeVsGyradius.png")
+    mk.getSlope(averageData.sizes, averageData.gyradius, sqrt, verbose, "tmpFig4.png")
     coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(islandAmount+1)
-    mk.getAverageGrowth(averageData.times, coverages, sqrt, verbose, "tmpFig5.png")
-    slopes.perimeter = mk.getAverageGrowth(averageData.times, completeData.outerPerimeter, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    mk.getSlope(averageData.times, coverages, sqrt, verbose, "tmpFig5.png")
+    #slopes.perimeter = mk.getAverageGrowth(averageData.times, completeData.outerPerimeter, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
     averageData.slopes = slopes
     return averageData
 
