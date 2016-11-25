@@ -4,10 +4,12 @@
 # function getFractalDimension of morphokineticsLow.py. More precisely
 # with numpy: matrix=np.loadtxt(fname="matrix.txt", delimiter="\t")
 
+# fluxes
 for i in $(ls -d */);
 do
     echo $i;
     cd $i;
+    # temperatures
     for j in $(ls -d */);
     do
 	echo $j;
@@ -24,5 +26,3 @@ do
     cd ..;
 done
 
-
-cd /home/jalberdi004/mk_test/activationEnergy/basic/400/islandDistributionNoForceDeposition100
