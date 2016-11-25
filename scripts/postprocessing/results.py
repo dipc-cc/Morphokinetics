@@ -308,7 +308,7 @@ class Results:
     def fluctuationIslandAmount(self):
         return (self.islands2()-(self.islands()**2))**(1/2)
     
-    def fluctionMonomers(self):
+    def fluctuationMonomers(self):
         return (self.monomers2()-(self.monomers()**2))**(1/2)
     
     def _addNull_(self):
