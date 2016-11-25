@@ -78,7 +78,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
     slopes = results.Slopes()
     try:
         averageData = mk.readAllValues(maxCoverage, temperature, flux)    
-    except OSError:
+    except (OSError, IndexError):
         print("averaged data was not found. Trying to compute it...")
         numberOfIsland = 0
         lastGyradius = 0
@@ -110,12 +110,13 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
     islandAmount = float(averageData.lastIslandAmount())
     # Curve fitting
-    slopes.growth = mk.getSlope(averageData.times, averageData.sizes, sqrt, verbose, "tmpFig.png")
-    slopes.gyradius = mk.getSlope(averageData.times, averageData.gyradius, sqrt, verbose, "tmpTimeVsGyradius.png")
+    slopes.growth = mk.getSlope(list(range(1,maxCoverage)), averageData.sizes, sqrt, verbose, "tmpFig.png")
+    slopes.gyradius = mk.getSlope(list(range(1,maxCoverage)), averageData.gyradius, sqrt, verbose, "tmpTimeVsGyradius.png")
     mk.getSlope(averageData.sizes, averageData.gyradius, sqrt, verbose, "tmpFig4.png")
     coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(islandAmount+1)
     mk.getSlope(averageData.times, coverages, sqrt, verbose, "tmpFig5.png")
     #slopes.perimeter = mk.getAverageGrowth(averageData.times, completeData.outerPerimeter, sqrt=False, verbose=verbose, tmpFileName="tmpFig3.png")
+    slopes.monomers = mk.getSlope(averageData.times, averageData.monomers, sqrt, verbose)
     averageData.slopes = slopes
     return averageData
 
