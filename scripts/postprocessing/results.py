@@ -65,7 +65,9 @@ class AverageData:
         self.sizes2 = [] # stores the average of s^2 (s: island sizes)
         self.times = [] # simulated times while executing (from data* file)     
         self.monomers = []
+        self.monomers2 = [] # squares of monomers amount
         self.islandsAmount = []
+        self.islandsAmount2 = [] # squares of island amount
         self.ratio = [] # total ratio (from data* file)
         self.gyradius = []
         self.gyradius2 = [] # stores the average of r_g^2 (r_g: gyradius)
@@ -86,7 +88,9 @@ class AverageData:
         self.sizes2.append(np.mean(np.array(islandSizes)**2))
         self.times.append(np.mean(np.array(completeData.time[index]).astype(np.float)))
         self.monomers.append(np.mean(np.array(completeData.monomers[index]).astype(np.float)))
-        self.islandsAmount.append(np.mean(np.array(completeData.islandAmount[index])))
+        self.monomers2.append(np.mean(np.array(completeData.monomers[index]).astype(np.float)**2))
+        self.islandsAmount.append(np.mean(np.array(completeData.islandAmount[index]))) 
+        self.islandsAmount2.append(np.mean(np.array(completeData.islandAmount[index])**2))
         self.ratio.append(np.mean(np.array(completeData.ne[index]).astype(np.float)))
         self.gyradius.append(np.mean(np.array(completeData.gyradius[index]).astype(np.float)))
         self.gyradius2.append(np.mean(np.array(completeData.gyradius[index]).astype(np.float)**2))
@@ -187,9 +191,10 @@ class MeanValues:
         self.sizes2.append(averageData.lastSize2())
 
     def updateTimeAndRatio(self, simulatedTime, numberOfEvents, aeRatioTimesPossible):
-        self.simulatedTimes.append(simulatedTime)
-        self.totalRatio.append(numberOfEvents/simulatedTime)
-        self.aeRatioTimesPossibleList.append(aeRatioTimesPossible)
+        if (simulatedTime != 0):
+            self.simulatedTimes.append(simulatedTime)
+            self.totalRatio.append(numberOfEvents/simulatedTime)
+            self.aeRatioTimesPossibleList.append(aeRatioTimesPossible)
         
 class Results:
     """ Stores results (mainly to be plotted)"""
