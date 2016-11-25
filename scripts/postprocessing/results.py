@@ -79,6 +79,23 @@ class AverageData:
         self.nePositive = []
         self.slopes = Slopes()
 
+    def appendData(self, row):
+        self.sizes.append(row[7])
+        self.sizes2.append(row[13])
+        self.times.append(row[5])
+        self.monomers.append(row[3])
+        self.monomers2.append(row[16])
+        self.islandsAmount.append(row[6])
+        self.islandsAmount2.append(row[15])
+        self.ratio.append(row[8])
+        self.gyradius.append(row[9])
+        self.gyradius2.append(row[14])
+        self.stdSizes.append(row[10])
+        self.stdGyradius.append(row[11])
+        self.sumProb.append(row[12])
+        #onlyPositives = [item for item in completeData.ne[index] if (float(item) >= 0)]  # remove negative values
+        #averageData.nePositive.append(np.mean(np.array(onlyPositives).astype(np.float)))
+        
     def updateData(self, index, islandSizes, completeData):
         verbose = False
         # do histogram
@@ -235,55 +252,55 @@ class Results:
 
     def growthSlope(self):
         """ returns island size growth slopes for the last flux, for all temperatures """
-        return np.array(self.results[-1][0])
+        return np.array(self.results[-1][0]).astype(float)
 
     def totalRatio(self):
         """ returns average total ratio for the last flux, for all temperatures """
-        return np.array(self.results[-1][1])
+        return np.array(self.results[-1][1]).astype(float)
 
     def gyradius(self):
         """ returns average gyradius growth for the last flux, for all temperatures """
-        return np.array(self.results[-1][2])
+        return np.array(self.results[-1][2]).astype(float)
 
     def lastGyradius(self):
         """ returns average gyradius for the last coverage, last flux, for all temperatures """
-        return np.array(self.results[-1][8])
+        return np.array(self.results[-1][8]).astype(float)
         
     def islands(self):
         """ returns average number of islands for the last flux, for all temperatures """
-        return np.array(self.results[-1][3])
+        return np.array(self.results[-1][3]).astype(float)
     
     def islands2(self):
         """ returns average number of islands for the last flux, for all temperatures """
-        return np.array(self.results[-1][11])
+        return np.array(self.results[-1][11]).astype(float)
 
     def perimeter(self):
         """ returns average perimeter length growth for the last flux, for all temperatures """
-        return np.array(self.results[-1][4])
+        return np.array(self.results[-1][4]).astype(float)
     
     def monomers(self):
         """ returns average number of monomers for the last flux, for all temperatures """
-        return np.array(self.results[-1][5])
+        return np.array(self.results[-1][5]).astype(float)
 
     def monomers2(self):
         """ returns average number of monomers for the last flux, for all temperatures """
-        return np.array(self.results[-1][12])
+        return np.array(self.results[-1][12]).astype(float)
 
     def aeRatioTimesPossible(self):
         """  """
-        return np.array(self.results[-1][6])
+        return np.array(self.results[-1][6]).astype(float)
 
     def times(self):
         """ returns average simulated times for the last flux, for all temperatures """
-        return np.array(self.results[-1][7])
+        return np.array(self.results[-1][7]).astype(float)
 
     def sizes(self):
         """ returns average island sizes for the last flux, for all temperatures """
-        return np.array(self.results[-1][9])
+        return np.array(self.results[-1][9]).astype(float)
 
     def sizes2(self):
         """ returns average squared island sizes for the last flux, for all temperatures """
-        return np.array(self.results[-1][10])
+        return np.array(self.results[-1][10]).astype(float)
 
     def fluctuationSizes(self):
         return (self.sizes2()-(self.sizes()**2))**(1/2)
