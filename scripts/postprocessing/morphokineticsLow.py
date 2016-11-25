@@ -77,7 +77,7 @@ def getAverageGrowth(times, valueList, sqrt=False, verbose=False, tmpFileName="t
             valueSlope = aPower
         else:
             valueSlope = a
-    except TypeError:
+    except (TypeError, RuntimeError):
         valueSlope = 0
 
     return valueSlope
