@@ -19,7 +19,7 @@ temperatures = list(range(120,321,5))
 
 workingPath = os.getcwd()
 results = results.Results()
-for i in range(0,1):
+for i in range(-6,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
@@ -45,8 +45,11 @@ for i in range(0,1):
         plt.legend(loc='upper left', prop={'size':6})
         plt.savefig("dSVsRgVsRate.png")
     except ValueError:
+        plt.close()
         traceback.print_exc(file=sys.stdout)
         print("error plotting")
+        print(x)
+        print(y)
     
 plt.close()
 
