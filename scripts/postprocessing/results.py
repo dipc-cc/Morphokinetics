@@ -191,6 +191,7 @@ class Slopes:
         self.growth = 0
         self.gyradius = 0
         self.perimeter = 0
+        self.monomers = 0
         
 
 class MeanValues:
@@ -205,6 +206,7 @@ class MeanValues:
         self.islandsAmount2 = []
         self.monomersAmount = []
         self.monomersAmount2 = []
+        self.monomersSlope = []
         self.simulatedTimes = []
         self.totalRatio = []
         self.sizes = []
@@ -220,6 +222,7 @@ class MeanValues:
         self.islandsAmount2.append(averageData.lastIslandAmount2())
         self.monomersAmount.append(averageData.lastMonomerAmount())
         self.monomersAmount2.append(averageData.lastMonomerAmount2())
+        self.monomersSlope.append(averageData.slopes.monomers)
         self.sizes.append(averageData.lastSize())
         self.sizes2.append(averageData.lastSize2())
 
@@ -238,7 +241,7 @@ class Results:
         self.useNaN = useNaN
 
     def append(self, meanValues):
-        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.islandsAmount, meanValues.perimeterSlopes, meanValues.monomersAmount, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2, meanValues.islandsAmount2, meanValues.monomersAmount2])
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.islandsAmount, meanValues.perimeterSlopes, meanValues.monomersAmount, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2, meanValues.islandsAmount2, meanValues.monomersAmount2, meanValues.monomersSlope])
         while(len(self.temperatures) > len(self.results[-1][0])):
             self.results[-1][0].append(self._addNull_())
             self.results[-1][1].append(self._addNull_())
@@ -310,6 +313,9 @@ class Results:
     
     def fluctuationMonomers(self):
         return (self.monomers2()-(self.monomers()**2))**(1/2)
+
+    def monomersSlope(self):
+        return self.results[-1][13]
     
     def _addNull_(self):
         if self.useNaN:
