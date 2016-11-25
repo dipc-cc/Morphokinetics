@@ -70,7 +70,7 @@ workingPath = os.getcwd()
 print(workingPath)
 resultsFractal = []
 x = np.empty(0)
-for i in range(-6,1):
+for i in range(0,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
