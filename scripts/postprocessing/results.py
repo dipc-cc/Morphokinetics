@@ -111,6 +111,12 @@ class AverageData:
         except IndexError:
             return float('nan')
 
+    def lastIslandAmount2(self):
+        try:
+            return self.islandsAmount2[-1]
+        except IndexError:
+            return float('nan')
+
     def lastSize(self):
         try:
             return self.sizes[-1]
@@ -154,6 +160,12 @@ class AverageData:
             return self.monomers[-1]
         except IndexError:
             return float('nan')
+        
+    def lastMonomerAmount2(self):
+        try:
+            return self.monomers2[-1]
+        except IndexError:
+            return float('nan')
 
 class Slopes:
     """ Stores fit slopes of several measurements"""
@@ -172,8 +184,10 @@ class MeanValues:
         self.gyradiusSlopes = []
         self.lastGyradius = []
         self.perimeterSlopes = []
-        self.numberOfIslands = []
-        self.numberOfMonomers = []
+        self.islandsAmount = []
+        self.islandsAmount2 = []
+        self.monomersAmount = []
+        self.monomersAmount2 = []
         self.simulatedTimes = []
         self.totalRatio = []
         self.sizes = []
@@ -185,8 +199,10 @@ class MeanValues:
         self.gyradiusSlopes.append(averageData.slopes.gyradius)
         self.lastGyradius.append(averageData.lastGyradius())
         self.perimeterSlopes.append(averageData.slopes.perimeter)
-        self.numberOfIslands.append(averageData.lastIslandAmount())
-        self.numberOfMonomers.append(averageData.lastMonomerAmount())
+        self.islandsAmount.append(averageData.lastIslandAmount())
+        self.islandsAmount2.append(averageData.lastIslandAmount2())
+        self.monomersAmount.append(averageData.lastMonomerAmount())
+        self.monomersAmount2.append(averageData.lastMonomerAmount2())
         self.sizes.append(averageData.lastSize())
         self.sizes2.append(averageData.lastSize2())
 
@@ -205,7 +221,7 @@ class Results:
         self.useNaN = useNaN
 
     def append(self, meanValues):
-        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.numberOfIslands, meanValues.perimeterSlopes, meanValues.numberOfMonomers, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2])
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.islandsAmount, meanValues.perimeterSlopes, meanValues.monomersAmount, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2, meanValues.islandsAmount2, meanValues.monomersAmount2])
         while(len(self.temperatures) > len(self.results[-1][0])):
             self.results[-1][0].append(self._addNull_())
             self.results[-1][1].append(self._addNull_())
@@ -236,6 +252,10 @@ class Results:
     def islands(self):
         """ returns average number of islands for the last flux, for all temperatures """
         return np.array(self.results[-1][3])
+    
+    def islands2(self):
+        """ returns average number of islands for the last flux, for all temperatures """
+        return np.array(self.results[-1][11])
 
     def perimeter(self):
         """ returns average perimeter length growth for the last flux, for all temperatures """
@@ -244,6 +264,10 @@ class Results:
     def monomers(self):
         """ returns average number of monomers for the last flux, for all temperatures """
         return np.array(self.results[-1][5])
+
+    def monomers2(self):
+        """ returns average number of monomers for the last flux, for all temperatures """
+        return np.array(self.results[-1][12])
 
     def aeRatioTimesPossible(self):
         """  """
@@ -261,6 +285,15 @@ class Results:
         """ returns average squared island sizes for the last flux, for all temperatures """
         return np.array(self.results[-1][10])
 
+    def fluctuationSizes(self):
+        return (self.sizes2()-(self.sizes()**2))**(1/2)
+    
+    def fluctuationIslandAmount(self):
+        return (self.islands2()-(self.islands()**2))**(1/2)
+    
+    def fluctionMonomers(self):
+        return (self.monomers2()-(self.monomers()**2))**(1/2)
+    
     def _addNull_(self):
         if self.useNaN:
             return np.nan
