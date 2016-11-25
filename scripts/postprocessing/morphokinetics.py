@@ -57,6 +57,9 @@ flake simulations. """
     d=b+a*(x**sigma)/(x**sigma+x0**sigma)
     return np.array(d)
 
+def readFractalD(flux):
+    return np.array(mk.readFractalD(flux)).astype(float)
+
 def shapeFactorFunc(x):
     """returns shape factor, based on a fit of a study of single flake
 simulations. """

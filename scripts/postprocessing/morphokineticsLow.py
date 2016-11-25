@@ -35,7 +35,18 @@ def readAllValues(maxCoverage, temperature, flux):
             # average
             averageData.appendData(row)
     return averageData
-        
+
+def readFractalD(flux):
+    fileName = "fractalD"+'{:E}'.format(flux)+".txt"
+    csvfile = open(fileName, newline='')
+    outreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
+    dimensions = []
+    for row in outreader:
+        if row[0][0] != "%":
+            # average
+            dimensions.append(row[3])
+    return dimensions
+    
 
 def getAllValues(maxCoverage, getSlopes=True):
     """ reads all the values for the corresponding coverage """
