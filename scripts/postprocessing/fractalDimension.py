@@ -70,7 +70,7 @@ workingPath = os.getcwd()
 print(workingPath)
 resultsFractal = []
 x = np.empty(0)
-for i in range(0,1):
+for i in range(-6,5):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
@@ -88,7 +88,7 @@ for i in range(0,1):
        resultsFractal[-1].append(float('nan'))
     rttFlux = np.log(mk.getRtt(temperatures)/flux**0.5)
     x = np.concatenate((x, rttFlux))
-    filename = "outputFileShapeF"+'{:E}'.format(flux)+".txt"
+    filename = "fractalD"+'{:E}'.format(flux)+".txt"
     with open(filename, 'w', newline='') as csvfile:
         outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         outwriter.writerow(["%index", "temp", "flux", "shapeF"])
