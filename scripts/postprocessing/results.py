@@ -75,6 +75,10 @@ class AverageData:
         self.stdGyradius = []
         self.sumProb = []
         self.chunk = chunk
+        self.innerPerimeter = []
+        self.outerPerimeter = []
+        self.stdInner = []
+        self.stdOuter = []
         self.maxCoverage = maxCoverage
         self.nePositive = []
         self.slopes = Slopes()
@@ -93,6 +97,8 @@ class AverageData:
         self.stdSizes.append(row[10])
         self.stdGyradius.append(row[11])
         self.sumProb.append(row[12])
+        self.innerPerimeter.append(row[17])
+        self.outerPerimeter.append(row[18])
         #onlyPositives = [item for item in completeData.ne[index] if (float(item) >= 0)]  # remove negative values
         #averageData.nePositive.append(np.mean(np.array(onlyPositives).astype(np.float)))
         
@@ -113,7 +119,11 @@ class AverageData:
         self.gyradius2.append(np.mean(np.array(completeData.gyradius[index]).astype(np.float)**2))
         self.stdSizes.append(np.std(islandSizes))
         self.stdGyradius.append(np.std(np.array(completeData.gyradius[index]).astype(np.float)))
-        self.sumProb.append(np.mean(np.array(completeData.sumProb[index]).astype(np.float)))
+        self.sumProb.append(np.mean(np.array(completeData.sumProb[index]).astype(np.float))) 
+        self.innerPerimeter.append(np.mean(np.array(completeData.innerPerimeter[index]).astype(np.float)))
+        self.outerPerimeter.append(np.mean(np.array(completeData.outerPerimeter[index]).astype(np.float)))
+        self.stdInner.append(np.std(np.array(completeData.innerPerimeter[index]).astype(np.float)))
+        self.stdOuter.append(np.std(np.array(completeData.outerPerimeter[index]).astype(np.float)))
         onlyPositives = [item for item in completeData.ne[index] if (float(item) >= 0)]  # remove negative values
         self.nePositive.append(np.mean(np.array(onlyPositives).astype(np.float)))
         if verbose:
@@ -140,6 +150,12 @@ class AverageData:
         except IndexError:
             return float('nan')
     
+    def lastStdSizes(self):
+        try:
+            return self.stdSizes[-1]
+        except IndexError:
+            return float('nan')
+    
     def lastSize2(self):
         try:
             return self.sizes2[-1]
@@ -155,6 +171,12 @@ class AverageData:
     def lastGyradius2(self):
         return self.gyradius2[-1]
     
+    def lastStdGyradius(self):
+        try:
+            return self.stdGyradius[-1]
+        except IndexError:
+            return float('nan')
+
     def lastTime(self):
         try:
             return self.times[-1]
@@ -183,15 +205,42 @@ class AverageData:
             return self.monomers2[-1]
         except IndexError:
             return float('nan')
+        
+    def lastInnerPerimeter(self):
+        try:
+            return self.innerPerimeter[-1]
+        except IndexError:
+            return float('nan')
+        
+    def lastOuterPerimeter(self):
+        try:
+            return self.outerPerimeter[-1]
+        except IndexError:
+            return float('nan')
+        
+    def lastStdInnerPerimeter(self):
+        try:
+            return self.stdInner[-1]
+        except IndexError:
+            return float('nan')
+        
+    def lastStdOuterPerimeter(self):
+        try:
+            return self.stdOuter[-1]
+        except IndexError:
+            return float('nan')
 
+        
 class Slopes:
     """ Stores fit slopes of several measurements"""
     
     def __init__(self):
         self.growth = 0
         self.gyradius = 0
-        self.perimeter = 0
+        self.innerPerimeter = 0
+        self.outerPerimeter = 0
         self.monomers = 0
+        self.islandsAmount = 0
         
 
 class MeanValues:
@@ -201,9 +250,16 @@ class MeanValues:
         self.growthSlopes = []
         self.gyradiusSlopes = []
         self.lastGyradius = []
-        self.perimeterSlopes = []
+        self.gyradiusStd = []
+        self.innerPerimeterAmount = []
+        self.outerPerimeterAmount = []
+        self.innerPerimeterSlopes = []
+        self.outerPerimeterSlopes = []
+        self.innerPerimeterStd = []
+        self.outerPerimeterStd = []
         self.islandsAmount = []
         self.islandsAmount2 = []
+        self.islandsAmountSlope = []
         self.monomersAmount = []
         self.monomersAmount2 = []
         self.monomersSlope = []
@@ -211,20 +267,29 @@ class MeanValues:
         self.totalRatio = []
         self.sizes = []
         self.sizes2 = []
+        self.sizesStd = []
         self.aeRatioTimesPossibleList = []
 
     def updateData(self, averageData):
         self.growthSlopes.append(averageData.slopes.growth)
         self.gyradiusSlopes.append(averageData.slopes.gyradius)
         self.lastGyradius.append(averageData.lastGyradius())
-        self.perimeterSlopes.append(averageData.slopes.perimeter)
+        self.gyradiusStd.append(averageData.lastStdGyradius())
+        self.innerPerimeterAmount.append(averageData.lastInnerPerimeter())
+        self.outerPerimeterAmount.append(averageData.lastOuterPerimeter())
+        self.innerPerimeterSlopes.append(averageData.slopes.innerPerimeter)
+        self.outerPerimeterSlopes.append(averageData.slopes.outerPerimeter)
+        self.innerPerimeterStd.append(averageData.lastStdInnerPerimeter())
+        self.outerPerimeterStd.append(averageData.lastStdOuterPerimeter())
         self.islandsAmount.append(averageData.lastIslandAmount())
         self.islandsAmount2.append(averageData.lastIslandAmount2())
+        self.islandsAmountSlope.append(averageData.slopes.islandsAmount)        
         self.monomersAmount.append(averageData.lastMonomerAmount())
         self.monomersAmount2.append(averageData.lastMonomerAmount2())
         self.monomersSlope.append(averageData.slopes.monomers)
         self.sizes.append(averageData.lastSize())
         self.sizes2.append(averageData.lastSize2())
+        self.sizesStd.append(averageData.lastStdSizes())
 
     def updateTimeAndRatio(self, simulatedTime, numberOfEvents, aeRatioTimesPossible):
         if (simulatedTime != 0):
@@ -241,7 +306,7 @@ class Results:
         self.useNaN = useNaN
 
     def append(self, meanValues):
-        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.islandsAmount, meanValues.perimeterSlopes, meanValues.monomersAmount, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2, meanValues.islandsAmount2, meanValues.monomersAmount2, meanValues.monomersSlope])
+        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.islandsAmount, meanValues.innerPerimeterSlopes, meanValues.monomersAmount, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2, meanValues.islandsAmount2, meanValues.monomersAmount2, meanValues.monomersSlope, meanValues.sizesStd, meanValues.gyradiusStd, meanValues.islandsAmountSlope, meanValues.outerPerimeterSlopes, meanValues.innerPerimeterAmount, meanValues.outerPerimeterAmount, meanValues.innerPerimeterStd, meanValues.outerPerimeterStd])
         while(len(self.temperatures) > len(self.results[-1][0])):
             self.results[-1][0].append(self._addNull_())
             self.results[-1][1].append(self._addNull_())
@@ -274,12 +339,30 @@ class Results:
         return np.array(self.results[-1][3]).astype(float)
     
     def islands2(self):
-        """ returns average number of islands for the last flux, for all temperatures """
+        """ returns average number of squares of islands for the last flux, for all temperatures """
         return np.array(self.results[-1][11]).astype(float)
 
-    def perimeter(self):
+    def innerPerimeterSlope(self):
         """ returns average perimeter length growth for the last flux, for all temperatures """
         return np.array(self.results[-1][4]).astype(float)
+    
+    def outerPerimeterSlope(self):
+        """ returns average perimeter length growth for the last flux, for all temperatures """
+        return np.array(self.results[-1][16]).astype(float)
+
+    def lastInnerPerimeter(self):
+        """ returns inner perimeter length for the last coverage, last flux, for all temperatures """
+        return np.array(self.results[-1][17]).astype(float)
+
+    def lastOuterPerimeter(self):
+        """ returns outer perimeter length for the last coverage, last flux, for all temperatures """
+        return np.array(self.results[-1][18]).astype(float)
+
+    def fluctuationInnerPerimeter(self):
+        return np.array(self.results[-1][19]).astype(float)
+    
+    def fluctuationOuterPerimeter(self):
+        return np.array(self.results[-1][20]).astype(float)
     
     def monomers(self):
         """ returns average number of monomers for the last flux, for all temperatures """
@@ -305,6 +388,9 @@ class Results:
         """ returns average squared island sizes for the last flux, for all temperatures """
         return np.array(self.results[-1][10]).astype(float)
 
+    def sizesSlope(self):
+        return np.array(self.results[-1][15]).astype(float)
+        
     def fluctuationSizes(self):
         return (self.sizes2()-(self.sizes()**2))**(1/2)
     
@@ -316,6 +402,12 @@ class Results:
 
     def monomersSlope(self):
         return self.results[-1][13]
+
+    def sizesStd(self):
+        return np.array(self.results[-1][14]).astype(float)
+
+    def gyradiusStd(self):
+        return self.results[-1][15]
     
     def _addNull_(self):
         if self.useNaN:
