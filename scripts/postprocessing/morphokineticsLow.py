@@ -103,6 +103,7 @@ def getSlope(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.pn
         aPower = popt[0][0]
         bPower = popt[0][1]
         if verbose:
+            plt.figure(num=None, figsize=(3,3), dpi=80, facecolor='w', edgecolor='k')
             label = "{}x+{}".format(a, b)
             print(label)
             plt.plot(x, averageValues)
@@ -118,8 +119,10 @@ def getSlope(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.pn
             valueSlope = aPower
         else:
             valueSlope = a
-    except (TypeError, RuntimeError):
-        print("Error fitting...") 
+    except (TypeError, RuntimeError, ValueError):
+        print("Error fitting...")
+        print(x)
+        print(averageValues)
         traceback.print_exc(file=sys.stdout)
         valueSlope = 0
 
