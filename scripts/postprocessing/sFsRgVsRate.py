@@ -36,7 +36,7 @@ for i in range(-6,1):
 
     os.chdir(workingPath)
     vs = results.growthSlope()
-    fs = (results.sizes2()-(results.sizes()**2))**(1/2)
+    fs = results.fluctuationSizes()
     vsPrime = np.maximum(vs,(1+fs**(4/3))*flux**1.08)
     N = (0.3*400*400)/results.islands()
     s = results.sizes()
