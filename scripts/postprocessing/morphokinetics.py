@@ -108,7 +108,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
             for index, islandSizes in enumerate(islandSizesList):
                 if islandSizes: #ensure that it is not null
                     averageData.updateData(index, islandSizes, completeData)
-                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], index/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.lastStdInnerPerimeter[-1], averageData.lastOuterPerimeter[-1]])
+                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], index/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1]])
                 
 
     islandAmount = float(averageData.lastIslandAmount())
@@ -118,8 +118,8 @@ island size. It returns the slope of the fit, which is the growth rate."""
     mk.getSlope(averageData.sizes, averageData.gyradius, sqrt, verbose, "tmpFig4.png")
     coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(islandAmount+1)
     mk.getSlope(averageData.times, coverages, sqrt, verbose, "tmpFig5.png")
-    slopes.innerPerimeter = mk.getSlope(averageData.times, averageData.innerPerimeter, sqrt=False, verbose=verbose, tmpFileName="tmpFigInnerPerimeter.png")
-    slopes.outerPerimeter = mk.getSlope(averageData.times, averageData.outerPerimeter, sqrt=False, verbose=verbose, tmpFileName="tmpFigOuterPerimeter.png")
+    slopes.innerPerimeter =  mk.getSlope(averageData.times, averageData.innerPerimeter, sqrt=True, verbose=verbose, tmpFileName="tmpFigInnerPerimeter.png")
+    slopes.outerPerimeter = mk.getSlope(averageData.times, averageData.outerPerimeter, sqrt=True, verbose=verbose, tmpFileName="tmpFigOuterPerimeter.png")
     slopes.monomers = mk.getSlope(averageData.times, averageData.monomers, sqrt, verbose)
     slopes.islandsAmount = mk.getSlope(averageData.times, averageData.islandsAmount, sqrt, verbose)
     averageData.slopes = slopes
