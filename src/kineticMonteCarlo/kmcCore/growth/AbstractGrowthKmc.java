@@ -622,10 +622,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.countPerimeter(null);
     //compute the average distances to centre.
     float avgDistance = (float) (1.0 / (lattice.getFractalDimension()));
+    int numberOfAtomFirstIsland = 0;
+    try{
+      numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
+    } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
+    }
     outData.format(Locale.US, coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%d\t%d\t%d\t%d\n", printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
             getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, lattice.getIsland(0).getNumberOfAtoms(),
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, numberOfAtomFirstIsland,
             lattice.getEdgeCount(), lattice.getKinkCount(), lattice.getBulkCount());
     sumProbabilities = 0.0d;
     outData.flush();
