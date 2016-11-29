@@ -344,6 +344,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   @Override
   public int simulate() {
     int coverageThreshold = 1;
+    int limit = 10000;
     int returnValue = 0;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
@@ -364,8 +365,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           }
           simulatedSteps++;
           sumProbabilities += getList().getTotalProbabilityFromList();
-          if (extraOutput && getCoverage() * 100 >= coverageThreshold) { // print extra data every 1% of coverage
-            printData(coverageThreshold);
+          if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+            if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
+              limit = limit / 10;
+              coverageThreshold = 1;
+            }
+            printData(null);
             coverageThreshold++;
           }
         }
