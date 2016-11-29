@@ -27,8 +27,10 @@ public class BasicGrowthSimulation extends AbstractGrowthSimulation{
     switch (getParser().getRatesLibrary()) {
       case "version2":
         setRates(new BasicGrowth2Rates());
+        break;
       case "version3":
         setRates(new BasicGrowth3Rates());
+        break;
       default:
         setRates(new BasicGrowthSyntheticRates());
     }
