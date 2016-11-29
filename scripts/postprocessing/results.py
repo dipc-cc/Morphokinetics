@@ -77,8 +77,8 @@ class AverageData:
         self.chunk = chunk
         self.innerPerimeter = []
         self.outerPerimeter = []
-        self.stdInner = []
-        self.stdOuter = []
+        self.stdInnerPerimeter = []
+        self.stdOuterPerimeter = []
         self.maxCoverage = maxCoverage
         self.nePositive = []
         self.slopes = Slopes()
@@ -122,8 +122,8 @@ class AverageData:
         self.sumProb.append(np.mean(np.array(completeData.sumProb[index]).astype(np.float))) 
         self.innerPerimeter.append(np.mean(np.array(completeData.innerPerimeter[index]).astype(np.float)))
         self.outerPerimeter.append(np.mean(np.array(completeData.outerPerimeter[index]).astype(np.float)))
-        self.stdInner.append(np.std(np.array(completeData.innerPerimeter[index]).astype(np.float)))
-        self.stdOuter.append(np.std(np.array(completeData.outerPerimeter[index]).astype(np.float)))
+        self.stdInnerPerimeter.append(np.std(np.array(completeData.innerPerimeter[index]).astype(np.float)))
+        self.stdOuterPerimeter.append(np.std(np.array(completeData.outerPerimeter[index]).astype(np.float)))
         onlyPositives = [item for item in completeData.ne[index] if (float(item) >= 0)]  # remove negative values
         self.nePositive.append(np.mean(np.array(onlyPositives).astype(np.float)))
         if verbose:
@@ -220,13 +220,13 @@ class AverageData:
         
     def lastStdInnerPerimeter(self):
         try:
-            return self.stdInner[-1]
+            return self.stdInnerPerimeter[-1]
         except IndexError:
             return float('nan')
         
     def lastStdOuterPerimeter(self):
         try:
-            return self.stdOuter[-1]
+            return self.stdOuterPerimeter[-1]
         except IndexError:
             return float('nan')
 
