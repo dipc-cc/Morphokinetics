@@ -137,7 +137,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter] ");
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. edges, 14. kinks, 15. bulks] ");
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -622,10 +622,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.countPerimeter(null);
     //compute the average distances to centre.
     float avgDistance = (float) (1.0 / (lattice.getFractalDimension()));
-    outData.format(Locale.US, coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%d\n", printCoverage, getTime(),
+    outData.format(Locale.US, coverageFormat + "\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%d\t%d\t%d\t%d\n", printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
             getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, lattice.getIsland(0).getNumberOfAtoms() );
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, lattice.getIsland(0).getNumberOfAtoms(),
+            lattice.getEdgeCount(), lattice.getKinkCount(), lattice.getBulkCount());
     sumProbabilities = 0.0d;
     outData.flush();
     if (extraOutput2) {

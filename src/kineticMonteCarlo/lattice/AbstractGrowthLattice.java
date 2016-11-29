@@ -46,6 +46,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int occupied;
   private int islandCount;
   private int monomerCount;
+  private int edgeCount;
+  private int kinkCount;
+  private int bulkCount;
   private ArrayList<Island> islands;
   private int innerPerimeter;
   private int outerPerimeter;
@@ -343,6 +346,36 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return -monomerCount;
   }
 
+  /**
+   * Edge atoms are atoms with one neighbour (basic simulation mode). After have counted them with
+   * {@link #countIslands(java.io.PrintWriter)}, the number of edge atoms is available.
+   *
+   * @return number of edge atoms.
+   */
+  public int getEdgeCount() {
+    return edgeCount;
+  }
+
+  /**
+   * Kink atoms are atoms with two neighbours (basic simulation mode). After have counted them with
+   * {@link #countIslands(java.io.PrintWriter)}, the number of kink atoms is available.
+   *
+   * @return number of monomers.
+   */
+  public int getKinkCount() {
+    return kinkCount;
+  }
+
+  /**
+   * Bulk atom are atoms with three or more neighbours  (basic simulation mode). After have counted them with
+   * {@link #countIslands(java.io.PrintWriter)}, the number of bulk atoms is available.
+   *
+   * @return number of bulk atoms.
+   */
+  public int getBulkCount() {
+    return bulkCount;
+  }
+
   public void getCentreOfMassTry() {
     int islandAmount = getIslandCount();
     int minX[] = new int[islandAmount];
@@ -565,6 +598,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     // do the count
     islandCount = 0;
     monomerCount = 0;
+    edgeCount = 0;
+    kinkCount = 0;
+    bulkCount = 0;
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
       AbstractGrowthUc uc = getUc(i);
@@ -646,7 +682,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   /**
-   * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set
+   * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set 
    * all them the same island number.
    *
    * @param atom atom to be classified.
@@ -669,6 +705,23 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       return;
     atom.setVisited(true);
     if (atom.isOccupied()) {
+      // Get atom type
+      switch (atom.getType()){
+        case 0:
+          break;
+        case 1:
+          edgeCount++;
+          break;
+        case 2:
+          kinkCount++;
+          break;
+        case 3:
+        case 4:
+          bulkCount++;
+          break;
+        default:
+          // should raise an error, skip for the moment
+      }
       atom.setIslandNumber(islandCount);
       atom.setRelativeX(xDiference);
       atom.setRelativeY(yDiference);
