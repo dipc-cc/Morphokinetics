@@ -80,6 +80,11 @@ public abstract class AbstractAtom implements IAtom {
     removed = !occupied;
   }
 
+  /**
+   * Number of neighbours that current atoms has, independently whether are occupied or not.
+   * 
+   * @return fixed number of neighbours.
+   */
   @Override
   public final int getNumberOfNeighbours() {
     return numberOfNeighbours;
