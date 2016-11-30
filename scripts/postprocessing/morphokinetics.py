@@ -85,8 +85,8 @@ island size. It returns the slope of the fit, which is the growth rate."""
         print("averaged data was not found. Trying to compute it...")
         numberOfIsland = 0
         lastGyradius = 0
-        averageData = results.AverageData(maxCoverage, chunk)
-        completeData = results.CompleteData(maxCoverage)
+        averageData = results.AverageData(maxCoverage, chunk) # create object
+        completeData = results.CompleteData(maxCoverage)      # create object
         try:
             completeData = mk.getAllValues(maxCoverage, growth)
         except OSError:
@@ -97,7 +97,6 @@ island size. It returns the slope of the fit, which is the growth rate."""
             islandSizesList = completeData.islandSizesSqrt
         else:
             islandSizesList = completeData.islandSizes
-        averageData = results.AverageData(maxCoverage, chunk) # create object
         if verbose:
             print("Average island size for")
 
