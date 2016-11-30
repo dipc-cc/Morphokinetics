@@ -6,6 +6,7 @@ import results
 import scipy.special
 import traceback
 import sys
+import os
 from scipy.optimize import curve_fit
 
 def myPrint(vector):
@@ -28,6 +29,8 @@ def readAllValues(maxCoverage, temperature, flux):
     chunk = 1 # it is not used
     averageData = results.AverageData(maxCoverage, chunk) # create return object
     fileName = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
+    if os.path.getmtime(fileName) < os.path.getmtime("results/dataEvery1percentAndNucleation.txt"):
+        raise OSError
     csvfile = open(fileName, newline='')
     outreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
     for row in outreader:
