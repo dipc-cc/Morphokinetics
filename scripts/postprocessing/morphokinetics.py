@@ -202,10 +202,9 @@ def getAllFractalDimensions(temperatures, verbose=False):
         os.chdir(workingPath)
     return fractalDimensions
 
-def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False, flux=-1):
+def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False, flux=-1, maxCoverage=30):
     """ computes the island distribution """
     chunk = 40
-    coverage = 30
     workingPath = os.getcwd()
     meanValues = results.MeanValues()
     for temperature in temperatures:
@@ -216,7 +215,7 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
             print(", creating it...")
             os.mkdir(str(temperature))
         else:
-            averageData = readData(chunk, coverage, sqrt, verbose, temperature=temperature, flux=flux)
+            averageData = readData(chunk, maxCoverage, sqrt, verbose, temperature=temperature, flux=flux)
             meanValues.updateData(averageData) 
             if (interval):
                 time2 = averageData.getTime(30)
