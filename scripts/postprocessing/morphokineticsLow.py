@@ -82,24 +82,24 @@ def getAllValues(maxCoverage, getSlopes=True):
             next(iterList)
             j = next(iterList)
             while j != '\n': # save the current values (island sizes) to an array
-                completeData.appendIslandSize(cov, j)
+                completeData.appendIslandSize(cov-1, j)
                 j = next(iterList)
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
             cov = int(line[2]+line[3])         # get coverage
-            if (cov >= maxCoverage):           
+            if (cov > maxCoverage):           
                 cov = 0                        # coverage is bigger than wanted, skip
             else:
-                completeData.appendData(cov, line)
+                completeData.appendData(cov-1, line)
                 dataLine = previousLine
         previousLine = line
 
     return completeData
 
-def getSlope(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
+def getSlope(times, valueList, maxCoverage, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
     x = np.array(times)
-    x = np.array(times).astype(float)
-    averageValues = np.array(valueList).astype(float)
+    x = np.array(times).astype(float)[0:maxCoverage]
+    averageValues = np.array(valueList).astype(float)[0:maxCoverage]
     try:
         a, b = np.polyfit(x, averageValues, 1)
         popt = curve_fit(powerFunc, x, averageValues)
@@ -123,10 +123,11 @@ def getSlope(times, valueList, sqrt=False, verbose=False, tmpFileName="tmpFig.pn
         else:
             valueSlope = a
     except (TypeError, RuntimeError, ValueError):
-        print("Error fitting...")
-        print(x)
-        print(averageValues)
-        traceback.print_exc(file=sys.stdout)
+        if (verbose):
+            print("Error fitting...")
+            print(x)
+            print(averageValues)
+            traceback.print_exc(file=sys.stdout)
         valueSlope = 0
 
     return valueSlope

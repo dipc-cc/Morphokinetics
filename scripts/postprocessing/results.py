@@ -119,7 +119,7 @@ class AverageData:
         self.gyradius2.append(np.mean(np.array(completeData.gyradius[index]).astype(np.float)**2))
         self.stdSizes.append(np.std(islandSizes))
         self.stdGyradius.append(np.std(np.array(completeData.gyradius[index]).astype(np.float)))
-        self.sumProb.append(np.mean(np.array(completeData.sumProb[index]).astype(np.float))) 
+        self.sumProb.append(np.mean(np.array(completeData.sumProb[index]).astype(np.float)))
         self.innerPerimeter.append(np.mean(np.array(completeData.innerPerimeter[index]).astype(np.float)))
         self.outerPerimeter.append(np.mean(np.array(completeData.outerPerimeter[index]).astype(np.float)))
         self.stdInnerPerimeter.append(np.std(np.array(completeData.innerPerimeter[index]).astype(np.float)))
@@ -134,52 +134,52 @@ class AverageData:
         
     def lastIslandAmount(self):
         try:
-            return self.islandsAmount[-1]
+            return self.islandsAmount[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 
     def lastIslandAmount2(self):
         try:
-            return self.islandsAmount2[-1]
+            return self.islandsAmount2[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 
     def lastSize(self):
         try:
-            return self.sizes[-1]
+            return self.sizes[self.maxCoverage-1]
         except IndexError:
             return float('nan')
     
     def lastStdSizes(self):
         try:
-            return self.stdSizes[-1]
+            return self.stdSizes[self.maxCoverage-1]
         except IndexError:
             return float('nan')
     
     def lastSize2(self):
         try:
-            return self.sizes2[-1]
+            return self.sizes2[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 
     def lastGyradius(self):
         try:
-            return self.gyradius[-1]
+            return self.gyradius[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 
     def lastGyradius2(self):
-        return self.gyradius2[-1]
+        return self.gyradius2[self.maxCoverage-1]
     
     def lastStdGyradius(self):
         try:
-            return self.stdGyradius[-1]
+            return self.stdGyradius[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 
     def lastTime(self):
         try:
-            return self.times[-1]
+            return self.times[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 
@@ -188,7 +188,7 @@ class AverageData:
 
     def lastNe(self):
         """ returns average number of events, removing negative values"""
-        return nePositive[-1]
+        return nePositive[self.maxCoverage-1]
 
     def getNe(self, index):
         """ returns average number of events, removing negative values"""
@@ -196,37 +196,37 @@ class AverageData:
 
     def lastMonomerAmount(self):
         try:
-            return self.monomers[-1]
+            return self.monomers[self.maxCoverage-1]
         except IndexError:
             return float('nan')
         
     def lastMonomerAmount2(self):
         try:
-            return self.monomers2[-1]
+            return self.monomers2[self.maxCoverage-1]
         except IndexError:
             return float('nan')
         
     def lastInnerPerimeter(self):
         try:
-            return self.innerPerimeter[-1]
+            return self.innerPerimeter[self.maxCoverage-1]
         except IndexError:
             return float('nan')
         
     def lastOuterPerimeter(self):
         try:
-            return self.outerPerimeter[-1]
+            return self.outerPerimeter[self.maxCoverage-1]
         except IndexError:
             return float('nan')
         
     def lastStdInnerPerimeter(self):
         try:
-            return self.stdInnerPerimeter[-1]
+            return self.stdInnerPerimeter[self.maxCoverage-1]
         except IndexError:
             return float('nan')
         
     def lastStdOuterPerimeter(self):
         try:
-            return self.stdOuterPerimeter[-1]
+            return self.stdOuterPerimeter[self.maxCoverage-1]
         except IndexError:
             return float('nan')
 

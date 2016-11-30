@@ -104,7 +104,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
         with open(filename, 'w', newline='') as csvfile:
             outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
             outwriter.writerow(["%","index, temperature, flux, monomers[-1], index/100, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter"])
-            for index, islandSizes in enumerate(islandSizesList):
+            for index, islandSizes in enumerate(islandSizesList, start=0):
                 if islandSizes: #ensure that it is not null
                     averageData.updateData(index, islandSizes, completeData)
                     outwriter.writerow([index, temperature, flux, averageData.monomers[-1], index/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1]])
@@ -112,15 +112,15 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
     islandAmount = float(averageData.lastIslandAmount())
     # Curve fitting
-    slopes.growth = mk.getSlope(list(range(1,maxCoverage)), averageData.sizes, sqrt, verbose, "tmpFig.png")
-    slopes.gyradius = mk.getSlope(list(range(1,maxCoverage)), averageData.gyradius, sqrt, verbose, "tmpTimeVsGyradius.png")
-    mk.getSlope(averageData.sizes, averageData.gyradius, sqrt, verbose, "tmpFig4.png")
-    coverages = 400*400/100*np.arange(0.01,maxCoverage-1, 1)/(islandAmount+1)
-    mk.getSlope(averageData.times, coverages, sqrt, verbose, "tmpFig5.png")
-    slopes.innerPerimeter =  mk.getSlope(averageData.times, averageData.innerPerimeter, sqrt=True, verbose=verbose, tmpFileName="tmpFigInnerPerimeter.png")
-    slopes.outerPerimeter = mk.getSlope(averageData.times, averageData.outerPerimeter, sqrt=True, verbose=verbose, tmpFileName="tmpFigOuterPerimeter.png")
-    slopes.monomers = mk.getSlope(averageData.times, averageData.monomers, sqrt, verbose)
-    slopes.islandsAmount = mk.getSlope(averageData.times, averageData.islandsAmount, sqrt, verbose)
+    slopes.growth = mk.getSlope(list(range(0,maxCoverage)), averageData.sizes, maxCoverage, sqrt, verbose, "tmpFig.png")
+    slopes.gyradius = mk.getSlope(list(range(0,maxCoverage)), averageData.gyradius, maxCoverage, sqrt, verbose, "tmpTimeVsGyradius.png")
+    mk.getSlope(averageData.sizes, averageData.gyradius, maxCoverage, sqrt, verbose, "tmpFig4.png")
+    coverages = 400*400/100*np.arange(0.01,maxCoverage, 1)/(islandAmount+1)
+    mk.getSlope(averageData.times, coverages, maxCoverage, sqrt, verbose, "tmpFig5.png")
+    slopes.innerPerimeter =  mk.getSlope(averageData.times, averageData.innerPerimeter, maxCoverage, sqrt=True, verbose=verbose, tmpFileName="tmpFigInnerPerimeter.png")
+    slopes.outerPerimeter = mk.getSlope(averageData.times, averageData.outerPerimeter, maxCoverage, sqrt=True, verbose=verbose, tmpFileName="tmpFigOuterPerimeter.png")
+    slopes.monomers = mk.getSlope(averageData.times, averageData.monomers, maxCoverage, sqrt, verbose)
+    slopes.islandsAmount = mk.getSlope(averageData.times, averageData.islandsAmount, maxCoverage,sqrt, verbose)
     averageData.slopes = slopes
     return averageData
 
@@ -205,7 +205,7 @@ def getAllFractalDimensions(temperatures, verbose=False):
 def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False, flux=-1):
     """ computes the island distribution """
     chunk = 40
-    coverage = 31
+    coverage = 30
     workingPath = os.getcwd()
     meanValues = results.MeanValues()
     for temperature in temperatures:
