@@ -18,7 +18,6 @@ plt.xlim(50,100)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120, 221, 5))
 for i in range(-6,1):
     folder = "flux3.5e"+str(i)
@@ -26,13 +25,13 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False))
+        meanValues = mk.getIslandDistribution(temperatures, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), 4e4*results.growthSlope(), label="growth "+str(i))
-    plt.loglog(1/(np.array(temperatures)*8.62e-5), results.totalRatio(), "--", label="t. ratio "+str(i))
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), 4e4*meanValues.getGrowthSlope(), label="growth "+str(i))
+    plt.loglog(1/(np.array(temperatures)*8.62e-5), meanValues.getTotalRatio(), "--", label="t. ratio "+str(i))
     plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("rateRadiusVsTemperature.png")
     

@@ -19,7 +19,6 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
@@ -29,20 +28,16 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
-    v = 0.82*400*400/(results.islands())*(flux**0.21)
-    #v = flux*0.7*400*400/(np.array(results[-1][3]))*(flux**0)
-    n = results.islands()
-    vSlope = results.growthSlope()/(flux**0.79)
-    totalRatio = (results.totalRatio()/(flux**0.81))**(1)
+    totalRatio = (meanValues.getTotalRatio()/(flux**0.81))**(1)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    gyradius = results.gyradius()
+    gyradius = meanValues.getGyradiusSlope()
     f = math.pi
     c = 4e-1
     d = np.array(y)

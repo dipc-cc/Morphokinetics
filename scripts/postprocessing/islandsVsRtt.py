@@ -15,8 +15,6 @@ plt.grid(True)
 
 workingPath = os.getcwd()
 temperatures = list(range(120,321,5))
-useNaN = False
-results = results.Results(temperatures, useNaN)
 
 for i in range(-6,1):
     folder = "flux3.5e"+str(i)
@@ -24,17 +22,19 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
-    v = 0.82*400*400/results.islands()*(flux**0.21)
-    n = results.islands()/(flux**0.23)
+    v = 0.82*400*400/meanValues.getIslandsAmount()*(flux**0.21)
+    n = meanValues.getIslandsAmount()/(flux**0.23)
     r = np.array(mk.getRtt(temperatures))/(flux**0.33)
     plt.loglog(r, n, ".", label="N "+folder)
     if (i == -1):
+        print(r)
+        print(n)
         popt = curve_fit(mk.powerFunc, r, n)
         a = popt[0][0]
         b = popt[0][1]

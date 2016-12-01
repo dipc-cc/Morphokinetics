@@ -296,121 +296,95 @@ class MeanValues:
             self.simulatedTimes.append(simulatedTime)
             self.totalRatio.append(numberOfEvents/simulatedTime)
             self.aeRatioTimesPossibleList.append(aeRatioTimesPossible)
-        
-class Results:
-    """ Stores results (mainly to be plotted)"""
 
-    def __init__(self, temperatures = [], useNaN = True):
-        self.results = []
-        self.temperatures = temperatures
-        self.useNaN = useNaN
-
-    def append(self, meanValues):
-        self.results.append([meanValues.growthSlopes, meanValues.totalRatio, meanValues.gyradiusSlopes, meanValues.islandsAmount, meanValues.innerPerimeterSlopes, meanValues.monomersAmount, meanValues.aeRatioTimesPossibleList, meanValues.simulatedTimes, meanValues.lastGyradius, meanValues.sizes, meanValues.sizes2, meanValues.islandsAmount2, meanValues.monomersAmount2, meanValues.monomersSlope, meanValues.sizesStd, meanValues.gyradiusStd, meanValues.islandsAmountSlope, meanValues.outerPerimeterSlopes, meanValues.innerPerimeterAmount, meanValues.outerPerimeterAmount, meanValues.innerPerimeterStd, meanValues.outerPerimeterStd])
-        while(len(self.temperatures) > len(self.results[-1][0])):
-            self.results[-1][0].append(self._addNull_())
-            self.results[-1][1].append(self._addNull_())
-            self.results[-1][2].append(self._addNull_())
-            self.results[-1][3].append(self._addNull_())
-            self.results[-1][4].append(self._addNull_())
-            self.results[-1][5].append(self._addNull_())
-            self.results[-1][6].append(self._addNull_())
-            self.results[-1][7].append(self._addNull_())
-            self.results[-1][8].append(self._addNull_())
-
-    def growthSlope(self):
+            
+    def getGrowthSlope(self):
         """ returns island size growth slopes for the last flux, for all temperatures """
-        return np.array(self.results[-1][0]).astype(float)
+        return np.array(self.growthSlopes).astype(float)
 
-    def totalRatio(self):
+    def getTotalRatio(self):
         """ returns average total ratio for the last flux, for all temperatures """
-        return np.array(self.results[-1][1]).astype(float)
+        return np.array(self.totalRatio).astype(float)
 
-    def gyradius(self):
+    def getGyradiusSlope(self):
         """ returns average gyradius growth for the last flux, for all temperatures """
-        return np.array(self.results[-1][2]).astype(float)
+        return np.array(self.gyradiusSlopes).astype(float)
 
-    def lastGyradius(self):
+    def getLastGyradius(self):
         """ returns average gyradius for the last coverage, last flux, for all temperatures """
-        return np.array(self.results[-1][8]).astype(float)
+        return np.array(self.lastGyradius).astype(float)
         
-    def islands(self):
+    def getIslandsAmount(self):
         """ returns average number of islands for the last flux, for all temperatures """
-        return np.array(self.results[-1][3]).astype(float)
+        return np.array(self.islandsAmount).astype(float)
     
-    def islands2(self):
+    def getIslandsAmount2(self):
         """ returns average number of squares of islands for the last flux, for all temperatures """
-        return np.array(self.results[-1][11]).astype(float)
+        return np.array(self.islandsAmount2).astype(float)
 
-    def innerPerimeterSlope(self):
+    def getInnerPerimeterSlope(self):
         """ returns average perimeter length growth for the last flux, for all temperatures """
-        return np.array(self.results[-1][4]).astype(float)
+        return np.array(self.innerPerimeterSlopes).astype(float)
     
-    def outerPerimeterSlope(self):
+    def getOuterPerimeterSlope(self):
         """ returns average perimeter length growth for the last flux, for all temperatures """
-        return np.array(self.results[-1][16]).astype(float)
+        return np.array(self.outerPerimeterSlopes).astype(float)
 
-    def lastInnerPerimeter(self):
+    def getLastInnerPerimeter(self):
         """ returns inner perimeter length for the last coverage, last flux, for all temperatures """
-        return np.array(self.results[-1][17]).astype(float)
+        return np.array(self.innerPerimeterAmount).astype(float)
 
-    def lastOuterPerimeter(self):
+    def getLastOuterPerimeter(self):
         """ returns outer perimeter length for the last coverage, last flux, for all temperatures """
-        return np.array(self.results[-1][18]).astype(float)
+        return np.array(self.outerPerimeterAmount).astype(float)
 
-    def fluctuationInnerPerimeter(self):
-        return np.array(self.results[-1][19]).astype(float)
+    def getFluctuationInnerPerimeter(self):
+        return np.array(self.innerPerimeterStd).astype(float)
     
-    def fluctuationOuterPerimeter(self):
-        return np.array(self.results[-1][20]).astype(float)
+    def getFluctuationOuterPerimeter(self):
+        return np.array(self.outerPerimeterStd).astype(float)
     
-    def monomers(self):
+    def getMonomersAmount(self):
         """ returns average number of monomers for the last flux, for all temperatures """
-        return np.array(self.results[-1][5]).astype(float)
+        return np.array(self.monomersAmount).astype(float)
 
-    def monomers2(self):
+    def getMonomersAmount2(self):
         """ returns average number of monomers for the last flux, for all temperatures """
-        return np.array(self.results[-1][12]).astype(float)
+        return np.array(self.monomersAmount2).astype(float)
 
-    def aeRatioTimesPossible(self):
+    def getAeRatioTimesPossible(self):
         """  """
-        return np.array(self.results[-1][6]).astype(float)
+        return np.array(self.aeRatioTimesPossibleList).astype(float)
 
-    def times(self):
+    def getTimes(self):
         """ returns average simulated times for the last flux, for all temperatures """
-        return np.array(self.results[-1][7]).astype(float)
+        return np.array(self.simulatedTimes).astype(float)
 
-    def sizes(self):
+    def getSizes(self):
         """ returns average island sizes for the last flux, for all temperatures """
-        return np.array(self.results[-1][9]).astype(float)
+        return np.array(self.sizes).astype(float)
 
-    def sizes2(self):
+    def getSizes2(self):
         """ returns average squared island sizes for the last flux, for all temperatures """
-        return np.array(self.results[-1][10]).astype(float)
+        return np.array(self.sizes2).astype(float)
 
-    def sizesSlope(self):
+    def getSizesSlope(self):
         return np.array(self.results[-1][15]).astype(float)
         
-    def fluctuationSizes(self):
+    def getFluctuationSizes(self):
         return (self.sizes2()-(self.sizes()**2))**(1/2)
     
-    def fluctuationIslandAmount(self):
+    def getFluctuationIslandAmount(self):
         return (self.islands2()-(self.islands()**2))**(1/2)
     
-    def fluctuationMonomers(self):
+    def getFluctuationMonomers(self):
         return (self.monomers2()-(self.monomers()**2))**(1/2)
 
-    def monomersSlope(self):
+    def getMonomersSlope(self):
         return self.results[-1][13]
 
-    def sizesStd(self):
+    def getSizesStd(self):
         return np.array(self.results[-1][14]).astype(float)
 
-    def gyradiusStd(self):
+    def getGyradiusStd(self):
         return self.results[-1][15]
-    
-    def _addNull_(self):
-        if self.useNaN:
-            return np.nan
-        else:
-            return 0

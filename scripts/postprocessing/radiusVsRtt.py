@@ -17,10 +17,8 @@ xPower = 0
 plt.grid(True)
 plt.xlabel(r"$\frac{{ r_{{tt}} }} {{ F^{{ {} }} }}$".format(xPower))
 plt.ylabel(r'Average radius growth rate/flux $\frac{{ \sqrt{{ \dot{{r}} }} }}{{F^{{ {} }} }} }}$'.format(yPower))
-plt.ylim(8,100)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,221,5))
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
@@ -28,12 +26,12 @@ for i in range(-6,5):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures))
+        meanValues = mk.getIslandDistribution(temperatures)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    plt.loglog(np.array(mk.getRtt(temperatures))/flux**xPower, results.growthSlope()/(flux**yPower), label=folder)
+    plt.loglog(np.array(mk.getRtt(temperatures))/flux**xPower, meanValues.getGrowthSlope()/(flux**yPower), label=folder)
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("radiusVsRtt.png")
     

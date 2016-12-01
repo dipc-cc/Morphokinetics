@@ -18,7 +18,6 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
@@ -28,17 +27,17 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
-    totalRatio = (results.totalRatio()/(flux**0.81))**(1)
+    totalRatio = (meanValues.getTotalRatio()/(flux**0.81))**(1)
     x = totalRatio
     y = mk.fractalDFunc(x)
-    gyradius = 4e7*(results.gyradius()/(flux**0.88))**(3/4*(np.array(y)-1))
-    gyradius = 1.3e5*(results.gyradius()/(flux**0.88))**(3*(np.array(y)-1))
+    gyradius = 4e7*(meanValues.getGyradiusSlope()/(flux**0.88))**(3/4*(np.array(y)-1))
+    gyradius = 1.3e5*(meanValues.getGyradiusSlope()/(flux**0.88))**(3*(np.array(y)-1))
     r = mk.getRtt(temperatures)/flux**0.36
     inverseTemperature = 1/(kb*np.array(temperatures))
     plt.semilogy(inverseTemperature, gyradius, "-", label="gyradius "+folder)

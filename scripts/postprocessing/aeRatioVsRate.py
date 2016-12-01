@@ -19,7 +19,6 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,221,5))
 
 for i in range(-6,1):
@@ -28,13 +27,13 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
-    mtt = results.aeRatioTimesPossible()#/flux**.063
+    mtt = meanValues.getAeRatioTimesPossible()#/flux**.063
     r = np.array(mk.getRtt(temperatures))#/flux**0.5
     plt.loglog(mtt, r, "-", label="N "+folder)
     if (i < -7):

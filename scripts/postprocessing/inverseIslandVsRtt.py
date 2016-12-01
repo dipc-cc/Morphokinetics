@@ -14,7 +14,6 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,321,5))
 
 for i in range(-6,1):
@@ -23,13 +22,13 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
-    islands = results.islands()
+    islands = meanValues.getIslandsAmount()
     indexes = np.where(islands > 0)
     islands = islands[indexes]
     t = np.array(temperatures)[indexes]

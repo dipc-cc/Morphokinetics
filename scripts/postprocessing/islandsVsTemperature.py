@@ -20,7 +20,6 @@ fig, ax1 = plt.subplots()
 ax2 = ax1.twinx()
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,221,5))
 kb = 8.6173324e-5
 
@@ -30,17 +29,17 @@ for i in range(-6,1):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
-    totalRatio = (results.totalRatio()/(flux**0.81))**(1)
+    totalRatio = (meanValues.getTotalRatio()/(flux**0.81))**(1)
     x = totalRatio
     inverseTemperature = 1/(kb*np.array(temperatures))
     d = mk.fractDFuncTemperature(inverseTemperature)
-    numberOfIslands = 9e9/results.islands()**(2/np.array(d))
+    numberOfIslands = 9e9/meanValues.getIslandsAmount()**(2/np.array(d))
     ax1.semilogy(inverseTemperature, numberOfIslands , "-", label="numberOfIslands "+folder)
     ax1.semilogy(inverseTemperature, totalRatio, "--", label="total ratio "+folder)
     ax2.plot(inverseTemperature, d, ".", label="total ratio "+folder)

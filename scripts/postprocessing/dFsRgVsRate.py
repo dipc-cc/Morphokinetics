@@ -25,18 +25,20 @@ temperatures = np.array(list(range(120,321,5)))
 workingPath = os.getcwd()
 results = results.Results()
 kb = 8.6173324e-5
-for i in range(-6,1):
+for i in range(-3,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
     try:
         os.chdir(folder)
+        meanValues = mk.getIslandDistribution(temperatures, sqrt=False, interval=False, growth=True, verbose=False, flux=flux)
         results.append(mk.getIslandDistribution(temperatures, sqrt=False, interval=False, growth=True, verbose=False, flux=flux))
     except OSError:
         print ("error changing to flux {}".format(folder))
 
     os.chdir(workingPath)
     vs = results.growthSlope()
+    vsM = meanValues.growthSlopes
     fs = results.fluctuationSizes()
     vsPrime = np.maximum(vs,(1+fs**(4/3))*flux**1.08)
     N = (0.3*400*400)/results.islands()
@@ -53,7 +55,8 @@ for i in range(-6,1):
     rtt = mk.getRtt(temperatures)
     d = mk.fractalDFunc(rtt/3.5e-1)
     d0 = mk.fractalDFunc(rtt/flux)
-    d = mk.readFractalD(flux)
+    
+    #d = mk.readFractalD(flux)
     rg = results.lastGyradius()
     vpi = results.innerPerimeterSlope()
     vpo = results.outerPerimeterSlope()
@@ -68,18 +71,23 @@ for i in range(-6,1):
     sigmaG = results.gyradiusStd()
     T1 = 1/(kb * temperatures)
     cov = 48000
+    x= 0.5
+
     command = "(1/d)*(fs*rg*flux**0.325)**(d/2*0.8333)"
-    #command = "(s**(d/2))"
+    command = "s**d0"
+    command = "s"
     y = eval(command)
     plt.title(command)
-    command = "r"
+    command = "r/flux**0.8"
+    command = "T1"
     x = eval(command)
     plt.xlabel(command)
     try:
         #fig1 = plt.figure(1, figsize=(4,4), dpi=80, facecolor='w', edgecolor='k')
-        plt.loglog(x, 1e5*y, label=folder)
-        #plt.loglog(x, 1e5*po, ".", label="out "+folder)
-        plt.loglog(x, x, color="black")
+        plt.semilogy(x, y, "-x", label=folder)
+        #print(vsM-vs)
+        #plt.loglog(x, np.array(vsM).astype(float), ".", label="out "+folder)
+        #plt.loglog(x, x, color="black")
         #plt.plot(x, 1e3*d**10, "-", label="d "+folder)
         #plt.plot(x, 1e3*d0**10, "-", label="d0 "+folder)
         #plt.loglog(x, 48000/N, label=flux)

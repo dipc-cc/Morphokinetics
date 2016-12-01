@@ -19,7 +19,6 @@ plt.grid(True)
 
 workingPath = os.getcwd()
 temperatures = list(range(120,501,5))
-results = results.Results(temperatures)
 kb = 8.6173324e-5
 
 for i in range(-6,5):
@@ -32,23 +31,23 @@ for i in range(-6,5):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, sqrt, interval, growth, verbose, flux))
+        meanValues = mk.getIslandDistribution(temperatures, sqrt, interval, growth, verbose, flux)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
 
     rtt = mk.getRtt(temperatures)
-    growthSlope = results.growthSlope()
-    totalRatio = results.totalRatio()
+    growthSlope = meanValues.getGrowthSlope()
+    totalRatio = meanValues.getTotalRatio()
     fractalD = mk.fractalDFunc(rtt/flux**0.5)
     shapeF = mk.shapeFactorFunc(rtt/flux**0.5)
-    gyradius = results.gyradius()
-    n = results.islands()
-    perimeterSlopes= results.perimeter()
-    numberOfMonomers= results.monomers()
-    aeRatioTimesPossibleList= results.aeRatioTimesPossible()
-    simulatedTimes= results.times()
+    gyradius = meanValues.getGyradiusSlope()
+    n = meanValues.getIslandsAmount()
+    perimeterSlopes= meanValues.getInnerPerimeterSlope()
+    numberOfMonomers= meanValues.getMonomersAmount()
+    aeRatioTimesPossibleList= meanValues.getAeRatioTimesPossible()
+    simulatedTimes= meanValues.getTimes()
 
     filename = "outputFile"+'{:E}'.format(flux)+".txt"
     with open(filename, 'w', newline='') as csvfile:

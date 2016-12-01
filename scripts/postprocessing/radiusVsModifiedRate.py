@@ -24,20 +24,19 @@ plt.grid(True)
 sqrt = True
 workingPath = os.getcwd()
 temperatures = list(range(120,221,5))
-results = results.Results()
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, sqrt))
+        meanValues = mk.getIslandDistribution(temperatures, sqrt)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
-    plt.loglog(results.totalRatio()/flux**xPower, results.growthSlope()/flux**yPower, label=folder)
-    plt.loglog(results.totalRatio()/flux**xPower, results.gyradius()/flux**yPower, '--', label="gyradius "+str(flux))
+    plt.loglog(meanValues.getTotalRatio()/flux**xPower, meanValues.getGrowthSlope()/flux**yPower, label=folder)
+    plt.loglog(meanValues.getTotalRatio()/flux**xPower, meanValues.getGyradiusSlope()/flux**yPower, '--', label="gyradius "+str(flux))
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("radiusVsModifiedRate.png")
     

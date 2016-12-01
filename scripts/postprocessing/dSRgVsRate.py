@@ -16,27 +16,26 @@ plt.grid(True)
 temperatures = list(range(120,321,5))
 
 workingPath = os.getcwd()
-results = results.Results()
 for i in range(-6,1):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False)
     except OSError:
         print ("error changing to flux {}".format(folder))
-        #results.complete()
+
     os.chdir(workingPath)
-    vs = results.growthSlope()
-    s = (0.3*400*400)/results.islands()
-    vg = results.gyradius()
+    vs = meanValues.getGrowthSlope()
+    s = (0.3*400*400)/meanValues.getIslandsAmount()
+    vg = meanValues.getGyradiusSlope()
     rtt = mk.getRtt(temperatures)
     d = mk.fractalDFunc(rtt/flux)
-    rg = results.lastGyradius()
+    rg = meanValues.getLastGyradius()
     print(len(d),len(s), len(rg))
     y = d * (s/rg)**2
-    x = results.totalRatio()
+    x = meanValues.getTotalRatio()
     print(len(x),len(y))
     try:
         plt.loglog(x, y,  label=folder)

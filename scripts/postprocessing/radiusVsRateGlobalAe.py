@@ -21,7 +21,6 @@ ax1.grid(True)
 
 workingPath = os.getcwd()
 temperatures = list(range(120,321,5))
-results = results.Results(temperatures)
 
 kb = 8.6173324e-5
 for i in range(-3,-2):
@@ -30,19 +29,19 @@ for i in range(-3,-2):
     print(folder)
     try:
         os.chdir(folder)
-        results.append(mk.getIslandDistribution(temperatures, False, False))
+        meanValues = mk.getIslandDistribution(temperatures, False, False)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
     os.chdir(workingPath)
         
     axes = plt.gca()
-    v = 0.7*flux*400*400/results.islands()#+np.array(results[-1][5]))
-    v0 = results.growthSlope()
+    v = 0.7*flux*400*400/meanValues.getIslandsAmount()
+    v0 = meanValues.getGrowthSlope()
     lng3 = ax1.semilogy(1/(kb*np.array(temperatures)), v,  "-r", label="islands "+folder)
     lng1 = ax1.semilogy(1/(kb*np.array(temperatures)), v0,  "x-", label="growth "+folder)
-    lng2 = ax1.semilogy(1/(kb*np.array(temperatures)), results.totalRatio(),  "s-", label="ratio "+folder)
-    lng4 = ax1.semilogy(1/(kb*np.array(temperatures)), 1e2*results.gyradius(), '--', label="gyradius "+folder)
+    lng2 = ax1.semilogy(1/(kb*np.array(temperatures)), meanValues.getTotalRatio(),  "s-", label="ratio "+folder)
+    lng4 = ax1.semilogy(1/(kb*np.array(temperatures)), 1e2*meanValues.getGyradiusSlope(), '--', label="gyradius "+folder)
     lng5 = ax2.plot(1/(kb*np.array(temperatures)), np.array(v0/v), 'g-', label="islands*growth "+folder)
     lng = lng1 + lng2 + lng3 + lng4 + lng5
     labs = [l.get_label() for l in lng]
