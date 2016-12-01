@@ -368,23 +368,23 @@ class MeanValues:
         """ returns average squared island sizes for the last flux, for all temperatures """
         return np.array(self.sizes2).astype(float)
 
-    def getSizesSlope(self):
-        return np.array(self.results[-1][15]).astype(float)
+    def getIslandsAmountSlope(self):
+        return np.array(self.islandsAmountSlope).astype(float)
         
     def getFluctuationSizes(self):
-        return (self.sizes2()-(self.sizes()**2))**(1/2)
+        return (self.getSizes2()-(self.getSizes()**2))**(1/2)
     
     def getFluctuationIslandAmount(self):
-        return (self.islands2()-(self.islands()**2))**(1/2)
+        return (self.getIslandsAmount2()-(self.getIslandsAmount()**2))**(1/2)
     
     def getFluctuationMonomers(self):
-        return (self.monomers2()-(self.monomers()**2))**(1/2)
+        return (self.getMonomersAmount2()-(self.getMonomersAmount()**2))**(1/2)
 
     def getMonomersSlope(self):
-        return self.results[-1][13]
+        return np.array(self.monomersSlope).astype(float)
 
     def getSizesStd(self):
-        return np.array(self.results[-1][14]).astype(float)
+        return np.array(self.sizesStd).astype(float)
 
     def getGyradiusStd(self):
-        return self.results[-1][15]
+        return np.array(self.gyradiusStd)
