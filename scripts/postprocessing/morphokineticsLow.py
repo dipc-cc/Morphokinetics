@@ -31,6 +31,8 @@ def readAllValues(maxCoverage, temperature, flux):
     fileName = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
     if os.path.getmtime(fileName) < os.path.getmtime("results/dataEvery1percentAndNucleation.txt"):
         raise OSError
+    if sum(1 for line in open(fileName)) < maxCoverage + 1: # ensure that cached file has enough lines
+        raise OSError
     csvfile = open(fileName, newline='')
     outreader = csv.reader(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
     for row in outreader:
