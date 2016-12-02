@@ -7,6 +7,7 @@ import scipy.special
 import traceback
 import sys
 import os
+import warnings
 from scipy.optimize import curve_fit
 
 def myPrint(vector):
@@ -164,7 +165,8 @@ dataEvery1percentAndNucleation.txt output file    """
 
     try:
         matrix = np.loadtxt(fname="matrix.txt", delimiter="\t")
-    except OSError:
+        warnings.simplefilter("error")
+    except (OSError, UserWarning):
         print("error opening matrix.txt file")
         return -1
     
