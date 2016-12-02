@@ -231,7 +231,6 @@ public class AgRatesFromPrbCox implements IRates {
    * @return rate
    */
   public static double getRate(double temperature, double energy) {
-      double kB = 8.617332e-5;;
       return (1e13 * Math.exp(-energy / (kB * temperature)));
   }
   
