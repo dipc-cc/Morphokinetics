@@ -13,6 +13,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
+import kineticMonteCarlo.atom.AgAtomSimple;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import utils.StaticRandom;
@@ -45,11 +46,20 @@ public class AgUcLattice extends AgLattice {
    */
   private final int[] shift = {2,3,4,5,0,1};
   
-  public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
+  /**
+   * Creates a lattice to work with hexagonal Ag simulation, based on unit cells (UC).
+   * 
+   * @param hexaSizeI size in I direction. How many points horizontally.
+   * @param hexaSizeJ size in J direction. How many points vectically.
+   * @param modified temporary buffer.
+   * @param distancePerStep auxiliary class for Devita.
+   * @param simple whether using simple Ag atoms.
+   */
+  public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep, boolean simple) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
     setUnitCellSize(2);
     ucList = new ArrayList<>();
-    createAtoms();
+    createAtoms(simple);
     
     // We assume that central unit cell, position 0 is the centre
     centralCartesianLocation = new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));
@@ -185,21 +195,26 @@ public class AgUcLattice extends AgLattice {
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    *
    */
-  private void createAtoms() {
+  private void createAtoms(boolean simple) {
 
     sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
     sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
     ucArray = new AgUc[sizeI][sizeJ];
-    int id = -1;
+    int id = 0;
     for (int i = 0; i < sizeI; i++) {
       for (int j = 0; j < sizeJ; j++) {
         List<AgAtom> atomsList = new ArrayList<>(2);
-        id++;
-        AgAtom atom0 = new AgAtom(id, 0);
+        AgAtom atom0;
+        AgAtom atom1;
+        if (simple) {
+          atom0 = new AgAtomSimple(id++, 0);
+          atom1 = new AgAtomSimple(id++, 1);
+        } else {
+          atom0 = new AgAtom(id++, 0);
+          atom1 = new AgAtom(id++, 1);
+        }
         atomsList.add(atom0);
-        id++;
-        AgAtom atom1 = new AgAtom(id, 1);
         atomsList.add(atom1);
         AgUc uc = new AgUc(i, j, atomsList);
         ucList.add(uc);

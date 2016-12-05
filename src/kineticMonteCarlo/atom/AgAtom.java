@@ -214,6 +214,11 @@ public class AgAtom extends AbstractGrowthAtom {
     return -1;
   }
 
+  /**
+   * It chooses one neighbour atom randomly.
+   * 
+   * @return atom to be moved.
+   */
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
 

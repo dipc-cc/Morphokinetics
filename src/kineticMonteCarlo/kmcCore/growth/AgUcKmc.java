@@ -13,6 +13,7 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AgUcLattice;
+import kineticMonteCarlo.lattice.AgUcLatticeSimple;
 import kineticMonteCarlo.unitCell.AgUc;
 import utils.StaticRandom;
 
@@ -27,7 +28,12 @@ public class AgUcKmc extends AbstractGrowthKmc {
     super(parser);
 
     HopsPerStep distancePerStep = new HopsPerStep();
-    AgUcLattice agLattice = new AgUcLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
+    AgUcLattice agLattice;
+    if (parser.getRatesLibrary().equals("simple")) {
+      agLattice = new AgUcLatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep);
+    } else {
+      agLattice = new AgUcLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, false);
+    }
     agLattice.init();
     setLattice(agLattice);
     if (parser.justCentralFlake()) {
