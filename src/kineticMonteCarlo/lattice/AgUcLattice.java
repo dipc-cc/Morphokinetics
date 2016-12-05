@@ -181,7 +181,7 @@ public class AgUcLattice extends AgLattice {
   }
   
   /**
-   * Creates all atoms and asings it neighbours. How are computed the neighbours is documented here:
+   * Creates all atoms and assigns it neighbours. How are computed the neighbours is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    *
    */
