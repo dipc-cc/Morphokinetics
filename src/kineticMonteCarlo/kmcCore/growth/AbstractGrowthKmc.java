@@ -467,8 +467,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
               && nextRadius < lattice.getCartSizeX() / 2
               && nextRadius < lattice.getCartSizeY() / 2) {
         if (extraOutput) {
-	  printData(null);
-	}
+          printData(null);
+        }
         if (perimeterType == RoundPerimeter.CIRCLE) {
           perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
           int newArea;
@@ -636,7 +636,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
-            getList().getTotalProbabilityFromList(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance,
+            getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance,
             lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, numberOfAtomFirstIsland,
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
