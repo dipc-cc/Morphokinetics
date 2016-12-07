@@ -105,7 +105,7 @@ class AverageData:
     def updateData(self, index, islandSizes, completeData):
         verbose = False
         # do histogram
-        self.histogMatrix[index].append(np.histogram(islandSizes, bins=range(0, max(islandSizes)+self.chunk, self.chunk), density=False))
+        self.histogMatrix[index].append(np.histogram(islandSizes))
         # average
         self.sizes.append(np.mean(islandSizes))
         self.sizes2.append(np.mean(np.array(islandSizes)**2))
