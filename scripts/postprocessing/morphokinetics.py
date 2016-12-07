@@ -6,6 +6,7 @@ import numpy as np
 import csv
 import morphokineticsLow as mk
 import results
+import matplotlib.pyplot as plt
 
 
 def powerFunc(x, a, b):
@@ -108,7 +109,12 @@ island size. It returns the slope of the fit, which is the growth rate."""
                 if islandSizes: #ensure that it is not null
                     averageData.updateData(index, islandSizes, completeData)
                     outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1]])
-                
+
+        if verbose:
+            plt.figure(num=None, figsize=(4,4), dpi=80)
+            for i in range(0,maxCoverage):
+                plt.loglog(averageData.histogMatrix[i][0][1][1:], averageData.histogMatrix[i][0][0], label=i)
+            plt.savefig("histo.png")
 
     islandAmount = float(averageData.lastIslandAmount())
     # Curve fitting
