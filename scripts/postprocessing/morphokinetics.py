@@ -112,8 +112,10 @@ island size. It returns the slope of the fit, which is the growth rate."""
 
         if verbose:
             plt.figure(num=None, figsize=(4,4), dpi=80)
-            for i in range(0,maxCoverage):
-                plt.loglog(averageData.histogMatrix[i][0][1][1:], averageData.histogMatrix[i][0][0], label=i)
+            for i in range(5,maxCoverage):
+                plt.semilogy(averageData.histogX[i], averageData.histogY[i], label=i+1)
+            plt.legend(loc='upper right', prop={'size':4})
+            plt.xlim(0,5)
             plt.savefig("histo.png")
 
     islandAmount = float(averageData.lastIslandAmount())

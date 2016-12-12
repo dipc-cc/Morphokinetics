@@ -61,6 +61,8 @@ class AverageData:
     def __init__(self, maxCoverage, chunk):
         w = 0
         self.histogMatrix = [[0 for x in range(w)] for y in range(maxCoverage)]
+        self.histogX = [[0 for x in range(w)] for y in range(maxCoverage)]
+        self.histogY = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.sizes = []
         self.sizes2 = [] # stores the average of s^2 (s: island sizes)
         self.times = [] # simulated times while executing (from data* file)     
@@ -105,7 +107,9 @@ class AverageData:
     def updateData(self, index, islandSizes, completeData):
         verbose = False
         # do histogram
-        self.histogMatrix[index].append(np.histogram(islandSizes))
+        self.histogMatrix[index].append(np.histogram(islandSizes, density=True))
+        self.histogX[index] = self.histogMatrix[index][0][1][1:]/np.mean(islandSizes)
+        self.histogY[index] = (self.histogMatrix[index][0][0])*(np.mean(islandSizes)**2)/((index+1)/100)
         # average
         self.sizes.append(np.mean(islandSizes))
         self.sizes2.append(np.mean(np.array(islandSizes)**2))
