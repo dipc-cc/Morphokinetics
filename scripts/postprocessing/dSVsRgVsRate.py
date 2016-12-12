@@ -36,10 +36,12 @@ for i in range(-6,1):
     d = mk.fractalDFunc(rtt/flux)
     rg = meanValues.getLastGyradius()
     print(len(d),len(s), len(rg))
-    y = d * ((s*vs)/rg**2)
+    command = "d * ((s*vs)/rg**2)"
+    y = eval(command)
     x = meanValues.getTotalRatio()
     print(len(x),len(y))
     try:
+        plt.ylabel(command)
         plt.loglog(x, y,  label=folder)
         plt.legend(loc='upper left', prop={'size':6})
         plt.savefig("dSVsRgVsRate.png")
