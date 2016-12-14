@@ -39,14 +39,14 @@ public class BasicGrowth2Rates implements IRates {
     energies[TERRACE][KINK] = Ed;
     energies[TERRACE][ISLAND] = Ed;
 
-    energies[EDGE][TERRACE] = Ea;
+    energies[EDGE][TERRACE] = Einf;
     energies[EDGE][EDGE] = Ea;
     energies[EDGE][KINK] = Ea;
     energies[EDGE][ISLAND] = Ea;
 
     energies[KINK][TERRACE] = Einf;
-    energies[KINK][EDGE] = Ea;
-    energies[KINK][KINK] = Ea;
+    energies[KINK][EDGE] = Einf;
+    energies[KINK][KINK] = Einf;
     energies[KINK][ISLAND] = Ea;
 
     energies[ISLAND][TERRACE] = Einf;
