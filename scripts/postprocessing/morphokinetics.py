@@ -104,11 +104,11 @@ island size. It returns the slope of the fit, which is the growth rate."""
         filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
         with open(filename, 'w', newline='') as csvfile:
             outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            outwriter.writerow(["%","index, temperature, flux, monomers[-1], coverage, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter"])
+            outwriter.writerow(["%","index, temperature, flux, monomers[-1], coverage, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter, numberOfEvents"])
             for index, islandSizes in enumerate(islandSizesList, start=0):
                 if islandSizes: #ensure that it is not null
                     averageData.updateData(index, islandSizes, completeData)
-                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1]])
+                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1], averageData.ne[-1]])
 
         if verbose:
             plt.figure(num=None, figsize=(4,4), dpi=80)
@@ -141,58 +141,6 @@ def getRtt(temperatures):
 
 def getAllRtt():
     return Rtt
-
-def getNumberOfEvents(time30cov):
-    """ gets data from output* file """
-    numberOfEvents = []
-    simulatedTime = []
-    regExpression = ("Need")
-    aeExpression = ("AeRatioTimesPossible")
-    fail = False
-    fileName = "unknown"
-    aeRatioTimesPossible = 0
-    try:
-        fileName = glob.glob("output*")[-1]
-        f = open(fileName)
-        # if found the coverage, save the next line
-        for line in f:
-            if re.search(aeExpression, line):
-                try:
-                    newValue = float(re.split(' ', line)[1])
-                    if (aeRatioTimesPossible < newValue):
-                        aeRatioTimesPossible = newValue
-                except ValueError:
-                    aeRatioTimesPossible = 0
-            if re.search(regExpression, line):
-                numberOfEvents.append(float(re.split(' ', line)[-5]))
-            if re.match("    0", line):
-                try:
-                    time = float(re.split('\t',line)[1])
-                    simulatedTime.append(time)
-                except (ValueError,IndexError):
-                    fail = True
-
-            if fail and re.search("Average", line): # if individual times are not found, try to get it from the end of the file.
-                line = next(f)
-                line = next(f)
-                line = next(f)
-                line = next(f)
-                time = float(re.split('\t',line)[1])
-                simulatedTime.append(time)
-    except (OSError,IndexError) as ex:
-        print("Input file {} can not be openned. Exiting! ".format(fileName))
-
-    if all(v == 0 for v in simulatedTime):
-        print("all values are zero ")
-        averageNumberOfEvents = np.mean(np.array(numberOfEvents))
-        if (math.isnan(averageNumberOfEvents)):
-            averageNumberOfEvents = 1
-        if (math.isnan(float(time30cov))):
-            time30cov = 1
-        return float(averageNumberOfEvents), float(time30cov), aeRatioTimesPossible
-    else:
-        return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime)), aeRatioTimesPossible
-
 
 def getAllFractalDimensions(temperatures, verbose=False):
     workingPath = os.getcwd()
@@ -234,13 +182,9 @@ def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, 
                 numberOfEvents = ne2-ne1
                 simulatedTime = time2-time1
             else:
-                time30cov = averageData.lastTime() 
-                numberOfEvents, simulatedTime, aeRatioTimesPossible = getNumberOfEvents(time30cov)
-                if (math.isnan(numberOfEvents) or math.isnan(simulatedTime) or simulatedTime == 0):
-                    print("something went wrong")
-                    print("\t"+str(numberOfEvents))
-                    print("\t"+str(simulatedTime))
-            meanValues.updateTimeAndRatio(simulatedTime, numberOfEvents, aeRatioTimesPossible)
+                simulatedTime = averageData.lastTime()
+                numberOfEvents = averageData.lastNe()
+            meanValues.updateTimeAndRatio(simulatedTime, numberOfEvents)
             try:
                 print("Temperature {} growth {:f} gyradius {:f} total rate {:d} ".format(temperature, averageData.slopes.growth, averageData.slopes.gyradius, int(numberOfEvents/simulatedTime)))
             except (ValueError, ZeroDivisionError):

@@ -82,7 +82,7 @@ class AverageData:
         self.stdInnerPerimeter = []
         self.stdOuterPerimeter = []
         self.maxCoverage = maxCoverage
-        self.nePositive = []
+        self.ne = []
         self.slopes = Slopes()
 
     def appendData(self, row):
@@ -101,8 +101,9 @@ class AverageData:
         self.sumProb.append(row[12])
         self.innerPerimeter.append(row[17])
         self.outerPerimeter.append(row[18])
-        #onlyPositives = [item for item in completeData.ne[index] if (float(item) >= 0)]  # remove negative values
-        #averageData.nePositive.append(np.mean(np.array(onlyPositives).astype(np.float)))
+        self.stdInnerPerimeter.append(row[19])
+        self.stdOuterPerimeter.append(row[20])
+        self.ne.append(row[21])
         
     def updateData(self, index, islandSizes, completeData):
         verbose = False
@@ -128,8 +129,7 @@ class AverageData:
         self.outerPerimeter.append(np.mean(np.array(completeData.outerPerimeter[index]).astype(np.float)))
         self.stdInnerPerimeter.append(np.std(np.array(completeData.innerPerimeter[index]).astype(np.float)))
         self.stdOuterPerimeter.append(np.std(np.array(completeData.outerPerimeter[index]).astype(np.float)))
-        onlyPositives = [item for item in completeData.ne[index] if (float(item) >= 0)]  # remove negative values
-        self.nePositive.append(np.mean(np.array(onlyPositives).astype(np.float)))
+        self.ne.append(np.mean(np.array(completeData.ne[index]).astype(np.float)))
         if verbose:
             print("  coverage {}%  {} time {}".format(index, sizes[-1], times[-1]))
         if index == 30: # only count islands in 30% of coverage
@@ -183,7 +183,7 @@ class AverageData:
 
     def lastTime(self):
         try:
-            return self.times[self.maxCoverage-1]
+            return float(self.times[self.maxCoverage-1])
         except IndexError:
             return float('nan')
 
@@ -192,11 +192,17 @@ class AverageData:
 
     def lastNe(self):
         """ returns average number of events, removing negative values"""
-        return nePositive[self.maxCoverage-1]
+        try:
+            return float(self.ne[self.maxCoverage-1])
+        except IndexError:
+            return float('nan')
 
     def getNe(self, index):
         """ returns average number of events, removing negative values"""
-        return nePositive[index]
+        try:
+            return float(self.ne[index])
+        except IndexError:
+            return float('nan')
 
     def lastMonomerAmount(self):
         try:
@@ -295,12 +301,10 @@ class MeanValues:
         self.sizes2.append(averageData.lastSize2())
         self.sizesStd.append(averageData.lastStdSizes())
 
-    def updateTimeAndRatio(self, simulatedTime, numberOfEvents, aeRatioTimesPossible):
+    def updateTimeAndRatio(self, simulatedTime, numberOfEvents):
         if (simulatedTime != 0):
             self.simulatedTimes.append(simulatedTime)
             self.totalRatio.append(numberOfEvents/simulatedTime)
-            self.aeRatioTimesPossibleList.append(aeRatioTimesPossible)
-
             
     def getGrowthSlope(self):
         """ returns island size growth slopes for the last flux, for all temperatures """
@@ -355,10 +359,6 @@ class MeanValues:
     def getMonomersAmount2(self):
         """ returns average number of monomers for the last flux, for all temperatures """
         return np.array(self.monomersAmount2).astype(float)
-
-    def getAeRatioTimesPossible(self):
-        """  """
-        return np.array(self.aeRatioTimesPossibleList).astype(float)
 
     def getTimes(self):
         """ returns average simulated times for the last flux, for all temperatures """
