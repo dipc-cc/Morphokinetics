@@ -187,9 +187,9 @@ def getNumberOfEvents(time30cov):
         averageNumberOfEvents = np.mean(np.array(numberOfEvents))
         if (math.isnan(averageNumberOfEvents)):
             averageNumberOfEvents = 1
-        if (math.isnan(time30cov)):
+        if (math.isnan(float(time30cov))):
             time30cov = 1
-        return averageNumberOfEvents, time30cov, aeRatioTimesPossible
+        return float(averageNumberOfEvents), float(time30cov), aeRatioTimesPossible
     else:
         return np.mean(np.array(numberOfEvents)), np.mean(np.array(simulatedTime)), aeRatioTimesPossible
 
