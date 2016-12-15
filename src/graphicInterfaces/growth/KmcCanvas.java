@@ -21,6 +21,7 @@ import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static java.lang.String.format;
+import java.text.DecimalFormat;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
@@ -296,13 +297,13 @@ public class KmcCanvas extends Canvas {
           int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
           int radius = (int) Math.round(scale * island.getMaxDistance());
           g.drawOval(X - radius, Y - radius, diameter, diameter);
-          g.drawString(Double.toString(island.getMaxDistance()), X, Y + 40);
+          g.drawString(new DecimalFormat("##.##").format(island.getMaxDistance()), X, Y + 40);
           g.setColor(GREEN);
           diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
           radius = (int) Math.round(scale * island.getAvgDistance());
           g.drawOval(X - radius, Y - radius, diameter, diameter);
           g.setColor(BLACK);
-          g.drawString(Double.toString(island.getAvgDistance()), X, Y + 10);
+          g.drawString(new DecimalFormat("##.##").format(island.getAvgDistance()), X, Y + 10);
         }
       } catch (NullPointerException e) {
         System.err.println("Some island centre or gyradius can not be printed. Ignoring and continuing... ");
