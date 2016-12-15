@@ -8,11 +8,6 @@ import results
 import sys
 import traceback
 
-def inprimatu(vector):
-    for i in vector:
-        print(i, end=" ")
-    print()
-
 label = r''
 plt.ylabel(label)
 label = r'$R/F^{0.79}$'
