@@ -135,7 +135,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
 def getRtt(temperatures):
     kb = 8.6173324e-5
     Rtt = []
-    for index,i in enumerate(temperatures):
+    for i in temperatures:
         Rtt.append(1e13*np.exp(-0.2/(kb*i)))
     return np.array(Rtt)
 
