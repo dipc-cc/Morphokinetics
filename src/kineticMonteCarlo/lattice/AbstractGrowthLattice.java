@@ -425,7 +425,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public String getAtomTypesCounter() {
     String sentence = "";
     for (int i = 0; i < atomTypesAmount; i++) {
-      sentence += String.valueOf(atomTypesCounter[i])+" ";
+      sentence += "\t"+String.valueOf(atomTypesCounter[i]);
     }
     return sentence;
   }
