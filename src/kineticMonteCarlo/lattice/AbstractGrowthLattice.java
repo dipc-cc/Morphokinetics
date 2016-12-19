@@ -632,9 +632,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           } 
         }
         if (atom.isOccupied() && occupiedNeighbours < atom.getNumberOfNeighbours()) {
+          atom.setInnerPerimeter();
           innerPerimeter++;
         }
         if (!atom.isOccupied() && occupiedNeighbours > 0) {
+          atom.setOuterPerimeter();
           outerPerimeter++; // it can also be +=occupiedNeighbours;
         }
       }

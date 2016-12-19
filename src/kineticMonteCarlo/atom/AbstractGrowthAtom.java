@@ -62,6 +62,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   private int relativeX;
   private int relativeY;
+  
+  private boolean innerPerimeter;
+  private boolean outerPerimeter;
 
   public int getRelativeX() {
     return relativeX;
@@ -93,6 +96,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     visited = false;
     relativeX = 0;
     relativeY = 0;
+    innerPerimeter = false;
+    outerPerimeter = false;
   }
   
   /**
@@ -283,6 +288,22 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return true;
   }
 
+  public void setInnerPerimeter() {
+    innerPerimeter = true;
+  }
+
+  public void setOuterPerimeter() {
+    outerPerimeter = true;
+  }
+  
+  public boolean isInnerPerimeter() {
+    return innerPerimeter;
+  }
+  
+  public boolean isOuterPerimeter() {
+    return outerPerimeter;
+  }
+  
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
@@ -374,6 +395,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     outside = false;
     probability = 0;
     depositionTime = 0;
+    innerPerimeter = false;
+    outerPerimeter = false;
     setList(false);
   }
   

@@ -67,6 +67,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private JSpinner spinnerScale;
   private JLabel statusbar;
   private JCheckBoxMenuItem bwMi;
+  private JCheckBoxMenuItem perimeterMi;
   private JProgressBar progressBar;
   private final int maxCoverage;
   private JCheckBoxMenuItem idMi;
@@ -359,6 +360,11 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     islandsMi.setDisplayedMnemonicIndex(12);
     islandsMi.setSelected(false);
     
+    perimeterMi = new JCheckBoxMenuItem("Print perimeter");
+    perimeterMi.setMnemonic(KeyEvent.VK_P);
+    perimeterMi.setDisplayedMnemonicIndex(0);
+    perimeterMi.setSelected(false);
+    
     JCheckBoxMenuItem centresMi = new JCheckBoxMenuItem("Show island centres");
     centresMi.setMnemonic(KeyEvent.VK_C);
     centresMi.setDisplayedMnemonicIndex(12);
@@ -369,6 +375,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     viewMenu.add(idMi);
     viewMenu.add(islandsMi);
     viewMenu.add(centresMi);
+    viewMenu.add(perimeterMi);
     viewMenu.setMnemonic(KeyEvent.VK_V);
     viewMenu.setDisplayedMnemonicIndex(0);
     menubar.add(fileMenu);
@@ -410,6 +417,10 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     
     centresMi.addItemListener((ItemEvent e) -> {
       canvas.changePrintIslandCentres();
+    });
+    
+    perimeterMi.addItemListener((ItemEvent e) -> {
+      canvas.changePrintPerimeter();
     });
   }
 

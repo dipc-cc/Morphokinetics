@@ -41,6 +41,7 @@ public class KmcCanvas extends Canvas {
   private int scale;
   private String imageName;
   private boolean blackAndWhite; 
+  private boolean printPerimeter; 
   private boolean paused;
   private boolean printId;
   private boolean printIslandNumber;
@@ -64,6 +65,7 @@ public class KmcCanvas extends Canvas {
     baseY = 0;
     scale = 2;
     blackAndWhite = false;
+    printPerimeter = false;
     paused = false;
     printId = true;
     printIslandNumber = false;
@@ -93,6 +95,10 @@ public class KmcCanvas extends Canvas {
 
   public void changeBlackAndWhite() {
     blackAndWhite = !blackAndWhite;
+  }
+  
+  public void changePrintPerimeter() {
+    printPerimeter = !printPerimeter;
   }
   
   public void setPaused(boolean pause) {
@@ -225,8 +231,14 @@ public class KmcCanvas extends Canvas {
         if (blackAndWhite) {
           if (atom.isOccupied()) {
             g.setColor(BLUE);
+            if (atom.isInnerPerimeter() && printPerimeter) {
+              g.setColor(RED);
+            }
           } else {
             g.setColor(WHITE_GRAY);
+            if (atom.isOuterPerimeter() && printPerimeter) {
+              g.setColor(BLACK);
+            }
           }
         } else {
           switch (atom.getType()) { // the cases are for graphene
