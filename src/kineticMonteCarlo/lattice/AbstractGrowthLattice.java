@@ -626,6 +626,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthAtom atom = uc.getAtom(j);
         occupiedNeighbours = 0;
+        atom.resetPerimeter();
         for (int k = 0; k < atom.getNumberOfNeighbours(); k++) {
           if (atom.getNeighbour(k).isOccupied()) {
             occupiedNeighbours++;

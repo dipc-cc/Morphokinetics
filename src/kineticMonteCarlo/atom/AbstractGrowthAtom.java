@@ -304,6 +304,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     return outerPerimeter;
   }
   
+  public void resetPerimeter() {
+    innerPerimeter = false;
+    outerPerimeter = false;
+  }
+  
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
