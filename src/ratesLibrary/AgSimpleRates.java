@@ -5,6 +5,11 @@
  */
 package ratesLibrary;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.TreeMap;
 import static ratesLibrary.IRates.kB;
 
 /**
@@ -17,6 +22,7 @@ public class AgSimpleRates implements IRates {
   private double diffusionMl;
   
   private final double prefactor;
+  private final TreeMap densities;
   
   public AgSimpleRates() {
     diffusionMl = 0.000035;
@@ -86,6 +92,41 @@ public class AgSimpleRates implements IRates {
     energies[6][5] = eInf;
     energies[6][6] = eInf;
     
+    densities = new TreeMap();
+    densities.put(50, 5.679e-02);
+    densities.put(55, 5.686e-02);
+    densities.put(60, 5.609e-02);
+    densities.put(65, 5.170e-02);
+    densities.put(70, 4.385e-02);
+    densities.put(75, 3.581e-02);
+    densities.put(80, 2.925e-02);
+    densities.put(85, 2.399e-02);
+    densities.put(90, 1.991e-02);
+    densities.put(95, 1.660e-02);
+    densities.put(100, 1.413e-02);
+    densities.put(110, 1.051e-02);
+    densities.put(120, 8.175e-03);
+    densities.put(130, 6.563e-03);
+    densities.put(140, 5.403e-03);
+    densities.put(150, 4.558e-03);
+    densities.put(200, 3.126e-03);
+    densities.put(250, 2.197e-03);
+    densities.put(300, 1.729e-03);
+    densities.put(350, 1.304e-03);
+    densities.put(400, 9.665e-04);
+    densities.put(450, 6.782e-04);
+    densities.put(500, 4.858e-04);
+    densities.put(550, 3.522e-04);
+    densities.put(600, 2.607e-04);
+    densities.put(650, 2.043e-04);
+    densities.put(700, 1.683e-04);
+    densities.put(750, 1.357e-04);
+    densities.put(800, 1.190e-04);
+    densities.put(850, 1.045e-04);
+    densities.put(900, 8.975e-05);
+    densities.put(950, 8.850e-05);
+    densities.put(1000, 8.275e-05);
+    densities.put(1050, 7.105e-05);
   }
   
   private double getRate(int sourceType, int destinationType, double temperature) {
@@ -100,6 +141,7 @@ public class AgSimpleRates implements IRates {
    */
   @Override
   public double getDepositionRatePerSite() {
+    System.out.println("d "+diffusionMl);
     return diffusionMl;
   }
   
@@ -114,19 +156,25 @@ public class AgSimpleRates implements IRates {
    */
   @Override
   public double getIslandDensity(double temperature) {
-    if (temperature < 135) {//120 degrees Kelvin
-      return 1e-4;
+    double density = -1;
+    System.out.println("Tempe " + (int) temperature);
+    try {
+      density = (double) densities.get((int) temperature);
+    } catch (NullPointerException e) {
+      Set allKeys = densities.keySet();
+      allKeys.iterator();
+
+      for (Object i : allKeys) {
+        System.out.println(i);
+        if ((int) i > temperature) {
+          density = (double) densities.get((int) i);
+          break;
+        }
+        //density = 5;
+      }
     }
-    if (temperature < 150) {//135 degrees Kelvin
-      return 5e-5;
-    }
-    if (temperature < 165) {//150 degrees Kelvin
-      return 4e-5;
-    }
-    if (temperature < 180) {//165 degrees Kelvin
-      return 3e-5;
-    }
-    return 2e-5; //180 degrees Kelvin
+    System.out.println("Density " + density);
+    return density;
   }
   
   @Override
