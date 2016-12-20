@@ -39,7 +39,7 @@ public abstract class AbstractSimulation {
   private double totalTime;
   private float coverage;
   private int islands;
-  private float fractalD;
+  private float gyradius;
   private int simulations;
   private int currentProgress;
   private float[][] sampledSurface;
@@ -140,7 +140,7 @@ public abstract class AbstractSimulation {
     totalTime = 0.0;
     coverage = 0.0f;
     islands = 0;
-    fractalD = 0.0f;
+    gyradius = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
 
     surfaceSizes = new int[2];
@@ -186,7 +186,7 @@ public abstract class AbstractSimulation {
       totalTime += kmc.getTime();
       coverage += kmc.getCoverage();
       islands += kmc.getLattice().getIslandCount();
-      fractalD += kmc.getLattice().getFractalDimension();
+      gyradius += kmc.getLattice().getAverageGyradius();
     }
 
     printFooter();
@@ -299,23 +299,24 @@ public abstract class AbstractSimulation {
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
     System.out.print("\t" + kmc.getLattice().getIslandCount());
-    System.out.format("\t%.4f", kmc.getLattice().getFractalDimension());
+    System.out.format("\t%.4f", kmc.getLattice().getAverageGyradius());
     System.out.println("");
   }
 
   public String printFooter() {
+    int i = parser.getNumberOfSimulations();
     String kmcResult = "";
     kmcResult += "\n\t__________________________________________________\n";
     kmcResult += "\tAverage\n";
-    kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tFractal d.\n";
+    kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tGyradius\n";
     kmcResult += "\t(units)\t\t\t (%)\t\t (ms/s/min)\n";
     kmcResult += "\t__________________________________________________\n";
-    kmcResult += "\t" + totalTime / parser.getNumberOfSimulations();
-    kmcResult += "\t" + coverage / parser.getNumberOfSimulations();
-    long msSimulationTime = (System.currentTimeMillis() - startTime) / parser.getNumberOfSimulations();
+    kmcResult += "\t" + totalTime / i;
+    kmcResult += "\t" + coverage / i;
+    long msSimulationTime = (System.currentTimeMillis() - startTime) / i;
     kmcResult += "\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60;
-    kmcResult += "\t\t" + (float) (islands) / (float) (parser.getNumberOfSimulations());
-    kmcResult += "\t" + fractalD / (float) parser.getNumberOfSimulations() + "\n";
+    kmcResult += "\t\t" + (float) (islands) / (float) (i);
+    kmcResult += "\t" + gyradius / (float) i + "\n";
     System.out.println(kmcResult);
     return kmcResult;
   }

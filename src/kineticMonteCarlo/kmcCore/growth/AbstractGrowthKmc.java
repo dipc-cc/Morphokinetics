@@ -624,11 +624,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     lattice.getCentreOfMass();
-    double gyradius = lattice.getAverageGyradius();
+    double gyradiusBasic = lattice.getCentreOfMassAndAverageGyradius();
     lattice.getDistancesToCentre();
     lattice.countPerimeter(null);
     //compute the average distances to centre.
-    float avgDistance = (float) (1.0 / (lattice.getFractalDimension()));
+    float avgGyradius = lattice.getAverageGyradius();
     int numberOfAtomFirstIsland = 0;
     try{
       numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
@@ -636,8 +636,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
-            getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgDistance,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradius, numberOfAtomFirstIsland,
+            getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), gyradiusBasic, numberOfAtomFirstIsland,
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
     outData.flush();

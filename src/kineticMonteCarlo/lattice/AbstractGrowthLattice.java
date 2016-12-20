@@ -24,6 +24,9 @@ import static java.lang.Math.atan;
 import static java.lang.Math.cos;
 import static java.lang.Math.floorDiv;
 import static java.lang.Math.sin;
+import static java.lang.Math.round;
+import static java.lang.Math.abs;
+import static java.lang.Math.floorDiv;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -255,17 +258,32 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   /**
-   * Computes the fractal dimension from the average distances to the centre of mass.
+   * Computes the average distances to the centre of mass for all islands.
    *
-   * @return fractal dimension.
+   * @return average gyradius.
    */
   @Override
-  public float getFractalDimension() {
+  public float getAverageGyradius() {
     float sumAvg = 0.0f;
     for (int i = 0; i < islandCount; i++) {
       sumAvg += islands.get(i).getAvgDistance();
     }
-    return (float) (1.0 / (sumAvg / islandCount));
+    return (float) (sumAvg / islandCount);
+  }
+    
+  /**
+   * Calculates arithmetic average of gyradius, iterating over all islands. Only valid for basic
+   * growth simulation mode.
+   *
+   * @return average gyradius
+   */
+  public double getCentreOfMassAndAverageGyradius() {
+    double averageGyradius = 0.0;
+    int i;
+    for (i = 0; i < islands.size(); i++) {
+      averageGyradius += islands.get(i).calculateCentreOfMassAndGyradius();
+    }
+    return averageGyradius / (double) i;
   }
   
   @Override
@@ -406,20 +424,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       double centreY = (getCartSizeY() * (atan2(-toZeroIfTooClose(zetaY[i] / counter[i]), -toZeroIfTooClose(xiY[i] / counter[i])) + PI)) / (2 * PI);
       islands.get(i).setCentreOfMass(new Point2D.Double(centreX, centreY));
     }
-  }
-  
-  /**
-   * Calculates arithmetic average of gyradius, iterating over all islands.
-   * 
-   * @return average gyradius
-   */
-  public double getAverageGyradius() {
-    double averageGyradius = 0.0;
-    int i;
-    for (i = 0; i < islands.size(); i++) {
-      averageGyradius += islands.get(i).calculateCentreOfMassAndGyradius();
-    }
-    return averageGyradius / (double) i;
   }
   
   public String getAtomTypesCounter() {

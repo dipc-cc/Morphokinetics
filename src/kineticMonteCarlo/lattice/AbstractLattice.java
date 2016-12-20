@@ -84,9 +84,9 @@ public abstract class AbstractLattice {
   /**
    * Only defined in growth lattice.
    *
-   * @return fractal dimension of simulation (or -1)
+   * @return average gyradius of all islands (or -1)
    */
-  public abstract float getFractalDimension();
+  public abstract float getAverageGyradius();
   
   public abstract void reset();
 

@@ -95,12 +95,12 @@ public class SiLattice extends AbstractLattice {
   }
   
   /**
-   * Fractal dimension not implemented in etching.
+   * Gyradius is not implemented in etching.
    *
    * @return -1.0 always.
    */
   @Override
-  public float getFractalDimension() {
+  public float getAverageGyradius() {
     return -1.0f;
   }
   
