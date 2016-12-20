@@ -39,10 +39,10 @@ for i in range(-6,1):
         exponent = []
         for i in temperatures:
             if (i > 250):
-                c.append(3.5e7)
+                c.append(220)
                 exponent.append(-0.666)
             else:
-                c.append(40023)
+                c.append(0.25)
                 exponent.append(-0.333)
         y = c * r ** exponent
         plt.loglog(x, y, "*", label="fit")
