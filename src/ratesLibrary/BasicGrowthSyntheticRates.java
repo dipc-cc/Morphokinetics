@@ -5,6 +5,7 @@
  */
 package ratesLibrary;
 
+import static java.lang.Math.pow;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.KINK;
@@ -66,28 +67,28 @@ public class BasicGrowthSyntheticRates implements IRates {
   
   /**
    * Returns the island density mono layer depending on the temperature. 
-   * These values are taken from section 4 of the paper of Cox et al.
+   * These values are taken from many run of multi flake with 400x400 lattice points
    * 
-   * (But are not consistent with, for example, the multi-flake
-   * simulations: 180K, 250x250)
    * @param temperature
    * @return a double value from 1e-4 to 2e-5
    */
   @Override
   public double getIslandDensity(double temperature) {
-    if (temperature < 135) {//120 degrees Kelvin
-      return 1e-2;
+    double flux = diffusionMl;
+    double c;
+    double slope;
+    double rtt;
+    if (temperature > 250) {
+      c = 220;
+      //c = 3.5e7;
+      slope = -(2.d / 3.d);
+    } else {
+      c = 25;
+      //c = 40023;
+      slope = -(1.d / 3.d);
     }
-    if (temperature < 150) {//135 degrees Kelvin
-      return 5e-3;
-    }
-    if (temperature < 165) {//150 degrees Kelvin
-      return 4e-3;
-    }
-    if (temperature < 180) {//165 degrees Kelvin
-      return 3e-3;
-    }
-    return 2e-3; //180 degrees Kelvin
+    rtt = getRate(0, 0, temperature);
+    return pow(flux, 0.23d) * c * pow(rtt / pow(flux, 1.d / 3.d), slope);
   }
 
   @Override
