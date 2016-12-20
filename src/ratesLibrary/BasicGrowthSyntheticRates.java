@@ -70,7 +70,7 @@ public class BasicGrowthSyntheticRates implements IRates {
    * These values are taken from many run of multi flake with 400x400 lattice points
    * 
    * @param temperature
-   * @return a double value from 1e-4 to 2e-5
+   * @return a double density value
    */
   @Override
   public double getIslandDensity(double temperature) {
@@ -80,15 +80,13 @@ public class BasicGrowthSyntheticRates implements IRates {
     double rtt;
     if (temperature > 250) {
       c = 220;
-      //c = 3.5e7;
       slope = -(2.d / 3.d);
     } else {
-      c = 25;
-      //c = 40023;
+      c = 0.25;
       slope = -(1.d / 3.d);
     }
     rtt = getRate(0, 0, temperature);
-    return pow(flux, 0.23d) * c * pow(rtt / pow(flux, 1.d / 3.d), slope);
+     return pow(flux, 0.23d) * c * pow(rtt / pow(flux, 1.d / 3.d), slope);
   }
 
   @Override
