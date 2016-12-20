@@ -9,6 +9,7 @@ import results
 
 label = r'Number of islands (N)/F^0.23'
 plt.ylabel(label)
+plt.figure(num=None, figsize=(5,5), dpi=80, facecolor='w', edgecolor='k')
 label = r'r_tt/F^0.33'
 plt.xlabel(label)
 plt.grid(True)
@@ -31,8 +32,21 @@ for i in range(-6,1):
     v = 0.82*400*400/meanValues.getIslandsAmount()*(flux**0.21)
     n = meanValues.getIslandsAmount()/(flux**0.23)
     r = np.array(mk.getRtt(temperatures))/(flux**0.33)
-    plt.loglog(r, n, ".", label="N "+folder)
-    if (i == -1):
+    plt.loglog(r, n, "-", label="N "+folder)
+    if (i == 0):
+        x = r
+        c = []
+        exponent = []
+        for i in temperatures:
+            if (i > 250):
+                c.append(3.5e7)
+                exponent.append(-0.666)
+            else:
+                c.append(40023)
+                exponent.append(-0.333)
+        y = c * r ** exponent
+        plt.loglog(x, y, "*", label="fit")
+    if (i == -1000):
         print(r)
         print(n)
         popt = curve_fit(mk.powerFunc, r, n)
@@ -43,7 +57,7 @@ for i in range(-6,1):
         y = mk.powerFunc(x, a, b)
         plt.loglog(x, y, label=label)
 
-    if (i == -2):
+    if (i == -2000):
         a = 2e7
         b = -(5/7)
         x = r
