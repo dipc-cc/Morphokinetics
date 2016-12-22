@@ -136,6 +136,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public AbstractGrowthAtom getAtom(int iHexa, int jHexa) {
     return ucArray[iHexa][jHexa].getAtom(0);
   }
+  
+  public AbstractGrowthAtom getAtom(int iHexa, int jHexa, int unitCellPos) {
+    int index = jHexa * getHexaSizeI() + iHexa;
+    return getUc(index).getAtom(0);
+  }
 
   @Override
   public AbstractGrowthUc getUc(int pos) {
@@ -150,9 +155,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     if (kHexa != 0 || unitCellPos != 0) {
       throw new UnsupportedOperationException("Z position or position inside unit cell cannot be different than 0, not supported"); //To change body of generated methods, choose Tools | Templates.
     }
-    return getAtom(iHexa, jHexa);
+    return getAtom(iHexa, jHexa, unitCellPos);
   }
-
+  
   public final void setAtoms(AbstractGrowthAtom[][] atoms) {
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {

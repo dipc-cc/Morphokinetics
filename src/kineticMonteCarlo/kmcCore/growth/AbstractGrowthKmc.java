@@ -833,7 +833,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         lattice.countIslands(null);
         int jCentre = (getLattice().getHexaSizeJ() / 2);
         int iCentre = (getLattice().getHexaSizeI() / 2);
-        int islandNumber = ((AgUcLattice) getLattice()).getAtom(iCentre, jCentre, 0).getIslandNumber();
+        int islandNumber = ((AbstractGrowthAtom) getLattice().getAtom(iCentre, jCentre, 0, 0)).getIslandNumber();
         boolean isInIsland = destinationAtom.getIslandNumber() == islandNumber;
         if (!isInIsland) {
           double probabilityChange = lattice.extract(destinationAtom);

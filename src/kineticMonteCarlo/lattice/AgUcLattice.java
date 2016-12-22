@@ -114,6 +114,7 @@ public class AgUcLattice extends AgLattice {
    * @param pos
    * @return an atom.
    */
+  @Override
   public AgAtom getAtom(int iHexa, int jHexa, int pos) {
     return ucArray[iHexa][jHexa].getAtom(pos);
   }
