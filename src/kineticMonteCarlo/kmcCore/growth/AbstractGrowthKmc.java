@@ -24,6 +24,7 @@ import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
+import kineticMonteCarlo.lattice.AgUcLattice;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -828,7 +829,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       boolean atomType = destinationAtom.getType() > 0;
       boolean distance = perimeter.contains(destinationAtom);
-      return atomType && distance;
+      if (atomType && distance) {
+        lattice.countIslands(null);
+        int jCentre = (getLattice().getHexaSizeJ() / 2);
+        int iCentre = (getLattice().getHexaSizeI() / 2);
+        int islandNumber = ((AgUcLattice) getLattice()).getAtom(iCentre, jCentre, 0).getIslandNumber();
+        boolean isInIsland = destinationAtom.getIslandNumber() == islandNumber;
+        if (!isInIsland) {
+          double probabilityChange = lattice.extract(destinationAtom);
+          getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
+          getList().deleteAtom(destinationAtom);
+          modifiedBuffer.updateAtoms(getList());
+        }
+        return isInIsland;
+      } else {
+        return false;
+      }
     }
   }
 }
