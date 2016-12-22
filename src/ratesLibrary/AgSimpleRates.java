@@ -5,11 +5,7 @@
  */
 package ratesLibrary;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.TreeMap;
+import static java.lang.Math.pow;
 import static ratesLibrary.IRates.kB;
 
 /**
@@ -22,7 +18,6 @@ public class AgSimpleRates implements IRates {
   private double diffusionMl;
   
   private final double prefactor;
-  private final TreeMap densities;
   
   public AgSimpleRates() {
     diffusionMl = 0.000035;
@@ -91,42 +86,6 @@ public class AgSimpleRates implements IRates {
     energies[6][4] = eInf;
     energies[6][5] = eInf;
     energies[6][6] = eInf;
-    
-    densities = new TreeMap();
-    densities.put(50, 5.679e-02);
-    densities.put(55, 5.686e-02);
-    densities.put(60, 5.609e-02);
-    densities.put(65, 5.170e-02);
-    densities.put(70, 4.385e-02);
-    densities.put(75, 3.581e-02);
-    densities.put(80, 2.925e-02);
-    densities.put(85, 2.399e-02);
-    densities.put(90, 1.991e-02);
-    densities.put(95, 1.660e-02);
-    densities.put(100, 1.413e-02);
-    densities.put(110, 1.051e-02);
-    densities.put(120, 8.175e-03);
-    densities.put(130, 6.563e-03);
-    densities.put(140, 5.403e-03);
-    densities.put(150, 4.558e-03);
-    densities.put(200, 3.126e-03);
-    densities.put(250, 2.197e-03);
-    densities.put(300, 1.729e-03);
-    densities.put(350, 1.304e-03);
-    densities.put(400, 9.665e-04);
-    densities.put(450, 6.782e-04);
-    densities.put(500, 4.858e-04);
-    densities.put(550, 3.522e-04);
-    densities.put(600, 2.607e-04);
-    densities.put(650, 2.043e-04);
-    densities.put(700, 1.683e-04);
-    densities.put(750, 1.357e-04);
-    densities.put(800, 1.190e-04);
-    densities.put(850, 1.045e-04);
-    densities.put(900, 8.975e-05);
-    densities.put(950, 8.850e-05);
-    densities.put(1000, 8.275e-05);
-    densities.put(1050, 7.105e-05);
   }
   
   private double getRate(int sourceType, int destinationType, double temperature) {
@@ -146,35 +105,32 @@ public class AgSimpleRates implements IRates {
   }
   
   /**
-   * Returns the island density mono layer depending on the temperature. 
-   * These values are taken from section 4 of the paper of Cox et al.
-   * 
-   * (But are not consistent with, for example, the multi-flake
-   * simulations: 180K, 250x250)
+   * Returns the island density mono layer depending on the temperature. These values are taken from
+   * many run of multi flake with 200x200 lattice points. The formula to get the number of islands
+   * is:
+   *
+   * N = F^{0.23}·c·(r_tt/F^{1/3})^x
+   *
+   * Therefore, we can get island density for single flake.
+   *
    * @param temperature
-   * @return a double value from 1e-4 to 2e-5
+   * @return a double density value
    */
   @Override
   public double getIslandDensity(double temperature) {
-    double density = -1;
-    System.out.println("Tempe " + (int) temperature);
-    try {
-      density = (double) densities.get((int) temperature);
-    } catch (NullPointerException e) {
-      Set allKeys = densities.keySet();
-      allKeys.iterator();
-
-      for (Object i : allKeys) {
-        System.out.println(i);
-        if ((int) i > temperature) {
-          density = (double) densities.get((int) i);
-          break;
-        }
-        //density = 5;
-      }
+    double flux = diffusionMl;
+    double c;
+    double slope;
+    double rtt;
+    if (temperature > 300) {
+      c = 1e3;
+      slope = -0.8;
+    } else {
+      c = 1.8e-3;
+      slope = -0.13;
     }
-    System.out.println("Density " + density);
-    return density;
+    rtt = getRate(0, 0, temperature);
+    return pow(flux, 0.23d) * c * pow(rtt / pow(flux, 1.d / 3.d), slope);
   }
   
   @Override
