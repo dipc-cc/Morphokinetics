@@ -120,6 +120,13 @@ public class AgUcLattice extends AgLattice {
   }
   
   @Override
+  public AgAtom getCentralAtom() {
+    int jCentre = (getHexaSizeJ() / 2);
+    int iCentre = (getHexaSizeI() / 2);
+    return getAtom(iCentre, jCentre, 0);
+  }
+  
+  @Override
   public Point2D getCentralCartesianLocation() {
     if (centralCartesianLocation == null) {
       return new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));

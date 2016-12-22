@@ -29,6 +29,15 @@ public class AgLattice extends AbstractGrowthLattice {
   }
   
   @Override
+  public AgAtom getCentralAtom() {
+    int jCentre = (getHexaSizeJ() / 2);
+    int iCentre = (getHexaSizeI() / 2) - (getHexaSizeJ() / 4);
+    
+    int index = jCentre * getHexaSizeI() + iCentre;
+    return (AgAtom) getUc(index).getAtom(0);
+  }
+      
+  @Override
   public Point2D getCentralCartesianLocation() {
     return centralCartesianLocation;
   }

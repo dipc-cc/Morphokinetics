@@ -25,6 +25,13 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   @Override
+  public BasicGrowthAtom getCentralAtom() {
+    int jCentre = (getHexaSizeJ() / 2);
+    int iCentre = (getHexaSizeI() / 2);
+    return (BasicGrowthAtom) getAtom(iCentre, jCentre, 0);
+  }
+  
+  @Override
   public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
     int index = jHexa * getHexaSizeI() + iHexa;
     return ((BasicGrowthAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);

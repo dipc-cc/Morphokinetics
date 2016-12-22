@@ -138,6 +138,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     int index = jHexa * getHexaSizeI() + iHexa;
     return getUc(index).getAtom(0);
   }
+  
+  public abstract AbstractGrowthAtom getCentralAtom();
 
   @Override
   public AbstractGrowthUc getUc(int pos) {

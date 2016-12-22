@@ -831,9 +831,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       boolean distance = perimeter.contains(destinationAtom);
       if (atomType && distance) {
         lattice.countIslands(null);
-        int jCentre = (getLattice().getHexaSizeJ() / 2);
-        int iCentre = (getLattice().getHexaSizeI() / 2);
-        int islandNumber = ((AbstractGrowthAtom) getLattice().getAtom(iCentre, jCentre, 0, 0)).getIslandNumber();
+        int islandNumber = ((AbstractGrowthAtom) getLattice().getCentralAtom()).getIslandNumber();
         boolean isInIsland = destinationAtom.getIslandNumber() == islandNumber;
         if (!isInIsland) {
           double probabilityChange = lattice.extract(destinationAtom);

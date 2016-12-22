@@ -43,6 +43,17 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     setAngles();
   }
 
+  /**
+   * TODO correct it!!
+   * @return 
+   */
+  @Override
+  public GrapheneAtom getCentralAtom() {
+    int jCentre = (getHexaSizeJ() / 2);
+    int iCentre = (getHexaSizeI() / 2);
+    return (GrapheneAtom) getAtom(iCentre, jCentre, 0);
+  }
+  
   @Override
   public GrapheneAtom getNeighbour(int xCart, int yCart, int neighbour) {
     int vec = latticeNeighborhoodData[neighbour];                      //esto define el tipo de atomo
