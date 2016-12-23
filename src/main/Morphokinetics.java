@@ -38,7 +38,7 @@ import utils.psdAnalysis.PsdSignature2D;
  * Morphokinetics is a software to simulate kinetics Monte Carlo (KMC) processes. It can simulate
  * etching and CVD growing processes. To specify simulation mode "parameters" file must be present
  * in the current working directory (more details in {@link Parser}).
- * 
+ *
  * @author J. Alberdi-Rodriguez
  */
 public class Morphokinetics {
