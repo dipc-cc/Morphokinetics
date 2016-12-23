@@ -244,9 +244,18 @@ public class AgAtom extends AbstractGrowthAtom {
     return neighbours[cont];
   }
 
+  /**
+   * This method tells if two terraces are going to form a dimer. This method should be called from
+   * an empty lattice location where atom is going to jump. In affirmative case, generally, it has
+   * two terrace neighbours. It only detects step-by-step collisions (it is not valid for Devita or
+   * perimeter reentrance).
+   *
+   * @return true if two terraces are going to be together.
+   */
   @Override
   public boolean areTwoTerracesTogether() {
 
+    // Another way to say that it is an unoccupied edge
     if (nMobile != 2 || nImmobile != 0) {
       return false;
     }
