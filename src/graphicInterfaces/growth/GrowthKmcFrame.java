@@ -62,11 +62,14 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private JButton pauseButton;
   private JToggleButton bwButton;
   private JButton pngSaveButton;
+  private JButton centreButton;
+  private JButton idButton;
   private JLabel labelScale;
   private JPanel panel;
   private JSpinner spinnerScale;
   private JLabel statusbar;
   private JCheckBoxMenuItem bwMi;
+  private JCheckBoxMenuItem centresMi;
   private JCheckBoxMenuItem perimeterMi;
   private JProgressBar progressBar;
   private final int maxCoverage;
@@ -164,6 +167,10 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     bwButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/bw.png"));
     pngSaveButton = new JButton();
     pngSaveButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/save.png"));
+    centreButton = new JButton();
+    centreButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/centre.png"));
+    idButton = new JButton();
+    idButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/id.png"));
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
 
@@ -195,10 +202,18 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     pngSaveButton.addActionListener((ActionEvent evt) -> {
       pngSave();
     });
+    centreButton.addActionListener((ActionEvent e) -> {
+      centresMi.setSelected(!centresMi.isSelected());
+    });
+    idButton.addActionListener((ActionEvent e) -> {
+      idMi.setSelected(!idMi.isSelected());
+    });
 
     pauseButton.setToolTipText("Pauses the execution");
     bwButton.setToolTipText("Changes between mono colour and all colours");
     pngSaveButton.setToolTipText("Saves current view to PNG image");
+    centreButton.setToolTipText("Shows centre of mass, gyradius and diameter");
+    idButton.setToolTipText("Shows id of atom, island number or nothing");
     
     GroupLayout layout = new GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -219,9 +234,13 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
                                     .addPreferredGap(RELATED)
                                     .addComponent(pauseButton, PREFERRED_SIZE, 20, 20)
                                     .addPreferredGap(RELATED)
+                                    .addComponent(pngSaveButton, PREFERRED_SIZE, 20, 20)
+                                    .addPreferredGap(RELATED)
                                     .addComponent(bwButton, PREFERRED_SIZE, 20, 20)
                                     .addPreferredGap(RELATED)
-                                    .addComponent(pngSaveButton, PREFERRED_SIZE, 20, 20)
+                                    .addComponent(centreButton, PREFERRED_SIZE, 20, 20)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(idButton, PREFERRED_SIZE, 20, 20)
                                     .addGap(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
     );
@@ -233,6 +252,8 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
                             .addComponent(pauseButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(bwButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(pngSaveButton, PREFERRED_SIZE, 20, 20)
+                            .addComponent(centreButton, PREFERRED_SIZE, 20, 20)
+                            .addComponent(idButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(spinnerScale, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
                     .addPreferredGap(RELATED)
                     .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
@@ -365,7 +386,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     perimeterMi.setDisplayedMnemonicIndex(0);
     perimeterMi.setSelected(false);
     
-    JCheckBoxMenuItem centresMi = new JCheckBoxMenuItem("Show island centres");
+    centresMi = new JCheckBoxMenuItem("Show island centres");
     centresMi.setMnemonic(KeyEvent.VK_C);
     centresMi.setDisplayedMnemonicIndex(12);
     centresMi.setSelected(false);
