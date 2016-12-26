@@ -88,4 +88,95 @@ public class AgAtomSimple extends AgAtom{
 
     return getProbability(originType, destination);
   }
+
+  /**
+   * This method tells if two terraces are going to form a dimer. This method should be called from
+   * an empty lattice location. In affirmative case, generally, it has two terrace neighbours.
+   *
+   * @return true if two terraces are going to be together.
+   */
+  @Override
+  public boolean areTwoTerracesTogether() {
+    switch (getType()) {
+      //case 1:
+      //  return unoccupiedCornerOneTerrace();
+      case 2:
+        return unoccupiedEdgeTwoTerraces();
+      case 3:
+        return unoccupiedKinkThreeTerraces();
+      default:
+        return false;
+
+    }
+  }//*/
+
+  /**
+   * It has one neighbour. Check if one neighbour of the current atom is a terrace. This is useful
+   * to catch dimer formation when an atom is doing perimeter reentrance;
+   *
+   * @param originAtom has one neighbour and it is a terrace.
+   * @return true if a dimer is going to be created, false otherwise.
+   */
+  public boolean unoccupiedCornerOneTerrace(AgAtomSimple originAtom) {
+    for (int i=0; i< getNumberOfNeighbours(); i++) {
+      AgAtomSimple neighbour = (AgAtomSimple) getNeighbour(i);
+      if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE){
+        return true;
+      }
+    }
+    return false;
+    /*int cont = 0;
+    while (cont < 1 && i < getNumberOfNeighbours()) {
+      if (getNeighbour(i).isOccupied() && !getNeighbour(i).equals(originAtom)) {
+        if (getNeighbour(i).getType() != TERRACE) {
+          return false;
+        }
+        cont++;
+      }
+      i++;
+    }
+    return true;//*/
+  }
+  
+  /**
+   * It has two neighbours. Check if those neighbours are terraces.
+   *
+   * @return
+   */
+  private boolean unoccupiedEdgeTwoTerraces() {
+    int cont = 0;
+    int i = 0;
+    while (cont < 2 && i < getNumberOfNeighbours()) {
+      if (getNeighbour(i).isOccupied()) {
+        if (getNeighbour(i).getType() != TERRACE) {
+          return false;
+        }
+        cont++;
+      }
+      i++;
+    }
+    return true;
+    
+  }
+  
+  /**
+   * It has three neighbours. Check if those neighbours are terraces.
+   *
+   * @return
+   */
+  private boolean unoccupiedKinkThreeTerraces() {
+    int cont = 0;
+    int i = 0;
+    while (cont < 3 && i < getNumberOfNeighbours()) {
+      if (getNeighbour(i).isOccupied()) {
+        if (getNeighbour(i).getType() != TERRACE) {
+          return false;
+        }
+        cont++;
+      }
+      i++;
+    }
+    return true;
+    
+  }
 }
