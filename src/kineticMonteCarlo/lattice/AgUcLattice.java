@@ -191,9 +191,6 @@ public class AgUcLattice extends AgLattice {
       }
     }
 
-    // for debugging
-    System.out.println("scale " + scale + " " + (jLattice - j));
-    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | "+ " " + pos);
     AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
 
     if (atom.isOccupied()) {
