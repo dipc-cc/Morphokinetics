@@ -20,6 +20,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
+import static java.lang.String.format;
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
@@ -78,6 +79,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private JCheckBoxMenuItem islandsMi;
   private ImageIcon pauseIcon;
   private ImageIcon resumeIcon;
+  private int pngLastTmpFile;
   /**
    * Creates new form frame for growth.
    *
@@ -110,6 +112,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     labelScale.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
     labelScale.getActionMap().put("pause", new Pause());
     idButtonState = 1;
+    pngLastTmpFile = 111;
   }
 
   @Override
@@ -331,7 +334,9 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   }
   
   private void pngSave() {
-    pngSave("results/tmp-surface-111.png");
+    String fileName = format("results/tmp-surface-%03d.png", pngLastTmpFile);
+    pngLastTmpFile++;
+    pngSave(fileName);
   }
   
   private void pngSave(String filename) {
