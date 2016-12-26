@@ -178,17 +178,22 @@ public class AgUcLattice extends AgLattice {
     double yCanvas = yMouse / scale;
     // choose the correct lattice
     iLattice = (int) Math.floor(xCanvas);
-    jLattice = (int) Math.floor(yCanvas / (2 * Y_RATIO));
-    double j = yCanvas / (2 * Y_RATIO);
+    jLattice = (int) Math.floor(yCanvas / (2.0 * Y_RATIO));
+    double j = yCanvas / (2.0 * Y_RATIO);
+    double i;
     int pos = 0;
     // choose the atom within the lattice
     if (j - jLattice > 0.5) {
       pos = 1;
+      i = (double) xCanvas;
+      if (i - iLattice < 0.5) { // correct the lattice number in pos 1
+        iLattice--;
+      }
     }
 
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
-    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
+    System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | "+ " " + pos);
     AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
 
     if (atom.isOccupied()) {
