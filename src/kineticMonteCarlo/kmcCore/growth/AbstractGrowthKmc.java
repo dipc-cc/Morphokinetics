@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import kineticMonteCarlo.atom.AgAtomSimple;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.lattice.AgUcLattice;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
@@ -292,6 +293,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return justCentralFlake;
   }
 
+  public RoundPerimeter getPerimeter() {
+    return perimeter;
+  }
+
   /**
    * @param perimeter the perimeter to set.
    */
@@ -454,11 +459,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         destinationAtom = chooseRandomHop(originAtom);
-        if (destinationAtom.isOutside()) {
-          destinationAtom = perimeter.getPerimeterReentrance(originAtom);
-          // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
-          getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
-        }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
 
@@ -549,10 +549,38 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @return destinationAtom.
    */
   private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
+    //System.out.println("origin "+);
+    AbstractGrowthAtom destinationAtom;
     if (accelerator != null) {
-      return accelerator.chooseRandomHop(originAtom);
+      destinationAtom = accelerator.chooseRandomHop(originAtom);
+    } else {
+      destinationAtom =  originAtom.chooseRandomHop();
     }
-    return originAtom.chooseRandomHop();
+      
+    if (destinationAtom.areTwoTerracesTogether()) {
+      destinationAtom.areTwoTerracesTogether();
+      for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
+        if (originAtom.getNeighbour(i).equals(destinationAtom)) {
+          int otherNeighbour = (i+3) % originAtom.getNumberOfNeighbours();
+          destinationAtom = originAtom.getNeighbour(otherNeighbour);
+          break;
+        }
+      }
+    }
+    boolean sss;
+    if (destinationAtom.isOutside()) {
+      int kk = 0;
+      do {
+        kk++;
+        if (kk > 1) {
+          sss = destinationAtom.areTwoTerracesTogether();
+        }
+        destinationAtom = perimeter.getPerimeterReentrance(originAtom);
+      } while(destinationAtom.areTwoTerracesTogether() || ((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) originAtom));
+      // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
+      getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
+    }
+    return destinationAtom;
   }
   
   private void printHistogram() {
@@ -713,7 +741,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (destinationAtom.isOccupied()) {
       return false;
     }
-
+    //System.out.println("kkk");
+    /*if (destinationAtom.areTwoTerracesTogether()) {
+      System.out.println("trueee");
+      destinationAtom.areTwoTerracesTogether();
+      for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
+        if (originAtom.getNeighbour(i).equals(destinationAtom)) {
+          System.out.println("found");
+          int otherNeighbour = (i+3) % originAtom.getNumberOfNeighbours();
+          destinationAtom = originAtom.getNeighbour(otherNeighbour);
+          return false;
+          //Ez du abisatzen destinationAtom aldatu egin dela eta zoratu egiten da! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+          //break;
+        }
+      }
+    }*/
+    
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (force) {
       if (extraOutput) {
@@ -771,7 +814,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
-      } while (!depositAtom(destinationAtom));
+      } while (!((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) destinationAtom) && !depositAtom(destinationAtom));
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
@@ -833,12 +876,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         lattice.countIslands(null);
         int islandNumber = ((AbstractGrowthAtom) getLattice().getCentralAtom()).getIslandNumber();
         boolean isInIsland = destinationAtom.getIslandNumber() == islandNumber;
-        if (!isInIsland) {
+        /*if (!isInIsland) {
+          System.out.println("EXTRACTEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD "+destinationAtom.getId());
           double probabilityChange = lattice.extract(destinationAtom);
           getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
           getList().deleteAtom(destinationAtom);
           modifiedBuffer.updateAtoms(getList());
-        }
+        }*/
         return isInIsland;
       } else {
         return false;
