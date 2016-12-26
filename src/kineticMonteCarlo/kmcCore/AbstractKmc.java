@@ -5,6 +5,8 @@
 package kineticMonteCarlo.kmcCore;
 
 import basic.Parser;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.list.AbstractList;
@@ -98,13 +100,24 @@ public abstract class AbstractKmc implements IKmc {
   
   /**
    * Does the actual simulation. It has to be called after reset() and depositSeed().
+   *
    * @return number of iterations that simulation took
    */
   @Override
   public int simulate() {
     iterationsForLastSimulation = 0;
-    while (!performSimulationStep()) {
-      iterationsForLastSimulation++;
+    boolean finished = false;
+    while (!finished) {
+      if (getLattice().isPaused()) {
+        try {
+          Thread.sleep(250);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      } else {
+        finished = performSimulationStep();
+        iterationsForLastSimulation++;
+      }
     }
 
     return iterationsForLastSimulation;
