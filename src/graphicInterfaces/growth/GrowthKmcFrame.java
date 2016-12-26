@@ -469,7 +469,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     }    
   }
     
-  public class MenuItemHandler implements ItemListener {
+  private class MenuItemHandler implements ItemListener {
 
     /**
      * Do not allow to have both id and island number at the same time selected.
