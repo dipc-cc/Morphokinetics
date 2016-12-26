@@ -64,6 +64,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private JButton pngSaveButton;
   private JButton centreButton;
   private JButton idButton;
+  private int idButtonState;
   private JLabel labelScale;
   private JPanel panel;
   private JSpinner spinnerScale;
@@ -108,6 +109,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     paused = false;
     labelScale.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("SPACE"), "pause");
     labelScale.getActionMap().put("pause", new Pause());
+    idButtonState = 1;
   }
 
   @Override
@@ -206,7 +208,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
       centresMi.setSelected(!centresMi.isSelected());
     });
     idButton.addActionListener((ActionEvent e) -> {
-      idMi.setSelected(!idMi.isSelected());
+      idButtonPressed();
     });
 
     pauseButton.setToolTipText("Pauses the execution");
@@ -445,6 +447,23 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     });
   }
 
+  private void idButtonPressed() {
+    idButtonState = (idButtonState + 1) % 3; // Three different states are possible
+    switch (idButtonState) {
+      case 0: // prints nothing
+        idMi.setSelected(false);
+        islandsMi.setSelected(false);
+        break;
+      case 1: // prints atom identifiers
+        idMi.setSelected(true);
+        break;
+      case 2: // prints island numbers
+        islandsMi.setSelected(true);
+        islandsMi.setSelected(true);
+        break;
+    }    
+  }
+    
   public class MenuItemHandler implements ItemListener {
 
     /**
