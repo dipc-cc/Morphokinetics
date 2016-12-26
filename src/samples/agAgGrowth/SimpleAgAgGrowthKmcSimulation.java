@@ -36,7 +36,7 @@ public class SimpleAgAgGrowthKmcSimulation {
   }
 
   private static void createGraphicsFrame(AgKmc kmc) {
-    frame = new GrowthKmcFrame(kmc.getLattice(), 1);
+    frame = new GrowthKmcFrame(kmc.getLattice(), kmc.getPerimeter(), 1);
     frame.setVisible(true);
     p = new paintLoop();
     p.start();

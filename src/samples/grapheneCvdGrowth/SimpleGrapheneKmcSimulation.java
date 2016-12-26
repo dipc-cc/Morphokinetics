@@ -38,7 +38,7 @@ public class SimpleGrapheneKmcSimulation {
   }
 
   private static void createGraphicsFrame(GrapheneKmc kmc) {
-    frame = new GrowthKmcFrame(kmc.getLattice(), 1);
+    frame = new GrowthKmcFrame(kmc.getLattice(), kmc.getPerimeter(), 1);
     frame.setVisible(true);
     p = new paintLoop();
     p.start();

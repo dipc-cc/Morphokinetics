@@ -22,6 +22,7 @@ import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static java.lang.String.format;
 import java.text.DecimalFormat;
+import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
@@ -38,6 +39,7 @@ public class KmcCanvas extends Canvas {
    */
   private BufferStrategy strategy;
   private AbstractGrowthLattice lattice;
+  private RoundPerimeter perimeter;
   private int scale;
   private String imageName;
   private boolean blackAndWhite; 
@@ -59,8 +61,9 @@ public class KmcCanvas extends Canvas {
   private final static Color GREEN = new Color (179,222,105);
   private final static Color MAUVE = new Color (252,205,229);
   
-  public KmcCanvas(AbstractGrowthLattice lattice) {
+  public KmcCanvas(AbstractGrowthLattice lattice, RoundPerimeter perimeter) {
     this.lattice = lattice;
+    this.perimeter = perimeter;
     baseX = 0;
     baseY = 0;
     scale = 2;
@@ -266,6 +269,10 @@ public class KmcCanvas extends Canvas {
             case AbstractAtom.BULK:
               g.setColor(GREEN);
               break;
+          }
+          if (perimeter != null) {
+            if (perimeter.contains(atom))
+              g.setColor(ORANGE);
           }
         }
 

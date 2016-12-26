@@ -292,6 +292,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return justCentralFlake;
   }
 
+  public RoundPerimeter getPerimeter() {
+    return perimeter;
+  }
+
   /**
    * @param perimeter the perimeter to set.
    */

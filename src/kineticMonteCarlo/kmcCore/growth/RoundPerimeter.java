@@ -84,9 +84,13 @@ public class RoundPerimeter {
   }
   
   public boolean contains(AbstractGrowthAtom atom) {
-    return currentPerimeterTreeMap.containsKey(atom.getId());
+    if (currentPerimeterTreeMap != null) {
+      return currentPerimeterTreeMap.containsKey(atom.getId());
+    } else {
+      return false;
+    }
   }
-  
+
   /**
    * Enlarge the perimeter; i.e. go to the next radius in the perimeter.
    * 
