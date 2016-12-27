@@ -125,17 +125,6 @@ public class AgAtomSimple extends AgAtom{
       }
     }
     return false;
-    /*int cont = 0;
-    while (cont < 1 && i < getNumberOfNeighbours()) {
-      if (getNeighbour(i).isOccupied() && !getNeighbour(i).equals(originAtom)) {
-        if (getNeighbour(i).getType() != TERRACE) {
-          return false;
-        }
-        cont++;
-      }
-      i++;
-    }
-    return true;//*/
   }
   
   /**

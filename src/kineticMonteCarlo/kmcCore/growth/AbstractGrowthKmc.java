@@ -727,21 +727,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (destinationAtom.isOccupied()) {
       return false;
     }
-    //System.out.println("kkk");
-    /*if (destinationAtom.areTwoTerracesTogether()) {
-      System.out.println("trueee");
-      destinationAtom.areTwoTerracesTogether();
-      for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
-        if (originAtom.getNeighbour(i).equals(destinationAtom)) {
-          System.out.println("found");
-          int otherNeighbour = (i+3) % originAtom.getNumberOfNeighbours();
-          destinationAtom = originAtom.getNeighbour(otherNeighbour);
-          return false;
-          //Ez du abisatzen destinationAtom aldatu egin dela eta zoratu egiten da! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-          //break;
-        }
-      }
-    }*/
     
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (force) {
@@ -862,13 +847,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         lattice.countIslands(null);
         int islandNumber = ((AbstractGrowthAtom) getLattice().getCentralAtom()).getIslandNumber();
         boolean isInIsland = destinationAtom.getIslandNumber() == islandNumber;
-        /*if (!isInIsland) {
-          System.out.println("EXTRACTEDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD "+destinationAtom.getId());
-          double probabilityChange = lattice.extract(destinationAtom);
-          getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
-          getList().deleteAtom(destinationAtom);
-          modifiedBuffer.updateAtoms(getList());
-        }*/
         return isInIsland;
       } else {
         return false;
