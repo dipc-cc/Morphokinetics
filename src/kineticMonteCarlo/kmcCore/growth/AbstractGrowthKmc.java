@@ -800,7 +800,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
-      } while (!((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) destinationAtom) && !depositAtom(destinationAtom));
+      } while (((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) destinationAtom) || !depositAtom(destinationAtom));
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
