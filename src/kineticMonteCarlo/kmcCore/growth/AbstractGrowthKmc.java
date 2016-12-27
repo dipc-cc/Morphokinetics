@@ -549,7 +549,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @return destinationAtom.
    */
   private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
-    //System.out.println("origin "+);
     AbstractGrowthAtom destinationAtom;
     if (accelerator != null) {
       destinationAtom = accelerator.chooseRandomHop(originAtom);
@@ -558,26 +557,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     if (destinationAtom.areTwoTerracesTogether()) {
-      // repeat until there are not two atoms together
       return chooseRandomHop(originAtom);
-      // send to opposite direction
-      /*destinationAtom.areTwoTerracesTogether();
-      for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
-        if (originAtom.getNeighbour(i).equals(destinationAtom)) {
-          int otherNeighbour = (i+3) % originAtom.getNumberOfNeighbours();
-          destinationAtom = originAtom.getNeighbour(otherNeighbour);
-          break;
-        }
-      }//*/
     }
-    boolean sss;
     if (destinationAtom.isOutside()) {
-      int kk = 0;
       do {
-        kk++;
-        if (kk > 1) {
-          sss = destinationAtom.areTwoTerracesTogether();
-        }
         destinationAtom = perimeter.getPerimeterReentrance(originAtom);
       } while(destinationAtom.areTwoTerracesTogether() || ((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) originAtom));
       // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
