@@ -556,16 +556,19 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       destinationAtom =  originAtom.chooseRandomHop();
     }
-      
+
     if (destinationAtom.areTwoTerracesTogether()) {
-      destinationAtom.areTwoTerracesTogether();
+      // repeat until there are not two atoms together
+      return chooseRandomHop(originAtom);
+      // send to opposite direction
+      /*destinationAtom.areTwoTerracesTogether();
       for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
         if (originAtom.getNeighbour(i).equals(destinationAtom)) {
           int otherNeighbour = (i+3) % originAtom.getNumberOfNeighbours();
           destinationAtom = originAtom.getNeighbour(otherNeighbour);
           break;
         }
-      }
+      }//*/
     }
     boolean sss;
     if (destinationAtom.isOutside()) {
