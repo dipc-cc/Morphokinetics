@@ -843,14 +843,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       boolean atomType = destinationAtom.getType() > 0;
       boolean distance = perimeter.contains(destinationAtom);
-      if (atomType && distance) {
-        lattice.countIslands(null);
-        int islandNumber = ((AbstractGrowthAtom) getLattice().getCentralAtom()).getIslandNumber();
-        boolean isInIsland = destinationAtom.getIslandNumber() == islandNumber;
-        return isInIsland;
-      } else {
-        return false;
-      }
+      return (atomType && distance);
     }
   }
 }
