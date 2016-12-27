@@ -154,7 +154,7 @@ public class RoundPerimeter {
       }
     }
 
-    while (destinationAtom.isOccupied() && destinationAtom != originAtom) {
+    while (destinationAtom.isOccupied() || destinationAtom.equals(originAtom)) {
       position++;
       if (position == currentPerimeter.size()) {
         position = 0;
