@@ -10,42 +10,42 @@ import csv
 from scipy.optimize import curve_fit
 
 def fractalDimensionFit():
-    r=np.reshape(resultsFractal, np.shape(resultsFractal)[0]*np.shape(resultsFractal)[1])
-    a=0.27
-    b=1.73
-    c=19
-    sigma=2
+    r = np.reshape(resultsFractal, np.shape(resultsFractal)[0]*np.shape(resultsFractal)[1])
+    a = 0.27
+    b = 1.73
+    c = 19
+    sigma = 2
     plt.close()
     plt.xlabel("log(r_tt/F^0.5)")
     plt.ylabel("d")
     plt.plot(x, r, ".", label="data")
     plt.plot(x, mkl.ourErrFunc(x, a, b, c, sigma), "o", label="fit fermi")
     ####################################################################################################
-    z=np.exp(x)
-    z0=np.exp(c)
-    y=b+a*(z**sigma)/(z**sigma+z0**sigma)
+    z = np.exp(x)
+    z0 = np.exp(c)
+    y = b+a*(z**sigma)/(z**sigma+z0**sigma)
     plt.plot(x, y, ".", label="new")
     
     ####################################################################################################
-    a=a/2
-    b=b+a
-    c=19
-    sigma=0.75
+    a = a/2
+    b = b+a
+    c = 19
+    sigma = 0.75
     plt.plot(x, mkl.errFunc(x, a, b, c, sigma), "s", label="fit errf")
     plt.legend(loc='upper left', prop={'size':12})
     plt.grid(True)
     plt.savefig("fractalDimensionAll.png")
 
 def factorDimensionFit():
-    r=np.reshape(resultsFractal, np.shape(resultsFractal)[0]*np.shape(resultsFractal)[1])
-    a=5.5
-    b=3.5
-    z=np.exp(x)
-    c=18
-    z0=np.exp(c)
-    sigma=1
+    r = np.reshape(resultsFractal, np.shape(resultsFractal)[0]*np.shape(resultsFractal)[1])
+    a = 5.5
+    b = 3.5
+    z = np.exp(x)
+    c = 18
+    z0 = np.exp(c)
+    sigma = 1
     plt.close()
-    y=b+a*(z**sigma)/(z**sigma+z0**sigma)
+    y = b+a*(z**sigma)/(z**sigma+z0**sigma)
     plt.grid(True)
     max = 7.3
     y = [max-(i-max)  if i > max else i for i in y]
