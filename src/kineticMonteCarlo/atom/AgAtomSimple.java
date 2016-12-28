@@ -117,7 +117,7 @@ public class AgAtomSimple extends AgAtom{
    * @param originAtom has one neighbour and it is a terrace.
    * @return true if a dimer is going to be created, false otherwise.
    */
-  public boolean unoccupiedCornerOneTerrace(AgAtomSimple originAtom) {
+  public boolean areTwoTerracesTogetherInPerimeter(AgAtomSimple originAtom) {
     for (int i=0; i< getNumberOfNeighbours(); i++) {
       AgAtomSimple neighbour = (AgAtomSimple) getNeighbour(i);
       if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE){

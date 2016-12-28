@@ -562,7 +562,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (destinationAtom.isOutside()) {
       do {
         destinationAtom = perimeter.getPerimeterReentrance(originAtom);
-      } while(destinationAtom.areTwoTerracesTogether() || ((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) originAtom));
+      } while(destinationAtom.areTwoTerracesTogether() || ((AgAtomSimple) destinationAtom).areTwoTerracesTogetherInPerimeter((AgAtomSimple) originAtom));
       // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
       getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
     }
@@ -785,7 +785,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
-      } while (((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) destinationAtom) || !depositAtom(destinationAtom));
+      } while (((AgAtomSimple) destinationAtom).areTwoTerracesTogetherInPerimeter((AgAtomSimple) destinationAtom) || !depositAtom(destinationAtom));
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
