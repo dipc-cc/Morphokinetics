@@ -419,4 +419,21 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public double remove() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+
+  /**
+   * It has one neighbour. Check if one neighbour of the current atom is a terrace. This is useful
+   * to catch dimer formation when an atom is doing perimeter reentrance;
+   *
+   * @param originAtom has one neighbour and it is a terrace.
+   * @return true if a dimer is going to be created, false otherwise.
+   */
+  public boolean areTwoTerracesTogetherInPerimeter(AbstractGrowthAtom originAtom) {
+    for (int i=0; i< getNumberOfNeighbours(); i++) {
+      AbstractGrowthAtom neighbour = getNeighbour(i);
+      if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE){
+        return true;
+      }
+    }
+    return false;
+  }
 }
