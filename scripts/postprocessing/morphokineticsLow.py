@@ -171,7 +171,7 @@ dataEvery1percentAndNucleation.txt output file    """
         return -1
     
     # Get columns 13 and 14 (only when the number of islands is 1)
-    gyradius =  [matrix[i][12] for i in range(0,matrix.shape[0]) if matrix[i][3] == 1]
+    gyradius =  [matrix[i][9] for i in range(0,matrix.shape[0]) if matrix[i][3] == 1]
     islandSize = [matrix[i][13] for i in range(0,matrix.shape[0]) if matrix[i][3] == 1]
     popt = curve_fit(powerFunc, gyradius, islandSize)
     a = popt[0][0]
