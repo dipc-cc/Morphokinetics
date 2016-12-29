@@ -458,7 +458,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     } else {
       do {
-        destinationAtom = chooseRandomHop(originAtom);
+        destinationAtom = chooseRandomHop(originAtom, 0);
+        if (destinationAtom.equals(originAtom)) {
+          destinationAtom.equals(originAtom);
+          break;
+        }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
 
@@ -546,9 +550,10 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * chosen. With Devita accelerator many steps far away atom can be chosen.
    *
    * @param originAtom atom that has to be moved.
+   * @param times how many times it has been called recursively
    * @return destinationAtom.
    */
-  private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
+  private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom, int times) {
     AbstractGrowthAtom destinationAtom;
     if (accelerator != null) {
       destinationAtom = accelerator.chooseRandomHop(originAtom);
@@ -556,13 +561,17 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       destinationAtom =  originAtom.chooseRandomHop();
     }
 
-    if (destinationAtom.areTwoTerracesTogether()) {
-      return chooseRandomHop(originAtom);
+    if (justCentralFlake && destinationAtom.areTwoTerracesTogether()) {
+      if (times > originAtom.getNumberOfNeighbours()*100) { // it is not possible to diffuse without forming a dimer. So returning originAtom itself to make possible to another originAtom to be choosen.
+        return originAtom;
+      }
+        
+      return chooseRandomHop(originAtom, times+1);
     }
     if (destinationAtom.isOutside()) {
       do {
         destinationAtom = perimeter.getPerimeterReentrance(originAtom);
-      } while(destinationAtom.areTwoTerracesTogether() || ((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) originAtom));
+      } while(destinationAtom.areTwoTerracesTogether() || destinationAtom.areTwoTerracesTogetherInPerimeter(originAtom));
       // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
       getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
     }
@@ -785,7 +794,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
-      } while (((AgAtomSimple) destinationAtom).unoccupiedCornerOneTerrace((AgAtomSimple) destinationAtom) || !depositAtom(destinationAtom));
+      } while (destinationAtom.areTwoTerracesTogetherInPerimeter(destinationAtom) || !depositAtom(destinationAtom));
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());

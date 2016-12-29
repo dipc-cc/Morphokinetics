@@ -108,23 +108,6 @@ public class AgAtomSimple extends AgAtom{
         return false;
 
     }
-  }//*/
-
-  /**
-   * It has one neighbour. Check if one neighbour of the current atom is a terrace. This is useful
-   * to catch dimer formation when an atom is doing perimeter reentrance;
-   *
-   * @param originAtom has one neighbour and it is a terrace.
-   * @return true if a dimer is going to be created, false otherwise.
-   */
-  public boolean unoccupiedCornerOneTerrace(AgAtomSimple originAtom) {
-    for (int i=0; i< getNumberOfNeighbours(); i++) {
-      AgAtomSimple neighbour = (AgAtomSimple) getNeighbour(i);
-      if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE){
-        return true;
-      }
-    }
-    return false;
   }
   
   /**
