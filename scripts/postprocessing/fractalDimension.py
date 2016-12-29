@@ -59,7 +59,7 @@ def factorDimensionFit():
     
 label = r'Fractal dimension'
 plt.ylabel(label)
-label = r'$\frac{r_{tt}}{F^{0.5}}$'
+label = r'$\frac{r_{tt}}{F^{0.333}}$'
 plt.xlabel(label)
 plt.grid(True)
 axes = plt.gca()
@@ -82,11 +82,12 @@ for i in range(-6,5):
         resultsFractal.append(mk.getAllFractalDimensions(temperatures, verbose))
     except OSError:
         print ("ERROR changing to {}".format(folder))
+        continue
     os.chdir(workingPath)
 
     while(len(temperatures) > len(resultsFractal[-1])):
        resultsFractal[-1].append(float('nan'))
-    rttFlux = np.log(mk.getRtt(temperatures)/flux**0.5)
+    rttFlux = np.log(mk.getRtt(temperatures)/flux**0.333)
     x = np.concatenate((x, rttFlux))
     filename = "fractalD"+'{:E}'.format(flux)+".txt"
     with open(filename, 'w', newline='') as csvfile:
