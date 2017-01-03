@@ -17,5 +17,5 @@
   "useMaxPerimeter": false,
   "perimeterType": circle,
   "coverage": 5,
-  "psdScale": 1,
+  "psdScale": 0.5,
 }
