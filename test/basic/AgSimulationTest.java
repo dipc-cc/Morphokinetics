@@ -174,7 +174,7 @@ public class AgSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    assertEquals(simulatedIslands, 3);
+    assertEquals(3, simulatedIslands);
     assertEquals(14.381566300521941, simulatedTime, 0.0);
   }
 
