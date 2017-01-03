@@ -11,7 +11,7 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgAtomSimple extends AgAtom{
+public class AgAtomSimple extends AgAtom {
   
   public AgAtomSimple(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa);
