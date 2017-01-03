@@ -689,10 +689,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         atom.setVisited(true);
         atomTypesCounter[atom.getType()]++;
       } else {
-        if (islandCount == 0) {
-          islands.add(new Island(islandCount));
-          islandCount++;
-        }
+        islands.add(new Island(islandCount));
+        islandCount++;
       }
     }
     if (atom.isVisited())
