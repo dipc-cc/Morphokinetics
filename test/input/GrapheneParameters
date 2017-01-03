@@ -16,4 +16,5 @@
   "useMaxPerimeter": false,
   "perimeterType": circle,
   "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"},],
+  "psdScale": 0.5,
 }

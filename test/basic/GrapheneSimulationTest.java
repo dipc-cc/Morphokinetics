@@ -93,7 +93,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref.length; i++) {
       assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(34539.64416617914, simulatedTime, 0.0);
+    assertEquals(33643.63470539624, simulatedTime, 0.0);
   }
 
   @Test
@@ -126,7 +126,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref2.length; i++) {
       assertArrayEquals(ref4[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(662.236404782772, simulatedTime, 0.0);
+    assertEquals(620.472492338597, simulatedTime, 0.0);
     // TODO compare the rest of surfaces
   }
     
