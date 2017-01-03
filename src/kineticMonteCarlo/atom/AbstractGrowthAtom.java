@@ -428,9 +428,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * @return true if a dimer is going to be created, false otherwise.
    */
   public boolean areTwoTerracesTogetherInPerimeter(AbstractGrowthAtom originAtom) {
-    for (int i=0; i< getNumberOfNeighbours(); i++) {
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
       AbstractGrowthAtom neighbour = getNeighbour(i);
-      if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE){
+      if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE) {
         return true;
       }
     }
