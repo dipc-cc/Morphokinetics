@@ -43,10 +43,6 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     setAngles();
   }
 
-  /**
-   * TODO correct it!!
-   * @return 
-   */
   @Override
   public GrapheneAtom getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
