@@ -34,47 +34,47 @@ public class DevitaAccelerator {
     updateRemainingHops(type, 0);
   }
 
-  public AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom source) {
-    int sourceAtomType = (int) source.getType();
+  public AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
+    int originAtomType = (int) originAtom.getType();
 
-    if (!hopsPerStep.isAccelerationEnabled(sourceAtomType)) {
-      return source.chooseRandomHop();
+    if (!hopsPerStep.isAccelerationEnabled(originAtomType)) {
+      return originAtom.chooseRandomHop();
     }
 
-    int desiredHopDistance = hopsPerStep.getDistancePerStep(sourceAtomType, sourceAtomType);
-    int remainingHops = desiredHopDistance * desiredHopDistance + remainingHopsMap.get(sourceAtomType);
+    int desiredHopDistance = hopsPerStep.getDistancePerStep(originAtomType, originAtomType);
+    int remainingHops = desiredHopDistance * desiredHopDistance + remainingHopsMap.get(originAtomType);
 
-    AbstractGrowthAtom destination;
+    AbstractGrowthAtom destinationAtom;
 
     int remainingDistance = (int) Math.sqrt(remainingHops);
-    int possibleDistance = lattice.getAvailableDistance(source, remainingDistance);
+    int possibleDistance = lattice.getAvailableDistance(originAtom, remainingDistance);
 
     if (possibleDistance <= 0) {
-      destination = source.chooseRandomHop();
+      destinationAtom = originAtom.chooseRandomHop();
       possibleDistance = 1;
     } else {
-      destination = lattice.getFarSite(source, possibleDistance);
+      destinationAtom = lattice.getFarSite(originAtom, possibleDistance);
     }
 
     remainingHops -= possibleDistance * possibleDistance;
-    updateRemainingHops(sourceAtomType, remainingHops);
-    updateDesiredHopDistances(remainingHops, desiredHopDistance, sourceAtomType);
+    updateRemainingHops(originAtomType, remainingHops);
+    updateDesiredHopDistances(remainingHops, desiredHopDistance, originAtomType);
 
-    return destination;
+    return destinationAtom;
   }
 
-  private void updateRemainingHops(int sourceAtomType, int pendingJumps) {
-    remainingHopsMap.put(sourceAtomType, pendingJumps);
+  private void updateRemainingHops(int originAtomType, int pendingJumps) {
+    remainingHopsMap.put(originAtomType, pendingJumps);
   }
 
-  private void updateDesiredHopDistances(int pendingJumps, int desiredHopDistance, int sourceAtomType) {
-    DevitaHopsConfig config = devitaConfig.get(sourceAtomType);
+  private void updateDesiredHopDistances(int pendingJumps, int desiredHopDistance, int originAtomType) {
+    DevitaHopsConfig config = devitaConfig.get(originAtomType);
 
     if (pendingJumps < config.getMinAccumulatedSteps() && desiredHopDistance < config.getMaxDistanceHops()) {
-      hopsPerStep.setDistancePerStep(sourceAtomType, desiredHopDistance + 1);
+      hopsPerStep.setDistancePerStep(originAtomType, desiredHopDistance + 1);
     }
     if (pendingJumps > config.getMaxAccumulatedSteps() && desiredHopDistance > config.getMinDistanceHops()) {
-      hopsPerStep.setDistancePerStep(sourceAtomType, desiredHopDistance >> 1);
+      hopsPerStep.setDistancePerStep(originAtomType, desiredHopDistance >> 1);
     }
   }
 }
