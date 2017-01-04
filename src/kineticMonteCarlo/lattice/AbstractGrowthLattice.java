@@ -139,6 +139,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return getUc(index).getAtom(0);
   }
   
+  /**
+   * Returns the atom that it is in the middle of single flake simulation.
+   * 
+   * @return central atom.
+   */
   public abstract AbstractGrowthAtom getCentralAtom();
 
   @Override
