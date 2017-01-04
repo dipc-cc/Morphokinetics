@@ -668,7 +668,7 @@ public class AgLattice extends AbstractGrowthLattice {
     if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
       boolean mobileToImmobile = (neighbourAtom.getType() < KINK_A && newType >= KINK_A);
       neighbourAtom.setType(newType);
-      addAtom(neighbourAtom);
+      //addAtom(neighbourAtom); // always has to be checked, its neighbours has changed.
       if (neighbourAtom.getNMobile() > 0 && !neighbourAtom.isOccupied()) {
         addBondAtom(neighbourAtom);
       }
@@ -680,6 +680,10 @@ public class AgLattice extends AbstractGrowthLattice {
         }
       }
     }
+    if (neighbourAtom.isOccupied()) { // the type of neighbour does not change, but it has a mew neighbour (caller one)
+      addAtom(neighbourAtom);
+    }
+      
   }
    
   /**
