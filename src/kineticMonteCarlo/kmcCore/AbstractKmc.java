@@ -106,17 +106,14 @@ public abstract class AbstractKmc implements IKmc {
   @Override
   public int simulate() {
     iterationsForLastSimulation = 0;
-    boolean finished = false;
-    while (!finished) {
+    while (!performSimulationStep()) {
+      iterationsForLastSimulation++;
       if (getLattice().isPaused()) {
         try {
           Thread.sleep(250);
         } catch (InterruptedException ex) {
           Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
         }
-      } else {
-        finished = performSimulationStep();
-        iterationsForLastSimulation++;
       }
     }
 
