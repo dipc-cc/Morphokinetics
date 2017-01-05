@@ -16,7 +16,6 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-results = results.Results()
 temperatures = list(range(120,321,5))
 
 for i in range(-6,1):
