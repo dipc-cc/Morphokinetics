@@ -26,3 +26,7 @@ View a specific Git commit
 Setting your branch to exactly match the remote branch can be done in two steps:
   git fetch origin
   git reset --hard origin/master
+
+Remove branch remotely and locally
+  git push origin --delete <branch_name>
+  git branch -d <branch_name>
