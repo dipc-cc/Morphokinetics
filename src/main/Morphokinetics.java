@@ -116,11 +116,11 @@ public class Morphokinetics {
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    AbstractGrowthKmc myKmc = (AbstractGrowthKmc) ga.getKmc();
-    AbstractGrowthLattice myLattice = myKmc.getLattice();
-    KmcCanvas myCanvas = new KmcCanvas(myLattice, myKmc.getPerimeter());
+    AbstractGrowthKmc kmc = (AbstractGrowthKmc) ga.getKmc();
+    AbstractGrowthLattice lattice = kmc.getLattice();
+    KmcCanvas canvas = new KmcCanvas(lattice, kmc.getPerimeter());
     MainInterface mainInterface = null;
-    if (parser.withGui()) mainInterface = new MainInterface(myCanvas);
+    if (parser.withGui()) mainInterface = new MainInterface(canvas);
     if (parser.withGui() && parser.visualise()) {
       mainInterface.setVisible(true);
       ga.setMainInterface(mainInterface);
