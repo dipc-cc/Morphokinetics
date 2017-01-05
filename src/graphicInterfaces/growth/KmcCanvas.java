@@ -270,7 +270,7 @@ public class KmcCanvas extends Canvas {
               g.setColor(GREEN);
               break;
           }
-          if (perimeter != null) {
+          if (printPerimeter && perimeter != null) {
             if (perimeter.contains(atom))
               g.setColor(ORANGE);
           }
