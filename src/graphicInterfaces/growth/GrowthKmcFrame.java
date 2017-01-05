@@ -82,8 +82,6 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private ImageIcon pauseIcon;
   private ImageIcon resumeIcon;
   private int pngLastTmpFile;
-  private boolean executingScroll;
-  private int counting = 0;
   
   /**
    * Creates new form frame for growth.
@@ -92,7 +90,6 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
    * @param max maximum value for the progress bar
    */
   public GrowthKmcFrame(AbstractGrowthLattice lattice, RoundPerimeter perimeter, int max) {
-    executingScroll = true;
     createMenuBar();
     maxCoverage = max;
     initComponents();
@@ -163,11 +160,6 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     statusbar.setText(Integer.toString(coverage) + "/" + maxCoverage);
   }
 
-  @Override
-  public void setVisible(boolean visible){
-    super.setVisible(visible);
-    executingScroll = false;
-  }
   /**
    * This method is called from within the constructor to initialise the form. 
    */ 
@@ -230,25 +222,6 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     pngSaveButton.setToolTipText("Saves current view to PNG image");
     centreButton.setToolTipText("Shows centre of mass, gyradius and diameter");
     idButton.setToolTipText("Shows id of atom, island number or nothing");
-    
-    /*scrollPane.getViewport().addChangeListener((ChangeEvent e) -> {
-      try {
-        if (!executingScroll) {
-          executingScroll = true;
-          System.out.println("changing scroll bar "+counting++);
-          panel.revalidate();
-          canvas.performDraw();
-          Thread.sleep(1000);
-          executingScroll = false;
-          
-        } else {
-          System.out.println("Waiting to free the lock");
-        }
-      } catch (Exception exc) {
-          System.out.println("Error in scroll bar");
-          executingScroll = false;
-        }
-    });//*/
 
     GroupLayout layout = new GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
