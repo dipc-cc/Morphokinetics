@@ -49,8 +49,10 @@ import javax.swing.KeyStroke;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
@@ -80,17 +82,18 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private ImageIcon pauseIcon;
   private ImageIcon resumeIcon;
   private int pngLastTmpFile;
+  
   /**
    * Creates new form frame for growth.
    *
    * @param lattice
    * @param max maximum value for the progress bar
    */
-  public GrowthKmcFrame(AbstractGrowthLattice lattice, int max) {
+  public GrowthKmcFrame(AbstractGrowthLattice lattice, RoundPerimeter perimeter, int max) {
     createMenuBar();
     maxCoverage = max;
     initComponents();
-    canvas = new KmcCanvas(lattice);
+    canvas = new KmcCanvas(lattice, perimeter);
     canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
     panel.add(canvas);
     canvas.initialise();
@@ -219,7 +222,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     pngSaveButton.setToolTipText("Saves current view to PNG image");
     centreButton.setToolTipText("Shows centre of mass, gyradius and diameter");
     idButton.setToolTipText("Shows id of atom, island number or nothing");
-    
+
     GroupLayout layout = new GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
     layout.setHorizontalGroup(

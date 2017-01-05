@@ -118,7 +118,7 @@ public class Morphokinetics {
 
     AbstractGrowthKmc myKmc = (AbstractGrowthKmc) ga.getKmc();
     AbstractGrowthLattice myLattice = myKmc.getLattice();
-    KmcCanvas myCanvas = new KmcCanvas(myLattice);
+    KmcCanvas myCanvas = new KmcCanvas(myLattice, myKmc.getPerimeter());
     MainInterface mainInterface = null;
     if (parser.withGui()) mainInterface = new MainInterface(myCanvas);
     if (parser.withGui() && parser.visualise()) {

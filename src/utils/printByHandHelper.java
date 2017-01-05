@@ -23,7 +23,7 @@ public class printByHandHelper {
     ModifiedBuffer modified = new ModifiedBuffer();
     AgUcLattice lattice = new AgUcLattice(30, 13, modified, null, false);
     lattice.init();
-    frame = new GrowthKmcFrame(lattice, 1);
+    frame = new GrowthKmcFrame(lattice, null, 1);
     frame.setVisible(true);
     p = new paintLoop();
   }

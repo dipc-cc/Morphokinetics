@@ -58,7 +58,7 @@ public class AgAgPsdTest {
   }
 
   private static GrowthKmcFrame createGraphicsFrame(AgKmc kmc) {
-    GrowthKmcFrame frame = new GrowthKmcFrame(kmc.getLattice(), 1);
+    GrowthKmcFrame frame = new GrowthKmcFrame(kmc.getLattice(), kmc.getPerimeter(), 1);
     return frame;
   }
 

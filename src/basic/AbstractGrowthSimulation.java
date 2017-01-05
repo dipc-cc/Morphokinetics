@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 
 import basic.io.OutputType.formatFlag;
 import graphicInterfacesCommon.growth.IGrowthKmcFrame;
+import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import ratesLibrary.IRates;
 
 /**
@@ -56,8 +57,8 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
         } else {
           className = "graphicInterfaces.growth.GrowthKmcFrame";
         }
-        Class<?> genericClass = Class.forName(className);
-        frame = (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance(getKmc().getLattice(), max);
+        Class<?> genericClass = Class.forName(className); 
+        frame = (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance(getKmc().getLattice(), ((AbstractGrowthKmc) getKmc()).getPerimeter(), max);
       } catch (Exception e) {
         Logger.getLogger(AbstractGrowthSimulation.class.getName()).log(Level.SEVERE, null, e);
         System.err.println("Error: Execution is not able to create the X11 frame.");
