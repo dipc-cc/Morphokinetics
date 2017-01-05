@@ -97,7 +97,7 @@ public class AgSimulationTest {
     for (int i = 0; i < ref.length; i++) {
       assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(198.40463058735776, simulatedTime, 0.0);
+    assertEquals(221.00970679730892, simulatedTime, 0.0);
   }
 
   /**
