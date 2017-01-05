@@ -279,6 +279,7 @@ class MeanValues:
         self.sizes2 = []
         self.sizesStd = []
         self.aeRatioTimesPossibleList = []
+        self.ne = []
 
     def updateData(self, averageData):
         self.growthSlopes.append(averageData.slopes.growth)
@@ -300,6 +301,7 @@ class MeanValues:
         self.sizes.append(averageData.lastSize())
         self.sizes2.append(averageData.lastSize2())
         self.sizesStd.append(averageData.lastStdSizes())
+        self.ne.append(averageData.lastNe())
 
     def updateTimeAndRatio(self, simulatedTime, numberOfEvents):
         if (simulatedTime != 0):
@@ -392,3 +394,7 @@ class MeanValues:
 
     def getGyradiusStd(self):
         return np.array(self.gyradiusStd)
+    
+    def getNumberOfEvents(self):
+        """ returns the number of events that simulation has done until given coverage """
+        return np.array(self.ne)
