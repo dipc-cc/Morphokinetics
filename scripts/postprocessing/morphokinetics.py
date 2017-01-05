@@ -13,6 +13,10 @@ def powerFunc(x, a, b):
     """ a*x^b function """
     return a*x**b
 
+def expFunc(x, a, b):
+    """ ae^bx function """
+    return a*np.exp(x*b)
+
 def fractalDFunc(x):
     """Fractal dimension for x (= rtt/flux)"""
     minD = 1.66
