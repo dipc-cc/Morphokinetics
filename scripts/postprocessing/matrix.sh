@@ -1,8 +1,12 @@
+#!/bin/bash
+#
 # It process output file of morphokinetics
 # "dataEvery1percentAndNucleation", it removes islands histograms and
 # deletes the first line. Thus, it is possible to read it with the
 # function getFractalDimension of morphokineticsLow.py. More precisely
 # with numpy: matrix=np.loadtxt(fname="matrix.txt", delimiter="\t")
+#
+# Author: J. Alberdi-Rodriguez
 
 # fluxes
 for i in $(ls -d */);
