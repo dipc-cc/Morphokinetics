@@ -4,6 +4,7 @@
 #Author: J. Alberdi-Rodriguez
 
 import os
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
@@ -18,11 +19,20 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-temperatures = list(range(120,501,5))
+hex = len(sys.argv) > 1
+if hex:
+    temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
+    initFlux = 3
+    endFlux = 5
+else:
+    temperatures = list(range(120,501,5))
+    initFlux = -6
+    endFlux = 5
+
 kb = 8.6173324e-5
 maxCoverage = 50
 
-for i in range(-6,5):
+for i in range(initFlux,endFlux):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     sqrt = False
