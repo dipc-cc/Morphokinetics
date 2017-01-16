@@ -28,15 +28,13 @@ def getAeStudy():
     # Get the most probable processes
     orderedIndexes = np.argsort(ratio, axis=None)
     ratioSum = 0.0
-    results = []
     resultsDict = {}
     for i in orderedIndexes[::-1]:
         x,y = getXy(i, len(ratioTimesPossible))
         ratioSum += ratio[x][y]
-        results.append([x,y,ratio[x][y],possible[x][y]])
         resultsDict[i] = [ratio[x][y],possible[x][y]]
         print(i, x, y, ratio[x][y], ratioSum)
-        if (ratioSum > 0.99):
+        if (ratioSum > 0.999):
             break
     return resultsDict
 
