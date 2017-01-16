@@ -162,6 +162,23 @@ def getAllFractalDimensions(temperatures, verbose=False):
         os.chdir(workingPath)
     return fractalDimensions
 
+def getAllAeStudy(temperatures, verbose=False):
+    workingPath = os.getcwd()
+    aeResults = []
+    for temperature in temperatures:
+        try:
+            os.chdir(str(temperature))
+            oneResult = mk.getAeStudy() 
+            for i in oneResult:
+                oneResult[i].append(temperature)
+            aeResults.append(oneResult)
+            print("***")
+        except OSError:
+            print("error", temperature)
+        os.chdir(workingPath)
+    return aeResults
+                     
+    
 def getIslandDistribution(temperatures, sqrt=True, interval=False, growth=True, verbose = False, flux=-1, maxCoverage=30):
     """ computes the island distribution """
     chunk = 40

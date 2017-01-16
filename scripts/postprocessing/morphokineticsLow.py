@@ -15,6 +15,32 @@ def myPrint(vector):
         print(i, end=" ")
     print()
     
+def getXy(i, length):
+    x = int(i / length)
+    y = i % length
+    return x,y
+
+def getAeStudy():
+    ratioTimesPossible = np.loadtxt(fname="AeRatioTimesPossible")
+    possible = np.loadtxt(fname="AePossibleFromList")
+    sum = np.sum(ratioTimesPossible)
+    ratio = ratioTimesPossible/np.sum(ratioTimesPossible)
+    # Get the most probable processes
+    orderedIndexes = np.argsort(ratio, axis=None)
+    ratioSum = 0.0
+    results = []
+    resultsDict = {}
+    for i in orderedIndexes[::-1]:
+        x,y = getXy(i, len(ratioTimesPossible))
+        ratioSum += ratio[x][y]
+        results.append([x,y,ratio[x][y],possible[x][y]])
+        resultsDict[i] = [ratio[x][y],possible[x][y]]
+        print(i, x, y, ratio[x][y], ratioSum)
+        if (ratioSum > 0.99):
+            break
+    return resultsDict
+
+
 def powerFunc(x, a, b):
     """ a*x^b function """
     return a*x**b
