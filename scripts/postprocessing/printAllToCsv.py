@@ -20,6 +20,7 @@ plt.grid(True)
 workingPath = os.getcwd()
 temperatures = list(range(120,501,5))
 kb = 8.6173324e-5
+maxCoverage = 50
 
 for i in range(-6,5):
     folder = "flux3.5e"+str(i)
@@ -31,7 +32,7 @@ for i in range(-6,5):
     print(folder)
     try:
         os.chdir(folder)
-        meanValues = mk.getIslandDistribution(temperatures, sqrt, interval, growth, verbose, flux)
+        meanValues = mk.getIslandDistribution(temperatures, sqrt, interval, growth, verbose, flux, maxCoverage)
     except OSError:
         print ("error changing to {}".format(folder))
         a = 0 #do nothing
@@ -46,7 +47,6 @@ for i in range(-6,5):
     n = meanValues.getIslandsAmount()
     perimeterSlopes= meanValues.getInnerPerimeterSlope()
     numberOfMonomers= meanValues.getMonomersAmount()
-    aeRatioTimesPossibleList= meanValues.getAeRatioTimesPossible()
     simulatedTimes= meanValues.getTimes()
 
     filename = "outputFile"+'{:E}'.format(flux)+".txt"
