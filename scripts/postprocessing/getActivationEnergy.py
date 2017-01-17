@@ -46,32 +46,45 @@ for i in range(-3,-2):
         continue
     os.chdir(workingPath)
 
-    possibles = np.zeros(shape=(len(resultsAe[0]),len(temperatures)), dtype=float)
-    percent = np.zeros(shape=(len(resultsAe[0]),len(temperatures)), dtype=float)
+    #possibles = np.zeros(shape=(len(resultsAe[0]),len(temperatures)), dtype=float)
+    #percent = np.zeros(shape=(len(resultsAe[0]),len(temperatures)), dtype=float)
     minusEnergy = []
-    transition = 0
     sumEnergy = 0.0
-    for index in resultsAe[0]:
-        temp = 0
+    # store all possible transitions
+    allTransitions = set()
+    for values in resultsAe:
+        for value in values:
+            allTransitions.add(value)
+
+    for index in allTransitions: # for example 0,1,2,5,6,9
+        possibles = []
+        percent   = []
+        temp      = []
         for values in resultsAe:
-            possibles[transition][temp] = values[index][1] # read possibles from slot 1
-            percent[transition][temp] = values[index][0] # read ratio from slot 0
-            temp += 1
-        popt = curve_fit(mk.expFunc, 1/kb/temperatures, possibles[transition], p0=[10e5, -0.01])
-        a = popt[0][0]
-        b = popt[0][1]
-        minusEnergy.append(b)
-        plt.semilogy(1/kb/temperatures, possibles[transition], "-x", label=index)
-        plt.semilogy(1/kb/temperatures, mk.expFunc(1/kb/temperatures, a,b), label="fit {}e^{}".format(a,b))
-        percentMean = np.mean(percent[transition])
-        # index is the process, from x to y
-        x,y = mkl.getXy(index, len(energies))
-        if (verbose):
-            print("/",index, mkl.getXy(index, len(energies)))
-            print(percentMean,energies[x][y],minusEnergy[transition])
-            print(percentMean*(energies[x][y]-minusEnergy[transition]))
-        sumEnergy += percentMean*(energies[x][y]-minusEnergy[transition])
-        transition += 1
+            try:
+                possibles.append(values[index][1]) # read possibles from slot 1
+                percent.append(values[index][0]) # read ratio from slot 0
+                temp.append(values[index][2]) # read temperature from slot 2
+            except KeyError:
+                pass
+        kbT = 1/kb/np.array(temp)
+        plt.semilogy(kbT, possibles, "-x", label=index)
+
+        # try to fit
+        if len(possibles) > 1:
+            popt = curve_fit(mk.expFunc, kbT, possibles, p0=[10e5, -0.01])
+            a = popt[0][0]
+            b = popt[0][1]
+            minusEnergy = b
+            plt.semilogy(kbT, mk.expFunc(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
+            percentMean = np.mean(percent)
+            # index is the process, from x to y
+            x,y = mkl.getXy(index, len(energies))
+            if (verbose):
+                print("/",index, mkl.getXy(index, len(energies)))
+                print(percentMean,energies[x][y],minusEnergy)
+                print(percentMean*(energies[x][y]-minusEnergy))
+            sumEnergy += percentMean*(energies[x][y]-minusEnergy)
 
     print("Energy from multiplicities is", sumEnergy)
     plt.legend(loc='upper left', prop={'size':6})
