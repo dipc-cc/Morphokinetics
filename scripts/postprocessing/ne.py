@@ -30,14 +30,13 @@ plt.xlabel(label)
 plt.figure(num=None, figsize=(6,6), dpi=80, facecolor='w', edgecolor='k')
 plt.grid(True)
 plt.title("Global activation energy")
-plt.ylim(1e7,1e10)
 temperatures = np.array(list(range(120,254,5)))
 
 workingPath = os.getcwd()
 kb = 8.6173324e-5
-#for i in range(1,2):
-i = -3
-for j in [30]:#,20,15,10,5,3,2,1]:    j = 30
+for i in range(-3,-2):
+#for j in [30]:#,20,15,10,5,3,2,1]:
+    j = 30
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
