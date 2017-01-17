@@ -18,7 +18,8 @@ axes = plt.gca()
 temperatures = list(range(120,321,5))
 temperatures = np.array(list(range(120,156,5)))
 #temperatures = np.array(list(range(165,200,5)))
-
+#temperatures = np.array(list(range(205,300,5)))
+                                   
 workingPath = os.getcwd()
 print(workingPath)
 resultsAe = []
