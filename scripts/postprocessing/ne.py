@@ -49,8 +49,9 @@ for j in [30]:#,20,15,10,5,3,2,1]:    j = 30
 
     os.chdir(workingPath)
     ne = meanValues.getNumberOfEvents()
+    time = meanValues.getTimes()
     T1 = 1/(kb * temperatures)
-    command = "ne"
+    command = "ne/time"
     y = eval(command)
     plt.ylabel(command)
     command = "1/kb/temperatures"#+np.log(flux**2.5)"
