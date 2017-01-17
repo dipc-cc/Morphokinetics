@@ -35,13 +35,12 @@ for i in range(-3,-2):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
-    verbose = False
-    sqrt = False
-    growth = False
+    verbose = True
     try:
         os.chdir(folder)
         resultsAe = mk.getAllAeStudy(temperatures, verbose)
-        print(resultsAe)
+        if (verbose):
+            print(resultsAe)
     except OSError:
         print ("ERROR changing to {}".format(folder))
         continue
@@ -53,8 +52,6 @@ for i in range(-3,-2):
     transition = 0
     sumEnergy = 0.0
     for index in resultsAe[0]:
-        # index is the process, from x to y
-        print("/",index, mkl.getXy(index, len(energies)))
         temp = 0
         for values in resultsAe:
             possibles[transition][temp] = values[index][1] # read possibles from slot 1
@@ -67,13 +64,16 @@ for i in range(-3,-2):
         plt.semilogy(1/kb/temperatures, possibles[transition], "-x", label=index)
         plt.semilogy(1/kb/temperatures, mk.expFunc(1/kb/temperatures, a,b), label="fit {}e^{}".format(a,b))
         percentMean = np.mean(percent[transition])
+        # index is the process, from x to y
         x,y = mkl.getXy(index, len(energies))
-        print(percentMean,energies[x][y],minusEnergy[transition])
+        if (verbose):
+            print("/",index, mkl.getXy(index, len(energies)))
+            print(percentMean,energies[x][y],minusEnergy[transition])
+            print(percentMean*(energies[x][y]-minusEnergy[transition]))
         sumEnergy += percentMean*(energies[x][y]-minusEnergy[transition])
-        print(percentMean*(energies[x][y]-minusEnergy[transition]))
         transition += 1
 
-    print(sumEnergy)
+    print("Energy from multiplicities is", sumEnergy)
     plt.legend(loc='upper left', prop={'size':6})
     plt.savefig("aeStudy.png")
 

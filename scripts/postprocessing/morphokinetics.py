@@ -168,11 +168,10 @@ def getAllAeStudy(temperatures, verbose=False):
     for temperature in temperatures:
         try:
             os.chdir(str(temperature))
-            oneResult = mk.getAeStudy() 
+            oneResult = mk.getAeStudy(verbose) 
             for i in oneResult:
                 oneResult[i].append(temperature)
             aeResults.append(oneResult)
-            print("***")
         except OSError:
             print("error", temperature)
         os.chdir(workingPath)

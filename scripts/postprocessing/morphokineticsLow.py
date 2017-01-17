@@ -20,7 +20,9 @@ def getXy(i, length):
     y = i % length
     return x,y
 
-def getAeStudy():
+def getAeStudy(verbose = False):
+    if (verbose):
+        print("***")
     ratioTimesPossible = np.loadtxt(fname="AeRatioTimesPossible")
     possible = np.loadtxt(fname="AePossibleFromList")
     sum = np.sum(ratioTimesPossible)
@@ -33,7 +35,8 @@ def getAeStudy():
         x,y = getXy(i, len(ratioTimesPossible))
         ratioSum += ratio[x][y]
         resultsDict[i] = [ratio[x][y],possible[x][y]]
-        print(i, x, y, ratio[x][y], ratioSum)
+        if (verbose):
+            print(i, x, y, ratio[x][y], ratioSum)
         if (ratioSum > 0.999):
             break
     return resultsDict
