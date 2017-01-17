@@ -23,6 +23,17 @@ def fit(x, y, initI, finishI):
     b = popt[0][1]
     return list([a,b])
 
+hex = len(sys.argv) > 1
+if hex:
+    temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
+    initFlux = 2
+    endFlux = 5
+else:
+    temperatures = np.array(list(range(120,254,5)))
+    initFlux = -3
+    endFlux = -2
+
+
 label = r''
 plt.ylabel(label)
 label = r'$R/F^{0.79}$'
@@ -30,11 +41,10 @@ plt.xlabel(label)
 plt.figure(num=None, figsize=(6,6), dpi=80, facecolor='w', edgecolor='k')
 plt.grid(True)
 plt.title("Global activation energy")
-temperatures = np.array(list(range(120,254,5)))
 
 workingPath = os.getcwd()
 kb = 8.6173324e-5
-for i in range(-3,-2):
+for i in range(initFlux,endFlux):
 #for j in [30]:#,20,15,10,5,3,2,1]:
     j = 30
     folder = "flux3.5e"+str(i)
@@ -58,15 +68,14 @@ for i in range(-3,-2):
     plt.xlabel(command)
     try:
         plt.semilogy(x, y, ".", label=folder+" "+str(j))
-        #plt.semilogy(x, mk.expFunc(x, 1e11, -0.1007), label=folder+" middle")
-        #plt.semilogy(x, mk.expFunc(x, 6e9, -0.0641), label=folder+" low")
 
-        a, b = fit(x, y, 0, 8)
-        plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
-        a, b = fit(x, y, 8, 16)
-        plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
-        a, b = fit(x, y, 17, 27)
-        plt.semilogy(x, mk.expFunc(x, a, b), label="fit high "+str(b))
+        if not(hex):
+            a, b = fit(x, y, 0, 8)
+            plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
+            a, b = fit(x, y, 8, 16)
+            plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
+            a, b = fit(x, y, 17, 27)
+            plt.semilogy(x, mk.expFunc(x, a, b), label="fit high "+str(b))
         plt.legend(loc='lower left', prop={'size':6})
         plt.savefig("ne.png")
     except ValueError:
