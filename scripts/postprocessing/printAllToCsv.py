@@ -22,7 +22,7 @@ workingPath = os.getcwd()
 hex = len(sys.argv) > 1
 if hex:
     temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
-    initFlux = 3
+    initFlux = 2
     endFlux = 5
 else:
     temperatures = list(range(120,501,5))
