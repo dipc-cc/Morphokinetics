@@ -73,19 +73,22 @@ for i in range(-3,-2):
 
         # try to fit
         if len(possibles) > 1:
-            popt = curve_fit(mk.expFunc, kbT, possibles, p0=[10e5, -0.01])
-            a = popt[0][0]
-            b = popt[0][1]
-            minusEnergy = b
-            plt.semilogy(kbT, mk.expFunc(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
-            percentMean = np.mean(percent)
-            # index is the process, from x to y
-            x,y = mkl.getXy(index, len(energies))
-            if (verbose):
-                print("/",index, mkl.getXy(index, len(energies)))
-                print(percentMean,energies[x][y],minusEnergy)
-                print(percentMean*(energies[x][y]-minusEnergy))
-            sumEnergy += percentMean*(energies[x][y]-minusEnergy)
+            try:
+                popt = curve_fit(mk.expFunc, kbT, possibles, p0=[10e5, -0.01])
+                a = popt[0][0]
+                b = popt[0][1]
+                minusEnergy = b
+                plt.semilogy(kbT, mk.expFunc(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
+                percentMean = np.mean(percent)
+                # index is the process, from x to y
+                x,y = mkl.getXy(index, len(energies))
+                if (verbose):
+                    print("/",index, mkl.getXy(index, len(energies)))
+                    print(percentMean,energies[x][y],minusEnergy)
+                    print(percentMean*(energies[x][y]-minusEnergy))
+                sumEnergy += percentMean*(energies[x][y]-minusEnergy)
+            except RuntimeError:
+                pass
 
     print("Energy from multiplicities is", sumEnergy)
     plt.legend(loc='upper left', prop={'size':6})
