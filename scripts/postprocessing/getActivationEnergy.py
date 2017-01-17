@@ -16,7 +16,7 @@ plt.xlabel(label)
 plt.grid(True)
 axes = plt.gca()
 temperatures = list(range(120,321,5))
-temperatures = np.array(list(range(120,161,5)))
+temperatures = np.array(list(range(120,156,5)))
 temperatures = np.array(list(range(165,200,5)))
 
 workingPath = os.getcwd()
@@ -53,24 +53,24 @@ for i in range(-3,-2):
     x = 0
     sumEnergy = 0.0
     for index in resultsAe[0]:
+        # index is the process, from x to y
         print("/",index, mkl.getXy(index, len(energies)))
         y = 0
         for values in resultsAe:
-            #print("^",values[index], x, y, values[index][1])
-            possibles[x][y] = values[index][1]
-            percent[x][y] = values[index][0]
+            possibles[x][y] = values[index][1] # read possibles from slot 1
+            percent[x][y] = values[index][0] # read ratio from slot 0
             y += 1
-        popt =curve_fit(mk.expFunc, temperatures, possibles[x], p0=[10e5, -0.01])
+        popt = curve_fit(mk.expFunc, 1/kb/temperatures, possibles[x], p0=[10e5, -0.01])
         a = popt[0][0]
         b = popt[0][1]
         minusEnergy.append(b)
         plt.semilogy(1/kb/temperatures, possibles[x], "-x", label=index)
-        plt.semilogy(1/kb/temperatures, mk.expFunc(temperatures, a,b), label="fit {}e^{}".format(a,b))
+        plt.semilogy(1/kb/temperatures, mk.expFunc(1/kb/temperatures, a,b), label="fit {}e^{}".format(a,b))
         percentMean = np.mean(percent[x])
         x1,y1 = mkl.getXy(index, len(energies))
         print(percentMean,energies[x1][y1],minusEnergy[x])
-        sumEnergy += percentMean*(energies[x1][y1]+minusEnergy[x])
-        print(percentMean*(energies[x1][y1]+minusEnergy[x]))
+        sumEnergy += percentMean*(energies[x1][y1]-minusEnergy[x])
+        print(percentMean*(energies[x1][y1]-minusEnergy[x]))
         x += 1
 
     print(sumEnergy)
