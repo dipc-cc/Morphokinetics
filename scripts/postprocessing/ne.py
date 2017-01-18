@@ -25,10 +25,11 @@ def fit(x, y, initI, finishI):
 
 hex = len(sys.argv) > 1
 if hex:
-    temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
+    temperatures = np.array(list(range(70,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
     initFlux = 2
     endFlux = 5
 else:
+    temperatures = np.array(list(range(130,351,5)))
     temperatures = np.array(list(range(120,254,5)))
     initFlux = -3
     endFlux = -2
@@ -69,7 +70,15 @@ for i in range(initFlux,endFlux):
     try:
         plt.semilogy(x, y, ".", label=folder+" "+str(j))
 
-        if not(hex):
+        if hex:
+            a, b = fit(x, y, 0, 12)
+            plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
+            a, b = fit(x, y, 12, 17)
+            plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
+            a, b = fit(x, y, 17, 30)
+            plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
+            plt.ylim(1e9,1e14)
+        else:
             a, b = fit(x, y, 0, 8)
             plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
             a, b = fit(x, y, 8, 16)
