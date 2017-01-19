@@ -51,6 +51,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private ArrayList<Island> islands;
   private int innerPerimeter;
   private int outerPerimeter;
+  private double diffusivityDistance;
+  private int mobileAtoms;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -442,6 +444,24 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
     return sentence;
   }
+
+  /**
+   * How far in average is an atom from where it was deposited. It is calculated in {@link  #countIslands(java.io.PrintWriter) } method.
+   * 
+   * @return distance^2
+   */
+  public double getDiffusivityDistance() {
+    return diffusivityDistance;
+  }
+
+  /**
+   * How many mobile atoms are. It is calculated in {@link  #countIslands(java.io.PrintWriter) } method.
+   * 
+   * @return atoms that are not bulk (island).
+   */
+  public int getMobileAtoms() {
+    return mobileAtoms;
+  }
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
@@ -577,12 +597,19 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @return number of islands.
    */
   public int countIslands(PrintWriter print) {
+    diffusivityDistance = 0.0;
+    mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
       AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
         uc.getAtom(j).setVisited(false);
         uc.getAtom(j).setIslandNumber(0);
+        if (atom.isOccupied() && !atom.isPartOfImmobilSubstrate()) {
+          mobileAtoms++;
+          diffusivityDistance += Math.pow(atom.getPos().distance(atom.getDepositionPosition()),2);
+        }
       }
     }
     islands = new ArrayList<>(); // reset all islands to null
