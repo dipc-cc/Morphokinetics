@@ -748,7 +748,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     lattice.deposit(destinationAtom, force);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
+    destinationAtom.setDepositionPosition(originAtom.getDepositionPosition());
     originAtom.setDepositionTime(0);
+    originAtom.setDepositionPosition(null);
     if (extraOutput2) {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
@@ -788,6 +790,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   private AbstractGrowthAtom depositNewAtom() {
     AbstractGrowthAtom destinationAtom;
+    int ucIndex = 0;
     if (justCentralFlake) {
       do {
         // Deposit in the perimeter
@@ -796,7 +799,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
-        int ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
+        ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
         destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);
       } while (!depositAtom(destinationAtom));
@@ -805,6 +808,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
     destinationAtom.setDepositionTime(getTime());
+    destinationAtom.setDepositionPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     return destinationAtom;
   }
