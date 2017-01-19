@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import javafx.geometry.Point3D;
+
 /**
  *
  * @author Nestor
@@ -65,6 +67,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   private boolean innerPerimeter;
   private boolean outerPerimeter;
+  /**
+   * The position were atom is deposited. Useful to get the diffusivity.
+   */
+  private Point3D depositionPosition;
 
   public int getRelativeX() {
     return relativeX;
@@ -234,6 +240,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   /**
    * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
    * has to be moved with the corresponding diffusion.
+   *
    * @param time deposition time or former time.
    */
   public void setDepositionTime(double time) {
@@ -246,6 +253,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public double getDepositionTime() {
     return depositionTime;
+  }
+  
+  public void setDepositionPosition(Point3D position) {
+    depositionPosition = position;
+  }
+    
+  public Point3D getDepositionPosition() {
+    return depositionPosition;
   }
   
   public void setIslandNumber(int islandNumber) {
@@ -436,4 +451,5 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
     return false;
   }
+
 }
