@@ -5,6 +5,7 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
@@ -64,9 +65,13 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     } else {
 
       for (int i = 0; i < 3; i++) {
-        int I = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
-        int J = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
-        depositAtom(I, J);
+        int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+        int ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
+        int atomIndex = random % getLattice().getUnitCellSize();
+        
+        AbstractGrowthAtom destinationAtom = getLattice().getUc(ucIndex).getAtom(atomIndex);
+        depositAtom(destinationAtom);
+        destinationAtom.setDepositionTime(0);
       }
     }
   }

@@ -66,7 +66,7 @@ public class BasicSimulationTest {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.001);
     }
     assertEquals(simulatedIslands, 14);
-    assertEquals(28.556960969829433, simulatedTime, 0.0);
+    assertEquals(30.500145622333992, simulatedTime, 0.0);
   }
   
   @Test
@@ -90,7 +90,7 @@ public class BasicSimulationTest {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.001);
     }
     assertEquals(simulatedIslands, 1);
-    assertEquals(29.712285617279285, simulatedTime, 0.0);
+    assertEquals(28.608440105080952, simulatedTime, 0.0);
   }
   
   private void doAgTest(Parser parser) {
