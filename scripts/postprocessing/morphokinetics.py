@@ -108,11 +108,11 @@ island size. It returns the slope of the fit, which is the growth rate."""
         filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
         with open(filename, 'w', newline='') as csvfile:
             outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            outwriter.writerow(["%","index, temperature, flux, monomers[-1], coverage, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter, numberOfEvents"])
+            outwriter.writerow(["%","index, temperature, flux, monomers[-1], coverage, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter, numberOfEvents, diffusivity, mobileAtoms"])
             for index, islandSizes in enumerate(islandSizesList, start=0):
                 if islandSizes: #ensure that it is not null
                     averageData.updateData(index, islandSizes, completeData)
-                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1], averageData.ne[-1]])
+                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1], averageData.ne[-1], averageData.diffusivity[-1], averageData.mobileAtoms[-1]])
 
         if verbose:
             plt.figure(num=None, figsize=(4,4), dpi=80)
@@ -133,6 +133,7 @@ island size. It returns the slope of the fit, which is the growth rate."""
     slopes.outerPerimeter = mk.getSlope(averageData.times, averageData.outerPerimeter, maxCoverage, sqrt=True, verbose=verbose, tmpFileName="tmpFigOuterPerimeter.png")
     slopes.monomers = mk.getSlope(averageData.times, averageData.monomers, maxCoverage, sqrt, verbose)
     slopes.islandsAmount = mk.getSlope(averageData.times, averageData.islandsAmount, maxCoverage,sqrt, verbose)
+    slopes.diffusivity = mk.getSlope(averageData.times, averageData.diffusivity, maxCoverage, sqrt, verbose, tmpFileName="tmpDiffusivity.png")
     averageData.slopes = slopes
     return averageData
 
