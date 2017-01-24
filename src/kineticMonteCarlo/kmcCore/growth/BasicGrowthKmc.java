@@ -5,14 +5,12 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.BasicGrowthLattice;
-import utils.StaticRandom;
 
 /**
  *

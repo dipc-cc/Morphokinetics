@@ -15,7 +15,6 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.AgUcLattice;
 import kineticMonteCarlo.lattice.AgUcLatticeSimple;
 import kineticMonteCarlo.unitCell.AgUc;
-import utils.StaticRandom;
 
 /**
  * Ag unit cell kinetic Monte Carlo
