@@ -517,7 +517,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return false;
   }
 
-  boolean depositAtom(AbstractGrowthAtom atom) {
+  private boolean depositAtom(AbstractGrowthAtom atom) {
     if (atom.isOccupied()) {
       return false;
     }
