@@ -41,42 +41,6 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     return getSampledSurface(binX, binY);
   }
   
-  @Override
-  public void depositSeed() {
-    getLattice().resetOccupied();
-    if (isJustCentralFlake()) {
-      setAtomPerimeter();
-      setCurrentOccupiedArea(8); // Seed will have 8 atoms
-      
-      int jCentre = (getLattice().getHexaSizeJ() / 2);
-      int iCentre = (getLattice().getHexaSizeI() / 2);
-
-      depositAtom(iCentre, jCentre);
-      depositAtom(iCentre + 1, jCentre);
-
-      depositAtom(iCentre - 1, jCentre + 1);
-      depositAtom(iCentre, jCentre + 1);
-      depositAtom(iCentre + 1, jCentre + 1);
-
-      depositAtom(iCentre, jCentre + 2);
-      depositAtom(iCentre - 1, jCentre + 2);
-      depositAtom(iCentre - 1, jCentre + 3);
-
-    } else {
-
-      for (int i = 0; i < 3; i++) {
-        int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
-        int ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
-        int atomIndex = random % getLattice().getUnitCellSize();
-        
-        AbstractGrowthAtom destinationAtom = getLattice().getUc(ucIndex).getAtom(atomIndex);
-        depositAtom(destinationAtom);
-        destinationAtom.setDepositionTime(0);
-        destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
-      }
-    }
-  }
-  
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
     setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));
 

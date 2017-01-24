@@ -55,31 +55,6 @@ public class GrapheneKmc extends AbstractGrowthKmc {
     super.initHistogramSucces(8);
   }
 
-  @Override
-  public void depositSeed() {
-    getLattice().resetOccupied();
-    if (isJustCentralFlake()) {
-      setAtomPerimeter();
-      setCurrentOccupiedArea(7); // Seed will have 7 atoms
-      
-      int iCentre = getLattice().getHexaSizeJ() / 2;
-      int jCentre = getLattice().getHexaSizeI() / 2;
-      
-      for (int j = -1; j < 2; j++) {
-        for (int i = -1; i < 1; i++) {
-          depositAtom(jCentre + i, iCentre + j);
-        }
-      }
-      depositAtom(jCentre + 2, iCentre + 1);
-    } else {
-      for (int i = 0; i < 3; i++) {
-        int iHexa = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
-        int jHexa = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
-        depositAtom(iHexa, jHexa);
-      }
-    }
-  }
-
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
     setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));
 

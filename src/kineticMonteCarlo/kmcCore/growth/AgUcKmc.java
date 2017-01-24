@@ -44,35 +44,6 @@ public class AgUcKmc extends AbstractGrowthKmc {
     }
     super.initHistogramSucces(7);
   }
-
-  @Override
-  public void depositSeed() {
-    getLattice().resetOccupied();
-    if (isJustCentralFlake()) {
-      setAtomPerimeter();
-      setCurrentOccupiedArea(8); // Seed will have 8 atoms
-
-      int jCentre = (getLattice().getHexaSizeJ() / 2);
-      int iCentre = (getLattice().getHexaSizeI() / 2);
-
-      depositAtom(iCentre - 1, jCentre - 1, 1); 
-      depositAtom(iCentre, jCentre - 1, 1);
-      depositAtom(iCentre - 1, jCentre, 0);
-      depositAtom(iCentre, jCentre, 0);
-      depositAtom(iCentre + 1, jCentre, 0);
-      depositAtom(iCentre, jCentre, 1);
-      depositAtom(iCentre - 1, jCentre, 1);
-      depositAtom(iCentre, jCentre + 1, 0);
-
-    } else {
-
-      for (int i = 0; i < 3; i++) {
-        int I = (int) (StaticRandom.raw() * getLattice().getHexaSizeI());
-        int J = (int) (StaticRandom.raw() * getLattice().getHexaSizeJ());
-        depositAtom(I, J);
-      }
-    }
-  }
  
   public void printLattice() {
     AgUcLattice lattice = (AgUcLattice) getLattice();

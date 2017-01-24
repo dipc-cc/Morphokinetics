@@ -441,6 +441,35 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     getList().cleanup();
   }
 
+  @Override
+  public void depositSeed() {
+    getLattice().resetOccupied();
+    if (justCentralFlake) {
+      setAtomPerimeter();
+      setCurrentOccupiedArea(8); // Seed will have 8 atoms
+      int depositedAtoms = 1;
+      AbstractGrowthAtom centralAtom = lattice.getCentralAtom();
+      deposition:
+      while (true) {
+        depositAtom(centralAtom);
+        for (int i = 0; i < centralAtom.getNumberOfNeighbours(); i++) {
+          AbstractGrowthAtom atom = centralAtom.getNeighbour(i);
+          if (depositAtom(atom)) {
+            depositedAtoms++;
+          }
+          if (depositedAtoms > 7) {
+            break deposition;
+          }
+        }
+        centralAtom = centralAtom.getNeighbour(1);
+      }
+    } else {
+      for (int i = 0; i < 3; i++) {
+        depositNewAtom();
+      }
+    }
+  }
+  
   /**
    * Performs a simulation step.
    * 
