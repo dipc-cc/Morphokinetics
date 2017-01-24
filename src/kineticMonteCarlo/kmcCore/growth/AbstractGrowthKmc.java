@@ -492,6 +492,20 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int index = jHexa * lattice.getHexaSizeI() + iHexa;
     return depositAtom(lattice.getUc(index).getAtom(0));
   }
+  
+  boolean depositAtom(AbstractGrowthAtom atom) {
+    if (atom.isOccupied()) {
+      return false;
+    }
+
+    boolean force = (forceNucleation && !justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
+    lattice.deposit(atom, force);
+    lattice.addOccupied();
+    modifiedBuffer.updateAtoms(getList());
+    
+    return true;
+
+  }
  
   /**
    * Initialises histogram to store the happened transition from atom type to atom type.
@@ -527,20 +541,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       perimeter.setCurrentPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
     }
-  }
-  
-  boolean depositAtom(AbstractGrowthAtom atom) {
-    if (atom.isOccupied()) {
-      return false;
-    }
-
-    boolean force = (forceNucleation && !justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    lattice.deposit(atom, force);
-    lattice.addOccupied();
-    modifiedBuffer.updateAtoms(getList());
-    
-    return true;
-
   }
 
   /**
