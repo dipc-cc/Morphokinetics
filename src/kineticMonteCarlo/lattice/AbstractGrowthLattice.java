@@ -598,6 +598,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public int countIslands(PrintWriter print) {
     diffusivityDistance = 0.0;
+    double distanceX;
+    double distanceY;
     mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
@@ -607,8 +609,16 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         uc.getAtom(j).setVisited(false);
         uc.getAtom(j).setIslandNumber(0);
         if (atom.isOccupied() && !atom.isPartOfImmobilSubstrate()) {
-          mobileAtoms++;
-          diffusivityDistance += Math.pow(atom.getPos().distance(atom.getDepositionPosition()),2);
+          mobileAtoms++;        
+          distanceX = abs(atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
+          if (distanceX > getCartSizeX() / 2) {
+            distanceX = getCartSizeX() - distanceX;
+          }
+          distanceY = abs(atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
+          if (distanceY > getCartSizeY() / 2) {
+            distanceY = getCartSizeY() - distanceY;
+          }
+          diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
         }
       }
     }
