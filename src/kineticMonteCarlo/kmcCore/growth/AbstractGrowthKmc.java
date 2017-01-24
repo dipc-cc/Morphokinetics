@@ -517,11 +517,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return false;
   }
 
-  boolean depositAtom(int iHexa, int jHexa) {
-    int index = jHexa * lattice.getHexaSizeI() + iHexa;
-    return depositAtom(lattice.getUc(index).getAtom(0));
-  }
-  
   boolean depositAtom(AbstractGrowthAtom atom) {
     if (atom.isOccupied()) {
       return false;
