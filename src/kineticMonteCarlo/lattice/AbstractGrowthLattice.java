@@ -608,8 +608,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         AbstractGrowthAtom atom = uc.getAtom(j);
         uc.getAtom(j).setVisited(false);
         uc.getAtom(j).setIslandNumber(0);
-        if (atom.isOccupied() && !atom.isPartOfImmobilSubstrate()) {
-          mobileAtoms++;        
+        if (atom.isOccupied()) {
+          mobileAtoms++;
           distanceX = abs(atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
           if (distanceX > getCartSizeX() / 2) {
             distanceX = getCartSizeX() - distanceX;
