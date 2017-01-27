@@ -464,7 +464,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         centralAtom = centralAtom.getNeighbour(1);
       }
     } else {
-      for (int i = 0; i < 3; i++) {
+      for (int i = 0; i < 1; i++) {
         depositNewAtom();
       }
     }
