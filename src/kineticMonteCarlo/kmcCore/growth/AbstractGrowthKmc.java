@@ -350,7 +350,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   @Override
   public int simulate() {
     int coverageThreshold = 1;
-    int limit = 10000;
+    int limit = 100000;
     int returnValue = 0;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
