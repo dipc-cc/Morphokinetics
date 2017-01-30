@@ -71,7 +71,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * The position were atom is deposited. Useful to get the diffusivity.
    */
   private Point3D depositionPosition;
-
+  /**
+   * Number of hops that atom has done. How many steps the atom has moved.
+   */
+  private int hops;
+  
   public int getRelativeX() {
     return relativeX;
   }
@@ -104,6 +108,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     relativeY = 0;
     innerPerimeter = false;
     outerPerimeter = false;
+    hops = 0;
   }
   
   /**
@@ -118,6 +123,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     jHexa = 0;
     bondsProbability = new double[numberOfNeighbours];
     setNumberOfNeighbours(numberOfNeighbours);
+    hops = 0;
   }
   
   public int getId() {
@@ -261,6 +267,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     
   public Point3D getDepositionPosition() {
     return depositionPosition;
+  }
+  
+  public void setHops(int hops) {
+    this.hops = hops;
+  }
+  
+  public int getHops() {
+    return hops;
   }
   
   public void setIslandNumber(int islandNumber) {

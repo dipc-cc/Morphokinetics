@@ -53,6 +53,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int outerPerimeter;
   private double diffusivityDistance;
   private int mobileAtoms;
+  private int hops;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -446,12 +447,23 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   /**
-   * How far in average is an atom from where it was deposited. It is calculated in {@link  #countIslands(java.io.PrintWriter) } method.
-   * 
+   * How far in average is an atom from where it was deposited. It is calculated in {@link  #countIslands(java.io.PrintWriter)
+   * } method.
+   *
    * @return distance^2
    */
   public double getDiffusivityDistance() {
     return diffusivityDistance;
+  }
+  
+  /**
+   * How many steps has been moved all the atoms. In practice, it should be the same number as the
+   * total rate - depositions.
+   *
+   * @return
+   */
+  public int getTotalHops() {
+    return hops;
   }
 
   /**
@@ -598,6 +610,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public int countIslands(PrintWriter print) {
     diffusivityDistance = 0.0;
+    hops = 0;
     double distanceX;
     double distanceY;
     mobileAtoms = 0;
@@ -619,6 +632,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
             distanceY = getCartSizeY() - distanceY;
           }
           diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
+          hops += atom.getHops();
         }
       }
     }
