@@ -78,8 +78,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private int hops;
   
   /**
-   * From where atom has moved. Direction is valid to compute the diffusivity distance. Can be 0
-   * (++), 1 (+-), 2 (-+) or 3 (--).
+   * From where atom has moved. Direction is valid to compute the diffusivity distance. Can be 3
+   * (++), 2 (+-), 1 (-+) or 0 (--).
    */
   private int direction;
   
