@@ -49,7 +49,7 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   /**
-   * Constructor for unit cell
+   * Constructor for unit cell.
    *
    * @param id atom identifier.
    * @param pos position within the unit cell
@@ -62,7 +62,7 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   /**
-   * Returns the position within the unit cell
+   * Returns the position within the unit cell.
    *
    * @return coordinates in unit cell
    */
@@ -123,7 +123,8 @@ public class AgAtom extends AbstractGrowthAtom {
   }
   
   /**
-   * Adds the given number to the number of mobile neighbours
+   * Adds the given number to the number of mobile neighbours.
+   * 
    * @param quantity 
    */
   public void addNMobile(int quantity) {
@@ -131,7 +132,8 @@ public class AgAtom extends AbstractGrowthAtom {
   }
   
   /**
-   * Adds the given number to the number of immobile neighbours
+   * Adds the given number to the number of immobile neighbours.
+   * 
    * @param quantity 
    */
   public void addNImmobile(int quantity) {
