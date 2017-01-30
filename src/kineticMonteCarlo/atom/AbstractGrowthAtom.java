@@ -4,6 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.ArrayList;
 import javafx.geometry.Point3D;
 
 /**
@@ -76,6 +77,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   private int hops;
   
+  /**
+   * From where atom has moved. Direction is valid to compute the diffusivity distance. Can be 0
+   * (++), 1 (+-), 2 (-+) or 3 (--).
+   */
+  private int direction;
+  
+  private ArrayList visitedPositions;
+
   public int getRelativeX() {
     return relativeX;
   }
@@ -109,6 +118,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     innerPerimeter = false;
     outerPerimeter = false;
     hops = 0;
+    direction = 3; // +,+ direction = 11
+    visitedPositions = new ArrayList();
   }
   
   /**
@@ -276,6 +287,33 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public int getHops() {
     return hops;
   }
+
+  public int getDirection() {
+    return direction;
+  }
+
+  /**
+   * Method to get direction while diffusing.
+   *
+   * @param direction
+   */
+  public void setDirection(int direction) {
+    this.direction = direction;
+  }
+
+  /**
+   * Method to update direction.
+   *
+   * @param position position of the bit to change: 0 (X), 1 (Y).
+   * @param bit set it to true (1) or false (0).
+   */
+  public void setDirection(int position, boolean bit) {
+    if (bit) {  // set bit
+      direction = direction | (1 << position);
+    } else {  // unset bit
+      direction = direction & ~(1 << position);
+    }
+  }
   
   public void setIslandNumber(int islandNumber) {
     this.islandNumber = islandNumber;
@@ -336,6 +374,19 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public void resetPerimeter() {
     innerPerimeter = false;
     outerPerimeter = false;
+  }
+  
+  public void addVisitedPosition(Point3D position) {
+    //visitedPositions.
+    visitedPositions.add(position);
+  }
+  
+  public ArrayList<Point3D> getVisitedPositions() {
+    return visitedPositions;
+  }
+  
+  public void setVisitedPositions(ArrayList positions) {
+    visitedPositions = positions;
   }
   
   /**

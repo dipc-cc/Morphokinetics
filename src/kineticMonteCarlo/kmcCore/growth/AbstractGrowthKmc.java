@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Point3D;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -138,8 +139,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. diffusivity distance 14. numberOfMobileAtoms 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
-        outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%d\t%d\t%d%s\n";
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. diffusivity distance 14. diffusivity distance 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
+        outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d%s\n";
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -486,6 +487,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         destinationAtom = chooseRandomHop(originAtom, 0);
+        //destinationAtom = lattice.getUc(101).getAtom(0);
+        //destinationAtom = lattice.getUc(32).getAtom(0);
         if (destinationAtom.equals(originAtom)) {
           destinationAtom.equals(originAtom);
           break;
@@ -682,7 +685,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
             getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getDiffusivityDistance(), lattice.getMobileAtoms(), numberOfAtomFirstIsland, lattice.getTotalHops(),
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getDiffusivityDistance(), lattice.getDiffusivityDistanceCorrected(), numberOfAtomFirstIsland, lattice.getTotalHops(),
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
     outData.flush();
@@ -771,7 +774,31 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     lattice.deposit(destinationAtom, force);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
-    destinationAtom.setDepositionPosition(originAtom.getDepositionPosition());
+    Point3D depositionPosition = originAtom.getDepositionPosition();
+    destinationAtom.setDepositionPosition(depositionPosition);
+    destinationAtom.setDirection(originAtom.getDirection());
+    if (depositionPosition.getX() == originAtom.getiHexa()) {// we are about to cross X deposition axis
+      if (destinationAtom.getiHexa() < depositionPosition.getX()) { // left
+        destinationAtom.setDirection(0, false); // first bit to zero. X negative
+      }
+      if (destinationAtom.getiHexa() > depositionPosition.getX()) { // >=
+        destinationAtom.setDirection(0, true); // first bit to zero. X positive
+      }
+    }
+    if (depositionPosition.getY() == originAtom.getjHexa()) {// we are about to cross Y deposition axis
+      if (destinationAtom.getjHexa() < depositionPosition.getY()) { // up. It just went north of the deposition
+        destinationAtom.setDirection(1, false); // second bit to zero. Y negative
+      }
+      if (destinationAtom.getjHexa() > depositionPosition.getY()) { // down. It just went south of the deposition
+        destinationAtom.setDirection(1, true); // second bit to one. Y positive
+      }
+    }
+    //destinationAtom.setDirection(0, true);
+    //destinationAtom.setDirection(1, true);
+    
+    destinationAtom.setVisitedPositions(originAtom.getVisitedPositions());
+    destinationAtom.addVisitedPosition(new Point3D(destinationAtom.getiHexa(), destinationAtom.getjHexa(), 0));
+    
     destinationAtom.setHops(originAtom.getHops() + 1);
     originAtom.setDepositionTime(0);
     originAtom.setDepositionPosition(null);
@@ -824,6 +851,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
+        //2,3
+        random = 32;
+        //random = 101;
         ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
         destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);

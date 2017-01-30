@@ -52,6 +52,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int innerPerimeter;
   private int outerPerimeter;
   private double diffusivityDistance;
+  private double diffusivityDistanceCorrected;
   private int mobileAtoms;
   private int hops;
 
@@ -455,6 +456,15 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public double getDiffusivityDistance() {
     return diffusivityDistance;
   }
+  /**
+   * How far in average is an atom from where it was deposited. It is calculated in {@link  #countIslands(java.io.PrintWriter)
+   * } method.
+   *
+   * @return distance^2
+   */
+  public double getDiffusivityDistanceCorrected() {
+    return diffusivityDistanceCorrected;
+  }
   
   /**
    * How many steps has been moved all the atoms. In practice, it should be the same number as the
@@ -610,9 +620,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public int countIslands(PrintWriter print) {
     diffusivityDistance = 0.0;
+    diffusivityDistanceCorrected = 0.0;
     hops = 0;
     double distanceX;
     double distanceY;
+    double posXAtom;
+    double posYAtom;
+    double posXDep;
+    double posYDep;
     mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
@@ -633,9 +648,38 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           }
           diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
           hops += atom.getHops();
+          int direction = atom.getDirection();
+          posXAtom = atom.getPos().getX() + uc.getPos().getX();
+          posYAtom = atom.getPos().getY() + uc.getPos().getY();
+          posXDep  = atom.getDepositionPosition().getX();
+          posYDep  = atom.getDepositionPosition().getY();
+          distanceX = abs(atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
+          distanceY = abs(atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
+          if (distanceX > 0) {
+            if ((direction & (1 << 0)) != 0) {// X is positive 
+              if (posXAtom < posXDep) {
+                distanceX = getCartSizeX() - distanceX;
+              }
+            } else if (posXAtom > posXDep) {
+              distanceX = getCartSizeX() - distanceX;
+            }
+          }
+          if (distanceY > 0) {
+            if ((direction & (1 << 1)) != 0) {// Y is positive 
+              if (posYAtom < posYDep) {
+                distanceY = getCartSizeY() - distanceY;
+              }
+            } else if (posYAtom > posYDep) {
+              distanceY = getCartSizeY() - distanceY;
+            }
+          }
+          diffusivityDistanceCorrected += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
+              
+          
         }
       }
     }
+    System.out.println("Distance "+diffusivityDistance+" "+diffusivityDistanceCorrected);
     islands = new ArrayList<>(); // reset all islands to null
     
     // do the count

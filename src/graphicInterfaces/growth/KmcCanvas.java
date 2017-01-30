@@ -22,6 +22,7 @@ import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static java.lang.String.format;
 import java.text.DecimalFormat;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
@@ -293,6 +294,15 @@ public class KmcCanvas extends Canvas {
             if (printIslandNumber) {
               String text = Integer.toString(atom.getIslandNumber());
               g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            }
+            //for (Point3D visitedPosition : atom.getVisitedPositions()) {
+            for (int k = 0; k < atom.getVisitedPositions().size() && k < 1000; k++) {
+              Point3D visitedPosition = atom.getVisitedPositions().get(k);
+              int myX, myY;
+              myX = (int) Math.round(visitedPosition.getX() * scale) + baseX;
+              myY = (int) Math.round(visitedPosition.getY() * scale) + baseY;
+              g.setColor(GREEN);
+              g.drawRect(myX, myY, scale, scale);
             }
           }
         } else if (!atom.isOutside()) {
