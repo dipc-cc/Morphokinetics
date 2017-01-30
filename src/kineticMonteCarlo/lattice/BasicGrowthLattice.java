@@ -113,7 +113,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     if (forceNucleation) {
       atom.setType(ISLAND);
     }
-    byte originalType = atom.getType();
+
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
