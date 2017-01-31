@@ -344,6 +344,12 @@ public class KmcCanvas extends Canvas {
               String text = Integer.toString(k);
               //g.drawString(text, myX + (scale / 2) - (scale / 4), myY + (scale / 2) + (scale / 4));
             }
+            Point3D visitedPosition = atom.getVisitedPositions().get(0);
+            int newX, newY;
+            newX = (int) Math.round(visitedPosition.getX() * scale) + baseX;
+            newY = (int) Math.round(visitedPosition.getY() * scale) + baseY;
+            g.setColor(BLACK);
+            g.drawOval(newX, newY, scale * 4, scale * 4);
           }
         } else if (!atom.isOutside()) {
           g.drawOval(X, Y, scale, scale);
