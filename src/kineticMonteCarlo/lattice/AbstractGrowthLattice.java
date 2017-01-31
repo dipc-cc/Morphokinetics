@@ -624,6 +624,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     hops = 0;
     double distanceX;
     double distanceY;
+    double distanceXnew;
+    double distanceYnew;
     double posXAtom;
     double posYAtom;
     double posXDep;
@@ -653,33 +655,31 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           posYAtom = atom.getPos().getY() + uc.getPos().getY();
           posXDep  = atom.getDepositionPosition().getX();
           posYDep  = atom.getDepositionPosition().getY();
-          distanceX = abs(posXAtom - posXDep);
-          distanceY = abs(posYAtom - posYDep);
-          if (distanceX > 0) {
+          distanceXnew = abs(posXAtom - posXDep);
+          distanceYnew = abs(posYAtom - posYDep);
+          if (distanceXnew > 0) {
             if ((direction & (1 << 0)) != 0) {// X is positive 
               if (posXAtom < posXDep) {
-                distanceX = getCartSizeX() - distanceX;
+                distanceXnew = getCartSizeX() - distanceXnew;
               }
             } else {// X is negative 
               if (posXAtom > posXDep) {
-                distanceX = getCartSizeX() - distanceX;
+                distanceXnew = getCartSizeX() - distanceXnew;
               }
             }
           }
-          if (distanceY > 0) {
+          if (distanceYnew > 0) {
             if ((direction & (1 << 1)) != 0) {// Y is positive 
               if (posYAtom < posYDep) {
-                distanceY = getCartSizeY() - distanceY;
+                distanceYnew = getCartSizeY() - distanceYnew;
               }
             } else {// Y is negative 
               if (posYAtom > posYDep) {
-                distanceY = getCartSizeY() - distanceY;
+                distanceYnew = getCartSizeY() - distanceYnew;
               }
             }
           }
-          diffusivityDistanceCorrected += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
-              
-          
+          diffusivityDistanceCorrected += Math.pow(distanceXnew, 2) + Math.pow(distanceYnew, 2);
         }
       }
     }
