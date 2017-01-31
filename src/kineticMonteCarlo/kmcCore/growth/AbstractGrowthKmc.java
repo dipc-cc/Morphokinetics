@@ -797,12 +797,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     //destinationAtom.setDirection(1, true);
     
     destinationAtom.setVisitedPositions(originAtom.getVisitedPositions());
+    destinationAtom.setHops(originAtom.getHops() + 1);
     destinationAtom.addVisitedPosition(new Point3D(destinationAtom.getiHexa(), destinationAtom.getjHexa(), 0));
     
-    destinationAtom.setHops(originAtom.getHops() + 1);
     originAtom.setDepositionTime(0);
     originAtom.setDepositionPosition(null);
     originAtom.setHops(0);
+    originAtom.setVisitedPositions(new ArrayList());
     if (extraOutput2) {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);
