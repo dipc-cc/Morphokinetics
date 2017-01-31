@@ -697,7 +697,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getDiffusivityDistance(), lattice.getMobileAtoms(), numberOfAtomFirstIsland, lattice.getTotalHops(),
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
-    printAe(outData, false);
+    if (aeOutput) {
+      printAe(outData, false);
+    }
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();
