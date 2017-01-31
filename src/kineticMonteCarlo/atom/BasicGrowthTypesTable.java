@@ -35,19 +35,10 @@ public class BasicGrowthTypesTable {
    * @return type of the atom (byte)
    */
   public byte getCurrentType(int numberOfNeighbourAtoms) {
-    byte type;
-
     if (numberOfNeighbourAtoms > 4) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >4, which is in practice impossible");
     }
-    try {
-      type = tablePresent[numberOfNeighbourAtoms];
-    } catch (ArrayIndexOutOfBoundsException exception) {
-      System.err.println("Catched error getting current type of Ag atom " + exception);
-      System.err.println("Trying to access " + numberOfNeighbourAtoms);
-      type = TERRACE;
-    }
-    return type;
+    return tablePresent[numberOfNeighbourAtoms];
   }
   
   public byte getFutureType(int numberOfNeighbourAtoms) {
