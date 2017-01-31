@@ -377,8 +377,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   }
   
   public void addVisitedPosition(Point3D position) {
-    //visitedPositions.
-    visitedPositions.add(position);
+    if (hops < 10000) {
+      visitedPositions.add(position);
+    }
   }
   
   public ArrayList<Point3D> getVisitedPositions() {
