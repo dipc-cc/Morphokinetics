@@ -49,6 +49,8 @@ public class KmcCanvas extends Canvas {
   private boolean printId;
   private boolean printIslandNumber;
   private boolean printIslandCentres;
+  private boolean printPath;
+  private int atomId;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -120,6 +122,17 @@ public class KmcCanvas extends Canvas {
   
   public void changePrintIslandCentres() {
     printIslandCentres = !printIslandCentres;
+  }
+
+  public void setPrintPath(boolean printPath) {
+    this.printPath = printPath;
+  }
+  public void changePrintPath() {
+    printPath = !printPath;
+  }
+
+  public void setAtomId(int atomId) {
+    this.atomId = atomId;
   }
   
   public boolean isPaused() {
@@ -295,14 +308,41 @@ public class KmcCanvas extends Canvas {
               String text = Integer.toString(atom.getIslandNumber());
               g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
             }
-            //for (Point3D visitedPosition : atom.getVisitedPositions()) {
-            for (int k = 0; k < atom.getVisitedPositions().size() && k < 1000; k++) {
+
+          }
+          int red = 255;
+          int green = 255;
+          int blue = 255;
+          if (atom.getId() == atomId) {
+            for (int k = 0; k < atom.getVisitedPositions().size() && k < 10000; k++) {
               Point3D visitedPosition = atom.getVisitedPositions().get(k);
-              int myX, myY;
-              myX = (int) Math.round(visitedPosition.getX() * scale) + baseX;
-              myY = (int) Math.round(visitedPosition.getY() * scale) + baseY;
-              g.setColor(GREEN);
-              g.drawRect(myX, myY, scale, scale);
+              int newX, newY;
+              newX = (int) Math.round(visitedPosition.getX() * scale) + baseX;
+              newY = (int) Math.round(visitedPosition.getY() * scale) + baseY;
+              Color c = new Color(red, green, blue);
+              blue -= 5;
+              if (blue <= 0) {
+                blue = 255;
+                red -= 5;
+                if (red <= 0) {
+                  blue = 255;
+                  red = 255;
+                  green -= 5;
+                  if (green < 0) {
+                    green = 0;
+                  }
+                }
+              }
+              if (visitedPosition.equals(atom.getVisitedPositions().get(atom.getVisitedPositions().size() - 1))) {
+                red = 0;
+                blue = 0;
+                green = 0;
+              }
+              g.setColor(c);
+              g.fillRect(newX, newY, scale, scale);
+              g.setColor(BLACK);
+              String text = Integer.toString(k);
+              //g.drawString(text, myX + (scale / 2) - (scale / 4), myY + (scale / 2) + (scale / 4));
             }
           }
         } else if (!atom.isOutside()) {

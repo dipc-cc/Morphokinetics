@@ -44,6 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
@@ -67,6 +68,8 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private JButton pngSaveButton;
   private JButton centreButton;
   private JButton idButton;
+  private JTextField atomIdText;
+  private JButton pathButton;
   private int idButtonState;
   private JLabel labelScale;
   private JPanel panel;
@@ -179,6 +182,9 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     centreButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/centre.png"));
     idButton = new JButton();
     idButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/id.png"));
+    atomIdText = new JTextField();
+    pathButton = new JButton();
+    pathButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/id.png"));
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
 
@@ -217,6 +223,10 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
       idButtonPressed();
     });
 
+    pathButton.addActionListener((ActionEvent e) -> {
+      pathButtonPressed();
+    });
+    
     pauseButton.setToolTipText("Pauses the execution");
     bwButton.setToolTipText("Changes between mono colour and all colours");
     pngSaveButton.setToolTipText("Saves current view to PNG image");
@@ -249,6 +259,10 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
                                     .addComponent(centreButton, PREFERRED_SIZE, 20, 20)
                                     .addPreferredGap(RELATED)
                                     .addComponent(idButton, PREFERRED_SIZE, 20, 20)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(atomIdText, PREFERRED_SIZE, 40, 40)
+                                    .addPreferredGap(RELATED)
+                                    .addComponent(pathButton, PREFERRED_SIZE, 20, 20)
                                     .addGap(0, 0, Short.MAX_VALUE)))
                     .addContainerGap())
     );
@@ -262,6 +276,8 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
                             .addComponent(pngSaveButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(centreButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(idButton, PREFERRED_SIZE, 20, 20)
+                            .addComponent(atomIdText, PREFERRED_SIZE, 20, 20)
+                            .addComponent(pathButton, PREFERRED_SIZE, 20, 20)
                             .addComponent(spinnerScale, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
                     .addPreferredGap(RELATED)
                     .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
@@ -469,7 +485,15 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
         islandsMi.setSelected(true);
         islandsMi.setSelected(true);
         break;
-    }    
+    }
+  }
+  
+  private void pathButtonPressed() {
+    if (paused) {
+      String text = atomIdText.getText();
+      int id = Integer.parseInt(text);
+      canvas.setAtomId(id);
+    }
   }
     
   private class MenuItemHandler implements ItemListener {
