@@ -487,8 +487,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         destinationAtom = chooseRandomHop(originAtom, 0);
-        //destinationAtom = lattice.getUc(101).getAtom(0);
-        //destinationAtom = lattice.getUc(32).getAtom(0);
         if (destinationAtom.equals(originAtom)) {
           destinationAtom.equals(originAtom);
           break;
@@ -793,8 +791,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         destinationAtom.setDirection(1, true); // second bit to one. Y positive
       }
     }
-    //destinationAtom.setDirection(0, true);
-    //destinationAtom.setDirection(1, true);
     
     destinationAtom.setVisitedPositions(originAtom.getVisitedPositions());
     destinationAtom.setHops(originAtom.getHops() + 1);
@@ -852,9 +848,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       do {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
-        //2,3
-        random = 32;
-        //random = 101;
         ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
         destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);
