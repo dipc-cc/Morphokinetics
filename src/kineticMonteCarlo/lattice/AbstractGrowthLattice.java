@@ -653,15 +653,17 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           posYAtom = atom.getPos().getY() + uc.getPos().getY();
           posXDep  = atom.getDepositionPosition().getX();
           posYDep  = atom.getDepositionPosition().getY();
-          distanceX = abs(atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
-          distanceY = abs(atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
+          distanceX = abs(posXAtom - posXDep);
+          distanceY = abs(posYAtom - posYDep);
           if (distanceX > 0) {
             if ((direction & (1 << 0)) != 0) {// X is positive 
               if (posXAtom < posXDep) {
                 distanceX = getCartSizeX() - distanceX;
               }
-            } else if (posXAtom > posXDep) {
-              distanceX = getCartSizeX() - distanceX;
+            } else {// X is negative 
+              if (posXAtom > posXDep) {
+                distanceX = getCartSizeX() - distanceX;
+              }
             }
           }
           if (distanceY > 0) {
@@ -669,8 +671,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
               if (posYAtom < posYDep) {
                 distanceY = getCartSizeY() - distanceY;
               }
-            } else if (posYAtom > posYDep) {
-              distanceY = getCartSizeY() - distanceY;
+            } else {// Y is negative 
+              if (posYAtom > posYDep) {
+                distanceY = getCartSizeY() - distanceY;
+              }
             }
           }
           diffusivityDistanceCorrected += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
