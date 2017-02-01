@@ -608,48 +608,61 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
       System.out.println();
     }
+    PrintWriter standardOutputWriter = new PrintWriter(System.out);
+    //lattice.countIslands(standardOutputWriter);
+    printAe(standardOutputWriter, -1);
+  }
+  
+  private void printAe(PrintWriter print, float coverage) {
+    boolean printLineBreak = (coverage == -1);
     double[][] histogramPossible;
     histogramPossible = ((LinearList) getList()).getHistogramPossible();
-    System.out.println("Ae");
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%f %s", coverage, "AePossibleFromList ");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      System.out.print("AePossibleFromList ");
+      if (printLineBreak) print.print("AePossibleFromList ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
-        System.out.print(histogramPossible[origin][destination] + " ");
+        print.print(histogramPossible[origin][destination] + " ");
       }
-      System.out.println();
+      if (printLineBreak) print.println();
     }
 
     long[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
-    System.out.println("Ae");
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleDiscrete ");
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
-      System.out.print("AePossibleDiscrete ");
+      if (printLineBreak) print.print("AePossibleDiscrete ");
       for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
-        System.out.print(histogramPossibleCounter[origin][destination] + " ");
+        print.print(histogramPossibleCounter[origin][destination] + " ");
       }
-      System.out.println();
+      if (printLineBreak) print.println();
     }
     
     double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
-    System.out.println("Ae");
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeRatioTimesPossible ");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      System.out.print("AeRatioTimesPossible ");
+      if (printLineBreak) print.print("AeRatioTimesPossible ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         ratioTimesPossible[origin][destination] = lattice.getUc(0).getAtom(0).getProbability(origin, destination) * histogramPossible[origin][destination];
-        System.out.print(ratioTimesPossible[origin][destination] + " ");
+        print.print(ratioTimesPossible[origin][destination] + " ");
       }
-      System.out.println();
+      if (printLineBreak) print.println();
     }
     
     double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
-    System.out.println("Ae");
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeMultiplicity ");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      System.out.print("AeMultiplicity ");
+      if (printLineBreak) print.print("AeMultiplicity ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
-        System.out.print(multiplicity[origin][destination] + " ");
+        print.print(multiplicity[origin][destination] + " ");
       }
-      System.out.println();
+      if (printLineBreak) print.println();
     }
+    print.println();
+    print.flush();
   }
   
   /**
@@ -686,6 +699,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getDiffusivityDistance(), lattice.getDiffusivityDistanceCorrected(), numberOfAtomFirstIsland, lattice.getTotalHops(),
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
+    if (aeOutput) {
+      printAe(outData, printCoverage);
+    }
     outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();

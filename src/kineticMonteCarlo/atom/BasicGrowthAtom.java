@@ -18,17 +18,13 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   public static final byte KINK = 2;
   public static final byte ISLAND = 3;
 
-  private static BasicGrowthTypesTable typesTable;
+  private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
 
   private int occupiedNeighbours;
   private final BasicGrowthAtom[] neighbours = new BasicGrowthAtom[4];
 
   public BasicGrowthAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
-    
-    if (typesTable == null) {
-      typesTable = new BasicGrowthTypesTable();
-    }
     occupiedNeighbours = 0;
   }
   
@@ -92,7 +88,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
    * @return new type
    */
   public byte getNewType(int addToNeighbour) {
-    return typesTable.getCurrentType(occupiedNeighbours+addToNeighbour);
+    return TYPE_TABLE.getCurrentType(occupiedNeighbours + addToNeighbour);
   }
   
   public int getOccupiedNeighbours(){
@@ -111,10 +107,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
    */
   @Override
   public byte getTypeWithoutNeighbour(int position) {
-    int myPositionForNeighbour = (position + 2) % getNumberOfNeighbours();
-    if (!neighbours[myPositionForNeighbour].isOccupied()) return getType(); // impossible to happen
-
-    return typesTable.getCurrentType(occupiedNeighbours - 1);
+    return TYPE_TABLE.getCurrentType(occupiedNeighbours - 1);
   }
 
   @Override
@@ -191,9 +184,6 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
     byte originType = getType();
     byte destination = neighbours[position].getTypeWithoutNeighbour(position);
 
-    if (destination > 3) {
-      System.out.println("error! ");
-    }
     return getProbability(originType, destination);
   }
 

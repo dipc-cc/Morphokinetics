@@ -199,6 +199,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   /**
    * Get probability in the given neighbour position.
+   *
    * @param i neighbour position.
    * @return probability (rate).
    */
@@ -215,6 +216,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   /**
    * Set the given probability in the given neighbour position.
+   *
    * @param value probability (rate).
    * @param i neighbour position.
    */

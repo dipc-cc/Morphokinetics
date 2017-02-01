@@ -25,6 +25,7 @@ public class ModifiedBuffer {
 
   /**
    * Adds an atom to the current modified buffer list.
+   *
    * @param atom atom to be added.
    */
   public void addOwnAtom(AbstractGrowthAtom atom) {
@@ -33,6 +34,7 @@ public class ModifiedBuffer {
 
   /**
    * Adds a bond atom to the current modified buffer list.
+   *
    * @param atom atom to be added.
    */
   public void addBondAtom(AbstractGrowthAtom atom) {
@@ -41,6 +43,7 @@ public class ModifiedBuffer {
 
   /**
    * Update rates list with the current modified atoms list.
+   *
    * @param list list to be changed.
    */
   public void updateAtoms(AbstractList list) {
