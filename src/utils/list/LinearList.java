@@ -137,23 +137,24 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     }
 
     if (doActivationEnergyStudy) {
+      double elapsedTime = 1 / getTotalProbability();
+      int numberOfNeighbours = ((AbstractGrowthAtom) surface.get(0)).getNumberOfNeighbours();
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       for (int i = 0; i < surface.size(); i++) {
         AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
-        for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
+        for (int pos = 0; pos < numberOfNeighbours; pos++) {
           AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
           byte destination = neighbourAtom.getTypeWithoutNeighbour(pos);
           byte origin = atom.getRealType();
           if (atom.getBondsProbability(pos) > 0) {
-            histogramPossible[origin][destination] += 1 / getTotalProbability();
+            histogramPossible[origin][destination] += elapsedTime;
             histogramPossibleCounter[origin][destination]++;
           }
         }
       }
 
-      double time = 1 / (getTotalProbability());
-      Ri_DeltaI += getTotalProbability() * time;
-      addTime(time);
+      Ri_DeltaI += getTotalProbability() * elapsedTime; // should be always 1
+      addTime(elapsedTime);
     }
     position -= getDepositionProbability();
     double currentProbability = 0;
