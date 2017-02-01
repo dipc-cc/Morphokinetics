@@ -24,6 +24,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private boolean doActivationEnergyStudy;
   private double[][] histogramPossible;
   private long[][] histogramPossibleCounter;
+  private double[][] histogramPossibleTmp;
+  private long[][] histogramPossibleCounterTmp;
+  private double previousProbability;
   
   public LinearList(Parser parser) {
     super();
@@ -39,18 +42,25 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
         doActivationEnergyStudy = true;
         histogramPossible = new double[4][4];
         histogramPossibleCounter = new long[4][4];
+        histogramPossibleTmp = new double[4][4];
+        histogramPossibleCounterTmp = new long[4][4];
       }
       if (parser.getCalculationMode().equals("graphene")) {
         doActivationEnergyStudy = true;
         histogramPossible = new double[8][8];
         histogramPossibleCounter = new long[8][8];
+        histogramPossibleTmp = new double[8][8];
+        histogramPossibleCounterTmp = new long[8][8];
       }
       if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
         doActivationEnergyStudy = true;
         histogramPossible = new double[7][7];
         histogramPossibleCounter = new long[7][7];
+        histogramPossibleTmp = new double[7][7];
+        histogramPossibleCounterTmp = new long[7][7];
       }
     }
+    previousProbability = 0;
   }
   
   @Override
@@ -137,22 +147,36 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     }
 
     if (doActivationEnergyStudy) {
+      int length = histogramPossibleCounter.length;
       double elapsedTime = 1 / getTotalProbability();
-      int numberOfNeighbours = ((AbstractGrowthAtom) surface.get(0)).getNumberOfNeighbours();
-      // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
-      for (int i = 0; i < surface.size(); i++) {
-        AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
-        for (int pos = 0; pos < numberOfNeighbours; pos++) {
-          AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
-          byte destination = neighbourAtom.getTypeWithoutNeighbour(pos);
-          byte origin = atom.getRealType();
-          if (atom.getBondsProbability(pos) > 0) {
-            histogramPossible[origin][destination] += elapsedTime;
-            histogramPossibleCounter[origin][destination]++;
+      if (previousProbability != getTotalProbability()) {
+        histogramPossibleTmp = new double[length][length];
+        histogramPossibleCounterTmp = new long[length][length];
+        int numberOfNeighbours = ((AbstractGrowthAtom) surface.get(0)).getNumberOfNeighbours();
+        // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
+        for (int i = 0; i < surface.size(); i++) {
+          AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
+          for (int pos = 0; pos < numberOfNeighbours; pos++) {
+            AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
+            byte destination = neighbourAtom.getTypeWithoutNeighbour(pos);
+            byte origin = atom.getRealType();
+            if (atom.getBondsProbability(pos) > 0) {
+              histogramPossible[origin][destination] += elapsedTime;
+              histogramPossibleCounter[origin][destination]++;
+              histogramPossibleTmp[origin][destination] += elapsedTime;
+              histogramPossibleCounterTmp[origin][destination]++;
+            }
+          }
+        }
+        previousProbability = getTotalProbability();
+      } else {
+        for (int i = 0; i < length; i++) {
+          for (int j = 0; j < length; j++) {
+            histogramPossible[i][j] += histogramPossibleTmp[i][j];
+            histogramPossibleCounter[i][j] += histogramPossibleCounterTmp[i][j];
           }
         }
       }
-
       Ri_DeltaI += getTotalProbability() * elapsedTime; // should be always 1
       addTime(elapsedTime);
     }
