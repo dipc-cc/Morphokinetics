@@ -683,7 +683,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         }
       }
     }
-    System.out.println("Distance "+diffusivityDistance+" "+diffusivityDistanceCorrected);
     islands = new ArrayList<>(); // reset all islands to null
     
     // do the count
