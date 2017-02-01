@@ -609,14 +609,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     PrintWriter standardOutputWriter = new PrintWriter(System.out);
     //lattice.countIslands(standardOutputWriter);
-    printAe(standardOutputWriter, true);
+    printAe(standardOutputWriter, -1);
   }
   
-  private void printAe(PrintWriter print, boolean printLineBreak) {
+  private void printAe(PrintWriter print, float coverage) {
+    boolean printLineBreak = (coverage == -1);
     double[][] histogramPossible;
     histogramPossible = ((LinearList) getList()).getHistogramPossible();
     if (printLineBreak) print.println("Ae");
-    else print.print("AePossibleFromList ");
+    else print.format(Locale.US, "%f %s", coverage, "AePossibleFromList ");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       if (printLineBreak) print.print("AePossibleFromList ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -627,7 +628,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     long[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
     if (printLineBreak) print.println("Ae");
-    else print.print("\nAePossibleDiscrete ");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleDiscrete ");
     for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
       if (printLineBreak) print.print("AePossibleDiscrete ");
       for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
@@ -638,7 +639,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
     if (printLineBreak) print.println("Ae");
-    else print.print("\nAeRatioTimesPossible ");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeRatioTimesPossible ");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       if (printLineBreak) print.print("AeRatioTimesPossible ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -650,7 +651,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
     if (printLineBreak) print.println("Ae");
-    else print.print("\nAeMultiplicity ");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeMultiplicity ");
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       if (printLineBreak) print.print("AeMultiplicity ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -698,7 +699,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
     if (aeOutput) {
-      printAe(outData, false);
+      printAe(outData, printCoverage);
     }
     outData.flush();
     if (extraOutput2) {
