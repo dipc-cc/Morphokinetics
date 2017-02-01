@@ -342,7 +342,7 @@ public class KmcCanvas extends Canvas {
               g.fillRect(newX, newY, scale, scale);
               g.setColor(BLACK);
               String text = Integer.toString(k);
-              //g.drawString(text, myX + (scale / 2) - (scale / 4), myY + (scale / 2) + (scale / 4));
+              //g.drawString(text, newX + (scale / 2) - (scale / 4), newY + (scale / 2) + (scale / 4));
             }
             Point3D visitedPosition = atom.getVisitedPositions().get(0);
             int newX, newY;
