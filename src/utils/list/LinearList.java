@@ -27,6 +27,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private double[][] histogramPossibleTmp;
   private long[][] histogramPossibleCounterTmp;
   private double previousProbability;
+  private int length;
   
   public LinearList(Parser parser) {
     super();
@@ -40,25 +41,20 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     if (aeOutput) {
       if (parser.getCalculationMode().equals("basic")) {
         doActivationEnergyStudy = true;
-        histogramPossible = new double[4][4];
-        histogramPossibleCounter = new long[4][4];
-        histogramPossibleTmp = new double[4][4];
-        histogramPossibleCounterTmp = new long[4][4];
+        length = 4;
       }
       if (parser.getCalculationMode().equals("graphene")) {
         doActivationEnergyStudy = true;
-        histogramPossible = new double[8][8];
-        histogramPossibleCounter = new long[8][8];
-        histogramPossibleTmp = new double[8][8];
-        histogramPossibleCounterTmp = new long[8][8];
+        length = 8;
       }
       if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
         doActivationEnergyStudy = true;
-        histogramPossible = new double[7][7];
-        histogramPossibleCounter = new long[7][7];
-        histogramPossibleTmp = new double[7][7];
-        histogramPossibleCounterTmp = new long[7][7];
+        length = 7;
       }
+      histogramPossible = new double[length][length];
+      histogramPossibleCounter = new long[length][length];
+      histogramPossibleTmp = new double[length][length];
+      histogramPossibleCounterTmp = new long[length][length];
     }
     previousProbability = 0;
   }
@@ -99,6 +95,12 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     surface.clear();
     clean = false;
     Ri_DeltaI = 0.0;
+    if (aeOutput) {
+      histogramPossible = new double[length][length];
+      histogramPossibleCounter = new long[length][length];
+      histogramPossibleTmp = new double[length][length];
+      histogramPossibleCounterTmp = new long[length][length];
+    }
   }
 
   @Override
@@ -147,7 +149,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     }
 
     if (doActivationEnergyStudy) {
-      int length = histogramPossibleCounter.length;
       double elapsedTime = 1 / getTotalProbability();
       if (previousProbability != getTotalProbability()) {
         histogramPossibleTmp = new double[length][length];
@@ -169,7 +170,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
           }
         }
         previousProbability = getTotalProbability();
-      } else {
+      } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
         for (int i = 0; i < length; i++) {
           for (int j = 0; j < length; j++) {
             histogramPossible[i][j] += histogramPossibleTmp[i][j];
