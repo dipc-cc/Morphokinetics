@@ -626,10 +626,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     double distanceY;
     double distanceXnew;
     double distanceYnew;
-    double posXAtom;
-    double posYAtom;
-    double posXDep;
-    double posYDep;
+    double atomPosX;
+    double atomPosY;
+    double depPosX;
+    double depPosY;
     mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
@@ -651,30 +651,30 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
           hops += atom.getHops();
           int direction = atom.getDirection();
-          posXAtom = atom.getPos().getX() + uc.getPos().getX();
-          posYAtom = atom.getPos().getY() + uc.getPos().getY();
-          posXDep  = atom.getDepositionPosition().getX();
-          posYDep  = atom.getDepositionPosition().getY();
-          distanceXnew = abs(posXAtom - posXDep);
-          distanceYnew = abs(posYAtom - posYDep);
+          atomPosX = atom.getPos().getX() + uc.getPos().getX();
+          atomPosY = atom.getPos().getY() + uc.getPos().getY();
+          depPosX  = atom.getDepositionPosition().getX();
+          depPosY  = atom.getDepositionPosition().getY();
+          distanceXnew = abs(atomPosX - depPosX);
+          distanceYnew = abs(atomPosY - depPosY);
           if (distanceXnew > 0) {
             if ((direction & (1 << 0)) != 0) {// X is positive 
-              if (posXAtom < posXDep) {
+              if (depPosX > atomPosX) {
                 distanceXnew = getCartSizeX() - distanceXnew;
               }
             } else {// X is negative 
-              if (posXAtom > posXDep) {
+              if (depPosX < atomPosX) {
                 distanceXnew = getCartSizeX() - distanceXnew;
               }
             }
           }
           if (distanceYnew > 0) {
             if ((direction & (1 << 1)) != 0) {// Y is positive 
-              if (posYAtom < posYDep) {
+              if (depPosY > atomPosY) {
                 distanceYnew = getCartSizeY() - distanceYnew;
               }
             } else {// Y is negative 
-              if (posYAtom > posYDep) {
+              if (depPosY < atomPosY) {
                 distanceYnew = getCartSizeY() - distanceYnew;
               }
             }
