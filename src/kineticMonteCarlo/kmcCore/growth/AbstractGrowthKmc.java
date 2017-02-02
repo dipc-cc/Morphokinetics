@@ -810,9 +810,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         // right
         if (xDepositionIsSize) {
           if (destinationAtom.getiHexa() == 0) { //right
-            destinationAtom.setDirection(0, false); // first bit to zero. X negative
+            destinationAtom.setDirection(0, true); // first bit to one. X positive
           } else { // left (normal case)
-            destinationAtom.setDirection(0, true);
+            destinationAtom.setDirection(0, false);
           }
         }          
       } else {
