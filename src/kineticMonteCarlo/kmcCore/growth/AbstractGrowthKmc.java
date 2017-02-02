@@ -792,18 +792,22 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     destinationAtom.setDepositionPosition(depositionPosition);
     destinationAtom.setDirection(originAtom.getDirection());
     if (depositionPosition.getX() == originAtom.getiHexa()) {// we are about to cross X deposition axis
-      if (destinationAtom.getiHexa() < depositionPosition.getX()) { // left
+      if (depositionPosition.getX() + 1 != lattice.getHexaSizeI() && depositionPosition.getX() + 1 != 1 && destinationAtom.getiHexa() < depositionPosition.getX() || 
+              (depositionPosition.getX()+1 == lattice.getHexaSizeI() && destinationAtom.getiHexa() > depositionPosition.getX()))   { // left
         destinationAtom.setDirection(0, false); // first bit to zero. X negative
       }
-      if (destinationAtom.getiHexa() > depositionPosition.getX()) { // >=
+      if (depositionPosition.getX() + 1 != lattice.getHexaSizeI() && depositionPosition.getX() + 1 != 1 && destinationAtom.getiHexa() > depositionPosition.getX()|| 
+              (depositionPosition.getX()+1 == 1 && destinationAtom.getiHexa() < depositionPosition.getX())) { // >=
         destinationAtom.setDirection(0, true); // first bit to zero. X positive
       }
     }
     if (depositionPosition.getY() == originAtom.getjHexa()) {// we are about to cross Y deposition axis
-      if (destinationAtom.getjHexa() < depositionPosition.getY()) { // up. It just went north of the deposition
+      if ((depositionPosition.getY() + 1 != lattice.getHexaSizeJ() && depositionPosition.getY() + 1 != 1 && destinationAtom.getjHexa() < depositionPosition.getY())
+              || (depositionPosition.getY() + 1 == 1 && destinationAtom.getjHexa() > depositionPosition.getY())) { // up. It just went north of the deposition
         destinationAtom.setDirection(1, false); // second bit to zero. Y negative
       }
-      if (destinationAtom.getjHexa() > depositionPosition.getY()) { // down. It just went south of the deposition
+      if ((depositionPosition.getY() + 1 != lattice.getHexaSizeJ() && depositionPosition.getY() + 1 != 1 && destinationAtom.getjHexa() > depositionPosition.getY())
+              || (depositionPosition.getY() + 1 == lattice.getHexaSizeJ() && destinationAtom.getjHexa() < depositionPosition.getY())) { // down. It just went south of the deposition
         destinationAtom.setDirection(1, true); // second bit to one. Y positive
       }
     }
