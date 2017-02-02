@@ -793,24 +793,68 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     Point3D depositionPosition = originAtom.getDepositionPosition();
     destinationAtom.setDepositionPosition(depositionPosition);
     destinationAtom.setDirection(originAtom.getDirection());
-    if (depositionPosition.getX() == originAtom.getiHexa()) {// we are about to cross X deposition axis
-      if (depositionPosition.getX() + 1 != lattice.getHexaSizeI() && depositionPosition.getX() + 1 != 1 && destinationAtom.getiHexa() < depositionPosition.getX() || 
-              (depositionPosition.getX()+1 == lattice.getHexaSizeI() && destinationAtom.getiHexa() > depositionPosition.getX()))   { // left
-        destinationAtom.setDirection(0, false); // first bit to zero. X negative
-      }
-      if (depositionPosition.getX() + 1 != lattice.getHexaSizeI() && depositionPosition.getX() + 1 != 1 && destinationAtom.getiHexa() > depositionPosition.getX()|| 
-              (depositionPosition.getX()+1 == 1 && destinationAtom.getiHexa() < depositionPosition.getX())) { // >=
-        destinationAtom.setDirection(0, true); // first bit to zero. X positive
+    if (depositionPosition.getX() == originAtom.getiHexa() && depositionPosition.getX() != destinationAtom.getiHexa()) {// we are about to cross X deposition axis
+      boolean xDepositionIsSize = depositionPosition.getX() + 1 == lattice.getHexaSizeI();
+      boolean xDepositionIsZero = depositionPosition.getX() == 0;
+      boolean specialCase = xDepositionIsSize || xDepositionIsZero;
+      boolean xDepositionIsBigger = depositionPosition.getX() > destinationAtom.getiHexa();
+      if (specialCase) {
+        // left
+        if (xDepositionIsZero) {
+          if (destinationAtom.getiHexa() == lattice.getHexaSizeI() - 1) { // left
+            destinationAtom.setDirection(0, false); // first bit to zero. X negative          
+          } else { // right (normal case)
+            destinationAtom.setDirection(0, true);
+          }
+        }
+        // right
+        if (xDepositionIsSize) {
+          if (destinationAtom.getiHexa() == 0) { //right
+            destinationAtom.setDirection(0, false); // first bit to zero. X negative
+          } else { // left (normal case)
+            destinationAtom.setDirection(0, true);
+          }
+        }          
+      } else {
+        // left
+        if (xDepositionIsBigger) {
+          destinationAtom.setDirection(0, false); // first bit to zero. X negative
+        }
+        // right
+        if (!xDepositionIsBigger) {
+          destinationAtom.setDirection(0, true); // first bit to one. X positive
+        }
       }
     }
-    if (depositionPosition.getY() == originAtom.getjHexa()) {// we are about to cross Y deposition axis
-      if ((depositionPosition.getY() + 1 != lattice.getHexaSizeJ() && depositionPosition.getY() + 1 != 1 && destinationAtom.getjHexa() < depositionPosition.getY())
-              || (depositionPosition.getY() + 1 == 1 && destinationAtom.getjHexa() > depositionPosition.getY())) { // up. It just went north of the deposition
-        destinationAtom.setDirection(1, false); // second bit to zero. Y negative
-      }
-      if ((depositionPosition.getY() + 1 != lattice.getHexaSizeJ() && depositionPosition.getY() + 1 != 1 && destinationAtom.getjHexa() > depositionPosition.getY())
-              || (depositionPosition.getY() + 1 == lattice.getHexaSizeJ() && destinationAtom.getjHexa() < depositionPosition.getY())) { // down. It just went south of the deposition
-        destinationAtom.setDirection(1, true); // second bit to one. Y positive
+    if (depositionPosition.getY() == originAtom.getjHexa() && depositionPosition.getY() != destinationAtom.getjHexa()) {// we are about to cross Y deposition axis 
+      boolean yDepositionIsSize = depositionPosition.getY() + 1 == lattice.getHexaSizeJ();
+      boolean yDepositionIsZero = depositionPosition.getY() == 0;
+      boolean ySpecialCase = yDepositionIsSize || yDepositionIsZero;
+      boolean yDepositionIsBigger = depositionPosition.getY() > destinationAtom.getjHexa();
+      if (ySpecialCase) {
+        if (yDepositionIsZero) {
+          if (destinationAtom.getjHexa() == lattice.getHexaSizeJ() - 1) { // up
+            destinationAtom.setDirection(1, false); // second bit to zero. Y negative
+          } else { // down (normal case)
+            destinationAtom.setDirection(1, true);
+          }
+        }
+        if (yDepositionIsSize) {
+          if (destinationAtom.getjHexa() == 0) { // down
+            destinationAtom.setDirection(1, true); // second bit to one. Y positive
+          } else { // up (normal case)
+            destinationAtom.setDirection(1, false);
+          }
+        }
+      } else {
+        // up
+        if (yDepositionIsBigger) {
+          destinationAtom.setDirection(1, false); // second bit to zero. Y negative
+        }
+        // down
+        if (!yDepositionIsBigger) {
+          destinationAtom.setDirection(1, true); // second bit to one. Y negative
+        }  
       }
     }
     
