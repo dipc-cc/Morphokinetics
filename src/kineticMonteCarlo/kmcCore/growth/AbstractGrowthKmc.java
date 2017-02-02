@@ -874,6 +874,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
+    destinationAtom.addVisitedPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     return destinationAtom;
   }
