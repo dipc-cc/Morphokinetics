@@ -858,9 +858,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     
-    destinationAtom.setVisitedPositions(originAtom.getVisitedPositions());
+    //destinationAtom.setVisitedPositions(originAtom.getVisitedPositions());
     destinationAtom.setHops(originAtom.getHops() + 1);
-    destinationAtom.addVisitedPosition(new Point3D(destinationAtom.getiHexa(), destinationAtom.getjHexa(), 0));
+    //destinationAtom.addVisitedPosition(new Point3D(destinationAtom.getiHexa(), destinationAtom.getjHexa(), 0));
     
     originAtom.setDepositionTime(0);
     originAtom.setDepositionPosition(null);
@@ -924,7 +924,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
-    destinationAtom.addVisitedPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
+    //destinationAtom.addVisitedPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     return destinationAtom;
   }
