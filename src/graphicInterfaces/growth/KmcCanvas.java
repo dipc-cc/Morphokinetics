@@ -17,6 +17,7 @@ import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import static java.lang.Math.abs;
 import javax.imageio.ImageIO;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -51,6 +52,7 @@ public class KmcCanvas extends Canvas {
   private boolean printIslandCentres;
   private boolean printPath;
   private int atomId;
+  private int printedAtom;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -76,6 +78,8 @@ public class KmcCanvas extends Canvas {
     printId = true;
     printIslandNumber = false;
     printIslandCentres = false;
+    printedAtom = -1;
+    atomId = -1;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -314,6 +318,48 @@ public class KmcCanvas extends Canvas {
           int green = 255;
           int blue = 255;
           if (atom.getId() == atomId) {
+            if (printedAtom != atomId) {
+              System.out.println("Atom " + atomId + " hops " + atom.getHops() + " direction " + atom.getDirection());
+              for (Point3D position : atom.getVisitedPositions()) {
+                System.out.println(position);
+              }
+              double distanceXnew;
+              double distanceYnew;
+              double posXAtom;
+              double posYAtom;
+              double posXDep;
+              double posYDep;
+              int direction = atom.getDirection();
+              posXAtom = atom.getPos().getX() + uc.getPos().getX();
+              posYAtom = atom.getPos().getY() + uc.getPos().getY();
+              posXDep = atom.getDepositionPosition().getX();
+              posYDep = atom.getDepositionPosition().getY();
+              distanceXnew = abs(posXAtom - posXDep);
+              distanceYnew = abs(posYAtom - posYDep);
+              if (distanceXnew > 0) {
+                if ((direction & (1 << 0)) != 0) {// X is positive 
+                  if (posXAtom < posXDep) {
+                    distanceXnew = lattice.getCartSizeX() - distanceXnew;
+                  }
+                } else// X is negative 
+                if (posXAtom > posXDep) {
+                  distanceXnew = lattice.getCartSizeX() - distanceXnew;
+                }
+              }
+              if (distanceYnew > 0) {
+                if ((direction & (1 << 1)) != 0) {// Y is positive 
+                  if (posYAtom < posYDep) {
+                    distanceYnew = lattice.getCartSizeY() - distanceYnew;
+                  }
+                } else// Y is negative 
+                if (posYAtom > posYDep) {
+                  distanceYnew = lattice.getCartSizeY() - distanceYnew;
+                }
+              }
+              System.out.println("Distance " + distanceXnew + " " + distanceYnew);
+
+            }
+            printedAtom = atomId;
             for (int k = 0; k < atom.getVisitedPositions().size() && k < 10000; k++) {
               Point3D visitedPosition = atom.getVisitedPositions().get(k);
               int newX, newY;
@@ -333,23 +379,27 @@ public class KmcCanvas extends Canvas {
                   }
                 }
               }
-              if (visitedPosition.equals(atom.getVisitedPositions().get(atom.getVisitedPositions().size() - 1))) {
-                red = 0;
-                blue = 0;
-                green = 0;
-              }
               g.setColor(c);
               g.fillRect(newX, newY, scale, scale);
               g.setColor(BLACK);
               String text = Integer.toString(k);
               //g.drawString(text, newX + (scale / 2) - (scale / 4), newY + (scale / 2) + (scale / 4));
             }
+            // origin
             Point3D visitedPosition = atom.getVisitedPositions().get(0);
             int newX, newY;
             newX = (int) Math.round(visitedPosition.getX() * scale) + baseX;
             newY = (int) Math.round(visitedPosition.getY() * scale) + baseY;
             g.setColor(BLACK);
             g.drawOval(newX, newY, scale * 4, scale * 4);
+            // destination
+            visitedPosition = atom.getVisitedPositions().get(atom.getVisitedPositions().size() - 1);
+            int newX1, newY1;
+            newX1 = (int) Math.round(visitedPosition.getX() * scale) + baseX;
+            newY1 = (int) Math.round(visitedPosition.getY() * scale) + baseY;
+            g.setColor(BLACK);
+            g.drawRect(newX1, newY1, scale * 4, scale * 4);
+            g.drawLine(newX, newY, newX1, newY1);
           }
         } else if (!atom.isOutside()) {
           g.drawOval(X, Y, scale, scale);
