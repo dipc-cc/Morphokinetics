@@ -341,6 +341,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     deltaTimePerAtom.clear();
     previousTime = 0;
     nucleations = 0;
+    int length = histogramSuccess.length;
+    histogramSuccess = new int[length][length];
   }
   
   @Override
@@ -524,7 +526,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param atomTypes number of different atom types.
    */
   void initHistogramSucces(int atomTypes) {
-    histogramSuccess = new  int[atomTypes][atomTypes];
+    histogramSuccess = new int[atomTypes][atomTypes];
   }
   
   /**
