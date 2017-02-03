@@ -116,6 +116,8 @@ def getAllValues(maxCoverage, getSlopes=True):
                 j = next(iterList)
             cov = 0
         if re.match(regExpression, line):      # just hit a coverage
+            if line[9] == "A":                 # it is activation energy data, skip it
+                continue
             cov = int(line[2]+line[3])         # get coverage
             if (cov > maxCoverage):           
                 cov = 0                        # coverage is bigger than wanted, skip
@@ -123,7 +125,6 @@ def getAllValues(maxCoverage, getSlopes=True):
                 completeData.appendData(cov-1, line)
                 dataLine = previousLine
         previousLine = line
-
     return completeData
 
 def getSlope(times, valueList, maxCoverage, sqrt=False, verbose=False, tmpFileName="tmpFig.png"):
