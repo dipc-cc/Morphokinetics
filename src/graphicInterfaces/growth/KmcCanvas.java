@@ -325,38 +325,45 @@ public class KmcCanvas extends Canvas {
               }
               double distanceXnew;
               double distanceYnew;
-              double posXAtom;
-              double posYAtom;
-              double posXDep;
-              double posYDep;
+              double atomPosX;
+              double atomPosY;
+              double depPosX;
+              double depPosY;
               int direction = atom.getDirection();
-              posXAtom = atom.getPos().getX() + uc.getPos().getX();
-              posYAtom = atom.getPos().getY() + uc.getPos().getY();
-              posXDep = atom.getDepositionPosition().getX();
-              posYDep = atom.getDepositionPosition().getY();
-              distanceXnew = abs(posXAtom - posXDep);
-              distanceYnew = abs(posYAtom - posYDep);
+              atomPosX = atom.getPos().getX() + uc.getPos().getX();
+              atomPosY = atom.getPos().getY() + uc.getPos().getY();
+              depPosX = atom.getDepositionPosition().getX();
+              depPosY = atom.getDepositionPosition().getY();
+              distanceXnew = abs(atomPosX - depPosX);
+              distanceYnew = abs(atomPosY - depPosY);
               if (distanceXnew > 0) {
                 if ((direction & (1 << 0)) != 0) {// X is positive 
-                  if (posXAtom < posXDep) {
+                  if (depPosX > atomPosX) {
                     distanceXnew = lattice.getCartSizeX() - distanceXnew;
                   }
                 } else// X is negative 
-                if (posXAtom > posXDep) {
+                if (depPosX < atomPosX) {
                   distanceXnew = lattice.getCartSizeX() - distanceXnew;
                 }
               }
               if (distanceYnew > 0) {
                 if ((direction & (1 << 1)) != 0) {// Y is positive 
-                  if (posYAtom < posYDep) {
+                  if (depPosY > atomPosY) {
                     distanceYnew = lattice.getCartSizeY() - distanceYnew;
                   }
                 } else// Y is negative 
-                if (posYAtom > posYDep) {
+                if (depPosY < atomPosY) {
                   distanceYnew = lattice.getCartSizeY() - distanceYnew;
                 }
               }
-              System.out.println("Distance " + distanceXnew + " " + distanceYnew);
+              System.out.println("Distance " + distanceXnew + " " + distanceYnew+" "+direction);
+              System.out.println("Deposition "+depPosX+" "+depPosY);
+              System.out.println("Current "+atomPosX+" "+atomPosY);
+              System.out.println(" "+atom.getiHexa()+" "+atom.getjHexa());
+              System.out.println("UC "+uc.getPos().getX()+" "+uc.getPos().getY());
+              if (distanceXnew > lattice.getCartSizeX() || distanceYnew > lattice.getCartSizeY()) {
+                System.out.println("!!!!!!!!!!!!!!!!");
+              }
 
             }
             printedAtom = atomId;
