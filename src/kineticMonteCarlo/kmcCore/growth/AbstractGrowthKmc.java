@@ -793,7 +793,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     Point3D depositionPosition = originAtom.getDepositionPosition();
     destinationAtom.setDepositionPosition(depositionPosition);
     destinationAtom.setDirection(originAtom.getDirection());
-    ///System.out.println(depositionPosition);
     if (depositionPosition.getX() == originAtom.getiHexa() && depositionPosition.getX() != destinationAtom.getiHexa()) {// we are about to cross X deposition axis
       boolean xDepositionIsSize = depositionPosition.getX() + 1 == lattice.getHexaSizeI();
       boolean xDepositionIsZero = depositionPosition.getX() == 0;
