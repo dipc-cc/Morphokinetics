@@ -237,6 +237,7 @@ public class Restart {
     } catch (IOException exception) {
       System.err.println("Could not read file " + fileName);
       Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, exception);
+      return "{}";
     }
 
     int lines = readList.size();
