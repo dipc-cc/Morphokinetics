@@ -50,6 +50,11 @@ public class AgAtomSimple extends AgAtom {
     return getType();
   }
   
+  @Override
+  public boolean isEligible() {
+    return isOccupied() && getType() < 4;
+  }
+  
   /**
    * Simpler implementation than {@link AgAtom#chooseRandomHop()}. This one, does not consider
    * corner rounding.
