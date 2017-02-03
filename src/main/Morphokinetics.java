@@ -52,26 +52,26 @@ public class Morphokinetics {
     parser.readFile("parameters");
     parser.print();
 
-      switch (parser.getCalculationType()) {
-        case "batch":
-          batchSimulation(parser);
-          break;
-        case "evolutionary":
+    switch (parser.getCalculationType()) {
+      case "batch":
+        batchSimulation(parser);
+        break;
+      case "evolutionary":
         evolutionarySimulation(parser);
-          break;
-        case "psd":
+        break;
+      case "psd":
         psdFromSurfaces(parser);
-          break;
-        default:
-          System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
-          System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are 'batch', 'evolutionary' or 'psd'");
-          throw new IllegalArgumentException("This simulation mode is not implemented");
-      }
-      printEnd();
-      if (!parser.withGui() || !parser.visualise()) {
-        System.exit(0);
-      }
+        break;
+      default:
+        System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
+        System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are 'batch', 'evolutionary' or 'psd'");
+        throw new IllegalArgumentException("This simulation mode is not implemented");
     }
+    printEnd();
+    if (!parser.withGui() || !parser.visualise()) {
+      System.exit(0);
+    }
+  }
 
   private static void batchSimulation(Parser parser) {
     AbstractSimulation simulation = null;
