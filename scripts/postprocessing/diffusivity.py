@@ -31,9 +31,9 @@ if hex:
 else:
     temperatures = np.array(list(range(130,351,5)))
     temperatures = np.array([200, 225, 250, 275, 300, 350, 400, 500, 600, 800, 1000, 1200])
-    temperatures = np.array(list(range(120,254,5)))
+    temperatures = np.array(list(range(120,326,5)))
     initFlux = -3
-    endFlux = -2
+    endFlux = 1
 
 
 label = r''
@@ -77,7 +77,7 @@ for i in range(initFlux,endFlux):
     x = eval(command)
     plt.xlabel(command)
     try:
-        plt.semilogy(x, y, ".-", label=folder+" "+str(j))
+        plt.semilogy(x, y, "3-", label=folder+" "+str(j))
         plt.semilogy(x, ne, ".", label=folder+" ne")
 
         if hex:
