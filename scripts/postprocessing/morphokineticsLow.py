@@ -121,7 +121,7 @@ def getAllValues(maxCoverage, getSlopes=True):
             cov = int(line[2]+line[3])         # get coverage
             if (cov > maxCoverage):           
                 cov = 0                        # coverage is bigger than wanted, skip
-            else:
+            elif (cov > 0):                    # we have to actually skip 0 coverages
                 completeData.appendData(cov-1, line)
                 dataLine = previousLine
         previousLine = line
