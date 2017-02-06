@@ -70,7 +70,7 @@ for i in range(initFlux,endFlux):
     T1 = 1/(kb * temperatures)
     print(d)
     command = "1/vd*1e12"
-    command = "1/d*1e12"
+    command = "d"
     y = eval(command)
     plt.ylabel(command)
     command = "1/kb/temperatures"#+np.log(flux**2.5)"
