@@ -63,7 +63,7 @@ for i in range(initFlux,endFlux):
     time = meanValues.getTimes()
     vd = meanValues.getDiffusivitySlope()
     d = meanValues.getDiffusivity()
-    m = meanValues.getMobileAtoms()
+    m = meanValues.getDiffusivityLarge()
     rg = meanValues.getLastGyradius()
     vg = meanValues.getGyradiusSlope()
     n = meanValues.getIslandsAmount()
