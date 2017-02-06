@@ -23,19 +23,36 @@ def fit(x, y, initI, finishI):
     b = popt[0][1]
     return list([a,b])
 
-hex = len(sys.argv) > 1
-if hex:
+
+def hexagonal():
     temperatures = np.array(list(range(70,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
     initFlux = 4
-    endFlux = 5
-else:
-    temperatures = np.array(list(range(130,351,5)))
-    temperatures = np.array([200, 225, 250, 275, 300, 350, 400, 500, 600, 800, 1000, 1200])
+    endFlux = 7
+    folderBase = "5e"
+    return temperatures, initFlux, endFlux, folderBase
+
+def twoEnergies():
+    temperatures = np.array(list(range(120,300,10))+list(range(300,501,50)))
+    initFlux = 0
+    endFlux = 1
+    folderBase = "3.5e"
+    return temperatures, initFlux, endFlux, folderBase
+
+def basic():
     temperatures = np.array(list(range(120,326,5)))
     initFlux = -3
     endFlux = 1
+    folderBase = "3.5e"
+    return temperatures, initFlux, endFlux, folderBase
 
+defaultValues = {'h': hexagonal,
+                 '2': twoEnergies,
+                 'b': basic,}
+    
+simulationType = sys.argv[1]
+temperatures, initFlux, endFlux, folderBase = defaultValues[simulationType]()
 
+hex = False
 label = r''
 plt.ylabel(label)
 label = r'$R/F^{0.79}$'
@@ -49,8 +66,8 @@ kb = 8.6173324e-5
 for i in range(initFlux,endFlux):
 #for j in [30]:#,20,15,10,5,3,2,1]:
     j = 30
-    folder = "flux3.5e"+str(i)
-    flux = float("3.5e"+str(i))
+    folder = "flux"+folderBase+str(i)
+    flux = float(folderBase+str(i))
     print(folder)
     try:
         os.chdir(folder)
@@ -88,7 +105,7 @@ for i in range(initFlux,endFlux):
             a, b = fit(x, y, 15, 22)
             plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
             plt.ylim(1e9,1e14)
-        else:
+        if hex:
             a, b = fit(x, y, 0, 8)
             plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
             a, b = fit(x, y, 8, 16)
