@@ -78,7 +78,7 @@ for i in range(initFlux,endFlux):
     plt.xlabel(command)
     try:
         plt.semilogy(x, y, ".-", label=folder+" "+str(j))
-        plt.semilogy(x, ne/time, ".", label=folder+" ne/time")
+        plt.semilogy(x, ne, ".", label=folder+" ne")
 
         if hex:
             a, b = fit(x, y, 0, 12)
