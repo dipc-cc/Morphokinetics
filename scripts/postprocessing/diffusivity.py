@@ -66,6 +66,7 @@ for i in range(initFlux,endFlux):
     m = meanValues.getMobileAtoms()
     rg = meanValues.getLastGyradius()
     vg = meanValues.getGyradiusSlope()
+    n = meanValues.getIslandsAmount()
     T1 = 1/(kb * temperatures)
     print(d)
     command = "1/vd*1e12"
