@@ -67,6 +67,7 @@ defaultValues = {'h': hexagonal,
                  'l': gaillard,}
     
 simulationType = sys.argv[1]
+coverage = int(sys.argv[2])
 temperatures, initFlux, endFlux, folderBase = defaultValues[simulationType]()
 
 hex = False
@@ -82,7 +83,7 @@ workingPath = os.getcwd()
 kb = 8.6173324e-5
 for i in range(initFlux,endFlux):
 #for j in [30]:#,20,15,10,5,3,2,1]:
-    j = 30
+    j = coverage
     folder = "flux"+folderBase+str(i)
     flux = float(folderBase+str(i))
     print(folder)
