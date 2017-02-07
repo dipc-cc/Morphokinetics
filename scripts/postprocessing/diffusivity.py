@@ -71,7 +71,7 @@ for i in range(initFlux,endFlux):
     print(folder)
     try:
         os.chdir(folder)
-        meanValues = mk.getIslandDistribution(temperatures, sqrt=False, interval=False, growth=True, verbose = False, flux=-1, maxCoverage=j)
+        meanValues = mk.getIslandDistribution(temperatures, sqrt=False, interval=False, growth=False, verbose = False, flux=-1, maxCoverage=j)
     except OSError:
         print ("error changing to flux {}".format(folder))
 
