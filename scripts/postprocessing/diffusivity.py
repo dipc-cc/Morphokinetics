@@ -45,9 +45,26 @@ def basic():
     folderBase = "3.5e"
     return temperatures, initFlux, endFlux, folderBase
 
+def graphene():
+    temperatures = np.array([200, 225, 250, 275, 300, 350, 400, 500, 600, 800, 1000, 1200, 1500])
+    initFlux = -5
+    endFlux = -4
+    folderBase = "3.5e"
+    return temperatures, initFlux, endFlux, folderBase
+
+def gaillard():
+    temperatures = np.array([200, 225, 250, 275, 300, 350, 400, 500, 600, 800, 1000, 1200, 1500])
+    initFlux = -4
+    endFlux = -3
+    folderBase = "5e"
+    return temperatures, initFlux, endFlux, folderBase
+    
+
 defaultValues = {'h': hexagonal,
                  '2': twoEnergies,
-                 'b': basic,}
+                 'b': basic,
+                 'g': graphene,
+                 'l': gaillard,}
     
 simulationType = sys.argv[1]
 temperatures, initFlux, endFlux, folderBase = defaultValues[simulationType]()
