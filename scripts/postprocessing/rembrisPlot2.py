@@ -10,11 +10,31 @@ import matplotlib.pyplot as plt
 import glob
 import re
 import os
+import math
 
 def thetaFunc(t):
     F = 5e6
     return 1 - np.exp(-F*t)
 
+def getSizeFromFile():
+    fileName = glob.glob("../output*")[0]
+    f = open(fileName)
+    for line in f:
+        if re.search("calculationMode", line):
+            calcType = list(filter(None,re.split(" |,",line)))[1]
+            return calcType, L1, L2  
+        if re.search("cartSizeX", line):
+            L1 = int(list(filter(None,re.split(" |,",line)))[1])
+        if re.search("cartSizeY", line):
+            L2 = int(list(filter(None,re.split(" |,",line)))[1])
+
+def getSize():
+    calcType, L1, L2 = getSizeFromFile()
+    if re.match("Ag", calcType):
+        L2 = round(L2 / math.sin(math.radians(60)))
+    return L1, L2
+    
+    
 def getR_tt():
     fileName = glob.glob("../output*")[0]
     f = open(fileName)
@@ -32,7 +52,8 @@ def diffusivityDistance():
 
     # get r_tt
     r_tt = getR_tt()
-    allData = [] # np.array()
+    L1, L2 = getSize()
+    allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
     for i in range(0,len(filesN)):
@@ -40,8 +61,6 @@ def diffusivityDistance():
         print(fileName)
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
-    L1 = 400
-    L2 = 462
 
     cove = np.mean([i[:,0]  for i in allData], axis=0)
     time = np.mean([i[:,1]  for i in allData], axis=0)
