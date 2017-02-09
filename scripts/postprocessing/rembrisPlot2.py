@@ -15,22 +15,23 @@ def thetaFunc(t):
     F = 5e6
     return 1 - np.exp(-F*t)
 
+def getR_tt():
+    fileName = glob.glob("../output*")[0]
+    f = open(fileName)
+    hit = False
+    for line in f:
+        if hit:
+            return float(re.split(' ', line)[0]) # return r_tt
+        if re.match("These", line):
+            hit = True
+            
 def diffusivityDistance():
     # split files
     os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"} END{print n}'")
     os.system("sed -i '1d' data0.txt")
 
     # get r_tt
-    fileName = glob.glob("../output*")[0]
-    f = open(fileName)
-    hit = False
-    for line in f:
-        if hit:
-            r_tt = float(re.split(' ', line)[0])
-            break
-        if re.match("These", line):
-            hit = True
-    print(r_tt)
+    r_tt = getR_tt()
     allData = [] # np.array()
 
     filesN = glob.glob("data[0-9]*.txt")
