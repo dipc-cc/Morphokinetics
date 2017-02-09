@@ -1,10 +1,6 @@
 #grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > "data"n".txt"} END{print n}'
 # sed -i '1d' data0.txt
 
-### THIS SHOULD BE A METHOD
-# PARAMETERS: number of columns
-#             L1
-#             L2
 import numpy as np
 import matplotlib.pyplot as plt
 import glob
@@ -55,7 +51,7 @@ def diffusivityDistance():
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)):
+    for i in range(0,len(filesN)-1):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
