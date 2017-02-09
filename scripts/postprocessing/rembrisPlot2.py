@@ -16,43 +16,41 @@ def thetaFunc(t):
     F = 5e6
     return 1 - np.exp(-F*t)
 
-def getSizeFromFile():
-    fileName = glob.glob("../output*")[0]
-    f = open(fileName)
-    for line in f:
-        if re.search("calculationMode", line):
-            calcType = list(filter(None,re.split(" |,",line)))[1]
-            return calcType, L1, L2  
-        if re.search("cartSizeX", line):
-            L1 = int(list(filter(None,re.split(" |,",line)))[1])
-        if re.search("cartSizeY", line):
-            L2 = int(list(filter(None,re.split(" |,",line)))[1])
-
-def getSize():
-    calcType, L1, L2 = getSizeFromFile()
-    if re.match("Ag", calcType):
-        L2 = round(L2 / math.sin(math.radians(60)))
-    return L1, L2
-    
-    
-def getR_tt():
+def getInformationFromFile():
     fileName = glob.glob("../output*")[0]
     f = open(fileName)
     hit = False
     for line in f:
+        if re.search("calculationMode", line):
+            calc = list(filter(None,re.split(" |,",line)))[1]
+        if re.search("cartSizeX", line):
+            sizX = int(list(filter(None,re.split(" |,",line)))[1])
+        if re.search("cartSizeY", line):
+            sizY = int(list(filter(None,re.split(" |,",line)))[1])
+        if re.search("temperature", line):
+            temp = float(list(filter(None,re.split(" |,",line)))[1])
+        if re.search("depositionFlux", line):
+            flux = float(list(filter(None,re.split(" |,",line)))[1])
         if hit:
-            return float(re.split(' ', line)[0]) # return r_tt
+            r_tt = float(re.split(' ', line)[0])
+            return r_tt, temp, flux, calc, sizX, sizY
         if re.match("These", line):
             hit = True
-            
+
+
+def getInputParameters():
+    r_tt, temp, flux, calcType, sizI, sizJ = getInformationFromFile()
+    if re.match("Ag", calcType): # Adjust J in hexagonal lattices
+        sizJ = round(sizJ / math.sin(math.radians(60)))
+    return r_tt, temp, flux, sizI, sizJ
+
+
 def diffusivityDistance():
     # split files
     os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"} END{print n}'")
     os.system("sed -i '1d' data0.txt")
 
-    # get r_tt
-    r_tt = getR_tt()
-    L1, L2 = getSize()
+    r_tt, temp, flux, L1, L2 = getInputParameters()
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
