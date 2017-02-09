@@ -39,9 +39,11 @@ def getInformationFromFile():
 
 def getInputParameters():
     r_tt, temp, flux, calcType, sizI, sizJ = getInformationFromFile()
+    maxN = 3
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
         sizJ = round(sizJ / math.sin(math.radians(60)))
-    return r_tt, temp, flux, sizI, sizJ
+        maxN = 6
+    return r_tt, temp, flux, sizI, sizJ, maxN
 
 
 def diffusivityDistance():
@@ -49,7 +51,7 @@ def diffusivityDistance():
     os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"}'")
     os.system("sed -i '1d' data0.txt")
 
-    r_tt, temp, flux, L1, L2 = getInputParameters()
+    r_tt, temp, flux, L1, L2, maxN = getInputParameters()
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
@@ -70,9 +72,10 @@ def diffusivityDistance():
     neg1 = np.mean([i[:,17] for i in allData], axis=0)
     neg2 = np.mean([i[:,18] for i in allData], axis=0)
     neg3 = np.mean([i[:,19] for i in allData], axis=0)
-    neg4 = np.mean([i[:,20] for i in allData], axis=0) + \
-           np.mean([i[:,21] for i in allData], axis=0) + \
-           np.mean([i[:,22] for i in allData], axis=0)
+    if maxN == 6:
+        neg4 = np.mean([i[:,20] for i in allData], axis=0) + \
+               np.mean([i[:,21] for i in allData], axis=0) + \
+               np.mean([i[:,22] for i in allData], axis=0)
     hops = even
     parti = np.mean([i[:,0]*L1*L2/100 for i in allData], axis=0)
 
@@ -91,7 +94,8 @@ def diffusivityDistance():
     plt.loglog(time, neg1/L1/L2, label=r"$\theta_1$")
     plt.loglog(time, neg2/L1/L2, label=r"$\theta_2$")
     plt.loglog(time, neg3/L1/L2, label=r"$\theta_3$")
-    plt.loglog(time, neg4/L1/L2, label=r"$\theta_{4+}$")
+    if maxN == 6:
+        plt.loglog(time, neg4/L1/L2, label=r"$\theta_{4+}$")
     plt.loglog(time, isld/L1/L2, label="number of islands")
 
     plt.loglog(time, thetaFunc(time, flux), label=r"$1-e^{-Ft}$")
