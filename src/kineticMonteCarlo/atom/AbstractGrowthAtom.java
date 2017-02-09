@@ -434,6 +434,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     innerPerimeter = false;
     outerPerimeter = false;
     setList(false);
+    hops = 0;
   }
   
   /**
