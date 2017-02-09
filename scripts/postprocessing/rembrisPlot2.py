@@ -12,8 +12,7 @@ import re
 import os
 import math
 
-def thetaFunc(t):
-    F = 5e6
+def thetaFunc(t, F):
     return 1 - np.exp(-F*t)
 
 def getInformationFromFile():
@@ -96,7 +95,7 @@ def diffusivityDistance():
     plt.loglog(time, neg4/L1/L2, label=r"$\theta_{4+}$")
     plt.loglog(time, isld/L1/L2, label="number of islands")
 
-    plt.loglog(time, thetaFunc(time), label=r"$1-e^{-Ft}$")
+    plt.loglog(time, thetaFunc(time, flux), label=r"$1-e^{-Ft}$")
     plt.loglog(time, cove, ".", color="orange", label=r"$\theta$", markerfacecolor="None")
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
     plt.legend(numpoints=1, prop={'size':12}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
