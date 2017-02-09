@@ -1,4 +1,4 @@
-#grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=0 '{if ($1<prev) {n++}prev=$1;} {print > "data"n".txt"} END{print n}'
+#grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > "data"n".txt"} END{print n}'
 # sed -i '1d' data1.txt
 
 ### THIS SHOULD BE A METHOD
@@ -16,7 +16,7 @@ def thetaFunc(t):
     return 1 - np.exp(-F*t)
 
 # split files
-os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=0 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"} END{print n}'")
+os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"} END{print n}'")
 os.system("sed -i '1d' data1.txt")
 
 # get r_tt
@@ -33,7 +33,7 @@ print(r_tt)
 allData = [] # np.array()
 
 filesN = glob.glob("data[1-9]*.txt")
-for i in range(1,len(filesN)+1):
+for i in range(1,len(filesN)):
     fileName = "data"+str(i)+".txt"
     print(fileName)
     allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
