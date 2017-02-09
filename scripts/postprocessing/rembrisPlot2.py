@@ -46,7 +46,7 @@ def getInputParameters():
 
 def diffusivityDistance():
     # split files
-    os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"} END{print n}'")
+    os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"}'")
     os.system("sed -i '1d' data0.txt")
 
     r_tt, temp, flux, L1, L2 = getInputParameters()
@@ -55,7 +55,6 @@ def diffusivityDistance():
     filesN = glob.glob("data[0-9]*.txt")
     for i in range(0,len(filesN)):
         fileName = "data"+str(i)+".txt"
-        print(fileName)
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
 
@@ -100,6 +99,27 @@ def diffusivityDistance():
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
     plt.legend(numpoints=1, prop={'size':12}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
-    plt.savefig("rembrisPlot.png")
+    plt.title("flux: {:.1e} temperature: {:d}".format(flux, int(temp)))
+    plt.savefig("plot"+str(flux)+str(temp)+".png")
 
-diffusivityDistance()
+##########################################################
+##########           Main function   #####################
+##########################################################
+
+workingPath = os.getcwd()
+fluxes = glob.glob("flux*")
+for f in fluxes:
+    print(f)
+    os.chdir(f)
+    fPath = os.getcwd()
+    temperatures = glob.glob("*")
+    for t in temperatures:
+        try:
+            os.chdir(t+"/results")
+            print("\t",t)
+            diffusivityDistance()
+        except FileNotFoundError:
+            pass
+        os.chdir(fPath)
+    os.chdir(workingPath)
+
