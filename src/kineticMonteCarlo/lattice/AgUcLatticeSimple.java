@@ -21,7 +21,7 @@ public class AgUcLatticeSimple extends AgUcLattice{
     atom.setOccupied(true);
     byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
+      addOccupiedNeighbour(atom.getNeighbour(i));
     }
 
     addAtom(atom);
@@ -56,7 +56,7 @@ public class AgUcLatticeSimple extends AgUcLattice{
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(AgAtom neighbourAtom, byte originType, boolean forceNucleation) {
+  private void addOccupiedNeighbour(AgAtom neighbourAtom) {
     byte newType = (byte) (neighbourAtom.getType() + 1);
     if (newType > 6) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >6, which is in practice impossible");
