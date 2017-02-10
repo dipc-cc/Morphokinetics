@@ -6,6 +6,8 @@
 
 package basic;
 
+import ratesLibrary.CatalysisRates;
+
 /**
  *
  * @author karmele
@@ -14,10 +16,11 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
     
   public CatalysisSimulation(Parser parser) {
     super(parser);
-  }
+  } 
   
   @Override
   public void initialiseKmc() {
     super.initialiseKmc();
+    setRates(new CatalysisRates()); 
   } 
 }
