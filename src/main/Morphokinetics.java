@@ -171,7 +171,6 @@ public class Morphokinetics {
         //throw e;
         continue;
       }
-      islandCount++;
       MathUtils.applyGrowthAccordingDistanceToPerimeter(readSurface);
       psd.addSurfaceSample(readSurface);
     }
