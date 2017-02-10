@@ -81,8 +81,8 @@ def diffusivityDistance():
     plt.loglog(time, diff/L1/L2, "s", color="black", label=r"$R^2 (\times \frac{1}{N_1 N_2})$", markerfacecolor="None")
     plt.loglog(time, hops/L1/L2, "*", markeredgecolor="gray", label=r"$N_h l^2 (\times \frac{1}{N_1 N_2})$", markerfacecolor="None")
     plt.loglog(time, diff/hops, ".", color="darkblue", label=r"$\frac{R^2}{N_h l^2}$", markerfacecolor="None")
-    plt.loglog(time, diff/time/L1/L2/r_tt, "o", markeredgecolor="red", label=r"$\frac{R^2}{t} (\times \frac{1}{N_1 N_2 r_{tt}})$", markerfacecolor="None")
-    plt.loglog(time, hops/time/L1/L2/r_tt, "x", markeredgecolor="lightpink", label=r"$\frac{N_h l^2}{t} (\times \frac{1}{N_1 N_2 r_{tt}})$", markerfacecolor="None")
+    plt.loglog(time, diff/time/L1/L2/r_tt, "-o", markeredgecolor="red", label=r"$\frac{R^2}{t} (\times \frac{1}{N_1 N_2 r_{tt}})$", markerfacecolor="None", color="red", lw=2)
+    plt.loglog(time, hops/time/L1/L2/r_tt, "-x", markeredgecolor="lightpink", label=r"$\frac{N_h l^2}{t} (\times \frac{1}{N_1 N_2 r_{tt}})$", markerfacecolor="None", color="lightpink", lw=2)
     plt.loglog(time, diff/(parti*time*r_tt), ">", markeredgecolor="lightblue", label=r"$\frac{R^2}{Nt} (\times \frac{1}{r_{tt}})$", markerfacecolor="None")
     plt.loglog(time, hops/(parti*time*r_tt), "+", markeredgecolor="lightskyblue", label=r"$\frac{N_h l^2}{Nt} (\times \frac{1}{r_{tt}})$", markerfacecolor="None")
     #coverages
@@ -97,6 +97,7 @@ def diffusivityDistance():
     plt.loglog(time, thetaFunc(time, flux), label=r"$1-e^{-Ft}$")
     plt.loglog(time, cove, ".", color="orange", label=r"$\theta$", markerfacecolor="None")
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
+
     plt.legend(numpoints=1, prop={'size':12}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
     plt.title("flux: {:.1e} temperature: {:d}".format(flux, int(temp)))
