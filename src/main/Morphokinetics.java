@@ -154,7 +154,6 @@ public class Morphokinetics {
     Restart restart = new Restart();
     int[] sizes = null;
     float[][] readSurface = null;
-    int islandCount = 0;
     int numberOfFiles = 43;
     String surfaceFileName = "psdFromImage/islands/3.OuterIsolatedSmall/island";
     PsdSignature2D psd = null;
@@ -172,7 +171,6 @@ public class Morphokinetics {
         //throw e;
         continue;
       }
-      islandCount++;
       MathUtils.applyGrowthAccordingDistanceToPerimeter(readSurface);
       psd.addSurfaceSample(readSurface);
     }
