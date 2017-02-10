@@ -19,7 +19,6 @@ public class AgUcLatticeSimple extends AgUcLattice{
   public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
     AgAtom atom = (AgAtom) a;
     atom.setOccupied(true);
-    byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       addOccupiedNeighbour(atom.getNeighbour(i));
     }
