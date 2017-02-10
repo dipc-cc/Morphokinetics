@@ -1136,7 +1136,7 @@ public class Parser {
    *
    * Input "parameters" variable: {@code calculationMode}.
    *
-   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic" or "graphene"
+   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic", "graphene" or "catalysis"
    */
   public String getCalculationMode() {
     return calculationMode;
