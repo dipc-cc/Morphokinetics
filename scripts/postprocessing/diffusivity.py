@@ -95,6 +95,7 @@ for i in range(initFlux,endFlux):
 
     os.chdir(workingPath)
     ne = meanValues.getNumberOfEvents()
+    hp = meanValues.getNumberOfHops()
     time = meanValues.getTimes()
     vd = meanValues.getDiffusivitySlope()
     d = meanValues.getDiffusivity()
@@ -114,6 +115,7 @@ for i in range(initFlux,endFlux):
     try:
         plt.semilogy(x, y, "3-", label=folder+" "+str(j))
         plt.semilogy(x, ne, ".", label=folder+" ne")
+        plt.semilogy(x, hp, "1", label=folder+" hops")
 
         if hex:
             a, b = fit(x, y, 0, 12)
