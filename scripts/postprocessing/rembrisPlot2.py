@@ -72,8 +72,8 @@ def diffusivityDistance():
         neg4 = np.mean([i[:,20] for i in allData], axis=0) + \
                np.mean([i[:,21] for i in allData], axis=0) + \
                np.mean([i[:,22] for i in allData], axis=0)
-    hops = even
     parti = np.mean([i[:,0]*L1*L2 for i in allData], axis=0)
+    #hops = even - parti+1
 
     # Plot 2
     plt.clf()
