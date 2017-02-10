@@ -11,6 +11,11 @@ package kineticMonteCarlo.atom;
  * @author karmele
  */
 public class CatalysisAtom extends AbstractGrowthAtom {
+    
+    /**
+     * Attribute to choose between CO and O.
+     */
+    private String atomType;
 
     public CatalysisAtom(int id, int numberOfNeighbours) {
         super(id, numberOfNeighbours);
