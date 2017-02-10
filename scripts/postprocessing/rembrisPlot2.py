@@ -73,7 +73,7 @@ def diffusivityDistance():
                np.mean([i[:,21] for i in allData], axis=0) + \
                np.mean([i[:,22] for i in allData], axis=0)
     hops = even
-    parti = np.mean([i[:,0]*L1*L2/100 for i in allData], axis=0)
+    parti = np.mean([i[:,0]*L1*L2 for i in allData], axis=0)
 
     # Plot 2
     plt.clf()
