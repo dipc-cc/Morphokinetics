@@ -10,6 +10,10 @@ package basic;
  *
  * @author karmele
  */
-public class CatalysisSimulation {
+public class CatalysisSimulation extends AbstractGrowthSimulation {
+    
+  public CatalysisSimulation(Parser parser) {
+    super(parser);
+  }
     
 }
