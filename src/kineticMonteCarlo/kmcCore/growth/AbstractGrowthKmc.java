@@ -466,9 +466,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         centralAtom = centralAtom.getNeighbour(1);
       }
     } else {
-      for (int i = 0; i < 1; i++) {
-        depositNewAtom();
-      }
+      // Do not deposit anything, just reset deposition probability
+      getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
   }
   

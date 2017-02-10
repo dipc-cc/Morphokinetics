@@ -22,7 +22,7 @@ class CompleteData:
         self.outerPerimeter = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.islandAmount = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.diffusivity = [[0 for x in range(w)] for y in range(maxCoverage)]
-        self.mobileAtoms = [[0 for x in range(w)] for y in range(maxCoverage)]
+        self.diffusivityLarge = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.readLines = -1
 
         self.time[0].append(0)
@@ -51,7 +51,7 @@ class CompleteData:
             self.outerPerimeter[cov].append(int(dataList[11]))
         if (len(dataList) > 13):
             self.diffusivity[cov].append(float(dataList[12]))
-            self.mobileAtoms[cov].append(int(dataList[13]))
+            self.diffusivityLarge[cov].append(float(dataList[13]))
         self.islandAmount[cov].append(int(dataList[3]))
 
     def addReadLines(self, readLines):
@@ -89,7 +89,7 @@ class AverageData:
         self.maxCoverage = maxCoverage
         self.ne = []
         self.diffusivity = []
-        self.mobileAtoms = []
+        self.diffusivityLarge = []
         self.slopes = Slopes()
 
     def appendData(self, row):
@@ -112,7 +112,7 @@ class AverageData:
         self.stdOuterPerimeter.append(row[20])
         self.ne.append(row[21])
         self.diffusivity.append(row[22])
-        self.mobileAtoms.append(row[23])
+        self.diffusivityLarge.append(row[23])
         
     def updateData(self, index, islandSizes, completeData):
         verbose = False
@@ -140,7 +140,7 @@ class AverageData:
         self.stdOuterPerimeter.append(np.std(np.array(completeData.outerPerimeter[index]).astype(np.float)))
         self.ne.append(np.mean(np.array(completeData.ne[index]).astype(np.float)))
         self.diffusivity.append(np.mean(np.array(completeData.diffusivity[index]).astype(np.float)))
-        self.mobileAtoms.append(np.mean(np.array(completeData.diffusivity[index]).astype(np.float)))
+        self.diffusivityLarge.append(np.mean(np.array(completeData.diffusivity[index]).astype(np.float)))
         if verbose:
             print("  coverage {}%  {} time {}".format(index, sizes[-1], times[-1]))
         if index == 30: # only count islands in 30% of coverage
@@ -257,9 +257,9 @@ class AverageData:
         except IndexError:
             return float('nan')
 
-    def lastMobileAtoms(self):
+    def lastDiffusivityLarge(self):
         try:
-            return self.mobileAtoms[self.maxCoverage-1]
+            return self.diffusivityLarge[self.maxCoverage-1]
         except IndexError:
             return float('nan')
         
@@ -306,7 +306,7 @@ class MeanValues:
         self.ne = []
         self.diffusivity = []
         self.diffusivitySlopes = []
-        self.mobileAtoms = []
+        self.diffusivityLarge = []
 
     def updateData(self, averageData):
         self.growthSlopes.append(averageData.slopes.growth)
@@ -331,7 +331,7 @@ class MeanValues:
         self.ne.append(averageData.lastNe())
         self.diffusivity.append(averageData.lastDiffusivity())
         self.diffusivitySlopes.append(averageData.slopes.diffusivity)
-        self.mobileAtoms.append(averageData.lastMobileAtoms())
+        self.diffusivityLarge.append(averageData.lastDiffusivityLarge())
 
     def updateTimeAndRatio(self, simulatedTime, numberOfEvents):
         if (simulatedTime != 0):
@@ -437,5 +437,5 @@ class MeanValues:
         """ returns slope value for the diffusivity for the last flux, for all temperatures"""
         return np.array(self.diffusivitySlopes).astype(float)
 
-    def getMobileAtoms(self):
-        return np.array(self.mobileAtoms)
+    def getDiffusivityLarge(self):
+        return np.array(self.diffusivityLarge)

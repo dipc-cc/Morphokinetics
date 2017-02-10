@@ -139,17 +139,15 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     }
 
     double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
-
-    if (!doActivationEnergyStudy) { // normal case
-      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability()));
-    }
+    
+    double elapsedTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
+    addTime(elapsedTime);
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
     }
 
     if (doActivationEnergyStudy) {
-      double elapsedTime = 1 / getTotalProbability();
       if (previousProbability != getTotalProbability()) {
         histogramPossibleTmp = new double[length][length];
         histogramPossibleCounterTmp = new long[length][length];
@@ -169,7 +167,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
             }
           }
         }
-        previousProbability = getTotalProbability();
+        previousProbability = getTotalProbability() + getDepositionProbability();
       } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
         for (int i = 0; i < length; i++) {
           for (int j = 0; j < length; j++) {
@@ -178,8 +176,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
           }
         }
       }
-      Ri_DeltaI += getTotalProbability() * elapsedTime; // should be always 1
-      addTime(elapsedTime);
+      Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * elapsedTime; // should be always 1
     }
     position -= getDepositionProbability();
     double currentProbability = 0;
