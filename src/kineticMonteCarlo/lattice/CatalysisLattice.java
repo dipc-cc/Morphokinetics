@@ -6,26 +6,27 @@
 
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.unitCell.SimpleUc;
-import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import kineticMonteCarlo.atom.ModifiedBuffer;
-import utils.QuickSort;
-import java.util.List;
-import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import kineticMonteCarlo.unitCell.IUc;
 import static java.lang.Math.PI;
-import static java.lang.Math.atan2;
-import static java.lang.Math.sqrt;
-import static java.lang.Math.atan;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.round;
 import static java.lang.Math.abs;
+import static java.lang.Math.abs;
+import static java.lang.Math.atan;
+import static java.lang.Math.atan2;
+import static java.lang.Math.cos;
 import static java.lang.Math.floorDiv;
+import static java.lang.Math.round;
+import static java.lang.Math.sin;
+import static java.lang.Math.sqrt;
+import java.util.ArrayList;
+import java.util.List;
+import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.unitCell.IUc;
+import kineticMonteCarlo.unitCell.SimpleUc;
+import utils.QuickSort;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -79,7 +80,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     islands = new ArrayList<>();
   }
 
-  public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
+  public abstract CatalysisAtom getNeighbour(int iHexa, int jHexa, int neighbour);
 
   /**
    * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
@@ -125,8 +126,8 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * @return selected atom.
    */
   @Deprecated
-  public AbstractGrowthAtom getAtom(int index) {
-    return getUc(index).getAtom(0);
+  public CatalysisAtom getAtom(int index) {
+    return (CatalysisAtom) getUc(index).getAtom(0);
   }
   
   /**
@@ -137,13 +138,13 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * @return required atom.
    */
   @Deprecated
-  public AbstractGrowthAtom getAtom(int iHexa, int jHexa) {
-    return ucArray[iHexa][jHexa].getAtom(0);
+  public CatalysisAtom getAtom(int iHexa, int jHexa) {
+    return (CatalysisAtom) ucArray[iHexa][jHexa].getAtom(0);
   }
   
-  public AbstractGrowthAtom getAtom(int iHexa, int jHexa, int unitCellPos) {
+  public CatalysisAtom getAtom(int iHexa, int jHexa, int unitCellPos) {
     int index = jHexa * getHexaSizeI() + iHexa;
-    return getUc(index).getAtom(0);
+    return (CatalysisAtom) getUc(index).getAtom(0);
   }
   
   /**
@@ -151,10 +152,10 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * 
    * @return central atom.
    */
-  public abstract AbstractGrowthAtom getCentralAtom();
+  public abstract CatalysisAtom getCentralAtom();
 
   @Override
-  public AbstractGrowthUc getUc(int pos) {
+  public SimpleUc getUc(int pos) {
     int j = floorDiv(pos, getHexaSizeI());
     int i = pos - (j * getHexaSizeI());
 
@@ -169,10 +170,10 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     return getAtom(iHexa, jHexa, unitCellPos);
   }
   
-  public final void setAtoms(AbstractGrowthAtom[][] atoms) {
+  public final void setAtoms(CatalysisAtom[][] atoms) {
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        AbstractGrowthAtom atom = atoms[i][j];
+        CatalysisAtom atom = atoms[i][j];
         ucArray[i][j] = new SimpleUc(i, j, atom);
 
         ucArray[i][j].setPosX(getCartX(i, j));
@@ -183,9 +184,9 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
 
   final void setAngles() {
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         double posY = atom.getPos().getY() + uc.getPos().getY();
         double posX = atom.getPos().getX() + uc.getPos().getX();
 
@@ -262,7 +263,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     return occupied;
   }
   
-  public AbstractGrowthUc getUc(int iLattice, int jLattice) {
+  public SimpleUc getUc(int iLattice, int jLattice) {
     return ucArray[iLattice][jLattice];
   }
   
@@ -314,7 +315,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
   
   public abstract void changeOccupationByHand(double xMouse, double yMouse, int scale);
   
-  public abstract void deposit(AbstractGrowthAtom atom, boolean forceNucleation);
+  public abstract void deposit(CatalysisAtom atom, boolean forceNucleation);
 
   /**
    * Extract the given atom from the lattice.
@@ -322,7 +323,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * @param atom the atom to be extracted.
    * @return probability change (positive value).
    */
-  public abstract double extract(AbstractGrowthAtom atom);
+  public abstract double extract(CatalysisAtom atom);
   
   public double getDistanceToCenter(int iHexa, int jHexa) {
     return getCentralCartesianLocation().distance(getCartesianLocation(iHexa, jHexa));
@@ -335,7 +336,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         int islandNumber = atom.getIslandNumber();
         // atom belongs to an island
         if (islandNumber > 0) {
@@ -390,7 +391,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         int islandNumber = atom.getIslandNumber();
       }
     }
@@ -414,7 +415,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     for (int i = 0; i < size(); i++) {
       IUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         int islandNumber = atom.getIslandNumber();
         // atom belongs to an island
         if (islandNumber > 0) {
@@ -489,9 +490,9 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     atomTypesAmount = probabilities.length;
     atomTypesCounter = new int[atomTypesAmount];
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         atom.initialiseRates(probabilities);
       }
     }
@@ -500,9 +501,9 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
   @Override
   public void reset() {
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         atom.clear();
       }
     }
@@ -517,13 +518,13 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * @param radius
    * @return An array with the atoms that are in the circumference (only the perimeter).
    */
-  public List<AbstractGrowthAtom> setInsideCircle(int radius, boolean periodicSingleFlake) {
-    ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
+  public List<CatalysisAtom> setInsideCircle(int radius, boolean periodicSingleFlake) {
+    ArrayList<CatalysisAtom> perimeterList = new ArrayList();
 
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
         double y = atom.getPos().getY() + uc.getPos().getY();
         double distance = getDistanceToCenter(x, y);
@@ -551,8 +552,8 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * @param radius is the half of the square side.
    * @return An array with the atoms that are in the perimeter.
    */
-  public List<AbstractGrowthAtom> setInsideSquare(int radius) {
-    ArrayList<AbstractGrowthAtom> perimeterList = new ArrayList();
+  public List<CatalysisAtom> setInsideSquare(int radius) {
+    ArrayList<CatalysisAtom> perimeterList = new ArrayList();
 
     Point2D centreCart = getCentralCartesianLocation();
     double left = centreCart.getX() - radius;
@@ -585,7 +586,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
                 continue;
               }
             }
-            perimeterList.add(ucArray[iHexa][jHexa].getAtom(0));
+            perimeterList.add((CatalysisAtom) ucArray[iHexa][jHexa].getAtom(0));
           }
         } else {
           ucArray[iHexa][jHexa].getAtom(0).setOutside(true);
@@ -598,11 +599,11 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     return perimeterList;
   }
   
-  void addAtom(AbstractGrowthAtom atom) {
+  void addAtom(CatalysisAtom atom) {
     modified.addOwnAtom(atom);
   }
   
-  void addBondAtom(AbstractGrowthAtom atom) {
+  void addBondAtom(CatalysisAtom atom) {
     modified.addBondAtom(atom);
   }
 
@@ -620,9 +621,9 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         atom.setVisited(false);
         atom.setIslandNumber(0);
         if (atom.isOccupied()) {
@@ -651,9 +652,9 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     }
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        identifyIsland(uc.getAtom(j), false, 0, 0);
+        identifyIsland((CatalysisAtom) uc.getAtom(j), false, 0, 0);
       }
     }
     
@@ -665,7 +666,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
       }
       // iterate all atoms and add to the corresponding island
       for (int i = 0; i < size(); i++) {
-        AbstractGrowthUc uc = getUc(i);
+        SimpleUc uc = getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           int island = uc.getAtom(j).getIslandNumber();
           if (island >= 0) {
@@ -690,9 +691,9 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     outerPerimeter = 0;
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
-      AbstractGrowthUc uc = getUc(i);
+      SimpleUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
         occupiedNeighbours = 0;
         atom.resetPerimeter();
         for (int k = 0; k < atom.getNumberOfNeighbours(); k++) {
@@ -739,7 +740,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
    * @param atom atom to be classified.
    * @param fromNeighbour whether is called from outside or recursively.
    */
-  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
+  private void identifyIsland(CatalysisAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
     int xRef = xDiference;
     int yRef = yDiference;
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
@@ -764,7 +765,7 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
       atom.setRelativeY(yDiference);
       islands.get(islandCount-1).addAtom(atom);
       for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
-        AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
+        CatalysisAtom neighbour = atom.getNeighbour(pos);
         if (!neighbour.isVisited()) {
           if (pos == 0) {
             xDiference = xRef;
