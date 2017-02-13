@@ -103,6 +103,8 @@ def diffusivityDistance():
     plt.title("flux: {:.1e} temperature: {:d}".format(flux, int(temp)))
     plt.savefig("plot"+str(flux)+str(temp)+".png")
 
+    return time, neg1
+
 ##########################################################
 ##########           Main function   #####################
 ##########################################################
@@ -110,17 +112,28 @@ def diffusivityDistance():
 workingPath = os.getcwd()
 fluxes = glob.glob("flux*")
 for f in fluxes:
+    firstCollisionTime = []
+    temperaturesPlot = []
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
     temperatures = glob.glob("*")
+    temperatures = np.array(temperatures).astype(int)
+    temperatures.sort()
     for t in temperatures:
         try:
-            os.chdir(t+"/results")
+            os.chdir(str(t)+"/results")
             print("\t",t)
-            diffusivityDistance()
+            time, neg1 = diffusivityDistance()
+            # find first dimer occurrence
+            i = np.argmax(neg1>0)
+            firstCollisionTime.append(time[i])
         except FileNotFoundError:
             pass
         os.chdir(fPath)
+    kb = 8.6173324e-5
+    plt.semilogy(1/kb/temperatures, firstCollisionTime, ".-", label=f)
     os.chdir(workingPath)
+plt.legend()
+plt.show()
 
