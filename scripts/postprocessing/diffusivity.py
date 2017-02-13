@@ -26,7 +26,7 @@ def fit(x, y, initI, finishI):
 
 def hexagonal():
     temperatures = np.array(list(range(70,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
-    initFlux = 4
+    initFlux = 2
     endFlux = 7
     folderBase = "5e"
     return temperatures, initFlux, endFlux, folderBase
