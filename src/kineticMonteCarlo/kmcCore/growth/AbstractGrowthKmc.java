@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.geometry.Point3D;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -451,6 +452,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       setCurrentOccupiedArea(8); // Seed will have 8 atoms
       int depositedAtoms = 1;
       AbstractGrowthAtom centralAtom = lattice.getCentralAtom();
+      centralAtom.setDepositionPosition(new Point3D(0, 0, 0));
       deposition:
       while (true) {
         depositAtom(centralAtom);
@@ -458,6 +460,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           AbstractGrowthAtom atom = centralAtom.getNeighbour(i);
           if (depositAtom(atom)) {
             depositedAtoms++;
+            atom.setDepositionPosition(new Point3D(0, 0, 0));
           }
           if (depositedAtoms > 7) {
             break deposition;
@@ -837,6 +840,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
+        destinationAtom.setDepositionPosition(new Point3D(0, 0, 0));
       } while (destinationAtom.areTwoTerracesTogetherInPerimeter(destinationAtom) || !depositAtom(destinationAtom));
     } else {
       do {
