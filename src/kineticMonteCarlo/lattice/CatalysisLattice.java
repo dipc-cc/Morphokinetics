@@ -36,7 +36,7 @@ import utils.QuickSort;
  *
  * @author karmele
  */
-public abstract class CatalysisLattice extends AbstractLattice implements IDevitaLattice {
+public abstract class CatalysisLattice extends AbstractGrowthLattice implements IDevitaLattice {
 
   public static final float Y_RATIO = (float) sqrt(3) / 2.0F; // it is the same as: sin 60º
 
@@ -61,7 +61,8 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
   private int hops;
 
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
-    setHexaSizeI(hexaSizeI);
+    super(hexaSizeI, hexaSizeJ, modified);
+     setHexaSizeI(hexaSizeI);
     setHexaSizeJ(hexaSizeJ);
     setHexaSizeK(1);
     setUnitCellSize(1);
@@ -178,31 +179,6 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
 
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
-      }
-    }
-  }
-
-  final void setAngles() {
-    for (int i = 0; i < size(); i++) {
-      SimpleUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
-        double posY = atom.getPos().getY() + uc.getPos().getY();
-        double posX = atom.getPos().getX() + uc.getPos().getX();
-
-        double xDif = posX - getCentralCartesianLocation().getX();
-        double yDif = posY - getCentralCartesianLocation().getY();
-        if (xDif == 0) {
-          xDif = 1e-8;
-        }
-        double angle = atan(yDif / xDif);
-        if (xDif < 0) {
-          angle = PI + angle;
-        }
-        if (xDif >= 0 && yDif < 0) {
-          angle = 2 * PI + angle;
-        }
-        atom.setAngle(angle);
       }
     }
   }
@@ -509,96 +485,6 @@ public abstract class CatalysisLattice extends AbstractLattice implements IDevit
     }
   }
 
-  /**
-   * Defines which atoms are inside from the current position (centre) and given radius.
-   *
-   * Define como átomos inside a los átomos dentro de dicho rádio Devuelve un array de átomos que es
-   * el perimetro de dicha circunferencia.
-   *
-   * @param radius
-   * @return An array with the atoms that are in the circumference (only the perimeter).
-   */
-  public List<CatalysisAtom> setInsideCircle(int radius, boolean periodicSingleFlake) {
-    ArrayList<CatalysisAtom> perimeterList = new ArrayList();
-
-    for (int i = 0; i < size(); i++) {
-      SimpleUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
-        double x = atom.getPos().getX() + uc.getPos().getX();
-        double y = atom.getPos().getY() + uc.getPos().getY();
-        double distance = getDistanceToCenter(x, y);
-      
-        if (radius < distance && !periodicSingleFlake) {
-          atom.setOutside(true);
-        } else {
-          atom.setOutside(false);
-          if (distance > radius - 1) {
-            perimeterList.add(atom);
-          }
-        }
-      }
-    }
-    
-    QuickSort.orderByAngle(perimeterList, perimeterList.size() - 1);
-
-    return perimeterList;
-  }
-  
-  /**
-   * Defines which atoms are inside from the current position.
-   *
-   *
-   * @param radius is the half of the square side.
-   * @return An array with the atoms that are in the perimeter.
-   */
-  public List<CatalysisAtom> setInsideSquare(int radius) {
-    ArrayList<CatalysisAtom> perimeterList = new ArrayList();
-
-    Point2D centreCart = getCentralCartesianLocation();
-    double left = centreCart.getX() - radius;
-    double right = centreCart.getX() + radius;
-    double bottom = centreCart.getY() - radius;
-    double top = centreCart.getY() + radius;
-    Point2D position;
-    int countTop = 1;
-    int countBottom = 1;
-    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-        position = getCartesianLocation(iHexa, jHexa);
-        if (left <= position.getX() && position.getX() <= right
-                && bottom <= position.getY() + Y_RATIO
-                && position.getY() - Y_RATIO <= top) {
-          ucArray[iHexa][jHexa].getAtom(0).setOutside(false);
-          if (abs(left - position.getX()) < 0.49
-                  || abs(right - position.getX()) < 0.49
-                  || abs(top - position.getY()) < Y_RATIO / 2
-                  || abs(bottom - position.getY()) < Y_RATIO / 2) {
-            if (abs(top - position.getY()) < Y_RATIO / 2) {
-              countTop++;
-              if (!includePerimeterList.contains(countTop)) {
-                continue;
-              }
-            }
-            if (abs(bottom - position.getY()) < Y_RATIO / 2) {
-              countBottom++;
-              if (!includePerimeterList.contains(countBottom)) {
-                continue;
-              }
-            }
-            perimeterList.add((CatalysisAtom) ucArray[iHexa][jHexa].getAtom(0));
-          }
-        } else {
-          ucArray[iHexa][jHexa].getAtom(0).setOutside(true);
-        }
-      }
-    }
-
-    QuickSort.orderByAngle(perimeterList, perimeterList.size() - 1);
-
-    return perimeterList;
-  }
-  
   void addAtom(CatalysisAtom atom) {
     modified.addOwnAtom(atom);
   }

@@ -21,6 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -472,53 +473,6 @@ public abstract class CatalysisKmc extends AbstractKmc {
       // Do not deposit anything, just reset deposition probability
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
-  }
-  
-  /**
-   * Performs a simulation step.
-   * 
-   * @return true if a stop condition happened (all atom etched, all surface covered).
-   */
-  @Override
-  protected boolean performSimulationStep() {
-    CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
-    CatalysisAtom destinationAtom;
-
-    if (originAtom == null) {
-      destinationAtom = depositNewAtom();
-
-    } else {
-      do {
-        destinationAtom = chooseRandomHop(originAtom, 0);
-        if (destinationAtom.equals(originAtom)) {
-          destinationAtom.equals(originAtom);
-          break;
-        }
-      } while (!diffuseAtom(originAtom, destinationAtom));
-    }
-
-    if (justCentralFlake && perimeterMustBeEnlarged(destinationAtom)) {
-      int nextRadius = perimeter.goToNextRadius();
-      if (nextRadius > 0
-              && nextRadius < lattice.getCartSizeX() / 2
-              && nextRadius < lattice.getCartSizeY() / 2) {
-        if (extraOutput) {
-          printData(null);
-        }
-        if (perimeterType == RoundPerimeter.CIRCLE) {
-          perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
-          int newArea;
-          newArea = calculateAreaAsInKmcCanvas();
-          freeArea += newArea - currentArea;
-          currentArea = newArea;
-        } else {
-          perimeter.setCurrentPerimeter(lattice.setInsideSquare(nextRadius));
-        }
-      } else {
-        return true;
-      }
-    }
-    return false;
   }
  
   /**
