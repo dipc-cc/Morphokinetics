@@ -72,6 +72,7 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
         AbstractGrowthAtom destinationAtom = getLattice().getUc(ucIndex).getAtom(atomIndex);
         depositAtom(destinationAtom);
         destinationAtom.setDepositionTime(0);
+        destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
       }
     }
   }
