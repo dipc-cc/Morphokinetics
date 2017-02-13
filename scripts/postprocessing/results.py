@@ -16,7 +16,8 @@ class CompleteData:
         self.gyradius = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.time = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.monomers = [[0 for x in range(w)] for y in range(maxCoverage)]
-        self.ne = [[0 for x in range(w)] for y in range(maxCoverage)]
+        self.ne =   [[0 for x in range(w)] for y in range(maxCoverage)]
+        self.hops = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.sumProb = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.innerPerimeter = [[0 for x in range(w)] for y in range(maxCoverage)]
         self.outerPerimeter = [[0 for x in range(w)] for y in range(maxCoverage)]
@@ -27,6 +28,7 @@ class CompleteData:
 
         self.time[0].append(0)
         self.ne[0].append(0)
+        self.hops[0].append(0)
 
         self.maxCoverage = maxCoverage
 
@@ -43,6 +45,7 @@ class CompleteData:
         self.time[cov].append(dataList[1])  # get the time and store it in a list
         self.monomers[cov].append(dataList[6])  # get the number of monomers
         self.ne[cov].append(dataList[7])    # get number of events and store it in a list
+        self.hops[cov].append(dataList[15]) # get number of hops
         self.sumProb[cov].append(dataList[8])  # sum of probabilities
         if (len(dataList) > 10):           # if gyradius was calculated store it
             self.gyradius[cov].append(float(dataList[9]))
@@ -88,6 +91,7 @@ class AverageData:
         self.stdOuterPerimeter = []
         self.maxCoverage = maxCoverage
         self.ne = []
+        self.hops = []
         self.diffusivity = []
         self.diffusivityLarge = []
         self.slopes = Slopes()
@@ -113,6 +117,7 @@ class AverageData:
         self.ne.append(row[21])
         self.diffusivity.append(row[22])
         self.diffusivityLarge.append(row[23])
+        self.hops.append(row[24])
         
     def updateData(self, index, islandSizes, completeData):
         verbose = False
@@ -139,6 +144,7 @@ class AverageData:
         self.stdInnerPerimeter.append(np.std(np.array(completeData.innerPerimeter[index]).astype(np.float)))
         self.stdOuterPerimeter.append(np.std(np.array(completeData.outerPerimeter[index]).astype(np.float)))
         self.ne.append(np.mean(np.array(completeData.ne[index]).astype(np.float)))
+        self.hops.append(np.mean(np.array(completeData.hops[index]).astype(np.float)))
         self.diffusivity.append(np.mean(np.array(completeData.diffusivity[index]).astype(np.float)))
         self.diffusivityLarge.append(np.mean(np.array(completeData.diffusivity[index]).astype(np.float)))
         if verbose:
@@ -215,6 +221,21 @@ class AverageData:
         except IndexError:
             return float('nan')
 
+    def lastHops(self):
+        """ returns average number of hops, removing negative values"""
+        try:
+            return float(self.hops[self.maxCoverage-1])
+        except IndexError:
+            return float('nan')
+
+    def getHops(self, index):
+        """ returns average number of hops, removing negative values"""
+        try:
+            return float(self.hops[index])
+        except IndexError:
+            return float('nan')
+
+        
     def lastMonomerAmount(self):
         try:
             return self.monomers[self.maxCoverage-1]
@@ -304,6 +325,7 @@ class MeanValues:
         self.sizesStd = []
         self.aeRatioTimesPossibleList = []
         self.ne = []
+        self.hops = []
         self.diffusivity = []
         self.diffusivitySlopes = []
         self.diffusivityLarge = []
@@ -329,6 +351,7 @@ class MeanValues:
         self.sizes2.append(averageData.lastSize2())
         self.sizesStd.append(averageData.lastStdSizes())
         self.ne.append(averageData.lastNe())
+        self.hops.append(averageData.lastHops())
         self.diffusivity.append(averageData.lastDiffusivity())
         self.diffusivitySlopes.append(averageData.slopes.diffusivity)
         self.diffusivityLarge.append(averageData.lastDiffusivityLarge())
@@ -428,6 +451,10 @@ class MeanValues:
     def getNumberOfEvents(self):
         """ returns the number of events that simulation has done until given coverage """
         return np.array(self.ne)
+    
+    def getNumberOfHops(self):
+        """ returns the number of hops (atom's movement) that simulation has done until given coverage """
+        return np.array(self.hops)
 
     def getDiffusivity(self):
         """ returns last value for the diffusivity for the last flux, for all temperatures"""
