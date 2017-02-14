@@ -44,7 +44,8 @@ def getInputParameters():
 
 def diffusivityDistance():
     # split files
-    os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > \"data\"n\".txt\"}'")
+    os.system("rm data[1-9]*.txt")
+    os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($2<prev) {n++}prev=$2;} {print > \"data\"n\".txt\"}'")
     os.system("sed -i '1d' data0.txt")
 
     r_tt, temp, flux, L1, L2, maxN = getInputParameters()
