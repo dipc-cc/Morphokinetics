@@ -16,6 +16,10 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  * @author J. Alberdi-Rodriguez
  */
 public class ActivationEnergy {
+  /**
+   * Attribute to count processes that happened. Used to compute activation energy per each rate.
+   */
+  private int[][] histogramSuccess;
   private double[][] histogramPossible;
   private long[][] histogramPossibleCounter;
   private double[][] histogramPossibleTmp;
@@ -63,6 +67,20 @@ public class ActivationEnergy {
     return histogramPossibleCounter;
   }
 
+  public int[][] getHistogramSuccess() {
+    return histogramSuccess;
+  }
+  
+ 
+  /**
+   * Initialises histogram to store the happened transition from atom type to atom type.
+   * 
+   * @param atomTypes number of different atom types.
+   */
+  void initHistogramSucces(int atomTypes) {
+    histogramSuccess = new int[atomTypes][atomTypes];
+  }
+  
   public void updatePossibles(ArrayList<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
@@ -95,6 +113,10 @@ public class ActivationEnergy {
     }
   }
 
+  public void updateSuccess(int oldType, int newType) {
+    histogramSuccess[oldType][newType]++;
+  }
+  
   public void update(ArrayList<AbstractAtom> surface)  {
     
   }
@@ -107,6 +129,17 @@ public class ActivationEnergy {
       histogramPossibleCounter = new long[length][length];
       histogramPossibleTmp = new double[length][length];
       histogramPossibleCounterTmp = new long[length][length];
+      histogramSuccess = new int[length][length];
+    }
+  }
+  
+  public void printSuccess() {
+    for (int origin = 0; origin < histogramSuccess.length; origin++) {
+      System.out.print("AeSuccess ");
+      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
+        System.out.print(histogramSuccess[origin][destination] + " ");
+      }
+      System.out.println();
     }
   }
 }

@@ -82,10 +82,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final boolean forceNucleation;
   
   private double terraceToTerraceProbability;
-  /**
-   * Attribute to count processes that happened. Used to compute activation energy per each rate.
-   */
-  private int[][] histogramSuccess;
   
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
@@ -328,6 +324,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   public void reset() {
     lattice.reset();
     getList().reset();
+    getActivationEnergy().reset();
     freeArea = calculateAreaAsInKmcCanvas();
     
     for (int i = 0; i < lattice.size(); i++) {
@@ -341,8 +338,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     deltaTimePerAtom.clear();
     previousTime = 0;
     nucleations = 0;
-    int length = histogramSuccess.length;
-    histogramSuccess = new int[length][length];
   }
   
   @Override
@@ -527,7 +522,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param atomTypes number of different atom types.
    */
   void initHistogramSucces(int atomTypes) {
-    histogramSuccess = new int[atomTypes][atomTypes];
+    getActivationEnergy().initHistogramSucces(atomTypes);
   }
   
   /**
@@ -604,13 +599,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
   
   private void printHistogram() {
-    for (int origin = 0; origin < histogramSuccess.length; origin++) {
-      System.out.print("AeSuccess ");
-      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
-        System.out.print(histogramSuccess[origin][destination] + " ");
-      }
-      System.out.println();
-    }
+    getActivationEnergy().printSuccess();
     PrintWriter standardOutputWriter = new PrintWriter(System.out);
     //lattice.countIslands(standardOutputWriter);
     printAe(standardOutputWriter, -1);
@@ -659,7 +648,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       if (printLineBreak) print.print("AeMultiplicity ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
-        multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
+        multiplicity[origin][destination] = getActivationEnergy().getHistogramSuccess()[origin][destination] / ratioTimesPossible[origin][destination];
         print.print(multiplicity[origin][destination] + " ");
       }
       if (printLineBreak) print.println();
@@ -802,7 +791,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     if (aeOutput) {
-      histogramSuccess[oldType][destinationAtom.getRealType()]++;
+      getActivationEnergy().updateSuccess(oldType, destinationAtom.getRealType());
     }
     modifiedBuffer.updateAtoms(getList());
 
