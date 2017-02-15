@@ -7,7 +7,9 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
 import basic.io.OutputType;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Locale;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 
@@ -30,6 +32,7 @@ public class ActivationEnergy {
   private double previousProbability;
   private int length;
   private int numberOfNeighbours;
+  private double[][] rates;
 
   public ActivationEnergy(Parser parser) {
     surface = new ArrayList();
@@ -71,6 +74,9 @@ public class ActivationEnergy {
     return histogramSuccess;
   }
   
+  public void setRates(double[][] rates) {
+    this.rates = rates;
+  }
  
   /**
    * Initialises histogram to store the happened transition from atom type to atom type.
@@ -141,5 +147,55 @@ public class ActivationEnergy {
       }
       System.out.println();
     }
+  }
+  
+  public void printAe(PrintWriter print, float coverage) {
+    boolean printLineBreak = (coverage == -1);
+    //histogramPossible = ((LinearList) getList()).getHistogramPossible();
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%f %s", coverage, "AePossibleFromList ");
+    for (int origin = 0; origin < length; origin++) {
+      if (printLineBreak) print.print("AePossibleFromList ");
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        print.print(histogramPossible[origin][destination] + " ");
+      }
+      if (printLineBreak) print.println();
+    }
+
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleDiscrete ");
+    for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
+      if (printLineBreak) print.print("AePossibleDiscrete ");
+      for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
+        print.print(histogramPossibleCounter[origin][destination] + " ");
+      }
+      if (printLineBreak) print.println();
+    }
+    
+    double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeRatioTimesPossible ");
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      if (printLineBreak) print.print("AeRatioTimesPossible ");
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        ratioTimesPossible[origin][destination] = rates[origin][destination] * histogramPossible[origin][destination];
+        print.print(ratioTimesPossible[origin][destination] + " ");
+      }
+      if (printLineBreak) print.println();
+    }
+    
+    double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeMultiplicity ");
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      if (printLineBreak) print.print("AeMultiplicity ");
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
+        print.print(multiplicity[origin][destination] + " ");
+      }
+      if (printLineBreak) print.println();
+    }
+    print.println();
+    print.flush();
   }
 }
