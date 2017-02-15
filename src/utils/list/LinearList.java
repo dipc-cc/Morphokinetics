@@ -147,7 +147,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   @Override
   public AbstractAtom getAtomAt(int position) {
     return surface.get(position);
-
   }
 
   @Override
@@ -157,14 +156,5 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
   public double getRi_DeltaI() {
     return Ri_DeltaI;
-  }  
-  
-  public double[][] getHistogramPossible() {
-    return activationEnergy.getHistogramPossible();
   }
-  
-  public long[][] getHistogramPossibleCounter() {
-    return activationEnergy.getHistogramPossibleCounter();
-  }
-  
 }

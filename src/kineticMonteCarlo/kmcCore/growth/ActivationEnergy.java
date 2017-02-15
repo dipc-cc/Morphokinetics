@@ -61,18 +61,6 @@ public class ActivationEnergy {
     }
     previousProbability = 0;
   }
-
-  public double[][] getHistogramPossible() {
-    return histogramPossible;
-  }
-
-  public long[][] getHistogramPossibleCounter() {
-    return histogramPossibleCounter;
-  }
-
-  public int[][] getHistogramSuccess() {
-    return histogramSuccess;
-  }
   
   public void setRates(double[][] rates) {
     this.rates = rates;
