@@ -21,14 +21,14 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   
   private final ActivationEnergy activationEnergy;
   
-  public LinearList(Parser parser) {
+  public LinearList(Parser parser, ActivationEnergy activationEnergy) {
     super();
     surface = new ArrayList();
     this.setLevel(-1);
     clean = false;
     Ri_DeltaI = 0.0;
     
-    activationEnergy = new ActivationEnergy(parser);
+    this.activationEnergy = activationEnergy;
   }
   
   @Override
