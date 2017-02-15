@@ -10,8 +10,6 @@ import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import static java.lang.Math.PI;
 import static java.lang.Math.abs;
-import static java.lang.Math.abs;
-import static java.lang.Math.atan;
 import static java.lang.Math.atan2;
 import static java.lang.Math.cos;
 import static java.lang.Math.floorDiv;
@@ -21,12 +19,10 @@ import static java.lang.Math.sqrt;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.IUc;
 import kineticMonteCarlo.unitCell.SimpleUc;
-import utils.QuickSort;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -36,7 +32,7 @@ import utils.QuickSort;
  *
  * @author karmele
  */
-public abstract class CatalysisLattice extends AbstractGrowthLattice implements IDevitaLattice {
+public abstract class CatalysisLattice extends AbstractGrowthLattice {
 
   public static final float Y_RATIO = (float) sqrt(3) / 2.0F; // it is the same as: sin 60º
 
