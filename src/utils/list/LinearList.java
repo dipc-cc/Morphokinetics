@@ -95,6 +95,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     surface.clear();
     clean = false;
     Ri_DeltaI = 0.0;
+    previousProbability = 0;
     if (aeOutput) {
       histogramPossible = new double[length][length];
       histogramPossibleCounter = new long[length][length];
@@ -143,10 +144,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     double elapsedTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
     addTime(elapsedTime);
 
-    if (position < getDepositionProbability()) {
-      return null; //toca añadir un átomo nuevo
-    }
-
     if (doActivationEnergyStudy) {
       if (previousProbability != getTotalProbability()) {
         histogramPossibleTmp = new double[length][length];
@@ -177,6 +174,10 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
         }
       }
       Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * elapsedTime; // should be always 1
+    }
+
+    if (position < getDepositionProbability()) {
+      return null; //toca añadir un átomo nuevo
     }
     position -= getDepositionProbability();
     double currentProbability = 0;
