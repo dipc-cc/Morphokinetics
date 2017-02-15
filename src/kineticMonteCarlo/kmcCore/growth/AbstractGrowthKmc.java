@@ -433,11 +433,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         if ((getIterations() - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
           break;
         }
-
       }
-
     }
-
     getList().cleanup();
   }
 
