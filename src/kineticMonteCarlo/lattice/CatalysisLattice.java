@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.BasicGrowthAtom;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
+import kineticMonteCarlo.atom.CatalysisAtom;
+import static kineticMonteCarlo.atom.CatalysisAtom.ISLAND;
+import static kineticMonteCarlo.atom.CatalysisAtom.TERRACE;
+import static kineticMonteCarlo.atom.CatalysisAtom.EDGE;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.StaticRandom;
 
 /**
  *
- * @author J. Alberdi-Rodriguez
+ * @author Karmele Valencia
  */
-public class CatalysisLattice extends BasicGrowthLattice {
+public class CatalysisLattice extends AbstractGrowthLattice {
 
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     super(hexaSizeI, hexaSizeJ, modified);
   }
   
+  @Override
   public CatalysisAtom getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
@@ -32,9 +32,9 @@ public class CatalysisLattice extends BasicGrowthLattice {
   }
   
   @Override
-  public BasicGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
     int index = jHexa * getHexaSizeI() + iHexa;
-    return ((BasicGrowthAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
+    return ((CatalysisAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
   }
 
   @Override
@@ -89,8 +89,8 @@ public class CatalysisLattice extends BasicGrowthLattice {
     }
   }
 
-
-  public CatalysisAtom getFarSite(CatalysisAtom atom, int distance) {
+  @Override
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
     switch (atom.getType()) {
       case TERRACE:
         return chooseClearAreaTerrace(atom, distance);
@@ -106,7 +106,8 @@ public class CatalysisLattice extends BasicGrowthLattice {
     setAngles();
   }    
 
-  public void deposit(CatalysisAtom a, boolean forceNucleation) {
+  @Override
+  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(true);
     if (forceNucleation) {
@@ -116,7 +117,7 @@ public class CatalysisLattice extends BasicGrowthLattice {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
-        addOccupiedNeighbour((BasicGrowthAtom) atom.getNeighbour(i), originalPosition, forceNucleation);
+        addOccupiedNeighbour(atom.getNeighbour(i), originalPosition, forceNucleation);
       }
     }
 
@@ -127,14 +128,15 @@ public class CatalysisLattice extends BasicGrowthLattice {
     atom.resetProbability();
   }
   
-  public double extract(CatalysisAtom a) {
+  @Override
+  public double extract(AbstractGrowthAtom a) {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
-        removeOccupied((CatalysisAtomtom) atom.getNeighbour(i), originalPosition);
+        removeOccupied(atom.getNeighbour(i), originalPosition);
       }
     }
 
@@ -198,8 +200,7 @@ public class CatalysisLattice extends BasicGrowthLattice {
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
-        CatalysisAtom atom;
-        atom = (CatalysisAtom) atoms[iHexa][jHexa];
+        CatalysisAtom atom = (CatalysisAtom) atoms[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
@@ -274,14 +275,14 @@ public class CatalysisLattice extends BasicGrowthLattice {
    * @param distance how far we have to move.
    * @return destination atom.
    */
-  private CatalysisAtom chooseClearAreaTerrace(CatalysisAtom atom, int distance) {
+  private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
     int sizeOfPerimeter = distance * 2 * 4;
     int randomNumber = StaticRandom.rawInteger(sizeOfPerimeter);
     int quotient = randomNumber / (distance*2); // far direction
     int mod = randomNumber % (distance*2); // perimeter direction
     
     for (int i = 0; i < distance; i++) { // go far direction
-      atom = (CatalysisAtom) atom.getNeighbour(quotient);
+      atom = atom.getNeighbour(quotient);
     }
     
     int direction;
@@ -293,7 +294,7 @@ public class CatalysisLattice extends BasicGrowthLattice {
       direction = (quotient + 1) % 4;
     }
     for (int i = 0; i < mod; i++) { // go throw perimeter (if required)
-      atom = (CatalysisAtom) atom.getNeighbour(direction);
+      atom = atom.getNeighbour(direction);
     }
     
     return atom;
@@ -375,7 +376,7 @@ public class CatalysisLattice extends BasicGrowthLattice {
    * @param neighbourPosition the position of the neighbour.
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
+  private void addOccupiedNeighbour(CatalysisAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
     byte newType;
 
     newType = neighbourAtom.getNewType(1); 
@@ -401,7 +402,7 @@ public class CatalysisLattice extends BasicGrowthLattice {
     }
   }
 
-  private void updateSecondNeighbour(BasicGrowthAtom secondNeighbourAtom) {
+  private void updateSecondNeighbour(CatalysisAtom secondNeighbourAtom) {
     if (secondNeighbourAtom.isOccupied()) {
       addAtom(secondNeighbourAtom);
     }
@@ -412,7 +413,7 @@ public class CatalysisLattice extends BasicGrowthLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom.
    */
-  private void removeOccupied(BasicGrowthAtom neighbourAtom, int neighbourPosition) {
+  private void removeOccupied(CatalysisAtom neighbourAtom, int neighbourPosition) {
     byte newType = neighbourAtom.getNewType(-1); // one less atom
     neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 
@@ -432,71 +433,4 @@ public class CatalysisLattice extends BasicGrowthLattice {
       }
     }
   }
-
-  private CatalysisAtom chooseClearAreaTerrace(CatalysisAtom atom, int distance) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private CatalysisAtom chooseClearAreaStep(CatalysisAtom atom, int distance) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private void addAtom(CatalysisAtom atom) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private void addBondAtom(CatalysisAtom atom) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  private static class CatalysisAtom {
-
-    public CatalysisAtom() {
-    }
-
-    private CatalysisAtom(int createId, short s, short s0) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private int getType() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void setOccupied(boolean b) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void setType(byte ISLAND) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private int getNumberOfNeighbours() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private Object getNeighbour(int i) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private int getOccupiedNeighbours() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void resetProbability() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private double getProbability() {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void setList(boolean b) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void setNeighbour(CatalysisAtom catalysisAtom, int i) {
-      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-  }
 }
-

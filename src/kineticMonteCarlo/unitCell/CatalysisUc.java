@@ -7,16 +7,15 @@ package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.CatalysisAtom;
-import kineticMonteCarlo.atom.CatalysisAtom;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_X;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
 
 /**
  * Really simple unit cell, which will contain only one atom.
  *
- * @author J. Alberdi-Rodriguez
+ * @author Karmele Valencia
  */
-public class CatalysisUc extends AbstractGrowhthUc implements IUc{
+public class CatalysisUc extends AbstractGrowthUc implements IUc{
 
   private final CatalysisAtom atom;
   private final int size; // how many atoms
@@ -26,7 +25,7 @@ public class CatalysisUc extends AbstractGrowhthUc implements IUc{
   private double posX;
   private double posY;
 
-  public SimpleUc(int posI, int posJ, CatalysisAtom atom) {
+  public CatalysisUc(int posI, int posJ, CatalysisAtom atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
