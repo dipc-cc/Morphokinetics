@@ -1,11 +1,10 @@
 package utils.list;
 
 import basic.Parser;
-import basic.io.OutputType;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import utils.StaticRandom;
 
 /**
@@ -20,15 +19,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private boolean clean;
   private double Ri_DeltaI;
   
-  private final boolean aeOutput;
-  private boolean doActivationEnergyStudy;
-  private double[][] histogramPossible;
-  private long[][] histogramPossibleCounter;
-  private double[][] histogramPossibleTmp;
-  private long[][] histogramPossibleCounterTmp;
-  private double previousProbability;
-  private int length;
-  private int numberOfNeighbours;
+  private final ActivationEnergy activationEnergy;
   
   public LinearList(Parser parser) {
     super();
@@ -37,30 +28,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     clean = false;
     Ri_DeltaI = 0.0;
     
-    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
-    doActivationEnergyStudy = false;
-    if (aeOutput) {
-      if (parser.getCalculationMode().equals("basic")) {
-        doActivationEnergyStudy = true;
-        length = 4;
-        numberOfNeighbours = 4;
-      }
-      if (parser.getCalculationMode().equals("graphene")) {
-        doActivationEnergyStudy = true;
-        length = 8;
-        numberOfNeighbours = 12;
-      }
-      if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
-        doActivationEnergyStudy = true;
-        length = 7;
-        numberOfNeighbours = 6;
-      }
-      histogramPossible = new double[length][length];
-      histogramPossibleCounter = new long[length][length];
-      histogramPossibleTmp = new double[length][length];
-      histogramPossibleCounterTmp = new long[length][length];
-    }
-    previousProbability = 0;
+    activationEnergy = new ActivationEnergy(parser);
   }
   
   @Override
@@ -99,13 +67,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     surface.clear();
     clean = false;
     Ri_DeltaI = 0.0;
-    previousProbability = 0;
-    if (aeOutput) {
-      histogramPossible = new double[length][length];
-      histogramPossibleCounter = new long[length][length];
-      histogramPossibleTmp = new double[length][length];
-      histogramPossibleCounterTmp = new long[length][length];
-    }
   }
 
   @Override
@@ -148,36 +109,8 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     double elapsedTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
     addTime(elapsedTime);
 
-    if (doActivationEnergyStudy) {
-      if (previousProbability != getTotalProbability() + getDepositionProbability()) {
-        histogramPossibleTmp = new double[length][length];
-        histogramPossibleCounterTmp = new long[length][length];
-        // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
-        for (int i = 0; i < surface.size(); i++) {
-          AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
-          for (int pos = 0; pos < numberOfNeighbours; pos++) {
-            AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
-            byte destination = neighbourAtom.getTypeWithoutNeighbour(pos);
-            byte origin = atom.getRealType();
-            if (atom.getBondsProbability(pos) > 0) {
-              histogramPossible[origin][destination] += elapsedTime;
-              histogramPossibleCounter[origin][destination]++;
-              histogramPossibleTmp[origin][destination] += elapsedTime;
-              histogramPossibleCounterTmp[origin][destination]++;
-            }
-          }
-        }
-        previousProbability = getTotalProbability() + getDepositionProbability();
-      } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
-        for (int i = 0; i < length; i++) {
-          for (int j = 0; j < length; j++) {
-            histogramPossible[i][j] += histogramPossibleTmp[i][j];
-            histogramPossibleCounter[i][j] += histogramPossibleCounterTmp[i][j];
-          }
-        }
-      }
-      Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * elapsedTime; // should be always 1
-    }
+    activationEnergy.updatePossibles(surface, getTotalProbability() + getDepositionProbability(), elapsedTime);
+    Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * elapsedTime; // should be always 1
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
@@ -227,11 +160,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   }  
   
   public double[][] getHistogramPossible() {
-    return histogramPossible;
+    return activationEnergy.getHistogramPossible();
   }
   
   public long[][] getHistogramPossibleCounter() {
-    return histogramPossibleCounter;
+    return activationEnergy.getHistogramPossibleCounter();
   }
   
 }
