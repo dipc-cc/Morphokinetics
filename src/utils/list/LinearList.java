@@ -28,6 +28,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private long[][] histogramPossibleCounterTmp;
   private double previousProbability;
   private int length;
+  private int numberOfNeighbours;
   
   public LinearList(Parser parser) {
     super();
@@ -42,14 +43,17 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
       if (parser.getCalculationMode().equals("basic")) {
         doActivationEnergyStudy = true;
         length = 4;
+        numberOfNeighbours = 4;
       }
       if (parser.getCalculationMode().equals("graphene")) {
         doActivationEnergyStudy = true;
         length = 8;
+        numberOfNeighbours = 12;
       }
       if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
         doActivationEnergyStudy = true;
         length = 7;
+        numberOfNeighbours = 6;
       }
       histogramPossible = new double[length][length];
       histogramPossibleCounter = new long[length][length];
@@ -145,10 +149,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     addTime(elapsedTime);
 
     if (doActivationEnergyStudy) {
-      if (previousProbability != getTotalProbability()) {
+      if (previousProbability != getTotalProbability() + getDepositionProbability()) {
         histogramPossibleTmp = new double[length][length];
         histogramPossibleCounterTmp = new long[length][length];
-        int numberOfNeighbours = ((AbstractGrowthAtom) surface.get(0)).getNumberOfNeighbours();
         // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
         for (int i = 0; i < surface.size(); i++) {
           AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
