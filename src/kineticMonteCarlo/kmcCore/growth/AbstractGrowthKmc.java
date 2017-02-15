@@ -515,15 +515,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     return false;
   }
- 
-  /**
-   * Initialises histogram to store the happened transition from atom type to atom type.
-   * 
-   * @param atomTypes number of different atom types.
-   */
-  void initHistogramSucces(int atomTypes) {
-    getActivationEnergy().initHistogramSucces(atomTypes);
-  }
   
   /**
    * This has to be called only once from AgKmc or GrapheneKmc.
