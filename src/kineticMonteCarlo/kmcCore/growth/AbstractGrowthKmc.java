@@ -385,7 +385,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double ri = ((LinearList) getList()).getRi_DeltaI();
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
-      printHistogram();
+      PrintWriter standardOutputWriter = new PrintWriter(System.out);
+      getActivationEnergy().printAe(standardOutputWriter, -1);
     } 
     
     // Dirty mode to have only one interface of countIslands
@@ -588,12 +589,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
     }
     return destinationAtom;
-  }
-  
-  private void printHistogram() {
-    getActivationEnergy().printSuccess();
-    PrintWriter standardOutputWriter = new PrintWriter(System.out);
-    getActivationEnergy().printAe(standardOutputWriter, -1);
   }
   
   /**

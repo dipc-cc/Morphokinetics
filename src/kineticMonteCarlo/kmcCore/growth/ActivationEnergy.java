@@ -139,21 +139,20 @@ public class ActivationEnergy {
     }
   }
   
-  public void printSuccess() {
-    for (int origin = 0; origin < histogramSuccess.length; origin++) {
-      System.out.print("AeSuccess ");
-      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
-        System.out.print(histogramSuccess[origin][destination] + " ");
-      }
-      System.out.println();
-    }
-  }
-  
   public void printAe(PrintWriter print, float coverage) {
     boolean printLineBreak = (coverage == -1);
+    if (printLineBreak) print.println("Ae");
+    else print.format(Locale.US, "%f %s", coverage, "AeSuccess ");
+    for (int origin = 0; origin < histogramSuccess.length; origin++) {
+      if (printLineBreak) print.print("AeSuccess ");
+      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
+        print.print(histogramSuccess[origin][destination] + " ");
+      }
+      if (printLineBreak) print.println();
+    }
     //histogramPossible = ((LinearList) getList()).getHistogramPossible();
     if (printLineBreak) print.println("Ae");
-    else print.format(Locale.US, "%f %s", coverage, "AePossibleFromList ");
+    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleFromList ");
     for (int origin = 0; origin < length; origin++) {
       if (printLineBreak) print.print("AePossibleFromList ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
