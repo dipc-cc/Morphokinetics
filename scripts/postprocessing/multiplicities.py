@@ -64,43 +64,133 @@ def getRatio(temperature, energies):
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
 
-r_tt, temp, flux, sizI, sizJ, maxN = getInputParameters()
+def computeMavgAndOmega(fileNumber):
+    r_tt, temp, flux, sizI, sizJ, maxN = getInputParameters()
+    discretes = np.loadtxt(fname="possibleDiscrete"+str(fileNumber)+".txt")
+    matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
+    possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
+    possiblesFromList = possiblesFromList[:,1:] # remove coverage
+    time = np.array(matrix[:,1])
+    length = len(time)
+    neg0 = matrix[:,16]
+    hops = np.array(matrix[:,15])
+    even = np.array(matrix[:,7])
+    cove = np.array(matrix[:,0])
+    ratios = getRatio(temp, getHexagonalEnergies())
+    Mavg = np.zeros(shape=(length,49))
+    for i in range(0,49):
+        Mavg[:,i] = possiblesFromList[:,i]/time
+    avgTotalHopRate2 = np.array(ratios.dot(np.transpose(Mavg)))
+    avgTotalHopRate1 = hops/time
+    # define omegas AgUc
+    omega = np.zeros(shape=(length, 49))
+    for i in range(0,length):
+        omega[i,:] =  Mavg[i,:] * ratios / avgTotalHopRate2[i]
+    np.shape(omega)
+    return Mavg, omega, avgTotalHopRate1, avgTotalHopRate2
 
-discretes = np.loadtxt(fname="possibleDiscrete0.txt")
-matrix = np.loadtxt(fname="data0.txt", delimiter="\t")
-possiblesFromList = np.loadtxt(fname="possibleFromList0.txt")
-possiblesFromList = possiblesFromList[:,1:] # remove coverage
-time = np.array(matrix[:,1])
-length = len(time)
-neg0 = matrix[:,16]
-hops = np.array(matrix[:,15])
-even = np.array(matrix[:,7])
-cove = np.array(matrix[:,0])
 
-ratios = getRatio(temp, getHexagonalEnergies())
-Mavg = np.zeros(shape=(length,49))
+def computeMavgAndOmegaOverRuns():
+    files = glob.glob("possibleDiscrete*")
+    files.sort()
+    matrix = np.loadtxt(fname="data0.txt", delimiter="\t")
+    length = len(matrix)
+    sumMavg = np.zeros(shape=(length,49))
+    sumOmega = np.zeros(shape=(length,49))
+    sumRate1 = np.zeros(length)
+    sumRate2 = np.zeros(length)
+    #iterating over runs
+    for i in range(0,len(files)-1):
+        tmpMavg, tmpOmega, tmpRate1, tmpRate2 = computeMavgAndOmega(i)
+        sumMavg = sumMavg + tmpMavg
+        sumOmega = sumOmega + tmpOmega
+        sumRate1 = sumRate1 + tmpRate1
+        sumRate2 = sumRate2 + tmpRate2
+        
+    
+    runMavg = sumMavg / (len(files)-1)
+    runOavg = sumOmega / (len(files)-1)
+    runR1avg = sumRate1 / (len(files)-1)
+    runR2avg = sumRate2 / (len(files)-1)
+    
+    #plt.loglog(avgTotalHopRate2)
+    #plt.loglog(avgTotalHopRate1)
+    #They should be the same, check if they are with many executions
+        
+    #plt.figure()
+    # plt.plot(np.sum(runAvgOmega[:,0:4], axis=1), lw=2, label="0:4")
+    # plt.plot(np.sum(runAvgOmega[:,8:12], axis=1), lw=2, label="8:12")
+    # plt.plot(np.sum(runAvgOmega[:,15:20], axis=1), label="15:20")
+    # plt.plot(np.sum(runAvgOmega[:,24:27], axis=1), label="24:27")
+    # plt.legend(loc="best")
+    # plt.show()
+    # plt.savefig("omegaAvg.png")
+    
+    #plt.figure()
+    # plt.loglog(np.sum(runMavg[:,0:4], axis=1), lw=2, label="0:4")
+    # plt.loglog(np.sum(runMavg[:,8:12], axis=1), lw=2, label="8:12")
+    # plt.loglog(np.sum(runMavg[:,15:20], axis=1), label="15:20")
+    # plt.loglog(np.sum(runMavg[:,24:27], axis=1), label="24:27")
+    # plt.show()
 
-for i in range(0,49):
-    Mavg[:,i]=possiblesFromList[:,i]/time
-avgTotalHopRate2 = np.array(ratios.dot(np.transpose(Mavg)))
+    return runMavg, runOavg, runR1avg, runR2avg
 
-avgTotalHopRate1=hops/time
+temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,400,50))+list(range(450,1100,50)))
+kb = 8.6173324e-5
+#tempMavg = {}
+#tempOavg = {}
+tempMavg = []
+tempOavg = []
+tempR1avg = []
+tempR2avg = []
 
-plt.loglog(avgTotalHopRate2)
-plt.loglog(avgTotalHopRate1)
-#They should be the same, check if they are with many executions
+workingPath = os.getcwd()
+for t in temperatures:
+    print(t)
+    os.chdir(str(t)+"/results")
+    #tempMavg[t], tempOavg[t] = computeMavgAndOmegaOverRuns()
+    tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns()
+    tempMavg.append(tmp1)
+    tempOavg.append(tmp2)
+    tempR1avg.append(tmp3)
+    tempR2avg.append(tmp4)
+    os.chdir(workingPath)
 
-# plotting omegas AgUc
-omega = np.zeros(shape=(length, 49))
-for i in range(0,length):
-    omega[i,:] =  Mavg[i,:] * ratios / hopsAvg[i]
+tempMavg = np.array(tempMavg)
+tempOavg = np.array(tempOavg)
+tempR1avg = np.array(tempR1avg)
+tempR2avg = np.array(tempR2avg)
 
-plt.figure()
-plt.plot(cove, np.sum(omega[:,0:4], axis=1), label="0:4")
-plt.plot(cove, np.sum(omega[:,8:12], axis=1), label="8:12")
-plt.plot(cove, np.sum(omega[:,15:20], axis=1), label="15:20")
-plt.plot(cove, np.sum(omega[:,24:27], axis=1), label="24:27")
-plt.legend(loc="best")
+cov = -9
+
+f, axarr = plt.subplots(3, sharex=True)
+axarr[0].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), tempR1avg[4:,cov], "x-")
+
+#last coverage                [4:]
+axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,0:4],   axis=1))
+axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,8:12],  axis=1))
+axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,15:20], axis=1))
+axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,24:27], axis=1))
+axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,0:4],   axis=1), ".-")
+axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,8:12],  axis=1), ".-")
+axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,15:20], axis=1), ".-")
+axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,24:27], axis=1), ".-")
+axarr[2].set_ylim(1e-6,2)
+axarr[2].set_ylim(-0.05,1.05)
+
+#plt.ylim(1e-4,1e0)
+#plt.xlim(20,200)
+
+#"all" coverages
+for i in [-49, -39, -29, -19, -9, -1]:
+    plt.figure()
+    plt.title(str(50+i))
+    plt.loglog(1/kb/temperatures, np.sum(tempMavg[:,i,0:4],axis=1))
+    plt.loglog(1/kb/temperatures, np.sum(tempMavg[:,i,8:12],axis=1))
+    plt.loglog(1/kb/temperatures, np.sum(tempMavg[:,i,15:20],axis=1))
+    plt.loglog(1/kb/temperatures, np.sum(tempMavg[:,i,24:27],axis=1))
+    plt.show()
+
 
 plt.loglog(Mavg)
 
