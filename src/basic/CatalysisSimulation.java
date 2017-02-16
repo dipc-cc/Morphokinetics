@@ -6,6 +6,7 @@
 
 package basic;
 
+import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
 import ratesLibrary.CatalysisRates;
 
 /**
@@ -21,6 +22,9 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
   @Override
   public void initialiseKmc() {
     super.initialiseKmc();
-    setRates(new CatalysisRates()); 
+    setRates(new CatalysisRates());
+    setKmc(new CatalysisKmc(getParser()));
+    initialiseRates(getRates(), getParser());
+    
   } 
 }
