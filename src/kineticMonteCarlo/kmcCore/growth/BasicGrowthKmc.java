@@ -31,7 +31,6 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
-    super.initHistogramSucces(4);
   }
 
   @Override

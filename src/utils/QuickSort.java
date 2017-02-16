@@ -1,9 +1,7 @@
 package utils;
 
-import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.CatalysisAtom;
 
 /** 
  * QuickSort algorithm
@@ -41,9 +39,5 @@ public class QuickSort {
     if (i < right) {
       orderByAngle(atom, i, right);
     }
-  }
-
-  public static void orderByAngle(ArrayList<CatalysisAtom> perimeterList, int i) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

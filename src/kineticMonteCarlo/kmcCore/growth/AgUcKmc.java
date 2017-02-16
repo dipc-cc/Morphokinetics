@@ -41,7 +41,6 @@ public class AgUcKmc extends AbstractGrowthKmc {
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
-    super.initHistogramSucces(7);
   }
  
   public void printLattice() {

@@ -51,7 +51,6 @@ public class GrapheneKmc extends AbstractGrowthKmc {
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
-    super.initHistogramSucces(8);
   }
 
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
