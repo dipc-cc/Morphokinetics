@@ -16,7 +16,7 @@ import kineticMonteCarlo.lattice.CatalysisLattice;
  *
  * @author Karmele Valencia
  */
-public abstract class CatalysisKmc extends AbstractGrowthKmc {
+public class CatalysisKmc extends AbstractGrowthKmc {
   
   public CatalysisKmc(Parser parser) {
     super(parser);
