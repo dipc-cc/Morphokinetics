@@ -1010,7 +1010,7 @@ public class Parser {
    * @return lattice size in I direction. 
    */
   public int getHexaSizeI() {
-    if (calculationMode.equals("basic")) {
+    if (calculationMode.equals("basic")|| getCalculationMode().equals("catalysis")) {
       return cartSizeX;
     }
     if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc")) {
@@ -1033,7 +1033,7 @@ public class Parser {
    * @return lattice size in J direction. 
    */
   public int getHexaSizeJ() {
-    if (calculationMode.equals("basic")) {
+    if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis")) {
       return cartSizeY;
     }
     if (getCalculationMode().equals("AgUc")) {
