@@ -22,9 +22,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     super(parser);
     
     HopsPerStep distancePerStep = new HopsPerStep();
-    CatalysisLattice basicLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
-    basicLattice.init();
-    setLattice(basicLattice); 
+    CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
+    catalysisLattice.init();
+    setLattice(catalysisLattice); 
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
     }
