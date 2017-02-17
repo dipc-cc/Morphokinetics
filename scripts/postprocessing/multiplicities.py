@@ -9,7 +9,32 @@ import glob
 import re
 import math
 import os
+from scipy.optimize import curve_fit
 
+def expFunc(x, a, b):
+    """ ae^bx function """
+    return a*np.exp(x*b)
+
+def linearFunc(x, a, b):
+    return a+x*b
+
+def fit(x, y, initI, finishI):
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = y[indexes]
+    popt = curve_fit(expFunc, x1, y1, p0=[1e10,-0.10])
+    a = popt[0][0]
+    b = popt[0][1]
+    return list([a,b])
+
+def linearFit(x, y, initI, finishI):
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = y[indexes]
+    popt = curve_fit(linearFunc, x1, y1)#, p0=[1e10,-0.10])
+    a = popt[0][0]
+    b = popt[0][1]
+    return list([a,b])
 
 def getInformationFromFile():
     fileName = glob.glob("../output*")[0]
@@ -135,6 +160,39 @@ def computeMavgAndOmegaOverRuns():
 
     return runMavg, runOavg, runR1avg, runR2avg
 
+def defineRanges(temperatures):
+    indexes = np.where((temperatures >= 70) & (temperatures <= 150))
+    iSl = indexes[0][0]
+    iFl = indexes[0][-1]
+    indexes = np.where((temperatures >= 150) & (temperatures <= 450))
+    iSm = indexes[0][0]
+    iFm = indexes[0][-1]
+    indexes = np.where((temperatures >= 450) & (temperatures <= 1100))
+    iSh = indexes[0][0]
+    iFh = indexes[0][-1]
+    return list([iSl, iFl, iSm, iFm, iSh, iFh])
+
+def fitAndPlot(x, y, rngt, axis):
+    axis.semilogy(x, y, "x-")
+    a, b = fit(x, y, rngt[0], rngt[1])
+    axis.semilogy(x[rngt[0]:rngt[1]+1], expFunc(x[rngt[0]:rngt[1]+1], a, b), label="fit low {:03.3f} ".format(b))
+    a, b = fit(x, y, rngt[2], rngt[3])
+    axis.semilogy(x[rngt[2]-1:rngt[3]+1], expFunc(x[rngt[2]-1:rngt[3]+1], a, b), label="fit med {:03.3f}".format(b))
+    a, b = fit(x, y, rngt[4], rngt[5])
+    axis.semilogy(x[rngt[4]-1:], expFunc(x[rngt[4]-1:], a, b), label="fit high {:03.3f}".format(b))
+    axis.legend(loc="best")
+
+def fitAndPlotLinear(x, y, rngt, axis):
+    y = np.log(y)
+    axis.plot(x, y, "x-")
+    a, b = linearFit(x, y, rngt[0], rngt[1])
+    axis.plot(x[rngt[0]:rngt[1]+1], linearFunc(x[rngt[0]:rngt[1]+1], a, b), label="fit low {:03.3f} ".format(b))
+    a, b = linearFit(x, y, rngt[2], rngt[3])
+    axis.plot(x[rngt[2]-1:rngt[3]+1], linearFunc(x[rngt[2]-1:rngt[3]+1], a, b), label="fit med {:03.3f}".format(b))
+    a, b = linearFit(x, y, rngt[4], rngt[5])
+    axis.plot(x[rngt[4]-1:], linearFunc(x[rngt[4]-1:], a, b), label="fit high {:03.3f}".format(b))
+    axis.legend(loc="best")
+
 temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,400,50))+list(range(450,1100,50)))
 kb = 8.6173324e-5
 #tempMavg = {}
@@ -161,16 +219,39 @@ tempOavg = np.array(tempOavg)
 tempR1avg = np.array(tempR1avg)
 tempR2avg = np.array(tempR2avg)
 
+tempMavg = tempMavg[4:]
+tempOavg = tempOavg[4:]
+tempR1avg = tempR1avg[4:]
+tempR2avg = tempR2avg[4:]
+
+
 cov = -9
 
-f, axarr = plt.subplots(3, sharex=True)
-axarr[0].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), tempR1avg[4:,cov], "x-")
 
-#last coverage                [4:]
-axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,0:4],   axis=1))
-axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,8:12],  axis=1))
-axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,15:20], axis=1))
-axarr[1].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempMavg[4:,cov,24:27], axis=1))
+f, axarr = plt.subplots(3, sharex=True)
+temperatures = temperatures[4:]
+# define ranges
+rngt = defineRanges(temperatures)
+plt.xlim(20,200)
+x = 1/kb/temperatures+np.log(5e4**1.5)
+y = tempR1avg
+
+# N_h
+fitAndPlot(x, y[:,cov], rngt, axarr[0])
+
+#one coverage
+ind = [0,4,8,12,15,20,24,27]
+for i in range(3,4):
+    y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
+    fitAndPlot(x, y, rngt, axarr[1])
+    
+for i in range(3,4):
+    y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
+    fitAndPlotLinear(x, y, rngt, axarr[2])
+
+
+
+
 axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,0:4],   axis=1), ".-")
 axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,8:12],  axis=1), ".-")
 axarr[2].semilogy(1/kb/temperatures[4:]+np.log(5e4**1.5), np.sum(tempOavg[4:,cov,15:20], axis=1), ".-")
