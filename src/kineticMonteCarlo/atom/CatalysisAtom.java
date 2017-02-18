@@ -24,7 +24,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private final CatalysisAtom[] neighbours = new CatalysisAtom[4];
   
   private final String latticeSite;
-
+  
+  private final byte typeOfAtom;
+  
+  public static final byte CO = 0;
+  public static final byte O = 1;
+  
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
     occupiedNeighbours = 0; 
@@ -32,6 +37,11 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       latticeSite = "bridge";
     } else {
       latticeSite = "cus";
+    }
+    if(Math.random()>0.5){
+      typeOfAtom = CatalysisAtom.O;
+    }else{
+      typeOfAtom = CatalysisAtom.CO;
     }
   }
   
