@@ -9,6 +9,12 @@ def exp(x, a, b):
     """ ae^bx function """
     return a*np.exp(x*b)
 
+def linear(x, a, b):
+    return a+x*b
+
+def theta(t, F):
+    return 1 - np.exp(-F*t)
+
 def fractalD(x):
     """Fractal dimension for x (= rtt/flux)"""
     minD = 1.66
