@@ -282,6 +282,30 @@ plt.savefig("multiplicities.png")
 
 colors = ["blue", "green", "red", "black"]
 
+
+
+for j in range(0,3): #temperature
+    partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
+    partialSum2 = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]), axis=1)
+    rev = np.sum(partialSum1) < 0
+    print(rev)
+    partialSum = partialSum1 + partialSum2
+    c = 0
+    if rev:
+        axarr[2-j].fill_between(cov, partialSum2, color=colors[c])
+        c += 1
+    for i in range(0,2):
+        if rev:
+            axarr[2-j].fill_between(cov,partialSum1, color=colors[c+i])
+            partialSum1 = partialSum1 + partialSum2
+            
+        else:
+            axarr[2-j].fill_between(cov, partialSum, color=colors[c+i])
+            partialSum -= partialSum1
+        
+
+
+
 for j in range(0,3): #temperature
     partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
     for i in range(3,-1,-1): #alfa
