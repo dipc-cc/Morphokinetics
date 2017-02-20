@@ -256,7 +256,7 @@ ind = [0,4,8,12,15,20,24,27]
 tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
-showPlot = True
+showPlot = False
 #for cov in [-49, -39, -29, -19, -9, -1]:
 for cov in range(-49,0):
     x = 1/kb/temperatures+np.log(5e4**1.5)
@@ -271,15 +271,15 @@ for cov in range(-49,0):
     tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, showPlot))
     tempOmega = np.zeros((4,3))
     tempEaM = []
-    for i in range(0,4):
+    for i in range(0,4): # alfa
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot))
         if showPlot:
             axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
             axarr[2].set_ylim(-0.05,1.05)
             axarr[2].set_ylim(1e-3,2)
-        for j in range(0,3):
-            tempOmega[i][j] = np.mean(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))
+        for j in range(0,3): # temperature ranges
+            tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     plt.savefig("plot"+str(cov)+".png")
@@ -303,7 +303,7 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
     plt.plot(cov, tempEaCov2[:,i], "x:", label="v2 {}".format(i))
     plt.plot(cov, 1-tempEaCov2[:,i]/tempEaCov[:,i], "o", label="relative error")
 plt.legend(loc="best", prop={'size':8})
-
+plt.savefig("multiplicities.png")
 
 
 
