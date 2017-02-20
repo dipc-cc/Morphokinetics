@@ -5,29 +5,7 @@ import glob
 import re
 import math
 import os
-from scipy.optimize import curve_fit
 
-def fit(x, y, initI, finishI):
-    indexes = np.array(range(initI,finishI))
-    x1 = x[indexes]
-    y1 = y[indexes]
-    popt = curve_fit(f.exp, x1, y1, p0=[1e10,-0.10])
-    a = popt[0][0]
-    b = popt[0][1]
-    return list([a,b])
-
-def linearFit(x, y, initI, finishI):
-    indexes = np.array(range(initI,finishI))
-    x1 = x[indexes]
-    y1 = np.log(y[indexes])
-    try:
-        popt = curve_fit(f.linear, x1, y1)#, p0=[1e10,-0.10])
-        a = popt[0][0]
-        b = popt[0][1]
-    except ValueError:
-        a = 0
-        b = 0
-    return list([a,b])
 
 def getInformationFromFile():
     fileName = glob.glob("../output*")[0]
@@ -168,13 +146,13 @@ def defineRanges(temperatures):
 def fitAndPlot(x, y, rngt, axis, alfa):
     slopes = []
     axis.semilogy(x, y, "x-")
-    a, b = fit(x, y, rngt[0], rngt[1])
+    a, b = f.fit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     axis.semilogy(x[rngt[0]:rngt[1]+1], f.exp(x[rngt[0]:rngt[1]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
-    a, b = fit(x, y, rngt[2], rngt[3])
+    a, b = f.fit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     axis.semilogy(x[rngt[2]-1:rngt[3]+1], f.exp(x[rngt[2]-1:rngt[3]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
-    a, b = fit(x, y, rngt[4], rngt[5])
+    a, b = f.fit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     axis.semilogy(x[rngt[4]-1:], f.exp(x[rngt[4]-1:], a, b), label="{} low {:03.3f} ".format(alfa,b))
     axis.legend(loc="best", prop={'size':7})
@@ -184,15 +162,15 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     slopes = []
     if showPlot:   
         axis.plot(x, y, "x-")
-    a, b = linearFit(x, y, rngt[0], rngt[1])
+    a, b = f.linearFit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     if showPlot:
         axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), label="{} low {:03.3f} ".format(alfa,b))
-    a, b = linearFit(x, y, rngt[2], rngt[3])
+    a, b = f.linearFit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     if showPlot:
         axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), label="{} med {:03.3f}".format(alfa,b))
-    a, b = linearFit(x, y, rngt[4], rngt[5])
+    a, b = f.linearFit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     if showPlot:
         axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(alfa,b))

@@ -1,19 +1,24 @@
 import numpy as np
+from scipy.optimize import curve_fit
 
 
 def power(x, a, b):
     """ a*x^b function """
     return a*x**b
 
+
 def exp(x, a, b):
     """ ae^bx function """
     return a*np.exp(x*b)
 
+
 def linear(x, a, b):
     return a+x*b
 
+
 def theta(t, F):
     return 1 - np.exp(-F*t)
+
 
 def fractalD(x):
     """Fractal dimension for x (= rtt/flux)"""
@@ -31,6 +36,7 @@ def fractalD(x):
                 #y.append(minD+(2-minD)/np.log(5e8/3e7)*np.log(x[i]))
                 y.append(minD+(2-minD)/(maxRatio-minRatio)*(x[i]-minRatio))
     return np.array(y)
+
 
 def fractDTemperature(temp):
     maxD = 2.00
@@ -60,8 +66,10 @@ flake simulations. """
     d=b+a*(x**sigma)/(x**sigma+x0**sigma)
     return np.array(d)
 
+
 def readFractalD(flux):
     return np.array(mk.readFractalD(flux)).astype(float)
+
 
 def shapeFactor(x):
     """returns shape factor, based on a fit of a study of single flake
@@ -80,5 +88,31 @@ simulations. """
 def err(x, a, b, c, sigma):
     return a*scipy.special.erf(sigma*(x-c))+b
 
+
 def ourErr(x, a, b, c, sigma):
     return a*(np.exp(sigma*(x-c))/(1+np.exp(sigma*(x-c))))+b
+
+
+def fit(x, y, initI, finishI):
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = y[indexes]
+    popt = curve_fit(exp, x1, y1, p0=[1e10,-0.10])
+    a = popt[0][0]
+    b = popt[0][1]
+    return list([a,b])
+
+
+def linearFit(x, y, initI, finishI):
+    """ linear fit of an exponential function """
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = np.log(y[indexes])
+    try:
+        popt = curve_fit(linear, x1, y1)#, p0=[1e10,-0.10])
+        a = popt[0][0]
+        b = popt[0][1]
+    except ValueError:
+        a = 0
+        b = 0
+    return list([a,b])
