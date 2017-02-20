@@ -36,14 +36,14 @@ import utils.list.LinearList;
  */
 public abstract class AbstractGrowthKmc extends AbstractKmc {
 
-  private AbstractGrowthLattice lattice;
-  private final ModifiedBuffer modifiedBuffer;
-  private final boolean justCentralFlake;
-  private final boolean periodicSingleFlake;
-  private RoundPerimeter perimeter;
-  private final boolean useMaxPerimeter;
-  private final short perimeterType;
-  private DevitaAccelerator accelerator;
+  AbstractGrowthLattice lattice;
+  final ModifiedBuffer modifiedBuffer;
+  final boolean justCentralFlake;
+  final boolean periodicSingleFlake;
+  RoundPerimeter perimeter;
+  final boolean useMaxPerimeter;
+  final short perimeterType;
+  DevitaAccelerator accelerator;
   
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
@@ -56,39 +56,39 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   /**
    * Attribute to store temporally the current area of the simulation.
    */
-  private int currentArea;
-  private double depositionRatePerSite;
-  private int freeArea;
-  private double previousTime;
-  private List<Double> deltaTimeBetweenTwoAttachments;
-  private List<Double> deltaTimePerAtom;
-  private int nucleations;
+  int currentArea;
+  double depositionRatePerSite;
+  int freeArea;
+  double previousTime;
+  List<Double> deltaTimeBetweenTwoAttachments;
+  List<Double> deltaTimePerAtom;
+  int nucleations;
   /**
    * Attribute to control the output of data every 1% and nucleation.
    */
-  private final boolean extraOutput;
+  final boolean extraOutput;
   /**
    * Attribute to control the output of extra data of delta time between two attachments and between
    * an atom is deposited and attached to an island.
    */
-  private final boolean extraOutput2;
+  final boolean extraOutput2;
   /**
    * Activation energy output at the end of execution
    */
-  private final boolean aeOutput;
+  final boolean aeOutput;
   /**
    * If two terraces are together freeze them, in multi-flake simulation mode.
    */
-  private final boolean forceNucleation;
+  final boolean forceNucleation;
   
-  private double terraceToTerraceProbability;
+  double terraceToTerraceProbability;
   
-  private PrintWriter outDeltaAttachments;
-  private PrintWriter outPerAtom;
-  private PrintWriter outData;
-  private String outDataFormat;
-  private long simulatedSteps;
-  private double sumProbabilities;
+  PrintWriter outDeltaAttachments;
+  PrintWriter outPerAtom;
+  PrintWriter outData;
+  String outDataFormat;
+  long simulatedSteps;
+  double sumProbabilities;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
