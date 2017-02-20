@@ -1,3 +1,4 @@
+import functions as f
 import csv
 import re
 import numpy as np
@@ -37,20 +38,10 @@ def getAeStudy(verbose = False):
         resultsDict[i] = [ratio[x][y],possible[x][y]]
         if (verbose):
             print(i, x, y, ratio[x][y], ratioSum)
-        if (ratioSum > 0.999):
+        if (ratioSum > 1):
             break
     return resultsDict
 
-
-def powerFunc(x, a, b):
-    """ a*x^b function """
-    return a*x**b
-
-def errFunc(x, a, b, c, sigma):
-    return a*scipy.special.erf(sigma*(x-c))+b
-
-def ourErrFunc(x, a, b, c, sigma):
-    return a*(np.exp(sigma*(x-c))/(1+np.exp(sigma*(x-c))))+b
 
 def readAllValues(maxCoverage, temperature, flux):
     """ reads average data from previously computed data """
@@ -133,7 +124,7 @@ def getSlope(times, valueList, maxCoverage, sqrt=False, verbose=False, tmpFileNa
     averageValues = np.array(valueList).astype(float)[0:maxCoverage]
     try:
         a, b = np.polyfit(x, averageValues, 1)
-        popt = curve_fit(powerFunc, x, averageValues)
+        popt = curve_fit(f.power, x, averageValues)
         aPower = popt[0][0]
         bPower = popt[0][1]
         if verbose:
@@ -143,7 +134,7 @@ def getSlope(times, valueList, maxCoverage, sqrt=False, verbose=False, tmpFileNa
             plt.plot(x, averageValues)
             y = a*np.array(x)+b
             plt.plot(x, y, label=label)
-            y = powerFunc(x, aPower, bPower)
+            y = f.power(x, aPower, bPower)
             label = "{}x^{}".format(aPower, bPower)
             plt.plot(x, y, label=label)
             plt.legend(loc='upper left', prop={'size':6})
@@ -201,7 +192,7 @@ dataEvery1percentAndNucleation.txt output file    """
     # Get columns 13 and 14 (only when the number of islands is 1)
     gyradius =  [matrix[i][9] for i in range(0,matrix.shape[0]) if matrix[i][3] == 1]
     islandSize = [matrix[i][13] for i in range(0,matrix.shape[0]) if matrix[i][3] == 1]
-    popt = curve_fit(powerFunc, gyradius, islandSize)
+    popt = curve_fit(f.power, gyradius, islandSize)
     a = popt[0][0]
     b = popt[0][1]
     return b
@@ -218,11 +209,11 @@ def plot(x, y):
     plt.grid(True)
     plt.loglog(xPlot, yPlot, ".")
     # fit
-    popt = curve_fit(powerFunc, xPlot, yPlot)
+    popt = curve_fit(f.power, xPlot, yPlot)
     aPower = popt[0][0]
     bPower = popt[0][1]
     label = "{}x^{}".format(aPower, bPower)
-    yPlot = powerFunc(xPlot, aPower, bPower)
+    yPlot = f.power(xPlot, aPower, bPower)
     plt.loglog(xPlot, yPlot, label=label)
     plt.legend(loc='upper left', prop={'size':12})
     plt.savefig("gyradiusVsSize.png")

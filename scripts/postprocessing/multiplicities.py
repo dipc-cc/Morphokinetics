@@ -1,8 +1,4 @@
-
-
-#import sys
-#sys.modules[__name__].__dict__.clear()
-
+import functions as f
 import numpy as np
 import matplotlib.pyplot as plt
 import glob
@@ -11,18 +7,11 @@ import math
 import os
 from scipy.optimize import curve_fit
 
-def expFunc(x, a, b):
-    """ ae^bx function """
-    return a*np.exp(x*b)
-
-def linearFunc(x, a, b):
-    return a+x*b
-
 def fit(x, y, initI, finishI):
     indexes = np.array(range(initI,finishI))
     x1 = x[indexes]
     y1 = y[indexes]
-    popt = curve_fit(expFunc, x1, y1, p0=[1e10,-0.10])
+    popt = curve_fit(f.exp, x1, y1, p0=[1e10,-0.10])
     a = popt[0][0]
     b = popt[0][1]
     return list([a,b])
@@ -32,7 +21,7 @@ def linearFit(x, y, initI, finishI):
     x1 = x[indexes]
     y1 = np.log(y[indexes])
     try:
-        popt = curve_fit(linearFunc, x1, y1)#, p0=[1e10,-0.10])
+        popt = curve_fit(f.linear, x1, y1)#, p0=[1e10,-0.10])
         a = popt[0][0]
         b = popt[0][1]
     except ValueError:
@@ -181,13 +170,13 @@ def fitAndPlot(x, y, rngt, axis, alfa):
     axis.semilogy(x, y, "x-")
     a, b = fit(x, y, rngt[0], rngt[1])
     slopes.append(b)
-    axis.semilogy(x[rngt[0]:rngt[1]+1], expFunc(x[rngt[0]:rngt[1]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
+    axis.semilogy(x[rngt[0]:rngt[1]+1], f.exp(x[rngt[0]:rngt[1]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
     a, b = fit(x, y, rngt[2], rngt[3])
     slopes.append(b)
-    axis.semilogy(x[rngt[2]-1:rngt[3]+1], expFunc(x[rngt[2]-1:rngt[3]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
+    axis.semilogy(x[rngt[2]-1:rngt[3]+1], f.exp(x[rngt[2]-1:rngt[3]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
     a, b = fit(x, y, rngt[4], rngt[5])
     slopes.append(b)
-    axis.semilogy(x[rngt[4]-1:], expFunc(x[rngt[4]-1:], a, b), label="{} low {:03.3f} ".format(alfa,b))
+    axis.semilogy(x[rngt[4]-1:], f.exp(x[rngt[4]-1:], a, b), label="{} low {:03.3f} ".format(alfa,b))
     axis.legend(loc="best", prop={'size':7})
     return slopes
 
@@ -198,15 +187,15 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     a, b = linearFit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(linearFunc(x[rngt[0]:rngt[1]+1], a, b)), label="{} low {:03.3f} ".format(alfa,b))
+        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), label="{} low {:03.3f} ".format(alfa,b))
     a, b = linearFit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(linearFunc(x[rngt[2]-1:rngt[3]+1], a, b)), label="{} med {:03.3f}".format(alfa,b))
+        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), label="{} med {:03.3f}".format(alfa,b))
     a, b = linearFit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[4]-1:], np.exp(linearFunc(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(alfa,b))
+        axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(alfa,b))
         axis.legend(loc="best", prop={'size':7})
     return slopes
 
@@ -256,14 +245,14 @@ ind = [0,4,8,12,15,20,24,27]
 tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
-showPlot = False
+showPlot = True
 #for cov in [-49, -39, -29, -19, -9, -1]:
 for cov in range(-49,0):
     x = 1/kb/temperatures+np.log(5e4**1.5)
     y = tempR1avg
     print(cov)
     if showPlot:
-        f, axarr = plt.subplots(3, sharex=True)
+        fig, axarr = plt.subplots(3, sharex=True)
         plt.xlim(20,200)
     else:
         axarr = np.zeros(3)
@@ -297,6 +286,8 @@ for alfa in range(0,4):
 cov = [1, 10, 20, 30, 40, 49]
 cov = list(range(0,49))
 
+plt.close()
+plt.figure()
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
 for i in range(0,3): # different temperature ranges (low, medium, high)
     plt.plot(cov, tempEaCov[:,i], label="{}".format(i))

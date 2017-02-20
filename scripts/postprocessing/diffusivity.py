@@ -106,16 +106,16 @@ for i in range(initFlux,endFlux):
     T1 = 1/(kb * temperatures)
     print(d)
     command = "1/vd*1e12"
-    command = "d"
+    command = "d/flux**-0.3"
     y = eval(command)
     plt.ylabel(command)
-    command = "1/kb/temperatures"#+np.log(flux**2.5)"
+    command = "1/kb/temperatures+np.log(flux**1.5)"
     x = eval(command)
     plt.xlabel(command)
     try:
         plt.semilogy(x, y, "3-", label=folder+" "+str(j))
-        plt.semilogy(x, ne, ".", label=folder+" ne")
-        plt.semilogy(x, hp, "1", label=folder+" hops")
+        plt.semilogy(x, ne/flux**-0.3, ".", label=folder+" ne")
+        plt.semilogy(x, hp/flux**-0.3, "h", label=folder+" hops")
 
         if hex:
             a, b = fit(x, y, 0, 12)
@@ -141,7 +141,8 @@ for i in range(initFlux,endFlux):
         print("error plotting")
         print(x)
         print(y)
-    
+
+plt.show()
 plt.close()
 
 
