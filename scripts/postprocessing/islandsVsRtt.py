@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -49,29 +50,29 @@ for i in range(-6,1):
     if (i == -1000):
         print(r)
         print(n)
-        popt = curve_fit(mk.powerFunc, r, n)
+        popt = curve_fit(f.power, r, n)
         a = popt[0][0]
         b = popt[0][1]
         label = "{}x^{}".format(a, b)
         x = r
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         plt.loglog(x, y, label=label)
 
     if (i == -2000):
         a = 2e7
         b = -(5/7)
         x = r
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         label = "{}x^{}".format(a, b)
         plt.loglog(x, y, label=label)
         a = 4e7
         b = -(2/3)
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         label = "{}x^{}".format(a, b)
         plt.loglog(x, y, label=label)
         a = 1e7
         b = -0.5
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         label = "{}x^{}".format(a, b)
         plt.loglog(x, y, label=label)
         

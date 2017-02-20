@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -45,7 +46,7 @@ for i in range(-6,1):
     inprimatu(results.sizes2())
     vg = results.gyradius()
     rtt = mk.getRtt(temperatures)
-    d = mk.fractalDimensionFunc(rtt/flux)
+    d = f.fractalDimension(rtt/flux)
     rg = results.lastGyradius()
     y = (s*(fs*flux**0.215)**(4/3))/rg**2
     r = np.array([i if i>1 else float('nan') for i in results.totalRatio() ])

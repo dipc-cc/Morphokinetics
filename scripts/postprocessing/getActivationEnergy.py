@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -90,11 +91,11 @@ for i in range(initFlux,endFlux):
         # try to fit
         if len(possibles) > 1:
             try:
-                popt = curve_fit(mk.expFunc, kbT, possibles, p0=[10e5, -0.01])
+                popt = curve_fit(f.exp, kbT, possibles, p0=[10e5, -0.01])
                 a = popt[0][0]
                 b = popt[0][1]
                 minusEnergy = b
-                plt.semilogy(kbT, mk.expFunc(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
+                plt.semilogy(kbT, f.exp(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
                 percentMean = np.mean(percent)
                 # index is the process, from x to y
                 x,y = mkl.getXy(index, len(energies))

@@ -1,3 +1,4 @@
+import functions as f
 # Computes all possible measurements (averages them if needed) and
 # prints them to CSV like files.
 #
@@ -51,7 +52,7 @@ for i in range(initFlux,endFlux):
     rtt = mk.getRtt(temperatures)
     growthSlope = meanValues.getGrowthSlope()
     totalRatio = meanValues.getTotalRatio()
-    fractalD = mk.fractalDFunc(rtt/flux**0.5)
+    fractalD = f.fractalD(rtt/flux**0.5)
     shapeF = mk.shapeFactorFunc(rtt/flux**0.5)
     gyradius = meanValues.getGyradiusSlope()
     n = meanValues.getIslandsAmount()

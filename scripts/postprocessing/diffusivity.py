@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -18,7 +19,7 @@ def fit(x, y, initI, finishI):
     indexes = np.array(range(initI,finishI))
     x1 = x[indexes]
     y1 = y[indexes]
-    popt = curve_fit(mk.expFunc, x1, y1, p0=[1e10,-0.10])
+    popt = curve_fit(f.exp, x1, y1, p0=[1e10,-0.10])
     a = popt[0][0]
     b = popt[0][1]
     return list([a,b])
@@ -119,19 +120,19 @@ for i in range(initFlux,endFlux):
 
         if hex:
             a, b = fit(x, y, 0, 12)
-            plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
+            plt.semilogy(x, f.exp(x, a, b), label="fit low "+str(b))
             a, b = fit(x, y, 12, 17)
-            plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
+            plt.semilogy(x, f.exp(x, a, b), label="fit middle "+str(b))
             a, b = fit(x, y, 15, 22)
-            plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
+            plt.semilogy(x, f.exp(x, a, b), label="fit middle "+str(b))
             plt.ylim(1e9,1e14)
         if hex:
             a, b = fit(x, y, 0, 8)
-            plt.semilogy(x, mk.expFunc(x, a, b), label="fit low "+str(b))
+            plt.semilogy(x, f.exp(x, a, b), label="fit low "+str(b))
             a, b = fit(x, y, 8, 16)
-            plt.semilogy(x, mk.expFunc(x, a, b), label="fit middle "+str(b))
+            plt.semilogy(x, f.exp(x, a, b), label="fit middle "+str(b))
             a, b = fit(x, y, 17, 27)
-            plt.semilogy(x, mk.expFunc(x, a, b), label="fit high "+str(b))
+            plt.semilogy(x, f.exp(x, a, b), label="fit high "+str(b))
             #plt.ylim(1e5,1e8)
         plt.legend(loc='lower left', prop={'size':6})
         plt.savefig("diffusivity.png")

@@ -1,3 +1,4 @@
+import functions as f
 #grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > "data"n".txt"} END{print n}'
 # sed -i '1d' data0.txt
 
@@ -7,9 +8,6 @@ import glob
 import re
 import os
 import math
-
-def thetaFunc(t, F):
-    return 1 - np.exp(-F*t)
 
 def getInformationFromFile():
     fileName = glob.glob("../output*")[0]
@@ -41,12 +39,13 @@ def getInputParameters():
         maxN = 6
     return r_tt, temp, flux, sizI, sizJ, maxN
 
-
-def diffusivityDistance():
+def splitFiles():
     # split files
-    os.system("rm data[1-9]*.txt")
+    os.system("rm data[1-9]*.txt -f")
     os.system("grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($2<prev) {n++}prev=$2;} {print > \"data\"n\".txt\"}'")
     os.system("sed -i '1d' data0.txt")
+
+def diffusivityDistance():
 
     r_tt, temp, flux, L1, L2, maxN = getInputParameters()
     allData = []
@@ -95,7 +94,7 @@ def diffusivityDistance():
         plt.loglog(time, neg4/L1/L2, label=r"$\theta_{4+}$")
     plt.loglog(time, isld/L1/L2, label="number of islands")
 
-    plt.loglog(time, thetaFunc(time, flux), label=r"$1-e^{-Ft}$")
+    plt.loglog(time, f.theta(time, flux), label=r"$1-e^{-Ft}$")
     plt.loglog(time, cove, ".", color="orange", label=r"$\theta$", markerfacecolor="None")
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
 
@@ -125,15 +124,16 @@ for f in fluxes:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            time, neg1 = diffusivityDistance()
+            splitFiles()
+            #time, neg1 = diffusivityDistance()
             # find first dimer occurrence
-            i = np.argmax(neg1>0)
-            firstCollisionTime.append(time[i])
+            #i = np.argmax(neg1>0)
+            #firstCollisionTime.append(time[i])
         except FileNotFoundError:
             pass
         os.chdir(fPath)
     kb = 8.6173324e-5
-    plt.semilogy(1/kb/temperatures, firstCollisionTime, ".-", label=f)
+    #plt.semilogy(1/kb/temperatures, firstCollisionTime, ".-", label=f)
     os.chdir(workingPath)
 plt.legend()
 plt.show()
