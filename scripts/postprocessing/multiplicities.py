@@ -223,7 +223,7 @@ ind = [0,4,8,12,15,20,24,27]
 tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
-showPlot = True
+showPlot = False
 #for cov in [-49, -39, -29, -19, -9, -1]:
 for cov in range(-49,0):
     x = 1/kb/temperatures+np.log(5e4**1.5)
@@ -266,14 +266,30 @@ cov = list(range(0,49))
 
 plt.close()
 plt.figure()
+fig, axarr = plt.subplots(1, 3, sharey=True)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
-for i in range(0,3): # different temperature ranges (low, medium, high)
-    plt.plot(cov, tempEaCov[:,i], label="{}".format(i))
-    plt.plot(cov, tempEaCov2[:,i], "x:", label="v2 {}".format(i))
-    plt.plot(cov, 1-tempEaCov2[:,i]/tempEaCov[:,i], "o", label="relative error")
-plt.legend(loc="best", prop={'size':8})
+#for i in range(2,-1,-1): # different temperature ranges (low, medium, high)
+for i in range(0,3):
+    ax = plt.gca()
+    axarr[i].plot(cov, tempEaCov[:,2-i], label="{}".format(2-i))
+    axarr[i].plot(cov, tempEaCov2[:,2-i], "x:", label="v2 {}".format(2-i))
+    ax = axarr[i].twinx()
+    ax.plot(cov, 1-tempEaCov2[:,2-i]/tempEaCov[:,2-i], "o", label="relative error")
+    ax.set_ylim(0,1)
+    #Label jartzea falta da
+    plt.legend(loc="best", prop={'size':8})
 plt.savefig("multiplicities.png")
 
+colors = ["blue", "green", "red", "black"]
+
+for j in range(0,3): #temperature
+    partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
+    for i in range(3,-1,-1): #alfa
+        axarr[2-j].fill_between(cov, partialSum, color=colors[i])#, ":d", label="ssss {}")
+        partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
+
+plt.legend(loc="best", prop={'size':8})
+plt.savefig("multiplicities.png")
 
 
     #plt.clf()
