@@ -117,7 +117,7 @@ for f in fluxes:
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
-    temperatures = glob.glob("*")
+    temperatures = glob.glob("[1-9]*")
     temperatures = np.array(temperatures).astype(int)
     temperatures.sort()
     for t in temperatures:
