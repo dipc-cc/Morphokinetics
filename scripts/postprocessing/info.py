@@ -128,5 +128,4 @@ def readAe(fileName):
         shape = re.split(",|\(|\)",line)
         shape = list(map(int,shape[1:4]))
         break
-    print(shape)
     return np.loadtxt(fileName).reshape(shape)
