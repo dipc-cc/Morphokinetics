@@ -178,6 +178,7 @@ for cov in range(-49,0):
     tempEaMCov.append(tempEaM)
     if showPlot:
         plt.savefig("plot"+str(cov)+".png")
+        plt.close()
     
 
 tempOmegaCov = np.array(tempOmegaCov) # [coverage, type (alfa), temperature range]
@@ -190,7 +191,6 @@ for alfa in range(0,4):
 cov = [1, 10, 20, 30, 40, 49]
 cov = list(range(0,49))
 
-plt.close()
 plt.figure()
 fig, axarr = plt.subplots(1, 3, sharey=True)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
@@ -211,7 +211,6 @@ for j in range(0,3): # different temperature ranges (low, medium, high)
     partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
     partialSum2 = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]), axis=1)
     rev = np.sum(partialSum1) < 0
-    print(rev)
     partialSum = partialSum1 + partialSum2
     c = 0
     if rev:
