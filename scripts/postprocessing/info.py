@@ -86,3 +86,47 @@ def getRatio(temperature, energies):
     kb = 8.62e-5
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
+
+
+def writeAe(fileName, data):
+    """ https://stackoverflow.com/questions/3685265/how-to-write-a-multidimensional-array-to-a-text-file """
+    f = open(fileName, "wb")
+    #Iterating through a ndimensional array produces slices along
+    # the last axis. This is equivalent to data[i,:,:] in this case
+    f.write(bytes('# Array shape: '+str(data.shape)+'\n', "UTF-8"))
+    for data_slice in data:
+    
+        # The formatting string indicates that I'm writing out
+        # the values in left-justified columns x characters in width
+        # with 18 decimal places.  
+        np.savetxt(f, data_slice, fmt='%.18f')
+    
+        # Writing out a break to indicate different slices...
+        f.write(b'# New slice\n')
+    # Write the array to disk
+    # with file(fileName, 'w') as outfile:
+    #     # I'm writing a header here just for the sake of readability
+    #     # Any line starting with "#" will be ignored by numpy.loadtxt
+    #     outfile.write('# Array shape: {0}\n'.format(data.shape))
+    
+    #     # Iterating through a ndimensional array produces slices along
+    #     # the last axis. This is equivalent to data[i,:,:] in this case
+    #     for data_slice in data:
+    
+    #         # The formatting string indicates that I'm writing out
+    #         # the values in left-justified columns 7 characters in width
+    #         # with 2 decimal places.  
+    #         np.savetxt(outfile, data_slice, fmt='%.18f')
+    
+    #         # Writing out a break to indicate different slices...
+    #         outfile.write('# New slice\n')
+
+
+def readAe(fileName):
+    f = open(fileName)
+    for line in f:
+        shape = re.split(",|\(|\)",line)
+        shape = list(map(int,shape[1:4]))
+        break
+    print(shape)
+    return np.loadtxt(fileName).reshape(shape)

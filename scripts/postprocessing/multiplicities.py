@@ -101,20 +101,41 @@ tempR1avg = []
 tempR2avg = []
 
 workingPath = os.getcwd()
-for t in temperatures:
-    print(t)
-    os.chdir(str(t)+"/results")
-    tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns()
-    tempMavg.append(tmp1)
-    tempOavg.append(tmp2)
-    tempR1avg.append(tmp3)
-    tempR2avg.append(tmp4)
-    os.chdir(workingPath)
 
-tempMavg = np.array(tempMavg)
-tempOavg = np.array(tempOavg)
-tempR1avg = np.array(tempR1avg)
-tempR2avg = np.array(tempR2avg)
+####################################################################################################
+# read
+####################################################################################################
+
+try:
+    tempMavg = info.readAe("tempMavg.txt")
+    tempOavg = info.readAe("tempOavg.txt")
+    tempR1avg = np.loadtxt("tempR1avg.txt")
+    tempR2avg = np.loadtxt("tempR2avg.txt")
+
+####################################################################################################
+# compute
+####################################################################################################
+except FileNotFoundError:
+    for t in temperatures:
+        print(t)
+        os.chdir(str(t)+"/results")
+        tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns()
+        tempMavg.append(tmp1)
+        tempOavg.append(tmp2)
+        tempR1avg.append(tmp3)
+        tempR2avg.append(tmp4)
+        os.chdir(workingPath)
+
+    tempMavg = np.array(tempMavg)
+    tempOavg = np.array(tempOavg)
+    tempR1avg = np.array(tempR1avg)
+    tempR2avg = np.array(tempR2avg)
+
+    #save
+    info.writeAe("tempMavg.txt", tempMavg)
+    info.writeAe("tempOavg.txt", tempOavg)
+    np.savetxt("tempR1avg.txt",tempR1avg, fmt='%.18f')
+    np.savetxt("tempR2avg.txt",tempR2avg, fmt='%.18f')
 
 minTemperatureIndex = 4
 tempMavg = tempMavg[minTemperatureIndex:]
@@ -126,8 +147,6 @@ temperatures = temperatures[minTemperatureIndex:]
 # define ranges
 rngt = defineRanges(temperatures)
 
-
-#one coverage
 ind = [0,4,8,12,15,20,24,27]
 tempOmegaCov = []
 tempEaCov = []
