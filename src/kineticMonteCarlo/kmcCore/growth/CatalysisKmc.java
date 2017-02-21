@@ -34,7 +34,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       configureDevitaAccelerator(distancePerStep);
     }
   }
-
+  
   @Override
   public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
     return getSampledSurface(binX, binY);
@@ -145,7 +145,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     originAtom.setDepositionTime(0);
     originAtom.setDepositionPosition(null);
     originAtom.setHops(0);
-    modifiedBuffer.updateAtoms(getList());
+    getModifiedBuffer().updateAtoms(getList());
 
     return true;
   }
@@ -160,9 +160,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       int atomIndex = random % getLattice().getUnitCellSize();
       destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
     } while (!depositAtom(destinationAtom));
-    // update the free area and the deposition rate counting just deposited atom
-    freeArea--;
-    getList().setDepositionProbability(depositionRatePerSite * freeArea);
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
