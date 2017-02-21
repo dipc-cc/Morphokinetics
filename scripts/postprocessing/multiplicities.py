@@ -108,26 +108,6 @@ def computeMavgAndOmegaOverRuns():
     runOavg = sumOmega / (len(files)-1)
     runR1avg = sumRate1 / (len(files)-1)
     runR2avg = sumRate2 / (len(files)-1)
-    
-    #plt.loglog(avgTotalHopRate2)
-    #plt.loglog(avgTotalHopRate1)
-    #They should be the same, check if they are with many executions
-        
-    #plt.figure()
-    # plt.plot(np.sum(runAvgOmega[:,0:4], axis=1), lw=2, label="0:4")
-    # plt.plot(np.sum(runAvgOmega[:,8:12], axis=1), lw=2, label="8:12")
-    # plt.plot(np.sum(runAvgOmega[:,15:20], axis=1), label="15:20")
-    # plt.plot(np.sum(runAvgOmega[:,24:27], axis=1), label="24:27")
-    # plt.legend(loc="best")
-    # plt.show()
-    # plt.savefig("omegaAvg.png")
-    
-    #plt.figure()
-    # plt.loglog(np.sum(runMavg[:,0:4], axis=1), lw=2, label="0:4")
-    # plt.loglog(np.sum(runMavg[:,8:12], axis=1), lw=2, label="8:12")
-    # plt.loglog(np.sum(runMavg[:,15:20], axis=1), label="15:20")
-    # plt.loglog(np.sum(runMavg[:,24:27], axis=1), label="24:27")
-    # plt.show()
 
     return runMavg, runOavg, runR1avg, runR2avg
 
@@ -179,8 +159,6 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
 
 temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,400,50))+list(range(450,1100,50)))
 kb = 8.6173324e-5
-#tempMavg = {}
-#tempOavg = {}
 tempMavg = []
 tempOavg = []
 tempR1avg = []
@@ -190,7 +168,6 @@ workingPath = os.getcwd()
 for t in temperatures:
     print(t)
     os.chdir(str(t)+"/results")
-    #tempMavg[t], tempOavg[t] = computeMavgAndOmegaOverRuns()
     tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns()
     tempMavg.append(tmp1)
     tempOavg.append(tmp2)
@@ -216,15 +193,10 @@ rngt = defineRanges(temperatures)
 
 #one coverage
 ind = [0,4,8,12,15,20,24,27]
-# for i in range(0,4):
-#     y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
-#     fitAndPlot(x, y, rngt, axarr[1])
-#for cov in [-49, -39, -29, -19, -9, -1]:
 tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
-#for cov in [-49, -39, -29, -19, -9, -1]:
 for cov in range(-49,0):
     x = 1/kb/temperatures+np.log(5e4**1.5)
     y = tempR1avg
@@ -253,8 +225,6 @@ for cov in range(-49,0):
         plt.savefig("plot"+str(cov)+".png")
     
 
-    #plt.show()
-print(len(tempOmegaCov))
 tempOmegaCov = np.array(tempOmegaCov) # [coverage, type (alfa), temperature range]
 tempEaCov = -np.array(tempEaCov) # [coverage, temperature range]
 tempEaMCov = np.array(tempEaMCov) # [coverage, type (alfa), temperature range]
@@ -269,8 +239,7 @@ plt.close()
 plt.figure()
 fig, axarr = plt.subplots(1, 3, sharey=True)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
-#for i in range(2,-1,-1): # different temperature ranges (low, medium, high)
-for i in range(0,3):
+for i in range(0,3): # different temperature ranges (low, medium, high)
     ax = plt.gca()
     axarr[i].plot(cov, tempEaCov[:,2-i], label="{}".format(2-i))
     axarr[i].plot(cov, tempEaCov2[:,2-i], "x:", label="v2 {}".format(2-i))
@@ -283,7 +252,7 @@ plt.savefig("multiplicities.png")
 
 cm = plt.get_cmap('Accent')
 
-for j in range(0,3): #temperature
+for j in range(0,3): # different temperature ranges (low, medium, high)
     partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
     partialSum2 = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]), axis=1)
     rev = np.sum(partialSum1) < 0
@@ -305,62 +274,11 @@ plt.savefig("multiplicities.png")
 
 cm = plt.get_cmap('Set1')
 
-for j in range(0,3): #temperature
+for j in range(0,3): # different temperature ranges (low, medium, high)
     partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
     for i in range(3,-1,-1): #alfa
-        axarr[2-j].fill_between(cov, partialSum, color=cm(i/3))#, ":d", label="ssss {}")
+        axarr[2-j].fill_between(cov, partialSum, color=cm(i/3))
         partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
 
 plt.legend(loc="best", prop={'size':8})
 plt.savefig("multiplicities.png")
-
-
-    #plt.clf()
-
-#plt.ylim(1e-4,1e0)
-#plt.xlim(20,200)
-
-#"all" coverages
-# for i in [-49, -39, -29, -19, -9, -1]:
-#     plt.figure()
-#     plt.title(str(50+i))
-#     plt.semilogy(1/kb/temperatures, np.sum(tempMavg[:,i,0:4],axis=1))
-#     plt.semilogy(1/kb/temperatures, np.sum(tempMavg[:,i,8:12],axis=1))
-#     plt.semilogy(1/kb/temperatures, np.sum(tempMavg[:,i,15:20],axis=1))
-#     plt.semilogy(1/kb/temperatures, np.sum(tempMavg[:,i,24:27],axis=1))
-#     plt.show()
-
-
-plt.loglog(Mavg)
-
-plt.clf()
-# Multiplicities M
-style = ":"
-plt.loglog(cove, np.sum(Mavg[:,0:4], axis=1),  ls=style, label="0:4")
-plt.loglog(cove, Mavg[:,4],                    ls=style, label="4")
-plt.loglog(cove, Mavg[:,5],                    ls=style, label=5)
-plt.loglog(cove, np.sum(Mavg[:,6:8], axis=1),  ls=style, label="6:8")
-plt.loglog(cove, np.sum(Mavg[:,9:12], axis=1), ls=style, label="9:12")
-plt.legend(loc="best")
-
-#plt.clf()
-# plotting omegas basic
-plt.loglog(time[:], np.sum(Mavg[:,0:4], axis=1)*ratios[0]/hopsAvg, label="0:4")
-plt.loglog(time[:], Mavg[:,4]*ratios[4]/hopsAvg, label="4")
-plt.loglog(time[:], Mavg[:,5]*ratios[5]/hopsAvg, label=5)
-plt.loglog(time[:], np.sum(Mavg[:,6:8], axis=1)*ratios[6]/hopsAvg, label="6:8")
-plt.loglog(time[:], np.sum(Mavg[:,9:12], axis=1)*ratios[9]/hopsAvg, label="9:12")
-plt.legend(loc="best")
-
-
-plt.loglog(time, cove, ls="--")
-
-
-for i in range(0,16):
-    plt.loglog(cove, discretes[:,i+1])
-plt.show()
-
-dtim.dot(Mij)
-
-for i in range(0,50):
-    plt.loglog(possiblesFromList[:,i]/time)
