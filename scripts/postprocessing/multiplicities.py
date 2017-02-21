@@ -89,7 +89,7 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     slopes.append(b)
     if showPlot:
         axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(alfa,b))
-        axis.legend(loc="best", prop={'size':7})
+        axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     return slopes
 
 
@@ -158,6 +158,8 @@ for cov in range(-49,0):
     print(cov)
     if showPlot:
         fig, axarr = plt.subplots(3, sharex=True)
+        fig.set_size_inches(6,6)
+        fig.subplots_adjust(right=0.7)
         plt.xlim(20,200)
     else:
         axarr = np.zeros(3)
