@@ -171,8 +171,10 @@ for cov in range(-49,0):
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot))
         if showPlot:
+            cbar_ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
+            cbar_ax.plot(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
+            cbar_ax.set_ylim(-0.05,1.05)
             axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
-            axarr[2].set_ylim(-0.05,1.05)
             axarr[2].set_ylim(1e-3,2)
         for j in range(0,3): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
