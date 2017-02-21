@@ -1,5 +1,7 @@
+import re
 import os
 import glob
+import math
 import numpy as np
 
 def getFluxes():
@@ -59,3 +61,28 @@ def splitAeFiles():
     os.system("grep AePossibleDiscrete dataEvery1percentAndNucleation.txt   | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"possibleDiscrete\"n\".txt\"}'")
     os.system("grep AeRatioTimesPossible dataEvery1percentAndNucleation.txt | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"ratioTimesPossible\"n\".txt\"}'")
     os.system("grep AeMultiplicity dataEvery1percentAndNucleation.txt       | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"multiplicity\"n\".txt\"}'")
+
+
+def getHexagonalEnergies():
+    energies = 999999999*np.ones(49, dtype=float)
+    energies[0:4] = 0.10
+    energies[8:12] = 0.25
+    energies[15:20] = 0.33
+    energies[24:27] = 0.42
+    return energies
+
+
+def getBasicEnergies():
+    energies = 999999999*np.ones(16, dtype=float)
+    energies[0:4] = 0.2
+    energies[4] = 0.45
+    energies[5] = 0.36
+    energies[6:8] = 0.35
+    energies[9:12] = 0.435
+    return energies
+    
+
+def getRatio(temperature, energies):
+    kb = 8.62e-5
+    p = 1e13
+    return p * np.exp(-energies/kb/temperature)
