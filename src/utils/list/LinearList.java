@@ -155,8 +155,4 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   public double getRi_DeltaI() {
     return Ri_DeltaI;
   }
-  
-  public ArrayList<AbstractAtom> getSurface(){
-    return surface;
-  }
 }
