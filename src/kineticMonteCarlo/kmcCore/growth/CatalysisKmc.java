@@ -5,13 +5,6 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import javafx.geometry.Point3D;
-import static kineticMonteCarlo.atom.AbstractAtom.BULK;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import static kineticMonteCarlo.atom.CatalysisAtom.EDGE;
 import static kineticMonteCarlo.atom.CatalysisAtom.TERRACE;
@@ -19,7 +12,6 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.CatalysisLattice;
-import kineticMonteCarlo.unitCell.CatalysisUc;
 import utils.StaticRandom;
 
 /**
@@ -126,97 +118,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   /**
-   * Print current information to extra file.
-   *
-   * @param coverage used to have exactly the coverage and to be easily greppable.
-   */
-  private void printData(Integer coverage) {
-    int islandCount = lattice.countIslands(outData);
-    float printCoverage;
-    String coverageFormat;
-    if (coverage != null) {
-      printCoverage = (float) (coverage) / 100;
-      coverageFormat = "%2.2f";
-    } else {
-      printCoverage = getCoverage();
-      coverageFormat = "%f";
-    }
-
-    lattice.getCentreOfMass();
-    double gyradiusBasic = lattice.getCentreOfMassAndAverageGyradius();
-    lattice.getDistancesToCentre();
-    lattice.countPerimeter(null);
-    //compute the average distances to centre.
-    float avgGyradius = lattice.getAverageGyradius();
-    int numberOfAtomFirstIsland = 0;
-    try{
-      numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
-    } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
-    }
-    outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
-            nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
-            getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getDiffusivityDistance(), lattice.getMobileAtoms(), numberOfAtomFirstIsland, lattice.getTotalHops(),
-            lattice.getAtomTypesCounter());
-    sumProbabilities = 0.0d;
-    if (aeOutput) {
-      getActivationEnergy().printAe(outData, printCoverage);
-    }
-    outData.flush();
-    if (extraOutput2) {
-      outDeltaAttachments.flush();
-      outPerAtom.flush();
-    }
-  }
-  
-  /**
-   * Calculates current area or, i.e. the number of current places that simulation has. This total
-   * area changes with the current radius. It is calculated as is done in KmcCanvas class.
-   * 
-   * @return simulated area.
-   */
-  private int calculateAreaAsInKmcCanvas() {
-    int totalArea = 0;
-    for (int i = 0; i < lattice.size(); i++) {
-      CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        if (uc.getAtom(j).isOccupied() || !uc.getAtom(j).isOutside()) {
-          totalArea++;
-        }
-      }
-    }
-    return totalArea;
-  }
-
-  /**
-   * Calculates the total area of a single flake simulation. 
-   * 
-   * @return total area.
-   */
-  private int calculateAreaAsInLattice() {
-    int totalArea = 0;
-    // Get the minimum radius of both coordinates
-    float minRadius = Math.min(lattice.getCartSizeX()/2,lattice.getCartSizeY()/2);
-    // Get the maximum radius multiple of 5
-    float radius = ((float) Math.floor(minRadius/5f)*5f);
-    
-    for (int i = 0; i < lattice.size(); i++) {
-      CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        CatalysisAtom atom = uc.getAtom(j);
-        double x = atom.getPos().getX() + uc.getPos().getX();
-        double y = atom.getPos().getY() + uc.getPos().getY();
-        double distance = lattice.getDistanceToCenter(x, y);
-        if (radius > distance) {
-          totalArea++;
-        } 
-      }
-    }
-
-    return totalArea;
-  }
-  
-  /**
    * Moves an atom from origin to destination.
    * 
    * @param originAtom origin atom.
@@ -236,12 +137,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    if (force) {
-      if (extraOutput) {
-        printData(null);
-      }
-      nucleations++;
-    }
     int oldType = originAtom.getRealType();
     double probabilityChange = lattice.extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
@@ -253,111 +148,28 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     originAtom.setDepositionTime(0);
     originAtom.setDepositionPosition(null);
     originAtom.setHops(0);
-    if (extraOutput2) {
-      if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
-        atomAttachedToIsland(destinationAtom);
-      }
-    }
-    if (aeOutput) {
-      getActivationEnergy().updateSuccess(oldType, destinationAtom.getRealType());
-    }
     modifiedBuffer.updateAtoms(getList());
 
     return true;
-  }
-  
-  /**
-   * An atom has been attached to an island an so printing this to output files.
-   *
-   * @param destination destination atom is required to compute time difference.
-   *
-   */
-  private void atomAttachedToIsland(CatalysisAtom destination) {      
-    int islandCount = lattice.countIslands(null);
-    deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
-    outDeltaAttachments.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + getList().getTotalProbabilityFromList() + " "
-            + islandCount);
-    previousTime = getTime();
-    deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
-    outPerAtom.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + getList().getTotalProbabilityFromList());
   }
 
   private CatalysisAtom depositNewAtom() {
     CatalysisAtom destinationAtom;
     int ucIndex = 0;
-    if (justCentralFlake) {
-      do {
-        // Deposit in the perimeter
-        destinationAtom = (CatalysisAtom) perimeter.getRandomPerimeterAtom();
-        destinationAtom.setDepositionPosition(new Point3D(0, 0, 0));
-      } while (destinationAtom.areTwoTerracesTogetherInPerimeter(destinationAtom) || !depositAtom(destinationAtom));
-    } else {
-      do {
-        int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
-        ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
-        int atomIndex = random % lattice.getUnitCellSize();
-        destinationAtom = (CatalysisAtom) lattice.getUc(ucIndex).getAtom(atomIndex);
-      } while (!depositAtom(destinationAtom));
-      // update the free area and the deposition rate counting just deposited atom
-      freeArea--;
-      getList().setDepositionProbability(depositionRatePerSite * freeArea);
-    }
+  
+    do {
+      int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
+      ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
+      int atomIndex = random % lattice.getUnitCellSize();
+      destinationAtom = (CatalysisAtom) lattice.getUc(ucIndex).getAtom(atomIndex);
+    } while (!depositAtom(destinationAtom));
+    // update the free area and the deposition rate counting just deposited atom
+    freeArea--;
+    getList().setDepositionProbability(depositionRatePerSite * freeArea);
+    
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     return destinationAtom;
-  }
-
-  private CatalysisAtom depositInIslands() {
-      List<CatalysisAtom> candidateAtoms = new ArrayList<>(100);
-      for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-        for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-          AbstractGrowthAtom atom = lattice.getAtom(i, j);
-          if (!atom.isOccupied() && atom.getType() != TERRACE && atom.getType() != BULK ) {
-            candidateAtoms.add((CatalysisAtom) atom);
-          }
-        }
-      }
-      
-      int position = StaticRandom.rawInteger(candidateAtoms.size());
-      CatalysisAtom perimeterAtom = candidateAtoms.get(position);
-      
-      for (int i = 0; i < perimeterAtom.getNumberOfNeighbours(); i++) {
-        if (!perimeterAtom.getNeighbour(i).isOccupied() && perimeterAtom.getNeighbour(i).getType() == TERRACE){
-          return perimeterAtom.getNeighbour(i);
-        }
-      }
-      return null; 
-      
-      //return candidateAtoms.get(position); //returns random island perimeter atom
-    }
-      
-  private boolean perimeterMustBeEnlarged(CatalysisAtom destinationAtom) {
-    
-    if (perimeterType == RoundPerimeter.SQUARE) {
-      Point2D centreCart = lattice.getCentralCartesianLocation();
-      double left = centreCart.getX() - perimeter.getCurrentRadius();
-      double right = centreCart.getX() + perimeter.getCurrentRadius();
-      double bottom = centreCart.getY() - perimeter.getCurrentRadius();
-      double top = centreCart.getY() + perimeter.getCurrentRadius();
-      Point2D  position = lattice.getCartesianLocation(destinationAtom.getiHexa(),destinationAtom.getjHexa());
-
-      return (destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
-              || Math.abs(right - position.getX()) < 2
-              || Math.abs(top - position.getY()) < 2
-              || Math.abs(bottom - position.getY()) < 2);
-    } else {
-      boolean atomType = destinationAtom.getType() > 0;
-      boolean distance = perimeter.contains(destinationAtom);
-      return (atomType && distance);
-    }
   }
 }
