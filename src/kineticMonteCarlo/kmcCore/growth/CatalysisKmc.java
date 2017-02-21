@@ -90,10 +90,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return false;
     }
 
-    boolean force = (forceNucleation && !justCentralFlake && atom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    lattice.deposit(atom, force);
-    lattice.addOccupied();
-    modifiedBuffer.updateAtoms(getList());
+    getLattice().deposit(atom, false);
+    getLattice().addOccupied();
+    getModifiedBuffer().updateAtoms(getList());
     
     return true;
   }
@@ -136,12 +135,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return false;
     }
     
-    boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
-    int oldType = originAtom.getRealType();
-    double probabilityChange = lattice.extract(originAtom);
+    double probabilityChange = getLattice().extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
-    lattice.deposit(destinationAtom, force);
+    getLattice().deposit(destinationAtom, false);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
     destinationAtom.setDepositionPosition(originAtom.getDepositionPosition());
     destinationAtom.setHops(originAtom.getHops() + 1);
@@ -158,17 +155,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int ucIndex = 0;
   
     do {
-      int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
-      ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
-      int atomIndex = random % lattice.getUnitCellSize();
-      destinationAtom = (CatalysisAtom) lattice.getUc(ucIndex).getAtom(atomIndex);
+      int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+      ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
+      int atomIndex = random % getLattice().getUnitCellSize();
+      destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
     } while (!depositAtom(destinationAtom));
     // update the free area and the deposition rate counting just deposited atom
     freeArea--;
     getList().setDepositionProbability(depositionRatePerSite * freeArea);
     
     destinationAtom.setDepositionTime(getTime());
-    destinationAtom.setDepositionPosition(lattice.getUc(ucIndex).getPos().add(destinationAtom.getPos()));
+    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     return destinationAtom;
   }
