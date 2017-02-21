@@ -76,6 +76,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Activation energy output at the end of execution
    */
   private final boolean aeOutput;
+  private ActivationEnergy activationEnergy;
   /**
    * If two terraces are together freeze them, in multi-flake simulation mode.
    */
@@ -142,6 +143,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     nucleations = 0;
+    activationEnergy = new ActivationEnergy(parser);
   }
     
   /**
@@ -318,14 +320,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     lattice.initialiseRates(processProbs2D);
-    getActivationEnergy().setRates(processProbs2D);
+    activationEnergy.setRates(processProbs2D);
   }
 
   @Override
   public void reset() {
     lattice.reset();
     getList().reset();
-    getActivationEnergy().reset();
+    activationEnergy.reset();
     freeArea = calculateAreaAsInKmcCanvas();
     
     for (int i = 0; i < lattice.size(); i++) {
@@ -365,7 +367,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
           }
         } else {
-          getActivationEnergy().updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime());
+          activationEnergy.updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime());
           if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
@@ -387,7 +389,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
       PrintWriter standardOutputWriter = new PrintWriter(System.out);
-      getActivationEnergy().printAe(standardOutputWriter, -1);
+      activationEnergy.printAe(standardOutputWriter, -1);
     } 
     
     // Dirty mode to have only one interface of countIslands
@@ -624,7 +626,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
     if (aeOutput) {
-      getActivationEnergy().printAe(outData, printCoverage);
+      activationEnergy.printAe(outData, printCoverage);
     }
     outData.flush();
     if (extraOutput2) {
@@ -723,7 +725,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     if (aeOutput) {
-      getActivationEnergy().updateSuccess(oldType, destinationAtom.getRealType());
+      activationEnergy.updateSuccess(oldType, destinationAtom.getRealType());
     }
     modifiedBuffer.updateAtoms(getList());
 

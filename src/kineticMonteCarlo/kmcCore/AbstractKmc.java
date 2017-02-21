@@ -8,7 +8,6 @@ import basic.Parser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
-import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.list.AbstractList;
 import utils.list.BinnedList;
@@ -23,10 +22,7 @@ public abstract class AbstractKmc implements IKmc {
   private AbstractList list;
   private AbstractLattice lattice;
   private int iterationsForLastSimulation;
-  private ActivationEnergy activationEnergy;
-
   public AbstractKmc(Parser parser) {
-    activationEnergy = new ActivationEnergy(parser);
     switch (parser.getListType()) {
       case "linear":
         list = new LinearList(parser);
@@ -90,10 +86,6 @@ public abstract class AbstractKmc implements IKmc {
   @Override
   public final AbstractList getList() {
     return list;
-  }
-  
-  public ActivationEnergy getActivationEnergy() {
-    return activationEnergy;
   }
 
   /**
