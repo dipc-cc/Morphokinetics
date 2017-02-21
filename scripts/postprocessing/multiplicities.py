@@ -280,9 +280,7 @@ for i in range(0,3):
     plt.legend(loc="best", prop={'size':8})
 plt.savefig("multiplicities.png")
 
-colors = ["blue", "green", "red", "black"]
-
-
+cm = plt.get_cmap('Accent')
 
 for j in range(0,3): #temperature
     partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
@@ -292,24 +290,24 @@ for j in range(0,3): #temperature
     partialSum = partialSum1 + partialSum2
     c = 0
     if rev:
-        axarr[2-j].fill_between(cov, partialSum2, color=colors[c])
+        axarr[2-j].fill_between(cov, partialSum2, color=cm(c/3), alpha=0.8)
         c += 1
     for i in range(0,2):
         if rev:
-            axarr[2-j].fill_between(cov,partialSum1, color=colors[c+i])
+            axarr[2-j].fill_between(cov,partialSum1, color=cm((c+i)/3), alpha=0.8)
             partialSum1 = partialSum1 + partialSum2
             
         else:
-            axarr[2-j].fill_between(cov, partialSum, color=colors[c+i])
+            axarr[2-j].fill_between(cov, partialSum, color=cm((c+i)/3), alpha=0.8)
             partialSum -= partialSum1
-        
+plt.savefig("multiplicities.png")
 
-
+cm = plt.get_cmap('Set1')
 
 for j in range(0,3): #temperature
     partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
     for i in range(3,-1,-1): #alfa
-        axarr[2-j].fill_between(cov, partialSum, color=colors[i])#, ":d", label="ssss {}")
+        axarr[2-j].fill_between(cov, partialSum, color=cm(i/3))#, ":d", label="ssss {}")
         partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
 
 plt.legend(loc="best", prop={'size':8})
