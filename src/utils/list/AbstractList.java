@@ -2,6 +2,7 @@ package utils.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
+import utils.StaticRandom;
 
 public abstract class AbstractList implements IProbabilityHolder {
 
@@ -16,6 +17,8 @@ public abstract class AbstractList implements IProbabilityHolder {
   private double totalProbability;
   private IProbabilityHolder parent;
   private int level;
+  private boolean cleanDeltaTime;
+  private double deltaTime;
   
   public AbstractList() {
     time = 0;
@@ -33,11 +36,26 @@ public abstract class AbstractList implements IProbabilityHolder {
   public double getTime() {
     return time;
   }
-  
+    
   public void addTime(double time) {
     this.time += time;
   }
-
+  public void addTime() {
+    cleanDeltaTime = false;
+    deltaTime = getDeltaTime();
+    time += deltaTime;
+  }
+  
+  public double getDeltaTime() {
+    if (cleanDeltaTime) {
+      return deltaTime;
+    } else {
+      deltaTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
+      cleanDeltaTime = true;
+      return deltaTime;
+    }
+  }
+  
   public abstract int cleanup();
 
   public AbstractList autoCleanup(boolean auto) {
@@ -90,6 +108,14 @@ public abstract class AbstractList implements IProbabilityHolder {
   public double getTotalProbability() {
     return totalProbability > 0 ? totalProbability : 0;
     //return totalProbability;
+  }
+  
+  /**
+   * 
+   * @return total movement probability + deposition probability
+   */
+  public double getGlobalProbability() {
+    return getTotalProbability() + getDepositionProbability();
   }
 
   public void reset() {

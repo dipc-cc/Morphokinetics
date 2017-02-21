@@ -106,11 +106,10 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
     double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
     
-    double elapsedTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
-    addTime(elapsedTime);
+    addTime();
 
-    activationEnergy.updatePossibles(surface, getTotalProbability() + getDepositionProbability(), elapsedTime);
-    Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * elapsedTime; // should be always 1
+    activationEnergy.updatePossibles(surface, getTotalProbability() + getDepositionProbability(), getDeltaTime());
+    Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * getDeltaTime(); // should be always 1
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo

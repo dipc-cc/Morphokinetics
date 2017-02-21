@@ -100,7 +100,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
 
     double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability());
     if (this.getParent() == null) {
-      addTime(-Math.log(StaticRandom.raw()) / (getTotalProbabilityFromList() + getDepositionProbability()));
+      addTime();
     }
 
     if (position < getDepositionProbability()) {
