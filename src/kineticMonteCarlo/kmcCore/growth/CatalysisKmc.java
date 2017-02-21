@@ -90,27 +90,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
 
-    if (justCentralFlake && perimeterMustBeEnlarged(destinationAtom)) {
-      int nextRadius = perimeter.goToNextRadius();
-      if (nextRadius > 0
-              && nextRadius < lattice.getCartSizeX() / 2
-              && nextRadius < lattice.getCartSizeY() / 2) {
-        if (extraOutput) {
-          printData(null);
-        }
-        if (perimeterType == RoundPerimeter.CIRCLE) {
-          perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
-          int newArea;
-          newArea = calculateAreaAsInKmcCanvas();
-          freeArea += newArea - currentArea;
-          currentArea = newArea;
-        } else {
-          perimeter.setCurrentPerimeter(lattice.setInsideSquare(nextRadius));
-        }
-      } else {
-        return true;
-      }
-    }
     return false;
   }
   
