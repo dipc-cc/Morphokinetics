@@ -37,6 +37,7 @@ def getInputParameters():
         maxN = 6
     return r_tt, temp, flux, sizI, sizJ, maxN
 
+
 def getHexagonalEnergies():
     energies = 999999999*np.ones(49, dtype=float)
     energies[0:4] = 0.10
@@ -44,6 +45,7 @@ def getHexagonalEnergies():
     energies[15:20] = 0.33
     energies[24:27] = 0.42
     return energies
+
 
 def getBasicEnergies():
     energies = 999999999*np.ones(16, dtype=float)
@@ -59,6 +61,7 @@ def getRatio(temperature, energies):
     kb = 8.62e-5
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
+
 
 def computeMavgAndOmega(fileNumber):
     r_tt, temp, flux, sizI, sizJ, maxN = getInputParameters()
@@ -111,6 +114,7 @@ def computeMavgAndOmegaOverRuns():
 
     return runMavg, runOavg, runR1avg, runR2avg
 
+
 def defineRanges(temperatures):
     indexes = np.where((temperatures >= 70) & (temperatures <= 150))
     iSl = indexes[0][0]
@@ -123,20 +127,6 @@ def defineRanges(temperatures):
     iFh = indexes[0][-1]
     return list([iSl, iFl, iSm, iFm, iSh, iFh])
 
-def fitAndPlot(x, y, rngt, axis, alfa):
-    slopes = []
-    axis.semilogy(x, y, "x-")
-    a, b = f.fit(x, y, rngt[0], rngt[1])
-    slopes.append(b)
-    axis.semilogy(x[rngt[0]:rngt[1]+1], f.exp(x[rngt[0]:rngt[1]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
-    a, b = f.fit(x, y, rngt[2], rngt[3])
-    slopes.append(b)
-    axis.semilogy(x[rngt[2]-1:rngt[3]+1], f.exp(x[rngt[2]-1:rngt[3]+1], a, b), label="{} low {:03.3f} ".format(alfa,b))
-    a, b = f.fit(x, y, rngt[4], rngt[5])
-    slopes.append(b)
-    axis.semilogy(x[rngt[4]-1:], f.exp(x[rngt[4]-1:], a, b), label="{} low {:03.3f} ".format(alfa,b))
-    axis.legend(loc="best", prop={'size':7})
-    return slopes
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     slopes = []
@@ -156,6 +146,7 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
         axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(alfa,b))
         axis.legend(loc="best", prop={'size':7})
     return slopes
+
 
 temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,400,50))+list(range(450,1100,50)))
 kb = 8.6173324e-5
