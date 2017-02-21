@@ -4,7 +4,6 @@ import basic.Parser;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import utils.StaticRandom;
 
 /**
@@ -19,16 +18,13 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   private boolean clean;
   private double Ri_DeltaI;
   
-  private final ActivationEnergy activationEnergy;
   
-  public LinearList(Parser parser, ActivationEnergy activationEnergy) {
+  public LinearList(Parser parser) {
     super();
     surface = new ArrayList();
     this.setLevel(-1);
     clean = false;
     Ri_DeltaI = 0.0;
-    
-    this.activationEnergy = activationEnergy;
   }
   
   @Override

@@ -7,7 +7,6 @@ package utils.list;
 import basic.Parser;
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
-import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import utils.StaticRandom;
 
 /**
@@ -26,20 +25,20 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
    */
   private boolean clean;
 
-  public BinnedList(Parser parser, ActivationEnergy activationEnergy, int binAmount, int extraBinLevels) {
+  public BinnedList(Parser parser, int binAmount, int extraBinLevels) {
     super();
     this.setLevel(extraBinLevels);
 
     if (extraBinLevels > 0) {
       bins = new BinnedList[binAmount];
       for (int i = 0; i < binAmount; i++) {
-        bins[i] = new BinnedList(parser, activationEnergy, binAmount, extraBinLevels - 1);
+        bins[i] = new BinnedList(parser, binAmount, extraBinLevels - 1);
         bins[i].setParent(this);
       }
     } else {
       bins = new LinearList[binAmount];
       for (int i = 0; i < binAmount; i++) {
-        bins[i] = new LinearList(parser, activationEnergy);
+        bins[i] = new LinearList(parser);
         bins[i].setParent(this);
       }
     }

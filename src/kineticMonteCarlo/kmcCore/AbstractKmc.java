@@ -29,10 +29,10 @@ public abstract class AbstractKmc implements IKmc {
     activationEnergy = new ActivationEnergy(parser);
     switch (parser.getListType()) {
       case "linear":
-        list = new LinearList(parser, activationEnergy);
+        list = new LinearList(parser);
         break;
       case "binned":
-        list = new BinnedList(parser, activationEnergy, parser.getBinsLevels(), parser.getExtraLevels());
+        list = new BinnedList(parser, parser.getBinsLevels(), parser.getExtraLevels());
         break;
       default:
         System.err.println("listType is not properly set");
