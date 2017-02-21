@@ -365,11 +365,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
           }
         } else {
-          if (performSimulationStep()) {
-            break;
-          }
-          simulatedSteps++;
-          sumProbabilities += getList().getTotalProbabilityFromList();
+          getActivationEnergy().updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime());
           if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
@@ -378,6 +374,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             printData(null);
             coverageThreshold++;
           }
+          if (performSimulationStep()) {
+            break;
+          }
+          simulatedSteps++;
+          sumProbabilities += getList().getTotalProbabilityFromList();
         }
       }
     }

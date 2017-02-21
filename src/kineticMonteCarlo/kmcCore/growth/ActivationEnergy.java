@@ -9,6 +9,7 @@ import basic.Parser;
 import basic.io.OutputType;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.util.Locale;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -75,14 +76,14 @@ public class ActivationEnergy {
     histogramSuccess = new int[atomTypes][atomTypes];
   }
   
-  public void updatePossibles(ArrayList<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
+  public void updatePossibles(ListIterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
         histogramPossibleTmp = new double[length][length];
         histogramPossibleCounterTmp = new long[length][length];
         // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
-        for (int i = 0; i < surface.size(); i++) {
-          AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.get(i);
+        while (surface.hasNext()) {
+          AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.next();
           for (int pos = 0; pos < numberOfNeighbours; pos++) {
             AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
             byte destination = neighbourAtom.getTypeWithoutNeighbour(pos);

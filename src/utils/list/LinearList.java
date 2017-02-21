@@ -108,7 +108,6 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     
     addTime();
 
-    activationEnergy.updatePossibles(surface, getTotalProbability() + getDepositionProbability(), getDeltaTime());
     Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * getDeltaTime(); // should be always 1
 
     if (position < getDepositionProbability()) {
@@ -155,5 +154,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
   public double getRi_DeltaI() {
     return Ri_DeltaI;
+  }
+  
+  public ArrayList<AbstractAtom> getSurface(){
+    return surface;
   }
 }
