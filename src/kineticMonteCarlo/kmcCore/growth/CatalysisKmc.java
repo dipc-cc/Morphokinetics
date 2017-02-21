@@ -122,20 +122,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       destinationAtom =  (CatalysisAtom) originAtom.chooseRandomHop();
     }
 
-    if (justCentralFlake && destinationAtom.areTwoTerracesTogether()) {
-      if (times > originAtom.getNumberOfNeighbours()*100) { // it is not possible to diffuse without forming a dimer. So returning originAtom itself to make possible to another originAtom to be choosen.
-        return originAtom;
-      }
-        
-      return chooseRandomHop(originAtom, times+1);
-    }
-    if (destinationAtom.isOutside()) {
-      do {
-        destinationAtom = (CatalysisAtom) perimeter.getPerimeterReentrance(originAtom);
-      } while(destinationAtom.areTwoTerracesTogether() || destinationAtom.areTwoTerracesTogetherInPerimeter(originAtom));
-      // Add to the time the inverse of the probability to go from terrace to terrace, multiplied by steps done outside the perimeter (from statistics).
-      getList().addTime(perimeter.getNeededSteps() / terraceToTerraceProbability);
-    }
     return destinationAtom;
   }
   
