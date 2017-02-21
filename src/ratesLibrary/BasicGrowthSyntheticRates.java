@@ -30,6 +30,7 @@ public class BasicGrowthSyntheticRates implements IRates {
     double Ea = 0.350;
     double Eb = 0.435;
     double Ec = 0.45;
+    double Eg = 0.535;
     double Einf = 9999999;
     
     prefactor = 1e13;
@@ -45,7 +46,7 @@ public class BasicGrowthSyntheticRates implements IRates {
     energies[EDGE][KINK] = Ea;
     energies[EDGE][ISLAND] = Ea;
 
-    energies[KINK][TERRACE] = Einf;
+    energies[KINK][TERRACE] = Eg;
     energies[KINK][EDGE] = Eb;
     energies[KINK][KINK] = Eb;
     energies[KINK][ISLAND] = Eb;
