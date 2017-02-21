@@ -1,18 +1,17 @@
 #grep -v histo dataEvery1percentAndNucleation.txt | grep -v Ae | awk -v n=-1 '{if ($1<prev) {n++}prev=$1;} {print > "data"n".txt"} END{print n}'
 # sed -i '1d' data0.txt
-
+import info
 import numpy as np
 import matplotlib.pyplot as plt
 import glob
 import re
 import os
 import math
-import functions as f
-import info as i
+import functions as fun
 
 
 def diffusivityDistance():
-    r_tt, temp, flux, L1, L2, maxN = getInputParameters()
+    r_tt, temp, flux, L1, L2, maxN = info.getInputParameters()
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
@@ -59,7 +58,7 @@ def diffusivityDistance():
         plt.loglog(time, neg4/L1/L2, label=r"$\theta_{4+}$")
     plt.loglog(time, isld/L1/L2, label="number of islands")
 
-    plt.loglog(time, f.theta(time, flux), label=r"$1-e^{-Ft}$")
+    plt.loglog(time, fun.theta(time, flux), label=r"$1-e^{-Ft}$")
     plt.loglog(time, cove, ".", color="orange", label=r"$\theta$", markerfacecolor="None")
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
 
@@ -75,22 +74,22 @@ def diffusivityDistance():
 ##########################################################
 
 workingPath = os.getcwd()
-fluxes = i.getFluxes()
+fluxes = info.getFluxes()
 for f in fluxes:
     firstCollisionTime = []
     temperaturesPlot = []
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
-    for t in i.getTemperatures():
+    for t in info.getTemperatures():
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            i.splitDataFiles()
-            #time, neg1 = diffusivityDistance()
+            info.splitDataFiles()
+            time, neg1 = diffusivityDistance()
             # find first dimer occurrence
-            #i = np.argmax(neg1>0)
-            #firstCollisionTime.append(time[i])
+            i = np.argmax(neg1>0)
+            firstCollisionTime.append(time[i])
         except FileNotFoundError:
             pass
         os.chdir(fPath)
