@@ -249,7 +249,8 @@ for cov in range(-49,0):
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
-    plt.savefig("plot"+str(cov)+".png")
+    if showPlot:
+        plt.savefig("plot"+str(cov)+".png")
     
 
     #plt.show()
