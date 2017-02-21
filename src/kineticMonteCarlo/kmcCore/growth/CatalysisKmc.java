@@ -92,35 +92,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     return false;
   }
-  
-  /**
-   * This has to be called only once from AgKmc or GrapheneKmc.
-   * 
-   * @param occupiedSize Size of the seed in atoms. Number to calculate free space. 
-   */
-  @Override
-  void setCurrentOccupiedArea(int occupiedSize) {
-    currentArea = calculateAreaAsInKmcCanvas();
-    freeArea = currentArea - occupiedSize;
-  }
-  
-  /**
-   * Internal method to select the perimeter size and type. Must be used in depositSeed() method
-   * just before depositing the seed.
-   */
-  @Override
-  void setAtomPerimeter() {
-    if (useMaxPerimeter) {
-      perimeter.setMaxPerimeter(lattice.getCartSizeX(), lattice.getCartSizeY());
-    } else {
-      perimeter.setMinRadius();
-    }
-    if (perimeterType == RoundPerimeter.CIRCLE) {
-      perimeter.setCurrentPerimeter(lattice.setInsideCircle(perimeter.getCurrentRadius(), periodicSingleFlake));
-    } else {
-      perimeter.setCurrentPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
-    }
-  }
 
   private boolean depositAtom(CatalysisAtom atom) {
     if (atom.isOccupied()) {
