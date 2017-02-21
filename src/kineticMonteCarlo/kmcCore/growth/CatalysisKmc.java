@@ -107,12 +107,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private CatalysisAtom chooseRandomHop(CatalysisAtom originAtom, int times) {
     CatalysisAtom destinationAtom;
-    if (accelerator != null) {
-      destinationAtom = (CatalysisAtom) accelerator.chooseRandomHop(originAtom);
-    } else {
-      destinationAtom =  (CatalysisAtom) originAtom.chooseRandomHop();
-    }
-
+    destinationAtom =  (CatalysisAtom) originAtom.chooseRandomHop();
     return destinationAtom;
   }
   
