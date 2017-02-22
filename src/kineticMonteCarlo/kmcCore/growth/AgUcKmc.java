@@ -6,7 +6,6 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
