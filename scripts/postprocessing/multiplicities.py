@@ -6,6 +6,7 @@ import glob
 import re
 import math
 import os
+import sys
 
 
 def computeMavgAndOmega(fileNumber):
@@ -209,34 +210,39 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
     plt.legend(loc="best", prop={'size':8})
 plt.savefig("multiplicities.png")
 
-cm = plt.get_cmap('Accent')
-
-for j in range(0,3): # different temperature ranges (low, medium, high)
-    partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
-    partialSum2 = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]), axis=1)
-    rev = np.sum(partialSum1) < 0
-    partialSum = partialSum1 + partialSum2
-    c = 0
-    if rev:
-        axarr[2-j].fill_between(cov, partialSum2, color=cm(c/3), alpha=0.8)
-        c += 1
-    for i in range(0,2):
+rAndM = False
+omegas = False
+if len(sys.argv) > 1:
+    rAndM = sys.argv[1] == "r"
+    omegas = sys.argv[1] == "o"
+if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
+    cm = plt.get_cmap('Accent')
+    for j in range(0,3): # different temperature ranges (low, medium, high)
+        partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
+        partialSum2 = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]), axis=1)
+        rev = np.sum(partialSum1) < 0
+        partialSum = partialSum1 + partialSum2
+        c = 0
         if rev:
-            axarr[2-j].fill_between(cov,partialSum1, color=cm((c+i)/3), alpha=0.8)
-            partialSum1 = partialSum1 + partialSum2
-            
-        else:
-            axarr[2-j].fill_between(cov, partialSum, color=cm((c+i)/3), alpha=0.8)
-            partialSum -= partialSum1
-plt.savefig("multiplicities.png")
+            axarr[2-j].fill_between(cov, partialSum2, color=cm(c/3), alpha=0.8)
+            c += 1
+        for i in range(0,2):
+            if rev:
+                axarr[2-j].fill_between(cov,partialSum1, color=cm((c+i)/3), alpha=0.8)
+                partialSum1 = partialSum1 + partialSum2
+                
+            else:
+                axarr[2-j].fill_between(cov, partialSum, color=cm((c+i)/3), alpha=0.8)
+                partialSum -= partialSum1
+    plt.savefig("multiplicitiesRandM.png")
 
-cm = plt.get_cmap('Set1')
-
-for j in range(0,3): # different temperature ranges (low, medium, high)
-    partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
-    for i in range(3,-1,-1): #alfa
-        axarr[2-j].fill_between(cov, partialSum, color=cm(i/3))
-        partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
-
-plt.legend(loc="best", prop={'size':8})
-plt.savefig("multiplicities.png")
+if (omegas):
+    cm = plt.get_cmap('Set1')
+    for j in range(0,3): # different temperature ranges (low, medium, high)
+        partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
+        for i in range(3,-1,-1): #alfa
+            axarr[2-j].fill_between(cov, partialSum, color=cm(i/3))
+            partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
+    
+    plt.legend(loc="best", prop={'size':8})
+    plt.savefig("multiplicitiesOmegas.png")
