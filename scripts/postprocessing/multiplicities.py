@@ -74,15 +74,15 @@ def defineRanges(temperatures):
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     slopes = []
     if showPlot:   
-        axis.plot(x, y, "x-")
+        axis.plot(x, y, "x-", lw=0.5)
     a, b = f.linearFit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), label="{} low {:03.3f} ".format(alfa,b))
+        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls=":", label="{} low {:03.3f} ".format(alfa,b))
     a, b = f.linearFit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), label="{} med {:03.3f}".format(alfa,b))
+        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), ls="dashdot", label="{} med {:03.3f}".format(alfa,b))
     a, b = f.linearFit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     if showPlot:
