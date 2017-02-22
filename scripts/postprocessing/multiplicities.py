@@ -153,6 +153,8 @@ tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
+if len(sys.argv) > 1:
+    showPlot = sys.argv[1] == "p"
 for cov in range(-49,0):
     x = 1/kb/temperatures+np.log(5e4**1.5)
     y = tempR1avg
