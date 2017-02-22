@@ -206,8 +206,11 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
     ax = axarr[i].twinx()
     ax.plot(coverage, 1-tempEaCov2[:,2-i]/tempEaCov[:,2-i], "o", label="relative error")
     ax.set_ylim(0,1)
+    if i != 2:
+        plt.setp(ax, visible=False)
     #Label jartzea falta da
     plt.legend(loc="best", prop={'size':8})
+fig.subplots_adjust(wspace=0.1)
 plt.savefig("multiplicities.png")
 
 rAndM = False
