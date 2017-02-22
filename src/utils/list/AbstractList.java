@@ -25,6 +25,8 @@ public abstract class AbstractList implements IProbabilityHolder {
     depositionProbability = 0;
     autoCleanup = false;
     removalsSinceLastCleanup = 0;
+    deltaTime = 0;
+    cleanDeltaTime = true;
   }
 
   public abstract void addAtom(AbstractAtom a);
