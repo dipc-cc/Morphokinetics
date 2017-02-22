@@ -2,6 +2,7 @@ import functions as f
 import info
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
 import glob
 import re
 import math
@@ -162,7 +163,7 @@ for cov in range(-maxC,0):
     if showPlot:
         fig, axarr = plt.subplots(3, sharex=True)
         fig.set_size_inches(6,6)
-        fig.subplots_adjust(right=0.7)
+        fig.subplots_adjust(right=0.7, hspace=0.1)
         plt.xlim(20,200)
     else:
         axarr = np.zeros(3)
@@ -174,9 +175,13 @@ for cov in range(-maxC,0):
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot))
         if showPlot:
-            cbar_ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
-            cbar_ax.plot(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
-            cbar_ax.set_ylim(-0.05,1.05)
+            ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
+            ax.plot(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
+            ax.set_ylim(-0.05,1.05)
+            loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
+            ax.xaxis.set_major_locator(loc)
+            loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
+            ax.yaxis.set_major_locator(loc)
             axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
             axarr[2].set_ylim(1e-3,2)
         for j in range(0,3): # temperature ranges
