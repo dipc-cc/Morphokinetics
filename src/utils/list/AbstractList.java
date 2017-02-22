@@ -18,6 +18,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   private IProbabilityHolder parent;
   private int level;
   private boolean cleanDeltaTime;
+  private boolean computeTime;
   private double deltaTime;
   
   public AbstractList() {
@@ -27,6 +28,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     removalsSinceLastCleanup = 0;
     deltaTime = 0;
     cleanDeltaTime = true;
+    computeTime = true;
   }
 
   public abstract void addAtom(AbstractAtom a);
@@ -44,16 +46,18 @@ public abstract class AbstractList implements IProbabilityHolder {
   }
   public void addTime() {
     cleanDeltaTime = false;
-    deltaTime = getDeltaTime();
+    deltaTime = getDeltaTime(computeTime);
+    computeTime = false;
     time += deltaTime;
   }
   
-  public double getDeltaTime() {
-    if (cleanDeltaTime) {
-      return deltaTime;
-    } else {
+  public double getDeltaTime(boolean compute) {
+    if (compute) {
+      //deltaTime = 1 / (getTotalProbability() + getDepositionProbability());
       deltaTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
       cleanDeltaTime = true;
+      return deltaTime;
+    } else {
       return deltaTime;
     }
   }
@@ -125,6 +129,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     totalProbability = 0;
     totalAtoms = 0;
     removalsSinceLastCleanup = 0;
+    computeTime = true;
   }
     
   public abstract AbstractAtom getAtomAt(int pos);

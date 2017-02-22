@@ -104,7 +104,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
     
     addTime();
 
-    Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * getDeltaTime(); // should be always 1
+    Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * getDeltaTime(false); // should be always 1
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
