@@ -10,7 +10,7 @@ import sys
 
 
 def computeMavgAndOmega(fileNumber):
-    r_tt, temp, flux, sizI, sizJ, maxN = info.getInputParameters()
+    r_tt, temp, flux, sizI, sizJ, maxN, maxC = info.getInputParameters()
     discretes = np.loadtxt(fname="possibleDiscrete"+str(fileNumber)+".txt")
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
     possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
@@ -19,8 +19,6 @@ def computeMavgAndOmega(fileNumber):
     length = len(time)
     neg0 = matrix[:,16]
     hops = np.array(matrix[:,15])
-    even = np.array(matrix[:,7])
-    cove = np.array(matrix[:,0])
     ratios = info.getRatio(temp, info.getHexagonalEnergies())
     Mavg = np.zeros(shape=(length,49))
     for i in range(0,49):
