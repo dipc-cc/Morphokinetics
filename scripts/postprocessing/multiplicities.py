@@ -150,6 +150,7 @@ tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
+coverage = list(range(0,49))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
 for cov in range(-49,0):
@@ -192,17 +193,16 @@ tempEaRCov = np.zeros(np.shape(tempEaMCov))
 energies = [0.1, 0.25, 0.33, 0.42]
 for alfa in range(0,4):
     tempEaRCov[:,alfa,:] = energies[alfa]
-cov = list(range(0,49))
 
 plt.figure()
 fig, axarr = plt.subplots(1, 3, sharey=True)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
 for i in range(0,3): # different temperature ranges (low, medium, high)
     ax = plt.gca()
-    axarr[i].plot(cov, tempEaCov[:,2-i], label="{}".format(2-i))
-    axarr[i].plot(cov, tempEaCov2[:,2-i], "x:", label="v2 {}".format(2-i))
+    axarr[i].plot(coverage, tempEaCov[:,2-i], label="{}".format(2-i))
+    axarr[i].plot(coverage, tempEaCov2[:,2-i], "x:", label="v2 {}".format(2-i))
     ax = axarr[i].twinx()
-    ax.plot(cov, 1-tempEaCov2[:,2-i]/tempEaCov[:,2-i], "o", label="relative error")
+    ax.plot(coverage, 1-tempEaCov2[:,2-i]/tempEaCov[:,2-i], "o", label="relative error")
     ax.set_ylim(0,1)
     #Label jartzea falta da
     plt.legend(loc="best", prop={'size':8})
@@ -222,15 +222,15 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
         partialSum = partialSum1 + partialSum2
         c = 0
         if rev:
-            axarr[2-j].fill_between(cov, partialSum2, color=cm(c/3), alpha=0.8)
+            axarr[2-j].fill_between(coverage, partialSum2, color=cm(c/3), alpha=0.8)
             c += 1
         for i in range(0,2):
             if rev:
-                axarr[2-j].fill_between(cov,partialSum1, color=cm((c+i)/3), alpha=0.8)
+                axarr[2-j].fill_between(coverage,partialSum1, color=cm((c+i)/3), alpha=0.8)
                 partialSum1 = partialSum1 + partialSum2
                 
             else:
-                axarr[2-j].fill_between(cov, partialSum, color=cm((c+i)/3), alpha=0.8)
+                axarr[2-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8)
                 partialSum -= partialSum1
     plt.savefig("multiplicitiesRandM.png")
 
@@ -239,7 +239,7 @@ if (omegas):
     for j in range(0,3): # different temperature ranges (low, medium, high)
         partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
         for i in range(3,-1,-1): #alfa
-            axarr[2-j].fill_between(cov, partialSum, color=cm(i/3))
+            axarr[2-j].fill_between(coverage, partialSum, color=cm(i/3))
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
     plt.legend(loc="best", prop={'size':8})
