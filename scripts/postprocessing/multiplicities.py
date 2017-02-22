@@ -195,7 +195,6 @@ tempEaRCov = np.zeros(np.shape(tempEaMCov))
 energies = [0.1, 0.25, 0.33, 0.42]
 for alfa in range(0,4):
     tempEaRCov[:,alfa,:] = energies[alfa]
-cov = [1, 10, 20, 30, 40, 49]
 cov = list(range(0,49))
 
 plt.figure()
