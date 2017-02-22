@@ -184,7 +184,7 @@ for cov in range(-maxC,0):
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
-        plt.savefig("plot"+str(cov)+".png")
+        plt.savefig("plot"+str(maxC+cov)+".png")
         plt.close()
     
 
