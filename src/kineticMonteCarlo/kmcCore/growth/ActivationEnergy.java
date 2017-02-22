@@ -76,6 +76,7 @@ public class ActivationEnergy {
   }
   
   public void updatePossibles(ArrayList<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
+    elapsedTime = 1 / totalAndDepositionProbability;
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
         histogramPossibleTmp = new double[length][length];

@@ -106,10 +106,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
 
     double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
     
-    double elapsedTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
+    //double elapsedTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
+    double elapsedTime = 1 / (getTotalProbability() + getDepositionProbability());
     addTime(elapsedTime);
 
-    activationEnergy.updatePossibles(surface, getTotalProbability() + getDepositionProbability(), elapsedTime);
+    //activationEnergy.updatePossibles(surface, getTotalProbability() + getDepositionProbability(), elapsedTime);
     Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * elapsedTime; // should be always 1
 
     if (position < getDepositionProbability()) {
@@ -157,4 +158,8 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   public double getRi_DeltaI() {
     return Ri_DeltaI;
   }
+
+  public ArrayList<AbstractAtom> getSurface() {
+    return surface;
+  }  
 }
