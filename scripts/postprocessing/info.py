@@ -18,10 +18,12 @@ def getTemperatures():
 def getInputParameters():
     r_tt, temp, flux, calcType, sizI, sizJ, maxC = getInformationFromFile()
     maxN = 3
+    maxA = 16
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
-    return r_tt, temp, flux, sizI, sizJ, maxN, maxC
+        maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
+    return r_tt, temp, flux, sizI, sizJ, maxN, maxC, maxA
 
 
 def getInformationFromFile():

@@ -10,23 +10,21 @@ import sys
 
 
 def computeMavgAndOmega(fileNumber):
-    r_tt, temp, flux, sizI, sizJ, maxN, maxC = info.getInputParameters()
-    discretes = np.loadtxt(fname="possibleDiscrete"+str(fileNumber)+".txt")
+    r_tt, temp, flux, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
     possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
     possiblesFromList = possiblesFromList[:,1:] # remove coverage
     time = np.array(matrix[:,1])
     length = len(time)
-    neg0 = matrix[:,16]
     hops = np.array(matrix[:,15])
     ratios = info.getRatio(temp, info.getHexagonalEnergies())
-    Mavg = np.zeros(shape=(length,49))
-    for i in range(0,49):
+    Mavg = np.zeros(shape=(length,maxA))
+    for i in range(0,maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
     avgTotalHopRate2 = np.array(ratios.dot(np.transpose(Mavg)))
     avgTotalHopRate1 = hops/time
     # define omegas AgUc
-    omega = np.zeros(shape=(length, 49))
+    omega = np.zeros(shape=(length,maxA)) # [coverage, alfa]
     for i in range(0,length):
         omega[i,:] =  Mavg[i,:] * ratios / avgTotalHopRate2[i]
     np.shape(omega)
@@ -34,12 +32,13 @@ def computeMavgAndOmega(fileNumber):
 
 
 def computeMavgAndOmegaOverRuns():
+    r_tt, temp, flux, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
     files = glob.glob("possibleDiscrete*")
     files.sort()
     matrix = np.loadtxt(fname="data0.txt", delimiter="\t")
     length = len(matrix)
-    sumMavg = np.zeros(shape=(length,49))
-    sumOmega = np.zeros(shape=(length,49))
+    sumMavg = np.zeros(shape=(length,maxA))  # [coverage, alfa]
+    sumOmega = np.zeros(shape=(length,maxA)) # [coverage, alfa]
     sumRate1 = np.zeros(length)
     sumRate2 = np.zeros(length)
     #iterating over runs
