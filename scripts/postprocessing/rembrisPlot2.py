@@ -11,7 +11,7 @@ import functions as fun
 
 
 def diffusivityDistance():
-    r_tt, temp, flux, L1, L2, maxN = info.getInputParameters()
+    r_tt, temp, flux, calc, L1, L2, maxN, maxC, maxA = info.getInputParameters()
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
