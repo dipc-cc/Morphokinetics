@@ -176,6 +176,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
       int atomIndex = random % getLattice().getUnitCellSize();
       destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
+      destinationAtom.chooseRandomType();
     } while (!depositAtom(destinationAtom));
     
     destinationAtom.setDepositionTime(getTime());

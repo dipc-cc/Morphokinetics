@@ -25,7 +25,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   
   private final String latticeSite;
   
-  private final byte typeOfAtom;
+  private byte typeOfAtom;
   
   public static final byte CO = 0;
   public static final byte O = 1;
@@ -45,11 +45,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       latticeSite = "bridge";
     } else {
       latticeSite = "cus";
-    }
-    if(Math.random()>0.5){
-      typeOfAtom = CatalysisAtom.O;
-    }else{
-      typeOfAtom = CatalysisAtom.CO;
     }
   }
 
@@ -253,5 +248,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       setBondsProbability(0, i);
     }
   }
- 
+
+  public void chooseRandomType() {
+    if (StaticRandom.raw() > 0.5) {
+      typeOfAtom = CatalysisAtom.O;
+    } else {
+      typeOfAtom = CatalysisAtom.CO;
+    }
+  }
 }
