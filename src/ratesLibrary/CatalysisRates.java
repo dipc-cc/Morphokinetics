@@ -41,6 +41,16 @@ public class CatalysisRates implements IRates {
     
     double[][][] energies = new double[2][2][2];
     energies[BR][CO][BR] = E1;
+    energies[BR][CO][CUS] = E2;
+    energies[CUS][CO][BR] = E3;
+    energies[CUS][CO][CUS] = E4;
+    energies[BR][O][BR] = E5;
+    energies[BR][O][CUS] = E6;
+    energies[CUS][O][BR] = E7;
+    energies[CUS][O][CUS] = E8;
+    
+            
+    
             
   }
   
