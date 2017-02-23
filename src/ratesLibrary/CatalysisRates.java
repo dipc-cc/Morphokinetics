@@ -7,10 +7,8 @@
 package ratesLibrary;
 
 import static java.lang.Math.pow;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.KINK;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
+import static kineticMonteCarlo.atom.CatalysisAtom.BR;
+import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 
 /**
  *
@@ -18,7 +16,7 @@ import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
  */
 public class CatalysisRates implements IRates {
 
-  private final double[][] energies;
+  //private final double[][] energies;
   private double diffusionMl;
   
   private final double prefactor;
@@ -29,35 +27,21 @@ public class CatalysisRates implements IRates {
   public CatalysisRates() {
     diffusionMl = 0.000035;
     
-    double Ed = 0.200;
-    double Ef = 0.360;
-    double Ea = 0.350;
-    double Eb = 0.435;
-    double Ec = 0.45;
+    double E1 = 0.6;
+    double E2 = 1.6;
+    double E3 = 1.3;
+    double E4 = 1.7;
+    double E5 = 0.7;
+    double E6 = 2.3;
+    double E7 = 1.0;
+    double E8 = 1.6;
     double Einf = 9999999;
     
     prefactor = 1e13;
     
-    energies = new double[4][4];
-    energies[TERRACE][TERRACE] = Ed;
-    energies[TERRACE][EDGE] = Ed;
-    energies[TERRACE][KINK] = Ed;
-    energies[TERRACE][ISLAND] = Ed;
-
-    energies[EDGE][TERRACE] = Ec;
-    energies[EDGE][EDGE] = Ef;
-    energies[EDGE][KINK] = Ea;
-    energies[EDGE][ISLAND] = Ea;
-
-    energies[KINK][TERRACE] = Einf;
-    energies[KINK][EDGE] = Eb;
-    energies[KINK][KINK] = Eb;
-    energies[KINK][ISLAND] = Eb;
-
-    energies[ISLAND][TERRACE] = Einf;
-    energies[ISLAND][EDGE] = Einf;
-    energies[ISLAND][KINK] = Einf;
-    energies[ISLAND][ISLAND] = Einf;
+    double[][][] energies = new double[2][2][2];
+    energies[BR][CO][BR] = E1;
+            
   }
   
   private double getRate(int sourceType, int destinationType, double temperature) {
