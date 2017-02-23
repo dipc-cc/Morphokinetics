@@ -15,8 +15,8 @@ def getTemperatures():
     return temperatures
 
     
-def getInputParameters():
-    r_tt, temp, flux, calcType, sizI, sizJ, maxC = getInformationFromFile()
+def getInputParameters(fileName = ""):
+    r_tt, temp, flux, calcType, sizI, sizJ, maxC = getInformationFromFile(fileName)
     maxN = 3
     maxA = 16
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
@@ -26,8 +26,9 @@ def getInputParameters():
     return r_tt, temp, flux, sizI, sizJ, maxN, maxC, maxA
 
 
-def getInformationFromFile():
-    fileName = glob.glob("../output*")[0]
+def getInformationFromFile(fileName):
+    if fileName == "":
+        fileName = glob.glob("../output*")[0]
     f = open(fileName)
     hit = False
     for line in f:

@@ -151,7 +151,8 @@ tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
-maxC = 50
+values = info.getInputParameters(glob.glob("*/output*")[0])
+maxC = values[6]
 maxC -= 1
 coverage = list(range(0,maxC))
 if len(sys.argv) > 1:
