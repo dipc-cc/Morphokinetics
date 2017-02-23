@@ -11,14 +11,17 @@ import sys
 
 
 def computeMavgAndOmega(fileNumber):
-    r_tt, temp, flux, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
+    r_tt, temp, flux, calc, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
     possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
     possiblesFromList = possiblesFromList[:,1:] # remove coverage
     time = np.array(matrix[:,1])
     length = len(time)
     hops = np.array(matrix[:,15])
-    ratios = info.getRatio(temp, info.getHexagonalEnergies())
+    if calc == "basic":
+        ratios = info.getRatio(temp, info.getBasicEnergies())
+    else:
+        ratios = info.getRatio(temp, info.getHexagonalEnergies())
     Mavg = np.zeros(shape=(length,maxA))
     for i in range(0,maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
@@ -33,7 +36,7 @@ def computeMavgAndOmega(fileNumber):
 
 
 def computeMavgAndOmegaOverRuns():
-    r_tt, temp, flux, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
+    r_tt, temp, flux, calc, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
     files = glob.glob("possibleDiscrete*")
     files.sort()
     matrix = np.loadtxt(fname="data0.txt", delimiter="\t")
@@ -59,16 +62,27 @@ def computeMavgAndOmegaOverRuns():
     return runMavg, runOavg, runR1avg, runR2avg
 
 
-def defineRanges(temperatures):
-    indexes = np.where((temperatures >= 70) & (temperatures <= 150))
-    iSl = indexes[0][0]
-    iFl = indexes[0][-1]
-    indexes = np.where((temperatures >= 150) & (temperatures <= 450))
-    iSm = indexes[0][0]
-    iFm = indexes[0][-1]
-    indexes = np.where((temperatures >= 450) & (temperatures <= 1100))
-    iSh = indexes[0][0]
-    iFh = indexes[0][-1]
+def defineRanges(calculationMode, temperatures):
+    if calculationMode == "AgUc":
+        indexes = np.where((temperatures >= 70) & (temperatures <= 150))
+        iSl = indexes[0][0]
+        iFl = indexes[0][-1]
+        indexes = np.where((temperatures >= 150) & (temperatures <= 450))
+        iSm = indexes[0][0]
+        iFm = indexes[0][-1]
+        indexes = np.where((temperatures >= 450) & (temperatures <= 1100))
+        iSh = indexes[0][0]
+        iFh = indexes[0][-1]
+    else:
+        indexes = np.where((temperatures >= 120) & (temperatures <= 190))
+        iSl = indexes[0][0]
+        iFl = indexes[0][-1]
+        indexes = np.where((temperatures >= 190) & (temperatures <= 270))
+        iSm = indexes[0][0]
+        iFm = indexes[0][-1]
+        indexes = np.where((temperatures >= 270) & (temperatures <= 1100))
+        iSh = indexes[0][0]
+        iFh = indexes[0][-1]
     return list([iSl, iFl, iSm, iFm, iSh, iFh])
 
 
@@ -92,7 +106,11 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     return slopes
 
 
-temperatures = np.array(list(range(50,100,5))+list(range(100,150,10))+list(range(150,400,50))+list(range(450,1100,50)))
+temperatures = info.getTemperatures()
+values = info.getInputParameters(glob.glob("*/output*")[0])
+maxC = values[7]
+maxC -= 1
+calculationMode = values[3]
 kb = 8.6173324e-5
 tempMavg = []
 tempOavg = []
@@ -136,24 +154,32 @@ except FileNotFoundError:
     np.savetxt("tempR1avg.txt",tempR1avg, fmt='%.18f')
     np.savetxt("tempR2avg.txt",tempR2avg, fmt='%.18f')
 
-minTemperatureIndex = 4
-tempMavg = tempMavg[minTemperatureIndex:]
-tempOavg = tempOavg[minTemperatureIndex:]
-tempR1avg = tempR1avg[minTemperatureIndex:]
-tempR2avg = tempR2avg[minTemperatureIndex:]
-
-temperatures = temperatures[minTemperatureIndex:]
+if calculationMode == "AgUc":
+    minTemperatureIndex = 4
+    tempMavg = tempMavg[minTemperatureIndex:]
+    tempOavg = tempOavg[minTemperatureIndex:]
+    tempR1avg = tempR1avg[minTemperatureIndex:]
+    tempR2avg = tempR2avg[minTemperatureIndex:]
+    temperatures = temperatures[minTemperatureIndex:]
+    ind = [0,4,8,12,15,20,24,27]
+    maxAlfa = 4
+    xmin = 20
+    xmax = 200
+    energies = [0.1, 0.25, 0.33, 0.42]
+else:
+    #       d   c   f   a   g   b
+    ind = [0,4,4,5,5,6,6,8,8,9,9,12]
+    maxAlfa = 6
+    xmin = 40
+    xmax = 120
+    energies = [0.2, 0.36, 0.35, 0.435, 0.45, 0.535]
 # define ranges
-rngt = defineRanges(temperatures)
+rngt = defineRanges(calculationMode, temperatures)
 
-ind = [0,4,8,12,15,20,24,27]
 tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
-values = info.getInputParameters(glob.glob("*/output*")[0])
-maxC = values[6]
-maxC -= 1
 coverage = list(range(0,maxC))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
@@ -165,14 +191,14 @@ for cov in range(-maxC,0):
         fig, axarr = plt.subplots(3, sharex=True)
         fig.set_size_inches(6,6)
         fig.subplots_adjust(right=0.7, hspace=0.1)
-        plt.xlim(20,200)
+        plt.xlim(xmin,xmax)
     else:
         axarr = np.zeros(3)
     # N_h
     tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, showPlot))
-    tempOmega = np.zeros((4,3))
+    tempOmega = np.zeros((maxAlfa,3))
     tempEaM = []
-    for i in range(0,4): # alfa
+    for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot))
         if showPlot:
@@ -198,8 +224,7 @@ tempOmegaCov = np.array(tempOmegaCov) # [coverage, type (alfa), temperature rang
 tempEaCov = -np.array(tempEaCov) # [coverage, temperature range]
 tempEaMCov = np.array(tempEaMCov) # [coverage, type (alfa), temperature range]
 tempEaRCov = np.zeros(np.shape(tempEaMCov))
-energies = [0.1, 0.25, 0.33, 0.42]
-for alfa in range(0,4):
+for alfa in range(0,maxAlfa):
     tempEaRCov[:,alfa,:] = energies[alfa]
 
 plt.figure()
