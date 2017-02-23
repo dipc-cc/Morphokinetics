@@ -8,6 +8,8 @@ package ratesLibrary;
 
 import static java.lang.Math.pow;
 import static kineticMonteCarlo.atom.CatalysisAtom.BR;
+import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
+import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 
 /**
