@@ -12,6 +12,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.ISLAND;
 import static kineticMonteCarlo.atom.CatalysisAtom.TERRACE;
 import static kineticMonteCarlo.atom.CatalysisAtom.EDGE;
 import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import utils.StaticRandom;
 
 /**
@@ -98,6 +99,24 @@ public class CatalysisLattice extends AbstractGrowthLattice {
         return chooseClearAreaStep(atom, distance);
       default:
         return null;
+    }
+  }
+  
+  /**
+   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
+   * jump from terrace to edge.
+   *
+   * @param probabilities Default rates.
+   */
+  public void initialiseRates(double[][][] probabilities) {
+    //atomTypesAmount = probabilities.length;
+    //atomTypesCounter = new int[atomTypesAmount];
+    for (int i = 0; i < size(); i++) {
+      AbstractGrowthUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
+        atom.initialiseRates(probabilities);
+      }
     }
   }
   

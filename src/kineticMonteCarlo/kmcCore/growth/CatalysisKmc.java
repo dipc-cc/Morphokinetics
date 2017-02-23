@@ -40,6 +40,23 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return getSampledSurface(binX, binY);
   }
   
+  @Override
+  public void initialiseRates(double[] rates) {
+    //we modify the 1D array into a 3D array;
+    int length = 2;
+    double[][][] processProbs3D = new double[length][length][length];
+
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        for (int k = 0; k < length; k++) {
+          processProbs3D[i][j][k] = rates[(i * length * length) + (j * length) + k];
+        }
+      }
+    }
+    ((CatalysisLattice) getLattice()).initialiseRates(processProbs3D);
+    //activationEnergy.setRates(processProbs3D);
+  }
+  
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
     setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));
 

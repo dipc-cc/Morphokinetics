@@ -32,6 +32,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   public static final byte BR = 0;
   public static final byte CUS = 1;
   
+  /**
+   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
+   * jump from terrace to edge.
+   */
+  private double[][][] probabilities;
+  
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
     occupiedNeighbours = 0; 
@@ -51,6 +57,17 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     return latticeSite;
   }
 
+  
+  /**
+   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
+   * jump from terrace to edge.
+   *
+   * @param probabilities Default rates.
+   */
+  public void initialiseRates(double[][][] probabilities) {
+    this.probabilities = probabilities;
+  }
+  
   /**
    * For the orientation they are only available two position. Orientation is either | or _. It is
    * assumed that current atom is of type EDGE.
