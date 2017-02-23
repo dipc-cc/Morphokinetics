@@ -18,7 +18,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
  */
 public class CatalysisRates implements IRates {
 
-  //private final double[][] energies;
+  private final double[][][] energies;
   private double diffusionMl;
   
   private final double prefactor;
@@ -41,7 +41,7 @@ public class CatalysisRates implements IRates {
     
     prefactor = 1e13;
     
-    double[][][] energies = new double[2][2][2];
+    energies = new double[2][2][2];
     energies[BR][CO][BR] = E1;
     energies[BR][CO][CUS] = E2;
     energies[CUS][CO][BR] = E3;
@@ -49,15 +49,7 @@ public class CatalysisRates implements IRates {
     energies[BR][O][BR] = E5;
     energies[BR][O][CUS] = E6;
     energies[CUS][O][BR] = E7;
-    energies[CUS][O][CUS] = E8;
-    
-            
-    
-            
-  }
-  
-  private double getRate(int sourceType, int destinationType, double temperature) {
-    return prefactor * Math.exp(-energies[sourceType][destinationType] / (kB * temperature));
+    energies[CUS][O][CUS] = E8;       
   }
 
   @Override
@@ -85,13 +77,17 @@ public class CatalysisRates implements IRates {
       c = 0.25;
       slope = -(1.d / 3.d);
     }
-    rtt = getRate(0, 0, temperature);
+    rtt = getRate(0, 0, 0, temperature);
      return pow(flux, 0.23d) * c * pow(rtt / pow(flux, 1.d / 3.d), slope);
   }
 
   @Override
   public double getEnergy(int i, int j) {
-    return energies[i][j];
+    return energies[i][j][0];
+  }
+  
+  private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
+    return prefactor * Math.exp(-energies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
 
   /**
@@ -107,36 +103,16 @@ public class CatalysisRates implements IRates {
 
   @Override
   public double[] getRates(double temperature) {
-    double[] rates = new double[16];
+    double[] rates = new double[8];
 
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        rates[i * 4 + j] = (getRate(i, j, temperature));
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+          int index = (i * 2 * 2) + (j * 2) + k;
+          rates[index] = (getRate(i, j, k, temperature));
+        }
       }
     }
-    return rates;
-  }
-  
-  /**
-   * Calculates rates from the genes. Some of the rates are 0, the rest is calculated from the given
-   * genes.
-   *
-   * Ratio (energy type) | ratio index
-   * 0) E_d                    (0,j) Terrace to any 
-   * 1) E_c                    (1,0) Edge to terrace
-   * 2) E_f                    (1,1) Edge to edge
-   * 3) E_a                    (1,2)=(1,3) Edge to kink or island
-   * 4) E_b                    (2,1)=(2,2)=(2,3) Kink to any (but terrace)
-   * @param temperature 
-   * @return rates[5]
-   */
-  public double[] getReduced5Rates(int temperature) {
-    double[] rates = new double[5];
-    rates[0] = getRate(0, 0, temperature);
-    rates[1] = getRate(1, 0, temperature);
-    rates[2] = getRate(1, 1, temperature);
-    rates[3] = getRate(1, 2, temperature);
-    rates[4] = getRate(2, 1, temperature);
     return rates;
   }
   
