@@ -67,6 +67,18 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   public void initialiseRates(double[][][] probabilities) {
     this.probabilities = probabilities;
   }
+    
+  /**
+   * Dummy method. Just to run.
+   * @param originType
+   * @param targetType
+   * @return 
+   */
+  @Override
+  public double getProbability(int originType, int targetType) {
+    return 0;
+  }
+  
   
   /**
    * For the orientation they are only available two position. Orientation is either | or _. It is
