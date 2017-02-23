@@ -29,6 +29,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   
   public static final byte CO = 0;
   public static final byte O = 1;
+  public static final byte BR = 0;
+  public static final byte CUS = 1;
   
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
@@ -44,7 +46,11 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       typeOfAtom = CatalysisAtom.CO;
     }
   }
-  
+
+  public String getLatticeSite() {
+    return latticeSite;
+  }
+
   /**
    * For the orientation they are only available two position. Orientation is either | or _. It is
    * assumed that current atom is of type EDGE.
