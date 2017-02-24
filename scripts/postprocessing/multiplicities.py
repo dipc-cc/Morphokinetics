@@ -235,6 +235,7 @@ for cov in range(-p.maxC,0):
             ax.yaxis.set_major_locator(loc)
             axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-", label=labelAlfa[i])
             axarr[2].set_ylim(1e-3,2)
+            axarr[2].legend(prop={'size': 8}, bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
         for j in range(0,3): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
