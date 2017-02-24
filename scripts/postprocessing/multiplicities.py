@@ -168,13 +168,13 @@ if calculationMode == "AgUc":
     energies = [0.1, 0.25, 0.33, 0.42]
     labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
 else:
-    #       d   c   f   a   g   b
-    ind = [0,4,4,5,5,6,6,8,8,9,9,12]
+    #       d   a   f   b    c   g
+    ind = [0,4,6,8,5,6,9,12,4,5,8,9]
     maxAlfa = 6
     xmin = 40
     xmax = 120
-    energies = [0.2, 0.36, 0.35, 0.435, 0.45, 0.535]
-    labelAlfa = ["$E_d$", "$E_c$", "$E_f$", "$E_a$", "$E_g$", "$E_b$"]
+    energies = [0.2, 0.35, 0.36, 0.435, 0.45, 0.535]
+    labelAlfa = ["$E_d$", "$E_a$", "$E_f$", "$E_b$", "$E_c$", "$E_g$"]
 # define ranges
 rngt = defineRanges(calculationMode, temperatures)
 
@@ -211,7 +211,7 @@ for cov in range(-maxC,0):
             ax.xaxis.set_major_locator(loc)
             loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
             ax.yaxis.set_major_locator(loc)
-            axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
+            axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-", label=labelAlfa[i])
             axarr[2].set_ylim(1e-3,2)
         for j in range(0,3): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
@@ -245,7 +245,7 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
     #if i != 2:
      #   plt.setp(ax, visible=False)
 
-plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "best", prop={'size':8})
+plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "upper right", prop={'size':8})
 plt.savefig("multiplicities.png")
 rAndM = False
 omegas = False
@@ -275,7 +275,7 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
                 lg = axarr[2-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[i])
                 lgR.append(lg)
                 partialSum -= partialSum1
-    plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), "best", prop={'size':8})
+    plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), "upper right", prop={'size':8})
     plt.savefig("multiplicitiesRandM.png")
 
 if (omegas):
@@ -290,8 +290,8 @@ if (omegas):
     myLegends = [lgEaCov, lgEaCov2, lgErr]
     myLabels = ["Activation energy", "Recomputed AE", "Error"]  
     myLegends += lgs
-    for i in range(0,maxAlfa):
+    for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
-    plt.figlegend(myLegends, myLabels, "best", prop={'size':8})
+    plt.figlegend(myLegends, myLabels, "upper right", prop={'size':8})
     
     plt.savefig("multiplicitiesOmegas.png")
