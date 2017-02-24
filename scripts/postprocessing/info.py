@@ -10,11 +10,12 @@ class fileData:
         self.temp = data[1] # temperature
         self.flux = data[2] # flux
         self.calc = data[3] # calculation mode: basic, AgUc ...
-        self.sizI = data[4] # simulation size I
-        self.sizJ = data[5] # simulation size J
-        self.maxN = data[6] # max simulated coverage
-        self.maxC = data[7] # max number of neighbour or atom types
-        self.maxA = data[8] # max alfa: possible transition types (i.e. different energies)
+        self.rLib = data[4]
+        self.sizI = data[5] # simulation size I
+        self.sizJ = data[6] # simulation size J
+        self.maxN = data[7] # max simulated coverage
+        self.maxC = data[8] # max number of neighbour or atom types
+        self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
         
 def getFluxes():
     return glob.glob("flux*")
@@ -28,14 +29,14 @@ def getTemperatures():
 
     
 def getInputParameters(fileName = ""):
-    r_tt, temp, flux, calcType, sizI, sizJ, maxC = getInformationFromFile(fileName)
+    r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC = getInformationFromFile(fileName)
     maxN = 3
     maxA = 16
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
-    return fileData([r_tt, temp, flux, calcType, sizI, sizJ, maxN, maxC, maxA])
+    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA])
 
 
 def getInformationFromFile(fileName):
@@ -46,6 +47,8 @@ def getInformationFromFile(fileName):
     for line in f:
         if re.search("calculationMode", line):
             calc = list(filter(None,re.split(" |,",line)))[1]
+        if re.search("ratesLibrary", line):
+            ratesLib = list(filter(None, re.split(" |,",line)))[1]
         if re.search("cartSizeX", line):
             sizX = int(list(filter(None,re.split(" |,",line)))[1])
         if re.search("cartSizeY", line):
@@ -58,7 +61,7 @@ def getInformationFromFile(fileName):
             maxC = int(float(list(filter(None,re.split(" |,",line)))[1]))
         if hit:
             r_tt = float(re.split(' ', line)[0])
-            return r_tt, temp, flux, calc, sizX, sizY, maxC
+            return r_tt, temp, flux, calc, ratesLib, sizX, sizY, maxC
         if re.match("These", line):
             hit = True
 

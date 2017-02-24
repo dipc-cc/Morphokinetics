@@ -62,7 +62,7 @@ def computeMavgAndOmegaOverRuns():
     return runMavg, runOavg, runR1avg, runR2avg
 
 
-def defineRanges(calculationMode, temperatures):
+def defineRanges(calculationMode, ratesLibrary, temperatures):
     if calculationMode == "AgUc":
         indexes = np.where((temperatures >= 70) & (temperatures <= 150))
         iSl = indexes[0][0]
@@ -74,15 +74,29 @@ def defineRanges(calculationMode, temperatures):
         iSh = indexes[0][0]
         iFh = indexes[0][-1]
     else:
-        indexes = np.where((temperatures >= 120) & (temperatures <= 190))
-        iSl = indexes[0][0]
-        iFl = indexes[0][-1]
-        indexes = np.where((temperatures >= 190) & (temperatures <= 270))
-        iSm = indexes[0][0]
-        iFm = indexes[0][-1]
-        indexes = np.where((temperatures >= 270) & (temperatures <= 1100))
-        iSh = indexes[0][0]
-        iFh = indexes[0][-1]
+        if ratesLibrary == "version2":
+            indexes = np.where((temperatures >= 120) & (temperatures <= 195))
+            iSl = indexes[0][0]
+            iFl = indexes[0][-1]
+            indexes = np.where((temperatures >= 195) & (temperatures <= 265))
+            iSm = indexes[0][0]
+            iFm = indexes[0][-1]
+            indexes = np.where((temperatures >= 265) & (temperatures <= 400))
+            iSh = indexes[0][0]
+            iFh = indexes[0][-1]
+            # in principle, it doesn't have intermediate temperature range
+            #iSm = iFl-1
+            #iFm = iSh+1
+        else:
+            indexes = np.where((temperatures >= 120) & (temperatures <= 190))
+            iSl = indexes[0][0]
+            iFl = indexes[0][-1]
+            indexes = np.where((temperatures >= 190) & (temperatures <= 270))
+            iSm = indexes[0][0]
+            iFm = indexes[0][-1]
+            indexes = np.where((temperatures >= 270) & (temperatures <= 1100))
+            iSh = indexes[0][0]
+            iFh = indexes[0][-1]
     return list([iSl, iFl, iSm, iFm, iSh, iFh])
 
 
@@ -167,15 +181,24 @@ if calculationMode == "AgUc":
     energies = [0.1, 0.25, 0.33, 0.42]
     labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
 else:
-    #       d   a   f   b    c   g
-    ind = [0,4,6,8,5,6,9,12,4,5,8,9]
-    maxAlfa = 6
-    xmin = 40
-    xmax = 120
-    energies = [0.2, 0.35, 0.36, 0.435, 0.45, 0.535]
-    labelAlfa = ["$E_d$", "$E_a$", "$E_f$", "$E_b$", "$E_c$", "$E_g$"]
+    if p.rLib == "version2":
+        #       d   a (missing one more)
+        ind = [0,4,5,8]
+        maxAlfa = 2
+        xmin = 30
+        xmax = 120
+        energies = [0.1, 0.4]
+        labelAlfa = ["$E_d$", "$E_a$"]
+    else:
+        #       d   a   f   b    c   g
+        ind = [0,4,6,8,5,6,9,12,4,5,8,9]
+        maxAlfa = 6
+        xmin = 40
+        xmax = 120
+        energies = [0.2, 0.35, 0.36, 0.435, 0.45, 0.535]
+        labelAlfa = ["$E_d$", "$E_a$", "$E_f$", "$E_b$", "$E_c$", "$E_g$"]
 # define ranges
-rngt = defineRanges(calculationMode, temperatures)
+rngt = defineRanges(calculationMode, p.rLib, temperatures)
 
 tempOmegaCov = []
 tempEaCov = []
