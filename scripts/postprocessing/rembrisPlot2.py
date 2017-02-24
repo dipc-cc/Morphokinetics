@@ -97,5 +97,4 @@ for f in fluxes:
     #plt.semilogy(1/kb/temperatures, firstCollisionTime, ".-", label=f)
     os.chdir(workingPath)
 plt.legend()
-plt.show()
 
