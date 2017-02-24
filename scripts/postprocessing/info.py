@@ -100,6 +100,13 @@ def getBasicEnergies():
     energies[6:8] = 0.35
     energies[9:12] = 0.435
     return energies
+
+def getBasic2Energies():
+    energies = 999999999*np.ones(16, dtype=float)
+    energies[0:4] = 0.1
+    energies[5:8] = 0.4
+    energies[11] = 0.4
+    return energies
     
 
 def getRatio(temperature, energies):

@@ -19,7 +19,10 @@ def computeMavgAndOmega(fileNumber):
     length = len(time)
     hops = np.array(matrix[:,15])
     if p.calc == "basic":
-        ratios = info.getRatio(p.temp, info.getBasicEnergies())
+        if p.rLib == "version2":
+            ratios = info.getRatio(p.temp, info.getBasic2Energies())
+        else:
+            ratios = info.getRatio(p.temp, info.getBasicEnergies())
     else:
         ratios = info.getRatio(p.temp, info.getHexagonalEnergies())
     Mavg = np.zeros(shape=(length,p.maxA))
