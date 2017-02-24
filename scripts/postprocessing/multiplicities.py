@@ -189,8 +189,8 @@ if calculationMode == "AgUc":
     labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
 else:
     if p.rLib == "version2":
-        #       d   a (missing one more)
-        ind = [0,4,5,8]
+        #       d   a
+        ind = [0,4,5,8] # and 11 too
         maxAlfa = 2
         xmin = 30
         xmax = 120
@@ -232,11 +232,17 @@ for cov in range(-p.maxC,0):
     tempOmega = np.zeros((maxAlfa,3))
     tempEaM = []
     for i in range(0,maxAlfa): # alfa
-        y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
+        y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
+        if p.calc == "basic" and p.rLib == "version2" and i == 1:
+            y += tempMavg[:,cov,11]
+        
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa))
         if showPlot:
             ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
-            ax.scatter(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), color=cm(abs(i/9)), alpha=0.75, edgecolors='none')
+            y = np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
+            if p.calc == "basic" and p.rLib == "version2" and i == 1:
+                y += tempOavg[:,cov,11]
+            ax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none')
             ax.set_ylim(-0.05,1.05)
             loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
             ax.xaxis.set_major_locator(loc)
