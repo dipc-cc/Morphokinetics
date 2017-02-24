@@ -11,24 +11,24 @@ import sys
 
 
 def computeMavgAndOmega(fileNumber):
-    r_tt, temp, flux, calc, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
+    p = info.getInputParameters()
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
     possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
     possiblesFromList = possiblesFromList[:,1:] # remove coverage
     time = np.array(matrix[:,1])
     length = len(time)
     hops = np.array(matrix[:,15])
-    if calc == "basic":
-        ratios = info.getRatio(temp, info.getBasicEnergies())
+    if p.calc == "basic":
+        ratios = info.getRatio(p.temp, info.getBasicEnergies())
     else:
-        ratios = info.getRatio(temp, info.getHexagonalEnergies())
-    Mavg = np.zeros(shape=(length,maxA))
-    for i in range(0,maxA): # iterate alfa
+        ratios = info.getRatio(p.temp, info.getHexagonalEnergies())
+    Mavg = np.zeros(shape=(length,p.maxA))
+    for i in range(0,p.maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
     avgTotalHopRate2 = np.array(ratios.dot(np.transpose(Mavg)))
     avgTotalHopRate1 = hops/time
     # define omegas AgUc
-    omega = np.zeros(shape=(length,maxA)) # [coverage, alfa]
+    omega = np.zeros(shape=(length,p.maxA)) # [coverage, alfa]
     for i in range(0,length):
         omega[i,:] =  Mavg[i,:] * ratios / avgTotalHopRate2[i]
     np.shape(omega)
@@ -36,13 +36,13 @@ def computeMavgAndOmega(fileNumber):
 
 
 def computeMavgAndOmegaOverRuns():
-    r_tt, temp, flux, calc, sizI, sizJ, maxN, maxC, maxA = info.getInputParameters()
+    p = info.getInputParameters()
     files = glob.glob("possibleDiscrete*")
     files.sort()
     matrix = np.loadtxt(fname="data0.txt", delimiter="\t")
     length = len(matrix)
-    sumMavg = np.zeros(shape=(length,maxA))  # [coverage, alfa]
-    sumOmega = np.zeros(shape=(length,maxA)) # [coverage, alfa]
+    sumMavg = np.zeros(shape=(length,p.maxA))  # [coverage, alfa]
+    sumOmega = np.zeros(shape=(length,p.maxA)) # [coverage, alfa]
     sumRate1 = np.zeros(length)
     sumRate2 = np.zeros(length)
     #iterating over runs
@@ -107,10 +107,9 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
 
 
 temperatures = info.getTemperatures()
-values = info.getInputParameters(glob.glob("*/output*")[0])
-maxC = values[7]
-maxC -= 1
-calculationMode = values[3]
+p = info.getInputParameters(glob.glob("*/output*")[0])
+p.maxC -= 1
+calculationMode = p.calc
 kb = 8.6173324e-5
 tempMavg = []
 tempOavg = []
@@ -182,10 +181,10 @@ tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
-coverage = list(range(0,maxC))
+coverage = list(range(0,p.maxC))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
-for cov in range(-maxC,0):
+for cov in range(-p.maxC,0):
     x = 1/kb/temperatures+np.log(5e4**1.5)
     y = tempR1avg
     print(cov)
@@ -218,7 +217,7 @@ for cov in range(-maxC,0):
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
-        plt.savefig("plot"+str(maxC+cov)+".png")
+        plt.savefig("plot"+str(p.maxC+cov)+".png")
         plt.close()
     
 

@@ -4,6 +4,19 @@ import glob
 import math
 import numpy as np
 
+class fileData:
+    def __init__(self, data):
+        print(data)
+        self.r_tt = data[0] # terrace to terrace rate
+        self.temp = data[1] # temperature
+        self.flux = data[2] # flux
+        self.calc = data[3] # calculation mode: basic, AgUc ...
+        self.sizI = data[4] # simulation size I
+        self.sizJ = data[5] # simulation size J
+        self.maxN = data[6] # max simulated coverage
+        self.maxC = data[7] # max number of neighbour or atom types
+        self.maxA = data[8] # max alfa: possible transition types (i.e. different energies)
+        
 def getFluxes():
     return glob.glob("flux*")
 
@@ -23,7 +36,7 @@ def getInputParameters(fileName = ""):
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
-    return r_tt, temp, flux, calcType, sizI, sizJ, maxN, maxC, maxA
+    return fileData([r_tt, temp, flux, calcType, sizI, sizJ, maxN, maxC, maxA])
 
 
 def getInformationFromFile(fileName):
