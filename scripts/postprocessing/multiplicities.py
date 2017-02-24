@@ -166,6 +166,7 @@ if calculationMode == "AgUc":
     xmin = 20
     xmax = 200
     energies = [0.1, 0.25, 0.33, 0.42]
+    labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
 else:
     #       d   c   f   a   g   b
     ind = [0,4,4,5,5,6,6,8,8,9,9,12]
@@ -173,6 +174,7 @@ else:
     xmin = 40
     xmax = 120
     energies = [0.2, 0.36, 0.35, 0.435, 0.45, 0.535]
+    labelAlfa = ["$E_d$", "$E_c$", "$E_f$", "$E_a$", "$E_g$", "$E_b$"]
 # define ranges
 rngt = defineRanges(calculationMode, temperatures)
 
@@ -230,26 +232,28 @@ for alfa in range(0,maxAlfa):
 plt.figure()
 fig, axarr = plt.subplots(1, 3, sharey=True)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
+
+cm = plt.get_cmap('gist_earth')
+ax = []
 for i in range(0,3): # different temperature ranges (low, medium, high)
-    ax = plt.gca()
-    axarr[i].plot(coverage, tempEaCov[:,2-i], label="{}".format(2-i))
-    axarr[i].plot(coverage, tempEaCov2[:,2-i], "x:", label="v2 {}".format(2-i))
-    ax = axarr[i].twinx()
-    ax.plot(coverage, abs(1-tempEaCov2[:,2-i]/tempEaCov[:,2-i]), "o", label="relative error")
-    ax.set_ylim(0,1)
+    lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,2-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
+    lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,2-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
+    ax.append(axarr[i].twinx())
+    lgErr, = ax[i].plot(coverage, abs(1-tempEaCov2[:,2-i]/tempEaCov[:,2-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
+    ax[i].set_ylim(0,1)
+    
     #if i != 2:
      #   plt.setp(ax, visible=False)
-    #Label jartzea falta da
-    plt.legend(loc="best", prop={'size':8})
-fig.subplots_adjust(wspace=0.1)
-plt.savefig("multiplicities.png")
 
+plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "best", prop={'size':8})
+plt.savefig("multiplicities.png")
 rAndM = False
 omegas = False
 if len(sys.argv) > 1:
     rAndM = sys.argv[1] == "r"
     omegas = sys.argv[1] == "o"
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
+    label = ["multiplicity", "sum", "ratio"]
     cm = plt.get_cmap('Accent')
     for j in range(0,3): # different temperature ranges (low, medium, high)
         partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
@@ -258,25 +262,36 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
         partialSum = partialSum1 + partialSum2
         c = 0
         if rev:
-            axarr[2-j].fill_between(coverage, partialSum2, color=cm(c/3), alpha=0.8)
+            lgSum = axarr[2-j].fill_between(coverage, partialSum2, color=cm(c/3), alpha=0.8, label=label[i])
             c += 1
+            lgR = []
         for i in range(0,2):
             if rev:
-                axarr[2-j].fill_between(coverage,partialSum1, color=cm((c+i)/3), alpha=0.8)
+                lg = axarr[2-j].fill_between(coverage,partialSum1, color=cm((c+i)/3), alpha=0.8, label=label[i])
+                lgR.append(lg)
                 partialSum1 = partialSum1 + partialSum2
                 
             else:
-                axarr[2-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8)
+                lg = axarr[2-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[i])
+                lgR.append(lg)
                 partialSum -= partialSum1
+    plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), "best", prop={'size':8})
     plt.savefig("multiplicitiesRandM.png")
 
 if (omegas):
     cm = plt.get_cmap('Set1')
     for j in range(0,3): # different temperature ranges (low, medium, high)
         partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
-        for i in range(3,-1,-1): #alfa
-            axarr[2-j].fill_between(coverage, partialSum, color=cm(i/3))
+        lgs = []
+        for i in range(maxAlfa-1,-1,-1): #alfa
+            lgs.append(axarr[2-j].fill_between(coverage, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
-    plt.legend(loc="best", prop={'size':8})
+    myLegends = [lgEaCov, lgEaCov2, lgErr]
+    myLabels = ["Activation energy", "Recomputed AE", "Error"]  
+    myLegends += lgs
+    for i in range(0,maxAlfa):
+        myLabels.append(labelAlfa[i])
+    plt.figlegend(myLegends, myLabels, "best", prop={'size':8})
+    
     plt.savefig("multiplicitiesOmegas.png")
