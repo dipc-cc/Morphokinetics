@@ -100,7 +100,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
     return list([iSl, iFl, iSm, iFm, iSh, iFh])
 
 
-def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
+def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     cm = plt.get_cmap('Set1')
     slopes = []
     if showPlot:   
@@ -108,15 +108,15 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
     a, b = f.linearFit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls=":", label="{} low {:03.3f} ".format(alfa,b))
+        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls=":", label="{} low {:03.3f} ".format(labelAlfa[alfa],b))
     a, b = f.linearFit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), ls="dashdot", label="{} med {:03.3f}".format(alfa,b))
+        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), ls="dashdot", label="{} med {:03.3f}".format(labelAlfa[alfa],b))
     a, b = f.linearFit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(alfa,b))
+        axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b))
         axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     return slopes
 
@@ -198,6 +198,7 @@ else:
         xmax = 120
         energies = [0.2, 0.35, 0.36, 0.435, 0.45, 0.535]
         labelAlfa = ["$E_d$", "$E_a$", "$E_f$", "$E_b$", "$E_c$", "$E_g$"]
+labelAlfa.append("EA")
 # define ranges
 rngt = defineRanges(calculationMode, p.rLib, temperatures)
 
@@ -221,12 +222,12 @@ for cov in range(-p.maxC,0):
     else:
         axarr = np.zeros(3)
     # N_h
-    tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, showPlot))
+    tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, showPlot, labelAlfa))
     tempOmega = np.zeros((maxAlfa,3))
     tempEaM = []
     for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1)
-        tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot))
+        tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa))
         if showPlot:
             ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
             ax.scatter(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), color=cm(abs(i/9)), alpha=0.75, edgecolors='none')
