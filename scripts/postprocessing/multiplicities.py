@@ -101,9 +101,10 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
 
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot):
+    cm = plt.get_cmap('Set1')
     slopes = []
     if showPlot:   
-        axis.plot(x, y, "x-", lw=0.5)
+        axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none')#, "o", lw=0.5)
     a, b = f.linearFit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     if showPlot:
@@ -212,6 +213,7 @@ for cov in range(-p.maxC,0):
     y = tempR1avg
     print(cov)
     if showPlot:
+        cm = plt.get_cmap('Set1')
         fig, axarr = plt.subplots(3, sharex=True)
         fig.set_size_inches(6,6)
         fig.subplots_adjust(right=0.7, hspace=0.1)
@@ -227,13 +229,15 @@ for cov in range(-p.maxC,0):
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot))
         if showPlot:
             ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
-            ax.plot(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-")
+            ax.scatter(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), color=cm(abs(i/9)), alpha=0.75, edgecolors='none')
             ax.set_ylim(-0.05,1.05)
             loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
             ax.xaxis.set_major_locator(loc)
             loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
             ax.yaxis.set_major_locator(loc)
-            axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-", label=labelAlfa[i])
+            ax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", "$1/3$", "$2/3$", "$1$")))
+            ax.set_xlim(xmin,xmax)
+            axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-", color=cm(abs(i/9)), label=labelAlfa[i])
             axarr[2].set_ylim(1e-3,2)
             axarr[2].legend(prop={'size': 8}, bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
         for j in range(0,3): # temperature ranges
