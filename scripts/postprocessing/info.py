@@ -6,7 +6,6 @@ import numpy as np
 
 class fileData:
     def __init__(self, data):
-        print(data)
         self.r_tt = data[0] # terrace to terrace rate
         self.temp = data[1] # temperature
         self.flux = data[2] # flux
