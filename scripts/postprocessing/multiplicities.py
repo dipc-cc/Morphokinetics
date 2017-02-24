@@ -108,16 +108,19 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     a, b = f.linearFit(x, y, rngt[0], rngt[1])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls=":", label="{} low {:03.3f} ".format(labelAlfa[alfa],b))
+        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls="-", label="{} low {:03.3f} ".format(labelAlfa[alfa],b))
     a, b = f.linearFit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), ls="dashdot", label="{} med {:03.3f}".format(labelAlfa[alfa],b))
+        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), ls="-", label="{} med {:03.3f}".format(labelAlfa[alfa],b))
     a, b = f.linearFit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     if showPlot:
         axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b))
-        axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        if alfa == -1:
+            axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+        else:
+            axis.legend(prop={'size': 5.1}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., ncol=2)
     return slopes
 
 
