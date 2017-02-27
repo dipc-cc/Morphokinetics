@@ -8,6 +8,7 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
 import static java.awt.Color.BLACK;
+import static java.awt.Color.WHITE;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -22,7 +23,9 @@ import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static java.lang.String.format;
 import java.text.DecimalFormat;
+import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
+import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
@@ -223,6 +226,9 @@ public class KmcCanvas extends Canvas {
     g.setFont(new Font("Arial", Font.PLAIN, 10)); 
     g.setColor(GRAY);
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
+    if (lattice instanceof CatalysisLattice) {
+      paintCatalysis(g);
+    } else {
 
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
@@ -300,6 +306,7 @@ public class KmcCanvas extends Canvas {
         }
       }
     }
+    }
 
     if (printIslandCentres) {
       try {
@@ -352,5 +359,51 @@ public class KmcCanvas extends Canvas {
   private Color getContrastColor(Color colour) {
     double y = (299 * colour.getRed() + 587 * colour.getGreen() + 114 * colour.getBlue()) / 1000;
     return y >= 128 ? Color.black : Color.white;
+  }
+  
+  private void paintCatalysis(Graphics g) {
+    for (int i = 0; i < lattice.size(); i++) {
+      if (i % 2 == 0) {
+        g.setColor(GRAY);
+      } else {
+        g.setColor(WHITE);
+      }
+
+      AbstractGrowthUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
+        int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
+
+        g.fillRect(X, Y, scale, scale);
+        switch (atom.getType()) { // the cases are for graphene
+          case CatalysisAtom.O:
+            g.setColor(RED);
+            break;
+          case CatalysisAtom.CO:
+            g.setColor(Color.BLUE);
+            break;
+        }
+
+        if (scale < 3) {
+          if (atom.isOccupied()) {
+            g.fillRect(X, Y, scale, scale);
+          }
+
+        } else if (atom.isOccupied()) {
+          g.fillOval(X, Y, scale, scale);
+          /*if (scale > 8) {
+            g.setColor(getContrastColor(g.getColor()));
+            if (printId) {
+              g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            }
+            if (printIslandNumber) {
+              String text = Integer.toString(atom.getIslandNumber());
+              g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            }
+          }//*/
+        }
+      }
+    }
   }
 }
