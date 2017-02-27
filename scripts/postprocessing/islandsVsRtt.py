@@ -1,4 +1,6 @@
 import functions as f
+import info as i
+import glob
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -16,24 +18,22 @@ plt.xlabel(label)
 plt.grid(True)
 
 workingPath = os.getcwd()
-temperatures = list(range(120,321,5))
 
-for i in range(-6,1):
-    folder = "flux3.5e"+str(i)
-    flux = float("3.5e"+str(i))
-    print(folder)
+for f in i.getFluxes():
     try:
-        os.chdir(folder)
+        p = i.getInputParameters(glob.glob(f+"/*/output*")[0])
+        os.chdir(f)
+        temperatures = i.getTemperatures()
         meanValues = mk.getIslandDistribution(temperatures, False, False, False)
-    except OSError:
-        print ("error changing to {}".format(folder))
-        a = 0 #do nothing
+    except (OSError, IndexError):
+        print ("error changing to {}".format(f))
+        continue
     os.chdir(workingPath)
 
-    v = 0.82*400*400/meanValues.getIslandsAmount()*(flux**0.21)
-    n = meanValues.getIslandsAmount()/(flux**0.23)
-    r = np.array(mk.getRtt(temperatures))/(flux**0.33)
-    plt.loglog(r, n, "-", label="N "+folder)
+    v = 0.82*400*400/meanValues.getIslandsAmount()*(p.flux**0.21)
+    n = meanValues.getIslandsAmount()/(p.flux**0.23)
+    r = np.array(mk.getRtt(temperatures))/(p.flux**0.33)
+    plt.loglog(r, n, "-", label="N "+f)
     if (i == 0):
         x = r
         c = []
