@@ -76,7 +76,6 @@ public class AgUcLatticeSimple extends AgUcLattice{
    * @param neighbourAtom neighbour atom of the original atom
    */
   private void removeMobileOccupied(AgAtom neighbourAtom) {
-
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible");
@@ -89,5 +88,4 @@ public class AgUcLatticeSimple extends AgUcLattice{
       addBondAtom(neighbourAtom);
     }
   }
-  
 }
