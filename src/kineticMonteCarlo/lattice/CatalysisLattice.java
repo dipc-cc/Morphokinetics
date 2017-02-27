@@ -84,7 +84,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     switch (atom.getType()) {
       case TERRACE:
         return getClearAreaTerrace(atom, thresholdDistance);
-      case EDGE:
+      case EDGE://sortu daitezke?
         return getClearAreaStep(atom, thresholdDistance);
       default:
         return 0;
@@ -96,7 +96,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     switch (atom.getType()) {
       case TERRACE:
         return chooseClearAreaTerrace(atom, distance);
-      case EDGE:
+      case EDGE://sortu daitezke?
         return chooseClearAreaStep(atom, distance);
       default:
         return null;
@@ -131,11 +131,11 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(true);
     if (forceNucleation) {
-      atom.setType(ISLAND);
+      atom.setType(ISLAND);//do I have to delete it?
     }
 
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {//what is part of immobil substrate?
         int originalPosition = (i + 2) % 4;
         addOccupiedNeighbour(atom.getNeighbour(i), originalPosition, forceNucleation);
       }
@@ -204,7 +204,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
   
   /**
-   * There are no islands in catalysis
+   * There are no islands in catalysis  --- why?
    * @param print
    * @return -1
    */
@@ -226,7 +226,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       }
     }
     
-    //Interconect atoms
+    //Interconnect atoms
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
@@ -330,7 +330,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     return atom;
   }
   
-  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
+  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {//edge ezin badira sortu, ezabatu
     int distance = 1;
     AbstractGrowthAtom currentAtom;
     AbstractGrowthAtom lastRight = atom;
@@ -371,7 +371,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     }
   }
   
-  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {
+  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {//edge ezin badira sortu, ezabatu
     double randomNumber = StaticRandom.raw();
     int neighbour = 0;
     switch (atom.getOrientation()) {
