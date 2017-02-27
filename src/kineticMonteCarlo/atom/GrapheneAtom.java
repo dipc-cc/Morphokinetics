@@ -69,6 +69,10 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     return n1;
   }
 
+  public void setN1(int addOrRemove) {
+    this.n1 += addOrRemove;
+  }
+
   /**
    * Total number of 2nd neighbours.
    * @return 0 <= value <= 6

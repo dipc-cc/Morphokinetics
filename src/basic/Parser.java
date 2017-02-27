@@ -691,16 +691,16 @@ public class Parser {
 
   /**
    * Selects which rates are used for the simulation. Available options for graphene are:
-   * "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else for synthetic rates.
-   * Available options for basic growth are: "simple", "version2", "version3" or anything else for
-   * original synthetic rates. Available options for AgUc growth are: "simple" or anything else for
-   * original Cox et al. rates.
+   * "GaillardSimple", "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else
+   * for synthetic rates. Available options for basic growth are: "simple", "version2", "version3"
+   * or anything else for original synthetic rates. Available options for AgUc growth are: "simple"
+   * or anything else for original Cox et al. rates.
    *
    * Input "parameters" variable: {@code ratesLibrary}.
    *
-   * @return "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else for
-   * synthetic rates for graphene. "simple", "version2", "version3" or anything else for basic
-   * growth. "simple" or anything else for AgUc.
+   * @return "GaillardSimple", "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything
+   * else for synthetic rates for graphene. "simple", "version2", "version3" or anything else for
+   * basic growth. "simple" or anything else for AgUc.
    */
   public String getRatesLibrary() {
     return ratesLibrary;
