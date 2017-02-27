@@ -6,6 +6,7 @@
 package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
+import java.io.PrintWriter;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import static kineticMonteCarlo.atom.CatalysisAtom.ISLAND;
@@ -200,6 +201,16 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     } else {
       deposit(atom, false);
     }
+  }
+  
+  /**
+   * There are no islands in catalysis
+   * @param print
+   * @return -1
+   */
+  @Override
+  public int countIslands(PrintWriter print) {
+    return -1;
   }
   
   private int createId(int i, int j) {
