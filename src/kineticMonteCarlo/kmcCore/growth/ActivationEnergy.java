@@ -47,8 +47,13 @@ public class ActivationEnergy {
       }
       if (parser.getCalculationMode().equals("graphene")) {
         doActivationEnergyStudy = true;
-        length = 8;
-        numberOfNeighbours = 12;
+        if (parser.getRatesLibrary().equals("GaillardSimple")) {
+          length = 4;
+          numberOfNeighbours = 3;
+        } else {
+          length = 8;
+          numberOfNeighbours = 12;
+        }
       }
       if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
         doActivationEnergyStudy = true;
