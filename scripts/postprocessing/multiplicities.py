@@ -314,10 +314,11 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
     lgErr, = ax[i].plot(coverage, abs(1-tempEaCov2[:,2-i]/tempEaCov[:,2-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
     ax[i].set_ylim(0,1)
     maxY = max(abs(1-tempEaCov2[:,2-i]/tempEaCov[:,2-i])[30:])+0.05 # get maximum for the arrow (>30% coverage)
-    ax[i].annotate(' ', xy=(80, maxY), xytext=(40, maxY),
-            arrowprops=dict(arrowstyle="->", edgecolor=cm(3/4), facecolor=cm(3/4)))
-    #if i != 2:
-     #   plt.setp(ax, visible=False)
+    ax[i].annotate(' ', xy=(80, maxY), xytext=(40, maxY), arrowprops=dict(arrowstyle="->", edgecolor=cm(3/4), facecolor=cm(3/4)))
+    if i != 2:
+        ax[i].yaxis.set_major_formatter(plticker.NullFormatter())
+    else:
+        ax[i].set_ylabel("Relative error")
 
 plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "upper right", prop={'size':8})
 plt.savefig("multiplicities.png")
