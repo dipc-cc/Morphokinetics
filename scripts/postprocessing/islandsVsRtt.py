@@ -1,5 +1,6 @@
 import functions as f
 import info as i
+import sys
 import glob
 # Author: J. Alberdi-Rodriguez
 
@@ -19,12 +20,13 @@ plt.grid(True)
 
 workingPath = os.getcwd()
 
+coverage = int(sys.argv[1])
 for f in i.getFluxes():
     try:
         p = i.getInputParameters(glob.glob(f+"/*/output*")[0])
         os.chdir(f)
         temperatures = i.getTemperatures()
-        meanValues = mk.getIslandDistribution(temperatures, False, False, False)
+        meanValues = mk.getIslandDistribution(temperatures, sqrt=False, interval=False, growth=False, verbose = False, flux=-1, maxCoverage=coverage)
     except (OSError, IndexError):
         print ("error changing to {}".format(f))
         continue
@@ -33,7 +35,7 @@ for f in i.getFluxes():
     v = 0.82*400*400/meanValues.getIslandsAmount()*(p.flux**0.21)
     n = meanValues.getIslandsAmount()/(p.flux**0.23)
     r = np.array(mk.getRtt(temperatures))/(p.flux**0.33)
-    plt.loglog(r, n, "-", label="N "+f)
+    plt.loglog(r, n, "-", label="N "+f+" "+str(coverage))
     if (i == 0):
         x = r
         c = []
@@ -77,7 +79,7 @@ for f in i.getFluxes():
         plt.loglog(x, y, label=label)
         
         
-    plt.legend(loc='lower left', prop={'size':6})
+    plt.legend(loc='best', prop={'size':6})
     plt.savefig("islandsVsRtt.png")
     
 plt.close()
