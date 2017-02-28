@@ -6,24 +6,18 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
 import kineticMonteCarlo.atom.CatalysisAtom;
-import static kineticMonteCarlo.atom.CatalysisAtom.EDGE;
-import static kineticMonteCarlo.atom.CatalysisAtom.TERRACE;
-import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
-import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
-import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import utils.StaticRandom;
 
 /**
  *
- * @author Karmele Valencia
+ * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
 public class CatalysisKmc extends AbstractGrowthKmc {
   
   public CatalysisKmc(Parser parser) {
     super(parser);
     
-    HopsPerStep distancePerStep = new HopsPerStep();
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
