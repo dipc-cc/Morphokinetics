@@ -23,7 +23,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private int occupiedNeighbours;
   private final CatalysisAtom[] neighbours = new CatalysisAtom[4];
   
-  private final String latticeSite;
+  private final byte latticeSite;
   
   private byte typeOfAtom;
   
@@ -42,13 +42,13 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     super(id, iHexa, jHexa, 4);
     occupiedNeighbours = 0; 
     if (iHexa % 2 == 0) {
-      latticeSite = "bridge";
+      latticeSite = BR;
     } else {
-      latticeSite = "cus";
+      latticeSite = CUS;
     }
   }
 
-  public String getLatticeSite() {
+  public byte getLatticeSite() {
     return latticeSite;
   }
 
