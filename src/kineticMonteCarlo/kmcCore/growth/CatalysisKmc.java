@@ -60,7 +60,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     } else {
       do {
-        destinationAtom = chooseRandomHop(originAtom, 0);
+        destinationAtom = chooseRandomHop(originAtom);
         if (destinationAtom.equals(originAtom)) {
           destinationAtom.equals(originAtom);
           break;
@@ -85,21 +85,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   /**
    * Selects the next step randomly. If there is not accelerator, an neighbour atom of originAtom is
-   * chosen. With Devita accelerator many steps far away atom can be chosen.
+   * chosen.
    *
    * @param originAtom atom that has to be moved.
-   * @param times how many times it has been called recursively
    * @return destinationAtom.
    */
-  private CatalysisAtom chooseRandomHop(CatalysisAtom originAtom, int times) {
-    CatalysisAtom destinationAtom;
-    if (getAccelerator() != null) {
-      destinationAtom = (CatalysisAtom) getAccelerator().chooseRandomHop(originAtom);
-    } else {
-      destinationAtom =  (CatalysisAtom) originAtom.chooseRandomHop();
-    }
-
-    return destinationAtom;
+  private CatalysisAtom chooseRandomHop(CatalysisAtom originAtom) {
+    return (CatalysisAtom) originAtom.chooseRandomHop();
   }
   
   /**
