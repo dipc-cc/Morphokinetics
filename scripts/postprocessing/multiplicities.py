@@ -23,8 +23,10 @@ def computeMavgAndOmega(fileNumber):
             ratios = info.getRatio(p.temp, info.getBasic2Energies())
         else:
             ratios = info.getRatio(p.temp, info.getBasicEnergies())
-    else:
+    elif (p.calc == "AgUc"):
         ratios = info.getRatio(p.temp, info.getHexagonalEnergies())
+    else:
+        ratios = info.getRatio(p.temp, info.getGrapheneSimpleEnergies())/100
     Mavg = np.zeros(shape=(length,p.maxA))
     for i in range(0,p.maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
@@ -76,7 +78,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         indexes = np.where((temperatures >= 450) & (temperatures <= 1100))
         iSh = indexes[0][0]
         iFh = indexes[0][-1]
-    else:
+    elif calculationMode == "basic":
         if ratesLibrary == "version2":
             indexes = np.where((temperatures >= 120) & (temperatures <= 195))
             iSl = indexes[0][0]
@@ -100,6 +102,18 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
             indexes = np.where((temperatures >= 270) & (temperatures <= 1100))
             iSh = indexes[0][0]
             iFh = indexes[0][-1]
+    else:
+        indexes = np.where((temperatures >= 200) & (temperatures <= 500))
+        iSl = indexes[0][0]
+        iFl = indexes[0][-1]
+        indexes = np.where((temperatures >= 500) & (temperatures <= 1000))
+        iSm = indexes[0][0]
+        iFm = indexes[0][-1]
+        indexes = np.where((temperatures >= 1000) & (temperatures <= 1500))
+        iSh = indexes[0][0]
+        iFh = indexes[0][-1]
+        print("sdfadf")
+        
     return list([iSl, iFl, iSm, iFm, iSh, iFh])
 
 
@@ -187,7 +201,7 @@ if calculationMode == "AgUc":
     xmax = 200
     energies = [0.1, 0.25, 0.33, 0.42]
     labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
-else:
+elif calculationMode == "basic":
     if p.rLib == "version2":
         #       d   a
         ind = [0,4,5,8] # and 11 too
@@ -204,6 +218,15 @@ else:
         xmax = 120
         energies = [0.2, 0.35, 0.36, 0.435, 0.45, 0.535]
         labelAlfa = ["$E_d$", "$E_a$", "$E_f$", "$E_b$", "$E_c$", "$E_g$"]
+else:
+    #       a   b   c   d
+    ind = [0,4,4,5,5,7,8,9]
+    maxAlfa = 4
+    xmin = 20
+    xmax = 80
+    energies = [0.5, 2.6, 1.8, 3.9]
+    labelAlfa = ["$E_a$", "$E_b$", "$E_c$", "$E_d$"]
+    
 labelAlfa.append("EA")
 # define ranges
 rngt = defineRanges(calculationMode, p.rLib, temperatures)
@@ -235,6 +258,8 @@ for cov in range(-p.maxC,0):
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
         if p.calc == "basic" and p.rLib == "version2" and i == 1:
             y += tempMavg[:,cov,11]
+        if p.calc == "graphene" and i == 1:
+            y += np.sum(tempMavg[:,cov,9:11], axis=1)
         
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa))
         if showPlot:
@@ -242,6 +267,8 @@ for cov in range(-p.maxC,0):
             y = np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
             if p.calc == "basic" and p.rLib == "version2" and i == 1:
                 y += tempOavg[:,cov,11]
+            if p.calc == "graphene" and i == 1:
+                y += np.sum(tempOavg[:,cov,9:11], axis=1)
             ax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none')
             ax.set_ylim(-0.05,1.05)
             loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
@@ -333,5 +360,4 @@ if (omegas):
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
     plt.figlegend(myLegends, myLabels, "upper right", prop={'size':8})
-    
     plt.savefig("multiplicitiesOmegas.png")

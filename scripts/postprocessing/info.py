@@ -107,10 +107,19 @@ def getBasic2Energies():
     energies[5:8] = 0.4
     energies[11] = 0.4
     return energies
-    
+
+def getGrapheneSimpleEnergies():
+    energies = 999999999*np.ones(16, dtype=float)
+    energies[0:4]  = 0.5
+    energies[4]    = 2.6
+    energies[5:7]  = 1.8
+    energies[8]    = 3.9
+    energies[9:11] = 2.6
+    return energies
+        
 
 def getRatio(temperature, energies):
-    kb = 8.62e-5
+    kb = 8.617332e-5
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
 
