@@ -313,7 +313,8 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
     ax.append(axarr[i].twinx())
     lgErr, = ax[i].plot(coverage, abs(1-tempEaCov2[:,2-i]/tempEaCov[:,2-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
     ax[i].set_ylim(0,1)
-    ax[i].annotate(' ', xy=(80, 0.1), xytext=(40, 0.1),
+    maxY = max(abs(1-tempEaCov2[:,2-i]/tempEaCov[:,2-i])[30:])+0.05 # get maximum for the arrow (>30% coverage)
+    ax[i].annotate(' ', xy=(80, maxY), xytext=(40, maxY),
             arrowprops=dict(arrowstyle="->", edgecolor=cm(3/4), facecolor=cm(3/4)))
     #if i != 2:
      #   plt.setp(ax, visible=False)
