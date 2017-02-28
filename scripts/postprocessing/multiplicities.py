@@ -288,7 +288,7 @@ for cov in range(-p.maxC,0):
     tempEaMCov.append(tempEaM)
     if showPlot:
         axarr[2].set_xlabel(r"$\theta$ Coverage")
-        plt.savefig("plot"+str(p.maxC+cov)+".png")
+        plt.savefig("plot"+str(p.maxC+cov)+".svg")
         plt.close()
     
 
@@ -301,6 +301,7 @@ for alfa in range(0,maxAlfa):
 
 plt.figure()
 fig, axarr = plt.subplots(1, 3, sharey=True)
+fig.subplots_adjust(wspace=0.1)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
 
 cm = plt.get_cmap('gist_earth')
@@ -321,7 +322,7 @@ for i in range(0,3): # different temperature ranges (low, medium, high)
         ax[i].set_ylabel("Relative error")
 
 plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "upper right", prop={'size':8})
-plt.savefig("multiplicities.png")
+plt.savefig("multiplicities.svg")
 rAndM = False
 omegas = False
 if len(sys.argv) > 1:
@@ -351,7 +352,7 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
                 lgR.append(lg)
                 partialSum -= partialSum1
     plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), "upper right", prop={'size':8})
-    plt.savefig("multiplicitiesRandM.png")
+    plt.savefig("multiplicitiesRandM.svg")
 
 if (omegas):
     cm = plt.get_cmap('Set1')
@@ -368,4 +369,4 @@ if (omegas):
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
     plt.figlegend(myLegends, myLabels, "upper right", prop={'size':8})
-    plt.savefig("multiplicitiesOmegas.png")
+    plt.savefig("multiplicitiesOmegas.svg")
