@@ -133,7 +133,8 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     a, b = f.linearFit(x, y, rngt[4], rngt[5])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b))
+        axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b)) 
+        axis.set_ylabel("eV")
         if alfa == -1:
             axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
         else:
@@ -280,11 +281,13 @@ for cov in range(-p.maxC,0):
             axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-", color=cm(abs(i/9)), label=labelAlfa[i])
             axarr[2].set_ylim(1e-3,2)
             axarr[2].legend(prop={'size': 8}, bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
+            axarr[2].set_ylabel(r"$\omega_\alpha$")
         for j in range(0,3): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
+        axarr[2].set_xlabel(r"$\theta$ Coverage")
         plt.savefig("plot"+str(p.maxC+cov)+".png")
         plt.close()
     
@@ -302,7 +305,9 @@ tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
 
 cm = plt.get_cmap('gist_earth')
 ax = []
+axarr[0].set_ylabel("eV")
 for i in range(0,3): # different temperature ranges (low, medium, high)
+    axarr[i].set_xlabel(r"$\theta$ Coverage")
     lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,2-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
     lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,2-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
     ax.append(axarr[i].twinx())
