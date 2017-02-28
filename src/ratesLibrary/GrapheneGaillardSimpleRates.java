@@ -50,7 +50,7 @@ public class GrapheneGaillardSimpleRates implements IRates {
 
   private void initialiseEnergies() {
     double eDiff = 0.5;
-    double eDetach = 3.9;;
+    double eDetach = 3.4;;
     double eInc = 1.8;
     double eDec = 2.6;
     double Einf = 9999999;
