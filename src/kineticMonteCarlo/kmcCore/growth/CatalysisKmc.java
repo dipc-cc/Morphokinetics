@@ -26,13 +26,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     HopsPerStep distancePerStep = new HopsPerStep();
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
-    setLattice(catalysisLattice); 
-    if (parser.justCentralFlake()) {
-      setPerimeter(new RoundPerimeter("Ag"));
-    }
-    if (parser.useDevita()) {
-      configureDevitaAccelerator(distancePerStep);
-    }
+    setLattice(catalysisLattice);
   }
   
   @Override
@@ -57,25 +51,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     //activationEnergy.setRates(processProbs3D);
   }
   
-  private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
-    setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));
-
-    if (getAccelerator() != null) {
-      getAccelerator().tryToSpeedUp(TERRACE,
-              new DevitaHopsConfig()
-              .setMinAccumulatedSteps(100)
-              .setMaxAccumulatedSteps(200)
-              .setMinDistanceHops(1)
-              .setMaxDistanceHops(8));
-
-      getAccelerator().tryToSpeedUp(EDGE,
-              new DevitaHopsConfig()
-              .setMinAccumulatedSteps(30)
-              .setMaxAccumulatedSteps(100)
-              .setMinDistanceHops(1)
-              .setMaxDistanceHops(5));
-    }
-  }
    /**
    * Performs a simulation step.
    * 

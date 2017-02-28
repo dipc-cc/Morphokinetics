@@ -10,11 +10,8 @@ import java.io.PrintWriter;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import static kineticMonteCarlo.atom.CatalysisAtom.ISLAND;
-import static kineticMonteCarlo.atom.CatalysisAtom.TERRACE;
-import static kineticMonteCarlo.atom.CatalysisAtom.EDGE;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import utils.StaticRandom;
 
 /**
  *
@@ -77,30 +74,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   @Override
   public Point2D getCentralCartesianLocation() {
     return new Point2D.Float(getHexaSizeI() / 2, getHexaSizeJ() / 2);
-  }
-
-  @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
-    switch (atom.getType()) {
-      case TERRACE:
-        return getClearAreaTerrace(atom, thresholdDistance);
-      case EDGE://sortu daitezke?
-        return getClearAreaStep(atom, thresholdDistance);
-      default:
-        return 0;
-    }
-  }
-
-  @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
-    switch (atom.getType()) {
-      case TERRACE:
-        return chooseClearAreaTerrace(atom, distance);
-      case EDGE://sortu daitezke?
-        return chooseClearAreaStep(atom, distance);
-      default:
-        return null;
-    }
   }
   
   /**
@@ -212,6 +185,16 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   public int countIslands(PrintWriter print) {
     return -1;
   }
+
+  @Override
+  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
   
   private int createId(int i, int j) {
     return j * getHexaSizeI() + i;
@@ -258,144 +241,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       }
     }
     return atoms;
-  }
-  
-  /**
-   * We only care about the largest possible distance atoms.
-   * 
-   * @param atom
-   * @param thresholdDistance
-   * @return clear distance.
-   */
-  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
-    byte errorCode = 0;
-    int possibleDistance = 0;
-    
-    int quantity;
-    while (true) {
-      atom = atom.getNeighbour(2).getNeighbour(3); // get the first neighbour
-      quantity = (possibleDistance * 2 + 2);
-      for (int direction = 0; direction < 4; direction++) {
-        for (int j = 0; j < quantity; j++) {
-          atom = atom.getNeighbour(direction);
-          if (atom.isOutside()) {
-            errorCode |= 1;
-          }
-          if (atom.isOccupied()) { // we have touched an occupied atom, exit
-            errorCode |= 2;
-            return possibleDistance;
-          }
-        }
-      }
-      possibleDistance++;
-      if ((errorCode & 1) != 0) { // if some of the atoms are outside, return
-        return possibleDistance;
-      }
-      if (possibleDistance > thresholdDistance) {
-        return thresholdDistance;
-      }
-    }
-  }
-  
-  /**
-   * Chooses the randomly a far atom. Firstly, it goes to the given distance and secondly, it
-   * navigates throw the perimeter.
-   * 
-   * @param atom origin atom.
-   * @param distance how far we have to move.
-   * @return destination atom.
-   */
-  private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
-    int sizeOfPerimeter = distance * 2 * 4;
-    int randomNumber = StaticRandom.rawInteger(sizeOfPerimeter);
-    int quotient = randomNumber / (distance*2); // far direction
-    int mod = randomNumber % (distance*2); // perimeter direction
-    
-    for (int i = 0; i < distance; i++) { // go far direction
-      atom = atom.getNeighbour(quotient);
-    }
-    
-    int direction;
-    if (mod > distance) {
-      direction = (quotient + 3) % 4;
-      mod = mod - distance;
-    }
-    else {
-      direction = (quotient + 1) % 4;
-    }
-    for (int i = 0; i < mod; i++) { // go throw perimeter (if required)
-      atom = atom.getNeighbour(direction);
-    }
-    
-    return atom;
-  }
-  
-  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {//edge ezin badira sortu, ezabatu
-    int distance = 1;
-    AbstractGrowthAtom currentAtom;
-    AbstractGrowthAtom lastRight = atom;
-    AbstractGrowthAtom lastLeft = atom;
-    int right;
-    int left;
-    // select the neighbours depending on the orientation of the source atom
-    switch (atom.getOrientation()) {
-      case 0:
-        right = 1;
-        left = 3;
-        break;
-      case 1:
-        right = 2;
-        left = 0;
-        break;
-      default: // it is possible that the current atom does not have a proper orientation, skip the method
-        return -1;
-    }
-    
-    while (true) { // check if the last and firsts neighbours are occupied
-      currentAtom = lastRight.getNeighbour(right);
-      if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
-        return distance - 1;
-      }
-      lastRight = currentAtom;
-
-      currentAtom = lastLeft.getNeighbour(left);
-      if (currentAtom.isOccupied() || currentAtom.getType() < 2) {
-        return distance - 1;
-      }
-      lastLeft = currentAtom;
-
-      if (distance == thresholdDistance) {
-        return distance;
-      }
-      distance++;
-    }
-  }
-  
-  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {//edge ezin badira sortu, ezabatu
-    double randomNumber = StaticRandom.raw();
-    int neighbour = 0;
-    switch (atom.getOrientation()) {
-      case 0:
-        if (randomNumber > 0.5) {
-          neighbour = 1;
-          break;
-        } else {
-          neighbour = 3;
-          break;
-        }
-      case 1:
-        if (randomNumber > 0.5) {
-          neighbour = 0;
-          break;
-        } else {
-          neighbour = 2;
-          break;
-        }
-    }
-    for (int i = 0; i < distance; i++) {
-      atom = atom.getNeighbour(neighbour);
-    }
-    return atom;
   }
   
   /**
