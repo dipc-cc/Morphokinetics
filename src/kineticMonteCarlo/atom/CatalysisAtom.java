@@ -52,6 +52,10 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     return latticeSite;
   }
 
+  @Override
+  public byte getType() {
+    return typeOfAtom;
+  }
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
