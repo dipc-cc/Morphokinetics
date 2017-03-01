@@ -132,16 +132,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
-  /**
-   * Calculates the new atom type when adding or removing a neighbour.
-   *
-   * @param addToNeighbour variation of the number of the number of neighbours. Must be -1, 0 or 1
-   * @return new type
-   */
-  public byte getNewType(int addToNeighbour) {
-    return TYPE_TABLE.getCurrentType(occupiedNeighbours + addToNeighbour);
-  }
-  
   public int getOccupiedNeighbours(){
     return occupiedNeighbours;
   }
