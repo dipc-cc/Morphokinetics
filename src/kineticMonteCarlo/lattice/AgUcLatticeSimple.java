@@ -9,7 +9,7 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgUcLatticeSimple extends AgUcLattice{
+public class AgUcLatticeSimple extends AgUcLattice {
   
   public AgUcLatticeSimple(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep, true);
@@ -51,6 +51,7 @@ public class AgUcLatticeSimple extends AgUcLattice{
   
   /**
    * Éste lo ejecutan los primeros vecinos
+   *
    * @param neighbourAtom neighbour atom of the original atom
    * @param originType type of the original atom
    * @param forceNucleation
