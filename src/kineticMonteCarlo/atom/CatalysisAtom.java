@@ -57,6 +57,11 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     return typeOfAtom;
   }
   
+  @Override
+  public void setType(byte newType) {
+    typeOfAtom = newType;
+  }
+  
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
    * jump from terrace to edge.
