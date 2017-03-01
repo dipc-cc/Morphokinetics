@@ -9,7 +9,6 @@ import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
-import static kineticMonteCarlo.atom.CatalysisAtom.ISLAND;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
@@ -103,19 +102,13 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(true);
-    if (forceNucleation) {
-      atom.setType(ISLAND);//do I have to delete it?
-    }
 
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {//what is part of immobil substrate?
-        int originalPosition = (i + 2) % 4;
-        addOccupiedNeighbour(atom.getNeighbour(i), originalPosition, forceNucleation);
-      }
+      addNeighbour(atom.getNeighbour(i));
     }
 
     addAtom(atom);
-    if (atom.getOccupiedNeighbours()> 0) {
+    if (atom.getOccupiedNeighbours() > 0) {
       addBondAtom(atom);
     }
     atom.resetProbability();
@@ -127,13 +120,10 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-        int originalPosition = (i + 2) % 4;
-        removeOccupied(atom.getNeighbour(i), originalPosition);
-      }
+      removeNeighbour(atom.getNeighbour(i));
     }
 
-    if (atom.getOccupiedNeighbours()> 0) {
+    if (atom.getOccupiedNeighbours() > 0) {
       addBondAtom(atom);
     }
 
@@ -248,18 +238,14 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * second neighbourhood.
    *
    * @param neighbourAtom current atom.
-   * @param neighbourPosition the position of the neighbour.
-   * @param forceNucleation
    */
-  private void addOccupiedNeighbour(CatalysisAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
-    byte newType;
+  private void addNeighbour(CatalysisAtom neighbourAtom) {
+    
+   // newType ez da beharrezkoa
+            byte newType;
 
     newType = neighbourAtom.getNewType(1); 
     neighbourAtom.addOccupiedNeighbour(1);
-    
-    if (forceNucleation && neighbourAtom.isOccupied()) {
-      newType = ISLAND;
-    }
 
     if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
       neighbourAtom.setType(newType);
@@ -267,19 +253,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
         addBondAtom(neighbourAtom);
       }
-      // update second neighbours 
-      for (int pos = 0; pos < neighbourAtom.getNumberOfNeighbours(); pos++) {
-        // skip if the neighbour is the original atom or it is an island.
-        if (neighbourPosition != pos && !neighbourAtom.getNeighbour(pos).isPartOfImmobilSubstrate()) {
-          updateSecondNeighbour(neighbourAtom.getNeighbour(pos));
-        }
-      }
-    }
-  }
-
-  private void updateSecondNeighbour(CatalysisAtom secondNeighbourAtom) {
-    if (secondNeighbourAtom.isOccupied()) {
-      addAtom(secondNeighbourAtom);
     }
   }
   
@@ -288,8 +261,9 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom.
    */
-  private void removeOccupied(CatalysisAtom neighbourAtom, int neighbourPosition) {
-    byte newType = neighbourAtom.getNewType(-1); // one less atom
+  private void removeNeighbour(CatalysisAtom neighbourAtom) {
+    //hau ez litzateke berritu beharko
+            byte newType = neighbourAtom.getNewType(-1); // one less atom
     neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 
     if (neighbourAtom.getType() != newType) {
@@ -297,14 +271,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       addAtom(neighbourAtom);
       if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
         addBondAtom(neighbourAtom);
-      }
-      
-      // update second neighbours 
-      for (int pos = 0; pos < neighbourAtom.getNumberOfNeighbours(); pos++) {
-        // skip if the neighbour is the original atom or is an island.
-        if (neighbourPosition != pos && !neighbourAtom.getNeighbour(pos).isPartOfImmobilSubstrate()) {
-          updateSecondNeighbour(neighbourAtom.getNeighbour(pos));
-        }
       }
     }
   }
