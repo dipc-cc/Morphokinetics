@@ -287,7 +287,7 @@ for cov in range(-p.maxC,0):
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
-        axarr[2].set_xlabel(r"$\theta$ Coverage")
+        axarr[2].set_xlabel(r"$1/k_BT$")
         plt.savefig("plot"+str(p.maxC+cov)+".svg")
         plt.close()
     
@@ -308,7 +308,7 @@ cm = plt.get_cmap('gist_earth')
 ax = []
 axarr[0].set_ylabel("eV")
 for i in range(0,3): # different temperature ranges (low, medium, high)
-    axarr[i].set_xlabel(r"$\theta$ Coverage")
+    axarr[i].set_xlabel(r"$\theta$")
     lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,2-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
     lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,2-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
     ax.append(axarr[i].twinx())
