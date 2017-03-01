@@ -240,19 +240,11 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * @param neighbourAtom current atom.
    */
   private void addNeighbour(CatalysisAtom neighbourAtom) {
-    
-   // newType ez da beharrezkoa
-            byte newType;
-
-    newType = neighbourAtom.getNewType(1); 
     neighbourAtom.addOccupiedNeighbour(1);
 
-    if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
-      neighbourAtom.setType(newType);
-      addAtom(neighbourAtom);
-      if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
-        addBondAtom(neighbourAtom);
-      }
+    addAtom(neighbourAtom);
+    if (!neighbourAtom.isOccupied()) {
+      addBondAtom(neighbourAtom);
     }
   }
   
@@ -262,16 +254,11 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * @param neighbourAtom neighbour atom of the original atom.
    */
   private void removeNeighbour(CatalysisAtom neighbourAtom) {
-    //hau ez litzateke berritu beharko
-            byte newType = neighbourAtom.getNewType(-1); // one less atom
     neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 
-    if (neighbourAtom.getType() != newType) {
-      neighbourAtom.setType(newType);
-      addAtom(neighbourAtom);
-      if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
-        addBondAtom(neighbourAtom);
-      }
+    addAtom(neighbourAtom);
+    if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
+      addBondAtom(neighbourAtom);
     }
   }
 }
