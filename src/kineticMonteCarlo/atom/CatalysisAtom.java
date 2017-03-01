@@ -13,24 +13,24 @@ import utils.StaticRandom;
  */
 public class CatalysisAtom extends AbstractGrowthAtom {
 
-  public static final byte TERRACE = 0;
-  public static final byte EDGE = 1;
-  public static final byte KINK = 2;
-  public static final byte ISLAND = 3;
-
-  private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
-
-  private int occupiedNeighbours;
-  private final CatalysisAtom[] neighbours = new CatalysisAtom[4];
-  
-  private final byte latticeSite;
-  
-  private byte typeOfAtom;
-  
   public static final byte CO = 0;
   public static final byte O = 1;
   public static final byte BR = 0;
   public static final byte CUS = 1;
+  
+  private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
+
+  private int occupiedNeighbours;
+  private final CatalysisAtom[] neighbours = new CatalysisAtom[4];
+  /**
+   * Bridge or CUS
+   */
+  private final byte latticeSite;
+  /**
+   * CO or O
+   */
+  private byte typeOfAtom;
+  
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
@@ -124,12 +124,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return isOccupied() && getType() < ISLAND;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   @Override
   public boolean isPartOfImmobilSubstrate() {
-    return isOccupied() && getType() == ISLAND;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   /**
