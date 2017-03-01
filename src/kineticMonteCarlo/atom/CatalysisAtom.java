@@ -206,24 +206,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       setBondsProbability(probJumpToNeighbour(1, i), i);
       addProbability(getBondsProbability(i));
     }
-    // check if it is really a kink
-    if (getType() == KINK) {
-      int neighbourPositions = 0;
-      for (int i = 0; i < neighbours.length; i++) {
-        if (neighbours[i].isOccupied()) {
-          neighbourPositions += i;
-        }
-      }
-      // make immobile, if two neighbours of the kink are not consecutive
-      if (neighbourPositions % 2 == 0) { 
-        for (int i = 0; i < neighbours.length; i++) {
-          neighbourPositions += i;
-          addProbability(-getBondsProbability(i)); 
-          setBondsProbability(0, i);
-        }
-        setType(ISLAND);
-      }
-    }
   }
   
   @Override
@@ -232,10 +214,13 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       return 0;
     }
 
-    byte originType = getType();
-    byte destination = neighbours[position].getTypeWithoutNeighbour(position);
-
-    return getProbability(originType, destination);
+    byte originSite = latticeSite; // cus or bridge
+    byte originType = typeOfAtom; // O or CO
+    byte destinationSite = originSite; // cus or bridge
+    if (position % 2 != 0) {
+      destinationSite = (byte) (originSite ^ 1); // the opposite of cus or bridge
+    }
+    return probabilities[originSite][originType][destinationSite];
   }
 
   /**
