@@ -124,7 +124,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return true;
   }
   
   @Override
