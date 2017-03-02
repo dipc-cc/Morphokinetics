@@ -19,6 +19,16 @@ def diffusivityDistance():
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
+    # read all histograms
+    islandDistribution = []
+    for i in range(0,len(filesN)):
+        fileName = "histogram"+str(i)+".txt"
+        islandDistribution.append(info.readHistogram(fileName))
+
+    islB2 = np.mean([[np.count_nonzero(h[1:]) for h in run] for run in islandDistribution],axis=0)
+    islB3 = np.mean([[np.count_nonzero(h[1:]>2) for h in run] for run in islandDistribution],axis=0)
+    islB4 = np.mean([[np.count_nonzero(h[1:]>3) for h in run] for run in islandDistribution],axis=0)
+    islB5 = np.mean([[np.count_nonzero(h[1:]>4) for h in run] for run in islandDistribution],axis=0)
 
     cove = np.mean([i[:,0]  for i in allData], axis=0)
     time = np.mean([i[:,1]  for i in allData], axis=0)
