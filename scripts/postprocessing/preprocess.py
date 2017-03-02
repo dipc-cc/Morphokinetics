@@ -16,6 +16,7 @@ for f in fluxes:
             print("\t",t)
             i.splitDataFiles()
             i.splitAeFiles()
+            i.splitHistogramFiles()
         except FileNotFoundError:
             pass
         os.chdir(fPath)

@@ -82,6 +82,8 @@ def splitAeFiles():
     os.system("grep AeRatioTimesPossible dataEvery1percentAndNucleation.txt | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"ratioTimesPossible\"n\".txt\"}'")
     os.system("grep AeMultiplicity dataEvery1percentAndNucleation.txt       | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"multiplicity\"n\".txt\"}'")
 
+def splitHistogramFiles():
+    os.system("grep histo dataEvery1percentAndNucleation.txt | sed -e 's/histogram\|\]\|\[\|,/ /g' | awk -v n=-1 '{if ($1>prev) {n++} prev=$1; {print > \"histogram\"n\".txt\"}}'")
 
 def getHexagonalEnergies():
     energies = 999999999*np.ones(49, dtype=float)
@@ -149,3 +151,10 @@ def readAe(fileName):
         shape = list(map(int,shape[1:4]))
         break
     return np.loadtxt(fileName).reshape(shape)
+
+def readHistogram(fileName):
+    f = open(fileName)
+    histogram = []
+    for line in f:
+        histogram.append(line.split())
+    return histogram
