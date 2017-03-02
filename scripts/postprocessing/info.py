@@ -156,5 +156,5 @@ def readHistogram(fileName):
     f = open(fileName)
     histogram = []
     for line in f:
-        histogram.append(line.split())
+        histogram.append(np.array(line.split()).astype(int))
     return histogram
