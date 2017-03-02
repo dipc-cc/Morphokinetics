@@ -15,7 +15,7 @@ def diffusivityDistance():
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)-1):
+    for i in range(0,len(filesN)):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
