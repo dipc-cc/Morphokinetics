@@ -116,3 +116,12 @@ def linearFit(x, y, initI, finishI):
         a = 0
         b = 0
     return list([a,b])
+
+def timeAverage(v, t):
+    vAvg = np.array(v)
+    partialSum = v[0]*t[0]
+    vAvg[0] = partialSum / t[0]
+    for i in range(1,len(v)):
+        partialSum = partialSum + v[i]*(t[i] - t[i-1])
+        vAvg[i] = partialSum / t[i]
+    return vAvg
