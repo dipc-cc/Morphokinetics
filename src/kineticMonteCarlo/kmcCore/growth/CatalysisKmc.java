@@ -64,11 +64,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         System.out.println("atomoa betea dago");
       do {
         destinationAtom = chooseRandomHop(originAtom);
-        if (destinationAtom.equals(originAtom)) {
-          destinationAtom.equals(originAtom);
-          System.out.println("difusioa?");
-          break;
-        }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
