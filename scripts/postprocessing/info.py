@@ -3,6 +3,7 @@ import os
 import glob
 import math
 import numpy as np
+import operator
 
 class fileData:
     def __init__(self, data):
@@ -125,6 +126,10 @@ def getRatio(temperature, energies):
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
 
+def getOnlyAscending(vector):
+    max_index, max_value = max(enumerate(vector), key=operator.itemgetter(1))
+    vector[max_index:] = max_value
+    return vector
 
 def writeAe(fileName, data):
     """ https://stackoverflow.com/questions/3685265/how-to-write-a-multidimensional-array-to-a-text-file """
