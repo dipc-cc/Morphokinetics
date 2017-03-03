@@ -51,7 +51,7 @@ def computeMavgAndOmegaOverRuns():
     sumRate1 = np.zeros(length)
     sumRate2 = np.zeros(length)
     #iterating over runs
-    for i in range(0,len(files)-1):
+    for i in range(0,len(files)):
         tmpMavg, tmpOmega, tmpRate1, tmpRate2 = computeMavgAndOmega(i)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
@@ -59,10 +59,10 @@ def computeMavgAndOmegaOverRuns():
         sumRate2 = sumRate2 + tmpRate2
         
     
-    runMavg = sumMavg / (len(files)-1)
-    runOavg = sumOmega / (len(files)-1)
-    runR1avg = sumRate1 / (len(files)-1)
-    runR2avg = sumRate2 / (len(files)-1)
+    runMavg = sumMavg / (len(files))
+    runOavg = sumOmega / (len(files))
+    runR1avg = sumRate1 / (len(files))
+    runR2avg = sumRate2 / (len(files))
 
     return runMavg, runOavg, runR1avg, runR2avg
 
