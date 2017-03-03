@@ -9,7 +9,7 @@ import utils.StaticRandom;
 
 /**
  *
- * @author karmele
+ * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
 public class CatalysisAtom extends AbstractGrowthAtom {
 
@@ -23,11 +23,11 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private int occupiedNeighbours;
   private final CatalysisAtom[] neighbours = new CatalysisAtom[4];
   /**
-   * Bridge or CUS
+   * Bridge or CUS.
    */
   private final byte latticeSite;
   /**
-   * CO or O
+   * CO or O.
    */
   private byte typeOfAtom;
   
@@ -82,7 +82,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   public double getProbability(int originType, int targetType) {
     return 0;
   }
-  
   
   /**
    * For the orientation they are only available two position. Orientation is either | or _. It is
@@ -223,7 +222,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
    */
   @Override
   public void clear() {
-    
     super.clear();
     setType(TERRACE);
     occupiedNeighbours = 0; // current atom has no neighbour
