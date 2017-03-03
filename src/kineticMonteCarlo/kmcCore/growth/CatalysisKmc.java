@@ -73,6 +73,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   public void depositSeed() {
     System.out.println("depositSeed");
+    getList().setDepositionProbability(0); // this line has to be changed with the proper deposition rates.
     getLattice().resetOccupied();
     simulatedSteps = 0;
     depositNewAtom();  
