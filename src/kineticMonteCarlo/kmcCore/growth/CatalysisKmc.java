@@ -5,15 +5,8 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import basic.io.OutputType;
-import java.io.PrintWriter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
-import utils.StaticRandom;
-import utils.list.LinearList;
 
 /**
  *
@@ -23,35 +16,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     
   private long simulatedSteps;
-  private double sumProbabilities;
-  
-  private double terraceToTerraceProbability;
-  private final boolean aeOutput;
-  
-  /**
-   * This attribute defines which is the maximum coverage for a multi-flake simulation.
-   */
-  private final float maxCoverage; 
-  private ActivationEnergy activationEnergy;
-  
+
   public CatalysisKmc(Parser parser) {
     super(parser);
     
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
-    
-    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
-    
-    
-    float coverage = (float) parser.getCoverage() / 100;
-    if ((0f > coverage) || (1f < coverage)) {
-      System.err.println("Chosen coverage is not permitted. Selecting the default one: 30%");
-      maxCoverage = 0.3f;
-    } else {
-      maxCoverage = coverage;
-    }
-    activationEnergy = new ActivationEnergy(parser);
   }
   
   @Override
@@ -76,7 +47,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     //activationEnergy.setRates(processProbs3D);
   }
   
-   /**
+  /**
    * Performs a simulation step.
    * 
    * @return true if a stop condition happened (all atom etched, all surface covered).
@@ -100,67 +71,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
-
-    return false;
+    simulatedSteps++;
+    return simulatedSteps > 100;
   }
   
   @Override
   public void depositSeed() {
     System.out.println("depositSeed");
     getLattice().resetOccupied();
-    depositNewAtom();  
-  }
-  
-  @Override
-  public int simulate() {
-    
-    System.out.println("Simulation starts");  
-    //depositSeed();
-    
-    int returnValue = 0;
-    boolean computeTime = false;
     simulatedSteps = 0;
-    sumProbabilities = 0.0d;
-    terraceToTerraceProbability = getLattice().getUc(0).getAtom(0).getProbability(0, 0);
-    
-    while (simulatedSteps<100) {
-        if (getLattice().isPaused()) {
-          try {
-            Thread.sleep(250);
-          } catch (InterruptedException ex) {
-            Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
-          }
-        } else {
-          activationEnergy.updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime(computeTime));
-          computeTime = true;
-          
-          if (performSimulationStep()) {
-              System.out.println("algo pasa");
-            break;
-          }
-          simulatedSteps++;
-          //System.out.println(simulatedSteps);
-          sumProbabilities += getList().getTotalProbabilityFromList();
-        }
-    }
-    if (aeOutput) {
-      double ri = ((LinearList) getList()).getRi_DeltaI();
-      double time = getList().getTime();
-      System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
-      PrintWriter standardOutputWriter = new PrintWriter(System.out);
-      activationEnergy.printAe(standardOutputWriter, -1);
-    } 
-    
-    // Dirty mode to have only one interface of countIslands
-    PrintWriter standardOutputWriter = new PrintWriter(System.out);
-    getLattice().countIslands(standardOutputWriter);
-    getLattice().countPerimeter(standardOutputWriter);
-    getLattice().getCentreOfMass();
-    getLattice().getAverageGyradius();
-    getLattice().getDistancesToCentre();
-    standardOutputWriter.flush();
-    
-    return returnValue;
+    depositNewAtom();  
   }
 
   private boolean depositAtom(CatalysisAtom atom) {
