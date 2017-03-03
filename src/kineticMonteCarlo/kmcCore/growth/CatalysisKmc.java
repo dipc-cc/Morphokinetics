@@ -119,6 +119,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (destinationAtom.isOccupied()) {
       return false;
     }
+    destinationAtom.setType(originAtom.getType());
     
     double probabilityChange = getLattice().extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
