@@ -94,7 +94,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (simulationNumber == numberOfSimulations - 1) {
         //grabar fichero de datos
         String fileName = format("%skarmele%03d.txt", "results/", 0);
-        writeSimulationDataText(simulationData, fileName, false);
+        writeSimulationDataText(simulationData, fileName);
       }
       return true;
     } else {
@@ -102,10 +102,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
   }
   
-  public void writeSimulationDataText(double[][][] data, String fileName, boolean shift) {
+  private void writeSimulationDataText(double[][][] data, String fileName) {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
-      String s;
       // for each byte in the buffer
       for (int i = 0; i < data[0].length; i++) {
         double R2 = 0;
