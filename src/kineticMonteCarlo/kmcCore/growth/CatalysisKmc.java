@@ -33,10 +33,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     catalysisLattice.init();
     setLattice(catalysisLattice);
     
+    simulatedSteps = 0;
     simulationNumber = -1;
     totalNumOfSteps = 1000;
     numStepsEachData = 100;
-    simulationData = new double[numberOfSimulations][totalNumOfSteps/numStepsEachData+1][3];
+    simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
   }
   
   @Override
@@ -132,7 +133,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().resetOccupied();
     simulatedSteps = 0;
     simulationNumber++;
-    depositNewAtom();  
+    depositNewAtom();
   }
 
   private boolean depositAtom(CatalysisAtom atom) {
