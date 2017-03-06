@@ -692,8 +692,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @return true if atom has moved, false otherwise.
    */
   private boolean diffuseAtom(AbstractGrowthAtom originAtom, AbstractGrowthAtom destinationAtom) {
-
-    //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
+    //If is not eligible, it can not be diffused
     if (!originAtom.isEligible()) {
       return false;
     }
