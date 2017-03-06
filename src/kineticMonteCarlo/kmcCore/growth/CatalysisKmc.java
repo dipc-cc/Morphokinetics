@@ -74,30 +74,30 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     if (originAtom == null) {
       //destinationAtom = depositNewAtom();
-      destinationAtom=null;
+      destinationAtom = null;
     } else {
       do {
         destinationAtom = chooseRandomHop(originAtom);
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
-    if((simulatedSteps+1)%numStepsEachData==0){
-      if(destinationAtom!=null){
-        simulationData[simulationNumber][(int)(simulatedSteps+1)/numStepsEachData][0] = destinationAtom.getiHexa();
-        simulationData[simulationNumber][(int)(simulatedSteps+1)/numStepsEachData][1] = destinationAtom.getjHexa();
-        simulationData[simulationNumber][(int)(simulatedSteps+1)/numStepsEachData][2] = getTime();
-      }else{
+    if ((simulatedSteps + 1) % numStepsEachData == 0) {
+      if (destinationAtom != null) {
+        simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
+        simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = destinationAtom.getjHexa();
+        simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][2] = getTime();
+      } else {
         System.out.println("atomoa hutsik dago");
       }
     }
-    if(simulatedSteps + 1 == totalNumOfSteps){
-        if(simulationNumber == numberOfSimulations-1){
-            //grabar fichero de datos
-            String fileName = format("%skarmele%03d.txt", "results/",0);
-            writeSimulationDataText(simulationData, fileName, false);
-        }
+    if (simulatedSteps + 1 == totalNumOfSteps) {
+      if (simulationNumber == numberOfSimulations - 1) {
+        //grabar fichero de datos
+        String fileName = format("%skarmele%03d.txt", "results/", 0);
+        writeSimulationDataText(simulationData, fileName, false);
+      }
       return true;
-    }else{
+    } else {
       return false;
     }
   }
@@ -108,17 +108,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       String s;
       // for each byte in the buffer
       for (int i = 0; i < data[0].length; i++) {
-          double R2 = 0;
-          double t = 0;
-          if(i>0){
-              for(int j=0; j<numberOfSimulations; j++){
-                R2 += Math.pow(data[j][i][0]-data[j][i-1][0], 2) + Math.pow(data[j][i][1]-data[j][i-1][1], 2);
-                t += data[j][i][2];
-              }
-              R2 = R2 / numberOfSimulations;
-              t = t / numberOfSimulations;
+        double R2 = 0;
+        double t = 0;
+        if (i > 0) {
+          for (int j = 0; j < numberOfSimulations; j++) {
+            R2 += Math.pow(data[j][i][0] - data[j][i - 1][0], 2) + Math.pow(data[j][i][1] - data[j][i - 1][1], 2);
+            t += data[j][i][2];
           }
-        out.write((i + ";" + t + ";" + R2 + "\n").replace('.',','));
+          R2 = R2 / numberOfSimulations;
+          t = t / numberOfSimulations;
+        }
+        out.write((i + ";" + t + ";" + R2 + "\n").replace('.', ','));
       }
     } catch (Exception e) {
       // if any I/O error occurs
