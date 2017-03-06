@@ -20,8 +20,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
   private long simulatedSteps;
   private int simulationNumber;
-  private int totalNumOfSteps;
-  private int numStepsEachData;
+  private final int totalNumOfSteps;
+  private final int numStepsEachData;
   private final double[][][] simulationData;
   
   private final int numberOfSimulations;
@@ -33,9 +33,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     catalysisLattice.init();
     setLattice(catalysisLattice);
     
-    simulationData = new double[numberOfSimulations][totalNumOfSteps/numStepsEachData+1][3];
     totalNumOfSteps = 1000;
     numStepsEachData = 100;
+    simulationData = new double[numberOfSimulations][totalNumOfSteps/numStepsEachData+1][3];
   }
   
   @Override
