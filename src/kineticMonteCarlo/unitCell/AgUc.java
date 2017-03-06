@@ -11,7 +11,7 @@ import kineticMonteCarlo.atom.AgAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
- * Unit cell of Ag (Silver) lattice
+ * Unit cell of Ag (Silver) lattice.
  *
  * @author J. Alberdi-Rodriguez
  */
