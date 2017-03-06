@@ -29,7 +29,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public CatalysisKmc(Parser parser) {
     super(parser);
     numberOfSimulations = parser.getNumberOfSimulations();
-      System.out.println("numberOfSimulations: "+numberOfSimulations);
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
