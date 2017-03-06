@@ -73,18 +73,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (originAtom == null) {
       //destinationAtom = depositNewAtom();
       destinationAtom=null;
-      //System.out.println("atomoa hutsik dago");
     } else {
-        //System.out.println("atomoa betea dago");
       do {
         destinationAtom = chooseRandomHop(originAtom);
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
     if((simulatedSteps+1)%numStepsEachData==0){
-      //System.out.println("cojo datos");
       if(destinationAtom!=null){
-        //System.out.println("simulatedSteps: "+simulatedSteps+" --- "+numberOfSimulation + " ---- "+(int)(simulatedSteps+1)/numStepsEachData);
         simulationData[numberOfSimulation][(int)(simulatedSteps+1)/numStepsEachData][0] = destinationAtom.getiHexa();
         simulationData[numberOfSimulation][(int)(simulatedSteps+1)/numStepsEachData][1] = destinationAtom.getjHexa();
         simulationData[numberOfSimulation][(int)(simulatedSteps+1)/numStepsEachData][2] = getTime();
