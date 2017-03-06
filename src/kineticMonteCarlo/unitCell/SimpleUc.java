@@ -13,7 +13,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class SimpleUc extends AbstractGrowthUc implements IUc{
+public class SimpleUc extends AbstractGrowthUc implements IUc {
 
   private final AbstractGrowthAtom atom;
   private final int size; // how many atoms
@@ -31,10 +31,10 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
   }
 
   /**
-   * Always returns the current atom
+   * Always returns the current atom.
    *
-   * @param pos ignored
-   * @return current atom
+   * @param pos ignored.
+   * @return current atom.
    */
   @Override
   public AbstractGrowthAtom getAtom(int pos) {
@@ -81,6 +81,7 @@ public class SimpleUc extends AbstractGrowthUc implements IUc{
   public void setPosY(double y) {
     posY = y;
   }
+  
   /**
    * Number of elements.
    *
