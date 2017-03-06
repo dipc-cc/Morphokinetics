@@ -19,12 +19,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     
   private long simulatedSteps;
-  private int numberOfSimulation = -1;
-  private int totalNumOfSteps = 1000;
-  private int numStepsEachData = 100;
-  private double[][][] simulationData;
+  private int simulationNumber;
+  private int totalNumOfSteps;
+  private int numStepsEachData;
+  private final double[][][] simulationData;
   
-  private int numberOfSimulations;
+  private final int numberOfSimulations;
 
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -35,6 +35,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     setLattice(catalysisLattice);
     
     simulationData = new double[numberOfSimulations][totalNumOfSteps/numStepsEachData+1][3];
+    totalNumOfSteps = 1000;
+    numStepsEachData = 100;
   }
   
   @Override
@@ -81,15 +83,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulatedSteps++;
     if((simulatedSteps+1)%numStepsEachData==0){
       if(destinationAtom!=null){
-        simulationData[numberOfSimulation][(int)(simulatedSteps+1)/numStepsEachData][0] = destinationAtom.getiHexa();
-        simulationData[numberOfSimulation][(int)(simulatedSteps+1)/numStepsEachData][1] = destinationAtom.getjHexa();
-        simulationData[numberOfSimulation][(int)(simulatedSteps+1)/numStepsEachData][2] = getTime();
+        simulationData[simulationNumber][(int)(simulatedSteps+1)/numStepsEachData][0] = destinationAtom.getiHexa();
+        simulationData[simulationNumber][(int)(simulatedSteps+1)/numStepsEachData][1] = destinationAtom.getjHexa();
+        simulationData[simulationNumber][(int)(simulatedSteps+1)/numStepsEachData][2] = getTime();
       }else{
         System.out.println("atomoa hutsik dago");
       }
     }
     if(simulatedSteps + 1 == totalNumOfSteps){
-        if(numberOfSimulation == numberOfSimulations-1){
+        if(simulationNumber == numberOfSimulations-1){
             //grabar fichero de datos
             String fileName = format("%skarmele%03d.txt", "results/",0);
             writeSimulationDataText(simulationData, fileName, false);
@@ -130,7 +132,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().setDepositionProbability(0); // this line has to be changed with the proper deposition rates.
     getLattice().resetOccupied();
     simulatedSteps = 0;
-    numberOfSimulation++;
+    simulationNumber++;
     depositNewAtom();  
   }
 
@@ -209,9 +211,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     System.out.println(destinationAtom.getiHexa()+";"+destinationAtom.getjHexa());
-    simulationData[numberOfSimulation][0][0] = destinationAtom.getiHexa();
-    simulationData[numberOfSimulation][0][1] = destinationAtom.getjHexa();
-    simulationData[numberOfSimulation][0][2] = getTime();
+    simulationData[simulationNumber][0][0] = destinationAtom.getiHexa();
+    simulationData[simulationNumber][0][1] = destinationAtom.getjHexa();
+    simulationData[simulationNumber][0][2] = getTime();
     return destinationAtom;
   }
 }
