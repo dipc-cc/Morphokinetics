@@ -50,7 +50,7 @@ public class AgUcLattice extends AgLattice {
    * Creates a lattice to work with hexagonal Ag simulation, based on unit cells (UC).
    * 
    * @param hexaSizeI size in I direction. How many points horizontally.
-   * @param hexaSizeJ size in J direction. How many points vectically.
+   * @param hexaSizeJ size in J direction. How many points vertically.
    * @param modified temporary buffer.
    * @param distancePerStep auxiliary class for Devita.
    * @param simple whether using simple Ag atoms.
@@ -206,7 +206,6 @@ public class AgUcLattice extends AgLattice {
    *
    */
   private void createAtoms(boolean simple) {
-
     sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
     sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
