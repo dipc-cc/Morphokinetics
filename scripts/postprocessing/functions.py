@@ -130,5 +130,12 @@ def timeAverage(v, t):
         vAvg[i] = partialSum / t[i]
     return vAvg
 
+
 def timeDerivative(x, t):
     return np.gradient(x)/np.gradient(t)
+
+
+def getOnlyAscending(vector):
+    max_index, max_value = max(enumerate(vector), key=operator.itemgetter(1))
+    vector[max_index:] = max_value
+    return vector
