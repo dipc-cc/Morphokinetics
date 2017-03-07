@@ -44,7 +44,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private final boolean useMaxPerimeter;
   private final short perimeterType;
   private DevitaAccelerator accelerator;
-  private boolean hasToPrint;
   
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
@@ -145,7 +144,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     nucleations = 0;
     activationEnergy = new ActivationEnergy(parser);
-    hasToPrint = false;
   }
     
   /**
@@ -355,8 +353,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int coverageThreshold = 1;
     int limit = 100000;
     int returnValue = 0;
-    int counter = 0;
-    int randomNumber = 0;
     boolean computeTime = false;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
@@ -374,22 +370,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         } else {
           activationEnergy.updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime(computeTime));
           computeTime = true;
-          if (extraOutput && getCoverage() * limit >= coverageThreshold && !hasToPrint) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+          if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
               coverageThreshold = 1;
             }
-            coverageThreshold++;
-            randomNumber = StaticRandom.rawInteger(1000);
-            hasToPrint = true;
-          }
-          if (hasToPrint && counter == randomNumber) {
             printData(null);
-            hasToPrint = false;
-            counter = 0;
-          }
-          if (hasToPrint) {
-            counter++;
+            coverageThreshold++;
           }
           if (performSimulationStep()) {
             break;
