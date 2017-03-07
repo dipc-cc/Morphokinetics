@@ -411,37 +411,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     return returnValue;
   }
-  
-  @Deprecated
-  public void simulateOld(int iterations) {
-    int radius = perimeter.getCurrentRadius();
-    int numEvents = 0;// contador de eventos desde el ultimo cambio de radio
-
-    setIterations(0);
-
-    for (int i = 0; i < iterations; i++) {
-      if (performSimulationStep()) {
-        break;
-      }
-
-      setIterations(getIterations() + 1);
-      numEvents++;
-
-      if (radius == 10 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
-        if (numEvents == 4000000) {
-          break;
-        }
-      } else if (radius != perimeter.getCurrentRadius()) {//Si cambia de radio se vuelve a empezar a contar el nuevo numero de eventos
-        radius = perimeter.getCurrentRadius();
-        numEvents = 0;
-      } else {
-        if ((getIterations() - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
-          break;
-        }
-      }
-    }
-    getList().cleanup();
-  }
 
   @Override
   public void depositSeed() {
