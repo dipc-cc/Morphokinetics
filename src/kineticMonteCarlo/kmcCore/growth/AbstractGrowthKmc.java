@@ -370,7 +370,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         } else {
           activationEnergy.updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime(computeTime));
           computeTime = true;
-          if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+          if (extraOutput && getEstimatedCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
               coverageThreshold = 1;
@@ -802,5 +802,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       boolean distance = perimeter.contains(destinationAtom);
       return (atomType && distance);
     }
+  }
+  
+  /**
+   * Method to obtain theoretical coverage from deposition flux and current time. This is beneficial
+   * to obtain better statistics for atom count (atoms with 0 neighbour, 1 neighbour and so on).
+   *
+   * @return estimated coverage.
+   */
+  private double getEstimatedCoverage() {
+    return 1 - Math.exp(-depositionRatePerSite * getList().getTime());
   }
 }
