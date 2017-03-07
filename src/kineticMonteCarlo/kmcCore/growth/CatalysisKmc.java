@@ -16,14 +16,13 @@ import kineticMonteCarlo.lattice.CatalysisLattice;
  * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
 public class CatalysisKmc extends AbstractGrowthKmc {
-    
-    
+
   private long simulatedSteps;
   private int simulationNumber;
   private final int totalNumOfSteps;
   private final int numStepsEachData;
   private final double[][][] simulationData;
-  
+
   private final int numberOfSimulations;
 
   public CatalysisKmc(Parser parser) {
@@ -32,27 +31,27 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
-    
+
     simulatedSteps = 0;
     simulationNumber = -1;
     totalNumOfSteps = 10000;
     numStepsEachData = 100;
     simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
-    
-    for(int i=0;i<numberOfSimulations;i++){
-        for(int j=0;j<totalNumOfSteps / numStepsEachData + 1;j++){
-            simulationData[i][j][0]=Double.NEGATIVE_INFINITY;
-            simulationData[i][j][1]=Double.NEGATIVE_INFINITY;
-            simulationData[i][j][2]=Double.NEGATIVE_INFINITY;
-        }
+
+    for (int i = 0; i < numberOfSimulations; i++) {
+      for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
+        simulationData[i][j][0] = Double.NEGATIVE_INFINITY;
+        simulationData[i][j][1] = Double.NEGATIVE_INFINITY;
+        simulationData[i][j][2] = Double.NEGATIVE_INFINITY;
+      }
     }
   }
-  
+
   @Override
   public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
     return getSampledSurface(binX, binY);
   }
-  
+
   @Override
   public void initialiseRates(double[] rates) {
     //we modify the 1D array into a 3D array;
@@ -69,11 +68,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     ((CatalysisLattice) getLattice()).initialiseRates(processProbs3D);
     //activationEnergy.setRates(processProbs3D);
   }
-  
-  
+
   /**
    * Performs a simulation step.
-   * 
+   *
    * @return true if a stop condition happened (all atom etched, all surface covered).
    */
   @Override
@@ -95,9 +93,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = destinationAtom.getjHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][2] = getTime();
-        
-        if(destinationAtom.getiHexa() > getLattice().getHexaSizeI() || destinationAtom.getiHexa() < 0 || destinationAtom.getjHexa() > getLattice().getHexaSizeJ() || destinationAtom.getjHexa() < 0){
-            shouldEnd = true;
+
+        if (destinationAtom.getiHexa() > getLattice().getHexaSizeI() || destinationAtom.getiHexa() < 0 || destinationAtom.getjHexa() > getLattice().getHexaSizeJ() || destinationAtom.getjHexa() < 0) {
+          shouldEnd = true;
         }
       } else {
         System.out.println("atomoa hutsik dago");
@@ -115,32 +113,32 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return false;
     }
   }
-  
-  private void printSimulationData(int numSim){
-      for(int i=0;i<simulationData[numSim].length;i++){
-          System.out.println(i+": "+simulationData[numSim][i][0]+"; "+simulationData[numSim][i][1]);
-      }
+
+  private void printSimulationData(int numSim) {
+    for (int i = 0; i < simulationData[numSim].length; i++) {
+      System.out.println(i + ": " + simulationData[numSim][i][0] + "; " + simulationData[numSim][i][1]);
+    }
   }
-  
+
   private void writeSimulationDataText(double[][][] data, String fileName) {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       int[] dataAmount = new int[totalNumOfSteps / numStepsEachData + 1];
-        
+
       for (int i = 0; i < dataAmount.length; i++) {
-          dataAmount[i]=0;
+        dataAmount[i] = 0;
         double R2 = 0;
         double t = 0;
         if (i > 0) {
           for (int j = 0; j < numberOfSimulations; j++) {
-              if(data[j][i][0]>Double.NEGATIVE_INFINITY){
-                R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
-                t += data[j][i][2];
-                dataAmount[i]=dataAmount[i]+1;
-              }
+            if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
+              R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
+              t += data[j][i][2];
+              dataAmount[i] = dataAmount[i] + 1;
+            }
           }
-          System.out.println(i+" - R2: "+R2+" - numData: "+dataAmount[i]);
+          System.out.println(i + " - R2: " + R2 + " - numData: " + dataAmount[i]);
           R2 = R2 / dataAmount[i];
           t = t / dataAmount[i];
         }
@@ -151,10 +149,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       e.printStackTrace();
     }
   }
-  
+
   @Override
   public void depositSeed() {
-    //System.out.println("depositSeed");
     getList().setDepositionProbability(0); // this line has to be changed with the proper deposition rates.
     getLattice().resetOccupied();
     simulatedSteps = 0;
@@ -170,7 +167,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().deposit(atom, false);
     getLattice().addOccupied();
     getModifiedBuffer().updateAtoms(getList());
-    
+
     return true;
   }
 
@@ -184,10 +181,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private CatalysisAtom chooseRandomHop(CatalysisAtom originAtom) {
     return (CatalysisAtom) originAtom.chooseRandomHop();
   }
-  
+
   /**
    * Moves an atom from origin to destination.
-   * 
+   *
    * @param originAtom origin atom.
    * @param destinationAtom destination atom.
    * @return true if atom has moved, false otherwise.
@@ -204,7 +201,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return false;
     }
     destinationAtom.setType(originAtom.getType());
-    
+
     double probabilityChange = getLattice().extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
@@ -223,20 +220,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private CatalysisAtom depositNewAtom() {
     CatalysisAtom destinationAtom;
     int ucIndex = 0;
-  
+
     do {
-      int random = getLattice().getHexaSizeI()*(getLattice().getHexaSizeJ()+1)/2;//StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+      int random = getLattice().getHexaSizeI() * (getLattice().getHexaSizeJ() + 1) / 2;//StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
       ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
       int atomIndex = random % getLattice().getUnitCellSize();
       destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
       destinationAtom.setType(CatalysisAtom.O);
-      //System.out.println("depositNewAtom");
     } while (!depositAtom(destinationAtom));
-    
+
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
-    
-    //System.out.println(destinationAtom.getiHexa()+";"+destinationAtom.getjHexa());
+
     simulationData[simulationNumber][0][0] = destinationAtom.getiHexa();
     simulationData[simulationNumber][0][1] = destinationAtom.getjHexa();
     simulationData[simulationNumber][0][2] = getTime();
