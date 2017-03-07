@@ -20,6 +20,10 @@ def theta(t, F):
     return 1 - np.exp(-F*t)
 
 
+def thetaAverage(t, F):
+    return 1-((1-np.exp(-F*t))/(F*t))
+
+
 def fractalD(x):
     """Fractal dimension for x (= rtt/flux)"""
     minD = 1.66
@@ -125,3 +129,6 @@ def timeAverage(v, t):
         partialSum = partialSum + v[i]*(t[i] - t[i-1])
         vAvg[i] = partialSum / t[i]
     return vAvg
+
+def timeDerivative(x, t):
+    return np.gradient(x)/np.gradient(t)
