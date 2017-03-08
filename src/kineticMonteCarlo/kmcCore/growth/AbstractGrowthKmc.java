@@ -752,14 +752,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   }
 
   private boolean perimeterMustBeEnlarged(AbstractGrowthAtom destinationAtom) {
-    
     if (perimeterType == RoundPerimeter.SQUARE) {
       Point2D centreCart = lattice.getCentralCartesianLocation();
       double left = centreCart.getX() - perimeter.getCurrentRadius();
       double right = centreCart.getX() + perimeter.getCurrentRadius();
       double bottom = centreCart.getY() - perimeter.getCurrentRadius();
       double top = centreCart.getY() + perimeter.getCurrentRadius();
-      Point2D  position = lattice.getCartesianLocation(destinationAtom.getiHexa(),destinationAtom.getjHexa());
+      Point2D position = lattice.getCartesianLocation(destinationAtom.getiHexa(), destinationAtom.getjHexa());
 
       return (destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
               || Math.abs(right - position.getX()) < 2
