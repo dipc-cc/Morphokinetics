@@ -223,9 +223,7 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   @Override
   public AbstractGrowthAtom chooseRandomHop() {
-
     double linearSearch = StaticRandom.raw() * getProbability();
-
     double sum = 0;
     int cont = 0;
     while (true) {
@@ -256,7 +254,6 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   @Override
   public boolean areTwoTerracesTogether() {
-
     // Another way to say that it is an unoccupied edge
     if (nMobile != 2 || nImmobile != 0) {
       return false;
@@ -286,8 +283,8 @@ public class AgAtom extends AbstractGrowthAtom {
 
   /**
    * 
-   * @param pos position of the neighbour
-   * @return change in the probability
+   * @param pos position of the neighbour.
+   * @return change in the probability.
    */
   @Override
   public double updateOneBound(int pos) {
@@ -322,7 +319,6 @@ public class AgAtom extends AbstractGrowthAtom {
     
   @Override
   public double probJumpToNeighbour(int ignored, int position) {
-
     if (neighbours[position].isOccupied()) {
       return 0;
     }
@@ -481,7 +477,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * This should be called when a edge jumps to a corner (instead of
    * expected edge).  It happens when a sharp vertex is found in the
    * island geometry and the atom has to jump over two corners and
-   * finish in the same type of edge (or any other type: ISLAND, KINK)
+   * finish in the same type of edge (or any other type: ISLAND, KINK).
    * 
    * @param cornerPosition position of the neighbour, from current atom
    * @return any other type (EDGE, KINK or BULK)
