@@ -62,9 +62,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   private final int id;
   
-  private int relativeX;
-  private int relativeY;
-  
   private boolean innerPerimeter;
   private boolean outerPerimeter;
   /**
@@ -75,22 +72,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * Number of hops that atom has done. How many steps the atom has moved.
    */
   private int hops;
-  
-  public int getRelativeX() {
-    return relativeX;
-  }
-
-  public void setRelativeX(int relativeX) {
-    this.relativeX = relativeX;
-  }
-
-  public int getRelativeY() {
-    return relativeY;
-  }
-
-  public void setRelativeY(int relativeY) {
-    this.relativeY = relativeY;
-  }
   
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
@@ -104,8 +85,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     multiplier = 1;
     islandNumber = 0;
     visited = false;
-    relativeX = 0;
-    relativeY = 0;
     innerPerimeter = false;
     outerPerimeter = false;
     hops = 0;
@@ -468,5 +447,4 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
     return false;
   }
-
 }

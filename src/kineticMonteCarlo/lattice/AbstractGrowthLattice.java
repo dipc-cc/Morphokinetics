@@ -244,7 +244,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   /**
    * 
-   * @return the coverage of the lattice
+   * @return the coverage of the lattice.
    */
   public float getCoverage() {
     return (float) occupied / (float) hexaArea;
@@ -252,7 +252,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   /**
    * 
-   * @return  number of occupied positions
+   * @return  number of occupied positions.
    */
   public int getOccupied() {
     return occupied;
@@ -281,21 +281,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       sumAvg += islands.get(i).getAvgDistance();
     }
     return (float) (sumAvg / islandCount);
-  }
-    
-  /**
-   * Calculates arithmetic average of gyradius, iterating over all islands. Only valid for basic
-   * growth simulation mode.
-   *
-   * @return average gyradius
-   */
-  public double getCentreOfMassAndAverageGyradius() {
-    double averageGyradius = 0.0;
-    int i;
-    for (i = 0; i < islands.size(); i++) {
-      averageGyradius += islands.get(i).calculateCentreOfMassAndGyradius();
-    }
-    return averageGyradius / (double) i;
   }
   
   @Override
@@ -351,7 +336,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         }
       }
     }
-    
   }
 
   /**
@@ -373,23 +357,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public int getMonomerCount() {
     return -monomerCount;
-  }
-
-  public void getCentreOfMassTry() {
-    int islandAmount = getIslandCount();
-    int minX[] = new int[islandAmount];
-    int maxX[] = new int[islandAmount];
-    int minY[] = new int[islandAmount];
-    int maxY[] = new int[islandAmount];
-    //islands = new Island[islandAmount];
-    //Arrays.setAll(islands, i -> new Island(i));
-    for (int i = 0; i < size(); i++) {
-      IUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
-        int islandNumber = atom.getIslandNumber();
-      }
-    }
   }
   
   /**
@@ -756,8 +723,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       // Get atom type
       atomTypesCounter[atom.getType()]++;
       atom.setIslandNumber(islandCount);
-      atom.setRelativeX(xDiference);
-      atom.setRelativeY(yDiference);
       islands.get(islandCount-1).addAtom(atom);
       for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
         AbstractGrowthAtom neighbour = atom.getNeighbour(pos);

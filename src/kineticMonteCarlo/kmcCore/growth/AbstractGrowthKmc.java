@@ -580,7 +580,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     lattice.getCentreOfMass();
-    double gyradiusBasic = lattice.getCentreOfMassAndAverageGyradius();
     lattice.getDistancesToCentre();
     lattice.countPerimeter(null);
     //compute the average distances to centre.
