@@ -3,7 +3,6 @@ import os
 import glob
 import math
 import numpy as np
-import operator
 
 class fileData:
     def __init__(self, data):
