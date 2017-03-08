@@ -1,3 +1,4 @@
+import functions as f
 #
 # Compares in a graph the average island size (or its square root)
 # growth with the total rate.
@@ -38,20 +39,20 @@ for i in range(-6,1):
     totalRatio = (meanValues.getTotalRatio()/(flux**0.81))**(1)
     x = totalRatio
     inverseTemperature = 1/(kb*np.array(temperatures))
-    d = mk.fractDFuncTemperature(inverseTemperature)
+    d = f.fractalDTemperature(inverseTemperature)
     numberOfIslands = 9e9/meanValues.getIslandsAmount()**(2/np.array(d))
     ax1.semilogy(inverseTemperature, numberOfIslands , "-", label="numberOfIslands "+folder)
     ax1.semilogy(inverseTemperature, totalRatio, "--", label="total ratio "+folder)
     ax2.plot(inverseTemperature, d, ".", label="total ratio "+folder)
     if (i < -7):
-        popt = curve_fit(mk.powerFunc, r, totalRatio)
+        popt = curve_fit(f.power, r, totalRatio)
         a = popt[0][0]
         b = popt[0][1]
         a = 8e-11
         b = 1.33
         label = "{}x^{}".format(a, b)
         x = r
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         plt.loglog(x, y, label=label)
     plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("islandsVsTemperature.png")

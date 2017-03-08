@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -19,7 +20,7 @@ def fractalDimensionFit():
     plt.xlabel("log(r_tt/F^0.5)")
     plt.ylabel("d")
     plt.plot(x, r, ".", label="data")
-    plt.plot(x, mkl.ourErrFunc(x, a, b, c, sigma), "o", label="fit fermi")
+    plt.plot(x, f.ourErr(x, a, b, c, sigma), "o", label="fit fermi")
     ####################################################################################################
     z = np.exp(x)
     z0 = np.exp(c)
@@ -31,7 +32,7 @@ def fractalDimensionFit():
     b = b+a
     c = 19
     sigma = 0.75
-    plt.plot(x, mkl.errFunc(x, a, b, c, sigma), "s", label="fit errf")
+    plt.plot(x, f.err(x, a, b, c, sigma), "s", label="fit errf")
     plt.legend(loc='upper left', prop={'size':12})
     plt.grid(True)
     plt.savefig("fractalDimensionAll.png")

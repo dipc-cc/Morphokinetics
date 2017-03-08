@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -39,7 +40,7 @@ for i in range(-6,1):
     print(s, s2, sPrime)
     vg = meanValues.getGyradiusSlope()
     rtt = mk.getRtt(temperatures)
-    d = mk.fractalDFunc(rtt/flux)
+    d = f.fractalD(rtt/flux)
     rg = meanValues.getLastGyradius()
     print(len(d),len(s), len(rg))
     y = (d * (sPrime**(1/2)/rg))**(7/3)

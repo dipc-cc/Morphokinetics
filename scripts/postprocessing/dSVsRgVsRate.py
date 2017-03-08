@@ -1,3 +1,6 @@
+import functions as fun
+import info as i
+import glob
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -15,25 +18,26 @@ plt.ylabel(label)
 label = r'R (total rate)'
 plt.xlabel(label)
 plt.grid(True)
-temperatures = list(range(120,321,5))
 
 workingPath = os.getcwd()
-for i in range(-6,1):
+
+for f in i.getFluxes():
     folder = "flux3.5e"+str(i)
-    flux = float("3.5e"+str(i))
     print(folder)
     try:
-        os.chdir(folder)
+        p = i.getInputParameters(glob.glob(f+"/*/output*")[0])
+        os.chdir(f)
+        temperatures = i.getTemperatures()
         meanValues = mk.getIslandDistribution(temperatures, False, False)
-    except OSError:
-        print ("error changing to flux {}".format(folder))
-
+    except (OSError, IndexError):
+        print ("error changing to flux {}".format(f))
+        continue
     os.chdir(workingPath)
     vs = meanValues.getGrowthSlope()
     s = (0.3*400*400)/meanValues.getIslandsAmount()
     vg = meanValues.getGyradiusSlope()
     rtt = mk.getRtt(temperatures)
-    d = mk.fractalDFunc(rtt/flux)
+    d = fun.fractalD(rtt/p.flux)
     rg = meanValues.getLastGyradius()
     print(len(d),len(s), len(rg))
     command = "d * ((s*vs)/rg**2)"
@@ -42,7 +46,8 @@ for i in range(-6,1):
     print(len(x),len(y))
     try:
         plt.ylabel(command)
-        plt.loglog(x, y,  label=folder)
+        plt.loglog(x, y,  label=f)
+        plt.loglog(x, x/6e10,  label="total ratio {}".format(f))
         plt.legend(loc='upper left', prop={'size':6})
         plt.savefig("dSVsRgVsRate.png")
     except ValueError:
@@ -51,6 +56,7 @@ for i in range(-6,1):
         print("error plotting")
         print(x)
         print(y)
+
     
 plt.close()
 

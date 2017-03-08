@@ -1,6 +1,8 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 import morphokinetics as mk
@@ -15,24 +17,39 @@ label = r'$\frac{1}{K_bT}$'
 plt.xlabel(label)
 plt.grid(True)
 axes = plt.gca()
-temperatures = list(range(120,321,5))
-temperatures = np.array(list(range(120,156,5)))
-#temperatures = np.array(list(range(165,200,5)))
-#temperatures = np.array(list(range(205,300,5)))
+hex = len(sys.argv) > 1
+if hex:
+    temperatures = np.array(list(range(90,100,5))+list(range(100,151,10)))
+    #temperatures = np.array(list(range(200,401,50)))
+    #temperatures = np.array(list(range(500,801,50)))
+    initFlux = 4
+    endFlux = 5
+    energies = np.zeros(shape=(7,7), dtype=float)
+    energies[0][0:4] = 0.10
+    energies[1][1:5] = 0.25
+    energies[2][1:6] = 0.33
+    energies[3][3:6] = 0.42
+else:
+    temperatures = list(range(120,321,5))
+    temperatures = np.array(list(range(120,156,5)))
+    #temperatures = np.array(list(range(165,200,5)))
+    #temperatures = np.array(list(range(205,300,5)))
+    energies = np.zeros(shape=(4,4), dtype=float)
+    energies[0] = 0.2
+    energies[1][1] = 0.45
+    energies[1][2] = 0.36
+    energies[1][3] = 0.35
+    energies[2][1:] = 0.435
+    initFlux = -3
+    endFlux = -2
                                    
 workingPath = os.getcwd()
 print(workingPath)
 resultsAe = []
 x = np.empty(0)
 kb = 8.6173324e-5
-energies = np.zeros(shape=(4,4), dtype=float)
-energies[0] = 0.2
-energies[1][1] = 0.45
-energies[1][2] = 0.36
-energies[1][3] = 0.35
-energies[2][1:] = 0.435
 
-for i in range(-3,-2):
+for i in range(initFlux,endFlux):
     folder = "flux3.5e"+str(i)
     flux = float("3.5e"+str(i))
     print(folder)
@@ -74,11 +91,11 @@ for i in range(-3,-2):
         # try to fit
         if len(possibles) > 1:
             try:
-                popt = curve_fit(mk.expFunc, kbT, possibles, p0=[10e5, -0.01])
+                popt = curve_fit(f.exp, kbT, possibles, p0=[10e5, -0.01])
                 a = popt[0][0]
                 b = popt[0][1]
                 minusEnergy = b
-                plt.semilogy(kbT, mk.expFunc(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
+                plt.semilogy(kbT, f.exp(kbT, a,b), label="fit {0:.4g}e^{1:.4f}".format(a,b))
                 percentMean = np.mean(percent)
                 # index is the process, from x to y
                 x,y = mkl.getXy(index, len(energies))

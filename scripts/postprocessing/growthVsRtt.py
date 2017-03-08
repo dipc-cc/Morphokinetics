@@ -1,3 +1,4 @@
+import functions as f
 # This plot is the same as inverseIslandVsRtt (scaled)
 #
 # Author: J. Alberdi-Rodriguez
@@ -42,22 +43,22 @@ for i in range(-6,1):
         indexes = np.array(range(0,13))
         x = r[indexes]
         y = v[indexes]
-        popt = curve_fit(mk.powerFunc, x, y)
+        popt = curve_fit(f.power, x, y)
         a = popt[0][0]
         b = popt[0][1]
         label = "{}x^{}".format(a, b)
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         plt.loglog(x, y, label=label)
 
     if (i == -1):
         indexes = np.array(range(len(islands)-15,len(islands)-2))
         x = r[indexes]
         y = v[indexes]
-        popt = curve_fit(mk.powerFunc, x, y)
+        popt = curve_fit(f.power, x, y)
         a = popt[0][0]
         b = popt[0][1]
         label = "{}x^{}".format(a, b)
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         plt.loglog(x, y, label=label)
         
         
