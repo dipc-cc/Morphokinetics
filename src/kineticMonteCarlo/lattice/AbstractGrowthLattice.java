@@ -577,27 +577,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @return number of islands.
    */
   public int countIslands(PrintWriter print) {
-    diffusivityDistance = 0.0;
-    hops = 0;
-    double distanceX;
-    double distanceY;
-    mobileAtoms = 0;
-    // reset all the atoms
-    for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
-        atom.setVisited(false);
-        atom.setIslandNumber(0);
-        if (atom.isOccupied()) {
-          mobileAtoms++;
-          distanceX = abs(atom.getCartesianSuperCell().getX() * getCartSizeX() + atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
-          distanceY = abs(atom.getCartesianSuperCell().getY() * getCartSizeY() + atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
-          diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
-          hops += atom.getHops();
-        }
-      }
-    }
+    computeDiffusivity();
     islands = new ArrayList<>(); // reset all islands to null
     
     // do the count
@@ -690,6 +670,30 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return abs(value) < 1e-10 ? -0.0d : value;
   }
 
+  double computeDiffusivity() {
+    diffusivityDistance = 0;
+    hops = 0;
+    double distanceX;
+    double distanceY;
+    mobileAtoms = 0;
+    // reset all the atoms
+    for (int i = 0; i < size(); i++) {
+      AbstractGrowthUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        atom.setVisited(false);
+        atom.setIslandNumber(0);
+        if (atom.isOccupied()) {
+          mobileAtoms++;
+          distanceX = abs(atom.getCartesianSuperCell().getX() * getCartSizeX() + atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
+          distanceY = abs(atom.getCartesianSuperCell().getY() * getCartSizeY() + atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
+          diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
+          hops += atom.getHops();
+        }
+      }
+    }
+    return diffusivityDistance;
+  }
   /**
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set 
    * all them the same island number.
