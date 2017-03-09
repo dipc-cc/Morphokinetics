@@ -149,6 +149,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       e.printStackTrace();
     }
   }
+  
+  @Override
+  public int simulate() {
+    int returnValue = 0;
+    while (true) {
+      if (performSimulationStep()) {
+        break;
+      }
+    }
+    
+    return returnValue;
+  }
 
   @Override
   public void depositSeed() {
