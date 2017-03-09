@@ -173,6 +173,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
+        atoms[i][j].setCartesianPosition(ucArray[i][j].getPos());
       }
     }
   }
@@ -590,14 +591,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         atom.setIslandNumber(0);
         if (atom.isOccupied()) {
           mobileAtoms++;
-          distanceX = abs(atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
-          if (distanceX > getCartSizeX() / 2) {
-            distanceX = getCartSizeX() - distanceX;
-          }
-          distanceY = abs(atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
-          if (distanceY > getCartSizeY() / 2) {
-            distanceY = getCartSizeY() - distanceY;
-          }
+          distanceX = abs(atom.getCartesianSuperCell().getX() * getCartSizeX() + atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
+          distanceY = abs(atom.getCartesianSuperCell().getY() * getCartSizeY() + atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
           diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
           hops += atom.getHops();
         }

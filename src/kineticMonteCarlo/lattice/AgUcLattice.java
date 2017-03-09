@@ -9,6 +9,7 @@ import kineticMonteCarlo.unitCell.AgUc;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
@@ -228,6 +229,12 @@ public class AgUcLattice extends AgLattice {
         AgUc uc = new AgUc(i, j, atomsList);
         ucList.add(uc);
         ucArray[i][j] = uc;
+        // set Cartesian position
+        Point3D ucPos = uc.getPos();
+        Point3D atom0Pos = atom0.getPos();
+        Point3D atom1Pos = atom1.getPos();
+        atom0.setCartesianPosition(ucPos.add(atom0Pos));
+        atom1.setCartesianPosition(ucPos.add(atom1Pos));
       }
     }
     

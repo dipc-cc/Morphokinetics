@@ -72,6 +72,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * Number of hops that atom has done. How many steps the atom has moved.
    */
   private int hops;
+  private Point3D cartesianPosition;
+  private Point3D cartesianSuperCell;
   
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
@@ -88,6 +90,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     innerPerimeter = false;
     outerPerimeter = false;
     hops = 0;
+    cartesianSuperCell = new Point3D(0, 0, 0);
   }
   
   /**
@@ -103,6 +106,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     bondsProbability = new double[numberOfNeighbours];
     setNumberOfNeighbours(numberOfNeighbours);
     hops = 0;
+    cartesianSuperCell = new Point3D(0, 0, 0);
   }
   
   public int getId() {
@@ -123,6 +127,22 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public short getjHexa() {
     return jHexa;
+  }
+
+  public Point3D getCartesianPosition() {
+    return cartesianPosition;
+  }
+
+  public void setCartesianPosition(Point3D cartesianPosition) {
+    this.cartesianPosition = cartesianPosition;
+  }
+
+  public Point3D getCartesianSuperCell() {
+    return cartesianSuperCell;
+  }
+
+  public void setCartesianSuperCell(Point3D cartesianSuperCell) {
+    this.cartesianSuperCell = cartesianSuperCell;
   }
   
   public double getAngle() {
