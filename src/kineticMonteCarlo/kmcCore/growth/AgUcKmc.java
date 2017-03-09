@@ -32,7 +32,6 @@ public class AgUcKmc extends AbstractGrowthKmc {
     } else {
       agLattice = new AgUcLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, false);
     }
-    agLattice.init();
     setLattice(agLattice);
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
