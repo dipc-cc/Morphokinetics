@@ -8,6 +8,7 @@ import basic.Parser;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import static java.lang.String.format;
+import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 
@@ -171,6 +172,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     depositNewAtom();
   }
 
+  @Override
+  public void reset() {
+    ListIterator iter = getList().getIterator();
+    while (iter.hasNext()){
+      CatalysisAtom atom = (CatalysisAtom) iter.next();
+      atom.clear();
+    }
+    getList().reset();
+  }
+  
   private boolean depositAtom(CatalysisAtom atom) {
     if (atom.isOccupied()) {
       return false;
