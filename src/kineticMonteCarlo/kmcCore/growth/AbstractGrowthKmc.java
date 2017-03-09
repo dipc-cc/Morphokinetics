@@ -330,13 +330,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     getList().reset();
     activationEnergy.reset();
     freeArea = calculateAreaAsInKmcCanvas();
-    
-    for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        uc.getAtom(j).clear();
-      }
-    }
 
     deltaTimeBetweenTwoAttachments.clear();
     deltaTimePerAtom.clear();
