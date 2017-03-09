@@ -434,6 +434,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     outerPerimeter = false;
     setList(false);
     hops = 0;
+    cartesianSuperCell = new Point3D(0, 0, 0);
   }
   
   /**

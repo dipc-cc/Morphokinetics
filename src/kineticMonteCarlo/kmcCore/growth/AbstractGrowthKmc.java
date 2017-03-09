@@ -675,23 +675,23 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
     Point3D origSuperCell = originAtom.getCartesianSuperCell();
     // Going out from the right ->|->
-    if (abs(originAtom.getCartesianPosition().getX() - getLattice().getCartSizeX()) < 1
-            && destinationAtom.getCartesianPosition().getX() < 1) {
+    if (abs(originAtom.getCartesianPosition().getX() - getLattice().getCartSizeX()) <= 1
+            && destinationAtom.getCartesianPosition().getX() <= 1) {
       origSuperCell = new Point3D(origSuperCell.getX() + 1, origSuperCell.getY(), 0.0);
     }
     // Going out from the left <-|<-
-    if (originAtom.getCartesianPosition().getX() < 1
-            && abs(destinationAtom.getCartesianPosition().getX() - getLattice().getCartSizeX()) < 1) {
+    if (originAtom.getCartesianPosition().getX() <= 1
+            && abs(destinationAtom.getCartesianPosition().getX() - getLattice().getCartSizeX()) <= 1) {
       origSuperCell = new Point3D(origSuperCell.getX() - 1, origSuperCell.getY(), 0.0);
     }
     // Going down
-    if (abs(originAtom.getCartesianPosition().getY() - getLattice().getCartSizeY()) < 1
-            && destinationAtom.getCartesianPosition().getY() < 1) {
+    if (abs(originAtom.getCartesianPosition().getY() - getLattice().getCartSizeY()) <= 1
+            && destinationAtom.getCartesianPosition().getY() <= 1) {
       origSuperCell = new Point3D(origSuperCell.getX(), origSuperCell.getY() + 1, 0.0);
     }
     // Going up
-    if (originAtom.getCartesianPosition().getY() < 1
-            && abs(destinationAtom.getCartesianPosition().getY() - getLattice().getCartSizeY()) < 1) {
+    if (originAtom.getCartesianPosition().getY() <= 1
+            && abs(destinationAtom.getCartesianPosition().getY() - getLattice().getCartSizeY()) <= 1) {
       origSuperCell = new Point3D(origSuperCell.getX(), origSuperCell.getY() - 1, 0.0);
     }
     destinationAtom.setCartesianSuperCell(origSuperCell);
