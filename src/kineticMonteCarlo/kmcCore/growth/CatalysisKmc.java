@@ -222,7 +222,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int ucIndex = 0;
 
     do {
-      int random = getLattice().getHexaSizeI() * (getLattice().getHexaSizeJ() + 1) / 2;//StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+      int random = (getLattice().getHexaSizeI() * (getLattice().getHexaSizeJ() + 1) / 2)+1;//StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
       ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
       int atomIndex = random % getLattice().getUnitCellSize();
       destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
