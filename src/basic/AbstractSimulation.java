@@ -263,36 +263,38 @@ public abstract class AbstractSimulation {
     System.out.format("    %03d", simulations);
     System.out.format("\t%.3f", (double) kmc.getTime());
     System.out.format("\t%.4f", kmc.getCoverage());
-
-    if (parser.getSurfaceType().equals("cartesian")) {
-      sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface
-    } else { // "periodic"
-      sampledSurface = kmc.getHexagonalPeriodicSurface(surfaceSizes[0], surfaceSizes[1]);
-    }
-    float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
-    if (parser.outputData()) {
-      if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-        restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
+    
+    if (parser.outputData() || parser.doPsd()) {
+      if (parser.getSurfaceType().equals("cartesian")) {
+        sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface
+      } else { // "periodic"
+        sampledSurface = kmc.getHexagonalPeriodicSurface(surfaceSizes[0], surfaceSizes[1]);
       }
-      if (parser.getOutputFormats().contains(formatFlag.TXT)) {
-        restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);
-      }
-      if (parser.getOutputFormats().contains(formatFlag.XYZ)) {
-        restart.writeXyz(simulations, getKmc().getLattice());
-      }
-      if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
-        printToImage(restartFolderName, simulations);
-      }
-    }
-
-    if (parser.doPsd()) {
-      psd.addSurfaceSample(extentSurface);
+      float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
       if (parser.outputData()) {
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-          psd.writePsdBinary(simulations);
+          restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
         }
         if (parser.getOutputFormats().contains(formatFlag.TXT)) {
-          psd.writePsdText(simulations);
+          restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);
+        }
+        if (parser.getOutputFormats().contains(formatFlag.XYZ)) {
+          restart.writeXyz(simulations, getKmc().getLattice());
+        }
+        if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
+          printToImage(restartFolderName, simulations);
+        }
+      }
+      
+      if (parser.doPsd()) {
+        psd.addSurfaceSample(extentSurface);
+        if (parser.outputData()) {
+          if (parser.getOutputFormats().contains(formatFlag.MKO)) {
+            psd.writePsdBinary(simulations);
+          }
+          if (parser.getOutputFormats().contains(formatFlag.TXT)) {
+            psd.writePsdText(simulations);
+          }
         }
       }
     }
