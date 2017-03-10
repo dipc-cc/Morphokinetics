@@ -126,12 +126,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
 
-      for (int i = 0; i < totalNumOfSteps / numStepsEachData + 1; i++) {
+      for (int i = 0; i < data[0].length; i++) {
         double R2 = 0;
         double t = 0;
         if (i > 0) {
           int j; 
-          for (j = 0; j < numberOfSimulations; j++) {
+          for (j = 0; j < data.length; j++) {
             if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
               R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
               t += data[j][i][2];
