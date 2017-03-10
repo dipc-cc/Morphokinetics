@@ -41,7 +41,10 @@ def diffusivityDistance(index):
     if p.calc == "AgUc":
         ratios = inf.getRatio(p.temp, inf.getHexagonalEnergies())
     if p.calc == "basic":
-        ratios = inf.getRatio(p.temp, inf.getBasicEnergies())
+        if p.rLib == "version2":
+            ratios = inf.getRatio(p.temp, inf.getBasic2Energies())
+        else:
+            ratios = inf.getRatio(p.temp, inf.getBasicEnergies())
     Na = cove * p.sizI * p.sizJ
 
     plt.clf()
