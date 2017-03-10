@@ -4,11 +4,8 @@ import info as inf
 import numpy as np
 import matplotlib.pyplot as plt
 import glob
-import re
 import os
-import math
 import functions as fun
-import itertools
 
 
 def diffusivityDistance(index):
@@ -51,32 +48,43 @@ def diffusivityDistance(index):
     x = list(range(0,len(time)))
     x = cove
     cm = plt.get_cmap("Accent")
+    alpha = 0.5
+    mew = 0
     diff = fun.timeDerivative(diff, time)/(4*Na)
-    plt.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
-               marker="s", ls="", mew=0, markerfacecolor=cm(0/8), alpha=0.8)
+    lgR, = plt.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
+               marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
     hops = fun.timeDerivative(hops, time)/(4*Na)
-    plt.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
-               marker="p", ls="", mew=0, markerfacecolor=cm(7/8), alpha=0.8)
+    lgN, = plt.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
+               marker="p", ls="", mew=mew, markerfacecolor=cm(7/8), ms=7, alpha=alpha)
 
-    plt.loglog(x, Rh/(4*Na), "o", label=r"$\frac{l^2}{2dN_a} R_{h} $")
+    lgRh, = plt.loglog(x, Rh/(4*Na), label=r"$\frac{l^2}{2dN_a} R_{h} $",
+               marker="o", ls="", mew=mew, markerfacecolor=cm(1/8), ms=5.5, alpha=alpha)
                
     #coverages
-    cm = plt.get_cmap("Set1")
-  
+    cm1 = plt.get_cmap("Set1")
+
+    handles = []
+    lg, = plt.loglog(x, cove, label=r"$\theta$", color=cm1(1/9))
+    handles.append(lg)
     for k in range(0,7):
         if k < 4:
-            plt.loglog(x, neg[k]/p.sizI/p.sizJ, label="$n_{}$ ".format(k))
+            label=r"${n_"+str(k)+"}$"
+            lg, = plt.loglog(x, neg[k]/p.sizI/p.sizJ, label=label, color=cm1((k+2)/9))
+            handles.append(lg)
  
-    plt.loglog(x, cove, label=r"$\theta$")
 
     hopsCalc0 = (6 * neg[0] *ratios[0])/(4*Na)
-    plt.loglog(x, hopsCalc0, "x", label="hops calc0")
+    lgC0, = plt.loglog(x, hopsCalc0, label="hops calc0",
+                       marker="", ls=":", mew=mew, color=cm(8/8), ms=4, alpha=1)
     if p.calc == "AgUc":
         hopsCalc = (6 * neg[0]*ratios[0]+2*neg[1]*ratios[8]+2*neg[2]*ratios[15]+0.1*neg[3]*ratios[24])/(4*Na)
-        plt.loglog(x, hopsCalc, ":", label="hops calc")
-
+        lgC, = plt.loglog(x, hopsCalc, label="hops calc",
+                   marker="*", ls="", mew=mew, markerfacecolor=cm(5/8), ms=5, alpha=alpha)
+        handles = [lgR, lgN, lgRh, lgC, lgC0] + handles 
+    else:
+        handles = [lgR, lgN, lgRh, lgC0] + handles
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
-    plt.legend(numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    plt.legend(handles=handles, numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
     plt.title("flux: {:.1e} temperature: {:d}".format(p.flux, int(p.temp)))
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
