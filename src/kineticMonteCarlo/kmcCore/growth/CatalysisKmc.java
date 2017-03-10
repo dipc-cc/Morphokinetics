@@ -5,6 +5,7 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
+import basic.io.Restart;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import static java.lang.String.format;
@@ -23,9 +24,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final int totalNumOfSteps;
   private final int numStepsEachData;
   private final double[][][] simulationData;
-
   private final int numberOfSimulations;
-
+  private final Restart restart;
+  
   public CatalysisKmc(Parser parser) {
     super(parser);
     numberOfSimulations = parser.getNumberOfSimulations();
@@ -46,6 +47,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         simulationData[i][j][2] = Double.NEGATIVE_INFINITY;
       }
     }
+    restart = new Restart("results");
   }
 
   @Override
@@ -105,9 +107,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (simulatedSteps + 1 == totalNumOfSteps || shouldEnd) {
       //printSimulationData(simulationNumber);
       if (simulationNumber == numberOfSimulations - 1) {
-        //grabar fichero de datos
-        String fileName = format("%skarmele%03d.txt", "results/", 0);
-        writeSimulationDataText(simulationData, fileName);
+        // Save to a file
+        String fileName = format("karmele%03d.txt", 0);
+        restart.writeSimulationDataText(simulationData, fileName);
       }
       return true;
     } else {
@@ -121,34 +123,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
   }
 
-  private void writeSimulationDataText(double[][][] data, String fileName) {
-    // create file descriptor. It will be automatically closed.
-    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
-      // for each byte in the buffer
-
-      for (int i = 0; i < data[0].length; i++) {
-        double R2 = 0;
-        double t = 0;
-        if (i > 0) {
-          int j; 
-          for (j = 0; j < data.length; j++) {
-            if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
-              R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
-              t += data[j][i][2];
-            }
-          }
-          System.out.println(i + " - R2: " + R2 + " - numData: " + j);
-          R2 = R2 / j;
-          t = t / j;
-        }
-        out.write((i + ";" + t + ";" + R2 + "\n").replace('.', ','));
-      }
-    } catch (Exception e) {
-      // if any I/O error occurs
-      e.printStackTrace();
-    }
-  }
-  
   @Override
   public int simulate() {
     int returnValue = 0;

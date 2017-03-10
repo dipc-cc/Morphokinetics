@@ -191,6 +191,12 @@ public class Restart {
     }
   }
   
+  
+  public void writeSimulationDataText(double[][][] data, String fileName) {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    RestartLow.writeLowSimulationDataText(data, fileName);
+  }
+  
   public void writeXyz(int simulationNumber, AbstractLattice lattice) {
     String fileName = format("%ssurface%03d.xyz", folder, simulationNumber);
     RestartLow.writeXyz(fileName, lattice);
