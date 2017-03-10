@@ -30,7 +30,6 @@ import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.unitCell.IUc;
 import main.Configurator;
-import static java.lang.String.format;
 
 /**
  * Class responsible to do the actual writings and readings. Only has to be used from Restart class.

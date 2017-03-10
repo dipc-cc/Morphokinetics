@@ -6,12 +6,10 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
 import basic.io.Restart;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import static java.lang.String.format;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
+import static java.lang.String.format;
 
 /**
  *
@@ -109,7 +107,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (simulationNumber == numberOfSimulations - 1) {
         // Save to a file
         String fileName = format("karmele%03d.txt", 0);
-        restart.writeSimulationDataText(simulationData, fileName);
+        restart.writeCatalysisDataText(simulationData, fileName);
       }
       return true;
     } else {

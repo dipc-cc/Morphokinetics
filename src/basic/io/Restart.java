@@ -192,7 +192,7 @@ public class Restart {
   }
   
   
-  public void writeSimulationDataText(double[][][] data, String fileName) {
+  public void writeCatalysisDataText(double[][][] data, String fileName) {
     fileName = addFolderAndSuffix(fileName, ".txt");
     RestartLow.writeLowSimulationDataText(data, fileName);
   }
