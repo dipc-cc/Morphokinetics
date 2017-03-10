@@ -8,60 +8,13 @@ import morphokinetics as mk
 import results
 import sys
 import traceback
+import info as inf
 from scipy.optimize import curve_fit
+import glob
 
-def inprimatu(vector):
-    for i in vector:
-        print(i, end=" ")
-    print()
+coverage = int(sys.argv[1])
 
-def hexagonal():
-    temperatures = np.array(list(range(70,100,5))+list(range(100,150,10))+list(range(150,1100,50)))
-    initFlux = 2
-    endFlux = 7
-    folderBase = "5e"
-    return temperatures, initFlux, endFlux, folderBase
-
-def twoEnergies():
-    temperatures = np.array(list(range(120,300,10))+list(range(300,501,50)))
-    initFlux = 0
-    endFlux = 1
-    folderBase = "3.5e"
-    return temperatures, initFlux, endFlux, folderBase
-
-def basic():
-    temperatures = np.array(list(range(120,326,5)))
-    initFlux = -3
-    endFlux = 1
-    folderBase = "3.5e"
-    return temperatures, initFlux, endFlux, folderBase
-
-def graphene():
-    temperatures = np.array([200, 225, 250, 275, 300, 350, 400, 500, 600, 800, 1000, 1200, 1500])
-    initFlux = -5
-    endFlux = -4
-    folderBase = "3.5e"
-    return temperatures, initFlux, endFlux, folderBase
-
-def gaillard():
-    temperatures = np.array([200, 225, 250, 275, 300, 350, 400, 500, 600, 800, 1000, 1200, 1500])
-    initFlux = -4
-    endFlux = -3
-    folderBase = "5e"
-    return temperatures, initFlux, endFlux, folderBase
-    
-
-defaultValues = {'h': hexagonal,
-                 '2': twoEnergies,
-                 'b': basic,
-                 'g': graphene,
-                 'l': gaillard,}
-    
-simulationType = sys.argv[1]
-coverage = int(sys.argv[2])
-temperatures, initFlux, endFlux, folderBase = defaultValues[simulationType]()
-
-hex = False
+hex = False 
 label = r''
 plt.ylabel(label)
 label = r'$R/F^{0.79}$'
@@ -72,17 +25,17 @@ plt.title("Global activation energy")
 
 workingPath = os.getcwd()
 kb = 8.6173324e-5
-for i in range(initFlux,endFlux):
-#for j in [30]:#,20,15,10,5,3,2,1]:
-    j = coverage
-    folder = "flux"+folderBase+str(i)
-    flux = float(folderBase+str(i))
-    print(folder)
+j = coverage
+for f in inf.getFluxes():
+    print(f)
     try:
-        os.chdir(folder)
+        p = inf.getInputParameters(glob.glob(f+"/*/output*")[0])
+        os.chdir(f)
+        temperatures = inf.getTemperatures()
         meanValues = mk.getIslandDistribution(temperatures, sqrt=False, interval=False, growth=False, verbose=False, flux=-1, maxCoverage=j)
-    except OSError:
-        print ("error changing to flux {}".format(folder))
+    except (OSError,IndexError):
+        print ("error changing to flux {}".format(f))
+        continue
 
     os.chdir(workingPath)
     ne = meanValues.getNumberOfEvents()
@@ -97,16 +50,16 @@ for i in range(initFlux,endFlux):
     T1 = 1/(kb * temperatures)
     print(d)
     command = "1/vd*1e12"
-    command = "d/flux**-0.3"
+    command = "d/p.flux**-0.3"
     y = eval(command)
     plt.ylabel(command)
-    command = "1/kb/temperatures+np.log(flux**1.5)"
+    command = "1/kb/temperatures+np.log(p.flux**1.5)"
     x = eval(command)
     plt.xlabel(command)
     try:
-        plt.semilogy(x, y, "3-", label=folder+" "+str(j))
-        plt.semilogy(x, ne/flux**-0.3, ".", label=folder+" ne")
-        plt.semilogy(x, hp/flux**-0.3, "h", label=folder+" hops")
+        plt.semilogy(x, ne/p.flux**-0.3, ".", label=f+" ne")
+        plt.semilogy(x, hp/p.flux**-0.3, "h", label=f+" hops")
+        plt.semilogy(x, y, "3-", label=f+" $R^2$ "+str(j))
 
         if hex:
             a, b = f.fit(x, y, 0, 12)
@@ -132,10 +85,6 @@ for i in range(initFlux,endFlux):
         print("error plotting")
         print(x)
         print(y)
-
-plt.show()
-plt.close()
-
 
 print("Good bye!")
           
