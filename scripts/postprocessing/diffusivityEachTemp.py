@@ -20,22 +20,6 @@ def diffusivityDistance(index):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
-    # read all histograms
-    islandDistribution = []
-    for i in range(0,len(filesN)):
-        fileName = "histogram"+str(i)+".txt"
-        islandDistribution.append(inf.readHistogram(fileName))
-
-
-    firstExecCov = allData[0][:,0]
-    hCov = np.exp(np.histogram(np.log(firstExecCov),10)[1])
-    coveTmp = [i[:,0]  for i in allData]
-    timeTmp = [i[:,1]  for i in allData]
-    cove = []
-    time = []
-    for i, elem in enumerate(coveTmp):
-        cove.append(np.interp(hCov, firstExecCov, elem))
-        time.append(np.interp(hCov, firstExecCov, timeTmp[i]))
     cove = np.mean([i[:,0]  for i in allData], axis=0)
     time = np.mean([i[:,1]  for i in allData], axis=0)
     isld = np.mean([i[:,3]  for i in allData], axis=0)
@@ -44,7 +28,6 @@ def diffusivityDistance(index):
     even = np.mean([i[:,7]  for i in allData], axis=0)
     hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
     diff = np.mean([i[:,12] for i in allData], axis=0)
-    peri = np.mean([i[:,10] for i in allData], axis=0)
     neg = []
     neg.append(np.mean([i[:,16] for i in allData], axis=0))
     neg.append(np.mean([i[:,17] for i in allData], axis=0))
@@ -55,7 +38,6 @@ def diffusivityDistance(index):
         neg.append(np.mean([i[:,21] for i in allData], axis=0))
         neg.append(np.mean([i[:,22] for i in allData], axis=0))
 
-    parti = np.mean([i[:,0]*p.sizI*p.sizJ for i in allData], axis=0)
     cove = np.sum(neg[:],axis=0)/p.sizI/p.sizJ
 
     ratios = 0
@@ -76,18 +58,16 @@ def diffusivityDistance(index):
     plt.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
                marker="p", ls="", mew=0, markerfacecolor=cm(7/8), alpha=0.8)
 
-    Rh = Rh / (4 * Na)
-    plt.loglog(x, Rh, "o", label=r"$\frac{l^2}{2dN_a} R_{h} $")
+    plt.loglog(x, Rh/(4*Na), "o", label=r"$\frac{l^2}{2dN_a} R_{h} $")
                
     #coverages
     cm = plt.get_cmap("Set1")
   
     for k in range(0,7):
         if k < 4:
-            plt.loglog(x, neg[k]/p.sizI/p.sizJ, label="neg{} ".format(k))
+            plt.loglog(x, neg[k]/p.sizI/p.sizJ, label="$n_{}$ ".format(k))
  
-    acov = fun.timeAverage(cove, time)
-    plt.loglog(x, cove, label="cove")
+    plt.loglog(x, cove, label=r"$\theta$")
 
     hopsCalc0 = (6 * neg[0] *ratios[0])/(4*Na)
     plt.loglog(x, hopsCalc0, "x", label="hops calc0")
@@ -95,12 +75,7 @@ def diffusivityDistance(index):
         hopsCalc = (6 * neg[0]*ratios[0]+2*neg[1]*ratios[8]+2*neg[2]*ratios[15]+0.1*neg[3]*ratios[24])/(4*Na)
         plt.loglog(x, hopsCalc, ":", label="hops calc")
 
-    ratios = inf.getRatio(p.temp, inf.getHexagonalEnergies())
-
-    cm = plt.get_cmap("Set3")
-
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
-
     plt.legend(numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
     plt.title("flux: {:.1e} temperature: {:d}".format(p.flux, int(p.temp)))
