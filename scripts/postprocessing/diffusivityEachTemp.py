@@ -10,12 +10,6 @@ import math
 import functions as fun
 import itertools
 
-def getAverage(indexes, reference, matrix):
-    result = []
-    for i in matrix:
-        result.append(np.interp(indexes, reference, i))
-    return np.mean(result, axis=0)
-
 
 def diffusivityDistance(index):
     p = inf.getInputParameters()
@@ -112,7 +106,6 @@ def diffusivityDistance(index):
     plt.title("flux: {:.1e} temperature: {:d}".format(p.flux, int(p.temp)))
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
 
-    return time, neg[1]
 
 ##########################################################
 ##########           Main function   #####################
@@ -121,7 +114,6 @@ def diffusivityDistance(index):
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
 for f in fluxes:
-    firstCollisionTime = []
     temperaturesPlot = []
     print(f)
     os.chdir(f)
@@ -131,15 +123,10 @@ for f in fluxes:
             os.chdir(str(t)+"/results")
             print("\t",t)
             inf.splitDataFiles()
-            time, neg1 = diffusivityDistance(i)
-            # find first dimer occurrence
-            i = np.argmax(neg1>0)
-            firstCollisionTime.append(time[i])
+            diffusivityDistance(i)
         except FileNotFoundError:
             pass
         os.chdir(fPath)
-    kb = 8.6173324e-5
-    #plt.semilogy(1/kb/temperatures, firstCollisionTime, ".-", label=f)
     os.chdir(workingPath)
 plt.legend()
 
