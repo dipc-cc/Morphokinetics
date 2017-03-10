@@ -125,23 +125,21 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
-      int[] dataAmount = new int[totalNumOfSteps / numStepsEachData + 1];
 
-      for (int i = 0; i < dataAmount.length; i++) {
-        dataAmount[i] = 0;
+      for (int i = 0; i < totalNumOfSteps / numStepsEachData + 1; i++) {
         double R2 = 0;
         double t = 0;
         if (i > 0) {
-          for (int j = 0; j < numberOfSimulations; j++) {
+          int j; 
+          for (j = 0; j < numberOfSimulations; j++) {
             if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
               R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
               t += data[j][i][2];
-              dataAmount[i] = dataAmount[i] + 1;
             }
           }
-          System.out.println(i + " - R2: " + R2 + " - numData: " + dataAmount[i]);
-          R2 = R2 / dataAmount[i];
-          t = t / dataAmount[i];
+          System.out.println(i + " - R2: " + R2 + " - numData: " + j);
+          R2 = R2 / j;
+          t = t / j;
         }
         out.write((i + ";" + t + ";" + R2 + "\n").replace('.', ','));
       }
