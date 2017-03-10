@@ -77,7 +77,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Activation energy output at the end of execution
    */
   private final boolean aeOutput;
-  private ActivationEnergy activationEnergy;
+  private final ActivationEnergy activationEnergy;
   /**
    * If two terraces are together freeze them, in multi-flake simulation mode.
    */
