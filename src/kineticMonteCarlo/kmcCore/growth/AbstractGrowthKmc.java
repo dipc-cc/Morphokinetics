@@ -23,7 +23,6 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point3D;
-import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
