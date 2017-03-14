@@ -46,12 +46,13 @@ def computeMavgAndOmegaOverRuns():
     files.sort()
     matrix = np.loadtxt(fname="data0.txt", delimiter="\t")
     length = len(matrix)
+    filesNumber = len(files)
     sumMavg = np.zeros(shape=(length,p.maxA))  # [coverage, alfa]
     sumOmega = np.zeros(shape=(length,p.maxA)) # [coverage, alfa]
     sumRate1 = np.zeros(length)
     sumRate2 = np.zeros(length)
     #iterating over runs
-    for i in range(0,len(files)):
+    for i in range(0,filesNumber):
         tmpMavg, tmpOmega, tmpRate1, tmpRate2 = computeMavgAndOmega(i)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
@@ -59,10 +60,10 @@ def computeMavgAndOmegaOverRuns():
         sumRate2 = sumRate2 + tmpRate2
         
     
-    runMavg = sumMavg / (len(files))
-    runOavg = sumOmega / (len(files))
-    runR1avg = sumRate1 / (len(files))
-    runR2avg = sumRate2 / (len(files))
+    runMavg = sumMavg / filesNumber
+    runOavg = sumOmega / filesNumber
+    runR1avg = sumRate1 / filesNumber
+    runR2avg = sumRate2 / filesNumber
 
     return runMavg, runOavg, runR1avg, runR2avg
 
