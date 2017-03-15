@@ -10,7 +10,7 @@ import functions as fun
 from scipy.signal import savgol_filter
 
 
-def diffusivityDistance(index, debug, smooth):
+def diffusivityDistance(index, debug, smooth, smoothCalc):
     p = inf.getInputParameters()
     allData = []
 
@@ -102,6 +102,8 @@ def diffusivityDistance(index, debug, smooth):
         
     if p.calc == "AgUc":
         hopsCalc = (6 * neg[0]*ratios[0]+2*neg[1]*ratios[8]+2*neg[2]*ratios[15]+0.1*neg[3]*ratios[24])/(4*Na)
+        if smoothCalc:
+            hopsCalc = np.exp(savgol_filter(np.log(hopsCalc), 9, 1))
         lgC, = plt.loglog(x, hopsCalc, label="hops calc",
                    marker="*", ls="", mew=mew, markerfacecolor=cm(5/8), ms=5, alpha=alpha)
         handles = [lgR, lgN, lgRh, lgC]+ lgCAll + handles 
@@ -126,6 +128,11 @@ try:
     smooth = sys.argv[2] == "y"
 except IndexError:
     smooth = False
+try:
+    smoothCalc = sys.argv[3] == "y"
+except IndexError:
+    smoothCalc = False
+    
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
 for f in fluxes:
@@ -138,7 +145,7 @@ for f in fluxes:
             os.chdir(str(t)+"/results")
             print("\t",t)
             inf.splitDataFiles()
-            diffusivityDistance(i, debug, smooth)
+            diffusivityDistance(i, debug, smooth, smoothCalc)
         except FileNotFoundError:
             pass
         os.chdir(fPath)
