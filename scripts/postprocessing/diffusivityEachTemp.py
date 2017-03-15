@@ -5,10 +5,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 import glob
 import os
+import sys
 import functions as fun
+from scipy.signal import savgol_filter
 
 
-def diffusivityDistance(index):
+def diffusivityDistance(index, debug, smooth):
     p = inf.getInputParameters()
     allData = []
 
@@ -71,19 +73,38 @@ def diffusivityDistance(index):
     handles.append(lg)
     for k in range(0,7):
         if k < 4:
-            label=r"${n_"+str(k)+"}$"
-            lg, = plt.loglog(x, neg[k]/p.sizI/p.sizJ, label=label, color=cm1((k+2)/9))
+            label = r"${n_"+str(k)+"}$"
+            lg, = plt.loglog(x, neg[k]/p.sizI/p.sizJ, label=label, ms=1,  marker=".", color=cm1((k+2)/9))
+            if smooth:
+                ySmooth = np.exp(savgol_filter(np.log(neg[k]), 9, 1))
+                plt.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
+                neg[k] = ySmooth
             handles.append(lg)
- 
 
     hopsCalc0 = (6 * neg[0] *ratios[0])/(4*Na)
-    lgC0, = plt.loglog(x, hopsCalc0, label="hops calc0",
-                       marker="", ls=":", mew=mew, color=cm(8/8), ms=4, alpha=1)
+    lgCAll = []
+    if debug:
+        lgC0, = plt.loglog(x, hopsCalc0, "p-", label="hops calc0")
+        lgCAll.append(lgC0)
+        hopsCalc1 = (2*neg[1]*ratios[8])/(4*Na)
+        lgC1, = plt.loglog(x, hopsCalc1, "x-", label="hops calc1")#,
+        lgCAll.append(lgC1)
+        hopsCalc2 = (2*neg[2]*ratios[15])/(4*Na)
+        lgC2, = plt.loglog(x, hopsCalc2, "o-", label="hops calc2")#
+        lgCAll.append(lgC2)
+        hopsCalc3 = (0.1*neg[3]*ratios[24])/(4*Na)
+        lgC3, = plt.loglog(x, hopsCalc3, "*-", label="hops calc3")#
+        lgCAll.append(lgC3)
+    else:
+        lgC0, = plt.loglog(x, hopsCalc0, label="hops calc0",
+                           marker="", ls=":", mew=mew, color=cm(8/8), ms=4, alpha=1)
+        lgCAll.append(lgC0)
+        
     if p.calc == "AgUc":
         hopsCalc = (6 * neg[0]*ratios[0]+2*neg[1]*ratios[8]+2*neg[2]*ratios[15]+0.1*neg[3]*ratios[24])/(4*Na)
         lgC, = plt.loglog(x, hopsCalc, label="hops calc",
                    marker="*", ls="", mew=mew, markerfacecolor=cm(5/8), ms=5, alpha=alpha)
-        handles = [lgR, lgN, lgRh, lgC, lgC0] + handles 
+        handles = [lgR, lgN, lgRh, lgC]+ lgCAll + handles 
     else:
         handles = [lgR, lgN, lgRh, lgC0] + handles
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
@@ -97,6 +118,14 @@ def diffusivityDistance(index):
 ##########           Main function   #####################
 ##########################################################
 
+try:
+    debug = sys.argv[1] == "d"
+except IndexError:
+    debug = False
+try:
+    smooth = sys.argv[2] == "y"
+except IndexError:
+    smooth = False
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
 for f in fluxes:
@@ -109,7 +138,7 @@ for f in fluxes:
             os.chdir(str(t)+"/results")
             print("\t",t)
             inf.splitDataFiles()
-            diffusivityDistance(i)
+            diffusivityDistance(i, debug, smooth)
         except FileNotFoundError:
             pass
         os.chdir(fPath)
