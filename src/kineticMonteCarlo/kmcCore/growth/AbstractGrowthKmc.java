@@ -347,6 +347,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int limit = 100000;
     int returnValue = 0;
     boolean computeTime = false;
+    boolean eventsHit = false;
+    long everyEvents = 0;
+    long lastEvents = 0;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
@@ -363,13 +366,26 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         } else {
           activationEnergy.updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime(computeTime));
           computeTime = true;
-          if (extraOutput && getEstimatedCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
-            if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
-              limit = limit / 10;
-              coverageThreshold = 1;
+          if (extraOutput) {
+            if (getEstimatedCoverage() * limit >= coverageThreshold) {// print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+              if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
+                limit = limit / 10;
+                coverageThreshold = 1;
+                if (limit == 100) {
+                  eventsHit = true;
+                  everyEvents = (int) simulatedSteps / 10;
+                }
+              }
+              printData(null);
+              coverageThreshold++;
+              if (limit == 100 && eventsHit) { // update events interval
+                everyEvents = (simulatedSteps - lastEvents) / 10;
+                lastEvents = simulatedSteps;
+              }
             }
-            printData(null);
-            coverageThreshold++;
+            if (eventsHit && simulatedSteps % everyEvents == 0) {
+              printData(null);
+            }
           }
           if (performSimulationStep()) {
             break;
