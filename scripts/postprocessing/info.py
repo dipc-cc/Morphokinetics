@@ -17,6 +17,17 @@ class fileData:
         self.maxC = data[8] # max number of neighbour or atom types
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
 
+    def getRatios(self):
+        ratios = 0
+        if self.calc == "AgUc":
+            ratios = getRatio(self.temp, getHexagonalEnergies())
+        if self.calc == "basic":
+            if self.rLib == "version2":
+                ratios = getRatio(self.temp, getBasic2Energies())
+            else:
+                ratios = getRatio(self.temp, getBasicEnergies())
+        return ratios
+
 
 def getFluxes():
     return glob.glob("flux*")
@@ -171,17 +182,6 @@ def getRatio(temperature, energies):
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
 
-def getRatios(p):
-    ratios = 0
-    if p.calc == "AgUc":
-        ratios = getRatio(p.temp, getHexagonalEnergies())
-    if p.calc == "basic":
-        if p.rLib == "version2":
-            ratios = getRatio(p.temp, getBasic2Energies())
-        else:
-            ratios = getRatio(p.temp, getBasicEnergies())
-
-    return ratios
 
 def writeAe(fileName, data):
     """ https://stackoverflow.com/questions/3685265/how-to-write-a-multidimensional-array-to-a-text-file """
