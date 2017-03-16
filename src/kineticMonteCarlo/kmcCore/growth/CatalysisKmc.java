@@ -108,6 +108,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         // Save to a file
         String fileName = format("karmele%03d.txt", 0);
         restart.writeCatalysisDataText(simulationData, fileName);
+        getLinearTrend();
       }
       return true;
     } else {
@@ -215,11 +216,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int ucIndex = 0;
 
     do {
-      int random = (getLattice().getHexaSizeI() * (getLattice().getHexaSizeJ() + 1) / 2)+1;//StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+      int random = (getLattice().getHexaSizeI() * (getLattice().getHexaSizeJ() + 1) / 2);//StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
       ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
       int atomIndex = random % getLattice().getUnitCellSize();
       destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
-      destinationAtom.setType(CatalysisAtom.O);
+      destinationAtom.setType(CatalysisAtom.CO);
     } while (!depositAtom(destinationAtom));
 
     destinationAtom.setDepositionTime(getTime());
@@ -230,4 +231,65 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulationData[simulationNumber][0][2] = getTime();
     return destinationAtom;
   }
+  
+  private void getLinearTrend(){
+        int MAXN = 1000;
+        int n = 0;
+        double[] x = new double[MAXN];
+        double[] y = new double[MAXN];
+
+        // first pass: read in data, compute xbar and ybar
+        double sumx = 0.0, sumy = 0.0, sumx2 = 0.0;
+        
+        for (n = 0; n < simulationData[0].length; n++) {
+            double R2 = 0;
+            double t = 0;
+            if (n > 0) {
+                int j; 
+                for (j = 0; j < simulationData.length; j++) {
+                  if (simulationData[j][n][0] > Double.NEGATIVE_INFINITY) {
+                    R2 += Math.pow(simulationData[j][n][0] - simulationData[j][0][0], 2) + Math.pow(simulationData[j][n][1] - simulationData[j][0][1], 2);
+                    t += simulationData[j][n][2];
+                  }
+                }
+                R2 = R2 / j;
+                y[n] = R2;
+                t = t / j;
+                x[n] = t;
+                sumx  += x[n];
+                sumx2 += x[n] * x[n];
+                sumy  += y[n];
+            }
+            
+        }
+        double xbar = sumx / n;
+        double ybar = sumy / n;
+
+        // second pass: compute summary statistics
+        double xxbar = 0.0, yybar = 0.0, xybar = 0.0;
+        for (int i = 0; i < n; i++) {
+            xxbar += (x[i] - xbar) * (x[i] - xbar);
+            yybar += (y[i] - ybar) * (y[i] - ybar);
+            xybar += (x[i] - xbar) * (y[i] - ybar);
+        }
+        double beta1 = xybar / xxbar;
+        double beta0 = ybar - beta1 * xbar;
+
+        // print results
+        System.out.println("y   = " + beta1 + " * x + " + beta0);
+
+        // analyze results
+        int df = n - 2;
+        double rss = 0.0;      // residual sum of squares
+        double ssr = 0.0;      // regression sum of squares
+        for (int i = 0; i < n; i++) {
+            double fit = beta1*x[i] + beta0;
+            rss += (fit - y[i]) * (fit - y[i]);
+            ssr += (fit - ybar) * (fit - ybar);
+        }
+        double R2    = ssr / yybar;
+        double svar  = rss / df;
+        double svar1 = svar / xxbar;
+        double svar0 = svar/n + xbar*xbar*svar1;
+    }
 }
