@@ -16,7 +16,8 @@ class fileData:
         self.maxN = data[7] # max simulated coverage
         self.maxC = data[8] # max number of neighbour or atom types
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
-        
+
+
 def getFluxes():
     return glob.glob("flux*")
 
@@ -65,6 +66,50 @@ def getInformationFromFile(fileName):
         if re.match("These", line):
             hit = True
 
+class avgData:
+    def __init__(self, data):
+        self.cove = data[0] # coverage
+        self.time = data[1] # simulation time
+        self.isld = data[2] # number of islands
+        self.depo = data[3] # deposition probability (Ra)
+        self.prob = data[4] # instantaneous total hops probability (Rh)
+        self.even = data[5] # number of events
+        self.diff = data[6] # diffusivity distance
+        self.hops = data[7] # total number of hops
+        self.negs = data[8] # neighbours vector
+
+    def getRecomputedCoverage(self):
+        return np.sum(self.negs[:],axis=0)
+
+def readAverages():
+    p = getInputParameters()
+    allData = []
+
+    filesN = glob.glob("data[0-9]*.txt")
+    for i in range(0,len(filesN)-1):
+        fileName = "data"+str(i)+".txt"
+        allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
+
+    cove = np.mean([i[:,0]  for i in allData], axis=0)
+    time = np.mean([i[:,1]  for i in allData], axis=0)
+    isld = np.mean([i[:,3]  for i in allData], axis=0)
+    depo = np.mean([i[:,4]  for i in allData], axis=0)
+    prob = np.mean([i[:,5]  for i in allData], axis=0)
+    even = np.mean([i[:,7]  for i in allData], axis=0)
+    diff = np.mean([i[:,12] for i in allData], axis=0)
+    hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
+    negs = []
+    negs.append(np.mean([i[:,16] for i in allData], axis=0))
+    negs.append(np.mean([i[:,17] for i in allData], axis=0))
+    negs.append(np.mean([i[:,18] for i in allData], axis=0))
+    negs.append(np.mean([i[:,19] for i in allData], axis=0))
+    if p.maxN == 6:
+        negs.append(np.mean([i[:,20] for i in allData], axis=0))
+        negs.append(np.mean([i[:,21] for i in allData], axis=0))
+        negs.append(np.mean([i[:,22] for i in allData], axis=0))
+
+    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
+
 
 def splitDataFiles():
     # split files
@@ -77,6 +122,7 @@ def splitAeFiles():
     # split files
     os.system("rm *ossible[1-9]*.txt -f")
     os.system("rm multiplicity[1-9]*.txt -f")
+    os.system("grep AeInstananeousDiscrete dataEvery1percentAndNucleation.txt   | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"instantaneous\"n\".txt\"}'")
     os.system("grep AePossibleFromList dataEvery1percentAndNucleation.txt   | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"possibleFromList\"n\".txt\"}'")
     os.system("grep AePossibleDiscrete dataEvery1percentAndNucleation.txt   | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"possibleDiscrete\"n\".txt\"}'")
     os.system("grep AeRatioTimesPossible dataEvery1percentAndNucleation.txt | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"ratioTimesPossible\"n\".txt\"}'")
@@ -125,6 +171,17 @@ def getRatio(temperature, energies):
     p = 1e13
     return p * np.exp(-energies/kb/temperature)
 
+def getRatios(p):
+    ratios = 0
+    if p.calc == "AgUc":
+        ratios = getRatio(p.temp, getHexagonalEnergies())
+    if p.calc == "basic":
+        if p.rLib == "version2":
+            ratios = getRatio(p.temp, getBasic2Energies())
+        else:
+            ratios = getRatio(p.temp, getBasicEnergies())
+
+    return ratios
 
 def writeAe(fileName, data):
     """ https://stackoverflow.com/questions/3685265/how-to-write-a-multidimensional-array-to-a-text-file """
