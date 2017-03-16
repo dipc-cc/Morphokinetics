@@ -122,6 +122,76 @@ def readAverages():
     return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
 
 
+def readBinnedAverages():
+    p = getInputParameters()
+    allData = []
+
+    filesN = glob.glob("data[0-9]*.txt")
+    for i in range(0,len(filesN)-1):
+        fileName = "data"+str(i)+".txt"
+        allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
+
+    firstExecCov = allData[0][:,0]
+    hCov = np.exp(np.histogram(np.log(firstExecCov),100)[1])
+    #read all raw data, all different length
+    covT = [i[:,0]  for i in allData]
+    timT = [i[:,1]  for i in allData]
+    islT = [i[:,3]  for i in allData]
+    depT = [i[:,4]  for i in allData]
+    proT = [i[:,5]  for i in allData]
+    eveT = [i[:,7]  for i in allData]
+    difT = [i[:,12] for i in allData]
+    hopT = [i[:,15] for i in allData]
+    ng0T = [i[:,16] for i in allData]
+    ng1T = [i[:,17] for i in allData]
+    ng2T = [i[:,18] for i in allData]
+    ng3T = [i[:,19] for i in allData]
+    if p.maxN == 6:
+        ng4T = [i[:,20] for i in allData]
+        ng5T = [i[:,21] for i in allData]
+        ng6T = [i[:,22] for i in allData]
+        
+    covI = []; timI = []; islI = []; depI = []; proI = []; eveI = []; difI = []
+    hopI = []; ng0I = []; ng1I = []; ng2I = []; ng3I = []; ng4I = []; ng5I = []; ng6I = []
+    # interpolate data to have the same length
+    for i in range(0, len(covT)):
+        covI.append(np.interp(hCov, covT[i], covT[i])) 
+        timI.append(np.interp(hCov, covT[i], timT[i]))
+        islI.append(np.interp(hCov, covT[i], islT[i]))
+        depI.append(np.interp(hCov, covT[i], depT[i]))
+        proI.append(np.interp(hCov, covT[i], proT[i]))
+        eveI.append(np.interp(hCov, covT[i], eveT[i]))
+        difI.append(np.interp(hCov, covT[i], difT[i]))
+        hopI.append(np.interp(hCov, covT[i], hopT[i]))
+        ng0I.append(np.interp(hCov, covT[i], ng0T[i]))
+        ng1I.append(np.interp(hCov, covT[i], ng1T[i]))
+        ng2I.append(np.interp(hCov, covT[i], ng2T[i]))
+        ng3I.append(np.interp(hCov, covT[i], ng3T[i]))
+        if p.maxN == 6:
+            ng4I.append(np.interp(hCov, covT[i], ng4T[i]))
+            ng5I.append(np.interp(hCov, covT[i], ng5T[i]))
+            ng6I.append(np.interp(hCov, covT[i], ng6T[i]))
+
+    #average data
+    cove = np.mean(covI, axis=0)
+    time = np.mean(timI, axis=0)
+    isld = np.mean(islI, axis=0)
+    depo = np.mean(depI, axis=0)
+    prob = np.mean(proI, axis=0)
+    even = np.mean(eveI, axis=0)
+    diff = np.mean(difI, axis=0)
+    hops = np.exp(np.mean(np.log(hopI), axis=0))
+    negs = []
+    negs.append(np.mean(ng0I, axis=0))
+    negs.append(np.mean(ng1I, axis=0))
+    negs.append(np.mean(ng2I, axis=0))
+    negs.append(np.mean(ng3I, axis=0))
+    if p.maxN == 6:
+        negs.append(np.mean(ng4I, axis=0))
+        negs.append(np.mean(ng5I, axis=0))
+        negs.append(np.mean(ng6I, axis=0))
+    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
+
 def splitDataFiles():
     # split files
     os.system("rm data[1-9]*.txt -f")
