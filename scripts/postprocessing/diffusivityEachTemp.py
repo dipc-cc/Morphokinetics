@@ -15,7 +15,7 @@ def diffusivityDistance(index, debug, smooth, smoothCalc):
     d = inf.readAverages()
 
     cove = d.getRecomputedCoverage()/p.sizI/p.sizJ
-    ratios = inf.getRatios(p)
+    ratios = p.getRatios()
     Na = cove * p.sizI * p.sizJ
 
     plt.clf()
@@ -113,7 +113,6 @@ for f in fluxes:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            inf.splitDataFiles()
             diffusivityDistance(i, debug, smooth, smoothCalc)
         except FileNotFoundError:
             pass
