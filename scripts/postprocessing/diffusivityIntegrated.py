@@ -26,17 +26,7 @@ def diffusivityDistance(index):
         fileName = "histogram"+str(i)+".txt"
         islandDistribution.append(inf.readHistogram(fileName))
 
-    islB2 = np.mean([[np.count_nonzero(h[1:]) for h in run] for run in islandDistribution],axis=0)
     islB3 = np.mean([[np.count_nonzero(h[1:]>2) for h in run] for run in islandDistribution],axis=0)
-    islB4 = np.mean([[np.count_nonzero(h[1:]>3) for h in run] for run in islandDistribution],axis=0)
-    islB5 = np.mean([[np.count_nonzero(h[1:]>4) for h in run] for run in islandDistribution],axis=0)
-
-    dimers = islB2-islB3
-    trimers = islB3-islB4
-    islB2 = fun.getOnlyAscending(islB2)
-    #islB3 = fun.getOnlyAscending(islB3)
-    islB4 = fun.getOnlyAscending(islB4)
-    islB5 = fun.getOnlyAscending(islB5)
 
     cove = np.mean([i[:,0]  for i in allData], axis=0)
     time = np.mean([i[:,1]  for i in allData], axis=0)
@@ -46,7 +36,6 @@ def diffusivityDistance(index):
     even = np.mean([i[:,7]  for i in allData], axis=0)
     hops = np.mean([i[:,15] for i in allData], axis=0)
     diff = np.mean([i[:,12] for i in allData], axis=0)
-    peri = np.mean([i[:,10] for i in allData], axis=0)
     neg0 = np.mean([i[:,16] for i in allData], axis=0)
     neg1 = np.mean([i[:,17] for i in allData], axis=0)
     neg2 = np.mean([i[:,18] for i in allData], axis=0)
@@ -64,7 +53,6 @@ def diffusivityDistance(index):
     neg.append(neg4)
     neg.append(neg5)
     neg.append(neg6)
-    parti = np.mean([i[:,0]*p.sizI*p.sizJ for i in allData], axis=0)
     cove = np.sum(neg[:],axis=0)/p.sizI/p.sizJ
 
     ratios = inf.getRatio(p.temp, inf.getHexagonalEnergies())
@@ -115,15 +103,12 @@ def diffusivityDistance(index):
     cm = plt.get_cmap("Set3")
     plt.loglog(x, fun.thetaAverage(time, p.flux), label=r"$1-\frac{1-e^{-Ft}}{Ft}$", color=cm(0))
     plt.loglog(x, fun.timeAverage(islB3, time)/p.sizI/p.sizJ, ".", color=cm(3/12), label=r"$N_{isl}$", markerfacecolor="None")
-    perimeter = (peri)/p.sizI/p.sizJ
-    vp = np.gradient(perimeter)/np.gradient(cove)#/np.gradient(time)
 
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
 
     plt.legend(numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
     plt.title("flux: {:.1e} temperature: {:d}".format(p.flux, int(p.temp)))
-    #plt.xscale("linear")
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
 
     return time, neg1
@@ -146,14 +131,9 @@ for f in fluxes:
             print("\t",t)
             inf.splitDataFiles()
             time, neg1 = diffusivityDistance(i)
-            # find first dimer occurrence
-            i = np.argmax(neg1>0)
-            firstCollisionTime.append(time[i])
         except FileNotFoundError:
             pass
         os.chdir(fPath)
-    kb = 8.6173324e-5
-    #plt.semilogy(1/kb/temperatures, firstCollisionTime, ".-", label=f)
     os.chdir(workingPath)
 plt.legend()
 
