@@ -12,57 +12,26 @@ from scipy.signal import savgol_filter
 
 def diffusivityDistance(index, debug, smooth, smoothCalc):
     p = inf.getInputParameters()
-    allData = []
+    d = inf.readAverages()
 
-    filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)):
-        fileName = "data"+str(i)+".txt"
-        allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
-
-    cove = np.mean([i[:,0]  for i in allData], axis=0)
-    time = np.mean([i[:,1]  for i in allData], axis=0)
-    isld = np.mean([i[:,3]  for i in allData], axis=0)
-    Ra   = np.mean([i[:,4]  for i in allData], axis=0)
-    Rh   = np.mean([i[:,5]  for i in allData], axis=0)
-    even = np.mean([i[:,7]  for i in allData], axis=0)
-    hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
-    diff = np.mean([i[:,12] for i in allData], axis=0)
-    neg = []
-    neg.append(np.mean([i[:,16] for i in allData], axis=0))
-    neg.append(np.mean([i[:,17] for i in allData], axis=0))
-    neg.append(np.mean([i[:,18] for i in allData], axis=0))
-    neg.append(np.mean([i[:,19] for i in allData], axis=0))
-    if p.maxN == 6:
-        neg.append(np.mean([i[:,20] for i in allData], axis=0))
-        neg.append(np.mean([i[:,21] for i in allData], axis=0))
-        neg.append(np.mean([i[:,22] for i in allData], axis=0))
-
-    cove = np.sum(neg[:],axis=0)/p.sizI/p.sizJ
-
-    ratios = 0
-    if p.calc == "AgUc":
-        ratios = inf.getRatio(p.temp, inf.getHexagonalEnergies())
-    if p.calc == "basic":
-        if p.rLib == "version2":
-            ratios = inf.getRatio(p.temp, inf.getBasic2Energies())
-        else:
-            ratios = inf.getRatio(p.temp, inf.getBasicEnergies())
+    cove = d.getRecomputedCoverage()/p.sizI/p.sizJ
+    ratios = inf.getRatios(p)
     Na = cove * p.sizI * p.sizJ
 
     plt.clf()
-    x = list(range(0,len(time)))
+    x = list(range(0,len(d.time)))
     x = cove
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
-    diff = fun.timeDerivative(diff, time)/(4*Na)
+    diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     lgR, = plt.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
                marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
-    hops = fun.timeDerivative(hops, time)/(4*Na)
+    hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
     lgN, = plt.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
                marker="p", ls="", mew=mew, markerfacecolor=cm(7/8), ms=7, alpha=alpha)
 
-    lgRh, = plt.loglog(x, Rh/(4*Na), label=r"$\frac{l^2}{2dN_a} R_{h} $",
+    lgRh, = plt.loglog(x, d.prob/(4*Na), label=r"$\frac{l^2}{2dN_a} R_{h} $",
                marker="o", ls="", mew=mew, markerfacecolor=cm(1/8), ms=5.5, alpha=alpha)
                
     #coverages
@@ -74,25 +43,25 @@ def diffusivityDistance(index, debug, smooth, smoothCalc):
     for k in range(0,7):
         if k < 4:
             label = r"${n_"+str(k)+"}$"
-            lg, = plt.loglog(x, neg[k]/p.sizI/p.sizJ, label=label, ms=1,  marker=".", color=cm1((k+2)/9))
+            lg, = plt.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1,  marker=".", color=cm1((k+2)/9))
             if smooth:
-                ySmooth = np.exp(savgol_filter(np.log(neg[k]), 9, 1))
+                ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
                 plt.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
-                neg[k] = ySmooth
+                d.negs[k] = ySmooth
             handles.append(lg)
 
-    hopsCalc0 = (6 * neg[0] *ratios[0])/(4*Na)
+    hopsCalc0 = (6 * d.negs[0] *ratios[0])/(4*Na)
     lgCAll = []
     if debug:
         lgC0, = plt.loglog(x, hopsCalc0, "p-", label="hops calc0")
         lgCAll.append(lgC0)
-        hopsCalc1 = (2*neg[1]*ratios[8])/(4*Na)
+        hopsCalc1 = (2*d.negs[1]*ratios[8])/(4*Na)
         lgC1, = plt.loglog(x, hopsCalc1, "x-", label="hops calc1")#,
         lgCAll.append(lgC1)
-        hopsCalc2 = (2*neg[2]*ratios[15])/(4*Na)
+        hopsCalc2 = (2*d.negs[2]*ratios[15])/(4*Na)
         lgC2, = plt.loglog(x, hopsCalc2, "o-", label="hops calc2")#
         lgCAll.append(lgC2)
-        hopsCalc3 = (0.1*neg[3]*ratios[24])/(4*Na)
+        hopsCalc3 = (0.1*d.negs[3]*ratios[24])/(4*Na)
         lgC3, = plt.loglog(x, hopsCalc3, "*-", label="hops calc3")#
         lgCAll.append(lgC3)
     else:
@@ -101,7 +70,7 @@ def diffusivityDistance(index, debug, smooth, smoothCalc):
         lgCAll.append(lgC0)
         
     if p.calc == "AgUc":
-        hopsCalc = (6 * neg[0]*ratios[0]+2*neg[1]*ratios[8]+2*neg[2]*ratios[15]+0.1*neg[3]*ratios[24])/(4*Na)
+        hopsCalc = (6 * d.negs[0]*ratios[0]+2*d.negs[1]*ratios[8]+2*d.negs[2]*ratios[15]+0.1*d.negs[3]*ratios[24])/(4*Na)
         if smoothCalc:
             hopsCalc = np.exp(savgol_filter(np.log(hopsCalc), 9, 1))
         lgC, = plt.loglog(x, hopsCalc, label="hops calc",
