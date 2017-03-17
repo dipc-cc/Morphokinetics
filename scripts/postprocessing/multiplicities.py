@@ -221,7 +221,7 @@ tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
-maxRanges = 3
+maxRanges = len(rngt) - 1
 coverage = list(range(0,p.maxC))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
