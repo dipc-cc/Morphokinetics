@@ -10,9 +10,12 @@ import functions as fun
 from scipy.signal import savgol_filter
 
 
-def diffusivityDistance(index, debug, smooth, smoothCalc):
+def diffusivityDistance(debug, smooth, smoothCalc, binned, readMultiplicities):
     p = inf.getInputParameters()
-    d = inf.readAverages()
+    if binned:
+        d = inf.readBinnedAverages()
+    else:
+        d = inf.readAverages()
 
     cove = d.getRecomputedCoverage()/p.sizI/p.sizJ
     ratios = p.getRatios()
@@ -25,6 +28,13 @@ def diffusivityDistance(index, debug, smooth, smoothCalc):
     alpha = 0.5
     mew = 0
     diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
+    handles = []
+    if readMultiplicities:
+        Malpha = inf.readInstantaneous()
+        lg, = plt.loglog(x, Malpha[0]/d.negs[0], label=r"$\frac{m_0}{n_0}$");    handles.append(lg) # Around 6
+        lg, = plt.loglog(x, Malpha[1]/d.negs[1], label=r"$\frac{m_1}{n_1}$");    handles.append(lg) # Around 2
+        lg, = plt.loglog(x, Malpha[2]/d.negs[2], label=r"$\frac{m_2}{n_2}$");    handles.append(lg) # Around 2
+        lg, = plt.loglog(x, Malpha[3]/d.negs[3], label=r"$\frac{m_3}{n_3}$");    handles.append(lg) # Around 0.1
     lgR, = plt.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
                marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
@@ -37,7 +47,6 @@ def diffusivityDistance(index, debug, smooth, smoothCalc):
     #coverages
     cm1 = plt.get_cmap("Set1")
 
-    handles = []
     lg, = plt.loglog(x, cove, label=r"$\theta$", color=cm1(1/9))
     handles.append(lg)
     for k in range(0,7):
@@ -101,6 +110,14 @@ try:
     smoothCalc = sys.argv[3] == "y"
 except IndexError:
     smoothCalc = False
+try:
+    binned = sys.argv[4] == "y"
+except IndexError:
+    binned = False
+try:
+    readMultiplicities = sys.argv[5] == "y"
+except IndexError:
+    readMultiplicities = False
     
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
@@ -109,11 +126,11 @@ for f in fluxes:
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
-    for i,t in enumerate(inf.getTemperatures()):
+    for t in inf.getTemperatures():
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            diffusivityDistance(i, debug, smooth, smoothCalc)
+            diffusivityDistance(debug, smooth, smoothCalc, binned, readMultiplicities)
         except FileNotFoundError:
             pass
         os.chdir(fPath)
