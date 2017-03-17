@@ -18,15 +18,7 @@ def computeMavgAndOmega(fileNumber):
     time = np.array(matrix[:,1])
     length = len(time)
     hops = np.array(matrix[:,15])
-    if p.calc == "basic":
-        if p.rLib == "version2":
-            ratios = info.getRatio(p.temp, info.getBasic2Energies())
-        else:
-            ratios = info.getRatio(p.temp, info.getBasicEnergies())
-    elif (p.calc == "AgUc"):
-        ratios = info.getRatio(p.temp, info.getHexagonalEnergies())
-    else:
-        ratios = info.getRatio(p.temp, info.getGrapheneSimpleEnergies())/100
+    ratios = p.getRatios()
     Mavg = np.zeros(shape=(length,p.maxA))
     for i in range(0,p.maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
