@@ -21,11 +21,13 @@ class fileData:
         ratios = 0
         if self.calc == "AgUc":
             ratios = getRatio(self.temp, getHexagonalEnergies())
-        if self.calc == "basic":
+        elif self.calc == "basic":
             if self.rLib == "version2":
                 ratios = getRatio(self.temp, getBasic2Energies())
             else:
                 ratios = getRatio(self.temp, getBasicEnergies())
+        else:
+            ratios = info.getRatio(p.temp, info.getGrapheneSimpleEnergies())
         return ratios
 
 
