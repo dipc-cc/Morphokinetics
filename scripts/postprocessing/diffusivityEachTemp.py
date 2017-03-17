@@ -81,7 +81,7 @@ def diffusivityDistance(index, debug, smooth, smoothCalc):
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
     plt.legend(handles=handles, numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
-    plt.title("flux: {:.1e} temperature: {:d} size {:d}x{:d}".format(p.flux, int(p.temp), p.sizI, p.sizJ))
+    plt.title("flux: {:.1e} temperature: {:d} size {:d}x{:d} \n {}".format(p.flux, int(p.temp), p.sizI, p.sizJ, os.getcwd()), fontsize=10)
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
 
 
