@@ -228,7 +228,7 @@ tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
 showPlot = False
-totalRanges = 3
+maxRanges = 3
 coverage = list(range(0,p.maxC))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
@@ -246,7 +246,7 @@ for cov in range(-p.maxC,0):
         axarr = np.zeros(3)
     # N_h
     tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, showPlot, labelAlfa))
-    tempOmega = np.zeros((maxAlfa,totalRanges))
+    tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
     for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
@@ -275,7 +275,7 @@ for cov in range(-p.maxC,0):
             axarr[2].set_ylim(1e-3,2)
             axarr[2].legend(prop={'size': 8}, bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
             axarr[2].set_ylabel(r"$\omega_\alpha$")
-        for j in range(0,totalRanges): # temperature ranges
+        for j in range(0,maxRanges): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
@@ -293,21 +293,21 @@ for alfa in range(0,maxAlfa):
     tempEaRCov[:,alfa,:] = energies[alfa]
 
 plt.figure()
-fig, axarr = plt.subplots(1, totalRanges, sharey=True)
+fig, axarr = plt.subplots(1, maxRanges, sharey=True)
 fig.subplots_adjust(wspace=0.1)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
 
 cm = plt.get_cmap('gist_earth')
 ax = []
 axarr[0].set_ylabel("eV")
-for i in range(0,totalRanges): # different temperature ranges (low, medium, high)
+for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     axarr[i].set_xlabel(r"$\theta$")
-    lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,totalRanges-1-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
-    lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,totalRanges-1-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
+    lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,maxRanges-1-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
+    lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,maxRanges-1-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
     ax.append(axarr[i].twinx())
-    lgErr, = ax[i].plot(coverage, abs(1-tempEaCov2[:,totalRanges-1-i]/tempEaCov[:,totalRanges-1-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
+    lgErr, = ax[i].plot(coverage, abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCov[:,maxRanges-1-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
     ax[i].set_ylim(0,1)
-    maxY = max(abs(1-tempEaCov2[:,totalRanges-1-i]/tempEaCov[:,totalRanges-1-i])[30:])+0.05 # get maximum for the arrow (>30% coverage)
+    maxY = max(abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCov[:,maxRanges-1-i])[30:])+0.05 # get maximum for the arrow (>30% coverage)
     ax[i].annotate(' ', xy=(80, maxY), xytext=(40, maxY), arrowprops=dict(arrowstyle="->", edgecolor=cm(3/4), facecolor=cm(3/4)))
     if i != 2:
         ax[i].yaxis.set_major_formatter(plticker.NullFormatter())
@@ -324,25 +324,25 @@ if len(sys.argv) > 1:
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
     label = ["multiplicity", "sum", "ratio"]
     cm = plt.get_cmap('Accent')
-    for j in range(0,totalRanges): # different temperature ranges (low, medium, high)
+    for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         partialSum1 = np.sum(tempOmegaCov[:,:,j]*(-tempEaMCov[:,:,j]), axis=1)
         partialSum2 = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]), axis=1)
         rev = np.sum(partialSum1) < 0
         partialSum = partialSum1 + partialSum2
         c = 0
         if rev:
-            print(totalRanges-1-j, len(axarr), i, len(label))
-            lgSum = axarr[totalRanges-1-j].fill_between(coverage, partialSum2, color=cm(c/3), alpha=0.8, label=label[c])
+            print(maxRanges-1-j, len(axarr), i, len(label))
+            lgSum = axarr[maxRanges-1-j].fill_between(coverage, partialSum2, color=cm(c/3), alpha=0.8, label=label[c])
             c += 1
             lgR = []
         for i in range(0,2):
             if rev:
-                lg = axarr[totalRanges-1-j].fill_between(coverage,partialSum1, color=cm((c+i)/3), alpha=0.8, label=label[i])
+                lg = axarr[maxRanges-1-j].fill_between(coverage,partialSum1, color=cm((c+i)/3), alpha=0.8, label=label[i])
                 lgR.append(lg)
                 partialSum1 = partialSum1 + partialSum2
                 
             else:
-                lg = axarr[totalRanges-1-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[i])
+                lg = axarr[maxRanges-1-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[i])
                 lgR.append(lg)
                 partialSum -= partialSum1
     plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), "upper right", prop={'size':8})
@@ -350,11 +350,11 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
 
 if (omegas):
     cm = plt.get_cmap('Set1')
-    for j in range(0,totalRanges): # different temperature ranges (low, medium, high)
+    for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
         lgs = []
         for i in range(maxAlfa-1,-1,-1): #alfa
-            lgs.append(axarr[totalRanges-1-j].fill_between(coverage, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
+            lgs.append(axarr[maxRanges-1-j].fill_between(coverage, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
     myLegends = [lgEaCov, lgEaCov2, lgErr]
