@@ -74,10 +74,8 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         if ratesLibrary == "version2":
             indexes = np.where((temperatures >= 120) & (temperatures <= 195))
             iSl = indexes[0][0]
-            iFl = indexes[0][-1]
             indexes = np.where((temperatures >= 195) & (temperatures <= 265))
             iSm = indexes[0][0]
-            iFm = indexes[0][-1]
             indexes = np.where((temperatures >= 265) & (temperatures <= 400))
             iSh = indexes[0][0]
             iFh = indexes[0][-1]
@@ -87,26 +85,21 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         else:
             indexes = np.where((temperatures >= 120) & (temperatures <= 190))
             iSl = indexes[0][0]
-            iFl = indexes[0][-1]
             indexes = np.where((temperatures >= 190) & (temperatures <= 270))
             iSm = indexes[0][0]
-            iFm = indexes[0][-1]
             indexes = np.where((temperatures >= 270) & (temperatures <= 1100))
             iSh = indexes[0][0]
             iFh = indexes[0][-1]
     else:
         indexes = np.where((temperatures >= 200) & (temperatures <= 500))
         iSl = indexes[0][0]
-        iFl = indexes[0][-1]
         indexes = np.where((temperatures >= 500) & (temperatures <= 1000))
         iSm = indexes[0][0]
-        iFm = indexes[0][-1]
         indexes = np.where((temperatures >= 1000) & (temperatures <= 1500))
         iSh = indexes[0][0]
         iFh = indexes[0][-1]
-        print("sdfadf")
         
-    return list([iSl, iFl, iSm, iFm, iSh, iFh])
+    return list([iSl, iSm, iSh, iFh])
 
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
@@ -118,14 +111,14 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     slopes.append(b)
     if showPlot:
         axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls="-", label="{} low {:03.3f} ".format(labelAlfa[alfa],b))
+    a, b = f.linearFit(x, y, rngt[1], rngt[2])
+    slopes.append(b)
+    if showPlot:
+        axis.semilogy(x[rngt[1]-1:rngt[2]+1], np.exp(f.linear(x[rngt[1]-1:rngt[2]+1], a, b)), ls="-", label="{} med {:03.3f}".format(labelAlfa[alfa],b))
     a, b = f.linearFit(x, y, rngt[2], rngt[3])
     slopes.append(b)
     if showPlot:
-        axis.semilogy(x[rngt[2]-1:rngt[3]+1], np.exp(f.linear(x[rngt[2]-1:rngt[3]+1], a, b)), ls="-", label="{} med {:03.3f}".format(labelAlfa[alfa],b))
-    a, b = f.linearFit(x, y, rngt[4], rngt[5])
-    slopes.append(b)
-    if showPlot:
-        axis.semilogy(x[rngt[4]-1:], np.exp(f.linear(x[rngt[4]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b)) 
+        axis.semilogy(x[rngt[2]-1:], np.exp(f.linear(x[rngt[2]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b)) 
         axis.set_ylabel("eV")
         if alfa == -1:
             axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
@@ -276,7 +269,7 @@ for cov in range(-p.maxC,0):
             axarr[2].legend(prop={'size': 8}, bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
             axarr[2].set_ylabel(r"$\omega_\alpha$")
         for j in range(0,maxRanges): # temperature ranges
-            tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[2*j]:rngt[2*j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
+            tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
