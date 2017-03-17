@@ -10,8 +10,7 @@ import os
 import sys
 
 
-def computeMavgAndOmega(fileNumber):
-    p = info.getInputParameters()
+def computeMavgAndOmega(fileNumber, p):
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
     possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
     possiblesFromList = possiblesFromList[:,1:] # remove coverage
@@ -45,7 +44,7 @@ def computeMavgAndOmegaOverRuns():
     sumRate2 = np.zeros(length)
     #iterating over runs
     for i in range(0,filesNumber):
-        tmpMavg, tmpOmega, tmpRate1, tmpRate2 = computeMavgAndOmega(i)
+        tmpMavg, tmpOmega, tmpRate1, tmpRate2 = computeMavgAndOmega(i, p)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
         sumRate1 = sumRate1 + tmpRate1
