@@ -103,27 +103,21 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
 
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
+    labelRange = ['low', 'med', 'high']
     cm = plt.get_cmap('Set1')
     slopes = []
     if showPlot:   
         axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none')#, "o", lw=0.5)
-    a, b = f.linearFit(x, y, rngt[0], rngt[1])
-    slopes.append(b)
-    if showPlot:
-        axis.semilogy(x[rngt[0]:rngt[1]+1], np.exp(f.linear(x[rngt[0]:rngt[1]+1], a, b)), ls="-", label="{} low {:03.3f} ".format(labelAlfa[alfa],b))
-    a, b = f.linearFit(x, y, rngt[1], rngt[2])
-    slopes.append(b)
-    if showPlot:
-        axis.semilogy(x[rngt[1]-1:rngt[2]+1], np.exp(f.linear(x[rngt[1]-1:rngt[2]+1], a, b)), ls="-", label="{} med {:03.3f}".format(labelAlfa[alfa],b))
-    a, b = f.linearFit(x, y, rngt[2], rngt[3])
-    slopes.append(b)
-    if showPlot:
-        axis.semilogy(x[rngt[2]-1:], np.exp(f.linear(x[rngt[2]-1:], a, b)), label="{} high {:03.3f}".format(labelAlfa[alfa],b)) 
-        axis.set_ylabel("eV")
-        if alfa == -1:
-            axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-        else:
-            axis.legend(prop={'size': 5.1}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., ncol=2)
+    for i in range(0,len(rngt)-1):
+        a, b = f.linearFit(x, y, rngt[i], rngt[i+1])
+        slopes.append(b)
+        if showPlot:
+            axis.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(f.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", label="{} {} {:03.3f} ".format(labelAlfa[alfa],labelRange[i],b))
+            if i == len(rngt)-2:
+                if alfa == -1:
+                    axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                else:
+                    axis.legend(prop={'size': 5.1}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., ncol=2)
     return slopes
 
 
