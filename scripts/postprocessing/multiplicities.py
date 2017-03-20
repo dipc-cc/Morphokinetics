@@ -104,6 +104,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     labelRange = ['low', 'med', 'high']
+    labelRange = labelRange+list([str(i) for i in rngt])
     cm = plt.get_cmap('Set1')
     slopes = []
     if showPlot:   
@@ -318,7 +319,6 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
         partialSum = partialSum1 + partialSum2
         c = 0
         if rev:
-            print(maxRanges-1-j, len(axarr), i, len(label))
             lgSum = axarr[maxRanges-1-j].fill_between(coverage, partialSum2, color=cm(c/3), alpha=0.8, label=label[c])
             c += 1
             lgR = []
