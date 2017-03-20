@@ -64,6 +64,7 @@ public abstract class AbstractSimulation {
     System.out.println("/ \\/ \\(  O ))   / ) __/) __ ((  O ))  (  )( /    / ) _)   )(   )(( (__ \\___ \\");
     System.out.println("\\_)(_/ \\__/(__\\_)(__)  \\_)(_/ \\__/(__\\_)(__)\\_)__)(____) (__) (__)\\___)(____/");
     System.out.println("");
+    System.out.println("Git revision: " + Restart.getGitRevision());
     DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     Date date = new Date();
     System.out.print("Execution started on " + dateFormat.format(date)); //2014/08/06 15:59:48

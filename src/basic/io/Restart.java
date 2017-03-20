@@ -27,6 +27,7 @@ import utils.MathUtils;
 public class Restart {
 
   public static final int MAX_DIMS = 3;
+
   private String folder;
   final static Charset ENCODING = StandardCharsets.UTF_8;
 
@@ -66,6 +67,10 @@ public class Restart {
     }
   }
 
+  public static String getGitRevision() {
+    return RestartLow.readGitRevision(getJarBaseDir());
+  }
+  
   public String getPsdScript(String inputFileName, String outputFileName, float min, float max, int sizeX, int sizeY) {
     String base = "reset\n"
             + "set term postscript enhanced color \"Arial\" 20\n"

@@ -243,6 +243,24 @@ class RestartLow {
     return data;
   }
 
+  static String readGitRevision(String folder) {
+    String rev;
+    String fileName = folder + "/.gitRevision";
+    // create file descriptor. It will be automatically closed.
+    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
+      String line;
+      // <-- read whole line
+      rev = in.readLine();
+    } catch (FileNotFoundException fe) {
+      rev = "not Found";
+    } catch (Exception e) {
+      // if any I/O error occurs
+      rev = "not known";
+      e.printStackTrace();
+    }
+    return rev;
+  }
+    
   static void writeLowTextHexagonal(float[][] data, String fileName) {
     // create file descriptor. It will be automatically closed.
     try (PrintWriter out = new PrintWriter(new FileWriter(fileName))) {
