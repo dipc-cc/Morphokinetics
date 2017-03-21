@@ -3,13 +3,27 @@
 import info as inf
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.ticker as plticker
 import glob
 import os
 import sys
 import functions as fun
 from scipy.signal import savgol_filter
+from PIL import Image
 
-
+def addSurface(fig, temperature):
+    try:
+        fileName = glob.glob("/home/jalberdi004/mk_test/activationEnergy/agUc/200/2.-surfaces/flux3.5e4/"+str(int(temperature))+"/results/*/surface000.png")[0]
+        im = Image.open(fileName)
+        newax = fig.add_axes([0.15, 0.4, 0.3, 0.3], anchor='NE', zorder=+100)
+        newax.imshow(im)
+        newax.yaxis.set_major_locator(plticker.NullLocator())
+        newax.xaxis.set_major_locator(plticker.NullLocator())
+        newax.set_xlabel(r"$\theta = 30\%$")
+        #newax.axis('off')
+    except IndexError:
+        pass
+    
 def diffusivityDistance(debug, smooth, smoothCalc, binned):
     p = inf.getInputParameters()
     if binned:
@@ -22,6 +36,7 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
     Na = cove * p.sizI * p.sizJ
 
     plt.clf()
+    fig, ax = plt.subplots()
     x = list(range(0,len(d.time)))
     x = cove
     cm = plt.get_cmap("Accent")
@@ -35,27 +50,26 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
     lgN, = plt.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
                marker="p", ls="", mew=mew, markerfacecolor=cm(7/8), ms=7, alpha=alpha)
 
-    #coverages
-    cm1 = plt.get_cmap("Set1")
-
     k=0
     label = r"$n_"+str(k)+"$"
-    lg, = plt.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1,  marker=".", color=cm1((k+2)/9))
+    lg, = plt.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, marker=".", color=cm(1/8))
     if smooth:
         ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
         plt.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
         d.negs[k] = ySmooth
     handles.append(lg)
     islD = inf.readHistograms()
-    islB3 = islD.islB3()
-    lg, = plt.loglog(x, fun.timeAverage(islB3, d.time)/p.sizI/p.sizJ, color=cm(3/12), label=r"$N_{isl}$", markerfacecolor="None")
+    isld = islD.islB2()
+    isld = d.isld
+    lg, = plt.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
     handles.append(lg)
-        
+
     handles = [lgR, lgN] + handles
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
     plt.legend(handles=handles, numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
     plt.title("flux: {:.1e} temperature: {:d} size {:d}x{:d} \n {}".format(p.flux, int(p.temp), p.sizI, p.sizJ, os.getcwd()), fontsize=10)
+    addSurface(fig, p.temp)
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
 
 
