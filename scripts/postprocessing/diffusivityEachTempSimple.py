@@ -19,7 +19,8 @@ def addSurface(fig, temperature):
         newax.imshow(im)
         newax.yaxis.set_major_locator(plticker.NullLocator())
         newax.xaxis.set_major_locator(plticker.NullLocator())
-        newax.set_xlabel(r"$\theta = 30\%$")
+        bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
+        newax.annotate(r"$\theta = 30\%$", xy=[200,100], bbox=bbox_props)
         #newax.axis('off')
     except IndexError:
         pass
@@ -66,8 +67,9 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
 
     handles = [lgR, lgN] + handles
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
-    plt.legend(handles=handles, numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    plt.legend(handles=handles, numpoints=1, prop={'size':12}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
+    plt.xlabel(r"$\theta$")
     plt.title("flux: {:.1e} temperature: {:d} size {:d}x{:d} \n {}".format(p.flux, int(p.temp), p.sizI, p.sizJ, os.getcwd()), fontsize=10)
     addSurface(fig, p.temp)
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
@@ -101,7 +103,7 @@ for f in fluxes:
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
-    for t in inf.getTemperatures():
+    for t in inf.getTemperatures()[15:]:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
