@@ -26,7 +26,7 @@ def diffusivityDistance(index):
 
     cove = d.getRecomputedCoverage()/p.sizI/p.sizJ
 
-    ratios = inf.getRatios(p)
+    ratios = p.getRatios()
 
     isld = fun.getOnlyAscending(d.isld)
 
@@ -40,15 +40,13 @@ def diffusivityDistance(index):
     plt.clf()
     x = list(range(0,len(d.time)))
     x = cove
-    plt.loglog(x, d.time, "s", label="time")
-    plt.loglog(x, tp, "x", label="corrected time")
     #time = tp
     cm = plt.get_cmap("Accent")
     plt.loglog(x, d.diff, label=r"$R^2 (\times \frac{1}{N_1 N_2})$",
                marker="s", ls="", mew=0, markerfacecolor=cm(0/8), alpha=0.8)
     plt.loglog(x, d.hops, label=r"$N_h l^2 (\times \frac{1}{N_1 N_2})$",
                marker="p", ls="", mew=0, markerfacecolor=cm(7/8), alpha=0.8)
-    plt.loglog(x, fun.timeAverage(d.hops,d.time)*d.time, label=r"$\overline{R_{h}} \;\; l^2 t$")
+    plt.loglog(x, fun.timeAverage(d.prob,d.time)*d.time, label=r"$\overline{R_{h}} \;\; l^2 t$")
                
     #coverages
     cm = plt.get_cmap("Set1")
@@ -57,11 +55,12 @@ def diffusivityDistance(index):
     for k in range(0,7):
         aneg.append(fun.timeAverage(d.negs[k], d.time))
         if k < 4:
-            plt.loglog(x, aneg[k]/p.sizI/p.sizJ, label="aneg{} ".format(k))
-    plt.loglog(x, (aneg[4]+aneg[5]+aneg[6])/p.sizI/p.sizJ, label="aneg{} ".format(k))
+            plt.loglog(x, aneg[k]/p.sizI/p.sizJ, label=r"$\overline{\theta}$"+str(k))
+    plt.loglog(x, (aneg[4]+aneg[5]+aneg[6])/p.sizI/p.sizJ, label=r"$\overline{\theta}_{4+}$")
  
-    acov = fun.timeAverage(cove, d.time)
-    plt.loglog(x, acov, "o", label="acov")
+    acov = np.sum(aneg[:], axis=0)/p.sizI/p.sizJ
+    plt.loglog(x, acov, "x", label=r"$\overline{\theta}$")
+    plt.loglog(x, fun.thetaAverage(d.time, p.flux), label=r"$1-\frac{1-e^{-Ft}}{Ft}$", color=cm(0))
 
     hopsCalc0 = (d.time * 6 * aneg[0] *ratios[0])
     plt.loglog(x, hopsCalc0, label="hops calc0")
@@ -71,7 +70,7 @@ def diffusivityDistance(index):
     ratios = inf.getRatio(p.temp, inf.getHexagonalEnergies())
 
     cm = plt.get_cmap("Set3")
-    plt.loglog(x, fun.thetaAverage(d.time, p.flux), label=r"$1-\frac{1-e^{-Ft}}{Ft}$", color=cm(0))
+   
     plt.loglog(x, fun.timeAverage(islB3, d.time)/p.sizI/p.sizJ, ".", color=cm(3/12), label=r"$N_{isl}$", markerfacecolor="None")
 
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
@@ -79,7 +78,7 @@ def diffusivityDistance(index):
     plt.legend(numpoints=1, prop={'size':8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
     plt.title("flux: {:.1e} temperature: {:d}".format(p.flux, int(p.temp)))
-    plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
+    plt.savefig("../../../plot2"+str(p.flux)+str(p.temp)+".png")
 
 
 ##########################################################
