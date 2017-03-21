@@ -10,7 +10,6 @@ import sys
 import functions as fun
 from scipy.signal import savgol_filter
 from PIL import Image
-from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 def addSurface(fig, temperature):
     try:
@@ -53,6 +52,7 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
     Na = cove * p.sizI * p.sizJ
 
     fig = plt.figure(num=None, figsize=(5,7))
+    ax = plt.gca()
     x = list(range(0,len(d.time)))
     x = cove
     cm = plt.get_cmap("Accent")
@@ -60,36 +60,37 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
     mew = 0
     diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR, = plt.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
+    lgR, = ax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
                marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
-    lgN, = plt.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
+    lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
                marker="p", ls="", mew=mew, markerfacecolor=cm(7/8), ms=7, alpha=alpha)
 
     k=0
     label = r"$\theta_0$"
-    lg, = plt.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, marker=".", color=cm(1/8))
+    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, marker=".", color=cm(1/8))
     if smooth:
         ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
-        plt.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
+        ax.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
         d.negs[k] = ySmooth
     handles.append(lg)
     islD = inf.readHistograms()
     isld = islD.islB2()
     isld = d.isld
-    lg, = plt.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
+    lg, = ax.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
     handles.append(lg)
 
     handles = [lgR, lgN] + handles
     #plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
-    plt.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15})#, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-    plt.grid()
-    plt.xlabel(r"$\theta$", size=16)
-    plt.ylim([1e-7,1e13])
-    plt.xlim([1e-5,1e0])
+    ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15})#, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    ax.grid()
+    ax.set_xlabel(r"$\theta$", size=16)
+    ax.set_ylim([1e-7,1e13])
+    ax.set_xlim([1e-5,1e0])
     addFreeDiffusivity(fig, x, p)
     addSurface(fig, p.temp)
-    plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
+    fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
+    return fig
 
 
 ##########################################################
@@ -124,7 +125,7 @@ for f in fluxes:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            diffusivityDistance(debug, smooth, smoothCalc, binned)
+            fig = diffusivityDistance(debug, smooth, smoothCalc, binned)
         except FileNotFoundError:
             pass
         os.chdir(fPath)
