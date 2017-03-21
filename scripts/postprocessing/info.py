@@ -194,6 +194,32 @@ def readInstantaneous():
 
     return Malpha
 
+class islandDistribution:
+    def __init__(self, data):
+        self.islD = data
+        
+    def islB2(self):
+        """ islands bigger than 2 atoms """
+        return np.mean([[np.count_nonzero(h[1:]) for h in run] for run in self.islD],axis=0)
+    def islB3(self):
+        """ islands bigger than 3 atoms """
+        return np.mean([[np.count_nonzero(h[1:]>2) for h in run] for run in self.islD],axis=0)
+    def islB4(self):
+        """ islands bigger than 4 atoms """
+        return np.mean([[np.count_nonzero(h[1:]>3) for h in run] for run in self.islD],axis=0)
+    def islB5(self):
+        """ islands bigger than 5 atoms """
+        return np.mean([[np.count_nonzero(h[1:]>4) for h in run] for run in self.islD],axis=0)    
+    
+def readHistograms():
+    """ It reads histograms and then, we are able to get islands bigger than 2, 3, 4 or 6 atoms """
+    # read all histograms
+    filesN = glob.glob("histogram[0-9]*.txt")
+    islD = []
+    for i in range(0,len(filesN)):
+        fileName = "histogram"+str(i)+".txt"
+        islD.append(readHistogram(fileName))
+    return islandDistribution(islD)
 
 def splitDataFiles():
     # split files
