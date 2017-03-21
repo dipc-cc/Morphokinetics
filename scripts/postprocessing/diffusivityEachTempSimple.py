@@ -10,20 +10,36 @@ import sys
 import functions as fun
 from scipy.signal import savgol_filter
 from PIL import Image
+from mpl_toolkits.axes_grid.anchored_artists import AnchoredText
 
 def addSurface(fig, temperature):
     try:
         fileName = glob.glob("/home/jalberdi004/mk_test/activationEnergy/agUc/200/2.-surfaces/flux3.5e4/"+str(int(temperature))+"/results/*/surface000.png")[0]
         im = Image.open(fileName)
-        newax = fig.add_axes([0.15, 0.4, 0.3, 0.3], anchor='NE', zorder=+100)
+        newax = fig.add_axes([0.16, 0.3, 0.3, 0.3], zorder=+100)
         newax.imshow(im)
         newax.yaxis.set_major_locator(plticker.NullLocator())
         newax.xaxis.set_major_locator(plticker.NullLocator())
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
         newax.annotate(r"$\theta = 30\%$", xy=[200,100], bbox=bbox_props)
-        #newax.axis('off')
     except IndexError:
         pass
+
+def addFreeDiffusivity(fig, x, p):
+    ax = fig.gca()
+    subfigure = {150: "a)", 250: "b)", 750: "c)"}
+    try:
+        note  = subfigure[p.temp]+" T={}, F={:1.0E}".format(int(p.temp),p.flux)
+        ax.annotate(note, xy=(0.16,0.68), xycoords="figure fraction", size=14)
+    except KeyError:
+        pass
+    x = x[0:20]
+    y = np.ones(len(x))
+    y = y * 3/2*p.getRatios()[0]
+    cm = plt.get_cmap("Accent")
+    ax.plot(x, y, "-", color=cm(8/8))
+    ax.annotate(r"$\frac{1}{2\alpha}m_{tt}\nu_{tt}l^2 = \frac{3}{2}\nu_{tt}$", xytext=(2e-2,4e11), textcoords="data",
+                xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     
 def diffusivityDistance(debug, smooth, smoothCalc, binned):
     p = inf.getInputParameters()
@@ -36,8 +52,7 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
     ratios = p.getRatios()
     Na = cove * p.sizI * p.sizJ
 
-    plt.clf()
-    fig, ax = plt.subplots()
+    fig = plt.figure(num=None, figsize=(5,7))
     x = list(range(0,len(d.time)))
     x = cove
     cm = plt.get_cmap("Accent")
@@ -52,7 +67,7 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
                marker="p", ls="", mew=mew, markerfacecolor=cm(7/8), ms=7, alpha=alpha)
 
     k=0
-    label = r"$n_"+str(k)+"$"
+    label = r"$\theta_0$"
     lg, = plt.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, marker=".", color=cm(1/8))
     if smooth:
         ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
@@ -66,11 +81,13 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
     handles.append(lg)
 
     handles = [lgR, lgN] + handles
-    plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
-    plt.legend(handles=handles, numpoints=1, prop={'size':12}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+    #plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
+    plt.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15})#, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
     plt.grid()
-    plt.xlabel(r"$\theta$")
-    plt.title("flux: {:.1e} temperature: {:d} size {:d}x{:d} \n {}".format(p.flux, int(p.temp), p.sizI, p.sizJ, os.getcwd()), fontsize=10)
+    plt.xlabel(r"$\theta$", size=16)
+    plt.ylim([1e-7,1e13])
+    plt.xlim([1e-5,1e0])
+    addFreeDiffusivity(fig, x, p)
     addSurface(fig, p.temp)
     plt.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
 
