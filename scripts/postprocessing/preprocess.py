@@ -5,8 +5,6 @@ import info as i
 workingPath = os.getcwd()
 fluxes = i.getFluxes()
 for f in fluxes:
-    firstCollisionTime = []
-    temperaturesPlot = []
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
@@ -16,10 +14,9 @@ for f in fluxes:
             print("\t",t)
             i.splitDataFiles()
             i.splitAeFiles()
-            i.splitHistogramFiles()
+            #i.splitHistogramFiles()
         except FileNotFoundError:
             pass
         os.chdir(fPath)
-    kb = 8.6173324e-5
     os.chdir(workingPath)
 
