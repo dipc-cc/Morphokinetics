@@ -11,7 +11,7 @@ import functions as fun
 import itertools
 
 
-def diffusivityDistance(index):
+def diffusivityDistance():
     p = inf.getInputParameters()
     d = inf.readAverages()
     
@@ -55,7 +55,8 @@ def diffusivityDistance(index):
     for k in range(0,7):
         aneg.append(fun.timeAverage(d.negs[k], d.time))
         if k < 4:
-            plt.loglog(x, aneg[k]/p.sizI/p.sizJ, label=r"$\overline{\theta}$"+str(k))
+            label=r"$\overline{\theta}_"+str(k)+"$"
+            plt.loglog(x, aneg[k]/p.sizI/p.sizJ, label=label)
     plt.loglog(x, (aneg[4]+aneg[5]+aneg[6])/p.sizI/p.sizJ, label=r"$\overline{\theta}_{4+}$")
  
     acov = np.sum(aneg[:], axis=0)/p.sizI/p.sizJ
@@ -93,12 +94,12 @@ for f in fluxes:
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
-    for i,t in enumerate(inf.getTemperatures()):
+    for t in inf.getTemperatures()[15:]:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
             inf.splitDataFiles()
-            diffusivityDistance(i)
+            diffusivityDistance()
         except FileNotFoundError:
             pass
         os.chdir(fPath)
