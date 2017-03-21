@@ -26,9 +26,9 @@ def addSurface(fig, temperature):
 
 def addFreeDiffusivity(fig, x, p):
     ax = fig.gca()
-    subfigure = {150: "a)", 250: "b)", 750: "c)"}
+    sublabel = {150: "a)", 250: "b)", 750: "c)"}
     try:
-        note  = subfigure[p.temp]+" T={}, F={:1.0E}".format(int(p.temp),p.flux)
+        note = sublabel[p.temp]+" T={}, F={:1.0E}".format(int(p.temp),p.flux)
         ax.annotate(note, xy=(0.16,0.68), xycoords="figure fraction", size=14)
     except KeyError:
         pass
@@ -121,14 +121,24 @@ for f in fluxes:
     print(f)
     os.chdir(f)
     fPath = os.getcwd()
-    for t in inf.getTemperatures()[15:]:
+    figs = []
+    for t in inf.getTemperatures():
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
             fig = diffusivityDistance(debug, smooth, smoothCalc, binned)
+            if t == 150 or t == 250 or t == 750:
+                fig.savefig("../../../p"+str(t)+".pdf")
+                figs.append(fig)
         except FileNotFoundError:
             pass
         os.chdir(fPath)
     os.chdir(workingPath)
-plt.legend()
 
+fig = plt.figure(num=None, figsize=(15,7))
+#fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,7))
+for f,i in enumerate(figs):
+    #axarr[i] = f
+    fig.axes.append(f.gca())
+    
+fig.savefig("figure.pdf")
