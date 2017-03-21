@@ -46,6 +46,10 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
         plt.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
         d.negs[k] = ySmooth
     handles.append(lg)
+    islD = inf.readHistograms()
+    islB3 = islD.islB3()
+    lg, = plt.loglog(x, fun.timeAverage(islB3, d.time)/p.sizI/p.sizJ, color=cm(3/12), label=r"$N_{isl}$", markerfacecolor="None")
+    handles.append(lg)
         
     handles = [lgR, lgN] + handles
     plt.subplots_adjust(left=0.12, bottom=0.1, right=0.7, top=0.9, wspace=0.2, hspace=0.2)
