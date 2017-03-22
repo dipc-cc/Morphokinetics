@@ -7,8 +7,12 @@ import numpy as np
 def diffusivityTime(coverage):
     p = inf.getInputParameters()
     d = inf.readAverages()
-    divisor = d.cove[100-coverage]*d.time[100-coverage]*p.flux**0.7
-    return p.flux, d.cove[100-coverage]/divisor, d.diff[100-coverage]/divisor, d.hops[100-coverage]/divisor, d.even[100-coverage]/divisor
+    try:
+        divisor = d.cove[100-coverage]*d.time[100-coverage]*p.flux**0.7
+        r = p.flux, d.cove[100-coverage]/divisor, d.diff[100-coverage]/divisor, d.hops[100-coverage]/divisor, d.even[100-coverage]/divisor
+    except IndexError:
+        r = p.flux, None, None, None, None
+    return r
 
 
 workingPath = os.getcwd()
@@ -19,6 +23,8 @@ kb = 8.617332e-5
 fig = plt.figure(num=None, figsize=(6,5))
 ax = fig.gca()
 ax.grid()
+ax.set_yscale("log")
+ax.set_title("{} % coverage".format(coverage))
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
     print(f)
@@ -46,8 +52,6 @@ for i,f in enumerate(fluxes):
     ax.plot(x, data[:,4], "-x", label=r"$N_h$ {:1.0E}".format(flux),
             marker="+", ls="", mew=1, markeredgecolor=cm(i/8), ms=7, alpha=1)
     ax.plot(x, data[:,5], "-", label=r"events {:1.0E}".format(flux), color=cm(i/8))
-    ax.legend(loc="best", numpoints=1, prop={'size':10}, markerscale=1.5)
-    ax.set_yscale("log")
-    ax.set_title("{} % coverage".format(coverage))
+    ax.legend(loc=1, numpoints=1, prop={'size':8}, markerscale=1.5)
     fig.savefig("../diff.png")
     os.chdir(workingPath)
