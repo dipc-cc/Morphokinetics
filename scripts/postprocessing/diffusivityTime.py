@@ -16,7 +16,7 @@ fluxes = inf.getFluxes()
 i = 0
 coverage = 10
 kb = 8.617332e-5
-for f in fluxes:
+for i,f in enumerate(fluxes):
     temperaturesPlot = []
     print(f)
     os.chdir(f)
@@ -32,15 +32,20 @@ for f in fluxes:
             pass
         os.chdir(fPath)
     ### Plot
+    cm = plt.get_cmap("Accent")
+    alpha = 0.5
+    mew = 0
     data = np.array(data)
     fig = plt.figure(num=None, figsize=(6,5))
     ax = fig.gca()
     flux = data[0,0]
     x = 1/kb/data[:,1]+np.log(flux**1.5)
-    ax.plot(x, data[:,3], "-o", label=r"$R^2$ {:1.0E}".format(flux))
-    ax.plot(x, data[:,4], "-x", label=r"$N_h$ {:1.0E}".format(flux))
-    ax.plot(x, data[:,5], "-", label=r"events {:1.0E}".format(flux))
-    ax.legend(loc="best")
+    ax.plot(x, data[:,3], "-o", label=r"$R^2$ {:1.0E}".format(flux),
+            marker="o", ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
+    ax.plot(x, data[:,4], "-x", label=r"$N_h$ {:1.0E}".format(flux),
+            marker="+", ls="", mew=1, markeredgecolor=cm(i/8), ms=7, alpha=1)
+    ax.plot(x, data[:,5], "-", label=r"events {:1.0E}".format(flux), color=cm(i/8))
+    ax.legend(loc="best", numpoints=1, prop={'size':15}, markerscale=2)
     ax.set_yscale("log")
     ax.grid()
     ax.set_title("{} % coverage".format(coverage))
