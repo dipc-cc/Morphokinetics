@@ -17,6 +17,8 @@ i = 0
 coverage = 10
 kb = 8.617332e-5
 fig = plt.figure(num=None, figsize=(6,5))
+ax = fig.gca()
+ax.grid()
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
     print(f)
@@ -37,7 +39,6 @@ for i,f in enumerate(fluxes):
     alpha = 0.5
     mew = 0
     data = np.array(data)
-    ax = fig.gca()
     flux = data[0,0]
     x = 1/kb/data[:,1]+np.log(flux**1.5)
     ax.plot(x, data[:,3], "-o", label=r"$R^2$ {:1.0E}".format(flux),
@@ -47,7 +48,6 @@ for i,f in enumerate(fluxes):
     ax.plot(x, data[:,5], "-", label=r"events {:1.0E}".format(flux), color=cm(i/8))
     ax.legend(loc="best", numpoints=1, prop={'size':10}, markerscale=1.5)
     ax.set_yscale("log")
-    ax.grid()
     ax.set_title("{} % coverage".format(coverage))
     fig.savefig("../diff.png")
     os.chdir(workingPath)
