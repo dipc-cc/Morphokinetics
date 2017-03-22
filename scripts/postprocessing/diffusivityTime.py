@@ -25,6 +25,7 @@ ax = fig.gca()
 ax.grid()
 ax.set_yscale("log")
 ax.set_title("{} % coverage".format(coverage))
+ax.set_xlabel(r"$1/k_BT + ln(f^{1.5})$")
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
     print(f)
