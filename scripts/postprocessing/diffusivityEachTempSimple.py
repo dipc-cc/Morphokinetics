@@ -40,7 +40,7 @@ def addFreeDiffusivity(fig, x, p):
     ax.annotate(r"$\frac{1}{2\alpha}m_{tt}\nu_{tt}l^2 = \frac{3}{2}\nu_{tt}$", xytext=(2e-2,4e11), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     
-def diffusivityDistance(debug, smooth, smoothCalc, binned):
+def diffusivityDistance(smooth, binned):
     p = inf.getInputParameters()
     if binned:
         d = inf.readBinnedAverages()
@@ -74,8 +74,6 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
         ax.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
         d.negs[k] = ySmooth
     handles.append(lg)
-    islD = inf.readHistograms()
-    isld = islD.islB2()
     isld = d.isld
     lg, = ax.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
     handles.append(lg)
@@ -98,17 +96,9 @@ def diffusivityDistance(debug, smooth, smoothCalc, binned):
 ##########################################################
 
 try:
-    debug = sys.argv[1] == "d"
-except IndexError:
-    debug = False
-try:
     smooth = sys.argv[2] == "y"
 except IndexError:
     smooth = False
-try:
-    smoothCalc = sys.argv[3] == "y"
-except IndexError:
-    smoothCalc = False
 try:
     binned = sys.argv[4] == "y"
 except IndexError:
@@ -126,7 +116,7 @@ for f in fluxes:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            fig = diffusivityDistance(debug, smooth, smoothCalc, binned)
+            fig = diffusivityDistance(smooth, binned)
             if t == 150 or t == 250 or t == 750:
                 fig.savefig("../../../p"+str(t)+".pdf")
                 figs.append(fig)
