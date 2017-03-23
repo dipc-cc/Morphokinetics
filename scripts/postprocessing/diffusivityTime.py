@@ -11,7 +11,7 @@ def read():
 
 def diffusivityTime(p, d, coverage):
     try:
-        divisor = d.cove[100-coverage]*d.time[100-coverage]*p.flux**0.7
+        divisor = d.time[100-coverage]*p.flux**0.7
         r = p.flux, d.cove[100-coverage]/divisor, d.diff[100-coverage]/divisor, d.hops[100-coverage]/divisor, d.even[100-coverage]/divisor
     except IndexError:
         r = p.flux, None, None, None, None
@@ -35,15 +35,15 @@ workingPath = os.getcwd()
 fluxes = inf.getFluxes()
 i = 0
 coverage1 = 10
-coverage2 = 40
-coverage3 = 60
+coverage2 = 50
+coverage3 = 70
 kb = 8.617332e-5
 fig = plt.figure(num=None, figsize=(6,5))
 ax = fig.gca()
 ax.set_yscale("log")
 ax.set_title("{} % coverage".format(coverage1))
-ax.set_xlabel(r"$1/k_BT + ln(f^{1.5})$")
-ax.set_ylabel(r"$R^2/f^{0.7}$,  $N_h/f^{0.7}$")
+ax.set_xlabel(r"$1/k_BT + ln(F^{1.5})$")
+ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
     print(f)
@@ -70,5 +70,5 @@ for i,f in enumerate(fluxes):
     plot(ax, data1, i, True)
     plot(ax, data2, i, False)
     plot(ax, data3, i, False)
-    fig.savefig("../diff.pdf", bbox_inches='tight')
+    fig.savefig("../diffusivityTime.pdf", bbox_inches='tight')
     os.chdir(workingPath)
