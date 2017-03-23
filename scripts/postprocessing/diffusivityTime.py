@@ -13,8 +13,8 @@ def read():
 
 def diffusivityTime(p, d, coverage):
     try:
-        divisor = d.time[100-coverage]*p.flux**0.7
-        r = p.flux, d.cove[100-coverage]/divisor, d.diff[100-coverage]/divisor, d.hops[100-coverage]/divisor, d.isld[100-coverage]/(p.flux**0.29)#np.max(d.isld)/(p.flux**0.29)
+        divisor = d.time[100-coverage]*(p.flux**0.7)
+        r = p.flux, d.cove[100-coverage]/divisor, d.diff[100-coverage]/divisor, d.hops[100-coverage]/divisor, np.max(d.isld[-95:])/(p.flux**0.27)#d.isld[100-coverage]/(p.flux**0.27)#
     except IndexError:
         r = p.flux, None, None, None, None
     return r
@@ -29,28 +29,30 @@ def plot(ax, ax2, data, i, showTheta):
     if ax2 != None:
         ax2.plot(x, data[:,5], label=r"$N_{isld}$",
                         color=cm(i/8))
+        ax2.plot(x, fun.power(np.exp(x), 2, 0.0333))
     lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
             marker="o", ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
-            marker="+", ls="", mew=1, markeredgecolor=cm(i/8), ms=7, alpha=1)
+            marker="+", ls="--", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
     if showTheta != None:
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         label = r"$\theta={}\%$".format(showTheta)
-        print(label, "{:g}".format(data[10,3]))
         ax.annotate(label, xy=(60,data[4,3]),
                     bbox=bbox_props)
-        ax.annotate("", xy=(44,1e7), xycoords='data', xytext=(44, 1e12),
+        ax.annotate(r"$1/3$", xy=(90,4e10),
+                    bbox=bbox_props)
+        ax.annotate("", xy=(44,1e2), xycoords='data', xytext=(44, 1e12),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
-        ax.annotate("", xy=(78,1e7), xycoords='data', xytext=(78, 1e12),
+        ax.annotate("", xy=(86,1e2), xycoords='data', xytext=(86, 1e12),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
     return lg1
 
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
 i = 0
-coverage1 = 10
-coverage2 = 50
-coverage3 = 70
+coverage1 = 30
+coverage2 = coverage1
+coverage3 = coverage1
 kb = 8.617332e-5
 fig = plt.figure(num=None, figsize=(6,5))
 ax = fig.gca()
@@ -70,7 +72,7 @@ for i,f in enumerate(fluxes):
     data1 = []
     data2 = []
     data3 = []
-    for t in inf.getTemperatures()[10:]:
+    for t in inf.getTemperatures():
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
