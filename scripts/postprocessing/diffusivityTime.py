@@ -29,7 +29,7 @@ def plot(ax, ax2, data, i):
     if ax2 != None:
         ax2.plot(x, data[:,5], label="isld",
                         color=cm(i/8))
-        #ax2.plot(x, fun.power(np.exp(x), 2, 0.0333))
+        ax2.plot(x, fun.power(np.exp(x), 2, 0.0333))
     lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
             marker="o", ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
@@ -37,8 +37,8 @@ def plot(ax, ax2, data, i):
     if i == 5:
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         label = r"$\theta=30\%$"
-        # #ax.annotate(r"$1/3$", xy=(90,4e10),
-        # #            bbox=bbox_props)
+        ax.annotate(r"$1/3$", xy=(120,2e1),
+                    bbox=bbox_props)
         ax.annotate(label, xy=(0.2,0.9), xycoords="axes fraction",
                     bbox=bbox_props)
         ax.annotate("", xy=(44,1e-5), xycoords='data', xytext=(44, 1e4),
