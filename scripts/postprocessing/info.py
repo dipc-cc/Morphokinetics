@@ -32,7 +32,9 @@ class fileData:
 
 
 def getFluxes():
-    return glob.glob("flux*")
+    fluxes = glob.glob("flux*")
+    fluxes.sort()
+    return fluxes
 
 
 def getTemperatures():
