@@ -1,6 +1,7 @@
 import numpy as np
 from scipy.optimize import curve_fit
 import operator
+import math
 
 def power(x, a, b):
     """ a*x^b function """
@@ -139,3 +140,9 @@ def getOnlyAscending(vector):
     max_index, max_value = max(enumerate(vector), key=operator.itemgetter(1))
     vector[max_index:] = max_value
     return vector
+
+
+def base10(x):
+    exp = int(math.log10(x))
+    r = r"${}\cdot10^{}$".format(str(int(x / 10**exp)), str(exp))
+    return r
