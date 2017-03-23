@@ -31,8 +31,12 @@ def addSurface(temperature, ax=0):
 def addFreeDiffusivity(ax, x, p):
     sublabel = {150: "a)", 250: "b)", 750: "c)"}
     try:
-        note = sublabel[p.temp]+" T={}, F={:1.0E}".format(int(p.temp),p.flux)
-        ax.annotate(note, xy=(0.06,0.73), xycoords="axes fraction", size=14)
+        if p.temp == 150:
+            note = sublabel[p.temp]+" ${} K, F=$".format(int(p.temp))+fun.base10(p.flux)+"$ML/s$"
+        else:
+            note = sublabel[p.temp]+" ${} K$".format(int(p.temp))
+        bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
+        ax.annotate(note, xy=(0.06,0.69), xycoords="axes fraction", size=14, bbox=bbox_props)
     except KeyError:
         pass
     x = x[0:20]
@@ -43,7 +47,7 @@ def addFreeDiffusivity(ax, x, p):
     ax.annotate(r"$\frac{1}{2\alpha}m_{tt}\nu_{tt}l^2 = \frac{3}{2}\nu_{tt}$", xytext=(2e-2,4e11), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     
-def diffusivityDistance(smooth, binned, fig=0, ax=0):
+def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     p = inf.getInputParameters()
     if binned:
         d = inf.readBinnedAverages()
@@ -71,6 +75,10 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0):
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
     lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
                marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
+    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{R^2}{t}$",
+                      color=cm(3/8), lw=2)
+    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), "--", label=r"$\frac{l^2}{2dN_a} \; \frac{N_h}{t}$",
+                      color=cm(4.1/8), lw=1.8)
 
     k=0
     label = r"$\theta_0$"
@@ -84,19 +92,41 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0):
     lg, = ax.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
     handles.append(lg)
 
-    handles = [lgR, lgN] + handles
-    ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
+    handles = [lgR, lgN, lgR3, lgN3] + handles
     ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     ax.set_ylim([1e-7,1e13])
     ax.set_xlim([1e-5,1e0])
     addFreeDiffusivity(ax, x, p)
     if innerFig:
+        ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
         addSurface(p.temp)
         fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
         plt.close(33)
     else:
         addSurface(p.temp, ax)
+        if i == 0:
+            ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
+        if i > 0:
+            position = [0.12, 0.27, 0.105, 0.22]
+            position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
+            newax = plt.gcf().add_axes(position, zorder=+100)
+            newax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
+                             marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
+            newax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
+               marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
+            newax.loglog(x, d.diff/d.time/(4*Na), label=r"new",
+                      color=cm(3/8), lw=2)
+            newax.loglog(x, d.hops/d.time/(4*Na), "--", label=r"new",
+                      color=cm(4.1/8), lw=1.8)
+            newax.xaxis.set_major_formatter(plticker.NullFormatter())
+            newax.yaxis.set_major_formatter(plticker.NullFormatter())
+            if (i == 1):
+                newax.set_xlim(7e-1,1)
+                newax.set_ylim(1,1e6)
+            if i == 2:
+                newax.set_xlim(7e-1,1)
+                newax.set_ylim(1e3,3e7)
 
 
 ##########################################################
@@ -121,14 +151,14 @@ for f in fluxes:
     os.chdir(f)
     fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,7))
     fPath = os.getcwd()
-    for t in inf.getTemperatures()[14:]:
+    for t in [150, 250, 750]:#inf.getTemperatures()[14:]:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
             diffusivityDistance(smooth, binned)
             if t == 150 or t == 250 or t == 750:
                 fig1.subplots_adjust(top=0.95, bottom=0.08, wspace=0.08)
-                diffusivityDistance(smooth, binned, fig=fig1, ax=axarr[i])
+                diffusivityDistance(smooth, binned, fig=fig1, ax=axarr[i], i=i)
                 i += 1
                 fig1.savefig("../../../figures.pdf", bbox_inches='tight')
         except FileNotFoundError:
