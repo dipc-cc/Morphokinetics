@@ -39,6 +39,10 @@ def plot(ax, ax2, data, i, showTheta):
         print(label, "{:g}".format(data[10,3]))
         ax.annotate(label, xy=(60,data[4,3]),
                     bbox=bbox_props)
+        ax.annotate("", xy=(44,1e7), xycoords='data', xytext=(44, 1e12),
+                    arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
+        ax.annotate("", xy=(78,1e7), xycoords='data', xytext=(78, 1e12),
+                    arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
     return lg1
 
 workingPath = os.getcwd()
