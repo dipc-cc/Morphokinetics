@@ -2,6 +2,7 @@ import info as inf
 import functions as fun
 import os
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 import numpy as np
 
 def read():
@@ -18,7 +19,7 @@ def diffusivityTime(p, d, coverage):
         r = p.flux, None, None, None, None
     return r
 
-def plot(ax, ax2, data, i):
+def plot(ax, ax2, data, i, showTheta):
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
@@ -26,15 +27,19 @@ def plot(ax, ax2, data, i):
     flux = data[0,0]
     x = 1/kb/data[:,1]+np.log(flux**1.5)
     if ax2 != None:
-        lg3, = ax2.plot(x, data[:,5], label=r"$N_{isld}$",
+        ax2.plot(x, data[:,5], label=r"$N_{isld}$",
                         color=cm(i/8))
-    else:
-        lg3 = None
-    lg1, = ax.plot(x, data[:,3], label=r"$R^2$"+fun.base10(flux),
+    lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
             marker="o", ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
-    lg2, = ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
+    ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
             marker="+", ls="", mew=1, markeredgecolor=cm(i/8), ms=7, alpha=1)
-    return lg1, lg2, lg3
+    if showTheta != None:
+        bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
+        label = r"$\theta={}\%$".format(showTheta)
+        print(label, "{:g}".format(data[10,3]))
+        ax.annotate(label, xy=(60,data[4,3]),
+                    bbox=bbox_props)
+    return lg1
 
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
@@ -48,11 +53,11 @@ ax = fig.gca()
 ax2 = ax.twinx()
 ax.set_yscale("log")
 ax2.set_yscale("log")
-ax.set_title("{} % coverage".format(coverage1))
 ax.set_xlabel(r"$1/k_BT + ln(F^{1.5})$")
 ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
 ax2.set_ylabel(r"$N_{isld}$")
 legends = []
+showTheta = [coverage1, coverage2, coverage3]
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
     print(f)
@@ -76,12 +81,23 @@ for i,f in enumerate(fluxes):
             pass
         os.chdir(fPath)
     ### Plot
-    lg1, lg2, g3 = plot(ax, None, data1, i)
-    g1, g2, lg3 = plot(ax, ax2, data2, i)
+    if showTheta[0] != None:
+        rLg = mlines.Line2D([], [], color='white', marker='o',
+                            markersize=10, label=r"$R^2$")
+        nLg = mlines.Line2D([], [], color='white', marker='+', markeredgecolor="black", markeredgewidth=1,
+                            markersize=8, label=r"$N_h$")
+        iLg = mlines.Line2D([], [], color='black', marker='',
+                            markersize=8, label=r"$N_{isld}$")
+        legends.append(rLg)
+        legends.append(nLg)
+        legends.append(iLg)
+    lg1 = plot(ax, None, data1, i, showTheta[0])
+    showTheta = showTheta[1:]
+    plot(ax, ax2, data2, i, showTheta[0])
+    showTheta = showTheta[1:]
     legends.append(lg1)
-    legends.append(lg2)
-    legends.append(lg3)
-    plot(ax, None, data3, i)
+    plot(ax, None, data3, i, showTheta[0])
+    showTheta = [None, None, None]
     ax.legend(handles=legends, loc=1, numpoints=1, ncol=2, prop={'size':8}, markerscale=1)
     fig.savefig("../diffusivityTime.pdf", bbox_inches='tight')
     os.chdir(workingPath)
