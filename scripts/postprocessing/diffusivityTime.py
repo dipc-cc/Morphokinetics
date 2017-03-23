@@ -1,4 +1,5 @@
 import info as inf
+import functions as fun
 import os
 import matplotlib.pyplot as plt
 import numpy as np
@@ -25,12 +26,15 @@ def plot(ax, ax2, data, i):
     flux = data[0,0]
     x = 1/kb/data[:,1]+np.log(flux**1.5)
     if ax2 != None:
-        ax2.plot(x, data[:,5])
-    lg1, = ax.plot(x, data[:,3], label=r"$R^2$ {:1.0E}".format(flux),
+        lg3, = ax2.plot(x, data[:,5], label=r"$N_{isld}$",
+                        color=cm(i/8))
+    else:
+        lg3 = None
+    lg1, = ax.plot(x, data[:,3], label=r"$R^2$"+fun.base10(flux),
             marker="o", ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
-    lg2, = ax.plot(x, data[:,4], label=r"$N_h$ {:1.0E}".format(flux),
+    lg2, = ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
             marker="+", ls="", mew=1, markeredgecolor=cm(i/8), ms=7, alpha=1)
-    return lg1, lg2
+    return lg1, lg2, lg3
 
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
@@ -47,6 +51,7 @@ ax2.set_yscale("log")
 ax.set_title("{} % coverage".format(coverage1))
 ax.set_xlabel(r"$1/k_BT + ln(F^{1.5})$")
 ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
+ax2.set_ylabel(r"$N_{isld}$")
 legends = []
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
@@ -71,11 +76,12 @@ for i,f in enumerate(fluxes):
             pass
         os.chdir(fPath)
     ### Plot
-    lg1, lg2 = plot(ax, None, data1, i)
+    lg1, lg2, g3 = plot(ax, None, data1, i)
+    g1, g2, lg3 = plot(ax, ax2, data2, i)
     legends.append(lg1)
     legends.append(lg2)
-    plot(ax, ax2, data2, i)
+    legends.append(lg3)
     plot(ax, None, data3, i)
-    ax.legend(handles=legends, loc=1, numpoints=1, prop={'size':8}, markerscale=1.5)
+    ax.legend(handles=legends, loc=1, numpoints=1, ncol=2, prop={'size':8}, markerscale=1)
     fig.savefig("../diffusivityTime.pdf", bbox_inches='tight')
     os.chdir(workingPath)
