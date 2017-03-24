@@ -53,7 +53,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int outerPerimeter;
   private double diffusivityDistance;
   private int mobileAtoms;
-  private int hops;
+  private long hops;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -430,7 +430,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    *
    * @return
    */
-  public int getTotalHops() {
+  public long getTotalHops() {
     return hops;
   }
 
