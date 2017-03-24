@@ -9,6 +9,10 @@ package ratesLibrary;
 import static java.lang.Math.pow;
 import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
+import static kineticMonteCarlo.atom.CatalysisAtom.BRBR;
+import static kineticMonteCarlo.atom.CatalysisAtom.CUSCUS;
+import static kineticMonteCarlo.atom.CatalysisAtom.BRCUS;
+import static kineticMonteCarlo.atom.CatalysisAtom.CUSBR;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 
@@ -18,11 +22,13 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
  */
 public class CatalysisRates implements IRates {
 
-  private final double[][][] energies;
+  private final double[][][] diffusionEnergies;
+  private final double[][] adsorption_desorptionEnergies;
   private double diffusionMl;
   
   private final double prefactor;
-
+  
+  private final double[] mass;
   /**
    * Same as {@link BasicGrowthSyntheticRates}.
    */
@@ -39,17 +45,43 @@ public class CatalysisRates implements IRates {
     double E8 = 1.6;
     double Einf = 9999999;
     
+    double E9 = 1.6;
+    double E10 = 1.3;
+    double E11 = 4.6;
+    double E12 = 2.0;
+    double E13 = 3.3;
+    
     prefactor = 1e13;
     
-    energies = new double[2][2][2];
-    energies[BR][CO][BR] = E1;
+    diffusionEnergies = new double[2][2][2];
+    /*energies[BR][CO][BR] = E1;
     energies[BR][CO][CUS] = E2;
     energies[CUS][CO][BR] = E3;
     energies[CUS][CO][CUS] = E4;
     energies[BR][O][BR] = E5;
     energies[BR][O][CUS] = E6;
     energies[CUS][O][BR] = E7;
-    energies[CUS][O][CUS] = E8;       
+    energies[CUS][O][CUS] = E8;*/
+    diffusionEnergies[CO][BR][BR] = E1;
+    diffusionEnergies[CO][BR][CUS] = E2;
+    diffusionEnergies[CO][CUS][BR] = E3;
+    diffusionEnergies[CO][CUS][CUS] = E4;
+    diffusionEnergies[O][BR][BR] = E5;
+    diffusionEnergies[O][BR][CUS] = E6;
+    diffusionEnergies[O][CUS][BR] = E7;
+    diffusionEnergies[O][CUS][CUS] = E8;
+    
+    adsorption_desorptionEnergies = new double[2][4];
+    adsorption_desorptionEnergies[CO][BR] = E9;
+    adsorption_desorptionEnergies[CO][CUS] = E10;
+    adsorption_desorptionEnergies[O][BRBR] = E11;
+    adsorption_desorptionEnergies[O][CUSCUS] = E12;
+    adsorption_desorptionEnergies[O][CUSBR] = E13;
+    adsorption_desorptionEnergies[O][BRCUS] = E13;
+    
+    mass = new double[2];
+    mass[CO]=28.01055;
+    mass[O]=15.9994;
   }
 
   @Override
@@ -83,11 +115,15 @@ public class CatalysisRates implements IRates {
 
   @Override
   public double getEnergy(int i, int j) {
-    return energies[i][j][0];
+    return diffusionEnergies[i][j][0];
+  }
+  
+  private double getAdsorptionRate(int sourceType, double pressure, double temperature) {
+    return pressure * 10 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
   }
   
   private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
-    return prefactor * Math.exp(-energies[sourceType][sourceSite][destinationSite] / (kB * temperature));
+    return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
 
   /**
