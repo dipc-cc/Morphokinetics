@@ -3,7 +3,12 @@ import functions as fun
 import os
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
+from matplotlib.ticker import FixedFormatter
 import numpy as np
+
+
+def getTemp(x,F):
+    return 1/(8.62e-5*(x-np.log(F**1.5)))
 
 def read():
     p = inf.getInputParameters()
@@ -61,6 +66,12 @@ ax.set_xlabel(r"$1/k_BT + ln(F^{1.5})$")
 ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
 ax2.set_ylabel("isld")
 ax.set_xlim(0,250)
+ax3 = ax.twiny()
+ax3.set_xlim(0,250)
+ax3.set_xlabel(r"Temperature at $F=5\cdot10^4$")
+x2labels = [int(getTemp(i,1e4)) for i in np.arange(0,260,50)]
+x2labels = [r"$\infty$" if i<0 else i for i in x2labels]
+ax3.get_xaxis().set_major_formatter(FixedFormatter(x2labels))
 legends = []
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
@@ -91,7 +102,7 @@ for i,f in enumerate(fluxes):
         legends.append(iLg)
     lg1 = plot(ax, ax2, data1, i)
     legends.append(lg1)
-    ax.legend(handles=legends, bbox_to_anchor=(0.75, 0.88),
+    ax.legend(handles=legends, bbox_to_anchor=(0.75, 0.32),
               bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=2, prop={'size':8}, markerscale=1)
     fig.savefig("../diffusivityTime.pdf", bbox_inches='tight')
     os.chdir(workingPath)
