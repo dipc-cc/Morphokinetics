@@ -112,7 +112,8 @@ def readAverages():
     prob = np.mean([i[:,5]  for i in allData], axis=0)
     even = np.mean([i[:,7]  for i in allData], axis=0)
     diff = np.mean([i[:,12] for i in allData], axis=0)
-    hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
+    #hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
+    hops = np.mean([i[:,15] for i in allData], axis=0)
     negs = []
     negs.append(np.mean([i[:,16] for i in allData], axis=0))
     negs.append(np.mean([i[:,17] for i in allData], axis=0))
@@ -141,7 +142,7 @@ def readBinnedAverages():
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)-1):
+    for i in range(0,len(filesN)):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
