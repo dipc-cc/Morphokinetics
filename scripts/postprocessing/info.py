@@ -101,7 +101,7 @@ def readAverages():
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)-1):
+    for i in range(0,len(filesN)):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
@@ -170,12 +170,12 @@ def readBinnedAverages():
 
     return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
 
-def readInstantaneous():
+def readInstantaneous(doBin=True):
     """ reads instantaneous multiplicities, for the moment only valid for AgUc """
     allData = []
 
     filesN = glob.glob("instantaneous[0-9]*.txt")
-    for i in range(0,len(filesN)-1):
+    for i in range(0,len(filesN)):
         fileName = "instantaneous"+str(i)+".txt"
         data = np.loadtxt(fname=fileName)
         Malpha = data[:,1:]
@@ -186,15 +186,21 @@ def readInstantaneous():
         m.append(np.sum(Malpha[:,14:21], axis=1))
         m.append(np.sum(Malpha[:,21:28], axis=1))
         allData.append(m)
-    firstExecCov = allData[0][:][0]
-    hCov = np.exp(np.histogram(np.log(firstExecCov),100)[1])
-    covT = [i[:][0]  for i in allData]
-    Malpha = []
-    Malpha.append(processData(hCov, covT, [i[1] for i in allData]))
-    Malpha.append(processData(hCov, covT, [i[2] for i in allData]))
-    Malpha.append(processData(hCov, covT, [i[3] for i in allData]))
-    Malpha.append(processData(hCov, covT, [i[4] for i in allData]))
-
+    if doBin:
+        firstExecCov = allData[0][:][0]
+        hCov = np.exp(np.histogram(np.log(firstExecCov),100)[1])
+        covT = [i[:][0]  for i in allData]
+        Malpha = []
+        Malpha.append(processData(hCov, covT, [i[1] for i in allData]))
+        Malpha.append(processData(hCov, covT, [i[2] for i in allData]))
+        Malpha.append(processData(hCov, covT, [i[3] for i in allData]))
+        Malpha.append(processData(hCov, covT, [i[4] for i in allData]))
+    else:
+        Malpha = []
+        allData = np.array(allData)
+        print(np.shape(allData))
+        for j in range(1,5): # alpha
+            Malpha.append(np.mean(allData[:,j,:], axis=0))
     return Malpha
 
 class islandDistribution:
