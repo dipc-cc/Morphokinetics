@@ -198,7 +198,6 @@ def readInstantaneous(doBin=True):
     else:
         Malpha = []
         allData = np.array(allData)
-        print(np.shape(allData))
         for j in range(1,5): # alpha
             Malpha.append(np.mean(allData[:,j,:], axis=0))
     return Malpha
@@ -221,7 +220,6 @@ def readPossibleFromList():
         allData.append(m)
     Malpha = []
     allData = np.array(allData)
-    print(np.shape(allData))
     for j in range(1,5): # alpha
         Malpha.append(np.mean(allData[:,j,:], axis=0))
     return Malpha
