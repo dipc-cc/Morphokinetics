@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 from matplotlib.ticker import FixedFormatter
 import numpy as np
+import math
 
 
 def getTemp(x,F):
@@ -18,10 +19,13 @@ def read():
 
 def diffusivityTime(p, d, coverage):
     try:
-        divisor = 4*coverage*p.sizI*p.sizJ*d.time[100-coverage]*(p.flux**0.7)
-        r = p.flux, d.cove[100-coverage]/divisor, d.diff[100-coverage]/divisor, d.hops[100-coverage]/divisor, np.max(d.isld[-95:])/(p.flux**0.27)#d.isld[100-coverage]/(p.flux**0.27)#
+        i = len(d.cove)-(100-coverage)
+        divisor = 4*coverage*p.sizI*p.sizJ*d.time[i]*(p.flux**0.7)
+        r = [p.flux, d.cove[i]/divisor, d.diff[i]/divisor, d.hops[i]/divisor, np.max(d.isld[-95:])/(p.flux**0.27)]#d.isld[i]/(p.flux**0.27)#
+        if math.isnan(d.hops[i]): # sometimes the number of hops is not properly saved, because it was an int instead of long
+            r[3] = (d.even[i] - (d.cove[i]*p.sizI*p.sizJ))/divisor # recalculating it: even - depositions
     except IndexError:
-        r = p.flux, None, None, None, None
+        r = [p.flux, None, None, None, None]
     return r
 
 def plot(ax, ax2, data, i):
