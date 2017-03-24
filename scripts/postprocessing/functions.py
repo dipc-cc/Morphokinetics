@@ -128,7 +128,7 @@ def timeAverage(v, t):
     vAvg[0] = partialSum / t[0]
     for i in range(1,len(v)):
         partialSum = partialSum + v[i]*(t[i] - t[i-1])
-        vAvg[i] = partialSum / t[i]
+        vAvg[i] = partialSum / t[i] #if /t[i] is removed, it'd the integral
     return vAvg
 
 
