@@ -22,13 +22,14 @@ def diffusivityTime(p, d, coverage):
         i = len(d.cove)-(100-coverage)
         divisor = 4*coverage*p.sizI*p.sizJ*d.time[i]*(p.flux**0.7)
         r = [p.flux, d.cove[i]/divisor, d.diff[i]/divisor, d.hops[i]/divisor, np.max(d.isld[-95:])/(p.flux**0.27)]#d.isld[i]/(p.flux**0.27)#
-        if math.isnan(d.hops[i]): # sometimes the number of hops is not properly saved, because it was an int instead of long
+        if math.isnan(d.hops[i]) or d.hops[i] < 0: # sometimes the number of hops is not properly saved, because it was an int instead of long
             r[3] = (d.even[i] - (d.cove[i]*p.sizI*p.sizJ))/divisor # recalculating it: even - depositions
     except IndexError:
         r = [p.flux, None, None, None, None]
     return r
 
 def plot(ax, ax2, data, i):
+    marker = ["o", "s", "H", "D","^"]
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
@@ -40,16 +41,17 @@ def plot(ax, ax2, data, i):
                         color=cm(i/8))
         ax2.plot(x, fun.power(np.exp(x), 2, 0.0333))
     lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
-            marker="o", ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
+            marker=marker[i], ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
             marker="+", ls="--", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
-    if i == 5:
+    if i == 4:
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         label = r"$\theta=30\%$"
-        ax.annotate(r"$1/3$", xy=(120,2e1),
+        ax.annotate(r"asymptote", xy=(140,3e2),
                     bbox=bbox_props)
         ax.annotate(label, xy=(0.2,0.9), xycoords="axes fraction",
                     bbox=bbox_props)
+        #ax.annotate(
         ax.annotate("", xy=(44,1e-5), xycoords='data', xytext=(44, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
         ax.annotate("", xy=(86,1e-5), xycoords='data', xytext=(86, 1e4),
@@ -66,9 +68,8 @@ ax = fig.gca()
 ax2 = ax.twinx()
 ax.set_yscale("log")
 ax2.set_yscale("log")
+ax2.set_ylabel(r"$N_{isl}$")
 ax.set_xlabel(r"$1/k_BT + ln(F^{1.5})$")
-ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
-ax2.set_ylabel("isld")
 ax.set_xlim(0,250)
 ax3 = ax.twiny()
 ax3.set_xlim(0,250)
@@ -78,6 +79,8 @@ x2labels = [r"$\infty$" if i<0 else i for i in x2labels]
 ax3.get_xaxis().set_major_formatter(FixedFormatter(x2labels))
 legends = []
 for i,f in enumerate(fluxes):
+    if i<-1:
+        continue
     temperaturesPlot = []
     print(f)
     os.chdir(f)
@@ -96,11 +99,11 @@ for i,f in enumerate(fluxes):
     ### Plot
     if i == 0:
         rLg = mlines.Line2D([], [], color='white', marker='o',
-                            markersize=10, label=r"$R^2$")
+                            markersize=10, label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t F^{0.7}}$")
         nLg = mlines.Line2D([], [], color='white', marker='+', markeredgecolor="black", markeredgewidth=1,
-                            markersize=8, label=r"$N_h$")
+                            markersize=8, label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t F^{0.7}}$")
         iLg = mlines.Line2D([], [], color='black', marker='',
-                            markersize=8, label="isld")
+                            markersize=8, label=r"$N_{isl}$")
         legends.append(rLg)
         legends.append(nLg)
         legends.append(iLg)
