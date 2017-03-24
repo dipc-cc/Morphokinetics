@@ -203,6 +203,29 @@ def readInstantaneous(doBin=True):
             Malpha.append(np.mean(allData[:,j,:], axis=0))
     return Malpha
 
+def readPossibleFromList():
+    """ reads instantaneous multiplicities, for the moment only valid for AgUc """
+    allData = []
+
+    filesN = glob.glob("possibleFromList[0-9]*.txt")
+    for i in range(0,len(filesN)-1):
+        fileName = "possibleFromList"+str(i)+".txt"
+        data = np.loadtxt(fname=fileName)
+        Malpha = data[:,1:]
+        m=[]
+        m.append(data[:,0])
+        m.append(np.sum(Malpha[:,0:7], axis=1))
+        m.append(np.sum(Malpha[:,7:14], axis=1))
+        m.append(np.sum(Malpha[:,14:21], axis=1))
+        m.append(np.sum(Malpha[:,21:28], axis=1))
+        allData.append(m)
+    Malpha = []
+    allData = np.array(allData)
+    print(np.shape(allData))
+    for j in range(1,5): # alpha
+        Malpha.append(np.mean(allData[:,j,:], axis=0))
+    return Malpha
+
 class islandDistribution:
     def __init__(self, data):
         self.islD = data
