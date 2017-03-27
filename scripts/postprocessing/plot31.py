@@ -12,13 +12,11 @@ import functions as fun
 from scipy.signal import savgol_filter
 
 
-def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
+def diffusivityDistance(binned, fig=0, ax=0, i=-1):
     p = inf.getInputParameters()
     if binned:
-        print(1)
         d = inf.readBinnedAverages()
     else:
-        print(2)
         d = inf.readAverages()
 
     cove = d.getRecomputedCoverage()/p.sizI/p.sizJ
@@ -33,56 +31,37 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
-    diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR, = ax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d\langle R^2 \rangle}{dt}$",
-               marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
-    lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d\langle N_h\rangle}{dt}$",
-               marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
-    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t}$",
-                      ls="-", color=cm(3/8), lw=2)
-    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t}$",
-                      ls=":", color=cm(4.1/8), lw=1.8)
+    lg, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d\langle N_h\rangle}{dt}$",
+               marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha);    handles.append(lg)
 
-    k=0
-    label = r"$\theta_0$"
-    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, ls="-.", color=cm(1/8))
-    if smooth:
-        ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
-        ax.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
-        d.negs[k] = ySmooth
-    handles.append(lg)
 
     Malpha = inf.readPossibleFromList()
     for l in range(0,4):
         Malpha[l] = fun.timeDerivative(Malpha[l], d.time)
-    lg, = plt.loglog(x, Malpha[0], label=r"$\frac{m_0}{n_0}$");    handles.append(lg) # Around 6
-    lg, = plt.loglog(x, Malpha[1], label=r"$\frac{m_1}{n_1}$");    handles.append(lg) # Around 2
-    lg, = plt.loglog(x, Malpha[2], label=r"$\frac{m_2}{n_2}$");    handles.append(lg) # Around 2
-    lg, = plt.loglog(x, Malpha[3], label=r"$\frac{m_3}{n_3}$");    handles.append(lg) # Around 0.1
+
     individualHopsCalc = []
     individualHopsCalc.append((Malpha[0]*ratios[0])/(4*Na))
     individualHopsCalc.append((Malpha[1]*ratios[8])/(4*Na))
     individualHopsCalc.append((Malpha[2]*ratios[15])/(4*Na))
     individualHopsCalc.append((Malpha[3]*ratios[24])/(4*Na))
-    lg, = plt.loglog(x, individualHopsCalc[0], "p-", label="hops calc0")
-    handles.append(lg)
-    lg, = plt.loglog(x, individualHopsCalc[1], "x-", label="hops calc1")#,
-    handles.append(lg)
-    lg, = plt.loglog(x, individualHopsCalc[2], "o-", label="hops calc2")#
-    handles.append(lg)
-    lg, = plt.loglog(x, individualHopsCalc[3], "*-", label="hops calc3")#
-    handles.append(lg)
     hopsCalc = np.sum(individualHopsCalc, axis=0)
-    lgC, = plt.loglog(x, hopsCalc, "+-", label="hops calc")
+    lgC, = plt.loglog(x, hopsCalc, "-", label="hops calc")
 #                   marker="*", ls="", mew=mew, markerfacecolor=cm(5/8), ms=5, alpha=alpha)
+    lg, = plt.loglog(x, individualHopsCalc[0], "-", label="hops calc0")
+    handles.append(lg)
+    lg, = plt.loglog(x, individualHopsCalc[1], "-", label="hops calc1")#,
+    handles.append(lg)
+    lg, = plt.loglog(x, individualHopsCalc[2], "-", label="hops calc2")#
+    handles.append(lg)
+    lg, = plt.loglog(x, individualHopsCalc[3], "-", label="hops calc3")#
+    handles.append(lg)
     handles.append(lgC)
-    handles = [lgR3] + handles + [lgN3]
     ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     #ax.set_ylim([1e-7,1e13])
-    ax.set_xlim([1e-1,1e0])
+    ax.set_xlim([1e-5,1e0])
     ax.legend(loc="best", prop={'size':6})
     #ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
     fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
