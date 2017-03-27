@@ -1,4 +1,4 @@
-import functions as f
+import functions as fun
 import info
 import numpy as np
 import matplotlib.pyplot as plt
@@ -111,15 +111,19 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     if showPlot:   
         axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
     for i in range(0,len(rngt)-1):
-        a, b = f.linearFit(x, y, rngt[i], rngt[i+1])
+        a, b = fun.linearFit(x, y, rngt[i], rngt[i+1])
         slopes.append(b)
         if showPlot:
-            axis.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(f.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", label="{} {} {:03.3f} ".format(labelAlfa[alfa],labelRange[i],b))
+            axis.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", label="{} {} {:03.3f} ".format(labelAlfa[alfa],labelRange[i],b))
+            if alfa != -1 and alfa < 3:
+                xHalf = (x[rngt[i]]+x[rngt[i+1]]+1)/2
+                yHalf = np.exp(fun.linear(xHalf, a, b))#*3
+                text = "{:03.3f}".format(b)
+                bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
+                axis.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
             if i == len(rngt)-2:
                 if alfa == -1:
                     axis.legend(prop={'size': 8},loc="best")# bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-                else:
-                    axis.legend(prop={'size': 5.1}, loc="best")#bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., ncol=2)
     return slopes
 
 def plotOmegas(x, y, axis, i):
