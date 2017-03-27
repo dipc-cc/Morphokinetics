@@ -103,12 +103,13 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
 
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
+    markers=["o", "s","D","^","o"]
     labelRange = ['low', 'med', 'high']
     labelRange = labelRange+list([str(i) for i in rngt])
     cm = plt.get_cmap('Set1')
     slopes = []
     if showPlot:   
-        axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none')#, "o", lw=0.5)
+        axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
     for i in range(0,len(rngt)-1):
         a, b = f.linearFit(x, y, rngt[i], rngt[i+1])
         slopes.append(b)
@@ -116,15 +117,31 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
             axis.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(f.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", label="{} {} {:03.3f} ".format(labelAlfa[alfa],labelRange[i],b))
             if i == len(rngt)-2:
                 if alfa == -1:
-                    axis.legend(prop={'size': 8}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+                    axis.legend(prop={'size': 8},loc="best")# bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
                 else:
-                    axis.legend(prop={'size': 5.1}, bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., ncol=2)
+                    axis.legend(prop={'size': 5.1}, loc="best")#bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0., ncol=2)
     return slopes
 
-
+def plotOmegas(x, y, axis, i):
+    markers=["o", "s","D","^"]
+    newax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
+    newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
+    newax.set_ylim(-0.05,1.05)
+    loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
+    newax.xaxis.set_major_locator(loc)
+    loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
+    newax.yaxis.set_major_locator(loc)
+    newax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", "$1/3$", "$2/3$", "$1$")))
+    newax.set_xlim(xmin,xmax)
+    newax.legend(prop={'size': 7}, loc=(0.6,0.2), scatterpoints=1)# bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
+    axis.semilogy(x, y, ".-", color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], markeredgecolor=cm(abs(i/9)))
+    axis.set_ylim(1e-3,2)
+    axis.set_ylabel(r"$\omega_\alpha$")
+    axis.set_xlabel(r"$1/k_BT$")
+    
 temperatures = info.getTemperatures()
 p = info.getInputParameters(glob.glob("*/output*")[0])
-p.maxC -= 1
+p.maxC += 1
 calculationMode = p.calc
 kb = 8.6173324e-5
 tempMavg = []
@@ -245,31 +262,18 @@ for cov in range(-p.maxC,0):
         
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa))
         if showPlot:
-            ax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
             y = np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
             if p.calc == "basic" and p.rLib == "version2" and i == 1:
                 y += tempOavg[:,cov,11]
             if p.calc == "graphene" and i == 1:
                 y += np.sum(tempOavg[:,cov,9:11], axis=1)
-            ax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none')
-            ax.set_ylim(-0.05,1.05)
-            loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
-            ax.xaxis.set_major_locator(loc)
-            loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
-            ax.yaxis.set_major_locator(loc)
-            ax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", "$1/3$", "$2/3$", "$1$")))
-            ax.set_xlim(xmin,xmax)
-            axarr[2].semilogy(x, np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]],   axis=1), ".-", color=cm(abs(i/9)), label=labelAlfa[i])
-            axarr[2].set_ylim(1e-3,2)
-            axarr[2].legend(prop={'size': 8}, bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
-            axarr[2].set_ylabel(r"$\omega_\alpha$")
+            plotOmegas(x, y, axarr[2], i)
         for j in range(0,maxRanges): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
-        axarr[2].set_xlabel(r"$1/k_BT$")
-        plt.savefig("plot"+str(p.maxC+cov)+".svg")
+        plt.savefig("plot"+str(p.maxC+cov)+".svg", bbox_inches='tight')
         plt.close()
     
 
