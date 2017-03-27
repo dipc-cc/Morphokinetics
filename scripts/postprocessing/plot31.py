@@ -26,11 +26,9 @@ def diffusivityDistance(binned, fig=0, ax=0, i=-1):
     fig = plt.figure(num=33, figsize=(6,5))
     ax = plt.gca()
         
-    x = list(range(0,len(d.time)))
     x = cove
     cm = plt.get_cmap("Accent")
     alpha = 0.5
-    mew = 0
     handles = []
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
     lg, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d\langle N_h\rangle}{dt}$",
