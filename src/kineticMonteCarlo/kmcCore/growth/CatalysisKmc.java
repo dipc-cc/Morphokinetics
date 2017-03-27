@@ -10,6 +10,7 @@ import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static java.lang.String.format;
+import utils.StaticRandom;
 
 /**
  *
@@ -81,11 +82,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom destinationAtom;
     boolean shouldEnd = false;
     if (originAtom == null) {
-      //destinationAtom = depositNewAtom();
-      destinationAtom = null;
+      destinationAtom = depositNewAtom();
     } else {
       do {
         destinationAtom = chooseRandomHop(originAtom);
+        if (destinationAtom.equals(originAtom)) {
+          destinationAtom.equals(originAtom);
+          break;
+        }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
@@ -212,7 +216,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   private CatalysisAtom depositNewAtom() {
-    CatalysisAtom destinationAtom;
+    /*CatalysisAtom destinationAtom;
     int ucIndex = 0;
 
     do {
@@ -229,7 +233,28 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulationData[simulationNumber][0][0] = destinationAtom.getiHexa();
     simulationData[simulationNumber][0][1] = destinationAtom.getjHexa();
     simulationData[simulationNumber][0][2] = getTime();
+    return destinationAtom;*/
+    
+    CatalysisAtom destinationAtom;
+    int ucIndex = 0;
+    
+    do {
+      int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+      ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
+      int atomIndex = random % getLattice().getUnitCellSize();
+      destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
+      byte randomType = (byte) StaticRandom.rawInteger(1);
+      destinationAtom.setType(randomType);
+    } while (!depositAtom(destinationAtom));
+    // update the free area and the deposition rate counting just deposited atom
+    
+    //getList().setDepositionProbability(depositionRatePerSite * freeArea);
+    
+    destinationAtom.setDepositionTime(getTime());
+    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
+    
     return destinationAtom;
+    
   }
   
   private void getLinearTrend() {

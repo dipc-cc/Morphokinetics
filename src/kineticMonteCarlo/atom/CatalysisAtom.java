@@ -17,6 +17,10 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   public static final byte O = 1;
   public static final byte BR = 0;
   public static final byte CUS = 1;
+  public static final byte BRBR = 0;
+  public static final byte BRCUS = 1;
+  public static final byte CUSBR = 2;
+  public static final byte CUSCUS = 3;
   
   private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
 
