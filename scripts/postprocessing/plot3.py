@@ -35,10 +35,9 @@ def diffusivityDistance(binned, fig=0, ax=0, i=-1):
     mew = 0
     diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t}$",
-                      ls="-", color=cm(3/8), lw=2)
-    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t}$",
-                      ls=":", color=cm(4.1/8), lw=1.8)
+    #lg, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t}$", ls="-", color=cm(3/8), lw=2); handles.append(lg)
+    lg, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t}$",
+                      marker="x", color=cm(4.1/8), ls="", solid_capstyle="round",lw=5); handles.append(lg)
 
     Malpha = inf.readPossibleFromList()#/d.time
     MalphaP = inf.readInstantaneous(False)
@@ -66,14 +65,13 @@ def diffusivityDistance(binned, fig=0, ax=0, i=-1):
     lgC, = plt.loglog(x, hopsCalc, label="hops calc")
 #                   marker="*", ls="", mew=mew, markerfacecolor=cm(5/8), ms=5, alpha=alpha)
     handles.append(lgC)
-    handles = [lgR3] + handles + [lgN3]
     ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     #ax.set_ylim([1e-7,1e13])
     ax.set_xlim([1e-5,1e0])
     ax.legend(loc="best", prop={'size':6})
     #ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
-    fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".pdf")
+    fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
     plt.close(33)
           
 
