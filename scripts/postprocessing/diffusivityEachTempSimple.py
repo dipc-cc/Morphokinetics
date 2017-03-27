@@ -4,6 +4,7 @@ import info as inf
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
+from matplotlib.patches import Rectangle
 import glob
 import os
 import sys
@@ -31,12 +32,12 @@ def addSurface(temperature, ax=0):
 def addFreeDiffusivity(ax, x, p):
     sublabel = {150: "a)", 250: "b)", 750: "c)"}
     try:
-        if p.temp == 150:
-            note = sublabel[p.temp]+" ${} K, F=$".format(int(p.temp))+fun.base10(p.flux)+"$ML/s$"
-        else:
-            note = sublabel[p.temp]+" ${} K$".format(int(p.temp))
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
-        ax.annotate(note, xy=(0.06,0.69), xycoords="axes fraction", size=14, bbox=bbox_props)
+        if p.temp == 150:
+            note = "$F=$".format(int(p.temp))+fun.base10(p.flux)+"$ML/s$\n${}".format(p.sizI)+r"\times{}$".format(p.sizJ)
+            ax.annotate(note, xy=(0.06,0.90), xycoords="axes fraction", size=14, bbox=bbox_props)
+        note = sublabel[p.temp]+" ${} K$".format(int(p.temp))
+        ax.annotate(note, xy=(0.06,0.74), xycoords="axes fraction", size=14, bbox=bbox_props)
     except KeyError:
         pass
     x = x[0:20]
@@ -44,7 +45,11 @@ def addFreeDiffusivity(ax, x, p):
     y = y * 3/2*p.getRatios()[0]
     cm = plt.get_cmap("Accent")
     ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{1}{2\alpha}m_{tt}\nu_{tt}l^2 = \frac{3}{2}\nu_{tt}$", xytext=(2e-2,4e11), textcoords="data",
+    ax.annotate(r"$\frac{1}{2d}m_{00}\nu_{00}l^2$", xytext=(2e-2,4e11), textcoords="data",
+                xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
+    y = y / 2
+    ax.plot(x, y, "-", color=cm(8/8))
+    ax.annotate(r"$\frac{1}{4d}m_{00}\nu_{00}l^2$", xytext=(2e-2,2e10), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     
 def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
@@ -70,19 +75,19 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     mew = 0
     diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR, = ax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
+    lgR, = ax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d\langle R^2 \rangle}{dt}$",
                marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
-    lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
+    lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d\langle N_h\rangle}{dt}$",
                marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
-    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{R^2}{t}$",
-                      color=cm(3/8), lw=2)
-    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), "--", label=r"$\frac{l^2}{2dN_a} \; \frac{N_h}{t}$",
-                      color=cm(4.1/8), lw=1.8)
+    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t}$",
+                      ls="-", color=cm(3/8), lw=2)
+    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t}$",
+                      ls=":", color=cm(4.1/8), lw=1.8)
 
     k=0
     label = r"$\theta_0$"
-    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, marker=".", color=cm(1/8))
+    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, ls="-.", color=cm(1/8))
     if smooth:
         ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
         ax.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
@@ -92,7 +97,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     lg, = ax.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
     handles.append(lg)
 
-    handles = [lgR, lgN, lgR3, lgN3] + handles
+    handles = [ lgR3, lgN3, lgR, lgN] + handles
     ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     ax.set_ylim([1e-7,1e13])
@@ -106,8 +111,15 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     else:
         addSurface(p.temp, ax)
         if i == 0:
-            ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
+            ax.legend(handles=handles, loc=(0.46,0.27), numpoints=1, prop={'size':13}, markerscale=1, labelspacing=0.4)
         if i > 0:
+            xlim = (7e-1,1)
+            if i == 1:
+                rect = Rectangle((7e-1, 1e1), 30, 1e6, facecolor="white", edgecolor=cm(8/8))
+                ax.add_patch(rect)
+            if i == 2:
+                rect = Rectangle((7e-1, 1e3), 30, 1e7, facecolor="white", edgecolor=cm(8/8))
+                ax.add_patch(rect)
             position = [0.12, 0.27, 0.105, 0.22]
             position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
             newax = plt.gcf().add_axes(position, zorder=+100)
@@ -121,10 +133,24 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
                       color=cm(4.1/8), lw=1.8)
             newax.xaxis.set_major_formatter(plticker.NullFormatter())
             newax.yaxis.set_major_formatter(plticker.NullFormatter())
-            if (i == 1):
+            if i == 1:
+                ax.annotate("",xy=(7e-1,1e1), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                            xytext=(3e-3,1.5e-1))
+                ax.annotate("",xy=(1,1e1), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                            xytext=(3.8e-1,1.3e-1))
+                #ax.annotate("",xy=(1,1e6), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                #            xytext=(3.8e-1,2e4))
+                ax.annotate("",xy=(7e-1,1e6), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                            xytext=(2.8e-3,2e4))
                 newax.set_xlim(7e-1,1)
                 newax.set_ylim(1,1e6)
             if i == 2:
+                ax.annotate("",xy=(7e-1,1e3), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                            xytext=(3e-3,1.5e-1))
+                ax.annotate("",xy=(1,1e3), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                            xytext=(3.8e-1,1.3e-1))
+                ax.annotate("",xy=(7e-1,1e7), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                            xytext=(2.8e-3,2e4))
                 newax.set_xlim(7e-1,1)
                 newax.set_ylim(1e3,3e7)
 
@@ -155,7 +181,7 @@ for f in fluxes:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
-            diffusivityDistance(smooth, binned)
+            #diffusivityDistance(smooth, binned)
             if t == 150 or t == 250 or t == 750:
                 fig1.subplots_adjust(top=0.95, bottom=0.08, wspace=0.08)
                 diffusivityDistance(smooth, binned, fig=fig1, ax=axarr[i], i=i)
