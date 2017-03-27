@@ -2,6 +2,8 @@
 # sed -i '1d' data0.txt
 import info as inf
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 from matplotlib.patches import Rectangle
@@ -68,7 +70,7 @@ def diffusivityDistance(binned, fig=0, ax=0, i=-1):
     ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     #ax.set_ylim([1e-7,1e13])
-    #ax.set_xlim([1e-1,1e0])
+    ax.set_xlim([1e-5,1e0])
     ax.legend(loc="best", prop={'size':6})
     #ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
     fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".pdf")
