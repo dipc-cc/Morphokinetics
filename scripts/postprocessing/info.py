@@ -4,6 +4,8 @@ import glob
 import math
 import numpy as np
 
+exclude = 0
+
 class fileData:
     def __init__(self, data):
         self.r_tt = data[0] # terrace to terrace rate
@@ -13,10 +15,9 @@ class fileData:
         self.rLib = data[4]
         self.sizI = data[5] # simulation size I
         self.sizJ = data[6] # simulation size J
-        self.maxN = data[7] # max simulated coverage
-        self.maxC = data[8] # max number of neighbour or atom types
+        self.maxN = data[7] # max number of neighbour or atom types
+        self.maxC = data[8] # max simulated coverage
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
-
     def getRatios(self):
         ratios = 0
         if self.calc == "AgUc":
@@ -101,7 +102,7 @@ def readAverages():
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)):
+    for i in range(0,len(filesN)-exclude):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
@@ -130,7 +131,7 @@ def readAverages():
 def processData(xInterpolated, xValues, yValues, logMean=False):
     """ Interpolated given values to xInterpolated vector """
     yValuesI = []
-    for i in range(0, len(xValues)):
+    for i in range(0, len(xValues)-exclude):
         yValuesI.append(np.interp(xInterpolated, xValues[i], yValues[i]))
     yInterpolated = np.mean(yValuesI, axis=0)
     if logMean:
@@ -142,7 +143,7 @@ def readBinnedAverages():
     allData = []
 
     filesN = glob.glob("data[0-9]*.txt")
-    for i in range(0,len(filesN)):
+    for i in range(0,len(filesN)-exclude):
         fileName = "data"+str(i)+".txt"
         allData.append(np.loadtxt(fname=fileName, delimiter="\t"))
 
@@ -175,7 +176,7 @@ def readInstantaneous(doBin=True):
     allData = []
 
     filesN = glob.glob("instantaneous[0-9]*.txt")
-    for i in range(0,len(filesN)):
+    for i in range(0,len(filesN)-exclude):
         fileName = "instantaneous"+str(i)+".txt"
         data = np.loadtxt(fname=fileName)
         Malpha = data[:,1:]
@@ -207,7 +208,7 @@ def readPossibleFromList():
     allData = []
 
     filesN = glob.glob("possibleFromList[0-9]*.txt")
-    for i in range(0,len(filesN)-1):
+    for i in range(0,len(filesN)-exclude):
         fileName = "possibleFromList"+str(i)+".txt"
         data = np.loadtxt(fname=fileName)
         Malpha = data[:,1:]
@@ -246,7 +247,7 @@ def readHistograms():
     # read all histograms
     filesN = glob.glob("histogram[0-9]*.txt")
     islD = []
-    for i in range(0,len(filesN)):
+    for i in range(0,len(filesN)-exclude):
         fileName = "histogram"+str(i)+".txt"
         islD.append(readHistogram(fileName))
     return islandDistribution(islD)
