@@ -302,13 +302,14 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     else:
         ax[i].set_ylabel("Relative error")
 
-plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "upper right", prop={'size':8})
-plt.savefig("multiplicities.svg")
 rAndM = False
 omegas = False
 if len(sys.argv) > 1:
     rAndM = sys.argv[1] == "r"
     omegas = sys.argv[1] == "o"
+if not rAndM and not omegas:
+    plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "upper right", prop={'size':8})
+plt.savefig("multiplicities.svg", bbox_inches='tight')
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
     label = ["multiplicity", "sum", "ratio"]
     cm = plt.get_cmap('Accent')
@@ -332,8 +333,8 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
                 lg = axarr[maxRanges-1-j].fill_between(coverage, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[i])
                 lgR.append(lg)
                 partialSum -= partialSum1
-    plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), "upper right", prop={'size':8})
-    plt.savefig("multiplicitiesRandM.svg")
+    plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), loc=(0.7,0.7), prop={'size':8})
+    plt.savefig("multiplicitiesRandM.svg", bbox_inches='tight')
 
 if (omegas):
     cm = plt.get_cmap('Set1')
@@ -349,5 +350,5 @@ if (omegas):
     myLegends += lgs
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
-    plt.figlegend(myLegends, myLabels, "upper right", prop={'size':8})
-    plt.savefig("multiplicitiesOmegas.svg")
+    plt.figlegend(myLegends, myLabels, loc=(0.7,0.68), prop={'size':8})
+    plt.savefig("multiplicitiesOmegas.svg", bbox_inches='tight')
