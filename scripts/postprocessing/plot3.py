@@ -46,7 +46,7 @@ def diffusivityDistance(binned, fig=0, ax=0, i=-1):
         Malpha[k] = Malpha[k]/d.time
         label = r"$\theta_{"+str(k)+"}$"
         lg, = ax.loglog(x, fun.timeAverage(d.negs[k]/p.sizI/p.sizJ, d.time), label=label, ms=1, lw=2, ls="-", color=cm(k/8)); handles.append(lg)
-        lg, = plt.loglog(x, MalphaP[k]/d.negs[k], label=r"$m_"+str(k)+"$");    handles.append(lg) # Around 6
+        #lg, = plt.loglog(x, MalphaP[k]/d.negs[k], label=r"$m_"+str(k)+"$");    handles.append(lg) # Around 6, 2, 2, 0.1
 
  
     individualHopsCalc = []
