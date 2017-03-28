@@ -23,7 +23,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 public class CatalysisRates implements IRates {
 
   private final double[][][] diffusionEnergies;
-  private final double[][] adsorption_desorptionEnergies;
+  private final double[][] adsorptionDesorptionEnergies;
   private double diffusionMl;
   
   private final double prefactor;
@@ -54,14 +54,6 @@ public class CatalysisRates implements IRates {
     prefactor = 1e13;
     
     diffusionEnergies = new double[2][2][2];
-    /*energies[BR][CO][BR] = E1;
-    energies[BR][CO][CUS] = E2;
-    energies[CUS][CO][BR] = E3;
-    energies[CUS][CO][CUS] = E4;
-    energies[BR][O][BR] = E5;
-    energies[BR][O][CUS] = E6;
-    energies[CUS][O][BR] = E7;
-    energies[CUS][O][CUS] = E8;*/
     diffusionEnergies[CO][BR][BR] = E1;
     diffusionEnergies[CO][BR][CUS] = E2;
     diffusionEnergies[CO][CUS][BR] = E3;
@@ -71,17 +63,17 @@ public class CatalysisRates implements IRates {
     diffusionEnergies[O][CUS][BR] = E7;
     diffusionEnergies[O][CUS][CUS] = E8;
     
-    adsorption_desorptionEnergies = new double[2][4];
-    adsorption_desorptionEnergies[CO][BR] = E9;
-    adsorption_desorptionEnergies[CO][CUS] = E10;
-    adsorption_desorptionEnergies[O][BRBR] = E11;
-    adsorption_desorptionEnergies[O][CUSCUS] = E12;
-    adsorption_desorptionEnergies[O][CUSBR] = E13;
-    adsorption_desorptionEnergies[O][BRCUS] = E13;
+    adsorptionDesorptionEnergies = new double[2][4];
+    adsorptionDesorptionEnergies[CO][BR] = E9;
+    adsorptionDesorptionEnergies[CO][CUS] = E10;
+    adsorptionDesorptionEnergies[O][BRBR] = E11;
+    adsorptionDesorptionEnergies[O][CUSCUS] = E12;
+    adsorptionDesorptionEnergies[O][CUSBR] = E13;
+    adsorptionDesorptionEnergies[O][BRCUS] = E13;
     
     mass = new double[2];
-    mass[CO]=28.01055;
-    mass[O]=15.9994;
+    mass [CO] = 28.01055;
+    mass [O] =15.9994;
   }
 
   @Override
