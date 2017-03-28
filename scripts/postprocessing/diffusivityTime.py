@@ -29,7 +29,7 @@ def diffusivityTime(p, d, coverage):
     return r
 
 def plot(ax, ax2, data, i):
-    marker = ["o", "s", "H", "D","^"]
+    marker = ["o", "s","D","^","d","h","p","o"]
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
