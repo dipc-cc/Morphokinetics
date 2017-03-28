@@ -60,6 +60,7 @@ def computeMavgAndOmegaOverRuns():
 
 
 def defineRanges(calculationMode, ratesLibrary, temperatures):
+    ranges = []
     if calculationMode == "AgUc":
         indexes = np.where((temperatures >= 70) & (temperatures <= 150))
         iSl = indexes[0][0]
@@ -72,22 +73,14 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         iFh = indexes[0][-1]
     elif calculationMode == "basic":
         if ratesLibrary == "version2":
-            indexes = np.where((temperatures >= 120) & (temperatures <= 195))
-            iSl = indexes[0][0]
-            indexes = np.where((temperatures >= 195) & (temperatures <= 265))
-            iSm = indexes[0][0]
-            indexes = np.where((temperatures >= 265) & (temperatures <= 400))
-            iSh = indexes[0][0]
-            iFh = indexes[0][-1]
-            # in principle, it doesn't have intermediate temperature range
-            #iSm = iFl-1
-            #iFm = iSh+1
+            # it has 4 ranges
+            ranges = list([0, 19, 33, 48, 58])
         else:
             indexes = np.where((temperatures >= 120) & (temperatures <= 190))
             iSl = indexes[0][0]
             indexes = np.where((temperatures >= 190) & (temperatures <= 270))
             iSm = indexes[0][0]
-            indexes = np.where((temperatures >= 270) & (temperatures <= 1100))
+            indexes = np.where((temperatures >= 270) & (temperatures <= 350))
             iSh = indexes[0][0]
             iFh = indexes[0][-1]
     else:
@@ -98,8 +91,11 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         indexes = np.where((temperatures >= 1000) & (temperatures <= 1500))
         iSh = indexes[0][0]
         iFh = indexes[0][-1]
-        
-    return list([iSl, iSm, iSh, iFh])
+
+    if len(ranges) > 0:
+        return ranges
+    else:
+        return list([iSl, iSm, iSh, iFh])
 
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
