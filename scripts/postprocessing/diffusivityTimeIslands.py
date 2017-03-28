@@ -21,22 +21,23 @@ def plot(ax, ax2, data, i):
     x = data[:,6]/flux**0.17
     if ax2 != None:
         ax2.plot(x, data[:,5], label="isld",
-                        color=cm(i/8))
-        ax2.plot(x, fun.power(x, 4e4, -0.3333))
+                        ls = "--", color=cm(i/8))
     lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
-            marker=marker[i], ls="", mew=mew, ms=8, alpha=alpha, markerfacecolor=cm(i/8))
+            marker="", ls="-", mew=mew, ms=8, alpha=alpha, color=cm(i/8))
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
-            marker="+", ls="--", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
+            marker="", ls="-.", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
     if i == 4:
+        xFit = np.array([1e2, 1e12])
+        ax2.plot(xFit, fun.power(xFit, 4e4, -0.3333), ls=":", color="black")
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
-        label = r"$\theta=30\%$"
-        ax.annotate(r"$1/3$", xy=(3e2,2e2),
+        label = r"$\theta=0.3$"
+        ax.annotate(r"$1/3$", xy=(1e3,2e2),
                     bbox=bbox_props)
-        ax.annotate(label, xy=(0.2,0.9), xycoords="axes fraction",
+        ax.annotate(label, xy=(0.4,0.9), xycoords="axes fraction",
                     bbox=bbox_props)
-        ax.annotate("", xy=(1e8,1e-5), xycoords='data', xytext=(1e8, 1e4),
+        ax.annotate("", xy=(1e9,1e-5), xycoords='data', xytext=(1e9, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
-        ax.annotate("", xy=(5e10,1e-5), xycoords='data', xytext=(5e10, 1e4),
+        ax.annotate("", xy=(8e10,1e-5), xycoords='data', xytext=(8e10, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
     return lg1
 
@@ -53,8 +54,7 @@ ax.set_yscale("log")
 ax2.set_yscale("log")
 ax.set_xlabel(r"$r_{tt}/F^{0.17}$")
 ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
-ax2.set_ylabel("isld")
-ax3 = ax.twiny()
+ax2.set_ylabel(r"$N_{isld}$")
 legends = []
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
