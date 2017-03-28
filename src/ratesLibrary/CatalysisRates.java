@@ -73,7 +73,7 @@ public class CatalysisRates implements IRates {
     
     mass = new double[2];
     mass[CO] = 28.01055;
-    mass[O] =15.9994;
+    mass[O] = 15.9994;
   }
 
   @Override
