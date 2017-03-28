@@ -1,3 +1,4 @@
+import functions as f
 #
 # Compares in a graph the average island size (or its square root)
 # growth with the total rate.
@@ -40,12 +41,12 @@ for i in range(-6,1):
     r = np.array(mk.getRtt(temperatures))/flux
     plt.loglog(r, n, ".", label="inverse island"+folder)
     if (i > -3):
-        popt = curve_fit(mk.powerFunc, r, n)
+        popt = curve_fit(f.power, r, n)
         a = popt[0][0]
         b = popt[0][1]
         label = "{}x^{}".format(a, b)
         x = r
-        y = mk.powerFunc(x, a, b)
+        y = f.power(x, a, b)
         plt.loglog(x, y, label=label)
     plt.legend(loc='lower left', prop={'size':6})
     plt.savefig("rttVsN.png")

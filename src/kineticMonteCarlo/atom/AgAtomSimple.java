@@ -83,7 +83,6 @@ public class AgAtomSimple extends AgAtom {
     
   @Override
   public double probJumpToNeighbour(int ignored, int position) {
-
     if (getNeighbour(position).isOccupied()) {
       return 0;
     }

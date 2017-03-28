@@ -9,6 +9,7 @@ import kineticMonteCarlo.unitCell.AgUc;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
@@ -50,7 +51,7 @@ public class AgUcLattice extends AgLattice {
    * Creates a lattice to work with hexagonal Ag simulation, based on unit cells (UC).
    * 
    * @param hexaSizeI size in I direction. How many points horizontally.
-   * @param hexaSizeJ size in J direction. How many points vectically.
+   * @param hexaSizeJ size in J direction. How many points vertically.
    * @param modified temporary buffer.
    * @param distancePerStep auxiliary class for Devita.
    * @param simple whether using simple Ag atoms.
@@ -206,7 +207,6 @@ public class AgUcLattice extends AgLattice {
    *
    */
   private void createAtoms(boolean simple) {
-
     sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
     sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
@@ -229,6 +229,12 @@ public class AgUcLattice extends AgLattice {
         AgUc uc = new AgUc(i, j, atomsList);
         ucList.add(uc);
         ucArray[i][j] = uc;
+        // set Cartesian position
+        Point3D ucPos = uc.getPos();
+        Point3D atom0Pos = atom0.getPos();
+        Point3D atom1Pos = atom1.getPos();
+        atom0.setCartesianPosition(ucPos.add(atom0Pos));
+        atom1.setCartesianPosition(ucPos.add(atom1Pos));
       }
     }
     

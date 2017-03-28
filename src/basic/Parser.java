@@ -691,16 +691,16 @@ public class Parser {
 
   /**
    * Selects which rates are used for the simulation. Available options for graphene are:
-   * "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else for synthetic rates.
-   * Available options for basic growth are: "version2", "version3" or anything else for original
-   * synthetic rates. Available options for AgUc growth are: "simple" or anything else for original
-   * Cox et al. rates.
+   * "GaillardSimple", "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else
+   * for synthetic rates. Available options for basic growth are: "simple", "version2", "version3"
+   * or anything else for original synthetic rates. Available options for AgUc growth are: "simple"
+   * or anything else for original Cox et al. rates.
    *
    * Input "parameters" variable: {@code ratesLibrary}.
    *
-   * @return "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything else for
-   * synthetic rates for graphene. "version2", "version3" or anything else for basic growth.
-   * "simple" or anything else for AgUc.
+   * @return "GaillardSimple", "Gaillard1Neighbour", "Gaillard2Neighbours", "Schoenhalz" or anything
+   * else for synthetic rates for graphene. "simple", "version2", "version3" or anything else for
+   * basic growth. "simple" or anything else for AgUc.
    */
   public String getRatesLibrary() {
     return ratesLibrary;
@@ -1010,7 +1010,7 @@ public class Parser {
    * @return lattice size in I direction. 
    */
   public int getHexaSizeI() {
-    if (calculationMode.equals("basic")) {
+    if (calculationMode.equals("basic")|| getCalculationMode().equals("catalysis")) {
       return cartSizeX;
     }
     if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc")) {
@@ -1033,7 +1033,7 @@ public class Parser {
    * @return lattice size in J direction. 
    */
   public int getHexaSizeJ() {
-    if (calculationMode.equals("basic")) {
+    if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis")) {
       return cartSizeY;
     }
     if (getCalculationMode().equals("AgUc")) {
@@ -1136,7 +1136,7 @@ public class Parser {
    *
    * Input "parameters" variable: {@code calculationMode}.
    *
-   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic" or "graphene"
+   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic", "graphene" or "catalysis"
    */
   public String getCalculationMode() {
     return calculationMode;

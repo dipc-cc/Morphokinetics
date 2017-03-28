@@ -54,7 +54,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private double diffusivityDistance;
   private double diffusivityDistanceCorrected;
   private int mobileAtoms;
-  private int hops;
+  private long hops;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     setHexaSizeI(hexaSizeI);
@@ -174,6 +174,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
+        atoms[i][j].setCartesianPosition(ucArray[i][j].getPos());
       }
     }
   }
@@ -245,7 +246,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   /**
    * 
-   * @return the coverage of the lattice
+   * @return the coverage of the lattice.
    */
   public float getCoverage() {
     return (float) occupied / (float) hexaArea;
@@ -253,7 +254,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   
   /**
    * 
-   * @return  number of occupied positions
+   * @return  number of occupied positions.
    */
   public int getOccupied() {
     return occupied;
@@ -282,21 +283,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       sumAvg += islands.get(i).getAvgDistance();
     }
     return (float) (sumAvg / islandCount);
-  }
-    
-  /**
-   * Calculates arithmetic average of gyradius, iterating over all islands. Only valid for basic
-   * growth simulation mode.
-   *
-   * @return average gyradius
-   */
-  public double getCentreOfMassAndAverageGyradius() {
-    double averageGyradius = 0.0;
-    int i;
-    for (i = 0; i < islands.size(); i++) {
-      averageGyradius += islands.get(i).calculateCentreOfMassAndGyradius();
-    }
-    return averageGyradius / (double) i;
   }
   
   @Override
@@ -352,7 +338,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         }
       }
     }
-    
   }
 
   /**
@@ -374,23 +359,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public int getMonomerCount() {
     return -monomerCount;
-  }
-
-  public void getCentreOfMassTry() {
-    int islandAmount = getIslandCount();
-    int minX[] = new int[islandAmount];
-    int maxX[] = new int[islandAmount];
-    int minY[] = new int[islandAmount];
-    int maxY[] = new int[islandAmount];
-    //islands = new Island[islandAmount];
-    //Arrays.setAll(islands, i -> new Island(i));
-    for (int i = 0; i < size(); i++) {
-      IUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = (AbstractGrowthAtom) uc.getAtom(j);
-        int islandNumber = atom.getIslandNumber();
-      }
-    }
   }
   
   /**
@@ -472,7 +440,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    *
    * @return
    */
-  public int getTotalHops() {
+  public long getTotalHops() {
     return hops;
   }
 
@@ -619,70 +587,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @return number of islands.
    */
   public int countIslands(PrintWriter print) {
-    diffusivityDistance = 0.0;
-    diffusivityDistanceCorrected = 0.0;
-    hops = 0;
-    double distanceX;
-    double distanceY;
-    double distanceXnew;
-    double distanceYnew;
-    double atomPosX;
-    double atomPosY;
-    double depPosX;
-    double depPosY;
-    mobileAtoms = 0;
-    // reset all the atoms
-    for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
-        atom.setVisited(false);
-        atom.setIslandNumber(0);
-        if (atom.isOccupied()) {
-          mobileAtoms++;
-          distanceX = abs(atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
-          if (distanceX > getCartSizeX() / 2) {
-            distanceX = getCartSizeX() - distanceX;
-          }
-          distanceY = abs(atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
-          if (distanceY > getCartSizeY() / 2) {
-            distanceY = getCartSizeY() - distanceY;
-          }
-          diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
-          hops += atom.getHops();
-          int direction = atom.getDirection();
-          atomPosX = atom.getPos().getX() + uc.getPos().getX();
-          atomPosY = atom.getPos().getY() + uc.getPos().getY();
-          depPosX  = atom.getDepositionPosition().getX();
-          depPosY  = atom.getDepositionPosition().getY();
-          distanceXnew = abs(atomPosX - depPosX);
-          distanceYnew = abs(atomPosY - depPosY);
-          if (distanceXnew > 0) {
-            if ((direction & (1 << 0)) != 0) {// X is positive 
-              if (depPosX > atomPosX) {
-                distanceXnew = getCartSizeX() - distanceXnew;
-              }
-            } else {// X is negative 
-              if (depPosX < atomPosX) {
-                distanceXnew = getCartSizeX() - distanceXnew;
-              }
-            }
-          }
-          if (distanceYnew > 0) {
-            if ((direction & (1 << 1)) != 0) {// Y is positive 
-              if (depPosY > atomPosY) {
-                distanceYnew = getCartSizeY() - distanceYnew;
-              }
-            } else {// Y is negative 
-              if (depPosY < atomPosY) {
-                distanceYnew = getCartSizeY() - distanceYnew;
-              }
-            }
-          }
-          diffusivityDistanceCorrected += Math.pow(distanceXnew, 2) + Math.pow(distanceYnew, 2);
-        }
-      }
-    }
+    computeDiffusivity();
     islands = new ArrayList<>(); // reset all islands to null
     
     // do the count
@@ -775,6 +680,30 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return abs(value) < 1e-10 ? -0.0d : value;
   }
 
+  double computeDiffusivity() {
+    diffusivityDistance = 0;
+    hops = 0;
+    double distanceX;
+    double distanceY;
+    mobileAtoms = 0;
+    // reset all the atoms
+    for (int i = 0; i < size(); i++) {
+      AbstractGrowthUc uc = getUc(i);
+      for (int j = 0; j < uc.size(); j++) {
+        AbstractGrowthAtom atom = uc.getAtom(j);
+        atom.setVisited(false);
+        atom.setIslandNumber(0);
+        if (atom.isOccupied()) {
+          mobileAtoms++;
+          distanceX = abs(atom.getCartesianSuperCell().getX() * getCartSizeX() + atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
+          distanceY = abs(atom.getCartesianSuperCell().getY() * getCartSizeY() + atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
+          diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
+          hops += atom.getHops();
+        }
+      }
+    }
+    return diffusivityDistance;
+  }
   /**
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set 
    * all them the same island number.
@@ -803,8 +732,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       // Get atom type
       atomTypesCounter[atom.getType()]++;
       atom.setIslandNumber(islandCount);
-      atom.setRelativeX(xDiference);
-      atom.setRelativeY(yDiference);
       islands.get(islandCount-1).addAtom(atom);
       for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
         AbstractGrowthAtom neighbour = atom.getNeighbour(pos);

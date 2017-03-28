@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -35,7 +36,7 @@ for i in range(-6,5):
     s = (0.3*100*100)/meanValues.getIslandsAmount()
     vg = meanValues.getGyradiusSlope()
     rtt = mk.getRtt(temperatures)
-    d = mk.fractalDimensionFunc(rtt/flux)
+    d = f.fractalDimension(rtt/flux)
     print(d)
     rg = meanValues.getLastGyradius()
     print(len(d),len(s), len(rg))

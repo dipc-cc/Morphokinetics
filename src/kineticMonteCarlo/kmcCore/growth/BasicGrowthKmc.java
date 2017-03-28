@@ -22,7 +22,9 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     super(parser);
      
     HopsPerStep distancePerStep = new HopsPerStep();
-    BasicGrowthLattice basicLattice = new BasicGrowthLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
+    BasicGrowthLattice basicLattice;
+     
+    basicLattice = new BasicGrowthLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), parser.getRatesLibrary().equals("simple"));
     basicLattice.init();
     setLattice(basicLattice); 
     if (parser.justCentralFlake()) {
@@ -31,7 +33,6 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
-    super.initHistogramSucces(4);
   }
 
   @Override

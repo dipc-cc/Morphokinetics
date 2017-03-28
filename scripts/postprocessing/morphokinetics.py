@@ -9,76 +9,6 @@ import results
 import matplotlib.pyplot as plt
 
 
-def powerFunc(x, a, b):
-    """ a*x^b function """
-    return a*x**b
-
-def expFunc(x, a, b):
-    """ ae^bx function """
-    return a*np.exp(x*b)
-
-def fractalDFunc(x):
-    """Fractal dimension for x (= rtt/flux)"""
-    minD = 1.66
-    maxRatio = 5e8
-    minRatio = 3e7
-    y = []
-    for i in range(len(x)):
-        if (x[i] <= minRatio):
-            y.append(minD)
-        else:
-            if (x[i] > maxRatio):
-                y.append(2.0)
-            else:
-                #y.append(minD+(2-minD)/np.log(5e8/3e7)*np.log(x[i]))
-                y.append(minD+(2-minD)/(maxRatio-minRatio)*(x[i]-minRatio))
-    return np.array(y)
-
-def fractDFuncTemperature(temp):
-    maxD = 2.00
-    minD = 1.75
-    maxTemp = 62
-    minTemp = 55
-    y = []
-    for i in range(len(temp)):
-        if (temp[i] <= minTemp):
-            y.append(maxD)
-        else:
-            if (temp[i] > maxTemp):
-                y.append(minD)
-            else:
-                y.append(maxD-(maxD-minD)/(maxTemp-minTemp)*(temp[i]-minTemp))#    minD+(2-minD)/(maxTemp-minTemp)*(temp[i]-minTemp))
-    return y
-    
-
-def fractalDimensionFunc(x):
-    """returns fractal dimension, based on a fit of a study of single
-flake simulations. """
-    a=0.27
-    b=1.73
-    c=19
-    sigma=2
-    x0=np.exp(c)
-    d=b+a*(x**sigma)/(x**sigma+x0**sigma)
-    return np.array(d)
-
-def readFractalD(flux):
-    return np.array(mk.readFractalD(flux)).astype(float)
-
-def shapeFactorFunc(x):
-    """returns shape factor, based on a fit of a study of single flake
-simulations. """
-    a=5.5
-    b=3.5
-    c=18
-    sigma=1
-    x0=np.exp(c)
-    f=b+a*(x**sigma)/(x**sigma+x0**sigma)
-    max = 7.3
-    f=[max-(i-max)  if i > max else i for i in f]
-    return np.array(f)
-
-
 def readData(chunk, maxCoverage, sqrt=True, verbose=True, growth=True, temperature=-1, flux=-1):
     """reads the input file and makes the histogram and the average
 island size. It returns the slope of the fit, which is the growth rate."""
@@ -108,11 +38,11 @@ island size. It returns the slope of the fit, which is the growth rate."""
         filename = "dataFile"+'{:E}'.format(flux)+"_"+str(temperature)+".txt"
         with open(filename, 'w', newline='') as csvfile:
             outwriter = csv.writer(csvfile, delimiter=' ', quotechar='|', quoting=csv.QUOTE_MINIMAL)
-            outwriter.writerow(["%","index, temperature, flux, monomers[-1], coverage, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter, numberOfEvents, diffusivity, mobileAtoms"])
+            outwriter.writerow(["%","index, temperature, flux, monomers[-1], coverage, times[-1], islandsAmount[-1], averageSizes[-1], averageRatio[-1]/times[-1], allGyradius[-1], stdSizes, stdGyradius, sumProb, s^2, r_g^2, islandsAmount**2, monomers**2, innerPerimeter, outerPerimeter, stdInner, stdOuter, numberOfEvents, diffusivity, diffusivityLarge"])
             for index, islandSizes in enumerate(islandSizesList, start=0):
                 if islandSizes: #ensure that it is not null
                     averageData.updateData(index, islandSizes, completeData)
-                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1], averageData.ne[-1], averageData.diffusivity[-1], averageData.mobileAtoms[-1]])
+                    outwriter.writerow([index, temperature, flux, averageData.monomers[-1], (index+1)/100, averageData.times[-1], averageData.islandsAmount[-1], averageData.sizes[-1], averageData.ratio[-1]/averageData.times[-1], averageData.gyradius[-1], averageData.stdSizes[-1], averageData.stdGyradius[-1], averageData.sumProb[-1], averageData.sizes2[-1], averageData.gyradius2[-1], averageData.islandsAmount2[-1], averageData.monomers2[-1], averageData.innerPerimeter[-1], averageData.outerPerimeter[-1], averageData.stdInnerPerimeter[-1], averageData.stdOuterPerimeter[-1], averageData.ne[-1], averageData.diffusivity[-1], averageData.diffusivityLarge[-1], averageData.hops[-1]])
 
         if verbose:
             plt.figure(num=None, figsize=(4,4), dpi=80)

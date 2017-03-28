@@ -8,6 +8,7 @@ package basic;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.BasicGrowth2Rates;
 import ratesLibrary.BasicGrowth3Rates;
+import ratesLibrary.BasicGrowthSimpleRates;
 import ratesLibrary.BasicGrowthSyntheticRates;
 
 /**
@@ -25,6 +26,9 @@ public class BasicGrowthSimulation extends AbstractGrowthSimulation{
     super.initialiseKmc();
 
     switch (getParser().getRatesLibrary()) {
+      case "simple":
+        setRates(new BasicGrowthSimpleRates());
+        break;
       case "version2":
         setRates(new BasicGrowth2Rates());
         break;

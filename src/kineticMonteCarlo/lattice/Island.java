@@ -71,6 +71,7 @@ public class Island {
   
   /**
    * Updates the average and max distances.
+   * 
    * @param distanceX Cartesian distance in X coordinate.
    * @param distanceY Cartesian distance in Y coordinate.
    */
@@ -79,35 +80,6 @@ public class Island {
     numberOfAtoms++;
     updateAvg(distance);
     updateMax(distance);
-  }
-
-  /**
-   * Calculates centre of mass and gyradius in an infinite surface. Gyradius is calculated with
-   * equation (19) of Kinsner, A unified approach to fractal dimensions.
-   *
-   * @return gyradius
-   */
-  public double calculateCentreOfMassAndGyradius() {
-    int sumX = 0;
-    int sumY = 0;
-    int sumSquareX = 0;
-    int sumSquareY = 0;
-    for (int i = 0; i < atoms.size(); i++) {
-      int currentX = atoms.get(i).getRelativeX();
-      int currentY = atoms.get(i).getRelativeY();
-      sumX += currentX;
-      sumY += currentY;
-      // gyradius
-      sumSquareX += currentX * currentX;
-      sumSquareY += currentY * currentY;
-    }
-    double centreOfMassX = sumX / atoms.size();
-    double centreOfMassY = sumY / atoms.size();
-    // gyradius
-    double sigmaX = sumSquareX - Math.pow(sumX, 2.0) / atoms.size();
-    double sigmaY = sumSquareY - Math.pow(sumY, 2.0) / atoms.size();
-    double gyradius = Math.sqrt((sigmaX + sigmaY) / atoms.size());
-    return gyradius;
   }
   
   private void updateAvg(double distance) {

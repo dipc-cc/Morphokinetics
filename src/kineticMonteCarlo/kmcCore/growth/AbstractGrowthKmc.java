@@ -16,13 +16,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point3D;
-import static kineticMonteCarlo.atom.AbstractAtom.BULK;
 import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
@@ -76,16 +76,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * Activation energy output at the end of execution
    */
   private final boolean aeOutput;
+  private final ActivationEnergy activationEnergy;
   /**
    * If two terraces are together freeze them, in multi-flake simulation mode.
    */
   private final boolean forceNucleation;
   
   private double terraceToTerraceProbability;
-  /**
-   * Attribute to count processes that happened. Used to compute activation energy per each rate.
-   */
-  private int[][] histogramSuccess;
   
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
@@ -146,6 +143,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     nucleations = 0;
+    activationEnergy = new ActivationEnergy(parser);
   }
     
   /**
@@ -322,27 +320,20 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     lattice.initialiseRates(processProbs2D);
+    activationEnergy.setRates(processProbs2D);
   }
 
   @Override
   public void reset() {
     lattice.reset();
     getList().reset();
+    activationEnergy.reset();
     freeArea = calculateAreaAsInKmcCanvas();
-    
-    for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        uc.getAtom(j).clear();
-      }
-    }
 
     deltaTimeBetweenTwoAttachments.clear();
     deltaTimePerAtom.clear();
     previousTime = 0;
     nucleations = 0;
-    int length = histogramSuccess.length;
-    histogramSuccess = new int[length][length];
   }
   
   @Override
@@ -355,6 +346,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     int coverageThreshold = 1;
     int limit = 100000;
     int returnValue = 0;
+    boolean computeTime = false;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
     terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
@@ -369,12 +361,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
           }
         } else {
-          if (performSimulationStep()) {
-            break;
-          }
-          simulatedSteps++;
-          sumProbabilities += getList().getTotalProbabilityFromList();
-          if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+          activationEnergy.updatePossibles(getList().getIterator(), getList().getGlobalProbability(), getList().getDeltaTime(computeTime));
+          computeTime = true;
+          if (extraOutput && getEstimatedCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
               coverageThreshold = 1;
@@ -382,6 +371,11 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             printData(null);
             coverageThreshold++;
           }
+          if (performSimulationStep()) {
+            break;
+          }
+          simulatedSteps++;
+          sumProbabilities += getList().getTotalProbabilityFromList();
         }
       }
     }
@@ -389,7 +383,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double ri = ((LinearList) getList()).getRi_DeltaI();
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
-      printHistogram();
+      PrintWriter standardOutputWriter = new PrintWriter(System.out);
+      activationEnergy.printAe(standardOutputWriter, -1);
     } 
     
     // Dirty mode to have only one interface of countIslands
@@ -409,40 +404,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     return returnValue;
   }
-  
-  @Deprecated
-  public void simulateOld(int iterations) {
-    int radius = perimeter.getCurrentRadius();
-    int numEvents = 0;// contador de eventos desde el ultimo cambio de radio
-
-    setIterations(0);
-
-    for (int i = 0; i < iterations; i++) {
-      if (performSimulationStep()) {
-        break;
-      }
-
-      setIterations(getIterations() + 1);
-      numEvents++;
-
-      if (radius == 10 && radius == perimeter.getCurrentRadius()) {//En la primera etapa no hay una referencia de eventos por lo que se pone un numero grande
-        if (numEvents == 4000000) {
-          break;
-        }
-      } else if (radius != perimeter.getCurrentRadius()) {//Si cambia de radio se vuelve a empezar a contar el nuevo numero de eventos
-        radius = perimeter.getCurrentRadius();
-        numEvents = 0;
-      } else {
-        if ((getIterations() - numEvents) * 2 <= numEvents) {//Si los eventos durante la ultima etapa son 1.X veces mayores que los habidos hasta la etapa anterior Fin. 
-          break;
-        }
-
-      }
-
-    }
-
-    getList().cleanup();
-  }
 
   @Override
   public void depositSeed() {
@@ -452,6 +413,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       setCurrentOccupiedArea(8); // Seed will have 8 atoms
       int depositedAtoms = 1;
       AbstractGrowthAtom centralAtom = lattice.getCentralAtom();
+      centralAtom.setDepositionPosition(new Point3D(0, 0, 0));
       deposition:
       while (true) {
         depositAtom(centralAtom);
@@ -459,6 +421,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
           AbstractGrowthAtom atom = centralAtom.getNeighbour(i);
           if (depositAtom(atom)) {
             depositedAtoms++;
+            atom.setDepositionPosition(new Point3D(0, 0, 0));
           }
           if (depositedAtoms > 7) {
             break deposition;
@@ -467,9 +430,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         centralAtom = centralAtom.getNeighbour(1);
       }
     } else {
-      for (int i = 0; i < 1; i++) {
-        depositNewAtom();
-      }
+      // Do not deposit anything, just reset deposition probability
+      getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
   }
   
@@ -518,15 +480,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     return false;
-  }
- 
-  /**
-   * Initialises histogram to store the happened transition from atom type to atom type.
-   * 
-   * @param atomTypes number of different atom types.
-   */
-  void initHistogramSucces(int atomTypes) {
-    histogramSuccess = new int[atomTypes][atomTypes];
   }
   
   /**
@@ -602,71 +555,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return destinationAtom;
   }
   
-  private void printHistogram() {
-    for (int origin = 0; origin < histogramSuccess.length; origin++) {
-      System.out.print("AeSuccess ");
-      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
-        System.out.print(histogramSuccess[origin][destination] + " ");
-      }
-      System.out.println();
-    }
-    PrintWriter standardOutputWriter = new PrintWriter(System.out);
-    //lattice.countIslands(standardOutputWriter);
-    printAe(standardOutputWriter, -1);
-  }
-  
-  private void printAe(PrintWriter print, float coverage) {
-    boolean printLineBreak = (coverage == -1);
-    double[][] histogramPossible;
-    histogramPossible = ((LinearList) getList()).getHistogramPossible();
-    if (printLineBreak) print.println("Ae");
-    else print.format(Locale.US, "%f %s", coverage, "AePossibleFromList ");
-    for (int origin = 0; origin < histogramPossible.length; origin++) {
-      if (printLineBreak) print.print("AePossibleFromList ");
-      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
-        print.print(histogramPossible[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
-
-    long[][] histogramPossibleCounter = ((LinearList) getList()).getHistogramPossibleCounter();
-    if (printLineBreak) print.println("Ae");
-    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleDiscrete ");
-    for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
-      if (printLineBreak) print.print("AePossibleDiscrete ");
-      for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
-        print.print(histogramPossibleCounter[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
-    
-    double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
-    if (printLineBreak) print.println("Ae");
-    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeRatioTimesPossible ");
-    for (int origin = 0; origin < histogramPossible.length; origin++) {
-      if (printLineBreak) print.print("AeRatioTimesPossible ");
-      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
-        ratioTimesPossible[origin][destination] = lattice.getUc(0).getAtom(0).getProbability(origin, destination) * histogramPossible[origin][destination];
-        print.print(ratioTimesPossible[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
-    
-    double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
-    if (printLineBreak) print.println("Ae");
-    else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeMultiplicity ");
-    for (int origin = 0; origin < histogramPossible.length; origin++) {
-      if (printLineBreak) print.print("AeMultiplicity ");
-      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
-        multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
-        print.print(multiplicity[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
-    print.println();
-    print.flush();
-  }
-  
   /**
    * Print current information to extra file.
    *
@@ -685,7 +573,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
 
     lattice.getCentreOfMass();
-    double gyradiusBasic = lattice.getCentreOfMassAndAverageGyradius();
     lattice.getDistancesToCentre();
     lattice.countPerimeter(null);
     //compute the average distances to centre.
@@ -702,7 +589,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             lattice.getAtomTypesCounter());
     sumProbabilities = 0.0d;
     if (aeOutput) {
-      printAe(outData, printCoverage);
+      activationEnergy.printAe(outData, printCoverage);
     }
     outData.flush();
     if (extraOutput2) {
@@ -766,8 +653,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @return true if atom has moved, false otherwise.
    */
   private boolean diffuseAtom(AbstractGrowthAtom originAtom, AbstractGrowthAtom destinationAtom) {
-
-    //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
+    //If is not eligible, it can not be diffused
     if (!originAtom.isEligible()) {
       return false;
     }
@@ -785,9 +671,32 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       nucleations++;
     }
     int oldType = originAtom.getRealType();
+
+    Point3D origSuperCell = originAtom.getCartesianSuperCell();
+    // Going out from the right ->|->
+    if (abs(originAtom.getCartesianPosition().getX() - getLattice().getCartSizeX()) <= 1
+            && destinationAtom.getCartesianPosition().getX() <= 1) {
+      origSuperCell = new Point3D(origSuperCell.getX() + 1, origSuperCell.getY(), 0.0);
+    }
+    // Going out from the left <-|<-
+    if (originAtom.getCartesianPosition().getX() <= 1
+            && abs(destinationAtom.getCartesianPosition().getX() - getLattice().getCartSizeX()) <= 1) {
+      origSuperCell = new Point3D(origSuperCell.getX() - 1, origSuperCell.getY(), 0.0);
+    }
+    // Going down
+    if (abs(originAtom.getCartesianPosition().getY() - getLattice().getCartSizeY()) <= 1
+            && destinationAtom.getCartesianPosition().getY() <= 1) {
+      origSuperCell = new Point3D(origSuperCell.getX(), origSuperCell.getY() + 1, 0.0);
+    }
+    // Going up
+    if (originAtom.getCartesianPosition().getY() <= 1
+            && abs(destinationAtom.getCartesianPosition().getY() - getLattice().getCartSizeY()) <= 1) {
+      origSuperCell = new Point3D(origSuperCell.getX(), origSuperCell.getY() - 1, 0.0);
+    }
+    destinationAtom.setCartesianSuperCell(origSuperCell);
     double probabilityChange = lattice.extract(originAtom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
-
+    originAtom.setCartesianSuperCell(new Point3D(0,0,0));
     lattice.deposit(destinationAtom, force);
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
     Point3D depositionPosition = originAtom.getDepositionPosition();
@@ -872,7 +781,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     if (aeOutput) {
-      histogramSuccess[oldType][destinationAtom.getRealType()]++;
+      activationEnergy.updateSuccess(oldType, destinationAtom.getRealType());
     }
     modifiedBuffer.updateAtoms(getList());
 
@@ -910,6 +819,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       do {
         // Deposit in the perimeter
         destinationAtom = perimeter.getRandomPerimeterAtom();
+        destinationAtom.setDepositionPosition(new Point3D(0, 0, 0));
       } while (destinationAtom.areTwoTerracesTogetherInPerimeter(destinationAtom) || !depositAtom(destinationAtom));
     } else {
       do {
@@ -929,39 +839,14 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return destinationAtom;
   }
 
-  private AbstractGrowthAtom depositInIslands() {
-      List<AbstractGrowthAtom> candidateAtoms = new ArrayList<>(100);
-      for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-        for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-          AbstractGrowthAtom atom = lattice.getAtom(i, j);
-          if (!atom.isOccupied() && atom.getType() != TERRACE && atom.getType() != BULK ) {
-            candidateAtoms.add(atom);
-          }
-        }
-      }
-      
-      int position = StaticRandom.rawInteger(candidateAtoms.size());
-      AbstractGrowthAtom perimeterAtom = candidateAtoms.get(position);
-      
-      for (int i = 0; i < perimeterAtom.getNumberOfNeighbours(); i++) {
-        if (!perimeterAtom.getNeighbour(i).isOccupied() && perimeterAtom.getNeighbour(i).getType() == TERRACE){
-          return perimeterAtom.getNeighbour(i);
-        }
-      }
-      return null; 
-      
-      //return candidateAtoms.get(position); //returns random island perimeter atom
-    }
-      
   private boolean perimeterMustBeEnlarged(AbstractGrowthAtom destinationAtom) {
-    
     if (perimeterType == RoundPerimeter.SQUARE) {
       Point2D centreCart = lattice.getCentralCartesianLocation();
       double left = centreCart.getX() - perimeter.getCurrentRadius();
       double right = centreCart.getX() + perimeter.getCurrentRadius();
       double bottom = centreCart.getY() - perimeter.getCurrentRadius();
       double top = centreCart.getY() + perimeter.getCurrentRadius();
-      Point2D  position = lattice.getCartesianLocation(destinationAtom.getiHexa(),destinationAtom.getjHexa());
+      Point2D position = lattice.getCartesianLocation(destinationAtom.getiHexa(), destinationAtom.getjHexa());
 
       return (destinationAtom.getType() > 0) && (Math.abs(left - position.getX()) < 2
               || Math.abs(right - position.getX()) < 2
@@ -972,5 +857,15 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       boolean distance = perimeter.contains(destinationAtom);
       return (atomType && distance);
     }
+  }
+  
+  /**
+   * Method to obtain theoretical coverage from deposition flux and current time. This is beneficial
+   * to obtain better statistics for atom count (atoms with 0 neighbour, 1 neighbour and so on).
+   *
+   * @return estimated coverage.
+   */
+  private double getEstimatedCoverage() {
+    return 1 - Math.exp(-depositionRatePerSite * getList().getTime());
   }
 }

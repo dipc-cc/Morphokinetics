@@ -6,7 +6,6 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
@@ -33,7 +32,6 @@ public class AgUcKmc extends AbstractGrowthKmc {
     } else {
       agLattice = new AgUcLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, false);
     }
-    agLattice.init();
     setLattice(agLattice);
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
@@ -41,7 +39,6 @@ public class AgUcKmc extends AbstractGrowthKmc {
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
-    super.initHistogramSucces(7);
   }
  
   public void printLattice() {

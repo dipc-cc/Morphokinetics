@@ -63,9 +63,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   private final int id;
   
-  private int relativeX;
-  private int relativeY;
-  
   private boolean innerPerimeter;
   private boolean outerPerimeter;
   /**
@@ -100,6 +97,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public void setRelativeY(int relativeY) {
     this.relativeY = relativeY;
   }
+  private Point3D cartesianPosition;
+  private Point3D cartesianSuperCell;
   
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
@@ -113,13 +112,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     multiplier = 1;
     islandNumber = 0;
     visited = false;
-    relativeX = 0;
-    relativeY = 0;
     innerPerimeter = false;
     outerPerimeter = false;
     hops = 0;
     direction = 3; // +,+ direction = 11
     visitedPositions = new ArrayList();
+    cartesianSuperCell = new Point3D(0, 0, 0);
   }
   
   /**
@@ -135,6 +133,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     bondsProbability = new double[numberOfNeighbours];
     setNumberOfNeighbours(numberOfNeighbours);
     hops = 0;
+    cartesianSuperCell = new Point3D(0, 0, 0);
   }
   
   public int getId() {
@@ -155,6 +154,22 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    */
   public short getjHexa() {
     return jHexa;
+  }
+
+  public Point3D getCartesianPosition() {
+    return cartesianPosition;
+  }
+
+  public void setCartesianPosition(Point3D cartesianPosition) {
+    this.cartesianPosition = cartesianPosition;
+  }
+
+  public Point3D getCartesianSuperCell() {
+    return cartesianSuperCell;
+  }
+
+  public void setCartesianSuperCell(Point3D cartesianSuperCell) {
+    this.cartesianSuperCell = cartesianSuperCell;
   }
   
   public double getAngle() {
@@ -486,6 +501,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     innerPerimeter = false;
     outerPerimeter = false;
     setList(false);
+    hops = 0;
+    cartesianSuperCell = new Point3D(0, 0, 0);
   }
   
   /**
@@ -519,5 +536,4 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
     return false;
   }
-
 }

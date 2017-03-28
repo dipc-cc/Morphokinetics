@@ -27,6 +27,7 @@ import utils.MathUtils;
 public class Restart {
 
   public static final int MAX_DIMS = 3;
+
   private String folder;
   final static Charset ENCODING = StandardCharsets.UTF_8;
 
@@ -66,6 +67,10 @@ public class Restart {
     }
   }
 
+  public static String getGitRevision() {
+    return RestartLow.readGitRevision(getJarBaseDir());
+  }
+  
   public String getPsdScript(String inputFileName, String outputFileName, float min, float max, int sizeX, int sizeY) {
     String base = "reset\n"
             + "set term postscript enhanced color \"Arial\" 20\n"
@@ -191,6 +196,12 @@ public class Restart {
     }
   }
   
+  
+  public void writeCatalysisDataText(double[][][] data, String fileName) {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    RestartLow.writeLowSimulationDataText(data, fileName);
+  }
+  
   public void writeXyz(int simulationNumber, AbstractLattice lattice) {
     String fileName = format("%ssurface%03d.xyz", folder, simulationNumber);
     RestartLow.writeXyz(fileName, lattice);
@@ -237,6 +248,7 @@ public class Restart {
     } catch (IOException exception) {
       System.err.println("Could not read file " + fileName);
       Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, exception);
+      return "{}";
     }
 
     int lines = readList.size();

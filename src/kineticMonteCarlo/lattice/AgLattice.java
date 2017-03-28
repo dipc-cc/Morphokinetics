@@ -54,7 +54,6 @@ public class AgLattice extends AbstractGrowthLattice {
 
   @Override
   public Point2D getCartesianLocation(int iHexa, int jHexa) {
-
     float xCart = iHexa + jHexa * 0.5f;
     if (xCart >= getHexaSizeI()) {
       xCart -= getHexaSizeI();
@@ -101,8 +100,8 @@ public class AgLattice extends AbstractGrowthLattice {
   /**
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
    * 
-   * @param yCart Cartesian Y coordinate
-   * @return j hexagonal position
+   * @param yCart Cartesian Y coordinate.
+   * @return j hexagonal position.
    */
   @Override
   public int getjHexa(double yCart) {
@@ -123,7 +122,7 @@ public class AgLattice extends AbstractGrowthLattice {
    *
    * @param iHexa
    * @param jHexa
-   * @return x Cartesian position
+   * @return x Cartesian position.
    */
   @Override
   public double getCartX(int iHexa, int jHexa) {
@@ -135,7 +134,7 @@ public class AgLattice extends AbstractGrowthLattice {
    * Simple relation between Y (Cartesian) and J (hexagonal), with Y_RATIO (=sin 60º).
    *
    * @param jHexa
-   * @return y Cartesian position
+   * @return y Cartesian position.
    */
   @Override
   public double getCartY(int jHexa) {
@@ -229,9 +228,9 @@ public class AgLattice extends AbstractGrowthLattice {
    * experimental and only works with AgUc simulation mode. If fails, the execution continues
    * normally.
    *
-   * @param xMouse absolute X location of the pressed point
-   * @param yMouse absolute Y location of the pressed point
-   * @param scale zoom level
+   * @param xMouse absolute X location of the pressed point.
+   * @param yMouse absolute Y location of the pressed point.
+   * @param scale zoom level.
    */
   @Override
   public void changeOccupationByHand(double xMouse, double yMouse, int scale) {
@@ -312,9 +311,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
     
   private int getClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
-
     int possibleDistance = 1;
-
     int i = iHexaOrigin;
     int j = jHexaOrigin - 1;
     int index;
@@ -389,9 +386,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
-
     int randomNumber = (int) (raw * (distance * 6));
-
     int i = iHexaOrigin;
     int j = jHexaOrigin - distance;
     int index;
@@ -450,7 +445,6 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   private int getClearAreaStep(short iHexaOrigin, short jHexaOrigin, int thresholdDistance) {
-
     int distance = 1;
     int i;
     int j;
@@ -530,7 +524,6 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   private AbstractGrowthAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
-
     int i;
     int j;
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
@@ -645,9 +638,10 @@ public class AgLattice extends AbstractGrowthLattice {
   }
    
   /**
-   * Éste lo ejecutan los primeros vecinos
-   * @param neighbourAtom neighbour atom of the original atom
-   * @param originType type of the original atom
+   * Éste lo ejecutan los primeros vecinos.
+   * 
+   * @param neighbourAtom neighbour atom of the original atom.
+   * @param originType type of the original atom.
    * @param forceNucleation
    */
   private void addOccupiedNeighbour(AgAtom neighbourAtom, byte originType, boolean forceNucleation) {
@@ -689,7 +683,7 @@ public class AgLattice extends AbstractGrowthLattice {
   /**
    * Computes the removal of one mobile atom.
    * 
-   * @param neighbourAtom neighbour atom of the original atom
+   * @param neighbourAtom neighbour atom of the original atom.
    */
   private void removeMobileOccupied(AgAtom neighbourAtom) {
 
@@ -712,5 +706,4 @@ public class AgLattice extends AbstractGrowthLattice {
       }
     }
   }
-  
 }

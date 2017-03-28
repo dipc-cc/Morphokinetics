@@ -22,7 +22,6 @@ public abstract class AbstractKmc implements IKmc {
   private AbstractList list;
   private AbstractLattice lattice;
   private int iterationsForLastSimulation;
-
   public AbstractKmc(Parser parser) {
     switch (parser.getListType()) {
       case "linear":

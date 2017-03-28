@@ -30,7 +30,6 @@ import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.unitCell.IUc;
 import main.Configurator;
-import static java.lang.String.format;
 
 /**
  * Class responsible to do the actual writings and readings. Only has to be used from Restart class.
@@ -244,6 +243,24 @@ class RestartLow {
     return data;
   }
 
+  static String readGitRevision(String folder) {
+    String rev;
+    String fileName = folder + "/.gitRevision";
+    // create file descriptor. It will be automatically closed.
+    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
+      String line;
+      // <-- read whole line
+      rev = in.readLine();
+    } catch (FileNotFoundException fe) {
+      rev = "not Found";
+    } catch (Exception e) {
+      // if any I/O error occurs
+      rev = "not known";
+      e.printStackTrace();
+    }
+    return rev;
+  }
+    
   static void writeLowTextHexagonal(float[][] data, String fileName) {
     // create file descriptor. It will be automatically closed.
     try (PrintWriter out = new PrintWriter(new FileWriter(fileName))) {
@@ -315,7 +332,35 @@ class RestartLow {
       // if any I/O error occurs
       e.printStackTrace();
     }
-  }   
+  }
+  
+  static void writeLowSimulationDataText(double[][][] data, String fileName) {
+    // create file descriptor. It will be automatically closed.
+    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
+      // for each byte in the buffer
+
+      for (int i = 0; i < data[0].length; i++) {
+        double R2 = 0;
+        double t = 0;
+        if (i > 0) {
+          int j; 
+          for (j = 0; j < data.length; j++) {
+            if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
+              R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
+              t += data[j][i][2];
+            }
+          }
+          System.out.println(i + " - R2: " + R2 + " - numData: " + j);
+          R2 = R2 / j;
+          t = t / j;
+        }
+        out.write((i + ";" + t + ";" + R2 + "\n").replace('.', ','));
+      }
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  }
   
   /**
    * Only used to read input "parameters" file.

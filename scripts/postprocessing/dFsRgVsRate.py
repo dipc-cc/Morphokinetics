@@ -1,3 +1,4 @@
+import functions as f
 # Author: J. Alberdi-Rodriguez
 
 import os
@@ -51,8 +52,8 @@ for i in range(-3,1):
     vg = meanValues.getGyradiusSlope()
     vN = meanValues.getIslandsAmountSlope()
     rtt = mk.getRtt(temperatures)
-    d = mk.fractalDFunc(rtt/3.5e-1)
-    d0 = mk.fractalDFunc(rtt/flux)
+    d = f.fractalD(rtt/3.5e-1)
+    d0 = f.fractalD(rtt/flux)
     
     #d = mk.readFractalD(flux)
     rg = meanValues.getLastGyradius()

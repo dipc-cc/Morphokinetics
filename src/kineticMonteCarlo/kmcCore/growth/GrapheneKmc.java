@@ -11,10 +11,12 @@ import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
 import kineticMonteCarlo.atom.GrapheneAtom;
 import kineticMonteCarlo.atom.GrapheneAtomGaillard;
 import kineticMonteCarlo.atom.GrapheneAtomGaillard1Neighbour;
+import kineticMonteCarlo.atom.GrapheneAtomGaillardSimple;
 import kineticMonteCarlo.atom.GrapheneAtomSchoenhalz;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.lattice.GrapheneLatticeSimple;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 
 /**
@@ -30,6 +32,9 @@ public class GrapheneKmc extends AbstractGrowthKmc {
 
     GrapheneLattice lattice;
     switch (parser.getRatesLibrary()) {
+      case "GaillardSimple":
+        lattice = new GrapheneLatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillardSimple.class);
+        break;
       case "Gaillard1Neighbour":
         lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillard1Neighbour.class);
         break;
@@ -51,7 +56,6 @@ public class GrapheneKmc extends AbstractGrowthKmc {
     if (parser.useDevita()) {
       configureDevitaAccelerator(distancePerStep);
     }
-    super.initHistogramSucces(8);
   }
 
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {

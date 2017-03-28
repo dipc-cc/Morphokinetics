@@ -11,6 +11,7 @@ import kineticMonteCarlo.atom.BasicGrowthAtom;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
 import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
+import kineticMonteCarlo.atom.BasicGrowthSimpleAtom;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.StaticRandom;
 
@@ -19,9 +20,11 @@ import utils.StaticRandom;
  * @author J. Alberdi-Rodriguez
  */
 public class BasicGrowthLattice extends AbstractGrowthLattice {
+  private final boolean simple;
 
-  public BasicGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
+  public BasicGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, boolean simple) {
     super(hexaSizeI, hexaSizeJ, modified);
+    this.simple = simple;
   }
   
   @Override
@@ -188,11 +191,20 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   private BasicGrowthAtom[][] createAtoms() {
+    BasicGrowthAtom[][] atoms;
     //Instantiate atoms
-    BasicGrowthAtom[][] atoms = new BasicGrowthAtom[getHexaSizeI()][getHexaSizeJ()];
+    if (simple) {
+      atoms = new BasicGrowthSimpleAtom[getHexaSizeI()][getHexaSizeJ()];
+    } else {
+      atoms = new BasicGrowthAtom[getHexaSizeI()][getHexaSizeJ()];
+    }
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new BasicGrowthAtom(createId(i, j), (short) i, (short) j);
+        if (simple) {
+          atoms[i][j] = new BasicGrowthSimpleAtom(createId(i, j), (short) i, (short) j);
+        } else {
+          atoms[i][j] = new BasicGrowthAtom(createId(i, j), (short) i, (short) j);
+        }
       }
     }
     

@@ -9,6 +9,7 @@ import basic.AgUcSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.BasicGrowthSimulation;
+import basic.CatalysisSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
@@ -52,26 +53,26 @@ public class Morphokinetics {
     parser.readFile("parameters");
     parser.print();
 
-      switch (parser.getCalculationType()) {
-        case "batch":
-          batchSimulation(parser);
-          break;
-        case "evolutionary":
+    switch (parser.getCalculationType()) {
+      case "batch":
+        batchSimulation(parser);
+        break;
+      case "evolutionary":
         evolutionarySimulation(parser);
-          break;
-        case "psd":
+        break;
+      case "psd":
         psdFromSurfaces(parser);
-          break;
-        default:
-          System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
-          System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are 'batch', 'evolutionary' or 'psd'");
-          throw new IllegalArgumentException("This simulation mode is not implemented");
-      }
-      printEnd();
-      if (!parser.withGui() || !parser.visualise()) {
-        System.exit(0);
-      }
+        break;
+      default:
+        System.err.println("Error: Default case calculation type. This simulation mode is not implemented!");
+        System.err.println("Current value: " + parser.getCalculationType() + ". Possible values are 'batch', 'evolutionary' or 'psd'");
+        throw new IllegalArgumentException("This simulation mode is not implemented");
     }
+    printEnd();
+    if (!parser.withGui() || !parser.visualise()) {
+      System.exit(0);
+    }
+  }
 
   private static void batchSimulation(Parser parser) {
     AbstractSimulation simulation = null;
@@ -90,6 +91,9 @@ public class Morphokinetics {
         break;
       case "basic":
         simulation = new BasicGrowthSimulation(parser);
+        break;
+      case "catalysis":
+        simulation = new CatalysisSimulation(parser);
         break;
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
@@ -154,7 +158,6 @@ public class Morphokinetics {
     Restart restart = new Restart();
     int[] sizes = null;
     float[][] readSurface = null;
-    int islandCount = 0;
     int numberOfFiles = 43;
     String surfaceFileName = "psdFromImage/islands/3.OuterIsolatedSmall/island";
     PsdSignature2D psd = null;
@@ -172,7 +175,6 @@ public class Morphokinetics {
         //throw e;
         continue;
       }
-      islandCount++;
       MathUtils.applyGrowthAccordingDistanceToPerimeter(readSurface);
       psd.addSurfaceSample(readSurface);
     }

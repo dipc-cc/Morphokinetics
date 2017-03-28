@@ -9,7 +9,7 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgUcLatticeSimple extends AgUcLattice{
+public class AgUcLatticeSimple extends AgUcLattice {
   
   public AgUcLatticeSimple(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep, true);
@@ -19,9 +19,8 @@ public class AgUcLatticeSimple extends AgUcLattice{
   public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
     AgAtom atom = (AgAtom) a;
     atom.setOccupied(true);
-    byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
+      addOccupiedNeighbour(atom.getNeighbour(i));
     }
 
     addAtom(atom);
@@ -52,11 +51,12 @@ public class AgUcLatticeSimple extends AgUcLattice{
   
   /**
    * Éste lo ejecutan los primeros vecinos
+   *
    * @param neighbourAtom neighbour atom of the original atom
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(AgAtom neighbourAtom, byte originType, boolean forceNucleation) {
+  private void addOccupiedNeighbour(AgAtom neighbourAtom) {
     byte newType = (byte) (neighbourAtom.getType() + 1);
     if (newType > 6) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >6, which is in practice impossible");
@@ -77,7 +77,6 @@ public class AgUcLatticeSimple extends AgUcLattice{
    * @param neighbourAtom neighbour atom of the original atom
    */
   private void removeMobileOccupied(AgAtom neighbourAtom) {
-
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible");
@@ -90,5 +89,4 @@ public class AgUcLatticeSimple extends AgUcLattice{
       addBondAtom(neighbourAtom);
     }
   }
-  
 }
