@@ -229,7 +229,7 @@ else:
     energies = [0.5, 2.6, 1.8, 3.9]
     labelAlfa = ["$E_a$", "$E_b$", "$E_c$", "$E_d$"]
     
-labelAlfa.append("EA")
+labelAlfa.append(r"$\frac{\langle N_h \rangle}{t}$")
 # define ranges
 rngt = defineRanges(calculationMode, p.rLib, temperatures)
 
@@ -354,7 +354,7 @@ if (omegas):
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
     myLegends = [lgEaCov, lgEaCov2, lgErr]
-    myLabels = ["Activation energy", "Recomputed AE", "Error"]  
+    myLabels = ["Activation energy\nSlope of "+r"$\frac{\langle N_h \rangle}{t}$", "Recomputed AE", "Error"]  
     myLegends += lgs
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
