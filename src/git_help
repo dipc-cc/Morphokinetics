@@ -30,3 +30,7 @@ Setting your branch to exactly match the remote branch can be done in two steps:
 Remove branch remotely and locally
   git push origin --delete <branch_name>
   git branch -d <branch_name>
+
+Grep in all code
+  git grep <regexp> $(git rev-list --all -- lib/util) -- lib/util
+  git branch --contains <commit>
