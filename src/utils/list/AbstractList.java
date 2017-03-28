@@ -50,7 +50,6 @@ public abstract class AbstractList implements IProbabilityHolder {
   
   public double getDeltaTime(boolean compute) {
     if (compute) {
-      //deltaTime = 1 / (getTotalProbability() + getDepositionProbability());
       deltaTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
       return deltaTime;
     } else {
@@ -104,15 +103,16 @@ public abstract class AbstractList implements IProbabilityHolder {
   public abstract double getTotalProbabilityFromList();
 
   /**
-   *
+   * Total hops probability.
+   * 
    * @return total probability (always >= 0)
    */
   public double getTotalProbability() {
     return totalProbability > 0 ? totalProbability : 0;
-    //return totalProbability;
   }
   
   /**
+   * Total hops probability plus deposition probability.
    * 
    * @return total movement probability + deposition probability
    */
