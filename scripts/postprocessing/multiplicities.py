@@ -103,7 +103,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
 
 
 def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
-    markers=["o", "s","D","^","o"]
+    markers=["o", "s","D","^","d","h","p","o"]
     labelRange = ['low', 'med', 'high']
     labelRange = labelRange+list([str(i) for i in rngt])
     cm = plt.get_cmap('Set1')
@@ -127,7 +127,7 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     return slopes
 
 def plotOmegas(x, y, axis, i):
-    markers=["o", "s","D","^"]
+    markers=["o", "s","D","^","d","h","p","o"]
     newax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
     newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
     newax.set_ylim(-0.05,1.05)
@@ -277,7 +277,7 @@ for cov in range(-p.maxC,0):
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
-        plt.savefig("plot"+str(p.maxC+cov)+".svg", bbox_inches='tight')
+        plt.savefig("plot"+str(p.maxC+cov)+".png", bbox_inches='tight')
         plt.close()
     
 
@@ -359,4 +359,4 @@ if (omegas):
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
     plt.figlegend(myLegends, myLabels, loc=(0.7,0.68), prop={'size':8})
-    plt.savefig("multiplicitiesOmegas.svg", bbox_inches='tight')
+    plt.savefig("multiplicitiesOmegas.png", bbox_inches='tight')
