@@ -81,22 +81,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private int direction;
   
   private ArrayList visitedPositions;
-
-  public int getRelativeX() {
-    return relativeX;
-  }
-
-  public void setRelativeX(int relativeX) {
-    this.relativeX = relativeX;
-  }
-
-  public int getRelativeY() {
-    return relativeY;
-  }
-
-  public void setRelativeY(int relativeY) {
-    this.relativeY = relativeY;
-  }
   private Point3D cartesianPosition;
   private Point3D cartesianSuperCell;
   
