@@ -18,6 +18,7 @@ class fileData:
         self.maxN = data[7] # max number of neighbour or atom types
         self.maxC = data[8] # max simulated coverage
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
+
     def getRatios(self):
         ratios = 0
         if self.calc == "AgUc":
@@ -28,7 +29,7 @@ class fileData:
             else:
                 ratios = getRatio(self.temp, getBasicEnergies())
         else:
-            ratios = info.getRatio(p.temp, info.getGrapheneSimpleEnergies())
+            ratios = getRatio(self.temp, getGrapheneSimpleEnergies())
         return ratios
 
 
@@ -137,7 +138,8 @@ def processData(xInterpolated, xValues, yValues, logMean=False):
     if logMean:
         yInterpolated = np.exp(np.mean(np.log(yValuesI), axis=0))
     return yInterpolated
-                
+
+
 def readBinnedAverages():
     p = getInputParameters()
     allData = []
@@ -171,6 +173,7 @@ def readBinnedAverages():
 
     return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
 
+
 def readInstantaneous(doBin=True):
     """ reads instantaneous multiplicities, for the moment only valid for AgUc """
     allData = []
@@ -203,6 +206,7 @@ def readInstantaneous(doBin=True):
             Malpha.append(np.mean(allData[:,j,:], axis=0))
     return Malpha
 
+
 def readPossibleFromList():
     """ reads instantaneous multiplicities, for the moment only valid for AgUc """
     allData = []
@@ -225,6 +229,7 @@ def readPossibleFromList():
         Malpha.append(np.mean(allData[:,j,:], axis=0))
     return Malpha
 
+
 class islandDistribution:
     def __init__(self, data):
         self.islD = data
@@ -241,6 +246,7 @@ class islandDistribution:
     def islB5(self):
         """ islands bigger than 5 atoms """
         return np.mean([[np.count_nonzero(h[1:]>4) for h in run] for run in self.islD],axis=0)    
+
     
 def readHistograms():
     """ It reads histograms and then, we are able to get islands bigger than 2, 3, 4 or 6 atoms """
@@ -251,6 +257,7 @@ def readHistograms():
         fileName = "histogram"+str(i)+".txt"
         islD.append(readHistogram(fileName))
     return islandDistribution(islD)
+
 
 def splitDataFiles():
     # split files
@@ -269,9 +276,11 @@ def splitAeFiles():
     os.system("grep AeRatioTimesPossible dataEvery1percentAndNucleation.txt | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"ratioTimesPossible\"n\".txt\"}'")
     os.system("grep AeMultiplicity dataEvery1percentAndNucleation.txt       | awk -v prev=100 -v n=-1 '{if ($1<prev) {n++}prev=$1;} {$2=\"\"; print > \"multiplicity\"n\".txt\"}'")
 
+    
 def splitHistogramFiles():
     os.system("grep histo dataEvery1percentAndNucleation.txt | sed -e 's/histogram\|\]\|\[\|,/ /g' | awk -v n=-1 '{if ($1>prev) {n++} prev=$1; {print > \"histogram\"n\".txt\"}}'")
 
+    
 def getHexagonalEnergies():
     energies = 999999999*np.ones(49, dtype=float)
     energies[0:4] = 0.10
@@ -290,12 +299,14 @@ def getBasicEnergies():
     energies[9:12] = 0.435
     return energies
 
+
 def getBasic2Energies():
     energies = 999999999*np.ones(16, dtype=float)
     energies[0:4] = 0.1
     energies[5:8] = 0.4
     energies[11] = 0.4
     return energies
+
 
 def getGrapheneSimpleEnergies():
     energies = 999999999*np.ones(16, dtype=float)
@@ -338,6 +349,7 @@ def readAe(fileName):
         shape = list(map(int,shape[1:4]))
         break
     return np.loadtxt(fileName).reshape(shape)
+
 
 def readHistogram(fileName):
     f = open(fileName)
