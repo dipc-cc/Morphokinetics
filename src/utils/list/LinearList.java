@@ -9,7 +9,7 @@ import utils.StaticRandom;
 /**
  * Linked list basic implementation.
  */
-public class LinearList extends AbstractList implements IProbabilityHolder{
+public class LinearList extends AbstractList implements IProbabilityHolder {
 
   private final ArrayList<AbstractAtom> surface;
   /**
@@ -48,8 +48,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder{
   }  
   
   /**
-   * Updates the total probability
-   * @param probabilityChange probability change
+   * Updates the total probability.
+   * 
+   * @param probabilityChange probability change.
    */
   @Override
   public void addTotalProbability(double probabilityChange) {
