@@ -144,5 +144,8 @@ def getOnlyAscending(vector):
 
 def base10(x):
     exp = int(math.log10(x))
-    r = r"${}\cdot10^{}$".format(str(int(x / 10**exp)), str(exp))
-    return r
+    man = int(x / 10**exp)
+    if man == 0:
+        exp -= 1
+    text = r"$"+str(int(x / 10**exp))+r"\cdot10^{"+str(exp)+r"}$"
+    return text
