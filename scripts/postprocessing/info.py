@@ -129,6 +129,18 @@ def readAverages():
     return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
 
 
+def getAvgDataCoverage(p, d, coverage):
+    try:
+        i = len(d.cove)-(100-coverage)
+        divisor = 4*coverage*p.sizI*p.sizJ*d.time[i]*(p.flux**0.7)
+        r = [p.flux, d.cove[i]/divisor, d.diff[i]/divisor, d.hops[i]/divisor, np.max(d.isld[-95:])/(p.flux**0.27)]#d.isld[i]/(p.flux**0.27)#
+        if math.isnan(d.hops[i]) or d.hops[i] < 0: # sometimes the number of hops is not properly saved, because it was an int instead of long
+            r[3] = (d.even[i] - (d.cove[i]*p.sizI*p.sizJ))/divisor # recalculating it: even - depositions
+    except IndexError:
+        r = [p.flux, None, None, None, None]
+    return r
+
+
 def processData(xInterpolated, xValues, yValues, logMean=False):
     """ Interpolated given values to xInterpolated vector """
     yValuesI = []
