@@ -22,24 +22,26 @@ def plot(ax, ax2, data, i):
     if ax2 != None:
         ax2.plot(x, data[:,5], label="isld",
                         ls = "--", color=cm(i/8))
+        ax2.text(x[0]/8, data[:,5][0], fun.base10(flux), color=cm(i/8), size=10)
     lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
             marker="", ls="-", mew=mew, ms=8, alpha=alpha, color=cm(i/8))
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
             marker="", ls="-.", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
+    ax.text(x[0]/8, data[:,4][0], fun.base10(flux), color=cm(i/8), size=10)
     if i == 4:
         xFit = np.array([1e2, 1e12])
         ax2.plot(xFit, fun.power(xFit, 4e4, -0.3333), ls=":", color="black")
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         label = r"$\theta=0.3$"
-        ax.annotate(r"$1/3$", xy=(1e3,2e2),
+        ax.annotate(r"$1/3$", xy=(1e5,3e2),
                     bbox=bbox_props)
-        ax.annotate(label, xy=(0.4,0.9), xycoords="axes fraction",
+        ax.annotate(label, xy=(0.5,0.93), xycoords="axes fraction",
                     bbox=bbox_props)
         ax.annotate("", xy=(1e9,1e-5), xycoords='data', xytext=(1e9, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
         ax.annotate("", xy=(8e10,1e-5), xycoords='data', xytext=(8e10, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
-    return lg1
+    #return lg1
 
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
@@ -74,18 +76,17 @@ for i,f in enumerate(fluxes):
         os.chdir(fPath)
     ### Plot
     if i == 0:
-        rLg = mlines.Line2D([], [], color='white', marker='o',
+        rLg = mlines.Line2D([], [], color='black', ls="-",
                             markersize=10, label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t F^{0.7}}$")
-        nLg = mlines.Line2D([], [], color='white', marker='+', markeredgecolor="black", markeredgewidth=1,
+        nLg = mlines.Line2D([], [], color='black', ls="-.",
                             markersize=8, label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t F^{0.7}}$")
-        iLg = mlines.Line2D([], [], color='black', marker='',
+        iLg = mlines.Line2D([], [], color='black', ls='--',
                             markersize=8, label=r"$N_{isl}$")
         legends.append(rLg)
         legends.append(nLg)
         legends.append(iLg)
-    lg1 = plot(ax, ax2, data1, i)
-    legends.append(lg1)
-    ax.legend(handles=legends, bbox_to_anchor=(0.75, 0.32),
-              bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=2, prop={'size':8}, markerscale=1)
+    plot(ax, ax2, data1, i)
+    ax.legend(handles=legends, bbox_to_anchor=(0.5, 0.32),
+              bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=1, prop={'size':8}, markerscale=1)
     fig.savefig("../diffusivityTimeIslands.pdf", bbox_inches='tight')
     os.chdir(workingPath)
