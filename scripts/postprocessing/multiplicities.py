@@ -3,12 +3,13 @@ import info
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
+from matplotlib.ticker import FixedFormatter
 import glob
 import re
 import math
 import os
 import sys
-
+import roman
 
 def computeMavgAndOmega(fileNumber, p):
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
@@ -292,7 +293,9 @@ tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
 cm = plt.get_cmap('gist_earth')
 ax = []
 axarr[0].set_ylabel("eV")
+coverage = np.array(coverage)/100
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
+    axarr[i].text(0.5, 0.95, roman.toRoman(maxRanges-i), color="gray", transform=axarr[i].transAxes)
     axarr[i].set_xlabel(r"$\theta$")
     lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,maxRanges-1-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
     lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,maxRanges-1-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
@@ -341,8 +344,10 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
     plt.savefig("multiplicitiesRandM.svg", bbox_inches='tight')
 
 if (omegas):
+    labels = ["0", "0.2", "0.4", "0.6", "0.8", "1"]
     cm = plt.get_cmap('Set1')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
+        axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
         partialSum = np.sum(tempOmegaCov[:,:,j]*(tempEaRCov[:,:,j]-tempEaMCov[:,:,j]), axis=1)
         lgs = []
         for i in range(maxAlfa-1,-1,-1): #alfa
@@ -354,5 +359,5 @@ if (omegas):
     myLegends += lgs
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
-    plt.figlegend(myLegends, myLabels, loc=(0.7,0.68), prop={'size':8})
+    plt.figlegend(myLegends, myLabels, loc=(0.7,0.55), prop={'size':8})
     plt.savefig("multiplicitiesOmegas.png", bbox_inches='tight')
