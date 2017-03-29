@@ -10,6 +10,8 @@ import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static java.lang.String.format;
+import java.util.ArrayList;
+import javafx.geometry.Point3D;
 import utils.StaticRandom;
 
 /**
@@ -207,9 +209,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     destinationAtom.setDepositionTime(originAtom.getDepositionTime());
     destinationAtom.setDepositionPosition(originAtom.getDepositionPosition());
     destinationAtom.setHops(originAtom.getHops() + 1);
+    destinationAtom.setVisitedPositions(originAtom.getVisitedPositions());
+    destinationAtom.addVisitedPosition(new Point3D(destinationAtom.getiHexa(), destinationAtom.getjHexa(), 0));
     originAtom.setDepositionTime(0);
     originAtom.setDepositionPosition(null);
     originAtom.setHops(0);
+    originAtom.setVisitedPositions(new ArrayList());
     getModifiedBuffer().updateAtoms(getList());
 
     return true;
