@@ -62,6 +62,9 @@ def plot(ax, ax2, data, i):
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
             marker="", ls="-.", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
     ax.text(x[0]/8, data[:,4][0], fun.base10(flux), color=cm(i/8), size=10)
+    if i == 0:
+        ax.annotate("",xytext=(x[1],data[:,4][1]*1.5), xy=(x[1]/80,data[:,4][1]*3),
+                     arrowprops=dict(arrowstyle="->", connectionstyle="angle3", ls="-", color="gray"), ha="center", va="center")
     if i == 4:
         xFit = np.array([1e2, 1e12])
         ax2.plot(xFit, fun.power(xFit, 4e4, -0.3333), ls=":", color="black")
@@ -87,6 +90,9 @@ def plot(ax, ax2, data, i):
         ax.text(2e7, y, "I", color="gray")
         ax.text(5e9, y, "II", color="gray")
         ax.text(2e11, y, "III", color="gray")
+
+        ax2.annotate("",xy=(x[-1]*18,data[:,5][-1]), xytext=(x[-1]*2,data[:,5][-1]/1.5),
+                     arrowprops=dict(arrowstyle="->", connectionstyle="angle3", ls="-", color="gray"), ha="center", va="center")
 
 
 workingPath = os.getcwd()
@@ -132,7 +138,7 @@ for i,f in enumerate(fluxes):
         legends.append(nLg)
         legends.append(iLg)
     plot(ax, ax2, data1, i)
-    ax.legend(handles=legends, bbox_to_anchor=(0.63, 0.5),
-              bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=1, prop={'size':8}, markerscale=1)
+    ax.legend(handles=legends, bbox_to_anchor=(0.63, 0.45),
+              bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=1, prop={'size':12}, markerscale=1)
     fig.savefig("../diffusivityTimeIslands.pdf", bbox_inches='tight')
     os.chdir(workingPath)
