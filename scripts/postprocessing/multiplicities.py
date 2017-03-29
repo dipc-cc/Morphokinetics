@@ -223,7 +223,7 @@ if calculationMode == "AgUc":
     xmin = 20
     xmax = 185
     energies = [0.1, 0.25, 0.33, 0.42]
-    labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
+    labelAlfa = [r"$\omega_0(E_0^r+E_0^M)$", r"$\omega_1(E_1^r+E_1^M)$",r"$\omega_2(E_2^r+E_2^M)$", r"$\omega_3(E_3^r+E_3^M)$"]
 elif calculationMode == "basic":
     if p.rLib == "version2":
         #       d   a
@@ -321,7 +321,7 @@ ax = []
 axarr[0].set_ylabel("eV")
 coverage = np.array(coverage)/100
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    axarr[i].text(0.5, 0.95, roman.toRoman(maxRanges-i), color="gray", transform=axarr[i].transAxes)
+    axarr[i].text(0.5, 0.95, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray", transform=axarr[i].transAxes)
     axarr[i].set_xlabel(r"$\theta$")
     lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,maxRanges-1-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
     lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,maxRanges-1-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
@@ -380,10 +380,12 @@ if (omegas):
             lgs.append(axarr[maxRanges-1-j].fill_between(coverage, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
-    myLegends = [lgEaCov, lgEaCov2, lgErr]
-    myLabels = ["Activation energy\nSlope of "+r"$\frac{\langle N_h \rangle}{t}$", "Recomputed AE", "Error"]  
+    myLegends = [lgEaCov, lgEaCov2]
+    myLabels = [r"$E_a^{Arrh}$", r"$E_a^{calc} = \sum_\alpha\omega_\alpha(E_\alpha^r+E_\alpha^M)$"]  
     myLegends += lgs
+    myLegends += [lgErr]
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
+    myLabels.append("Relative error")
     plt.figlegend(myLegends, myLabels, loc=(0.7,0.55), prop={'size':8})
-    plt.savefig("multiplicitiesOmegas.pdf", bbox_inches='tight')
+    plt.savefig("multiplicitiesOmegas.png", bbox_inches='tight')
