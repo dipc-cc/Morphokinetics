@@ -3,12 +3,46 @@ import functions as fun
 import os
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
+import matplotlib.ticker as plticker
+from matplotlib.patches import Ellipse
 import numpy as np
 
 def read():
     p = inf.getInputParameters()
     d = inf.readAverages()
     return p, d
+
+def addEllipses():
+    alpha = 0.05
+    position = [0.16, 0.5, 0.3, 0.3]
+    newax = plt.gcf().add_axes(position, zorder=+100)
+    newax.patch.set_alpha(0)
+    newax.yaxis.set_major_locator(plticker.NullLocator())
+    newax.xaxis.set_major_locator(plticker.NullLocator())
+    newax.axis('off')
+    ellipse = Ellipse((0.3, 0.6), 0.3, 0.6,
+                      edgecolor='None', fc='green', alpha=alpha)
+    newax.add_patch(ellipse)
+
+    position = [0.16, 0.15, 0.3, 0.3]
+    newax = plt.gcf().add_axes(position, zorder=+100)
+    newax.patch.set_alpha(0)
+    newax.yaxis.set_major_locator(plticker.NullLocator())
+    newax.xaxis.set_major_locator(plticker.NullLocator())
+    newax.axis('off')
+    ellipse = Ellipse((0.3, 0.6), 0.3, 0.6,
+                      edgecolor='None', fc='blue', alpha=alpha)
+    newax.add_patch(ellipse)
+    
+    position = [0.61, 0.28, 0.3, 0.3]
+    newax = plt.gcf().add_axes(position, zorder=+100)
+    newax.patch.set_alpha(0)
+    newax.yaxis.set_major_locator(plticker.NullLocator())
+    newax.xaxis.set_major_locator(plticker.NullLocator())
+    newax.axis('off')
+    ellipse = Ellipse((0.3, 0.6), 0.3, 0.45,
+                      edgecolor='None', fc='red', alpha=alpha, angle=45)
+    newax.add_patch(ellipse)
     
 
 def plot(ax, ax2, data, i):
@@ -41,7 +75,19 @@ def plot(ax, ax2, data, i):
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
         ax.annotate("", xy=(8e10,1e-5), xycoords='data', xytext=(8e10, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
-    #return lg1
+        addEllipses()
+        alpha=0.1
+        ax.annotate("a)", xy=(7e2,3), xytext=(7e2,7e-1), ha="center", va="center",
+                    arrowprops=dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha), color="green", alpha=alpha)
+        ax.annotate("b)", xy=(7e2,1e-4), xytext=(7e2,3e-5), ha="center", va="center",
+                    arrowprops=dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha), color="blue", alpha=alpha)
+        ax.annotate("c)", xy=(8e9,1), xytext=(8e9,2), ha="center", va="center",
+                    arrowprops=dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha), color="red", alpha=alpha)
+        y = 3e-5
+        ax.text(2e7, y, "I", color="gray")
+        ax.text(5e9, y, "II", color="gray")
+        ax.text(2e11, y, "III", color="gray")
+
 
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
@@ -86,7 +132,7 @@ for i,f in enumerate(fluxes):
         legends.append(nLg)
         legends.append(iLg)
     plot(ax, ax2, data1, i)
-    ax.legend(handles=legends, bbox_to_anchor=(0.5, 0.32),
+    ax.legend(handles=legends, bbox_to_anchor=(0.63, 0.5),
               bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=1, prop={'size':8}, markerscale=1)
     fig.savefig("../diffusivityTimeIslands.pdf", bbox_inches='tight')
     os.chdir(workingPath)
