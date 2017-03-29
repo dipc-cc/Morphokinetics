@@ -17,7 +17,8 @@ def computeMavgAndOmega(fileNumber, p):
     possiblesFromList = possiblesFromList[:,1:] # remove coverage
     time = np.array(matrix[:,1])
     length = len(time)
-    hops = np.array(matrix[:,15])
+    coverage = matrix[:,0]
+    hops = np.array(matrix[:,15])/(4*coverage*p.sizI*p.sizJ) # scale all data
     ratios = p.getRatios()
     Mavg = np.zeros(shape=(length,p.maxA))
     for i in range(0,p.maxA): # iterate alfa
@@ -107,38 +108,61 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     slopes = []
     if showPlot:   
         axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
+        arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
+        xI = 42
+        xII = 94
+        if alfa == -1:
+            axis.text(30, 300, "a)", ha="center", va="center")
+            axis.set_ylabel(r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h \rangle}{t}$")
+            yMin = 1e1
+            yMax = 1e6
+        elif alfa == 0:
+            axis.text(30, 3e3, "b)", ha="center", va="center")
+            axis.set_ylabel(r"$M_\alpha$")
+            yMin = 1e-1
+            yMax = 1e5
+        if alfa < 1:
+            axis.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
+            axis.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
     for i in range(0,len(rngt)-1):
         a, b = fun.linearFit(x, y, rngt[i], rngt[i+1])
         slopes.append(b)
         if showPlot:
             axis.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", label="{} {} {:03.3f} ".format(labelAlfa[alfa],labelRange[i],b))
-            if alfa != -1 and alfa < 3:
-                xHalf = (x[rngt[i]]+x[rngt[i+1]]+1)/2
-                yHalf = np.exp(fun.linear(xHalf, a, b))#*3
-                text = "{:03.3f}".format(b)
-                bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-                axis.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
-            if i == len(rngt)-2:
-                if alfa == -1:
-                    axis.legend(prop={'size': 8},loc="best")# bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
+            xHalf = (x[rngt[i]]+x[rngt[i+1]]+1)/2
+            text = "{:03.3f}".format(-b)
+            yHalf = np.exp(fun.linear(xHalf, a, b))
+            if alfa == -1:
+                xHalf *= 1.15
+                yHalf *= 5
+                text = r"$E_a^{"+roman.toRoman(maxRanges-i)+r"}="+text+r"$"
+                xText = [30, 60, 120]
+                axis.text(xText[i], 30, roman.toRoman(maxRanges-i), color="gray")#, transform=axarr[i].transAxes)
+            bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
+            axis.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
     return slopes
 
 def plotOmegas(x, y, axis, i):
     markers=["o", "s","D","^","d","h","p","o"]
-    newax = fig.add_axes([0.4, 0.15, 0.25, 0.15])
+    newax = fig.add_axes([0.43, 0.15, 0.25, 0.15])
     newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
     newax.set_ylim(-0.05,1.05)
     loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
     newax.xaxis.set_major_locator(loc)
     loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
     newax.yaxis.set_major_locator(loc)
-    newax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", "$1/3$", "$2/3$", "$1$")))
+    newax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", r"$\frac{1}{3}$", r"$\frac{2}{3}$", "$1$")))
     newax.set_xlim(xmin,xmax)
-    newax.legend(prop={'size': 7}, loc=(0.6,0.2), scatterpoints=1)# bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
-    axis.semilogy(x, y, ".-", color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], markeredgecolor=cm(abs(i/9)))
-    axis.set_ylim(1e-3,2)
+    newax.legend(prop={'size': 7}, loc=(0.6,0.12), scatterpoints=1)# bbox_to_anchor=(1.05, 0), loc="lower left", borderaxespad=0.)
+    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], markeredgecolor=cm(abs(i/9)))
+    axis.set_ylim(2e-4,2)
     axis.set_ylabel(r"$\omega_\alpha$")
     axis.set_xlabel(r"$1/k_BT$")
+    arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
+    if i == 0:
+        axis.annotate("", xy=(42,2e-4), xytext=(42,2), arrowprops=arrow)
+        axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
+        axis.text(30, 2e-3, "c)", ha="center", va="center")
     
 temperatures = info.getTemperatures()
 p = info.getInputParameters(glob.glob("*/output*")[0])
@@ -197,7 +221,7 @@ if calculationMode == "AgUc":
     ind = [0,4,8,12,15,20,24,27]
     maxAlfa = 4
     xmin = 20
-    xmax = 200
+    xmax = 185
     energies = [0.1, 0.25, 0.33, 0.42]
     labelAlfa = ["$E_0$", "$E_1$", "$E_2$", "$E_3$"]
 elif calculationMode == "basic":
@@ -226,7 +250,7 @@ else:
     energies = [0.5, 2.6, 1.8, 3.9]
     labelAlfa = ["$E_a$", "$E_b$", "$E_c$", "$E_d$"]
     
-labelAlfa.append(r"$\frac{\langle N_h \rangle}{t}$")
+labelAlfa.append(r"$E_a \; \frac{\langle N_h \rangle}{t}$")
 # define ranges
 rngt = defineRanges(calculationMode, p.rLib, temperatures)
 
@@ -239,13 +263,15 @@ coverage = list(range(0,p.maxC))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
 for cov in range(-p.maxC,0):
+    #if cov < -71 or cov > -68:
+     #  continue
     x = 1/kb/temperatures+np.log(5e4**1.5)
     y = tempR1avg
     print(cov)
     if showPlot:
         cm = plt.get_cmap('Set1')
         fig, axarr = plt.subplots(3, sharex=True)
-        fig.set_size_inches(6,6)
+        fig.set_size_inches(5,6)
         fig.subplots_adjust(right=0.7, hspace=0.1)
         plt.xlim(xmin,xmax)
     else:
@@ -274,7 +300,7 @@ for cov in range(-p.maxC,0):
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
-        plt.savefig("plot"+str(p.maxC+cov)+".png", bbox_inches='tight')
+        plt.savefig("plot"+str(p.maxC+cov)+".pdf", bbox_inches='tight')
         plt.close()
     
 
@@ -360,4 +386,4 @@ if (omegas):
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
     plt.figlegend(myLegends, myLabels, loc=(0.7,0.55), prop={'size':8})
-    plt.savefig("multiplicitiesOmegas.png", bbox_inches='tight')
+    plt.savefig("multiplicitiesOmegas.pdf", bbox_inches='tight')
