@@ -4,6 +4,8 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 import matplotlib.ticker as plticker
+from matplotlib.ticker import MaxNLocator
+from matplotlib.ticker import LogLocator
 from matplotlib.patches import Ellipse
 import numpy as np
 
@@ -44,6 +46,16 @@ def addEllipses():
                       edgecolor='None', fc='red', alpha=alpha, angle=45)
     newax.add_patch(ellipse)
     
+    position = [0.78, 0.78, 0.1, 0.1]
+    newax = plt.gcf().add_axes(position, zorder=+100)
+    newax.patch.set_alpha(0)
+    newax.yaxis.set_major_locator(plticker.NullLocator())
+    newax.xaxis.set_major_locator(plticker.NullLocator())
+    newax.axis('off')
+    ellipse = Ellipse((0.5, 0.5), 0.3, 0.5,
+                      edgecolor='None', fc='brown', alpha=alpha)
+    newax.add_patch(ellipse)
+    
 
 def plot(ax, ax2, data, i):
     marker = ["o", "s","H","D","^","d","h","p","o"]
@@ -69,7 +81,7 @@ def plot(ax, ax2, data, i):
         xFit = np.array([1e2, 1e12])
         ax2.plot(xFit, fun.power(xFit, 4e4, -0.3333), ls=":", color="black")
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
-        label = r"$\theta=0.3$"
+        label = r"$\theta=0.30$"
         ax.annotate(r"$1/3$", xy=(1e5,3e2),
                     bbox=bbox_props)
         ax.annotate(label, xy=(0.5,0.93), xycoords="axes fraction",
@@ -79,13 +91,16 @@ def plot(ax, ax2, data, i):
         ax.annotate("", xy=(8e10,1e-5), xycoords='data', xytext=(8e10, 1e4),
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
         addEllipses()
-        alpha=0.1
-        ax.annotate("a)", xy=(7e2,3), xytext=(7e2,7e-1), ha="center", va="center",
-                    arrowprops=dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha), color="green", alpha=alpha)
-        ax.annotate("b)", xy=(7e2,1e-4), xytext=(7e2,3e-5), ha="center", va="center",
-                    arrowprops=dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha), color="blue", alpha=alpha)
-        ax.annotate("c)", xy=(8e9,1), xytext=(8e9,2), ha="center", va="center",
-                    arrowprops=dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha), color="red", alpha=alpha)
+        alpha=0.2
+        arrow = dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha)
+        ax.annotate("A", xy=(7e2,3), xytext=(7e2,7e-1), ha="center", va="center",
+                    arrowprops=arrow, color="green", alpha=alpha)
+        ax.annotate("B", xy=(7e2,1e-4), xytext=(7e2,3e-5), ha="center", va="center",
+                    arrowprops=arrow, color="blue", alpha=alpha)
+        ax.annotate("C", xy=(8e9,1), xytext=(8e9,2), ha="center", va="center",
+                    arrowprops=arrow, color="red", alpha=alpha)
+        ax.annotate("D", xy=(8e11,2e2), xytext=(8e11,1e2), ha="center", va="center",
+                    arrowprops=arrow, color="brown", alpha=alpha)
         y = 3e-5
         ax.text(2e7, y, "I", color="gray")
         ax.text(5e9, y, "II", color="gray")
@@ -107,8 +122,7 @@ ax.set_xscale("log")
 ax.set_yscale("log")
 ax2.set_yscale("log")
 ax.set_xlabel(r"$r_{tt}/F^{0.17}$")
-ax.set_ylabel(r"$R^2/(t F^{0.7})$,  $N_h/(t F^{0.7})$")
-ax2.set_ylabel(r"$N_{isld}$")
+ax.set_xlim(8,1e13)
 legends = []
 for i,f in enumerate(fluxes):
     temperaturesPlot = []
@@ -140,5 +154,8 @@ for i,f in enumerate(fluxes):
     plot(ax, ax2, data1, i)
     ax.legend(handles=legends, bbox_to_anchor=(0.63, 0.45),
               bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=1, prop={'size':12}, markerscale=1)
-    fig.savefig("../diffusivityTimeIslands.pdf", bbox_inches='tight')
+    
+    locator = LogLocator(100,[10])
+    ax.xaxis.set_major_locator(locator)
+    fig.savefig("../diffusivityTimeIslands.pdf")#, bbox_inches='tight')
     os.chdir(workingPath)
