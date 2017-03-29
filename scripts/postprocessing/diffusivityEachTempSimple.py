@@ -25,7 +25,7 @@ def addSurface(temperature, ax=0):
         newax.yaxis.set_major_locator(plticker.NullLocator())
         newax.xaxis.set_major_locator(plticker.NullLocator())
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
-        newax.annotate(r"$\theta = 30\%$", xy=[200,100], bbox=bbox_props)
+        newax.annotate(r"$\theta = 0.3$", xy=[200,100], bbox=bbox_props)
     except IndexError:
         pass
 
@@ -45,11 +45,11 @@ def addFreeDiffusivity(ax, x, p):
     y = y * 3/2*p.getRatios()[0]
     cm = plt.get_cmap("Accent")
     ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{1}{2d}m_{00}\nu_{00}l^2$", xytext=(2e-2,4e11), textcoords="data",
+    ax.annotate(r"$\frac{1}{2d}m_{0}\nu_{0}l^2$", xytext=(2e-2,4e11), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     y = y / 2
     ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{1}{4d}m_{00}\nu_{00}l^2$", xytext=(2e-2,2e10), textcoords="data",
+    ax.annotate(r"$\frac{1}{4d}m_{0}\nu_{0}l^2$", xytext=(2e-2,2e10), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     
 def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
