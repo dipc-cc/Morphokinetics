@@ -25,12 +25,12 @@ def addSurface(temperature, ax=0):
         newax.yaxis.set_major_locator(plticker.NullLocator())
         newax.xaxis.set_major_locator(plticker.NullLocator())
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
-        newax.annotate(r"$\theta = 0.3$", xy=[200,100], bbox=bbox_props)
+        newax.annotate(r"$\theta = 0.30$", xy=[200,100], bbox=bbox_props)
     except IndexError:
         pass
 
 def addFreeDiffusivity(ax, x, p):
-    sublabel = {150: "a)", 250: "b)", 750: "c)"}
+    sublabel = {150: "(a)", 250: "(b)", 750: "(c)"}
     try:
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
         if p.temp == 150:
