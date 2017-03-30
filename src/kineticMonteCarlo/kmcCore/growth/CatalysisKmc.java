@@ -241,7 +241,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom destinationAtom = null;
     int ucIndex = 0;
     double random1 = StaticRandom.raw();
-    double random2 = StaticRandom.raw();
 
     do {
       int qState = 0;
@@ -273,7 +272,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       destinationAtom.setType(atomType);
     } while (!depositAtom(destinationAtom));
 
-    destinationAtom.setDepositionTime(getTime() - Math.log(random2) * kTot);
+    destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     return destinationAtom;
     
