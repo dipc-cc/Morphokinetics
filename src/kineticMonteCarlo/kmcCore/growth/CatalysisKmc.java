@@ -99,35 +99,25 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   protected boolean performSimulationStep() {
     CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
     CatalysisAtom destinationAtom;
-	//commented this line for future combinig of adsorption and diffusion
-    //boolean shouldEnd = false;
-    if (originAtom == null) {
+    //commented this line for future combinig of adsorption and diffusion
+    //if (originAtom == null) {
+    if (true) {
       destinationAtom = depositNewAtom();
-    } 
-	/*else {
+    } else {
       do {
         destinationAtom = chooseRandomHop(originAtom);
-        if (destinationAtom.equals(originAtom)) {
-          destinationAtom.equals(originAtom);
-          break;
-        }
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
+    System.out.println("s "+simulatedSteps);
     if ((simulatedSteps + 1) % numStepsEachData == 0) {
       if (destinationAtom != null) {
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = destinationAtom.getjHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][2] = getTime();
-
-        if (destinationAtom.getiHexa() > getLattice().getHexaSizeI() || destinationAtom.getiHexa() < 0 || destinationAtom.getjHexa() > getLattice().getHexaSizeJ() || destinationAtom.getjHexa() < 0) {
-          shouldEnd = true;
-        }
-      } else {
-        System.out.println("atomoa hutsik dago");
       }
     }
-    if (simulatedSteps + 1 == totalNumOfSteps || shouldEnd) {
+    if (simulatedSteps + 1 == totalNumOfSteps) {
       //printSimulationData(simulationNumber);
       if (simulationNumber == numberOfSimulations - 1) {
         // Save to a file
@@ -138,8 +128,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return true;
     } else {
       return false;
-    }*/
-	return false;
+    }
   }
 
   private void printSimulationData(int numSim) {
