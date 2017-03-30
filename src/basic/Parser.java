@@ -331,7 +331,7 @@ public class Parser {
     try {
       pressureCO = json.getInt("pressureCO");
     } catch (JSONException e) {
-      pressureCO = 1;
+      pressureCO = 7;
     }
     try {
       depositionFlux = json.getDouble("depositionFlux");
