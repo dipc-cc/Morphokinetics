@@ -62,12 +62,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return getSampledSurface(binX, binY);
   }
   
-  public void setAdsorptionRates(double[] _adsorptionRates){
-      adsorptionRates = _adsorptionRates;
-      kTot=0.0;
-      for(int i=0;i<adsorptionRates.length;i++){
-          kTot += adsorptionRates[i];
-      }
+  public void setAdsorptionRates(double[] adsorptionRates) {
+    this.adsorptionRates = adsorptionRates;
+    kTot = 0.0;
+    for (int i = 0; i < adsorptionRates.length; i++) {
+      kTot += adsorptionRates[i];
+    }
   }
 
   @Override
