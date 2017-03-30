@@ -28,7 +28,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final double[][][] simulationData;
   private final int numberOfSimulations;
   private final Restart restart;
-  private int freeArea;
   private double[] adsorptionRates;
   private double kTot; 
   /**
@@ -163,7 +162,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   @Override
   public void depositSeed() {
-    freeArea = getLattice().size();
     //getList().setDepositionProbability(0); // this line has to be changed with the proper deposition rates.
     getLattice().resetOccupied();
     simulatedSteps = 0;
@@ -251,15 +249,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       for (int i = 0; i < adsorptionRates.length; i++) {
         qState = i;
         double sumKq = 0.0;
-        double sumKq_1 = 0.0;
+        double sumKq1 = 0.0;
         for (int j = 0; j < qState + 1; j++) {
           if (j <= qState - 1) {
-            sumKq_1 += adsorptionRates[j];
+            sumKq1 += adsorptionRates[j];
           }
           sumKq += adsorptionRates[j];
         }
 
-        if (sumKq >= randomMultiplyingKTot && randomMultiplyingKTot >= sumKq_1) {
+        if (sumKq >= randomMultiplyingKTot && randomMultiplyingKTot >= sumKq1) {
           break;
         }
       }
@@ -274,8 +272,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
       destinationAtom.setType(atomType);
     } while (!depositAtom(destinationAtom));
-    // update the free area and the deposition rate counting just deposited atom
-    freeArea--;
 
     destinationAtom.setDepositionTime(getTime() - Math.log(random2) * kTot);
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
