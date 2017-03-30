@@ -10,9 +10,6 @@ import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static java.lang.String.format;
-import static kineticMonteCarlo.atom.CatalysisAtom.CO;
-import static kineticMonteCarlo.atom.CatalysisAtom.O;
-import kineticMonteCarlo.unitCell.CatalysisUc;	
 import utils.StaticRandom;
 
 /**
