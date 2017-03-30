@@ -6,7 +6,6 @@
 
 package ratesLibrary;
 
-import static java.lang.Math.pow;
 import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.BRBR;
@@ -18,13 +17,12 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 
 /**
  *
- * @author karmele
+ * @author karmele, J. Alberdi-Rodriguez
  */
 public class CatalysisRates implements IRates {
 
   private final double[][][] diffusionEnergies;
   private final double[][] adsorptionDesorptionEnergies;
-  private double diffusionMl;
   
   private final double prefactor;
   
@@ -33,7 +31,6 @@ public class CatalysisRates implements IRates {
    * Same as {@link BasicGrowthSyntheticRates}.
    */
   public CatalysisRates() {
-    diffusionMl = 0.000035;
     
     double E1 = 0.6;
     double E2 = 1.6;
@@ -78,31 +75,17 @@ public class CatalysisRates implements IRates {
 
   @Override
   public double getDepositionRatePerSite() {
-    return diffusionMl;
+    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms. Use instead absortion methods.");
+  }
+
+  @Override
+  public void setDepositionFlux(double diffusionMl) {
+    throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms. Use instead absortion methods.");
   }
   
-  /**
-   * Returns the island density mono layer depending on the temperature. 
-   * These values are taken from many run of multi flake with 400x400 lattice points
-   * 
-   * @param temperature
-   * @return a double density value
-   */
   @Override
   public double getIslandDensity(double temperature) {
-    double flux = diffusionMl;
-    double c;
-    double slope;
-    double rtt;
-    if (temperature > 250) {
-      c = 220;
-      slope = -(2.d / 3.d);
-    } else {
-      c = 0.25;
-      slope = -(1.d / 3.d);
-    }
-    rtt = getRate(0, 0, 0, temperature);
-     return pow(flux, 0.23d) * c * pow(rtt / pow(flux, 1.d / 3.d), slope);
+    throw new UnsupportedOperationException("This KMC does does not form islands.");
   }
 
   @Override
@@ -118,17 +101,6 @@ public class CatalysisRates implements IRates {
     return adsorptionRates;
   }
 
-  /**
-   * Diffusion Mono Layer (F). Utilised to calculate absorption rate. By default it F=0.000035 ML/s.
-   * The perimeter deposition is calculated multiplying F (this) and island density.
-   *
-   * @param diffusionMl diffusion mono layer (deposition flux)
-   */
-  @Override
-  public void setDepositionFlux(double diffusionMl) {
-    this.diffusionMl = diffusionMl;
-  }
-
   @Override
   public double[] getRates(double temperature) {
     double[] rates = new double[8];
@@ -137,7 +109,7 @@ public class CatalysisRates implements IRates {
       for (int j = 0; j < 2; j++) {
         for (int k = 0; k < 2; k++) {
           int index = (i * 2 * 2) + (j * 2) + k;
-          rates[index] = (getRate(i, j, k, temperature));
+          rates[index] = getRate(i, j, k, temperature);
         }
       }
     }
