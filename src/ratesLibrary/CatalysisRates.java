@@ -8,10 +8,6 @@ package ratesLibrary;
 
 import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
-import static kineticMonteCarlo.atom.CatalysisAtom.BRBR;
-import static kineticMonteCarlo.atom.CatalysisAtom.CUSCUS;
-import static kineticMonteCarlo.atom.CatalysisAtom.BRCUS;
-import static kineticMonteCarlo.atom.CatalysisAtom.CUSBR;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 
@@ -22,52 +18,43 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 public class CatalysisRates implements IRates {
 
   private final double[][][] diffusionEnergies;
-  private final double[][] adsorptionDesorptionEnergies;
+  private final double[][] desorptionEnergiesUnimolecular;
+  private final double[][][] desorptionEnergiesWithO;
   
   private final double prefactor;
   
   private final double[] mass;
-  /**
-   * Same as {@link BasicGrowthSyntheticRates}.
-   */
+  
   public CatalysisRates() {
-    
-    double E1 = 0.6;
-    double E2 = 1.6;
-    double E3 = 1.3;
-    double E4 = 1.7;
-    double E5 = 0.7;
-    double E6 = 2.3;
-    double E7 = 1.0;
-    double E8 = 1.6;
     double Einf = 9999999;
-    
-    double E9 = 1.6;
-    double E10 = 1.3;
-    double E11 = 4.6;
-    double E12 = 2.0;
-    double E13 = 3.3;
-    
     prefactor = 1e13;
     
     diffusionEnergies = new double[2][2][2];
-    diffusionEnergies[CO][BR][BR] = E1;
-    diffusionEnergies[CO][BR][CUS] = E2;
-    diffusionEnergies[CO][CUS][BR] = E3;
-    diffusionEnergies[CO][CUS][CUS] = E4;
-    diffusionEnergies[O][BR][BR] = E5;
-    diffusionEnergies[O][BR][CUS] = E6;
-    diffusionEnergies[O][CUS][BR] = E7;
-    diffusionEnergies[O][CUS][CUS] = E8;
+    diffusionEnergies[CO][BR][BR] = 0.6;
+    diffusionEnergies[CO][BR][CUS] = 1.6;
+    diffusionEnergies[CO][CUS][BR] = 1.3;
+    diffusionEnergies[CO][CUS][CUS] = 1.7;
+    diffusionEnergies[O][BR][BR] = 0.7;
+    diffusionEnergies[O][BR][CUS] = 2.3;
+    diffusionEnergies[O][CUS][BR] = 1.0;
+    diffusionEnergies[O][CUS][CUS] = 1.6;
     
-    adsorptionDesorptionEnergies = new double[2][4];
-    adsorptionDesorptionEnergies[CO][BR] = E9;
-    adsorptionDesorptionEnergies[CO][CUS] = E10;
-    adsorptionDesorptionEnergies[O][BRBR] = E11;
-    adsorptionDesorptionEnergies[O][CUSCUS] = E12;
-    adsorptionDesorptionEnergies[O][CUSBR] = E13;
-    adsorptionDesorptionEnergies[O][BRCUS] = E13;
-    
+    desorptionEnergiesUnimolecular = new double[2][2];
+    desorptionEnergiesUnimolecular[CO][BR] = 1.6;
+    desorptionEnergiesUnimolecular[CO][CUS] = 1.3;
+    desorptionEnergiesUnimolecular[O][BR] = Einf;
+    desorptionEnergiesUnimolecular[O][CUS] = Einf;
+  
+    desorptionEnergiesWithO = new double[2][2][2];
+    desorptionEnergiesWithO[CO][BR][BR] = 1.5;
+    desorptionEnergiesWithO[CO][BR][CUS] = 1.2;
+    desorptionEnergiesWithO[CO][CUS][BR] = 0.8;
+    desorptionEnergiesWithO[CO][CUS][CUS]= 0.9;
+    desorptionEnergiesWithO[O][BR][BR]  = 4.6;
+    desorptionEnergiesWithO[O][BR][CUS] = 3.3;
+    desorptionEnergiesWithO[O][CUS][BR] = 3.3;
+    desorptionEnergiesWithO[O][CUS][CUS] = 2.0;
+      
     mass = new double[2];
     mass[CO] = 28.01055;
     mass[O] = 15.9994;
