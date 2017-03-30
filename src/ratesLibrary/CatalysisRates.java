@@ -165,7 +165,7 @@ public class CatalysisRates implements IRates {
   }
   
   private double getAdsorptionRate(int sourceType, double pressure, double temperature) {
-    return pressure * 10 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
+    return pressure * 10.0308 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
   }
   
   /**
