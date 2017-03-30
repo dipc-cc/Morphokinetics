@@ -10,6 +10,9 @@ import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static java.lang.String.format;
+import static kineticMonteCarlo.atom.CatalysisAtom.CO;
+import static kineticMonteCarlo.atom.CatalysisAtom.O;
+import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
 
 /**
@@ -25,8 +28,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final double[][][] simulationData;
   private final int numberOfSimulations;
   private final Restart restart;
-  private double[] adsorptionRates;
-  private double kTot; 
+  private double totalAdsorptionRate; 
+  private double adsorptionRateCO;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -39,7 +42,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
-    kTot = 0.0;
+    totalAdsorptionRate = 0.0;
 
     simulatedSteps = 0;
     simulationNumber = -1;
@@ -62,12 +65,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return getSampledSurface(binX, binY);
   }
   
-  public void setAdsorptionRates(double[] adsorptionRates) {
-    this.adsorptionRates = adsorptionRates;
-    kTot = 0.0;
-    for (int i = 0; i < adsorptionRates.length; i++) {
-      kTot += adsorptionRates[i];
-    }
+  public void setAdsorptionRates(CatalysisRates rates) {
+    totalAdsorptionRate = rates.getTotalAdsorptionRate();
+    adsorptionRateCO = rates.getAdsorptionRate(CO);
   }
 
   @Override
@@ -147,7 +147,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   @Override
   public void depositSeed() {
-    //getList().setDepositionProbability(0); // this line has to be changed with the proper deposition rates.
+    getList().setDepositionProbability(totalAdsorptionRate);
     getLattice().resetOccupied();
     simulatedSteps = 0;
     simulationNumber++;
@@ -225,29 +225,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private CatalysisAtom depositNewAtom() {
     CatalysisAtom destinationAtom = null;
     int ucIndex = 0;
-    double random1 = StaticRandom.raw();
 
     do {
-      int qState = 0;
-      double randomMultiplyingKTot = random1 * kTot;
-      for (int i = 0; i < adsorptionRates.length; i++) {
-        qState = i;
-        double sumKq = 0.0;
-        double sumKq1 = 0.0;
-        for (int j = 0; j < qState + 1; j++) {
-          if (j <= qState - 1) {
-            sumKq1 += adsorptionRates[j];
-          }
-          sumKq += adsorptionRates[j];
-        }
-
-        if (sumKq >= randomMultiplyingKTot && randomMultiplyingKTot >= sumKq1) {
-          break;
-        }
-      }
-      byte atomType = (byte) StaticRandom.rawInteger(2);
-      if (qState >= 0 && qState < adsorptionRates.length) {
-        atomType = (byte) qState;
+      byte atomType;
+      double randomNumber = StaticRandom.raw() * totalAdsorptionRate;
+      if (randomNumber < adsorptionRateCO) {
+        atomType = CO;
+      } else {
+        atomType = O;
       }
       int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
       ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
