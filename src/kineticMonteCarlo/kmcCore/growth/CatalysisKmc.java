@@ -31,10 +31,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int freeArea;
   private double[] adsorptionRates;
   private double kTot; 
+  /**
+   * This attribute defines which is the maximum coverage for a multi-flake simulation.
+   */
+  private final float maxCoverage; 
   
   public CatalysisKmc(Parser parser) {
     super(parser);
     numberOfSimulations = parser.getNumberOfSimulations();
+    maxCoverage =(float) parser.getCoverage() / 100;
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
@@ -147,7 +152,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   public int simulate() {
     int returnValue = 0;
-    while (true) {
+    while (getLattice().getCoverage() < maxCoverage) {
       if (performSimulationStep()) {
         break;
       }
@@ -237,45 +242,43 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private CatalysisAtom depositNewAtom() {
     CatalysisAtom destinationAtom = null;
     int ucIndex = 0;
-    if(calculateOccupiedAreaAsInKmcCanvas()<1.0){
-        double random1 = StaticRandom.raw();
-        double random2 = StaticRandom.raw();
-          
-        do {
-          int qState = 0;
-          double randomMultiplyingKTot = random1*kTot;
-          for(int i=0;i<adsorptionRates.length;i++){
-              qState = i;
-              double sumKq = 0.0;
-              double sumKq_1=0.0;
-              for(int j=0;j<qState+1;j++){
-                  if(j<=qState-1){
-                      sumKq_1+=adsorptionRates[j];
-                  }
-                  sumKq+=adsorptionRates[j];
-              }
-              
-              if(sumKq >= randomMultiplyingKTot && randomMultiplyingKTot >= sumKq_1){
-                  break;
-              }
+    double random1 = StaticRandom.raw();
+    double random2 = StaticRandom.raw();
+
+    do {
+      int qState = 0;
+      double randomMultiplyingKTot = random1 * kTot;
+      for (int i = 0; i < adsorptionRates.length; i++) {
+        qState = i;
+        double sumKq = 0.0;
+        double sumKq_1 = 0.0;
+        for (int j = 0; j < qState + 1; j++) {
+          if (j <= qState - 1) {
+            sumKq_1 += adsorptionRates[j];
           }
-          byte atomType = (byte) StaticRandom.rawInteger(2);
-          if(qState >=0 && qState < adsorptionRates.length){
-              atomType = (byte) qState;
-          }
-          int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
-          ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
-          int atomIndex = random % getLattice().getUnitCellSize();
-          destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
-          
-          destinationAtom.setType(atomType);
-        } while (!depositAtom(destinationAtom));
-        // update the free area and the deposition rate counting just deposited atom
-        freeArea--;
-    
-		destinationAtom.setDepositionTime(getTime() - Math.log(random2)*kTot);
-	    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
-    }
+          sumKq += adsorptionRates[j];
+        }
+
+        if (sumKq >= randomMultiplyingKTot && randomMultiplyingKTot >= sumKq_1) {
+          break;
+        }
+      }
+      byte atomType = (byte) StaticRandom.rawInteger(2);
+      if (qState >= 0 && qState < adsorptionRates.length) {
+        atomType = (byte) qState;
+      }
+      int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
+      ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
+      int atomIndex = random % getLattice().getUnitCellSize();
+      destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
+
+      destinationAtom.setType(atomType);
+    } while (!depositAtom(destinationAtom));
+    // update the free area and the deposition rate counting just deposited atom
+    freeArea--;
+
+    destinationAtom.setDepositionTime(getTime() - Math.log(random2) * kTot);
+    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     return destinationAtom;
     
   }
@@ -339,13 +342,5 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double svar = rss / df;
     double svar1 = svar / xxbar;
     double svar0 = svar / n + xbar * xbar * svar1;
-  }
-   /* Calculates current area or, i.e. the number of current places that simulation has. This total
-   * area changes with the current radius. It is calculated as is done in KmcCanvas class.
-   * 
-   * @return simulated area.
-   */
-  private double calculateOccupiedAreaAsInKmcCanvas() {
-    return 1.0 - (double) freeArea/ (double) getLattice().size();
   }
 }
