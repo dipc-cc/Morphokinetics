@@ -8,6 +8,7 @@ package basic;
 
 import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
 import ratesLibrary.CatalysisRates;
+import ratesLibrary.IRates;
 
 /**
  *
@@ -27,4 +28,11 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
     initialiseRates(getRates(), getParser());
     
   } 
+  
+  @Override
+  void initialiseRates(IRates rates, Parser parser) {
+    super.initialiseRates(rates,parser);
+    double[] adsorptionRates = ((CatalysisRates) rates).getAdsorptionRates(parser.getTemperature(), parser.getPresure());
+    ((CatalysisKmc) getKmc()).setAdsorptionRates(adsorptionRates);
+  }
 }
