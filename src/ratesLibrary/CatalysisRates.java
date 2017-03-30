@@ -109,10 +109,6 @@ public class CatalysisRates implements IRates {
   public double getEnergy(int i, int j) {
     return diffusionEnergies[i][j][0];
   }
-  
-  private double getAdsorptionRate(int sourceType, double pressure, double temperature) {
-    return pressure * 10 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
-  }
 
   public double[] getAdsorptionRates(int temperature, int presure) {
     double[] adsorptionRates = new double[2];
@@ -120,10 +116,6 @@ public class CatalysisRates implements IRates {
       adsorptionRates[i] = getAdsorptionRate(i, presure, temperature);
     }
     return adsorptionRates;
-  }
-  
-  private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
-    return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
 
   /**
@@ -160,5 +152,13 @@ public class CatalysisRates implements IRates {
     rates[3] = getEnergy(1, 2);
     rates[4] = getEnergy(2, 1);
     return rates;
+  }
+  
+  private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
+    return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
+  }
+  
+  private double getAdsorptionRate(int sourceType, double pressure, double temperature) {
+    return pressure * 10 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
   }
 }
