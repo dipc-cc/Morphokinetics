@@ -59,7 +59,11 @@ public class Parser {
    * See {@link #getTemperature()}.
    */
   private int temperature;
-  private int presure;
+  /**
+   * See {@link #getPressureO()} and {@link #getPressureCO()}.
+   */
+  private int pressureCO;
+  private int pressureO;
   /**
    * See {@link #getDepositionFlux()}.
    */
@@ -220,7 +224,8 @@ public class Parser {
     calculationMode = "Ag";
     surfaceType = "cartesian";
     temperature = 135;
-    presure = 135;
+    pressureO = 1;
+    pressureCO = 7;
     depositionFlux = 0.0035;
     coverage = 30.0;
     psdScale = 1;
@@ -319,9 +324,14 @@ public class Parser {
       temperature = 135;
     }
     try {
-      presure = json.getInt("presure");
+      pressureO = json.getInt("pressureO");
     } catch (JSONException e) {
-      presure = 135;
+      pressureO = 1;
+    }
+    try {
+      pressureCO = json.getInt("pressureCO");
+    } catch (JSONException e) {
+      pressureCO = 1;
     }
     try {
       depositionFlux = json.getDouble("depositionFlux");
@@ -615,7 +625,8 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"millerZ\"", millerZ);
     System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
     System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
-    System.out.printf("%32s: %s,\n", "\"presure\"", presure);
+    System.out.printf("%32s: %s,\n", "\"pressureO\"", pressureO);
+    System.out.printf("%32s: %s,\n", "\"pressureCO\"", pressureCO);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
     System.out.printf("%32s: %s,\n", "\"endTime\"", endTime);
@@ -757,12 +768,21 @@ public class Parser {
   }
 
   /**
-   * Not used for the moment. 
+   * Partial pressure for O.
    * 
    * @return nothing
    */
-  public int getPresure() {
-    return presure;
+  public int getPressureO() {
+    return pressureO;
+  }
+  
+  /**
+   * Partial pressure for CO.
+   * 
+   * @return nothing
+   */
+  public int getPressureCO() {
+    return pressureCO;
   }
 
   /**
