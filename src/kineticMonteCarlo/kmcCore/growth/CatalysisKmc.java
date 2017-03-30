@@ -106,7 +106,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
-    System.out.println("s "+simulatedSteps);
     if ((simulatedSteps + 1) % numStepsEachData == 0) {
       if (destinationAtom != null) {
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
