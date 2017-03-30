@@ -24,8 +24,15 @@ public class CatalysisRates implements IRates {
   private final double prefactor;
   
   private final double[] mass;
+  private final int[] pressures;
+  private double totalAdsorptionRate;
+  private final double[] adsorptionRates;
   
-  public CatalysisRates() {
+  private final int temperature;
+  
+  public CatalysisRates(int temperature) {
+    this.temperature = temperature;
+    
     double Einf = 9999999;
     prefactor = 1e13;
     
@@ -58,6 +65,9 @@ public class CatalysisRates implements IRates {
     mass = new double[2];
     mass[CO] = 28.01055;
     mass[O] = 15.9994;
+    pressures = new int[2];
+    adsorptionRates = new double[2];
+    totalAdsorptionRate = -1; // it needs to be initialised
   }
 
   @Override
@@ -79,11 +89,48 @@ public class CatalysisRates implements IRates {
   public double getEnergy(int i, int j) {
     return diffusionEnergies[i][j][0];
   }
+  
+  public void setPressureO(int pressureO) {
+    pressures[O] = pressureO;
+  }
+  
+  public void setPressureCO(int pressureCO) {
+    pressures[CO] = pressureCO;
+  }
 
-  public double[] getAdsorptionRates(int temperature, int presure) {
-    double[] adsorptionRates = new double[2];
-    for (int i = 0; i < adsorptionRates.length; i++) {
-      adsorptionRates[i] = getAdsorptionRate(i, presure, temperature);
+  /**
+   * Sum of adsorption rates of CO and O.
+   * 
+   * @return total adsorption rate.
+   */
+  public double getTotalAdsorptionRate() {
+    if (totalAdsorptionRate == -1) {
+      computeAdsorptionRates();
+    }
+    return totalAdsorptionRate;
+  }
+
+  /**
+   * Adsorption rate for CO or O.
+   * 
+   * @param atomType CO or O.
+   * @return adsorption rate.
+   */
+  public double getAdsorptionRate(int atomType) {
+    if (totalAdsorptionRate == -1) {
+      computeAdsorptionRates();
+    }
+    return adsorptionRates[atomType];
+  }
+
+  /**
+   * All adsorption rates.
+   * 
+   * @return all adsorption rates.
+   */
+  public double[] getAdsorptionRates() {
+    if (totalAdsorptionRate == -1) {
+      computeAdsorptionRates();
     }
     return adsorptionRates;
   }
@@ -119,5 +166,14 @@ public class CatalysisRates implements IRates {
   
   private double getAdsorptionRate(int sourceType, double pressure, double temperature) {
     return pressure * 10 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
+  }
+  
+  /**
+   * Compute all adsorptions. 
+   */
+  private void computeAdsorptionRates() {
+    adsorptionRates[O] = getAdsorptionRate(O, pressures[0], temperature);
+    adsorptionRates[CO] = getAdsorptionRate(CO, pressures[CO], temperature);
+    totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
 }
