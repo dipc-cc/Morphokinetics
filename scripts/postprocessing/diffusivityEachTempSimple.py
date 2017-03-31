@@ -35,9 +35,9 @@ def addFreeDiffusivity(ax, x, p):
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
         if p.temp == 150:
             note = "$F=$".format(int(p.temp))+fun.base10(p.flux)+"$ML/s$\n${}".format(p.sizI)+r"\times{}$".format(p.sizJ)
-            ax.annotate(note, xy=(0.06,0.90), xycoords="axes fraction", size=14, bbox=bbox_props)
+            ax.annotate(note, xy=(0.06,0.87), xycoords="axes fraction", size=14, bbox=bbox_props)
         note = sublabel[p.temp]+" ${} K$".format(int(p.temp))
-        ax.annotate(note, xy=(0.06,0.74), xycoords="axes fraction", size=14, bbox=bbox_props)
+        ax.annotate(note, xy=(0.06,0.7), xycoords="axes fraction", size=14, bbox=bbox_props)
     except KeyError:
         pass
     x = x[0:20]
@@ -81,37 +81,38 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d\langle N_h\rangle}{dt}$",
                marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
     lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t}$",
-                      ls="-", color=cm(3/8), lw=2)
+                      ls="-", color=cm(3/8), lw=5)
     lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t}$",
-                      ls=":", color=cm(4.1/8), lw=1.8)
+                      ls=":", color=cm(4.1/8), lw=4)
 
     k=0
-    label = r"$\theta_0$"
-    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ, label=label, ms=1, lw=2, ls="-.", color=cm(1/8))
+    label = r"$\theta_0\cdot 10^4$"
+    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ*1e4, label=label, ms=1, lw=2, ls="-.", color=cm(1/8))
     if smooth:
         ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
         ax.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
         d.negs[k] = ySmooth
     handles.append(lg)
     isld = d.isld
-    lg, = ax.loglog(x, isld/p.sizI/p.sizJ, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}$", markerfacecolor="None")
+    lg, = ax.loglog(x, isld/p.sizI/p.sizJ*1e4, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}\cdot 10^4$", markerfacecolor="None")
     handles.append(lg)
 
     handles = [ lgR3, lgN3, lgR, lgN] + handles
-    ax.grid()
+    #ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
-    ax.set_ylim([1e-7,1e13])
+    ax.set_ylim([1e-3,1e13])
     ax.set_xlim([1e-5,1e0])
     addFreeDiffusivity(ax, x, p)
     if innerFig:
         ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
-        addSurface(p.temp)
+        #addSurface(p.temp)
         fig.savefig("../../../plot"+str(p.flux)+str(p.temp)+".png")
         plt.close(33)
     else:
         addSurface(p.temp, ax)
-        if i == 0:
-            ax.legend(handles=handles, loc=(0.46,0.27), numpoints=1, prop={'size':13}, markerscale=1, labelspacing=0.4)
+        if i == 2:
+            ax.legend(handles=handles, loc=(-1.6,-0.15), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=0.1, ncol=6, columnspacing=.7, borderpad=0.3)
+            #                                    -.15/1.03
         if i > 0:
             xlim = (7e-1,1)
             if i == 1:
@@ -120,7 +121,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
             if i == 2:
                 rect = Rectangle((7e-1, 1e3), 30, 1e7, facecolor="white", edgecolor=cm(8/8))
                 ax.add_patch(rect)
-            position = [0.12, 0.27, 0.105, 0.22]
+            position = [0.1, 0.27, 0.08, 0.22]
             position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
             newax = plt.gcf().add_axes(position, zorder=+100)
             newax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
@@ -133,25 +134,27 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
                       color=cm(4.1/8), lw=1.8)
             newax.xaxis.set_major_formatter(plticker.NullFormatter())
             newax.yaxis.set_major_formatter(plticker.NullFormatter())
+            arrow = dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8))
+            x1Big = 7e-1
             if i == 1:
-                ax.annotate("",xy=(7e-1,1e1), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                ax.annotate("",xy=(x1Big,1e1), arrowprops=arrow,
                             xytext=(3e-3,1.5e-1))
-                ax.annotate("",xy=(1,1e1), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                ax.annotate("",xy=(1,1e1), arrowprops=arrow,
                             xytext=(3.8e-1,1.3e-1))
-                #ax.annotate("",xy=(1,1e6), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                #ax.annotate("",xy=(1,1e6), arrowprops=arrow,
                 #            xytext=(3.8e-1,2e4))
-                ax.annotate("",xy=(7e-1,1e6), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                ax.annotate("",xy=(x1Big,1e6), arrowprops=arrow,
                             xytext=(2.8e-3,2e4))
-                newax.set_xlim(7e-1,1)
+                newax.set_xlim(x1Big,1)
                 newax.set_ylim(1,1e6)
             if i == 2:
-                ax.annotate("",xy=(7e-1,1e3), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                ax.annotate("",xy=(x1Big,1e3), arrowprops=arrow,
                             xytext=(3e-3,1.5e-1))
-                ax.annotate("",xy=(1,1e3), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                ax.annotate("",xy=(1,1e3), arrowprops=arrow,
                             xytext=(3.8e-1,1.3e-1))
-                ax.annotate("",xy=(7e-1,1e7), arrowprops=dict(arrowstyle="-", connectionstyle="arc3", color=cm(8/8)),
+                ax.annotate("",xy=(x1Big,1e7), arrowprops=arrow,
                             xytext=(2.8e-3,2e4))
-                newax.set_xlim(7e-1,1)
+                newax.set_xlim(x1Big,1)
                 newax.set_ylim(1e3,3e7)
 
 
@@ -175,7 +178,7 @@ for f in fluxes:
     temperaturesPlot = []
     print(f)
     os.chdir(f)
-    fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,7))
+    fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,5))
     fPath = os.getcwd()
     for t in [150, 250, 750]:#inf.getTemperatures()[14:]:
         try:
