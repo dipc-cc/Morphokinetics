@@ -143,9 +143,9 @@ for i,f in enumerate(fluxes):
     ### Plot
     if i == 0:
         rLg = mlines.Line2D([], [], color='black', ls="-",
-                            markersize=10, label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t F^{0.7}}$")
+                            markersize=10, label=r"$g\; \frac{\langle R^2\rangle}{t F^{0.7}}$")
         nLg = mlines.Line2D([], [], color='black', ls="-.",
-                            markersize=8, label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t F^{0.7}}$")
+                            markersize=8, label=r"$gl^2\; \frac{\langle N_h\rangle}{t F^{0.7}}$")
         iLg = mlines.Line2D([], [], color='black', ls='--',
                             markersize=8, label=r"$N_{isl}$")
         legends.append(rLg)
