@@ -4,7 +4,6 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
 import matplotlib.ticker as plticker
-from matplotlib.ticker import MaxNLocator
 from matplotlib.ticker import LogLocator
 from matplotlib.patches import Ellipse
 import numpy as np
@@ -62,17 +61,18 @@ def plot(ax, ax2, data, i):
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
+    lw = 3
     data = np.array(data)
     flux = data[0,0]
     x = data[:,6]/flux**0.17
     if ax2 != None:
         ax2.plot(x, data[:,5], label="isld",
-                        ls = "--", color=cm(i/8))
+                        lw=lw, ls = "--", color=cm(i/8))
         ax2.text(x[0]/8, data[:,5][0], fun.base10(flux), color=cm(i/8), size=10)
     lg1, = ax.plot(x, data[:,3], label=r"$F=$"+fun.base10(flux),
-            marker="", ls="-", mew=mew, ms=8, alpha=alpha, color=cm(i/8))
+                   lw=lw, marker="", ls="-", mew=mew, ms=8, alpha=alpha, color=cm(i/8))
     ax.plot(x, data[:,4], label=r"$N_h$"+fun.base10(flux),
-            marker="", ls="-.", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
+            lw=lw+1, marker="", ls="-.", mew=1, color=cm(i/8), markeredgecolor=cm(i/8), ms=7, alpha=1)
     ax.text(x[0]/8, data[:,4][0], fun.base10(flux), color=cm(i/8), size=10)
     if i == 0:
         ax.annotate("",xytext=(x[1],data[:,4][1]*1.5), xy=(x[1]/80,data[:,4][1]*3),
@@ -92,7 +92,7 @@ def plot(ax, ax2, data, i):
                     arrowprops=dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray"))
         addEllipses()
         alpha=0.2
-        arrow = dict(arrowstyle="-[",  ls="-", color="gray", alpha=alpha)
+        arrow = dict(arrowstyle="-[",  ls="-", color="gray", alpha=0)
         ax.annotate("A", xy=(7e2,3), xytext=(7e2,7e-1), ha="center", va="center",
                     arrowprops=arrow, color="green", alpha=alpha)
         ax.annotate("B", xy=(7e2,1e-4), xytext=(7e2,3e-5), ha="center", va="center",
@@ -102,9 +102,9 @@ def plot(ax, ax2, data, i):
         ax.annotate("D", xy=(8e11,2e2), xytext=(8e11,1e2), ha="center", va="center",
                     arrowprops=arrow, color="brown", alpha=alpha)
         y = 3e-5
-        ax.text(2e7, y, "I", color="gray")
-        ax.text(5e9, y, "II", color="gray")
-        ax.text(2e11, y, "III", color="gray")
+        ax.text(2e7, y, "$I$", color="gray")
+        ax.text(5e9, y, "$II$", color="gray")
+        ax.text(2e11, y, "$III$", color="gray")
 
         ax2.annotate("",xy=(x[-1]*18,data[:,5][-1]), xytext=(x[-1]*2,data[:,5][-1]/1.5),
                      arrowprops=dict(arrowstyle="->", connectionstyle="angle3", ls="-", color="gray"), ha="center", va="center")
