@@ -4,6 +4,7 @@ import info as inf
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
+import matplotlib.lines as mlines
 from matplotlib.patches import Rectangle
 import glob
 import os
@@ -18,7 +19,7 @@ def addSurface(temperature, ax=0):
         im = Image.open(fileName)
         position = [0.16, 0.3, 0.3, 0.3]
         if ax != 0:
-            position = [-0.07, 0.3, 0.22, 0.22]
+            position = [-0.1, 0.3, 0.3, 0.3]
             position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
         newax = plt.gcf().add_axes(position, zorder=+100)
         newax.imshow(im)
@@ -39,7 +40,7 @@ def addFreeDiffusivity(ax, x, p):
             note = "$F=$".format(int(p.temp))+fun.base10(p.flux)+"$ML/s$\n${}".format(p.sizI)+r"\times{}$".format(p.sizJ)
             ax.annotate(note, xy=(0.06,0.85), xycoords="axes fraction", size=14, bbox=bbox_props)
         note = sublabel[p.temp]+" ${} K$".format(int(p.temp))
-        ax.annotate(note, xy=(0.06,0.68), xycoords="axes fraction", size=14, bbox=bbox_props)
+        ax.annotate(note, xy=(0.75,0.9), xycoords="axes fraction", size=14, bbox=bbox_props)
     except KeyError:
         pass
     x = x[0:20]
@@ -47,11 +48,11 @@ def addFreeDiffusivity(ax, x, p):
     y = y * 3/2*p.getRatios()[0]
     cm = plt.get_cmap("Accent")
     ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{1}{2d}m_{0}\nu_{0}l^2$", xytext=(2e-2,4e11), textcoords="data",
+    ax.annotate(r"$\frac{3}{2}\nu_{0}l^2$", xytext=(1e-2,7e11), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     y = y / 2
     ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{1}{4d}m_{0}\nu_{0}l^2$", xytext=(2e-2,2e10), textcoords="data",
+    ax.annotate(r"$\frac{3}{4}\nu_{0}l^2$", xytext=(1e-2,5e10), textcoords="data",
                 xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     
 def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
@@ -124,7 +125,10 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     else:
         addSurface(p.temp, ax)
         if i == 2:
-            ax.legend(handles=handles, loc=(1.05,.5), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=0.1, ncol=1, columnspacing=.7, borderpad=0.3)
+            thetas = mlines.Line2D([], [], color='black',
+                                   markersize=15, label=r"$\theta_{0,1,2,3,4+}$")
+            handles.append(thetas)
+            ax.legend(handles=handles, loc=(1.05,.2), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
             #                                    -.15/1.03
         if i > 1:
             xlim = (7e-1,1)
@@ -134,8 +138,8 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
             if i == 2:
                 rect = Rectangle((7e-1, 1e3), 30, 1e7, facecolor="white", edgecolor=cm(8/8))
                 ax.add_patch(rect)
-            ax.annotate("", xy=(8e-3,1e5), xytext=(6e-1,1e5), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", color=cm(8/8)))
-            position = [0.08, 0.3, 0.06, 0.22]
+            ax.annotate("", xy=(3e-2,1e5), xytext=(6e-1,1e5), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", color=cm(8/8)))
+            position = [0.1, 0.3, 0.06, 0.3]
             position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
             newax = plt.gcf().add_axes(position, zorder=+100)
             newax.loglog(x, diff, label=r"$g \; \frac{d(R^2)}{dt}$",
