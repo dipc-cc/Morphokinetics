@@ -93,13 +93,13 @@ def plot(ax, ax2, data, i):
         addEllipses()
         alpha=0.2
         arrow = dict(arrowstyle="-[",  ls="-", color="gray", alpha=0)
-        ax.annotate("A", xy=(7e2,3), xytext=(7e2,7e-1), ha="center", va="center",
+        ax.annotate("A", xy=(7e2,3), xytext=(7e2,1), ha="center", va="center",
                     arrowprops=arrow, color="green", alpha=alpha)
-        ax.annotate("B", xy=(7e2,1e-4), xytext=(7e2,3e-5), ha="center", va="center",
+        ax.annotate("B", xy=(7e2,1e-4), xytext=(7e2,1e-4), ha="center", va="center",
                     arrowprops=arrow, color="blue", alpha=alpha)
-        ax.annotate("C", xy=(8e9,1), xytext=(8e9,2), ha="center", va="center",
+        ax.annotate("C", xy=(8e9,1), xytext=(8e9,5e-1), ha="center", va="center",
                     arrowprops=arrow, color="red", alpha=alpha)
-        ax.annotate("D", xy=(8e11,2e2), xytext=(8e11,1e2), ha="center", va="center",
+        ax.annotate("D", xy=(8e11,2e2), xytext=(8e11,7e2), ha="center", va="center",
                     arrowprops=arrow, color="brown", alpha=alpha)
         y = 3e-5
         ax.text(2e7, y, "$I$", color="gray")
