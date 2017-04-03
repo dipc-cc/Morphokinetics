@@ -172,7 +172,6 @@ public class KmcCanvas extends Canvas {
    * @param fileName filename to which is going to be written.
    */
   public void performDrawToImage(String fileName) {
-    
     if (!fileName.endsWith(".png")) {
       fileName = fileName + ".png";
     }

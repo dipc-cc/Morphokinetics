@@ -49,7 +49,6 @@ import javax.swing.KeyStroke;
 import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
@@ -347,7 +346,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     pause();
     canvas.setPaused(true);
     canvas.performDrawToImage(filename);
-  }    
+  }
   
   private void createMenuBar() {
     JMenuBar menubar = new JMenuBar();
