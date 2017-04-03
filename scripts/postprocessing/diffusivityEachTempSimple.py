@@ -18,14 +18,16 @@ def addSurface(temperature, ax=0):
         im = Image.open(fileName)
         position = [0.16, 0.3, 0.3, 0.3]
         if ax != 0:
-            position = [-0.053, 0.27, 0.22, 0.22]
+            position = [-0.07, 0.3, 0.22, 0.22]
             position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
         newax = plt.gcf().add_axes(position, zorder=+100)
         newax.imshow(im)
         newax.yaxis.set_major_locator(plticker.NullLocator())
         newax.xaxis.set_major_locator(plticker.NullLocator())
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
-        newax.annotate(r"$\theta = 0.30$", xy=[200,100], bbox=bbox_props)
+        newax.annotate(r"$\theta = 0.30$", xy=(0.5,0.85), xycoords="axes fraction",
+                       ha="center", va="center", bbox=bbox_props)
+        newax.axis('off')
     except IndexError:
         pass
 
@@ -35,9 +37,9 @@ def addFreeDiffusivity(ax, x, p):
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
         if p.temp == 150:
             note = "$F=$".format(int(p.temp))+fun.base10(p.flux)+"$ML/s$\n${}".format(p.sizI)+r"\times{}$".format(p.sizJ)
-            ax.annotate(note, xy=(0.06,0.87), xycoords="axes fraction", size=14, bbox=bbox_props)
+            ax.annotate(note, xy=(0.06,0.85), xycoords="axes fraction", size=14, bbox=bbox_props)
         note = sublabel[p.temp]+" ${} K$".format(int(p.temp))
-        ax.annotate(note, xy=(0.06,0.7), xycoords="axes fraction", size=14, bbox=bbox_props)
+        ax.annotate(note, xy=(0.06,0.68), xycoords="axes fraction", size=14, bbox=bbox_props)
     except KeyError:
         pass
     x = x[0:20]
@@ -75,32 +77,43 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     mew = 0
     diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR, = ax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d\langle R^2 \rangle}{dt}$",
+    lgR, = ax.loglog(x, diff, label=r"$g \; \frac{d\langle R^2 \rangle}{dt}$",
                marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
     hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
-    lgN, = ax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d\langle N_h\rangle}{dt}$",
+    lgN, = ax.loglog(x, hops, label=r"$gl^2 \; \frac{d\langle N_h\rangle}{dt}$",
                marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
-    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$\frac{1}{2dN_a} \; \frac{\langle R^2\rangle}{t}$",
+    lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$g \; \frac{\langle R^2\rangle}{t}$",
                       ls="-", color=cm(3/8), lw=5)
-    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h\rangle}{t}$",
+    lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$gl^2 \; \frac{\langle N_h\rangle}{t}$",
                       ls=":", color=cm(4.1/8), lw=4)
 
-    k=0
-    label = r"$\theta_0\cdot 10^4$"
-    lg, = ax.loglog(x, d.negs[k]/p.sizI/p.sizJ*1e4, label=label, ms=1, lw=2, ls="-.", color=cm(1/8))
+    lg, = ax.loglog(x, (np.sum(d.negs[0:7],axis=0))/p.sizI/p.sizJ*1e5, ms=1, lw=1, ls="-.", color="black", label=r"$\theta \cdot 10^5$")#, marker=markers[4])
+    markers=["o", "s","D","^","d","h","p","o"]
+    cm1 = plt.get_cmap("Set1")
+    bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.7, pad=0.1)
+    for k in range(0,4):
+        label = r"$\theta_"+str(k)+r"\cdot 10^4$"
+        ax.loglog(x, d.negs[k]/p.sizI/p.sizJ*1e5, label=label, ms=3, lw=1, ls="-", color=cm1(k/8))# marker=markers[k])
+        #ax.text(x[1],1e1,"text")
+        index = np.where(d.negs[k] > 0)[0][2]
+        ax.text(x[index],d.negs[k][index]/p.sizI/p.sizJ*1e5, r"$\theta_{"+str(k)+r"}$", color=cm1(k/8), bbox=bbox_props)
+    index = np.where(d.negs[4] > 0)[0][2]
+    ax.text(x[index],d.negs[4][index]/p.sizI/p.sizJ*1e5, r"$\theta_{4+}$",color=cm1(7/8), bbox=bbox_props)
+    ax.loglog(x, (d.negs[4]+d.negs[5]+d.negs[6])/p.sizI/p.sizJ*1e5, label=label, ms=1, lw=1, ls="-", color=cm1(7/8))#, marker=markers[4])
+        
     if smooth:
         ySmooth = np.exp(savgol_filter(np.log(d.negs[k]), 9, 1))
         ax.loglog(x, ySmooth/p.sizI/p.sizJ, lw=2)
         d.negs[k] = ySmooth
     handles.append(lg)
     isld = d.isld
-    lg, = ax.loglog(x, isld/p.sizI/p.sizJ*1e4, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}\cdot 10^4$", markerfacecolor="None")
+    lg, = ax.loglog(x, isld/p.sizI/p.sizJ*1e5, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}\cdot 10^5$", markerfacecolor="None")
     handles.append(lg)
 
     handles = [ lgR3, lgN3, lgR, lgN] + handles
     #ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
-    ax.set_ylim([1e-3,1e13])
+    ax.set_ylim([1e-2,1e13])
     ax.set_xlim([1e-5,1e0])
     addFreeDiffusivity(ax, x, p)
     if innerFig:
@@ -111,9 +124,9 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     else:
         addSurface(p.temp, ax)
         if i == 2:
-            ax.legend(handles=handles, loc=(-1.6,-0.15), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=0.1, ncol=6, columnspacing=.7, borderpad=0.3)
+            ax.legend(handles=handles, loc=(1.05,.5), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=0.1, ncol=1, columnspacing=.7, borderpad=0.3)
             #                                    -.15/1.03
-        if i > 0:
+        if i > 1:
             xlim = (7e-1,1)
             if i == 1:
                 rect = Rectangle((7e-1, 1e1), 30, 1e6, facecolor="white", edgecolor=cm(8/8))
@@ -121,12 +134,13 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
             if i == 2:
                 rect = Rectangle((7e-1, 1e3), 30, 1e7, facecolor="white", edgecolor=cm(8/8))
                 ax.add_patch(rect)
-            position = [0.1, 0.27, 0.08, 0.22]
+            ax.annotate("", xy=(8e-3,1e5), xytext=(6e-1,1e5), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", color=cm(8/8)))
+            position = [0.08, 0.3, 0.06, 0.22]
             position[0:2] += ax.get_position().get_points().reshape(4)[0:2]
             newax = plt.gcf().add_axes(position, zorder=+100)
-            newax.loglog(x, diff, label=r"$\frac{1}{2dN_a} \; \frac{d(R^2)}{dt}$",
+            newax.loglog(x, diff, label=r"$g \; \frac{d(R^2)}{dt}$",
                              marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
-            newax.loglog(x, hops, label=r"$\frac{l^2}{2dN_a} \; \frac{d(N_h)}{dt}$",
+            newax.loglog(x, hops, label=r"$gl^2 \; \frac{d(N_h)}{dt}$",
                marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
             newax.loglog(x, d.diff/d.time/(4*Na), label=r"new",
                       color=cm(3/8), lw=2)
@@ -147,13 +161,13 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
                             xytext=(2.8e-3,2e4))
                 newax.set_xlim(x1Big,1)
                 newax.set_ylim(1,1e6)
-            if i == 2:
-                ax.annotate("",xy=(x1Big,1e3), arrowprops=arrow,
-                            xytext=(3e-3,1.5e-1))
-                ax.annotate("",xy=(1,1e3), arrowprops=arrow,
-                            xytext=(3.8e-1,1.3e-1))
-                ax.annotate("",xy=(x1Big,1e7), arrowprops=arrow,
-                            xytext=(2.8e-3,2e4))
+            if i == 2: 
+                #ax.annotate("",xy=(x1Big,1e3), arrowprops=arrow,
+                #            xytext=(3e-3,1.5e-1))
+                #ax.annotate("",xy=(1,1e3), arrowprops=arrow,
+                #            xytext=(3.8e-1,1.3e-1))
+                #ax.annotate("",xy=(x1Big,1e7), arrowprops=arrow,
+                #            xytext=(2.8e-3,2e4))
                 newax.set_xlim(x1Big,1)
                 newax.set_ylim(1e3,3e7)
 
@@ -178,7 +192,7 @@ for f in fluxes:
     temperaturesPlot = []
     print(f)
     os.chdir(f)
-    fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,5))
+    fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,4))
     fPath = os.getcwd()
     for t in [150, 250, 750]:#inf.getTemperatures()[14:]:
         try:
