@@ -336,6 +336,52 @@ def getRatio(temperature, energies):
     return p * np.exp(-energies/kb/temperature)
 
 
+def defineRanges(calculationMode, ratesLibrary, temperatures):
+    ranges = []
+    if calculationMode == "AgUc":
+        indexes = np.where((temperatures >= 70) & (temperatures <= 150))
+        iSl = indexes[0][0]
+        iFl = indexes[0][-1]
+        indexes = np.where((temperatures >= 150) & (temperatures <= 400))
+        iSm = indexes[0][0]
+        iFm = indexes[0][-1]
+        indexes = np.where((temperatures >= 400) & (temperatures <= 1100))
+        iSh = indexes[0][0]
+        iFh = indexes[0][-1]
+    elif calculationMode == "basic":
+        if ratesLibrary == "version2":
+            # it has 4 ranges
+            ranges = list([0, 19, 33, 48, 58])
+        else:
+            indexes = np.where((temperatures >= 120) & (temperatures <= 190))
+            iSl = indexes[0][0]
+            indexes = np.where((temperatures >= 190) & (temperatures <= 270))
+            iSm = indexes[0][0]
+            indexes = np.where((temperatures >= 270) & (temperatures <= 339))
+            iSh = indexes[0][0]
+            iFh = indexes[0][-1]
+    else:
+        indexes = np.where((temperatures >= 200) & (temperatures <= 500))
+        iSl = indexes[0][0]
+        indexes = np.where((temperatures >= 500) & (temperatures <= 1000))
+        iSm = indexes[0][0]
+        indexes = np.where((temperatures >= 1000) & (temperatures <= 1500))
+        iSh = indexes[0][0]
+        iFh = indexes[0][-1]
+
+    if len(ranges) > 0:
+        return ranges
+    else:
+        return list([iSl, iSm, iSh, iFh])
+
+    
+def smallerFont(ax, size=10):
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(size)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(size)
+
+
 def writeAe(fileName, data):
     """ https://stackoverflow.com/questions/3685265/how-to-write-a-multidimensional-array-to-a-text-file """
     f = open(fileName, "wb")
