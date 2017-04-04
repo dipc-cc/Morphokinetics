@@ -106,8 +106,27 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
     else:
         return list([iSl, iSm, iSh, iFh])
 
+def putLabels(ax, hex, alfa):
+    arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
+    if hex:
+        xI = 45
+        xII = 94
+        if alfa == -1:
+            ax.text(-12, 4e5, "(a)", ha="center", va="center")
+            ax.set_ylabel(r"$gl^2 \; \frac{\langle N_h \rangle}{t}$")
+            yMin = 1e1
+            yMax = 1e6
+        elif alfa == 0:
+            ax.text(-12, 1.5e4, "(b)", ha="center", va="center")
+            ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
+            yMin = 1e-1
+            yMax = 1e5
+        if alfa < 1:
+            ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
+            ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
 
-def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
+
+def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa):
     markers=["o", "s","D","^","d","h","p","o"]
     labelRange = ['low', 'med', 'high']
     labelRange = labelRange+list([str(i) for i in rngt])
@@ -115,29 +134,15 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     cm1 = plt.get_cmap('Set3')
     slopes = []
     if showPlot:
-        smallerFont(axis, 8)
-        axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
+        smallerFont(ax, 8)
+        ax.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-        xI = 45
-        xII = 94
-        if alfa == -1:
-            axis.text(-12, 4e5, "(a)", ha="center", va="center")
-            axis.set_ylabel(r"$gl^2 \; \frac{\langle N_h \rangle}{t}$")
-            yMin = 1e1
-            yMax = 1e6
-        elif alfa == 0:
-            axis.text(-12, 1.5e4, "(b)", ha="center", va="center")
-            axis.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
-            yMin = 1e-1
-            yMax = 1e5
-        if alfa < 1:
-            axis.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
-            axis.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
+        putLabels(ax, True, alfa)
     for i in range(0,len(rngt)-1):
         a, b = fun.linearFit(x, y, rngt[i], rngt[i+1])
         slopes.append(b)
         if showPlot:
-            axis.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", color=cm1((i+abs(alfa)*3)/12))
+            ax.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", color=cm1((i+abs(alfa)*3)/12))
             xHalf = (x[rngt[i]]+x[rngt[i+1]]+1)/2
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
@@ -146,12 +151,12 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
                 yHalf *= 5
                 text = r"$E_a^{"+roman.toRoman(i+1)+r", Arrh}="+text+r"$"
                 xText = [22, 60, 120]
-                axis.text(xText[i], 2e1, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray")#, transform=axarr[i].transAxes)
+                ax.text(xText[i], 2e1, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray")#, transform=axarr[i].transAxes)
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            axis.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
+            ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])
-        axis.yaxis.set_major_locator(locator)
+        ax.yaxis.set_major_locator(locator)
     return slopes
 
 def plotOmegas(x, y, axis, i):
