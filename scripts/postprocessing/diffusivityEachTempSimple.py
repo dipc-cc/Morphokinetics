@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 import matplotlib.lines as mlines
 from matplotlib.patches import Rectangle
+from matplotlib.ticker import LogLocator
 import glob
 import os
 import sys
@@ -116,6 +117,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     ax.set_xlabel(r"$\theta$", size=16)
     ax.set_ylim([1e-2,1e13])
     ax.set_xlim([1e-5,1e0])
+    ax.yaxis.set_major_locator(LogLocator(100,[1e-2]))
     addFreeDiffusivity(ax, x, p)
     if innerFig:
         ax.legend(handles=handles, loc=(0.46,0.3), numpoints=1, prop={'size':15}, markerscale=2)
@@ -126,9 +128,9 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
         addSurface(p.temp, ax)
         if i == 2:
             thetas = mlines.Line2D([], [], color='black',
-                                   markersize=15, label=r"$\theta_{0,1,2,3,4+}$")
+                                   markersize=15, label=r"$\theta_{i} \cdot 10^5$"+"\n"+r"$i = 0,1,2,3,4+$")
             handles.append(thetas)
-            ax.legend(handles=handles, loc=(1.05,.2), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
+            ax.legend(handles=handles, loc=(1.05,.15), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
             #                                    -.15/1.03
         if i > 1:
             xlim = (7e-1,1)
