@@ -12,6 +12,13 @@ import os
 import sys
 import roman
 
+def smallerFont(ax, size=10):
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(size)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(size)
+
+        
 def computeMavgAndOmega(fileNumber, p):
     matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
     possiblesFromList = np.loadtxt(fname="possibleFromList"+str(fileNumber)+".txt")
@@ -52,7 +59,6 @@ def computeMavgAndOmegaOverRuns():
         sumOmega = sumOmega + tmpOmega
         sumRate1 = sumRate1 + tmpRate1
         sumRate2 = sumRate2 + tmpRate2
-        
     
     runMavg = sumMavg / filesNumber
     runOavg = sumOmega / filesNumber
@@ -68,10 +74,10 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         indexes = np.where((temperatures >= 70) & (temperatures <= 150))
         iSl = indexes[0][0]
         iFl = indexes[0][-1]
-        indexes = np.where((temperatures >= 150) & (temperatures <= 450))
+        indexes = np.where((temperatures >= 150) & (temperatures <= 400))
         iSm = indexes[0][0]
         iFm = indexes[0][-1]
-        indexes = np.where((temperatures >= 450) & (temperatures <= 1100))
+        indexes = np.where((temperatures >= 400) & (temperatures <= 1100))
         iSh = indexes[0][0]
         iFh = indexes[0][-1]
     elif calculationMode == "basic":
@@ -108,19 +114,20 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     cm = plt.get_cmap('Set1')
     cm1 = plt.get_cmap('Set3')
     slopes = []
-    if showPlot:   
+    if showPlot:
+        smallerFont(axis, 8)
         axis.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-        xI = 42
+        xI = 45
         xII = 94
         if alfa == -1:
-            axis.text(-15, 4e5, "(a)", ha="center", va="center")
-            axis.set_ylabel(r"$\frac{l^2}{2dN_a} \; \frac{\langle N_h \rangle}{t}$")
+            axis.text(-12, 4e5, "(a)", ha="center", va="center")
+            axis.set_ylabel(r"$gl^2 \; \frac{\langle N_h \rangle}{t}$")
             yMin = 1e1
             yMax = 1e6
         elif alfa == 0:
-            axis.text(-15, 1.5e4, "(b)", ha="center", va="center")
-            axis.set_ylabel(r"$M_\alpha$")
+            axis.text(-12, 1.5e4, "(b)", ha="center", va="center")
+            axis.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
             yMin = 1e-1
             yMax = 1e5
         if alfa < 1:
@@ -139,7 +146,7 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
                 yHalf *= 5
                 text = r"$E_a^{"+roman.toRoman(i+1)+r", Arrh}="+text+r"$"
                 xText = [22, 60, 120]
-                axis.text(xText[i], 30, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray")#, transform=axarr[i].transAxes)
+                axis.text(xText[i], 2e1, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray")#, transform=axarr[i].transAxes)
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
             axis.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
     if showPlot and alfa > -1:
@@ -148,6 +155,7 @@ def fitAndPlotLinear(x, y, rngt, axis, alfa, showPlot, labelAlfa):
     return slopes
 
 def plotOmegas(x, y, axis, i):
+    smallerFont(axis, 8)
     markers=["o", "s","D","^","d","h","p","o"]
     newax = fig.add_axes([0.43, 0.15, 0.25, 0.15])
     newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
@@ -157,6 +165,7 @@ def plotOmegas(x, y, axis, i):
     loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
     newax.yaxis.set_major_locator(loc)
     newax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", r"$\frac{1}{3}$", r"$\frac{2}{3}$", "$1$")))
+    smallerFont(newax,8)
     newax.set_xlim(xmin,xmax)
     lg = newax.legend(prop={'size': 7}, loc=(0.45,0.13), scatterpoints=1)
     newax.add_artist(lg)
@@ -166,10 +175,10 @@ def plotOmegas(x, y, axis, i):
     axis.set_ylabel(r"$\omega_\alpha$")
     axis.set_xlabel(r"$1/k_BT$")
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-    if i == 0:
-        axis.annotate("", xy=(42,2e-4), xytext=(42,2), arrowprops=arrow)
+    if i == 0: # range separation lines
+        axis.annotate("", xy=(45,2e-4), xytext=(45,2), arrowprops=arrow)
         axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
-        axis.text(-15, 1, "(c)", ha="center", va="center")
+        axis.text(-12, 1, "(c)", ha="center", va="center")
     
 temperatures = info.getTemperatures()
 p = info.getInputParameters(glob.glob("*/output*")[0])
@@ -331,15 +340,18 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     axarr[i].set_xlabel(r"$\theta$")
     lgEaCov2, = axarr[i].plot(coverage, tempEaCov2[:,maxRanges-1-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
     lgEaCov, = axarr[i].plot(coverage, tempEaCov[:,maxRanges-1-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
-    ax.append(axarr[i].twinx())
-    lgErr, = ax[i].plot(coverage, abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCov[:,maxRanges-1-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
-    ax[i].set_ylim(0,1)
-    maxY = max(abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCov[:,maxRanges-1-i])[30:])+0.05 # get maximum for the arrow (>30% coverage)
-    ax[i].annotate(' ', xy=(.8, maxY), xytext=(.4, maxY), arrowprops=dict(arrowstyle="->", edgecolor=cm(3/4), facecolor=cm(3/4)))
+    ax2 = axarr[i].twinx()
+    lgErr, = ax2.plot(coverage, abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCov[:,maxRanges-1-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
+    ax2.set_ylim(0,0.5)
+    maxY = max(abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCov[:,maxRanges-1-i])[30:])+0.015 # get maximum for the arrow (>30% coverage)
+    ax2.annotate(' ', xy=(.6, maxY), xytext=(.2, maxY-1e-2), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", edgecolor=cm(3/4), facecolor=cm(3/4)))
+    maxYlabel = "{:03.2f}%".format(maxY*100)
+    bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
+    ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props, color=cm(3/4))
     if i != 2:
-        ax[i].yaxis.set_major_formatter(plticker.NullFormatter())
+        ax2.yaxis.set_major_formatter(plticker.NullFormatter())
     else:
-        ax[i].set_ylabel("Relative error")
+        ax2.set_ylabel("Relative error")
 
 rAndM = False
 omegas = False
@@ -387,12 +399,12 @@ if (omegas):
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
     myLegends = [lgEaCov, lgEaCov2]
-    myLabels = [r"$E_a^{Arrh}$", r"$E_a^{calc} = \sum_\alpha\omega_\alpha(E_\alpha^r+E_\alpha^M)$"]  
+    myLabels = [r"$E_a^{Arrh}$", r"$\sum_\alpha\omega_\alpha(E_\alpha+E_\alpha^M)$"]  
     myLegends += lgs
     myLegends += [lgErr]
-    labelAlfa = [r"$\omega_0(E_0^r+E_0^M)$", r"$\omega_1(E_1^r+E_1^M)$",r"$\omega_2(E_2^r+E_2^M)$", r"$\omega_3(E_3^r+E_3^M)$"]
+    labelAlfa = [r"$\omega_0(E_0+E_0^M)$", r"$\omega_1(E_1+E_1^M)$",r"$\omega_2(E_2+E_2^M)$", r"$\omega_3(E_3+E_3^M)$"]
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
     myLabels.append("Relative error")
-    plt.figlegend(myLegends, myLabels, loc=(0.67,0.55), prop={'size':9})
+    plt.figlegend(myLegends, myLabels, loc=(0.68,0.5), prop={'size':11})
     plt.savefig("multiplicitiesOmegas.pdf", bbox_inches='tight')
