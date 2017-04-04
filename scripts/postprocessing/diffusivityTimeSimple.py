@@ -54,13 +54,13 @@ def plot(ax, data, i):
         for i in range(0,len(rngt)-1):
             y = data[:,4]
             a, b = fun.linearFit(x, y, rngt[i], rngt[i+1])
-            ax.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", color="black")
+            ax.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", color="black", zorder=+200)
             xHalf = (x[rngt[i]]+x[rngt[i+1]]+1)/2
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))*5
             text = r"$E_a^{Arrh}="+text+r"$"
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            ax.text(xHalf,yHalf, text, color="black", bbox=bbox_props, ha="center", va="center", size=8)
+            ax.text(xHalf,yHalf, text, color="black", bbox=bbox_props, ha="center", va="center", size=10)
     return lg1
 
 workingPath = os.getcwd()
