@@ -10,9 +10,6 @@ import math
 import roman
 
 
-def getTemp(x,F):
-    return 1/(8.62e-5*(x-np.log(F**1.5)))
-
 def read():
     p = inf.getInputParameters()
     d = inf.readAverages()
@@ -74,13 +71,6 @@ ax.set_yscale("log")
 ax.set_xlabel(r"$1/k_BT + ln(F^{1.5})$")
 ax.set_xlim(0,250)
 ax.set_ylim(1e-3,1e4)
-ax3 = ax.twiny()
-ax3.set_xlim(0,250)
-ax3.set_xlabel(r"Temperature at $F=5\cdot10^4$", size=10)
-x2labels = [int(getTemp(i,1e4)) for i in np.arange(0,260,50)]
-x2labels = [r"$\infty$" if i<0 else i for i in x2labels]
-ax3.get_xaxis().set_major_formatter(FixedFormatter(x2labels))
-inf.smallerFont(ax3, 6)
 legends = []
 for i,f in enumerate(fluxes):
     if i<-1:
