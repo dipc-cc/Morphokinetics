@@ -83,16 +83,19 @@ def putLabels(ax, calc, alfa):
             yMin = 1e-1
             yMax = 1e5
         
+    bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
     if alfa == -1:
         ax.set_ylabel(r"$gl^2 \; \frac{\langle N_h \rangle}{t}$")
         ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
-        bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         label = r"$\theta=0.30$"
         ax.annotate(label, xy=(0.75,0.85), xycoords="axes fraction",
                     bbox=bbox_props)
     elif alfa == 0:
         ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
-        ax.annotate("(b)", xy=(-0.2, 0.93), xycoords="axes fraction")
+        ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
+        label = r"$\theta=0.30$"
+        ax.annotate(label, xy=(0.75,0.55), xycoords="axes fraction",
+                    bbox=bbox_props)
     if alfa < 1:
         ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
         ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
@@ -135,7 +138,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, p):
 def plotOmegas(x, y, axis, i):
     inf.smallerFont(axis, 8)
     markers=["o", "s","D","^","d","h","p","o"]
-    newax = fig.add_axes([0.43, 0.15, 0.25, 0.15])
+    newax = fig.add_axes([0.43, 0.15, 0.25, 0.25])
     newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
     newax.set_ylim(-0.05,1.05)
     loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
@@ -145,9 +148,9 @@ def plotOmegas(x, y, axis, i):
     newax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", r"$\frac{1}{3}$", r"$\frac{2}{3}$", "$1$")))
     inf.smallerFont(newax,8)
     newax.set_xlim(xmin,xmax)
-    lg = newax.legend(prop={'size': 7}, loc=(0.45,0.13), scatterpoints=1)
+    lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     newax.add_artist(lg)
-    newax.legend(prop={'size': 7}, loc=(0.45,1.6), scatterpoints=1)
+    newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
     axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], markeredgecolor=cm(abs(i/9)))
     axis.set_ylim(2e-4,2)
     axis.set_ylabel(r"$\omega_\alpha$")
@@ -156,7 +159,7 @@ def plotOmegas(x, y, axis, i):
     if i == 0: # range separation lines
         axis.annotate("", xy=(45,2e-4), xytext=(45,2), arrowprops=arrow)
         axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
-        axis.annotate("(c)", xy=(-0.2, 0.93), xycoords="axes fraction")
+        axis.annotate("(b)", xy=(-0.2, 0.93), xycoords="axes fraction")
 
     
 temperatures = inf.getTemperatures()
@@ -265,14 +268,13 @@ for cov in range(-p.maxC,0):
     print(cov)
     if showPlot:
         cm = plt.get_cmap('Set1')
-        fig, axarr = plt.subplots(3, sharex=True)
-        fig.set_size_inches(5,6)
+        fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
         fig.subplots_adjust(right=0.7, hspace=0.1)
         plt.xlim(xmin,xmax)
     else:
         axarr = np.zeros(3)
     # N_h
-    tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, showPlot, labelAlfa, p))
+    tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, False, labelAlfa, p))
     tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
     for i in range(0,maxAlfa): # alfa
@@ -282,14 +284,14 @@ for cov in range(-p.maxC,0):
         if p.calc == "graphene" and i == 1:
             y += np.sum(tempMavg[:,cov,9:11], axis=1)
         
-        tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa, p))
+        tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[0], i, showPlot, labelAlfa, p))
         if showPlot:
             y = np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
             if p.calc == "basic" and p.rLib == "version2" and i == 1:
                 y += tempOavg[:,cov,11]
             if p.calc == "graphene" and i == 1:
                 y += np.sum(tempOavg[:,cov,9:11], axis=1)
-            plotOmegas(x, y, axarr[2], i)
+            plotOmegas(x, y, axarr[-1], i)
         for j in range(0,maxRanges): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
     tempOmegaCov.append(tempOmega)
@@ -378,16 +380,16 @@ if (omegas):
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
     myLegends = [lgEaCov, lgEaCov2]
-    myLabels = [r"$E_a^{Arrh}$", r"$\sum_\alpha\omega_\alpha(E_\alpha+E_\alpha^M)$"]  
+    myLabels = [r"$E_a^{Arrh}$", r"$\sum_\alpha \;\epsilon_\alpha$"]
     myLegends += lgs
     myLegends += [lgErr]
     if p.calc == "AgUc":
-        labelAlfa = [r"$\omega_0(E_0+E_0^M)$", r"$\omega_1(E_1+E_1^M)$",r"$\omega_2(E_2+E_2^M)$", r"$\omega_3(E_3+E_3^M)$"]
+        labelAlfa = [r"$\epsilon_0$", r"$\epsilon_1$", r"$\epsilon_2$", r"$\epsilon_3$"]
     else:
-        labelAlfa = [r"$\omega_0(E_0+E_0^M)$", r"$\omega_a(E_a+E_a^M)$",r"$\omega_1(E_1+E_1^M)$", r"$\omega_b(E_b+E_b^M)$",r"$\omega_c(E_c+E_c^M)$", r"$\omega_2(E_2+E_2^M)$"]
+        labelAlfa = [r"$\epsilon_0$", r"$\epsilon_a$",r"$\epsilon_1$", r"$\epsilon_b$",r"$\epsilon_c$", r"$\epsilon_2$"]
         
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
-    myLabels.append("Relative error")
+    myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.5), prop={'size':11})
     plt.savefig("multiplicitiesOmegas.pdf", bbox_inches='tight')
