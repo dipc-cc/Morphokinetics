@@ -130,14 +130,20 @@ def readAverages():
 
 
 def getAvgDataCoverage(p, d, coverage):
+    if p.calc == "AgUc":
+        factor1 = 0.7
+        factor2 = 1.5
+    else:
+        factor1 = 0.8
+        factor2 = 1.78
     try:
         i = len(d.cove)-(100-coverage)
-        divisor = 4*coverage*p.sizI*p.sizJ*d.time[i]*(p.flux**0.7)
-        r = [p.flux, d.cove[i]/divisor, d.diff[i]/divisor, d.hops[i]/divisor, np.max(d.isld[-95:])/(p.flux**0.27)]#d.isld[i]/(p.flux**0.27)#
+        divisor = 4*coverage*p.sizI*p.sizJ*d.time[i]*(p.flux**factor1)
+        r = [p.flux, d.cove[i]/divisor, d.diff[i]/divisor, d.hops[i]/divisor, np.max(d.isld[-95:])/(p.flux**0.27), factor2]#d.isld[i]/(p.flux**0.27)#
         if math.isnan(d.hops[i]) or d.hops[i] < 0: # sometimes the number of hops is not properly saved, because it was an int instead of long
             r[3] = (d.even[i] - (d.cove[i]*p.sizI*p.sizJ))/divisor # recalculating it: even - depositions
     except IndexError:
-        r = [p.flux, None, None, None, None]
+        r = [p.flux, None, None, None, None, factor2]
     return r
 
 
@@ -339,7 +345,7 @@ def getRatio(temperature, energies):
 def defineRanges(calculationMode, ratesLibrary, temperatures):
     ranges = []
     if calculationMode == "AgUc":
-        indexes = np.where((temperatures >= 70) & (temperatures <= 150))
+        indexes = np.where((temperatures >= 90) & (temperatures <= 150))
         iSl = indexes[0][0]
         iFl = indexes[0][-1]
         indexes = np.where((temperatures >= 150) & (temperatures <= 400))
