@@ -39,7 +39,7 @@ public class AgSimpleRates implements IRates {
     energies[0][5] = eInf;
     energies[0][6] = eInf;
     
-    energies[1][0] = eInf;
+    energies[1][0] = 1.50;
     energies[1][1] = e1;
     energies[1][2] = e1;
     energies[1][3] = e1;
@@ -47,7 +47,7 @@ public class AgSimpleRates implements IRates {
     energies[1][5] = eInf;
     energies[1][6] = eInf;
     
-    energies[2][0] = eInf;
+    energies[2][0] = 1.58;
     energies[2][1] = e2;
     energies[2][2] = e2;
     energies[2][3] = e2;
