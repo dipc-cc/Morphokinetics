@@ -67,12 +67,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   public void setAdsorptionRates(CatalysisRates rates) {
-    totalAdsorptionRate = rates.getTotalAdsorptionRate();
     adsorptionRateCO = rates.getAdsorptionRate(CO);
-    System.out.println("adsorptionRateO: "+(totalAdsorptionRate-adsorptionRateCO));
-    System.out.println("adsorptionRateCO: "+(adsorptionRateCO));
+    totalAdsorptionRate = rates.getTotalAdsorptionRate();
   }
-  
 
   @Override
   public void initialiseRates(double[] rates) {
@@ -249,7 +246,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     } while (!depositAtom(destinationAtom));
     
     getList().setDepositionProbability(totalAdsorptionRate * (1-getCoverage()));
-     
+    System.out.println(destinationAtom.getType()+" --- "+getTime());
+    
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
