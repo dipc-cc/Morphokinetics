@@ -12,6 +12,7 @@ import kineticMonteCarlo.lattice.CatalysisLattice;
 import static java.lang.String.format;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
+import kineticMonteCarlo.unitCell.CatalysisUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
 
@@ -66,8 +67,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   public void setAdsorptionRates(CatalysisRates rates) {
-    totalAdsorptionRate = rates.getTotalAdsorptionRate();
     adsorptionRateCO = rates.getAdsorptionRate(CO);
+    totalAdsorptionRate = rates.getTotalAdsorptionRate();
   }
 
   @Override
@@ -147,11 +148,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   @Override
   public void depositSeed() {
-    getList().setDepositionProbability(totalAdsorptionRate);
+    getList().setDepositionProbability(totalAdsorptionRate*(1-getCoverage()));
     getLattice().resetOccupied();
     simulatedSteps = 0;
     simulationNumber++;
-    //depositNewAtom();
   }
 
   @Override
@@ -161,8 +161,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       CatalysisAtom atom = (CatalysisAtom) iter.next();
       atom.clear();
     }
+    getLattice().reset();
     getList().reset();
   }
+  
+  
   
   private boolean depositAtom(CatalysisAtom atom) {
     if (atom.isOccupied()) {
@@ -241,9 +244,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
       destinationAtom.setType(atomType);
     } while (!depositAtom(destinationAtom));
-
+    
+    getList().setDepositionProbability(totalAdsorptionRate * (1-getCoverage()));
+    System.out.println(destinationAtom.getType()+" --- "+getTime());
+    
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
+    
     return destinationAtom;
     
   }
