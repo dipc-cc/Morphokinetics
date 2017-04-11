@@ -25,6 +25,10 @@ def thetaAverage(t, F):
     return 1-((1-np.exp(-F*t))/(F*t))
 
 
+def constant(x, a):
+    return np.ones(len(x))*a
+
+
 def fractalD(x):
     """Fractal dimension for x (= rtt/flux)"""
     minD = 1.66
