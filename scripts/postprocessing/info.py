@@ -371,6 +371,8 @@ def getHexagonalEnergies():
     energies[24:27] = 0.42
     energies[7] = 1.5
     energies[14] = 1.58
+    energies[21] = 2.0
+    energies[22:24] = 0.75
     return energies
 
 
