@@ -306,8 +306,11 @@ class RestartLow {
     }
     // create file descriptor. It will be automatically closed.
     try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))){
+      PrintWriter surface = new PrintWriter(new FileWriter(fileName+".xyz"));
       String s = format("%d", numberOfAtoms);
       printWriter.write(s +"\n simple XYZ file made with Morphokinetics\n");
+      s = format("%d", lattice.getHexaSizeI() * lattice.getHexaSizeJ() * lattice.getUnitCellSize());
+      surface.write(s +"\n surface XYZ file made with Morphokinetics\n");
       IUc uc;
       double posX;
       double posY;
@@ -317,17 +320,47 @@ class RestartLow {
         uc = lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           IAtom atom = uc.getAtom(j);
+          posX = (uc.getPos().getX() + atom.getPos().getX()) * scale+scale/2;
+          posY = (uc.getPos().getY() + atom.getPos().getY()) * scale+scale/3;
+          posZ = ((uc.getPos().getZ() + atom.getPos().getZ()) * scale)-scale;
+          s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
+          surface.write(s + "\n");
           if (atom.isOccupied()) {
+            switch((int)atom.getType()){
+                    case 0:
+                      element = "Au";
+                      break;
+                    case 1:
+                      element = "Cu";
+                      break;
+                    case 2:
+                      element = "Rg";
+                      break;
+                    case 3:
+                      element = "Mg";
+                      break;
+                    case 4:
+                    case 5:
+                    case 6:
+                      element = "Al";
+                      break;
+                    default:
+                      element = "Ag";
+                      break;
+            }
             posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
             posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
             posZ = (uc.getPos().getZ() + atom.getPos().getZ()) * scale;
             s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
             printWriter.write(s + "\n");
+            element = "Ag";
           }
         }
       }
       printWriter.flush();
       printWriter.close();
+      surface.flush();
+      surface.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
