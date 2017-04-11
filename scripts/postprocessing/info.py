@@ -95,6 +95,8 @@ class avgData:
         self.hops = data[7] # total number of hops
         self.negs = data[8] # neighbours vector
 
+        self.difS = data[9] # standard deviation of diffusivity
+
     def getRecomputedCoverage(self):
         return np.sum(self.negs[:],axis=0)
 
@@ -114,6 +116,7 @@ def readAverages():
     prob = np.mean([i[:,5]  for i in allData], axis=0)
     even = np.mean([i[:,7]  for i in allData], axis=0)
     diff = np.mean([i[:,12] for i in allData], axis=0)
+    difS = np.std([i[:,12] for i in allData], axis=0)
     #hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
     hops = np.mean([i[:,15] for i in allData], axis=0)
     negs = []
@@ -126,7 +129,7 @@ def readAverages():
         negs.append(np.mean([i[:,21] for i in allData], axis=0))
         negs.append(np.mean([i[:,22] for i in allData], axis=0))
 
-    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
+    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs, difS])
 
 
 def getAvgDataCoverage(p, d, coverage):
