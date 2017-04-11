@@ -26,7 +26,7 @@ public class AgSimpleRates implements IRates {
     double e1 = 0.25;
     double e2 = 0.33;
     double e3 = 0.42;
-    double eInf = 9999999;
+    double eImpossible = 9999999;
     
     prefactor = 1e13;
     
@@ -35,17 +35,17 @@ public class AgSimpleRates implements IRates {
     energies[0][1] = e0;
     energies[0][2] = e0;
     energies[0][3] = e0;
-    energies[0][4] = eInf;
-    energies[0][5] = eInf;
-    energies[0][6] = eInf;
+    energies[0][4] = eImpossible;
+    energies[0][5] = eImpossible;
+    energies[0][6] = eImpossible;
     
     energies[1][0] = 1.50;
     energies[1][1] = e1;
     energies[1][2] = e1;
     energies[1][3] = e1;
     energies[1][4] = e1;
-    energies[1][5] = eInf;
-    energies[1][6] = eInf;
+    energies[1][5] = eImpossible;
+    energies[1][6] = eImpossible;
     
     energies[2][0] = 1.58;
     energies[2][1] = e2;
@@ -53,39 +53,39 @@ public class AgSimpleRates implements IRates {
     energies[2][3] = e2;
     energies[2][4] = e2;
     energies[2][5] = e2;
-    energies[2][6] = eInf;
+    energies[2][6] = eImpossible;
     
-    energies[3][0] = eInf;
-    energies[3][1] = eInf;
-    energies[3][2] = eInf;
+    energies[3][0] = 2.0;
+    energies[3][1] = 0.75;
+    energies[3][2] = 0.75;
     energies[3][3] = e3;
     energies[3][4] = e3;
     energies[3][5] = e3;
-    energies[3][6] = eInf;
+    energies[3][6] = eImpossible;
     
-    energies[4][0] = eInf;
-    energies[4][1] = eInf;
-    energies[4][2] = eInf;
-    energies[4][3] = eInf;
-    energies[4][4] = eInf;
-    energies[4][5] = eInf;
-    energies[4][6] = eInf;
+    energies[4][0] = eImpossible;
+    energies[4][1] = eImpossible;
+    energies[4][2] = eImpossible;
+    energies[4][3] = eImpossible;
+    energies[4][4] = eImpossible;
+    energies[4][5] = eImpossible;
+    energies[4][6] = eImpossible;
     
-    energies[5][0] = eInf;
-    energies[5][1] = eInf;
-    energies[5][2] = eInf;
-    energies[5][3] = eInf;
-    energies[5][4] = eInf;
-    energies[5][5] = eInf;
-    energies[5][6] = eInf;
+    energies[5][0] = eImpossible;
+    energies[5][1] = eImpossible;
+    energies[5][2] = eImpossible;
+    energies[5][3] = eImpossible;
+    energies[5][4] = eImpossible;
+    energies[5][5] = eImpossible;
+    energies[5][6] = eImpossible;
     
-    energies[6][0] = eInf;
-    energies[6][1] = eInf;
-    energies[6][2] = eInf;
-    energies[6][3] = eInf;
-    energies[6][4] = eInf;
-    energies[6][5] = eInf;
-    energies[6][6] = eInf;
+    energies[6][0] = eImpossible;
+    energies[6][1] = eImpossible;
+    energies[6][2] = eImpossible;
+    energies[6][3] = eImpossible;
+    energies[6][4] = eImpossible;
+    energies[6][5] = eImpossible;
+    energies[6][6] = eImpossible;
   }
   
   private double getRate(int sourceType, int destinationType, double temperature) {
