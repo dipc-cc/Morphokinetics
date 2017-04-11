@@ -1,6 +1,7 @@
 import functions as fun
 import info as inf
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 from matplotlib.ticker import FixedFormatter
@@ -94,8 +95,8 @@ def putLabels(ax, calc, alfa):
         ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
         ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
         label = r"$\theta=0.30$"
-        ax.annotate(label, xy=(0.75,0.55), xycoords="axes fraction",
-                    bbox=bbox_props)
+        ax.annotate(label, xy=(0.78,0.55), xycoords="axes fraction",
+                    bbox=bbox_props, size=8)
     if alfa < 1:
         ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
         ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
@@ -135,7 +136,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, p):
         ax.yaxis.set_major_locator(locator)
     return slopes
 
-def plotOmegas(x, y, axis, i):
+def plotOmegas(x, y, axis, i, averageLines):
     inf.smallerFont(axis, 8)
     markers=["o", "s","D","^","d","h","p","o"]
     newax = fig.add_axes([0.43, 0.15, 0.25, 0.25])
@@ -151,7 +152,10 @@ def plotOmegas(x, y, axis, i):
     lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     newax.add_artist(lg)
     newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], markeredgecolor=cm(abs(i/9)))
+    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], mec='none',alpha=0.75)
+    
+    for j in range(0,3):
+        axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(2e-4,2)
     axis.set_ylabel(r"$\omega_\alpha$")
     axis.set_xlabel(r"$1/k_BT$")
@@ -285,15 +289,15 @@ for cov in range(-p.maxC,0):
             y += np.sum(tempMavg[:,cov,9:11], axis=1)
         
         tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[0], i, showPlot, labelAlfa, p))
+        for j in range(0,maxRanges): # temperature ranges
+            tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],cov,ind[2*i]:ind[2*i+1]], axis=1))))
         if showPlot:
             y = np.sum(tempOavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
             if p.calc == "basic" and p.rLib == "version2" and i == 1:
                 y += tempOavg[:,cov,11]
             if p.calc == "graphene" and i == 1:
                 y += np.sum(tempOavg[:,cov,9:11], axis=1)
-            plotOmegas(x, y, axarr[-1], i)
-        for j in range(0,maxRanges): # temperature ranges
-            tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],cov,ind[2*i]:ind[2*i+1]],   axis=1))))
+            plotOmegas(x, y, axarr[-1], i, tempOmega[i])
     tempOmegaCov.append(tempOmega)
     tempEaMCov.append(tempEaM)
     if showPlot:
