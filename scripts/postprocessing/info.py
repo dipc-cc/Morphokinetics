@@ -195,15 +195,47 @@ def readBinnedAverages():
     return avgData([cove, time, isld, depo, prob, even, diff, hops, negs])
 
 
-def readInstantaneous(doBin=True):
-    """ reads instantaneous multiplicities, for the moment only valid for AgUc """
-    allData = []
 
-    filesN = glob.glob("instantaneous[0-9]*.txt")
+def readPossibles():
+    """ reads XXXX multiplicities, for the moment only valid for AgUc """
+    allData = []
+    allMij = []
+
+    filesN = glob.glob("possibleFromList[0-9]*.txt")
     for i in range(0,len(filesN)-exclude):
-        fileName = "instantaneous"+str(i)+".txt"
+        fileName = "possibleFromList"+str(i)+".txt"
         data = np.loadtxt(fname=fileName)
         Malpha = data[:,1:]
+        Mij = data[:,1:]
+        M=[]
+        M.append(data[:,0])
+        M.append(np.sum(Malpha[:,0:7], axis=1))
+        M.append(np.sum(Malpha[:,7:14], axis=1))
+        M.append(np.sum(Malpha[:,14:21], axis=1))
+        M.append(np.sum(Malpha[:,21:28], axis=1))
+        allData.append(M)
+        allMij.append(Mij)
+        
+    MalphaOrig = np.array(Malpha)
+    Malpha = []
+    allData = np.array(allData)
+    for j in range(1,5): # alpha
+        Malpha.append(np.mean(allData[:,j,:], axis=0))
+    Mij = np.mean(allMij, axis=0)
+    return Malpha, Mij
+
+
+
+def readDiscrete():
+    """ reads discrete multiplicities, for the moment only valid for AgUc """
+    allData = []
+
+    filesN = glob.glob("possibleDiscrete[0-9]*.txt")
+    for i in range(0,len(filesN)-exclude):
+        fileName = "possibleDiscrete"+str(i)+".txt"
+        data = np.loadtxt(fname=fileName)
+        Malpha = data[:,1:]
+        Mij = data[:,1:]
         m=[]
         m.append(data[:,0])
         m.append(np.sum(Malpha[:,0:7], axis=1))
@@ -211,6 +243,33 @@ def readInstantaneous(doBin=True):
         m.append(np.sum(Malpha[:,14:21], axis=1))
         m.append(np.sum(Malpha[:,21:28], axis=1))
         allData.append(m)
+        
+    MalphaOrig = np.array(Malpha)
+    Malpha = []
+    allData = np.array(allData)
+    for j in range(1,5): # alpha
+        Malpha.append(np.mean(allData[:,j,:], axis=0))
+    return Malpha, MalphaOrig
+
+
+def readInstantaneous(doBin=True):
+    """ reads instantaneous multiplicities, for the moment only valid for AgUc """
+    allData = []
+    allMij = []
+
+    filesN = glob.glob("instantaneous[0-9]*.txt")
+    for i in range(0,len(filesN)-exclude):
+        fileName = "instantaneous"+str(i)+".txt"
+        data = np.loadtxt(fname=fileName)
+        Mij = data[:,1:]
+        M=[]
+        M.append(data[:,0])
+        M.append(np.sum(Mij[:,0:7], axis=1))
+        M.append(np.sum(Mij[:,7:14], axis=1))
+        M.append(np.sum(Mij[:,14:21], axis=1))
+        M.append(np.sum(Mij[:,21:28], axis=1))
+        allData.append(M)
+        allMij.append(Mij)
     if doBin:
         firstExecCov = allData[0][:][0]
         hCov = np.exp(np.histogram(np.log(firstExecCov),100)[1])
@@ -225,7 +284,9 @@ def readInstantaneous(doBin=True):
         allData = np.array(allData)
         for j in range(1,5): # alpha
             Malpha.append(np.mean(allData[:,j,:], axis=0))
-    return Malpha
+        Mij = np.mean(allMij, axis=0)
+            
+    return Malpha, Mij
 
 
 def readPossibleFromList():
@@ -308,6 +369,8 @@ def getHexagonalEnergies():
     energies[8:12] = 0.25
     energies[15:20] = 0.33
     energies[24:27] = 0.42
+    energies[7] = 1.5
+    energies[14] = 1.58
     return energies
 
 
