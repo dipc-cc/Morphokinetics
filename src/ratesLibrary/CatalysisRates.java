@@ -24,9 +24,10 @@ public class CatalysisRates implements IRates {
   private final double prefactor;
   
   private final double[] mass;
-  private final int[] pressures;
+  private final double[] pressures;
   private double totalAdsorptionRate;
   private final double[] adsorptionRates;
+
   
   private final int temperature;
   
@@ -64,8 +65,8 @@ public class CatalysisRates implements IRates {
       
     mass = new double[2];
     mass[CO] = 28.01055;
-    mass[O] = 15.9994;
-    pressures = new int[2];
+    mass[O] = 15.9994*2;
+    pressures = new double[2];
     adsorptionRates = new double[2];
     totalAdsorptionRate = -1; // it needs to be initialised
   }
@@ -90,11 +91,11 @@ public class CatalysisRates implements IRates {
     return diffusionEnergies[i][j][0];
   }
   
-  public void setPressureO(int pressureO) {
+  public void setPressureO(double pressureO) {
     pressures[O] = pressureO;
   }
   
-  public void setPressureCO(int pressureCO) {
+  public void setPressureCO(double pressureCO) {
     pressures[CO] = pressureCO;
   }
 
@@ -164,16 +165,16 @@ public class CatalysisRates implements IRates {
     return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
   
-  private double getAdsorptionRate(int sourceType, double pressure, double temperature) {
-    return pressure * 10.0308 / Math.sqrt(2 * Math.PI * mass[sourceType] * kB * temperature);
+  private double getAdsorptionRate(int sourceType, double pressures[], double temperature) {
+    return pressures[sourceType] * 101132 * 5.0145 * Math.pow(10,-20) /(Math.sqrt(2 * Math.PI * mass[sourceType] * 1.381 * Math.pow(10,-23) * temperature /(1000 * 6.022 * Math.pow(10,23)) ));
   }
   
   /**
    * Compute all adsorptions. 
    */
   private void computeAdsorptionRates() {
-    adsorptionRates[O] = getAdsorptionRate(O, pressures[0], temperature);
-    adsorptionRates[CO] = getAdsorptionRate(CO, pressures[CO], temperature);
+    adsorptionRates[O] = getAdsorptionRate(O, pressures, temperature);
+    adsorptionRates[CO] = getAdsorptionRate(CO, pressures, temperature);
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
 }
