@@ -22,7 +22,7 @@ def annotate(ax):
     ax.set_xlim(0,250)
     ax.set_ylim(1e-3,1e4)
     bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=1)
-    label = r"$\theta=0.30$"
+    label = r"$\theta=0.60$"
     ax.annotate(label, xy=(0.075,0.45), xycoords="axes fraction",
                 bbox=bbox_props, zorder=+100)
     ax.annotate("", xy=(45,1e-3), xycoords='data', xytext=(45, 1e4),
@@ -97,7 +97,7 @@ def plot(ax, data, i):
             lw=lw+1, ls="-.", mew=1, color=cm(i/8), ms=7, alpha=1)
     arrow = dict(arrowstyle="->", connectionstyle="arc3", ls="-", color=cm(i/8))
     if str(flux)[0] == "5":
-        ax.annotate(fun.base10(flux), xy=(x[2], data[:,4][2]), color=cm(i/8),
+        ax.annotate(fun.base10(flux), xy=(x[3], data[:,4][3]), color=cm(i/8),
                     xytext=(0.9,0.52-0.05*i), textcoords="axes fraction", arrowprops=arrow)
     if flux == 5e4:
         #Fit
@@ -132,7 +132,7 @@ def plot(ax, data, i):
 workingPath = os.getcwd()
 fluxes = inf.getFluxes()
 i = 0
-coverage = 30
+coverage = 60
 kb = 8.617332e-5
 fig = plt.figure(num=None, figsize=(6,4))
 ax = fig.gca()
@@ -203,4 +203,4 @@ for i,f in enumerate(fluxes):
         continue
     ax2.legend(handles=legends, loc="best", #bbox_to_anchor=(0.75, 0.32),
               bbox_transform=plt.gcf().transFigure, numpoints=1, ncol=1, prop={'size':8}, markerscale=1)
-    fig.savefig("../diffusivityTimeSimple.pdf", bbox_inches='tight')
+    fig.savefig("../diffusivityTimeSimple"+str(coverage)+".pdf", bbox_inches='tight')
