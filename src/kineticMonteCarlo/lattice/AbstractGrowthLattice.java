@@ -47,6 +47,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int islandCount;
   private int monomerCount;
   private int[] atomTypesCounter;
+  private int[] emptyTypesCounter;
   private int atomTypesAmount;
   private ArrayList<Island> islands;
   private int innerPerimeter;
@@ -413,6 +414,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
     return sentence;
   }
+  
+  public String getEmptyTypesCounter() {
+    String sentence = "";
+    for (int i = 0; i < atomTypesAmount; i++) {
+      sentence += "\t"+String.valueOf(emptyTypesCounter[i]);
+    }
+    return sentence;
+  }
 
   /**
    * How far in average is an atom from where it was deposited. It is calculated in {@link  #countIslands(java.io.PrintWriter)
@@ -452,6 +461,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public void initialiseRates(double[][] probabilities) {
     atomTypesAmount = probabilities.length;
     atomTypesCounter = new int[atomTypesAmount];
+    emptyTypesCounter = new int[atomTypesAmount];
     for (int i = 0; i < size(); i++) {
       AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
@@ -585,7 +595,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     monomerCount = 0;
     for (int i = 0; i < atomTypesAmount; i++) {
       atomTypesCounter[i] = 0;
-      
+      emptyTypesCounter[i] = 0;
     }
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
@@ -745,6 +755,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           identifyIsland(neighbour, true, xDiference, yDiference);
         }
       }
+    } else {
+      emptyTypesCounter[atom.getType()]++;
     }
   }
 }
