@@ -27,6 +27,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final int totalNumOfSteps;
   private final int numStepsEachData;
   private final double[][][] simulationData;
+  private final double[][][] adsorptionSimulationData;
   private final int numberOfSimulations;
   private final Restart restart;
   private double totalAdsorptionRate; 
@@ -48,8 +49,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulatedSteps = 0;
     simulationNumber = -1;
     totalNumOfSteps = 10000;
-    numStepsEachData = 100;
+    numStepsEachData = 10;
     simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
+    adsorptionSimulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][2];
 
     for (int i = 0; i < numberOfSimulations; i++) {
       for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
@@ -112,15 +114,22 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = destinationAtom.getjHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][2] = getTime();
+        
+        adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = getCoverage();
+        adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = getTime();
       }
     }
     if (simulatedSteps + 1 == totalNumOfSteps) {
       //printSimulationData(simulationNumber);
       if (simulationNumber == numberOfSimulations - 1) {
         // Save to a file
-        String fileName = format("karmele%03d.txt", 0);
+        /*String fileName = format("karmele%03d.txt", 0);
         restart.writeCatalysisDataText(simulationData, fileName);
-        getLinearTrend();
+        
+        getLinearTrend();*/
+        
+        String fileName2 = format("karmele%04d.txt", 0);
+        restart.writeCatalysisAdsorptionDataText(adsorptionSimulationData, fileName2);
       }
       return true;
     } else {
@@ -142,7 +151,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         break;
       }
     }
-    
+    System.out.println("coverage: "+maxCoverage+" - time: "+getTime());
+    System.out.println("k_i(CO): "+adsorptionRateCO+" k_i(O): "+(totalAdsorptionRate-adsorptionRateCO));
     return returnValue;
   }
 
@@ -246,7 +256,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     } while (!depositAtom(destinationAtom));
     
     getList().setDepositionProbability(totalAdsorptionRate * (1-getCoverage()));
-    System.out.println(destinationAtom.getType()+" --- "+getTime());
+    //System.out.println(destinationAtom.getType()+" --- "+getTime());
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
@@ -299,7 +309,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double beta0 = ybar - beta1 * xbar;
 
     // print results
-    System.out.println("y   = " + beta1 + " * x + " + beta0);
+    //System.out.println("y   = " + beta1 + " * x + " + beta0);
 
     // analyze results
     int df = n - 2;
