@@ -29,7 +29,7 @@ def addSurface(temperature, ax=0):
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
         newax.annotate(r"$\theta = 0.30$", xy=(0.5,0.85), xycoords="axes fraction",
                        ha="center", va="center", bbox=bbox_props)
-        newax.axis('off')
+        #newax.axis('off')
     except IndexError:
         pass
 
