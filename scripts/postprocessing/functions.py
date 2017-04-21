@@ -153,3 +153,7 @@ def base10(x):
         exp -= 1
     text = r"$"+str(int(x / 10**exp))+r"\cdot10^{"+str(exp)+r"}$"
     return text
+
+def estimatedTime(x,flux):
+    r = -np.log(1-x)/flux
+    return r
