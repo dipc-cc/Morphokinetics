@@ -395,6 +395,7 @@ def getBasicEnergies():
     energies[4] = 0.45
     energies[5] = 0.36
     energies[6:8] = 0.35
+    energies[8] = 0.535
     energies[9:12] = 0.435
     return energies
 
