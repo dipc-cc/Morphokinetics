@@ -136,8 +136,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (extraOutput) {
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. diffusivity distance 14. numberOfMobileAtoms 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
-        outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%d\t%d\t%d%s%s\n";
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. tracer diffusivity distance 14. centre of mass diffusivity distance 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
+        outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d%s%s\n";
       } catch (IOException e) {
         Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -585,7 +585,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
             getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getDiffusivityDistance(), lattice.getMobileAtoms(), numberOfAtomFirstIsland, lattice.getTotalHops(),
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
             lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
     sumProbabilities = 0.0d;
     if (aeOutput) {

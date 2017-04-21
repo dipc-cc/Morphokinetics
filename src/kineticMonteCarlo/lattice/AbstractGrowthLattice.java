@@ -52,7 +52,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private ArrayList<Island> islands;
   private int innerPerimeter;
   private int outerPerimeter;
-  private double diffusivityDistance;
+  private double tracerDistance;
+  private double centreMassDistance;
   private int mobileAtoms;
   private long hops;
 
@@ -429,8 +430,12 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    *
    * @return distance^2
    */
-  public double getDiffusivityDistance() {
-    return diffusivityDistance;
+  public double getTracerDistance() {
+    return tracerDistance;
+  }
+  
+  public double getCmDistance() {
+    return centreMassDistance;
   }
   
   /**
@@ -681,10 +686,15 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   double computeDiffusivity() {
-    diffusivityDistance = 0;
+    tracerDistance = 0;
+    centreMassDistance = 0;
     hops = 0;
     double distanceX;
     double distanceY;
+    double distanceXTotal;
+    double distanceYTotal;
+    distanceXTotal = 0.0;
+    distanceYTotal = 0.0;
     mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
@@ -697,12 +707,15 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
           mobileAtoms++;
           distanceX = abs(atom.getCartesianSuperCell().getX() * getCartSizeX() + atom.getPos().getX() + uc.getPos().getX() - atom.getDepositionPosition().getX());
           distanceY = abs(atom.getCartesianSuperCell().getY() * getCartSizeY() + atom.getPos().getY() + uc.getPos().getY() - atom.getDepositionPosition().getY());
-          diffusivityDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
+          distanceXTotal += distanceX;
+          distanceYTotal += distanceY;
+          tracerDistance += Math.pow(distanceX, 2) + Math.pow(distanceY, 2);
           hops += atom.getHops();
         }
       }
     }
-    return diffusivityDistance;
+    centreMassDistance = Math.pow(distanceXTotal, 2) + Math.pow(distanceYTotal, 2);
+    return tracerDistance;
   }
   /**
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set 
