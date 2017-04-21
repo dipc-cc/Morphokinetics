@@ -27,13 +27,14 @@ def computeMavgAndOmega(fileNumber, p):
     for i in range(0,p.maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
     avgTotalHopRate2 = np.array(ratios.dot(np.transpose(Mavg)))
-    avgTotalHopRate1 = hops/time
+    avgTotalHopRate3 = hops/time
+    avgTotalHopRate1 = matrix[:,12]/(4*coverage*p.sizI*p.sizJ)/time # diffusivity
     # define omegas AgUc
     omega = np.zeros(shape=(length,p.maxA)) # [coverage, alfa]
     for i in range(0,length):
         omega[i,:] =  Mavg[i,:] * ratios / avgTotalHopRate2[i]
     np.shape(omega)
-    return Mavg, omega, avgTotalHopRate1, avgTotalHopRate2
+    return Mavg, omega, avgTotalHopRate1, avgTotalHopRate2, avgTotalHopRate3
 
 
 def computeMavgAndOmegaOverRuns():
@@ -47,20 +48,23 @@ def computeMavgAndOmegaOverRuns():
     sumOmega = np.zeros(shape=(length,p.maxA)) # [coverage, alfa]
     sumRate1 = np.zeros(length)
     sumRate2 = np.zeros(length)
+    sumRate3 = np.zeros(length)
     #iterating over runs
     for i in range(0,filesNumber):
-        tmpMavg, tmpOmega, tmpRate1, tmpRate2 = computeMavgAndOmega(i, p)
+        tmpMavg, tmpOmega, tmpRate1, tmpRate2, tmpRate3 = computeMavgAndOmega(i, p)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
         sumRate1 = sumRate1 + tmpRate1
         sumRate2 = sumRate2 + tmpRate2
+        sumRate3 = sumRate3 + tmpRate3
     
     runMavg = sumMavg / filesNumber
     runOavg = sumOmega / filesNumber
     runR1avg = sumRate1 / filesNumber
     runR2avg = sumRate2 / filesNumber
+    runR3avg = sumRate3 / filesNumber
 
-    return runMavg, runOavg, runR1avg, runR2avg
+    return runMavg, runOavg, runR1avg, runR2avg, runR3avg
 
 
 def putLabels(ax, calc, alfa):
@@ -92,8 +96,8 @@ def putLabels(ax, calc, alfa):
         ax.annotate(label, xy=(0.75,0.85), xycoords="axes fraction",
                     bbox=bbox_props)
     elif alfa == 0:
-        ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
-        ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
+        ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$", size=8)
+        ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction", size=8)
         label = r"$\theta=0.30$"
         ax.annotate(label, xy=(0.78,0.55), xycoords="axes fraction",
                     bbox=bbox_props, size=8)
@@ -130,7 +134,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, p):
                 text = r"$E_a^{Arrh}="+text+r"$"
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=8)
+            ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])
         ax.yaxis.set_major_locator(locator)
@@ -157,13 +161,13 @@ def plotOmegas(x, y, axis, i, averageLines):
     for j in range(0,3):
         axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(2e-4,2)
-    axis.set_ylabel(r"$\omega_\alpha$")
-    axis.set_xlabel(r"$1/k_BT$")
+    axis.set_ylabel(r"$\omega_\alpha$", size=8)
+    axis.set_xlabel(r"$1/k_BT$", size=8)
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
     if i == 0: # range separation lines
         axis.annotate("", xy=(45,2e-4), xytext=(45,2), arrowprops=arrow)
         axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
-        axis.annotate("(b)", xy=(-0.2, 0.93), xycoords="axes fraction")
+        axis.annotate("(b)", xy=(-0.2, 0.93), xycoords="axes fraction", size=8)
 
     
 temperatures = inf.getTemperatures()
@@ -175,6 +179,7 @@ tempMavg = []
 tempOavg = []
 tempR1avg = []
 tempR2avg = []
+tempR3avg = []
 
 workingPath = os.getcwd()
 
@@ -187,6 +192,7 @@ try:
     tempOavg = inf.readAe("tempOavg.txt")
     tempR1avg = np.loadtxt("tempR1avg.txt")
     tempR2avg = np.loadtxt("tempR2avg.txt")
+    tempR3avg = np.loadtxt("tempR3avg.txt")
 
 ####################################################################################################
 # compute
@@ -195,23 +201,26 @@ except FileNotFoundError:
     for t in temperatures:
         print(t)
         os.chdir(str(t)+"/results")
-        tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns()
+        tmp1, tmp2, tmp3, tmp4, tmp5 = computeMavgAndOmegaOverRuns()
         tempMavg.append(tmp1)
         tempOavg.append(tmp2)
         tempR1avg.append(tmp3)
         tempR2avg.append(tmp4)
+        tempR3avg.append(tmp5)
         os.chdir(workingPath)
 
     tempMavg = np.array(tempMavg)
     tempOavg = np.array(tempOavg)
     tempR1avg = np.array(tempR1avg)
     tempR2avg = np.array(tempR2avg)
+    tempR3avg = np.array(tempR3avg)
 
     #save
     inf.writeAe("tempMavg.txt", tempMavg)
     inf.writeAe("tempOavg.txt", tempOavg)
     np.savetxt("tempR1avg.txt",tempR1avg, fmt='%.18f')
     np.savetxt("tempR2avg.txt",tempR2avg, fmt='%.18f')
+    np.savetxt("tempR3avg.txt",tempR3avg, fmt='%.18f')
 
 if calculationMode == "AgUc":
     minTemperatureIndex = 4
@@ -219,6 +228,7 @@ if calculationMode == "AgUc":
     tempOavg = tempOavg[minTemperatureIndex:]
     tempR1avg = tempR1avg[minTemperatureIndex:]
     tempR2avg = tempR2avg[minTemperatureIndex:]
+    tempR3avg = tempR3avg[minTemperatureIndex:]
     temperatures = temperatures[minTemperatureIndex:]
     ind = [0,4,8,12,15,20,24,27]
     maxAlfa = 4
@@ -259,14 +269,13 @@ rngt = inf.defineRanges(calculationMode, p.rLib, temperatures)
 tempOmegaCov = []
 tempEaCov = []
 tempEaMCov = []
+tempEafCov = []
 showPlot = False
 maxRanges = len(rngt) - 1
 coverage = list(range(0,p.maxC))
 if len(sys.argv) > 1:
     showPlot = sys.argv[1] == "p"
 for cov in range(-p.maxC,0):
-    #if cov < -71 or cov > -68:
-     #   continue
     x = 1/kb/temperatures+np.log(5e4**1.5)
     y = tempR1avg
     print(cov)
@@ -281,6 +290,16 @@ for cov in range(-p.maxC,0):
     tempEaCov.append(fitAndPlotLinear(x, y[:,cov], rngt, axarr[0], -1, False, labelAlfa, p))
     tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
+    y2 = tempR1avg/tempR3avg
+    if cov < -71 or cov > -68:
+        plt.semilogy(x,y2[:,cov])
+        # plt.semilogy(x,tempR1avg, "o")
+        # plt.semilogy(x,tempR3avg, "+")
+        #plt.show()
+    #   continue
+    
+    print(np.shape(y2))
+    tempEafCov.append(fitAndPlotLinear(x, y2[:,cov], rngt, axarr[0], -2, False, labelAlfa, p))
     for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
         if p.calc == "basic" and p.rLib == "version2" and i == 1:
@@ -304,7 +323,7 @@ for cov in range(-p.maxC,0):
         plt.savefig("plot"+str(p.maxC+cov)+".pdf", bbox_inches='tight')
         plt.close()
     
-
+print(tempEafCov)
 tempOmegaCov = np.array(tempOmegaCov) # [coverage, type (alfa), temperature range]
 tempEaCov = -np.array(tempEaCov) # [coverage, temperature range]
 tempEaMCov = np.array(tempEaMCov) # [coverage, type (alfa), temperature range]
@@ -314,7 +333,8 @@ for alfa in range(0,maxAlfa):
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(8,5))
 fig.subplots_adjust(wspace=0.1)
-tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)
+tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)-tempEafCov
+print(np.shape(tempEaCov2))
 
 cm = plt.get_cmap('gist_earth')
 ax = []
@@ -332,7 +352,7 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     ax2.annotate(' ', xy=(.6, maxY), xytext=(.2, maxY-1e-2), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", edgecolor=cm(3/4), facecolor=cm(3/4)))
     maxYlabel = "{:03.2f}%".format(maxY*100)
     bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
-    ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props, color=cm(3/4))
+    ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props)
     if i != 2:
         ax2.yaxis.set_major_formatter(plticker.NullFormatter())
     else:
@@ -396,4 +416,4 @@ if (omegas):
         myLabels.append(labelAlfa[i])
     myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.5), prop={'size':11})
-    plt.savefig("multiplicitiesOmegas.pdf", bbox_inches='tight')
+    plt.savefig("multiplicitiesOmegasP.pdf", bbox_inches='tight')
