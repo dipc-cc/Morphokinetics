@@ -96,6 +96,7 @@ class avgData:
         self.negs = data[8] # neighbours vector
 
         self.difS = data[9] # standard deviation of diffusivity
+        self.empt = data[10] # types of empty sites
 
     def getRecomputedCoverage(self):
         return np.sum(self.negs[:],axis=0)
@@ -119,6 +120,7 @@ def readAverages():
     difS = np.std([i[:,12] for i in allData], axis=0)
     #hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
     hops = np.mean([i[:,15] for i in allData], axis=0)
+    empt = []
     negs = []
     negs.append(np.mean([i[:,16] for i in allData], axis=0))
     negs.append(np.mean([i[:,17] for i in allData], axis=0))
@@ -128,8 +130,19 @@ def readAverages():
         negs.append(np.mean([i[:,20] for i in allData], axis=0))
         negs.append(np.mean([i[:,21] for i in allData], axis=0))
         negs.append(np.mean([i[:,22] for i in allData], axis=0))
+        try:
+            empt.append(np.mean([i[:,23] for i in allData], axis=0))
+            empt.append(np.mean([i[:,24] for i in allData], axis=0))
+            empt.append(np.mean([i[:,25] for i in allData], axis=0))
+            empt.append(np.mean([i[:,26] for i in allData], axis=0))
+            empt.append(np.mean([i[:,27] for i in allData], axis=0))
+            empt.append(np.mean([i[:,28] for i in allData], axis=0))
+            empt.append(np.mean([i[:,29] for i in allData], axis=0))
+        except IndexError:
+            pass
+            
 
-    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs, difS])
+    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs, difS, empt])
 
 
 def getAvgDataCoverage(p, d, coverage):
