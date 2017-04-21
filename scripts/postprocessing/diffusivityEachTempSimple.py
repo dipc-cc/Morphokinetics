@@ -48,9 +48,6 @@ def addFreeDiffusivity(ax, x, p):
     y = np.ones(len(x))
     y = y * 3/2*p.getRatios()[0]
     cm = plt.get_cmap("Accent")
-    ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{3}{2}\nu_{0}l^2$", xytext=(1e-2,7e11), textcoords="data",
-                xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     y = y / 2
     ax.plot(x, y, "-", color=cm(8/8))
     ax.annotate(r"$\frac{3}{4}\nu_{0}l^2$", xytext=(1e-2,5e10), textcoords="data",
@@ -77,13 +74,9 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
-    diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR, = ax.loglog(x, diff, label=r"$g \; \frac{d\langle R^2 \rangle}{dt}$",
-               marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
-    hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
-    lgN, = ax.loglog(x, hops, label=r"$gl^2 \; \frac{d\langle N_h\rangle}{dt}$",
-               marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
+    lgE, = ax.loglog(x, d.diff/d.hops*1e9, label="$f\cdot10^9$",
+                     marker="o", ms=1, ls="", mec=cm(3/20), mfc=cm(3/20), lw=2)
     lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$g \; \frac{\langle R^2\rangle}{t}$",
                       ls="-", color=cm(3/8), lw=5)
     lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$gl^2 \; \frac{\langle N_h\rangle}{t}$",
@@ -112,7 +105,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     lg, = ax.loglog(x, isld/p.sizI/p.sizJ*1e5, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}\cdot 10^5$", markerfacecolor="None")
     handles.append(lg)
 
-    handles = [ lgR3, lgN3, lgR, lgN] + handles
+    handles = [ lgR3, lgN3, lgE] + handles
     #ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     ax.set_ylim([1e-2,1e13])
@@ -130,9 +123,9 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
             thetas = mlines.Line2D([], [], color='black',
                                    markersize=15, label=r"$\theta_{i} \cdot 10^5$"+"\n"+r"$i = 0,1,2,3,4+$")
             handles.append(thetas)
-            ax.legend(handles=handles, loc=(1.05,.15), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
+            ax.legend(handles=handles, loc=(1.05,.15), numpoints=4, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
             #                                    -.15/1.03
-        if i > 1:
+        if i > 2:
             xlim = (7e-1,1)
             if i == 1:
                 rect = Rectangle((7e-1, 1e1), 30, 1e6, facecolor="white", edgecolor=cm(8/8))

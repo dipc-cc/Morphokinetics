@@ -34,7 +34,7 @@ def addSurface(temperature, ax=0):
         pass
 
 def addFreeDiffusivity(ax, x, p):
-    sublabel = {150: "(a)", 220: "(b)", 335: "(c)"}
+    sublabel = {150: "(a)", 220: "(b)", 330: "(c)"}
     try:
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.9)
         if p.temp == 150:
@@ -48,9 +48,6 @@ def addFreeDiffusivity(ax, x, p):
     y = np.ones(len(x))
     y = y *p.getRatios()[0]
     cm = plt.get_cmap("Accent")
-    ax.plot(x, y, "-", color=cm(8/8))
-    ax.annotate(r"$\frac{1}{1}\nu_{0}l^2$", xytext=(1e-2,1e10), textcoords="data",
-                xy=(x[-1],y[-1]), xycoords='data', arrowprops=dict(arrowstyle="->", connectionstyle="arc3", color=cm(8/8)))
     y = y / 2
     ax.plot(x, y, "-", color=cm(8/8))
     ax.annotate(r"$\frac{1}{2}\nu_{0}l^2$", xytext=(1e-2,1e9), textcoords="data",
@@ -77,13 +74,9 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     cm = plt.get_cmap("Accent")
     alpha = 0.5
     mew = 0
-    diff = fun.timeDerivative(d.diff, d.time)/(4*Na)
     handles = []
-    lgR, = ax.loglog(x, diff, label=r"$g \; \frac{d\langle R^2 \rangle}{dt}$",
-               marker="s", ls="", mew=mew, markerfacecolor=cm(0/8), ms=8, alpha=alpha)
-    hops = fun.timeDerivative(d.hops, d.time)/(4*Na)
-    lgN, = ax.loglog(x, hops, label=r"$gl^2 \; \frac{d\langle N_h\rangle}{dt}$",
-               marker="+", ls="", mew=1, markeredgecolor=cm(7/8), ms=7, alpha=alpha)
+    lgE, = ax.loglog(x, d.diff/d.hops*1e7, label="$f\cdot10^7$",
+                     marker="o", ms=1, ls="", mec=cm(3/20), mfc=cm(3/20), lw=2)
     lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$g \; \frac{\langle R^2\rangle}{t}$",
                       ls="-", color=cm(3/8), lw=5)
     lgN3, = ax.loglog(x, d.hops/d.time/(4*Na), label=r"$gl^2 \; \frac{\langle N_h\rangle}{t}$",
@@ -109,7 +102,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     lg, = ax.loglog(x, isld/p.sizI/p.sizJ*up, ls="--", lw=2, color=cm(6/8), label=r"$N_{isl}\cdot 10^4$", markerfacecolor="None")
     handles.append(lg)
 
-    handles = [ lgR3, lgN3, lgR, lgN] + handles
+    handles = [ lgR3, lgN3, lgE] + handles
     #ax.grid()
     ax.set_xlabel(r"$\theta$", size=16)
     ax.set_ylim([1e-3,5e10])
@@ -126,7 +119,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
             thetas = mlines.Line2D([], [], color='black',
                                    markersize=15, label=r"$\theta_{i} \cdot 10^5$"+"\n"+r"$i = 0,1,2,3-4$")
             handles.append(thetas)
-            ax.legend(handles=handles, loc=(1.05,.15), numpoints=1, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
+            ax.legend(handles=handles, loc=(1.05,.15), numpoints=4, prop={'size':12}, markerscale=1, labelspacing=1, ncol=1, columnspacing=.7, borderpad=0.3)
 
 
 ##########################################################
@@ -151,7 +144,7 @@ for f in fluxes:
     os.chdir(f)
     fig1, axarr = plt.subplots(1, 3, sharey=True,figsize=(15,4))
     fPath = os.getcwd()
-    for t in [150, 220, 335]:#inf.getTemperatures()[14:]:
+    for t in [150, 220, 330]:#inf.getTemperatures()[14:]:
         try:
             os.chdir(str(t)+"/results")
             print("\t",t)
