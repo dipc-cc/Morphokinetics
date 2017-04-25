@@ -27,6 +27,7 @@ public class AgSimpleRates implements IRates {
     double e2 = 0.33;
     double e3 = 0.42;
     double eImpossible = 9999999;
+    double eHigh = 2.4;
     
     prefactor = 1e13;
     
@@ -64,19 +65,19 @@ public class AgSimpleRates implements IRates {
     energies[3][6] = eImpossible;
     
     energies[4][0] = eImpossible;
-    energies[4][1] = eImpossible;
-    energies[4][2] = eImpossible;
-    energies[4][3] = eImpossible;
-    energies[4][4] = eImpossible;
-    energies[4][5] = eImpossible;
+    energies[4][1] = eHigh;
+    energies[4][2] = eHigh;
+    energies[4][3] = eHigh;
+    energies[4][4] = eHigh;
+    energies[4][5] = eHigh;
     energies[4][6] = eImpossible;
     
     energies[5][0] = eImpossible;
     energies[5][1] = eImpossible;
-    energies[5][2] = eImpossible;
-    energies[5][3] = eImpossible;
-    energies[5][4] = eImpossible;
-    energies[5][5] = eImpossible;
+    energies[5][2] = eHigh;
+    energies[5][3] = eHigh;
+    energies[5][4] = eHigh;
+    energies[5][5] = eHigh;
     energies[5][6] = eImpossible;
     
     energies[6][0] = eImpossible;
