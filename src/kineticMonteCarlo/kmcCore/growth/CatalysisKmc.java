@@ -145,15 +145,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         break;
       }
     }
-    System.out.println("coverage: "+maxCoverage+" - time: "+getTime());
-    System.out.println("k_i(CO): "+adsorptionRateCO+" k_i(O): "+(totalAdsorptionRate-adsorptionRateCO));
+    System.out.println("coverage: " + getLattice().getCoverage() + " - time: " + getTime());
+    System.out.println("k_i(CO): " + adsorptionRateCO + " k_i(O): " + (totalAdsorptionRate - adsorptionRateCO));
     return returnValue;
   }
 
   @Override
   public void depositSeed() {
-    getList().setDepositionProbability(totalAdsorptionRate*(1-getCoverage()));
     getLattice().resetOccupied();
+    getList().setDepositionProbability(totalAdsorptionRate*(1-getCoverage()));
     simulatedSteps = 0;
     simulationNumber++;
   }
