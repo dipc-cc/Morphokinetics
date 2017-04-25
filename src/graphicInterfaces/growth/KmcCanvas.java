@@ -4,6 +4,7 @@
  */
 package graphicInterfaces.growth;
 
+import basic.io.Restart;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -51,6 +52,7 @@ public class KmcCanvas extends Canvas {
   private boolean printId;
   private boolean printIslandNumber;
   private boolean printIslandCentres;
+  private Restart restart;
   
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
@@ -76,6 +78,7 @@ public class KmcCanvas extends Canvas {
     printId = true;
     printIslandNumber = false;
     printIslandCentres = false;
+    restart = new Restart();
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -149,7 +152,6 @@ public class KmcCanvas extends Canvas {
    * Public drawing method, call this from your game loop for update image.
    */
   public void performDraw() {
-
     Graphics g;
     try {
       g = strategy.getDrawGraphics();
@@ -177,6 +179,7 @@ public class KmcCanvas extends Canvas {
     }
     imageName = fileName;
     performDrawToImage();
+    writeXYZ();    
   }
 
   /**
@@ -404,5 +407,9 @@ public class KmcCanvas extends Canvas {
         }
       }
     }
+  }
+  
+  private void writeXYZ() {
+    restart.writeXyz(1, lattice);
   }
 }
