@@ -89,6 +89,10 @@ public class Parser {
    */
   private int numberOfSimulations;
   /**
+   * See {@link #getNumberOfSteps() }.
+   */
+  private int numberOfSteps;
+  /**
    * See {@link #getCartSizeX()}.
    */
   private int cartSizeX;
@@ -232,6 +236,7 @@ public class Parser {
     psdExtend = 1;
     endTime = -1;
     numberOfSimulations = 10;
+    numberOfSteps = -1;
     cartSizeX = 256;
     cartSizeY = 256;
     cartSizeZ = 256;
@@ -367,7 +372,12 @@ public class Parser {
     } catch (JSONException e) {
       numberOfSimulations = 10;
     }
-   try {
+    try {
+      numberOfSteps = json.getInt("numberOfSteps");
+    } catch (JSONException e) {
+      numberOfSteps = -1;
+    }
+    try {
       cartSizeX = json.getInt("cartSizeX");
     } catch (JSONException e) {
       cartSizeX = 256;
@@ -617,6 +627,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"perimeterType\"", perimeterType);
     System.out.printf("%32s: %s,\n", "\"multithreaded\"", multithreaded);
     System.out.printf("%32s: %s,\n", "\"numberOfSimulations\"", numberOfSimulations);
+    System.out.printf("%32s: %s,\n", "\"numberOfSteps\"", numberOfSteps);
     System.out.printf("%32s: %s,\n", "\"cartSizeX\"", cartSizeX);
     System.out.printf("%32s: %s,\n", "\"cartSizeY\"", cartSizeY);
     System.out.printf("%32s: %s,\n", "\"cartSizeZ\"", cartSizeZ);
@@ -950,6 +961,18 @@ public class Parser {
    */
   public int getNumberOfSimulations() {
     return numberOfSimulations;
+  }
+  
+  /**
+   * Selects the number of steps that each simulation will at most. -1 by default, which means that
+   * it will run until another criteria is reached.
+   *
+   * Input "parameters" variable: {@code numberOfSteps}.
+   *
+   * @return number of simulations.
+   */
+  public int getNumberOfSteps() {
+    return numberOfSteps;
   }
 
   /**
