@@ -22,12 +22,13 @@ import utils.StaticRandom;
  */
 public class CatalysisKmc extends AbstractGrowthKmc {
 
+  private final boolean measureDiffusivity;
   private long simulatedSteps;
   private int simulationNumber;
-  private final int totalNumOfSteps;
-  private final int numStepsEachData;
-  private final double[][][] simulationData;
-  private final double[][][] adsorptionSimulationData;
+  private int totalNumOfSteps;
+  private int numStepsEachData;
+  private double[][][] simulationData;
+  private double[][][] adsorptionSimulationData;
   private final int numberOfSimulations;
   private final Restart restart;
   private double totalAdsorptionRate; 
@@ -48,16 +49,23 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     simulatedSteps = 0;
     simulationNumber = -1;
-    totalNumOfSteps = 10000;
-    numStepsEachData = 10;
-    simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
-    adsorptionSimulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][2];
+    measureDiffusivity = parser.outputData();
+    if (measureDiffusivity) {
+      totalNumOfSteps = parser.getNumberOfSteps();
+      if (totalNumOfSteps < 0) {
+        System.err.println("You should consider defining a proper number of steps to get diffusivity information about catalysis");
+        System.err.println("Most probably execution will fail");
+      }
+      numStepsEachData = 10;
+      simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
+      adsorptionSimulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][2];
 
-    for (int i = 0; i < numberOfSimulations; i++) {
-      for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
-        simulationData[i][j][0] = Double.NEGATIVE_INFINITY;
-        simulationData[i][j][1] = Double.NEGATIVE_INFINITY;
-        simulationData[i][j][2] = Double.NEGATIVE_INFINITY;
+      for (int i = 0; i < numberOfSimulations; i++) {
+        for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
+          simulationData[i][j][0] = Double.NEGATIVE_INFINITY;
+          simulationData[i][j][1] = Double.NEGATIVE_INFINITY;
+          simulationData[i][j][2] = Double.NEGATIVE_INFINITY;
+        }
       }
     }
     restart = new Restart("results");
@@ -109,7 +117,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
     simulatedSteps++;
-    if ((simulatedSteps + 1) % numStepsEachData == 0) {
+    if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
       if (destinationAtom != null) {
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
         simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = destinationAtom.getjHexa();
@@ -119,7 +127,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = getTime();
       }
     }
-    if (simulatedSteps + 1 == totalNumOfSteps) {
+    if (measureDiffusivity && simulatedSteps + 1 == totalNumOfSteps) {
       //printSimulationData(simulationNumber);
       if (simulationNumber == numberOfSimulations - 1) {
         // Save to a file
