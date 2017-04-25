@@ -75,7 +75,7 @@ def diffusivityDistance(smooth, binned, fig=0, ax=0, i=-1):
     alpha = 0.5
     mew = 0
     handles = []
-    lgE, = ax.loglog(x, d.diff/d.hops*1e7, label="$f\cdot10^7$",
+    lgE, = ax.loglog(x, d.diff/d.hops*1e7, label="$f_T\cdot10^7$",
                      marker="o", ms=1, ls="", mec=cm(3/20), mfc=cm(3/20), lw=2)
     lgR3, = ax.loglog(x, d.diff/d.time/(4*Na), label=r"$g \; \frac{\langle R^2\rangle}{t}$",
                       ls="-", color=cm(3/8), lw=5)
