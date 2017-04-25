@@ -56,6 +56,9 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   public AgAtom(int id, int pos) {
     super(id, 6);
+    if (typesTable == null) {
+      typesTable = new AgTypesTable();
+    }
     this.pos = pos;
     nImmobile = 0;
     nMobile   = 0;
