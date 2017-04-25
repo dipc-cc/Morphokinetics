@@ -436,6 +436,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         indexes = np.where((temperatures >= 400) & (temperatures <= 1100))
         iSh = indexes[0][0]
         iFh = indexes[0][-1]
+        #ranges = list(range(0,30,3))
     elif calculationMode == "basic":
         if ratesLibrary == "version2":
             # it has 4 ranges
@@ -448,6 +449,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
             indexes = np.where((temperatures >= 270) & (temperatures <= 339))
             iSh = indexes[0][0]
             iFh = indexes[0][-1]
+            #ranges = list(range(0,30,3))
     else:
         indexes = np.where((temperatures >= 200) & (temperatures <= 500))
         iSl = indexes[0][0]
