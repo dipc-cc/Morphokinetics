@@ -56,8 +56,8 @@ public class GrapheneSimulationTest {
     assertEquals("graphene", parser.getCalculationMode());
     assertEquals(1273, parser.getTemperature());
     assertEquals(1, parser.getNumberOfSimulations());
-    assertEquals(400, parser.getCartSizeX());
-    assertEquals(400, parser.getCartSizeY());
+    assertEquals(200, parser.getCartSizeX());
+    assertEquals(200, parser.getCartSizeY());
     assertEquals(true, parser.justCentralFlake());
     assertEquals("linear", parser.getListType());
     assertEquals(true, parser.doPsd());
@@ -93,7 +93,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref.length; i++) {
       assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(33643.63470539624, simulatedTime, 0.0);
+    assertEquals(2206.977229875009, simulatedTime, 0.0);
   }
 
   @Test
@@ -126,7 +126,7 @@ public class GrapheneSimulationTest {
     for (int i = 0; i < ref2.length; i++) {
       assertArrayEquals(ref4[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(620.472492338597, simulatedTime, 0.0);
+    assertEquals(123.68364303727847, simulatedTime, 0.0);
     // TODO compare the rest of surfaces
   }
     
@@ -157,7 +157,7 @@ public class GrapheneSimulationTest {
       assertArrayEquals(ref2[i], simulatedSurface[i], (float) 0.001);
     }
     assertEquals(simulatedIslands, 1);
-    assertEquals(10001.725060521605, simulatedTime, 0.0);
+    assertEquals(9660.486940127535, simulatedTime, 0.0);
     // TODO compare the rest of surfaces
     /*try {
       // read reference surfaces and compare them with simulated ones

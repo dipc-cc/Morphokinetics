@@ -1,4 +1,4 @@
-{ "temperature": 1273,
+{ "temperature": 300,
   "numberOfSimulations": 3,
   "cartSizeX": 40,
   "cartSizeY": 40,
@@ -16,4 +16,5 @@
   "useMaxPerimeter": false,
   "perimeterType": circle,
   "outputDataFormat": [ {"type": "txt"},],
+  "psdScale": 0.5,
 }
