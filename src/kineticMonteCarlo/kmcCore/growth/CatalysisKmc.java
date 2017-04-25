@@ -127,11 +127,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = getTime();
       }
     }
-    if (simulatedSteps + 1 == totalNumOfSteps) {
-      return true;
-    } else {
-      return false;
-    }
+    return simulatedSteps + 1 == totalNumOfSteps;
   }
 
   private void printSimulationData(int numSim) {
