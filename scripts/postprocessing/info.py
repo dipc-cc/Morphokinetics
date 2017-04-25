@@ -464,6 +464,7 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
 
     
 def smallerFont(ax, size=10):
+    ax.tick_params(axis='both', which='major', labelsize=size)
     for tick in ax.xaxis.get_major_ticks():
         tick.label.set_fontsize(size)
     for tick in ax.yaxis.get_major_ticks():
