@@ -406,8 +406,9 @@ class RestartLow {
         double t = 0;
         coverage = data[i][0];
         t = data[i][1];
-          
-        out.write((i + ";" + t + ";" + coverage + "\n").replace('.', ','));
+        if (t > 0 || coverage > 0) {
+          out.write((i + ";" + t + ";" + coverage + "\n").replace('.', ','));
+        }
       }
     } catch (Exception e) {
       // if any I/O error occurs
