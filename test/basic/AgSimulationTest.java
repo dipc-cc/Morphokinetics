@@ -97,7 +97,7 @@ public class AgSimulationTest {
     for (int i = 0; i < ref.length; i++) {
       assertArrayEquals(ref[i], simulatedSurface[i], (float) 0.001);
     }
-    assertEquals(217.27663190786933, simulatedTime, 0.0);
+    assertEquals(29661.004893001955, simulatedTime, 0.0);
   }
 
   /**
@@ -174,8 +174,8 @@ public class AgSimulationTest {
       Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
 
-    assertEquals(2, simulatedIslands);
-    assertEquals(14.776118941953134, simulatedTime, 0.0);
+    assertEquals(14.872934912420744, simulatedTime, 0.0);
+    assertEquals(1, simulatedIslands);
   }
 
   private void doAgTest(Parser parser) {
