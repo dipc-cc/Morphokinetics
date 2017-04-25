@@ -97,9 +97,14 @@ class avgData:
 
         self.difS = data[9] # standard deviation of diffusivity
         self.empt = data[10] # types of empty sites
+        self.cmDf = data[11] # centre of mass diffusivity distance
+        self.negS = data[12] # standar deviation coverage
 
     def getRecomputedCoverage(self):
-        return np.sum(self.negs[:],axis=0)
+        return np.sum(self.negs[:], axis=0)
+    
+    def getStdCoverage(self):
+        return np.std(self.negs[:], axis=0)
 
 def readAverages():
     p = getInputParameters()
@@ -118,6 +123,7 @@ def readAverages():
     even = np.mean([i[:,7]  for i in allData], axis=0)
     diff = np.mean([i[:,12] for i in allData], axis=0)
     difS = np.std([i[:,12] for i in allData], axis=0)
+    cmDf = np.mean([i[:,13] for i in allData], axis=0)
     #hops = np.exp(np.mean(np.log([i[:,15] for i in allData]), axis=0))
     hops = np.mean([i[:,15] for i in allData], axis=0)
     empt = []
@@ -126,6 +132,8 @@ def readAverages():
     negs.append(np.mean([i[:,17] for i in allData], axis=0))
     negs.append(np.mean([i[:,18] for i in allData], axis=0))
     negs.append(np.mean([i[:,19] for i in allData], axis=0))
+    #negS = np.std(np.sum([i[:,16:20] for i in allData], axis=2), axis=0)
+    negS = 0
     if p.maxN == 6:
         negs.append(np.mean([i[:,20] for i in allData], axis=0))
         negs.append(np.mean([i[:,21] for i in allData], axis=0))
@@ -142,7 +150,7 @@ def readAverages():
             pass
             
 
-    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs, difS, empt])
+    return avgData([cove, time, isld, depo, prob, even, diff, hops, negs, difS, empt, cmDf, negS])
 
 
 def getAvgDataCoverage(p, d, coverage):
