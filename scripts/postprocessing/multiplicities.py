@@ -131,7 +131,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, p):
                 ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
                 xHalf *= 1.15
                 yHalf *= 5
-                text = r"$E_a^{Arrh}="+text+r"$"
+                text = r"$E_a="+text+r"$"
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
             ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
@@ -291,14 +291,7 @@ for cov in range(-p.maxC,0):
     tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
     y2 = tempR1avg/tempR3avg
-    if cov < -71 or cov > -68:
-        plt.semilogy(x,y2[:,cov])
-        # plt.semilogy(x,tempR1avg, "o")
-        # plt.semilogy(x,tempR3avg, "+")
-        #plt.show()
-    #   continue
-    
-    print(np.shape(y2))
+
     tempEafCov.append(fitAndPlotLinear(x, y2[:,cov], rngt, axarr[0], -2, False, labelAlfa, p))
     for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,cov,ind[2*i]:ind[2*i+1]], axis=1)
@@ -323,7 +316,6 @@ for cov in range(-p.maxC,0):
         plt.savefig("plot"+str(p.maxC+cov)+".pdf", bbox_inches='tight')
         plt.close()
     
-print(tempEafCov)
 tempOmegaCov = np.array(tempOmegaCov) # [coverage, type (alfa), temperature range]
 tempEaCov = -np.array(tempEaCov) # [coverage, temperature range]
 tempEaMCov = np.array(tempEaMCov) # [coverage, type (alfa), temperature range]
@@ -334,7 +326,6 @@ for alfa in range(0,maxAlfa):
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(8,5))
 fig.subplots_adjust(wspace=0.1)
 tempEaCov2 = np.sum(tempOmegaCov*(tempEaRCov-tempEaMCov), axis=1)-tempEafCov
-print(np.shape(tempEaCov2))
 
 cm = plt.get_cmap('gist_earth')
 ax = []
@@ -353,7 +344,7 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     maxYlabel = "{:03.2f}%".format(maxY*100)
     bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
     ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props)
-    if i != 2:
+    if i != maxRanges-1:
         ax2.yaxis.set_major_formatter(plticker.NullFormatter())
     else:
         ax2.set_ylabel("Relative error")
@@ -404,7 +395,7 @@ if (omegas):
             partialSum -= tempOmegaCov[:,i,j]*(tempEaRCov[:,i,j]-tempEaMCov[:,i,j])
     
     myLegends = [lgEaCov, lgEaCov2]
-    myLabels = [r"$E_a^{Arrh}$", r"$\sum_\alpha \;\epsilon_\alpha$"]
+    myLabels = [r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
     myLegends += lgs
     myLegends += [lgErr]
     if p.calc == "AgUc":
