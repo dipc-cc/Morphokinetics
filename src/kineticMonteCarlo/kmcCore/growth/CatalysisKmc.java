@@ -119,12 +119,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulatedSteps++;
     if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
       if (destinationAtom != null) {
-        simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = destinationAtom.getiHexa();
-        simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = destinationAtom.getjHexa();
-        simulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][2] = getTime();
+        int step = (int) (simulatedSteps + 1) / numStepsEachData;
+        simulationData[simulationNumber][step][0] = destinationAtom.getiHexa();
+        simulationData[simulationNumber][step][1] = destinationAtom.getjHexa();
+        simulationData[simulationNumber][step][2] = getTime();
         
-        adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][0] = getCoverage();
-        adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = getTime();
+        adsorptionSimulationData[simulationNumber][step][0] = getCoverage();
+        adsorptionSimulationData[simulationNumber][step][1] = getTime();
       }
     }
     return simulatedSteps + 1 == totalNumOfSteps;
