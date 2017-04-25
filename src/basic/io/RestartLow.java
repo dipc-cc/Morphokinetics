@@ -396,27 +396,18 @@ class RestartLow {
   }
   
   
-  
-  static void writeAdsorptionLowSimulationDataText(double[][][] data, String fileName) {
+  static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
 
-      for (int i = 0; i < data[0].length; i++) {
+      for (int i = 0; i < data.length; i++) {
         double coverage = 0;
         double t = 0;
-        if (i > 0) {
-          int j; 
-          for (j = 0; j < data.length; j++) {
-            if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
-              coverage += data[j][i][0];
-              t += data[j][i][1];
-            }
-          }
-          coverage = Math.log10(9* coverage / j + 1); //this makes this variable start at 0 and finish at 1 [coverage goes from 0 to 1, so log10 must go from 1 to 10]
-          t = t / j;
-          out.write((i + ";" + t + ";" + coverage + "\n").replace('.', ','));
-        }
+        coverage = data[i][0];
+        t = data[i][1];
+          
+        out.write((i + ";" + t + ";" + coverage + "\n").replace('.', ','));
       }
     } catch (Exception e) {
       // if any I/O error occurs

@@ -510,6 +510,9 @@ public class Parser {
         if (type.equals("extra2")){
           numericFormatCode += 64;
         }
+        if (type.equals("catalysis")){
+          numericFormatCode += 128;
+        }
       }
     } catch (JSONException e) {
         numericFormatCode = 2; // Only mko (binary) output by default

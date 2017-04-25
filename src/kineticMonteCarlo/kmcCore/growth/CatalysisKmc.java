@@ -5,11 +5,9 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import basic.io.Restart;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
-import static java.lang.String.format;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.unitCell.CatalysisUc;
@@ -30,7 +28,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double[][][] simulationData;
   private double[][][] adsorptionSimulationData;
   private final int numberOfSimulations;
-  private final Restart restart;
   private double totalAdsorptionRate; 
   private double adsorptionRateCO;
   /**
@@ -68,7 +65,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }
     }
-    restart = new Restart("results");
   }
 
   @Override
@@ -81,6 +77,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalAdsorptionRate = rates.getTotalAdsorptionRate();
   }
 
+  public double[][] getOutputAdsorptionData(int simulationNumber) {
+    return adsorptionSimulationData[simulationNumber];
+  }
+  
   @Override
   public void initialiseRates(double[] rates) {
     //we modify the 1D array into a 3D array;
@@ -144,10 +144,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (performSimulationStep()) {
         break;
       }
-    }
-    if (measureDiffusivity) {
-      String fileName2 = format("karmele%04d.txt", 0);
-      restart.writeCatalysisAdsorptionDataText(adsorptionSimulationData, fileName2);
     }
     System.out.println("coverage: "+maxCoverage+" - time: "+getTime());
     System.out.println("k_i(CO): "+adsorptionRateCO+" k_i(O): "+(totalAdsorptionRate-adsorptionRateCO));

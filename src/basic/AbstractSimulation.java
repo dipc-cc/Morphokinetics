@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
+import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
 import ratesLibrary.IRates;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -273,6 +274,10 @@ public abstract class AbstractSimulation {
       }
       float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
       if (parser.outputData()) {
+        if (parser.getOutputFormats().contains(formatFlag.CAT)) {
+          double[][] data = ((CatalysisKmc) kmc).getOutputAdsorptionData(simulations);
+          restart.writeCatalysisAdsorptionDataText(simulations, data);
+        }
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
           restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
         }
