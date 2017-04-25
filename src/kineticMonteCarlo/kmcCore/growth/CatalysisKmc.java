@@ -127,18 +127,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         adsorptionSimulationData[simulationNumber][(int) (simulatedSteps + 1) / numStepsEachData][1] = getTime();
       }
     }
-    if (measureDiffusivity && simulatedSteps + 1 == totalNumOfSteps) {
-      //printSimulationData(simulationNumber);
-      if (simulationNumber == numberOfSimulations - 1) {
-        // Save to a file
-        /*String fileName = format("karmele%03d.txt", 0);
-        restart.writeCatalysisDataText(simulationData, fileName);
-        
-        getLinearTrend();*/
-        
-        String fileName2 = format("karmele%04d.txt", 0);
-        restart.writeCatalysisAdsorptionDataText(adsorptionSimulationData, fileName2);
-      }
+    if (simulatedSteps + 1 == totalNumOfSteps) {
       return true;
     } else {
       return false;
@@ -158,6 +147,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (performSimulationStep()) {
         break;
       }
+    }
+    if (measureDiffusivity) {
+      String fileName2 = format("karmele%04d.txt", 0);
+      restart.writeCatalysisAdsorptionDataText(adsorptionSimulationData, fileName2);
     }
     System.out.println("coverage: "+maxCoverage+" - time: "+getTime());
     System.out.println("k_i(CO): "+adsorptionRateCO+" k_i(O): "+(totalAdsorptionRate-adsorptionRateCO));
