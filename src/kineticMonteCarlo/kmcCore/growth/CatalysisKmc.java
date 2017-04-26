@@ -33,7 +33,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
-  private final float maxCoverage; 
+  private final float maxCoverage;
+  private int[] numAtomsInSimulation;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -55,7 +56,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       numStepsEachData = 10;
       simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
-      adsorptionSimulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][2];
+      adsorptionSimulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][4];
 
       for (int i = 0; i < numberOfSimulations; i++) {
         for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
@@ -64,6 +65,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           simulationData[i][j][2] = Double.NEGATIVE_INFINITY;
         }
       }
+      numAtomsInSimulation = new int[2];
     }
   }
 
@@ -126,6 +128,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         
         adsorptionSimulationData[simulationNumber][step][0] = getCoverage();
         adsorptionSimulationData[simulationNumber][step][1] = getTime();
+        adsorptionSimulationData[simulationNumber][step][2] = numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY());
+        adsorptionSimulationData[simulationNumber][step][3] = numAtomsInSimulation[O]/(getLattice().getCartSizeX()*getLattice().getCartSizeY());
       }
     }
     return simulatedSteps + 1 == totalNumOfSteps;
@@ -140,11 +144,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   public int simulate() {
     int returnValue = 0;
+    
+    if(measureDiffusivity){
+        numAtomsInSimulation[O] = 0;
+        numAtomsInSimulation[CO] = 0;
+    }
     while (getLattice().getCoverage() < maxCoverage) {
       if (performSimulationStep()) {
         break;
       }
     }
+    System.out.println("coverage_CO: " + numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()) + " - coverage_O: " + numAtomsInSimulation[O]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()));
+    
     System.out.println("coverage: " + getLattice().getCoverage() + " - time: " + getTime());
     System.out.println("k_i(CO): " + adsorptionRateCO + " k_i(O): " + (totalAdsorptionRate - adsorptionRateCO));
     return returnValue;
@@ -232,9 +243,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private CatalysisAtom depositNewAtom() {
     CatalysisAtom destinationAtom = null;
     int ucIndex = 0;
-
+    byte atomType;
+      
     do {
-      byte atomType;
       double randomNumber = StaticRandom.raw() * totalAdsorptionRate;
       if (randomNumber < adsorptionRateCO) {
         atomType = CO;
@@ -248,6 +259,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
       destinationAtom.setType(atomType);
     } while (!depositAtom(destinationAtom));
+    
+    numAtomsInSimulation[atomType]++;
     
     getList().setDepositionProbability(totalAdsorptionRate * (1-getCoverage()));
     //System.out.println(destinationAtom.getType()+" --- "+getTime());
