@@ -403,11 +403,16 @@ class RestartLow {
 
       for (int i = 0; i < data.length; i++) {
         double coverage = 0;
+        double coverageCO = 0;
+        double coverageO = 0;
         double t = 0;
         coverage = data[i][0];
+        coverageCO = data[i][2];
+        coverageO = data[i][3];
         t = data[i][1];
+        
         if (t > 0 || coverage > 0) {
-          out.write((i + ";" + t + ";" + coverage + "\n").replace('.', ','));
+          out.write((i + ";" + t + ";" + coverage  + ";" + coverageCO + ";" + coverageO + "\n").replace('.', ','));
         }
       }
     } catch (Exception e) {
