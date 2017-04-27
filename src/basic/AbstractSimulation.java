@@ -275,7 +275,7 @@ public abstract class AbstractSimulation {
       float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
       if (parser.outputData()) {
         if (parser.getOutputFormats().contains(formatFlag.CAT)) {
-          double[][] data = ((CatalysisKmc) kmc).getOutputAdsorptionData(simulations);
+          double[][] data = ((CatalysisKmc) kmc).getOutputAdsorptionData();
           restart.writeCatalysisAdsorptionDataText(simulations, data);
         }
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
