@@ -5,6 +5,8 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
+import basic.io.CatalysisData;
+import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
@@ -26,7 +28,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int totalNumOfSteps;
   private int numStepsEachData;
   private double[][][] simulationData;
-  private double[][] adsorptionSimulationData;
+  private ArrayList<CatalysisData> adsorptionData;
   private final int numberOfSimulations;
   private double totalAdsorptionRate; 
   private double adsorptionRateCO;
@@ -56,7 +58,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       numStepsEachData = 10;
       simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
-      adsorptionSimulationData = new double[totalNumOfSteps / numStepsEachData + 1][4];
+      adsorptionData = new ArrayList<>();
 
       for (int i = 0; i < numberOfSimulations; i++) {
         for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
@@ -80,6 +82,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   public double[][] getOutputAdsorptionData() {
+    double[][] adsorptionSimulationData = new double[adsorptionData.size()][4];
+    for (int i = 0; i < adsorptionData.size(); i++) {
+      adsorptionSimulationData[i] = adsorptionData.get(i).getCatalysisData();
+    }
+    
     return adsorptionSimulationData;
   }
   
@@ -126,10 +133,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         simulationData[simulationNumber][step][1] = destinationAtom.getjHexa();
         simulationData[simulationNumber][step][2] = getTime();
         
-        adsorptionSimulationData[step][0] = getCoverage();
-        adsorptionSimulationData[step][1] = getTime();
-        adsorptionSimulationData[step][2] = numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY());
-        adsorptionSimulationData[step][3] = numAtomsInSimulation[O]/(getLattice().getCartSizeX()*getLattice().getCartSizeY());
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), 
+                numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()), 
+                numAtomsInSimulation[O]/(getLattice().getCartSizeX()*getLattice().getCartSizeY())));
       }
     }
     return simulatedSteps + 1 == totalNumOfSteps;
