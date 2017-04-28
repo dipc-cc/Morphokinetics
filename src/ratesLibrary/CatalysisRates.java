@@ -63,7 +63,7 @@ public class CatalysisRates implements IRates {
     desorptionEnergiesWithO[O][CUS][BR] = 3.3;
     desorptionEnergiesWithO[O][CUS][CUS] = 2.0;
       
-    mass = new double[2];
+    mass = new double[2]; // g/mol
     mass[CO] = 28.01055;
     mass[O] = 15.9994*2;
     pressures = new double[2];
