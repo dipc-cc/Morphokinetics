@@ -165,6 +165,14 @@ public class CatalysisRates implements IRates {
     return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
   
+  /**
+   * Equation (3) of Reuter & Scheffler, PRB 73, 2006.
+   * 
+   * @param sourceType
+   * @param pressures
+   * @param temperature
+   * @return 
+   */
   private double getAdsorptionRate(int sourceType, double pressures[], double temperature) {
     return pressures[sourceType] * 101132 * 5.0145 * Math.pow(10,-20) /(Math.sqrt(2 * Math.PI * mass[sourceType] * 1.381 * Math.pow(10,-23) * temperature /(1000 * 6.022 * Math.pow(10,23)) ));
   }
