@@ -12,7 +12,7 @@ import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
-import kineticMonteCarlo.unitCell.CatalysisUc;
+import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
 
@@ -28,8 +28,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
-  private double totalAdsorptionRate; 
-  private double adsorptionRateCO;
+  private double totalAdsorptionRatePerSite; 
+  private double adsorptionRateCOPerSite;
+  private double totalAdsorptionRate;
+  private ArrayList<ArrayList<Double>> adsorptionRateList;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -43,6 +45,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     catalysisLattice.init();
     setLattice(catalysisLattice);
     totalAdsorptionRate = 0.0;
+    totalAdsorptionRatePerSite = 0.0;
 
     simulatedSteps = 0;
     measureDiffusivity = parser.outputData();
@@ -54,6 +57,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
       numAtomsInSimulation = new int[2];
     }
+    adsorptionRateList = new ArrayList<>();
   }
 
   @Override
@@ -62,8 +66,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   public void setAdsorptionRates(CatalysisRates rates) {
-    adsorptionRateCO = rates.getAdsorptionRate(CO);
-    totalAdsorptionRate = rates.getTotalAdsorptionRate();
+    adsorptionRateCOPerSite = rates.getAdsorptionRate(CO);
+    totalAdsorptionRatePerSite = rates.getTotalAdsorptionRate();
   }
 
   public double[][] getOutputAdsorptionData() {
@@ -116,9 +120,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         int step = (int) (simulatedSteps + 1) / numStepsEachData;
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), 
-                numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()), 
-                numAtomsInSimulation[O]/(getLattice().getCartSizeX()*getLattice().getCartSizeY())));
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(),
+                numAtomsInSimulation[CO] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()),
+                numAtomsInSimulation[O] / (getLattice().getCartSizeX() * getLattice().getCartSizeY())));
       }
     }
     return simulatedSteps + 1 == totalNumOfSteps;
@@ -148,14 +152,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
             + " - coverage_O: " + numAtomsInSimulation[O] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()));
 
     System.out.println("coverage: " + getLattice().getCoverage() + " - time: " + getTime());
-    System.out.println("k_i(CO): " + adsorptionRateCO + " k_i(O): " + (totalAdsorptionRate - adsorptionRateCO));
+    System.out.println("k_i(CO): " + adsorptionRateCOPerSite + " k_i(O): " + (totalAdsorptionRatePerSite - adsorptionRateCOPerSite));
     return returnValue;
   }
 
   @Override
   public void depositSeed() {
     getLattice().resetOccupied();
-    getList().setDepositionProbability(totalAdsorptionRate * (1 - getCoverage()));
+    updateDepositionProbability();
+    //getList().setDepositionProbability(totalAdsorptionRatePerSite * (1 - getCoverage()));
     simulatedSteps = 0;
   }
 
@@ -170,7 +175,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().reset();
   }
   
-  
+  private boolean depositAtom(CatalysisAtom atom, byte type) {
+    if (depositAtom(atom)) {
+      atom.setType(type);
+      return true;
+    }
+    return false;
+  }    
   
   private boolean depositAtom(CatalysisAtom atom) {
     if (atom.isOccupied()) {
@@ -234,30 +245,78 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int ucIndex = 0;
     byte atomType;
       
+    boolean deposited;
     do {
-      double randomNumber = StaticRandom.raw() * totalAdsorptionRate;
-      if (randomNumber < adsorptionRateCO) {
+      double randomNumber = StaticRandom.raw() * totalAdsorptionRatePerSite;
+      if (randomNumber < adsorptionRateCOPerSite) {
         atomType = CO;
       } else {
         atomType = O;
       }
-      int random = StaticRandom.rawInteger(getLattice().size() * getLattice().getUnitCellSize());
-      ucIndex = Math.floorDiv(random, getLattice().getUnitCellSize());
-      int atomIndex = random % getLattice().getUnitCellSize();
+      
+      randomNumber = StaticRandom.raw() * totalAdsorptionRate;
+      
+      double sum = 0.0;
+      int i;
+      for (i = 0; i < adsorptionRateList.size(); i++) {
+        sum += adsorptionRateList.get(i).get(0);
+        if (sum > randomNumber) {
+          ucIndex = adsorptionRateList.get(i).get(1).intValue();
+          if (adsorptionRateList.get(i).get(0) == adsorptionRateCOPerSite){
+            atomType = CO;
+            System.out.println("found!!! "+atomType);
+          }
+          break;
+        }
+      }
+      int atomIndex = 0;
       destinationAtom = (CatalysisAtom) getLattice().getUc(ucIndex).getAtom(atomIndex);
-
       destinationAtom.setType(atomType);
-    } while (!depositAtom(destinationAtom));
+      deposited = depositAtom(destinationAtom);
+      if (atomType == O) {
+        int random = StaticRandom.rawInteger(4);
+        CatalysisAtom neighbourAtom;
+        do {
+          neighbourAtom = destinationAtom.getNeighbour(random);
+          random = (random + 1) % 4;
+        }while (!depositAtom(neighbourAtom, O));
+      }
+    } while (!deposited);
     
     numAtomsInSimulation[atomType]++;
     
-    getList().setDepositionProbability(totalAdsorptionRate * (1-getCoverage()));
+    updateDepositionProbability();
     //System.out.println(destinationAtom.getType()+" --- "+getTime());
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     return destinationAtom;
-    
+  }
+
+  /**
+   * Iterates over all lattice sites and updates adsorption probabilities.
+   */
+  private void updateDepositionProbability() {
+    totalAdsorptionRate = 0.0;
+    adsorptionRateList = new ArrayList<>();
+    for (int i = 0; i < getLattice().size(); i++) {
+      AbstractGrowthUc uc = getLattice().getUc(i);
+      for (int j = 0; j < uc.size(); j++) { // it will be always 0
+        CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        if (!a.isOccupied()) {
+          ArrayList<Double> tmp = new ArrayList<>();
+          if (a.getOccupiedNeighbours()< 4) {
+            tmp.add(totalAdsorptionRatePerSite);
+          } else { // Can't add O2; it doesn't have an empty neighbour
+            tmp.add(adsorptionRateCOPerSite);
+          }
+          tmp.add(new Double(i)); // add uc position
+          adsorptionRateList.add(tmp);
+          totalAdsorptionRate += adsorptionRateList.get(adsorptionRateList.size() - 1).get(0);
+        }
+      }
+    }
+    getList().setDepositionProbability(totalAdsorptionRate);
   }
 }
