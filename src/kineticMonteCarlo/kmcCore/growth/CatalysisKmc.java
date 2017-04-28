@@ -24,12 +24,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   private final boolean measureDiffusivity;
   private long simulatedSteps;
-  private int simulationNumber;
   private int totalNumOfSteps;
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
-  private final int numberOfSimulations;
   private double totalAdsorptionRate; 
   private double adsorptionRateCO;
   /**
@@ -40,7 +38,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   public CatalysisKmc(Parser parser) {
     super(parser);
-    numberOfSimulations = parser.getNumberOfSimulations();
     maxCoverage =(float) parser.getCoverage() / 100;
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
@@ -48,14 +45,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalAdsorptionRate = 0.0;
 
     simulatedSteps = 0;
-    simulationNumber = -1;
     measureDiffusivity = parser.outputData();
     if (measureDiffusivity) {
       totalNumOfSteps = parser.getNumberOfSteps();
-      if (totalNumOfSteps < 0) {
-        System.err.println("You should consider defining a proper number of steps to get diffusivity information about catalysis");
-        System.err.println("Most probably execution will fail");
-      }
       numStepsEachData = 10;
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
@@ -164,7 +156,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().resetOccupied();
     getList().setDepositionProbability(totalAdsorptionRate*(1-getCoverage()));
     simulatedSteps = 0;
-    simulationNumber++;
   }
 
   @Override
