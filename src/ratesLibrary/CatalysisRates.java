@@ -167,6 +167,7 @@ public class CatalysisRates implements IRates {
   
   /**
    * Equation (3) of Reuter & Scheffler, PRB 73, 2006.
+   * k_i = \frac{p_A A_s}{\sqrt{2\pi m_A K_B T}}
    * 
    * @param sourceType
    * @param pressures
