@@ -135,17 +135,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
     
-    if(measureDiffusivity){
-        numAtomsInSimulation[O] = 0;
-        numAtomsInSimulation[CO] = 0;
+    if (measureDiffusivity) {
+      numAtomsInSimulation[O] = 0;
+      numAtomsInSimulation[CO] = 0;
     }
     while (getLattice().getCoverage() < maxCoverage) {
       if (performSimulationStep()) {
         break;
       }
     }
-    System.out.println("coverage_CO: " + numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()) + " - coverage_O: " + numAtomsInSimulation[O]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()));
-    
+    System.out.println("coverage_CO: " + numAtomsInSimulation[CO] / (getLattice().getCartSizeX() * getLattice().getCartSizeY())
+            + " - coverage_O: " + numAtomsInSimulation[O] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()));
+
     System.out.println("coverage: " + getLattice().getCoverage() + " - time: " + getTime());
     System.out.println("k_i(CO): " + adsorptionRateCO + " k_i(O): " + (totalAdsorptionRate - adsorptionRateCO));
     return returnValue;
@@ -154,7 +155,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   public void depositSeed() {
     getLattice().resetOccupied();
-    getList().setDepositionProbability(totalAdsorptionRate*(1-getCoverage()));
+    getList().setDepositionProbability(totalAdsorptionRate * (1 - getCoverage()));
     simulatedSteps = 0;
   }
 
@@ -202,7 +203,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @return true if atom has moved, false otherwise.
    */
   private boolean diffuseAtom(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
-
     //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
     if (!originAtom.isEligible()) {
       return false;
