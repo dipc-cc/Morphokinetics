@@ -138,12 +138,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   public int simulate() {
     int returnValue = 0;
-    
+
     if (measureDiffusivity) {
       numAtomsInSimulation[O] = 0;
       numAtomsInSimulation[CO] = 0;
     }
     while (getLattice().getCoverage() < maxCoverage) {
+      getList().getDeltaTime(true);
       if (performSimulationStep()) {
         break;
       }
