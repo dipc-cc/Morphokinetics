@@ -326,27 +326,27 @@ class RestartLow {
           s = format("%s %.3f %.3f %.3f", element, posX, posY, posZ);
           surface.write(s + "\n");
           if (atom.isOccupied()) {
-            switch((int)atom.getType()){
-                    case 0:
-                      element = "Au";
-                      break;
-                    case 1:
-                      element = "Cu";
-                      break;
-                    case 2:
-                      element = "Rg";
-                      break;
-                    case 3:
-                      element = "Mg";
-                      break;
-                    case 4:
-                    case 5:
-                    case 6:
-                      element = "Al";
-                      break;
-                    default:
-                      element = "Ag";
-                      break;
+            switch ((int) atom.getType()) {
+              case 0:
+                element = "Au";
+                break;
+              case 1:
+                element = "Cu";
+                break;
+              case 2:
+                element = "Rg";
+                break;
+              case 3:
+                element = "Mg";
+                break;
+              case 4:
+              case 5:
+              case 6:
+                element = "Al";
+                break;
+              default:
+                element = "Ag";
+                break;
             }
             posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
             posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
