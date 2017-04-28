@@ -27,7 +27,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int simulationNumber;
   private int totalNumOfSteps;
   private int numStepsEachData;
-  private double[][][] simulationData;
+  private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
   private final int numberOfSimulations;
   private double totalAdsorptionRate; 
@@ -57,16 +57,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         System.err.println("Most probably execution will fail");
       }
       numStepsEachData = 10;
-      simulationData = new double[numberOfSimulations][totalNumOfSteps / numStepsEachData + 1][3];
+      simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
 
-      for (int i = 0; i < numberOfSimulations; i++) {
-        for (int j = 0; j < totalNumOfSteps / numStepsEachData + 1; j++) {
-          simulationData[i][j][0] = Double.NEGATIVE_INFINITY;
-          simulationData[i][j][1] = Double.NEGATIVE_INFINITY;
-          simulationData[i][j][2] = Double.NEGATIVE_INFINITY;
-        }
-      }
       numAtomsInSimulation = new int[2];
     }
   }
@@ -129,9 +122,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
       if (destinationAtom != null) {
         int step = (int) (simulatedSteps + 1) / numStepsEachData;
-        simulationData[simulationNumber][step][0] = destinationAtom.getiHexa();
-        simulationData[simulationNumber][step][1] = destinationAtom.getjHexa();
-        simulationData[simulationNumber][step][2] = getTime();
+        simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), 
                 numAtomsInSimulation[CO]/(getLattice().getCartSizeX()*getLattice().getCartSizeY()), 
@@ -141,9 +132,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return simulatedSteps + 1 == totalNumOfSteps;
   }
 
-  private void printSimulationData(int numSim) {
-    for (int i = 0; i < simulationData[numSim].length; i++) {
-      System.out.println(i + ": " + simulationData[numSim][i][0] + "; " + simulationData[numSim][i][1]);
+  private void printSimulationData() {
+    for (int i = 0; i < simulationData.size(); i++) {
+      double[] data = simulationData.get(i).getAdsorptionData();
+      System.out.println(i + ": " + data[0] + "; " + data[1]);
     }
   }
 
@@ -276,66 +268,5 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     return destinationAtom;
     
-  }
-  
-  private void getLinearTrend() {
-    int MAXN = 1000;
-    int n = 0;
-    double[] x = new double[MAXN];
-    double[] y = new double[MAXN];
-
-    // first pass: read in data, compute xbar and ybar
-    double sumx = 0.0, sumy = 0.0, sumx2 = 0.0;
-
-    for (n = 0; n < simulationData[0].length; n++) {
-      double R2 = 0;
-      double t = 0;
-      if (n > 0) {
-        int j;
-        for (j = 0; j < simulationData.length; j++) {
-          if (simulationData[j][n][0] > Double.NEGATIVE_INFINITY) {
-            R2 += Math.pow(simulationData[j][n][0] - simulationData[j][0][0], 2) + Math.pow(simulationData[j][n][1] - simulationData[j][0][1], 2);
-            t += simulationData[j][n][2];
-          }
-        }
-        R2 = R2 / j;
-        y[n] = R2;
-        t = t / j;
-        x[n] = t;
-        sumx += x[n];
-        sumx2 += x[n] * x[n];
-        sumy += y[n];
-      }
-
-    }
-    double xbar = sumx / n;
-    double ybar = sumy / n;
-
-    // second pass: compute summary statistics
-    double xxbar = 0.0, yybar = 0.0, xybar = 0.0;
-    for (int i = 0; i < n; i++) {
-      xxbar += (x[i] - xbar) * (x[i] - xbar);
-      yybar += (y[i] - ybar) * (y[i] - ybar);
-      xybar += (x[i] - xbar) * (y[i] - ybar);
-    }
-    double beta1 = xybar / xxbar;
-    double beta0 = ybar - beta1 * xbar;
-
-    // print results
-    //System.out.println("y   = " + beta1 + " * x + " + beta0);
-
-    // analyze results
-    int df = n - 2;
-    double rss = 0.0;      // residual sum of squares
-    double ssr = 0.0;      // regression sum of squares
-    for (int i = 0; i < n; i++) {
-      double fit = beta1 * x[i] + beta0;
-      rss += (fit - y[i]) * (fit - y[i]);
-      ssr += (fit - ybar) * (fit - ybar);
-    }
-    double R2 = ssr / yybar;
-    double svar = rss / df;
-    double svar1 = svar / xxbar;
-    double svar0 = svar / n + xbar * xbar * svar1;
   }
 }
