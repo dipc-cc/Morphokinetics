@@ -104,6 +104,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     
   }
   
+  public AbstractGrowthAtomAttributes getAttributes() {
+    return attributes;
+  }
+  
+  public void setAttributes(AbstractGrowthAtomAttributes attributes) {
+    this.attributes = attributes;
+  }
+  
   public int getId() {
     return id;
   }
@@ -395,6 +403,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
       return false;
     }
     return true;
+  }
+  
+  public void swapAttributes(AbstractGrowthAtom atom) {
+    AbstractGrowthAtomAttributes tmpAttributes = this.attributes;
+    this.attributes = atom.getAttributes();
+    atom.setAttributes(tmpAttributes);
   }
   
   /**
