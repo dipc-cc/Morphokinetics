@@ -699,8 +699,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     originAtom.setCartesianSuperCell(new Point3D(0,0,0));
     lattice.deposit(destinationAtom, force);
     destinationAtom.swapAttributes(originAtom);
-    destinationAtom.setHops(originAtom.getHops() + 1);
-    originAtom.setHops(0);
     if (extraOutput2) {
       if (oldType == TERRACE && destinationAtom.getType() != TERRACE) { // atom gets attached to the island
         atomAttachedToIsland(destinationAtom);

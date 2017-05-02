@@ -59,10 +59,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   
   private boolean innerPerimeter;
   private boolean outerPerimeter;
-  /**
-   * Number of hops that atom has done. How many steps the atom has moved.
-   */
-  private int hops;
   private Point3D cartesianPosition;
   private Point3D cartesianSuperCell;
   private AbstractGrowthAtomAttributes attributes;
@@ -81,7 +77,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     visited = false;
     innerPerimeter = false;
     outerPerimeter = false;
-    hops = 0;
     cartesianSuperCell = new Point3D(0, 0, 0);
     attributes = new AbstractGrowthAtomAttributes();
   }
@@ -98,7 +93,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     jHexa = 0;
     bondsProbability = new double[numberOfNeighbours];
     setNumberOfNeighbours(numberOfNeighbours);
-    hops = 0;
     cartesianSuperCell = new Point3D(0, 0, 0);
     attributes = new AbstractGrowthAtomAttributes();
     
@@ -274,11 +268,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   }
   
   public void setHops(int hops) {
-    this.hops = hops;
+    attributes.setHops(hops);
   }
   
   public int getHops() {
-    return hops;
+    return attributes.getHops();
   }
   
   public void setIslandNumber(int islandNumber) {
@@ -408,6 +402,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   public void swapAttributes(AbstractGrowthAtom atom) {
     AbstractGrowthAtomAttributes tmpAttributes = this.attributes;
     this.attributes = atom.getAttributes();
+    this.attributes.addOneHop();
     atom.setAttributes(tmpAttributes);
   }
   
@@ -438,11 +433,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     setOccupied(false);
     outside = false;
     probability = 0;
-    attributes.setDepositionTime(0);
+    attributes.clear();
     innerPerimeter = false;
     outerPerimeter = false;
     setList(false);
-    hops = 0;
     cartesianSuperCell = new Point3D(0, 0, 0);
   }
   

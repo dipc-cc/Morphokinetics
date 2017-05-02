@@ -23,6 +23,10 @@ public class AbstractGrowthAtomAttributes {
    * The position were atom is deposited. Useful to get the diffusivity.
    */
   private Point3D depositionPosition;
+  /**
+   * Number of hops that atom has done. How many steps the atom has moved.
+   */
+  private int hops;
   
   /**
    * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
@@ -48,5 +52,23 @@ public class AbstractGrowthAtomAttributes {
     
   public Point3D getDepositionPosition() {
     return depositionPosition;
+  }
+  
+  public void setHops(int hops) {
+    this.hops = hops;
+  }
+  
+  public int getHops() {
+    return hops;
+  }
+  
+  public void addOneHop() {
+    hops++;
+  }
+  
+  public void clear() {
+    depositionPosition = null;
+    depositionTime = 0;
+    hops = 0;
   }
 }
