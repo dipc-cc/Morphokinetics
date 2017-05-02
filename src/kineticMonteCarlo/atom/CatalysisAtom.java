@@ -30,6 +30,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
    * CO or O.
    */
   private byte typeOfAtom;
+  private double adsorptionProbability;
   
   
   /**
@@ -107,6 +108,14 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   @Override
   public CatalysisAtom getNeighbour(int pos) {
     return neighbours[pos];
+  }
+
+  public double getAdsorptionProbability() {
+    return adsorptionProbability;
+  }
+
+  public void setAdsorptionProbability(double adsorptionProbability) {
+    this.adsorptionProbability = adsorptionProbability;
   }
   
   /**
