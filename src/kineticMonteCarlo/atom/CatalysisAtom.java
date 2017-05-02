@@ -47,6 +47,16 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     attributes = new CatalysisAtomAttributes();
   }
 
+  @Override
+  public AbstractGrowthAtomAttributes getAttributes() {
+    return attributes;
+  }
+  
+  @Override
+  public void setAttributes(AbstractGrowthAtomAttributes attributes) {
+    this.attributes = (CatalysisAtomAttributes) attributes;
+  }
+  
   public byte getLatticeSite() {
     return latticeSite;
   }
@@ -229,7 +239,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
   
   @Override
-  public void swapAttributes(AbstractGrowthAtom atom) {
+  public void swapAttributes(AbstractGrowthAtom a) {
+    CatalysisAtom atom = (CatalysisAtom) a;
     CatalysisAtomAttributes tmpAttributes = this.attributes;
     this.attributes = (CatalysisAtomAttributes) atom.getAttributes();
     this.attributes.addOneHop();
