@@ -44,11 +44,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private final short jHexa;
   private int multiplier;
   /**
-   * Stores when the atom has been deposited. It has to be moved with the
-   * corresponding diffusion.
-   */
-  private double depositionTime;
-  /**
    * If current atom belong to an island, its number is stored, otherwise is 0.
    */
   private int islandNumber;
@@ -65,15 +60,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private boolean innerPerimeter;
   private boolean outerPerimeter;
   /**
-   * The position were atom is deposited. Useful to get the diffusivity.
-   */
-  private Point3D depositionPosition;
-  /**
    * Number of hops that atom has done. How many steps the atom has moved.
    */
   private int hops;
   private Point3D cartesianPosition;
   private Point3D cartesianSuperCell;
+  private AbstractGrowthAtomAttributes attributes;
   
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
@@ -91,6 +83,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     outerPerimeter = false;
     hops = 0;
     cartesianSuperCell = new Point3D(0, 0, 0);
+    attributes = new AbstractGrowthAtomAttributes();
   }
   
   /**
@@ -107,6 +100,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     setNumberOfNeighbours(numberOfNeighbours);
     hops = 0;
     cartesianSuperCell = new Point3D(0, 0, 0);
+    attributes = new AbstractGrowthAtomAttributes();
+    
   }
   
   public int getId() {
@@ -251,7 +246,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * @param time deposition time or former time.
    */
   public void setDepositionTime(double time) {
-    depositionTime = time;
+    attributes.setDepositionTime(time);
   }
   
   /**
@@ -259,15 +254,15 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
    * @return when the atom has been deposited.
    */
   public double getDepositionTime() {
-    return depositionTime;
+    return attributes.getDepositionTime();
   }
   
   public void setDepositionPosition(Point3D position) {
-    depositionPosition = position;
+    attributes.setDepositionPosition(position);
   }
     
   public Point3D getDepositionPosition() {
-    return depositionPosition;
+    return attributes.getDepositionPosition();
   }
   
   public void setHops(int hops) {
@@ -429,7 +424,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     setOccupied(false);
     outside = false;
     probability = 0;
-    depositionTime = 0;
+    attributes.setDepositionTime(0);
     innerPerimeter = false;
     outerPerimeter = false;
     setList(false);
