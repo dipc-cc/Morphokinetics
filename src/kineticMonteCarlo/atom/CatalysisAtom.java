@@ -26,11 +26,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
    * Bridge or CUS.
    */
   private final byte latticeSite;
-  /**
-   * CO or O.
-   */
-  private byte typeOfAtom;
-  private double adsorptionProbability;
   
   
   /**
@@ -38,6 +33,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
    * jump from terrace to edge.
    */
   private double[][][] probabilities;
+  
+  private CatalysisAtomAttributes attributes;
   
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
@@ -47,22 +44,13 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     } else {
       latticeSite = CUS;
     }
+    attributes = new CatalysisAtomAttributes();
   }
 
   public byte getLatticeSite() {
     return latticeSite;
   }
 
-  @Override
-  public byte getType() {
-    return typeOfAtom;
-  }
-  
-  @Override
-  public void setType(byte newType) {
-    typeOfAtom = newType;
-  }
-  
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
    * jump from terrace to edge.
@@ -111,13 +99,13 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
 
   public double getAdsorptionProbability() {
-    return adsorptionProbability;
+    return attributes.getAdsorptionProbability();
   }
 
   public void setAdsorptionProbability(double adsorptionProbability) {
-    this.adsorptionProbability = adsorptionProbability;
+    attributes.setAdsorptionProbability(adsorptionProbability);
   }
-  
+
   /**
    * 
    * @param pos position of the neighbour
@@ -218,7 +206,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     }
 
     byte originSite = latticeSite; // cus or bridge
-    byte originType = typeOfAtom; // O or CO
+    byte originType = attributes.getType(); // O or CO
     byte destinationSite = originSite; // cus or bridge
     if (position % 2 != 0) {
       destinationSite = (byte) (originSite ^ 1); // the opposite of cus or bridge
@@ -239,12 +227,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       setBondsProbability(0, i);
     }
   }
-
-  public void chooseRandomType() {
-    if (StaticRandom.raw() > 0.5) {
-      typeOfAtom = CatalysisAtom.O;
-    } else {
-      typeOfAtom = CatalysisAtom.CO;
-    }
+  
+  @Override
+  public void swapAttributes(AbstractGrowthAtom atom) {
+    CatalysisAtomAttributes tmpAttributes = this.attributes;
+    this.attributes = (CatalysisAtomAttributes) atom.getAttributes();
+    this.attributes.addOneHop();
+    atom.setAttributes(tmpAttributes);
   }
 }
