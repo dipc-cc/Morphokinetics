@@ -229,13 +229,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
     getLattice().deposit(destinationAtom, false);
-    destinationAtom.setDepositionTime(originAtom.getDepositionTime());
-    destinationAtom.setDepositionPosition(originAtom.getDepositionPosition());
-    destinationAtom.setHops(originAtom.getHops() + 1);
-    originAtom.setDepositionTime(0);
-    originAtom.setDepositionPosition(null);
-    originAtom.setHops(0);
+    destinationAtom.swapAttributes(originAtom);
     getModifiedBuffer().updateAtoms(getList());
+    adsorptionRateSites.remove(destinationAtom);
+    adsorptionRateSites.add(originAtom);
+    atomMoved(destinationAtom);
 
     return true;
   }
@@ -273,6 +271,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }
 
+      if (destinationAtom == null || destinationAtom.getAdsorptionProbability() == 0) {
+        boolean isThereAnAtom = destinationAtom == null;
+        System.out.println("Something is wrong " + isThereAnAtom);
+      }
       destinationAtom.setType(atomType);
       deposited = depositAtom(destinationAtom);
       totalAdsorptionRate -= destinationAtom.getAdsorptionProbability();
@@ -330,8 +332,30 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         // Can not adsorb O2 anymore:
         neighbour.setAdsorptionProbability(adsorptionRateCOPerSite);
         totalAdsorptionRate -= totalAdsorptionRatePerSite - adsorptionRateCOPerSite;
-    }
+      }
     }
   }
-    
+ 
+  /**
+   * Updates total adsorption probability. Atom has gone from [0-3] neighbours to [0-3] neighbours.
+   *
+   * @param atom just moved atom
+   */
+  private void atomMoved(CatalysisAtom atom) {
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = atom.getNeighbour(i);
+      if (!neighbour.isOccupied()) {
+        if (neighbour.getOccupiedNeighbours() == 4) {
+          totalAdsorptionRate -= (totalAdsorptionRatePerSite - adsorptionRateCOPerSite);
+          // Only valid when there are Os
+          if (adsorptionRateCOPerSite == 0) {
+            neighbour.setAdsorptionProbability(0);
+            adsorptionRateSites.remove(neighbour);
+          } else {
+            neighbour.setAdsorptionProbability(adsorptionRateCOPerSite);
+          }
+        }
+      }
+    }
+  }
 }
