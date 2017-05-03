@@ -62,8 +62,8 @@ public class Parser {
   /**
    * See {@link #getPressureO()} and {@link #getPressureCO()}.
    */
-  private int pressureCO;
-  private int pressureO;
+  private double pressureCO;
+  private double pressureO;
   /**
    * See {@link #getDepositionFlux()}.
    */
@@ -228,8 +228,8 @@ public class Parser {
     calculationMode = "Ag";
     surfaceType = "cartesian";
     temperature = 135;
-    pressureO = 1;
-    pressureCO = 7;
+    pressureO = 1.0;
+    pressureCO = 7.0;
     depositionFlux = 0.0035;
     coverage = 30.0;
     psdScale = 1;
@@ -329,14 +329,14 @@ public class Parser {
       temperature = 135;
     }
     try {
-      pressureO = json.getInt("pressureO");
+      pressureO = json.getDouble("pressureO");
     } catch (JSONException e) {
-      pressureO = 1;
+      pressureO = 1.0;
     }
     try {
-      pressureCO = json.getInt("pressureCO");
+      pressureCO = json.getDouble("pressureCO");
     } catch (JSONException e) {
-      pressureCO = 7;
+      pressureCO = 7.0;
     }
     try {
       depositionFlux = json.getDouble("depositionFlux");
@@ -782,20 +782,20 @@ public class Parser {
   }
 
   /**
-   * Partial pressure for O.
+   * Partial pressure for O_2.
    * 
-   * @return nothing
+   * @return O_2 pressure.
    */
-  public int getPressureO() {
+  public double getPressureO() {
     return pressureO;
   }
   
   /**
    * Partial pressure for CO.
    * 
-   * @return nothing
+   * @return CO pressure.
    */
-  public int getPressureCO() {
+  public double getPressureCO() {
     return pressureCO;
   }
 
