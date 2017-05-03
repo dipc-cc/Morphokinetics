@@ -387,7 +387,7 @@ class RestartLow {
           R2 = R2 / j;
           t = t / j;
         }
-        out.write((i + ";" + t + ";" + R2 + "\n").replace('.', ','));
+        out.write((i + "\t" + t + "\t" + R2 + "\n"));
       }
     } catch (Exception e) {
       // if any I/O error occurs
@@ -402,17 +402,17 @@ class RestartLow {
       // for each byte in the buffer
 
       for (int i = 0; i < data.length; i++) {
-        double coverage = 0;
-        double coverageCO = 0;
-        double coverageO = 0;
-        double t = 0;
+        double coverage;
+        double coverageCO;
+        double coverageO;
+        double t;
         coverage = data[i][0];
         coverageCO = data[i][2];
         coverageO = data[i][3];
         t = data[i][1];
         
         if (t > 0 || coverage > 0) {
-          out.write((i + ";" + t + ";" + coverage  + ";" + coverageCO + ";" + coverageO + "\n").replace('.', ','));
+          out.write((i + "\t" + t + "\t" + coverage  + "\t" + coverageCO + "\t" + coverageO + "\n"));
         }
       }
     } catch (Exception e) {
