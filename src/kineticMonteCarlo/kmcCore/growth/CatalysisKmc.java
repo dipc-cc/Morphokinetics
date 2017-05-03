@@ -303,6 +303,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
+    getList().setDepositionProbability(totalAdsorptionRate);
     
     return destinationAtom;
   }
