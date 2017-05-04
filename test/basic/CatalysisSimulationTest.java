@@ -6,10 +6,7 @@
 package basic;
 
 import basic.io.Restart;
-import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -26,7 +23,6 @@ import org.junit.Test;
 public class CatalysisSimulationTest {
   
   private float[][] simulatedSurface;
-  private float[][] simulatedPsd;
   private double simulatedTime;
 
   public CatalysisSimulationTest() {
