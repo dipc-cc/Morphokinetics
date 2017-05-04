@@ -109,6 +109,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom destinationAtom;
     if (!doDiffusion || originAtom == null) {
       destinationAtom = depositNewAtom();
+      if (destinationAtom == null) {
+        return true;
+      }
     } else {
       do {
         destinationAtom = chooseRandomHop(originAtom);
@@ -248,6 +251,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int random;
     
     do {
+      if (adsorptionRateSites.isEmpty()) {
+        // can not deposit anymore
+        return null;
+      }
       double randomNumber = StaticRandom.raw() * totalAdsorptionRatePerSite;
       if (randomNumber < adsorptionRateCOPerSite) {
         atomType = CO;
@@ -333,6 +340,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         // Can not adsorb O2 anymore:
         neighbour.setAdsorptionProbability(adsorptionRateCOPerSite);
         totalAdsorptionRate -= totalAdsorptionRatePerSite - adsorptionRateCOPerSite;
+        if (adsorptionRateCOPerSite == 0) {
+          neighbour.setAdsorptionProbability(0);
+          adsorptionRateSites.remove(neighbour);
+        }
       }
     }
   }
