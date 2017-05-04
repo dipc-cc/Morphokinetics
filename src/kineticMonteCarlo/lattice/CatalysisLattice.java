@@ -111,6 +111,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     if (atom.getOccupiedNeighbours() > 0) {
       addBondAtom(atom);
     }
+    atom.checkImmobile();
     atom.resetProbability();
   }
   
@@ -246,6 +247,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     if (!neighbourAtom.isOccupied()) {
       addBondAtom(neighbourAtom);
     }
+    neighbourAtom.checkImmobile();
   }
   
   /**
