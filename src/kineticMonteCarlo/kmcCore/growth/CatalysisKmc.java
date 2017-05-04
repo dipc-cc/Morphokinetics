@@ -37,6 +37,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private final float maxCoverage;
   private int[] numAtomsInSimulation;
+  private final boolean doDiffusion;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -58,6 +59,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numAtomsInSimulation = new int[2];
     }
     adsorptionRateSites = new ArrayList<>();
+    doDiffusion = parser.doCatalysisDiffusion();
   }
 
   @Override
@@ -105,9 +107,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   protected boolean performSimulationStep() {
     CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
     CatalysisAtom destinationAtom;
-    //commented this line for future combinig of adsorption and diffusion
-    //if (originAtom == null) {
-    if (true) {
+    if (!doDiffusion || originAtom == null) {
       destinationAtom = depositNewAtom();
     } else {
       do {
