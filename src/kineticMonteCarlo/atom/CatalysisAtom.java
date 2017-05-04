@@ -26,6 +26,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
    * Bridge or CUS.
    */
   private final byte latticeSite;
+  private boolean eligible;
   
   
   /**
@@ -45,6 +46,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       latticeSite = CUS;
     }
     attributes = new CatalysisAtomAttributes();
+    eligible = true;
   }
 
   @Override
@@ -135,7 +137,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return isOccupied() && getProbability() > 0;
+    return isOccupied() && eligible;
   }
   
   @Override
@@ -179,6 +181,17 @@ public class CatalysisAtom extends AbstractGrowthAtom {
       i++;
     }
     return true;
+  }
+  
+  /**
+   * Makes this atom "immobile" if it is sourounded by 4 neighbours. Thus, it will not be eligible
+   * for diffusion.
+   */
+  public void checkImmobile() {
+    eligible = true;
+    if (getOccupiedNeighbours() == 4) {
+      eligible = false;
+    }
   }
 
   @Override
