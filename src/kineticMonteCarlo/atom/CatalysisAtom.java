@@ -135,7 +135,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   @Override
   public boolean isEligible() {
-    return isOccupied();
+    return isOccupied() && getProbability() > 0;
   }
   
   @Override
