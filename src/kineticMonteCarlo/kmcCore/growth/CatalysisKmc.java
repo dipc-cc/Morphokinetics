@@ -239,7 +239,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getModifiedBuffer().updateAtoms(getList());
     adsorptionRateSites.remove(destinationAtom);
     adsorptionRateSites.add(originAtom);
-    atomMoved(destinationAtom);
+    updateAdsorptionRate(destinationAtom);
 
     return true;
   }
@@ -302,9 +302,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     numAtomsInSimulation[atomType]++;
     
-    checkNeighbours(destinationAtom);
+    updateAdsorptionRate(destinationAtom);
     if (neighbourAtom != null) {
-      checkNeighbours(neighbourAtom);
+      updateAdsorptionRate(neighbourAtom);
     }
     
     destinationAtom.setDepositionTime(getTime());
@@ -332,7 +332,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().setDepositionProbability(totalAdsorptionRate);
   }
   
-  private void checkNeighbours(CatalysisAtom atom) {
+  /**
+   * Updates total adsorption probability. 
+   *
+   * @param atom just moved or deposited atom.
+   */
+  private void updateAdsorptionRate(CatalysisAtom atom) {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied() && neighbour.getOccupiedNeighbours() == 4) {
@@ -342,29 +347,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         if (adsorptionRateCOPerSite == 0) {
           neighbour.setAdsorptionProbability(0);
           adsorptionRateSites.remove(neighbour);
-        }
-      }
-    }
-  }
- 
-  /**
-   * Updates total adsorption probability. Atom has gone from [0-3] neighbours to [0-3] neighbours.
-   *
-   * @param atom just moved atom
-   */
-  private void atomMoved(CatalysisAtom atom) {
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
-      if (!neighbour.isOccupied()) {
-        if (neighbour.getOccupiedNeighbours() == 4) {
-          totalAdsorptionRate -= (totalAdsorptionRatePerSite - adsorptionRateCOPerSite);
-          // Only valid when there are Os
-          if (adsorptionRateCOPerSite == 0) {
-            neighbour.setAdsorptionProbability(0);
-            adsorptionRateSites.remove(neighbour);
-          } else {
-            neighbour.setAdsorptionProbability(adsorptionRateCOPerSite);
-          }
         }
       }
     }
