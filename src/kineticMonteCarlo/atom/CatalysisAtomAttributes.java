@@ -15,7 +15,6 @@ public class CatalysisAtomAttributes extends AbstractGrowthAtomAttributes{
    * CO or O.
    */
   private byte typeOfAtom;
-  private double adsorptionProbability;
   
   public byte getType() {
     return typeOfAtom;
@@ -23,13 +22,5 @@ public class CatalysisAtomAttributes extends AbstractGrowthAtomAttributes{
   
   public void setType(byte newType) {
     typeOfAtom = newType;
-  }
-  
-  public double getAdsorptionProbability() {
-    return adsorptionProbability;
-  }
-
-  public void setAdsorptionProbability(double adsorptionProbability) {
-    this.adsorptionProbability = adsorptionProbability;
   }
 }
