@@ -168,6 +168,10 @@ public class Parser {
    * See {@link #doCatalysisDiffusion()}
    */
   private boolean catalysisDiffusion;
+  /**
+   * See {@link #doCatalysisAdsorption()}
+   */
+  private boolean catalysisAdsorption;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -264,6 +268,7 @@ public class Parser {
     forceNucleation = true;
     devita = true;
     catalysisDiffusion = true;
+    catalysisAdsorption = true;
 
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -488,6 +493,11 @@ public class Parser {
       catalysisDiffusion = true;
     }
     try {
+      catalysisAdsorption = json.getBoolean("catalysisAdsorption");
+    } catch (JSONException e) {
+      catalysisAdsorption = true;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -670,6 +680,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"forceNucleation\"", forceNucleation);
     System.out.printf("%32s: %s,\n", "\"devita\"", devita);
     System.out.printf("%32s: %s,\n", "\"catalysisDiffusion\"", catalysisDiffusion);
+    System.out.printf("%32s: %s,\n", "\"catalysisAdsorption\"", catalysisAdsorption);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1340,6 +1351,17 @@ public class Parser {
    */
   public boolean doCatalysisDiffusion() {
     return catalysisDiffusion;
+  }
+  
+  /**
+   * Adsorb atoms during catalysis simulation
+   *
+   * Input "parameters" variable: {@code catalysisAdsorption}.
+   * 
+   * @return do diffusion.
+   */
+  public boolean doCatalysisAdsorption() {
+    return catalysisAdsorption;
   }
   
   public String getEvolutionaryAlgorithm() {
