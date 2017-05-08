@@ -120,14 +120,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   protected boolean performSimulationStep() {
     CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
-    CatalysisAtom destinationAtom;
-    if (originAtom == null) {
+    CatalysisAtom destinationAtom = null;
+    if (originAtom == null) { // adsorption
       destinationAtom = depositNewAtom();
       if (destinationAtom == null || getList().getGlobalProbability() == 0) {
         return true;
       }
+    } else if (originAtom.isRemoved()) { // desorption
+      desorpAtom();
     } else {
-      do {
+      do { // diffusion
         destinationAtom = chooseRandomHop(originAtom);
       } while (!diffuseAtom(originAtom, destinationAtom));
     }
@@ -332,6 +334,34 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     return destinationAtom;
   }
+  
+  private void desorpAtom() {
+    CatalysisAtom atom = null;
+    double randomNumber = StaticRandom.raw() * totalDesorptionRate;
+    
+    double sum = 0.0;
+    int i;
+    for (i = 0; i < desorptionSites.size(); i++) {
+      sum += desorptionSites.get(i).getDesorptionProbability();
+      if (sum > randomNumber) {
+        atom = desorptionSites.get(i);
+        break;
+      }
+    }
+    atom.setOccupied(false);
+    getLattice().subtractOccupied();
+    totalDesorptionRate -= atom.getDesorptionProbability();
+    desorptionSites.remove(atom);
+    atom.setDesorptionProbability(0);
+    
+    if (atom.getOccupiedNeighbours() == 4) {
+      atom.setAdsorptionProbability(adsorptionRateCOPerSite);
+    } else {
+      atom.setAdsorptionProbability(adsorptionRatePerSite);
+    }
+    totalAdsorptionRate += atom.getAdsorptionProbability();
+    adsorptionSites.add(atom);
+  }
 
   /**
    * Iterates over all lattice sites and initialises adsorption probabilities.
@@ -356,7 +386,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.getType() == CO) {
       desorptionSites.add(atom);
       atom.setDesorptionProbability(desorptionRateCOPerSite[atom.getLatticeSite()]);
-      totalDesorptionRate = atom.getDesorptionProbability();
+      totalDesorptionRate += atom.getDesorptionProbability();
     }
   }
     

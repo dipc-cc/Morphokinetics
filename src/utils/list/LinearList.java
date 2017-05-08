@@ -4,6 +4,7 @@ import basic.Parser;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.CatalysisAtom;
 import utils.StaticRandom;
 
 /**
@@ -101,7 +102,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
+    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability() + getDesorptionProbability());
     
     addTime();
 
@@ -110,10 +111,15 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo
     }
-    position -= getDepositionProbability();
+    AbstractAtom atom = null;
+    if (position < getDepositionProbability() + getDesorptionProbability()) {
+      atom = new CatalysisAtom(-1, (short) 0, (short) 0); // dummy atom; just to say to do desportion
+      atom.setRemoved();
+      return atom;
+    }
+    position -= getDepositionProbability() + getDesorptionProbability();
     double currentProbability = 0;
 
-    AbstractAtom atom = null;
     for (int i = 0; i < surface.size(); i++) {
       clean = false;
       atom = surface.get(i);
