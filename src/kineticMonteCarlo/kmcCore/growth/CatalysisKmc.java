@@ -181,6 +181,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     getLattice().reset();
     getList().reset();
+    if (measureDiffusivity) {
+      simulationData = new ArrayList<>();
+      adsorptionData = new ArrayList<>();
+
+      numAtomsInSimulation = new int[2];
+    }
   }
   
   private boolean depositAtom(CatalysisAtom atom, byte type) {
