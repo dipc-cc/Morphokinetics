@@ -303,6 +303,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     updateAdsorptionRateDeposition(destinationAtom);
     if (neighbourAtom != null) {
       updateAdsorptionRateDeposition(neighbourAtom);
+      neighbourAtom.setDepositionTime(getTime());
+      //neighbourAtom.setDepositionPosition(-1);
+      numAtomsInSimulation[atomType]++;
     }
     
     destinationAtom.setDepositionTime(getTime());
