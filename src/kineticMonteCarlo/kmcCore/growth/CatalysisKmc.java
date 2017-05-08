@@ -32,7 +32,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
   private double totalAdsorptionRate;
-  private ArrayList<CatalysisAtom> adsorptionRateSites;
+  private ArrayList<CatalysisAtom> adsorptionSites;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -59,7 +59,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
       numAtomsInSimulation = new int[2];
     }
-    adsorptionRateSites = new ArrayList<>();
+    adsorptionSites = new ArrayList<>();
     doDiffusion = parser.doCatalysisDiffusion();
   }
 
@@ -260,7 +260,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int random;
     
     do {
-      if (adsorptionRateSites.isEmpty()) {
+      if (adsorptionSites.isEmpty()) {
         // can not deposit anymore
         return null;
       }
@@ -275,11 +275,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       
       double sum = 0.0;
       int i;
-      for (i = 0; i < adsorptionRateSites.size(); i++) {
-        sum += adsorptionRateSites.get(i).getAdsorptionProbability();
+      for (i = 0; i < adsorptionSites.size(); i++) {
+        sum += adsorptionSites.get(i).getAdsorptionProbability();
         if (sum > randomNumber) {
-          destinationAtom = adsorptionRateSites.get(i);
-          if (adsorptionRateSites.get(i).getAdsorptionProbability() == adsorptionRateCOPerSite){
+          destinationAtom = adsorptionSites.get(i);
+          if (adsorptionSites.get(i).getAdsorptionProbability() == adsorptionRateCOPerSite){
             // it has to be CO, because this site didn't have adsorption rate for O.
             atomType = CO;
           }
@@ -326,13 +326,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private void initDepositionProbability() {
     totalAdsorptionRate = 0.0;
-    adsorptionRateSites = new ArrayList<>();
+    adsorptionSites = new ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         a.setAdsorptionProbability(adsorptionRatePerSite);
-        adsorptionRateSites.add(a);
+        adsorptionSites.add(a);
         totalAdsorptionRate += adsorptionRatePerSite;
       }
     }
@@ -345,7 +345,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @param atom just moved or deposited atom.
    */
   private void updateAdsorptionRateDeposition(CatalysisAtom atom) {
-    if (adsorptionRateSites.remove(atom)) {
+    if (adsorptionSites.remove(atom)) {
       totalAdsorptionRate -= atom.getAdsorptionProbability();
       if (totalAdsorptionRate / adsorptionRatePerSite < 1e-10) {
         totalAdsorptionRate = 0;
@@ -359,7 +359,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         totalAdsorptionRate -= neighbour.getAdsorptionProbability();
         neighbour.setAdsorptionProbability(adsorptionRateCOPerSite);
         if (neighbour.getAdsorptionProbability() == 0) {
-          adsorptionRateSites.remove(neighbour);
+          adsorptionSites.remove(neighbour);
         }
         totalAdsorptionRate += adsorptionRateCOPerSite;
       }
@@ -373,18 +373,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     // destination atom
     totalAdsorptionRate -= destinationAtom.getAdsorptionProbability();
     destinationAtom.setAdsorptionProbability(0);
-    adsorptionRateSites.remove(destinationAtom);
+    adsorptionSites.remove(destinationAtom);
     
     // origin atom
     if (originAtom.getOccupiedNeighbours() < 4) {
       originAtom.setAdsorptionProbability(adsorptionRatePerSite);
-      adsorptionRateSites.add(originAtom);
+      adsorptionSites.add(originAtom);
     } else {
       originAtom.setAdsorptionProbability(adsorptionRateCOPerSite);
       if (adsorptionRateCOPerSite == 0) {
-        adsorptionRateSites.remove(originAtom);
+        adsorptionSites.remove(originAtom);
       } else {
-        adsorptionRateSites.add(originAtom);
+        adsorptionSites.add(originAtom);
       }
     }
     totalAdsorptionRate += originAtom.getAdsorptionProbability(); // adsorption probability was 0 (always).
@@ -396,8 +396,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         if (neighbour.getAdsorptionProbability() == adsorptionRateCOPerSite) {
           totalAdsorptionRate += adsorptionRateOPerSite;
           neighbour.setAdsorptionProbability(adsorptionRatePerSite);
-          if (!adsorptionRateSites.contains(neighbour)) {
-            adsorptionRateSites.add(neighbour);
+          if (!adsorptionSites.contains(neighbour)) {
+            adsorptionSites.add(neighbour);
           }
         }
       }
@@ -412,8 +412,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (!neighbour.isOccupied() && neighbour.getOccupiedNeighbours() == 3) {
         if (neighbour.getAdsorptionProbability() == adsorptionRateCOPerSite) {
           neighbour.setAdsorptionProbability(adsorptionRatePerSite);
-          if (!adsorptionRateSites.contains(neighbour)) {
-            adsorptionRateSites.add(neighbour);
+          if (!adsorptionSites.contains(neighbour)) {
+            adsorptionSites.add(neighbour);
             totalAdsorptionRate += adsorptionRatePerSite; ///-adsorptionRateCOPerSite
           }
         }
