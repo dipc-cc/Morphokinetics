@@ -96,6 +96,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }
     }
+    if (!doDiffusion) {
+      processProbs3D = new double[length][length][length]; // reset to zero, there is no diffusion at all.
+    }
     ((CatalysisLattice) getLattice()).initialiseRates(processProbs3D);
     //activationEnergy.setRates(processProbs3D);
   }
