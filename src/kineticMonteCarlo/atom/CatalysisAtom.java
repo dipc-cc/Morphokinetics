@@ -28,7 +28,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private final byte latticeSite;
   private boolean eligible;
   private double adsorptionProbability;
-  private double desorptionProabability;
+  private double desorptionProbability;
   
   
   /**
@@ -121,11 +121,11 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
 
   public double getDesorptionProbability() {
-    return desorptionProabability;
+    return desorptionProbability;
   }
 
   public void setDesorptionProbability(double desorptionProbability) {
-    this.desorptionProabability = desorptionProbability;
+    this.desorptionProbability = desorptionProbability;
   }
 
   /**
