@@ -121,7 +121,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   protected boolean performSimulationStep() {
     CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
     CatalysisAtom destinationAtom;
-    if (!doDiffusion || originAtom == null) {
+    if (originAtom == null) {
       destinationAtom = depositNewAtom();
       if (destinationAtom == null || getList().getGlobalProbability() == 0) {
         return true;
