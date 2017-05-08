@@ -361,19 +361,26 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void updateAdsorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
+    // destination atom
     totalAdsorptionRate -= destinationAtom.getAdsorptionProbability();
     destinationAtom.setAdsorptionProbability(0);
     adsorptionRateSites.remove(destinationAtom);
+    
+    // origin atom
     if (originAtom.getOccupiedNeighbours() < 4) {
       originAtom.setAdsorptionProbability(adsorptionRatePerSite);
       adsorptionRateSites.add(originAtom);
     } else {
-      totalAdsorptionRate -= originAtom.getAdsorptionProbability();
-      adsorptionRateSites.remove(originAtom);
       originAtom.setAdsorptionProbability(adsorptionRateCOPerSite);
+      if (adsorptionRateCOPerSite == 0) {
+        adsorptionRateSites.remove(originAtom);
+      } else {
+        adsorptionRateSites.add(originAtom);
+      }
     }
-    totalAdsorptionRate += originAtom.getAdsorptionProbability();
+    totalAdsorptionRate += originAtom.getAdsorptionProbability(); // adsorption probability was 0 (always).
 
+    // neighbours of origin atom
     for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = originAtom.getNeighbour(i);
       if (!neighbour.isOccupied() && neighbour.getOccupiedNeighbours() == 3) {
@@ -387,6 +394,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     
+    // neighbours of destination atom
     for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
       if (neighbour.equals(originAtom)){
@@ -402,10 +410,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }     
       if (!neighbour.isOccupied() && neighbour.getOccupiedNeighbours() == 4) {
-        if (neighbour.getAdsorptionProbability() == adsorptionRateOPerSite) {
+        if (neighbour.getAdsorptionProbability() == adsorptionRatePerSite) {
           totalAdsorptionRate -= adsorptionRateOPerSite;
           neighbour.setAdsorptionProbability(adsorptionRateCOPerSite);
-          adsorptionRateSites.remove(neighbour);
         }
       }
     }
