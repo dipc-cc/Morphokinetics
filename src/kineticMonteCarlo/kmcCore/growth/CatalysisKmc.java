@@ -337,7 +337,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private void updateAdsorptionRateDeposition(CatalysisAtom atom) {
     if (adsorptionRateSites.remove(atom)) {
-      totalAdsorptionRate -= adsorptionRatePerSite;
+      totalAdsorptionRate -= atom.getAdsorptionProbability();
       if (totalAdsorptionRate / adsorptionRatePerSite < 1e-10) {
         totalAdsorptionRate = 0;
       }
