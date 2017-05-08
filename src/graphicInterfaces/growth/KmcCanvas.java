@@ -387,7 +387,7 @@ public class KmcCanvas extends Canvas {
             break;
         }
 
-        if (scale < 3) {
+        if (scale < 10) {
           if (atom.isOccupied()) {
             g.fillRect(X, Y, scale, scale);
           }

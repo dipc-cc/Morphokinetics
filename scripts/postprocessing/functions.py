@@ -112,6 +112,25 @@ def fit(x, y, initI, finishI):
     return list([a,b])
 
 
+def powerFit(x, y, initI, finishI):
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = y[indexes]
+    popt = curve_fit(power, x1, y1)# p0=[1e10,-0.10])
+    a = popt[0][0]
+    b = popt[0][1]
+    return list([a,b])
+
+def karmeleLinearFit(x, y, initI, finishI):
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = y[indexes]
+    popt = curve_fit(linear, x1, y1)# p0=[1e10,-0.10])
+    a = popt[0][0]
+    b = popt[0][1]
+    return list([a,b])
+
+
 def linearFit(x, y, initI, finishI):
     """ linear fit of an exponential function """
     indexes = np.array(range(initI,finishI))

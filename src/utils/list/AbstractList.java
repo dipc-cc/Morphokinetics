@@ -12,6 +12,7 @@ public abstract class AbstractList implements IProbabilityHolder {
 
   private double time;
   private double depositionProbability;
+  private double desorptionProbability;
   private int totalAtoms;
   /** Sum of all probabilities. Useful to measure the time. */
   private double totalProbability;
@@ -23,6 +24,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   public AbstractList() {
     time = 0;
     depositionProbability = 0;
+    desorptionProbability = 0;
     autoCleanup = false;
     removalsSinceLastCleanup = 0;
     deltaTime = 0;
@@ -71,6 +73,15 @@ public abstract class AbstractList implements IProbabilityHolder {
   public void setDepositionProbability(double depositionProbability) {
     this.depositionProbability = depositionProbability;
   }
+  
+  public double getDesorptionProbabiliry() {
+    return desorptionProbability;
+  }
+
+  public void setDesorptionProbability(double desorptionProbability) {
+    this.desorptionProbability = desorptionProbability;
+  }
+
 
   public int getRemovalsSinceLastCleanup() {
     return removalsSinceLastCleanup;

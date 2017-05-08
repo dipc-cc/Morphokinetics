@@ -33,6 +33,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double adsorptionRateOPerSite;
   private double totalAdsorptionRate;
   private ArrayList<CatalysisAtom> adsorptionSites;
+  private double desorptionRatePerSite; 
+  private double[] desorptionRateCOPerSite;
+  private double desorptionRateOPerSite;
+  private double totalDesorptionRate;
+  private ArrayList<CatalysisAtom> desorptionSites;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -48,6 +53,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     setLattice(catalysisLattice);
     totalAdsorptionRate = 0.0;
     adsorptionRatePerSite = 0.0;
+    totalDesorptionRate = 0.0;
+    desorptionRatePerSite = 0.0;
 
     simulatedSteps = 0;
     measureDiffusivity = parser.outputData();
@@ -60,6 +67,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numAtomsInSimulation = new int[2];
     }
     adsorptionSites = new ArrayList<>();
+    desorptionSites = new ArrayList<>();
     doDiffusion = parser.doCatalysisDiffusion();
   }
 
@@ -68,10 +76,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return getSampledSurface(binX, binY);
   }
   
-  public void setAdsorptionRates(CatalysisRates rates) {
+  public void setRates(CatalysisRates rates) {
     adsorptionRateCOPerSite = rates.getAdsorptionRate(CO);
     adsorptionRatePerSite = rates.getTotalAdsorptionRate();
     adsorptionRateOPerSite = adsorptionRatePerSite - adsorptionRateCOPerSite;
+    desorptionRateCOPerSite = rates.getDesorptionRate(CO);
   }
 
   public double[][] getOutputAdsorptionData() {
@@ -246,6 +255,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     destinationAtom.swapAttributes(originAtom);
     getModifiedBuffer().updateAtoms(getList());
     updateAdsorptionRateDiffusion(originAtom, destinationAtom);
+    updateDesorptionRateDiffusion(originAtom, destinationAtom);
 
     return true;
   }
@@ -307,6 +317,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     numAtomsInSimulation[atomType]++;
     
     updateAdsorptionRateDeposition(destinationAtom);
+    updateDesorptionRateDeposition(destinationAtom);
     if (neighbourAtom != null) {
       updateAdsorptionRateDeposition(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
@@ -317,6 +328,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     getList().setDepositionProbability(totalAdsorptionRate);
+    getList().setDesorptionProbability(totalDesorptionRate);
     
     return destinationAtom;
   }
@@ -337,7 +349,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     getList().setDepositionProbability(totalAdsorptionRate);
+    getList().setDesorptionProbability(0);
   }
+  
+  private void updateDesorptionRateDeposition(CatalysisAtom atom) {
+    if (atom.getType() == CO) {
+      desorptionSites.add(atom);
+      atom.setDesorptionProbability(desorptionRateCOPerSite[atom.getLatticeSite()]);
+      totalDesorptionRate = atom.getDesorptionProbability();
+    }
+  }
+    
   
   /**
    * Updates total adsorption probability. 
@@ -366,6 +388,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (!neighbour.isOccupied() && neighbour.getOccupiedNeighbours() < 4) {
         neighbour.setAdsorptionProbability(adsorptionRatePerSite);
       }
+    }
+  }
+  
+  private void updateDesorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
+    if (originAtom.getType() == CO) {
+      desorptionSites.remove(originAtom);
+      totalDesorptionRate -= originAtom.getDesorptionProbability();
+      originAtom.setDesorptionProbability(0);
+      desorptionSites.add(destinationAtom);
+      destinationAtom.setDesorptionProbability(desorptionRateCOPerSite[destinationAtom.getLatticeSite()]);
+      totalDesorptionRate = destinationAtom.getDesorptionProbability();
     }
   }
   

@@ -34,7 +34,7 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
     CatalysisRates r = (CatalysisRates) rates;
     r.setPressureO(parser.getPressureO());
     r.setPressureCO(parser.getPressureCO());
-    ((CatalysisKmc) getKmc()).setAdsorptionRates(r);
+    ((CatalysisKmc) getKmc()).setRates(r);
     getKmc().initialiseRates(rates.getRates(parser.getTemperature()));
   }
   
