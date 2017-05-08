@@ -74,7 +74,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     this.depositionProbability = depositionProbability;
   }
   
-  public double getDesorptionProbabiliry() {
+  public double getDesorptionProbability() {
     return desorptionProbability;
   }
 
