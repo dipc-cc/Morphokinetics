@@ -152,9 +152,18 @@ public class CatalysisRates implements IRates {
   }
   
   public double[] getDesorptionRate(int type) {
-    double[] result = new double[2];
-    result[0] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][0]/(kB * temperature));
-    result[1] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][1]/(kB * temperature));
+    double[] result;
+    if (type == CO) {
+      result = new double[2];
+      result[0] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][0] / (kB * temperature));
+      result[1] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][1] / (kB * temperature));
+    } else {
+      result = new double[4];
+      result[0] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][BR] / (kB * temperature));
+      result[1] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][CUS] / (kB * temperature));
+      result[2] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][BR] / (kB * temperature));
+      result[3] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][CUS] / (kB * temperature));
+    }
     return result;
   }
   
