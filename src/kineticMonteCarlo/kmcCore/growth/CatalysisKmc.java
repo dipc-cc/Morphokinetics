@@ -124,27 +124,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-    double batura = 0;
-    for (int i = 0; i < desorptionSites.size(); i++) {
-      CatalysisAtom atomoa = desorptionSites.get(i);
-      batura += atomoa.getDesorptionProbability();
-      double aBatura = 0;
-      for (int j = 0; j < atomoa.getNumberOfNeighbours(); j++) {
-        aBatura += atomoa.getDesorptionOEdge(j);
-      }
-      if (Math.abs(1 - (aBatura / atomoa.getDesorptionProbability())) > 1e-10) {
-        System.out.println("aaa "+aBatura+" "+atomoa.getDesorptionProbability()+" "+(aBatura-atomoa.getDesorptionProbability()));
-      }
-    }
-    if (Math.abs(1 - (batura / totalDesorptionRate)) > 1e-10) {
-      System.out.println("O oooo "+batura+" "+totalDesorptionRate+" "+(batura-totalDesorptionRate)+" "+Math.abs(1 - (batura / totalDesorptionRate)));
-    }
-    if (getLattice().getOccupied() < desorptionSites.size()) {
-      System.out.println("gaizki gaizki...");
-    }
-    
-    
-    System.out.println(simulatedSteps+" kkk "+totalAdsorptionRate+" "+totalDesorptionRate+" "+adsorptionSites.size()+" "+desorptionSites.size());
     CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
     CatalysisAtom destinationAtom = null;
     if (originAtom == null) { // adsorption
@@ -389,18 +368,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           break;
         }
       }
-      if (!neighbour.isOccupied()) {
-        System.out.println("ERROR!");
-      }
       neighbour.setOccupied(false);
       getLattice().subtractOccupied();
       double probabilityChange = getLattice().extract(neighbour);
       getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     }
 
-    if (atom.getId() == 73  || neighbour.getId() == 73) {
-      System.out.println("aa");
-    }
     atom.setOccupied(false);
     getLattice().subtractOccupied();
     double probabilityChange = getLattice().extract(atom);
@@ -633,11 +606,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   public void updateDesorptionRateDesorption(CatalysisAtom atom) {
-    totalDesorptionRate -= atom.getDesorptionProbability(); // TODO: eguneratu egin behra dira bizilagunak ere bai.
+    totalDesorptionRate -= atom.getDesorptionProbability();
     desorptionSites.remove(atom);
     atom.setDesorptionProbability(0);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      // TODO: falta da kentzea loturak "atom"-ekin eta desortzioa gutxitea
       CatalysisAtom neighbour = atom.getNeighbour(i);
       if (neighbour.isOccupied()) {
         if (neighbour.getOccupiedNeighbours() == 0) {
@@ -657,10 +629,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           totalDesorptionRate -= probability;
         }
       }
-    }
-    if (Math.abs(totalDesorptionRate)< 1e-10) {
-      System.out.println("Kontuz!");
-      totalDesorptionRate = 0;
     }
     getList().setDesorptionProbability(totalDesorptionRate);
   }
