@@ -29,6 +29,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private boolean eligible;
   private double adsorptionProbability;
   private double desorptionProbability;
+  private double[] desorptionOEdge;
   
   
   /**
@@ -49,6 +50,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     }
     attributes = new CatalysisAtomAttributes();
     eligible = true;
+    desorptionOEdge = new double[4];
   }
 
   @Override
@@ -126,6 +128,18 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   public void setDesorptionProbability(double desorptionProbability) {
     this.desorptionProbability = desorptionProbability;
+    if (desorptionProbability == 0) {
+      desorptionOEdge = new double[4];
+    }
+  }
+
+  public void addDesorptionProbability(double probability, int neighbourPos) {
+    desorptionProbability += probability;
+    desorptionOEdge[neighbourPos] += probability;
+  }
+  
+  public double getDesorptionOEdge(int pos) {
+    return desorptionOEdge[pos];
   }
 
   /**
