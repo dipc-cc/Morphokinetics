@@ -333,10 +333,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     numAtomsInSimulation[atomType]++;
     
-    updateAdsorptionRateDeposition(destinationAtom);
-    updateDesorptionRateDeposition(destinationAtom);
+    updateAdsorptionRateAdsorption(destinationAtom);
+    updateDesorptionRateAdsorption(destinationAtom);
     if (neighbourAtom != null) {
-      updateAdsorptionRateDeposition(neighbourAtom);
+      updateAdsorptionRateAdsorption(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
       //neighbourAtom.setDepositionPosition(-1);
       numAtomsInSimulation[atomType]++;
@@ -449,7 +449,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
     
 
-  private void updateDesorptionRateDeposition(CatalysisAtom destinationAtom) {
+  private void updateDesorptionRateAdsorption(CatalysisAtom destinationAtom) {
     desorptionSites.add(destinationAtom); // CO is always added, and O2 deposition ensures that O has (at least) one neighbour
     if (destinationAtom.getType() == CO) {
       destinationAtom.setDesorptionProbability(desorptionRateCOPerSite[destinationAtom.getLatticeSite()]);
@@ -517,7 +517,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    *
    * @param atom just moved or deposited atom.
    */
-  private void updateAdsorptionRateDeposition(CatalysisAtom atom) {
+  private void updateAdsorptionRateAdsorption(CatalysisAtom atom) {
     if (adsorptionSites.remove(atom)) {
       totalAdsorptionRate -= atom.getAdsorptionProbability();
       if (totalAdsorptionRate / adsorptionRatePerSite < 1e-10) {
