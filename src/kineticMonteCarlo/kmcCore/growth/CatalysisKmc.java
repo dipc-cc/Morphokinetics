@@ -434,7 +434,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         a.setType((byte) StaticRandom.rawInteger(2));
         numAtomsInSimulation[a.getType()]++;
         getLattice().deposit(a, false);
-        getLattice().addOccupied();
+        //getLattice().addOccupied();
       }
     }
 
