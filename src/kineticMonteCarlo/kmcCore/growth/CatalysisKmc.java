@@ -130,13 +130,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   @Override
   protected boolean performSimulationStep() {
+    if (getList().getGlobalProbability() == 0) {
+      return true; // there is nothing more we can do
+    }
     CatalysisAtom originAtom = (CatalysisAtom) getList().nextEvent();
     CatalysisAtom destinationAtom = null;
     if (originAtom == null) { // adsorption
       destinationAtom = depositNewAtom();
-      if (destinationAtom == null || getList().getGlobalProbability() == 0) {
-        return true;
-      }
     } else if (originAtom.isRemoved()) { // desorption
       desorpAtom();
     } else {
