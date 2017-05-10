@@ -63,7 +63,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(9.939149882091123E-9, simulatedTime, 0.0);
+    assertEquals(1.2398698370006613E-8, simulatedTime, 0.0);
   }
   
   
@@ -86,7 +86,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(1.1545249022238973E-8, simulatedTime, 0.0);
+    assertEquals(1.0716274722174692E-8, simulatedTime, 0.0);
   }
   
   private void doCatalysisTest(Parser parser) {
