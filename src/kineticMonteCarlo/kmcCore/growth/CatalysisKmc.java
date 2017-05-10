@@ -431,7 +431,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
-        a.setType(O);
+        a.setType((byte) StaticRandom.rawInteger(2));
+        numAtomsInSimulation[a.getType()]++;
         getLattice().deposit(a, false);
         for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
           CatalysisAtom neighbour = a.getNeighbour(k);
