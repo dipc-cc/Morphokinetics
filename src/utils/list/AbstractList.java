@@ -52,7 +52,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   
   public double getDeltaTime(boolean compute) {
     if (compute) {
-      deltaTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability());
+      deltaTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability() + getDesorptionProbability());
       return deltaTime;
     } else {
       return deltaTime;
