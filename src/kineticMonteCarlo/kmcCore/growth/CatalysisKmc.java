@@ -632,24 +632,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalDesorptionRate -= atom.getDesorptionProbability();
     desorptionSites.remove(atom);
     atom.setDesorptionProbability(0);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
-      if (neighbour.isOccupied()) {
-        if (neighbour.getOccupiedNeighbours() == 0) {
-          totalDesorptionRate -= neighbour.getDesorptionProbability();
-          if (neighbour.getType() == O) {
-            neighbour.setDesorptionProbability(0);
-            desorptionSites.remove(neighbour);
-          } else { // CO
-            neighbour.setDesorptionProbability(desorptionRateCOPerSite[neighbour.getLatticeSite()]);
-          }
-        } else { // remove one connection
-          // TODO neighbour type is CO
+    if (atom.getType() == O) { // update neighbours if necessary
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+        CatalysisAtom neighbour = atom.getNeighbour(i);
+        if (neighbour.isOccupied() && neighbour.getType() == O) {
           int origPos = (i + 2) % 4;
           int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
           double probability = desorptionRateOPerSite[index];
           neighbour.addDesorptionProbability(-probability, origPos);
           totalDesorptionRate -= probability;
+          if (neighbour.getDesorptionProbability() == 0) {
+            desorptionSites.remove(neighbour); // O without O neighbour
+          }
         }
       }
     }
