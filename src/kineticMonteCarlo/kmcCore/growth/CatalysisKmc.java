@@ -45,6 +45,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int[] numAtomsInSimulation;
   private final boolean doDiffusion;
   private final boolean doAdsorption;
+  private final boolean doDesorption;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -71,6 +72,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     desorptionSites = new ArrayList<>();
     doDiffusion = parser.doCatalysisDiffusion();
     doAdsorption = parser.doCatalysisAdsorption();
+    doDesorption = parser.doCatalysisDesorption();
   }
 
   @Override
@@ -83,9 +85,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       adsorptionRateCOPerSite = rates.getAdsorptionRate(CO);
       adsorptionRatePerSite = rates.getTotalAdsorptionRate();
       adsorptionRateOPerSite = adsorptionRatePerSite - adsorptionRateCOPerSite;
-      desorptionRateCOPerSite = rates.getDesorptionRate(CO);
+      desorptionRateCOPerSite = new double[2]; // empty
+      desorptionRateOPerSite = new double[4]; // empty 
     }
-    desorptionRateOPerSite = rates.getDesorptionRate(O);
+    if (doDesorption) {
+      desorptionRateCOPerSite = rates.getDesorptionRate(CO);
+      desorptionRateOPerSite = rates.getDesorptionRate(O);
+    }
   }
 
   public double[][] getOutputAdsorptionData() {
