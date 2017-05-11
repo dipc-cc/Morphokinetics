@@ -2,7 +2,6 @@
   pressureCO:7,
   pressureO:1,
   catalysisDiffusion: true,
-  catalysisDesorption: false,
   numberOfSimulations: 1,
   cartSizeX: 50,
   cartSizeY: 50,

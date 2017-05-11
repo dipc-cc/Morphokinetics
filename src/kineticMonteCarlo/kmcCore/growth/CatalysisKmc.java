@@ -456,7 +456,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
               a.addDesorptionProbability(probability, k);
             }
           }
-          desorptionSites.add(a);
+          if (a.getDesorptionProbability() > 0) {
+            desorptionSites.add(a);
+          }
           totalDesorptionRate += a.getDesorptionProbability();
         }
       }
