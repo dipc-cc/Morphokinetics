@@ -15,4 +15,5 @@
   withGui: true,
   numberOfSteps: 1e7,
   catalysisDiffusion: false,
+  catalysisDesorption: false,
 }
