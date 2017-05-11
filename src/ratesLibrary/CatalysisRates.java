@@ -170,11 +170,13 @@ public class CatalysisRates implements IRates {
   
   public double[] getReactionRates() {
     double[] rates;
+    double planckConstant = 4.136e-15; // eV⋅s
+    double constant = 0.5 * kB * temperature / planckConstant;
     rates = new double[4];
-    rates[0] = prefactor * Math.exp(-reactionEnergiesWithO[BR][BR] / (kB * temperature));
-    rates[1] = prefactor * Math.exp(-reactionEnergiesWithO[BR][CUS] / (kB * temperature));
-    rates[2] = prefactor * Math.exp(-reactionEnergiesWithO[CUS][BR] / (kB * temperature));
-    rates[3] = prefactor * Math.exp(-reactionEnergiesWithO[CUS][CUS] / (kB * temperature));
+    rates[0] = constant * Math.exp(-reactionEnergiesWithO[BR][BR] / (kB * temperature));
+    rates[1] = constant * Math.exp(-reactionEnergiesWithO[BR][CUS] / (kB * temperature));
+    rates[2] = constant * Math.exp(-reactionEnergiesWithO[CUS][BR] / (kB * temperature));
+    rates[3] = constant * Math.exp(-reactionEnergiesWithO[CUS][CUS] / (kB * temperature));
     return rates;
   }
     
