@@ -631,6 +631,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   public void updateDesorptionRateDesorption(CatalysisAtom atom) {
+    double previousDesorptionRate = totalDesorptionRate;
     totalDesorptionRate -= atom.getDesorptionProbability();
     desorptionSites.remove(atom);
     atom.setDesorptionProbability(0);
@@ -649,9 +650,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }
     }
-    if (Math.abs(totalDesorptionRate) < 1e-10) {
-      totalDesorptionRate = 0;
+    if (totalDesorptionRate / previousDesorptionRate < 1e-1) {
+      updateDesorptionRateFromList();
     }
+
     getList().setDesorptionProbability(totalDesorptionRate);
+  }
+  
+  private void updateDesorptionRateFromList() {
+    double sum = 0.0;
+    for (int i = 0; i < desorptionSites.size(); i++) {
+      sum += desorptionSites.get(i).getDesorptionProbability();
+    }
+    totalDesorptionRate = sum;
   }
 }
