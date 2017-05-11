@@ -111,6 +111,28 @@ public class CatalysisSimulationTest {
     assertEquals(2.928716156045857E25, simulatedTime, 0.0);
   }
   
+  @Test
+  public void testCatalysisAdsorptionDesorptionDiffusion() {
+    AbstractSimulation.printHeader("Catalysis test");
+    Parser parser = new Parser();
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisAddParameters");
+    parser.print();
+
+    doCatalysisTest(parser);
+    
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
+    float[][] ref0 = null;
+    try {
+      ref0 = restart.readSurfaceBinary2D("CatalysisAddSurface000.mko");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }    
+    for (int i = 0; i < ref0.length; i++) {
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
+    }
+    assertEquals(0.2175328892004462, simulatedTime, 0.0);
+  }
+  
   private void doCatalysisTest(Parser parser) {
     AbstractSimulation simulation = new CatalysisSimulation(parser);
 
