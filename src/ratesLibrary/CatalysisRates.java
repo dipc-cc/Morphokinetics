@@ -18,8 +18,9 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 public class CatalysisRates implements IRates {
 
   private final double[][][] diffusionEnergies;
-  private final double[][] desorptionEnergiesUnimolecular;
-  private final double[][][] desorptionEnergiesWithO;
+  private final double[] desorptionEnergiesCo;
+  private final double[][] desorptionEnergiesO;
+  private final double[][] reactionEnergiesWithO;
   
   private final double prefactor;
   
@@ -47,21 +48,21 @@ public class CatalysisRates implements IRates {
     diffusionEnergies[O][CUS][BR] = 1.0;
     diffusionEnergies[O][CUS][CUS] = 1.6;
     
-    desorptionEnergiesUnimolecular = new double[2][2];
-    desorptionEnergiesUnimolecular[CO][BR] = 1.6;
-    desorptionEnergiesUnimolecular[CO][CUS] = 1.3;
-    desorptionEnergiesUnimolecular[O][BR] = Einf;
-    desorptionEnergiesUnimolecular[O][CUS] = Einf;
+    desorptionEnergiesCo = new double[2];
+    desorptionEnergiesCo[BR] = 1.6;
+    desorptionEnergiesCo[CUS] = 1.3;
   
-    desorptionEnergiesWithO = new double[2][2][2];
-    desorptionEnergiesWithO[CO][BR][BR] = 1.5;
-    desorptionEnergiesWithO[CO][BR][CUS] = 1.2;
-    desorptionEnergiesWithO[CO][CUS][BR] = 0.8;
-    desorptionEnergiesWithO[CO][CUS][CUS]= 0.9;
-    desorptionEnergiesWithO[O][BR][BR]  = 4.6;
-    desorptionEnergiesWithO[O][BR][CUS] = 3.3;
-    desorptionEnergiesWithO[O][CUS][BR] = 3.3;
-    desorptionEnergiesWithO[O][CUS][CUS] = 2.0;
+    desorptionEnergiesO = new double[2][2];
+    desorptionEnergiesO[BR][BR]  = 4.6;
+    desorptionEnergiesO[BR][CUS] = 3.3;
+    desorptionEnergiesO[CUS][BR] = 3.3;
+    desorptionEnergiesO[CUS][CUS] = 2.0;
+    
+    reactionEnergiesWithO = new double[2][2];
+    reactionEnergiesWithO[BR][BR] = 1.5;
+    reactionEnergiesWithO[BR][CUS] = 1.2;
+    reactionEnergiesWithO[CUS][BR] = 0.8;
+    reactionEnergiesWithO[CUS][CUS]= 0.9;
       
     mass = new double[2]; // g/mol
     mass[CO] = 28.01055;
@@ -155,14 +156,14 @@ public class CatalysisRates implements IRates {
     double[] rates;
     if (type == CO) {
       rates = new double[2];
-      rates[0] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][0] / (kB * temperature));
-      rates[1] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][1] / (kB * temperature));
+      rates[0] = prefactor * Math.exp(-desorptionEnergiesCo[0] / (kB * temperature));
+      rates[1] = prefactor * Math.exp(-desorptionEnergiesCo[1] / (kB * temperature));
     } else {
       rates = new double[4];
-      rates[0] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][BR] / (kB * temperature));
-      rates[1] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][CUS] / (kB * temperature));
-      rates[2] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][BR] / (kB * temperature));
-      rates[3] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][CUS] / (kB * temperature));
+      rates[0] = prefactor * Math.exp(-desorptionEnergiesO[BR][BR] / (kB * temperature));
+      rates[1] = prefactor * Math.exp(-desorptionEnergiesO[BR][CUS] / (kB * temperature));
+      rates[2] = prefactor * Math.exp(-desorptionEnergiesO[CUS][BR] / (kB * temperature));
+      rates[3] = prefactor * Math.exp(-desorptionEnergiesO[CUS][CUS] / (kB * temperature));
     }
     return rates;
   }
@@ -170,10 +171,10 @@ public class CatalysisRates implements IRates {
   public double[] getReactionRates() {
     double[] rates;
     rates = new double[4];
-    rates[0] = prefactor * Math.exp(-desorptionEnergiesWithO[CO][BR][BR] / (kB * temperature));
-    rates[1] = prefactor * Math.exp(-desorptionEnergiesWithO[CO][BR][CUS] / (kB * temperature));
-    rates[2] = prefactor * Math.exp(-desorptionEnergiesWithO[CO][CUS][BR] / (kB * temperature));
-    rates[3] = prefactor * Math.exp(-desorptionEnergiesWithO[CO][CUS][CUS] / (kB * temperature));
+    rates[0] = prefactor * Math.exp(-reactionEnergiesWithO[BR][BR] / (kB * temperature));
+    rates[1] = prefactor * Math.exp(-reactionEnergiesWithO[BR][CUS] / (kB * temperature));
+    rates[2] = prefactor * Math.exp(-reactionEnergiesWithO[CUS][BR] / (kB * temperature));
+    rates[3] = prefactor * Math.exp(-reactionEnergiesWithO[CUS][CUS] / (kB * temperature));
     return rates;
   }
     
