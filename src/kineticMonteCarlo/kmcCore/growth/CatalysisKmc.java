@@ -89,8 +89,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       desorptionRateOPerSite = new double[4]; // empty 
     }
     if (doDesorption) {
-      desorptionRateCOPerSite = rates.getDesorptionRate(CO);
-      desorptionRateOPerSite = rates.getDesorptionRate(O);
+      desorptionRateCOPerSite = rates.getDesorptionRates(CO);
+      desorptionRateOPerSite = rates.getDesorptionRates(O);
     }
   }
 

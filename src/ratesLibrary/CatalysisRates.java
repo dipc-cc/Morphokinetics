@@ -151,20 +151,20 @@ public class CatalysisRates implements IRates {
     return rates;
   }
   
-  public double[] getDesorptionRate(int type) {
-    double[] result;
+  public double[] getDesorptionRates(int type) {
+    double[] rates;
     if (type == CO) {
-      result = new double[2];
-      result[0] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][0] / (kB * temperature));
-      result[1] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][1] / (kB * temperature));
+      rates = new double[2];
+      rates[0] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][0] / (kB * temperature));
+      rates[1] = prefactor * Math.exp(-desorptionEnergiesUnimolecular[CO][1] / (kB * temperature));
     } else {
-      result = new double[4];
-      result[0] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][BR] / (kB * temperature));
-      result[1] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][CUS] / (kB * temperature));
-      result[2] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][BR] / (kB * temperature));
-      result[3] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][CUS] / (kB * temperature));
+      rates = new double[4];
+      rates[0] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][BR] / (kB * temperature));
+      rates[1] = prefactor * Math.exp(-desorptionEnergiesWithO[O][BR][CUS] / (kB * temperature));
+      rates[2] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][BR] / (kB * temperature));
+      rates[3] = prefactor * Math.exp(-desorptionEnergiesWithO[O][CUS][CUS] / (kB * temperature));
     }
-    return result;
+    return rates;
   }
   
   private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
