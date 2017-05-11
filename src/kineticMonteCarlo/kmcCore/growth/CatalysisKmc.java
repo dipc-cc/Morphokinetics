@@ -630,7 +630,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
   }
   
-  public void updateDesorptionRateDesorption(CatalysisAtom atom) {
+  private void updateDesorptionRateDesorption(CatalysisAtom atom) {
     double previousDesorptionRate = totalDesorptionRate;
     totalDesorptionRate -= atom.getDesorptionProbability();
     desorptionSites.remove(atom);
