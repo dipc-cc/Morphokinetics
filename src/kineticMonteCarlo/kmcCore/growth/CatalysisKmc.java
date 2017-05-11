@@ -375,12 +375,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }
       neighbour.setOccupied(false);
+      numAtomsInSimulation[atom.getType()]--;
       getLattice().subtractOccupied();
       double probabilityChange = getLattice().extract(neighbour);
       getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     }
 
     atom.setOccupied(false);
+    numAtomsInSimulation[atom.getType()]--;
     getLattice().subtractOccupied();
     double probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
