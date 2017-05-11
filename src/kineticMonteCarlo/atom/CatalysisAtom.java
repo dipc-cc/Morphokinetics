@@ -134,10 +134,14 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
 
   public void addDesorptionProbability(double probability, int neighbourPos) {
-    desorptionProbability += probability;
+    //desorptionProbability += probability; // it creates numerical error
     desorptionOEdge[neighbourPos] += probability;
+    desorptionProbability = 0;
+    for (int i = 0; i < 4; i++) { // to avoid numerical error. Recompute
+      desorptionProbability += desorptionOEdge[i];
+    }
   }
-  
+
   public double getDesorptionOEdge(int pos) {
     return desorptionOEdge[pos];
   }
