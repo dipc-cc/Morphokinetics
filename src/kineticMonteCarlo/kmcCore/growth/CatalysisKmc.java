@@ -422,8 +422,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       totalAdsorptionRate += neighbour.getAdsorptionProbability();
       adsorptionSites.add(neighbour);
       updateDesorptionRateDesorption(neighbour);
+      updateReactionRateReaction(neighbour);
     }
     updateDesorptionRateDesorption(atom);
+    updateReactionRateReaction(atom);
   }
   
   private void reactAtom() {
@@ -471,8 +473,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     adsorptionSites.add(neighbour);
     updateReactionRateReaction(neighbour);
     updateReactionRateReaction(atom);
-    // updateDesorptionRateReaction(atom);
-    // updateDesorptionRateReaction(neighbour);
+    updateDesorptionRateDesorption(neighbour);
+    updateDesorptionRateDesorption(atom);
   }
 
   /**
