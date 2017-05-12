@@ -137,7 +137,7 @@ public abstract class AbstractList implements IProbabilityHolder {
    * @return total movement probability + deposition probability
    */
   public double getGlobalProbability() {
-    return getTotalProbability() + getDepositionProbability() + getDesorptionProbability();
+    return getTotalProbability() + getDepositionProbability() + getDesorptionProbability() + getReactionProbability();
   }
 
   public void reset() {
