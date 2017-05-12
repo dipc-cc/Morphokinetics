@@ -35,7 +35,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double totalAdsorptionRate;
   // Desorption
   private ArrayList<CatalysisAtom> adsorptionSites;
-  private double desorptionRatePerSite; 
   private double[] desorptionRateCOPerSite; // BRIDGE or CUS
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   private double totalDesorptionRate;
@@ -63,7 +62,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalAdsorptionRate = 0.0;
     adsorptionRatePerSite = 0.0;
     totalDesorptionRate = 0.0;
-    desorptionRatePerSite = 0.0;
     totalReactionRate = 0.0;
 
     simulatedSteps = 0;
