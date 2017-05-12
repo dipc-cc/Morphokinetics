@@ -4,6 +4,7 @@
   catalysisDiffusion: false,
   catalysisAdsorption: false,
   catalysisDesorption: true,
+  catalysisReaction: false,
   numberOfSimulations: 1,
   cartSizeX: 10,
   cartSizeY: 10,

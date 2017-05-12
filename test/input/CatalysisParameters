@@ -16,4 +16,5 @@
   numberOfSteps: 1e7,
   catalysisDiffusion: false,
   catalysisDesorption: false,
+  catalysisReaction: false,
 }
