@@ -102,7 +102,8 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability() + getDesorptionProbability());
+    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability() 
+            + getDesorptionProbability() + getReactionProbability());
     
     addTime();
 
@@ -117,7 +118,13 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
       atom.setRemoved();
       return atom;
     }
-    position -= getDepositionProbability() + getDesorptionProbability();
+    if (position < getDepositionProbability() + getDesorptionProbability() + getReactionProbability()) {
+      atom = new CatalysisAtom(-1, (short) 0, (short) 0); // dummy atom; just to say to do a reaction
+      atom.unRemove();
+      atom.setList(false);
+      return atom;
+    }
+    position -= getDepositionProbability() + getDesorptionProbability() + getReactionProbability();
     double currentProbability = 0;
 
     for (int i = 0; i < surface.size(); i++) {
