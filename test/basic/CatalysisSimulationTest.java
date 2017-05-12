@@ -152,7 +152,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    //assertEquals(infinity, simulatedTime, 0.0);
+    assertEquals(0.24765350563536598, simulatedTime, 0.0);
   }
   
   
