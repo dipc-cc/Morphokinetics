@@ -20,7 +20,7 @@ public class CatalysisRates implements IRates {
   private final double[][][] diffusionEnergies;
   private final double[] desorptionEnergiesCo;
   private final double[][] desorptionEnergiesO;
-  private final double[][] reactionEnergiesWithO;
+  private final double[][] reactionEnergiesCoO;
   
   private final double prefactor;
   
@@ -58,11 +58,11 @@ public class CatalysisRates implements IRates {
     desorptionEnergiesO[CUS][BR] = 3.3;
     desorptionEnergiesO[CUS][CUS] = 2.0;
     
-    reactionEnergiesWithO = new double[2][2];
-    reactionEnergiesWithO[BR][BR] = 1.5;
-    reactionEnergiesWithO[BR][CUS] = 1.2;
-    reactionEnergiesWithO[CUS][BR] = 0.8;
-    reactionEnergiesWithO[CUS][CUS]= 0.9;
+    reactionEnergiesCoO = new double[2][2];
+    reactionEnergiesCoO[BR][BR] = 1.5; // CO is in bridge and O in bridge
+    reactionEnergiesCoO[BR][CUS] = 0.8; // CO is in bridge and O in CUS
+    reactionEnergiesCoO[CUS][BR] = 1.2; // CO is in CUS and O in bridge
+    reactionEnergiesCoO[CUS][CUS]= 0.9; // CO is in CUS and O in CUS
       
     mass = new double[2]; // g/mol
     mass[CO] = 28.01055;
@@ -173,10 +173,10 @@ public class CatalysisRates implements IRates {
     double planckConstant = 4.136e-15; // eV⋅s
     double constant = 0.5 * kB * temperature / planckConstant;
     rates = new double[4];
-    rates[0] = constant * Math.exp(-reactionEnergiesWithO[BR][BR] / (kB * temperature));
-    rates[1] = constant * Math.exp(-reactionEnergiesWithO[BR][CUS] / (kB * temperature));
-    rates[2] = constant * Math.exp(-reactionEnergiesWithO[CUS][BR] / (kB * temperature));
-    rates[3] = constant * Math.exp(-reactionEnergiesWithO[CUS][CUS] / (kB * temperature));
+    rates[0] = constant * Math.exp(-reactionEnergiesCoO[BR][BR] / (kB * temperature));
+    rates[1] = constant * Math.exp(-reactionEnergiesCoO[BR][CUS] / (kB * temperature));
+    rates[2] = constant * Math.exp(-reactionEnergiesCoO[CUS][BR] / (kB * temperature));
+    rates[3] = constant * Math.exp(-reactionEnergiesCoO[CUS][CUS] / (kB * temperature));
     return rates;
   }
     
