@@ -406,13 +406,16 @@ class RestartLow {
         double coverageCO = 0;
         double coverageO = 0;
         double t = 0;
+        double stepP = 0;
         coverage = data[i][0];
         coverageCO = data[i][2];
         coverageO = data[i][3];
         t = data[i][1];
+        //System.out.println(data[i][4]);
+        stepP = data[i][4];
         
         if (t > 0 || coverage > 0) {
-          out.write((i + ";" + t + ";" + coverage  + ";" + coverageCO + ";" + coverageO + "\n").replace('.', ','));
+          out.write((i + ";" + t + ";" + coverage  + ";" + coverageCO + ";" + coverageO  + ";" + stepP + "\n").replace('.', ','));
         }
       }
     } catch (Exception e) {
