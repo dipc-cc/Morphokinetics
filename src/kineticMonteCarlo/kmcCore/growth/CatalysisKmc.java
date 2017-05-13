@@ -42,6 +42,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private ArrayList<CatalysisAtom> desorptionSites;
   private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private double totalReactionRate;
+  private float currentAdsorptionP;
   private ArrayList<CatalysisAtom> reactionSites;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
@@ -56,6 +57,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public CatalysisKmc(Parser parser) {
     super(parser);
     maxCoverage =(float) parser.getCoverage() / 100;
+    currentAdsorptionP = 1.0f;
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
@@ -107,7 +109,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   public double[][] getOutputAdsorptionData() {
-    double[][] adsorptionSimulationData = new double[adsorptionData.size()][4];
+    double[][] adsorptionSimulationData = new double[adsorptionData.size()][5];
     for (int i = 0; i < adsorptionData.size(); i++) {
       adsorptionSimulationData[i] = adsorptionData.get(i).getCatalysisData();
     }
@@ -142,6 +144,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   @Override
   protected boolean performSimulationStep() {
+      currentAdsorptionP = 1.0f;
     if (getList().getGlobalProbability() == 0) {
       return true; // there is nothing more we can do
     }
@@ -163,10 +166,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         int step = (int) (simulatedSteps + 1) / numStepsEachData;
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
-        
+        //System.out.println(currentAdsorptionP);
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(),
                 numAtomsInSimulation[CO] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()),
-                numAtomsInSimulation[O] / (getLattice().getCartSizeX() * getLattice().getCartSizeY())));
+                numAtomsInSimulation[O] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()), currentAdsorptionP));
       }
     }
     return simulatedSteps + 1 == totalNumOfSteps;
@@ -337,14 +340,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (atomType == O) { // it has to deposit two O (dissociation of O2 -> 2O)
         boolean depositedNeighbour;
         random = StaticRandom.rawInteger(4);
+        //System.out.println("currentAdsorptionP: "+currentAdsorptionP);
         do {
           neighbourAtom = destinationAtom.getNeighbour(random);
           random = (random + 1) % 4;
           depositedNeighbour = depositAtom(neighbourAtom, O);
         } while (!depositedNeighbour);
+        
       }
     } while (!deposited);
-    
+    currentAdsorptionP = getCurrentP();
     numAtomsInSimulation[atomType]++;
     
     updateAdsorptionRateAdsorption(destinationAtom);
@@ -929,5 +934,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       sum += reactionSites.get(i).getReactionProbability();
     }
     totalReactionRate = sum;
+  }
+  
+  private float getCurrentP(){
+      float numLoturak = 0f;
+      //System.out.println("sitios libres: "+adsorptionSites.size());
+      for (int i = 0; i < adsorptionSites.size(); i++) {
+        CatalysisAtom tempAtom = adsorptionSites.get(i);
+        numLoturak+=(1-(float) tempAtom.getOccupiedNeighbours()/4);
+        //System.out.println("vecinos ocupados: "+tempAtom.getOccupiedNeighbours()+ " sumo: "+(1- (float)tempAtom.getOccupiedNeighbours()/4)+" llevo: "+numLoturak);
+      }
+      float currentP = (float) numLoturak/adsorptionSites.size();
+      return currentP;
   }
 }
