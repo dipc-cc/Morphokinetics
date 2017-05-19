@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import static java.lang.String.format;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringTokenizer;
 
 import kineticMonteCarlo.atom.IAtom;
@@ -397,6 +398,15 @@ class RestartLow {
   
   
   static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
+    String separator;
+    Locale locale;
+    if (System.getProperty("os.name").contains("Linux")){
+      locale = Locale.UK;
+      separator = "\t";
+    } else {
+      locale = Locale.FRANCE;
+      separator = ";";
+    }    
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
@@ -411,11 +421,11 @@ class RestartLow {
         coverageCO = data[i][2];
         coverageO = data[i][3];
         t = data[i][1];
-        //System.out.println(data[i][4]);
         stepP = data[i][4];
         
         if (t > 0 || coverage > 0) {
-          out.write((i + ";" + t + ";" + coverage  + ";" + coverageCO + ";" + coverageO  + ";" + stepP + "\n").replace('.', ','));
+          String s = format(locale, "%d%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO);
+          out.write(s);
         }
       }
     } catch (Exception e) {
