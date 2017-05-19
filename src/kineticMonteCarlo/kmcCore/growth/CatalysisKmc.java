@@ -144,7 +144,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-      currentAdsorptionP = 1.0f;
+    currentAdsorptionP = 1.0f;
     if (getList().getGlobalProbability() == 0) {
       return true; // there is nothing more we can do
     }
@@ -166,7 +166,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         int step = (int) (simulatedSteps + 1) / numStepsEachData;
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
-        //System.out.println(currentAdsorptionP);
+        
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(),
                 numAtomsInSimulation[CO] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()),
                 numAtomsInSimulation[O] / (getLattice().getCartSizeX() * getLattice().getCartSizeY()), currentAdsorptionP));
@@ -340,13 +340,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (atomType == O) { // it has to deposit two O (dissociation of O2 -> 2O)
         boolean depositedNeighbour;
         random = StaticRandom.rawInteger(4);
-        //System.out.println("currentAdsorptionP: "+currentAdsorptionP);
         do {
           neighbourAtom = destinationAtom.getNeighbour(random);
           random = (random + 1) % 4;
           depositedNeighbour = depositAtom(neighbourAtom, O);
         } while (!depositedNeighbour);
-        
       }
     } while (!deposited);
     currentAdsorptionP = getCurrentP();
@@ -936,15 +934,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalReactionRate = sum;
   }
   
-  private float getCurrentP(){
-      float numLoturak = 0f;
-      //System.out.println("sitios libres: "+adsorptionSites.size());
-      for (int i = 0; i < adsorptionSites.size(); i++) {
-        CatalysisAtom tempAtom = adsorptionSites.get(i);
-        numLoturak+=(1-(float) tempAtom.getOccupiedNeighbours()/4);
-        //System.out.println("vecinos ocupados: "+tempAtom.getOccupiedNeighbours()+ " sumo: "+(1- (float)tempAtom.getOccupiedNeighbours()/4)+" llevo: "+numLoturak);
-      }
-      float currentP = (float) numLoturak/adsorptionSites.size();
-      return currentP;
+  private float getCurrentP() {
+    float numOccupiedNeighbours = 0f;
+    for (int i = 0; i < adsorptionSites.size(); i++) {
+      numOccupiedNeighbours += (1 - (float) adsorptionSites.get(i).getOccupiedNeighbours() / 4);
+    }
+    return (float) numOccupiedNeighbours / adsorptionSites.size();
   }
 }
