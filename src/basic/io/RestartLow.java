@@ -424,8 +424,8 @@ class RestartLow {
         stepP = data[i][4];
         
         if (t > 0 || coverage > 0) {
-          String s = format(locale, "%d%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO);
-          out.write(s);
+          String s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, stepP);
+          out.write(s.replace(',', '.'));
         }
       }
     } catch (Exception e) {
