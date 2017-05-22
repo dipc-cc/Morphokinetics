@@ -682,7 +682,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   /**
-   * Updates reaction rate for origin (at its neighbourhood) ant destination atoms.
+   * Updates reaction rate for origin (at its neighbourhood) and destination atoms.
    * 
    * @param originAtom
    * @param destinationAtom 
