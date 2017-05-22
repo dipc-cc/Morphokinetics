@@ -340,7 +340,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom == null || destinationAtom.getAdsorptionProbability() == 0) {
         boolean isThereAnAtom = destinationAtom == null;
         System.out.println("Something is wrong " + isThereAnAtom);
-        System.exit(1);
       }
       destinationAtom.setType(atomType);
       deposited = depositAtom(destinationAtom);
