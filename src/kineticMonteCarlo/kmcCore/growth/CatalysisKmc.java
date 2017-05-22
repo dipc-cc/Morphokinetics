@@ -290,6 +290,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getModifiedBuffer().updateAtoms(getList());
     updateAdsorptionRateDiffusion(originAtom, destinationAtom);
     updateDesorptionRateDiffusion(originAtom, destinationAtom);
+    updateReactionRateDiffusion(originAtom, destinationAtom);
 
     return true;
   }
@@ -580,113 +581,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
  
   private void updateReactionRateAdsorption(CatalysisAtom destinationAtom) {
-    if (destinationAtom.getType() == CO) {
-      // current atom
-      ArrayList<CatalysisAtom> neighbours = new ArrayList<>();
-      for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
-        CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
-        if (neighbour.isOccupied() && neighbour.getType() == O) {
-          int index = 2 * destinationAtom.getLatticeSite() + neighbour.getLatticeSite();
-          double probability = reactionRateCoO[index];
-          destinationAtom.addReactionProbability(probability, i);
-          neighbours.add(neighbour);
-        }
-      }
-      totalReactionRate += destinationAtom.getReactionProbability();
-      CatalysisAtom atom;
-      ArrayList<CatalysisAtom> secondNeighbours = new ArrayList<>();
-      // first neighbours
-      for (int i = 0; i < neighbours.size(); i++) {
-        atom = neighbours.get(i);
-        totalReactionRate -= atom.getReactionProbability();
-        atom.setReactionProbability(0);
-        for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
-          CatalysisAtom neighbour = atom.getNeighbour(j);
-          if (neighbour.isOccupied() && neighbour.getType() == O) {
-            int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-            double probability = reactionRateCoO[index];
-            atom.addReactionProbability(probability, j);
-            if (!neighbour.equals(destinationAtom)) {
-              secondNeighbours.add(neighbour);
-            }
-          }
-        }
-        totalReactionRate += atom.getReactionProbability();
-        reactionSites.add(atom);
-      }
-
-      // second neighbours
-      for (int i = 0; i < secondNeighbours.size(); i++) {
-        atom = secondNeighbours.get(i);
-        totalReactionRate -= atom.getReactionProbability();
-        reactionSites.remove(atom);
-        atom.setReactionProbability(0);
-        for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
-          CatalysisAtom neighbour = atom.getNeighbour(j);
-          if (neighbour.isOccupied() && neighbour.getType() == O) {
-            int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-            double probability = reactionRateCoO[index];
-            atom.addReactionProbability(probability, j);
-          }
-        }
-        totalReactionRate += atom.getReactionProbability();
-        reactionSites.add(atom);
-      }
-    } else { // destination type O
-      // current atom
-      ArrayList<CatalysisAtom> neighbours = new ArrayList<>();
-      for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
-        CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
-        if (neighbour.isOccupied() && neighbour.getType() == CO) {
-          int index = 2 * destinationAtom.getLatticeSite() + neighbour.getLatticeSite();
-          double probability = reactionRateCoO[index];
-          destinationAtom.addReactionProbability(probability, i);
-          neighbours.add(neighbour);
-        }
-      }
-      totalReactionRate += destinationAtom.getReactionProbability();
-      CatalysisAtom atom;
-      ArrayList<CatalysisAtom> secondNeighbours = new ArrayList<>();
-      // first neighbours
-      for (int i = 0; i < neighbours.size(); i++) {
-        atom = neighbours.get(i);
-        totalReactionRate -= atom.getReactionProbability();
-        atom.setReactionProbability(0);
-        for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
-          CatalysisAtom neighbour = atom.getNeighbour(j);
-          if (neighbour.isOccupied() && neighbour.getType() == CO) {
-            int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-            double probability = reactionRateCoO[index];
-            atom.addReactionProbability(probability, j);
-            if (!neighbour.equals(destinationAtom)) {
-              secondNeighbours.add(neighbour);
-            }
-          }
-        }
-        totalReactionRate += atom.getReactionProbability();
-        reactionSites.add(atom);
-      }
-
-      // second neighbours
-      for (int i = 0; i < secondNeighbours.size(); i++) {
-        atom = secondNeighbours.get(i);
-        totalReactionRate -= atom.getReactionProbability();
-        reactionSites.remove(atom);
-        atom.setReactionProbability(0);
-        for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
-          CatalysisAtom neighbour = atom.getNeighbour(j);
-          if (neighbour.isOccupied() && neighbour.getType() == CO) {
-            int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-            double probability = reactionRateCoO[index];
-            atom.addReactionProbability(probability, j);
-          }
-        }
-        totalReactionRate += atom.getReactionProbability();
-        reactionSites.add(atom);
-      }
+    recomputeReactionProbability(destinationAtom);
+    for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
+      recomputeReactionProbability(neighbour);
     }
   }
-
+  
   private void updateDesorptionRateAdsorption(CatalysisAtom destinationAtom) {
     desorptionSites.add(destinationAtom); // CO is always added, and O2 deposition ensures that O has (at least) one neighbour
     if (destinationAtom.getType() == CO) {
@@ -779,6 +680,26 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
   }
+  
+  /**
+   * Updates reaction rate for origin (at its neighbourhood) ant destination atoms.
+   * 
+   * @param originAtom
+   * @param destinationAtom 
+   */
+  private void updateReactionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom){
+    recomputeReactionProbability(originAtom);
+    for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = originAtom.getNeighbour(i);
+      recomputeReactionProbability(neighbour);
+    }
+    
+    recomputeReactionProbability(destinationAtom);
+    for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
+      recomputeReactionProbability(neighbour);
+    }
+  }  
   
   private void updateDesorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
     if (originAtom.getType() == CO) {
@@ -917,6 +838,46 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
 
     getList().setDesorptionProbability(totalDesorptionRate);
+  }
+  
+  private void recomputeReactionProbability(CatalysisAtom atom) {
+    totalReactionRate -= atom.getReactionProbability();
+    reactionSites.remove(atom);
+    atom.setReactionProbability(0);
+    if (!atom.isOccupied()) {
+      return;
+    }
+    byte otherType = (byte) ((atom.getType() + 1) % 2);
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = atom.getNeighbour(i);
+      if (neighbour.isOccupied() && neighbour.getType() == otherType) {
+        double probability = getReactionProbability(atom, neighbour);
+        atom.addReactionProbability(probability, i);
+      }
+    }
+    if (atom.getReactionProbability() > 0) {
+      totalReactionRate += atom.getReactionProbability();
+      reactionSites.add(atom);
+    }
+  }
+
+  /**
+   * One atom is O and the other CO, for sure.
+   * 
+   * @param atom
+   * @param neighbour
+   * @return 
+   */
+  private double getReactionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+    int index;
+    if (atom.getType() == CO) {
+      index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
+    } else {
+      index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
+    }
+    double probability = reactionRateCoO[index];
+    
+    return probability;
   }
   
   private void updateDesorptionRateFromList() {
