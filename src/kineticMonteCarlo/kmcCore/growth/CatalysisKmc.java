@@ -206,6 +206,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   @Override
   public void depositSeed() {
+    totalAdsorptionRate = 0.0;
+    totalDesorptionRate = 0.0;
+    totalReactionRate = 0.0;
     getLattice().resetOccupied();
     if (doAdsorption) {
       initAdsorptionProbability();
@@ -486,7 +489,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Iterates over all lattice sites and initialises adsorption probabilities.
    */
   private void initAdsorptionProbability() {
-    totalAdsorptionRate = 0.0;
     adsorptionSites = new ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
