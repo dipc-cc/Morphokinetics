@@ -303,10 +303,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom neighbourAtom = null;
     int random;
     
-     /*/System.out.println("sitios libres: "+adsorptionSites.size());
-    System.out.println("Press Enter to continue");
-    try{System.in.read();}
-    catch(Exception e){}/*/
     currentAdsorptionP = getCurrentP();
  
     do {
