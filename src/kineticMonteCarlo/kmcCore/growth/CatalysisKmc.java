@@ -774,11 +774,39 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   private void updateReactionRateReaction(CatalysisAtom atom) {
     double previousReactionRate = totalReactionRate;
-       
-    recomputeReactionProbability(atom);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
-      recomputeReactionProbability(neighbour);
+    totalReactionRate -= atom.getReactionProbability();
+    reactionSites.remove(atom);
+    atom.setReactionProbability(0);
+    if (atom.getType() == O) { // update neighbours if necessary
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+        CatalysisAtom neighbour = atom.getNeighbour(i);
+        if (neighbour.isOccupied() && neighbour.getType() == CO) {
+          int origPos = (i + 2) % 4;
+          //               CO                   +         O
+          int index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
+          double probability = reactionRateCoO[index];
+          neighbour.addReactionProbability(-probability, origPos);
+          totalReactionRate -= probability;
+          if (neighbour.getReactionProbability() == 0) {
+            reactionSites.remove(neighbour);
+          }
+        }
+      }
+    } else { // update neighbours if necessary
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+        CatalysisAtom neighbour = atom.getNeighbour(i);
+        if (neighbour.isOccupied() && neighbour.getType() == O) {
+          int origPos = (i + 2) % 4;
+          //               CO                   +         O
+          int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
+          double probability = reactionRateCoO[index];
+          neighbour.addReactionProbability(-probability, origPos);
+          totalReactionRate -= probability;
+          if (neighbour.getReactionProbability() == 0) {
+            reactionSites.remove(neighbour);
+          }
+        }
+      }
     }
     if (totalReactionRate / previousReactionRate < 1e-1) {
       updateReactionRateFromList();
