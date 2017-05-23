@@ -263,7 +263,7 @@ public abstract class AbstractSimulation {
 
   private void printOutput() {
     System.out.format("    %03d", simulations);
-    System.out.format("\t%.3f", (double) kmc.getTime());
+    System.out.format("\t%.3g", (double) kmc.getTime());
     System.out.format("\t%.4f", kmc.getCoverage());
     
     if (parser.outputData() || parser.doPsd()) {
