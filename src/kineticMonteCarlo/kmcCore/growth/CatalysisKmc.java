@@ -293,7 +293,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getModifiedBuffer().updateAtoms(getList());
     updateAdsorptionRateDiffusion(originAtom, destinationAtom);
     updateDesorptionRateDiffusion(originAtom, destinationAtom);
-    updateReactionRateDiffusion(originAtom, destinationAtom);
+    updateReactionRate(originAtom);
+    updateReactionRate(destinationAtom);
 
     return true;
   }
@@ -357,11 +358,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     updateAdsorptionRateAdsorption(destinationAtom);
     updateDesorptionRateAdsorption(destinationAtom);
-    updateReactionRateAdsorption(destinationAtom);
+    updateReactionRate(destinationAtom);
     if (neighbourAtom != null) {
       updateAdsorptionRateAdsorption(neighbourAtom);
       updateDesorptionRateAdsorption(neighbourAtom);
-      updateReactionRateAdsorption(neighbourAtom);
+      updateReactionRate(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
       //neighbourAtom.setDepositionPosition(-1);
       numAtomsInSimulation[atomType]++;
@@ -422,10 +423,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       totalAdsorptionRate += neighbour.getAdsorptionProbability();
       adsorptionSites.add(neighbour);
       updateDesorptionRateDesorption(neighbour);
-      updateReactionRateReaction(neighbour);
+      updateReactionRate(neighbour);
     }
     updateDesorptionRateDesorption(atom);
-    updateReactionRateReaction(atom);
+    updateReactionRate(atom);
   }
   
   private void reactAtom() {
@@ -471,8 +472,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     neighbour.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - neighbour.getOccupiedNeighbours()) * adsorptionRateOPerSite);
     totalAdsorptionRate += neighbour.getAdsorptionProbability();
     adsorptionSites.add(neighbour);
-    updateReactionRateReaction(neighbour);
-    updateReactionRateReaction(atom);
+    updateReactionRate(neighbour);
+    updateReactionRate(atom);
     updateDesorptionRateDesorption(neighbour);
     updateDesorptionRateDesorption(atom);
   }
@@ -574,11 +575,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().setReactionProbability(totalReactionRate);
   }
  
-  private void updateReactionRateAdsorption(CatalysisAtom destinationAtom) {
+  /**
+   * Updates reaction rate for atom (at its neighbourhood).
+   * 
+   * @param atom 
+   */
+  private void updateReactionRate(CatalysisAtom atom) {
     double previousReactionRate = totalReactionRate;
-    recomputeReactionProbability(destinationAtom);
-    for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
+    recomputeReactionProbability(atom);
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = atom.getNeighbour(i);
       recomputeReactionProbability(neighbour);
     }
     if (totalReactionRate / previousReactionRate < 1e-1) {
@@ -665,18 +671,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       updateAdsorptionRateFromList();
     }
   }
-  
-  /**
-   * Updates reaction rate for origin (at its neighbourhood) and destination atoms.
-   * 
-   * @param originAtom
-   * @param destinationAtom 
-   */
-  private void updateReactionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom){
-    updateReactionRateAdsorption(originAtom);
-    updateReactionRateAdsorption(destinationAtom);
-  }  
-  
+
   private void updateDesorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
     if (originAtom.getType() == CO) {
       desorptionSites.remove(originAtom);
@@ -694,10 +689,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     adsorptionSites.add(originAtom);
   }
 
-  private void updateReactionRateReaction(CatalysisAtom atom) {
-    updateReactionRateAdsorption(atom);
-  }
-  
   private void updateDesorptionRateDesorption(CatalysisAtom atom) {
     double previousDesorptionRate = totalDesorptionRate;
     totalDesorptionRate -= atom.getDesorptionProbability();
