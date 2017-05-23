@@ -320,10 +320,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         sum += adsorptionSites.get(i).getAdsorptionProbability();
         if (sum > randomNumber) {
           destinationAtom = adsorptionSites.get(i);
-          if (adsorptionSites.get(i).getAdsorptionProbability() == adsorptionRateCOPerSite){
-            // it has to be CO, because this site didn't have adsorption rate for O.
-            atomType = CO;
-          }
           break;
         }
       }
