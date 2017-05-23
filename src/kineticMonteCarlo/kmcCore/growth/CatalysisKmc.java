@@ -291,7 +291,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().deposit(destinationAtom, false);
     destinationAtom.swapAttributes(originAtom);
     getModifiedBuffer().updateAtoms(getList());
-    updateAdsorptionRateDiffusion(originAtom, destinationAtom);
+    updateAdsorptionRate(originAtom, true);
+    updateAdsorptionRate(destinationAtom, false);
     updateDesorptionRateDiffusion(originAtom, destinationAtom);
     updateReactionRate(originAtom);
     updateReactionRate(destinationAtom);
@@ -356,11 +357,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     } while (!deposited);
     numAtomsInSimulation[atomType]++;
     
-    updateAdsorptionRateAdsorption(destinationAtom);
+    updateAdsorptionRate(destinationAtom, false);
     updateDesorptionRateAdsorption(destinationAtom);
     updateReactionRate(destinationAtom);
     if (neighbourAtom != null) {
-      updateAdsorptionRateAdsorption(neighbourAtom);
+      updateAdsorptionRate(neighbourAtom, false);
       updateDesorptionRateAdsorption(neighbourAtom);
       updateReactionRate(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
@@ -370,7 +371,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
-    getList().setDepositionProbability(totalAdsorptionRate);
     getList().setDesorptionProbability(totalDesorptionRate);
     getList().setReactionProbability(totalReactionRate);
     
@@ -414,14 +414,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     
-    atom.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - atom.getOccupiedNeighbours()) * adsorptionRateOPerSite);
-    totalAdsorptionRate += atom.getAdsorptionProbability();
-    adsorptionSites.add(atom);
+    updateAdsorptionRate(atom, true);
    
     if (neighbour != null) {
-      neighbour.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - neighbour.getOccupiedNeighbours()) * adsorptionRateOPerSite);
-      totalAdsorptionRate += neighbour.getAdsorptionProbability();
-      adsorptionSites.add(neighbour);
+      updateAdsorptionRate(neighbour, true);
       updateDesorptionRateDesorption(neighbour);
       updateReactionRate(neighbour);
     }
@@ -465,13 +461,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     
-    atom.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - atom.getOccupiedNeighbours()) * adsorptionRateOPerSite);
-    totalAdsorptionRate += atom.getAdsorptionProbability();
-    adsorptionSites.add(atom);
-   
-    neighbour.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - neighbour.getOccupiedNeighbours()) * adsorptionRateOPerSite);
-    totalAdsorptionRate += neighbour.getAdsorptionProbability();
-    adsorptionSites.add(neighbour);
+    updateAdsorptionRate(atom, true);
+    updateAdsorptionRate(neighbour, true);
     updateReactionRate(neighbour);
     updateReactionRate(atom);
     updateDesorptionRateDesorption(neighbour);
@@ -576,6 +567,27 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
  
   /**
+   * Updates total adsorption probability.
+   *
+   * @param atom
+   * @param add wheter to add to the adsorption sites list or not.
+   */
+  private void updateAdsorptionRate(CatalysisAtom atom, boolean add) {
+    double previousAdsorptionRate = totalAdsorptionRate;
+    recomputeAdsorptionProbability(atom);
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      recomputeAdsorptionProbability(atom.getNeighbour(i));
+    }
+    if (totalAdsorptionRate / previousAdsorptionRate < 1e-1) {
+      updateAdsorptionRateFromList();
+    }
+    getList().setDepositionProbability(totalAdsorptionRate);
+    if (add) {
+      adsorptionSites.add(atom);
+    }
+  }
+  
+  /**
    * Updates reaction rate for atom (at its neighbourhood).
    * 
    * @param atom 
@@ -656,22 +668,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
   }
 
-  /**
-   * Updates total adsorption probability. 
-   *
-   * @param atom just moved or deposited atom.
-   */
-  private void updateAdsorptionRateAdsorption(CatalysisAtom atom) {
-    double previousAdsorptionRate = totalAdsorptionRate;
-    recomputeAdsorptionProbability(atom);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      recomputeAdsorptionProbability(atom.getNeighbour(i));
-    }
-    if (totalAdsorptionRate / previousAdsorptionRate < 1e-1) {
-      updateAdsorptionRateFromList();
-    }
-  }
-
   private void updateDesorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
     if (originAtom.getType() == CO) {
       desorptionSites.remove(originAtom);
@@ -681,12 +677,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       destinationAtom.setDesorptionProbability(desorptionRateCOPerSite[destinationAtom.getLatticeSite()]);
       totalDesorptionRate = destinationAtom.getDesorptionProbability();
     }
-  }
-  
-  private void updateAdsorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
-    updateAdsorptionRateAdsorption(destinationAtom);
-    updateAdsorptionRateAdsorption(originAtom);
-    adsorptionSites.add(originAtom);
   }
 
   private void updateDesorptionRateDesorption(CatalysisAtom atom) {
