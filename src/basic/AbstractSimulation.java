@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static kineticMonteCarlo.atom.CatalysisAtom.CO;
+import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
 import ratesLibrary.IRates;
@@ -169,8 +171,12 @@ public abstract class AbstractSimulation {
     System.out.println("Output folder : " + restartFolderName);
     System.out.println("_____________________________________________________________________________");
 
-    System.out.println("    I\tSimul t\tCover.\tCPU\tIslands\tFractal d.");
-    System.out.println("    \t(units)\t(%)\t(ms)");
+    if (kmc instanceof CatalysisKmc) {
+      System.out.println("    I\tSimul time\tCover.\tCPU\tCove CO\tCove O");
+    } else {
+      System.out.println("    I\tSimul time\tCover.\tCPU\tIslands\tFractal d.");
+    }
+    System.out.println("    \t(units) \t(%)\t(ms)");
     System.out.println("    _________________________________________________________________________");
     // Main loop
     for (simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
@@ -306,8 +312,13 @@ public abstract class AbstractSimulation {
     }
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
-    System.out.print("\t" + kmc.getLattice().getIslandCount());
-    System.out.format("\t%.4f", kmc.getLattice().getAverageGyradius());
+    if (kmc instanceof CatalysisKmc) {
+      System.out.format("\t%.4f", ((CatalysisKmc) kmc).getCoverage(CO));
+      System.out.format("\t%.4f", ((CatalysisKmc) kmc).getCoverage(O));
+    } else {
+      System.out.print("\t" + kmc.getLattice().getIslandCount());
+      System.out.format("\t%.4f", kmc.getLattice().getAverageGyradius());
+    }
     System.out.println("");
   }
 
