@@ -414,7 +414,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     adsorptionSites.add(atom);
    
     if (neighbour != null) {
-      neighbour.setAdsorptionProbability(adsorptionRateCOPerSite+(4-atom.getOccupiedNeighbours())*adsorptionRateOPerSite/4);
+      neighbour.setAdsorptionProbability(adsorptionRateCOPerSite+(4-neighbour.getOccupiedNeighbours())*adsorptionRateOPerSite);
       totalAdsorptionRate += neighbour.getAdsorptionProbability();
       adsorptionSites.add(neighbour);
       updateDesorptionRateDesorption(neighbour);
