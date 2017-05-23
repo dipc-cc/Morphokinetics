@@ -575,11 +575,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
  
   private void updateReactionRateAdsorption(CatalysisAtom destinationAtom) {
+    double previousReactionRate = totalReactionRate;
     recomputeReactionProbability(destinationAtom);
     for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = destinationAtom.getNeighbour(i);
       recomputeReactionProbability(neighbour);
     }
+    if (totalReactionRate / previousReactionRate < 1e-1) {
+      updateReactionRateFromList();
+    }
+    getList().setReactionProbability(totalReactionRate);
   }
   
   private void updateDesorptionRateAdsorption(CatalysisAtom destinationAtom) {
@@ -668,15 +673,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @param destinationAtom 
    */
   private void updateReactionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom){
-    recomputeReactionProbability(originAtom);
-    for (int i = 0; i < originAtom.getNumberOfNeighbours(); i++) {
-      recomputeReactionProbability(originAtom.getNeighbour(i));
-    }
-    
-    recomputeReactionProbability(destinationAtom);
-    for (int i = 0; i < destinationAtom.getNumberOfNeighbours(); i++) {
-      recomputeReactionProbability(destinationAtom.getNeighbour(i));
-    }
+    updateReactionRateAdsorption(originAtom);
+    updateReactionRateAdsorption(destinationAtom);
   }  
   
   private void updateDesorptionRateDiffusion(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
@@ -697,18 +695,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   private void updateReactionRateReaction(CatalysisAtom atom) {
-    double previousReactionRate = totalReactionRate;
-       
-    recomputeReactionProbability(atom);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
-      recomputeReactionProbability(neighbour);
-    }
-    if (totalReactionRate / previousReactionRate < 1e-1) {
-      updateReactionRateFromList();
-    }
-
-    getList().setReactionProbability(totalReactionRate);
+    updateReactionRateAdsorption(atom);
   }
   
   private void updateDesorptionRateDesorption(CatalysisAtom atom) {
