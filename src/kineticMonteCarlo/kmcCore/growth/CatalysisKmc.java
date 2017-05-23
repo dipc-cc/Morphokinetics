@@ -29,7 +29,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
-  private double adsorptionRatePerSite; 
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
   private double totalAdsorptionRate;
@@ -62,7 +61,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     catalysisLattice.init();
     setLattice(catalysisLattice);
     totalAdsorptionRate = 0.0;
-    adsorptionRatePerSite = 0.0;
     totalDesorptionRate = 0.0;
     totalReactionRate = 0.0;
 
@@ -96,8 +94,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     reactionRateCoO = new double[4]; // empty
     if (doAdsorption) {
       adsorptionRateCOPerSite = rates.getAdsorptionRate(CO);
-      adsorptionRatePerSite = rates.getTotalAdsorptionRate();
-      adsorptionRateOPerSite = adsorptionRatePerSite - adsorptionRateCOPerSite;
+      adsorptionRateOPerSite = rates.getAdsorptionRate(O);
     }
     if (doDesorption) {
       desorptionRateCOPerSite = rates.getDesorptionRates(CO);
@@ -106,7 +103,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (doReaction) {
       reactionRateCoO = rates.getReactionRates();
     }
-    System.out.println("k_i(CO): " + adsorptionRateCOPerSite + " k_i(O): " + (adsorptionRatePerSite - adsorptionRateCOPerSite));
+    System.out.println("k_i(CO): " + adsorptionRateCOPerSite + " k_i(O): " + adsorptionRateOPerSite);
   }
 
   public double[][] getOutputAdsorptionData() {
@@ -316,14 +313,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         // can not deposit anymore
         return null;
       }
-      double randomNumber = StaticRandom.raw() * adsorptionRatePerSite;
-      if (randomNumber < adsorptionRateCOPerSite) {
-        atomType = CO;
-      } else {
-        atomType = O;
-      }
       
-      randomNumber = StaticRandom.raw() * totalAdsorptionRate;
+      double randomNumber = StaticRandom.raw() * totalAdsorptionRate;
       
       double sum = 0.0;
       int i;
@@ -342,6 +333,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom == null || destinationAtom.getAdsorptionProbability() == 0) {
         boolean isThereAnAtom = destinationAtom == null;
         System.out.println("Something is wrong " + isThereAnAtom);
+      }
+      randomNumber = StaticRandom.raw() * destinationAtom.getAdsorptionProbability();
+      if (randomNumber < adsorptionRateCOPerSite) {
+        atomType = CO;
+      } else {
+        atomType = O;
       }
       destinationAtom.setType(atomType);
       deposited = depositAtom(destinationAtom);
