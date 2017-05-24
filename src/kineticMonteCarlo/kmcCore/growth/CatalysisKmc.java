@@ -43,11 +43,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double totalReactionRate;
   private float currentAdsorptionP;
   private ArrayList<CatalysisAtom> reactionSites;
-  private double[] diffusionRates; // who knows what are they
-  private double[] diffusionRateCO;
-  private double[] diffusionRateO;
-  private double totalDiffusionRate;
-  private ArrayList<CatalysisAtom> diffusionSizes;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -272,8 +267,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().deposit(destinationAtom, false);
     destinationAtom.swapAttributes(originAtom);
     getModifiedBuffer().updateAtoms(getList());
-    updateAdsorptionRate(originAtom, true);
-    updateAdsorptionRate(destinationAtom, false);
+    updateAdsorptionRate(originAtom);
+    updateAdsorptionRate(destinationAtom);
     updateDesorptionRate(originAtom);
     updateDesorptionRate(destinationAtom);
     updateReactionRate(originAtom);
@@ -335,11 +330,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     } while (!deposited);
     
-    updateAdsorptionRate(destinationAtom, false);
+    updateAdsorptionRate(destinationAtom);
     updateDesorptionRate(destinationAtom);
     updateReactionRate(destinationAtom);
     if (neighbourAtom != null) {
-      updateAdsorptionRate(neighbourAtom, false);
+      updateAdsorptionRate(neighbourAtom);
       updateDesorptionRate(neighbourAtom);
       updateReactionRate(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
@@ -388,10 +383,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     
-    updateAdsorptionRate(atom, true);
+    updateAdsorptionRate(atom);
    
     if (neighbour != null) {
-      updateAdsorptionRate(neighbour, true);
+      updateAdsorptionRate(neighbour);
       updateDesorptionRate(neighbour);
       updateReactionRate(neighbour);
     }
@@ -431,8 +426,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     
-    updateAdsorptionRate(atom, true);
-    updateAdsorptionRate(neighbour, true);
+    updateAdsorptionRate(atom);
+    updateAdsorptionRate(neighbour);
     updateReactionRate(neighbour);
     updateReactionRate(atom);
     updateDesorptionRate(neighbour);
@@ -537,9 +532,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Updates total adsorption probability.
    *
    * @param atom
-   * @param add wheter to add to the adsorption sites list or not.
    */
-  private void updateAdsorptionRate(CatalysisAtom atom, boolean add) {
+  private void updateAdsorptionRate(CatalysisAtom atom) {
     double previousAdsorptionRate = totalAdsorptionRate;
     recomputeAdsorptionProbability(atom);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
