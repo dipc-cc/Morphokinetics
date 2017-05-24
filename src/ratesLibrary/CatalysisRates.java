@@ -179,7 +179,15 @@ public class CatalysisRates implements IRates {
     rates[3] = constant * Math.exp(-reactionEnergiesCoO[CUS][CUS] / (kB * temperature));
     return rates;
   }
-    
+  
+  public double[] getDiffusionRates(int type) {
+    double[] rates = new double[4];
+    rates[0] = getRate(type, BR, BR, temperature);
+    rates[1] = getRate(type, BR, CUS, temperature);
+    rates[2] = getRate(type, CUS, BR, temperature);
+    rates[3] = getRate(type, CUS, CUS, temperature);
+    return rates;
+  }    
   
   private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
     return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
