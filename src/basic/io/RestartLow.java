@@ -388,7 +388,7 @@ class RestartLow {
           R2 = R2 / j;
           t = t / j;
         }
-        out.write((i + ";" + t + ";" + R2 + "\n").replace('.', ','));
+        out.write(i + ";" + t + ";" + R2 + "\n");
       }
     } catch (Exception e) {
       // if any I/O error occurs
@@ -404,7 +404,7 @@ class RestartLow {
       locale = Locale.UK;
       separator = "\t";
     } else {
-      locale = Locale.FRANCE;
+      locale = Locale.UK;
       separator = ";";
     }    
     // create file descriptor. It will be automatically closed.
