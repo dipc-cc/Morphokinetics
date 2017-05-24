@@ -525,6 +525,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().setDepositionProbability(0);
     getList().setDesorptionProbability(totalDesorptionRate);
     getList().setReactionProbability(totalReactionRate);
+    getLattice().resetOccupied();
   }
  
   /**
