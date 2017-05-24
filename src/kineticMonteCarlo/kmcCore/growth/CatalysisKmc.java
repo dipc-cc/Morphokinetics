@@ -47,7 +47,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
   private final float maxCoverage;
-  private int[] numAtomsInSimulation;
   private final boolean doDiffusion;
   private final boolean doAdsorption;
   private final boolean doDesorption;
@@ -71,8 +70,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numStepsEachData = 10;
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
-
-      numAtomsInSimulation = new int[2];
     }
     adsorptionSites = new ArrayList<>();
     desorptionSites = new ArrayList<>();
@@ -116,7 +113,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   public float getCoverage(byte type) {
-    return numAtomsInSimulation[type] / (getLattice().getCartSizeX() * getLattice().getCartSizeY());
+    return ((CatalysisLattice) getLattice()).getCoverage(type);
   }
   
   @Override
@@ -185,10 +182,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    if (measureDiffusivity) {
-      numAtomsInSimulation[O] = 0;
-      numAtomsInSimulation[CO] = 0;
-    }
     while (getLattice().getCoverage() < maxCoverage) {
       getList().getDeltaTime(true);
       if (performSimulationStep()) {
@@ -224,18 +217,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (measureDiffusivity) {
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
-
-      numAtomsInSimulation = new int[2];
     }
   }
-  
-  private boolean depositAtom(CatalysisAtom atom, byte type) {
-    if (depositAtom(atom)) {
-      atom.setType(type);
-      return true;
-    }
-    return false;
-  }    
   
   private boolean depositAtom(CatalysisAtom atom) {
     if (atom.isOccupied()) {
@@ -243,7 +226,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
 
     getLattice().deposit(atom, false);
-    getLattice().addOccupied();
     getModifiedBuffer().updateAtoms(getList());
 
     return true;
@@ -337,16 +319,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       destinationAtom.setType(atomType);
       deposited = depositAtom(destinationAtom);
       if (atomType == O) { // it has to deposit two O (dissociation of O2 -> 2O)
-        boolean depositedNeighbour;
         random = StaticRandom.rawInteger(4);
-        do {
-          neighbourAtom = destinationAtom.getNeighbour(random);
+        neighbourAtom = destinationAtom.getNeighbour(random);
+        while (neighbourAtom.isOccupied()) {
           random = (random + 1) % 4;
-          depositedNeighbour = depositAtom(neighbourAtom, O);
-        } while (!depositedNeighbour);
+          neighbourAtom = destinationAtom.getNeighbour(random);
+        }
+        neighbourAtom.setType(O);
+        depositAtom(neighbourAtom);
       }
     } while (!deposited);
-    numAtomsInSimulation[atomType]++;
     
     updateAdsorptionRate(destinationAtom, false);
     updateDesorptionRate(destinationAtom);
@@ -357,7 +339,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       updateReactionRate(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
       //neighbourAtom.setDepositionPosition(-1);
-      numAtomsInSimulation[atomType]++;
     }
     
     destinationAtom.setDepositionTime(getTime());
@@ -393,14 +374,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
       }
       neighbour.setOccupied(false);
-      numAtomsInSimulation[neighbour.getType()]--;
-      getLattice().subtractOccupied();
       double probabilityChange = getLattice().extract(neighbour);
       getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     }
 
     atom.setOccupied(false);
-    numAtomsInSimulation[atom.getType()]--;
     getLattice().subtractOccupied();
     double probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
@@ -441,14 +419,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     neighbour.setOccupied(false);
-    numAtomsInSimulation[neighbour.getType()]--;
-    getLattice().subtractOccupied();
     double probabilityChange = getLattice().extract(neighbour);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
 
     atom.setOccupied(false);
-    numAtomsInSimulation[atom.getType()]--;
-    getLattice().subtractOccupied();
     probabilityChange = getLattice().extract(atom);
     getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
     
@@ -485,9 +459,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         a.setType((byte) StaticRandom.rawInteger(2));
-        numAtomsInSimulation[a.getType()]++;
         getLattice().deposit(a, false);
-        //getLattice().addOccupied();
       }
     }
 

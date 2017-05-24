@@ -9,6 +9,8 @@ import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import static kineticMonteCarlo.atom.CatalysisAtom.CO;
+import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
@@ -18,8 +20,14 @@ import kineticMonteCarlo.unitCell.AbstractGrowthUc;
  */
 public class CatalysisLattice extends AbstractGrowthLattice {
 
+  /**
+   * Current CO and O coverages.
+   */
+  private int[] coverage;
+  
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     super(hexaSizeI, hexaSizeJ, modified);
+    coverage = new int[2];
   }
   
   @Override
@@ -75,6 +83,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     return new Point2D.Float(getHexaSizeI() / 2, getHexaSizeJ() / 2);
   }
   
+  public float getCoverage(byte type) {
+    float cov = (float) coverage[type];
+    float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
+    return cov / hexaArea;
+  }
+  
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
    * jump from terrace to edge.
@@ -113,6 +127,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     }
     atom.checkImmobile();
     atom.resetProbability();
+    addOccupied();
+    coverage[a.getType()]++;
   }
   
   @Override
@@ -130,9 +146,18 @@ public class CatalysisLattice extends AbstractGrowthLattice {
 
     atom.resetProbability();
     atom.setList(false);
+    subtractOccupied();
+    coverage[a.getType()]--;
     return probabilityChange;
   }
-
+  
+  @Override
+  public void reset() {
+    coverage[O] = 0;
+    coverage[CO] = 0;
+    super.reset();
+  }
+  
   /**
    * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
    * experimental and only works with AgUc simulation mode. If fails, the execution continues
