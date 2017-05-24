@@ -43,6 +43,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double totalReactionRate;
   private float currentAdsorptionP;
   private ArrayList<CatalysisAtom> reactionSites;
+  private double[] diffusionRates; // who knows what are they
+  private double[] diffusionRateCO;
+  private double[] diffusionRateO;
+  private double totalDiffusionRate;
+  private ArrayList<CatalysisAtom> diffusionSizes;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -544,9 +549,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       updateAdsorptionRateFromList();
     }
     getList().setDepositionProbability(totalAdsorptionRate);
-    if (add) {
-      adsorptionSites.add(atom);
-    }
   }
   
   private void updateDesorptionRate(CatalysisAtom atom) {
@@ -580,7 +582,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void recomputeAdsorptionProbability(CatalysisAtom atom) {
-    totalAdsorptionRate -= atom.getAdsorptionProbability();
+    double oldAdsorptionRate = atom.getAdsorptionProbability();
+    totalAdsorptionRate -= oldAdsorptionRate;
     if (atom.isOccupied()) {
       atom.setAdsorptionProbability(0);
     } else {
@@ -589,6 +592,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalAdsorptionRate += atom.getAdsorptionProbability();
     if (atom.getAdsorptionProbability() == 0) {
       adsorptionSites.remove(atom);
+    } else if (oldAdsorptionRate == 0) {
+      adsorptionSites.add(atom);
     }
   }
   
