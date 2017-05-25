@@ -59,8 +59,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   
   public double getDeltaTime(boolean compute) {
     if (compute) {
-      deltaTime = -Math.log(StaticRandom.raw()) / (getTotalProbability() + getDepositionProbability() 
-              + getDesorptionProbability() + getReactionProbability());
+      deltaTime = -Math.log(StaticRandom.raw()) / (getGlobalProbability());
       return deltaTime;
     } else {
       return deltaTime;
@@ -138,12 +137,13 @@ public abstract class AbstractList implements IProbabilityHolder {
   }
   
   /**
-   * Total hops probability plus deposition probability.
-   * 
-   * @return total movement probability + deposition probability
+   * Total hops probability plus deposition probability plus desorption probability plus reaction
+   * probability.
+   *
+   * @return total movement + deposition + desorption + reaction.
    */
   public double getGlobalProbability() {
-    return getTotalProbability() + getDepositionProbability() + getDesorptionProbability() + getReactionProbability();
+    return getTotalProbability() + depositionProbability + desorptionProbability + reactionProbability;
   }
 
   public void reset() {
@@ -188,18 +188,17 @@ public abstract class AbstractList implements IProbabilityHolder {
    * @return next reaction type that should be executed.
    */
   public byte nextReaction() {
-    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability()
-            + getDesorptionProbability() + getReactionProbability());
+    double position = StaticRandom.raw() * getGlobalProbability();
 
     addTime();
 
-    if (position < getDepositionProbability()) {
+    if (position < depositionProbability) {
       return ADSORPTION;
     }
-    if (position < getDepositionProbability() + getDesorptionProbability()) {
+    if (position < depositionProbability + desorptionProbability) {
       return DESORPTION;
     }
-    if (position < getDepositionProbability() + getDesorptionProbability() + getReactionProbability()) {
+    if (position < depositionProbability + desorptionProbability + reactionProbability) {
       return REACTION;
     }
     return DIFFUSION;
