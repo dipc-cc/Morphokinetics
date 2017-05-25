@@ -506,71 +506,51 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().setReactionProbability(totalReactionRate);
     getLattice().resetOccupied();
   }
- 
-  private void updateRates(CatalysisAtom atom) {
-    updateAdsorptionRate(atom);
-    updateDesorptionRate(atom);
-    updateReactionRate(atom);
-    updateDiffusionRate(atom);
-  }
   
   /**
-   * Updates total adsorption probability.
+   * Updates total adsorption, desorption, reaction and diffusion probabilities.
    *
    * @param atom
    */
-  private void updateAdsorptionRate(CatalysisAtom atom) {
+  private void updateRates(CatalysisAtom atom) {
+    // save previous rates
     double previousAdsorptionRate = totalAdsorptionRate;
+    double previousDesorptionRate = totalDesorptionRate;
+    double previousReactionRate = totalReactionRate;
+    double previousDiffusionRate = totalDiffusionRate;
+    
+    // recompute the probability of the current atom
     recomputeAdsorptionProbability(atom);
+    recomputeDesorptionProbability(atom);
+    recomputeReactionProbability(atom);
+    recomputeDiffusionProbability(atom);
+    // recompute the probability of the neighbour atoms
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      recomputeAdsorptionProbability(atom.getNeighbour(i));
+      CatalysisAtom neighbour = atom.getNeighbour(i);
+      recomputeAdsorptionProbability(neighbour);
+      recomputeDesorptionProbability(neighbour);
+      recomputeReactionProbability(neighbour);
+      recomputeDiffusionProbability(neighbour);
     }
+    
+    // recalculate total probability, if needed
     if (totalAdsorptionRate / previousAdsorptionRate < 1e-1) {
       updateAdsorptionRateFromList();
-    }
-    getList().setDepositionProbability(totalAdsorptionRate);
-  }
-  
-  private void updateDesorptionRate(CatalysisAtom atom) {
-    double previousDesorptionRate = totalDesorptionRate;
-    recomputeDesorptionProbability(atom);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      recomputeDesorptionProbability(atom.getNeighbour(i));
     }
     if (totalDesorptionRate / previousDesorptionRate < 1e-1) {
       updateDesorptionRateFromList();
     }
-    getList().setDesorptionProbability(totalDesorptionRate);
-  }
-  
-  /**
-   * Updates reaction rate for atom (at its neighbourhood).
-   * 
-   * @param atom 
-   */
-  private void updateReactionRate(CatalysisAtom atom) {
-    double previousReactionRate = totalReactionRate;
-    recomputeReactionProbability(atom);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
-      recomputeReactionProbability(neighbour);
-    }
     if (totalReactionRate / previousReactionRate < 1e-1) {
       updateReactionRateFromList();
-    }
-    getList().setReactionProbability(totalReactionRate);
-  }
-  
-  private void updateDiffusionRate(CatalysisAtom atom) {
-    double previousDiffusionRate = totalDiffusionRate;
-    recomputeDiffusionProbability(atom);
-    for (int i=0;i<atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
-      recomputeDiffusionProbability(neighbour);
     }
     if (totalDiffusionRate / previousDiffusionRate < 1e-1) {
       updateDiffusionRateFromList();
     }
+    
+    // tell to the list new probabilities
+    getList().setDepositionProbability(totalAdsorptionRate);
+    getList().setDesorptionProbability(totalDesorptionRate);
+    getList().setReactionProbability(totalReactionRate);
     getList().setDiffusionProbability(totalDiffusionRate);
   }
             
