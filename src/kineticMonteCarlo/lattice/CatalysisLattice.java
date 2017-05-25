@@ -118,15 +118,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     atom.setOccupied(true);
 
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      addNeighbour(atom.getNeighbour(i));
+      atom.getNeighbour(i).addOccupiedNeighbour(1);
     }
-
-    addAtom(atom);
-    if (atom.getOccupiedNeighbours() > 0) {
-      addBondAtom(atom);
-    }
-    atom.checkImmobile();
-    atom.resetProbability();
     addOccupied();
     coverage[a.getType()]++;
   }
@@ -135,20 +128,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   public double extract(AbstractGrowthAtom a) {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(false);
-    double probabilityChange = a.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      removeNeighbour(atom.getNeighbour(i));
+      atom.getNeighbour(i).addOccupiedNeighbour(-1);
     }
-
-    if (atom.getOccupiedNeighbours() > 0) {
-      addBondAtom(atom);
-    }
-
-    atom.resetProbability();
-    atom.setList(false);
     subtractOccupied();
     coverage[a.getType()]--;
-    return probabilityChange;
+    return 0;
   }
   
   @Override
@@ -257,35 +242,5 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       }
     }
     return atoms;
-  }
-  
-  /**
-   * A new occupied atom was added before calling this method, here, updating the first and the
-   * second neighbourhood.
-   *
-   * @param neighbourAtom current atom.
-   */
-  private void addNeighbour(CatalysisAtom neighbourAtom) {
-    neighbourAtom.addOccupiedNeighbour(1);
-
-    addAtom(neighbourAtom);
-    if (!neighbourAtom.isOccupied()) {
-      addBondAtom(neighbourAtom);
-    }
-    neighbourAtom.checkImmobile();
-  }
-  
-  /**
-   * Computes the removal of one atom.
-   * 
-   * @param neighbourAtom neighbour atom of the original atom.
-   */
-  private void removeNeighbour(CatalysisAtom neighbourAtom) {
-    neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
-
-    addAtom(neighbourAtom);
-    if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
-      addBondAtom(neighbourAtom);
-    }
   }
 }
