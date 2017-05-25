@@ -513,22 +513,22 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
-        if (a.getType() == O) {
-          for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
-            CatalysisAtom neighbour = a.getNeighbour(k);
-            if (neighbour.getType() == CO) {
-              //               CO                   +         O
-              int index = 2 * neighbour.getLatticeSite() + a.getLatticeSite();
-              double probability = reactionRateCoO[index];
-              a.addReactionProbability(probability, k);
-            }
-          }
-        } else { // CO
+        if (a.getType() == CO) {
           for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
             CatalysisAtom neighbour = a.getNeighbour(k);
             if (neighbour.getType() == O) {
               //               CO                   +         O
               int index = 2 * a.getLatticeSite() + neighbour.getLatticeSite();
+              double probability = reactionRateCoO[index];
+              a.addReactionProbability(probability, k);
+            }
+          }
+        } else { // O
+          for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
+            CatalysisAtom neighbour = a.getNeighbour(k);
+            if (neighbour.getType() == CO) {
+              //               CO                   +         O
+              int index = 2 * neighbour.getLatticeSite() + a.getLatticeSite();
               double probability = reactionRateCoO[index];
               a.addReactionProbability(probability, k);
             }
@@ -634,8 +634,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       atom.setDesorptionProbability(desorptionRateCOPerSite[atom.getLatticeSite()]);
       totalDesorptionRate += atom.getDesorptionProbability();
       desorptionSites.add(atom);
-    } else {
-      byte otherType = (byte) ((atom.getType() + 1) % 2);
+    } else { // O
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
         CatalysisAtom neighbour = atom.getNeighbour(i);
         if (neighbour.isOccupied() && neighbour.getType() == O) {
