@@ -97,7 +97,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * getGlobalProbability();
+    double position = StaticRandom.raw() * (getDiffusionProbabilityFromList() + getDepositionProbability());
     if (this.getParent() == null) {
       addTime();
     }
