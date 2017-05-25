@@ -295,15 +295,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     } while (!deposited);
     
-    updateAdsorptionRate(destinationAtom);
-    updateDesorptionRate(destinationAtom);
-    updateReactionRate(destinationAtom);
-    updateDiffusionRate(destinationAtom);
+    updateRates(destinationAtom);
     if (neighbourAtom != null) {
-      updateAdsorptionRate(neighbourAtom);
-      updateDesorptionRate(neighbourAtom);
-      updateReactionRate(neighbourAtom);
-      updateDiffusionRate(neighbourAtom);
+      updateRates(neighbourAtom);
       neighbourAtom.setDepositionTime(getTime());
       //neighbourAtom.setDepositionPosition(-1);
     }
@@ -344,18 +338,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
 
     getLattice().extract(atom);
-    
-    updateAdsorptionRate(atom);
    
     if (neighbour != null) {
-      updateAdsorptionRate(neighbour);
-      updateDesorptionRate(neighbour);
-      updateReactionRate(neighbour);
-      updateDiffusionRate(neighbour);
+      updateRates(neighbour);
     }
-    updateDesorptionRate(atom);
-    updateReactionRate(atom);
-    updateDiffusionRate(atom);
+    updateRates(atom);
   }
   
   private void reactAtom() {
@@ -385,14 +372,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().extract(neighbour);
     getLattice().extract(atom);
     
-    updateAdsorptionRate(atom);
-    updateAdsorptionRate(neighbour);
-    updateReactionRate(neighbour);
-    updateReactionRate(atom);
-    updateDesorptionRate(neighbour);
-    updateDesorptionRate(atom);
-    updateDiffusionRate(neighbour);
-    updateDiffusionRate(atom);
+    updateRates(neighbour);
+    updateRates(atom);
   }
   
   /**
@@ -428,14 +409,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().deposit(destinationAtom, false);
     
     destinationAtom.swapAttributes(originAtom);
-    updateAdsorptionRate(originAtom);
-    updateAdsorptionRate(destinationAtom);
-    updateDesorptionRate(originAtom);
-    updateDesorptionRate(destinationAtom);
-    updateReactionRate(originAtom);
-    updateReactionRate(destinationAtom);
-    updateDiffusionRate(originAtom);
-    updateDiffusionRate(destinationAtom);
+    updateRates(originAtom);
+    updateRates(destinationAtom);
   }
 
   /**
@@ -532,6 +507,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().resetOccupied();
   }
  
+  private void updateRates(CatalysisAtom atom) {
+    updateAdsorptionRate(atom);
+    updateDesorptionRate(atom);
+    updateReactionRate(atom);
+    updateDiffusionRate(atom);
+  }
+  
   /**
    * Updates total adsorption probability.
    *
