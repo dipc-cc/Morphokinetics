@@ -208,7 +208,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         break;
       }
     }
-    System.out.println(simulatedSteps+getLattice().getCoverage());
     return returnValue;
   }
 
