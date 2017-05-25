@@ -239,7 +239,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
 
     getLattice().deposit(atom, false);
-    getModifiedBuffer().updateAtoms(getList());
 
     return true;
   }
@@ -442,7 +441,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().deposit(destinationAtom, false);
     
     destinationAtom.swapAttributes(originAtom);
-    getModifiedBuffer().updateAtoms(getList());
     updateAdsorptionRate(originAtom);
     updateAdsorptionRate(destinationAtom);
     updateDesorptionRate(originAtom);
