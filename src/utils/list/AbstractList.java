@@ -105,7 +105,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     removalsSinceLastCleanup++;
   }
 
-  void setTotalProbability(double prob) {
+  public void setTotalProbability(double prob) {
     this.totalProbability = prob;
   }
   
