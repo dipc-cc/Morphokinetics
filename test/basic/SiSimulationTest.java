@@ -94,7 +94,7 @@ public class SiSimulationTest {
       assertArrayEquals(ref[i], surface[i], 0.001f);
     }
     double simulatedTime = simulation.getSimulatedTime();
-    assertEquals(1.0779838516773791E13, simulatedTime, 0.0);
+    assertEquals(5.147736907144184E13, simulatedTime, 0.0);
   }
   
 }
