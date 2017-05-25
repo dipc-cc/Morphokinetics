@@ -15,7 +15,7 @@
   outputData: true,
   outputDataFormat: [{type: catalysis},{type: mko},],
   randomSeed: false,
-  coverage: 100,
-  withGui: false,
+  coverage: 50,
+  withGui: true,
   numberOfSteps: -1e7,
 }

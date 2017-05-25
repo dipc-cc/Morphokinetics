@@ -63,9 +63,8 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(1.2398698370006613E-8, simulatedTime, 0.0);
+    assertEquals(1.2016803061297377E-8, simulatedTime, 0.0);
   }
-  
   
   @Test
   public void testCatalysisDiffusion() {
@@ -86,7 +85,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(1.0716274722174692E-8, simulatedTime, 0.0);
+    assertEquals(1.2175985993311267E-8, simulatedTime, 0.0);
   }
   
   @Test
@@ -108,7 +107,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(2.928716156045857E25, simulatedTime, 0.0);
+    assertEquals(4.593607446724338E25, simulatedTime, 0.0);
   }
   
   @Test
@@ -130,7 +129,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(0.2175328892004462, simulatedTime, 0.0);
+    assertEquals(7.7920991953483E-4, simulatedTime, 0.0);
   }
   
   @Test
@@ -152,7 +151,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(0.24765350563536598, simulatedTime, 0.0);
+    assertEquals(0.3408043569783348, simulatedTime, 0.0);
   }
   
   
@@ -176,7 +175,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(3.0437227727699142E25, simulatedTime, 0.0);
+    assertEquals(3.584418558195821E14, simulatedTime, 0.0);
   }
   
   
