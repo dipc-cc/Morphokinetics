@@ -341,13 +341,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           break;
         }
       }
-      double probabilityChange = getLattice().extract(neighbour);
-      getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
+      getLattice().extract(neighbour);
     }
 
     getLattice().subtractOccupied();
-    double probabilityChange = getLattice().extract(atom);
-    getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
+    getLattice().extract(atom);
     
     updateAdsorptionRate(atom);
    
@@ -386,11 +384,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         break;
       }
     }
-    double probabilityChange = getLattice().extract(neighbour);
-    getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
-
-    probabilityChange = getLattice().extract(atom);
-    getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
+    getLattice().extract(neighbour);
+    getLattice().extract(atom);
     
     updateAdsorptionRate(atom);
     updateAdsorptionRate(neighbour);
@@ -430,8 +425,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     destinationAtom.setType(originAtom.getType());
-    double probabilityChange = getLattice().extract(originAtom);
-    getList().addTotalProbability(-probabilityChange);
+    getLattice().extract(originAtom);
     
     getLattice().deposit(destinationAtom, false);
     
