@@ -399,12 +399,10 @@ class RestartLow {
   
   static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     String separator;
-    Locale locale;
+    Locale locale = Locale.UK;
     if (System.getProperty("os.name").contains("Linux")){
-      locale = Locale.UK;
       separator = "\t";
     } else {
-      locale = Locale.UK;
       separator = ";";
     }    
     // create file descriptor. It will be automatically closed.
@@ -412,20 +410,15 @@ class RestartLow {
       // for each byte in the buffer
 
       for (int i = 0; i < data.length; i++) {
-        double coverage = 0;
-        double coverageCO = 0;
-        double coverageO = 0;
-        double t = 0;
-        double stepP = 0;
-        coverage = data[i][0];
-        coverageCO = data[i][2];
-        coverageO = data[i][3];
-        t = data[i][1];
-        stepP = data[i][4];
+        double coverage = data[i][0];
+        double t = data[i][1];
+        double coverageCO = data[i][2];
+        double coverageO = data[i][3];
+        double stepP = data[i][4];
         
         if (t > 0 || coverage > 0) {
           String s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, stepP);
-          out.write(s.replace(',', '.'));
+          out.write(s);
         }
       }
     } catch (Exception e) {
