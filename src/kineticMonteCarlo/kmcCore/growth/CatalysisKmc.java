@@ -344,7 +344,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       getLattice().extract(neighbour);
     }
 
-    getLattice().subtractOccupied();
     getLattice().extract(atom);
     
     updateAdsorptionRate(atom);
