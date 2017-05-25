@@ -253,7 +253,7 @@ class RestartLow {
       // <-- read whole line
       rev = in.readLine();
     } catch (FileNotFoundException fe) {
-      rev = "not Found";
+      rev = "not found";
     } catch (Exception e) {
       // if any I/O error occurs
       rev = "not known";
