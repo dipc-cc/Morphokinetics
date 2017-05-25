@@ -66,7 +66,7 @@ public class ModifiedBuffer {
         list.addAtom(atom);
       }
       if (atom.isOnList()) {
-        list.addTotalProbability(probabilityChange);
+        list.addDiffusionProbability(probabilityChange);
       }
       if (!atom.isEligible()) {
         atom.setList(false);
@@ -80,7 +80,7 @@ public class ModifiedBuffer {
       AbstractGrowthAtom neighbour = atom.getNeighbour(i);
       if (neighbour.isEligible() && !buffer.contains(neighbour)) {
         double probabilityChange = neighbour.updateOneBound(i);
-        list.addTotalProbability(probabilityChange);
+        list.addDiffusionProbability(probabilityChange);
       }
     }
   }

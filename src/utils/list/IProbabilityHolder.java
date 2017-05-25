@@ -10,6 +10,6 @@ package utils.list;
  */
 public interface IProbabilityHolder {
 
-  public void addTotalProbability(double probabilityChanges);
+  public void addDiffusionProbability(double probabilityChanges);
 
 }

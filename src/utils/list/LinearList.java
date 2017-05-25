@@ -28,34 +28,34 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
   }
   
   @Override
-  public double getTotalProbabilityFromList() {
+  public double getDiffusionProbabilityFromList() {
     if (clean) {
-      return getTotalProbability();
+      return getDiffusionProbability();
     } else {
-      double totalProbability = 0;
+      double diffusionProbability = 0;
 
       ListIterator<AbstractAtom> li = surface.listIterator();
       while (li.hasNext()) {
         AbstractAtom atom = li.next();
         if (atom.isEligible()) {
-          totalProbability += atom.getProbability();
+          diffusionProbability += atom.getProbability();
         }
       }
       clean = true;
-      setTotalProbability(totalProbability);
-      return totalProbability;
+      setDiffusionProbability(diffusionProbability);
+      return diffusionProbability;
     }
   }  
   
   /**
-   * Updates the total probability.
+   * Updates the diffusion probability.
    * 
    * @param probabilityChange probability change.
    */
   @Override
-  public void addTotalProbability(double probabilityChange) {
+  public void addDiffusionProbability(double probabilityChange) {
     clean = false;
-    setTotalProbability(getTotalProbability() + probabilityChange);
+    setDiffusionProbability(getDiffusionProbability() + probabilityChange);
   }
 
   @Override
@@ -101,11 +101,11 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability());
+    double position = StaticRandom.raw() * getGlobalProbability();
     
     addTime();
 
-    Ri_DeltaI += (getTotalProbability() + getDepositionProbability()) * getDeltaTime(false); // should be always 1
+    Ri_DeltaI += (getDiffusionProbability() + getDepositionProbability()) * getDeltaTime(false); // should be always 1
 
     if (position < getDepositionProbability()) {
       return null; //toca añadir un átomo nuevo

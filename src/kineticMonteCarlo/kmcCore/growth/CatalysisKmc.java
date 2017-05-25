@@ -589,7 +589,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (totalDiffusionRate / previousDiffusionRate < 1e-1) {
       updateDiffusionRateFromList();
     }
-    getList().setTotalProbability(totalDiffusionRate);
+    getList().setDiffusionProbability(totalDiffusionRate);
   }
             
   private void recomputeAdsorptionProbability(CatalysisAtom atom) {

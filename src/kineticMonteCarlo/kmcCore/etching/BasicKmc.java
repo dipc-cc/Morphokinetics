@@ -67,7 +67,7 @@ public class BasicKmc extends AbstractKmc {
             BasicAtom atom = (BasicAtom) getLattice().getAtom(i, j, k, l);
             if (atom.getType() < 4 && atom.getType() > 0 && !atom.isRemoved()) {
               getList().addAtom(atom);
-              getList().addTotalProbability(atom.getProbability());
+              getList().addDiffusionProbability(atom.getProbability());
             }
 
           }
@@ -89,7 +89,7 @@ public class BasicKmc extends AbstractKmc {
     for (int k = 0; k < 4; k++) {
       if (atom.getNeighbour(k).getType() == 3) {
         getList().addAtom(atom.getNeighbour(k));
-        getList().addTotalProbability(atom.getProbability());
+        getList().addDiffusionProbability(atom.getProbability());
       }
     }
     return false;

@@ -80,13 +80,13 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
    * @param probabilityChange probability change
    */
   @Override
-  public void addTotalProbability(double probabilityChange) {
+  public void addDiffusionProbability(double probabilityChange) {
     clean = false;
-    setTotalProbability(getTotalProbability() + probabilityChange);
+    setDiffusionProbability(getDiffusionProbability() + probabilityChange);
     // How I know which is the correct bin?? 
     // next line creates an ERROR!! (when using getTotalProbability()
     // Previously the current atom was updating its linear list and propagating the change to the parents.
-    bins[currentBin].addTotalProbability(probabilityChange);
+    bins[currentBin].addDiffusionProbability(probabilityChange);
   }
   
   @Override
@@ -97,7 +97,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
       resetRemovalsSinceLastCleanup();
     }
 
-    double position = StaticRandom.raw() * (getTotalProbabilityFromList() + getDepositionProbability());
+    double position = StaticRandom.raw() * getGlobalProbability();
     if (this.getParent() == null) {
       addTime();
     }
@@ -107,14 +107,14 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
     }
     position -= getDepositionProbability();
     int selectedBin = 0;
-    double accumulation = bins[selectedBin].getTotalProbabilityFromList();
+    double accumulation = bins[selectedBin].getDiffusionProbabilityFromList();
 
     while (position >= accumulation) {
       selectedBin++;
       if (selectedBin == bins.length - 1) {
         break;
       }
-      accumulation += bins[selectedBin].getTotalProbabilityFromList();
+      accumulation += bins[selectedBin].getDiffusionProbabilityFromList();
     }
     
     AbstractAtom atom = bins[selectedBin].nextEvent();
@@ -135,18 +135,18 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public double getTotalProbabilityFromList() {
+  public double getDiffusionProbabilityFromList() {
     if (clean) {
-      return getTotalProbability();
+      return getDiffusionProbability();
     } else {
-      double totalProb = 0;
+      double diffusionProbability = 0;
       for (AbstractList bin : bins) {
-        totalProb += bin.getTotalProbabilityFromList();
+        diffusionProbability += bin.getDiffusionProbabilityFromList();
       }
 
       clean = true;
-      setTotalProbability(totalProb);
-      return totalProb;
+      setDiffusionProbability(diffusionProbability);
+      return diffusionProbability;
     }
   }
 

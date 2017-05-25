@@ -163,7 +163,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
     }
     if (extraOutput) {
-      outData.println("0\t0\t0\t0\t" + depositionRatePerSite * freeArea + "\t" + getList().getTotalProbabilityFromList());
+      outData.println("0\t0\t0\t0\t" + depositionRatePerSite * freeArea + "\t" + getList().getDiffusionProbabilityFromList());
     }
   }
 
@@ -375,7 +375,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             break;
           }
           simulatedSteps++;
-          sumProbabilities += getList().getTotalProbabilityFromList();
+          sumProbabilities += getList().getDiffusionProbabilityFromList();
         }
       }
     }
@@ -584,7 +584,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
             nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
-            getList().getTotalProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
+            getList().getDiffusionProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
             lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
             lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
     sumProbabilities = 0.0d;
@@ -695,7 +695,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     destinationAtom.setCartesianSuperCell(origSuperCell);
     double probabilityChange = lattice.extract(originAtom);
-    getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
+    getList().addDiffusionProbability(-probabilityChange); // remove the probability of the extracted atom
     originAtom.setCartesianSuperCell(new Point3D(0,0,0));
     lattice.deposit(destinationAtom, force);
     destinationAtom.swapAttributes(originAtom);
@@ -725,7 +725,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
             + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
             + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + getList().getTotalProbabilityFromList() + " "
+            + getList().getDiffusionProbabilityFromList() + " "
             + islandCount);
     previousTime = getTime();
     deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
@@ -733,7 +733,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
             + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
             + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
             + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + getList().getTotalProbabilityFromList());
+            + getList().getDiffusionProbabilityFromList());
   }
 
   private AbstractGrowthAtom depositNewAtom() {

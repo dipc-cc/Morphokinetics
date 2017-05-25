@@ -98,7 +98,7 @@ public class SiKmc extends AbstractKmc {
     // I am not sure that the next line is correct (Joseba). However,
     if (atom == null) return false; // next even can be null and we should be ready to handle this
     double probabilityChange = atom.remove();
-    getList().addTotalProbability(probabilityChange);
+    getList().addDiffusionProbability(probabilityChange);
     atom.setList(null);
     for (int k = 0; k < 4; k++) {
       SiAtom neighbour = atom.getNeighbour(k);

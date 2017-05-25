@@ -19,9 +19,8 @@ public abstract class AbstractList implements IProbabilityHolder {
   private double depositionProbability;
   private double desorptionProbability;
   private double reactionProbability;
+  private double diffusionProbability;
   private int totalAtoms;
-  /** Sum of all probabilities. Useful to measure the time. */
-  private double totalProbability;
   private IProbabilityHolder parent;
   private int level;
   private boolean computeTime;
@@ -59,7 +58,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   
   public double getDeltaTime(boolean compute) {
     if (compute) {
-      deltaTime = -Math.log(StaticRandom.raw()) / (getGlobalProbability());
+      deltaTime = -Math.log(StaticRandom.raw()) / getGlobalProbability();
       return deltaTime;
     } else {
       return deltaTime;
@@ -109,8 +108,8 @@ public abstract class AbstractList implements IProbabilityHolder {
     removalsSinceLastCleanup++;
   }
 
-  public void setTotalProbability(double prob) {
-    this.totalProbability = prob;
+  public void setDiffusionProbability(double probability) {
+    this.diffusionProbability = probability;
   }
   
   public void setParent(IProbabilityHolder parent) {
@@ -125,15 +124,15 @@ public abstract class AbstractList implements IProbabilityHolder {
     return autoCleanup;
   }
   
-  public abstract double getTotalProbabilityFromList();
+  public abstract double getDiffusionProbabilityFromList();
 
   /**
    * Total hops probability.
    * 
    * @return total probability (always >= 0)
    */
-  public double getTotalProbability() {
-    return totalProbability > 0 ? totalProbability : 0;
+  public double getDiffusionProbability() {
+    return diffusionProbability > 0 ? diffusionProbability : 0;
   }
   
   /**
@@ -143,12 +142,12 @@ public abstract class AbstractList implements IProbabilityHolder {
    * @return total movement + deposition + desorption + reaction.
    */
   public double getGlobalProbability() {
-    return getTotalProbability() + depositionProbability + desorptionProbability + reactionProbability;
+    return getDiffusionProbability() + depositionProbability + desorptionProbability + reactionProbability;
   }
 
   public void reset() {
     time = 0;
-    totalProbability = 0;
+    diffusionProbability = 0;
     totalAtoms = 0;
     removalsSinceLastCleanup = 0;
     computeTime = true;
