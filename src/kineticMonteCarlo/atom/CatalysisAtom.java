@@ -30,8 +30,10 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private double adsorptionProbability;
   private double desorptionProbability;
   private double reactionProbability;
+  private double diffusionProbability;
   private double[] desorptionOEdge;
   private double[] reactionEdge;
+  private double[] diffusionEdge;
   
   
   /**
@@ -54,6 +56,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     eligible = true;
     desorptionOEdge = new double[4];
     reactionEdge = new double[4];
+    diffusionEdge = new double[4];
   }
 
   @Override
@@ -171,6 +174,29 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   public double getReactionEdge(int pos) {
     return reactionEdge[pos];
+  }
+  
+  public double getDiffusionProbability() {
+    return diffusionProbability;
+  }
+
+  public void setDiffusionProbability(double diffusionProbability) {
+    this.diffusionProbability = diffusionProbability;
+    if (diffusionProbability == 0) {
+      diffusionEdge = new double[4];
+    }
+  }
+
+  public void addDiffusionProbability(double probability, int neighbourPos) {
+    diffusionEdge[neighbourPos] += probability;
+    diffusionProbability = 0;
+    for (int i = 0; i < 4; i++) { // to avoid numerical error. Recompute
+      diffusionProbability += diffusionEdge[i];
+    }
+  }
+
+  public double getDiffusionEdge(int pos) {
+    return diffusionEdge[pos];
   }
 
   /**
