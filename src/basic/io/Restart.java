@@ -68,7 +68,13 @@ public class Restart {
   }
 
   public static String getGitRevision() {
-    return RestartLow.readGitRevision(getJarBaseDir());
+    String folder = getJarBaseDir();
+    String revision = RestartLow.readGitRevision(folder);
+    if (revision.equals("not found")) {
+      folder = folder + "/../";
+      revision = RestartLow.readGitRevision(folder);
+    }
+    return revision;
   }
   
   public String getPsdScript(String inputFileName, String outputFileName, float min, float max, int sizeX, int sizeY) {
