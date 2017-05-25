@@ -191,13 +191,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return simulatedSteps + 1 == totalNumOfSteps;
   }
 
-  private void printSimulationData() {
-    for (int i = 0; i < simulationData.size(); i++) {
-      double[] data = simulationData.get(i).getAdsorptionData();
-      System.out.println(i + ": " + data[0] + "; " + data[1]);
-    }
-  }
-
   @Override
   public int simulate() {
     int returnValue = 0;
@@ -250,55 +243,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     return true;
   }
-
-  /**
-   * Selects the next step randomly. If there is not accelerator, an neighbour atom of originAtom is
-   * chosen.
-   *
-   * @param originAtom atom that has to be moved.
-   * @return destinationAtom.
-   */
-  private CatalysisAtom chooseRandomHop(CatalysisAtom originAtom) {
-    return (CatalysisAtom) originAtom.chooseRandomHop();
-  }
-
-  /**
-   * Moves an atom from origin to destination.
-   *
-   * @param originAtom origin atom.
-   * @param destinationAtom destination atom.
-   * @return true if atom has moved, false otherwise.
-   */
-  private boolean diffuseAtom(CatalysisAtom originAtom, CatalysisAtom destinationAtom) {
-    //Si no es elegible, sea el destino el mismo o diferente no se puede difundir.
-    if (!originAtom.isEligible()) {
-      return false;
-    }
-
-    // if the destination atom is occupied do not diffuse (even if it is itself)
-    if (destinationAtom.isOccupied()) {
-      return false;
-    }
-    destinationAtom.setType(originAtom.getType());
-
-    double probabilityChange = getLattice().extract(originAtom);
-    getList().addTotalProbability(-probabilityChange); // remove the probability of the extracted atom
-
-    getLattice().deposit(destinationAtom, false);
-    destinationAtom.swapAttributes(originAtom);
-    getModifiedBuffer().updateAtoms(getList());
-    updateAdsorptionRate(originAtom);
-    updateAdsorptionRate(destinationAtom);
-    updateDesorptionRate(originAtom);
-    updateDesorptionRate(destinationAtom);
-    updateReactionRate(originAtom);
-    updateReactionRate(destinationAtom);
-    updateDiffusionRate(originAtom);
-    updateDiffusionRate(destinationAtom);
-
-    return true;
-  }
-
+  
   private CatalysisAtom depositNewAtom() {
     CatalysisAtom destinationAtom = null;
     int ucIndex = 0;
@@ -462,6 +407,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     updateDiffusionRate(atom);
   }
   
+  /**
+   * Moves an atom.
+   */
   private void diffuseAtom() {
     CatalysisAtom originAtom = null;
     double randomNumber = StaticRandom.raw() * totalDiffusionRate;
