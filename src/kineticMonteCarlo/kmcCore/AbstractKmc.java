@@ -11,7 +11,6 @@ import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.list.AbstractList;
 import utils.list.BinnedList;
-import utils.list.CatalysisLinearList;
 import utils.list.LinearList;
 
 /**
@@ -23,24 +22,20 @@ public abstract class AbstractKmc implements IKmc {
   private AbstractList list;
   private AbstractLattice lattice;
   private int iterationsForLastSimulation;
-
+  
   public AbstractKmc(Parser parser) {
-    if (parser.getCalculationMode().equals("catalysis")) {
-      list = new CatalysisLinearList(parser);
-    } else {
-      switch (parser.getListType()) {
-        case "linear":
-          list = new LinearList(parser);
-          break;
-        case "binned":
-          list = new BinnedList(parser, parser.getBinsLevels(), parser.getExtraLevels());
-          break;
-        default:
-          System.err.println("listType is not properly set");
-          System.err.println("listType currently is " + parser.getListType());
-          System.err.println("Available options are \"linear\" and \"binned\" ");
-          list = null;
-      }
+    switch (parser.getListType()) {
+      case "linear":
+        list = new LinearList(parser);
+        break;
+      case "binned":
+        list = new BinnedList(parser, parser.getBinsLevels(), parser.getExtraLevels());
+        break;
+      default:
+        System.err.println("listType is not properly set");
+        System.err.println("listType currently is " + parser.getListType());
+        System.err.println("Available options are \"linear\" and \"binned\" ");
+        list = null;
     }
   }
 

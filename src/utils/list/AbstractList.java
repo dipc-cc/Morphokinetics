@@ -7,6 +7,11 @@ import utils.StaticRandom;
 public abstract class AbstractList implements IProbabilityHolder {
 
   protected static final int EVENTS_PER_CLEANUP = 2048;
+  public static final byte ADSORPTION = 0;
+  public static final byte DESORPTION = 1;
+  public static final byte REACTION = 2;
+  public static final byte DIFFUSION = 3;
+  
   private int removalsSinceLastCleanup;
   private boolean autoCleanup;
 
@@ -175,5 +180,28 @@ public abstract class AbstractList implements IProbabilityHolder {
    */
   public final void setLevel(int level) {
     this.level = level;
+  }
+  
+  /**
+   * Equivalent to nextEvent, but only valid for catalysis.
+   *
+   * @return next reaction type that should be executed.
+   */
+  public byte nextReaction() {
+    double position = StaticRandom.raw() * (getTotalProbability() + getDepositionProbability()
+            + getDesorptionProbability() + getReactionProbability());
+
+    addTime();
+
+    if (position < getDepositionProbability()) {
+      return ADSORPTION;
+    }
+    if (position < getDepositionProbability() + getDesorptionProbability()) {
+      return DESORPTION;
+    }
+    if (position < getDepositionProbability() + getDesorptionProbability() + getReactionProbability()) {
+      return REACTION;
+    }
+    return DIFFUSION;
   }
 }

@@ -15,11 +15,10 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
-import utils.list.CatalysisLinearList;
-import static utils.list.CatalysisLinearList.ADSORPTION;
-import static utils.list.CatalysisLinearList.DESORPTION;
-import static utils.list.CatalysisLinearList.DIFFUSION;
-import static utils.list.CatalysisLinearList.REACTION;
+import static utils.list.AbstractList.ADSORPTION;
+import static utils.list.AbstractList.DESORPTION;
+import static utils.list.AbstractList.DIFFUSION;
+import static utils.list.AbstractList.REACTION;
 
 /**
  *
@@ -164,7 +163,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (getList().getGlobalProbability() == 0) {
       return true; // there is nothing more we can do
     }
-    byte reaction = ((CatalysisLinearList) getList()).nextReaction();
+    byte reaction = getList().nextReaction();
     CatalysisAtom destinationAtom = null;
     switch (reaction) {
       case ADSORPTION:
