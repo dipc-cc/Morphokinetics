@@ -28,7 +28,8 @@ public class CatalysisRates implements IRates {
   private final double[] pressures;
   private double totalAdsorptionRate;
   private final double[] adsorptionRates;
-
+  /** Chemical potential. */
+  private final double[] mu; 
   
   private final int temperature;
   
@@ -70,6 +71,9 @@ public class CatalysisRates implements IRates {
     pressures = new double[2];
     adsorptionRates = new double[2];
     totalAdsorptionRate = -1; // it needs to be initialised
+    mu = new double[2];
+    mu[CO] = 1;
+    mu[O] = 1;
   }
 
   @Override
@@ -156,14 +160,14 @@ public class CatalysisRates implements IRates {
     double[] rates;
     if (type == CO) {
       rates = new double[2];
-      rates[0] = prefactor * Math.exp(-desorptionEnergiesCo[0] / (kB * temperature));
-      rates[1] = prefactor * Math.exp(-desorptionEnergiesCo[1] / (kB * temperature));
+      rates[0] = getDesorptionRate(CO, desorptionEnergiesCo[BR]);
+      rates[1] = getDesorptionRate(CO, desorptionEnergiesCo[CUS]);
     } else {
       rates = new double[4];
-      rates[0] = prefactor * Math.exp(-desorptionEnergiesO[BR][BR] / (kB * temperature));
-      rates[1] = prefactor * Math.exp(-desorptionEnergiesO[BR][CUS] / (kB * temperature));
-      rates[2] = prefactor * Math.exp(-desorptionEnergiesO[CUS][BR] / (kB * temperature));
-      rates[3] = prefactor * Math.exp(-desorptionEnergiesO[CUS][CUS] / (kB * temperature));
+      rates[0] = getDesorptionRate(O, desorptionEnergiesO[BR][BR]);
+      rates[1] = getDesorptionRate(O, desorptionEnergiesO[BR][CUS]);
+      rates[2] = getDesorptionRate(O, desorptionEnergiesO[CUS][BR]);
+      rates[3] = getDesorptionRate(O, desorptionEnergiesO[CUS][CUS]);
     }
     return rates;
   }
@@ -214,5 +218,9 @@ public class CatalysisRates implements IRates {
     adsorptionRates[O] = 0.25 * getAdsorptionRate(O, pressures, temperature);
     adsorptionRates[CO] = getAdsorptionRate(CO, pressures, temperature);
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
+  }
+  
+  private double getDesorptionRate(byte site, double energy) {
+    return prefactor * Math.exp((-energy * mu[site]) / (kB * temperature));
   }
 }
