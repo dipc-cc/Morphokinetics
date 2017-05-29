@@ -124,6 +124,10 @@ public class AgUcSimulationTest {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
     assertEquals(2.1246955660861665E-6, simulatedTime, 0.0);
+    String ref = "0.098370\t2.11089e-06\t0\t7\t82950000.000000\t2247972.682327\t0\t24780\t33590328769005.703000\t3.038708\t181\t324\t27950.000722\t1914757.064401\t18\t24599\t0\t25\t69\t59\t24\t4\t0\t1335\t147\t90\t56\t21\t9\t1";
+    String extraFile = restart.readFile("results/dataEvery1percentAndNucleation.txt");
+    String read = extraFile.substring(55150, 55329);
+    assertEquals(ref.trim(), read.trim());
   }
     
     
