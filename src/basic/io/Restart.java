@@ -5,8 +5,10 @@
  */
 package basic.io;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.String.format;
@@ -15,8 +17,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.MathUtils;
 
@@ -30,6 +34,10 @@ public class Restart {
 
   private String folder;
   final static Charset ENCODING = StandardCharsets.UTF_8;
+  
+  private boolean extraOutput;
+  private String outDataFormat;
+  private PrintWriter outData;
 
   public Restart() {
     folder = "results/";
@@ -43,6 +51,19 @@ public class Restart {
     }
     createFolder(restartFolder);
   }
+  
+  public Restart(boolean extraOutput) {
+    if (extraOutput) {
+      this.extraOutput = extraOutput;
+      try {
+        outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
+        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. tracer diffusivity distance 14. centre of mass diffusivity distance 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
+        outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d%s%s\n";
+      } catch (IOException e) {
+        Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
+      }
+    }
+  } 
 
   /**
    * Returns the base location of the JAR file (or the main executable instead).
@@ -218,6 +239,33 @@ public class Restart {
   public void writeXyz(int simulationNumber, AbstractLattice lattice) {
     String fileName = format("%ssurface%03d.xyz", folder, simulationNumber);
     RestartLow.writeXyz(fileName, lattice);
+  }
+  
+  public void writeExtraOutput(AbstractGrowthLattice lattice, float coverage, int nucleations,
+          double time, double adsorptionRate, double diffusionRate, long simulatedSteps, double sumProbabilities) {
+    int islandCount = lattice.countIslands(outData);
+    String coverageFormat = "%f";
+
+    lattice.getCentreOfMass();
+    lattice.getDistancesToCentre();
+    lattice.countPerimeter(null);
+    //compute the average distances to centre.
+    float avgGyradius = lattice.getAverageGyradius();
+    int numberOfAtomFirstIsland = 0;
+    try{
+      numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
+    } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
+    }
+    outData.format(Locale.US, coverageFormat + outDataFormat, coverage, time,
+            nucleations, islandCount, adsorptionRate,
+            diffusionRate, lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
+            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
+            lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
+    outData.flush();
+  }
+  
+  public PrintWriter getExtraWriter() {
+    return outData;
   }
   
   /**

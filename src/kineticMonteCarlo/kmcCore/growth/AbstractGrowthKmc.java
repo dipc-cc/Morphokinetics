@@ -6,6 +6,7 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
 import basic.io.OutputType;
+import basic.io.Restart;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
@@ -19,7 +20,6 @@ import java.io.PrintWriter;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point3D;
@@ -86,10 +86,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
-  private PrintWriter outData;
-  private String outDataFormat;
   private long simulatedSteps;
   private double sumProbabilities;
+  private Restart restart;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
@@ -134,13 +133,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       }
     }
     if (extraOutput) {
-      try {
-        outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
-        outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. tracer diffusivity distance 14. centre of mass diffusivity distance 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
-        outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d%s%s\n";
-      } catch (IOException e) {
-        Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
-      }
+      restart = new Restart(extraOutput);
     }
     nucleations = 0;
     activationEnergy = new ActivationEnergy(parser);
@@ -161,9 +154,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     } else {
       freeArea = calculateAreaAsInKmcCanvas();
       getList().setDepositionProbability(depositionRatePerSite * freeArea);
-    }
-    if (extraOutput) {
-      outData.println("0\t0\t0\t0\t" + depositionRatePerSite * freeArea + "\t" + getList().getDiffusionProbabilityFromList());
     }
   }
 
@@ -321,6 +311,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     lattice.initialiseRates(processProbs2D);
     activationEnergy.setRates(processProbs2D);
+    if (extraOutput) {
+      restart.writeExtraOutput(lattice, 0, 0, 0, depositionRatePerSite * freeArea, getList().getDiffusionProbabilityFromList(), 0, 0);
+    }
   }
 
   @Override
@@ -395,9 +388,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.getAverageGyradius();
     lattice.getDistancesToCentre();
     standardOutputWriter.flush();
-    if (extraOutput) {
-      outData.flush();
-    }
     if (extraOutput2) {
       outDeltaAttachments.flush();
       outPerAtom.flush();
@@ -561,37 +551,19 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
   private void printData(Integer coverage) {
-    int islandCount = lattice.countIslands(outData);
     float printCoverage;
-    String coverageFormat;
     if (coverage != null) {
       printCoverage = (float) (coverage) / 100;
-      coverageFormat = "%2.2f";
     } else {
       printCoverage = getCoverage();
-      coverageFormat = "%f";
     }
-
-    lattice.getCentreOfMass();
-    lattice.getDistancesToCentre();
-    lattice.countPerimeter(null);
-    //compute the average distances to centre.
-    float avgGyradius = lattice.getAverageGyradius();
-    int numberOfAtomFirstIsland = 0;
-    try{
-      numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
-    } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
-    }
-    outData.format(Locale.US, coverageFormat + outDataFormat, printCoverage, getTime(),
-            nucleations, islandCount, (double) (depositionRatePerSite * freeArea),
-            getList().getDiffusionProbability(), lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
-            lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
+    restart.writeExtraOutput(lattice, printCoverage, nucleations, getTime(), 
+            (double) (depositionRatePerSite * freeArea), getList().getDiffusionProbability(), simulatedSteps, sumProbabilities);
+    
     sumProbabilities = 0.0d;
     if (aeOutput) {
-      activationEnergy.printAe(outData, printCoverage);
+      activationEnergy.printAe(restart.getExtraWriter(), printCoverage);
     }
-    outData.flush();
     if (extraOutput2) {
       outDeltaAttachments.flush();
       outPerAtom.flush();
