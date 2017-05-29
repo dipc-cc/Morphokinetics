@@ -103,6 +103,30 @@ public class AgUcSimulationTest {
     assertEquals(350939.25839387067, simulatedTime, 52649); // tolerance is 15%. It is too big but the simulation time varies a lot.
 
   }
+  
+  @Test
+  public void testAgUcExtraOutput() {
+    AbstractSimulation.printHeader("AgUc extra output test");
+    Parser parser = new Parser();
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUcExtraParameters");
+    parser.print();
+
+    doAgTest(parser);
+    
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
+    float[][] ref0 = null;
+    try {
+      ref0 = restart.readSurfaceBinary2D("AgUcExtraSurface000.mko");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }    
+    for (int i = 0; i < ref0.length; i++) {
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
+    }
+    assertEquals(2.1246955660861665E-6, simulatedTime, 0.0);
+  }
+    
+    
 
   private void doAgTest(Parser parser) {
     AbstractSimulation simulation = new AgUcSimulation(parser);
@@ -113,7 +137,10 @@ public class AgUcSimulationTest {
     simulation.finishSimulation();
 
     simulatedSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
-    simulatedPsd = simulation.getPsd().getPsd();
+    try {
+      simulatedPsd = simulation.getPsd().getPsd();
+    } catch (NullPointerException e) {
+    }
     simulatedTime = simulation.getSimulatedTime();
   }
 
