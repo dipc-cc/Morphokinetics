@@ -48,7 +48,7 @@ public class AgUcSimulationTest {
   public void tearDown() {
   }
 
-  //@Test
+  @Test
   public void testAgUc180() {
     AbstractSimulation.printHeader("AgUc 180 test");
     Parser parser = new Parser();
@@ -70,7 +70,7 @@ public class AgUcSimulationTest {
     assertEquals(57.23857330592217, simulatedTime, 0.0);
   }
   
-  //@Test
+  @Test
   public void testAgUcPsd() {
     AbstractSimulation.printHeader("AgUc PSD test");
     Parser parser = new Parser();
