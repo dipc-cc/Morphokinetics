@@ -6,7 +6,7 @@
   justCentralFlake: false,
   coverage: 10,
   outputData: true,
-  outputDataFormat: [ {type: ae},{type: extra},{type: png}, {type: xyz},{type: mko},{type: txt}],
+  outputDataFormat: [ {type: ae},{type: extra},{type: extra2},{type: png}, {type: xyz},{type: mko},{type: txt}],
   randomSeed: false,
   depositionFlux: 5E4,
   forceNucleation: false,
