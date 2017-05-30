@@ -37,7 +37,14 @@ public class Restart {
   private String folder;
   final static Charset ENCODING = StandardCharsets.UTF_8;
   
+  /**
+   * Attribute to control the output of data every 1% and nucleation.
+   */
   private boolean extraOutput;
+  /**
+   * Attribute to control the output of extra data of delta time between two attachments and between
+   * an atom is deposited and attached to an island.
+   */
   private boolean extraOutput2;
   private String outDataFormat;
   private PrintWriter outData;
@@ -275,44 +282,47 @@ public class Restart {
   
   public void writeExtraOutput(AbstractGrowthLattice lattice, float coverage, int nucleations,
           double time, double adsorptionRate, double diffusionRate, long simulatedSteps, double sumProbabilities) {
-    int islandCount = lattice.countIslands(outData);
-    String coverageFormat = "%f";
+    if (extraOutput) {
+      int islandCount = lattice.countIslands(outData);
+      String coverageFormat = "%f";
 
-    lattice.getCentreOfMass();
-    lattice.getDistancesToCentre();
-    lattice.countPerimeter(null);
-    //compute the average distances to centre.
-    float avgGyradius = lattice.getAverageGyradius();
-    int numberOfAtomFirstIsland = 0;
-    try {
-      numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
-    } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
+      lattice.getCentreOfMass();
+      lattice.getDistancesToCentre();
+      lattice.countPerimeter(null);
+      //compute the average distances to centre.
+      float avgGyradius = lattice.getAverageGyradius();
+      int numberOfAtomFirstIsland = 0;
+      try {
+        numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
+      } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
+      }
+      outData.format(Locale.US, coverageFormat + outDataFormat, coverage, time,
+              nucleations, islandCount, adsorptionRate,
+              diffusionRate, lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
+              lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
+              lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
     }
-    outData.format(Locale.US, coverageFormat + outDataFormat, coverage, time,
-            nucleations, islandCount, adsorptionRate,
-            diffusionRate, lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
-            lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
-            lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
   }
   
   public void writeExtra2Output(AbstractGrowthLattice lattice, AbstractGrowthAtom atom, 
           float coverage, double time, double diffusionRate) {
-      
-    int islandCount = lattice.countIslands(null);
-    deltaTimeBetweenTwoAttachments.add(time - previousTime);
-    outDeltaAttachments.println(coverage + " " + time + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + diffusionRate + " "
-            + islandCount);
-    previousTime = time;
-    deltaTimePerAtom.add(time - atom.getDepositionTime());
-    outPerAtom.println(coverage + " " + time + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + diffusionRate);
+    if (extraOutput2) {
+      int islandCount = lattice.countIslands(null);
+      deltaTimeBetweenTwoAttachments.add(time - previousTime);
+      outDeltaAttachments.println(coverage + " " + time + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
+              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
+              + diffusionRate + " "
+              + islandCount);
+      previousTime = time;
+      deltaTimePerAtom.add(time - atom.getDepositionTime());
+      outPerAtom.println(coverage + " " + time + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
+              + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
+              + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
+              + diffusionRate);
+    }
   }
 
   public PrintWriter getExtraWriter() {

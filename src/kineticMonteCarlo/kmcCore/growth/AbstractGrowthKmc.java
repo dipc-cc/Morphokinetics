@@ -280,9 +280,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     lattice.initialiseRates(processProbs2D);
     activationEnergy.setRates(processProbs2D);
-    if (extraOutput) {
-      restart.writeExtraOutput(lattice, 0, 0, 0, depositionRatePerSite * freeArea, getList().getDiffusionProbabilityFromList(), 0, 0);
-    }
+    restart.writeExtraOutput(lattice, 0, 0, 0, depositionRatePerSite * freeArea, getList().getDiffusionProbabilityFromList(), 0, 0);
   }
 
   @Override
@@ -355,9 +353,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.getAverageGyradius();
     lattice.getDistancesToCentre();
     standardOutputWriter.flush();
-    if (extraOutput || extraOutput2) {
-      restart.flushExtra();
-    }
+    restart.flushExtra();
     return returnValue;
   }
 
@@ -419,9 +415,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       if (nextRadius > 0
               && nextRadius < lattice.getCartSizeX() / 2
               && nextRadius < lattice.getCartSizeY() / 2) {
-        if (extraOutput) {
-          printData(null);
-        }
+        printData(null);
         if (perimeterType == RoundPerimeter.CIRCLE) {
           perimeter.setCurrentPerimeter(lattice.setInsideCircle(nextRadius, periodicSingleFlake));
           int newArea;
@@ -530,9 +524,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (aeOutput) {
       activationEnergy.printAe(restart.getExtraWriter(), printCoverage);
     }
-    if (extraOutput || extraOutput2) {
-      restart.flushExtra();
-    }
+    restart.flushExtra();
   }
   
   /**
@@ -602,9 +594,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     
     boolean force = (forceNucleation && !justCentralFlake && destinationAtom.areTwoTerracesTogether()); //indica si 2 terraces se van a chocar
     if (force) {
-      if (extraOutput) {
-        printData(null);
-      }
+      printData(null);
       nucleations++;
     }
     int oldType = originAtom.getRealType();
