@@ -50,6 +50,7 @@ public class Restart {
   private PrintWriter outData;
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
+  private PrintWriter outCatalysis;
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
   private double previousTime;
@@ -102,7 +103,20 @@ public class Restart {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
     }
-  } 
+  }
+  
+  public Restart(boolean catalysisOutput) {
+    if (catalysisOutput) {
+      // new filetry {
+      try {
+        outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter("results/dataCatalysis.txt")));
+        outCatalysis.println("# Information about the system every fixed number of events\n[1. time 2. coverage, 3. coverageCO, 4. coverageO, 5. nAdsorption, 6. nDesorption, 7. nReaction, 8. nDiffusion]");
+        outDataFormat = "%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\n";
+      } catch (IOException e) {
+        Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
+      }
+    }
+  }
 
   /**
    * Returns the base location of the JAR file (or the main executable instead).
@@ -324,6 +338,10 @@ public class Restart {
               + diffusionRate);
     }
   }
+  
+  public void writeExtraCatalysisOutput(double time, double coverage, double coverageCO, double coverageO, long[] steps) {
+    outCatalysis.format(outDataFormat, time, coverage, coverageCO, coverageO, steps[0], steps[1], steps[2], steps[3]);
+  }
 
   public PrintWriter getExtraWriter() {
     return outData;
@@ -383,6 +401,7 @@ public class Restart {
 
     return str;
   }
+
   public void flushExtra() {
     if (extraOutput) {
     outData.flush();
@@ -392,7 +411,10 @@ public class Restart {
     outPerAtom.flush();
     }
   }
-  
+
+  public void flushCatalysis() {
+    outCatalysis.flush();
+  }
   public void reset() {
     deltaTimeBetweenTwoAttachments.clear();
     deltaTimePerAtom.clear();

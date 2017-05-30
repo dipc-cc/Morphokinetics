@@ -6,6 +6,7 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
 import basic.io.CatalysisData;
+import basic.io.Restart;
 import java.util.ArrayList;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
@@ -28,6 +29,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   private final boolean measureDiffusivity;
   private long simulatedSteps;
+  private long[] steps;
   private int totalNumOfSteps;
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
@@ -59,6 +61,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean doAdsorption;
   private final boolean doDesorption;
   private final boolean doReaction;
+  private Restart restart;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -79,6 +82,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
     }
+    restart = new Restart(measureDiffusivity);
     adsorptionSites = new ArrayList<>();
     desorptionSites = new ArrayList<>();
     reactionSites = new ArrayList<>();
@@ -87,6 +91,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     doAdsorption = parser.doCatalysisAdsorption();
     doDesorption = parser.doCatalysisDesorption();
     doReaction = parser.doCatalysisReaction();
+    steps = new long[4];
   }
 
   @Override
@@ -164,6 +169,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return true; // there is nothing more we can do
     }
     byte reaction = getList().nextReaction();
+    steps[reaction]++;
     CatalysisAtom destinationAtom = null;
     switch (reaction) {
       case ADSORPTION:
@@ -186,6 +192,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), currentAdsorptionP));
       }
+      restart.writeExtraCatalysisOutput(getTime(), getCoverage(), getCoverage(CO), getCoverage(O), steps);
+    }
+    if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0) {
+      restart.flushCatalysis();
     }
     return simulatedSteps + 1 == totalNumOfSteps;
   }
@@ -199,6 +209,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (performSimulationStep()) {
         break;
       }
+    }
+    if (measureDiffusivity) {
+      restart.flushCatalysis();
     }
     return returnValue;
   }
@@ -230,6 +243,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
     }
+    steps = new long[4];
   }
   
   private boolean depositAtom(CatalysisAtom atom) {
