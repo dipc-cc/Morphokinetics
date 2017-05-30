@@ -12,14 +12,8 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.geom.Point2D;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import static java.lang.Math.abs;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point3D;
@@ -59,9 +53,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   private int currentArea;
   private double depositionRatePerSite;
   private int freeArea;
-  private double previousTime;
-  private List<Double> deltaTimeBetweenTwoAttachments;
-  private List<Double> deltaTimePerAtom;
   private int nucleations;
   /**
    * Attribute to control the output of data every 1% and nucleation.
@@ -84,8 +75,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   
   private double terraceToTerraceProbability;
   
-  private PrintWriter outDeltaAttachments;
-  private PrintWriter outPerAtom;
   private long simulatedSteps;
   private double sumProbabilities;
   private Restart restart;
@@ -106,9 +95,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     modifiedBuffer = new ModifiedBuffer();
     getList().autoCleanup(true);
     perimeterType = parser.getPerimeterType();
-    previousTime = 0;
-    deltaTimeBetweenTwoAttachments = new ArrayList<>();
-    deltaTimePerAtom = new ArrayList<>();  
     
     extraOutput2 = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA2);
     if (extraOutput2) {
@@ -117,24 +103,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     }
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
-    if (extraOutput2) {
-      try {
-        File file = new File("results/deltaTimeBetweenTwoAttachments.txt");
-        outDeltaAttachments = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-        outDeltaAttachments.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
-      } catch (IOException e) {
-        Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
-      }
-      try {
-        outPerAtom = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt")));
-        outPerAtom.println("# Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
-      } catch (IOException e) {
-        Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, e);
-      }
-    }
-    if (extraOutput) {
-      restart = new Restart(extraOutput);
-    }
+    restart = new Restart(extraOutput, extraOutput2);
     nucleations = 0;
     activationEnergy = new ActivationEnergy(parser);
   }
@@ -323,9 +292,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     activationEnergy.reset();
     freeArea = calculateAreaAsInKmcCanvas();
 
-    deltaTimeBetweenTwoAttachments.clear();
-    deltaTimePerAtom.clear();
-    previousTime = 0;
+    restart.reset();
     nucleations = 0;
   }
   
@@ -388,9 +355,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     lattice.getAverageGyradius();
     lattice.getDistancesToCentre();
     standardOutputWriter.flush();
-    if (extraOutput2) {
-      outDeltaAttachments.flush();
-      outPerAtom.flush();
+    if (extraOutput || extraOutput2) {
+      restart.flushExtra();
     }
     return returnValue;
   }
@@ -564,9 +530,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     if (aeOutput) {
       activationEnergy.printAe(restart.getExtraWriter(), printCoverage);
     }
-    if (extraOutput2) {
-      outDeltaAttachments.flush();
-      outPerAtom.flush();
+    if (extraOutput || extraOutput2) {
+      restart.flushExtra();
     }
   }
   
@@ -690,22 +655,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param destination destination atom is required to compute time difference.
    *
    */
-  private void atomAttachedToIsland(AbstractGrowthAtom destination) {      
-    int islandCount = lattice.countIslands(null);
-    deltaTimeBetweenTwoAttachments.add(getTime() - previousTime);
-    outDeltaAttachments.println(getCoverage() + " " + getTime() + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + getList().getDiffusionProbabilityFromList() + " "
-            + islandCount);
-    previousTime = getTime();
-    deltaTimePerAtom.add(getTime() - destination.getDepositionTime());
-    outPerAtom.println(getCoverage() + " " + getTime() + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
-            + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
-            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
-            + getList().getDiffusionProbabilityFromList());
+  private void atomAttachedToIsland(AbstractGrowthAtom destination) {
+    restart.writeExtra2Output(lattice, destination, getCoverage(), getTime(), getList().getDiffusionProbabilityFromList());
   }
 
   private AbstractGrowthAtom depositNewAtom() {

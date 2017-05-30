@@ -16,10 +16,12 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.MathUtils;
@@ -36,8 +38,14 @@ public class Restart {
   final static Charset ENCODING = StandardCharsets.UTF_8;
   
   private boolean extraOutput;
+  private boolean extraOutput2;
   private String outDataFormat;
   private PrintWriter outData;
+  private PrintWriter outDeltaAttachments;
+  private PrintWriter outPerAtom;
+  private List<Double> deltaTimeBetweenTwoAttachments;
+  private List<Double> deltaTimePerAtom;
+  private double previousTime;
 
   public Restart() {
     folder = "results/";
@@ -52,13 +60,37 @@ public class Restart {
     createFolder(restartFolder);
   }
   
-  public Restart(boolean extraOutput) {
+  /**
+   * Creates a restart object to be used to write extra data files.
+   * 
+   * @param extraOutput
+   * @param extraOutput2 
+   */
+  public Restart(boolean extraOutput, boolean extraOutput2) {
+    this.extraOutput = extraOutput;
+    this.extraOutput2 = extraOutput2;
+    deltaTimeBetweenTwoAttachments = new ArrayList<>();
+    deltaTimePerAtom = new ArrayList<>();  
     if (extraOutput) {
-      this.extraOutput = extraOutput;
       try {
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataEvery1percentAndNucleation.txt")));
         outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. tracer diffusivity distance 14. centre of mass diffusivity distance 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
         outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d%s%s\n";
+      } catch (IOException e) {
+        Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
+      }
+    }
+    if (extraOutput2) {
+      try {
+        File file = new File("results/deltaTimeBetweenTwoAttachments.txt");
+        outDeltaAttachments = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+        outDeltaAttachments.println("# Time difference between two attachments to the islands [1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability, 8. No. islands] ");
+      } catch (IOException e) {
+        Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
+      }
+      try {
+        outPerAtom = new PrintWriter(new BufferedWriter(new FileWriter("results/deltaTimePerAtom.txt")));
+        outPerAtom.println("# Time difference between deposition and attachment to the islands for a single atom[1. coverage, 2. time, 3. min, 4. max, 5. average, 6. sum, 7. total probability] ");
       } catch (IOException e) {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -252,7 +284,7 @@ public class Restart {
     //compute the average distances to centre.
     float avgGyradius = lattice.getAverageGyradius();
     int numberOfAtomFirstIsland = 0;
-    try{
+    try {
       numberOfAtomFirstIsland = lattice.getIsland(0).getNumberOfAtoms();
     } catch (NullPointerException | IndexOutOfBoundsException e) { // It may occur that there is no any island
     }
@@ -261,9 +293,28 @@ public class Restart {
             diffusionRate, lattice.getMonomerCount(), simulatedSteps, sumProbabilities, avgGyradius,
             lattice.getInnerPerimeterLenght(), lattice.getOuterPerimeterLenght(), lattice.getTracerDistance(), lattice.getCmDistance(), numberOfAtomFirstIsland, lattice.getTotalHops(),
             lattice.getAtomTypesCounter(), lattice.getEmptyTypesCounter());
-    outData.flush();
   }
   
+  public void writeExtra2Output(AbstractGrowthLattice lattice, AbstractGrowthAtom atom, 
+          float coverage, double time, double diffusionRate) {
+      
+    int islandCount = lattice.countIslands(null);
+    deltaTimeBetweenTwoAttachments.add(time - previousTime);
+    outDeltaAttachments.println(coverage + " " + time + " " + deltaTimeBetweenTwoAttachments.stream().min((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimeBetweenTwoAttachments.stream().max((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimeBetweenTwoAttachments.stream().mapToDouble(e -> e).average().getAsDouble() + " "
+            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
+            + diffusionRate + " "
+            + islandCount);
+    previousTime = time;
+    deltaTimePerAtom.add(time - atom.getDepositionTime());
+    outPerAtom.println(coverage + " " + time + " " + deltaTimePerAtom.stream().min((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimePerAtom.stream().max((a, b) -> a.compareTo(b)).get() + " "
+            + deltaTimePerAtom.stream().mapToDouble(e -> e).average().getAsDouble() + " "
+            + deltaTimePerAtom.stream().reduce(0.0, (a, b) -> a + b) + " "
+            + diffusionRate);
+  }
+
   public PrintWriter getExtraWriter() {
     return outData;
   }
@@ -321,6 +372,21 @@ public class Restart {
     System.out.println("Parser read " + lines + " lines from " + fileName);
 
     return str;
+  }
+  public void flushExtra() {
+    if (extraOutput) {
+    outData.flush();
+    }
+    if (extraOutput2) {
+    outDeltaAttachments.flush();
+    outPerAtom.flush();
+    }
+  }
+  
+  public void reset() {
+    deltaTimeBetweenTwoAttachments.clear();
+    deltaTimePerAtom.clear();
+    previousTime = 0;
   }
   
   private void createFolder(String restartFolder) {
