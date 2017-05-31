@@ -136,6 +136,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return ((CatalysisLattice) getLattice()).getCoverage(type);
   }
   
+  public float[] getCoverages() {
+    return ((CatalysisLattice) getLattice()).getCoverages();
+  }
+  
   @Override
   public void initialiseRates(double[] rates) {
     //we modify the 1D array into a 3D array;
@@ -191,7 +195,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), currentAdsorptionP));
       }
-      restart.writeExtraCatalysisOutput(getTime(), getCoverage(), getCoverage(CO), getCoverage(O), steps);
+      getCoverages();
+      restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps);
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0) {
       restart.flushCatalysis();
