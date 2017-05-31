@@ -9,7 +9,9 @@ import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
+import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
@@ -21,13 +23,13 @@ import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 public class CatalysisLattice extends AbstractGrowthLattice {
 
   /**
-   * Current CO and O coverages.
+   * Current CO and O coverages, for sites BR, CUS.
    */
-  private int[] coverage;
+  private int[][] coverage;
   
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     super(hexaSizeI, hexaSizeJ, modified);
-    coverage = new int[2];
+    coverage = new int[2][2];
   }
   
   @Override
@@ -84,9 +86,23 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
   
   public float getCoverage(byte type) {
-    float cov = (float) coverage[type];
+    float cov = (float) coverage[type][BR] + (float) coverage[type][CUS];
     float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
     return cov / hexaArea;
+  }
+  
+  /**
+   * Computes partial coverages for CO and O in BR and CUS sites.
+   * 
+   * @return coverage CO^BR, CO^CUS, O^BR, CO^CUS
+   */
+  public float[] getCoverages() {
+    float[] cov = new float[4];
+    float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
+    for (int i = 0; i < cov.length; i++) {
+      cov[i] = coverage[i / 2][i % 2] / hexaArea;
+    }
+    return cov;
   }
   
   /**
@@ -121,7 +137,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       atom.getNeighbour(i).addOccupiedNeighbour(1);
     }
     addOccupied();
-    coverage[a.getType()]++;
+    coverage[a.getType()][atom.getLatticeSite()]++;
   }
   
   @Override
@@ -132,14 +148,16 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       atom.getNeighbour(i).addOccupiedNeighbour(-1);
     }
     subtractOccupied();
-    coverage[a.getType()]--;
+    coverage[a.getType()][atom.getLatticeSite()]--;
     return 0;
   }
   
   @Override
   public void reset() {
-    coverage[O] = 0;
-    coverage[CO] = 0;
+    coverage[CO][BR] = 0;
+    coverage[CO][CUS] = 0;
+    coverage[O][BR] = 0;
+    coverage[O][CUS] = 0;
     super.reset();
   }
   
