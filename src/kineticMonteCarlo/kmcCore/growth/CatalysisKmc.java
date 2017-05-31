@@ -120,8 +120,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       diffusionRateCO = rates.getDiffusionRates(CO);
       diffusionRateO = rates.getDiffusionRates(O);
     }
-
-    System.out.println("k_i(CO): " + adsorptionRateCOPerSite + " k_i(O): " + adsorptionRateOPerSite);
+    printRates();
   }
 
   public double[][] getOutputAdsorptionData() {
@@ -724,5 +723,27 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numOccupiedNeighbours += (1 - (float) adsorptionSites.get(i).getOccupiedNeighbours() / 4);
     }
     return (float) numOccupiedNeighbours / adsorptionSites.size();
+  }
+  
+  /**
+   * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).
+   */
+  private void printRates() {
+    System.out.println(" Process ");
+    System.out.println(" ------- ");
+    System.out.println("CO adsorption\t" + adsorptionRateCOPerSite);
+    System.out.println(" O adsorption\t" + adsorptionRateOPerSite +"\t"+adsorptionRateOPerSite*4);
+    System.out.println(" ------- ");
+    System.out.println("CO desorption (BR)\t" + desorptionRateCOPerSite[0]);
+    System.out.println("CO desorption (CUS)\t" + desorptionRateCOPerSite[1]);
+    System.out.println("O^BR + O^BR\t"+ desorptionRateOPerSite[0]);
+    System.out.println("O^BR + O^CUS\t"+ desorptionRateOPerSite[1]);
+    System.out.println("O^CUS + O^BR\t"+ desorptionRateOPerSite[2]);
+    System.out.println("O^CUS + O^CUS\t"+ desorptionRateOPerSite[3]);
+    System.out.println(" ------- ");
+    System.out.println("CO^BR + O^CUS\t"+reactionRateCoO[1]);
+    System.out.println("CO^BR + O^BR\t"+reactionRateCoO[0]);
+    System.out.println("CO^CUS + O^CUS\t"+reactionRateCoO[3]);
+    System.out.println("CO^CUS + O^BR\t"+reactionRateCoO[2]);
   }
 }
