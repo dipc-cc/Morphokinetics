@@ -36,7 +36,6 @@ public class CatalysisRates implements IRates {
   public CatalysisRates(int temperature) {
     this.temperature = temperature;
     
-    double Einf = 9999999;
     prefactor = 1e13;
     
     diffusionEnergies = new double[2][2][2];
