@@ -66,7 +66,7 @@ public class CatalysisRates implements IRates {
       
     mass = new double[2]; // g/mol
     mass[CO] = 28.01055;
-    mass[O] = 15.9994*2;
+    mass[O] = 2 * 15.9994;
     pressures = new double[2];
     adsorptionRates = new double[2];
     totalAdsorptionRate = -1; // it needs to be initialised
@@ -148,7 +148,7 @@ public class CatalysisRates implements IRates {
       for (int j = 0; j < 2; j++) {
         for (int k = 0; k < 2; k++) {
           int index = (i * 2 * 2) + (j * 2) + k;
-          rates[index] = getRate(i, j, k, temperature);
+          rates[index] = getRate(i, j, k);
         }
       }
     }
@@ -185,14 +185,14 @@ public class CatalysisRates implements IRates {
   
   public double[] getDiffusionRates(int type) {
     double[] rates = new double[4];
-    rates[0] = getRate(type, BR, BR, temperature);
-    rates[1] = getRate(type, BR, CUS, temperature);
-    rates[2] = getRate(type, CUS, BR, temperature);
-    rates[3] = getRate(type, CUS, CUS, temperature);
+    rates[0] = getRate(type, BR, BR);
+    rates[1] = getRate(type, BR, CUS);
+    rates[2] = getRate(type, CUS, BR);
+    rates[3] = getRate(type, CUS, CUS);
     return rates;
   }    
   
-  private double getRate(int sourceType, int sourceSite, int destinationSite, double temperature) {
+  private double getRate(int sourceType, int sourceSite, int destinationSite) {
     return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
   
@@ -205,7 +205,7 @@ public class CatalysisRates implements IRates {
    * @param temperature
    * @return 
    */
-  private double getAdsorptionRate(int sourceType, double pressures[], double temperature) {
+  private double computeAdsorptionRate(int sourceType) {
     return pressures[sourceType] * 101132 * 5.0145e-20 /
             (Math.sqrt(2 * Math.PI * mass[sourceType] * 1.381e-23 * temperature /(1000 * 6.022e23)));
   }
@@ -214,8 +214,8 @@ public class CatalysisRates implements IRates {
    * Compute all adsorptions. 
    */
   private void computeAdsorptionRates() {
-    adsorptionRates[O] = 0.25 * getAdsorptionRate(O, pressures, temperature);
-    adsorptionRates[CO] = getAdsorptionRate(CO, pressures, temperature);
+    adsorptionRates[O] = 0.25 * computeAdsorptionRate(O);
+    adsorptionRates[CO] = computeAdsorptionRate(CO);
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
   
