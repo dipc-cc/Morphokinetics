@@ -393,7 +393,7 @@ public class Parser {
       numberOfSimulations = 10;
     }
     try {
-      numberOfSteps = json.getInt("numberOfSteps");
+      numberOfSteps = (int) json.getDouble("numberOfSteps");
     } catch (JSONException e) {
       numberOfSteps = -1;
     }
