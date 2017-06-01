@@ -180,6 +180,10 @@ public class Parser {
    * See {@link #doCatalysisReaction()}
    */
   private boolean catalysisReaction;
+  /**
+   * See {@link #calalysisStartOxygenCov()}
+   */
+  private boolean catalysisStartOxygenCov;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -279,6 +283,7 @@ public class Parser {
     catalysisAdsorption = true;
     catalysisDesorption = true;
     catalysisReaction = true;
+    catalysisStartOxygenCov = false;
 
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -518,6 +523,11 @@ public class Parser {
       catalysisReaction = true;
     }
     try {
+      catalysisStartOxygenCov = json.getBoolean("catalysisStartOxygenCov");
+    } catch (JSONException e) {
+      catalysisStartOxygenCov = false;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -703,6 +713,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"catalysisAdsorption\"", catalysisAdsorption);
     System.out.printf("%32s: %s,\n", "\"catalysisDesorption\"", catalysisDesorption);
     System.out.printf("%32s: %s,\n", "\"catalysisReaction\"", catalysisReaction);
+    System.out.printf("%32s: %s,\n", "\"catalysisStartOxygenCov\"", catalysisStartOxygenCov);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1397,7 +1408,6 @@ public class Parser {
     return catalysisDesorption;
   }
   
-  
   /**
    * Allow to react atoms during catalysis simulation
    *
@@ -1407,6 +1417,17 @@ public class Parser {
    */
   public boolean doCatalysisReaction() {
     return catalysisReaction;
+  }
+  
+  /**
+   * Starts a catalysis run with fully oxygen covered surface.
+   *
+   * Input "parameters" variable: {@code catalysisStartOxygenCov}.
+   * 
+   * @return do diffusion.
+   */
+  public boolean catalysisStartOxigenCov() {
+    return catalysisStartOxygenCov;
   }
   
   public String getEvolutionaryAlgorithm() {

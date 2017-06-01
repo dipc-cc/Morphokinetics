@@ -61,11 +61,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean doAdsorption;
   private final boolean doDesorption;
   private final boolean doReaction;
+  private final boolean startOxygen;
   private Restart restart;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
-    maxCoverage =(float) parser.getCoverage() / 100;
     currentAdsorptionP = 1.0f;
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
@@ -91,6 +91,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     doAdsorption = parser.doCatalysisAdsorption();
     doDesorption = parser.doCatalysisDesorption();
     doReaction = parser.doCatalysisReaction();
+    startOxygen = parser.catalysisStartOxigenCov();
+    if (startOxygen) {
+      maxCoverage = 2; // it will never end because of coverage
+    } else {
+      maxCoverage = (float) parser.getCoverage() / 100;
+    }
     steps = new long[4];
   }
 
@@ -226,10 +232,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalDesorptionRate = 0.0;
     totalReactionRate = 0.0;
     getLattice().resetOccupied();
-    if (doAdsorption) {
+    if (startOxygen) {
+      initCovered();
+    } else if (doAdsorption) {
       initAdsorptionProbability();
     } else {
-      initDesorptionOnly();
+      initCovered();
     }
     simulatedSteps = 0;
   }
@@ -449,13 +457,22 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().setDesorptionProbability(0);
   }
   
-  private void initDesorptionOnly() {
+  /**
+   * Start with fully covered surface.
+   * 
+   * @param randomTypes if true, CO and O types randomly chosed. If false, only oxygen.
+   */
+  private void initCovered() {
     desorptionSites = new ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
-        a.setType((byte) StaticRandom.rawInteger(2));
+        if (startOxygen) {
+          a.setType(O);
+        } else {
+          a.setType((byte) StaticRandom.rawInteger(2));
+        }
         getLattice().deposit(a, false);
       }
     }
