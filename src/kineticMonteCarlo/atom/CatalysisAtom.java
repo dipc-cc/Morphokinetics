@@ -35,6 +35,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private double[] reactionEdge;
   private double[] diffusionEdge;
   
+  private boolean onReactionList;
+  private boolean onDesorptionList;
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
@@ -57,7 +59,26 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     desorptionOEdge = new double[4];
     reactionEdge = new double[4];
     diffusionEdge = new double[4];
+    onReactionList = false;
+    onDesorptionList = false;
   }
+
+  public boolean isOnReactionList() {
+    return onReactionList;
+  }
+
+  public void setOnReactionList(boolean onReactionList) {
+    this.onReactionList = onReactionList;
+  }
+
+  public boolean isOnDesorptionList() {
+    return onDesorptionList;
+  }
+
+  public void setOnDesorptionList(boolean onDesorptionList) {
+    this.onDesorptionList = onDesorptionList;
+  }
+  
 
   @Override
   public AbstractGrowthAtomAttributes getAttributes() {
