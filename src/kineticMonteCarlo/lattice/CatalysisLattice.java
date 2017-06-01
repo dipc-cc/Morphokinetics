@@ -92,13 +92,13 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
   
   /**
-   * Computes partial coverages for CO and O in BR and CUS sites.
+   * Computes a partial coverage for CO and O in BR and CUS sites.
    * 
    * @return coverage CO^BR, CO^CUS, O^BR, CO^CUS
    */
   public float[] getCoverages() {
     float[] cov = new float[4];
-    float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
+    float hexaArea = (float) ((float) getHexaSizeI() * getHexaSizeJ() / 2.0);
     for (int i = 0; i < cov.length; i++) {
       cov[i] = coverage[i / 2][i % 2] / hexaArea;
     }
