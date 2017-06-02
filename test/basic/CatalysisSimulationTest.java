@@ -154,8 +154,6 @@ public class CatalysisSimulationTest {
     assertEquals(0.3408043569783348, simulatedTime, 0.0);
   }
   
-  
-  
   @Test
   public void testCatalysisDesorptionReaction() {
     AbstractSimulation.printHeader("Catalysis desorption reaction test");
@@ -178,6 +176,31 @@ public class CatalysisSimulationTest {
     assertEquals(3.584418558195821E14, simulatedTime, 0.0);
   }
   
+  @Test
+  public void testCatalysisTof() {
+    AbstractSimulation.printHeader("Catalysis TOF reaction test");
+    Parser parser = new Parser();
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisTofParameters");
+    parser.print();
+
+    doCatalysisTest(parser);
+    
+    Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
+    float[][] ref0 = null;
+    try {
+      ref0 = restart.readSurfaceBinary2D("CatalysisTofSurface000.mko");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(AgSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }    
+    for (int i = 0; i < ref0.length; i++) {
+      assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
+    }
+    assertEquals(4.753740191692258, simulatedTime, 0.0);
+    String ref = "4.75374\t0.535000\t1.00000\t0.465000\t0.00000\t654\t7\t329\t9\t0\t15\t111\t203";
+    String extraFile = restart.readFile("results/dataCatalysis.txt");
+    String read = extraFile.substring(6706, 6772);
+    assertEquals(ref.trim(), read.trim());
+  }  
   
   private void doCatalysisTest(Parser parser) {
     AbstractSimulation simulation = new CatalysisSimulation(parser);
