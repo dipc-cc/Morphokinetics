@@ -51,9 +51,19 @@ public class Restart {
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
   private PrintWriter outCatalysis;
+  private PrintWriter outTof;
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
+  private double currentTime;
   private double previousTime;
+  /**
+   * Previous moment CO2 amount.
+   */
+  private long[] co2P;
+  /**
+   * Current moment CO2 amount.
+   */
+  private long[] co2C;
 
   public Restart() {
     folder = "results/";
@@ -107,11 +117,14 @@ public class Restart {
   
   public Restart(boolean catalysisOutput) {
     if (catalysisOutput) {
-      // new filetry {
+      co2P = new long[4];
+      // new file
       try {
         outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter("results/dataCatalysis.txt")));
-        outCatalysis.println("# Information about the system every fixed number of events\n[1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion]");
+        outCatalysis.println("# Information about the system every fixed number of events\n[1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion, 10. CO[BR]+O[BR], 11. CO[BR]+O[CUS], 12. CO[CUS]+O[BR], 13. CO[CUS]+O[CUS]]");
         outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
+        outTof = new PrintWriter(new BufferedWriter(new FileWriter("results/dataTof.txt")));
+        outTof.println("# Information about TOF\n[1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
       } catch (IOException e) {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -276,12 +289,10 @@ public class Restart {
     }
   }
   
-  
   public void writeCatalysisDataText(double[][][] data, String fileName) {
     fileName = addFolderAndSuffix(fileName, ".txt");
     RestartLow.writeLowSimulationDataText(data, fileName);
   }
-  
   
   public void writeCatalysisAdsorptionDataText(int simulationNumber, double[][] data) {
     String fileName = format("%scatalisysAdsorption%03d.txt", folder, simulationNumber);
@@ -341,7 +352,8 @@ public class Restart {
   
   public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2) {
     outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], co2[0], co2[1], co2[2], co2[3]);
-    
+    co2C = co2;
+    currentTime = time;
   }
 
   public PrintWriter getExtraWriter() {
@@ -414,8 +426,20 @@ public class Restart {
   }
 
   public void flushCatalysis() {
+    double deltaTime = currentTime - previousTime;
+    outTof.print(currentTime + "\t");
+    // compute TOF
+    for (int i = 0; i < co2P.length; i++) {
+      double tof = (co2C[i] - co2P[i]) / deltaTime;
+      outTof.print(tof + "\t");
+      co2P[i] = co2C[i];
+    }
+    outTof.println();
+    previousTime = currentTime;
     outCatalysis.flush();
+    outTof.flush();
   }
+  
   public void reset() {
     deltaTimeBetweenTwoAttachments.clear();
     deltaTimePerAtom.clear();
