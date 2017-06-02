@@ -111,7 +111,7 @@ public class Restart {
       try {
         outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter("results/dataCatalysis.txt")));
         outCatalysis.println("# Information about the system every fixed number of events\n[1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion]");
-        outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\n";
+        outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
       } catch (IOException e) {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
@@ -339,8 +339,8 @@ public class Restart {
     }
   }
   
-  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps) {
-    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3]);
+  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] tof) {
+    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], tof[0], tof[1], tof[2], tof[3]);
   }
 
   public PrintWriter getExtraWriter() {

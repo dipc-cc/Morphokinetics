@@ -30,6 +30,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean measureDiffusivity;
   private long simulatedSteps;
   private long[] steps;
+  private long[] tof; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private int totalNumOfSteps;
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
@@ -98,6 +99,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       maxCoverage = (float) parser.getCoverage() / 100;
     }
     steps = new long[4];
+    tof = new long[4];
   }
 
   @Override
@@ -202,7 +204,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), currentAdsorptionP));
       }
       getCoverages();
-      restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps);
+      restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, tof);
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0) {
       restart.flushCatalysis();
@@ -397,7 +399,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     getLattice().extract(neighbour);
     getLattice().extract(atom);
-    
+    // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+    int index;
+    if (atom.getType() == CO) {
+      index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
+    } else {
+      index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
+    }
+    tof[index]++;
+
     updateRates(neighbour);
     updateRates(atom);
   }
