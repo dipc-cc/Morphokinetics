@@ -339,8 +339,9 @@ public class Restart {
     }
   }
   
-  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] tof) {
-    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], tof[0], tof[1], tof[2], tof[3]);
+  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2) {
+    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], co2[0], co2[1], co2[2], co2[3]);
+    
   }
 
   public PrintWriter getExtraWriter() {
