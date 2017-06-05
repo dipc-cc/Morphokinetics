@@ -6,6 +6,7 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
 import basic.io.CatalysisData;
+import basic.io.OutputType;
 import basic.io.Restart;
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -65,6 +66,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean startOxygen;
   private Restart restart;
   private final ActivationEnergy activationEnergy;
+  /**
+   * Activation energy output during the execution
+   */
+  private final boolean aeOutput;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -102,6 +107,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     steps = new long[4];
     co2 = new long[4];
     activationEnergy = new ActivationEnergy(parser);
+    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
   }
 
   @Override
@@ -215,7 +221,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       getCoverages();
       restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
-      activationEnergy.printAe(restart.getExtraWriter(), 0);
+      if (aeOutput) {
+        activationEnergy.printAe(restart.getExtraWriter(), 0);
+      }
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0) {
       restart.flushCatalysis();
@@ -227,7 +235,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage+1) {
+    while (getLattice().getCoverage() < maxCoverage) {
       activationEnergy.updatePossibles(reactionSites.listIterator(), getList().getDeltaTime(true));
       if (performSimulationStep()) {
         break;
