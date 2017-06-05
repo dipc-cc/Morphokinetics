@@ -198,7 +198,7 @@ public class CatalysisSimulationTest {
     assertEquals(4.753740191692258, simulatedTime, 0.0);
     String ref = "4.75374\t0.535000\t1.00000\t0.465000\t0.00000\t654\t7\t329\t9\t0\t15\t111\t203";
     String extraFile = restart.readFile("results/dataCatalysis.txt");
-    String read = extraFile.substring(6706, 6772);
+    String read = extraFile.substring(6782, 6848);
     assertEquals(ref.trim(), read.trim());
   }  
   
