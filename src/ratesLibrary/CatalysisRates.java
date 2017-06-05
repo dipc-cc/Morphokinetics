@@ -214,7 +214,7 @@ public class CatalysisRates implements IRates {
    * Compute all adsorptions. 
    */
   private void computeAdsorptionRates() {
-    adsorptionRates[O] = 0.25 * computeAdsorptionRate(O);
+    adsorptionRates[O] = 0.5 * computeAdsorptionRate(O);
     adsorptionRates[CO] = computeAdsorptionRate(CO);
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
