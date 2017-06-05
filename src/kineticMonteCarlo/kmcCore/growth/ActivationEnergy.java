@@ -80,6 +80,12 @@ public class ActivationEnergy {
     this.rates = rates;
   }
   
+  /**
+   * Computes possibles for catalysis.
+   * 
+   * @param surface
+   * @param elapsedTime 
+   */
   public void updatePossibles(ListIterator<CatalysisAtom> surface, double elapsedTime) {
     if (doActivationEnergyStudy) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
