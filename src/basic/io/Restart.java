@@ -125,6 +125,7 @@ public class Restart {
         outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
         outTof = new PrintWriter(new BufferedWriter(new FileWriter("results/dataTof.txt")));
         outTof.println("# Information about TOF\n[1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
+        outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataAe.txt")));
       } catch (IOException e) {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }

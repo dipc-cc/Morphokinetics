@@ -64,6 +64,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean doReaction;
   private final boolean startOxygen;
   private Restart restart;
+  private final ActivationEnergy activationEnergy;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -100,6 +101,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     steps = new long[4];
     co2 = new long[4];
+    activationEnergy = new ActivationEnergy(parser);
   }
 
   @Override
@@ -129,6 +131,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       diffusionRateO = rates.getDiffusionRates(O);
     }
     printRates();
+    double[][] processProbs2D = new double[2][2];
+
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        processProbs2D[i][j] = rates.getReactionRates()[i * 2 + j];
+      }
+    }
+    activationEnergy.setRates(processProbs2D);
   }
 
   public double[][] getOutputAdsorptionData() {
@@ -205,6 +215,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       getCoverages();
       restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
+      activationEnergy.printAe(restart.getExtraWriter(), 0);
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0) {
       restart.flushCatalysis();
@@ -216,8 +227,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage) {
-      getList().getDeltaTime(true);
+    while (getLattice().getCoverage() < maxCoverage+1) {
+      activationEnergy.updatePossibles(reactionSites.listIterator(), getList().getDeltaTime(true));
       if (performSimulationStep()) {
         break;
       }

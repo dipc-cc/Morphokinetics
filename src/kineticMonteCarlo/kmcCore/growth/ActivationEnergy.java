@@ -13,6 +13,8 @@ import java.util.ListIterator;
 import java.util.Locale;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.CatalysisAtom;
+import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 
 /**
  *
@@ -60,10 +62,16 @@ public class ActivationEnergy {
         length = 7;
         numberOfNeighbours = 6;
       }
+      if (parser.getCalculationMode().equals("catalysis")){
+        doActivationEnergyStudy = true;
+        length = 2;
+        numberOfNeighbours = 4;
+      }
       histogramPossible = new double[length][length];
       histogramPossibleCounter = new long[length][length];
       histogramPossibleTmp = new double[length][length];
       histogramPossibleCounterTmp = new long[length][length];
+      histogramSuccess = new int[length][length];
     }
     previousProbability = 0;
   }
@@ -71,14 +79,38 @@ public class ActivationEnergy {
   public void setRates(double[][] rates) {
     this.rates = rates;
   }
- 
-  /**
-   * Initialises histogram to store the happened transition from atom type to atom type.
-   * 
-   * @param atomTypes number of different atom types.
-   */
-  void initHistogramSucces(int atomTypes) {
-    histogramSuccess = new int[atomTypes][atomTypes];
+  
+  public void updatePossibles(ListIterator<CatalysisAtom> surface, double elapsedTime) {
+    if (doActivationEnergyStudy) {
+      // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
+      
+      histogramPossibleTmp = new double[length][length];
+      while (surface.hasNext()) {
+        CatalysisAtom atom = surface.next();
+        for (int pos = 0; pos < numberOfNeighbours; pos++) {
+          CatalysisAtom neighbour = atom.getNeighbour(pos);
+          if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+            continue;
+          }
+          // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+          if (atom.getType() == CO) {
+            histogramPossible[atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime / 2.0;
+            //histogramPossibleCounter[atom.getLatticeSite()][neighbour.getLatticeSite()]++;
+            histogramPossibleTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
+          } else {
+            histogramPossible[neighbour.getLatticeSite()][atom.getLatticeSite()] += elapsedTime / 2.0;
+            //histogramPossibleCounter[neighbour.getLatticeSite()][atom.getLatticeSite()]++;
+            histogramPossibleTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
+          }
+        }
+      }
+      // it is counting twice each reaction, so dividing by 2
+      for (int i = 0; i < histogramPossibleCounter.length; i++) {
+        for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
+          histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j];
+        }
+      }
+    }
   }
   
   public void updatePossibles(ListIterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
