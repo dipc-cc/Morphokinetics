@@ -194,6 +194,10 @@ public class Parser {
    * to be chosen.
    */
   private long numericFormatCode;
+  /**
+   * See {@link #getOutputEvery()].
+   */
+  private int outputEvery;
   
   // For evolutionary algorithm
   /** Can be original or dcma. */
@@ -275,6 +279,7 @@ public class Parser {
     outputData = false;
     numericFormatCode = 2;
     outputType = new OutputType();
+    outputEvery = 10;
     randomSeed = true;
     useMaxPerimeter = false;
     forceNucleation = true;
@@ -567,6 +572,11 @@ public class Parser {
     } catch (JSONException e) {
         numericFormatCode = 2; // Only mko (binary) output by default
     }
+    try {
+      outputEvery = json.getInt("outputEvery");
+    } catch (JSONException e) {
+      outputEvery = 10;
+    }
     
     //  -------------- Evolutionary Algorithm ----------------------
     try {
@@ -726,6 +736,7 @@ public class Parser {
     } else {
       System.out.printf("%32s: [ {\"type\": \"mko\"},],\n", "\"outputDataFormat\"");
     }
+    System.out.printf("%32s: %s,\n", "\"outputEvery\"", outputEvery);
     System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
     System.out.printf("%32s: %s,\n", "\"parallelEvaluator\"", parallelEvaluator);
     System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
@@ -1325,6 +1336,15 @@ public class Parser {
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);
+  }
+  
+  /**
+   * How frequently should be printed extra file of catalysis.
+   * 
+   * @return output frequency.
+   */
+  public int getOutputEvery() {
+    return outputEvery;
   }
   
   /**

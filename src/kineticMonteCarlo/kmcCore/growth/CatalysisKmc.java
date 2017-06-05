@@ -79,7 +79,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     measureDiffusivity = parser.outputData();
     if (measureDiffusivity) {
       totalNumOfSteps = parser.getNumberOfSteps();
-      numStepsEachData = 10;
+      numStepsEachData = parser.getOutputEvery();
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
     }
