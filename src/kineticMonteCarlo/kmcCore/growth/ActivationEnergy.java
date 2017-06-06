@@ -114,6 +114,7 @@ public class ActivationEnergy {
       for (int i = 0; i < histogramPossibleCounter.length; i++) {
         for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
           histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j];
+          histogramPossibleCounterTmp[i][j] = (long) histogramPossibleTmp[i][j];
         }
       }
     }
