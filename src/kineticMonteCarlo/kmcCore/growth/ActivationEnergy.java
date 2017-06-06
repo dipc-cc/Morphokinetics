@@ -175,9 +175,9 @@ public class ActivationEnergy {
   public void printAe(PrintWriter print, float coverage) {
     boolean printLineBreak = (coverage == -1);
     if (printLineBreak) print.println("Ae");
-    else print.format(Locale.US, "%f %s", coverage, "AeInstananeousDiscrete ");
+    else print.format(Locale.US, "%f %s", coverage, "AeInstantaneousDiscrete ");
     for (int origin = 0; origin < histogramPossibleCounterTmp.length; origin++) {
-      if (printLineBreak) print.print("AeInstananeousDiscrete ");
+      if (printLineBreak) print.print("AeInstantaneousDiscrete ");
       for (int destination = 0; destination < histogramPossibleCounterTmp[0].length; destination++) {
         print.print(histogramPossibleCounterTmp[origin][destination] + " ");
       }
