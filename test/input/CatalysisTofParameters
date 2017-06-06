@@ -1,0 +1,20 @@
+{  temperature: 600,
+   pressureO: 1,
+   pressureCO: 7,
+   numberOfSimulations: 1,
+   numberOfSteps: 1e3,
+   cartSizeX: 20,
+   cartSizeY: 20,
+   justCentralFlake: false,
+   listType: linear,
+   psd: false,
+   calculationMode: catalysis,
+   outputData: true,
+   outputDataFormat: [ {type: catalysis}],
+   randomSeed: false,
+   coverage: 100,
+   withGui: false,
+   catalysisStartOxygenCov: true,
+}
+
+
