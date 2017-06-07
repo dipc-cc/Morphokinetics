@@ -237,7 +237,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     while (getLattice().getCoverage() < maxCoverage) {
       activationEnergy.updatePossibles(reactionSites.listIterator(), getList().getDeltaTime(true));
-      float p = getCurrentP();
       if (performSimulationStep()) {
         break;
       }
@@ -301,7 +300,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int random;
     
     currentAdsorptionP = getCurrentP();
-      System.out.println(currentAdsorptionP);
  
     do {
       if (adsorptionSites.isEmpty()) {
@@ -626,7 +624,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalAdsorptionRate -= oldAdsorptionRate;
     if (atom.isOccupied()) {
       atom.setAdsorptionProbability(0);
-       // adsorptionSites.remove(atom);
     } else {
       atom.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - atom.getOccupiedNeighbours()) * adsorptionRateOPerSite);
     }
@@ -635,9 +632,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       adsorptionSites.remove(atom);
     } else if (oldAdsorptionRate == 0) {
       adsorptionSites.add(atom);
-    }
-    if (atom.isOccupied()){
-        adsorptionSites.remove(atom);
     }
   }
   
@@ -778,12 +772,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private float getCurrentP() {
     float numOccupiedNeighbours = 0f;
     for (int i = 0; i < adsorptionSites.size(); i++) {
-      numOccupiedNeighbours += (4f-(float) adsorptionSites.get(i).getOccupiedNeighbours())/4f;
+      numOccupiedNeighbours += (1 - (float) adsorptionSites.get(i).getOccupiedNeighbours() / 4);
     }
-      //System.out.println("\t"+numOccupiedNeighbours+" "+adsorptionSites.size()*4);
-    //return 1.0f -(float) numOccupiedNeighbours / 4.0f / (float) adsorptionSites.size();
-  //return numOccupiedNeighbours/(float) adsorptionSites.size();
-  return  (float)totalAdsorptionRate / (float) adsorptionSites.size();
+    return (float) numOccupiedNeighbours / adsorptionSites.size();
   }
   
   /**
