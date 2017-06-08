@@ -10,11 +10,21 @@ package ratesLibrary;
  */
 public interface IRates {
   /**
-   * Boltzmann constant.
+   * Boltzmann constant (eV/K).
    */
   static double kB = 8.617332e-5;
-  static double h = 6.6260695729e-34; //Planck constant (J.s)
+  /**
+   * Boltzmann constant (J/K).
+   */
   static double kBInt = 1.381e-23;
+  /**
+   * Planck constant (J·s).
+   */
+  static double h = 6.6260695729e-34;
+  /**
+   * Avogadro constant (1/mol).
+   */
+  static double Na = 6.022e23;
   
   public double[] getRates(double temperature);
 
