@@ -232,9 +232,9 @@ public class CatalysisRates implements IRates {
   }
   
   private double getDesorptionRate(byte site, double energy) {
-    double _desRate =  adsorptionRates[site] * Math.exp((energy * 1.602176565e-19 + (-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site] / (1000 * Na)) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))) * (Math.exp(-h * V[site] / (2 * kBInt * temperature))/(1-Math.exp(-h * V[site] / (kBInt * temperature))))))) / (kBInt * temperature));
+    double desorptionRate =  adsorptionRates[site] * Math.exp((energy * 1.602176565e-19 + (-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site] / (1000 * Na)) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))) * (Math.exp(-h * V[site] / (2 * kBInt * temperature))/(1-Math.exp(-h * V[site] / (kBInt * temperature))))))) / (kBInt * temperature));
     System.out.println((-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site] / (1000 * Na)) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))))));
-    return _desRate;
+    return desorptionRate;
   }
   
   
