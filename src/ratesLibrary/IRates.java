@@ -22,9 +22,9 @@ public interface IRates {
    */
   static double h = 6.6260695729e-34;
   /**
-   * Avogadro constant (1/mol).
+   * Avogadro constant (1/mol) * 1000 (g -> kg). 6.022e23·1000.
    */
-  static double Na = 6.022e23;
+  static double Na = 6.022e26;
   
   public double[] getRates(double temperature);
 
