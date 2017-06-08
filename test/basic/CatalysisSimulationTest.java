@@ -63,7 +63,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(1.289225939056773E-8, simulatedTime, 0.0);
+    assertEquals(1.289225939056773E-8, simulatedTime, 1e-14);
   }
   
   @Test
@@ -198,7 +198,7 @@ public class CatalysisSimulationTest {
     assertEquals(4.753680449737789, simulatedTime, 0.0);
     String ref = "4.75368\t0.480000\t1.00000\t0.520000\t0.00000\t644\t13\t322\t20\t0\t15\t102\t205";
     String extraFile = restart.readFile("results/dataCatalysis.txt");
-    String read = extraFile.substring(6816, 6884);
+    String read = extraFile.substring(6817, 6885);
     assertEquals(ref.trim(), read.trim());
   }  
   
