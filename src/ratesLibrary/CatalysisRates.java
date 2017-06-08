@@ -6,6 +6,10 @@
 
 package ratesLibrary;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.exp;
+import static java.lang.Math.log;
+import static java.lang.Math.pow;
 import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
@@ -36,14 +40,16 @@ public class CatalysisRates implements IRates {
   private final double[] pressures;
   private double totalAdsorptionRate;
   private final double[] adsorptionRates;
-  /** Chemical potential. */
+  /** Chemical potential (eV). */
   private final double[] mu;
   /** Molecular interdistance (m). Distance between atoms in the molecule.*/
   private final double[] R;
   /** Vibrational frequency (Hz). */
   private final double[] V;
-  private final double[] preI;
-  /** Symmetry number. */
+  private final double[] reducedMass;
+  /**
+   * Symmetry number.
+   */
   private final double[] sigma;
   /** Temperature (K). */
   private final int temperature;
@@ -88,15 +94,15 @@ public class CatalysisRates implements IRates {
     mu = new double[2];
     mu[CO] = 1;
     mu[O2] = 1;
-    R = new double[2];
+    R = new double[2]; // m
     R[CO] = 1.128e-10;
     R[O2] = 1.21e-10;
-    V = new double[2];
+    V = new double[2]; // Hz
     V[CO] = 6.5e13;
     V[O2] = 4.7e13;
-    preI = new double[2];
-    preI[CO] = (12.01115 * 15.9994) / ((12.01115 + 15.9994) * Na);
-    preI[O2] = 15.9994  / (2 * Na);
+    reducedMass = new double[2];
+    reducedMass[CO] = (12.01115 * 15.9994) / ((12.01115 + 15.9994) * Na);
+    reducedMass[O] = 15.9994 / (2.0 * Na);
     sigma = new double[2];
     sigma[CO] = 0.98;
     sigma[O2] = 0.66;
@@ -246,9 +252,33 @@ public class CatalysisRates implements IRates {
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
   
+  /**
+   * mu_{A} = -K_{B} T log( k_{B} T / p_{A} * (2 pi m_{A} k_{B} T /
+h^2)^(3/2) * (8 pi^2 I k_{B} T / sigma h^2) * 1/
+( 1 - exp( -h v / k_{B} T ) )) )
+   * @param type
+   * @param energy
+   * @return 
+   */
   private double getDesorptionRate(byte type, double energy) {
-    double desorptionRate =  adsorptionRates[type] * Math.exp((energy * 1.602176565e-19 + (-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[type] * 101325))* Math.pow(2 * Math.PI * (mass[type]) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[type] * Math.pow(R[type],2))  * kBInt * temperature / (sigma[type] * Math.pow(h,2))) * (Math.exp(-h * V[type] / (2 * kBInt * temperature))/(1-Math.exp(-h * V[type] / (kBInt * temperature))))))) / (kBInt * temperature));
-    System.out.println((-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[type] * 101325))* Math.pow(2 * Math.PI * (mass[type]) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[type] * Math.pow(R[type],2))  * kBInt * temperature / (sigma[type] * Math.pow(h,2))))));
-    return prefactor * Math.exp((-energy * mu[type]) / (kB * temperature));
+    // translationPartitionFunction
+    double[] qt = new double[2];
+    qt[CO] = pow(2.0 * PI * mass[CO] * kBInt * temperature / pow(h, 2.0), (3.0 / 2.0));
+    qt[O2] = pow(2.0 * PI * mass[O2] * kBInt * temperature / pow(h, 2.0), (3.0 / 2.0)); //O2
+
+    // rotational partition function
+    double[] qr = new double[2];
+    qr[CO] = 8.0 * pow(PI, 2.0) * reducedMass[CO] * pow(R[CO], 2.0) * kBInt * temperature / (sigma[CO] * pow(h, 2.0));
+    qr[O] = 8.0 * pow(PI, 2.0) * reducedMass[O2] * pow(R[O], 2.0) * kBInt * temperature / (sigma[O] * pow(h, 2.0));
+
+    // vibrational partition function
+    double[] qv = new double[2];
+    qv[CO] = 1.0 / (1.0 - exp(-h * V[CO] / (kBInt * temperature)));
+    qv[O2] = 1.0 / (1.0 - exp(-h * V[O2] / (kBInt * temperature)));
+
+    mu[CO] = -kB * temperature * log(kBInt * temperature / (pressures[CO] * 101325.0) * qt[CO] * qr[CO] * qv[CO]);
+    mu[O] = -kB * temperature * log(kBInt * temperature / (pressures[O2] * 101325.0) * qt[O] * qr[O] * qv[O]);
+    double correction = type + 1; // adsorption rate for O is for an atom, this is for a O2 molecule.
+    return correction * adsorptionRates[type] * exp(-(energy + mu[type]) / (kB * temperature));
   }
 }
