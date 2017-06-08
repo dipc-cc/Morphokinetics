@@ -13,6 +13,8 @@ public interface IRates {
    * Boltzmann constant.
    */
   static double kB = 8.617332e-5;
+  static double h = 6.6260695729e-34; //Planck constant (J.s)
+  static double kBInt = 1.381e-23;
   
   public double[] getRates(double temperature);
 
