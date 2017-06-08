@@ -129,11 +129,11 @@ public class CatalysisRates implements IRates {
   }
   
   public void setPressureO2(double pressureO) {
-    pressures[O2] = pressureO;
+    setPressure(O2, pressureO);
   }
   
   public void setPressureCO(double pressureCO) {
-    pressures[CO] = pressureCO;
+    setPressure(CO, pressureCO);
   }
 
   /**
@@ -225,6 +225,13 @@ public class CatalysisRates implements IRates {
     return rates;
   }    
   
+  private void setPressure(byte type, double pressure) {
+    if (pressure < 1e-10) {
+      pressure = 1e-10;
+    }
+    pressures[type] = pressure;
+  }
+
   private double getRate(int sourceType, int sourceSite, int destinationSite) {
     return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
@@ -277,7 +284,7 @@ h^2)^(3/2) * (8 pi^2 I k_{B} T / sigma h^2) * 1/
     qv[O2] = 1.0 / (1.0 - exp(-h * V[O2] / (kBInt * temperature)));
 
     mu[CO] = -kB * temperature * log(kBInt * temperature / (pressures[CO] * 101325.0) * qt[CO] * qr[CO] * qv[CO]);
-    mu[O] = -kB * temperature * log(kBInt * temperature / (pressures[O2] * 101325.0) * qt[O] * qr[O] * qv[O]);
+    mu[O2] = -kB * temperature * log(kBInt * temperature / (pressures[O2] * 101325.0) * qt[O2] * qr[O2] * qv[O2]);
     double correction = type + 1; // adsorption rate for O is for an atom, this is for a O2 molecule.
     return correction * adsorptionRates[type] * exp(-(energy + mu[type]) / (kB * temperature));
   }
