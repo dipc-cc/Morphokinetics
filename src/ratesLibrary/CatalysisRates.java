@@ -10,6 +10,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
+import static kineticMonteCarlo.atom.CatalysisAtom.O2;
 
 /**
  *
@@ -19,7 +20,7 @@ public class CatalysisRates implements IRates {
 
   private final double[][][] diffusionEnergies;
   private final double[] desorptionEnergiesCo;
-  private final double[][] desorptionEnergiesO;
+  private final double[][] desorptionEnergiesO2;
   private final double[][] reactionEnergiesCoO;
   
   private final double prefactor;
@@ -56,11 +57,11 @@ public class CatalysisRates implements IRates {
     desorptionEnergiesCo[BR] = 1.6;
     desorptionEnergiesCo[CUS] = 1.3;
   
-    desorptionEnergiesO = new double[2][2];
-    desorptionEnergiesO[BR][BR]  = 4.6;
-    desorptionEnergiesO[BR][CUS] = 3.3;
-    desorptionEnergiesO[CUS][BR] = 3.3;
-    desorptionEnergiesO[CUS][CUS] = 2.0;
+    desorptionEnergiesO2 = new double[2][2];
+    desorptionEnergiesO2[BR][BR]  = 4.6;
+    desorptionEnergiesO2[BR][CUS] = 3.3;
+    desorptionEnergiesO2[CUS][BR] = 3.3;
+    desorptionEnergiesO2[CUS][CUS] = 2.0;
     
     reactionEnergiesCoO = new double[2][2];
     reactionEnergiesCoO[BR][BR] = 1.5; // CO is in bridge and O in bridge
@@ -70,25 +71,25 @@ public class CatalysisRates implements IRates {
       
     mass = new double[2]; // g/mol
     mass[CO] = 28.01055;
-    mass[O] = 2 * 15.9994;
+    mass[O2] = 2 * 15.9994;
     pressures = new double[2];
     adsorptionRates = new double[2];
     totalAdsorptionRate = -1; // it needs to be initialised
     mu = new double[2];
     mu[CO] = 1;
-    mu[O] = 1;
+    mu[O2] = 1;
     R = new double[2];
     R[CO] = 1.128e-10;
-    R[O] = 1.21e-10;
+    R[O2] = 1.21e-10;
     V = new double[2];
     V[CO] = 6.5e13;
-    V[O] = 4.7e13;
+    V[O2] = 4.7e13;
     preI = new double[2];
     preI[CO] = (12.01115 * 15.9994) / ((12.01115 + 15.9994) * Na);
-    preI[O] = 15.9994  / (2 * Na);
+    preI[O2] = 15.9994  / (2 * Na);
     sigma = new double[2];
     sigma[CO] = 0.98;
-    sigma[O] = 0.66;
+    sigma[O2] = 0.66;
   }
 
   @Override
@@ -111,8 +112,8 @@ public class CatalysisRates implements IRates {
     return diffusionEnergies[i][j][0];
   }
   
-  public void setPressureO(double pressureO) {
-    pressures[O] = pressureO;
+  public void setPressureO2(double pressureO) {
+    pressures[O2] = pressureO;
   }
   
   public void setPressureCO(double pressureCO) {
@@ -179,10 +180,10 @@ public class CatalysisRates implements IRates {
       rates[1] = getDesorptionRate(CO, desorptionEnergiesCo[CUS]);
     } else {
       rates = new double[4];
-      rates[0] = getDesorptionRate(O, desorptionEnergiesO[BR][BR]);
-      rates[1] = getDesorptionRate(O, desorptionEnergiesO[BR][CUS]);
-      rates[2] = getDesorptionRate(O, desorptionEnergiesO[CUS][BR]);
-      rates[3] = getDesorptionRate(O, desorptionEnergiesO[CUS][CUS]);
+      rates[0] = getDesorptionRate(O, desorptionEnergiesO2[BR][BR]);
+      rates[1] = getDesorptionRate(O, desorptionEnergiesO2[BR][CUS]);
+      rates[2] = getDesorptionRate(O, desorptionEnergiesO2[CUS][BR]);
+      rates[3] = getDesorptionRate(O, desorptionEnergiesO2[CUS][CUS]);
     }
     return rates;
   }
@@ -230,7 +231,7 @@ public class CatalysisRates implements IRates {
    * Compute all adsorptions. 
    */
   private void computeAdsorptionRates() {
-    adsorptionRates[O] = 0.5 * computeAdsorptionRate(O);
+    adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
     adsorptionRates[CO] = computeAdsorptionRate(CO);
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
