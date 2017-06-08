@@ -15,6 +15,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
 
   public static final byte CO = 0;
   public static final byte O = 1;
+  public static final byte C = 0;
+  public static final byte O2 = 1;
   public static final byte BR = 0;
   public static final byte CUS = 1;
   
