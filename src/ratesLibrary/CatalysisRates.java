@@ -219,7 +219,7 @@ public class CatalysisRates implements IRates {
    */
   private double computeAdsorptionRate(int sourceType) {
     return pressures[sourceType] * 101132 * 5.0145e-20 /
-            (Math.sqrt(2 * Math.PI * mass[sourceType] * 1.381e-23 * temperature /(1000 * 6.022e23)));
+            (Math.sqrt(2 * Math.PI * mass[sourceType] * kBInt * temperature /(1000 * Na)));
   }
   
   /**
