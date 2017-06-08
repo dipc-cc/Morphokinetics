@@ -25,6 +25,9 @@ public class CatalysisRates implements IRates {
   
   private final double prefactor;
   
+  /**
+   * Mass of molecule (kg/molecule).
+   */
   private final double[] mass;
   private final double[] pressures;
   private double totalAdsorptionRate;
@@ -69,9 +72,9 @@ public class CatalysisRates implements IRates {
     reactionEnergiesCoO[CUS][BR] = 1.2; // CO is in CUS and O in bridge
     reactionEnergiesCoO[CUS][CUS]= 0.9; // CO is in CUS and O in CUS
       
-    mass = new double[2]; // g/mol
-    mass[CO] = 28.01055;
-    mass[O2] = 2 * 15.9994;
+    mass = new double[2]; // kg/molecule
+    mass[CO] = 28.01055 / Na;
+    mass[O2] = 2 * 15.9994 / Na;
     pressures = new double[2];
     adsorptionRates = new double[2];
     totalAdsorptionRate = -1; // it needs to be initialised
@@ -224,7 +227,7 @@ public class CatalysisRates implements IRates {
    */
   private double computeAdsorptionRate(int sourceType) {
     return pressures[sourceType] * 101132 * 5.0145e-20 /
-            (Math.sqrt(2 * Math.PI * mass[sourceType] * kBInt * temperature / Na));
+            (Math.sqrt(2 * Math.PI * mass[sourceType] * kBInt * temperature));
   }
   
   /**
@@ -237,8 +240,8 @@ public class CatalysisRates implements IRates {
   }
   
   private double getDesorptionRate(byte site, double energy) {
-    double desorptionRate =  adsorptionRates[site] * Math.exp((energy * 1.602176565e-19 + (-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site] / Na) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))) * (Math.exp(-h * V[site] / (2 * kBInt * temperature))/(1-Math.exp(-h * V[site] / (kBInt * temperature))))))) / (kBInt * temperature));
-    System.out.println((-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site] / Na) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))))));
+    double desorptionRate =  adsorptionRates[site] * Math.exp((energy * 1.602176565e-19 + (-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site]) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))) * (Math.exp(-h * V[site] / (2 * kBInt * temperature))/(1-Math.exp(-h * V[site] / (kBInt * temperature))))))) / (kBInt * temperature));
+    System.out.println((-kBInt * temperature * Math.log10((kBInt * temperature / (pressures[site] * 101325))* Math.pow(2 * Math.PI * (mass[site]) * kBInt * temperature / Math.pow(h, 2), 3/2) * (8 * Math.pow(Math.PI,2) * (preI[site] * Math.pow(R[site],2))  * kBInt * temperature / (sigma[site] * Math.pow(h,2))))));
     return prefactor * Math.exp((-energy * mu[site]) / (kB * temperature));
   }
 }
