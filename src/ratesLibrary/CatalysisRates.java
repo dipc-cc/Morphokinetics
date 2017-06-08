@@ -29,16 +29,23 @@ public class CatalysisRates implements IRates {
    * Mass of molecule (kg/molecule).
    */
   private final double[] mass;
+  /**
+   * Partial pressures (atm). It is not in Pascal.
+   * Pa = p * 101325 (Pa: kg/m/s^2)
+   */
   private final double[] pressures;
   private double totalAdsorptionRate;
   private final double[] adsorptionRates;
   /** Chemical potential. */
-  private final double[] mu; 
+  private final double[] mu;
+  /** Molecular interdistance (m). Distance between atoms in the molecule.*/
   private final double[] R;
+  /** Vibrational frequency (Hz). */
   private final double[] V;
   private final double[] preI;
+  /** Symmetry number. */
   private final double[] sigma;
-  
+  /** Temperature (K). */
   private final int temperature;
   
   public CatalysisRates(int temperature) {
