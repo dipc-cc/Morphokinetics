@@ -60,10 +60,10 @@ public class Parser {
    */
   private int temperature;
   /**
-   * See {@link #getPressureO()} and {@link #getPressureCO()}.
+   * See {@link #getPressureO2()} and {@link #getPressureCO()}.
    */
   private double pressureCO;
-  private double pressureO;
+  private double pressureO2;
   /**
    * See {@link #getDepositionFlux()}.
    */
@@ -252,7 +252,7 @@ public class Parser {
     calculationMode = "Ag";
     surfaceType = "cartesian";
     temperature = 135;
-    pressureO = 1.0;
+    pressureO2 = 1.0;
     pressureCO = 7.0;
     depositionFlux = 0.0035;
     coverage = 30.0;
@@ -359,9 +359,9 @@ public class Parser {
       temperature = 135;
     }
     try {
-      pressureO = json.getDouble("pressureO");
+      pressureO2 = json.getDouble("pressureO2");
     } catch (JSONException e) {
-      pressureO = 1.0;
+      pressureO2 = 1.0;
     }
     try {
       pressureCO = json.getDouble("pressureCO");
@@ -699,7 +699,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"millerZ\"", millerZ);
     System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
     System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
-    System.out.printf("%32s: %s,\n", "\"pressureO\"", pressureO);
+    System.out.printf("%32s: %s,\n", "\"pressureO\"", pressureO2);
     System.out.printf("%32s: %s,\n", "\"pressureCO\"", pressureCO);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
@@ -848,12 +848,12 @@ public class Parser {
   }
 
   /**
-   * Partial pressure for O_2.
+   * Partial pressure for O2.
    * 
-   * @return O_2 pressure.
+   * @return O2 pressure.
    */
-  public double getPressureO() {
-    return pressureO;
+  public double getPressureO2() {
+    return pressureO2;
   }
   
   /**

@@ -1,5 +1,5 @@
 {  temperature: 600,
-   pressureO: 1,
+   pressureO2: 1,
    pressureCO: 7,
    numberOfSimulations: 1,
    numberOfSteps: 1e3,

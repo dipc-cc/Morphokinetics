@@ -1,6 +1,6 @@
 { temperature: 600,
   pressureCO:7e-6,
-  pressureO:1e-6,
+  pressureO2:1e-6,
   catalysisDiffusion: true,
   catalysisAdsorption: true,
   catalysisDesorption: true,

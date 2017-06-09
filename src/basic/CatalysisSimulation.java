@@ -26,13 +26,12 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
     setRates(new CatalysisRates(getParser().getTemperature()));
     setKmc(new CatalysisKmc(getParser()));
     initialiseRates(getRates(), getParser());
-    
   } 
   
   @Override
   void initialiseRates(IRates rates, Parser parser) {
     CatalysisRates r = (CatalysisRates) rates;
-    r.setPressureO2(parser.getPressureO());
+    r.setPressureO2(parser.getPressureO2());
     r.setPressureCO(parser.getPressureCO());
     ((CatalysisKmc) getKmc()).setRates(r);
     getKmc().initialiseRates(rates.getRates(parser.getTemperature()));
