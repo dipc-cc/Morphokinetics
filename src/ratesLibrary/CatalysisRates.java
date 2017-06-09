@@ -226,8 +226,8 @@ public class CatalysisRates implements IRates {
   }    
   
   private void setPressure(byte type, double pressure) {
-    if (pressure < 1e-10) {
-      pressure = 1e-10;
+    if (pressure < 1e-20) {
+      pressure = 1e-20;
     }
     pressures[type] = pressure;
   }
