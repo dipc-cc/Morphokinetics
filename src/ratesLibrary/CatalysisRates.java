@@ -137,18 +137,6 @@ public class CatalysisRates implements IRates {
   }
 
   /**
-   * Sum of adsorption rates of CO and O.
-   * 
-   * @return total adsorption rate.
-   */
-  public double getTotalAdsorptionRate() {
-    if (totalAdsorptionRate == -1) {
-      computeAdsorptionRates();
-    }
-    return totalAdsorptionRate;
-  }
-
-  /**
    * Adsorption rate for CO or O.
    * 
    * @param atomType CO or O.
@@ -159,18 +147,6 @@ public class CatalysisRates implements IRates {
       computeAdsorptionRates();
     }
     return adsorptionRates[atomType];
-  }
-
-  /**
-   * All adsorption rates.
-   * 
-   * @return all adsorption rates.
-   */
-  public double[] getAdsorptionRates() {
-    if (totalAdsorptionRate == -1) {
-      computeAdsorptionRates();
-    }
-    return adsorptionRates;
   }
 
   @Override
