@@ -276,7 +276,7 @@ h^2)^(3/2) * (8 pi^2 I k_{B} T / sigma h^2) * 1/
     // rotational partition function
     double[] qr = new double[2];
     qr[CO] = 8.0 * pow(PI, 2.0) * reducedMass[CO] * pow(R[CO], 2.0) * kBInt * temperature / (sigma[CO] * pow(h, 2.0));
-    qr[O] = 8.0 * pow(PI, 2.0) * reducedMass[O2] * pow(R[O], 2.0) * kBInt * temperature / (sigma[O] * pow(h, 2.0));
+    qr[O2] = 8.0 * pow(PI, 2.0) * reducedMass[O2] * pow(R[O2], 2.0) * kBInt * temperature / (sigma[O2] * pow(h, 2.0));
 
     // vibrational partition function
     double[] qv = new double[2];
