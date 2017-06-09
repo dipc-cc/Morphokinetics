@@ -38,7 +38,6 @@ public class CatalysisRates implements IRates {
    * Pa = p * 101325 (Pa: kg/m/s^2)
    */
   private final double[] pressures;
-  private double totalAdsorptionRate;
   private final double[] adsorptionRates;
   /** Chemical potential (eV). */
   private final double[] mu;
@@ -90,7 +89,6 @@ public class CatalysisRates implements IRates {
     mass[O2] = 2 * 15.9994 / Na;
     pressures = new double[2];
     adsorptionRates = new double[2];
-    totalAdsorptionRate = -1; // it needs to be initialised
     mu = new double[2];
     mu[CO] = 1;
     mu[O2] = 1;
@@ -204,7 +202,6 @@ public class CatalysisRates implements IRates {
   public void computeAdsorptionRates() {
     adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
     adsorptionRates[CO] = computeAdsorptionRate(CO);
-    totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
   
   private void setPressure(byte type, double pressure) {
