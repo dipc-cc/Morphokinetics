@@ -143,9 +143,6 @@ public class CatalysisRates implements IRates {
    * @return adsorption rate.
    */
   public double getAdsorptionRate(int atomType) {
-    if (totalAdsorptionRate == -1) {
-      computeAdsorptionRates();
-    }
     return adsorptionRates[atomType];
   }
 
@@ -229,7 +226,7 @@ public class CatalysisRates implements IRates {
   /**
    * Compute all adsorptions. 
    */
-  private void computeAdsorptionRates() {
+  public void computeAdsorptionRates() {
     adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
     adsorptionRates[CO] = computeAdsorptionRate(CO);
     totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
