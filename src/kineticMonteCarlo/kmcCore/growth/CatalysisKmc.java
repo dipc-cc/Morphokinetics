@@ -784,18 +784,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     System.out.println(" Process ");
     System.out.println(" ------- ");
     System.out.println("CO adsorption\t" + adsorptionRateCOPerSite);
-    System.out.println(" O adsorption\t" + adsorptionRateOPerSite +"\t"+adsorptionRateOPerSite*4);
+    System.out.println(" O adsorption\t" + adsorptionRateOPerSite + "\t" + adsorptionRateOPerSite * 4);
     System.out.println(" ------- ");
     System.out.println("CO desorption (BR)\t" + desorptionRateCOPerSite[0]);
     System.out.println("CO desorption (CUS)\t" + desorptionRateCOPerSite[1]);
-    System.out.println("O^BR + O^BR\t"+ desorptionRateOPerSite[0]);
-    System.out.println("O^BR + O^CUS\t"+ desorptionRateOPerSite[1]);
-    System.out.println("O^CUS + O^BR\t"+ desorptionRateOPerSite[2]);
-    System.out.println("O^CUS + O^CUS\t"+ desorptionRateOPerSite[3]);
+    System.out.println("O^BR + O^BR\t" + desorptionRateOPerSite[0]);
+    System.out.println("O^BR + O^CUS\t" + desorptionRateOPerSite[1]);
+    System.out.println("O^CUS + O^BR\t" + desorptionRateOPerSite[2]);
+    System.out.println("O^CUS + O^CUS\t" + desorptionRateOPerSite[3]);
     System.out.println(" ------- ");
-    System.out.println("CO^BR + O^CUS\t"+reactionRateCoO[1]);
-    System.out.println("CO^BR + O^BR\t"+reactionRateCoO[0]);
-    System.out.println("CO^CUS + O^CUS\t"+reactionRateCoO[3]);
-    System.out.println("CO^CUS + O^BR\t"+reactionRateCoO[2]);
+    System.out.println("CO^BR + O^CUS\t" + reactionRateCoO[1]);
+    System.out.println("CO^BR + O^BR\t" + reactionRateCoO[0]);
+    System.out.println("CO^CUS + O^CUS\t" + reactionRateCoO[3]);
+    System.out.println("CO^CUS + O^BR\t" + reactionRateCoO[2]);
   }
 }
