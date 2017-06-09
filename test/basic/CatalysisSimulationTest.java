@@ -107,7 +107,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(4.593607446724338E25, simulatedTime, 0.0);
+    assertEquals(2.59077385392468E20, simulatedTime, 0.0);
   }
   
   @Test
@@ -129,7 +129,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(4.812131634474805E-4, simulatedTime, 0.0);
+    assertEquals(0.0019962995960283642, simulatedTime, 0.0);
   }
   
   @Test
@@ -173,7 +173,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(3.584418558195821E14, simulatedTime, 0.0);
+    assertEquals(5.3347262984724244E20, simulatedTime, 0.0);
   }
   
   @Test
@@ -195,10 +195,11 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(4.753680449737789, simulatedTime, 0.0);
+    assertEquals(3.763340035214277E-5, simulatedTime, 0.0);
     String ref = "4.75368\t0.480000\t1.00000\t0.520000\t0.00000\t644\t13\t322\t20\t0\t15\t102\t205";
+    ref = "3.76334e-05\t0.00000\t0.0350000\t1.00000\t0.960000\t503\t488\t8\t0\t0\t0\t0\t8";
     String extraFile = restart.readFile("results/dataCatalysis.txt");
-    String read = extraFile.substring(6817, 6885);
+    String read = extraFile.substring(6781, 6847);
     assertEquals(ref.trim(), read.trim());
   }  
   
