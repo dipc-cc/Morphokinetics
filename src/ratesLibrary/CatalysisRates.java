@@ -198,6 +198,15 @@ public class CatalysisRates implements IRates {
     return rates;
   }    
   
+  /**
+   * Compute all adsorptions. 
+   */
+  public void computeAdsorptionRates() {
+    adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
+    adsorptionRates[CO] = computeAdsorptionRate(CO);
+    totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
+  }
+  
   private void setPressure(byte type, double pressure) {
     if (pressure < 1e-20) {
       pressure = 1e-20;
@@ -221,15 +230,6 @@ public class CatalysisRates implements IRates {
   private double computeAdsorptionRate(int sourceType) {
     return pressures[sourceType] * 101132 * 5.0145e-20 /
             (Math.sqrt(2 * Math.PI * mass[sourceType] * kBInt * temperature));
-  }
-  
-  /**
-   * Compute all adsorptions. 
-   */
-  public void computeAdsorptionRates() {
-    adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
-    adsorptionRates[CO] = computeAdsorptionRate(CO);
-    totalAdsorptionRate = adsorptionRates[O] + adsorptionRates[CO];
   }
   
   /**
