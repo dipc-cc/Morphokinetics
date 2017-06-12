@@ -103,7 +103,7 @@ public class CatalysisRates implements IRates {
     reducedMass[O] = 15.9994 / (2.0 * Na);
     sigma = new double[2];
     sigma[CO] = 0.98;
-    sigma[O2] = 0.66;
+    sigma[O2] = 1.32;
   }
 
   @Override
@@ -210,8 +210,10 @@ public class CatalysisRates implements IRates {
    * Compute all adsorptions.
    */
   public void computeAdsorptionRates() {
-    adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
-    adsorptionRates[CO] = computeAdsorptionRate(CO);
+    double stickingCoefficient = 0.5;
+    adsorptionRates[CO] = stickingCoefficient * computeAdsorptionRate(CO);
+    double dissociativeAdsorption = 0.5;
+    adsorptionRates[O] = dissociativeAdsorption * computeAdsorptionRate(O2);
   }
   
   private void setPressure(byte type, double pressure) {
@@ -235,8 +237,8 @@ public class CatalysisRates implements IRates {
    * @return 
    */
   private double computeAdsorptionRate(int sourceType) {
-    double areaQuarterUc = 5.0145e-20; // Angstrom²
-    return pressures[sourceType] * areaQuarterUc /
+    double areaHalfUc = 10.0308e-20; // Angstrom²
+    return pressures[sourceType] * areaHalfUc /
             (Math.sqrt(2.0 * Math.PI * mass[sourceType] * kBInt * temperature));
   }
   

@@ -478,7 +478,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
-        a.setAdsorptionProbability(adsorptionRateCOPerSite + 4 * adsorptionRateOPerSite); // there is no neighbour
+        a.setAdsorptionProbability(adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
         adsorptionSites.add(a);
         totalAdsorptionRate += a.getAdsorptionProbability();
       }
@@ -625,7 +625,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.isOccupied()) {
       atom.setAdsorptionProbability(0);
     } else {
-      atom.setAdsorptionProbability(adsorptionRateCOPerSite + (4 - atom.getOccupiedNeighbours()) * adsorptionRateOPerSite);
+      int canAdsorbO2 = atom.isIsolated() ? 0 : 1;
+      atom.setAdsorptionProbability(adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
     }
     totalAdsorptionRate += atom.getAdsorptionProbability();
     if (atom.getAdsorptionProbability() == 0) {
