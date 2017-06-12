@@ -34,8 +34,8 @@ public class CatalysisRates implements IRates {
    */
   private final double[] mass;
   /**
-   * Partial pressures (atm). It is not in Pascal.
-   * Pa = p * 101325 (Pa: kg/m/s^2)
+   * Partial pressures in Pascal (Pa).
+   * Pa = atm * 101325 (Pa: kg/m/s^2)
    */
   private final double[] pressures;
   private final double[] adsorptionRates;
@@ -126,10 +126,20 @@ public class CatalysisRates implements IRates {
     return diffusionEnergies[i][j][0];
   }
   
+  /**
+   * Sets pressure for O2 given in atmospheres and saved in Pa.
+   *
+   * @param pressureO in atm.
+   */
   public void setPressureO2(double pressureO) {
     setPressure(O2, pressureO);
   }
   
+  /**
+   * Sets pressure for CO given in atmospheres and saved in Pa.
+   *
+   * @param pressureCO in atm.
+   */
   public void setPressureCO(double pressureCO) {
     setPressure(CO, pressureCO);
   }
@@ -197,7 +207,7 @@ public class CatalysisRates implements IRates {
   }    
   
   /**
-   * Compute all adsorptions. 
+   * Compute all adsorptions.
    */
   public void computeAdsorptionRates() {
     adsorptionRates[O] = 0.5 * computeAdsorptionRate(O2);
@@ -208,7 +218,7 @@ public class CatalysisRates implements IRates {
     if (pressure < 1e-20) {
       pressure = 1e-20;
     }
-    pressures[type] = pressure;
+    pressures[type] = pressure * 101325.0;
   }
 
   private double getRate(int sourceType, int sourceSite, int destinationSite) {
@@ -225,8 +235,9 @@ public class CatalysisRates implements IRates {
    * @return 
    */
   private double computeAdsorptionRate(int sourceType) {
-    return pressures[sourceType] * 101132 * 5.0145e-20 /
-            (Math.sqrt(2 * Math.PI * mass[sourceType] * kBInt * temperature));
+    double areaQuarterUc = 5.0145e-20; // Angstrom²
+    return pressures[sourceType] * areaQuarterUc /
+            (Math.sqrt(2.0 * Math.PI * mass[sourceType] * kBInt * temperature));
   }
   
   /**
@@ -253,8 +264,8 @@ h^2)^(3/2) * (8 pi^2 I k_{B} T / sigma h^2) * 1/
     qv[CO] = 1.0 / (1.0 - exp(-h * V[CO] / (kBInt * temperature)));
     qv[O2] = 1.0 / (1.0 - exp(-h * V[O2] / (kBInt * temperature)));
 
-    mu[CO] = -kB * temperature * log(kBInt * temperature / (pressures[CO] * 101325.0) * qt[CO] * qr[CO] * qv[CO]);
-    mu[O2] = -kB * temperature * log(kBInt * temperature / (pressures[O2] * 101325.0) * qt[O2] * qr[O2] * qv[O2]);
+    mu[CO] = -kB * temperature * log(kBInt * temperature / pressures[CO] * qt[CO] * qr[CO] * qv[CO]);
+    mu[O2] = -kB * temperature * log(kBInt * temperature / pressures[O2] * qt[O2] * qr[O2] * qv[O2]);
     double correction = type + 1; // adsorption rate for O is for an atom, this is for a O2 molecule.
     return correction * adsorptionRates[type] * exp(-(energy + mu[type]) / (kB * temperature));
   }
