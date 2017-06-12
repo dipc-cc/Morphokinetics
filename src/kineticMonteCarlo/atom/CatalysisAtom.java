@@ -186,9 +186,16 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     }
   }
 
+  /**
+   * Stores reaction probability for current atom with respect to neighbour atoms.
+   * 
+   * @param probability reaction probability, only the half is stored. To avoid double counting,
+   * otherwise, every reaction will be counted twice.
+   * @param neighbourPos
+   */
   public void addReactionProbability(double probability, int neighbourPos) {
     //reactionProbability += probability; // it creates numerical error
-    reactionEdge[neighbourPos] += probability;
+    reactionEdge[neighbourPos] += probability * 0.5;
     reactionProbability = 0;
     for (int i = 0; i < 4; i++) { // to avoid numerical error. Recompute
       reactionProbability += reactionEdge[i];
