@@ -673,7 +673,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = atom.getNeighbour(i);
       if (neighbour.isOccupied() && neighbour.getType() == otherType) {
-        double probability = getReactionProbability(atom, neighbour);
+        double probability = getReactionProbability(atom, neighbour); 
         atom.addReactionProbability(probability, i);
       }
     }
@@ -784,19 +784,20 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private void printRates() {
     System.out.println(" Process ");
     System.out.println(" ------- ");
-    System.out.println("CO adsorption\t" + adsorptionRateCOPerSite);
-    System.out.println(" O adsorption\t" + adsorptionRateOPerSite + "\t" + adsorptionRateOPerSite * 4);
+    System.out.format("%s\t%1.1e\n", "CO adsorption\t", adsorptionRateCOPerSite);
+    System.out.format("%s\t%1.1e\t%1.1e\n", " O adsorption\t",adsorptionRateOPerSite, adsorptionRateOPerSite * 2);
     System.out.println(" ------- ");
-    System.out.println("CO desorption (BR)\t" + desorptionRateCOPerSite[0]);
-    System.out.println("CO desorption (CUS)\t" + desorptionRateCOPerSite[1]);
-    System.out.println("O^BR + O^BR\t" + desorptionRateOPerSite[0]);
-    System.out.println("O^BR + O^CUS\t" + desorptionRateOPerSite[1]);
-    System.out.println("O^CUS + O^BR\t" + desorptionRateOPerSite[2]);
-    System.out.println("O^CUS + O^CUS\t" + desorptionRateOPerSite[3]);
+    System.out.println("Desorption");
+    System.out.format("%s\t\t%1.1e\n","CO^BR", desorptionRateCOPerSite[0]);
+    System.out.format("%s\t\t%1.1e\n", "CO^CUS", desorptionRateCOPerSite[1]);
+    System.out.format("%s\t%1.1e\n", "O^BR + O^BR", desorptionRateOPerSite[0]);
+    System.out.format("%s\t%1.1e\n", "O^CUS + O^CUS", desorptionRateOPerSite[3]);
+    System.out.format("%s\t%1.1e\n", "O^BR + O^CUS", desorptionRateOPerSite[1]);
+    System.out.format("%s\t%1.1e\n", "O^CUS + O^BR", desorptionRateOPerSite[2]);
     System.out.println(" ------- ");
-    System.out.println("CO^BR + O^CUS\t" + reactionRateCoO[1]);
-    System.out.println("CO^BR + O^BR\t" + reactionRateCoO[0]);
-    System.out.println("CO^CUS + O^CUS\t" + reactionRateCoO[3]);
-    System.out.println("CO^CUS + O^BR\t" + reactionRateCoO[2]);
+    System.out.format("%s\t%1.1e\n", "CO^BR + O^CUS", reactionRateCoO[1]);
+    System.out.format("%s\t%1.1e\n", "CO^BR + O^BR", reactionRateCoO[0]);
+    System.out.format("%s\t%1.1e\n", "CO^CUS + O^CUS", reactionRateCoO[3]);
+    System.out.format("%s\t%1.1e\n", "CO^CUS + O^BR", reactionRateCoO[2]);
   }
 }
