@@ -95,6 +95,16 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   public byte getLatticeSite() {
     return latticeSite;
   }
+  
+  /**
+   * Tells when current atom is completely surrounded.
+   * 
+   * @return true if it has 4 occupied neighbours.
+   */
+  @Override
+  public boolean isIsolated() {
+    return getOccupiedNeighbours() == 4;
+  }
 
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
