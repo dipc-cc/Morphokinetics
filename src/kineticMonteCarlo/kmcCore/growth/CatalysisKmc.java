@@ -49,7 +49,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private ArrayList<CatalysisAtom> desorptionSites;
   private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private double totalReactionRate;
-  private float currentAdsorptionP;
+  
   private ArrayList<CatalysisAtom> reactionSites;
   private double[] diffusionRateCO;
   private double[] diffusionRateO;
@@ -73,7 +73,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   public CatalysisKmc(Parser parser) {
     super(parser);
-    currentAdsorptionP = 1.0f;
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
@@ -191,7 +190,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-    currentAdsorptionP = 1.0f;
     if (getList().getGlobalProbability() == 0) {
       return true; // there is nothing more we can do
     }
@@ -217,7 +215,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), currentAdsorptionP));
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O)));
       }
       getCoverages();
       restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
@@ -298,8 +296,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     boolean deposited;
     CatalysisAtom neighbourAtom = null;
     int random;
-    
-    currentAdsorptionP = getCurrentP();
  
     do {
       if (adsorptionSites.isEmpty()) {
@@ -774,13 +770,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalDiffusionRate = sum;
   }
   
-  private float getCurrentP() {
+  /*private float getCurrentP() {
     float numOccupiedNeighbours = 0f;
     for (int i = 0; i < adsorptionSites.size(); i++) {
       numOccupiedNeighbours += (1 - (float) adsorptionSites.get(i).getOccupiedNeighbours() / 4);
     }
     return (float) numOccupiedNeighbours / adsorptionSites.size();
-  }
+  }*/
   
   /**
    * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).
