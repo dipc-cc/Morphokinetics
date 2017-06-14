@@ -324,22 +324,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atomType = CO;
       } else {
         atomType = O;
-        if(destinationAtom.getOccupiedNeighbours()==4){
-          deposited=false;
-          continue;
-        }
       }
       destinationAtom.setType(atomType);
       deposited = depositAtom(destinationAtom);
       if (atomType == O) { // it has to deposit two O (dissociation of O2 -> 2O)
         random = StaticRandom.rawInteger(4);
+        neighbourAtom = destinationAtom.getNeighbour(random);
+        while (neighbourAtom.isOccupied()) {
+          random = (random + 1) % 4;
           neighbourAtom = destinationAtom.getNeighbour(random);
-          while (neighbourAtom.isOccupied()) {
-            random = (random + 1) % 4;
-            neighbourAtom = destinationAtom.getNeighbour(random);
-          }
-          neighbourAtom.setType(O);
-          depositAtom(neighbourAtom);
+        }
+        neighbourAtom.setType(O);
+        depositAtom(neighbourAtom);
       }
     } while (!deposited);
     
