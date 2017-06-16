@@ -55,6 +55,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double[] diffusionRateO;
   private double totalDiffusionRate;
   private ArrayList<CatalysisAtom> diffusionSites;
+  
+  private ArrayList sitesWith4OccupiedNeighbours;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -215,7 +217,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O)));
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float)(sitesWith4OccupiedNeighbours.size()/(float)getLattice().size())));
       }
       getCoverages();
       restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
@@ -250,6 +252,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalAdsorptionRate = 0.0;
     totalDesorptionRate = 0.0;
     totalReactionRate = 0.0;
+    sitesWith4OccupiedNeighbours = new ArrayList();
     getLattice().resetOccupied();
     if (startOxygen) {
       initCovered();
@@ -278,14 +281,40 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     co2 = new long[4];
   }
   
-  private boolean depositAtom(CatalysisAtom atom) {
+  private boolean depositAtom(CatalysisAtom atom){
+    return depositAtom(atom,false);
+  }
+  
+  private boolean depositAtom(CatalysisAtom atom, boolean check) {
     if (atom.isOccupied()) {
       return false;
     }
-
     getLattice().deposit(atom, false);
+    
+    if(check){
+      updateLakes(atom);
+    }
 
     return true;
+  }
+  
+  private void updateLakes(CatalysisAtom atom){
+    for (int i = -2; i < 3; i++) {
+      for (int j = -2; j < 3; j++) { 
+        int atomJ = (atom.getjHexa()+j+getLattice().getHexaSizeJ())%getLattice().getHexaSizeJ();
+        int atomI = (atom.getiHexa()+i+getLattice().getHexaSizeI())%getLattice().getHexaSizeI();
+        
+        int tempAtomIndex = atomJ*getLattice().getHexaSizeJ()+atomI;
+        
+        AbstractGrowthUc uc = getLattice().getUc(tempAtomIndex);
+        CatalysisAtom tempAtom = (CatalysisAtom) uc.getAtom(j);
+        if(!sitesWith4OccupiedNeighbours.contains(tempAtom.getId())){
+          if(tempAtom.getOccupiedNeighbours()==4 && !tempAtom.isOccupied()){
+            sitesWith4OccupiedNeighbours.add(tempAtom.getId());
+          }
+        }
+      }
+    }
   }
   
   private CatalysisAtom depositNewAtom() {
@@ -335,7 +364,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           neighbourAtom = destinationAtom.getNeighbour(random);
         }
         neighbourAtom.setType(O);
-        depositAtom(neighbourAtom);
+        depositAtom(neighbourAtom, true);
       }
     } while (!deposited);
     
