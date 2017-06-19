@@ -27,10 +27,10 @@ public class AvlTree<T extends Comparable<T>> {
   }
   
   public double getDesorptionRate() {
-    return ((CatalysisAtom) root.getData()).sumDesorptionRate;
+    return ((CatalysisAtom) root.getData()).getSumDesorptionRate();
   }
   
-  public T Maximum() {
+  public T getMaximum() {
     Node<T> local = root;
     if (local == null)
       return null;
@@ -39,7 +39,7 @@ public class AvlTree<T extends Comparable<T>> {
     return local.getData();
   }
   
-  public T Minimum() {
+  public T getMinimum() {
     Node<T> local = root;
     if (local == null)
       return null;
@@ -150,9 +150,9 @@ public class AvlTree<T extends Comparable<T>> {
   private boolean removeRate(Node<T> n, T data){
     if (n == null) 
       return false;
-    ((CatalysisAtom) n.getData()).sumDesorptionRate -= ((CatalysisAtom)data).desorptionProbability;
+    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-((CatalysisAtom)data).getDesorptionProbability());
     if (n.getData().compareTo(data) == 0){
-      ((CatalysisAtom)data).desorptionProbability = 0.0;
+      ((CatalysisAtom)data).setDesorptionProbability(0.0);
       return true;}
     if (n.getData().compareTo(data) > 0)
         return removeRate(n.getLeft(), data);
@@ -161,10 +161,9 @@ public class AvlTree<T extends Comparable<T>> {
     return false;
   }
   
-  
   public boolean searchAndSetZero(T data) {
     return searchAndSetZero(root, data);
-  }//*/
+  }
   
   private boolean searchAndSetZero(Node<T> n, T data){
     if (n == null) 
@@ -178,7 +177,7 @@ public class AvlTree<T extends Comparable<T>> {
     if (n.getData().compareTo(data) < 0)
       return searchAndSetZero(n.getRight(), data);
     return false;
-  }//*/
+  }
   
   @Override
   public String toString() {
@@ -187,12 +186,12 @@ public class AvlTree<T extends Comparable<T>> {
   
   public boolean addRate(T data) {
     return addRate(root, data);
-  }//*/
+  }
   
   private boolean addRate(Node<T> n, T data) {
     if (n == null) 
       return false;
-    ((CatalysisAtom) n.getData()).sumDesorptionRate += ((CatalysisAtom) data).desorptionProbability;
+    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(((CatalysisAtom) data).getDesorptionProbability());
     if (n.getData().compareTo(data) == 0){
       return true;}
     if (n.getData().compareTo(data) > 0)
@@ -200,11 +199,11 @@ public class AvlTree<T extends Comparable<T>> {
     if (n.getData().compareTo(data) < 0)
       return addRate(n.getRight(), data);
     return false;
-  }//*/
+  }
   
   public boolean searchAndUpdate(T data) {
     return searchAndUpdate(root, data);
-  }//*/
+  }
   
   private boolean searchAndUpdate(Node<T> n, T data) {
     if (n == null) 
@@ -217,7 +216,7 @@ public class AvlTree<T extends Comparable<T>> {
     if (n.getData().compareTo(data) < 0)
       return searchAndUpdate(n.getRight(), data);
     return false;
-  }//*/
+  }
   
   public void PrintTree() {
     root.level = 0;
@@ -239,6 +238,7 @@ public class AvlTree<T extends Comparable<T>> {
       }
     }
   }
+  
   public void setParents() {
     setParents(root, null);
   }
@@ -289,14 +289,14 @@ public class AvlTree<T extends Comparable<T>> {
   private void clear(Node n) {
     if (n == null)
       return;
-    ((CatalysisAtom) n.getData()).sumDesorptionRate = 0.0;
+    ((CatalysisAtom) n.getData()).setSumDesorptionRate(0.0);
     clear(n.getLeft());
     clear(n.getRight());
   }
     
   public void populate() {
     populateCatalysisAtom(root);
-  }//*/
+  }
   
   /**
    * Populates tree with the sum of child rates to current node.
@@ -311,41 +311,35 @@ public class AvlTree<T extends Comparable<T>> {
 
     if (n.isLeaf()) {
       ((CatalysisAtom) n.getData()).equalRate();
-      return ((CatalysisAtom) n.getData()).desorptionProbability;
+      return ((CatalysisAtom) n.getData()).getDesorptionProbability();
     }
     // add current rate to the sum
-    ((CatalysisAtom) n.getData()).sumDesorptionRate = ((CatalysisAtom) n.getData()).desorptionProbability;
+    ((CatalysisAtom) n.getData()).setSumDesorptionRate(((CatalysisAtom) n.getData()).getDesorptionProbability());
     if (n.getLeft() != null) {
       // add left childen rate sum 
-      ((CatalysisAtom) n.getData()).sumDesorptionRate += populateCatalysisAtom(n.getLeft());
+      ((CatalysisAtom) n.getData()).addToSumDesorptionRate(populateCatalysisAtom(n.getLeft()));
     }
     if (n.getRight() != null) {
-      ((CatalysisAtom) n.getData()).sumDesorptionRate += populateCatalysisAtom(n.getRight());
+      ((CatalysisAtom) n.getData()).addToSumDesorptionRate(populateCatalysisAtom(n.getRight()));
     }
-    return ((CatalysisAtom) n.getData()).sumDesorptionRate;
-  }//*/
-  
-  
+    return ((CatalysisAtom) n.getData()).getSumDesorptionRate();
+  }  
   
   public CatalysisAtom randomAtom(double randomNumber) {
     return (CatalysisAtom) randomAtom(root, randomNumber).getData();
-  }//*/
+  }
   
-  private Node randomAtom(Node n, double r) { //, int level) {
-    //System.out.println(level);
+  private Node randomAtom(Node n, double r) {
     CatalysisAtom a = (CatalysisAtom) n.getData();
     if (n.isLeaf()) {
       return n;
     }
-    /*if (n.getLeft() == null) {
-      return n;
-    }//*/
     double leftRate = 0.0;
     if (n.getLeft() != null) 
-      leftRate = ((CatalysisAtom) n.getLeft().getData()).sumDesorptionRate;
+      leftRate = ((CatalysisAtom) n.getLeft().getData()).getSumDesorptionRate();
     double rightRate = 0.0;
     if (n.getRight() != null) 
-      rightRate = ((CatalysisAtom) n.getRight().getData()).sumDesorptionRate;
+      rightRate = ((CatalysisAtom) n.getRight().getData()).getSumDesorptionRate();
 
     if (r < leftRate) {
       return randomAtom(n.getLeft(), r);
@@ -354,21 +348,17 @@ public class AvlTree<T extends Comparable<T>> {
     } else {
       return n;
     }
-  }//*/
+  }
   
   public Comparable findRate(double randomNumber) {
     return findRate(root, randomNumber).getData();
   }
   
   private Node findRate(Node n, double r) { //, int level) {
-    //System.out.println(level);
     PseudoAtom a = (PseudoAtom) n.getData();
     if (n.isLeaf()) {
       return n;
     }
-    /*if (n.getLeft() == null) {
-      return n;
-    }//*/
     double leftRate = 0.0;
     if (n.getLeft() != null) 
       leftRate = ((PseudoAtom) n.getLeft().getData()).sumRate;
