@@ -5,13 +5,14 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.Comparator;
 import utils.StaticRandom;
 
 /**
  *
  * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisAtom extends AbstractGrowthAtom {
+public class CatalysisAtom extends AbstractGrowthAtom implements Comparator, Comparable {
 
   public static final byte CO = 0;
   public static final byte O = 1;
@@ -47,6 +48,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private double[][][] probabilities;
   
   private CatalysisAtomAttributes attributes;
+  /** Attribute for AVL tree. */
+  private double sumDesorptionRate;
   
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
@@ -104,6 +107,18 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   @Override
   public boolean isIsolated() {
     return getOccupiedNeighbours() == 4;
+  }
+
+  public double getSumDesorptionRate() {
+    return sumDesorptionRate;
+  }
+
+  public void setSumDesorptionRate(double sumDesorptionRate) {
+    this.sumDesorptionRate = sumDesorptionRate;
+  }
+  
+  public void addToSumDesorptionRate(double delta) {
+    sumDesorptionRate += delta;
   }
 
   /**
@@ -380,4 +395,72 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     this.attributes.addOneHop();
     atom.setAttributes(tmpAttributes);
   }
+
+  /**
+   * Compares desorption probabilities of two CatalysisAtom.
+   * 
+   * @param o other atom.
+   * @return 
+   */
+  @Override
+  public int compareTo(Object o) {
+    // Desorption probability
+    /*if (o instanceof CatalysisAtom) {
+      CatalysisAtom a = (CatalysisAtom) o;
+      double otherDesorption = a.getDesorptionProbability();
+      if (desorptionProbability < otherDesorption) {
+        return -1;
+      } else if (desorptionProbability > otherDesorption) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } else {
+      throw new IllegalArgumentException("obj must be an "
+              + " instance of a TestScores object.");
+    }//*/
+    if (o instanceof CatalysisAtom) {
+      CatalysisAtom a = (CatalysisAtom) o;
+      double otherId = a.getId();
+      if (getId() < otherId) {
+        return -1;
+      } else if (getId() > otherId) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } else {
+      throw new IllegalArgumentException("obj must be an "
+              + " instance of a TestScores object.");
+    }//*/
+  }
+  public void equalRate() {
+    sumDesorptionRate = desorptionProbability;
+  }
+  
+  @Override
+  public String toString() {
+    String returnString = "Atom Id " + getId() + " desorptionRate " + desorptionProbability + " "+sumDesorptionRate;
+    return returnString;
+  }
+
+  /**
+   * It should only compare 
+   * @param o1
+   * @param o2
+   * @return 
+   */
+  @Override
+  public int compare(Object o1, Object o2) {
+    double a1 = (double) o1;
+    double a2 = (double) o2;
+    if (a1 < a2) {
+      return -1;
+    } else if (a1 > a2) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
 }
