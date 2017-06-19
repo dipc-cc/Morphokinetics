@@ -699,7 +699,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"millerZ\"", millerZ);
     System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
     System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
-    System.out.printf("%32s: %s,\n", "\"pressureO\"", pressureO2);
+    System.out.printf("%32s: %s,\n", "\"pressureO2\"", pressureO2);
     System.out.printf("%32s: %s,\n", "\"pressureCO\"", pressureCO);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
