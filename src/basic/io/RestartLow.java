@@ -408,16 +408,17 @@ class RestartLow {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
-
+      String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
+      out.write(s);
       for (int i = 0; i < data.length; i++) {
         double coverage = data[i][0];
         double t = data[i][1];
         double coverageCO = data[i][2];
         double coverageO = data[i][3];
-        double coverageLagos = data[i][4];
+        double coverageLake = data[i][4];
         
         if (t > 0 || coverage > 0) {
-          String s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, coverageLagos);
+          s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, coverageLake);
           out.write(s);
         }
       }
