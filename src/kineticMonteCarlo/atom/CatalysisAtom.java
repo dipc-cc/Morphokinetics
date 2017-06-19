@@ -5,14 +5,13 @@
  */
 package kineticMonteCarlo.atom;
 
-import java.util.Comparator;
 import utils.StaticRandom;
 
 /**
  *
  * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisAtom extends AbstractGrowthAtom implements Comparator, Comparable {
+public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
 
   public static final byte CO = 0;
   public static final byte O = 1;
@@ -404,21 +403,6 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparator, Com
    */
   @Override
   public int compareTo(Object o) {
-    // Desorption probability
-    /*if (o instanceof CatalysisAtom) {
-      CatalysisAtom a = (CatalysisAtom) o;
-      double otherDesorption = a.getDesorptionProbability();
-      if (desorptionProbability < otherDesorption) {
-        return -1;
-      } else if (desorptionProbability > otherDesorption) {
-        return 1;
-      } else {
-        return 0;
-      }
-    } else {
-      throw new IllegalArgumentException("obj must be an "
-              + " instance of a TestScores object.");
-    }//*/
     if (o instanceof CatalysisAtom) {
       CatalysisAtom a = (CatalysisAtom) o;
       double otherId = a.getId();
@@ -432,7 +416,7 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparator, Com
     } else {
       throw new IllegalArgumentException("obj must be an "
               + " instance of a TestScores object.");
-    }//*/
+    }
   }
   public void equalRate() {
     sumDesorptionRate = desorptionProbability;
@@ -443,24 +427,4 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparator, Com
     String returnString = "Atom Id " + getId() + " desorptionRate " + desorptionProbability + " "+sumDesorptionRate;
     return returnString;
   }
-
-  /**
-   * It should only compare 
-   * @param o1
-   * @param o2
-   * @return 
-   */
-  @Override
-  public int compare(Object o1, Object o2) {
-    double a1 = (double) o1;
-    double a2 = (double) o2;
-    if (a1 < a2) {
-      return -1;
-    } else if (a1 > a2) {
-      return 1;
-    } else {
-      return 0;
-    }
-  }
-
 }
