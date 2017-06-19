@@ -7,7 +7,6 @@ package utils.list;
 import java.util.LinkedList;
 import java.util.Queue;
 import kineticMonteCarlo.atom.CatalysisAtom;
-import kineticMonteCarlo.atom.PseudoAtom;
 
 /**
  *
@@ -161,24 +160,6 @@ public class AvlTree<T extends Comparable<T>> {
     return false;
   }
   
-  public boolean searchAndSetZero(T data) {
-    return searchAndSetZero(root, data);
-  }
-  
-  private boolean searchAndSetZero(Node<T> n, T data){
-    if (n == null) 
-      return false;
-    ((PseudoAtom) n.getData()).sumRate -= ((PseudoAtom)data).rate;
-    if (n.getData().compareTo(data) == 0){
-      ((PseudoAtom)data).rate = 0.0;
-      return true;}
-    if (n.getData().compareTo(data) > 0)
-        return searchAndSetZero(n.getLeft(), data);
-    if (n.getData().compareTo(data) < 0)
-      return searchAndSetZero(n.getRight(), data);
-    return false;
-  }
-  
   @Override
   public String toString() {
     return root.toString();
@@ -198,23 +179,6 @@ public class AvlTree<T extends Comparable<T>> {
         return addRate(n.getLeft(), data);
     if (n.getData().compareTo(data) < 0)
       return addRate(n.getRight(), data);
-    return false;
-  }
-  
-  public boolean searchAndUpdate(T data) {
-    return searchAndUpdate(root, data);
-  }
-  
-  private boolean searchAndUpdate(Node<T> n, T data) {
-    if (n == null) 
-      return false;
-    ((PseudoAtom) n.getData()).sumRate += ((PseudoAtom)data).rate;
-    if (n.getData().compareTo(data) == 0){
-      return true;}
-    if (n.getData().compareTo(data) > 0)
-        return searchAndUpdate(n.getLeft(), data);
-    if (n.getData().compareTo(data) < 0)
-      return searchAndUpdate(n.getRight(), data);
     return false;
   }
   
@@ -250,38 +214,7 @@ public class AvlTree<T extends Comparable<T>> {
     setParents(n.getLeft(), n);
     setParents(n.getRight(), n);
   }
-    
-  public void populateTree() {
-    populateTree(root);
-  }
-  
-  /**
-   * Populates tree with the sum of child rates to current node.
-   * 
-   * @param n
-   * @return 
-   */
-  private double populateTree(Node n) {
-    if (n == null) {
-      return 0;
-    }
 
-    if (n.isLeaf()) {
-      ((PseudoAtom) n.getData()).equalRate();
-      return ((PseudoAtom) n.getData()).rate;
-    }
-    // add current rate to the sum
-    ((PseudoAtom) n.getData()).sumRate = ((PseudoAtom) n.getData()).rate;
-    if (n.getLeft() != null) {
-      // add left childen rate sum 
-      ((PseudoAtom) n.getData()).sumRate += populateTree(n.getLeft());
-    }
-    if (n.getRight() != null) {
-      ((PseudoAtom) n.getData()).sumRate += populateTree(n.getRight());
-    }
-    return ((PseudoAtom) n.getData()).sumRate;
-  }
-  
   public void clear() {
     clear(root);
   }
@@ -345,32 +278,6 @@ public class AvlTree<T extends Comparable<T>> {
       return randomAtom(n.getLeft(), r);
     } else if (r < leftRate + rightRate) {
       return randomAtom(n.getRight(), r-leftRate);
-    } else {
-      return n;
-    }
-  }
-  
-  public Comparable findRate(double randomNumber) {
-    return findRate(root, randomNumber).getData();
-  }
-  
-  private Node findRate(Node n, double r) { //, int level) {
-    PseudoAtom a = (PseudoAtom) n.getData();
-    if (n.isLeaf()) {
-      return n;
-    }
-    double leftRate = 0.0;
-    if (n.getLeft() != null) 
-      leftRate = ((PseudoAtom) n.getLeft().getData()).sumRate;
-    double rightRate = 0.0;
-    if (n.getRight() != null) 
-      rightRate = ((PseudoAtom) n.getRight().getData()).sumRate;
-    double diffRate = a.sumRate;
-
-    if (r < leftRate) {
-      return findRate(n.getLeft(), r);
-    } else if (r < leftRate + rightRate) {
-      return findRate(n.getRight(), r-leftRate);
     } else {
       return n;
     }
