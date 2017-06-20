@@ -264,7 +264,10 @@ public class AvlTree<T extends Comparable<T>> {
     clear(n.getLeft());
     clear(n.getRight());
   }
-    
+  
+  /**
+   * It goes through all nodes and recomputes sum of the rates.
+   */
   public void populate() {
     populateCatalysisAtom(root);
   }
