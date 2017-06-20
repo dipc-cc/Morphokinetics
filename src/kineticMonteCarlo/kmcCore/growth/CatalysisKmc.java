@@ -17,6 +17,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
+import utils.list.AvlTree;
 import static utils.list.AbstractList.ADSORPTION;
 import static utils.list.AbstractList.DESORPTION;
 import static utils.list.AbstractList.DIFFUSION;
@@ -45,8 +46,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double[] desorptionRateCOPerSite; // BRIDGE or CUS
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   private double totalDesorptionRate;
+  private final AvlTree desorptionTree;
   // Reaction
-  private ArrayList<CatalysisAtom> desorptionSites;
   private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private double totalReactionRate;
   private float currentAdsorptionP;
@@ -91,7 +92,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     restart = new Restart(measureDiffusivity);
     adsorptionSites = new ArrayList<>();
-    desorptionSites = new ArrayList<>();
+    desorptionTree = new AvlTree();
     reactionSites = new ArrayList<>();
     diffusionSites = new ArrayList<>();
     doDiffusion = parser.doCatalysisDiffusion();
@@ -359,18 +360,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void desorpAtom() {
-    CatalysisAtom atom = null;
-    double randomNumber = StaticRandom.raw() * totalDesorptionRate;
+    double randomNumber;
     
-    double sum = 0.0;
-    int i;
-    for (i = 0; i < desorptionSites.size(); i++) {
-      sum += desorptionSites.get(i).getDesorptionProbability();
-      if (sum > randomNumber) {
-        atom = desorptionSites.get(i);
-        break;
-      }
-    }
+    CatalysisAtom atom = desorptionTree.randomAtom();
+    double sum;
     CatalysisAtom neighbour = null;
     if (atom.getType() == O) { // it has to desorp with another O to create O2
       randomNumber = StaticRandom.raw() * atom.getDesorptionProbability();
@@ -384,7 +377,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       getLattice().extract(neighbour);
     }
-
+    
     getLattice().extract(atom);
    
     if (neighbour != null) {
@@ -481,23 +474,25 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         a.setAdsorptionProbability(adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
         adsorptionSites.add(a);
         totalAdsorptionRate += a.getAdsorptionProbability();
+        desorptionTree.insert(a);
       }
     }
     getList().setDepositionProbability(totalAdsorptionRate);
     getList().setDesorptionProbability(0);
+    desorptionTree.populate();
   }
   
   /**
    * Start with fully covered surface.
    * 
-   * @param randomTypes if true, CO and O types randomly chosed. If false, only oxygen.
+   * @param randomTypes if true, CO and O types randomly chosen. If false, only oxygen.
    */
   private void initCovered() {
-    desorptionSites = new ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        desorptionTree.insert(a);
         if (startOxygen) {
           a.setType(O);
         } else {
@@ -513,7 +508,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         if (a.getType() == CO) {
-          desorptionSites.add(a);
+          a.setOnDesorptionList(true);
           a.setDesorptionProbability(desorptionRateCOPerSite[a.getLatticeSite()]);
           totalDesorptionRate += a.getDesorptionProbability();
         } else { //O
@@ -526,12 +521,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
             }
           }
           if (a.getDesorptionProbability() > 0) {
-            desorptionSites.add(a);
+            a.setOnDesorptionList(true);
           }
           totalDesorptionRate += a.getDesorptionProbability();
         }
       }
     }
+    desorptionTree.populate();
+    totalDesorptionRate = desorptionTree.getDesorptionRate();
     
     totalReactionRate = 0;
     for (int i = 0; i < getLattice().size(); i++) {
@@ -561,6 +558,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         }
         if (a.getReactionProbability() > 0) {
           reactionSites.add(a);
+          a.setOnReactionList(true);
         }
         totalReactionRate += a.getReactionProbability();
       }
@@ -602,7 +600,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (totalAdsorptionRate / previousAdsorptionRate < 1e-1) {
       updateAdsorptionRateFromList();
     }
-    if (totalDesorptionRate / previousDesorptionRate < 1e-1) {
+    if (totalDesorptionRate / previousDesorptionRate < 1e-1 || 1.0 - totalDesorptionRate / desorptionTree.getDesorptionRate() > 1e-3 || simulatedSteps % 10000000 == 0) {
+      System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + desorptionTree.getDesorptionRate());
       updateDesorptionRateFromList();
     }
     if (totalReactionRate / previousReactionRate < 1e-1) {
@@ -638,15 +637,23 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   private void recomputeDesorptionProbability(CatalysisAtom atom) {
     totalDesorptionRate -= atom.getDesorptionProbability();
-    desorptionSites.remove(atom);
-    atom.setDesorptionProbability(0);
     if (!atom.isOccupied()) {
+      if (atom.isOnDesorptionList()) {
+        desorptionTree.removeAtomRate(atom);
+      }
+      atom.setOnDesorptionList(false);
       return;
     }
+    double oldDesorptionProbability = atom.getDesorptionProbability();
+    atom.setDesorptionProbability(0);
     if (atom.getType() == CO) {
       atom.setDesorptionProbability(desorptionRateCOPerSite[atom.getLatticeSite()]);
       totalDesorptionRate += atom.getDesorptionProbability();
-      desorptionSites.add(atom);
+      if (!atom.isOnDesorptionList()) {
+        //desorptionSites.add(atom);
+        desorptionTree.addRate(atom);
+      }
+      atom.setOnDesorptionList(true);
     } else { // O
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
         CatalysisAtom neighbour = atom.getNeighbour(i);
@@ -657,16 +664,25 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       if (atom.getDesorptionProbability() > 0) {
         totalDesorptionRate += atom.getDesorptionProbability();
-        desorptionSites.add(atom);
+        if (!atom.isOnDesorptionList()) {
+          desorptionTree.addRate(atom);
+        }
+        atom.setOnDesorptionList(true);
+      }
+      if (oldDesorptionProbability != atom.getDesorptionProbability()) {
+        desorptionTree.removeRate(atom, oldDesorptionProbability - atom.getDesorptionProbability());
       }
     }
   }
   
   private void recomputeReactionProbability(CatalysisAtom atom) {
     totalReactionRate -= atom.getReactionProbability();
-    reactionSites.remove(atom);
     atom.setReactionProbability(0);
     if (!atom.isOccupied()) {
+      if (atom.isOnReactionList()) {
+        reactionSites.remove(atom);
+      }
+      atom.setOnReactionList(false);
       return;
     }
     byte otherType = (byte) ((atom.getType() + 1) % 2);
@@ -679,7 +695,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     if (atom.getReactionProbability() > 0) {
       totalReactionRate += atom.getReactionProbability();
-      reactionSites.add(atom);
+      if (!atom.isOnReactionList()) {
+        reactionSites.add(atom);
+      }
+      atom.setOnReactionList(true);
+    } else if (atom.isOnReactionList()) {
+      atom.setOnReactionList(false);
+      reactionSites.remove(atom);
     }
   }
 
@@ -747,11 +769,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   private void updateDesorptionRateFromList() {
-    double sum = 0.0;
-    for (int i = 0; i < desorptionSites.size(); i++) {
-      sum += desorptionSites.get(i).getDesorptionProbability();
-    }
-    totalDesorptionRate = sum;
+    desorptionTree.clear();
+    desorptionTree.populate();
+    totalDesorptionRate = desorptionTree.getDesorptionRate();
   }
   
   private void updateReactionRateFromList() {
