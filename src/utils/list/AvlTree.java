@@ -141,22 +141,60 @@ public class AvlTree<T extends Comparable<T>> {
     }
     return false;
   }
-  
-  public boolean removeRate(T data) {
-    return removeRate(root, data);
+  /**
+   * Method to update rates from root to atom.
+   * 
+   * @param data atom that has a delta in rate.
+   * @param diff rate to be added.
+   * @return 
+   */
+  public boolean removeRate(T data, double diff){
+    return removeRate(root, data, diff);
   }
   
-  private boolean removeRate(Node<T> n, T data){
-    if (n == null) 
+  private boolean removeRate(Node<T> n, T data, double diff) {
+    if (n == null) {
       return false;
-    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-((CatalysisAtom)data).getDesorptionProbability());
-    if (n.getData().compareTo(data) == 0){
-      ((CatalysisAtom)data).setDesorptionProbability(0.0);
-      return true;}
-    if (n.getData().compareTo(data) > 0)
-        return removeRate(n.getLeft(), data);
-    if (n.getData().compareTo(data) < 0)
-      return removeRate(n.getRight(), data);
+    }
+    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-diff);
+    if (n.getData().compareTo(data) == 0) {
+      return true;
+    }
+    if (n.getData().compareTo(data) > 0) {
+      return removeRate(n.getLeft(), data, diff);
+    }
+    if (n.getData().compareTo(data) < 0) {
+      return removeRate(n.getRight(), data, diff);
+    }
+    return false;
+  }
+      
+  
+  /**
+   * Removes atom's rate, with its old desorption rate and sets to zero.
+   * 
+   * @param data
+   * @return 
+   */
+  public boolean removeAtomRate(T data) {
+    return removeAtomRate(root, data);
+  }
+  
+  private boolean removeAtomRate(Node<T> n, T data) {
+    if (n == null) {
+      return false;
+    }
+    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-((CatalysisAtom) data).getDesorptionProbability());
+    if (n.getData().compareTo(data) == 0) {
+      ((CatalysisAtom) data).setDesorptionProbability(0.0);
+      return true;
+    }
+    if (n.getData().compareTo(data) > 0) {
+      return removeAtomRate(n.getLeft(), data);
+    }
+    if (n.getData().compareTo(data) < 0) {
+      return removeAtomRate(n.getRight(), data);
+    }
     return false;
   }
   
