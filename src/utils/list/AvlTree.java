@@ -7,6 +7,7 @@ package utils.list;
 import java.util.LinkedList;
 import java.util.Queue;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import utils.StaticRandom;
 
 /**
  *
@@ -297,14 +298,25 @@ public class AvlTree<T extends Comparable<T>> {
       ((CatalysisAtom) n.getData()).addToSumDesorptionRate(populateCatalysisAtom(n.getRight()));
     }
     return ((CatalysisAtom) n.getData()).getSumDesorptionRate();
-  }  
-  
-  public CatalysisAtom randomAtom(double randomNumber) {
-    return (CatalysisAtom) randomAtom(root, randomNumber).getData();
+  }
+
+  /**
+   * Chooses a random atom from current tree.
+   *
+   * @return an atom.
+   */
+  public CatalysisAtom randomAtom() {
+    double randomNumber = StaticRandom.raw() * getDesorptionRate();
+    CatalysisAtom atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
+    while (atom.getDesorptionProbability() == 0) {
+      //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
+      randomNumber = StaticRandom.raw() * getDesorptionRate();
+      atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
+    }
+    return atom;
   }
   
   private Node randomAtom(Node n, double r) {
-    CatalysisAtom a = (CatalysisAtom) n.getData();
     if (n.isLeaf()) {
       return n;
     }
@@ -318,7 +330,7 @@ public class AvlTree<T extends Comparable<T>> {
     if (r < leftRate) {
       return randomAtom(n.getLeft(), r);
     } else if (r < leftRate + rightRate) {
-      return randomAtom(n.getRight(), r-leftRate);
+      return randomAtom(n.getRight(), r - leftRate);
     } else {
       return n;
     }
