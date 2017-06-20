@@ -71,7 +71,7 @@ public class AvlTree<T extends Comparable<T>> {
     return root;
   }
   
-  public Node<T> insert(Node<T> node, T data) {
+  private Node<T> insert(Node<T> node, T data) {
     if (node == null)
       return new Node<T>(data);
     if (node.getData().compareTo(data) > 0) {
