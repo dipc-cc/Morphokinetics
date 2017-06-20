@@ -73,14 +73,14 @@ public class AvlTree<T extends Comparable<T>> {
   
   private Node<T> insert(Node<T> node, T data) {
     if (node == null)
-      return new Node<T>(data);
+      return new Node<>(data);
     if (node.getData().compareTo(data) > 0) {
-      node = new Node<T>(node.getData(), insert(node.getLeft(), data),
+      node = new Node<>(node.getData(), insert(node.getLeft(), data),
               node.getRight());
       // node.setLeft(insert(node.getLeft(), data));
     } else if (node.getData().compareTo(data) < 0) {
       // node.setRight(insert(node.getRight(), data));
-      node = new Node<T>(node.getData(), node.getLeft(), insert(
+      node = new Node<>(node.getData(), node.getLeft(), insert(
               node.getRight(), data));
     }
     // After insert the new node, check and rebalance the current node if
@@ -114,8 +114,8 @@ public class AvlTree<T extends Comparable<T>> {
     Node<T> c = q.getLeft();
     Node<T> a = p.getLeft();
     Node<T> b = p.getRight();
-    q = new Node<T>(q.getData(), c, a);
-    p = new Node<T>(p.getData(), q, b);
+    q = new Node<>(q.getData(), c, a);
+    p = new Node<>(p.getData(), q, b);
     return p;
   }
   
@@ -125,8 +125,8 @@ public class AvlTree<T extends Comparable<T>> {
     Node<T> c = q.getRight();
     Node<T> a = p.getLeft();
     Node<T> b = p.getRight();
-    q = new Node<T>(q.getData(), b, c);
-    p = new Node<T>(p.getData(), a, q);
+    q = new Node<>(q.getData(), b, c);
+    p = new Node<>(p.getData(), a, q);
     return p;
   }
   
@@ -223,7 +223,7 @@ public class AvlTree<T extends Comparable<T>> {
   
   public void PrintTree() {
     root.level = 0;
-    Queue<Node<T>> queue = new LinkedList<Node<T>>();
+    Queue<Node<T>> queue = new LinkedList<>();
     queue.add(root);
     while (!queue.isEmpty()) {
       Node<T> node = queue.poll();
