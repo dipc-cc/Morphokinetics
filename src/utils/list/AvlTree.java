@@ -16,7 +16,7 @@ import utils.StaticRandom;
  * @param <T>
  */
 public class AvlTree<T extends Comparable<T>> {
-  Node<T> root;
+  private Node<T> root;
   
   public AvlTree() {
     root = null;
