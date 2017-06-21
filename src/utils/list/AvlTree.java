@@ -143,7 +143,7 @@ public class AvlTree<T extends Comparable<T>> {
     return false;
   }
   /**
-   * Method to update rates from root to atom.
+   * Method to update rates from root to an atom.
    * 
    * @param data atom that has a delta in rate.
    * @param diff rate to be added.
@@ -204,6 +204,12 @@ public class AvlTree<T extends Comparable<T>> {
     return root.toString();
   }
   
+  /**
+   * Rate of current atom is added in the tree.
+   * 
+   * @param data current atom.
+   * @return 
+   */
   public boolean addRate(T data) {
     return addRate(root, data);
   }
