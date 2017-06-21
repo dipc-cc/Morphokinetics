@@ -17,11 +17,12 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
-import utils.list.AvlTree;
 import static utils.list.AbstractList.ADSORPTION;
 import static utils.list.AbstractList.DESORPTION;
 import static utils.list.AbstractList.DIFFUSION;
 import static utils.list.AbstractList.REACTION;
+import utils.list.atoms.AtomsCollection;
+import utils.list.atoms.IAtomsCollection;
 
 /**
  *
@@ -46,7 +47,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double[] desorptionRateCOPerSite; // BRIDGE or CUS
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   private double totalDesorptionRate;
-  private final AvlTree desorptionSites;
+  private final IAtomsCollection desorptionSites;
   // Reaction
   private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private double totalReactionRate;
@@ -92,7 +93,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     restart = new Restart(measureDiffusivity);
     adsorptionSites = new ArrayList<>();
-    desorptionSites = new AvlTree();
+    AtomsCollection col = new AtomsCollection(parser);
+    desorptionSites = col.getCollection(); // Either a tree or array
     reactionSites = new ArrayList<>();
     diffusionSites = new ArrayList<>();
     doDiffusion = parser.doCatalysisDiffusion();
@@ -362,7 +364,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private void desorpAtom() {
     double randomNumber;
     
-    CatalysisAtom atom = desorptionSites.randomAtom();
+    CatalysisAtom atom = (CatalysisAtom) desorptionSites.randomAtom();
     double sum;
     CatalysisAtom neighbour = null;
     if (atom.getType() == O) { // it has to desorp with another O to create O2
@@ -492,7 +494,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
-        desorptionSites.insert(a);
         if (startOxygen) {
           a.setType(O);
         } else {
@@ -509,6 +510,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         if (a.getType() == CO) {
           a.setOnDesorptionList(true);
+          desorptionSites.insert(a);
           a.setDesorptionProbability(desorptionRateCOPerSite[a.getLatticeSite()]);
           totalDesorptionRate += a.getDesorptionProbability();
         } else { //O
@@ -520,7 +522,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
               a.addDesorptionProbability(probability, k);
             }
           }
-          if (a.getDesorptionProbability() > 0) {
+          if (a.getDesorptionProbability() > 0) {          
+            desorptionSites.insert(a);
             a.setOnDesorptionList(true);
           }
           totalDesorptionRate += a.getDesorptionProbability();

@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import utils.StaticRandom;
+import utils.list.atoms.IAtomsCollection;
 
 /**
  *
@@ -15,9 +16,10 @@ import utils.StaticRandom;
  * @author J. Alberdi-Rodriguez morphokinetics modification
  * @param <T>
  */
-public class AvlTree<T extends Comparable<T>> {
+public class AvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
+
   private Node<T> root;
-  
+
   public AvlTree() {
     root = null;
   }
@@ -56,7 +58,8 @@ public class AvlTree<T extends Comparable<T>> {
     // 1 + Math.max(depth(node.getLeft()), depth(node.getRight()));
   }
   
-  public Node<T> insert(T data) {
+  @Override
+  public void insert(T data) {
     root = insert(root, data);
     switch (balanceNumber(root)) {
       case 1:
@@ -68,7 +71,6 @@ public class AvlTree<T extends Comparable<T>> {
       default:
         break;
     }
-    return root;
   }
   
   private Node<T> insert(Node<T> node, T data) {
@@ -147,56 +149,54 @@ public class AvlTree<T extends Comparable<T>> {
    * 
    * @param data atom that has a delta in rate.
    * @param diff rate to be added.
-   * @return 
    */
-  public boolean removeRate(T data, double diff){
-    return removeRate(root, data, diff);
+  @Override
+  public void removeRate(T data, double diff){
+    removeRate(root, data, diff);
   }
   
-  private boolean removeRate(Node<T> n, T data, double diff) {
+  private void removeRate(Node<T> n, T data, double diff) {
     if (n == null) {
-      return false;
+      return;
     }
     ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-diff);
     if (n.getData().compareTo(data) == 0) {
-      return true;
+      return;
     }
     if (n.getData().compareTo(data) > 0) {
-      return removeRate(n.getLeft(), data, diff);
+      removeRate(n.getLeft(), data, diff);
     }
     if (n.getData().compareTo(data) < 0) {
-      return removeRate(n.getRight(), data, diff);
+      removeRate(n.getRight(), data, diff);
     }
-    return false;
   }
       
   
   /**
-   * Removes atom's rate, with its old desorption rate and sets to zero.
+   * Removes atom's rate from the tree, with its old desorption rate and sets to zero.
    * 
    * @param data
-   * @return 
    */
-  public boolean removeAtomRate(T data) {
-    return removeAtomRate(root, data);
+  @Override
+  public void removeAtomRate(T data) {
+    removeAtomRate(root, data);
   }
   
-  private boolean removeAtomRate(Node<T> n, T data) {
+  private void removeAtomRate(Node<T> n, T data) {
     if (n == null) {
-      return false;
+      return;
     }
     ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-((CatalysisAtom) data).getDesorptionProbability());
     if (n.getData().compareTo(data) == 0) {
       ((CatalysisAtom) data).setDesorptionProbability(0.0);
-      return true;
+      return;
     }
     if (n.getData().compareTo(data) > 0) {
-      return removeAtomRate(n.getLeft(), data);
+      removeAtomRate(n.getLeft(), data);
     }
     if (n.getData().compareTo(data) < 0) {
-      return removeAtomRate(n.getRight(), data);
+      removeAtomRate(n.getRight(), data);
     }
-    return false;
   }
   
   @Override
@@ -208,23 +208,26 @@ public class AvlTree<T extends Comparable<T>> {
    * Rate of current atom is added in the tree.
    * 
    * @param data current atom.
-   * @return 
    */
-  public boolean addRate(T data) {
-    return addRate(root, data);
+  @Override
+  public void addRate(T data) {
+    addRate(root, data);
   }
   
-  private boolean addRate(Node<T> n, T data) {
-    if (n == null) 
-      return false;
+  private void addRate(Node<T> n, T data) {
+    if (n == null) {
+      return;
+    }
     ((CatalysisAtom) n.getData()).addToSumDesorptionRate(((CatalysisAtom) data).getDesorptionProbability());
-    if (n.getData().compareTo(data) == 0){
-      return true;}
-    if (n.getData().compareTo(data) > 0)
-        return addRate(n.getLeft(), data);
-    if (n.getData().compareTo(data) < 0)
-      return addRate(n.getRight(), data);
-    return false;
+    if (n.getData().compareTo(data) == 0) {
+      return;
+    }
+    if (n.getData().compareTo(data) > 0) {
+      addRate(n.getLeft(), data);
+    }
+    if (n.getData().compareTo(data) < 0) {
+      addRate(n.getRight(), data);
+    }
   }
   
   public void PrintTree() {
@@ -260,6 +263,7 @@ public class AvlTree<T extends Comparable<T>> {
     setParents(n.getRight(), n);
   }
 
+  @Override
   public void clear() {
     clear(root);
   }
@@ -275,6 +279,7 @@ public class AvlTree<T extends Comparable<T>> {
   /**
    * It goes through all nodes and recomputes sum of the rates.
    */
+  @Override
   public void populate() {
     populateCatalysisAtom(root);
   }
@@ -311,7 +316,8 @@ public class AvlTree<T extends Comparable<T>> {
    *
    * @return an atom.
    */
-  public CatalysisAtom randomAtom() {
+  @Override
+  public T randomAtom() {
     double randomNumber = StaticRandom.raw() * getDesorptionRate();
     CatalysisAtom atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
     while (atom.getDesorptionProbability() == 0) {
@@ -319,7 +325,7 @@ public class AvlTree<T extends Comparable<T>> {
       randomNumber = StaticRandom.raw() * getDesorptionRate();
       atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
     }
-    return atom;
+    return (T) atom;
   }
   
   private Node randomAtom(Node n, double r) {
@@ -340,5 +346,10 @@ public class AvlTree<T extends Comparable<T>> {
     } else {
       return n;
     }
+  }
+
+  @Override
+  public void remove(T atom) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
