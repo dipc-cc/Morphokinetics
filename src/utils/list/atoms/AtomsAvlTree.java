@@ -3,12 +3,12 @@
 * To change this template file, choose Tools | Templates
 * and open the template in the editor.
 */
-package utils.list;
+package utils.list.atoms;
 import java.util.LinkedList;
 import java.util.Queue;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import utils.StaticRandom;
-import utils.list.atoms.IAtomsCollection;
+import utils.list.Node;
 
 /**
  *
@@ -16,11 +16,11 @@ import utils.list.atoms.IAtomsCollection;
  * @author J. Alberdi-Rodriguez morphokinetics modification
  * @param <T>
  */
-public class AvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
+public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
 
   private Node<T> root;
 
-  public AvlTree() {
+  public AtomsAvlTree() {
     root = null;
   }
   
@@ -28,6 +28,7 @@ public class AvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
     return root;
   }
   
+  @Override
   public double getDesorptionRate() {
     return ((CatalysisAtom) root.getData()).getSumDesorptionRate();
   }

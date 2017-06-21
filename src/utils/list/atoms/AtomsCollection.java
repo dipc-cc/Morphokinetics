@@ -6,7 +6,6 @@
 package utils.list.atoms;
 
 import basic.Parser;
-import utils.list.AvlTree;
 
 /**
  *
@@ -18,7 +17,7 @@ public class AtomsCollection {
 
   public AtomsCollection(Parser parser) {
     if (parser.isDiffusionFixed()) {
-      atomsCollection = new AvlTree();
+      atomsCollection = new AtomsAvlTree();
     } else {
       atomsCollection = new AtomsArrayList();
     }
