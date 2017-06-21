@@ -30,7 +30,6 @@ public class CatalysisProcess {
   
   public void setSumRate(double rate) {
     sumRate = rate;
-    active = false;
   }
 
   public double getSumRate() {
