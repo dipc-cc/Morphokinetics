@@ -19,6 +19,7 @@ public class CatalysisProcess {
   public static final byte DIFFUSION = 3;
   
   private double rate;
+  /** Attribute for AVL tree. */
   private double sumRate;
   private double[] edgeRate;
   private boolean active;
@@ -83,5 +84,9 @@ public class CatalysisProcess {
 
   public double getEdgeRate(int pos) {
     return edgeRate[pos];
+  }
+  
+  public void equalRate() {
+    sumRate = rate;
   }
 }
