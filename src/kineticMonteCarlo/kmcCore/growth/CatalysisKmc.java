@@ -358,23 +358,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atomType = O;
       }
       destinationAtom.setType(atomType);
-      if(atomType == CO){
-        deposited = depositAtom(destinationAtom,true);
-      }else{
-        if (doO2Dissociation) { // it has to deposit two O (dissociation of O2 -> 2O)
-          deposited = depositAtom(destinationAtom);
-          random = StaticRandom.rawInteger(4);
+      if(!doO2Dissociation || atomType == CO){
+        deposited = depositAtom(destinationAtom, true);
+      } else { // it has to deposit two O (dissociation of O2 -> 2O)
+        deposited = depositAtom(destinationAtom);
+        random = StaticRandom.rawInteger(4);
+        neighbourAtom = destinationAtom.getNeighbour(random);
+        while (neighbourAtom.isOccupied()) {
+          random = (random + 1) % 4;
           neighbourAtom = destinationAtom.getNeighbour(random);
-          while (neighbourAtom.isOccupied()) {
-            random = (random + 1) % 4;
-            neighbourAtom = destinationAtom.getNeighbour(random);
-          }
-          neighbourAtom.setType(O);
-          depositAtom(neighbourAtom, true);
         }
-        else{
-          deposited = depositAtom(destinationAtom,true);
-        }
+        neighbourAtom.setType(O);
+        depositAtom(neighbourAtom, true);
       }
     } while (!deposited);
     
@@ -660,11 +655,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.isOccupied()) {
       atom.setAdsorptionProbability(0);
     } else {
-        int canAdsorbO2 = 1;
-        if(doO2Dissociation){
-            canAdsorbO2 = atom.isIsolated() ? 0 : 1;
-        }
-        atom.setAdsorptionProbability(adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
+      int canAdsorbO2 = atom.isIsolated() && doO2Dissociation ? 0 : 1;
+      atom.setAdsorptionProbability(adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
     }
     totalAdsorptionRate += atom.getAdsorptionProbability();
     if (atom.getAdsorptionProbability() == 0) {
