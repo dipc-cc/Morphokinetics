@@ -533,7 +533,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     desorptionSites.populate();
-    totalDesorptionRate = desorptionSites.getDesorptionRate();
+    totalDesorptionRate = desorptionSites.getTotalRate(DESORPTION);
     //((AtomsAvlTree) desorptionSites).PrintTree();
     
     totalReactionRate = 0;
@@ -606,7 +606,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (totalAdsorptionRate / previousAdsorptionRate < 1e-1) {
       updateAdsorptionRateFromList();
     }
-    if (totalDesorptionRate / previousDesorptionRate < 1e-1 || 1.0 - totalDesorptionRate / desorptionSites.getDesorptionRate() > 1e-3 || simulatedSteps % 10000000 == 0) {
+    if (totalDesorptionRate / previousDesorptionRate < 1e-1 || 1.0 - totalDesorptionRate / desorptionSites.getTotalRate(DESORPTION) > 1e-3 || simulatedSteps % 10000000 == 0) {
       //System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + desorptionSites.getDesorptionRate());
       updateDesorptionRateFromList();
     }
@@ -790,7 +790,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private void updateDesorptionRateFromList() {
     desorptionSites.clear();
     desorptionSites.populate();
-    totalDesorptionRate = desorptionSites.getDesorptionRate();
+    totalDesorptionRate = desorptionSites.getTotalRate(DESORPTION);
   }
   
   private void updateReactionRateFromList() {
