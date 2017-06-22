@@ -281,6 +281,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     steps = new long[4];
     co2 = new long[4];
+    desorptionSites.clear();
   }
   
   private boolean depositAtom(CatalysisAtom atom) {

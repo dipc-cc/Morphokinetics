@@ -298,6 +298,9 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       setBondsProbability(0, i);
     }
+    for (int i = 0; i < 4; i++) {
+      processes[i].clear();
+    }
   }
   
   @Override

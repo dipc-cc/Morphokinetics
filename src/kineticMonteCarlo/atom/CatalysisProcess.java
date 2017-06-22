@@ -88,4 +88,10 @@ public class CatalysisProcess {
   public void equalRate() {
     sumRate = rate;
   }
+  
+  public void clear() {
+    sumRate = 0.0;
+    rate = 0.0;
+    active = false;
+  }
 }
