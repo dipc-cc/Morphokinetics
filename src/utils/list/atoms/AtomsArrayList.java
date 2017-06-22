@@ -50,10 +50,8 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   
   private void add(T atom) {
     CatalysisAtom a = (CatalysisAtom) atom;
-    if (a.isOnList(process)) {
-      totalRate += a.getRate(process);
-      atomsArray.add(a);
-    }
+    totalRate += a.getRate(process);
+    atomsArray.add(a);
   }
 
   @Override
