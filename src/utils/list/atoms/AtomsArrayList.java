@@ -78,7 +78,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
 
   @Override
-  public double getDesorptionRate() {
+  public double getTotalRate(byte process) {
     return totalRate;
   }
   

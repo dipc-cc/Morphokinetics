@@ -29,7 +29,7 @@ public interface IAtomsCollection<T extends Comparable<T>> {
 
   public void populate();
 
-  public double getDesorptionRate();
+  public double getTotalRate(byte process);
   
   public void clear();
   

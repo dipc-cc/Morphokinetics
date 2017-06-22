@@ -30,11 +30,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
   
   @Override
-  public double getDesorptionRate() {
+  public double getTotalRate(byte process) {
     if (root == null) {
       return 0;
     }
-    return ((CatalysisAtom) root.getData()).getSumRate(DESORPTION);
+    return ((CatalysisAtom) root.getData()).getSumRate(process);
   }
   
   public T getMaximum() {
@@ -323,11 +323,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public T randomAtom() {
-    double randomNumber = StaticRandom.raw() * getDesorptionRate();
+    double randomNumber = StaticRandom.raw() * getTotalRate(DESORPTION);
     CatalysisAtom atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
     while (atom.getRate(DESORPTION) == 0) {
       //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
-      randomNumber = StaticRandom.raw() * getDesorptionRate();
+      randomNumber = StaticRandom.raw() * getTotalRate(DESORPTION);
       atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
     }
     return (T) atom;
