@@ -409,7 +409,7 @@ class RestartLow {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
-      out.write(s);
+      //out.write(s);
       for (int i = 0; i < data.length; i++) {
         double coverage = data[i][0];
         double t = data[i][1];
