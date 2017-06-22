@@ -283,6 +283,8 @@ public abstract class AbstractSimulation {
         if (parser.getOutputFormats().contains(formatFlag.CAT)) {
           double[][] data = ((CatalysisKmc) kmc).getOutputAdsorptionData();
           restart.writeCatalysisAdsorptionDataText(simulations, data);
+          double[][] completeData = ((CatalysisKmc) kmc).getOutputCompleteAdsorptionData();
+          restart.writeCatalysisCompleteAdsorptionDataText(simulations, completeData);
         }
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
           restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
