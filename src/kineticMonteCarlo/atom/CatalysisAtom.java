@@ -5,6 +5,10 @@
  */
 package kineticMonteCarlo.atom;
 
+import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
+import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
+import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
+import static kineticMonteCarlo.atom.CatalysisProcess.REACTION;
 import utils.StaticRandom;
 
 /**
@@ -29,16 +33,7 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
    */
   private final byte latticeSite;
   private boolean eligible;
-  private double adsorptionProbability;
-  private double desorptionProbability;
-  private double reactionProbability;
-  private double diffusionProbability;
-  private double[] desorptionOEdge;
-  private double[] reactionEdge;
-  private double[] diffusionEdge;
-  
-  private boolean onReactionList;
-  private boolean onDesorptionList;
+  private final CatalysisProcess[] processes;
   
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
@@ -47,8 +42,6 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   private double[][][] probabilities;
   
   private CatalysisAtomAttributes attributes;
-  /** Attribute for AVL tree. */
-  private double sumDesorptionRate;
   
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
@@ -60,30 +53,49 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     }
     attributes = new CatalysisAtomAttributes();
     eligible = true;
-    desorptionOEdge = new double[4];
-    reactionEdge = new double[4];
-    diffusionEdge = new double[4];
-    onReactionList = false;
-    onDesorptionList = false;
-  }
-
-  public boolean isOnReactionList() {
-    return onReactionList;
-  }
-
-  public void setOnReactionList(boolean onReactionList) {
-    this.onReactionList = onReactionList;
-  }
-
-  public boolean isOnDesorptionList() {
-    return onDesorptionList;
-  }
-
-  public void setOnDesorptionList(boolean onDesorptionList) {
-    this.onDesorptionList = onDesorptionList;
+    processes = new CatalysisProcess[4];
+    processes[ADSORPTION] = new CatalysisProcess();
+    processes[DESORPTION] = new CatalysisProcess();
+    processes[REACTION] = new CatalysisProcess();
+    processes[DIFFUSION] = new CatalysisProcess();
   }
   
+  public boolean isOnList(byte process) {
+    return processes[process].isActive();
+  }
+  
+  public void setOnList(byte process, boolean onList) {
+    processes[process].setActive(onList);
+  }
+  
+  public double getRate(byte process) {
+    return processes[process].getRate();
+  }
+  
+  public void setRate(byte process, double rate) {
+    processes[process].setRate(rate);
+  }
 
+  public void addRate(byte process, double rate, int neighbourPos) {
+    processes[process].addRate(rate, neighbourPos);
+  }
+  
+  public double getEdgeRate(byte process, int pos) {
+    return processes[process].getEdgeRate(pos);
+  }
+  
+  public double getSumRate(byte process) {
+    return processes[process].getSumRate();
+  }
+  
+  public void setSumRate(byte process, double rate) {
+    processes[process].setSumRate(rate);
+  }
+
+  public void addToSumRate(byte process, double rate) {
+    processes[process].addSumRate(rate);
+  }
+  
   @Override
   public AbstractGrowthAtomAttributes getAttributes() {
     return attributes;
@@ -107,19 +119,7 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   public boolean isIsolated() {
     return getOccupiedNeighbours() == 4;
   }
-
-  public double getSumDesorptionRate() {
-    return sumDesorptionRate;
-  }
-
-  public void setSumDesorptionRate(double sumDesorptionRate) {
-    this.sumDesorptionRate = sumDesorptionRate;
-  }
   
-  public void addToSumDesorptionRate(double delta) {
-    sumDesorptionRate += delta;
-  }
-
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
    * jump from terrace to edge.
@@ -165,92 +165,6 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   @Override
   public CatalysisAtom getNeighbour(int pos) {
     return neighbours[pos];
-  }
-
-  public double getAdsorptionProbability() {
-    return adsorptionProbability;
-  }
-
-  public void setAdsorptionProbability(double adsorptionProbability) {
-    this.adsorptionProbability = adsorptionProbability;
-  }
-
-  public double getDesorptionProbability() {
-    return desorptionProbability;
-  }
-
-  public void setDesorptionProbability(double desorptionProbability) {
-    this.desorptionProbability = desorptionProbability;
-    if (desorptionProbability == 0) {
-      desorptionOEdge = new double[4];
-    }
-  }
-
-  public void addDesorptionProbability(double probability, int neighbourPos) {
-    //desorptionProbability += probability; // it creates numerical error
-    desorptionOEdge[neighbourPos] += probability;
-    desorptionProbability = 0;
-    for (int i = 0; i < 4; i++) { // to avoid numerical error. Recompute
-      desorptionProbability += desorptionOEdge[i];
-    }
-  }
-
-  public double getDesorptionOEdge(int pos) {
-    return desorptionOEdge[pos];
-  }
-  
-  public double getReactionProbability() {
-    return reactionProbability;
-  }
-
-  public void setReactionProbability(double reactionProbability) {
-    this.reactionProbability = reactionProbability;
-    if (reactionProbability == 0) {
-      reactionEdge = new double[4];
-    }
-  }
-
-  /**
-   * Stores reaction probability for current atom with respect to neighbour atoms.
-   * 
-   * @param probability reaction probability, only the half is stored. To avoid double counting,
-   * otherwise, every reaction will be counted twice.
-   * @param neighbourPos
-   */
-  public void addReactionProbability(double probability, int neighbourPos) {
-    //reactionProbability += probability; // it creates numerical error
-    reactionEdge[neighbourPos] += probability * 0.5;
-    reactionProbability = 0;
-    for (int i = 0; i < 4; i++) { // to avoid numerical error. Recompute
-      reactionProbability += reactionEdge[i];
-    }
-  }
-
-  public double getReactionEdge(int pos) {
-    return reactionEdge[pos];
-  }
-  
-  public double getDiffusionProbability() {
-    return diffusionProbability;
-  }
-
-  public void setDiffusionProbability(double diffusionProbability) {
-    this.diffusionProbability = diffusionProbability;
-    if (diffusionProbability == 0) {
-      diffusionEdge = new double[4];
-    }
-  }
-
-  public void addDiffusionProbability(double probability, int neighbourPos) {
-    diffusionEdge[neighbourPos] += probability;
-    diffusionProbability = 0;
-    for (int i = 0; i < 4; i++) { // to avoid numerical error. Recompute
-      diffusionProbability += diffusionEdge[i];
-    }
-  }
-
-  public double getDiffusionEdge(int pos) {
-    return diffusionEdge[pos];
   }
 
   /**
@@ -418,13 +332,15 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
               + " instance of a TestScores object.");
     }
   }
+  
+  
   public void equalRate() {
-    sumDesorptionRate = desorptionProbability;
+    processes[DESORPTION].equalRate();
   }
   
   @Override
   public String toString() {
-    String returnString = "Atom Id " + getId() + " desorptionRate " + desorptionProbability + " "+sumDesorptionRate;
+    String returnString = "Atom Id " + getId() + " desorptionRate " + processes[DESORPTION].getRate() + " " + processes[DESORPTION].getSumRate();
     return returnString;
   }
 }

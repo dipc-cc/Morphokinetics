@@ -2,15 +2,15 @@ package utils.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
+import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
+import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
+import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
+import static kineticMonteCarlo.atom.CatalysisProcess.REACTION;
 import utils.StaticRandom;
 
 public abstract class AbstractList implements IProbabilityHolder {
 
   protected static final int EVENTS_PER_CLEANUP = 2048;
-  public static final byte ADSORPTION = 0;
-  public static final byte DESORPTION = 1;
-  public static final byte REACTION = 2;
-  public static final byte DIFFUSION = 3;
   
   private int removalsSinceLastCleanup;
   private boolean autoCleanup;

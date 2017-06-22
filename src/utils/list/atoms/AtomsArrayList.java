@@ -7,6 +7,7 @@ package utils.list.atoms;
 
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
 import utils.StaticRandom;
 
 /**
@@ -45,8 +46,10 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   
   private void add(T atom) {
     CatalysisAtom a = (CatalysisAtom) atom;
-    totalRate += a.getDesorptionProbability();
-    atomsArray.add(a);
+    if (a.isOnList(DESORPTION)) {
+      totalRate += a.getRate(DESORPTION);
+      atomsArray.add(a);
+    }
   }
 
   @Override
@@ -57,8 +60,8 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   @Override
   public void removeAtomRate(T atom) {
     CatalysisAtom a = (CatalysisAtom) atom;
-    totalRate -= a.getDesorptionProbability();
-    a.setDesorptionProbability(0.0);
+    totalRate -= a.getRate(DESORPTION);
+    a.setRate(DESORPTION, 0.0);
     atomsArray.remove(a);
   }
 
@@ -86,7 +89,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   public void clear() {
     double sum = 0.0;
     for (int i = 0; i < atomsArray.size(); i++) {
-      sum += atomsArray.get(i).getDesorptionProbability();
+      sum += atomsArray.get(i).getRate(DESORPTION);
     }
     totalRate = sum;
   }
@@ -99,7 +102,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     double sum = 0.0;
     int i;
     for (i = 0; i < atomsArray.size(); i++) {
-      sum += atomsArray.get(i).getDesorptionProbability();
+      sum += atomsArray.get(i).getRate(DESORPTION);
       if (sum > randomNumber) {
         atom = atomsArray.get(i);
         break;

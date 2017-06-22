@@ -7,6 +7,7 @@ package utils.list.atoms;
 import java.util.LinkedList;
 import java.util.Queue;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
 import utils.StaticRandom;
 import utils.list.Node;
 
@@ -30,7 +31,10 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   
   @Override
   public double getDesorptionRate() {
-    return ((CatalysisAtom) root.getData()).getSumDesorptionRate();
+    if (root == null) {
+      return 0;
+    }
+    return ((CatalysisAtom) root.getData()).getSumRate(DESORPTION);
   }
   
   public T getMaximum() {
@@ -160,7 +164,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-diff);
+    ((CatalysisAtom) n.getData()).addToSumRate(DESORPTION, -diff);
     if (n.getData().compareTo(data) == 0) {
       return;
     }
@@ -187,9 +191,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(-((CatalysisAtom) data).getDesorptionProbability());
+    ((CatalysisAtom) n.getData()).addToSumRate(DESORPTION, -((CatalysisAtom) data).getRate(DESORPTION));
     if (n.getData().compareTo(data) == 0) {
-      ((CatalysisAtom) data).setDesorptionProbability(0.0);
+      ((CatalysisAtom) data).setRate(DESORPTION, 0.0);
       return;
     }
     if (n.getData().compareTo(data) > 0) {
@@ -219,7 +223,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumDesorptionRate(((CatalysisAtom) data).getDesorptionProbability());
+    ((CatalysisAtom) n.getData()).addToSumRate(DESORPTION, ((CatalysisAtom) data).getRate(DESORPTION));
     if (n.getData().compareTo(data) == 0) {
       return;
     }
@@ -272,7 +276,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   private void clear(Node n) {
     if (n == null)
       return;
-    ((CatalysisAtom) n.getData()).setSumDesorptionRate(0.0);
+    ((CatalysisAtom) n.getData()).setSumRate(DESORPTION, 0.0);
     clear(n.getLeft());
     clear(n.getRight());
   }
@@ -298,18 +302,18 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
 
     if (n.isLeaf()) {
       ((CatalysisAtom) n.getData()).equalRate();
-      return ((CatalysisAtom) n.getData()).getDesorptionProbability();
+      return ((CatalysisAtom) n.getData()).getRate(DESORPTION);
     }
     // add current rate to the sum
-    ((CatalysisAtom) n.getData()).setSumDesorptionRate(((CatalysisAtom) n.getData()).getDesorptionProbability());
+    ((CatalysisAtom) n.getData()).setSumRate(DESORPTION, ((CatalysisAtom) n.getData()).getRate(DESORPTION));
     if (n.getLeft() != null) {
       // add left childen rate sum 
-      ((CatalysisAtom) n.getData()).addToSumDesorptionRate(populateCatalysisAtom(n.getLeft()));
+      ((CatalysisAtom) n.getData()).addToSumRate(DESORPTION, populateCatalysisAtom(n.getLeft()));
     }
     if (n.getRight() != null) {
-      ((CatalysisAtom) n.getData()).addToSumDesorptionRate(populateCatalysisAtom(n.getRight()));
+      ((CatalysisAtom) n.getData()).addToSumRate(DESORPTION, populateCatalysisAtom(n.getRight()));
     }
-    return ((CatalysisAtom) n.getData()).getSumDesorptionRate();
+    return ((CatalysisAtom) n.getData()).getSumRate(DESORPTION);
   }
 
   /**
@@ -321,7 +325,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   public T randomAtom() {
     double randomNumber = StaticRandom.raw() * getDesorptionRate();
     CatalysisAtom atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
-    while (atom.getDesorptionProbability() == 0) {
+    while (atom.getRate(DESORPTION) == 0) {
       //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
       randomNumber = StaticRandom.raw() * getDesorptionRate();
       atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
@@ -335,10 +339,10 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
     double leftRate = 0.0;
     if (n.getLeft() != null) 
-      leftRate = ((CatalysisAtom) n.getLeft().getData()).getSumDesorptionRate();
+      leftRate = ((CatalysisAtom) n.getLeft().getData()).getSumRate(DESORPTION);
     double rightRate = 0.0;
     if (n.getRight() != null) 
-      rightRate = ((CatalysisAtom) n.getRight().getData()).getSumDesorptionRate();
+      rightRate = ((CatalysisAtom) n.getRight().getData()).getSumRate(DESORPTION);
 
     if (r < leftRate) {
       return randomAtom(n.getLeft(), r);
