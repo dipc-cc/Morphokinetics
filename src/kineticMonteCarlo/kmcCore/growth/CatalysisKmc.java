@@ -717,9 +717,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   private void recomputeDiffusionProbability(CatalysisAtom atom) {
     totalDiffusionRate -= atom.getRate(DIFFUSION);
-    diffusionSites.remove(atom);
     atom.setRate(DIFFUSION, 0);
     if (!atom.isOccupied()) {
+      if (atom.isOnList(DIFFUSION)) {
+        diffusionSites.remove(atom);
+      }
+      atom.setOnList(DIFFUSION, false);
       return;
     }
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
@@ -731,7 +734,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     if (atom.getRate(DIFFUSION) > 0) {
       totalDiffusionRate += atom.getRate(DIFFUSION);
-      diffusionSites.add(atom);
+      if (!atom.isOnList(DIFFUSION)) {
+        diffusionSites.add(atom);
+        atom.setOnList(DIFFUSION, true);
+      }
+    } else if (atom.isOnList(DIFFUSION)) {
+      atom.setOnList(DIFFUSION, false);
+      diffusionSites.remove(atom);
     }
   }
     
