@@ -238,7 +238,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage+4) {
+    while (getLattice().getCoverage() < maxCoverage) {
       activationEnergy.updatePossibles(reactionSites.listIterator(), getList().getDeltaTime(true));
       if (performSimulationStep()) {
         break;
@@ -605,7 +605,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       updateAdsorptionRateFromList();
     }
     if (totalDesorptionRate / previousDesorptionRate < 1e-1 || 1.0 - totalDesorptionRate / desorptionSites.getDesorptionRate() > 1e-3 || simulatedSteps % 10000000 == 0) {
-      System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + desorptionSites.getDesorptionRate());
+      //System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + desorptionSites.getDesorptionRate());
       updateDesorptionRateFromList();
     }
     if (totalReactionRate / previousReactionRate < 1e-1) {
