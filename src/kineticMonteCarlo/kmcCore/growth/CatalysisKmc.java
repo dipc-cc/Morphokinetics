@@ -93,7 +93,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     restart = new Restart(measureDiffusivity);
     adsorptionSites = new ArrayList<>();
-    AtomsCollection col = new AtomsCollection(parser);
+    AtomsCollection col = new AtomsCollection(parser, DESORPTION);
     desorptionSites = col.getCollection(); // Either a tree or array
     reactionSites = new ArrayList<>();
     diffusionSites = new ArrayList<>();

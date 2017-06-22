@@ -15,11 +15,11 @@ public class AtomsCollection {
   
   IAtomsCollection atomsCollection;
 
-  public AtomsCollection(Parser parser) {
+  public AtomsCollection(Parser parser, byte process) {
     if (parser.isDiffusionFixed()) {
-      atomsCollection = new AtomsAvlTree();
+      atomsCollection = new AtomsAvlTree(process);
     } else {
-      atomsCollection = new AtomsArrayList();
+      atomsCollection = new AtomsArrayList(process);
     }
   }
   
