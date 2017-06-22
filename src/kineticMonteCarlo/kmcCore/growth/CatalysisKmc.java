@@ -475,6 +475,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         a.setRate(ADSORPTION, adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
         adsorptionSites.add(a);
+        a.setOnList(ADSORPTION, true);
         totalAdsorptionRate += a.getRate(ADSORPTION);
         desorptionSites.insert(a);
       }
@@ -508,6 +509,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        a.setOnList(ADSORPTION, false);
         if (a.getType() == CO) {
           a.setOnList(DESORPTION, true);
           desorptionSites.insert(a);
@@ -633,9 +635,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     totalAdsorptionRate += atom.getRate(ADSORPTION);
     if (atom.getRate(ADSORPTION) == 0) {
-      adsorptionSites.remove(atom);
+      if (atom.isOnList(ADSORPTION)) {
+        adsorptionSites.remove(atom);
+      }
+      atom.setOnList(ADSORPTION, false);
     } else if (oldAdsorptionRate == 0) {
       adsorptionSites.add(atom);
+      atom.setOnList(ADSORPTION, true);
     }
   }
   
