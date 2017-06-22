@@ -65,6 +65,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean doAdsorption;
   private final boolean doDesorption;
   private final boolean doReaction;
+  private final boolean doO2Dissociation;
   private final boolean startOxygen;
   private Restart restart;
   private final ActivationEnergy activationEnergy;
@@ -100,6 +101,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     doDesorption = parser.doCatalysisDesorption();
     doReaction = parser.doCatalysisReaction();
     startOxygen = parser.catalysisStartOxigenCov();
+    doO2Dissociation = parser.doCatalysisO2Dissociation();
     if (startOxygen) {
       maxCoverage = 2; // it will never end because of coverage
     } else {
@@ -356,16 +358,23 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atomType = O;
       }
       destinationAtom.setType(atomType);
-      deposited = depositAtom(destinationAtom);
-      if (atomType == O) { // it has to deposit two O (dissociation of O2 -> 2O)
-        random = StaticRandom.rawInteger(4);
-        neighbourAtom = destinationAtom.getNeighbour(random);
-        while (neighbourAtom.isOccupied()) {
-          random = (random + 1) % 4;
+      if(atomType == CO){
+        deposited = depositAtom(destinationAtom,true);
+      }else{
+        if (doO2Dissociation) { // it has to deposit two O (dissociation of O2 -> 2O)
+          deposited = depositAtom(destinationAtom);
+          random = StaticRandom.rawInteger(4);
           neighbourAtom = destinationAtom.getNeighbour(random);
+          while (neighbourAtom.isOccupied()) {
+            random = (random + 1) % 4;
+            neighbourAtom = destinationAtom.getNeighbour(random);
+          }
+          neighbourAtom.setType(O);
+          depositAtom(neighbourAtom, true);
         }
-        neighbourAtom.setType(O);
-        depositAtom(neighbourAtom, true);
+        else{
+          deposited = depositAtom(destinationAtom,true);
+        }
       }
     } while (!deposited);
     
@@ -651,8 +660,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.isOccupied()) {
       atom.setAdsorptionProbability(0);
     } else {
-      int canAdsorbO2 = atom.isIsolated() ? 0 : 1;
-      atom.setAdsorptionProbability(adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
+        int canAdsorbO2 = 1;
+        if(doO2Dissociation){
+            canAdsorbO2 = atom.isIsolated() ? 0 : 1;
+        }
+        atom.setAdsorptionProbability(adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
     }
     totalAdsorptionRate += atom.getAdsorptionProbability();
     if (atom.getAdsorptionProbability() == 0) {
