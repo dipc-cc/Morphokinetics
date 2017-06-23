@@ -429,4 +429,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     final void checkForComodification() {
     }
   }
+  
+  @Override
+  public int size() {
+    return depth(root);
+  }
 }

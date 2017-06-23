@@ -39,4 +39,6 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   public T randomAtom();
   
   public Iterator<T> iterator();
+  
+  public int size();
 }
