@@ -290,18 +290,6 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
       }
     }
   }
-  
-  public void setParents() {
-    setParents(root, null);
-  }
-  
-  private void setParents(Node n, Node parent) {
-    if (n == null) 
-      return;
-    n.parent = parent;
-    setParents(n.getLeft(), n);
-    setParents(n.getRight(), n);
-  }
 
   @Override
   public void clear() {
