@@ -9,7 +9,7 @@ import basic.Parser;
 import basic.io.OutputType;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.ListIterator;
+import java.util.Iterator;
 import java.util.Locale;
 import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
@@ -86,7 +86,7 @@ public class ActivationEnergy {
    * @param surface
    * @param elapsedTime 
    */
-  public void updatePossibles(ListIterator<CatalysisAtom> surface, double elapsedTime) {
+  public void updatePossibles(Iterator<CatalysisAtom> surface, double elapsedTime) {
     if (doActivationEnergyStudy) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       
@@ -120,7 +120,7 @@ public class ActivationEnergy {
     }
   }
   
-  public void updatePossibles(ListIterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
+  public void updatePossibles(Iterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
         histogramPossibleTmp = new double[length][length];
