@@ -209,8 +209,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n.getData().compareTo(data) < 0) {
       removeRate(n.getRight(), data, diff);
     }
-  }
-      
+  }    
   
   /**
    * Removes atom's rate from the tree, with its old desorption rate and sets to zero.
@@ -270,7 +269,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
   }
   
-  public void PrintTree() {
+  public void printTree() {
     root.setLevel(0);
     Queue<Node<T>> queue = new LinkedList<>();
     queue.add(root);
@@ -382,6 +381,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
 
   @Override
+  public int size() {
+    return depth(root);
+  }
+  
+  @Override
   public Iterator<T> iterator() {
     Itr itr = new Itr();
     return itr;
@@ -428,10 +432,5 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
 
     final void checkForComodification() {
     }
-  }
-  
-  @Override
-  public int size() {
-    return depth(root);
   }
 }
