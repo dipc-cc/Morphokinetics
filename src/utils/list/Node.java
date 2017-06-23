@@ -17,7 +17,6 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
   private Node<T> right;
   public int level;
   private int depth;
-  public Node<T> parent;
 
   public Node(T data) {
     this(data, null, null);
