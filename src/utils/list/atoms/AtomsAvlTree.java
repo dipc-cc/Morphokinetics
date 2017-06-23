@@ -271,21 +271,21 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
   
   public void PrintTree() {
-    root.level = 0;
+    root.setLevel(0);
     Queue<Node<T>> queue = new LinkedList<>();
     queue.add(root);
     while (!queue.isEmpty()) {
       Node<T> node = queue.poll();
       System.out.println(node);
-      int level = node.level;
+      int level = node.getLevel();
       Node<T> left = node.getLeft();
       Node<T> right = node.getRight();
       if (left != null) {
-        left.level = level + 1;
+        left.setLevel(level + 1);
         queue.add(left);
       }
       if (right != null) {
-        right.level = level + 1;
+        right.setLevel(level + 1);
         queue.add(right);
       }
     }

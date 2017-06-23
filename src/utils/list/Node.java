@@ -15,7 +15,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
   private T data;
   private Node<T> left;
   private Node<T> right;
-  public int level;
+  private int level;
   private int depth;
 
   public Node(T data) {
@@ -85,6 +85,13 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
     return left == null && right == null;
   }
 
+  public int getLevel() {
+    return level;
+  }
+
+  public void setLevel(int level) {
+    this.level = level;
+  }
 
   /*@Override
 	public String toString() {
@@ -102,5 +109,4 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 
     return "Level " + level + ": " + data;
   }
-
 }
