@@ -40,7 +40,7 @@ public abstract class AbstractSimulation {
   private long startTime;
   private long iterationStartTime;
   private double totalTime;
-  private float coverage;
+  private float[] coverage;
   private int islands;
   private float gyradius;
   private int simulations;
@@ -58,6 +58,7 @@ public abstract class AbstractSimulation {
     staticRandom = new StaticRandom(parser.randomSeed());
     restartFolderName = "results/run" + System.currentTimeMillis();
     restart = new Restart(restartFolderName);
+    coverage = new float[3]; // Coverage, Coverage CO, Coverage O
   }
 
   public static void printHeader() {
@@ -142,7 +143,7 @@ public abstract class AbstractSimulation {
   public void doSimulation() {
     startTime = System.currentTimeMillis();
     totalTime = 0.0;
-    coverage = 0.0f;
+    coverage[0] = 0.0f;
     islands = 0;
     gyradius = 0.0f;
     boolean printPsd = (parser.doPsd() && parser.outputData());
@@ -192,9 +193,13 @@ public abstract class AbstractSimulation {
       
       printOutput();
       totalTime += kmc.getTime();
-      coverage += kmc.getCoverage();
+      coverage[0] += kmc.getCoverage();
       islands += kmc.getLattice().getIslandCount();
       gyradius += kmc.getLattice().getAverageGyradius();
+      if (kmc instanceof CatalysisKmc) {
+        coverage[CO+1] += ((CatalysisKmc) kmc).getCoverage(CO);
+        coverage[O+1] += ((CatalysisKmc) kmc).getCoverage(O);
+      }
     }
 
     printFooter();
@@ -327,15 +332,24 @@ public abstract class AbstractSimulation {
     String kmcResult = "";
     kmcResult += "\n\t__________________________________________________\n";
     kmcResult += "\tAverage\n";
-    kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tGyradius\n";
+    if (kmc instanceof CatalysisKmc) {
+      kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tCove CO\tCove O\n";
+    } else {
+      kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tGyradius\n";
+    }
     kmcResult += "\t(units)\t\t\t (%)\t\t (ms/s/min)\n";
     kmcResult += "\t__________________________________________________\n";
     kmcResult += "\t" + totalTime / i;
-    kmcResult += "\t" + coverage / i;
+    kmcResult += "\t" + coverage[0] / i;
     long msSimulationTime = (System.currentTimeMillis() - startTime) / i;
     kmcResult += "\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60;
-    kmcResult += "\t\t" + (float) (islands) / (float) (i);
-    kmcResult += "\t" + gyradius / (float) i + "\n";
+    if (kmc instanceof CatalysisKmc) {
+      kmcResult += "\t\t" + coverage[CO+1] / (float) (i);
+      kmcResult += "\t" + coverage[O+1] / (float) i + "\n";
+    } else {
+      kmcResult += "\t\t" + (float) (islands) / (float) (i);
+      kmcResult += "\t" + gyradius / (float) i + "\n";
+    }
     System.out.println(kmcResult);
     return kmcResult;
   }
