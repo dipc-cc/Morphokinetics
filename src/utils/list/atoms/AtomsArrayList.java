@@ -31,12 +31,18 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
   
   /**
-   * Current atom is added.
-   * @param atom 
+   * Current atom is added. This should only be called in the initialisation. Add atoms only if they
+   * have a rate.
+   *
+   * @param atom
    */
   @Override
   public void insert(T atom) {
-    add(atom);
+    CatalysisAtom a = (CatalysisAtom) atom;
+    a.setOnList(process, a.getRate(process) > 0);
+    if (a.getRate(process) > 0) {
+      add(atom);
+    }
   }
 
   /**
