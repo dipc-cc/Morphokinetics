@@ -6,6 +6,7 @@
 package utils.list.atoms;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import utils.StaticRandom;
 
@@ -16,7 +17,7 @@ import utils.StaticRandom;
  */
 public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection<T> {
 
-  private final ArrayList<CatalysisAtom> atomsArray;
+  private final ArrayList<T> atomsArray;
   private double totalRate;
   /**
    * Adsorption, desorption, reaction or diffusion.
@@ -51,7 +52,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   private void add(T atom) {
     CatalysisAtom a = (CatalysisAtom) atom;
     totalRate += a.getRate(process);
-    atomsArray.add(a);
+    atomsArray.add(atom);
   }
 
   @Override
@@ -91,32 +92,37 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   public void clear() {
     double sum = 0.0;
     for (int i = 0; i < atomsArray.size(); i++) {
-      sum += atomsArray.get(i).getRate(process);
+      sum += ((CatalysisAtom) atomsArray.get(i)).getRate(process);
     }
     totalRate = sum;
   }
 
   @Override
   public T randomAtom() {
-    CatalysisAtom atom = null;
+    T a = null;
     double randomNumber = StaticRandom.raw() * totalRate;
     
     double sum = 0.0;
     int i;
     for (i = 0; i < atomsArray.size(); i++) {
-      sum += atomsArray.get(i).getRate(process);
+      sum += ((CatalysisAtom) atomsArray.get(i)).getRate(process);
       if (sum > randomNumber) {
-        atom = atomsArray.get(i);
+        a = atomsArray.get(i);
         break;
       }
     }
     
-    if (atom == null) { // Search has failed
+    if (a == null) { // Search has failed
       // Recompute total rate and try again
       clear();
-      atom = (CatalysisAtom) randomAtom();
+      a = randomAtom();
     }
     
-    return (T) atom;
-  }  
+    return a;
+  }
+  
+  @Override
+  public Iterator<T> iterator() {
+    return atomsArray.iterator();
+  }
 }

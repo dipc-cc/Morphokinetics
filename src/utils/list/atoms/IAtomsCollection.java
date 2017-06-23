@@ -5,6 +5,9 @@
  */
 package utils.list.atoms;
 
+import java.util.Iterator;
+import kineticMonteCarlo.atom.CatalysisAtom;
+
 /**
  *
  * @author J. Alberdi-Rodriguez
@@ -34,4 +37,6 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   public void clear();
   
   public T randomAtom();
+  
+  public Iterator<T> iterator();
 }

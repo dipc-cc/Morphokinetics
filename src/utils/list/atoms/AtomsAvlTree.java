@@ -4,8 +4,10 @@
 * and open the template in the editor.
 */
 package utils.list.atoms;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.function.Consumer;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import utils.StaticRandom;
 import utils.list.Node;
@@ -59,6 +61,16 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
     return local.getData();
   }
+  
+  public Node<T> getMinimumNode() {
+    Node<T> local = root;
+    if (local == null)
+      return null;
+    while (local.getLeft() != null) {
+      local = local.getLeft();
+    }
+    return local;
+  }  
   
   private int depth(Node<T> node) {
     if (node == null)
@@ -153,6 +165,25 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
     return false;
   }
+  
+  /**
+   * Finds the element itself.
+   * @param data
+   * @return element if found, null otherwise.
+   */
+  public T find(T data) {
+    Node<T> local = root;
+    while (local != null) {
+      if (local.getData().compareTo(data) == 0)
+        return local.getData();
+      else if (local.getData().compareTo(data) > 0)
+        local = local.getLeft();
+      else
+        local = local.getRight();
+    }
+    return null;
+  }
+  
   /**
    * Method to update rates from root to an atom.
    * 
@@ -360,5 +391,54 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public void remove(T atom) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Iterator<T> iterator() {
+    Itr itr = new Itr();
+    return itr;
+  }
+  
+  private class Itr implements Iterator<T> {
+
+    int cursor;       // index of next element to return
+    int lastRet = -1; // index of last element returned; -1 if no such
+    int max; // last element
+
+    private Itr() {
+      cursor = -1;
+      max = getMaximum().hashCode();
+    }
+
+    /**
+     * Left -> current -> right.
+     * @return 
+     */
+    @Override
+    public boolean hasNext() {
+      return cursor < max;
+    }
+
+    /**
+     * Very inefficient way to iterate over all elements.
+     * 
+     * @return next element.
+     */
+    @SuppressWarnings("unchecked")
+    @Override
+    public T next() {
+      // go to next element
+      cursor++;
+      T a  = (T) new CatalysisAtom(cursor, (short)-1, (short)-1);
+      return find(a);
+    }      
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public void forEachRemaining(Consumer<? super T> consumer) {
+    }
+
+    final void checkForComodification() {
+    }
   }
 }
