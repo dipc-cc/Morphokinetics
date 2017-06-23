@@ -65,7 +65,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     CatalysisAtom a = (CatalysisAtom) atom;
     totalRate -= a.getRate(process);
     a.setRate(process, 0.0);
-    atomsArray.remove(a);
+    atomsArray.remove(atom);
   }
 
   @Override
