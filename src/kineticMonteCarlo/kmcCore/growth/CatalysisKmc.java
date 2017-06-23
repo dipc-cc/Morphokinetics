@@ -283,6 +283,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     steps = new long[4];
     co2 = new long[4];
     desorptionSites.clear();
+    reactionSites.clear();
   }
   
   private boolean depositAtom(CatalysisAtom atom) {
@@ -787,14 +788,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   private void updateDesorptionRateFromList() {
-    desorptionSites.clear();
-    desorptionSites.populate();
+    desorptionSites.recomputeTotalRate(DESORPTION);
     totalDesorptionRate = desorptionSites.getTotalRate(DESORPTION);
   }
   
   private void updateReactionRateFromList() {
-    reactionSites.clear();
-    reactionSites.populate();
+    reactionSites.recomputeTotalRate(REACTION);
     totalReactionRate = reactionSites.getTotalRate(REACTION);
   }
   

@@ -303,6 +303,12 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     clear(n.getRight());
   }
   
+  @Override
+  public void recomputeTotalRate(byte process) {
+    clear();
+    populate();
+  }
+  
   /**
    * It goes through all nodes and recomputes sum of the rates.
    */

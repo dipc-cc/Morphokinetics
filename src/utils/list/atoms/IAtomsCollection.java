@@ -34,6 +34,8 @@ public interface IAtomsCollection<T extends Comparable<T>> {
 
   public double getTotalRate(byte process);
   
+  public void recomputeTotalRate(byte process);
+  
   public void clear();
   
   public T randomAtom();

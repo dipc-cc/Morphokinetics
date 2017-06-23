@@ -85,22 +85,25 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   @Override
   public void populate() {
   }
+  
+  @Override
+  public void recomputeTotalRate(byte process) {
+    double sum = 0.0;
+    for (int i = 0; i < atomsArray.size(); i++) {
+      sum += ((CatalysisAtom) atomsArray.get(i)).getRate(process);
+    }
+    totalRate = sum;
+  }
 
   @Override
   public double getTotalRate(byte process) {
     return totalRate;
   }
   
-  /**
-   * Used to recompute totalRate.
-   */
   @Override
   public void clear() {
-    double sum = 0.0;
-    for (int i = 0; i < atomsArray.size(); i++) {
-      sum += ((CatalysisAtom) atomsArray.get(i)).getRate(process);
-    }
-    totalRate = sum;
+    atomsArray.clear();
+    totalRate = 0.0;
   }
 
   @Override
@@ -120,7 +123,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     
     if (a == null) { // Search has failed
       // Recompute total rate and try again
-      clear();
+      recomputeTotalRate(process);
       a = randomAtom();
     }
     
