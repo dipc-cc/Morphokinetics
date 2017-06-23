@@ -469,6 +469,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         a.setOnList(ADSORPTION, true);
         totalAdsorptionRate += a.getRate(ADSORPTION);
         desorptionSites.insert(a);
+        reactionSites.insert(a);
       }
     }
     getList().setDepositionProbability(totalAdsorptionRate);
