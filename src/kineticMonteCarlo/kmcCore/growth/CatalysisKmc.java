@@ -537,17 +537,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     // recalculate total probability, if needed
     if (totalRate[ADSORPTION] / previousRate[ADSORPTION] < 1e-1) {
-      updateAdsorptionRateFromList();
+      updateRateFromList(ADSORPTION);
     }
     if (totalRate[DESORPTION] / previousRate[DESORPTION] < 1e-1 || 1.0 - totalRate[DESORPTION] / sites[DESORPTION].getTotalRate(DESORPTION) > 1e-3 || simulatedSteps % 10000000 == 0) {
       //System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + sites[DESORPTION].getDesorptionRate());
-      updateDesorptionRateFromList();
+      updateRateFromList(DESORPTION);
     }
     if (totalRate[REACTION] / previousRate[REACTION] < 1e-1) {
-      updateReactionRateFromList();
+      updateRateFromList(REACTION);
     }
     if (totalRate[DIFFUSION] / previousRate[DIFFUSION] < 1e-1) {
-      updateDiffusionRateFromList();
+      updateRateFromList(DIFFUSION);
     }
     
     // tell to the list new probabilities
@@ -566,29 +566,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       int canAdsorbO2 = atom.isIsolated() ? 0 : 1;
       atom.setRate(ADSORPTION, adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
     }
-    totalRate[ADSORPTION] += atom.getRate(ADSORPTION);
-    if (atom.getRate(ADSORPTION) > 0) {
-      if (atom.isOnList(ADSORPTION)) {
-        if (oldAdsorptionRate != atom.getRate(ADSORPTION)) {
-          sites[ADSORPTION].removeRate(atom, oldAdsorptionRate - atom.getRate(ADSORPTION));
-        } else { // rate is the same as it was.
-          // do nothing
-        }
-      } else { // atom it was not in the list
-        sites[ADSORPTION].addRate(atom);
-      }
-      atom.setOnList(ADSORPTION, true);
-    } else {// adsorption == 0
-      if (atom.isOnList(ADSORPTION)) {
-        if (oldAdsorptionRate > 0) {
-          sites[ADSORPTION].removeRate(atom, oldAdsorptionRate);
-          sites[ADSORPTION].removeAtomRate(atom);
-        }
-      } else { // not on list
-        // do nothing
-      }
-      atom.setOnList(ADSORPTION, false);
-    }
+    recomputeCollection(ADSORPTION, atom, oldAdsorptionRate);
   }
   
   private void recomputeDesorptionProbability(CatalysisAtom atom) {
@@ -650,29 +628,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atom.addRate(REACTION, rate/2.0, i);
       }
     }
-    totalRate[REACTION] += atom.getRate(REACTION);
-    if (atom.getRate(REACTION) > 0) {
-      if (atom.isOnList(REACTION)) {
-        if (oldReactionRate != atom.getRate(REACTION)) {
-          sites[REACTION].removeRate(atom, oldReactionRate - atom.getRate(REACTION));
-        } else { // rate is the same as it was.
-          //do nothing.
-        }
-      } else { // atom it was not in the list
-        sites[REACTION].addRate(atom);
-      }
-      atom.setOnList(REACTION, true);
-    } else { // reaction == 0
-      if (atom.isOnList(REACTION)) {
-        if (oldReactionRate > 0) {
-          sites[REACTION].removeRate(atom, oldReactionRate);
-          sites[REACTION].removeAtomRate(atom);
-        }
-      } else { // not on list
-        // do nothing
-      }
-      atom.setOnList(REACTION, false);
-    }
+    recomputeCollection(REACTION, atom, oldReactionRate);
   }
 
   private void recomputeDiffusionProbability(CatalysisAtom atom) {
@@ -693,49 +649,27 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atom.addRate(DIFFUSION, probability, i);
       }
     }
-    totalRate[DIFFUSION] += atom.getRate(DIFFUSION);
-    if (atom.getRate(DIFFUSION) > 0) {
-      if (atom.isOnList(DIFFUSION)) {
-        if (oldDiffusionRate != atom.getRate(DIFFUSION)) {
-          sites[DIFFUSION].removeRate(atom, oldDiffusionRate-atom.getRate(DIFFUSION));
-        } else { // rate is the same as it was.
-          //do nothing.
-        }
-      } else { // atom it was not in the list
-        sites[DIFFUSION].addRate(atom);
-      }
-      atom.setOnList(DIFFUSION, true);
-    } else { // reaction == 0
-      if (atom.isOnList(DIFFUSION)) {
-        if (oldDiffusionRate > 0) {
-          sites[DIFFUSION].removeRate(atom, oldDiffusionRate);
-          sites[DIFFUSION].removeAtomRate(atom);
-        }
-      } else { // not on list
-        // do nothing
-      }
-      atom.setOnList(DIFFUSION, false);
-    }
+    recomputeCollection(DIFFUSION, atom, oldDiffusionRate);
   }
   
-  private void recompute(byte process, CatalysisAtom atom, double oldRate) {
+  private void recomputeCollection(byte process, CatalysisAtom atom, double oldRate) {
     totalRate[process] += atom.getRate(process);
     if (atom.getRate(process) > 0) {
       if (atom.isOnList(process)) {
         if (oldRate != atom.getRate(process)) {
-          sites[DIFFUSION].removeRate(atom, oldRate-atom.getRate(process));
+          sites[process].removeRate(atom, oldRate-atom.getRate(process));
         } else { // rate is the same as it was.
           //do nothing.
         }
       } else { // atom it was not in the list
-        sites[DIFFUSION].addRate(atom);
+        sites[process].addRate(atom);
       }
       atom.setOnList(process, true);
     } else { // reaction == 0
       if (atom.isOnList(process)) {
         if (oldRate > 0) {
-          sites[DIFFUSION].removeRate(atom, oldRate);
-          sites[DIFFUSION].removeAtomRate(atom);
+          sites[process].removeRate(atom, oldRate);
+          sites[process].removeAtomRate(atom);
         }
       } else { // not on list
         // do nothing
@@ -779,24 +713,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return probability;
   }
   
-  private void updateAdsorptionRateFromList() {
-    sites[ADSORPTION].recomputeTotalRate(ADSORPTION);
-    totalRate[ADSORPTION] = sites[ADSORPTION].getTotalRate(ADSORPTION);
-  }
-
-  private void updateDesorptionRateFromList() {
-    sites[DESORPTION].recomputeTotalRate(DESORPTION);
-    totalRate[DESORPTION] = sites[DESORPTION].getTotalRate(DESORPTION);
-  }
-  
-  private void updateReactionRateFromList() {
-    sites[REACTION].recomputeTotalRate(REACTION);
-    totalRate[REACTION] = sites[REACTION].getTotalRate(REACTION);
-  }
-  
-  private void updateDiffusionRateFromList() {
-    sites[DIFFUSION].recomputeTotalRate(DIFFUSION);
-    totalRate[DIFFUSION] = sites[DIFFUSION].getTotalRate(DIFFUSION);
+  private void updateRateFromList(byte process) {
+    sites[process].recomputeTotalRate(process);
+    totalRate[process] = sites[process].getTotalRate(process);
   }
 
   private float getCurrentP() {
