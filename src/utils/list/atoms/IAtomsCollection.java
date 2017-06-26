@@ -6,7 +6,6 @@
 package utils.list.atoms;
 
 import java.util.Iterator;
-import kineticMonteCarlo.atom.CatalysisAtom;
 
 /**
  *
