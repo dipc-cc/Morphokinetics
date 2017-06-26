@@ -337,8 +337,8 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   }
   
   
-  public void equalRate() {
-    processes[DESORPTION].equalRate();
+  public void equalRate(byte process) {
+    processes[process].equalRate();
   }
   
   @Override

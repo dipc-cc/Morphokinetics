@@ -329,7 +329,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
 
     if (n.isLeaf()) {
-      ((CatalysisAtom) n.getData()).equalRate();
+      ((CatalysisAtom) n.getData()).equalRate(process);
       return ((CatalysisAtom) n.getData()).getRate(process);
     }
     // add current rate to the sum
