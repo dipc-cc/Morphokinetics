@@ -39,11 +39,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
+  private final IAtomsCollection adsorptionSites;
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
   private double totalAdsorptionRate;
   // Desorption
-  private ArrayList<CatalysisAtom> adsorptionSites;
   private double[] desorptionRateCOPerSite; // BRIDGE or CUS
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   private double totalDesorptionRate;
@@ -92,9 +92,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       adsorptionData = new ArrayList<>();
     }
     restart = new Restart(measureDiffusivity);
-    adsorptionSites = new ArrayList<>();
-    AtomsCollection col = new AtomsCollection(parser, DESORPTION);
-    desorptionSites = col.getCollection(); // Either a tree or array 
+    AtomsCollection col = new AtomsCollection(parser, ADSORPTION);
+    adsorptionSites = col.getCollection(); // Either a tree or array 
+    col = new AtomsCollection(parser, DESORPTION);
+    desorptionSites = col.getCollection();
     col = new AtomsCollection(parser, REACTION);
     reactionSites = col.getCollection();
     diffusionSites = new ArrayList<>();
@@ -315,23 +316,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         return null;
       }
       
-      double randomNumber = StaticRandom.raw() * totalAdsorptionRate;
-      
-      double sum = 0.0;
-      int i;
-      for (i = 0; i < adsorptionSites.size(); i++) {
-        sum += adsorptionSites.get(i).getRate(ADSORPTION);
-        if (sum > randomNumber) {
-          destinationAtom = adsorptionSites.get(i);
-          break;
-        }
-      }
+      destinationAtom = (CatalysisAtom) adsorptionSites.randomAtom();
 
       if (destinationAtom == null || destinationAtom.getRate(ADSORPTION) == 0 || destinationAtom.isOccupied()) {
         boolean isThereAnAtom = destinationAtom == null;
         System.out.println("Something is wrong " + isThereAnAtom);
       }
-      randomNumber = StaticRandom.raw() * destinationAtom.getRate(ADSORPTION);
+      double randomNumber = StaticRandom.raw() * destinationAtom.getRate(ADSORPTION);
       if (randomNumber < adsorptionRateCOPerSite) {
         atomType = CO;
       } else {
@@ -462,21 +453,21 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Iterates over all lattice sites and initialises adsorption probabilities.
    */
   private void initAdsorptionProbability() {
-    adsorptionSites = new ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         a.setRate(ADSORPTION, adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
-        adsorptionSites.add(a);
         a.setOnList(ADSORPTION, true);
         totalAdsorptionRate += a.getRate(ADSORPTION);
+        adsorptionSites.insert(a);
         desorptionSites.insert(a);
         reactionSites.insert(a);
       }
     }
     getList().setDepositionProbability(totalAdsorptionRate);
     getList().setDesorptionProbability(0);
+    adsorptionSites.populate();
     desorptionSites.populate();
     reactionSites.populate();
   }
@@ -506,6 +497,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         a.setOnList(ADSORPTION, false);
+        adsorptionSites.insert(a);
         if (a.getType() == CO) {
           a.setRate(DESORPTION, desorptionRateCOPerSite[a.getLatticeSite()]);
           totalDesorptionRate += a.getRate(DESORPTION);
@@ -622,14 +614,27 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       atom.setRate(ADSORPTION, adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
     }
     totalAdsorptionRate += atom.getRate(ADSORPTION);
-    if (atom.getRate(ADSORPTION) == 0) {
+    if (atom.getRate(ADSORPTION) > 0) {
       if (atom.isOnList(ADSORPTION)) {
-        adsorptionSites.remove(atom);
+        if (oldAdsorptionRate != atom.getRate(ADSORPTION)) {
+          adsorptionSites.removeRate(atom, oldAdsorptionRate - atom.getRate(ADSORPTION));
+        } else { // rate is the same as it was.
+          // do nothing
+        }
+      } else { // atom it was not in the list
+        adsorptionSites.addRate(atom);
+      }
+      atom.setOnList(ADSORPTION, true);
+    } else {// adsorption == 0
+      if (atom.isOnList(ADSORPTION)) {
+        if (oldAdsorptionRate > 0) {
+          adsorptionSites.removeRate(atom, oldAdsorptionRate);
+          adsorptionSites.removeAtomRate(atom);
+        }
+      } else { // not on list
+        // do nothing
       }
       atom.setOnList(ADSORPTION, false);
-    } else if (oldAdsorptionRate == 0) {
-      adsorptionSites.add(atom);
-      atom.setOnList(ADSORPTION, true);
     }
   }
   
@@ -782,11 +787,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void updateAdsorptionRateFromList() {
-    double sum = 0.0;
-    for (int i = 0; i < adsorptionSites.size(); i++) {
-      sum += adsorptionSites.get(i).getRate(ADSORPTION);
-    }
-    totalAdsorptionRate = sum;
+    adsorptionSites.recomputeTotalRate(ADSORPTION);
+    totalAdsorptionRate = adsorptionSites.getTotalRate(ADSORPTION);
   }
 
   private void updateDesorptionRateFromList() {
@@ -808,11 +810,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private float getCurrentP() {
-    float numOccupiedNeighbours = 0f;
+    return 0;
+    //TODO
+    /*float numOccupiedNeighbours = 0f;
     for (int i = 0; i < adsorptionSites.size(); i++) {
       numOccupiedNeighbours += (1 - (float) adsorptionSites.get(i).getOccupiedNeighbours() / 4);
     }
-    return (float) numOccupiedNeighbours / adsorptionSites.size();
+    return (float) numOccupiedNeighbours / adsorptionSites.size();*/
   }
   
   /**
