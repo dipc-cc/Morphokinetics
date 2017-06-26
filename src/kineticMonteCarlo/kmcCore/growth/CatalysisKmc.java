@@ -57,7 +57,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double[] diffusionRateCO;
   private double[] diffusionRateO;
   private double totalDiffusionRate;
-  private ArrayList<CatalysisAtom> diffusionSites;
+  private final IAtomsCollection diffusionSites;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -99,7 +99,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     desorptionSites = col.getCollection();
     col = new AtomsCollection(parser, REACTION);
     reactionSites = col.getCollection();
-    diffusionSites = new ArrayList<>();
+    col = new AtomsCollection(parser, DIFFUSION);
+    diffusionSites = col.getCollection();
     doDiffusion = parser.doCatalysisDiffusion();
     doAdsorption = parser.doCatalysisAdsorption();
     doDesorption = parser.doCatalysisDesorption();
@@ -417,22 +418,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Moves an atom.
    */
   private void diffuseAtom() {
-    CatalysisAtom originAtom = null;
-    double randomNumber = StaticRandom.raw() * totalDiffusionRate;
-    
-    double sum = 0.0;
-    int i;
-    for (i = 0; i < diffusionSites.size(); i++) {
-      sum += diffusionSites.get(i).getRate(DIFFUSION);
-      if (sum > randomNumber) {
-        originAtom = diffusionSites.get(i);
-        break;
-      }
-    }
+    CatalysisAtom originAtom = (CatalysisAtom) diffusionSites.randomAtom();
     CatalysisAtom destinationAtom = null;
     // it has to react with another atom
-    randomNumber = StaticRandom.raw() * originAtom.getRate(DIFFUSION);
-    sum = 0.0;
+    double randomNumber = StaticRandom.raw() * originAtom.getRate(DIFFUSION);
+    double sum = 0.0;
     for (int j = 0; j < originAtom.getNumberOfNeighbours(); j++) {
       sum += originAtom.getEdgeRate(DIFFUSION, j);
       if (sum > randomNumber) {
@@ -464,6 +454,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         adsorptionSites.insert(a);
         desorptionSites.insert(a);
         reactionSites.insert(a);
+        diffusionSites.insert(a);
       }
     }
     getList().setDepositionProbability(totalAdsorptionRate);
@@ -471,6 +462,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     adsorptionSites.populate();
     desorptionSites.populate();
     reactionSites.populate();
+    diffusionSites.populate();
   }
   
   /**
@@ -499,6 +491,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         a.setOnList(ADSORPTION, false);
         adsorptionSites.insert(a);
+        diffusionSites.insert(a);
         if (a.getType() == CO) {
           a.setRate(DESORPTION, desorptionRateCOPerSite[a.getLatticeSite()]);
           totalDesorptionRate += a.getRate(DESORPTION);
@@ -725,14 +718,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   private void recomputeDiffusionProbability(CatalysisAtom atom) {
     totalDiffusionRate -= atom.getRate(DIFFUSION);
-    atom.setRate(DIFFUSION, 0);
+    double oldDiffusionRate = atom.getRate(DIFFUSION);
     if (!atom.isOccupied()) {
       if (atom.isOnList(DIFFUSION)) {
-        diffusionSites.remove(atom);
+        diffusionSites.removeAtomRate(atom);
       }
       atom.setOnList(DIFFUSION, false);
       return;
     }
+    atom.setRate(DIFFUSION, 0);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied()) {
@@ -740,18 +734,31 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atom.addRate(DIFFUSION, probability, i);
       }
     }
+    totalDiffusionRate += atom.getRate(DIFFUSION);
     if (atom.getRate(DIFFUSION) > 0) {
-      totalDiffusionRate += atom.getRate(DIFFUSION);
-      if (!atom.isOnList(DIFFUSION)) {
-        diffusionSites.add(atom);
-        atom.setOnList(DIFFUSION, true);
+      if (atom.isOnList(DIFFUSION)) {
+        if (oldDiffusionRate != atom.getRate(DIFFUSION)) {
+          diffusionSites.removeRate(atom, oldDiffusionRate-atom.getRate(DIFFUSION));
+        } else { // rate is the same as it was.
+          //do nothing.
+        }
+      } else { // atom it was not in the list
+        diffusionSites.addRate(atom);
       }
-    } else if (atom.isOnList(DIFFUSION)) {
+      atom.setOnList(DIFFUSION, true);
+    } else { // reaction == 0
+      if (atom.isOnList(DIFFUSION)) {
+        if (oldDiffusionRate > 0) {
+          diffusionSites.removeRate(atom, oldDiffusionRate);
+          diffusionSites.removeAtomRate(atom);
+        }
+      } else { // not on list
+        // do nothing
+      }
       atom.setOnList(DIFFUSION, false);
-      diffusionSites.remove(atom);
     }
   }
-    
+
   private double getDesorptionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     return desorptionRateOPerSite[index];
@@ -803,15 +810,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void updateDiffusionRateFromList() {
-    double sum = 0.0;
-    for (int i = 0; i < diffusionSites.size(); i++) {
-      sum += diffusionSites.get(i).getRate(DIFFUSION);
-    }
-    totalDiffusionRate = sum;
+    diffusionSites.recomputeTotalRate(DIFFUSION);
+    totalDiffusionRate = diffusionSites.getTotalRate(DIFFUSION);
   }
 
   private float getCurrentP() {
-    if (false) {
+    if (true) {
       return 0;
     } else {
       float numOccupiedNeighbours = 0f;
