@@ -9,6 +9,7 @@ import basic.io.CatalysisData;
 import basic.io.OutputType;
 import basic.io.Restart;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
@@ -808,15 +809,19 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     totalDiffusionRate = sum;
   }
-  
+
   private float getCurrentP() {
-    return 0;
-    //TODO
-    /*float numOccupiedNeighbours = 0f;
-    for (int i = 0; i < adsorptionSites.size(); i++) {
-      numOccupiedNeighbours += (1 - (float) adsorptionSites.get(i).getOccupiedNeighbours() / 4);
+    if (false) {
+      return 0;
+    } else {
+      float numOccupiedNeighbours = 0f;
+      Iterator i = adsorptionSites.iterator();
+      while (i.hasNext()) {
+        CatalysisAtom a = (CatalysisAtom) i.next();
+        numOccupiedNeighbours += (1 - (float) a.getOccupiedNeighbours() / 4);
+      }
+      return (float) numOccupiedNeighbours / adsorptionSites.size();
     }
-    return (float) numOccupiedNeighbours / adsorptionSites.size();*/
   }
   
   /**
