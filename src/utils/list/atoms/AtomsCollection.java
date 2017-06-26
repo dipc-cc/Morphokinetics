@@ -16,7 +16,7 @@ public class AtomsCollection {
   IAtomsCollection atomsCollection;
 
   public AtomsCollection(Parser parser, byte process) {
-    if (parser.isDiffusionFixed()) {
+    if (parser.useCatalysisTree(process)) {
       atomsCollection = new AtomsAvlTree(process);
     } else {
       atomsCollection = new AtomsArrayList(process);

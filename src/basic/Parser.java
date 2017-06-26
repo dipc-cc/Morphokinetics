@@ -10,6 +10,11 @@ import basic.io.OutputType.formatFlag;
 import basic.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import java.util.EnumSet;
+import kineticMonteCarlo.atom.CatalysisProcess;
+import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
+import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
+import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
+import static kineticMonteCarlo.atom.CatalysisProcess.REACTION;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import org.json.JSONArray;
@@ -28,7 +33,11 @@ import org.json.JSONObject;
 public class Parser {
   
   /**
-   * Restart object to read "parameters" file
+   * Attribute to control the use of trees for catalysis.
+   */
+  private boolean[] catalysisTree;
+  /**
+   * Restart object to read "parameters" file.
    */
   private final Restart restart;
   /** 
@@ -167,19 +176,19 @@ public class Parser {
   /**
    * See {@link #doCatalysisDiffusion()}
    */
-  private boolean catalysisDiffusion;
+  private String catalysisDiffusion;
   /**
    * See {@link #doCatalysisAdsorption()}
    */
-  private boolean catalysisAdsorption;
+  private String catalysisAdsorption;
   /**
    * See {@link #doCatalysisDesorption()}
    */
-  private boolean catalysisDesorption;
+  private String catalysisDesorption;
   /**
    * See {@link #doCatalysisReaction()}
    */
-  private boolean catalysisReaction;
+  private String catalysisReaction;
   /**
    * See {@link #calalysisStartOxygenCov()}
    */
@@ -284,10 +293,10 @@ public class Parser {
     useMaxPerimeter = false;
     forceNucleation = true;
     devita = true;
-    catalysisDiffusion = true;
-    catalysisAdsorption = true;
-    catalysisDesorption = true;
-    catalysisReaction = true;
+    catalysisDiffusion = "true";
+    catalysisAdsorption = "true";
+    catalysisDesorption = "true";
+    catalysisReaction = "true";
     catalysisStartOxygenCov = false;
 
     evolutionaryAlgorithm = "original";
@@ -508,24 +517,40 @@ public class Parser {
       devita = justCentralFlake; // By default Devita works with single-flake simulations only
     }
     try {
-      catalysisDiffusion = json.getBoolean("catalysisDiffusion");
+      catalysisDiffusion = json.getString("catalysisDiffusion");
     } catch (JSONException e) {
-      catalysisDiffusion = true;
+      try {
+        catalysisDiffusion = Boolean.toString(json.getBoolean("catalysisDiffusion"));
+      } catch (JSONException ex) {
+        catalysisDiffusion = "true";
+      }
     }
     try {
-      catalysisAdsorption = json.getBoolean("catalysisAdsorption");
+      catalysisAdsorption = json.getString("catalysisAdsorption");
     } catch (JSONException e) {
-      catalysisAdsorption = true;
+      try {
+        catalysisAdsorption = Boolean.toString(json.getBoolean("catalysisAdsorption"));
+      } catch (JSONException ex) {
+        catalysisAdsorption = "true";
+      }
     }
     try {
-      catalysisDesorption = json.getBoolean("catalysisDesorption");
+      catalysisDesorption = json.getString("catalysisDesorption");
     } catch (JSONException e) {
-      catalysisDesorption = true;
+      try {
+        catalysisDesorption = Boolean.toString(json.getBoolean("catalysisDesorption"));
+      } catch (JSONException ex) {
+        catalysisDesorption = "true";
+      }
     }
     try {
-      catalysisReaction = json.getBoolean("catalysisReaction");
-    } catch (JSONException e) {
-      catalysisReaction = true;
+      catalysisReaction = json.getString("catalysisReaction");
+      } catch (JSONException e) {
+      try {
+        catalysisReaction = Boolean.toString(json.getBoolean("catalysisReaction"));
+      } catch (JSONException ex) {
+        catalysisReaction = "true";
+      }
     }
     try {
       catalysisStartOxygenCov = json.getBoolean("catalysisStartOxygenCov");
@@ -1403,7 +1428,7 @@ public class Parser {
    * @return do diffusion.
    */
   public boolean doCatalysisDiffusion() {
-    return catalysisDiffusion;
+    return !catalysisDiffusion.equals("false");
   }
   
   /**
@@ -1414,7 +1439,7 @@ public class Parser {
    * @return do diffusion.
    */
   public boolean doCatalysisAdsorption() {
-    return catalysisAdsorption;
+    return !catalysisAdsorption.equals("false");
   }
   
   /**
@@ -1425,7 +1450,7 @@ public class Parser {
    * @return do diffusion.
    */
   public boolean doCatalysisDesorption() {
-    return catalysisDesorption;
+    return !catalysisDesorption.equals("false");
   }
   
   /**
@@ -1436,7 +1461,34 @@ public class Parser {
    * @return do diffusion.
    */
   public boolean doCatalysisReaction() {
-    return catalysisReaction;
+    return !catalysisReaction.equals("false");
+  }
+  
+  private void computeTree() {
+    catalysisTree = new boolean[4];
+    catalysisTree[ADSORPTION] = catalysisAdsorption.equals("tree");
+    catalysisTree[DESORPTION] = catalysisDesorption.equals("tree");
+    catalysisTree[REACTION] = catalysisReaction.equals("tree");
+    catalysisTree[DIFFUSION] = catalysisDiffusion.equals("tree");
+  }
+  
+  /**
+   * Instead of writting "true", one can use the word "tree" to use a tree to store catalysis
+   * processes.
+   *
+   * @return
+   */
+
+  /**
+   * Instead of writting "true", one can use the word "tree" to use a tree to store catalysis
+ processes.
+   * @param process
+   * @return
+   */
+  public boolean useCatalysisTree(byte process) {
+    if (catalysisTree == null) 
+      computeTree();
+    return catalysisTree[process];
   }
   
   /**
