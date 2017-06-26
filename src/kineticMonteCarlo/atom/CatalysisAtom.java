@@ -166,6 +166,21 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   public CatalysisAtom getNeighbour(int pos) {
     return neighbours[pos];
   }
+  
+  public CatalysisAtom getRandomNeighbour(byte process) {
+    CatalysisAtom neighbour;
+    double randomNumber = StaticRandom.raw() * getRate(process);
+    double sum = 0.0;
+    for (int j = 0; j < getNumberOfNeighbours(); j++) {
+      sum += getEdgeRate(process, j);
+      if (sum > randomNumber) {
+        neighbour = getNeighbour(j);
+        return neighbour;
+      }
+    }
+    // raise an error
+    return null;
+  }
 
   /**
    * 
@@ -335,7 +350,6 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
               + " instance of a TestScores object.");
     }
   }
-  
   
   public void equalRate(byte process) {
     processes[process].equalRate();

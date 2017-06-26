@@ -359,22 +359,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return destinationAtom;
   }
   
-  private void desorpAtom() {
-    double randomNumber;
-    
+  private void desorpAtom() {    
     CatalysisAtom atom = (CatalysisAtom) desorptionSites.randomAtom();
-    double sum;
     CatalysisAtom neighbour = null;
     if (atom.getType() == O) { // it has to desorp with another O to create O2
-      randomNumber = StaticRandom.raw() * atom.getRate(DESORPTION);
-      sum = 0.0;
-      for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
-        sum += atom.getEdgeRate(DESORPTION, j);
-        if (sum > randomNumber) {
-          neighbour = atom.getNeighbour(j);
-          break;
-        }
-      }
+      neighbour = atom.getRandomNeighbour(DESORPTION);
       getLattice().extract(neighbour);
     }
     
@@ -388,17 +377,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   private void reactAtom() {
     CatalysisAtom atom = (CatalysisAtom) reactionSites.randomAtom();
-    CatalysisAtom neighbour = null;
     // it has to react with another atom
-    double randomNumber = StaticRandom.raw() * atom.getRate(REACTION);
-    double sum = 0.0;
-    for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
-      sum += atom.getEdgeRate(REACTION, j);
-      if (sum > randomNumber) {
-        neighbour = atom.getNeighbour(j);
-        break;
-      }
-    }
+    CatalysisAtom neighbour = atom.getRandomNeighbour(REACTION);
     getLattice().extract(neighbour);
     getLattice().extract(atom);
     // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
@@ -419,20 +399,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private void diffuseAtom() {
     CatalysisAtom originAtom = (CatalysisAtom) diffusionSites.randomAtom();
-    CatalysisAtom destinationAtom = null;
-    // it has to react with another atom
-    double randomNumber = StaticRandom.raw() * originAtom.getRate(DIFFUSION);
-    double sum = 0.0;
-    for (int j = 0; j < originAtom.getNumberOfNeighbours(); j++) {
-      sum += originAtom.getEdgeRate(DIFFUSION, j);
-      if (sum > randomNumber) {
-        destinationAtom = originAtom.getNeighbour(j);
-        break;
-      }
-    }
+    CatalysisAtom destinationAtom = originAtom.getRandomNeighbour(DIFFUSION);
     destinationAtom.setType(originAtom.getType());
-    getLattice().extract(originAtom);
-    
+    getLattice().extract(originAtom);    
     getLattice().deposit(destinationAtom, false);
     
     destinationAtom.swapAttributes(originAtom);
