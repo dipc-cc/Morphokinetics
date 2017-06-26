@@ -582,12 +582,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     atom.setRate(DESORPTION, 0);
     if (atom.getType() == CO) {
       atom.setRate(DESORPTION, desorptionRateCOPerSite[atom.getLatticeSite()]);
-      totalRate[DESORPTION] += atom.getRate(DESORPTION);
-      if (!atom.isOnList(DESORPTION)) {
-        //sites[DESORPTION].add(atom);
-        sites[DESORPTION].addRate(atom);
-      }
-      atom.setOnList(DESORPTION, true);
     } else { // O
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
         CatalysisAtom neighbour = atom.getNeighbour(i);
@@ -596,17 +590,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           atom.addRate(DESORPTION, rate, i);
         }
       }
-      if (atom.getRate(DESORPTION) > 0) {
-        totalRate[DESORPTION] += atom.getRate(DESORPTION);
-        if (!atom.isOnList(DESORPTION)) {
-          sites[DESORPTION].addRate(atom);
-        }
-        atom.setOnList(DESORPTION, true);
-      }
-      if (oldDesorptionProbability != atom.getRate(DESORPTION)) {
-        sites[DESORPTION].removeRate(atom, oldDesorptionProbability - atom.getRate(DESORPTION));
-      }
     }
+    recomputeCollection(DESORPTION, atom, oldDesorptionProbability);
   }
   
   private void recomputeReactionProbability(CatalysisAtom atom) {
