@@ -346,9 +346,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
-    getList().setDesorptionProbability(totalRate[DESORPTION]);
-    getList().setReactionProbability(totalRate[REACTION]);
-    
     return destinationAtom;
   }
   
@@ -419,8 +416,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         sites[DIFFUSION].insert(a);
       }
     }
-    getList().setDepositionProbability(totalRate[ADSORPTION]);
-    getList().setDesorptionProbability(0);
+    getList().setRates(totalRate);
     sites[ADSORPTION].populate();
     sites[DESORPTION].populate();
     sites[REACTION].populate();
@@ -506,9 +502,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     sites[REACTION].populate();
     
-    getList().setDepositionProbability(0);
-    getList().setDesorptionProbability(totalRate[DESORPTION]);
-    getList().setReactionProbability(totalRate[REACTION]);
+    getList().setRates(totalRate);
     getLattice().resetOccupied();
   }
   
@@ -551,10 +545,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     
     // tell to the list new probabilities
-    getList().setDepositionProbability(totalRate[ADSORPTION]);
-    getList().setDesorptionProbability(totalRate[DESORPTION]);
-    getList().setReactionProbability(totalRate[REACTION]);
-    getList().setDiffusionProbability(totalRate[DIFFUSION]);
+    getList().setRates(totalRate);
   }
             
   private void recomputeAdsorptionProbability(CatalysisAtom atom) {

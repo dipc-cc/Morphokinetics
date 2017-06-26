@@ -72,28 +72,19 @@ public abstract class AbstractList implements IProbabilityHolder {
     return this;
   }
 
-  public double getDepositionProbability() {
+  double getDepositionProbability() {
     return depositionProbability;
   }
 
   public void setDepositionProbability(double depositionProbability) {
     this.depositionProbability = depositionProbability;
   }
-  
-  public double getDesorptionProbability() {
-    return desorptionProbability;
-  }
 
-  public void setDesorptionProbability(double desorptionProbability) {
-    this.desorptionProbability = desorptionProbability;
-  }
-
-  public double getReactionProbability() {
-    return reactionProbability;
-  }
-
-  public void setReactionProbability(double reactionProbability) {
-    this.reactionProbability = reactionProbability;
+  public void setRates(double[] rates) {
+    depositionProbability = rates[ADSORPTION];
+    desorptionProbability = rates[DESORPTION];
+    reactionProbability = rates[REACTION];
+    diffusionProbability = rates[DIFFUSION];
   }
 
   public int getRemovalsSinceLastCleanup() {
@@ -108,7 +99,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     removalsSinceLastCleanup++;
   }
 
-  public void setDiffusionProbability(double probability) {
+  void setDiffusionProbability(double probability) {
     this.diffusionProbability = probability;
   }
   
