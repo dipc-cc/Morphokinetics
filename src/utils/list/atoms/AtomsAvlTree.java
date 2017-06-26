@@ -392,6 +392,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
   
   @Override
+  public boolean isEmpty() {
+    return root == null;
+  }
+  
+  @Override
   public Iterator<T> iterator() {
     Itr itr = new Itr();
     return itr;

@@ -139,4 +139,9 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   public int size() {
     return atomsArray.size();
   }
+  
+  @Override
+  public boolean isEmpty() {
+    return size() == 0;
+  }
 }

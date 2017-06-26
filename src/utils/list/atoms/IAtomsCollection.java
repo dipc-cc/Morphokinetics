@@ -42,4 +42,6 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   public Iterator<T> iterator();
   
   public int size();
+  
+  public boolean isEmpty();
 }
