@@ -464,6 +464,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           }
           totalRate[DESORPTION] += a.getRate(DESORPTION);
         }
+        if (a.getRate(DESORPTION) > 0) {
+          a.setOnList(DESORPTION, true);
+        }
         sites[DESORPTION].insert(a);
       }
     }
