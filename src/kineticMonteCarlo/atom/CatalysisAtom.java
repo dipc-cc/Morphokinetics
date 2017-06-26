@@ -80,10 +80,6 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     processes[process].addRate(rate, neighbourPos);
   }
   
-  public double getEdgeRate(byte process, int pos) {
-    return processes[process].getEdgeRate(pos);
-  }
-  
   public double getSumRate(byte process) {
     return processes[process].getSumRate();
   }
@@ -172,7 +168,7 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     double randomNumber = StaticRandom.raw() * getRate(process);
     double sum = 0.0;
     for (int j = 0; j < getNumberOfNeighbours(); j++) {
-      sum += getEdgeRate(process, j);
+      sum += processes[process].getEdgeRate(j);
       if (sum > randomNumber) {
         neighbour = getNeighbour(j);
         return neighbour;
