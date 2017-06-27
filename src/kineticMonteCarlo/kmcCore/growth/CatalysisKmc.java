@@ -636,7 +636,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.getRate(process) > 0) {
       if (atom.isOnList(process)) {
         if (oldRate != atom.getRate(process)) {
-          sites[process].removeRate(atom, oldRate-atom.getRate(process));
+          sites[process].updateRate(atom, oldRate-atom.getRate(process));
         } else { // rate is the same as it was.
           //do nothing.
         }
@@ -647,7 +647,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     } else { // reaction == 0
       if (atom.isOnList(process)) {
         if (oldRate > 0) {
-          sites[process].removeRate(atom, oldRate);
+          sites[process].updateRate(atom, oldRate);
           sites[process].removeAtomRate(atom);
         }
       } else { // not on list

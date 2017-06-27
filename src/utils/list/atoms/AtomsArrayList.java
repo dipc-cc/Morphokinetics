@@ -74,8 +74,13 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     atomsArray.remove(atom);
   }
 
+  /**
+   * Updates total rate.
+   * @param atom Ignored.
+   * @param diff Value to be added.
+   */
   @Override
-  public void removeRate(T atom, double diff) {
+  public void updateRate(T atom, double diff) {
     totalRate += diff;
   }
 

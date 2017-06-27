@@ -191,11 +191,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    * @param diff rate to be added.
    */
   @Override
-  public void removeRate(T data, double diff){
-    removeRate(root, data, diff);
+  public void updateRate(T data, double diff){
+    updateRate(root, data, diff);
   }
   
-  private void removeRate(Node<T> n, T data, double diff) {
+  private void updateRate(Node<T> n, T data, double diff) {
     if (n == null) {
       return;
     }
@@ -204,10 +204,10 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
       return;
     }
     if (n.getData().compareTo(data) > 0) {
-      removeRate(n.getLeft(), data, diff);
+      updateRate(n.getLeft(), data, diff);
     }
     if (n.getData().compareTo(data) < 0) {
-      removeRate(n.getRight(), data, diff);
+      updateRate(n.getRight(), data, diff);
     }
   }    
   

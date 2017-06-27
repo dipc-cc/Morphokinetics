@@ -27,7 +27,7 @@ public interface IAtomsCollection<T extends Comparable<T>> {
    */
   public void removeAtomRate(T atom);
 
-  public void removeRate(T atom, double diff);
+  public void updateRate(T atom, double diff);
 
   public void populate();
 
