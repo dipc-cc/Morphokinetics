@@ -327,43 +327,40 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int ucIndex = 0;
     byte atomType;
       
-    boolean deposited;
     CatalysisAtom neighbourAtom = null;
     int random;
- 
-    do {
-      if (sites[ADSORPTION].isEmpty()) {
-        // can not deposit anymore
-        return null;
-      }
-      
-      destinationAtom = (CatalysisAtom) sites[ADSORPTION].randomAtom();
+    
+     if (sites[ADSORPTION].isEmpty()) {
+      // can not deposit anymore
+      return null;
+    }
 
-      if (destinationAtom == null || destinationAtom.getRate(ADSORPTION) == 0 || destinationAtom.isOccupied()) {
-        boolean isThereAnAtom = destinationAtom == null;
-        System.out.println("Something is wrong " + isThereAnAtom);
-      }
-      double randomNumber = StaticRandom.raw() * destinationAtom.getRate(ADSORPTION);
-      if (randomNumber < adsorptionRateCOPerSite) {
-        atomType = CO;
-      } else {
-        atomType = O;
-      }
-      destinationAtom.setType(atomType);
-      if (!doO2Dissociation || atomType == CO) {
-        deposited = depositAtom(destinationAtom);
-      } else { // it has to deposit two O (dissociation of O2 -> 2O)
-        deposited = depositAtom(destinationAtom);
-        random = StaticRandom.rawInteger(4);
+    destinationAtom = (CatalysisAtom) sites[ADSORPTION].randomAtom();
+
+    if (destinationAtom == null || destinationAtom.getRate(ADSORPTION) == 0 || destinationAtom.isOccupied()) {
+      boolean isThereAnAtom = destinationAtom == null;
+      System.out.println("Something is wrong " + isThereAnAtom);
+    }
+    double randomNumber = StaticRandom.raw() * destinationAtom.getRate(ADSORPTION);
+    if (randomNumber < adsorptionRateCOPerSite) {
+      atomType = CO;
+    } else {
+      atomType = O;
+    }
+    destinationAtom.setType(atomType);
+    if (!doO2Dissociation || atomType == CO) {
+      depositAtom(destinationAtom);
+    } else { // it has to deposit two O (dissociation of O2 -> 2O)
+      depositAtom(destinationAtom);
+      random = StaticRandom.rawInteger(4);
+      neighbourAtom = destinationAtom.getNeighbour(random);
+      while (neighbourAtom.isOccupied()) {
+        random = (random + 1) % 4;
         neighbourAtom = destinationAtom.getNeighbour(random);
-        while (neighbourAtom.isOccupied()) {
-          random = (random + 1) % 4;
-          neighbourAtom = destinationAtom.getNeighbour(random);
-        }
-        neighbourAtom.setType(O);
-        depositAtom(neighbourAtom);
       }
-    } while (!deposited);
+      neighbourAtom.setType(O);
+      depositAtom(neighbourAtom);
+    }
     
     updateRates(destinationAtom);
     if (neighbourAtom != null) {
