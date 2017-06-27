@@ -235,9 +235,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size())));
-        
-        adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size()),(float)(numGaps/(getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
+                (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size())));
+
+        adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
+                (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size()), 
+                (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
       }
       getCoverages();
       restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
