@@ -400,16 +400,18 @@ class RestartLow {
   static void writeCompleteAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     String separator;
     Locale locale = Locale.UK;
-    if (System.getProperty("os.name").contains("Linux")){
+    if (System.getProperty("os.name").contains("Linux")) {
       separator = "\t";
     } else {
       separator = ";";
-    }    
+    }   
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
-      String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
-      //out.write(s);
+      String s = "#[1. step 2. time 3. coverage 4. coverageCO 5. coverageO 6. coverageLake 7. coverageGaps]\n";
+      if (System.getProperty("os.name").contains("Linux")) {
+        out.write(s);
+      }
       for (int i = 0; i < data.length; i++) {
         double coverage = data[i][0];
         double t = data[i][1];
@@ -433,7 +435,7 @@ class RestartLow {
   static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     String separator;
     Locale locale = Locale.UK;
-    if (System.getProperty("os.name").contains("Linux")){
+    if (System.getProperty("os.name").contains("Linux")) {
       separator = "\t";
     } else {
       separator = ";";
@@ -442,7 +444,9 @@ class RestartLow {
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
       String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
-      //out.write(s);
+      if (System.getProperty("os.name").contains("Linux")) {
+        out.write(s);
+      }
       for (int i = 0; i < data.length; i++) {
         double coverage = data[i][0];
         double t = data[i][1];
