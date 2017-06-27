@@ -10,7 +10,6 @@ import basic.io.OutputType;
 import basic.io.Restart;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.ListIterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
@@ -293,8 +292,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   @Override
   public void reset() {
-    ListIterator iter = getList().getIterator();
-    while (iter.hasNext()){
+    Iterator iter = getList().getIterator();
+    while (iter.hasNext()) {
       CatalysisAtom atom = (CatalysisAtom) iter.next();
       atom.clear();
     }
