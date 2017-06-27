@@ -193,6 +193,10 @@ public class Parser {
    * See {@link #calalysisStartOxygenCov()}
    */
   private boolean catalysisStartOxygenCov;
+  /**
+   * See {@link #doCatalysisO2Dissociation()}
+   */
+  private boolean catalysisO2Dissociation;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -298,7 +302,8 @@ public class Parser {
     catalysisDesorption = "true";
     catalysisReaction = "true";
     catalysisStartOxygenCov = false;
-
+    catalysisO2Dissociation = true;
+    
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
     populationSize = 5;
@@ -558,6 +563,11 @@ public class Parser {
       catalysisStartOxygenCov = false;
     }
     try {
+      catalysisO2Dissociation = json.getBoolean("catalysisO2Dissociation");
+    } catch (JSONException e) {
+      catalysisO2Dissociation = true;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -724,7 +734,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"millerZ\"", millerZ);
     System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
     System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
-    System.out.printf("%32s: %s,\n", "\"pressureO\"", pressureO2);
+    System.out.printf("%32s: %s,\n", "\"pressureO2\"", pressureO2);
     System.out.printf("%32s: %s,\n", "\"pressureCO\"", pressureCO);
     System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
     System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
@@ -749,6 +759,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"catalysisDesorption\"", catalysisDesorption);
     System.out.printf("%32s: %s,\n", "\"catalysisReaction\"", catalysisReaction);
     System.out.printf("%32s: %s,\n", "\"catalysisStartOxygenCov\"", catalysisStartOxygenCov);
+    System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1500,6 +1511,17 @@ public class Parser {
    */
   public boolean catalysisStartOxigenCov() {
     return catalysisStartOxygenCov;
+  }
+  
+  /**
+   * Dissociates O2 atoms during catalysis simulation
+   *
+   * Input "parameters" variable: {@code catalysisO2Dissociation}.
+   * 
+   * @return do O2 dissociation.
+   */
+  public boolean doCatalysisO2Dissociation() {
+    return catalysisO2Dissociation;
   }
   
   public String getEvolutionaryAlgorithm() {

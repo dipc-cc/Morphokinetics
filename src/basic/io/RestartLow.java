@@ -397,6 +397,39 @@ class RestartLow {
   }
   
   
+  static void writeCompleteAdsorptionLowSimulationDataText(double[][] data, String fileName) {
+    String separator;
+    Locale locale = Locale.UK;
+    if (System.getProperty("os.name").contains("Linux")){
+      separator = "\t";
+    } else {
+      separator = ";";
+    }    
+    // create file descriptor. It will be automatically closed.
+    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
+      // for each byte in the buffer
+      String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
+      //out.write(s);
+      for (int i = 0; i < data.length; i++) {
+        double coverage = data[i][0];
+        double t = data[i][1];
+        double coverageCO = data[i][2];
+        double coverageO = data[i][3];
+        double coverageLake = data[i][4];
+        double coverageGaps = data[i][5];
+        
+        if (t > 0 || coverage > 0) {
+          s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, coverageLake, separator, coverageGaps);
+          out.write(s);
+        }
+      }
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  }
+  
+  
   static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     String separator;
     Locale locale = Locale.UK;
@@ -408,16 +441,17 @@ class RestartLow {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
-
+      String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
+      //out.write(s);
       for (int i = 0; i < data.length; i++) {
         double coverage = data[i][0];
         double t = data[i][1];
         double coverageCO = data[i][2];
         double coverageO = data[i][3];
-        double stepP = data[i][4];
+        double coverageLake = data[i][4];
         
         if (t > 0 || coverage > 0) {
-          String s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, stepP);
+          s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, coverageLake);
           out.write(s);
         }
       }

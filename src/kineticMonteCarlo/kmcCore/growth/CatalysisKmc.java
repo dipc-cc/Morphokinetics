@@ -39,6 +39,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
+  private ArrayList<CatalysisData> adsorptionCompleteData;
   // Adsorption
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
@@ -47,8 +48,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   // Reaction
   private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-  private float currentAdsorptionP;
-  // Diffusion
   private double[] diffusionRateCO;
   private double[] diffusionRateO;
   // Total rates
@@ -62,6 +61,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean doAdsorption;
   private final boolean doDesorption;
   private final boolean doReaction;
+  private final boolean doO2Dissociation;
   private final boolean startOxygen;
   private Restart restart;
   private final ActivationEnergy activationEnergy;
@@ -69,14 +69,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Activation energy output during the execution
    */
   private final boolean aeOutput;
+  private long numGaps;
+  private ArrayList sitesWith4OccupiedNeighbours;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
-    currentAdsorptionP = 1.0f;
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
     catalysisLattice.init();
     setLattice(catalysisLattice);
     totalRate = new double[4]; // adsorption, desorption, reaction, diffusion
+    numGaps = 0;
 
     simulatedSteps = 0;
     measureDiffusivity = parser.outputData();
@@ -85,6 +87,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numStepsEachData = parser.getOutputEvery();
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
+      adsorptionCompleteData = new ArrayList<>();
     }
     restart = new Restart(measureDiffusivity);
     sites = new IAtomsCollection[4];
@@ -101,6 +104,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     doDesorption = parser.doCatalysisDesorption();
     doReaction = parser.doCatalysisReaction();
     startOxygen = parser.catalysisStartOxigenCov();
+    doO2Dissociation = parser.doCatalysisO2Dissociation();
     if (startOxygen) {
       maxCoverage = 2; // it will never end because of coverage
     } else {
@@ -147,12 +151,25 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     activationEnergy.setRates(processProbs2D);
+    numGaps = (long) (getLattice().getCartSizeX()*getLattice().getCartSizeY());
+    
   }
 
   public double[][] getOutputAdsorptionData() {
     double[][] adsorptionSimulationData = new double[adsorptionData.size()][5];
     for (int i = 0; i < adsorptionData.size(); i++) {
       adsorptionSimulationData[i] = adsorptionData.get(i).getCatalysisData();
+    }
+    
+    return adsorptionSimulationData;
+  }
+  
+  
+
+  public double[][] getOutputCompleteAdsorptionData() {
+    double[][] adsorptionSimulationData = new double[adsorptionCompleteData.size()][5];
+    for (int i = 0; i < adsorptionData.size(); i++) {
+      adsorptionSimulationData[i] = adsorptionCompleteData.get(i).getCatalysisCompleteData();
     }
     
     return adsorptionSimulationData;
@@ -193,7 +210,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-    currentAdsorptionP = 1.0f;
     if (getList().getGlobalProbability() == 0) {
       return true; // there is nothing more we can do
     }
@@ -219,7 +235,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), currentAdsorptionP));
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size())));
+        
+        adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size()),(float)(numGaps/(getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
       }
       getCoverages();
       restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
@@ -244,14 +262,18 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     if (measureDiffusivity) {
+      adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size())));
+      adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), (float) (sitesWith4OccupiedNeighbours.size() / (float) getLattice().size()),(float)(numGaps/(getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
       restart.flushCatalysis();
     }
+    numGaps = (long) (getLattice().getCartSizeX()*getLattice().getCartSizeY());
     return returnValue;
   }
 
   @Override
   public void depositSeed() {
     totalRate = new double[4];
+    sitesWith4OccupiedNeighbours = new ArrayList();
     getLattice().resetOccupied();
     if (startOxygen) {
       initCovered();
@@ -284,14 +306,40 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     sites[DIFFUSION].clear();
   }
   
-  private boolean depositAtom(CatalysisAtom atom) {
+  private boolean depositAtom(CatalysisAtom atom){
+    return depositAtom(atom,false);
+  }
+  
+  private boolean depositAtom(CatalysisAtom atom, boolean check) {
     if (atom.isOccupied()) {
       return false;
     }
-
     getLattice().deposit(atom, false);
-
+    
+    if(check){
+      updateLakes(atom);
+    }
+    numGaps--;
     return true;
+  }
+  
+  private void updateLakes(CatalysisAtom atom){
+    for (int i = -2; i < 3; i++) {
+      for (int j = -2; j < 3; j++) { 
+        int atomJ = (atom.getjHexa()+j+getLattice().getHexaSizeJ())%getLattice().getHexaSizeJ();
+        int atomI = (atom.getiHexa()+i+getLattice().getHexaSizeI())%getLattice().getHexaSizeI();
+        
+        int tempAtomIndex = atomJ*getLattice().getHexaSizeJ()+atomI;
+        
+        AbstractGrowthUc uc = getLattice().getUc(tempAtomIndex);
+        CatalysisAtom tempAtom = (CatalysisAtom) uc.getAtom(j);
+        if(!sitesWith4OccupiedNeighbours.contains(tempAtom.getId())){
+          if(tempAtom.getOccupiedNeighbours()==4 && !tempAtom.isOccupied()){
+            sitesWith4OccupiedNeighbours.add(tempAtom.getId());
+          }
+        }
+      }
+    }
   }
   
   private CatalysisAtom depositNewAtom() {
@@ -302,8 +350,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     boolean deposited;
     CatalysisAtom neighbourAtom = null;
     int random;
-    
-    currentAdsorptionP = getCurrentP();
  
     do {
       if (sites[ADSORPTION].isEmpty()) {
@@ -324,8 +370,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         atomType = O;
       }
       destinationAtom.setType(atomType);
-      deposited = depositAtom(destinationAtom);
-      if (atomType == O) { // it has to deposit two O (dissociation of O2 -> 2O)
+      if(!doO2Dissociation || atomType == CO){
+        deposited = depositAtom(destinationAtom, true);
+      } else { // it has to deposit two O (dissociation of O2 -> 2O)
+        deposited = depositAtom(destinationAtom);
         random = StaticRandom.rawInteger(4);
         neighbourAtom = destinationAtom.getNeighbour(random);
         while (neighbourAtom.isOccupied()) {
@@ -333,7 +381,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           neighbourAtom = destinationAtom.getNeighbour(random);
         }
         neighbourAtom.setType(O);
-        depositAtom(neighbourAtom);
+        depositAtom(neighbourAtom, true);
       }
     } while (!deposited);
     
@@ -351,14 +399,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   private void desorpAtom() {    
     CatalysisAtom atom = (CatalysisAtom) sites[DESORPTION].randomAtom();
+    int atomsToDesorp = 1;
     CatalysisAtom neighbour = null;
     if (atom.getType() == O) { // it has to desorp with another O to create O2
       neighbour = atom.getRandomNeighbour(DESORPTION);
+      atomsToDesorp = 2;
       getLattice().extract(neighbour);
     }
     
     getLattice().extract(atom);
-   
+    numGaps = numGaps + atomsToDesorp;
     if (neighbour != null) {
       updateRates(neighbour);
     }
@@ -371,6 +421,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom neighbour = atom.getRandomNeighbour(REACTION);
     getLattice().extract(neighbour);
     getLattice().extract(atom);
+    numGaps = numGaps-2;
     // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
     int index;
     if (atom.getType() == CO) {
@@ -557,7 +608,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.isOccupied()) {
       atom.setRate(ADSORPTION, 0);
     } else {
-      int canAdsorbO2 = atom.isIsolated() ? 0 : 1;
+      int canAdsorbO2 = atom.isIsolated() && doO2Dissociation ? 0 : 1;
       atom.setRate(ADSORPTION, adsorptionRateCOPerSite + canAdsorbO2 * adsorptionRateOPerSite);
     }
     recomputeCollection(ADSORPTION, atom, oldAdsorptionRate);
@@ -697,20 +748,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalRate[process] = sites[process].getTotalRate(process);
   }
 
-  private float getCurrentP() {
-    if (true) {
-      return 0;
-    } else {
-      float numOccupiedNeighbours = 0f;
-      Iterator i = sites[ADSORPTION].iterator();
-      while (i.hasNext()) {
-        CatalysisAtom a = (CatalysisAtom) i.next();
-        numOccupiedNeighbours += (1 - (float) a.getOccupiedNeighbours() / 4);
-      }
-      return (float) numOccupiedNeighbours / sites[ADSORPTION].size();
-    }
-  }
-  
   /**
    * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).
    */

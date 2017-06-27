@@ -14,9 +14,10 @@ public class CatalysisData {
   private double time;
   private double coverageCO;
   private double coverageO;
-  private double stepP;
   private int iHexa;
   private int jHexa;
+  private float coverageLagos;
+  private float coverageGaps;
   
   public CatalysisData(int iHexa, int jHexa, double time){
     this.iHexa = iHexa;
@@ -24,12 +25,21 @@ public class CatalysisData {
     this.time = time;
   }
   
-  public CatalysisData(float coverage, double time, float coverageCO, float coverageO, float stepP) {
+  public CatalysisData(float coverage, double time, float coverageCO, float coverageO, float coverageLagos) {
     this.coverage = coverage;
     this.time = time;
     this.coverageCO = coverageCO;
     this.coverageO = coverageO;
-    this.stepP = stepP;
+    this.coverageLagos = coverageLagos;
+  }
+  
+  public CatalysisData(float coverage, double time, float coverageCO, float coverageO, float coverageLagos, float coverageGaps) {
+    this.coverage = coverage;
+    this.time = time;
+    this.coverageCO = coverageCO;
+    this.coverageO = coverageO;
+    this.coverageLagos = coverageLagos;
+    this.coverageGaps = coverageGaps;
   }
   
   public double[] getAdsorptionData(){
@@ -46,7 +56,18 @@ public class CatalysisData {
     data[1] = time;
     data[2] = (double) coverageCO;
     data[3] = (double) coverageO;
-    data[4] = (double) stepP;
+    data[4] = (double) coverageLagos;
+    return data;
+  }
+  
+  public double[] getCatalysisCompleteData(){
+    double[] data = new double[6];
+    data[0] = (double) coverage;
+    data[1] = time;
+    data[2] = (double) coverageCO;
+    data[3] = (double) coverageO;
+    data[4] = (double) coverageLagos;
+    data[5] = (double) coverageGaps;
     return data;
   }
 }
