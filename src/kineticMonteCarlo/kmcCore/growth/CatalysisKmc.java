@@ -163,8 +163,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     return adsorptionSimulationData;
   }
-  
-  
 
   public double[][] getOutputCompleteAdsorptionData() {
     double[][] adsorptionSimulationData = new double[adsorptionCompleteData.size()][5];
@@ -286,6 +284,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       initAdsorptionProbability();
     } else {
       initCovered();
+    }
+    for (int i = 0; i < getLattice().size(); i++) {
+      AbstractGrowthUc uc = getLattice().getUc(i);
+      for (int j = 0; j < uc.size(); j++) { // it will be always 0
+        CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        updateRates(a);
+      }
     }
     simulatedSteps = 0;
   }
@@ -526,6 +531,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
               a.addRate(REACTION, rate/2.0, k);
             }
           }
+        }
+        if (a.getRate(REACTION) > 0) {
+          a.setOnList(REACTION, true);
         }
         sites[REACTION].insert(a);
         totalRate[REACTION] += a.getRate(REACTION);
