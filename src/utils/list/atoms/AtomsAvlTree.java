@@ -199,7 +199,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumRate(process, -diff);
+    ((CatalysisAtom) n.getData()).addToSumRate(process, diff);
     if (n.getData().compareTo(data) == 0) {
       return;
     }
