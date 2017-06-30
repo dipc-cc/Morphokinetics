@@ -297,6 +297,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
 
   @Override
   public void clear() {
+    occupied = 0;
     clear(root);
   }
   
@@ -333,6 +334,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
       return 0;
     }
 
+    if (((CatalysisAtom) n.getData()).getRate(process) > 0) {
+      occupied++;
+    }
     if (n.isLeaf()) {
       ((CatalysisAtom) n.getData()).equalRate(process);
       return ((CatalysisAtom) n.getData()).getRate(process);
