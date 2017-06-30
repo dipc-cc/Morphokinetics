@@ -241,7 +241,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
                 (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
       }
       getCoverages();
-      restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2);
+      int[] sizes = new int[4];
+      sizes[ADSORPTION] = sites[ADSORPTION].size();
+      sizes[DESORPTION] = sites[DESORPTION].size();
+      sizes[REACTION] = sites[REACTION].size();
+      sizes[DIFFUSION] = sites[DIFFUSION].size();
+      restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
       if (aeOutput) {
         activationEnergy.printAe(restart.getExtraWriter(), (float) getTime());
       }
@@ -467,8 +472,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         if (startOxygen) {
-          a.setType(O);
-        } else {
+            a.setType(O);
+          } else {
           a.setType((byte) StaticRandom.rawInteger(2));
         }
         getLattice().deposit(a, false);

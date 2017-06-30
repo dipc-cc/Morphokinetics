@@ -122,7 +122,7 @@ public class Restart {
       try {
         outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter("results/dataCatalysis.txt")));
         outCatalysis.println("# Information about the system every fixed number of events\n#[1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion, 10. CO[BR]+O[BR], 11. CO[BR]+O[CUS], 12. CO[CUS]+O[BR], 13. CO[CUS]+O[CUS]]");
-        outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
+        outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
         outTof = new PrintWriter(new BufferedWriter(new FileWriter("results/dataTof.txt")));
         outTof.println("# Information about TOF\n[1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
         outData = new PrintWriter(new BufferedWriter(new FileWriter("results/dataAe.txt")));
@@ -357,8 +357,8 @@ public class Restart {
     }
   }
   
-  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2) {
-    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], co2[0], co2[1], co2[2], co2[3]);
+  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2, int[] sizes) {
+    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], co2[0], co2[1], co2[2], co2[3], sizes[0], sizes[1], sizes[2], sizes[3]);
     co2C = co2;
     currentTime = time;
   }
