@@ -25,10 +25,13 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    * Adsorption, desorption, reaction or diffusion.
    */
   private final byte process;
+  /** How much is the occupancy of the tree. */
+  private int occupied;
 
   public AtomsAvlTree(byte process) {
     root = null;
     this.process = process;
+    occupied = 0;
   }
   
   Node<T> getRoot() {
@@ -218,6 +221,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public void removeAtomRate(T data) {
+    occupied--;
     removeAtomRate(root, data);
   }
   
@@ -250,6 +254,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public void addRate(T data) {
+    occupied++;
     addRate(root, data);
   }
   
@@ -388,7 +393,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
 
   @Override
   public int size() {
-    return depth(root);
+    return occupied;
   }
   
   @Override
