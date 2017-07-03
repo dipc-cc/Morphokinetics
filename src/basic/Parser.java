@@ -174,10 +174,6 @@ public class Parser {
    */
   private boolean devita;
   /**
-   * See {@link #doCatalysisDiffusion()}
-   */
-  private String catalysisDiffusion;
-  /**
    * See {@link #doCatalysisAdsorption()}
    */
   private String catalysisAdsorption;
@@ -189,6 +185,10 @@ public class Parser {
    * See {@link #doCatalysisReaction()}
    */
   private String catalysisReaction;
+  /**
+   * See {@link #doCatalysisDiffusion()}
+   */
+  private String catalysisDiffusion;
   /**
    * See {@link #calalysisStartOxygenCov()}
    */
@@ -297,10 +297,10 @@ public class Parser {
     useMaxPerimeter = false;
     forceNucleation = true;
     devita = true;
-    catalysisDiffusion = "true";
     catalysisAdsorption = "true";
     catalysisDesorption = "true";
     catalysisReaction = "true";
+    catalysisDiffusion = "true";
     catalysisStartOxygenCov = false;
     catalysisO2Dissociation = true;
     
@@ -522,15 +522,6 @@ public class Parser {
       devita = justCentralFlake; // By default Devita works with single-flake simulations only
     }
     try {
-      catalysisDiffusion = json.getString("catalysisDiffusion");
-    } catch (JSONException e) {
-      try {
-        catalysisDiffusion = Boolean.toString(json.getBoolean("catalysisDiffusion"));
-      } catch (JSONException ex) {
-        catalysisDiffusion = "true";
-      }
-    }
-    try {
       catalysisAdsorption = json.getString("catalysisAdsorption");
     } catch (JSONException e) {
       try {
@@ -555,6 +546,15 @@ public class Parser {
         catalysisReaction = Boolean.toString(json.getBoolean("catalysisReaction"));
       } catch (JSONException ex) {
         catalysisReaction = "true";
+      }
+    }
+    try {
+      catalysisDiffusion = json.getString("catalysisDiffusion");
+    } catch (JSONException e) {
+      try {
+        catalysisDiffusion = Boolean.toString(json.getBoolean("catalysisDiffusion"));
+      } catch (JSONException ex) {
+        catalysisDiffusion = "true";
       }
     }
     try {
@@ -754,10 +754,10 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
     System.out.printf("%32s: %s,\n", "\"forceNucleation\"", forceNucleation);
     System.out.printf("%32s: %s,\n", "\"devita\"", devita);
-    System.out.printf("%32s: %s,\n", "\"catalysisDiffusion\"", catalysisDiffusion);
     System.out.printf("%32s: %s,\n", "\"catalysisAdsorption\"", catalysisAdsorption);
     System.out.printf("%32s: %s,\n", "\"catalysisDesorption\"", catalysisDesorption);
     System.out.printf("%32s: %s,\n", "\"catalysisReaction\"", catalysisReaction);
+    System.out.printf("%32s: %s,\n", "\"catalysisDiffusion\"", catalysisDiffusion);
     System.out.printf("%32s: %s,\n", "\"catalysisStartOxygenCov\"", catalysisStartOxygenCov);
     System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
@@ -1432,17 +1432,6 @@ public class Parser {
   }
   
   /**
-   * Diffuse atom during catalysis simulation
-   *
-   * Input "parameters" variable: {@code catalysisDiffusion}.
-   * 
-   * @return do diffusion.
-   */
-  public boolean doCatalysisDiffusion() {
-    return !catalysisDiffusion.equals("false");
-  }
-  
-  /**
    * Adsorb atoms during catalysis simulation
    *
    * Input "parameters" variable: {@code catalysisAdsorption}.
@@ -1473,6 +1462,17 @@ public class Parser {
    */
   public boolean doCatalysisReaction() {
     return !catalysisReaction.equals("false");
+  }
+  
+  /**
+   * Diffuse atom during catalysis simulation
+   *
+   * Input "parameters" variable: {@code catalysisDiffusion}.
+   * 
+   * @return do diffusion.
+   */
+  public boolean doCatalysisDiffusion() {
+    return !catalysisDiffusion.equals("false");
   }
   
   private void computeTree() {
