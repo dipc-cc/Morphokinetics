@@ -7,7 +7,6 @@ package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,10 +30,9 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   /**
    * Current CO and O coverages, for sites BR, CUS.
    */
-  private int[][] coverage;
-  private List<double[][]> last1000events;
-  private List<double[][]> last1000eventsMean;
-  private List<Double> last1000eventsTime;
+  private final int[][] coverage;
+  private final List<double[][]> last1000events;
+  private final List<Double> last1000eventsTime;
   private final int MAX;
   
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
@@ -42,16 +40,16 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     coverage = new int[2][2];
     MAX = (int) Math.sqrt(hexaSizeI*hexaSizeJ)*20;
     last1000events = new LinkedList<>();
-    //last1000events = new ArrayList<>();
-    //last1000events = new doublelinkedlist
-    //last1000events = new ArrayDeque();
-    last1000eventsMean = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
-    /*for (int i = 0; i < MAX; i++) {
-      last1000eventsTime.add((double) i);
-    }//*/
   }
   
+  /**
+   * Identifies stationary situation, when sufficient number of previous steps are saved and their
+   * R² is lower than 0.1 for all the species.
+   *
+   * @param time
+   * @return
+   */
   public double[][][] isStationary(double time) {
     double hexaArea = (double) getHexaSizeI() * getHexaSizeJ() / 2.0;
     double[][] covTmp = new double[2][2];
@@ -66,10 +64,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     if (last1000events.size() > MAX) {
       last1000events.remove(0);
       last1000eventsTime.remove(0);
-      last1000eventsMean.remove(0);
-    } /*else {
-      return new double[2][2][2];
-    }*/
+    }
     double[][] sum = new double[2][2];
     last1000events.stream().forEach((tmp) -> {
       for (int j = 0; j < 2; j++) {
@@ -84,7 +79,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
         mean[j][k] = sum[j][k] / (double) last1000events.size();
       }
     }
-    last1000eventsMean.add(mean);
     double[][] std = new double[2][2];
     last1000events.stream().forEach((tmp) -> {
       for (int j = 0; j < 2; j++) {
@@ -99,41 +93,51 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       }
     }
     
-    // print
-    /*System.out.println("- "+last1000events.size());
-    for (int j = 0; j < 2; j++) {
-      for (int k = 0; k < 2; k++) {
-        System.out.println(mean[j][k] + " " + std[j][k]);
-      }
-    }//*/
     double[][][] result = new double[2][2][2];
     result[0] = mean;
     result[1] = std;
-    double[][] y = new double[4][last1000eventsMean.size()];
-    for (int i = 0; i < last1000eventsMean.size(); i++) {
+    double[][] y = new double[4][last1000events.size()];
+    for (int i = 0; i < last1000events.size(); i++) {
       for (int j = 0; j < 2; j++) {
         for (int k = 0; k < 2; k++) {
           int index = j*2  + k ;
-          y[index][i] = last1000eventsMean.get(i)[j][k];
+          y[index][i] = last1000events.get(i)[j][k];
+        }
+      }
+    }
+
+    double[] x = new double[last1000events.size()];
+    Iterator iter = last1000eventsTime.iterator();
+    int i = 0;
+    while (iter.hasNext() && i < last1000events.size()) {
+      x[i++] = (double) iter.next();
+    }
+    ArrayList<LinearRegression> regressions = new ArrayList();
+    regressions.add(new LinearRegression(x, y[0]));
+    regressions.add(new LinearRegression(x, y[1]));
+    regressions.add(new LinearRegression(x, y[2]));
+    regressions.add(new LinearRegression(x, y[3]));
+
+    boolean stationary = false;
+    if (last1000events.size() == MAX) {
+      stationary = true;
+      for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+          int index = j * 2 + k;
+          /*if (maxSlope[j][k] * .1 < abs(regressions.get(index).slope())) {
+            stationary = false;
+          }//*/
+          if (regressions.get(index).R2() > 0.1)
+            stationary = false;
         }
       }
     }
     
-    //if (last1000events.size() == MAX) {
-      double[] x = new double[last1000events.size()];
-      Iterator iter = last1000eventsTime.iterator();
-      int i = 0;
-      while (iter.hasNext() && i < last1000events.size()) {
-        x[i++] = (double) iter.next();
-      }
-      ArrayList regressions = new ArrayList();
+    if (stationary) 
+      System.out.println("stationary");
+            
+    System.out.println("CO^br " + regressions.get(0) + " CO^cus " + regressions.get(1) + " O^br " + regressions.get(2) + " O^cus " + regressions.get(3));
 
-      regressions.add(new LinearRegression(x, y[0]));
-      regressions.add(new LinearRegression(x, y[1]));
-      regressions.add(new LinearRegression(x, y[2]));
-      regressions.add(new LinearRegression(x, y[3]));
-      System.out.println("CO^br " + regressions.get(0) + " CO^cus " + regressions.get(1) + " O^br " + regressions.get(2) + " O^cus " + regressions.get(3));
-    //}
     return result;
   }
   
