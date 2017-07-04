@@ -7,6 +7,11 @@ package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import static kineticMonteCarlo.atom.CatalysisAtom.BR;
@@ -15,6 +20,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import utils.LinearRegression;
 
 /**
  *
@@ -26,10 +32,105 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * Current CO and O coverages, for sites BR, CUS.
    */
   private int[][] coverage;
+  private List<double[][]> last1000events;
+  private List<Double> last1000eventsTime;
+  private final int MAX;
   
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     super(hexaSizeI, hexaSizeJ, modified);
     coverage = new int[2][2];
+    MAX = (int) Math.sqrt(hexaSizeI*hexaSizeJ)*20;
+    last1000events = new LinkedList<>();
+    //last1000events = new ArrayList<>();
+    //last1000events = new doublelinkedlist
+    //last1000events = new ArrayDeque();
+    last1000eventsTime = new LinkedList<>();
+    /*for (int i = 0; i < MAX; i++) {
+      last1000eventsTime.add((double) i);
+    }//*/
+  }
+  
+  public double[][][] isStationary(double time) {
+    double hexaArea = (double) getHexaSizeI() * getHexaSizeJ() / 2.0;
+    double[][] covTmp = new double[2][2];
+   
+    for (int j = 0; j < 2; j++) {
+      for (int k = 0; k < 2; k++) {
+        covTmp[j][k] = (double) coverage[j][k] / hexaArea;
+      }
+    }
+    last1000events.add(covTmp);
+    last1000eventsTime.add(time);
+    if (last1000events.size() > MAX) {
+      last1000events.remove(0);
+      //last1000eventsTime.remove(0);
+    } /*else {
+      return new double[2][2][2];
+    }*/
+    double[][] sum = new double[2][2];
+    last1000events.stream().forEach((tmp) -> {
+      for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+          sum[j][k] += tmp[j][k];
+        }
+      }
+    });
+    double[][] mean = new double[2][2];
+    for (int j = 0; j < 2; j++) {
+      for (int k = 0; k < 2; k++) {
+        mean[j][k] = sum[j][k] / (double) last1000events.size();
+      }
+    }
+    double[][] std = new double[2][2];
+    last1000events.stream().forEach((tmp) -> {
+      for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+          std[j][k] += Math.pow(tmp[j][k] - mean[j][k], 2);
+        }
+      }
+    });
+    for (int j = 0; j < 2; j++) {
+      for (int k = 0; k < 2; k++) {
+        std[j][k] = Math.sqrt(std[j][k] / (double) last1000events.size());
+      }
+    }
+    
+    // print
+    /*System.out.println("- "+last1000events.size());
+    for (int j = 0; j < 2; j++) {
+      for (int k = 0; k < 2; k++) {
+        System.out.println(mean[j][k] + " " + std[j][k]);
+      }
+    }//*/
+    double[][][] result = new double[2][2][2];
+    result[0] = mean;
+    result[1] = std;
+    double[][] y = new double[4][last1000events.size()];
+    for (int i = 0; i < last1000events.size(); i++) {
+      for (int j = 0; j < 2; j++) {
+        for (int k = 0; k < 2; k++) {
+          int index = j*2  + k ;
+          y[index][i] = last1000events.get(i)[j][k];
+        }
+      }
+    }
+    
+    //if (last1000events.size() == MAX) {
+      double[] x = new double[last1000events.size()];
+      Iterator iter = last1000eventsTime.iterator();
+      int i = 0;
+      while (iter.hasNext() && i < last1000events.size()) {
+        x[i++] = (double) iter.next();
+      }
+      ArrayList regressions = new ArrayList();
+
+      regressions.add(new LinearRegression(x, y[0]));
+      regressions.add(new LinearRegression(x, y[1]));
+      regressions.add(new LinearRegression(x, y[2]));
+      regressions.add(new LinearRegression(x, y[3]));
+      System.out.println("CO^br " + regressions.get(0) + " CO^cus " + regressions.get(1) + " O^br " + regressions.get(2) + " O^cus " + regressions.get(3));
+    //}
+    return result;
   }
   
   @Override
