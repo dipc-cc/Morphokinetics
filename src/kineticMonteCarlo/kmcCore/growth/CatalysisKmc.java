@@ -70,6 +70,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean aeOutput;
   private long numGaps;
   private int counterSitesWith4OccupiedNeighbours;
+  boolean stationary;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -114,6 +115,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     activationEnergy = new ActivationEnergy(parser);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     counterSitesWith4OccupiedNeighbours = 0;
+    stationary = false;
   }
 
   @Override
@@ -230,7 +232,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     simulatedSteps++;
     if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
-      boolean stationary = ((CatalysisLattice) getLattice()).isStationary(getTime());
+      if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
+        System.out.println("Stationary state achieved");
+        stationary = true;
+      }
       if (destinationAtom != null) {
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
@@ -247,12 +252,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       sizes[DESORPTION] = sites[DESORPTION].size();
       sizes[REACTION] = sites[REACTION].size();
       sizes[DIFFUSION] = sites[DIFFUSION].size();
-      restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
+      if (stationary)
+        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
       if (aeOutput) {
         activationEnergy.printAe(restart.getExtraWriter(), (float) getTime());
       }
     }
-    if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0) {
+    if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0 && stationary) {
       restart.flushCatalysis();
     }
     return simulatedSteps + 1 == totalNumOfSteps;
@@ -321,6 +327,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     sites[REACTION].clear();
     sites[DIFFUSION].clear();
     counterSitesWith4OccupiedNeighbours = 0;
+    stationary = false;
   }
   
   private boolean depositAtom(CatalysisAtom atom) {
