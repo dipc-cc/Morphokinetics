@@ -33,6 +33,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    */
   private int[][] coverage;
   private List<double[][]> last1000events;
+  private List<double[][]> last1000eventsMean;
   private List<Double> last1000eventsTime;
   private final int MAX;
   
@@ -44,6 +45,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     //last1000events = new ArrayList<>();
     //last1000events = new doublelinkedlist
     //last1000events = new ArrayDeque();
+    last1000eventsMean = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
     /*for (int i = 0; i < MAX; i++) {
       last1000eventsTime.add((double) i);
@@ -63,7 +65,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     last1000eventsTime.add(time);
     if (last1000events.size() > MAX) {
       last1000events.remove(0);
-      //last1000eventsTime.remove(0);
+      last1000eventsTime.remove(0);
+      last1000eventsMean.remove(0);
     } /*else {
       return new double[2][2][2];
     }*/
@@ -81,6 +84,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
         mean[j][k] = sum[j][k] / (double) last1000events.size();
       }
     }
+    last1000eventsMean.add(mean);
     double[][] std = new double[2][2];
     last1000events.stream().forEach((tmp) -> {
       for (int j = 0; j < 2; j++) {
@@ -105,12 +109,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     double[][][] result = new double[2][2][2];
     result[0] = mean;
     result[1] = std;
-    double[][] y = new double[4][last1000events.size()];
-    for (int i = 0; i < last1000events.size(); i++) {
+    double[][] y = new double[4][last1000eventsMean.size()];
+    for (int i = 0; i < last1000eventsMean.size(); i++) {
       for (int j = 0; j < 2; j++) {
         for (int k = 0; k < 2; k++) {
           int index = j*2  + k ;
-          y[index][i] = last1000events.get(i)[j][k];
+          y[index][i] = last1000eventsMean.get(i)[j][k];
         }
       }
     }
