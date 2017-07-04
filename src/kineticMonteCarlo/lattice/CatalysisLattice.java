@@ -50,7 +50,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * @param time
    * @return
    */
-  public double[][][] isStationary(double time) {
+  public boolean isStationary(double time) {
     double hexaArea = (double) getHexaSizeI() * getHexaSizeJ() / 2.0;
     double[][] covTmp = new double[2][2];
    
@@ -65,37 +65,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       last1000events.remove(0);
       last1000eventsTime.remove(0);
     }
-    double[][] sum = new double[2][2];
-    last1000events.stream().forEach((tmp) -> {
-      for (int j = 0; j < 2; j++) {
-        for (int k = 0; k < 2; k++) {
-          sum[j][k] += tmp[j][k];
-        }
-      }
-    });
-    double[][] mean = new double[2][2];
-    for (int j = 0; j < 2; j++) {
-      for (int k = 0; k < 2; k++) {
-        mean[j][k] = sum[j][k] / (double) last1000events.size();
-      }
-    }
-    double[][] std = new double[2][2];
-    last1000events.stream().forEach((tmp) -> {
-      for (int j = 0; j < 2; j++) {
-        for (int k = 0; k < 2; k++) {
-          std[j][k] += Math.pow(tmp[j][k] - mean[j][k], 2);
-        }
-      }
-    });
-    for (int j = 0; j < 2; j++) {
-      for (int k = 0; k < 2; k++) {
-        std[j][k] = Math.sqrt(std[j][k] / (double) last1000events.size());
-      }
-    }
-    
-    double[][][] result = new double[2][2][2];
-    result[0] = mean;
-    result[1] = std;
+
     double[][] y = new double[4][last1000events.size()];
     for (int i = 0; i < last1000events.size(); i++) {
       for (int j = 0; j < 2; j++) {
@@ -124,21 +94,13 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       for (int j = 0; j < 2; j++) {
         for (int k = 0; k < 2; k++) {
           int index = j * 2 + k;
-          /*if (maxSlope[j][k] * .1 < abs(regressions.get(index).slope())) {
+          if (regressions.get(index).R2() > 0.1) {
             stationary = false;
-          }//*/
-          if (regressions.get(index).R2() > 0.1)
-            stationary = false;
+          }
         }
       }
     }
-    
-    if (stationary) 
-      System.out.println("stationary");
-            
-    System.out.println("CO^br " + regressions.get(0) + " CO^cus " + regressions.get(1) + " O^br " + regressions.get(2) + " O^cus " + regressions.get(3));
-
-    return result;
+    return stationary;
   }
   
   @Override
