@@ -11,6 +11,7 @@ import ratesLibrary.CatalysisKiejnaRates;
 import ratesLibrary.CatalysisRates;
 import ratesLibrary.CatalysisReuterRates;
 import ratesLibrary.CatalysisSeitsonenRates;
+import ratesLibrary.CatalysisFarkasRates;
 import ratesLibrary.IRates;
 
 /**
@@ -35,6 +36,9 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
         break;
       case "seitsonen":
         setRates(new CatalysisSeitsonenRates(getParser().getTemperature()));
+        break;
+      case "farkas":
+        setRates(new CatalysisFarkasRates(getParser().getTemperature()));
         break;
       default:
         System.out.println("Rates not set. Execution will fail.");
