@@ -28,8 +28,8 @@ public class CatalysisKiejnaRates extends CatalysisRates {
   
     double[][] desorptionEnergiesO2 = new double[2][2];
     desorptionEnergiesO2[BR][BR]  = 4.66;
-    desorptionEnergiesO2[BR][CUS] = 3.3; // TODO: It is not in the article
-    desorptionEnergiesO2[CUS][BR] = 3.3; // TODO: It is not in the article
+    desorptionEnergiesO2[BR][CUS] = 3.16; // TODO: It is not in the article
+    desorptionEnergiesO2[CUS][BR] = 3.16; // TODO: It is not in the article
     desorptionEnergiesO2[CUS][CUS] = 1.72;
     setDesorptionEnergiesO2(desorptionEnergiesO2);
     
@@ -42,11 +42,11 @@ public class CatalysisKiejnaRates extends CatalysisRates {
     
     double[][][] diffusionEnergies = new double[2][2][2];
     diffusionEnergies[CO][BR][BR] = 0.6;
-    diffusionEnergies[CO][BR][CUS] = 1.6; // TODO: It is not in the article
+    diffusionEnergies[CO][BR][CUS] = 1.6; // TODO: It is not in the article, but it is correct
     diffusionEnergies[CO][CUS][BR] = 1.3;
     diffusionEnergies[CO][CUS][CUS] = 1.7;
     diffusionEnergies[O][BR][BR] = 0.7;
-    diffusionEnergies[O][BR][CUS] = 2.3; // TODO: It is not in the article
+    diffusionEnergies[O][BR][CUS] = 2.3; // TODO: It is not in the article, but it is correct
     diffusionEnergies[O][CUS][BR] = 1.0;
     diffusionEnergies[O][CUS][CUS] = 1.6;
     setDiffusionEnergies(diffusionEnergies);
