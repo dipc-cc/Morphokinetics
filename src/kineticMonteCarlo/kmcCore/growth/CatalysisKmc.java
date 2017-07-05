@@ -388,7 +388,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom atom = (CatalysisAtom) sites[DESORPTION].randomAtom();
     int atomsToDesorp = 1;
     CatalysisAtom neighbour = null;
-    if (atom.getType() == O) { // it has to desorp with another O to create O2
+    if (atom.getType() == O && doO2Dissociation) { // it has to desorp with another O to create O2
       neighbour = atom.getRandomNeighbour(DESORPTION);
       atomsToDesorp = 2;
       getLattice().extract(neighbour);
@@ -731,7 +731,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.getType() == CO) {
       probability = diffusionRateCO[index];
     } else {
-      probability = diffusionRateO[index];
+        if(doO2Dissociation){
+            probability = diffusionRateO[3];
+        }else{
+            probability = diffusionRateO[index];
+        }
     }
     return probability;
   }
