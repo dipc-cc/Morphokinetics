@@ -20,12 +20,12 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O2;
  *
  * @author karmele, J. Alberdi-Rodriguez
  */
-public class CatalysisRates implements IRates {
+public abstract class CatalysisRates implements IRates {
 
-  private final double[][][] diffusionEnergies;
-  private final double[] desorptionEnergiesCo;
-  private final double[][] desorptionEnergiesO2;
-  private final double[][] reactionEnergiesCoO;
+  private double[][][] diffusionEnergies;
+  private double[] desorptionEnergiesCo;
+  private double[][] desorptionEnergiesO2;
+  private double[][] reactionEnergiesCoO;
   
   private final double prefactor;
   
@@ -57,32 +57,6 @@ public class CatalysisRates implements IRates {
     this.temperature = temperature;
     
     prefactor = 1e13;
-    
-    diffusionEnergies = new double[2][2][2];
-    diffusionEnergies[CO][BR][BR] = 0.6;
-    diffusionEnergies[CO][BR][CUS] = 1.6;
-    diffusionEnergies[CO][CUS][BR] = 1.3;
-    diffusionEnergies[CO][CUS][CUS] = 1.7;
-    diffusionEnergies[O][BR][BR] = 0.7;
-    diffusionEnergies[O][BR][CUS] = 2.3;
-    diffusionEnergies[O][CUS][BR] = 1.0;
-    diffusionEnergies[O][CUS][CUS] = 1.6;
-    
-    desorptionEnergiesCo = new double[2];
-    desorptionEnergiesCo[BR] = 1.6;
-    desorptionEnergiesCo[CUS] = 1.3;
-  
-    desorptionEnergiesO2 = new double[2][2];
-    desorptionEnergiesO2[BR][BR]  = 4.6;
-    desorptionEnergiesO2[BR][CUS] = 3.3;
-    desorptionEnergiesO2[CUS][BR] = 3.3;
-    desorptionEnergiesO2[CUS][CUS] = 2.0;
-    
-    reactionEnergiesCoO = new double[2][2];
-    reactionEnergiesCoO[BR][BR] = 1.5; // CO is in bridge and O in bridge
-    reactionEnergiesCoO[BR][CUS] = 0.8; // CO is in bridge and O in CUS
-    reactionEnergiesCoO[CUS][BR] = 1.2; // CO is in CUS and O in bridge
-    reactionEnergiesCoO[CUS][CUS]= 0.9; // CO is in CUS and O in CUS
       
     mass = new double[2]; // kg/molecule
     mass[CO] = 28.01055 / Na;
@@ -106,6 +80,22 @@ public class CatalysisRates implements IRates {
     sigma[O2] = 1.32;
   }
 
+  public final void setDiffusionEnergies(double[][][] diffusionEnergies) {
+    this.diffusionEnergies = diffusionEnergies;
+  }
+
+  public final void setDesorptionEnergiesCo(double[] desorptionEnergiesCo) {
+    this.desorptionEnergiesCo = desorptionEnergiesCo;
+  }
+
+  public final void setDesorptionEnergiesO2(double[][] desorptionEnergiesO2) {
+    this.desorptionEnergiesO2 = desorptionEnergiesO2;
+  }
+
+  public final void setReactionEnergiesCoO(double[][] reactionEnergiesCoO) {
+    this.reactionEnergiesCoO = reactionEnergiesCoO;
+  }
+  
   @Override
   public double getDepositionRatePerSite() {
     throw new UnsupportedOperationException("This KMC does not support deposition of surface atoms. Use instead absortion methods.");

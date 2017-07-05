@@ -7,7 +7,10 @@
 package basic;
 
 import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
+import ratesLibrary.CatalysisKiejnaRates;
 import ratesLibrary.CatalysisRates;
+import ratesLibrary.CatalysisReuterRates;
+import ratesLibrary.CatalysisSeitsonenRates;
 import ratesLibrary.IRates;
 
 /**
@@ -23,7 +26,19 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
   @Override
   public void initialiseKmc() {
     super.initialiseKmc();
-    setRates(new CatalysisRates(getParser().getTemperature()));
+    switch (getParser().getRatesLibrary()) {
+      case "reuter":
+        setRates(new CatalysisReuterRates(getParser().getTemperature()));
+        break;
+      case "kiejna":
+        setRates(new CatalysisKiejnaRates(getParser().getTemperature()));
+        break;
+      case "seitsonen":
+        setRates(new CatalysisSeitsonenRates(getParser().getTemperature()));
+        break;
+      default:
+        System.out.println("Rates not set. Execution will fail.");
+    }        
     setKmc(new CatalysisKmc(getParser()));
     initialiseRates(getRates(), getParser());
   } 
