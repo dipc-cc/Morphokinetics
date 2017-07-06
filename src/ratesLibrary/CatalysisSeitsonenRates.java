@@ -28,8 +28,8 @@ public class CatalysisSeitsonenRates extends CatalysisRates {
   
     double[][] desorptionEnergiesO2 = new double[2][2];
     desorptionEnergiesO2[BR][BR]  = 4.82;
-    desorptionEnergiesO2[BR][CUS] = 3.3; // TODO: It is not in the article
-    desorptionEnergiesO2[CUS][BR] = 3.3; // TODO: It is not in the article
+    desorptionEnergiesO2[BR][CUS] = 3.3;
+    desorptionEnergiesO2[CUS][BR] = 3.3;
     desorptionEnergiesO2[CUS][CUS] = 1.78;
     setDesorptionEnergiesO2(desorptionEnergiesO2);
     
@@ -42,11 +42,11 @@ public class CatalysisSeitsonenRates extends CatalysisRates {
     
     double[][][] diffusionEnergies = new double[2][2][2];
     diffusionEnergies[CO][BR][BR] = 0.7;
-    diffusionEnergies[CO][BR][CUS] = 1.6; // TODO: It is not in the article
+    diffusionEnergies[CO][BR][CUS] = 2.06;
     diffusionEnergies[CO][CUS][BR] = 1.4;
     diffusionEnergies[CO][CUS][CUS] = 1.57;
     diffusionEnergies[O][BR][BR] = 0.9;
-    diffusionEnergies[O][BR][CUS] = 2.3; // TODO: It is not in the article
+    diffusionEnergies[O][BR][CUS] = 1.97;
     diffusionEnergies[O][CUS][BR] = 0.7;
     diffusionEnergies[O][CUS][CUS] = 1.53;
     setDiffusionEnergies(diffusionEnergies);
