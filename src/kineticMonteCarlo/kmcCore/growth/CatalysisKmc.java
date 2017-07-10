@@ -232,7 +232,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     simulatedSteps++;
     if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
-      if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
+      if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
         System.out.println("Stationary state achieved");
         stationary = true;
       }
