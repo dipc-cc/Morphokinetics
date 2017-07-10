@@ -280,7 +280,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
               (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
-      restart.flushCatalysis();
+      if (stationary)
+        restart.flushCatalysis();
     }
     numGaps = (long) (getLattice().getCartSizeX()*getLattice().getCartSizeY());
     return returnValue;
