@@ -34,7 +34,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   private final List<double[][]> last1000events;
   private final List<Double> last1000eventsTime;
   private final int MAX;
-  
+  ArrayList<LinearRegression> regressions;
+
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
     super(hexaSizeI, hexaSizeJ, modified);
     coverage = new int[2][2];
@@ -82,7 +83,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     while (iter.hasNext() && i < last1000events.size()) {
       x[i++] = (double) iter.next();
     }
-    ArrayList<LinearRegression> regressions = new ArrayList();
+    regressions = new ArrayList();
     regressions.add(new LinearRegression(x, y[0]));
     regressions.add(new LinearRegression(x, y[1]));
     regressions.add(new LinearRegression(x, y[2]));
@@ -102,7 +103,15 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     }
     return stationary;
   }
-  
+
+  public double[] getR2() {
+    double[] r2 = new double[4];
+    for (int i = 0; i < 4; i++) {
+      r2[i] = regressions.get(i).R2();
+    }
+    return r2;
+  }
+
   @Override
   public CatalysisAtom getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
