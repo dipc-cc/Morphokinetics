@@ -297,13 +297,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     } else {
       initCovered();
     }
-    for (int i = 0; i < getLattice().size(); i++) {
+    /*for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
         updateRates(a);
       }
-    }
+    }//*/
     simulatedSteps = 0;
   }
 
