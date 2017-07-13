@@ -495,8 +495,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
           for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
             CatalysisAtom neighbour = a.getNeighbour(k);
             if (neighbour.getType() == O) {
-              int index = 2 * a.getLatticeSite() + neighbour.getLatticeSite();
-              double rate = desorptionRateOPerSite[index];
+              double rate = getDesorptionProbability(a, neighbour);
               a.addRate(DESORPTION, rate, k);
             }
           }
@@ -702,8 +701,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
 
   private double getDesorptionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
-    int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-    return desorptionRateOPerSite[index];
+      return 1e6;
+    /*int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
+    return desorptionRateOPerSite[index];*/
   }
   
   /**
