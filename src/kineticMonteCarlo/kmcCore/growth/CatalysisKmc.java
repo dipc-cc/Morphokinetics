@@ -731,11 +731,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (atom.getType() == CO) {
       probability = diffusionRateCO[index];
     } else {
-        if(doO2Dissociation){
-            probability = diffusionRateO[3];
-        }else{
-            probability = diffusionRateO[index];
-        }
+        probability = diffusionRateO[index];
     }
     return probability;
   }
