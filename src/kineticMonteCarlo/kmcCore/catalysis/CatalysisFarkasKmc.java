@@ -1,4 +1,4 @@
-package kineticMonteCarlo.kmcCore.growth;
+package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
 import kineticMonteCarlo.atom.CatalysisAtom;

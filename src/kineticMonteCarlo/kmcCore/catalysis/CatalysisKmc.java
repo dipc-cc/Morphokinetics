@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.kmcCore.growth;
+package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
 import basic.io.CatalysisData;
@@ -11,6 +11,8 @@ import basic.io.Restart;
 import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
+import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;

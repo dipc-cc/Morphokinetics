@@ -6,8 +6,8 @@
 
 package basic;
 
-import kineticMonteCarlo.kmcCore.growth.CatalysisFarkasKmc;
-import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
+import kineticMonteCarlo.kmcCore.catalysis.CatalysisFarkasKmc;
+import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
 import ratesLibrary.CatalysisKiejnaRates;
 import ratesLibrary.CatalysisRates;
 import ratesLibrary.CatalysisReuterRates;

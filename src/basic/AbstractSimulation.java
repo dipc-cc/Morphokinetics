@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
+import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
 import ratesLibrary.IRates;
 import utils.MathUtils;
 import utils.StaticRandom;
