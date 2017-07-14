@@ -6,6 +6,7 @@
 
 package basic;
 
+import kineticMonteCarlo.kmcCore.growth.CatalysisFarkasKmc;
 import kineticMonteCarlo.kmcCore.growth.CatalysisKmc;
 import ratesLibrary.CatalysisKiejnaRates;
 import ratesLibrary.CatalysisRates;
@@ -42,10 +43,14 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
         break;
       default:
         System.out.println("Rates not set. Execution will fail.");
-    }        
-    setKmc(new CatalysisKmc(getParser()));
+    }
+    if (getParser().getRatesLibrary().equals("farkas")) {
+      setKmc(new CatalysisFarkasKmc(getParser()));
+    } else {
+      setKmc(new CatalysisKmc(getParser()));
+    }
     initialiseRates(getRates(), getParser());
-  } 
+  }
   
   @Override
   void initialiseRates(IRates rates, Parser parser) {

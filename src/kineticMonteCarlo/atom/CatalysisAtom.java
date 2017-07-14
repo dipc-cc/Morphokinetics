@@ -43,6 +43,9 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   
   private CatalysisAtomAttributes attributes;
   
+  /** Current atom is CO^CUS and it has as many CO^CUS neighbours. */
+  private int coCusWithCoCus;
+  
   public CatalysisAtom(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4);
     occupiedNeighbours = 0; 
@@ -58,6 +61,7 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     processes[DESORPTION] = new CatalysisProcess();
     processes[REACTION] = new CatalysisProcess();
     processes[DIFFUSION] = new CatalysisProcess();
+    coCusWithCoCus = 0;
   }
   
   public boolean isOnList(byte process) {
@@ -176,6 +180,18 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     }
     // raise an error
     return null;
+  }
+
+  public void addCoCusNeighbours(int value) {
+    coCusWithCoCus += value;
+  }
+
+  public void cleanCoCusNeighbours() {
+    coCusWithCoCus = 0;
+  }
+
+  public int getCoCusNeighbours() {
+    return coCusWithCoCus;
   }
 
   /**

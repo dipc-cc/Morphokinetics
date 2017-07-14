@@ -43,12 +43,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
   // Desorption
-  private double[] desorptionRateCOPerSite; // BRIDGE or CUS
+  double[] desorptionRateCOPerSite; // BRIDGE or CUS
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   // Reaction
-  private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-  private double[] diffusionRateCO;
-  private double[] diffusionRateO;
+  double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+  double[] diffusionRateCO;
+  double[] diffusionRateO;
   // Total rates
   private double[] totalRate;
   private final IAtomsCollection[] sites;
@@ -397,7 +397,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     CatalysisAtom atom = (CatalysisAtom) sites[DESORPTION].randomAtom();
     int atomsToDesorp = 1;
     CatalysisAtom neighbour = null;
-    if (atom.getType() == O && doO2Dissociation) { // it has to desorp with another O to create O2
+    if (atom.getType() == O) { // it has to desorp with another O to create O2
       neighbour = atom.getRandomNeighbour(DESORPTION);
       atomsToDesorp = 2;
       getLattice().extract(neighbour);
@@ -628,7 +628,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double oldDesorptionProbability = atom.getRate(DESORPTION);
     atom.setRate(DESORPTION, 0);
     if (atom.getType() == CO) {
-      atom.setRate(DESORPTION, desorptionRateCOPerSite[atom.getLatticeSite()]);
+      double rate = getDesorptionProbability(atom);
+      atom.setRate(DESORPTION, rate);
     } else { // O
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
         CatalysisAtom neighbour = atom.getNeighbour(i);
@@ -710,6 +711,23 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
   }
 
+  /**
+   * Computes desorption probability.
+   * 
+   * @param atom CO molecule.
+   * @return 
+   */
+  double getDesorptionProbability(CatalysisAtom atom) {
+    return desorptionRateCOPerSite[atom.getLatticeSite()];
+  }
+  
+  /**
+   * Computes desorption probability.
+   * 
+   * @param atom O atom.
+   * @param neighbour O atom.
+   * @return 
+   */
   private double getDesorptionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     return desorptionRateOPerSite[index];
@@ -722,7 +740,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @param neighbour
    * @return 
    */
-  private double getReactionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+  double getReactionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index;
     if (atom.getType() == CO) {
       index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
@@ -734,17 +752,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return probability;
   }
   
-  private double getDiffusionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+  double getDiffusionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     double probability;
     if (atom.getType() == CO) {
       probability = diffusionRateCO[index];
     } else {
-        if(doO2Dissociation){
-            probability = diffusionRateO[3];
-        }else{
-            probability = diffusionRateO[index];
-        }
+      probability = diffusionRateO[index];
     }
     return probability;
   }

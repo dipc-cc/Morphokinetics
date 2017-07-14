@@ -213,8 +213,11 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(true);
 
+    updateCoCus(atom);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = atom.getNeighbour(i);
       atom.getNeighbour(i).addOccupiedNeighbour(1);
+      updateCoCus(neighbour);
     }
     addOccupied();
     coverage[a.getType()][atom.getLatticeSite()]++;
@@ -224,8 +227,11 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   public double extract(AbstractGrowthAtom a) {
     CatalysisAtom atom = (CatalysisAtom) a;
     atom.setOccupied(false);
+    atom.cleanCoCusNeighbours();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      CatalysisAtom neighbour = atom.getNeighbour(i);
       atom.getNeighbour(i).addOccupiedNeighbour(-1);
+      updateCoCus(neighbour);
     }
     subtractOccupied();
     coverage[a.getType()][atom.getLatticeSite()]--;
@@ -340,5 +346,22 @@ public class CatalysisLattice extends AbstractGrowthLattice {
       }
     }
     return atoms;
+  }
+
+  /**
+   * Check whether two CO^CUS atoms are together.
+   * 
+   * @param atom
+   */
+  private void updateCoCus(CatalysisAtom atom) {
+    if (atom.isOccupied() && atom.getLatticeSite() == CUS && atom.getType() == CO) {
+      atom.cleanCoCusNeighbours();
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i += 2) { // Only up and down neighbours
+        CatalysisAtom neighbour = atom.getNeighbour(i);
+        if (neighbour.isOccupied() && neighbour.getType() == CO) {
+          atom.addCoCusNeighbours(1);
+        }
+      }
+    }
   }
 }

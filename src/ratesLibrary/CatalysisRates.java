@@ -27,6 +27,11 @@ public abstract class CatalysisRates implements IRates {
   private double[][] desorptionEnergiesO2;
   private double[][] reactionEnergiesCoO;
   
+  // Only for Farkas
+  private double[] desorptionEnergiesCoCusCoCus;
+  private double[] reactionEnergiesCoOCoCusCoCus;
+  private double[] diffusionEnergiesCoCusCoCus;
+  
   private final double prefactor;
   
   /**
@@ -83,9 +88,17 @@ public abstract class CatalysisRates implements IRates {
   public final void setDiffusionEnergies(double[][][] diffusionEnergies) {
     this.diffusionEnergies = diffusionEnergies;
   }
+  
+  public final void setDiffusionEnergiesCoCusCoCus(double[] diffusionEnergiesCoCusCoCus) {
+    this.diffusionEnergiesCoCusCoCus = diffusionEnergiesCoCusCoCus;
+  }
 
   public final void setDesorptionEnergiesCo(double[] desorptionEnergiesCo) {
     this.desorptionEnergiesCo = desorptionEnergiesCo;
+  }
+  
+  public final void setDesorptionEnergiesCoCusCoCus(double[] desorptionEnergiesCoCusCoCus) {
+    this.desorptionEnergiesCoCusCoCus= desorptionEnergiesCoCusCoCus;
   }
 
   public final void setDesorptionEnergiesO2(double[][] desorptionEnergiesO2) {
@@ -94,6 +107,10 @@ public abstract class CatalysisRates implements IRates {
 
   public final void setReactionEnergiesCoO(double[][] reactionEnergiesCoO) {
     this.reactionEnergiesCoO = reactionEnergiesCoO;
+  }
+  
+  public final void setReactionEnergiesCoOcoCusCoCus(double[] reactionEnergiesCoOCoCusCoCus) {
+    this.reactionEnergiesCoOCoCusCoCus = reactionEnergiesCoOCoCusCoCus;
   }
   
   @Override
@@ -175,6 +192,18 @@ public abstract class CatalysisRates implements IRates {
     return rates;
   }
   
+  /**
+   * Only for Farkas and repulsion.
+   *
+   * @return rates.
+   */
+  public double[] getDesorptionRates() {
+    double[] rates = new double[2];
+    rates[0] = getDesorptionRate(CO, desorptionEnergiesCoCusCoCus[0]);
+    rates[1] = getDesorptionRate(CO, desorptionEnergiesCoCusCoCus[1]);
+    return rates;
+  }
+  
   public double[] getReactionRates() {
     double[] rates;
     double planckConstant = 4.136e-15; // eV⋅s
@@ -187,6 +216,24 @@ public abstract class CatalysisRates implements IRates {
     return rates;
   }
   
+  /**
+   * Only for Farkas and repulsion.
+   * 
+   * @param fake fake parameter.
+   * @return rates.
+   */
+  public double[] getReactionRates(boolean fake) {
+    double[] rates;
+    double planckConstant = 4.136e-15; // eV⋅s
+    double constant = 0.5 * kB * temperature / planckConstant;
+    rates = new double[2];
+    // only one CO cus neighbour
+    rates[0] = constant * Math.exp(-reactionEnergiesCoOCoCusCoCus[0] / (kB * temperature));
+    // two CO neighbours
+    rates[1] = constant * Math.exp(-reactionEnergiesCoOCoCusCoCus[1] / (kB * temperature));
+    return rates;
+  }    
+  
   public double[] getDiffusionRates(int type) {
     double[] rates = new double[4];
     rates[0] = getRate(type, BR, BR);
@@ -194,7 +241,20 @@ public abstract class CatalysisRates implements IRates {
     rates[2] = getRate(type, CUS, BR);
     rates[3] = getRate(type, CUS, CUS);
     return rates;
-  }    
+  }
+  
+  /**
+   * Only for Farkas and repulsion.
+   *
+   * @return rates.
+   */
+  public double[] getDiffusionRates()  {
+    double[] rates = new double[3];
+    rates[0] = getRate(0);
+    rates[1] = getRate(1);
+    rates[2] = getRate(2);
+    return rates;
+  }
   
   /**
    * Compute all adsorptions.
@@ -217,6 +277,15 @@ public abstract class CatalysisRates implements IRates {
     return prefactor * Math.exp(-diffusionEnergies[sourceType][sourceSite][destinationSite] / (kB * temperature));
   }
   
+  /**
+   * Only for Farkas and repulsion.
+   *
+   * @return rate.
+   */
+  private double getRate(int index) {
+    return prefactor * Math.exp(-diffusionEnergiesCoCusCoCus[index] / (kB * temperature));
+  }
+
   /**
    * Equation (3) of Reuter & Scheffler, PRB 73, 2006.
    * k_i = \frac{p_A A_s}{\sqrt{2\pi m_A K_B T}}
