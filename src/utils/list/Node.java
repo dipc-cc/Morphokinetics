@@ -15,6 +15,7 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
   private T data;
   private Node<T> left;
   private Node<T> right;
+  private Node<T> next;
   private int level;
   private int depth;
 
@@ -60,6 +61,14 @@ public class Node<T extends Comparable<T>> implements Comparable<Node<T>> {
 
   public void setRight(Node<T> right) {
     this.right = right;
+  }
+  
+  public void setNext(Node<T> next) {
+    this.next = next;
+  }
+  
+  public Node<T> next() {
+    return next;
   }
 
   /**

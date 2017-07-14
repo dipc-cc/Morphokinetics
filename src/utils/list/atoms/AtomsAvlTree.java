@@ -21,6 +21,8 @@ import utils.list.Node;
 public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
 
   private Node<T> root;
+  private Node<T> current;
+  private Node<T> next;
   /**
    * Adsorption, desorption, reaction or diffusion.
    */
@@ -171,6 +173,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   
   /**
    * Finds the element itself.
+   * 
    * @param data
    * @return element if found, null otherwise.
    */
@@ -187,6 +190,19 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     return null;
   }
   
+  public Node<T> findNode(T data) {
+    Node<T> local = root;
+    while (local != null) {
+      if (local.getData().compareTo(data) == 0)
+        return local;
+      else if (local.getData().compareTo(data) > 0)
+        local = local.getLeft();
+      else
+        local = local.getRight();
+    }
+    return null;
+  }
+    
   /**
    * Method to update rates from root to an atom.
    * 
@@ -321,6 +337,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public void populate() {
     populateCatalysisAtom(root);
+    findNexts();
   }
   
   /**
@@ -353,6 +370,21 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     return ((CatalysisAtom) n.getData()).getSumRate(process);
   }
 
+  /**
+   * Creates a list inside the tree. It is aimed to iterate over the tree faster.
+   */
+  private void findNexts() {
+    current = getMinimumNode();
+    int i = 0;
+    while (current != null) {
+      i++;
+      T a  = (T) new CatalysisAtom(i, (short)-1, (short)-1);
+      next = findNode(a);
+      current.setNext(next);
+      current = next;
+    }
+  }
+  
   /**
    * Chooses a random atom from current tree.
    *
@@ -413,37 +445,45 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   
   private class Itr implements Iterator<T> {
 
-    int cursor;       // index of next element to return
-    int lastRet = -1; // index of last element returned; -1 if no such
-    int max; // last element
-
     private Itr() {
-      cursor = -1;
-      max = getMaximum().hashCode();
+      current = next = getMinimumNode();
     }
 
     /**
-     * Left -> current -> right.
+     * Skip non-occupied atoms.
+     * 
      * @return 
      */
     @Override
     public boolean hasNext() {
-      return cursor < max;
+      if (next == null) { // We have reached the end of the list
+        return false;
+      } else {
+        CatalysisAtom atom = (CatalysisAtom) next.getData();
+        while (!atom.isOccupied()) {// && current != null) {
+          next = next.next();
+          if (next == null) { // We have reached the end of the list
+            return false;
+          } else {
+            atom = (CatalysisAtom) next.getData();
+          }
+        }
+        current = next;
+        next = current.next();
+        return true;
+      }
     }
 
     /**
-     * Very inefficient way to iterate over all elements.
+     * Return current atom.
      * 
      * @return next element.
      */
     @SuppressWarnings("unchecked")
     @Override
     public T next() {
-      // go to next element
-      cursor++;
-      T a  = (T) new CatalysisAtom(cursor, (short)-1, (short)-1);
-      return find(a);
-    }      
+      return current.getData();
+    }
 
     @Override
     @SuppressWarnings("unchecked")
