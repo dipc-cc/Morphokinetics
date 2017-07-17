@@ -448,9 +448,12 @@ public class Restart {
   }
   
   public void reset() {
-    deltaTimeBetweenTwoAttachments.clear();
-    deltaTimePerAtom.clear();
+    if (extraOutput2) {
+      deltaTimeBetweenTwoAttachments.clear();
+      deltaTimePerAtom.clear();
+    }
     previousTime = 0;
+    co2P = new long[4];
   }
   
   private void createFolder(String restartFolder) {
