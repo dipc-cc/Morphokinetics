@@ -51,16 +51,6 @@ public class CatalysisData {
   }
   
   public double[] getCatalysisData(){
-    double[] data = new double[5];
-    data[0] = (double) coverage;
-    data[1] = time;
-    data[2] = (double) coverageCO;
-    data[3] = (double) coverageO;
-    data[4] = (double) coverageLakes;
-    return data;
-  }
-  
-  public double[] getCatalysisCompleteData(){
     double[] data = new double[6];
     data[0] = (double) coverage;
     data[1] = time;
@@ -70,4 +60,5 @@ public class CatalysisData {
     data[5] = (double) coverageGaps;
     return data;
   }
+  
 }

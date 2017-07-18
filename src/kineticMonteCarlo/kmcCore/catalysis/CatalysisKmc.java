@@ -40,7 +40,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
-  private ArrayList<CatalysisData> adsorptionCompleteData;
   // Adsorption
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
@@ -89,7 +88,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numStepsEachData = parser.getOutputEvery();
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
-      adsorptionCompleteData = new ArrayList<>();
     }
     restart = new Restart(measureDiffusivity);
     sites = new IAtomsCollection[4];
@@ -167,15 +165,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     return adsorptionSimulationData;
   }
-
-  public double[][] getOutputCompleteAdsorptionData() {
-    double[][] adsorptionSimulationData = new double[adsorptionCompleteData.size()][5];
-    for (int i = 0; i < adsorptionData.size(); i++) {
-      adsorptionSimulationData[i] = adsorptionCompleteData.get(i).getCatalysisCompleteData();
-    }
-    
-    return adsorptionSimulationData;
-  }
   
   public float getCoverage(byte type) {
     return ((CatalysisLattice) getLattice()).getCoverage(type);
@@ -241,10 +230,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (destinationAtom != null) {
         simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
         
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
-                (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size())));
 
-        adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
                 (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
                 (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
       }
@@ -277,9 +264,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     if (measureDiffusivity) {
-      adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
-              (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size())));
-      adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
+      adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
               (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
       if (stationary)
