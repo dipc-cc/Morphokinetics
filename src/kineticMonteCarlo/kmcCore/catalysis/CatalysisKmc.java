@@ -36,6 +36,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private long simulatedSteps;
   private long[] steps;
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+  private long co2sum;
   private int totalNumOfSteps;
   private int numStepsEachData;
   private ArrayList<CatalysisData> simulationData;
@@ -114,6 +115,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     steps = new long[4];
     co2 = new long[4];
+    co2sum = 0;
     activationEnergy = new ActivationEnergy(parser);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     counterSitesWith4OccupiedNeighbours = 0;
@@ -270,20 +272,28 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage) {
+    while (getLattice().getCoverage() < maxCoverage && co2sum < 1000) {
       activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true));
       if (performSimulationStep()) {
         break;
       }
     }
+    System.out.println(co2sum + " CO2 molecules created");
     if (measureDiffusivity) {
       adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size())));
       adsorptionCompleteData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
               (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
-      if (stationary)
+      if (stationary) {
         restart.flushCatalysis();
+        int[] sizes = new int[4];
+        sizes[ADSORPTION] = sites[ADSORPTION].size();
+        sizes[DESORPTION] = sites[DESORPTION].size();
+        sizes[REACTION] = sites[REACTION].size();
+        sizes[DIFFUSION] = sites[DIFFUSION].size();
+        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
+      }
     }
     numGaps = (long) (getLattice().getCartSizeX()*getLattice().getCartSizeY());
     return returnValue;
@@ -319,12 +329,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     getLattice().reset();
     getList().reset();
+    restart.reset();
     if (measureDiffusivity) {
       simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
     }
     steps = new long[4];
     co2 = new long[4];
+    co2sum = 0;
     sites[ADSORPTION].clear();
     sites[DESORPTION].clear();
     sites[REACTION].clear();
@@ -428,6 +440,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
     }
     co2[index]++;
+    if (stationary)
+      co2sum++;
 
     updateRates(neighbour);
     updateRates(atom);
