@@ -59,10 +59,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
   private final float maxCoverage;
-  private final boolean doDiffusion;
   private final boolean doAdsorption;
-  private final boolean doDesorption;
-  private final boolean doReaction;
+  final boolean doDesorption;
+  final boolean doReaction;
+  final boolean doDiffusion;
   private final boolean doO2Dissociation;
   private final boolean startOxygen;
   private Restart restart;
@@ -585,17 +585,17 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double[] previousRate = totalRate.clone();
     
     // recompute the probability of the current atom
-    recomputeAdsorptionProbability(atom);
-    recomputeDesorptionProbability(atom);
-    recomputeReactionProbability(atom);
-    recomputeDiffusionProbability(atom);
+    if (doAdsorption) recomputeAdsorptionProbability(atom);
+    if (doDesorption) recomputeDesorptionProbability(atom);
+    if (doReaction) recomputeReactionProbability(atom);
+    if (doDiffusion) recomputeDiffusionProbability(atom);
     // recompute the probability of the neighbour atoms
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = atom.getNeighbour(i);
-      recomputeAdsorptionProbability(neighbour);
-      recomputeDesorptionProbability(neighbour);
-      recomputeReactionProbability(neighbour);
-      recomputeDiffusionProbability(neighbour);
+      if (doAdsorption) recomputeAdsorptionProbability(neighbour);
+      if (doDesorption) recomputeDesorptionProbability(neighbour);
+      if (doReaction) recomputeReactionProbability(neighbour);
+      if (doDiffusion) recomputeDiffusionProbability(neighbour);
     }
     
     // recalculate total probability, if needed

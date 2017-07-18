@@ -30,9 +30,15 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
   @Override
   public void setRates(CatalysisRates rates) {
     super.setRates(rates);
-    desorptionRateCoCusCoCus = rates.getDesorptionRates();
-    reactionRateCoOCoCusCoCus = rates.getReactionRates(true);
-    diffusionRateCoCusCoCus = rates.getDiffusionRates();
+    if (doDesorption) {
+      desorptionRateCoCusCoCus = rates.getDesorptionRates();
+    }
+    if (doReaction) {
+      reactionRateCoOCoCusCoCus = rates.getReactionRates(true);
+    }
+    if (doDiffusion) {
+      diffusionRateCoCusCoCus = rates.getDiffusionRates();
+    }
 
     //activationEnergy.setRates(processProbs2D);
   }
