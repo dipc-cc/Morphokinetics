@@ -244,6 +244,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     coverage[CO][CUS] = 0;
     coverage[O][BR] = 0;
     coverage[O][CUS] = 0;
+    last1000events.clear();
+    last1000eventsTime.clear();
     super.reset();
   }
   
