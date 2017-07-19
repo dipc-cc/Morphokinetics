@@ -22,6 +22,10 @@ public interface IRates {
    */
   static double h = 6.6260695729e-34;
   /**
+   * Planck constant (eV·s).
+   */
+  static double hEv = 4.136e-15;
+  /**
    * Avogadro constant (1/mol) * 1000 (g -> kg). 6.022e23·1000.
    */
   static double Na = 6.022e26;
