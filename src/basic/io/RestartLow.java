@@ -366,7 +366,8 @@ class RestartLow {
       // if any I/O error occurs
       e.printStackTrace();
     }
-  }  
+  }
+  
   static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     String separator;
     Locale locale = Locale.UK;
@@ -463,9 +464,5 @@ class RestartLow {
       // if any I/O error occurs
       e.printStackTrace();
     }
-  }
-
-  static void writeLowSimulationDataText(double[][][] data, String fileName) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

@@ -290,10 +290,6 @@ public class Restart {
     }
   }
   
-  public void writeCatalysisDataText(double[][][] data, String fileName) {
-    fileName = addFolderAndSuffix(fileName, ".txt");
-    RestartLow.writeLowSimulationDataText(data, fileName);
-  } 
   public void writeCatalysisAdsorptionDataText(int simulationNumber, double[][] data) {
     String fileName = format("%scatalisysAdsorption%03d.txt", folder, simulationNumber);
     fileName = addFolderAndSuffix(fileName, ".txt");
