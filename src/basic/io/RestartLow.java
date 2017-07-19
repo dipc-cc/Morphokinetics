@@ -366,38 +366,8 @@ class RestartLow {
       // if any I/O error occurs
       e.printStackTrace();
     }
-  }
-  
-  static void writeLowSimulationDataText(double[][][] data, String fileName) {
-    // create file descriptor. It will be automatically closed.
-    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
-      // for each byte in the buffer
-
-      for (int i = 0; i < data[0].length; i++) {
-        double R2 = 0;
-        double t = 0;
-        if (i > 0) {
-          int j; 
-          for (j = 0; j < data.length; j++) {
-            if (data[j][i][0] > Double.NEGATIVE_INFINITY) {
-              R2 += Math.pow(data[j][i][0] - data[j][0][0], 2) + Math.pow(data[j][i][1] - data[j][0][1], 2);
-              t += data[j][i][2];
-            }
-          }
-          //System.out.println(i + " - R2: " + R2 + " - numData: " + j);
-          R2 = R2 / j;
-          t = t / j;
-        }
-        out.write(i + ";" + t + ";" + R2 + "\n");
-      }
-    } catch (Exception e) {
-      // if any I/O error occurs
-      e.printStackTrace();
-    }
-  }
-  
-  
-  static void writeCompleteAdsorptionLowSimulationDataText(double[][] data, String fileName) {
+  }  
+  static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
     String separator;
     Locale locale = Locale.UK;
     if (System.getProperty("os.name").contains("Linux")) {
@@ -430,41 +400,6 @@ class RestartLow {
       e.printStackTrace();
     }
   }
-  
-  
-  static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {
-    String separator;
-    Locale locale = Locale.UK;
-    if (System.getProperty("os.name").contains("Linux")) {
-      separator = "\t";
-    } else {
-      separator = ";";
-    }    
-    // create file descriptor. It will be automatically closed.
-    try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
-      // for each byte in the buffer
-      String s = "#[1. step 2. coverage 3. coverageCO 4. coverageO 5. coverageLake]\n";
-      if (System.getProperty("os.name").contains("Linux")) {
-        out.write(s);
-      }
-      for (int i = 0; i < data.length; i++) {
-        double coverage = data[i][0];
-        double t = data[i][1];
-        double coverageCO = data[i][2];
-        double coverageO = data[i][3];
-        double coverageLake = data[i][4];
-        
-        if (t > 0 || coverage > 0) {
-          s = format(locale, "%d%s%g%s%g%s%g%s%g%s%g\n",i, separator, t, separator, coverage, separator, coverageCO, separator, coverageO, separator, coverageLake);
-          out.write(s);
-        }
-      }
-    } catch (Exception e) {
-      // if any I/O error occurs
-      e.printStackTrace();
-    }
-  }
-  
   /**
    * Only used to read input "parameters" file.
    * 
@@ -528,5 +463,9 @@ class RestartLow {
       // if any I/O error occurs
       e.printStackTrace();
     }
+  }
+
+  static void writeLowSimulationDataText(double[][][] data, String fileName) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }
