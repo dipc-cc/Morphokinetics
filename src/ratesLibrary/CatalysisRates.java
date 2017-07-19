@@ -61,8 +61,8 @@ public abstract class CatalysisRates implements IRates {
   public CatalysisRates(int temperature) {
     this.temperature = temperature;
     
-    prefactor = 1e13;
-      
+    prefactor = kB * temperature / hEv;
+
     mass = new double[2]; // kg/molecule
     mass[CO] = 28.01055 / Na;
     mass[O2] = 2 * 15.9994 / Na;
@@ -206,8 +206,7 @@ public abstract class CatalysisRates implements IRates {
   
   public double[] getReactionRates() {
     double[] rates;
-    double planckConstant = 4.136e-15; // eV⋅s
-    double constant = 0.5 * kB * temperature / planckConstant;
+    double constant = 0.5 * prefactor;
     rates = new double[4];
     rates[0] = constant * Math.exp(-reactionEnergiesCoO[BR][BR] / (kB * temperature));
     rates[1] = constant * Math.exp(-reactionEnergiesCoO[BR][CUS] / (kB * temperature));
@@ -224,8 +223,7 @@ public abstract class CatalysisRates implements IRates {
    */
   public double[] getReactionRates(boolean fake) {
     double[] rates;
-    double planckConstant = 4.136e-15; // eV⋅s
-    double constant = 0.5 * kB * temperature / planckConstant;
+    double constant = 0.5 * prefactor;
     rates = new double[2];
     // only one CO cus neighbour
     rates[0] = constant * Math.exp(-reactionEnergiesCoOCoCusCoCus[0] / (kB * temperature));
