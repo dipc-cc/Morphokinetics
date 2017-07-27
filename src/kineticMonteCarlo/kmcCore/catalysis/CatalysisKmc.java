@@ -8,6 +8,7 @@ import basic.Parser;
 import basic.io.CatalysisData;
 import basic.io.OutputType;
 import basic.io.Restart;
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.atom.CatalysisAtom;
@@ -121,6 +122,47 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   @Override
   public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
     return getSampledSurface(binX, binY);
+  }
+  
+  @Override
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
+    
+    Point2D corner1 = getLattice().getCartesianLocation(0, 0);
+    double scaleX = binX / getLattice().getCartSizeX();
+    double scaleY = binY / getLattice().getCartSizeY();
+
+    if (scaleX > 1.01 || scaleY > 1.02) {
+      System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
+      System.err.println("The size of the surface should be " + binX + " and it is " + getLattice().getCartSizeX() + "/" + scaleX+" (hexagonal size is "+getLattice().getHexaSizeI()+")");
+      System.err.println("The size of the surface should be " + binY + " and it is " + getLattice().getCartSizeY() + "/" + scaleY+" (hexagonal size is "+getLattice().getHexaSizeJ()+")");
+      System.err.println("X scale is " + scaleX + " Y scale is " + scaleY);
+      return null;
+    }
+
+    for (int i = 0; i < binX; i++) {
+      for (int j = 0; j < binY; j++) {
+        surface[i][j] = -1;
+      }
+    }
+    int x;
+    int y;
+    for (int i = 0; i < getLattice().size(); i++) {
+      AbstractGrowthUc uc = getLattice().getUc(i);
+      double posUcX = uc.getPos().getX();
+      double posUcY = uc.getPos().getY();
+      for (int j = 0; j < uc.size(); j++) {
+        if (uc.getAtom(j).isOccupied()) {
+          double posAtomX = uc.getAtom(j).getPos().getX();
+          double posAtomY = uc.getAtom(j).getPos().getY();
+          x = (int) ((posUcX + posAtomX - corner1.getX()) * scaleX);
+          y = (int) ((posUcY + posAtomY - corner1.getY()) * scaleY);
+
+          surface[x][y] = uc.getAtom(j).getType();
+        }
+      }
+    }
+    return surface;
   }
   
   public void setRates(CatalysisRates rates) {
