@@ -39,7 +39,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private long co2sum;
   private int totalNumOfSteps;
   private int numStepsEachData;
-  private ArrayList<CatalysisData> simulationData;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
   private double adsorptionRateCOPerSite;
@@ -87,7 +86,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (measureDiffusivity) {
       totalNumOfSteps = parser.getNumberOfSteps();
       numStepsEachData = parser.getOutputEvery();
-      simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
     }
     restart = new Restart(measureDiffusivity);
@@ -230,9 +228,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         stationary = true;
       }
       if (destinationAtom != null) {
-        simulationData.add(new CatalysisData(destinationAtom.getiHexa(), destinationAtom.getjHexa(), getTime()));
-        
-
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
                 (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
                 (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
@@ -316,7 +311,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getList().reset();
     restart.reset();
     if (measureDiffusivity) {
-      simulationData = new ArrayList<>();
       adsorptionData = new ArrayList<>();
     }
     steps = new long[4];
