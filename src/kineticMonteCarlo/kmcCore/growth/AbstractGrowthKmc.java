@@ -162,7 +162,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return surface;
   }
   
-  public float[][] getRawSurface(int binX, int binY) {
+  @Override
+  public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
     
     Point2D corner1 = lattice.getCartesianLocation(0, 0);
@@ -199,12 +200,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         }
       }
     }
-    return surface;
-  }
-  
-  @Override
-  public float[][] getSampledSurface(int binX, int binY) {
-    float[][] surface = getRawSurface(binX, binY);
     MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
     MathUtils.normalise(surface);
     return surface;
