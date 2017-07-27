@@ -17,7 +17,6 @@ import static kineticMonteCarlo.atom.CatalysisAtom.BR;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
-import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import utils.LinearRegression;
 
@@ -36,8 +35,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   private final int MAX;
   ArrayList<LinearRegression> regressions;
 
-  public CatalysisLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
-    super(hexaSizeI, hexaSizeJ, modified);
+  public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
+    super(hexaSizeI, hexaSizeJ, null);
     coverage = new int[2][2];
     MAX = (int) Math.sqrt(hexaSizeI*hexaSizeJ)*20;
     last1000events = new LinkedList<>();

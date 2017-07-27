@@ -76,7 +76,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   public CatalysisKmc(Parser parser) {
     super(parser);
-    CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer());
+    CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ());
     catalysisLattice.init();
     setLattice(catalysisLattice);
     totalRate = new double[4]; // adsorption, desorption, reaction, diffusion
