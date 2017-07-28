@@ -10,7 +10,6 @@ import basic.io.OutputType.formatFlag;
 import basic.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import java.util.EnumSet;
-import kineticMonteCarlo.atom.CatalysisProcess;
 import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
@@ -197,6 +196,10 @@ public class Parser {
    * See {@link #doCatalysisO2Dissociation()}
    */
   private boolean catalysisO2Dissociation;
+  /**
+   * See {@link #areCollectionsAutomatic()}.
+   */
+  private boolean automaticCollections;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -303,6 +306,7 @@ public class Parser {
     catalysisDiffusion = "true";
     catalysisStartOxygenCov = false;
     catalysisO2Dissociation = true;
+    automaticCollections = false;
     
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -568,6 +572,11 @@ public class Parser {
       catalysisO2Dissociation = true;
     }
     try {
+      automaticCollections = json.getBoolean("automaticCollections");
+    } catch (JSONException e) {
+      automaticCollections = false;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -760,6 +769,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"catalysisDiffusion\"", catalysisDiffusion);
     System.out.printf("%32s: %s,\n", "\"catalysisStartOxygenCov\"", catalysisStartOxygenCov);
     System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
+    System.out.printf("%32s: %s,\n", "\"automaticCollections\"", automaticCollections);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1522,6 +1532,17 @@ public class Parser {
    */
   public boolean doCatalysisO2Dissociation() {
     return catalysisO2Dissociation;
+  }
+  
+  /**
+   * Allow to change between tree and array collections, when the code decides to do so.
+   *
+   * Input "parameters" variable: {@code automaticCollections}.
+   *
+   * @return "automatically" change between tree/array.
+   */
+  public boolean areCollectionsAutomatic() {
+    return automaticCollections;
   }
   
   public String getEvolutionaryAlgorithm() {

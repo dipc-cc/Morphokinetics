@@ -75,6 +75,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private long numGaps;
   private int counterSitesWith4OccupiedNeighbours;
   boolean stationary;
+  private final boolean automaticCollections;
   
   public CatalysisKmc(Parser parser) {
     super(parser);
@@ -119,6 +120,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
+    automaticCollections = parser.areCollectionsAutomatic();
   }
 
   @Override
@@ -813,18 +815,20 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * small, change it to be an array.
    */
   private void checkSizes() {
-    double totalArea = (double) (getLattice().getCartSizeX() * getLattice().getCartSizeY());
-    double ratio;
-    // ADSORPTION, DESORPTION, REACTION, DIFFUSION
-    for (byte i = 0; i < sites.length; i++) {
-      ratio = (double) sites[i].size() / totalArea;
-      if (ratio > 0.8 && sites[i] instanceof AtomsArrayList) {
-        fromArrayToTree(i);
-        System.out.println("Changed to Tree " + i);
-      }
-      if (ratio < 0.2 && sites[i] instanceof AtomsAvlTree) {
-        fromTreeToArray(i);
-        System.out.println("Changed to Array " + i);
+    if (automaticCollections) {
+      double totalArea = (double) (getLattice().getCartSizeX() * getLattice().getCartSizeY());
+      double ratio;
+      // ADSORPTION, DESORPTION, REACTION, DIFFUSION
+      for (byte i = 0; i < sites.length; i++) {
+        ratio = (double) sites[i].size() / totalArea;
+        if (ratio > 0.8 && sites[i] instanceof AtomsArrayList) {
+          fromArrayToTree(i);
+          System.out.println("Changed to Tree " + i);
+        }
+        if (ratio < 0.2 && sites[i] instanceof AtomsAvlTree) {
+          fromTreeToArray(i);
+          System.out.println("Changed to Array " + i);
+        }
       }
     }
   }
