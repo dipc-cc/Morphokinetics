@@ -460,7 +460,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
         return false;
       } else {
         CatalysisAtom atom = (CatalysisAtom) next.getData();
-        while (!atom.isOccupied()) {// && current != null) {
+        while (!atom.isOnList(process)) {
           next = next.next();
           if (next == null) { // We have reached the end of the list
             return false;
