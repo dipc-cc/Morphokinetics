@@ -41,6 +41,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private long co2sum;
   private int totalNumOfSteps;
+  private int numberOfCo2;
   private int numStepsEachData;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
@@ -92,6 +93,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       numStepsEachData = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
+    numberOfCo2 = parser.getNumberOfCo2();
     restart = new Restart(measureDiffusivity);
     sites = new IAtomsCollection[4];
     AtomsCollection col = new AtomsCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
@@ -300,7 +302,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage && co2sum < 1000) {
+    while (getLattice().getCoverage() < maxCoverage && co2sum != numberOfCo2) {
       activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true));
       if (performSimulationStep()) {
         break;

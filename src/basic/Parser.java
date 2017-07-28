@@ -101,6 +101,10 @@ public class Parser {
    */
   private int numberOfSteps;
   /**
+   * See {@link #getNumberOfCo2()}.
+   */
+  private int numberOfCo2;
+  /**
    * See {@link #getCartSizeX()}.
    */
   private int cartSizeX;
@@ -277,6 +281,7 @@ public class Parser {
     endTime = -1;
     numberOfSimulations = 10;
     numberOfSteps = -1;
+    numberOfCo2 = -1;
     cartSizeX = 256;
     cartSizeY = 256;
     cartSizeZ = 256;
@@ -424,6 +429,11 @@ public class Parser {
       numberOfSteps = (int) json.getDouble("numberOfSteps");
     } catch (JSONException e) {
       numberOfSteps = -1;
+    }
+    try {
+      numberOfCo2 = (int) json.getDouble("numberOfCo2");
+    } catch (JSONException e) {
+      numberOfCo2 = -1;
     }
     try {
       cartSizeX = json.getInt("cartSizeX");
@@ -735,6 +745,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"multithreaded\"", multithreaded);
     System.out.printf("%32s: %s,\n", "\"numberOfSimulations\"", numberOfSimulations);
     System.out.printf("%32s: %s,\n", "\"numberOfSteps\"", numberOfSteps);
+    System.out.printf("%32s: %s,\n", "\"numberOfCo2\"", numberOfCo2);
     System.out.printf("%32s: %s,\n", "\"cartSizeX\"", cartSizeX);
     System.out.printf("%32s: %s,\n", "\"cartSizeY\"", cartSizeY);
     System.out.printf("%32s: %s,\n", "\"cartSizeZ\"", cartSizeZ);
@@ -1088,6 +1099,18 @@ public class Parser {
    */
   public int getNumberOfSteps() {
     return numberOfSteps;
+  }
+  
+  /**
+   * Selects the number of CO2 molecules that will be created at most. -1 by default, which means that
+   * it will run until another criteria is reached.
+   *
+   * Input "parameters" variable: {@code numberOfCo2}.
+   *
+   * @return number of simulations.
+   */
+  public int getNumberOfCo2() {
+    return numberOfCo2;
   }
 
   /**
