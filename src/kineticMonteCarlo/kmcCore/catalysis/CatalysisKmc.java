@@ -66,7 +66,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   final boolean doDiffusion;
   private final boolean doO2Dissociation;
   private final boolean startOxygen;
-  private Restart restart;
+  private final Restart restart;
   private final ActivationEnergy activationEnergy;
   /**
    * Activation energy output during the execution
