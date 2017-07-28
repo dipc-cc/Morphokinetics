@@ -24,6 +24,8 @@ import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
 import static kineticMonteCarlo.atom.CatalysisProcess.REACTION;
+import utils.list.atoms.AtomsArrayList;
+import utils.list.atoms.AtomsAvlTree;
 import utils.list.atoms.AtomsCollection;
 import utils.list.atoms.IAtomsCollection;
 
@@ -301,6 +303,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (performSimulationStep()) {
         break;
       }
+      checkSizes();
     }
     System.out.println(co2sum + " CO2 molecules created in " + simulatedSteps + " steps");
     if (measureDiffusivity) {
@@ -805,6 +808,56 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     totalRate[process] = sites[process].getTotalRate(process);
   }
 
+  /**
+   * If a process is stored in a array and it is too big, change to be a tree. If a tree is too
+   * small, change it to be an array.
+   */
+  private void checkSizes() {
+    double totalArea = (double) (getLattice().getCartSizeX() * getLattice().getCartSizeY());
+    double ratio;
+    // ADSORPTION, DESORPTION, REACTION, DIFFUSION
+    for (byte i = 0; i < sites.length; i++) {
+      ratio = (double) sites[i].size() / totalArea;
+      if (ratio > 0.8 && sites[i] instanceof AtomsArrayList) {
+        fromArrayToTree(i);
+        System.out.println("Changed to Tree " + i);
+      }
+      if (ratio < 0.2 && sites[i] instanceof AtomsAvlTree) {
+        fromTreeToArray(i);
+        System.out.println("Changed to Array " + i);
+      }
+    }
+  }
+  
+  private void fromTreeToArray(byte process) {
+    AtomsCollection col = new AtomsCollection(false, process);
+    sites[process] = col.getCollection();
+    for (int i = 0; i < getLattice().size(); i++) {
+      AbstractGrowthUc uc = getLattice().getUc(i);
+      for (int j = 0; j < uc.size(); j++) { // it will be always 0
+        CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        sites[process].insert(a);
+      }
+    }
+  }
+
+  /**
+   * Changes current collection from array to tree.
+   * 
+   * @param process ADSORPTION, DESORPTION, REACTION, DIFFUSION.
+   */
+  private void fromArrayToTree(byte process) {
+    AtomsCollection col = new AtomsCollection(true, process);
+    sites[process] = col.getCollection();
+    for (int i = 0; i < getLattice().size(); i++) {
+      AbstractGrowthUc uc = getLattice().getUc(i);
+      for (int j = 0; j < uc.size(); j++) { // it will be always 0
+        CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        sites[process].insert(a);
+      }
+    }
+    sites[process].populate();
+  }
   /**
    * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).
    */
