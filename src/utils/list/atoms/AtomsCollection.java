@@ -15,8 +15,8 @@ public class AtomsCollection {
   
   IAtomsCollection atomsCollection;
 
-  public AtomsCollection(Parser parser, byte process) {
-    if (parser.useCatalysisTree(process)) {
+  public AtomsCollection(boolean isTree, byte process) {
+    if (isTree) {
       atomsCollection = new AtomsAvlTree(process);
     } else {
       atomsCollection = new AtomsArrayList(process);

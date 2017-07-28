@@ -91,13 +91,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     restart = new Restart(measureDiffusivity);
     sites = new IAtomsCollection[4];
-    AtomsCollection col = new AtomsCollection(parser, ADSORPTION);
+    AtomsCollection col = new AtomsCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
     sites[ADSORPTION] = col.getCollection(); // Either a tree or array 
-    col = new AtomsCollection(parser, DESORPTION);
+    col = new AtomsCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
     sites[DESORPTION] = col.getCollection();
-    col = new AtomsCollection(parser, REACTION);
+    col = new AtomsCollection(parser.useCatalysisTree(REACTION), REACTION);
     sites[REACTION] = col.getCollection();
-    col = new AtomsCollection(parser, DIFFUSION);
+    col = new AtomsCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
     sites[DIFFUSION] = col.getCollection();
     doDiffusion = parser.doCatalysisDiffusion();
     doAdsorption = parser.doCatalysisAdsorption();
@@ -302,7 +302,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         break;
       }
     }
-    System.out.println(co2sum + " CO2 molecules created");
+    System.out.println(co2sum + " CO2 molecules created in " + simulatedSteps + " steps");
     if (measureDiffusivity) {
       adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
