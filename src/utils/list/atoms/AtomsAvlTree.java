@@ -231,7 +231,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }    
   
   /**
-   * Removes atom's rate from the tree, with its old desorption rate and sets to zero.
+   * Removes atom's rate from the tree, with its old rate and sets to zero.
    * 
    * @param data
    */
