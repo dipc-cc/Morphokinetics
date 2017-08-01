@@ -146,25 +146,27 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       } else {
         width = (int) getParser().getCoverage();
       }
-      while (true) {
-        try {
-          TerminalLoop.sleep(1000);
-          if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
-                  || (getKmc().getCoverage() * 100 > getCurrentProgress())) {
+      if (!getParser().getCalculationMode().equals("catalysis")) {
+        while (true) {
+          try {
+            TerminalLoop.sleep(1000);
+            if ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
+                    || (getKmc().getCoverage() * 100 > getCurrentProgress())) {
 
-            System.out.print("\r[");
-            int i = 0;
-            for (; i < getCurrentProgress(); i++) {
-              System.out.print(".");
-            }
-            for (; i < width; i++) {
-              System.out.print(" ");
-            }
-            System.out.print("] ");
-            updateCurrentProgress();
+              System.out.print("\r[");
+              int i = 0;
+              for (; i < getCurrentProgress(); i++) {
+                System.out.print(".");
+              }
+              for (; i < width; i++) {
+                System.out.print(" ");
+              }
+              System.out.print("] ");
+              updateCurrentProgress();
 
+            }
+          } catch (Exception e) {
           }
-        } catch (Exception e) {
         }
       }
     }
