@@ -1309,8 +1309,9 @@ public class Parser {
   /**
    * Selects the type of system to be calculated. Can be Si (for silicon etching), Ag (2D Ag/Ag
    * growth in former mode), AgUc (same as previous Ag/Ag growth, with correct periodicity), basic
-   * (synthetic simulation mode in a square lattice) or graphene (graphene 2D growth simulation).
-   * For the graphene pay attention to the used rates library with {@link #getRatesLibrary()}.
+   * (synthetic simulation mode in a square lattice), graphene (graphene 2D growth simulation) or
+   * Catalysis (CO2 catalysis on RuO2 (110)). For the graphene and catalysis pay attention to the
+   * used rates library with {@link #getRatesLibrary()}.
    *
    * The temperature ({@link #getTemperature()}) has to be between 120 and 180 for Ag, between 120
    * and 220 for basic and 1273 for graphene.
