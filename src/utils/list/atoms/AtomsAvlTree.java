@@ -29,11 +29,14 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   private final byte process;
   /** How much is the occupancy of the tree. */
   private int occupied;
+  /** There is a inner list to iterate over the tree. Is it initialised? */
+  private boolean listComputed;
 
   public AtomsAvlTree(byte process) {
     root = null;
     this.process = process;
     occupied = 0;
+    listComputed = false;
   }
   
   Node<T> getRoot() {
@@ -337,7 +340,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public void populate() {
     populateCatalysisAtom(root);
-    findNexts();
+    if (!listComputed) {
+      findNexts();
+    }
   }
   
   /**
@@ -383,6 +388,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
       current.setNext(next);
       current = next;
     }
+    listComputed = true;
   }
   
   /**
