@@ -192,7 +192,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       diffusionRateCO = rates.getDiffusionRates(CO);
       diffusionRateO = rates.getDiffusionRates(O);
     }
-    printRates();
+    
     double[][] processProbs2D = new double[2][2];
 
     for (int i = 0; i < 2; i++) {
@@ -864,10 +864,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     sites[process].populate();
   }
+  
   /**
    * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).
    */
-  private void printRates() {
+  public void printRates() {
     System.out.println(" Process ");
     System.out.println(" ------- ");
     System.out.format("%s\t%1.1e\n", "CO adsorption\t", adsorptionRateCOPerSite);

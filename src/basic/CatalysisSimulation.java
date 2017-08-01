@@ -64,17 +64,6 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
   
   @Override
   public void printRates(Parser parser) {
-    double[] rates = getRates().getRates(parser.getTemperature());
-    //we modify the 1D array into a 3D array;
-    int length = 2;
-
-    for (int i = 0; i < length; i++) { // CO or O
-      for (int j = 0; j < length; j++) { // from BR or CUS
-        for (int k = 0; k < length; k++) { // to BR or CUS
-          System.out.printf("%1.3E  ", rates[i * length * length + j * length + k]);
-        }
-        System.out.println(" ");
-      }
-    }
+    ((CatalysisKmc) getKmc()).printRates();
   }
 }
