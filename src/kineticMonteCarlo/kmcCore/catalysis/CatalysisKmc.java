@@ -73,7 +73,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Activation energy output during the execution
    */
   private final boolean aeOutput;
-  private long numGaps;
+  private int numGaps;
   private int counterSitesWith4OccupiedNeighbours;
   boolean stationary;
   private final boolean automaticCollections;
@@ -201,8 +201,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
     }
     activationEnergy.setRates(processProbs2D);
-    numGaps = (long) (getLattice().getCartSizeX()*getLattice().getCartSizeY());
-    
+    numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
 
   public double[][] getOutputAdsorptionData() {
@@ -324,7 +323,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
       }
     }
-    numGaps = (long) (getLattice().getCartSizeX()*getLattice().getCartSizeY());
     return returnValue;
   }
 
@@ -371,6 +369,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     sites[DIFFUSION].clear();
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
+    numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
   
   private boolean depositAtom(CatalysisAtom atom) {
