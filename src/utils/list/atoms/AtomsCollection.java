@@ -5,8 +5,6 @@
  */
 package utils.list.atoms;
 
-import basic.Parser;
-
 /**
  *
  * @author J. Alberdi-Rodriguez
