@@ -2,7 +2,7 @@
    pressureO2: 1,
    pressureCO: 7,
    numberOfSimulations: 1,
-   numberOfSteps: 1e3,
+   numberOfSteps: 1e4,
    cartSizeX: 20,
    cartSizeY: 20,
    justCentralFlake: false,
@@ -15,6 +15,7 @@
    coverage: 100,
    withGui: false,
    catalysisStartOxygenCov: true,
+   ratesLibrary: reuter,
 }
 
 

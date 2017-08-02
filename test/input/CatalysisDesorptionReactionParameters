@@ -18,4 +18,5 @@
   coverage: 100,
   withGui: false,
   numberOfSteps: -1e7,
+  ratesLibrary: reuter,
 }

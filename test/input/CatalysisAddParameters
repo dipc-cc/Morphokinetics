@@ -14,8 +14,10 @@
   calculationMode: catalysis,
   outputData: true,
   outputDataFormat: [{type: catalysis},{type: mko},],
+  outputEvery: 10000,
   randomSeed: false,
   coverage: 50,
   withGui: true,
   numberOfSteps: -1e7,
+  ratesLibrary: reuter,
 }

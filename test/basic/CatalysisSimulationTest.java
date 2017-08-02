@@ -85,7 +85,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(1.1810342178556614E-8, simulatedTime, 0.0);
+    assertEquals(1.0270168073118504E-8, simulatedTime, 0.0);
   }
   
   @Test
@@ -107,7 +107,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(2.585375024742761E20, simulatedTime, 0.0);
+    assertEquals(1.6483405890072265E20, simulatedTime, 0.0);
   }
   
   @Test
@@ -129,7 +129,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(0.002839812330594191, simulatedTime, 0.0);
+    assertEquals(0.003029557984908654, simulatedTime, 0.0);
   }
   
   @Test
@@ -151,7 +151,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(0.6816087139566696, simulatedTime, 0.0);
+    assertEquals(0.4953070112706185, simulatedTime, 0.0);
   }
   
   @Test
@@ -173,7 +173,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(5.3236094362367984E20, simulatedTime, 0.0);
+    assertEquals(1.5146394613233045E20, simulatedTime, 0.0);
   }
   
   @Test
@@ -195,10 +195,11 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(4.358507256505913E-5, simulatedTime, 0.0);
-    String ref = "4.35851e-05\t0.00000\t0.0200000\t1.00000\t0.980000\t502\t491\t6\t0\t0\t0\t0\t6";
+    assertEquals(1.2906173669907474E-4, simulatedTime, 0.0);
+    String ref = "0.000129062\t0.00500000\t0.0450000\t0.995000\t0.950000\t5013\t4938\t47\t1\t0\t5\t1\t41\t1\t399\t31\t4";
     String extraFile = restart.readFile("results/dataCatalysis.txt");
-    String read = extraFile.substring(6781, 6847);
+    System.out.println(extraFile.length());
+    String read = extraFile.substring(42463, 42548);
     assertEquals(ref.trim(), read.trim());
   }  
   
