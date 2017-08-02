@@ -172,12 +172,14 @@ public abstract class AbstractSimulation {
     System.out.println("Output folder : " + restartFolderName);
     System.out.println("_____________________________________________________________________________");
 
+    String secondLine = "    \t(units) \t(%)\t(ms)";
     if (kmc instanceof CatalysisKmc) {
-      System.out.println("    I\tSimul time\tCover.\tCPU\tCove CO\tCove O");
+      System.out.println("    I\tSimul time\tCover.\tCPU\tCoverage\tCO2\tSteps\tStationary");
+      secondLine += "\tCO\tO";
     } else {
       System.out.println("    I\tSimul time\tCover.\tCPU\tIslands\tFractal d.");
     }
-    System.out.println("    \t(units) \t(%)\t(ms)");
+    System.out.println(secondLine);
     System.out.println("    _________________________________________________________________________");
     // Main loop
     for (simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
@@ -318,8 +320,7 @@ public abstract class AbstractSimulation {
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
     if (kmc instanceof CatalysisKmc) {
-      System.out.format("\t%.4f", ((CatalysisKmc) kmc).getCoverage(CO));
-      System.out.format("\t%.4f", ((CatalysisKmc) kmc).getCoverage(O));
+      ((CatalysisKmc) kmc).printIteration();
     } else {
       System.out.print("\t" + kmc.getLattice().getIslandCount());
       System.out.format("\t%.4f", kmc.getLattice().getAverageGyradius());

@@ -75,7 +75,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private final boolean aeOutput;
   private int numGaps;
   private int counterSitesWith4OccupiedNeighbours;
-  boolean stationary;
+  private boolean stationary;
+  private long stationaryStep;
   /** Stores all collections of atoms; either in a tree or an array. */
   AtomsCollection col;
   private final boolean automaticCollections;
@@ -122,6 +123,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
+    stationaryStep = -1;
     automaticCollections = parser.areCollectionsAutomatic();
   }
 
@@ -271,8 +273,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulatedSteps++;
     if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
       if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
-        System.out.println("Stationary state achieved in " + simulatedSteps + " steps");
         stationary = true;
+        stationaryStep = simulatedSteps;
       }
       if (destinationAtom != null) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
@@ -308,7 +310,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       }
       checkSizes();
     }
-    System.out.println(co2sum + " CO2 molecules created in " + simulatedSteps + " steps");
+    
     if (measureDiffusivity) {
       adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
@@ -369,6 +371,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     sites[DIFFUSION].clear();
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
+    stationaryStep = -1;
     numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
   
@@ -888,5 +891,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     System.out.println("dCO=["+diffusionRateCO[0]+", "+diffusionRateCO[1]+", "+diffusionRateCO[2]+", "+diffusionRateCO[3]+"]");
     System.out.println("dO=["+diffusionRateO[0]+", "+diffusionRateO[1]+", "+diffusionRateO[2]+", "+diffusionRateO[3]+"]");
+  }
+  
+  public void printIteration() {
+    System.out.format("\t%.4f", getCoverage(CO));
+    System.out.format("\t%.4f", getCoverage(O));
+    System.out.format("\t%d", co2sum);
+    System.out.format("\t%d", simulatedSteps);
+    System.out.format("\t%d", stationaryStep);
   }
 }
