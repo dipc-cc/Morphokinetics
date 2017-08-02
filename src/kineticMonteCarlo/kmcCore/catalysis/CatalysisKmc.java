@@ -76,6 +76,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private int numGaps;
   private int counterSitesWith4OccupiedNeighbours;
   boolean stationary;
+  /** Stores all collections of atoms; either in a tree or an array. */
+  AtomsCollection col;
   private final boolean automaticCollections;
   
   public CatalysisKmc(Parser parser) {
@@ -96,14 +98,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     numberOfCo2 = parser.getNumberOfCo2();
     restart = new Restart(measureDiffusivity);
     sites = new IAtomsCollection[4];
-    AtomsCollection col = new AtomsCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
-    sites[ADSORPTION] = col.getCollection(); // Either a tree or array 
-    col = new AtomsCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
-    sites[DESORPTION] = col.getCollection();
-    col = new AtomsCollection(parser.useCatalysisTree(REACTION), REACTION);
-    sites[REACTION] = col.getCollection();
-    col = new AtomsCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
-    sites[DIFFUSION] = col.getCollection();
+    col = new AtomsCollection((CatalysisLattice) getLattice());
+    // Either a tree or array 
+    sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
+    sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
+    sites[REACTION] = col.getCollection(parser.useCatalysisTree(REACTION), REACTION);
+    sites[DIFFUSION] = col.getCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
     doDiffusion = parser.doCatalysisDiffusion();
     doAdsorption = parser.doCatalysisAdsorption();
     doDesorption = parser.doCatalysisDesorption();
@@ -842,8 +842,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @param toTree if true from array to tree, otherwise from tree to array.
    */
   private void changeCollection(byte process, boolean toTree) {
-    AtomsCollection col = new AtomsCollection(toTree, process);
-    sites[process] = col.getCollection();
+    sites[process] = col.getCollection(toTree, process);
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0

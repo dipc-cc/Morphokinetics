@@ -5,205 +5,47 @@
 */
 package utils.list.atoms;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.function.Consumer;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import utils.StaticRandom;
 import utils.list.Node;
 
 /**
  *
- * @author antonio081014 original code
- * @author J. Alberdi-Rodriguez morphokinetics modification
+ * @author J. Alberdi-Rodriguez
  * @param <T>
  */
 public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
 
-  private Node<T> root;
-  private Node<T> current;
-  private Node<T> next;
   /**
    * Adsorption, desorption, reaction or diffusion.
    */
   private final byte process;
   /** How much is the occupancy of the tree. */
   private int occupied;
-  /** There is a inner list to iterate over the tree. Is it initialised? */
-  private boolean listComputed;
+  /** Actual AvlTree. */
+  private final AvlTree tree;
 
-  public AtomsAvlTree(byte process) {
-    root = null;
-    this.process = process;
+  public AtomsAvlTree(byte process, AvlTree tree) {
+    super();
     occupied = 0;
-    listComputed = false;
+    this.process = process;
+    this.tree = tree;
   }
-  
-  Node<T> getRoot() {
-    return root;
-  }
-  
+
   @Override
   public double getTotalRate(byte process) {
-    if (root == null) {
+    if (tree.getRoot() == null) {
       return 0;
     }
-    return ((CatalysisAtom) root.getData()).getSumRate(process);
-  }
-  
-  public T getMaximum() {
-    Node<T> local = root;
-    if (local == null)
-      return null;
-    while (local.getRight() != null)
-      local = local.getRight();
-    return local.getData();
-  }
-  
-  public T getMinimum() {
-    Node<T> local = root;
-    if (local == null)
-      return null;
-    while (local.getLeft() != null) {
-      local = local.getLeft();
-    }
-    return local.getData();
-  }
-  
-  public Node<T> getMinimumNode() {
-    Node<T> local = root;
-    if (local == null)
-      return null;
-    while (local.getLeft() != null) {
-      local = local.getLeft();
-    }
-    return local;
-  }  
-  
-  private int depth(Node<T> node) {
-    if (node == null)
-      return 0;
-    return node.getDepth();
-    // 1 + Math.max(depth(node.getLeft()), depth(node.getRight()));
-  }
-  
-  @Override
-  public void insert(T data) {
-    root = insert(root, data);
-    switch (balanceNumber(root)) {
-      case 1:
-        root = rotateLeft(root);
-        break;
-      case -1:
-        root = rotateRight(root);
-        break;
-      default:
-        break;
-    }
-  }
-  
-  private Node<T> insert(Node<T> node, T data) {
-    if (node == null)
-      return new Node<>(data);
-    if (node.getData().compareTo(data) > 0) {
-      node = new Node<>(node.getData(), insert(node.getLeft(), data),
-              node.getRight());
-      // node.setLeft(insert(node.getLeft(), data));
-    } else if (node.getData().compareTo(data) < 0) {
-      // node.setRight(insert(node.getRight(), data));
-      node = new Node<>(node.getData(), node.getLeft(), insert(
-              node.getRight(), data));
-    }
-    // After insert the new node, check and rebalance the current node if
-    // necessary.
-    switch (balanceNumber(node)) {
-      case 1:
-        node = rotateLeft(node);
-        break;
-      case -1:
-        node = rotateRight(node);
-        break;
-      default:
-        return node;
-    }
-    return node;
-  }
-  
-  private int balanceNumber(Node<T> node) {
-    int L = depth(node.getLeft());
-    int R = depth(node.getRight());
-    if (L - R >= 2)
-      return -1;
-    else if (L - R <= -2)
-      return 1;
-    return 0;
-  }
-  
-  private Node<T> rotateLeft(Node<T> node) {
-    Node<T> q = node;
-    Node<T> p = q.getRight();
-    Node<T> c = q.getLeft();
-    Node<T> a = p.getLeft();
-    Node<T> b = p.getRight();
-    q = new Node<>(q.getData(), c, a);
-    p = new Node<>(p.getData(), q, b);
-    return p;
-  }
-  
-  private Node<T> rotateRight(Node<T> node) {
-    Node<T> q = node;
-    Node<T> p = q.getLeft();
-    Node<T> c = q.getRight();
-    Node<T> a = p.getLeft();
-    Node<T> b = p.getRight();
-    q = new Node<>(q.getData(), b, c);
-    p = new Node<>(p.getData(), a, q);
-    return p;
-  }
-  
-  public boolean search(T data) {
-    Node<T> local = root;
-    while (local != null) {
-      if (local.getData().compareTo(data) == 0)
-        return true;
-      else if (local.getData().compareTo(data) > 0)
-        local = local.getLeft();
-      else
-        local = local.getRight();
-    }
-    return false;
+    return ((CatalysisAtom) tree.getRoot().getData()).getSumRate(process);
   }
   
   /**
-   * Finds the element itself.
-   * 
-   * @param data
-   * @return element if found, null otherwise.
+   * Do nothing
+   * @param data 
    */
-  public T find(T data) {
-    Node<T> local = root;
-    while (local != null) {
-      if (local.getData().compareTo(data) == 0)
-        return local.getData();
-      else if (local.getData().compareTo(data) > 0)
-        local = local.getLeft();
-      else
-        local = local.getRight();
-    }
-    return null;
-  }
-  
-  public Node<T> findNode(T data) {
-    Node<T> local = root;
-    while (local != null) {
-      if (local.getData().compareTo(data) == 0)
-        return local;
-      else if (local.getData().compareTo(data) > 0)
-        local = local.getLeft();
-      else
-        local = local.getRight();
-    }
-    return null;
+  @Override
+  public void insert(T data) {
   }
     
   /**
@@ -214,7 +56,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public void updateRate(T data, double diff){
-    updateRate(root, data, diff);
+    updateRate(tree.getRoot(), data, diff);
   }
   
   private void updateRate(Node<T> n, T data, double diff) {
@@ -241,7 +83,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public void removeAtomRate(T data) {
     occupied--;
-    removeAtomRate(root, data);
+    removeAtomRate(tree.getRoot(), data);
   }
   
   private void removeAtomRate(Node<T> n, T data) {
@@ -263,7 +105,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   
   @Override
   public String toString() {
-    return root.toString();
+    return tree.toString();
   }
   
   /**
@@ -274,7 +116,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public void addRate(T data) {
     occupied++;
-    addRate(root, data);
+    addRate(tree.getRoot(), data);
   }
   
   private void addRate(Node<T> n, T data) {
@@ -292,32 +134,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
       addRate(n.getRight(), data);
     }
   }
-  
-  public void printTree() {
-    root.setLevel(0);
-    Queue<Node<T>> queue = new LinkedList<>();
-    queue.add(root);
-    while (!queue.isEmpty()) {
-      Node<T> node = queue.poll();
-      System.out.println(node);
-      int level = node.getLevel();
-      Node<T> left = node.getLeft();
-      Node<T> right = node.getRight();
-      if (left != null) {
-        left.setLevel(level + 1);
-        queue.add(left);
-      }
-      if (right != null) {
-        right.setLevel(level + 1);
-        queue.add(right);
-      }
-    }
-  }
 
   @Override
   public void clear() {
     occupied = 0;
-    clear(root);
+    clear(tree.getRoot());
   }
   
   private void clear(Node n) {
@@ -339,10 +160,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public void populate() {
-    populateCatalysisAtom(root);
-    if (!listComputed) {
-      findNexts();
-    }
+    populateCatalysisAtom(tree.getRoot());
   }
   
   /**
@@ -374,22 +192,6 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
     return ((CatalysisAtom) n.getData()).getSumRate(process);
   }
-
-  /**
-   * Creates a list inside the tree. It is aimed to iterate over the tree faster.
-   */
-  private void findNexts() {
-    current = getMinimumNode();
-    int i = 0;
-    while (current != null) {
-      i++;
-      T a  = (T) new CatalysisAtom(i, (short)-1, (short)-1);
-      next = findNode(a);
-      current.setNext(next);
-      current = next;
-    }
-    listComputed = true;
-  }
   
   /**
    * Chooses a random atom from current tree.
@@ -399,11 +201,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public T randomAtom() {
     double randomNumber = StaticRandom.raw() * getTotalRate(process);
-    CatalysisAtom atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
+    CatalysisAtom atom = (CatalysisAtom) randomAtom(tree.getRoot(), randomNumber).getData();
     while (atom.getRate(process) == 0) {
       //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
       randomNumber = StaticRandom.raw() * getTotalRate(process);
-      atom = (CatalysisAtom) randomAtom(root, randomNumber).getData();
+      atom = (CatalysisAtom) randomAtom(tree.getRoot(), randomNumber).getData();
     }
     return (T) atom;
   }
@@ -440,63 +242,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   
   @Override
   public boolean isEmpty() {
-    return root == null;
+    return tree.isEmpty();
   }
   
   @Override
   public Iterator<T> iterator() {
-    Itr itr = new Itr();
-    return itr;
-  }
-  
-  private class Itr implements Iterator<T> {
-
-    private Itr() {
-      current = next = getMinimumNode();
-    }
-
-    /**
-     * Skip non-occupied atoms.
-     * 
-     * @return 
-     */
-    @Override
-    public boolean hasNext() {
-      if (next == null) { // We have reached the end of the list
-        return false;
-      } else {
-        CatalysisAtom atom = (CatalysisAtom) next.getData();
-        while (!atom.isOnList(process)) {
-          next = next.next();
-          if (next == null) { // We have reached the end of the list
-            return false;
-          } else {
-            atom = (CatalysisAtom) next.getData();
-          }
-        }
-        current = next;
-        next = current.next();
-        return true;
-      }
-    }
-
-    /**
-     * Return current atom.
-     * 
-     * @return next element.
-     */
-    @SuppressWarnings("unchecked")
-    @Override
-    public T next() {
-      return current.getData();
-    }
-
-    @Override
-    @SuppressWarnings("unchecked")
-    public void forEachRemaining(Consumer<? super T> consumer) {
-    }
-
-    final void checkForComodification() {
-    }
+    return tree.iterator(process);
   }
 }
