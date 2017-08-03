@@ -195,14 +195,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       diffusionRateO = rates.getDiffusionRates(O);
     }
     
-    double[][] processProbs2D = new double[2][2];
+    if (aeOutput) {
+      double[][] processProbs2D = new double[2][2];
 
-    for (int i = 0; i < 2; i++) {
-      for (int j = 0; j < 2; j++) {
-        processProbs2D[i][j] = rates.getReactionRates()[i * 2 + j];
+      for (int i = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
+          processProbs2D[i][j] = rates.getReactionRates()[i * 2 + j];
+        }
       }
+      activationEnergy.setRates(processProbs2D);
     }
-    activationEnergy.setRates(processProbs2D);
     numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
 
@@ -221,26 +223,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   
   public float[] getCoverages() {
     return ((CatalysisLattice) getLattice()).getCoverages();
-  }
-  
-  @Override
-  public void initialiseRates(double[] rates) {
-    //we modify the 1D array into a 3D array;
-    int length = 2;
-    double[][][] processProbs3D = new double[length][length][length];
-
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
-        for (int k = 0; k < length; k++) {
-          processProbs3D[i][j][k] = rates[(i * length * length) + (j * length) + k];
-        }
-      }
-    }
-    if (!doDiffusion) {
-      processProbs3D = new double[length][length][length]; // reset to zero, there is no diffusion at all.
-    }
-    ((CatalysisLattice) getLattice()).initialiseRates(processProbs3D);
-    //activationEnergy.setRates(processProbs3D);
   }
 
   /**
