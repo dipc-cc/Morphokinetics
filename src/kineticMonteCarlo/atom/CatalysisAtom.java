@@ -221,10 +221,20 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
-  public int getOccupiedNeighbours(){
+  /**
+   * How many neighbours are occupied.
+   *
+   * @return occupied neighbours.
+   */
+  public int getOccupiedNeighbours() {
     return occupiedNeighbours;
   }
   
+  /**
+   * An atom is added to current neighbourhood (can be negative).
+   * 
+   * @param value to be added or removed.
+   */
   public void addOccupiedNeighbour(int value) {
     occupiedNeighbours += value;
   }
@@ -260,7 +270,7 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
   }
   
   /**
-   * Makes this atom "immobile" if it is sourounded by 4 neighbours. Thus, it will not be eligible
+   * Makes this atom "immobile" if it is surrounded by 4 neighbours. Thus, it will not be eligible
    * for diffusion.
    */
   public void checkImmobile() {
