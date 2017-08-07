@@ -386,6 +386,19 @@ public class Restart {
     return RestartLow.readLowText2D(fileName);
   }
   
+  /**
+   * Reads a file to a ArrayList of unknown size aimed to be like array[][].
+   *
+   * @param fileName
+   * @return
+   * @throws FileNotFoundException
+   */
+  public ArrayList<ArrayList> readDataTextFile(String fileName) throws FileNotFoundException {
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    return RestartLow.readLowTextData(fileName);
+  }
+    
+    
   public String readFile(String fileName) {
     List<String> readList = null;
     try {
@@ -466,12 +479,12 @@ public class Restart {
       String fileName = format("%sdataCatalysis%03d.txt", folder, simulationNumber);
       outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outCatalysis.println("# File " + fileName);
-      outCatalysis.println("# Information about the system every fixed number of events\n#[1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion, 10. CO[BR]+O[BR], 11. CO[BR]+O[CUS], 12. CO[CUS]+O[BR], 13. CO[CUS]+O[CUS], 14. sizeAdsorption, 15. sizeDesorption, 16. sizeReaction, 17. sizeDiffusion, ");
+      outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion, 10. CO[BR]+O[BR], 11. CO[BR]+O[CUS], 12. CO[CUS]+O[BR], 13. CO[CUS]+O[CUS], 14. sizeAdsorption, 15. sizeDesorption, 16. sizeReaction, 17. sizeDiffusion, ");
       outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
       fileName = format("%sdataTof%03d.txt", folder, simulationNumber);
       outTof = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outTof.println("# File " + fileName);
-      outTof.println("# Information about TOF\n#[1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
+      outTof.println("# Information about TOF\n# [1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
       fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
       outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outData.println("# File " + fileName);

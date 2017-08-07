@@ -243,7 +243,43 @@ class RestartLow {
     }
     return data;
   }
-
+  
+  /**
+   * Reads a file to a ArrayList of unknown size aimed to be like array[][]
+   *
+   * @param fileName
+   * @return
+   * @throws FileNotFoundException
+   */
+  static ArrayList<ArrayList> readLowTextData(String fileName) throws FileNotFoundException {
+    ArrayList<ArrayList> data = new ArrayList<>();
+    // create file descriptor. It will be automatically closed.
+    try (BufferedReader in = new BufferedReader(new FileReader(fileName))) {
+      String line;
+      // <-- read whole line
+      line = in.readLine();
+      while (line != null) {
+        data.add(new ArrayList());
+        StringTokenizer tk = new StringTokenizer(line);
+        while (tk.hasMoreTokens())  {
+          String token = tk.nextToken();
+          if (token.equals("#")) {
+            break;
+          }
+          data.get(data.size()-1).add(new Double(token));
+        }
+        line = in.readLine();
+      }
+      in.close();
+    } catch (FileNotFoundException fe) {
+      throw fe;
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+    return data;
+  }
+  
   static String readGitRevision(String folder) {
     String rev;
     String fileName = folder + "/.gitRevision";
@@ -379,7 +415,7 @@ class RestartLow {
     // create file descriptor. It will be automatically closed.
     try (BufferedWriter out = new BufferedWriter(new FileWriter(fileName))) {
       // for each byte in the buffer
-      String s = "#[1. step 2. time 3. coverage 4. coverageCO 5. coverageO 6. coverageLake 7. coverageGaps]\n";
+      String s = "# [1. step 2. time 3. coverage 4. coverageCO 5. coverageO 6. coverageLake 7. coverageGaps]\n";
       if (System.getProperty("os.name").contains("Linux")) {
         out.write(s);
       }
