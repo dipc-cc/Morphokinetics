@@ -257,7 +257,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
         stationary = true;
         stationaryStep = simulatedSteps;
-        //getList().resetTime();
+        getList().resetTime();
         restart.resetCatalysis();
       }
       if (destinationAtom != null) {
