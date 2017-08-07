@@ -7,6 +7,7 @@ package basic;
 
 import basic.io.Restart;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -24,6 +25,7 @@ public class CatalysisSimulationTest {
   
   private float[][] simulatedSurface;
   private double simulatedTime;
+  private String restartFolder;
 
   public CatalysisSimulationTest() {
   }
@@ -195,13 +197,36 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(1.2906173669907474E-4, simulatedTime, 0.0);
-    String ref = "0.000129062\t0.00500000\t0.0450000\t0.995000\t0.950000\t5013\t4938\t47\t1\t0\t5\t1\t41\t1\t399\t31\t4";
-    String extraFile = restart.readFile("results/dataCatalysis.txt");
-    System.out.println(extraFile.length());
-    String read = extraFile.substring(42463, 42548);
-    assertEquals(ref.trim(), read.trim());
-  }  
+    assertEquals(4.559062277553586E-5, simulatedTime, 0.0);
+    ArrayList<ArrayList> data = null;
+    try {
+      Restart restartRun = new Restart(restartFolder);
+      data = restartRun.readDataTextFile("dataCatalysis000.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(CatalysisSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    ArrayList readDataLastLine = data.get(data.size() - 1);
+    ArrayList refData = new ArrayList();
+    refData.add(4.55906E-5);
+    refData.add(0.005);
+    refData.add(0.045);
+    refData.add(0.995);
+    refData.add(0.95);
+    refData.add(5013.0);
+    refData.add(4938.0);
+    refData.add(47.0);
+    refData.add(1.0);
+    refData.add(0.0);
+    refData.add(5.0);
+    refData.add(1.0);
+    refData.add(41.0);
+    refData.add(1.0);
+    refData.add(399.0);
+    refData.add(31.0);
+    refData.add(4.0);
+    System.out.println(refData);
+    assertArrayEquals(refData.toArray(), readDataLastLine.toArray());
+  }
   
   private void doCatalysisTest(Parser parser) {
     AbstractSimulation simulation = new CatalysisSimulation(parser);
@@ -210,6 +235,7 @@ public class CatalysisSimulationTest {
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
+    restartFolder = simulation.getRestartFolderName();
 
     simulatedSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
     simulatedTime = simulation.getSimulatedTime();
