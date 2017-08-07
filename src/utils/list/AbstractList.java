@@ -50,6 +50,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   public void addTime(double time) {
     this.time += time;
   }
+  
   public void addTime() {
     deltaTime = getDeltaTime(computeTime);
     computeTime = false;
@@ -142,6 +143,13 @@ public abstract class AbstractList implements IProbabilityHolder {
     totalAtoms = 0;
     removalsSinceLastCleanup = 0;
     computeTime = true;
+  }
+  
+  /**
+   * Method to set time to zero. Useful for catalysis to measure TOF.
+   */
+  public void resetTime() {
+    time = 0;
   }
     
   public abstract AbstractAtom getAtomAt(int pos);
