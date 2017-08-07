@@ -81,7 +81,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   AtomsCollection col;
   private final boolean automaticCollections;
   
-  public CatalysisKmc(Parser parser) {
+  public CatalysisKmc(Parser parser, String restartFolder) {
     super(parser);
     CatalysisLattice catalysisLattice = new CatalysisLattice(parser.getHexaSizeI(), parser.getHexaSizeJ());
     catalysisLattice.init();
@@ -97,7 +97,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       adsorptionData = new ArrayList<>();
     }
     numberOfCo2 = parser.getNumberOfCo2();
-    restart = new Restart(measureDiffusivity);
+    restart = new Restart(measureDiffusivity, restartFolder);
     sites = new IAtomsCollection[4];
     col = new AtomsCollection((CatalysisLattice) getLattice());
     // Either a tree or array 
@@ -257,6 +257,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
         stationary = true;
         stationaryStep = simulatedSteps;
+        //getList().resetTime();
+        restart.resetCatalysis();
       }
       if (destinationAtom != null) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 

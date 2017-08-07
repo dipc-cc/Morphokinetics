@@ -23,8 +23,8 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
   private double[] reactionRateCoOCoCusCoCus; // Only for Farkas
   private double[] diffusionRateCoCusCoCus; // Only for Farkas
   
-  public CatalysisFarkasKmc(Parser parser) {
-    super(parser);
+  public CatalysisFarkasKmc(Parser parser, String restartFolder) {
+    super(parser, restartFolder);
   }
   
   @Override
