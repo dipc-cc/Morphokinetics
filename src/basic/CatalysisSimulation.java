@@ -45,7 +45,7 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
         System.out.println("Rates not set. Execution will fail.");
     }
     if (getParser().getRatesLibrary().equals("farkas")) {
-      setKmc(new CatalysisFarkasKmc(getParser()));
+      setKmc(new CatalysisFarkasKmc(getParser(), getRestartFolderName()));
     } else {
       setKmc(new CatalysisKmc(getParser(), getRestartFolderName()));
     }
