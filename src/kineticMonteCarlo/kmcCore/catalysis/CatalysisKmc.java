@@ -273,8 +273,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       sizes[DIFFUSION] = sites[DIFFUSION].size();
       if (stationary)
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
-      if (aeOutput) {
-        activationEnergy.printAe(restart.getExtraWriter(), (float) getTime());
+      if (aeOutput && stationary) {
+        activationEnergy.printAe(restart.getExtraWriters());
       }
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0 && stationary) {
@@ -288,7 +288,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int returnValue = 0;
 
     while (getLattice().getCoverage() < maxCoverage && co2sum != numberOfCo2) {
-      activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true));
+      activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
       if (performSimulationStep()) {
         break;
       }
