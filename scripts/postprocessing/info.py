@@ -45,6 +45,12 @@ def getTemperatures():
     temperatures.sort()
     return temperatures
 
+
+def getPressures():
+    temperatures = glob.glob("[0-9]*")
+    temperatures = np.array(temperatures).astype(float)
+    temperatures.sort()
+    return temperatures
     
 def getInputParameters(fileName = ""):
     r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC = getInformationFromFile(fileName)
