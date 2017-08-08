@@ -266,7 +266,11 @@ class RestartLow {
           if (token.equals("#")) {
             break;
           }
-          data.get(data.size()-1).add(new Double(token));
+          try {
+            data.get(data.size()-1).add(new Double(token));
+          } catch (NumberFormatException e) {
+            break;
+          }
         }
         line = in.readLine();
       }
