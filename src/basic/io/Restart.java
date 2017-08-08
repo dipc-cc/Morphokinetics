@@ -48,8 +48,10 @@ public class Restart {
    * an atom is deposited and attached to an island.
    */
   private boolean extraOutput2;
+  private final boolean isCatalysis;
   private String outDataFormat;
   private PrintWriter outData;
+  private PrintWriter outDataAe[];
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
   private PrintWriter outCatalysis;
@@ -70,6 +72,7 @@ public class Restart {
   public Restart() {
     folder = "results/";
     createFolder(folder);
+    isCatalysis = false;
   }
 
   public Restart(String restartFolder) {
@@ -78,6 +81,7 @@ public class Restart {
       folder += "/";
     }
     createFolder(restartFolder);
+    isCatalysis = false;
   }
   
   /**
@@ -115,6 +119,7 @@ public class Restart {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
     }
+    isCatalysis = false;
   }
   
   public Restart(boolean catalysisOutput, String restartFolder) {
@@ -127,6 +132,7 @@ public class Restart {
     if (catalysisOutput) {
       //initCatalysis(iteration);
     }
+    isCatalysis = true;
   }
   
   /**
@@ -353,6 +359,10 @@ public class Restart {
     return outData;
   }
   
+  public PrintWriter[] getExtraWriters() {
+    return outDataAe;
+  }
+  
   /**
    * Reads a surface from a (binary) file and it reduces it surface by the given factor.
    *
@@ -423,7 +433,7 @@ public class Restart {
 
   public void flushExtra() {
     if (extraOutput) {
-    outData.flush();
+      outData.flush();
     }
     if (extraOutput2) {
     outDeltaAttachments.flush();
@@ -468,7 +478,9 @@ public class Restart {
     }
     previousTime = 0;
     co2P = new long[4];
-    initCatalysis(iteration++);
+    if (isCatalysis) {
+      initCatalysis(iteration++);
+    }
   }
   
   private void initCatalysis(int simulationNumber) {
@@ -488,6 +500,16 @@ public class Restart {
       fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
       outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outData.println("# File " + fileName);
+      outDataAe = new PrintWriter[6];
+      
+      String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList", 
+        "PossibleDiscrete", "RatioTimesPossible", "Multiplicity"};
+      for (int i = 0; i < names.length; i++) {
+        fileName = format("%sdataAe%s%03d.txt", folder, names[i], simulationNumber);
+        outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+        outData.println("# File " + fileName);
+        outDataAe[i] = outData;
+      }
     } catch (IOException e) {
       Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
     }
