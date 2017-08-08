@@ -24,11 +24,11 @@ public class ActivationEnergy {
   /**
    * Attribute to count processes that happened. Used to compute activation energy per each rate.
    */
-  private int[][] histogramSuccess;
-  private double[][] histogramPossible;
-  private long[][] histogramPossibleCounter;
-  private double[][] histogramPossibleTmp;
-  private long[][] histogramPossibleCounterTmp;
+  private Integer[][] histogramSuccess;
+  private Double[][] histogramPossible;
+  private Long[][] histogramPossibleCounter;
+  private Double[][] histogramPossibleTmp;
+  private Long[][] histogramPossibleCounterTmp;
   private final ArrayList<AbstractAtom> surface;
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
@@ -67,11 +67,20 @@ public class ActivationEnergy {
         length = 2;
         numberOfNeighbours = 4;
       }
-      histogramPossible = new double[length][length];
-      histogramPossibleCounter = new long[length][length];
-      histogramPossibleTmp = new double[length][length];
-      histogramPossibleCounterTmp = new long[length][length];
-      histogramSuccess = new int[length][length];
+      histogramPossible = new Double[length][length];
+      histogramPossibleCounter = new Long[length][length];
+      histogramPossibleTmp = new Double[length][length];
+      histogramPossibleCounterTmp = new Long[length][length];
+      histogramSuccess = new Integer[length][length];
+      for (int i = 0; i < length; i++) {
+        for (int j = 0; j < length; j++) {
+          histogramPossible[i][j] = new Double(0);
+          histogramPossibleCounter[i][j] = new Long(0);
+          histogramPossibleTmp[i][j] = new Double(0);
+          histogramPossibleCounterTmp[i][j] = new Long(0);
+          histogramSuccess[i][j] = new Integer(0);
+        }
+      }
     }
     previousProbability = 0;
   }
@@ -85,12 +94,13 @@ public class ActivationEnergy {
    * 
    * @param surface
    * @param elapsedTime 
+   * @param stationary
    */
-  public void updatePossibles(Iterator<CatalysisAtom> surface, double elapsedTime) {
-    if (doActivationEnergyStudy) {
+  public void updatePossibles(Iterator<CatalysisAtom> surface, double elapsedTime, boolean stationary) {
+    if (doActivationEnergyStudy && stationary) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       
-      histogramPossibleTmp = new double[length][length];
+      histogramPossibleTmp = initDouble(length);
       while (surface.hasNext()) {
         CatalysisAtom atom = surface.next();
         for (int pos = 0; pos < numberOfNeighbours; pos++) {
@@ -113,8 +123,8 @@ public class ActivationEnergy {
       // it is counting twice each reaction, so dividing by 2
       for (int i = 0; i < histogramPossibleCounter.length; i++) {
         for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
-          histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j];
-          histogramPossibleCounterTmp[i][j] = (long) histogramPossibleTmp[i][j];
+          histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j].longValue();
+          histogramPossibleCounterTmp[i][j] = histogramPossibleTmp[i][j].longValue();
         }
       }
     }
@@ -123,8 +133,8 @@ public class ActivationEnergy {
   public void updatePossibles(Iterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
-        histogramPossibleTmp = new double[length][length];
-        histogramPossibleCounterTmp = new long[length][length];
+        histogramPossibleTmp = initDouble(length);
+        histogramPossibleCounterTmp = initLong(length);
         // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
         while (surface.hasNext()) {
           AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.next();
@@ -164,11 +174,11 @@ public class ActivationEnergy {
     surface.clear();
     previousProbability = 0;
     if (aeOutput) {
-      histogramPossible = new double[length][length];
-      histogramPossibleCounter = new long[length][length];
-      histogramPossibleTmp = new double[length][length];
-      histogramPossibleCounterTmp = new long[length][length];
-      histogramSuccess = new int[length][length];
+      histogramPossible = initDouble(length);
+      histogramPossibleCounter = initLong(length);
+      histogramPossibleTmp = initDouble(length);
+      histogramPossibleCounterTmp = initLong(length);
+      histogramSuccess = initInt(length);
     }
   }
   
@@ -176,67 +186,110 @@ public class ActivationEnergy {
     boolean printLineBreak = (coverage == -1);
     if (printLineBreak) print.println("Ae");
     else print.format(Locale.US, "%f %s", coverage, "AeInstantaneousDiscrete ");
-    for (int origin = 0; origin < histogramPossibleCounterTmp.length; origin++) {
-      if (printLineBreak) print.print("AeInstantaneousDiscrete ");
-      for (int destination = 0; destination < histogramPossibleCounterTmp[0].length; destination++) {
-        print.print(histogramPossibleCounterTmp[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
+    printAeLow(print, "AeInstantaneousDiscrete ", printLineBreak, histogramPossibleCounterTmp);
+    
     if (printLineBreak) print.println("Ae");
     else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeSuccess ");
-    for (int origin = 0; origin < histogramSuccess.length; origin++) {
-      if (printLineBreak) print.print("AeSuccess ");
-      for (int destination = 0; destination < histogramSuccess[0].length; destination++) {
-        print.print(histogramSuccess[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
-    //histogramPossible = ((LinearList) getList()).getHistogramPossible();
+    printAeLow(print, "AeSuccess ", printLineBreak, histogramSuccess);
+    
     if (printLineBreak) print.println("Ae");
     else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleFromList ");
-    for (int origin = 0; origin < length; origin++) {
-      if (printLineBreak) print.print("AePossibleFromList ");
-      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
-        print.print(histogramPossible[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
+    printAeLow(print, "AePossibleFromList ", printLineBreak, histogramPossible);
 
     if (printLineBreak) print.println("Ae");
     else print.format(Locale.US, "%s%f %s", "\n", coverage, "AePossibleDiscrete ");
-    for (int origin = 0; origin < histogramPossibleCounter.length; origin++) {
-      if (printLineBreak) print.print("AePossibleDiscrete ");
-      for (int destination = 0; destination < histogramPossibleCounter[0].length; destination++) {
-        print.print(histogramPossibleCounter[origin][destination] + " ");
-      }
-      if (printLineBreak) print.println();
-    }
+    printAeLow(print, "AePossibleDiscrete ", printLineBreak, histogramPossibleCounter);
     
-    double[][] ratioTimesPossible = new double[histogramPossible.length][histogramPossible[0].length];
     if (printLineBreak) print.println("Ae");
     else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeRatioTimesPossible ");
+    Double[][] ratioTimesPossible = new Double[histogramPossible.length][histogramPossible[0].length];
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      if (printLineBreak) print.print("AeRatioTimesPossible ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         ratioTimesPossible[origin][destination] = rates[origin][destination] * histogramPossible[origin][destination];
-        print.print(ratioTimesPossible[origin][destination] + " ");
       }
-      if (printLineBreak) print.println();
     }
+    printAeLow(print, "AeRatioTimesPossible ", printLineBreak, ratioTimesPossible);
     
-    double[][] multiplicity = new double[histogramPossible.length][histogramPossible[0].length];
     if (printLineBreak) print.println("Ae");
     else print.format(Locale.US, "%s%f %s", "\n", coverage, "AeMultiplicity ");
+    Double[][] multiplicity = new Double[histogramPossible.length][histogramPossible[0].length];
     for (int origin = 0; origin < histogramPossible.length; origin++) {
-      if (printLineBreak) print.print("AeMultiplicity ");
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
         multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
-        print.print(multiplicity[origin][destination] + " ");
+      }
+    }
+    printAeLow(print, "AeMultiplicity ", printLineBreak, multiplicity);
+    print.println();
+    print.flush();
+  }
+  
+  public void printAe(PrintWriter print[]) {
+    boolean printLineBreak = false;
+    
+    printAeLow(print[0], "", printLineBreak, histogramPossibleCounterTmp); //AeInstantaneousDiscrete
+    printAeLow(print[1], "", printLineBreak, histogramSuccess); //AeSuccess 
+    printAeLow(print[2], "", printLineBreak, histogramPossible); //AePossibleFromList
+    printAeLow(print[3], "", printLineBreak, histogramPossibleCounter); //AePossibleDiscrete
+    
+    Double[][] ratioTimesPossible = new Double[histogramPossible.length][histogramPossible[0].length];
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        ratioTimesPossible[origin][destination] = rates[origin][destination] * histogramPossible[origin][destination];
+      }
+    }
+    printAeLow(print[4], "", printLineBreak, ratioTimesPossible); //AeRatioTimesPossible
+    
+    Double[][] multiplicity = new Double[histogramPossible.length][histogramPossible[0].length];
+    for (int origin = 0; origin < histogramPossible.length; origin++) {
+      for (int destination = 0; destination < histogramPossible[0].length; destination++) {
+        multiplicity[origin][destination] = histogramSuccess[origin][destination] / ratioTimesPossible[origin][destination];
+      }
+    }
+    printAeLow(print[5], "", printLineBreak, multiplicity); //AeMultiplicity
+    //*/
+    for (int i = 0; i < print.length; i++) {
+      print[i].println();
+      print[i].flush();
+    }
+  }
+  
+  private void printAeLow(PrintWriter print, String name, boolean printLineBreak, Object[][] histogram) {
+    for (int origin = 0; origin < histogram.length; origin++) {
+      if (printLineBreak) print.print(name);
+      for (int destination = 0; destination < histogram[0].length; destination++) {
+        print.print(histogram[origin][destination] + " ");
       }
       if (printLineBreak) print.println();
     }
-    print.println();
-    print.flush();
+  }
+    
+  private Double[][] initDouble(int length) {
+    Double[][] histogram = new Double[length][length];
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        histogram[i][j] = new Double(0);
+      }
+    }
+    return histogram;
+  }
+  
+  private Long[][] initLong(int length) {
+    Long[][] histogram = new Long[length][length];
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        histogram[i][j] = new Long(0);
+      }
+    }
+    return histogram;
+  }
+  
+  private Integer[][] initInt(int length) {
+    Integer[][] histogram = new Integer[length][length];
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        histogram[i][j] = new Integer(0);
+      }
+    }
+    return histogram;
   }
 }
