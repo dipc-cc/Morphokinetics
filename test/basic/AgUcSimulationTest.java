@@ -124,20 +124,41 @@ public class AgUcSimulationTest {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
     assertEquals(2.1246955660861665E-6, simulatedTime, 0.0);
-    String ref = "0.098370\t2.11089e-06\t0\t7\t82950000.000000\t2247972.682327\t0\t24780\t33590328769005.703000\t3.038708\t181\t324\t27950.000722\t1914757.064401\t18\t24599\t0\t25\t69\t59\t24\t4\t0\t1335\t147\t90\t56\t21\t9\t1";
-    String extraFile = restart.readFile("results/dataEvery1percentAndNucleation.txt");
-    String read = extraFile.substring(55268, 55447);
-    assertEquals(ref.trim(), read.trim());
+    ArrayList<ArrayList> data = null;
+    Restart restartRun = new Restart("results/");
+    try {
+      data = restartRun.readDataTextFile("dataEvery1percentAndNucleation.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(CatalysisSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    ArrayList readDataLastLine = data.get(data.size() - 7);
+    Double[] ref = new Double[]{0.098370, 2.11089e-06, 0.0, 7.0, 82950000.000000, 2247972.682327, 0.0, 
+      24780.0, 33590328769005.703000, 3.038708, 181.0, 324.0, 27950.000722, 1914757.064401, 18.0, 
+      24599.0, 0.0, 25.0, 69.0, 59.0, 24.0, 4.0, 0.0, 1335.0, 147.0, 90.0, 56.0, 21.0, 9.0, 1.0};
+    Object[] read = readDataLastLine.toArray();
+    assertArrayEquals(ref, read);
     
-    ref = "0.09945652 2.122443278862133E-6 2.5713448306030566E-10 5.674102886400366E-8 1.3872178293216556E-8 8.405044982769268E-7 2248299.6039003315 7";
-    extraFile = restart.readFile("results/deltaTimeBetweenTwoAttachments.txt");
-    read = extraFile.substring(21314,21453);
-    assertEquals(ref.trim(), read.trim());
+    ref = new Double[]{0.09945652, 2.122443278862133E-6, 2.5713448306030566E-10, 5.674102886400366E-8, 
+      1.3872178293216556E-8, 8.405044982769268E-7, 2248299.6039003315, 7.0};
+    try {
+      data = restartRun.readDataTextFile("deltaTimeBetweenTwoAttachments.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(CatalysisSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    readDataLastLine = data.get(data.size() - 1);
+    read = readDataLastLine.toArray();
+    assertArrayEquals(ref, read);
     
-    ref = "0.09945652 2.122443278862133E-6 8.981666458090267E-12 5.0618686787943304E-8 5.513717703413084E-9 8.435988086222019E-7 2248299.6039003315";
-    extraFile = restart.readFile("results/deltaTimePerAtom.txt");
-    read = extraFile.substring(21175,21311);
-    assertEquals(ref.trim(), read.trim());
+    ref = new Double[]{0.09945652, 2.122443278862133E-6, 8.981666458090267E-12, 5.0618686787943304E-8,
+      5.513717703413084E-9, 8.435988086222019E-7, 2248299.6039003315};
+    try {
+      data = restartRun.readDataTextFile("deltaTimePerAtom.txt");
+    } catch (FileNotFoundException ex) {
+      Logger.getLogger(CatalysisSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    readDataLastLine = data.get(data.size() - 1);
+    read = readDataLastLine.toArray();
+    assertArrayEquals(ref, read);
   }
     
     
