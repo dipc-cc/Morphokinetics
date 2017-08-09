@@ -13,7 +13,7 @@ import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
 /**
  * Really simple unit cell, which will contain only one atom.
  *
- * @author Karmele Valencia
+ * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
 public class CatalysisUc extends AbstractGrowthUc implements IUc{
 

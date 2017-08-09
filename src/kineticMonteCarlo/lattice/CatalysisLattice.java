@@ -22,7 +22,7 @@ import utils.LinearRegression;
 
 /**
  *
- * @author Karmele Valencia
+ * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
 public class CatalysisLattice extends AbstractGrowthLattice {
 
