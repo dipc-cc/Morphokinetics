@@ -223,14 +223,19 @@ public class ActivationEnergy {
     print.flush();
   }
   
-  public void printAe(PrintWriter print[]) {
+  public void printAe(PrintWriter print[], double time) {
     boolean printLineBreak = false;
     
+    print[0].print(time + "\t");
     printAeLow(print[0], "", printLineBreak, histogramPossibleCounterTmp); //AeInstantaneousDiscrete
+    print[1].print(time + "\t");
     printAeLow(print[1], "", printLineBreak, histogramSuccess); //AeSuccess 
+    print[2].print(time + "\t");
     printAeLow(print[2], "", printLineBreak, histogramPossible); //AePossibleFromList
+    print[3].print(time + "\t");
     printAeLow(print[3], "", printLineBreak, histogramPossibleCounter); //AePossibleDiscrete
-    
+
+    print[4].print(time + "\t");
     Double[][] ratioTimesPossible = new Double[histogramPossible.length][histogramPossible[0].length];
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -238,7 +243,8 @@ public class ActivationEnergy {
       }
     }
     printAeLow(print[4], "", printLineBreak, ratioTimesPossible); //AeRatioTimesPossible
-    
+
+    print[5].print(time + "\t");
     Double[][] multiplicity = new Double[histogramPossible.length][histogramPossible[0].length];
     for (int origin = 0; origin < histogramPossible.length; origin++) {
       for (int destination = 0; destination < histogramPossible[0].length; destination++) {
@@ -246,7 +252,7 @@ public class ActivationEnergy {
       }
     }
     printAeLow(print[5], "", printLineBreak, multiplicity); //AeMultiplicity
-    //*/
+
     for (int i = 0; i < print.length; i++) {
       print[i].println();
       print[i].flush();
@@ -257,7 +263,7 @@ public class ActivationEnergy {
     for (int origin = 0; origin < histogram.length; origin++) {
       if (printLineBreak) print.print(name);
       for (int destination = 0; destination < histogram[0].length; destination++) {
-        print.print(histogram[origin][destination] + " ");
+        print.print(histogram[origin][destination] + "\t");
       }
       if (printLineBreak) print.println();
     }

@@ -274,7 +274,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (stationary)
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
       if (aeOutput && stationary) {
-        activationEnergy.printAe(restart.getExtraWriters());
+        activationEnergy.printAe(restart.getExtraWriters(), getTime());
       }
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0 && stationary) {
