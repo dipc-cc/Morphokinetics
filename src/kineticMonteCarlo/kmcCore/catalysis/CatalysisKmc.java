@@ -35,16 +35,16 @@ import utils.list.atoms.IAtomsCollection;
  */
 public class CatalysisKmc extends AbstractGrowthKmc {
 
-  private final boolean measureDiffusivity;
+  private final boolean outputData;
   private long simulatedSteps;
   private long[] steps;
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private long co2sum;
   /** Previous instant co2sum. For output */
   private long co2prv;
+  private final int co2max;
   private int totalNumOfSteps;
-  private int numberOfCo2;
-  private int numStepsEachData;
+  private int outputEvery;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
   private double adsorptionRateCOPerSite;
@@ -74,7 +74,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   /**
    * Activation energy output during the execution
    */
-  private final boolean aeOutput;
+  private final boolean outputAe;
   private int numGaps;
   private int counterSitesWith4OccupiedNeighbours;
   private boolean stationary;
@@ -92,14 +92,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     numGaps = 0;
 
     simulatedSteps = 0;
-    measureDiffusivity = parser.outputData();
-    if (measureDiffusivity) {
+    outputData = parser.outputData();
+    if (outputData) {
       totalNumOfSteps = parser.getNumberOfSteps();
-      numStepsEachData = parser.getOutputEvery();
+      outputEvery = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
-    numberOfCo2 = parser.getNumberOfCo2();
-    restart = new Restart(measureDiffusivity, restartFolder);
+    co2max = parser.getNumberOfCo2();
+    restart = new Restart(outputData, restartFolder);
     sites = new IAtomsCollection[4];
     col = new AtomsCollection((CatalysisLattice) getLattice());
     // Either a tree or array 
@@ -122,7 +122,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     co2 = new long[4];
     co2sum = 0;
     activationEnergy = new ActivationEnergy(parser);
-    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
+    outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
     stationaryStep = -1;
@@ -197,7 +197,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       diffusionRateO = rates.getDiffusionRates(O);
     }
     
-    if (aeOutput) {
+    if (outputAe) {
       double[][] processProbs2D = new double[2][2];
 
       for (int i = 0; i < 2; i++) {
@@ -255,7 +255,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         break;
     }
     simulatedSteps++;
-    if (measureDiffusivity && (simulatedSteps + 1) % numStepsEachData == 0) {
+    if (outputData && (simulatedSteps + 1) % outputEvery == 0) {
       if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
         stationary = true;
         stationaryStep = simulatedSteps;
@@ -277,13 +277,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (stationary)
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
     }
-    
-    if (aeOutput && stationary && co2sum % 10 == 0 && co2prv != co2sum) {
+    if (outputAe && stationary && co2sum % 10 == 0 && co2prv != co2sum) {
       System.out.println(co2sum);
       activationEnergy.printAe(restart.getExtraWriters(), getTime());
       co2prv = co2sum;
     }
-    if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0 && stationary) {
+    if (outputData && (simulatedSteps + 1) % (outputEvery * 10) == 0 && stationary) {
       restart.flushCatalysis();
     }
     return simulatedSteps + 1 == totalNumOfSteps;
@@ -293,7 +292,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage && co2sum != numberOfCo2) {
+    while (getLattice().getCoverage() < maxCoverage && co2sum != co2max) {
       activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
       if (performSimulationStep()) {
         break;
@@ -301,7 +300,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       checkSizes();
     }
     
-    if (measureDiffusivity) {
+    if (outputData) {
       adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
               (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
@@ -349,7 +348,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     getLattice().reset();
     getList().reset();
     restart.reset();
-    if (measureDiffusivity) {
+    if (outputData) {
       adsorptionData = new ArrayList<>();
     }
     steps = new long[4];
