@@ -8,7 +8,6 @@ package basic;
 import basic.io.Restart;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -207,11 +206,11 @@ public class CatalysisSimulationTest {
       Logger.getLogger(CatalysisSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
     ArrayList readDataLastLine = data.get(data.size() - 1);
-    Double[] refData = new Double[]{4.55906E-5, 0.005, 0.045, 0.995, 0.95, 5013.0, 4938.0,
+    Double[] ref = new Double[]{4.55906E-5, 0.005, 0.045, 0.995, 0.95, 5013.0, 4938.0,
       47.0, 1.0, 0.0, 5.0, 1.0, 41.0, 1.0, 399.0, 31.0, 4.0};
     Object[] read = readDataLastLine.toArray();
     
-    assertArrayEquals(refData, read);
+    assertArrayEquals(ref, read);
   }
   
   private void doCatalysisTest(Parser parser) {
