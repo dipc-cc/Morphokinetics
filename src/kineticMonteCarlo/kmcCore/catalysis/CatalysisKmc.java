@@ -40,6 +40,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private long[] steps;
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   private long co2sum;
+  /** Previous instant co2sum. For output */
+  private long co2prv;
   private int totalNumOfSteps;
   private int numberOfCo2;
   private int numStepsEachData;
@@ -259,6 +261,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         stationaryStep = simulatedSteps;
         getList().resetTime();
         restart.resetCatalysis();
+        co2prv = 0;
       }
       if (destinationAtom != null) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
@@ -273,9 +276,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       sizes[DIFFUSION] = sites[DIFFUSION].size();
       if (stationary)
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
-      if (aeOutput && stationary) {
-        activationEnergy.printAe(restart.getExtraWriters(), getTime());
-      }
+    }
+    
+    if (aeOutput && stationary && co2sum % 10 == 0 && co2prv != co2sum) {
+      System.out.println(co2sum);
+      activationEnergy.printAe(restart.getExtraWriters(), getTime());
+      co2prv = co2sum;
     }
     if (measureDiffusivity && (simulatedSteps + 1) % (numStepsEachData * 10) == 0 && stationary) {
       restart.flushCatalysis();
