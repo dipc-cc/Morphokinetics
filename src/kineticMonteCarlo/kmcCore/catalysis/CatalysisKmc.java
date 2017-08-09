@@ -278,7 +278,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
     }
     if (outputAe && stationary && co2sum % 10 == 0 && co2prv != co2sum) {
-      System.out.println(co2sum);
       activationEnergy.printAe(restart.getExtraWriters(), getTime());
       co2prv = co2sum;
     }
