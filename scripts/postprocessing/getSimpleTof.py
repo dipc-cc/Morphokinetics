@@ -22,9 +22,12 @@ def getSimpleTof():
 
 workingPath = os.getcwd()
 for f in inf.getTemperatures():
-    os.chdir(str(f)+"/results")
-    runFolder = glob.glob("*/");
-    os.chdir(runFolder[0])
+    try:
+        os.chdir(str(f)+"/results")
+        runFolder = glob.glob("*/");
+        os.chdir(runFolder[0])
+    except FileNotFoundError:
+        pass
     os.getcwd()
     tof = 0
     try:
