@@ -3,9 +3,11 @@ import os
 import glob
 import math
 import numpy as np
+import energies as e
 
 exclude = 0
 
+    
 class fileData:
     def __init__(self, data):
         self.r_tt = data[0] # terrace to terrace rate
@@ -19,17 +21,17 @@ class fileData:
         self.maxC = data[8] # max simulated coverage
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
 
+        
     def getRatios(self):
         ratios = 0
-        if self.calc == "AgUc":
-            ratios = getRatio(self.temp, getHexagonalEnergies())
-        elif self.calc == "basic":
-            if self.rLib == "version2":
-                ratios = getRatio(self.temp, getBasic2Energies())
-            else:
-                ratios = getRatio(self.temp, getBasicEnergies())
-        else:
-            ratios = getRatio(self.temp, getGrapheneSimpleEnergies())
+        calcSwitcher = {
+            "AgUc": e.agUc,
+            "basic": e.basic,
+            "graphene": e.graphene,
+            "catalysis": e.catalysis,
+        }
+        func = calcSwitcher.get(self.calc, lambda: "nothing")
+        ratios = e.getRatio(self.calc, self.temp, func(self))
         return ratios
 
 
@@ -60,12 +62,17 @@ def getInputParameters(fileName = ""):
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
+    if re.match("catalysis", calcType):
+        maxA = 4 # Production of CO2, CO^B+O^B | CO^B+O^C | CO^C+O^B | CO^C+O^C
     return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA])
 
 
 def getInformationFromFile(fileName):
     if fileName == "":
-        fileName = glob.glob("../output*")[0]
+        try:
+            fileName = glob.glob("../output*")[0]
+        except IndexError:
+            fileName = glob.glob("../../output*")[-1]
     f = open(fileName)
     hit = False
     for line in f:
@@ -81,10 +88,13 @@ def getInformationFromFile(fileName):
             temp = float(list(filter(None,re.split(" |,",line)))[1])
         if re.search("depositionFlux", line):
             flux = float(list(filter(None,re.split(" |,",line)))[1])
-        if re.search("coverage", line):
+        if re.search("\"coverage\"", line):
             maxC = int(float(list(filter(None,re.split(" |,",line)))[1]))
         if hit:
-            r_tt = float(re.split(' ', line)[0])
+            try:
+                r_tt = float(re.split(' ', line)[0])
+            except ValueError:
+                r_tt = 0
             return r_tt, temp, flux, calc, ratesLib, sizX, sizY, maxC
         if re.match("These", line):
             hit = True
@@ -389,96 +399,7 @@ def splitAeFiles(fileName = "dataEvery1percentAndNucleation.txt"):
 def splitHistogramFiles():
     os.system("grep histo dataEvery1percentAndNucleation.txt | sed -e 's/histogram\|\]\|\[\|,/ /g' | awk -v n=-1 '{if ($1>prev) {n++} prev=$1; {print > \"histogram\"n\".txt\"}}'")
 
-    
-def getHexagonalEnergies():
-    energies = 999999999*np.ones(49, dtype=float)
-    energies[0:4] = 0.10
-    energies[8:12] = 0.25
-    energies[15:20] = 0.33
-    energies[24:27] = 0.42
-    energies[7] = 1.5
-    energies[14] = 1.58
-    energies[21] = 2.0
-    energies[22:24] = 0.75
-    return energies
 
-
-def getBasicEnergies():
-    energies = 999999999*np.ones(16, dtype=float)
-    energies[0:4] = 0.2
-    energies[4] = 0.45
-    energies[5] = 0.36
-    energies[6:8] = 0.35
-    energies[8] = 0.535
-    energies[9:12] = 0.435
-    return energies
-
-
-def getBasic2Energies():
-    energies = 999999999*np.ones(16, dtype=float)
-    energies[0:4] = 0.1
-    energies[5:8] = 0.4
-    energies[11] = 0.4
-    return energies
-
-
-def getGrapheneSimpleEnergies():
-    energies = 999999999*np.ones(16, dtype=float)
-    energies[0:4]  = 0.5
-    energies[4]    = 2.6
-    energies[5:7]  = 1.8
-    energies[8]    = 3.9
-    energies[9:11] = 2.6
-    return energies
-        
-
-def getRatio(temperature, energies):
-    kb = 8.617332e-5
-    p = 1e13
-    return p * np.exp(-energies/kb/temperature)
-
-
-def defineRanges(calculationMode, ratesLibrary, temperatures):
-    ranges = []
-    if calculationMode == "AgUc":
-        indexes = np.where((temperatures >= 90) & (temperatures <= 150))
-        iSl = indexes[0][0]
-        iFl = indexes[0][-1]
-        indexes = np.where((temperatures >= 150) & (temperatures <= 400))
-        iSm = indexes[0][0]
-        iFm = indexes[0][-1]
-        indexes = np.where((temperatures >= 400) & (temperatures <= 1100))
-        iSh = indexes[0][0]
-        iFh = indexes[0][-1]
-        #ranges = list(range(0,30,3))
-    elif calculationMode == "basic":
-        if ratesLibrary == "version2":
-            # it has 4 ranges
-            ranges = list([0, 19, 33, 48, 58])
-        else:
-            indexes = np.where((temperatures >= 120) & (temperatures <= 190))
-            iSl = indexes[0][0]
-            indexes = np.where((temperatures >= 190) & (temperatures <= 270))
-            iSm = indexes[0][0]
-            indexes = np.where((temperatures >= 270) & (temperatures <= 339))
-            iSh = indexes[0][0]
-            iFh = indexes[0][-1]
-            #ranges = list(range(0,30,3))
-    else:
-        indexes = np.where((temperatures >= 200) & (temperatures <= 500))
-        iSl = indexes[0][0]
-        indexes = np.where((temperatures >= 500) & (temperatures <= 1000))
-        iSm = indexes[0][0]
-        indexes = np.where((temperatures >= 1000) & (temperatures <= 1500))
-        iSh = indexes[0][0]
-        iFh = indexes[0][-1]
-
-    if len(ranges) > 0:
-        return ranges
-    else:
-        return list([iSl, iSm, iSh, iFh])
-
-    
 def smallerFont(ax, size=10):
     ax.tick_params(axis='both', which='major', labelsize=size)
     for tick in ax.xaxis.get_major_ticks():

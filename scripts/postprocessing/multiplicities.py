@@ -264,7 +264,7 @@ else:
     
 labelAlfa.append(r"$E_a \; \frac{\langle N_h \rangle}{t}$")
 # define ranges
-rngt = inf.defineRanges(calculationMode, p.rLib, temperatures)
+rngt = e.defineRanges(calculationMode, p.rLib, temperatures)
 
 tempOmegaCov = []
 tempEaCov = []
