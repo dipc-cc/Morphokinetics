@@ -21,7 +21,7 @@ public class CatalysisFarkasRates extends CatalysisRates {
     super(temperature);
     double repulsion = 10.6 / 2.0;
     
-    double kJeV = 1.04e-2;
+    double kJeV = 1.0/96.485;
     
     double[] desorptionEnergiesCo = new double[2];
     desorptionEnergiesCo[BR] = 193 * kJeV;
