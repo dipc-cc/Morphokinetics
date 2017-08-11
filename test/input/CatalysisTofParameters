@@ -10,7 +10,7 @@
    psd: false,
    calculationMode: catalysis,
    outputData: true,
-   outputDataFormat: [ {type: catalysis}],
+   outputDataFormat: [ {type: catalysis}, {type: mko},],
    randomSeed: false,
    coverage: 100,
    withGui: false,

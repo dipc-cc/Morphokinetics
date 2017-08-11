@@ -197,7 +197,7 @@ public class CatalysisSimulationTest {
     for (int i = 0; i < ref0.length; i++) {
       assertArrayEquals(ref0[i], simulatedSurface[i], (float) 0.0001);
     }
-    assertEquals(4.559062277553586E-5, simulatedTime, 0.0);
+    assertEquals(4.52115466652838E-5, simulatedTime, 0.0);
     ArrayList<ArrayList> data = null;
     try {
       Restart restartRun = new Restart(restartFolder);
@@ -206,8 +206,8 @@ public class CatalysisSimulationTest {
       Logger.getLogger(CatalysisSimulationTest.class.getName()).log(Level.SEVERE, null, ex);
     }
     ArrayList readDataLastLine = data.get(data.size() - 1);
-    Double[] ref = new Double[]{4.55906E-5, 0.005, 0.045, 0.995, 0.95, 5013.0, 4938.0,
-      47.0, 1.0, 0.0, 5.0, 1.0, 41.0, 1.0, 399.0, 31.0, 4.0};
+    Double[] ref = new Double[]{4.52115e-05, 0.005, 0.05, 0.995, 0.95, 5014.0, 4938.0,
+      47.0, 1.0, 0.0, 5.0, 1.0, 41.0, 0.0, 400.0, 33.0, 0.0};
     Object[] read = readDataLastLine.toArray();
     
     assertArrayEquals(ref, read);
