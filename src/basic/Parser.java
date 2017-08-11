@@ -99,7 +99,7 @@ public class Parser {
   /**
    * See {@link #getNumberOfSteps() }.
    */
-  private int numberOfSteps;
+  private long numberOfSteps;
   /**
    * See {@link #getNumberOfCo2()}.
    */
@@ -426,7 +426,7 @@ public class Parser {
       numberOfSimulations = 10;
     }
     try {
-      numberOfSteps = (int) json.getDouble("numberOfSteps");
+      numberOfSteps = (long) json.getDouble("numberOfSteps");
     } catch (JSONException e) {
       numberOfSteps = -1;
     }
@@ -1097,7 +1097,7 @@ public class Parser {
    *
    * @return number of simulations.
    */
-  public int getNumberOfSteps() {
+  public long getNumberOfSteps() {
     return numberOfSteps;
   }
   

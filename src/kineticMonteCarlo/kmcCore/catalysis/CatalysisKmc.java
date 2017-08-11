@@ -43,7 +43,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   /** Previous instant co2sum. For output */
   private long co2prv;
   private final int co2max;
-  private int totalNumOfSteps;
+  private long maxSteps;
   private int outputEvery;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
@@ -93,8 +93,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     simulatedSteps = 0;
     outputData = parser.outputData();
+    maxSteps = parser.getNumberOfSteps();
     if (outputData) {
-      totalNumOfSteps = parser.getNumberOfSteps();
       outputEvery = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
@@ -284,7 +284,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (outputData && (simulatedSteps + 1) % (outputEvery * 10) == 0 && stationary) {
       restart.flushCatalysis();
     }
-    return simulatedSteps + 1 == totalNumOfSteps;
+    return simulatedSteps == maxSteps;
   }
 
   @Override
@@ -880,7 +880,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     System.out.format("\t%.4f", getCoverage(CO));
     System.out.format("\t%.4f", getCoverage(O));
     System.out.format("\t%d", co2sum);
-    System.out.format("\t%d", simulatedSteps);
+    System.out.format("\t%1.0e", (double)simulatedSteps);
     System.out.format("\t%d", stationaryStep);
   }
 }
