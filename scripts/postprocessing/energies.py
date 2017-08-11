@@ -162,10 +162,10 @@ def kiejna(temperatures):
     return list([iSl, iSm, iSh, iFh])
 
 def seitsonen(temperatures):
-    indexes = np.where((temperatures >= 300) & (temperatures <= 335))
+    indexes = np.where((temperatures >= 300) & (temperatures <= 330))
     iSl = indexes[0][0]
     iFl = indexes[0][-1]
-    indexes = np.where((temperatures >= 335) & (temperatures <= 345))
+    indexes = np.where((temperatures >= 330) & (temperatures <= 345))
     iSm = indexes[0][0]
     iFm = indexes[0][-1]
     indexes = np.where((temperatures >= 350) & (temperatures <= 370))
