@@ -192,7 +192,35 @@ def plotSimple(x, targt, rcmpt, error, ax, maxRanges, i, legend):
     else:
         ax2.set_ylabel("Relative error")
 
+    handles = [lgTargt, lgRcmpt, lgError]
     if legend and i == maxRanges-1:
-        ax.legend(handles=[lgTargt, lgRcmpt, lgError], loc="upper right", prop={'size':8})
+        ax.legend(handles=handles, loc="upper right", prop={'size':8})
+    return handles
         
-   
+def plotRandM(x, sum1, sum2, ax, handles, legend):
+    label = ["M (multiplicity)", " R (ratio)", "sum"]
+    cm = plt.get_cmap('Accent')
+    rev = np.sum(sum1) < 0
+    partialSum = sum1 + sum2
+    c = 0
+    lgR = []
+    if rev:
+        lg = ax.fill_between(x, sum2, color=cm(c/3), alpha=0.8, label=label[c])
+        lgR.append(lg)
+        c += 1
+    for i in range(0,2):
+        if rev:
+            lg = ax.fill_between(x, sum1, color=cm((c+i)/3), alpha=0.8, label=label[c+i])
+            lgR.append(lg)
+            sum1 = sum1 + sum2
+        else:
+            lg = ax.fill_between(x, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[c+i])
+            lgR.append(lg)
+            partialSum -= sum1
+    if legend:
+        handles = handles + lgR
+        ax.legend(handles=handles, loc=(0.3,0.7), prop={'size':8})
+        
+def plotOmega(x, y, ax, maxRanges, i):
+    cm = plt.get_cmap('Set2')
+    ax.fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i])

@@ -173,14 +173,13 @@ if len(sys.argv) > 1:
     rAndM = sys.argv[1] == "r"
     omegas = sys.argv[1] == "o"
     
-ax = []
 axarr[0].set_ylabel("eV")
 co2 = list(range(0,100))
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     targt = tempEaCov2[:,maxRanges-1-i]
     rcmpt = tempEaCo2[:,maxRanges-1-i]
     error = abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCo2[:,maxRanges-1-i])
-    lgEaCov2 = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
+    handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not rAndM and not omegas)
 
 plt.savefig("multiplicities.png", bbox_inches='tight')
@@ -191,24 +190,9 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         partialSum1 = np.sum(tempOmegaCo2[:,:,j]*(-tempEaMCo2[:,:,j]), axis=1)
         partialSum2 = np.sum(tempOmegaCo2[:,:,j]*(tempEaRCo2[:,:,j]), axis=1)
-        rev = np.sum(partialSum1) < 0
-        partialSum = partialSum1 + partialSum2
-        c = 0
-        lgR = []
-        if rev:
-            lgSum = axarr[maxRanges-1-j].fill_between(co2, partialSum2, color=cm(c/3), alpha=0.8, label=label[c])
-            c += 1
-        for i in range(0,2):
-            if rev:
-                lg = axarr[maxRanges-1-j].fill_between(co2,partialSum1, color=cm((c+i)/3), alpha=0.8, label=label[i])
-                lgR.append(lg)
-                partialSum1 = partialSum1 + partialSum2
-                
-            else:
-                lg = axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm((c+i)/3), alpha=0.8, label=label[i])
-                lgR.append(lg)
-                partialSum -= partialSum1
-    plt.figlegend((lgEaCov, lgEaCov2, lgErr, lgR[0], lgR[1], lgSum),("Activation energy", "Recomputed AE", "Error", "R", "sum", "M"), loc=(0.7,0.7), prop={'size':8})
+        mp.plotRandM(co2, partialSum1, partialSum2, axarr[maxRanges-1-j],
+                     handles, j == maxRanges-1)
+
     plt.savefig("multiplicitiesRandM.png", bbox_inches='tight')
 
 if (omegas):
