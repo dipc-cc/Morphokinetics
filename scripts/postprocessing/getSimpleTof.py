@@ -21,11 +21,16 @@ def getSimpleTof():
     
 
 workingPath = os.getcwd()
-for f in inf.getTemperatures():
+try:
+    iter = inf.getTemperatures()
+except ValueError:
+    iter = inf.getPressures()
+for f in iter:
     try:
         os.chdir(str(f)+"/results")
         runFolder = glob.glob("*/");
-        os.chdir(runFolder[0])
+        runFolder.sort()
+        os.chdir(runFolder[-1])
     except FileNotFoundError:
         pass
     os.getcwd()
