@@ -44,7 +44,7 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
   }
   
   @Override
-  double getDesorptionProbability(CatalysisAtom atom) {
+  double getDesorptionRate(CatalysisAtom atom) {
     double rate = desorptionRateCOPerSite[atom.getLatticeSite()];
     if (atom.getLatticeSite() == CUS) {
       if (atom.getCoCusNeighbours() > 0) {
@@ -62,7 +62,7 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
    * @return
    */
   @Override
-  double getReactionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+  double getReactionRate(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index;
     CatalysisAtom atomCo;
     CatalysisAtom atomO;
@@ -73,28 +73,28 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
       atomCo = neighbour;
       atomO = atom;
     }
-    double probability;
+    double rate;
     if (atomCo.getCoCusNeighbours() > 0) { // repulsion
-      probability = reactionRateCoOCoCusCoCus[atomCo.getCoCusNeighbours() - 1];
+      rate = reactionRateCoOCoCusCoCus[atomCo.getCoCusNeighbours() - 1];
     } else {
       index = 2 * atomCo.getLatticeSite() + atomO.getLatticeSite();
-      probability = reactionRateCoO[index];
+      rate = reactionRateCoO[index];
     }
-    return probability;
+    return rate;
   }
 
   @Override
-  double getDiffusionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+  double getDiffusionRate(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-    double probability;
+    double rate;
     if (atom.getType() == CO) {
-      probability = diffusionRateCO[index];
+      rate = diffusionRateCO[index];
       if (atom.getCoCusNeighbours() > 0) { // repulsion
-        probability = diffusionRateCoCusCoCus[atom.getCoCusNeighbours() - 1];
+        rate = diffusionRateCoCusCoCus[atom.getCoCusNeighbours() - 1];
       }
     } else {
-      probability = diffusionRateO[index];
+      rate = diffusionRateO[index];
     }
-    return probability;
+    return rate;
   }
 }

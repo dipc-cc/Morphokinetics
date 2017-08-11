@@ -662,7 +662,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     double oldDesorptionProbability = atom.getRate(DESORPTION);
     atom.setRate(DESORPTION, 0);
     if (atom.getType() == CO) {
-      double rate = getDesorptionProbability(atom);
+      double rate = getDesorptionRate(atom);
       atom.setRate(DESORPTION, rate);
     } else { // O
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
@@ -691,7 +691,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = atom.getNeighbour(i);
       if (neighbour.isOccupied() && neighbour.getType() == otherType) {
-        double rate = getReactionProbability(atom, neighbour); 
+        double rate = getReactionRate(atom, neighbour); 
         atom.addRate(REACTION, rate/2.0, i);
       }
     }
@@ -712,7 +712,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       CatalysisAtom neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied()) {
-        double probability = getDiffusionProbability(atom, neighbour);
+        double probability = getDiffusionRate(atom, neighbour);
         atom.addRate(DIFFUSION, probability, i);
       }
     }
@@ -751,7 +751,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @param atom CO molecule.
    * @return 
    */
-  double getDesorptionProbability(CatalysisAtom atom) {
+  double getDesorptionRate(CatalysisAtom atom) {
     return desorptionRateCOPerSite[atom.getLatticeSite()];
   }
   
@@ -774,7 +774,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * @param neighbour
    * @return 
    */
-  double getReactionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+  double getReactionRate(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index;
     if (atom.getType() == CO) {
       index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
@@ -786,7 +786,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return probability;
   }
   
-  double getDiffusionProbability(CatalysisAtom atom, CatalysisAtom neighbour) {
+  double getDiffusionRate(CatalysisAtom atom, CatalysisAtom neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     double probability;
     if (atom.getType() == CO) {
