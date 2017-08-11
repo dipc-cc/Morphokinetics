@@ -857,14 +857,15 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     System.out.format("%s\t\t%1.1e\n","CO^BR", desorptionRateCOPerSite[0]);
     System.out.format("%s\t\t%1.1e\n", "CO^CUS", desorptionRateCOPerSite[1]);
     System.out.format("%s\t%1.1e\n", "O^BR + O^BR", desorptionRateOPerSite[0]);
-    System.out.format("%s\t%1.1e\n", "O^CUS + O^CUS", desorptionRateOPerSite[3]);
     System.out.format("%s\t%1.1e\n", "O^BR + O^CUS", desorptionRateOPerSite[1]);
     System.out.format("%s\t%1.1e\n", "O^CUS + O^BR", desorptionRateOPerSite[2]);
+    System.out.format("%s\t%1.1e\n", "O^CUS + O^CUS", desorptionRateOPerSite[3]);
     System.out.println(" ------- ");
-    System.out.format("%s\t%1.1e\n", "CO^BR + O^CUS", reactionRateCoO[1]);
+    System.out.println("Reaction");
     System.out.format("%s\t%1.1e\n", "CO^BR + O^BR", reactionRateCoO[0]);
-    System.out.format("%s\t%1.1e\n", "CO^CUS + O^CUS", reactionRateCoO[3]);
+    System.out.format("%s\t%1.1e\n", "CO^BR + O^CUS", reactionRateCoO[1]);
     System.out.format("%s\t%1.1e\n", "CO^CUS + O^BR", reactionRateCoO[2]);
+    System.out.format("%s\t%1.1e\n", "CO^CUS + O^CUS", reactionRateCoO[3]);
     System.out.println(" ------- ");
     System.out.println("Diffusion");
     System.out.format("%s\t%1.1e\n", "CO^BR -> CO^BR  ", diffusionRateCO[0]);
@@ -876,9 +877,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     System.out.format("%s\t%1.1e\n", "O^BR -> O^CUS   ", diffusionRateO[1]);
     System.out.format("%s\t%1.1e\n", "O^CUS -> O^BR   ", diffusionRateO[2]);
     System.out.format("%s\t%1.1e\n", "O^CUS -> O^CUS  ", diffusionRateO[3]);
-    
-    System.out.println("dCO=["+diffusionRateCO[0]+", "+diffusionRateCO[1]+", "+diffusionRateCO[2]+", "+diffusionRateCO[3]+"]");
-    System.out.println("dO=["+diffusionRateO[0]+", "+diffusionRateO[1]+", "+diffusionRateO[2]+", "+diffusionRateO[3]+"]");
   }
   
   public void printIteration() {
