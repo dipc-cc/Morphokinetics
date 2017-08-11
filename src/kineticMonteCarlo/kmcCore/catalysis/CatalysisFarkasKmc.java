@@ -89,9 +89,14 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
     double rate;
     if (atom.getType() == CO) {
       rate = diffusionRateCO[index];
-      if (atom.getCoCusNeighbours() > 0) { // repulsion
-        rate = diffusionRateCoCusCoCus[atom.getCoCusNeighbours() - 1];
+      if (atom.getCoCusNeighbours() == 1) { // repulsion
+        // C -> B, with one CO neighbour
+        // C -> C, with one CO neighbour
+        rate = diffusionRateCoCusCoCus[neighbour.getLatticeSite()];
       }
+      if (atom.getCoCusNeighbours() == 2) // repulsion
+        // C -> B, with two CO neighbours
+        rate = diffusionRateCoCusCoCus[2];
     } else {
       rate = diffusionRateO[index];
     }
