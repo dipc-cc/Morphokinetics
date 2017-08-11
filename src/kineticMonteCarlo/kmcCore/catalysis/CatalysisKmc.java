@@ -263,26 +263,27 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.resetCatalysis();
         co2prv = 0;
       }
-      if (destinationAtom != null) {
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
-                (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
-                (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
-      }
-      getCoverages();
-      int[] sizes = new int[4];
-      sizes[ADSORPTION] = sites[ADSORPTION].size();
-      sizes[DESORPTION] = sites[DESORPTION].size();
-      sizes[REACTION] = sites[REACTION].size();
-      sizes[DIFFUSION] = sites[DIFFUSION].size();
-      if (stationary)
+    }
+    if (destinationAtom != null) {
+      adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
+              (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
+              (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
+    }
+    if (stationary && co2sum % 10 == 0 && co2prv != co2sum) {
+      if (outputData) {
+        restart.flushCatalysis();
+        int[] sizes = new int[4];
+        sizes[ADSORPTION] = sites[ADSORPTION].size();
+        sizes[DESORPTION] = sites[DESORPTION].size();
+        sizes[REACTION] = sites[REACTION].size();
+        sizes[DIFFUSION] = sites[DIFFUSION].size();
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
-    }
-    if (outputAe && stationary && co2sum % 10 == 0 && co2prv != co2sum) {
-      activationEnergy.printAe(restart.getExtraWriters(), getTime());
+      }
+
+      if (outputAe) {
+        activationEnergy.printAe(restart.getExtraWriters(), getTime());
+      }
       co2prv = co2sum;
-    }
-    if (outputData && (simulatedSteps + 1) % (outputEvery * 10) == 0 && stationary) {
-      restart.flushCatalysis();
     }
     return simulatedSteps == maxSteps;
   }
