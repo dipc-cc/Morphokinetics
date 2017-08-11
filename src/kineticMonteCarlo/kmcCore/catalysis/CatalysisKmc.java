@@ -880,7 +880,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     System.out.format("\t%.4f", getCoverage(CO));
     System.out.format("\t%.4f", getCoverage(O));
     System.out.format("\t%d", co2sum);
-    System.out.format("\t%1.0e", (double)simulatedSteps);
+    System.out.format("\t%1.1e", (double)simulatedSteps);
     System.out.format("\t%d", stationaryStep);
   }
 }
