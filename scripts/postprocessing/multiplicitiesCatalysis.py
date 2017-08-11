@@ -9,7 +9,7 @@ import os
 import glob
 import numpy as np
 import functions as fun
-import roman
+import multiplicitiesPlot as mp
 
 
 def computeMavgAndOmega(fileNumber, p):
@@ -65,100 +65,6 @@ def computeMavgAndOmegaOverRuns():
 
     return runMavg, runOavg, runR1avg, runR2avg, runR3avg
 
-def putLabels(ax, co2, alfa):
-    arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-    xI = 59
-    xII = 77
-    if alfa == -1:
-        yMin = 1e1
-        yMax = 1e5
-    elif alfa == 0:
-        yMin = 1e-1
-        yMax = 1e5
-        
-    bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
-    if alfa == -1:
-        ax.set_ylabel(r"$CO_2$ Molecules/s");
-        ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
-        label = r"$CO_2="+str(co2*10)+r"$"
-        ax.annotate(label, xy=(0.75,0.85), xycoords="axes fraction",
-                    bbox=bbox_props)
-    elif alfa == 0:
-         ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$", size=8)
-         ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction", size=8)
-         label = r"$CO_2="+str(co2*10)+r"$"
-         ax.annotate(label, xy=(0.78,0.55), xycoords="axes fraction",
-                     bbox=bbox_props, size=8)
-    # if alfa < 1:
-    #     ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
-    #     ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
-
-
-
-def plotOmegas(x, y, axis, i, averageLines):
-    inf.smallerFont(axis, 8)
-    markers=["o", "s","D","^","d","h","p","o"]
-    # #newax = fig.add_axes([0.43, 0.15, 0.25, 0.25])
-    # newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
-    # newax.set_ylim(-0.05,1.05)
-    # loc = plticker.MultipleLocator(40.0) # this locator puts ticks at regular intervals
-    # newax.xaxis.set_major_locator(loc)
-    # loc = plticker.MultipleLocator(1/3) # this locator puts ticks at regular intervals
-    # newax.yaxis.set_major_locator(loc)
-    # newax.yaxis.set_major_formatter(plticker.FixedFormatter(("0", "$0$", r"$\frac{1}{3}$", r"$\frac{2}{3}$", "$1$")))
-    # inf.smallerFont(newax,8)
-    #newax.set_xlim(xmin,xmax)
-    # lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
-    # newax.add_artist(lg)
-    # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], mec='none',alpha=0.75)
-    
-    for j in range(0,3):
-        axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
-    axis.set_ylim(2e-4,2)
-    axis.set_ylabel(r"$\omega_\alpha$", size=8)
-    axis.set_xlabel(r"$1/k_BT$", size=8)
-    arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-    axis.legend(prop={'size': 7}, loc=(1.1,1.55), scatterpoints=1)
-    if i == 0: # range separation lines
-        axis.annotate("", xy=(45,2e-4), xytext=(45,2), arrowprops=arrow)
-        axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
-        axis.annotate("(b)", xy=(-0.2, 0.93), xycoords="axes fraction", size=8)
-
-
-def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
-    markers=["o", "s","D","^","d","h","p","o"]
-    labelRange = ['low', 'med', 'high']
-    labelRange = labelRange+list([str(i) for i in rngt])
-    cm = plt.get_cmap('Set1')
-    cm1 = plt.get_cmap('Set3')
-    slopes = []
-    if showPlot:
-        inf.smallerFont(ax, 8)
-        ax.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
-        arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-        putLabels(ax, co2, alfa)
-    for i in range(0,len(rngt)-1):
-        #print(rngt[i], rngt[i+1], x, y, len(x), len(y))
-        a, b = fun.linearFit(x, y, rngt[i], rngt[i+1])
-        slopes.append(b)
-        if showPlot:
-            ax.semilogy(x[rngt[i]:rngt[i+1]+1], np.exp(fun.linear(x[rngt[i]:rngt[i+1]+1], a, b)), ls="-", color=cm1((i+abs(alfa)*3)/12))
-            xHalf = (x[rngt[i]]+x[rngt[i]])/2 # (x[rngt[i]]+x[rngt[i+1]+1])/2
-            text = "{:03.3f}".format(-b)
-            yHalf = np.exp(fun.linear(xHalf, a, b))
-            if alfa == -1:
-                ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
-                xHalf *= 1
-                yHalf *= 5
-                text = r"$E_a="+text+r"$"
-
-            bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
-    if showPlot and alfa > -1:
-        locator = LogLocator(100,[1e-1])
-        ax.yaxis.set_major_locator(locator)
-    return slopes
 
 
 ##########################################################
@@ -230,24 +136,20 @@ for co2 in range(0,100): # created co2: 10,20,30...1000
     else:
         axarr = np.zeros(3)
     # N_h
-    tempEaCo2.append(fitAndPlotLinear(x, y[:,co2], rngt, axarr[0], -1, showPlot, labelAlfa, co2))
+    tempEaCo2.append(mp.fitAndPlotLinear(x, y[:,co2], rngt, axarr[0], -1, showPlot, labelAlfa, co2))
     tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
     y2 = tempR1avg/tempR3avg
-    tempEafCo2.append(fitAndPlotLinear(x, y2[:,co2], rngt, axarr[0], -2, False, labelAlfa, co2))
+    tempEafCo2.append(mp.fitAndPlotLinear(x, y2[:,co2], rngt, axarr[0], -2, False, labelAlfa, co2))
     
     for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
-        tempEaM.append(fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa, co2))
+        tempEaM.append(mp.fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa, co2))
         for j in range(0,maxRanges): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],co2,ind[2*i]:ind[2*i+1]], axis=1))))
         if showPlot:
             y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
-            if p.calc == "basic" and p.rLib == "version2" and i == 1:
-                y += tempOavg[:,co2,11]
-            if p.calc == "graphene" and i == 1:
-                y += np.sum(tempOavg[:,co2,9:11], axis=1)
-            plotOmegas(x, y, axarr[-1], i, tempOmega[i])
+            mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i])
     tempOmegaCo2.append(tempOmega)
     tempEaMCo2.append(tempEaM)
     if showPlot:
@@ -265,36 +167,22 @@ fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(8,5))
 fig.subplots_adjust(wspace=0.1)
 tempEaCov2 = np.sum(tempOmegaCo2*(tempEaRCo2-tempEaMCo2), axis=1)-tempEafCo2
 
-cm = plt.get_cmap('gist_earth')
-ax = []
-axarr[0].set_ylabel("eV")
-co2 = list(range(0,100))
-for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    axarr[i].text(0.5, 0.95, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray", transform=axarr[i].transAxes)
-    axarr[i].set_xlabel(r"$CO_2\cdot10$")
-    lgEaCov2, = axarr[i].plot(co2, tempEaCov2[:,maxRanges-1-i], ls="dashed", solid_capstyle="round", lw=5, label="Recomputed AE", alpha=0.6, color=cm(1/3))
-    lgEaCov, = axarr[i].plot(co2, tempEaCo2[:,maxRanges-1-i], "-",  solid_capstyle="round", lw=5, label="Activation energy", alpha=0.6, color=cm(2/3))
-    ax2 = axarr[i].twinx()
-    lgErr, = ax2.plot(co2, abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCo2[:,maxRanges-1-i]),lw=5, ls="dotted", solid_capstyle="round", color=cm(3/4), label="relative error")
-    ax2.set_ylim(0,1)
-    maxY = max(abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCo2[:,maxRanges-1-i])[30:])+0.015 # get maximum for the arrow (>30% co2)
-    ax2.annotate(' ', xy=(.6, maxY), xytext=(.2, maxY-1e-2), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", edgecolor=cm(3/4), facecolor=cm(3/4)))
-    maxYlabel = "{:03.2f}%".format(maxY*100)
-    bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
-    ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props)
-    if i != maxRanges-1:
-        ax2.yaxis.set_major_formatter(plticker.NullFormatter())
-    else:
-        ax2.set_ylabel("Relative error")
-
-        
 rAndM = False
 omegas = False
 if len(sys.argv) > 1:
     rAndM = sys.argv[1] == "r"
     omegas = sys.argv[1] == "o"
-if not rAndM and not omegas:
-    plt.figlegend((lgEaCov, lgEaCov2, lgErr),("Activation energy", "Recomputed AE", "Error"), "upper right", prop={'size':8})
+    
+ax = []
+axarr[0].set_ylabel("eV")
+co2 = list(range(0,100))
+for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
+    targt = tempEaCov2[:,maxRanges-1-i]
+    rcmpt = tempEaCo2[:,maxRanges-1-i]
+    error = abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCo2[:,maxRanges-1-i])
+    lgEaCov2 = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
+                             maxRanges, i, not rAndM and not omegas)
+
 plt.savefig("multiplicities.png", bbox_inches='tight')
 
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
