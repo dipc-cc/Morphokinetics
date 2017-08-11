@@ -808,12 +808,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private void checkSizes() {
     if (automaticCollections) {
-      double totalArea = (double) (getLattice().getCartSizeX() * getLattice().getCartSizeY());
-      double ratio;
       // ADSORPTION, DESORPTION, REACTION, DIFFUSION
       for (byte i = 0; i < sites.length; i++) {
         long startTime = System.currentTimeMillis();
-        ratio = (double) sites[i].size() / totalArea;
         if ((sites[i].size() > 1000) && sites[i] instanceof AtomsArrayList) {
           changeCollection(i, true);
           System.out.println("Changed to Tree " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
