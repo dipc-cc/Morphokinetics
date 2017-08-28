@@ -149,7 +149,7 @@ for co2 in range(0,100): # created co2: 10,20,30...1000
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],co2,ind[2*i]:ind[2*i+1]], axis=1))))
         if showPlot:
             y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
-            mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i])
+            mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
     tempOmegaCo2.append(tempOmega)
     tempEaMCo2.append(tempEaM)
     if showPlot:
@@ -206,10 +206,9 @@ if (omegas):
             lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
             partialSum -= tempOmegaCo2[:,i,j]*(tempEaRCo2[:,i,j]-tempEaMCo2[:,i,j])
     
-    myLegends = [lgEaCov, lgEaCov2]
+    myLegends = []
     myLabels = [r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
     myLegends += lgs
-    myLegends += [lgErr]
         
     for i in range(maxAlfa-1,-1,-1): #alfa
         myLabels.append(labelAlfa[i])
