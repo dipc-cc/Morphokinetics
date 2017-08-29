@@ -113,8 +113,8 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     # newax.add_artist(lg)
     # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
     axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], mec='none',alpha=0.75)
-    
-    for j in range(0,3):
+
+    for j in range(0,len(rngt)-1):
         axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(2e-4,2)
     axis.set_ylabel(r"$\omega_\alpha$", size=8)
