@@ -21,19 +21,15 @@ def computeMavgAndOmega(fileNumber, p):
     for i in range(0,p.maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
     ratios = p.getRatios()
-    ##matrix = np.loadtxt(fname="data"+str(fileNumber)+".txt", delimiter="\t")
-    ##co2amount = matrix[:,0]
-    ##hops = np.array(matrix[:,15])/(4*co2amount*p.sizI*p.sizJ) # scale all data
-    avgTotalHopRate2 = np.array(ratios.dot(np.transpose(Mavg)))
-    ##avgTotalHopRate3 = hops/time
-    ##avgTotalHopRate1 = matrix[:,12]/(4*co2amount*p.sizI*p.sizJ)/time # diffusivity
-    # define omegas AgUc
+
+    avgTotalRate2 = np.array(ratios.dot(np.transpose(Mavg)))
+    # define omegas 
     omega = np.zeros(shape=(length,p.maxA)) # [co2amount, alfa]
     for i in range(0,length):
-        omega[i,:] =  Mavg[i,:] * ratios / avgTotalHopRate2[i]
+        omega[i,:] =  Mavg[i,:] * ratios / avgTotalRate2[i]
     np.shape(omega)
-    avgTotalHopRate1 = avgTotalHopRate3 = avgTotalHopRate2
-    return Mavg, omega, avgTotalHopRate1, avgTotalHopRate2, avgTotalHopRate3
+    avgTotalHopRate1 = avgTotalHopRate3 = avgTotalRate2
+    return Mavg, omega, avgTotalHopRate1, avgTotalRate2, avgTotalHopRate3
 
 
 def computeMavgAndOmegaOverRuns():
