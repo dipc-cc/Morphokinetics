@@ -33,6 +33,7 @@ public abstract class CatalysisRates implements IRates {
   private double[] diffusionEnergiesCoCusCoCus;
   
   private final double prefactor;
+  private double factor;
   
   /**
    * Mass of molecule (kg/molecule).
@@ -62,6 +63,7 @@ public abstract class CatalysisRates implements IRates {
     this.temperature = temperature;
     
     prefactor = kB * temperature / hEv;
+    factor = 0.5;
 
     mass = new double[2]; // kg/molecule
     mass[CO] = 28.01055 / Na;
@@ -83,6 +85,15 @@ public abstract class CatalysisRates implements IRates {
     sigma = new double[2];
     sigma[CO] = 0.98;
     sigma[O2] = 1.32;
+  }
+  
+  /**
+   * Scales prefactor. By default is kB * temperature / hEv
+   *
+   * @param factor 1.0 or 0.5
+   */
+  public final void setPrefactor(double factor) {
+    this.factor = factor;
   }
 
   public final void setDiffusionEnergies(double[][][] diffusionEnergies) {
@@ -206,7 +217,7 @@ public abstract class CatalysisRates implements IRates {
   
   public double[] getReactionRates() {
     double[] rates;
-    double constant = 0.5 * prefactor;
+    double constant = factor * prefactor;
     rates = new double[4];
     rates[0] = constant * Math.exp(-reactionEnergiesCoO[BR][BR] / (kB * temperature));
     rates[1] = constant * Math.exp(-reactionEnergiesCoO[BR][CUS] / (kB * temperature));
@@ -223,7 +234,7 @@ public abstract class CatalysisRates implements IRates {
    */
   public double[] getReactionRates(boolean fake) {
     double[] rates;
-    double constant = 0.5 * prefactor;
+    double constant = factor * prefactor;
     rates = new double[2];
     // only one CO cus neighbour
     rates[0] = constant * Math.exp(-reactionEnergiesCoOCoCusCoCus[0] / (kB * temperature));
