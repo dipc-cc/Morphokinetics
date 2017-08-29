@@ -97,7 +97,7 @@ def putLabels(ax, co2, alfa):
 
 def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     inf.smallerFont(axis, 8)
-    cm = plt.get_cmap('Accent')
+    cm = plt.get_cmap('Set1')
     markers=["o", "s","D","^","d","h","p","o"]
     # #newax = fig.add_axes([0.43, 0.15, 0.25, 0.25])
     # newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
