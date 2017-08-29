@@ -49,7 +49,7 @@ def computeMavgAndOmegaOverRuns():
     sumRate2 = np.zeros(length)
     sumRate3 = np.zeros(length)
     #iterating over runs
-    for i in range(0,filesNumber-1):
+    for i in range(0,filesNumber):
         tmpMavg, tmpOmega, tmpRate1, tmpRate2, tmpRate3 = computeMavgAndOmega(i, p)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
@@ -150,12 +150,6 @@ for co2 in range(0,100): # created co2: 10,20,30...1000
         if showPlot:
             y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
             mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
-    #normalise
-    tempOmegaSum = np.sum(tempOmega, axis=0)
-    for j in range(0,maxRanges): # temperature ranges
-        for i in range(0,maxAlfa): # alfa
-            tempOmega[i][j] = tempOmega[i][j] / tempOmegaSum[j]
-        
     
     tempOmegaCo2.append(tempOmega)
     tempEaMCo2.append(tempEaM)
