@@ -91,7 +91,7 @@ def getRatio(calc, temperature, energies):
     kb = 8.617332e-5
     if calc == "catalysis":
         hev = 4.136e-15
-        p = 0.5* kb * temperature / hev
+        p = 0.5 * kb * temperature / hev
     else:
         p = 1e13
     return p * np.exp(-energies/kb/temperature)
@@ -138,16 +138,18 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         return list([iSl, iSm, iSh, iFh])
 
 def reuter(temperatures):
-    indexes = np.where((temperatures >= 300) & (temperatures <= 340))
+    indexes = np.where((temperatures >= 300) & (temperatures <= 320))
     iSl = indexes[0][0]
     iFl = indexes[0][-1]
-    indexes = np.where((temperatures >= 340) & (temperatures <= 355))
+    indexes = np.where((temperatures >= 320) & (temperatures <= 340))
     iSm = indexes[0][0]
     iFm = indexes[0][-1]
     indexes = np.where((temperatures >= 355) & (temperatures <= 370))
     iSh = indexes[0][0]
     iFh = indexes[0][-1]
-    return list([iSl, iSm, iSh, iFh])
+    ranges = list([iSl, iSm, iSh, iFh])
+    ranges = list([0, 4, 8, 12, 15])
+    return ranges
 
 def kiejna(temperatures):
     indexes = np.where((temperatures >= 300) & (temperatures <= 325))
