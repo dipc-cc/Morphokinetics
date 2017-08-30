@@ -143,6 +143,7 @@ for co2 in range(0,100): # created co2: 10,20,30...1000
         tempEaM.append(mp.fitAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa, co2))
         for j in range(0,maxRanges): # temperature ranges
             tempOmega[i][j] = np.exp(np.mean(np.log(np.sum(tempOavg[rngt[j]:rngt[j+1],co2,ind[2*i]:ind[2*i+1]], axis=1))))
+            tempOmega[i][j] = np.mean(np.sum(tempOavg[rngt[j]:rngt[j+1],co2,ind[2*i]:ind[2*i+1]], axis=1))
         if showPlot:
             y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
             mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
