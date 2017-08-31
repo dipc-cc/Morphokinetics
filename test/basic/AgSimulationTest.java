@@ -58,7 +58,7 @@ public class AgSimulationTest {
     parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
     parser.print();
     assertEquals("Ag", parser.getCalculationMode());
-    assertEquals(135, parser.getTemperature());
+    assertEquals(135.0f, parser.getTemperature(),0);
     assertEquals(1, parser.getNumberOfSimulations());
     assertEquals(256, parser.getCartSizeX());
     assertEquals(256, parser.getCartSizeY());
