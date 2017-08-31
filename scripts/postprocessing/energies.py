@@ -1,5 +1,7 @@
 import numpy as np
 
+kJtoeV = 96.485
+
 def agUc(self):
     return getHexagonalEnergies()
         
@@ -17,6 +19,7 @@ def catalysis(self):
         "reuter": getCatalysisEnergiesReuter,
         "kiejna": getCatalysisEnergiesKiejna,
         "seitsonen": getCatalysisEnergiesSeitsonen,
+        "farkas": getCatalysisEnergiesFarkas,
     }
     func = libSwitcher.get(self.rLib)
     return func()
@@ -86,6 +89,15 @@ def getCatalysisEnergiesSeitsonen():
     energies[2] = 0.74
     energies[3] = 0.71
     return energies
+
+def getCatalysisEnergiesFarkas():
+    energies = 99999999*np.ones(4, dtype=float)
+    energies[0] = 133 / kJtoeV
+    energies[1] =  91 / kJtoeV
+    energies[2] =  89 / kJtoeV
+    energies[3] =  89 / kJtoeV
+    return energies
+    
 
 def getRatio(calc, temperature, energies):
     kb = 8.617332e-5
@@ -174,6 +186,10 @@ def seitsonen(temperatures):
     iSh = indexes[0][0]
     iFh = indexes[0][-1]
     return list([iSl, iSm, iSh, iFh])
+
+def farkas(temperatures):
+    ranges = list(np.arange(0,16,3))
+    return ranges
     
 # https://www.pydanny.com/why-doesnt-python-have-switch-case.html
 def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
@@ -182,6 +198,7 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
         "reuter": reuter,
         "kiejna": kiejna,
         "seitsonen": seitsonen,
+        "farkas": farkas,
     }
     # Get the function from switcher dictionary
     func = switcher.get(ratesLibrary, lambda: "nothing")
