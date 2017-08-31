@@ -16,7 +16,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
  */
 public class CatalysisReuterRates extends CatalysisRates {
   
-  public CatalysisReuterRates(int temperature) {
+  public CatalysisReuterRates(float temperature) {
     super(temperature);
     
     double[] desorptionEnergiesCo = new double[2];

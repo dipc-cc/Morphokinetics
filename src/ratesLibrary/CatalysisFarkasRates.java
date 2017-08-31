@@ -17,7 +17,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
  */
 public class CatalysisFarkasRates extends CatalysisRates {
 
-  public CatalysisFarkasRates(int temperature) {
+  public CatalysisFarkasRates(float temperature) {
     super(temperature);
     setPrefactor(1.0);
 

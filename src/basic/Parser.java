@@ -66,7 +66,7 @@ public class Parser {
   /**
    * See {@link #getTemperature()}.
    */
-  private int temperature;
+  private float temperature;
   /**
    * See {@link #getPressureO2()} and {@link #getPressureCO()}.
    */
@@ -271,7 +271,7 @@ public class Parser {
     perimeterType = "circle";
     calculationMode = "Ag";
     surfaceType = "cartesian";
-    temperature = 135;
+    temperature = 135.0f;
     pressureO2 = 1.0;
     pressureCO = 7.0;
     depositionFlux = 0.0035;
@@ -377,9 +377,9 @@ public class Parser {
       surfaceType = "cartesian";
     }
     try {
-      temperature = json.getInt("temperature");
+      temperature = (float) json.getDouble("temperature");
     } catch (JSONException e) {
-      temperature = 135;
+      temperature = 135.0f;
     }
     try {
       pressureO2 = json.getDouble("pressureO2");
@@ -889,7 +889,7 @@ public class Parser {
     }
   }
 
-  public void setTemperature(int temperature) {
+  public void setTemperature(float temperature) {
     this.temperature = temperature;
   }
   
@@ -900,7 +900,7 @@ public class Parser {
    * 
    * @return temperature
    */
-  public int getTemperature() {
+  public float getTemperature() {
     return temperature;
   }
 

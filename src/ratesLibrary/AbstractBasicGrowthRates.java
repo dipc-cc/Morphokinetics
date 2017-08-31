@@ -97,7 +97,7 @@ public abstract class AbstractBasicGrowthRates implements IRates {
    * @param temperature 
    * @return rates[5]
    */
-  public double[] getReduced5Rates(int temperature) {
+  public double[] getReduced5Rates(float temperature) {
     double[] rates = new double[5];
     rates[0] = getRate(0, 0, temperature);
     rates[1] = getRate(1, 0, temperature);

@@ -39,9 +39,9 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
   private int simulationCount;
   private float[][] sampledSurface;
   /** Temperature of the simulation. Useful when searching for energies. */
-  private final int temperature;
+  private final float temperature;
   
-  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType, int temperature) {
+  public AgBasicPsdEvaluator(AgKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType, float temperature) {
 
     super(repeats, measureInterval, flags, hierarchyEvaluator);
 

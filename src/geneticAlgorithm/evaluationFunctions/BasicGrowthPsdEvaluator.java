@@ -37,14 +37,14 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
   private int simulationCount;
   private float[][] sampledSurface;
   /** Temperature of the simulation. Useful when searching for energies. */
-  private final int temperature;
+  private final float temperature;
   
   /**
    * Current thread, responsible to run many KMCs to compute a PSD.
    */
   private Runner currentRun;
   
-  public BasicGrowthPsdEvaluator(BasicGrowthKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType, int temperature) {
+  public BasicGrowthPsdEvaluator(BasicGrowthKmc kmc, int repeats, int measureInterval, int psdSizeX, int psdSizeY, Set flags, String hierarchyEvaluator, String evolutionarySearchType, float temperature) {
     super(repeats, measureInterval, flags, hierarchyEvaluator);
 
     setPsdSizeX(psdSizeX);

@@ -313,7 +313,7 @@ public class AgRatesFromPrbCox implements IRates {
    * @param temperature
    * @return rates[6]
    */
-  public double[] getReduced6Rates(int temperature) {
+  public double[] getReduced6Rates(float temperature) {
     double[] rates = new double[6];
     rates[0] = getRate(0, 0, temperature);
     rates[1] = getRate(1, 1, temperature);

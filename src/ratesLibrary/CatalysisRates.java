@@ -57,9 +57,9 @@ public abstract class CatalysisRates implements IRates {
    */
   private final double[] sigma;
   /** Temperature (K). */
-  private final int temperature;
+  private final float temperature;
   
-  public CatalysisRates(int temperature) {
+  public CatalysisRates(float temperature) {
     this.temperature = temperature;
     
     prefactor = kB * temperature / hEv;
