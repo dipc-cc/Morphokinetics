@@ -189,7 +189,7 @@ def localAvgAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
         slopes.append(b)
         if showPlot:
             ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1((i+abs(alfa)*3)/12))
-            xHalf = x[i]#(x[rngt[i]]+x[rngt[i]])/2 # (x[rngt[i]]+x[rngt[i+1]+1])/2
+            xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
             if alfa == -1:
@@ -202,7 +202,7 @@ def localAvgAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
             ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
     # last point
     b = np.log(y[-1]/y[-2]) / (x[-1] - x[-2])
-    if np.isnan(b): #float('nan'):
+    if np.isnan(b):
         b = 0
         print(y[-1], y[-2],x[-1], x[-2])
     slopes.append(b)
