@@ -140,7 +140,6 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         putLabels(ax, co2, alfa)
     for i in range(0,len(rngt)-1):
-        #print(rngt[i], rngt[i+1], x, y, len(x), len(y))
         a, b = fun.linearFit(x, y, rngt[i], rngt[i+1])
         slopes.append(b)
         if showPlot:
@@ -156,6 +155,57 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
             ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
+    if showPlot and alfa > -1:
+        locator = LogLocator(100,[1e-1])
+        ax.yaxis.set_major_locator(locator)
+    return slopes
+
+
+def localAvgAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
+    markers=["o", "s","D","^","d","h","p","o"]
+    labelRange = ['low', 'med', 'high']
+    labelRange = labelRange+list([str(i) for i in rngt])
+    cm = plt.get_cmap('Set1')
+    cm1 = plt.get_cmap('Set3')
+    slopes = []
+    if showPlot:
+        inf.smallerFont(ax, 8)
+        ax.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
+        arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
+        putLabels(ax, co2, alfa)
+    # one neighbour point
+    b = np.log(y[1]/y[0]) / (x[1] - x[0])
+    slopes.append(b)
+    # all but last
+    for i in range(1,len(x)-1):
+        retFun = fun.timeDerivative(np.log(y[i-1:i+2]),x[i-1:i+2])
+        b = retFun[1] # slope of the point in the middle
+        if np.isinf(b):
+            b = 0
+            a = 0
+            print("error fitting")
+        else:
+            a = np.log(y[i])-b*x[i]
+        slopes.append(b)
+        if showPlot:
+            ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1((i+abs(alfa)*3)/12))
+            xHalf = x[i]#(x[rngt[i]]+x[rngt[i]])/2 # (x[rngt[i]]+x[rngt[i+1]+1])/2
+            text = "{:03.3f}".format(-b)
+            yHalf = np.exp(fun.linear(xHalf, a, b))
+            if alfa == -1:
+                ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
+                xHalf *= 1
+                yHalf *= 5
+                text = r"$E_a="+text+r"$"
+
+            bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
+            ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
+    # last point
+    b = np.log(y[-1]/y[-2]) / (x[-1] - x[-2])
+    if np.isnan(b): #float('nan'):
+        b = 0
+        print(y[-1], y[-2],x[-1], x[-2])
+    slopes.append(b)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])
         ax.yaxis.set_major_locator(locator)
