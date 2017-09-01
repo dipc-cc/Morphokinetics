@@ -14,7 +14,7 @@ import multiplicitiesInfo as mi
 ##########           Main function   #####################
 ##########################################################
 
-temperatures = inf.getTemperatures()
+temperatures = inf.getTemperatures("float")
 kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxAlfa = 4
@@ -67,8 +67,9 @@ tempEafCo2 = []
 rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
 
 maxRanges = len(temperatures)
+maxCo2 = 100
 labelAlfa = ["$CO_2^B+O^B$","$CO_2^B+O^C$","$CO_2^C+O^B$","$CO_2^C+O^C$"]
-for co2 in range(0,100): # created co2: 10,20,30...1000
+for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     print(co2)
     x = 1/kb/temperatures
     y = tempR1avg
@@ -106,7 +107,7 @@ tempEaRCo2 = np.zeros(np.shape(tempEaMCo2))
 for alfa in range(0,maxAlfa):
     tempEaRCo2[:,alfa,:] = energies[alfa]
 
-fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(18,5))
+fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
 tempEaCov2 = np.sum(tempOmegaCo2*(tempEaRCo2-tempEaMCo2), axis=1)-tempEafCo2
 
@@ -117,7 +118,7 @@ if len(sys.argv) > 1:
     omegas = sys.argv[1] == "o"
     
 axarr[0].set_ylabel("eV")
-co2 = list(range(0,100))
+co2 = list(range(0,maxCo2))
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     targt = tempEaCov2[:,maxRanges-1-i]
     rcmpt = tempEaCo2[:,maxRanges-1-i]

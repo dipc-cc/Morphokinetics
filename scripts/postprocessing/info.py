@@ -41,9 +41,12 @@ def getFluxes():
     return fluxes
 
 
-def getTemperatures():
+def getTemperatures(*types):
     temperatures = glob.glob("[1-9]*")
-    temperatures = np.array(temperatures).astype(int)
+    if len(types) > 0:
+        temperatures = np.array(temperatures).astype(float)
+    else:
+        temperatures = np.array(temperatures).astype(int)
     temperatures.sort()
     return temperatures
 
