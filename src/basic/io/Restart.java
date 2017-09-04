@@ -277,6 +277,12 @@ public class Restart {
     String fileName = format("%ssurfaceHexagonal%03d.txt", folder, simulationNumber);
     RestartLow.writeLowTextHexagonal(data, fileName);
   }
+  
+  public void writeSurfaceStationary(float[][] data) {
+    String fileName = format("surfaceStationary%03d.txt",iteration-1);
+    fileName = addFolderAndSuffix(fileName, ".txt");
+    RestartLow.writeLowText2D(data, fileName, false);
+  }
 
   public void writeTextString(String data, String fileName) {
     fileName = addFolderAndSuffix(fileName, ".txt");
@@ -485,7 +491,7 @@ public class Restart {
   
   private void initCatalysis(int simulationNumber) {
     co2P = new long[4];
-    counterCo2=0;
+    counterCo2 = 0;
     // new file
     try {
       String fileName = format("%sdataCatalysis%03d.txt", folder, simulationNumber);
