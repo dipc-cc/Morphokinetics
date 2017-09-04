@@ -275,13 +275,13 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     if (stationary && co2sum % 10 == 0 && co2prv != co2sum) {
       if (outputData) {
-        restart.flushCatalysis();
         int[] sizes = new int[4];
         sizes[ADSORPTION] = sites[ADSORPTION].size();
         sizes[DESORPTION] = sites[DESORPTION].size();
         sizes[REACTION] = sites[REACTION].size();
         sizes[DIFFUSION] = sites[DIFFUSION].size();
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
+        restart.flushCatalysis();
       }
 
       if (outputAe) {
