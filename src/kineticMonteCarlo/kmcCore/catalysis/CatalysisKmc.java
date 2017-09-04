@@ -262,6 +262,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         getList().resetTime();
         restart.resetCatalysis();
         co2prv = 0;
+        int[] sizes = new int[2];
+        sizes[0] = getLattice().getHexaSizeI();
+        sizes[1] = getLattice().getHexaSizeJ();
+        restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
       }
     }
     if (destinationAtom != null) {
