@@ -239,10 +239,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     byte reaction = getList().nextReaction();
     steps[reaction]++;
-    CatalysisAtom destinationAtom = null;
     switch (reaction) {
       case ADSORPTION:
-        destinationAtom = depositNewAtom();
+        depositNewAtom();
         break;
       case DESORPTION:
         desorpAtom(); 
@@ -268,13 +267,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
       }
     }
-    if (destinationAtom != null) {
+    if (stationary && co2sum % 10 == 0 && co2prv != co2sum) {
+      if (outputData) {
       adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
               (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
-    }
-    if (stationary && co2sum % 10 == 0 && co2prv != co2sum) {
-      if (outputData) {
         int[] sizes = new int[4];
         sizes[ADSORPTION] = sites[ADSORPTION].size();
         sizes[DESORPTION] = sites[DESORPTION].size();
