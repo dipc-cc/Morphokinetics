@@ -56,9 +56,9 @@ print(np.shape(tempMavg))
 # print(tempR1avg)
 # print(tempR2avg)
 # print(tempR3avg)
-showPlot=False
+sp=False
 if len(sys.argv) > 1:
-    showPlot = sys.argv[1] == "p"
+    sp = sys.argv[1] == "p"
 
 tempOmegaCo2 = []
 tempEaMCo2 = []
@@ -70,6 +70,7 @@ maxRanges = len(temperatures)
 maxCo2 = 100
 labelAlfa = ["$CO_2^B+O^B$","$CO_2^B+O^C$","$CO_2^C+O^B$","$CO_2^C+O^C$"]
 for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
+    showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
     print(co2)
     x = 1/kb/temperatures
     y = tempR1avg
@@ -118,11 +119,12 @@ if len(sys.argv) > 1:
     omegas = sys.argv[1] == "o"
     
 axarr[0].set_ylabel("eV")
-co2 = list(range(0,maxCo2))
+minCo2 = 0
+co2 = list(range(minCo2,maxCo2-1))
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    targt = tempEaCov2[:,maxRanges-1-i]
-    rcmpt = tempEaCo2[:,maxRanges-1-i]
-    error = abs(1-tempEaCov2[:,maxRanges-1-i]/tempEaCo2[:,maxRanges-1-i])
+    targt = tempEaCov2[minCo2:-1,maxRanges-1-i]
+    rcmpt = tempEaCo2[minCo2:-1,maxRanges-1-i]
+    error = abs(1-tempEaCov2[minCo2:-1,maxRanges-1-i]/tempEaCo2[minCo2:-1,maxRanges-1-i])
     handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not rAndM and not omegas)
 
