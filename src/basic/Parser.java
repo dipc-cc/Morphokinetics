@@ -905,7 +905,7 @@ public class Parser {
   }
 
   /**
-   * Partial pressure for O2.
+   * Partial pressure for O2 in atm.
    * 
    * @return O2 pressure.
    */
@@ -914,7 +914,7 @@ public class Parser {
   }
   
   /**
-   * Partial pressure for CO.
+   * Partial pressure for CO in atm.
    * 
    * @return CO pressure.
    */
