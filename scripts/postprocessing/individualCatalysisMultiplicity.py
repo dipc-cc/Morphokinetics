@@ -17,6 +17,7 @@ import multiplicitiesInfo as mi
 temperatures = inf.getTemperatures("float")
 kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
+maxCo2 = int(p.nCo2/10)
 maxAlfa = 4
 ind = [0,1,1,2,2,3,3,4]
 energies = e.catalysis(p)
@@ -67,7 +68,6 @@ tempEafCo2 = []
 rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
 
 maxRanges = len(temperatures)
-maxCo2 = 100
 labelAlfa = ["$CO_2^B+O^B$","$CO_2^B+O^C$","$CO_2^C+O^B$","$CO_2^C+O^C$"]
 for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
@@ -121,14 +121,32 @@ if len(sys.argv) > 1:
 axarr[0].set_ylabel("eV")
 minCo2 = 0
 co2 = list(range(minCo2,maxCo2-1))
+tgt = []
+rct = []
+x = []
+err = []
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     targt = tempEaCov2[minCo2:-1,maxRanges-1-i]
     rcmpt = tempEaCo2[minCo2:-1,maxRanges-1-i]
     error = abs(1-tempEaCov2[minCo2:-1,maxRanges-1-i]/tempEaCo2[minCo2:-1,maxRanges-1-i])
     handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not rAndM and not omegas)
+    x.append(i)
+    tgt.append(targt[-1])
+    rct.append(rcmpt[-1])
+    err.append(error[-1])
 
 plt.savefig("multiplicities.png", bbox_inches='tight')
+fig, ax = plt.subplots(1, figsize=(5,4))
+ax.plot(x, tgt, label="target")
+ax.plot(x, rct, label="recomputed")
+ax2 = ax.twinx()
+ax2.plot(x, err, label="Relative error")
+ax2.set_ylim(0,1)
+ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
+ax.legend(loc="best", prop={'size':6})
+plt.savefig("multiplicitiesResume.png", bbox_inches='tight')
+
 
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
     label = ["multiplicity", "sum", "ratio"]
