@@ -20,6 +20,7 @@ class fileData:
         self.maxN = data[7] # max number of neighbour or atom types
         self.maxC = data[8] # max simulated coverage
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
+        self.nCo2 = data[10] # created CO2 molecules. For catalysis
 
         
     def getRatios(self):
@@ -58,7 +59,7 @@ def getPressures():
     return temperatures
     
 def getInputParameters(fileName = ""):
-    r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC = getInformationFromFile(fileName)
+    r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC, nCO2 = getInformationFromFile(fileName)
     maxN = 3
     maxA = 16
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
@@ -67,7 +68,7 @@ def getInputParameters(fileName = ""):
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
     if re.match("catalysis", calcType):
         maxA = 4 # Production of CO2, CO^B+O^B | CO^B+O^C | CO^C+O^B | CO^C+O^C
-    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA])
+    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2])
 
 
 def getInformationFromFile(fileName):
@@ -93,12 +94,14 @@ def getInformationFromFile(fileName):
             flux = float(list(filter(None,re.split(" |,",line)))[1])
         if re.search("\"coverage\"", line):
             maxC = int(float(list(filter(None,re.split(" |,",line)))[1]))
+        if re.search("numberOfCo2", line):
+            nCO2 = int(list(filter(None,re.split(" |,",line)))[1])
         if hit:
             try:
                 r_tt = float(re.split(' ', line)[0])
             except ValueError:
                 r_tt = 0
-            return r_tt, temp, flux, calc, ratesLib, sizX, sizY, maxC
+            return r_tt, temp, flux, calc, ratesLib, sizX, sizY, maxC, nCO2
         if re.match("These", line):
             hit = True
 
