@@ -269,9 +269,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     if (stationary && co2sum % 10 == 0 && co2prv != co2sum) {
       if (outputData) {
-      adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
-              (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
-              (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
+                (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
+                (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
         int[] sizes = new int[4];
         sizes[ADSORPTION] = sites[ADSORPTION].size();
         sizes[DESORPTION] = sites[DESORPTION].size();
@@ -341,6 +341,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
   @Override
   public void reset() {
+    activationEnergy.reset();
     Iterator iter = getList().getIterator();
     while (iter.hasNext()) {
       CatalysisAtom atom = (CatalysisAtom) iter.next();
