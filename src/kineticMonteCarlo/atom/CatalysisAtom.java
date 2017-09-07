@@ -76,6 +76,10 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     return processes[process].getRate();
   }
   
+  public double getEdgeRate(byte process, int neighbourPos) {
+    return processes[process].getEdgeRate(neighbourPos);
+  }
+  
   public void setRate(byte process, double rate) {
     processes[process].setRate(rate);
   }
