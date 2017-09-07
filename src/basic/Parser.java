@@ -193,9 +193,9 @@ public class Parser {
    */
   private String catalysisDiffusion;
   /**
-   * See {@link #calalysisStartOxygenCov()}
+   * See {@link #calalysisStart()}
    */
-  private boolean catalysisStartOxygenCov;
+  private String catalysisStart;
   /**
    * See {@link #doCatalysisO2Dissociation()}
    */
@@ -309,7 +309,7 @@ public class Parser {
     catalysisDesorption = "true";
     catalysisReaction = "true";
     catalysisDiffusion = "true";
-    catalysisStartOxygenCov = false;
+    catalysisStart = "O";
     catalysisO2Dissociation = true;
     automaticCollections = false;
     
@@ -572,9 +572,9 @@ public class Parser {
       }
     }
     try {
-      catalysisStartOxygenCov = json.getBoolean("catalysisStartOxygenCov");
+      catalysisStart = json.getString("catalysisStart");
     } catch (JSONException e) {
-      catalysisStartOxygenCov = false;
+      catalysisStart = "O";
     }
     try {
       catalysisO2Dissociation = json.getBoolean("catalysisO2Dissociation");
@@ -778,7 +778,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"catalysisDesorption\"", catalysisDesorption);
     System.out.printf("%32s: %s,\n", "\"catalysisReaction\"", catalysisReaction);
     System.out.printf("%32s: %s,\n", "\"catalysisDiffusion\"", catalysisDiffusion);
-    System.out.printf("%32s: %s,\n", "\"catalysisStartOxygenCov\"", catalysisStartOxygenCov);
+    System.out.printf("%32s: %s,\n", "\"catalysisStart\"", catalysisStart);
     System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
     System.out.printf("%32s: %s,\n", "\"automaticCollections\"", automaticCollections);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
@@ -1516,16 +1516,9 @@ public class Parser {
     catalysisTree[REACTION] = catalysisReaction.equals("tree");
     catalysisTree[DIFFUSION] = catalysisDiffusion.equals("tree");
   }
-  
-  /**
-   * Instead of writting "true", one can use the word "tree" to use a tree to store catalysis
-   * processes.
-   *
-   * @return
-   */
 
   /**
-   * Instead of writting "true", one can use the word "tree" to use a tree to store catalysis
+   * Instead of writing "true", one can use the word "tree" to use a tree to store catalysis
  processes.
    * @param process
    * @return
@@ -1537,14 +1530,15 @@ public class Parser {
   }
   
   /**
-   * Starts a catalysis run with fully oxygen covered surface.
+   * Starts a catalysis run given coverage. Can be "O" (Oxygen covered), "CO" (CO covered), "empty"
+   * or "random" (randomly covered surface).
    *
-   * Input "parameters" variable: {@code catalysisStartOxygenCov}.
-   * 
+   * Input "parameters" variable: {@code catalysisStart}.
+   *
    * @return do diffusion.
    */
-  public boolean catalysisStartOxigenCov() {
-    return catalysisStartOxygenCov;
+  public String catalysisStart() {
+    return catalysisStart;
   }
   
   /**

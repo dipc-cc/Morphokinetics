@@ -14,7 +14,7 @@
    randomSeed: false,
    coverage: 100,
    withGui: false,
-   catalysisStartOxygenCov: true,
+   catalysisStart: O,
    ratesLibrary: reuter,
 }
 

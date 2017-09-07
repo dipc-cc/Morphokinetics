@@ -18,4 +18,5 @@
   withGui: false,
   numberOfSteps: 1e7,
   ratesLibrary: reuter,
+  catalysisStart: empty,
 }

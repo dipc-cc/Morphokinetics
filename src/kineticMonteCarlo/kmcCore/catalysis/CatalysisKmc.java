@@ -68,7 +68,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   final boolean doReaction;
   final boolean doDiffusion;
   private final boolean doO2Dissociation;
-  private final boolean startOxygen;
+  private final String start;
   private final Restart restart;
   private final ActivationEnergy activationEnergy;
   /**
@@ -111,12 +111,12 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     doAdsorption = parser.doCatalysisAdsorption();
     doDesorption = parser.doCatalysisDesorption();
     doReaction = parser.doCatalysisReaction();
-    startOxygen = parser.catalysisStartOxigenCov();
+    start = parser.catalysisStart();
     doO2Dissociation = parser.doCatalysisO2Dissociation();
-    if (startOxygen) {
-      maxCoverage = 2; // it will never end because of coverage
-    } else {
+    if (start.equals("empty")) {
       maxCoverage = (float) parser.getCoverage() / 100;
+    } else {
+      maxCoverage = 2; // it will never end because of coverage
     }
     steps = new long[4];
     co2 = new long[4];
@@ -322,12 +322,10 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   public void depositSeed() {
     totalRate = new double[4];
     getLattice().resetOccupied();
-    if (startOxygen) {
+    if (!start.equals("empty")) {
       initCovered();
     } else if (doAdsorption) {
       initAdsorptionProbability();
-    } else {
-      initCovered();
     }
     /*for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
@@ -517,10 +515,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
-        if (startOxygen) {
+        switch (start) {
+          case "O":
             a.setType(O);
-          } else {
-          a.setType((byte) StaticRandom.rawInteger(2));
+            break;
+          case "CO":
+            a.setType(CO);
+            break;
+          default:
+            a.setType((byte) StaticRandom.rawInteger(2));
+            break;
         }
         getLattice().deposit(a, false);
       }

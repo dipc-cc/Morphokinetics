@@ -18,4 +18,5 @@
   catalysisDesorption: false,
   catalysisReaction: false,
   ratesLibrary: reuter,
+  catalysisStart: empty,
 }
