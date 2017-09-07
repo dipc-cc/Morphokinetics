@@ -506,10 +506,10 @@ public class Restart {
       fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
       outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outData.println("# File " + fileName);
-      outDataAe = new PrintWriter[6];
+      outDataAe = new PrintWriter[7];
       
       String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList", 
-        "PossibleDiscrete", "RatioTimesPossible", "Multiplicity"};
+        "PossibleDiscrete", "RatioTimesPossible", "Multiplicity", "All"};
       for (int i = 0; i < names.length; i++) {
         fileName = format("%sdataAe%s%03d.txt", folder, names[i], simulationNumber);
         outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
