@@ -8,6 +8,7 @@ import errno
 
 def plotCoverages():
     covFiles = glob.glob("dataCatalysis0*.txt")
+    covFiles.sort()
     f, axarr = plt.subplots(3, 4)
     # Fine-tune figure; hide x ticks for top plots and y ticks for right plots
     i = 0
@@ -18,7 +19,8 @@ def plotCoverages():
         if len(data) > 0:
             try:
                 for k in range(1,5):
-                    axarr[i,j].plot(data[:,k], label=labels[k-1])
+                    axarr[i,j].plot(data[:,0],data[:,k], label=labels[k-1])
+                    axarr[i,j].set_ylim(-0.1,1.1)
                 i += 1
                 if i == 3:
                     i = 0
