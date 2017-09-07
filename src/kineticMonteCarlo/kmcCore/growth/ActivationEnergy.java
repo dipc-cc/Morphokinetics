@@ -15,6 +15,9 @@ import kineticMonteCarlo.atom.AbstractAtom;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
 import static kineticMonteCarlo.atom.CatalysisAtom.CO;
+import static kineticMonteCarlo.atom.CatalysisAtom.O;
+import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.unitCell.SimpleUc;
 
 /**
  *
@@ -26,6 +29,10 @@ public class ActivationEnergy {
    */
   private Integer[][] histogramSuccess;
   private Double[][] histogramPossible;
+  private Double[] histogramPossibleAdsorption;
+  private Double[][][] histogramPossibleDesorption;
+  /** CO|O, from BR|CUS to BR|CUS. */
+  private Double[][][] histogramPossibleDiffusion;
   private Long[][] histogramPossibleCounter;
   private Double[][] histogramPossibleTmp;
   private Long[][] histogramPossibleCounterTmp;
@@ -66,6 +73,9 @@ public class ActivationEnergy {
         doActivationEnergyStudy = true;
         length = 2;
         numberOfNeighbours = 4;
+        histogramPossibleAdsorption = new Double[2];
+        histogramPossibleDesorption = new Double[2][2][2];
+        histogramPossibleDiffusion = new Double[2][2][2];
       }
       histogramPossible = new Double[length][length];
       histogramPossibleCounter = new Long[length][length];
@@ -73,12 +83,17 @@ public class ActivationEnergy {
       histogramPossibleCounterTmp = new Long[length][length];
       histogramSuccess = new Integer[length][length];
       for (int i = 0; i < length; i++) {
+        histogramPossibleAdsorption[i] = new Double(0);
         for (int j = 0; j < length; j++) {
           histogramPossible[i][j] = new Double(0);
           histogramPossibleCounter[i][j] = new Long(0);
           histogramPossibleTmp[i][j] = new Double(0);
           histogramPossibleCounterTmp[i][j] = new Long(0);
           histogramSuccess[i][j] = new Integer(0);
+          for (int k = 0; k < histogramSuccess.length; k++) {
+            histogramPossibleDesorption[i][j][k] = new Double(0);
+            histogramPossibleDiffusion[i][j][k] = new Double(0);
+          }
         }
       }
     }
@@ -90,8 +105,72 @@ public class ActivationEnergy {
   }
   
   /**
+   * Computes possibles for catalysis for all kind of processes
+   *
+   * @param lattice
+   * @param elapsedTime
+   * @param stationary
+   */
+  public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary) {
+    if (doActivationEnergyStudy && stationary) {
+      histogramPossibleTmp = initDouble(length);
+      for (int i = 0; i < lattice.size(); i++) {
+        SimpleUc uc = (SimpleUc) lattice.getUc(i);
+        for (int j = 0; j < uc.size(); j++) {
+          CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
+          // Adsorption
+          if (!atom.isOccupied()) {
+            histogramPossibleAdsorption[CO] += elapsedTime;
+            if (atom.isIsolated()) {
+              histogramPossibleAdsorption[O] += elapsedTime;
+            }
+          }
+          for (int pos = 0; pos < numberOfNeighbours; pos++) {
+            CatalysisAtom neighbour = atom.getNeighbour(pos);
+            // Desorption
+            if (atom.isOccupied()) {
+              if (atom.getType() == CO) {
+                histogramPossibleDesorption[CO][0][0] += elapsedTime;
+              } else if (neighbour.getType() == O) { // Two O together
+                histogramPossibleDesorption[O][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
+              }
+            }
+            
+            // Diffusion
+            if (atom.isOccupied() && !neighbour.isOccupied()) {
+              histogramPossibleDiffusion[atom.getType()][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime;
+            }
+
+            // Reaction
+            if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+              continue;
+            }
+            // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+            if (atom.getType() == CO) {
+              histogramPossible[atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime / 2.0;
+              //histogramPossibleCounter[atom.getLatticeSite()][neighbour.getLatticeSite()]++;
+              histogramPossibleTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
+            } else {
+              histogramPossible[neighbour.getLatticeSite()][atom.getLatticeSite()] += elapsedTime / 2.0;
+              //histogramPossibleCounter[neighbour.getLatticeSite()][atom.getLatticeSite()]++;
+              histogramPossibleTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
+            }
+          }
+        }
+      }
+      // it is counting twice each reaction, so dividing by 2
+      for (int i = 0; i < histogramPossibleCounter.length; i++) {
+        for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
+          histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j].longValue();
+          histogramPossibleCounterTmp[i][j] = histogramPossibleTmp[i][j].longValue();
+        }
+      }
+    }
+  }
+
+  /**
    * Computes possibles for catalysis.
-   * 
+   *
    * @param surface
    * @param elapsedTime 
    * @param stationary
@@ -179,6 +258,10 @@ public class ActivationEnergy {
       histogramPossibleTmp = initDouble(length);
       histogramPossibleCounterTmp = initLong(length);
       histogramSuccess = initInt(length);
+      
+      histogramPossibleAdsorption = initDouble1(length);
+      histogramPossibleDesorption = initDouble3(length);
+      histogramPossibleDiffusion = initDouble3(length);
     }
   }
   
@@ -253,6 +336,26 @@ public class ActivationEnergy {
     }
     printAeLow(print[5], "", printLineBreak, multiplicity); //AeMultiplicity
 
+    // new print with everything
+    print[6].print(time + "\t");
+    printAeLow(print[6], "", printLineBreak, histogramPossible); //AePossibleFromList REACTION
+    for (int i = 0; i < histogramPossibleAdsorption.length; i++) {
+      print[6].print(histogramPossibleAdsorption[i] + "\t");   
+    }
+    print[6].print(histogramPossibleDesorption[CO][0][0] + "\t");
+    for (int i = 0; i < histogramPossibleDesorption[O].length; i++) {
+      for (int j = 0; j < histogramPossibleDesorption[O][0].length; j++) {
+        print[6].print(histogramPossibleDesorption[O][i][j] + "\t");
+      }
+    }
+    for (int i = 0; i < histogramPossibleDiffusion.length; i++) {
+      for (int j = 0; j < histogramPossibleDiffusion[0].length; j++) {
+        for (int k = 0; k < histogramPossibleDiffusion[0][0].length; k++) {
+          print[6].print(histogramPossibleDiffusion[i][j][k] + "\t");
+        }
+      }
+    }
+    
     for (int i = 0; i < print.length; i++) {
       print[i].println();
       print[i].flush();
@@ -269,6 +372,26 @@ public class ActivationEnergy {
     }
   }
     
+  private Double[] initDouble1(int length) {
+    Double[] histogram = new Double[length];
+    for (int i = 0; i < length; i++) {
+        histogram[i] = new Double(0);
+    }
+    return histogram;
+  }
+  
+  private Double[][][] initDouble3(int length) {
+    Double[][][] histogram = new Double[length][length][length];
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        for (int k = 0; k < length; k++) {
+          histogram[i][j][k] = new Double(0);
+        }
+      }
+    }
+    return histogram;
+  }
+  
   private Double[][] initDouble(int length) {
     Double[][] histogram = new Double[length][length];
     for (int i = 0; i < length; i++) {
