@@ -176,7 +176,7 @@ if (omegas):
     plt.savefig("multiplicitiesOmegasP.png", bbox_inches='tight')
 
 figR, ax = plt.subplots(1, figsize=(5,4))
-ax.plot(x, tgt, label="target", color="red")
+ax.plot(x, tgt, label="target")
 ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('Set2')
 for i in range(0,maxAlfa):
