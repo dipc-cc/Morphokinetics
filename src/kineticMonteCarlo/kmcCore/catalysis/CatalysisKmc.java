@@ -75,6 +75,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Activation energy output during the execution
    */
   private final boolean outputAe;
+  private final boolean outputAeTotal;
   private int numGaps;
   private int counterSitesWith4OccupiedNeighbours;
   private boolean stationary;
@@ -123,6 +124,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     co2sum = 0;
     activationEnergy = new ActivationEnergy(parser);
     outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
+    outputAeTotal = parser.getOutputFormats().contains(OutputType.formatFlag.AETOTAL);
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
     stationaryStep = -1;
@@ -197,7 +199,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       diffusionRateO = rates.getDiffusionRates(O);
     }
     
-    if (outputAe) {
+    if (outputAe || outputAeTotal) {
       double[][] processProbs2D = new double[2][2];
 
       for (int i = 0; i < 2; i++) {
@@ -256,6 +258,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     simulatedSteps++;
     if (outputData && simulatedSteps % outputEvery == 0) {
       if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
+        System.out.println("stationary");
         stationary = true;
         stationaryStep = simulatedSteps;
         getList().resetTime();
@@ -281,7 +284,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.flushCatalysis();
       }
 
-      if (outputAe) {
+      if (outputAe || outputAeTotal) {
         activationEnergy.printAe(restart.getExtraWriters(), getTime());
       }
       co2prv = co2sum;
@@ -295,6 +298,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     while (getLattice().getCoverage() < maxCoverage && co2sum != co2max) {
       activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
+      if (outputAeTotal) {
+        activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
+      }
       if (performSimulationStep()) {
         break;
       }
