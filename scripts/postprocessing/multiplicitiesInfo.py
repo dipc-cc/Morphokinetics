@@ -24,7 +24,7 @@ def computeMavgAndOmega(fileNumber, p):
 
 def computeMavgAndOmegaOverRuns():
     p = inf.getInputParameters()
-    files = glob.glob("dataAePossibleDiscrete*")
+    files = glob.glob("dataAePossibleFromList*")
     files.sort()
     filesNumber = len(files)
     matrix = np.loadtxt(fname=files[0])
