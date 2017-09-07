@@ -71,7 +71,8 @@ maxRanges = len(temperatures)
 labelAlfa = ["$CO_2^B+O^B$","$CO_2^B+O^C$","$CO_2^C+O^B$","$CO_2^C+O^C$"]
 for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
-    print(co2)
+    if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
+        print(co2)
     x = 1/kb/temperatures
     y = tempR1avg
     if showPlot:
@@ -137,15 +138,6 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     err.append(error[-1])
 
 plt.savefig("multiplicities.png", bbox_inches='tight')
-fig, ax = plt.subplots(1, figsize=(5,4))
-ax.plot(x, tgt, label="target")
-ax.plot(x, rct, label="recomputed")
-ax2 = ax.twinx()
-ax2.plot(x, err, label="Relative error")
-ax2.set_ylim(0,1)
-ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
-ax.legend(loc="best", prop={'size':6})
-plt.savefig("multiplicitiesResume.png", bbox_inches='tight')
 
 
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
@@ -159,7 +151,9 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
 
     plt.savefig("multiplicitiesRandM.png", bbox_inches='tight')
 
+lastOmegas = np.zeros(shape=(maxRanges,maxAlfa))
 if (omegas):
+    co2.append(maxCo2)
     labels = ["0", "20", "40", "60", "80", "100"]
     cm = plt.get_cmap('Set2')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
@@ -169,9 +163,10 @@ if (omegas):
         for i in range(0,maxAlfa): #alfa
             lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
             partialSum -= tempOmegaCo2[:,i,j]*(tempEaRCo2[:,i,j]-tempEaMCo2[:,i,j])
+            lastOmegas[maxRanges-1-j][i] = partialSum[-1]
     
     myLegends = []
-    myLabels = [r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
+    myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
     myLegends += lgs
         
     for i in range(maxAlfa-1,-1,-1): #alfa
@@ -179,3 +174,18 @@ if (omegas):
     myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
     plt.savefig("multiplicitiesOmegasP.png", bbox_inches='tight')
+
+figR, ax = plt.subplots(1, figsize=(5,4))
+ax.plot(x, tgt, label="target", color="red")
+ax.plot(x, rct, "--", label="recomputed")
+cm = plt.get_cmap('Set2')
+for i in range(0,maxAlfa):
+    #ax.plot(x, lastOmegas[:,i], "--", label=i)
+    ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[i], color=cm(i/(maxAlfa-1)))
+# ax2 = ax.twinx()
+# ax2.plot(x, err, label="Relative error")
+# ax2.set_ylim(0,1)
+ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
+ax.legend(loc="best", prop={'size':6})
+#ax.set_yscale("log")
+plt.savefig("multiplicitiesResume.png", bbox_inches='tight')
