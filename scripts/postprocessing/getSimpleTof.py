@@ -19,7 +19,7 @@ def getSimpleTof():
         if len(data) > 0:
             try:
                 tofs += data[i,0] - data[j,0]# last simulated time, assuming 1000 atoms are created
-                #print(data[50,0],data[0,0])
+                #print(data[i,0] - data[j,0])
             except IndexError:
                 continue
     tof = i_j / (tofs / len(tofFiles))
@@ -58,14 +58,43 @@ def plot(x,y,p,meskinePlot):
     ax.legend(loc="best", prop={'size':6})
 
     fig.savefig("tof.png", bbox_inches='tight')
+    
+def plotPressures(x,y,p):
+    fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,4))
+    # Labels
+    ax.set_title("TOF "+str(p.sizI)+"x"+str(p.sizJ))
+    ax.set_ylabel(r"$\frac{TOF}{molecules/cm^2 sec}$")
+    ax.set_xlabel(r"$P_{CO}/P_{O}$")
+    
+    ucArea = 3.12*6.43/4
+    toCm = 1e-8
+    area = p.sizI * p.sizJ * ucArea * toCm * toCm
+    x = np.array(x)
+    y = np.array(y)
+    y = y / area 
+    # reference
+    scriptDir = os.path.dirname(os.path.realpath(__file__))
+    data = np.loadtxt(scriptDir+"/tofP"+p.rLib.title()+".txt")
+    print(scriptDir+"/tofP"+p.rLib.title()+".txt")
+    ax.set_yscale("log")
+    ax.set_ylim(1e11,1e14)
+    ax.plot(x,y,label=p.rLib.title(), ls="-", marker="+")
+    ax.plot(data[:,0],data[:,1],label="ref", ls="-", marker="^")
+    ax.legend(loc="best", prop={'size':6})
+
+    fig.savefig("tof.png", bbox_inches='tight')
 
 workingPath = os.getcwd()
 x = []
 y = []
+temperatures = True
 try:
     iter = inf.getTemperatures()
 except ValueError:
     iter = inf.getPressures()
+
+if iter[0] < 15:
+    temperatures = False
 for f in iter:
     try:
         os.chdir(str(f)+"/results")
@@ -91,4 +120,7 @@ p = inf.getInputParameters(glob.glob("*/output*")[0])
 meskinePlot = False
 if len(sys.argv) > 1:
     meskinePlot = True
-plot(x,y,p,meskinePlot)
+if temperatures:
+    plot(x,y,p,meskinePlot)
+else:
+    plotPressures(x,y,p)
