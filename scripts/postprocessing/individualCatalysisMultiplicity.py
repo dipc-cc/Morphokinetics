@@ -76,21 +76,20 @@ for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     x = 1/kb/temperatures
     y = tempR1avg
     if showPlot:
-        cm = plt.get_cmap('Set1')
         fig, axarr = plt.subplots(3, sharex=True, figsize=(5,6))
         fig.subplots_adjust(right=0.7, hspace=0.1)
     else:
         axarr = np.zeros(3)
     # N_h
-    tempEaCo2.append(mp.localAvgAndPlotLinear(x, y[:,co2], rngt, axarr[0], -1, showPlot, labelAlfa, co2))
+    tempEaCo2.append(mp.localAvgAndPlotLinear(x, y[:,co2], axarr[0], -1, showPlot, co2))
     tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
     y2 = tempR1avg/tempR3avg
-    tempEafCo2.append(mp.localAvgAndPlotLinear(x, y2[:,co2], rngt, axarr[0], -2, False, labelAlfa, co2))
+    tempEafCo2.append(mp.localAvgAndPlotLinear(x, y2[:,co2], axarr[0], -2, False, co2))
     
     for i in range(0,maxAlfa): # alfa
         y = np.sum(tempMavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
-        tempEaM.append(mp.localAvgAndPlotLinear(x, y, rngt, axarr[1], i, showPlot, labelAlfa, co2))
+        tempEaM.append(mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2))
         if showPlot:
             y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
             mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
