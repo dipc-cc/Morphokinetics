@@ -162,7 +162,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
     return slopes
 
 
-def localAvgAndPlotLinear(x, y, ax, alfa, showPlot, labelAlfa, co2):
+def localAvgAndPlotLinear(x, y, ax, alfa, showPlot, co2):
     markers=["o", "s","D","^","d","h","p","o"]
     cm = plt.get_cmap('Set1')
     cm1 = plt.get_cmap('Set3')
