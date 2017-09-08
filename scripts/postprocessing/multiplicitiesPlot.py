@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import LogLocator
 from matplotlib.ticker import FixedFormatter
 import matplotlib.ticker as plticker
+from matplotlib.font_manager import FontProperties
 import os
 import glob
 import numpy as np
@@ -161,10 +162,8 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
     return slopes
 
 
-def localAvgAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
+def localAvgAndPlotLinear(x, y, ax, alfa, showPlot, labelAlfa, co2):
     markers=["o", "s","D","^","d","h","p","o"]
-    labelRange = ['low', 'med', 'high']
-    labelRange = labelRange+list([str(i) for i in rngt])
     cm = plt.get_cmap('Set1')
     cm1 = plt.get_cmap('Set3')
     slopes = []
@@ -193,13 +192,13 @@ def localAvgAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
             if alfa == -1:
-                ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
+                #ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
                 xHalf *= 1
                 yHalf *= 5
                 text = r"$E_a="+text+r"$"
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
+            #ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
     # last point
     b = np.log(y[-1]/y[-2]) / (x[-1] - x[-2])
     if np.isnan(b):
@@ -213,6 +212,7 @@ def localAvgAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
 
 
 def plotSimple(x, targt, rcmpt, error, ax, maxRanges, i, legend):
+    #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))
     cm = plt.get_cmap('gist_earth')
     ax.text(0.5, 0.95, r"$"+roman.toRoman(maxRanges-i)+r"$", color="gray", transform=ax.transAxes)
     ax.set_xlabel(r"$CO_2\cdot10$")
@@ -236,12 +236,25 @@ def plotSimple(x, targt, rcmpt, error, ax, maxRanges, i, legend):
         maxY = 1
     ax2.annotate(' ', xy=(.6, maxY), xytext=(.2, maxY-1e-2), arrowprops=dict(arrowstyle="->", connectionstyle="angle3", edgecolor=cm(3/4), facecolor=cm(3/4)))
     maxYlabel = "{:03.2f}%".format(maxY*100)
-    bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
-    ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props)
     if i != maxRanges-1:
         ax2.yaxis.set_major_formatter(plticker.NullFormatter())
     else:
         ax2.set_ylabel("Relative error")
+
+    # Annotate last energies and absolute error
+    font = FontProperties()
+    font.set_size(6)
+    label = "{:03.4f}".format(rcmpt[-1])
+    bbox_props = dict(boxstyle="round", fc=cm(1/3), ec=cm(1/3), alpha=0.7)
+    ax.text(30,rcmpt[-1]+1,label, bbox=bbox_props, fontproperties=font)
+    label = "{:03.4f}".format(targt[-1])
+    bbox_props = dict(boxstyle="round", fc=cm(2/3), ec=cm(2/3), alpha=0.7)
+    ax.text(30,targt[-1]-1,label, bbox=bbox_props, fontproperties=font)
+    label = "{:03.4f}".format(abs(rcmpt[-1]-targt[-1]))
+    bbox_props = dict(boxstyle="round", fc=cm(3/3), ec=cm(3/3), alpha=0.7)
+    ax.text(30,targt[-1]-0.5,label, bbox=bbox_props, fontproperties=font)
+    bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
+    ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props)
 
     handles = [lgTargt, lgRcmpt, lgError]
     if legend and i == maxRanges-1:
