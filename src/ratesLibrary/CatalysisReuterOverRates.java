@@ -16,29 +16,29 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisKiejnaRates extends CatalysisRates {
+public class CatalysisReuterOverRates extends CatalysisRates {
   
-  public CatalysisKiejnaRates(float temperature) {
+  public CatalysisReuterOverRates(float temperature) {
     super(temperature);
     setCorrectionFactor(1.0);
     
     double[] desorptionEnergiesCo = new double[2];
-    desorptionEnergiesCo[BR] = 1.69;
-    desorptionEnergiesCo[CUS] = 1.31;
+    desorptionEnergiesCo[BR] = 1.6;
+    desorptionEnergiesCo[CUS] = 1.3;
     setDesorptionEnergiesCo(desorptionEnergiesCo);
   
     double[][] desorptionEnergiesO2 = new double[2][2];
-    desorptionEnergiesO2[BR][BR]  = 4.66;
-    desorptionEnergiesO2[BR][CUS] = 3.19;
-    desorptionEnergiesO2[CUS][BR] = 3.19;
-    desorptionEnergiesO2[CUS][CUS] = 1.72;
+    desorptionEnergiesO2[BR][BR]  = 4.6;
+    desorptionEnergiesO2[BR][CUS] = 3.3;
+    desorptionEnergiesO2[CUS][BR] = 3.3;
+    desorptionEnergiesO2[CUS][CUS] = 2.0;
     setDesorptionEnergiesO2(desorptionEnergiesO2);
     
     double[][] reactionEnergiesCoO = new double[2][2];
-    reactionEnergiesCoO[BR][BR] = 1.48; // CO is in bridge and O in bridge
-    reactionEnergiesCoO[BR][CUS] = 0.61; // CO is in bridge and O in CUS
-    reactionEnergiesCoO[CUS][BR] = 0.99; // CO is in CUS and O in bridge
-    reactionEnergiesCoO[CUS][CUS]= 0.78; // CO is in CUS and O in CUS
+    reactionEnergiesCoO[BR][BR] = 1.54; // CO is in bridge and O in bridge
+    reactionEnergiesCoO[BR][CUS] = 0.76; // CO is in bridge and O in CUS
+    reactionEnergiesCoO[CUS][BR] = 1.25; // CO is in CUS and O in bridge
+    reactionEnergiesCoO[CUS][CUS]= 0.89; // CO is in CUS and O in CUS
     setReactionEnergiesCoO(reactionEnergiesCoO);
     
     double[][][] diffusionEnergies = new double[2][2][2];

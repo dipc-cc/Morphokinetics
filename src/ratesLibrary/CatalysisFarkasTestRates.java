@@ -18,7 +18,7 @@ public class CatalysisFarkasTestRates extends CatalysisRates {
   
   public CatalysisFarkasTestRates(float temperature) {
     super(temperature);
-    setPrefactor(0.5);
+    setCorrectionFactor(0.5);
   }
   
   @Override

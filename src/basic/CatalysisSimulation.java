@@ -14,6 +14,7 @@ import ratesLibrary.CatalysisReuterRates;
 import ratesLibrary.CatalysisSeitsonenRates;
 import ratesLibrary.CatalysisFarkasRates;
 import ratesLibrary.CatalysisFarkasTestRates;
+import ratesLibrary.CatalysisReuterOverRates;
 import ratesLibrary.IRates;
 
 /**
@@ -32,6 +33,9 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
     switch (getParser().getRatesLibrary()) {
       case "reuter":
         setRates(new CatalysisReuterRates(getParser().getTemperature()));
+        break;
+      case "reuterOver":
+        setRates(new CatalysisReuterOverRates(getParser().getTemperature()));
         break;
       case "kiejna":
         setRates(new CatalysisKiejnaRates(getParser().getTemperature()));

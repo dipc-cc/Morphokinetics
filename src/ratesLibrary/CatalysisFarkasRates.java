@@ -19,7 +19,7 @@ public class CatalysisFarkasRates extends CatalysisRates {
 
   public CatalysisFarkasRates(float temperature) {
     super(temperature);
-    setPrefactor(1.0);
+    setCorrectionFactor(1.0);
 
     double repulsion = 10.6 / 2.0;    
     double kJeV = 1.0 / 96.485;
