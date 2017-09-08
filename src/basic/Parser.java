@@ -209,9 +209,10 @@ public class Parser {
    * See {@link #getOutputFormats()}.
    */
   private final OutputType outputType;
-  /** This numbers reflect the power of two and gives the chance to choose between inclusively among
-   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4), XYZ(5) and EXTRA2(6). So a number between 0 and 63 has
-   * to be chosen.
+  /**
+   * This numbers reflect the power of two and gives the chance to choose between inclusively among
+   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4), XYZ(5), EXTRA2(6), CAT(7) and AETOTAL(8). So a number
+   * between 0 and 2⁸ has to be chosen.
    */
   private long numericFormatCode;
   /**
@@ -621,6 +622,9 @@ public class Parser {
         }
         if (type.equals("catalysis")){
           numericFormatCode += 128;
+        }
+        if (type.equals("aetotal")){
+          numericFormatCode += 256;
         }
       }
     } catch (JSONException e) {
@@ -1402,7 +1406,7 @@ public class Parser {
    *
    * Input "parameters" variable: {@code outputDataFormat}.
    * 
-   * @return output format. Either: TXT, PNG, MKO, EXTRA, EXTRA2, AE or XYZ
+   * @return output format. Either: TXT, PNG, MKO, EXTRA, EXTRA2, AE, XYZ or AETOTAL
    */
   public EnumSet<formatFlag> getOutputFormats() {
     return outputType.getStatusFlags(numericFormatCode);
