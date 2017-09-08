@@ -68,7 +68,7 @@ tempEafCo2 = []
 rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
 
 maxRanges = len(temperatures)
-labelAlfa = ["$CO_2^B+O^B$","$CO_2^B+O^C$","$CO_2^C+O^B$","$CO_2^C+O^C$"]
+labelAlfa = ["$CO^B+O^B$","$CO^B+O^C$","$CO^C+O^B$","$CO^C+O^C$"]
 for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
     if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
