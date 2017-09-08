@@ -130,7 +130,7 @@ public class ActivationEnergy {
             // Desorption
             if (atom.isOccupied()) {
               if (atom.getType() == CO) {
-                histogramPossibleDesorption[CO][0][0] += elapsedTime;
+                histogramPossibleDesorption[CO][atom.getLatticeSite()][0] += elapsedTime;
               } else if (neighbour.getType() == O) { // Two O together
                 histogramPossibleDesorption[O][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
               }
@@ -343,6 +343,7 @@ public class ActivationEnergy {
       print[6].print(histogramPossibleAdsorption[i] + "\t");   
     }
     print[6].print(histogramPossibleDesorption[CO][0][0] + "\t");
+    print[6].print(histogramPossibleDesorption[CO][1][0] + "\t");
     for (int i = 0; i < histogramPossibleDesorption[O].length; i++) {
       for (int j = 0; j < histogramPossibleDesorption[O][0].length; j++) {
         print[6].print(histogramPossibleDesorption[O][i][j] + "\t");
