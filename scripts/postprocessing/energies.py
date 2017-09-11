@@ -14,12 +14,24 @@ def basic(self):
 def graphene(self):
     return getGrapheneSimpleEnergies()
 
-def catalysis(self):
+def catalysisEnergies(self):
     libSwitcher = {
         "reuter": getCatalysisEnergiesReuter,
+        "reuterOver": getCatalysisEnergiesReuterOver,
         "kiejna": getCatalysisEnergiesKiejna,
         "seitsonen": getCatalysisEnergiesSeitsonen,
         "farkas": getCatalysisEnergiesFarkas,
+    }
+    func = libSwitcher.get(self.rLib)
+    return func()
+
+def catalysisEnergiesTotal(self):
+    libSwitcher = {
+        "reuter": getCatalysisEnergiesReuterTotal,
+        "reuterOver": getCatalysisEnergiesReuterOverTotal,
+        "kiejna": getCatalysisEnergiesKiejnaTotal,
+        "seitsonen": getCatalysisEnergiesSeitsonenTotal,
+        "farkas": getCatalysisEnergiesFarkasTotal,
     }
     func = libSwitcher.get(self.rLib)
     return func()
@@ -67,35 +79,146 @@ def getGrapheneSimpleEnergies():
 
 
 def getCatalysisEnergiesReuter():
+    energies = getCatalysisEnergiesReuterTotal()
+    return energies[0:4]
+
+def getCatalysisEnergiesReuterTotal():
+    energies = 99999999*np.ones(20, dtype=float)
+    energies[0] = 1.5  # CO^B + O^B -> CO_2 
+    energies[1] = 0.8  # CO^B + O^C -> CO_2 
+    energies[2] = 1.2  # CO^C + O^B -> CO_2 
+    energies[3] = 0.9  # CO^C + O^C -> CO_2#
+    energies[4] = 0.    # rate must be obtained in another way
+    energies[5] = 0.    # rate must be obtained in another way
+    energies[6] = 1.85  # CO^B -> V
+    energies[7] = 1.32  # CO^C -> V
+    energies[8] = 4.82  # O^B + O^B -> V^B + V^B
+    energies[9] = 3.30  # O^B + O^C -> V^B + V^C
+    energies[10] = 3.0  # O^C + O^B -> V^C + V^B
+    energies[11] = 1.78 # O^C + O^C -> V^C + V^C
+    energies[12] = 0.70 # CO^B -> CO^B
+    energies[13] = 2.06 # CO^B -> CO^C
+    energies[14] = 1.40 # CO^C -> CO^B
+    energies[15] = 1.57 # CO^C -> CO^C
+    energies[16] = 0.90 # O^B  -> O^B
+    energies[17] = 1.97 # O^B  -> O^C
+    energies[18] = 0.70 # O^C  -> O^B
+    energies[19] = 1.53 # O^C  -> O^C
+    return energies
+
+def getCatalysisEnergiesReuterOver():
+    energies = getCatalysisEnergiesReuterOverTotal()
+    return energies[0:4]
+
+def getCatalysisEnergiesReuterOverTotal():
     energies = 99999999*np.ones(4, dtype=float)
-    energies[0] = 1.5
-    energies[1] = 0.8
-    energies[2] = 1.2
-    energies[3] = 0.9
+    energies[0] = 1.54  # CO^B + O^B -> CO_2 
+    energies[1] = 0.76  # CO^B + O^C -> CO_2 
+    energies[2] = 1.25  # CO^C + O^B -> CO_2 
+    energies[3] = 0.89  # CO^C + O^C -> CO_2#
+    energies[4] = 0.    # rate must be obtained in another way
+    energies[5] = 0.    # rate must be obtained in another way
+    energies[6] = 1.6   # CO^B -> V
+    energies[7] = 1.3   # CO^C -> V
+    energies[8] = 4.6   # O^B + O^B -> V^B + V^B
+    energies[9] = 3.3   # O^B + O^C -> V^B + V^C
+    energies[10] = 3.3  # O^C + O^B -> V^C + V^B
+    energies[11] = 2.0  # O^C + O^C -> V^C + V^C
+    
+    energies[12] = 0.6 # CO^B -> CO^B
+    energies[13] = 1.6 # CO^B -> CO^C
+    energies[14] = 1.3 # CO^C -> CO^B
+    energies[15] = 1.7 # CO^C -> CO^C
+    energies[16] = 0.7 # O^B  -> O^B
+    energies[17] = 2.3 # O^B  -> O^C
+    energies[18] = 1.0 # O^C  -> O^B
+    energies[19] = 1.6 # O^C  -> O^C    
     return energies
 
 def getCatalysisEnergiesKiejna():
-    energies = 99999999*np.ones(4, dtype=float)
-    energies[0] = 1.48
-    energies[1] = 0.61
-    energies[2] = 0.99
-    energies[3] = 0.78
+    energies = getCatalysisEnergiesKiejnaTotal()
+    return energies[0:4]
+
+def getCatalysisEnergiesKiejnaTotal():
+    energies = 99999999*np.ones(20, dtype=float)
+    energies[0] = 1.48  # CO^B + O^B -> CO_2 
+    energies[1] = 0.61  # CO^B + O^C -> CO_2 
+    energies[2] = 0.99  # CO^C + O^B -> CO_2 
+    energies[3] = 0.78  # CO^C + O^C -> CO_2#
+    energies[4] = 0.    # rate must be obtained in another way
+    energies[5] = 0.    # rate must be obtained in another way
+    energies[6] = 1.69  # CO^B -> V
+    energies[7] = 1.31  # CO^C -> V
+    energies[8] = 4.66  # O^B + O^B -> V^B + V^B
+    energies[9] = 3.19  # O^B + O^C -> V^B + V^C
+    energies[10] = 3.19  # O^C + O^B -> V^C + V^B
+    energies[11] = 1.72 # O^C + O^C -> V^C + V^C
+    energies[12] = 0.6 # CO^B -> CO^B
+    energies[13] = 1.6 # CO^B -> CO^C
+    energies[14] = 1.3 # CO^C -> CO^B
+    energies[15] = 1.7 # CO^C -> CO^C
+    energies[16] = 0.7 # O^B  -> O^B
+    energies[17] = 2.3 # O^B  -> O^C
+    energies[18] = 1.0 # O^C  -> O^B
+    energies[19] = 1.6 # O^C  -> O^C
     return energies
 
 def getCatalysisEnergiesSeitsonen():
-    energies = 99999999*np.ones(4, dtype=float)
-    energies[0] = 1.4
-    energies[1] = 0.6
-    energies[2] = 0.74
-    energies[3] = 0.71
+    energies = getCatalysisEnergiesSeitsonenTotal()
+    return energies[0:4]
+
+def getCatalysisEnergiesSeitsonenTotal():
+    energies = 99999999*np.ones(20, dtype=float)
+    energies[0] = 1.4  # CO^B + O^B -> CO_2
+    energies[1] = 0.6  # CO^B + O^C -> CO_2
+    energies[2] = 0.74 # CO^C + O^B -> CO_2
+    energies[3] = 0.71 # CO^C + O^C -> CO_2#
+    energies[4] = 0.    # rate must be obtained in another way
+    energies[5] = 0.    # rate must be obtained in another way
+    energies[6] = 1.85  # CO^B -> V
+    energies[7] = 1.32  # CO^C -> V
+    energies[8] = 4.82  # O^B + O^B -> V^B + V^B
+    energies[9] = 3.30  # O^B + O^C -> V^B + V^C
+    energies[10] = 3.30 # O^C + O^B -> V^C + V^B
+    energies[11] = 1.78 # O^C + O^C -> V^C + V^C
+    energies[12] = 0.70 # CO^B -> CO^B
+    energies[13] = 2.06 # CO^B -> CO^C
+    energies[14] = 1.40 # CO^C -> CO^B
+    energies[15] = 1.57 # CO^C -> CO^C
+    energies[16] = 0.90 # O^B  -> O^B
+    energies[17] = 1.97 # O^B  -> O^C
+    energies[18] = 0.70 # O^C  -> O^B
+    energies[19] = 1.53 # O^C  -> O^C
     return energies
 
 def getCatalysisEnergiesFarkas():
-    energies = 99999999*np.ones(4, dtype=float)
-    energies[0] = 133 / kJtoeV
-    energies[1] =  91 / kJtoeV
-    energies[2] =  89 / kJtoeV
-    energies[3] =  89 / kJtoeV
+    energies = getCatalysisEnergiesFarkasTotal()
+    return energies[0:4]
+
+def getCatalysisEnergiesFarkasTotal():
+    energies = 99999999*np.ones(20, dtype=float)
+    energies[0] = 133 / kJtoeV  # CO^B + O^B -> CO_2 
+    energies[1] =  91 / kJtoeV  # CO^B + O^C -> CO_2 
+    energies[2] =  89 / kJtoeV  # CO^C + O^B -> CO_2 
+    energies[3] =  89 / kJtoeV  # CO^C + O^C -> CO_2#
+    
+    energies[4] = 0.    # rate must be obtained in another way
+    energies[5] = 0.    # rate must be obtained in another way
+    energies[6] = 1.85  # CO^B -> V
+    energies[7] = 1.32  # CO^C -> V
+    energies[8] = 4.82  # O^B + O^B -> V^B + V^B
+    energies[9] = 3.30  # O^B + O^C -> V^B + V^C
+    energies[10] = 3.0  # O^C + O^B -> V^C + V^B
+    energies[11] = 1.78 # O^C + O^C -> V^C + V^C
+    energies[12] = 0.70 # CO^B -> CO^B
+    energies[13] = 2.06 # CO^B -> CO^C
+    energies[14] = 1.40 # CO^C -> CO^B
+    energies[15] = 1.57 # CO^C -> CO^C
+    energies[16] = 0.90 # O^B  -> O^B
+    energies[17] = 1.97 # O^B  -> O^C
+    energies[18] = 0.70 # O^C  -> O^B
+    energies[19] = 1.53 # O^C  -> O^C
+    
     return energies
     
 
@@ -103,7 +226,7 @@ def getRatio(calc, temperature, energies):
     kb = 8.617332e-5
     if calc == "catalysis":
         hev = 4.136e-15
-        p = 0.5 * kb * temperature / hev
+        p = 1.0 * kb * temperature / hev
     else:
         p = 1e13
     return p * np.exp(-energies/kb/temperature)
@@ -150,42 +273,23 @@ def defineRanges(calculationMode, ratesLibrary, temperatures):
         return list([iSl, iSm, iSh, iFh])
 
 def reuter(temperatures):
-    indexes = np.where((temperatures >= 300) & (temperatures <= 320))
-    iSl = indexes[0][0]
-    iFl = indexes[0][-1]
-    indexes = np.where((temperatures >= 320) & (temperatures <= 340))
-    iSm = indexes[0][0]
-    iFm = indexes[0][-1]
-    indexes = np.where((temperatures >= 355) & (temperatures <= 370))
-    iSh = indexes[0][0]
-    iFh = indexes[0][-1]
-    ranges = list([iSl, iSm, iSh, iFh])
-    ranges = list([0, 4, 8, 12, 15])
+
+    ranges = list([0, 4, 8])
+    return ranges
+
+def reuterOver(temperatures):
+
+    ranges = list([0, 4, 8])
     return ranges
 
 def kiejna(temperatures):
-    indexes = np.where((temperatures >= 300) & (temperatures <= 325))
-    iSl = indexes[0][0]
-    iFl = indexes[0][-1]
-    indexes = np.where((temperatures >= 330) & (temperatures <= 340))
-    iSm = indexes[0][0]
-    iFm = indexes[0][-1]
-    indexes = np.where((temperatures >= 345) & (temperatures <= 370))
-    iSh = indexes[0][0]
-    iFh = indexes[0][-1]
-    return list([iSl, iSm, iSh, iFh])
+
+    ranges = list([0, 4, 8, 12, 15])
+    return ranges
 
 def seitsonen(temperatures):
-    indexes = np.where((temperatures >= 300) & (temperatures <= 330))
-    iSl = indexes[0][0]
-    iFl = indexes[0][-1]
-    indexes = np.where((temperatures >= 330) & (temperatures <= 345))
-    iSm = indexes[0][0]
-    iFm = indexes[0][-1]
-    indexes = np.where((temperatures >= 350) & (temperatures <= 370))
-    iSh = indexes[0][0]
-    iFh = indexes[0][-1]
-    return list([iSl, iSm, iSh, iFh])
+    ranges = list(np.arange(0,16,3))
+    return ranges
 
 def farkas(temperatures):
     ranges = list(np.arange(0,16,3))
@@ -196,6 +300,7 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
     ranges = []
     switcher = {
         "reuter": reuter,
+        "reuterOver": reuterOver,
         "kiejna": kiejna,
         "seitsonen": seitsonen,
         "farkas": farkas,

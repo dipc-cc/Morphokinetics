@@ -29,11 +29,17 @@ class fileData:
             "AgUc": e.agUc,
             "basic": e.basic,
             "graphene": e.graphene,
-            "catalysis": e.catalysis,
+            "catalysis": e.catalysisEnergies,
         }
         func = calcSwitcher.get(self.calc, lambda: "nothing")
         ratios = e.getRatio(self.calc, self.temp, func(self))
         return ratios
+
+    # For catalysis
+    def getRatiosTotal(self):
+        ratios = e.getRatio(self.calc, self.temp, e.catalysisEnergiesTotal(self))
+        return ratios
+        
 
 
 def getFluxes():

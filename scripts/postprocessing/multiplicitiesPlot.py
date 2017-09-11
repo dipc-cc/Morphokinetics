@@ -113,7 +113,7 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     # lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     # newax.add_artist(lg)
     # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i], mec='none',alpha=0.75)
+    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i%8], mec='none',alpha=0.75)
 
     for j in range(0,len(rngt)-1):
         axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
@@ -162,14 +162,15 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
     return slopes
 
 
-def localAvgAndPlotLinear(x, y, ax, alfa, showPlot, co2):
+def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
+    showPlot = sp# and (alfa == 4 or alfa == 5)
     markers=["o", "s","D","^","d","h","p","o"]
     cm = plt.get_cmap('Set1')
     cm1 = plt.get_cmap('Set3')
     slopes = []
     if showPlot:
-        inf.smallerFont(ax, 8)
-        ax.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa])#, "o", lw=0.5)
+        #inf.smallerFont(ax, 8)
+        ax.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa%7])#, "o", lw=0.5)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         putLabels(ax, co2, alfa)
     # one neighbour point
@@ -187,12 +188,13 @@ def localAvgAndPlotLinear(x, y, ax, alfa, showPlot, co2):
             a = np.log(y[i])-b*x[i]
         slopes.append(b)
         if showPlot:
-            ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1((i+abs(alfa)*3)/12))
+            ax.set_yscale("log")
+            #ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1((i+abs(alfa%12)*3)/12))
             xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
             if alfa == -1:
-                #ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
+                ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
                 xHalf *= 1
                 yHalf *= 5
                 text = r"$E_a="+text+r"$"
@@ -203,7 +205,7 @@ def localAvgAndPlotLinear(x, y, ax, alfa, showPlot, co2):
     b = np.log(y[-1]/y[-2]) / (x[-1] - x[-2])
     if np.isnan(b):
         b = 0
-        print(y[-1], y[-2],x[-1], x[-2])
+        #print(y[-1], y[-2],x[-1], x[-2])
     slopes.append(b)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])

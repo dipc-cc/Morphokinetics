@@ -18,9 +18,14 @@ temperatures = inf.getTemperatures("float")
 kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
-maxAlfa = 4
-ind = [0,1,1,2,2,3,3,4]
-energies = e.catalysisEnergies(p)
+maxAlfa = 19 # I think is correct
+labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$",
+             r"$V\rightarrow CO$",r"$V\rightarrow O$",
+             r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$",
+             r"$CO^B\rightarrow CO^B$",r"$CO^B\rightarrow CO^C$",r"$CO^C\rightarrow CO^B$",r"$CO^C\rightarrow CO^C$",
+             r"$O^B+O^B\rightarrow V^B+V^B$",r"$O^B+O^C\rightarrow V^B+V^C$",r"$O^C+O^B\rightarrow V^C+V^B$",r"$O^C+O^C\rightarrow V^C+V^C$",
+             r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"]
+energies = e.catalysisEnergiesTotal(p)
 tempMavg = []
 tempOavg = []
 tempR1avg = []
@@ -38,7 +43,7 @@ for t in temperatures:
         os.chdir(runFolder[-1])
     except FileNotFoundError:
         continue
-    tmp1, tmp2, tmp3, tmp4, tmp5 = mi.computeMavgAndOmegaOverRuns()
+    tmp1, tmp2, tmp3, tmp4, tmp5 = mi.computeMavgAndOmegaOverRuns(total=True)
     tempMavg.append(tmp1)
     tempOavg.append(tmp2)
     tempR1avg.append(tmp3)
@@ -68,7 +73,6 @@ tempEafCo2 = []
 rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
 
 maxRanges = len(temperatures)
-labelAlfa = ["$CO^B+O^B$","$CO^B+O^C$","$CO^C+O^B$","$CO^C+O^C$"]
 for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
     if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
@@ -88,12 +92,15 @@ for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     tempEafCo2.append(mp.localAvgAndPlotLinear(x, y2[:,co2], axarr[0], -2, False, co2))
     
     for i in range(0,maxAlfa): # alfa
-        y = np.sum(tempMavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
+        #if i == 4 or i == 5:
+        #    showPlot = True
+            
+        y = np.sum(tempMavg[:,co2,i:i+1], axis=1)
         tempEaM.append(mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2))
         if showPlot:
-            y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
+            y = np.sum(tempOavg[:,co2,i:i+1], axis=1)
             mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
-        tempOmega[i] = list(tempOavg[:, co2, ind[2*i]:ind[2*i+1]])
+        tempOmega[i] = list(tempOavg[:, co2, i:i+1])
     
     tempOmegaCo2.append(tempOmega)
     tempEaMCo2.append(tempEaM)
@@ -175,9 +182,9 @@ if (omegas):
     plt.savefig("multiplicitiesOmegasP.png", bbox_inches='tight')
 
 figR, ax = plt.subplots(1, figsize=(5,4))
-ax.plot(x, tgt, label="target")
+ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
-cm = plt.get_cmap('Set2')
+cm = plt.get_cmap('tab20c')
 for i in range(0,maxAlfa):
     #ax.plot(x, lastOmegas[:,i], "--", label=i)
     ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[i], color=cm(i/(maxAlfa-1)))
@@ -187,4 +194,4 @@ for i in range(0,maxAlfa):
 ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
 ax.legend(loc="best", prop={'size':6})
 #ax.set_yscale("log")
-plt.savefig("multiplicitiesResume.png", bbox_inches='tight')
+plt.savefig("multiplicitiesResume.svg", bbox_inches='tight')

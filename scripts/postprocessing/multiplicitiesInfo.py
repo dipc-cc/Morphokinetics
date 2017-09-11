@@ -2,28 +2,34 @@ import info as inf
 import glob as glob
 import numpy as np
 
-def computeMavgAndOmega(fileNumber, p):
-    possiblesFromList = np.loadtxt(fname="dataAePossibleFromList"+"{:03d}".format(fileNumber)+".txt")
+def computeMavgAndOmega(fileNumber, p, total):
+    if total:
+        name = "dataAeAll"
+        ratios = p.getRatiosTotal()
+    else:
+        name = "dataAePossibleFromList"
+        ratios = p.getRatios()
+    possiblesFromList = np.loadtxt(fname=name+"{:03d}".format(fileNumber)+".txt")
     time = np.array(possiblesFromList[:,0])
     possiblesFromList = possiblesFromList[:,1:] # remove time
     length = len(time)
     Mavg = np.zeros(shape=(length,p.maxA))
     for i in range(0,p.maxA): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,i]/time
-    ratios = p.getRatios()
 
     avgTotalRate2 = np.array(ratios.dot(np.transpose(Mavg)))
     # define omegas 
     omega = np.zeros(shape=(length,p.maxA)) # [co2amount, alfa]
     for i in range(0,length):
         omega[i,:] =  Mavg[i,:] * ratios / avgTotalRate2[i]
-    np.shape(omega)
     avgTotalHopRate1 = avgTotalHopRate3 = avgTotalRate2
     return Mavg, omega, avgTotalHopRate1, avgTotalRate2, avgTotalHopRate3
 
 
-def computeMavgAndOmegaOverRuns():
+def computeMavgAndOmegaOverRuns(total=False):
     p = inf.getInputParameters()
+    if total:
+        p.maxA = 20
     files = glob.glob("dataAePossibleFromList*")
     files.sort()
     filesNumber = len(files)
@@ -36,7 +42,7 @@ def computeMavgAndOmegaOverRuns():
     sumRate3 = np.zeros(length)
     #iterating over runs
     for i in range(0,filesNumber):
-        tmpMavg, tmpOmega, tmpRate1, tmpRate2, tmpRate3 = computeMavgAndOmega(i, p)
+        tmpMavg, tmpOmega, tmpRate1, tmpRate2, tmpRate3 = computeMavgAndOmega(i, p, total)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
         sumRate1 = sumRate1 + tmpRate1
