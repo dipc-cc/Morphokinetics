@@ -18,7 +18,7 @@ temperatures = inf.getTemperatures("float")
 kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
-maxAlfa = 19 # I think is correct
+maxAlfa = 20 # I think is correct
 labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$",
              r"$V\rightarrow CO$",r"$V\rightarrow O$",
              r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$",
@@ -92,9 +92,6 @@ for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     tempEafCo2.append(mp.localAvgAndPlotLinear(x, y2[:,co2], axarr[0], -2, False, co2))
     
     for i in range(0,maxAlfa): # alfa
-        #if i == 4 or i == 5:
-        #    showPlot = True
-            
         y = np.sum(tempMavg[:,co2,i:i+1], axis=1)
         tempEaM.append(mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2))
         if showPlot:
@@ -161,7 +158,7 @@ lastOmegas = np.zeros(shape=(maxRanges,maxAlfa))
 if (omegas):
     co2.append(maxCo2)
     labels = ["0", "20", "40", "60", "80", "100"]
-    cm = plt.get_cmap('Set2')
+    cm = plt.get_cmap('tab20c')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
         partialSum = np.sum(tempOmegaCo2[:,:,j]*(tempEaRCo2[:,:,j]-tempEaMCo2[:,:,j]), axis=1)
@@ -187,7 +184,7 @@ ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('tab20c')
 for i in range(0,maxAlfa):
     #ax.plot(x, lastOmegas[:,i], "--", label=i)
-    ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[i], color=cm(i/(maxAlfa-1)))
+    ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[maxRanges-1-i], color=cm(i/(maxAlfa-1)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
 # ax2.set_ylim(0,1)

@@ -1,6 +1,26 @@
 import numpy as np
 
 kJtoeV = 96.485
+kb = 8.617332e-5
+Na = 6.022e26 #Avogadro constant (1/mol) * 1000 (g -> kg). 6.022e23·1000.
+mass = [28.01055 / Na, 2*15.9994 / Na] #Mass of molecule (kg/molecule).
+kBInt = 1.381e-23
+mu = np.zeros(2)
+mu[0] = 1;
+mu[1] = 1;
+R = np.zeros(2) # m
+R[0] = 1.128e-10;
+R[1] = 1.21e-10;
+V = np.zeros(2) # Hz
+V[0] = 6.5e13;
+V[1] = 4.7e13;
+reducedMass = np.zeros(2)
+reducedMass[0] = (12.01115 * 15.9994) / ((12.01115 + 15.9994) * Na);
+reducedMass[1] = 15.9994 / (2.0 * Na);
+sigma = np.zeros(2)
+sigma[0] = 0.98;
+sigma[1] = 1.32;
+
 
 def agUc(self):
     return getHexagonalEnergies()
@@ -223,7 +243,6 @@ def getCatalysisEnergiesFarkasTotal():
     
 
 def getRatio(calc, temperature, energies):
-    kb = 8.617332e-5
     if calc == "catalysis":
         hev = 4.136e-15
         p = 1.0 * kb * temperature / hev
@@ -309,3 +328,28 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
     func = switcher.get(ratesLibrary, lambda: "nothing")
     # Execute the function
     return func(temperatures)
+
+def computeAdsorptionRate(p,pressure,type):
+    areaHalfUc = 10.0308e-20
+    return pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
+    
+def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
+    h = 6.6260695729e-34 #Planck constant (J·s).
+    qt = np.zeros(2)
+    qt[type] = pow(2.0 * np.pi * mass[type] * kBInt * p.temp / pow(h, 2.0), (3.0 / 2.0))
+    qr = np.zeros(2)
+    qr[type] = 8.0 * pow(np.pi, 2.0) * reducedMass[type] * pow(R[type], 2.0) * kBInt * p.temp / (sigma[type] * pow(h, 2.0));
+
+    # vibrational partition function
+    qv = np.zeros(2)
+    qv[type] = 1.0 / (1.0 - np.exp(-h * V[type] / (kBInt * p.temp)));
+
+    mu = np.zeros(2)
+    mu[type] = -kb * p.temp * np.log(kBInt * p.temp / pressure * qt[type] * qr[type] * qv[type]);
+    correction = 1
+    if (type == 0):
+        correction = 0.5
+
+    #correction = type + 1 # adsorption rate for O is for an atom, this is for a O2 molecule.
+
+    return correction * adsorptionRate * np.exp(-(energy + mu[type]) / (kb * p.temp));

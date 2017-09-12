@@ -21,6 +21,8 @@ class fileData:
         self.maxC = data[8] # max simulated coverage
         self.maxA = data[9] # max alfa: possible transition types (i.e. different energies)
         self.nCo2 = data[10] # created CO2 molecules. For catalysis
+        self.prCO = data[11] # pressure. For catalysis
+        self.prO2 = data[12] # pressure. For catalysis
 
         
     def getRatios(self):
@@ -38,6 +40,14 @@ class fileData:
     # For catalysis
     def getRatiosTotal(self):
         ratios = e.getRatio(self.calc, self.temp, e.catalysisEnergiesTotal(self))
+        ratios[4] = e.computeAdsorptionRate(self,self.prCO, 0)
+        ratios[5] = e.computeAdsorptionRate(self,self.prO2, 1)
+        ratios[6] = e.computeDesorptionRate(self,self.prCO, 0, ratios[4], e.catalysisEnergiesTotal(self)[6]) #CO^B
+        ratios[7] = e.computeDesorptionRate(self,self.prCO, 0, ratios[4], e.catalysisEnergiesTotal(self)[7]) #CO^C
+        ratios[8] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5], e.catalysisEnergiesTotal(self)[8]) #O^B + O^B
+        ratios[9] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5], e.catalysisEnergiesTotal(self)[9]) #O^B + O^C
+        ratios[10] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5], e.catalysisEnergiesTotal(self)[10]) #O^C + O^B
+        ratios[11] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5], e.catalysisEnergiesTotal(self)[11]) #O^C + O^C
         return ratios
         
 
@@ -65,7 +75,7 @@ def getPressures():
     return temperatures
     
 def getInputParameters(fileName = ""):
-    r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC, nCO2 = getInformationFromFile(fileName)
+    r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC, nCO2, prCO, prO2 = getInformationFromFile(fileName)
     maxN = 3
     maxA = 16
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
@@ -74,7 +84,7 @@ def getInputParameters(fileName = ""):
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
     if re.match("catalysis", calcType):
         maxA = 4 # Production of CO2, CO^B+O^B | CO^B+O^C | CO^C+O^B | CO^C+O^C
-    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2])
+    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2, prCO, prO2])
 
 
 def getInformationFromFile(fileName):
@@ -102,12 +112,18 @@ def getInformationFromFile(fileName):
             maxC = int(float(list(filter(None,re.split(" |,",line)))[1]))
         if re.search("numberOfCo2", line):
             nCO2 = int(list(filter(None,re.split(" |,",line)))[1])
+        if re.search("pressureCO", line):
+            prCO = float(list(filter(None,re.split(" |,",line)))[1])
+            prCO = prCO * 101325.0 #to Pa
+        if re.search("pressureO2",line):
+            prO2 = float(list(filter(None,re.split(" |,",line)))[1])
+            prO2 = prO2 * 101325.0  #to Pa /2
         if hit:
             try:
                 r_tt = float(re.split(' ', line)[0])
             except ValueError:
                 r_tt = 0
-            return r_tt, temp, flux, calc, ratesLib, sizX, sizY, maxC, nCO2
+            return r_tt, temp, flux, calc, ratesLib, sizX, sizY, maxC, nCO2, prCO, prO2
         if re.match("These", line):
             hit = True
 
