@@ -121,7 +121,7 @@ public class ActivationEnergy {
           // Adsorption
           if (!atom.isOccupied()) {
             histogramPossibleAdsorption[CO] += elapsedTime;
-            if (atom.isIsolated()) {
+            if (!atom.isIsolated()) {
               histogramPossibleAdsorption[O] += elapsedTime;
             }
           }
@@ -130,7 +130,7 @@ public class ActivationEnergy {
             // Desorption
             if (atom.isOccupied()) {
               if (atom.getType() == CO) {
-                histogramPossibleDesorption[CO][atom.getLatticeSite()][0] += elapsedTime;
+                histogramPossibleDesorption[CO][atom.getLatticeSite()][0] += elapsedTime/4.0; // it goes throw 4 times
               } else if (neighbour.getType() == O) { // Two O together
                 histogramPossibleDesorption[O][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
               }
@@ -142,7 +142,7 @@ public class ActivationEnergy {
             }
 
             // Reaction
-            if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+            if (!atom.isOccupied() || atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
               continue;
             }
             // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
