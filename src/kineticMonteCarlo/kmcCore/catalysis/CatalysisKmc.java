@@ -297,10 +297,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int returnValue = 0;
 
     while (getLattice().getCoverage() < maxCoverage && co2sum != co2max) {
-      activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
       if (outputAeTotal) {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
-      }
+      } else {
+	activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
+      }	      
       if (performSimulationStep()) {
         break;
       }
