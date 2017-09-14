@@ -98,7 +98,7 @@ def putLabels(ax, co2, alfa):
 
 def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     inf.smallerFont(axis, 8)
-    cm = plt.get_cmap('Set1')
+    cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p","o"]
     # #newax = fig.add_axes([0.43, 0.15, 0.25, 0.25])
     # newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
@@ -113,7 +113,7 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     # lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     # newax.add_artist(lg)
     # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs(i/9)), label=labelAlfa[i], marker=markers[i%8], mec='none',alpha=0.75)
+    axis.semilogy(x, y, ls="",color=cm(abs(i/20)), label=labelAlfa[i], marker=markers[i%8], mec='none',alpha=0.75)
 
     for j in range(0,len(rngt)-1):
         axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
@@ -165,31 +165,26 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
 def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
     showPlot = sp# and (alfa == 4 or alfa == 5)
     markers=["o", "s","D","^","d","h","p","o"]
-    cm = plt.get_cmap('Set1')
-    cm1 = plt.get_cmap('Set3')
+    cm = plt.get_cmap('tab20')
+    cm1 = plt.get_cmap('hsv')
     slopes = []
+    l = 1
     if showPlot:
         #inf.smallerFont(ax, 8)
-        ax.scatter(x, y, color=cm(abs(alfa/9)), alpha=0.75, edgecolors='none', marker=markers[alfa%7])#, "o", lw=0.5)
+        ax.scatter(x, y, color=cm(abs(alfa/20)), alpha=0.75, edgecolors='none', marker=markers[alfa%7])#, "o", lw=0.5)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         putLabels(ax, co2, alfa)
-    # one neighbour point
-    b = np.log(y[1]/y[0]) / (x[1] - x[0])
-    slopes.append(b)
-    # all but last
-    for i in range(1,len(x)-1):
-        retFun = fun.timeDerivative(np.log(y[i-1:i+2]),x[i-1:i+2])
-        b = retFun[1] # slope of the point in the middle
-        if np.isinf(b):
-            b = 0
-            a = 0
-            print("error fitting")
-        else:
-            a = np.log(y[i])-b*x[i]
+    # first point(s)
+    for i in range(0,l):
+        a,b = fitFirst(x,y,i,l)
+        slopes.append(b)
+    # all but last(s)
+    for i in range(l,len(x)-l):
+        a, b = fit(x,y,i,l)
         slopes.append(b)
         if showPlot:
             ax.set_yscale("log")
-            #ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1((i+abs(alfa%12)*3)/12))
+            ax.semilogy(x[i-l:i+l+1], np.exp(fun.linear(x[i-l:i+l+1], a, b)), ls="-", color=cm1(i/30), alpha=0.5)
             xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
@@ -201,17 +196,40 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
             #ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
-    # last point
-    b = np.log(y[-1]/y[-2]) / (x[-1] - x[-2])
-    if np.isnan(b):
-        b = 0
-        #print(y[-1], y[-2],x[-1], x[-2])
-    slopes.append(b)
+    # last point(s)
+    for i in range(-l,0):
+        a,b = fitLast(x,y,i,l)
+        slopes.append(b)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])
         ax.yaxis.set_major_locator(locator)
     return slopes
 
+def fitFirst(x,y,i,l):
+    mn = 0
+    mx = i+l+1
+    return fitLow(x,y,i,mn,mx)
+
+def fit(x,y,i,l):
+    mn = i-l
+    mx = i+l+1
+    return fitLow(x,y,i,mn,mx)
+        
+def fitLast(x,y,i,l):
+    mn = i-l-1
+    mx = -1
+    return fitLow(x,y,i,mn,mx)
+
+def fitLow(x,y,i,mn,mx):
+    retFun = fun.timeDerivative(np.log(y[mn:mx]),x[mn:mx])
+    b = retFun[1] # slope of the point in the middle
+    if np.isinf(b) or np.isnan(b):
+        b = 0
+        a = 0
+        print("error fitting")
+    else:
+        a = np.log(y[i])-b*x[i]
+    return a,b
 
 def plotSimple(x, targt, rcmpt, error, ax, maxRanges, i, legend):
     #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))

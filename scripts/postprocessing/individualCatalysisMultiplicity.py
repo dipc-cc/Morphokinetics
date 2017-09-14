@@ -19,13 +19,11 @@ kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
 maxAlfa = 4
-ind = [0,1,1,2,2,3,3,4]
+labelAlfa = ["$CO^B+O^B$","$CO^B+O^C$","$CO^C+O^B$","$CO^C+O^C$"]
 energies = e.catalysisEnergies(p)
 tempMavg = []
 tempOavg = []
-tempR1avg = []
-tempR2avg = []
-tempR3avg = []
+tempRavg = []
 
 workingPath = os.getcwd()
 for t in temperatures:
@@ -38,25 +36,17 @@ for t in temperatures:
         os.chdir(runFolder[-1])
     except FileNotFoundError:
         continue
-    tmp1, tmp2, tmp3, tmp4, tmp5 = mi.computeMavgAndOmegaOverRuns()
+    tmp1, tmp2, tmp3 = mi.computeMavgAndOmegaOverRuns()
     tempMavg.append(tmp1)
     tempOavg.append(tmp2)
-    tempR1avg.append(tmp3)
-    tempR2avg.append(tmp4)
-    tempR3avg.append(tmp5)
+    tempRavg.append(tmp3)
    
 os.chdir(workingPath) 
 tempMavg = np.array(tempMavg)
 tempOavg = np.array(tempOavg)
-tempR1avg = np.array(tempR1avg)
-tempR2avg = np.array(tempR2avg)
-tempR3avg = np.array(tempR3avg)
+tempRavg = np.array(tempRavg)
 
-#print(tempMavg)
 print(np.shape(tempMavg))
-# print(tempR1avg)
-# print(tempR2avg)
-# print(tempR3avg)
 sp=False
 if len(sys.argv) > 1:
     sp = sys.argv[1] == "p"
@@ -68,13 +58,12 @@ tempEafCo2 = []
 rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
 
 maxRanges = len(temperatures)
-labelAlfa = ["$CO^B+O^B$","$CO^B+O^C$","$CO^C+O^B$","$CO^C+O^C$"]
 for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
     if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
         print(co2)
     x = 1/kb/temperatures
-    y = tempR1avg
+    y = tempRavg
     if showPlot:
         fig, axarr = plt.subplots(3, sharex=True, figsize=(5,6))
         fig.subplots_adjust(right=0.7, hspace=0.1)
@@ -84,21 +73,19 @@ for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
     tempEaCo2.append(mp.localAvgAndPlotLinear(x, y[:,co2], axarr[0], -1, showPlot, co2))
     tempOmega = np.zeros((maxAlfa,maxRanges))
     tempEaM = []
-    y2 = tempR1avg/tempR3avg
-    tempEafCo2.append(mp.localAvgAndPlotLinear(x, y2[:,co2], axarr[0], -2, False, co2))
     
     for i in range(0,maxAlfa): # alfa
-        y = np.sum(tempMavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
+        y = np.sum(tempMavg[:,co2,i:i+1], axis=1)
         tempEaM.append(mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2))
         if showPlot:
-            y = np.sum(tempOavg[:,co2,ind[2*i]:ind[2*i+1]], axis=1)
+            y = np.sum(tempOavg[:,co2,i:i+1], axis=1)
             mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
-        tempOmega[i] = list(tempOavg[:, co2, ind[2*i]:ind[2*i+1]])
+        tempOmega[i] = list(tempOavg[:, co2, i:i+1])
     
     tempOmegaCo2.append(tempOmega)
     tempEaMCo2.append(tempEaM)
     if showPlot:
-        plt.savefig("plot"+str(co2)+".png", bbox_inches='tight')
+        plt.savefig("plot"+str(co2)+".svg", bbox_inches='tight')
         plt.close()
 
 tempOmegaCo2 = np.array(tempOmegaCo2) # [co2, type (alfa), temperature range]
@@ -110,7 +97,7 @@ for alfa in range(0,maxAlfa):
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
-tempEaCov2 = np.sum(tempOmegaCo2*(tempEaRCo2-tempEaMCo2), axis=1)-tempEafCo2
+tempEaCov2 = np.sum(tempOmegaCo2*(tempEaRCo2-tempEaMCo2), axis=1)
 
 rAndM = False
 omegas = False
@@ -126,12 +113,12 @@ rct = []
 x = []
 err = []
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    targt = tempEaCov2[minCo2:-1,maxRanges-1-i]
-    rcmpt = tempEaCo2[minCo2:-1,maxRanges-1-i]
+    rcmpt = tempEaCov2[minCo2:-1,maxRanges-1-i]
+    targt = tempEaCo2[minCo2:-1,maxRanges-1-i]
     error = abs(1-tempEaCov2[minCo2:-1,maxRanges-1-i]/tempEaCo2[minCo2:-1,maxRanges-1-i])
     handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not rAndM and not omegas)
-    x.append(i)
+    x.append(1000/temperatures[maxRanges-1-i])
     tgt.append(targt[-1])
     rct.append(rcmpt[-1])
     err.append(error[-1])
@@ -154,15 +141,15 @@ lastOmegas = np.zeros(shape=(maxRanges,maxAlfa))
 if (omegas):
     co2.append(maxCo2)
     labels = ["0", "20", "40", "60", "80", "100"]
-    cm = plt.get_cmap('Set2')
+    cm = plt.get_cmap('tab20c')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
         partialSum = np.sum(tempOmegaCo2[:,:,j]*(tempEaRCo2[:,:,j]-tempEaMCo2[:,:,j]), axis=1)
         lgs = []
         for i in range(0,maxAlfa): #alfa
             lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
-            partialSum -= tempOmegaCo2[:,i,j]*(tempEaRCo2[:,i,j]-tempEaMCo2[:,i,j])
             lastOmegas[maxRanges-1-j][i] = partialSum[-1]
+            partialSum -= tempOmegaCo2[:,i,j]*(tempEaRCo2[:,i,j]-tempEaMCo2[:,i,j])
     
     myLegends = []
     myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
@@ -172,12 +159,12 @@ if (omegas):
         myLabels.append(labelAlfa[i])
     myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
-    plt.savefig("multiplicitiesOmegasP.png", bbox_inches='tight')
+    plt.savefig("multiplicitiesOmegasP.svg", bbox_inches='tight')
 
 figR, ax = plt.subplots(1, figsize=(5,4))
-ax.plot(x, tgt, label="target")
+ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
-cm = plt.get_cmap('Set2')
+cm = plt.get_cmap('tab20c')
 for i in range(0,maxAlfa):
     #ax.plot(x, lastOmegas[:,i], "--", label=i)
     ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[i], color=cm(i/(maxAlfa-1)))
@@ -187,4 +174,4 @@ for i in range(0,maxAlfa):
 ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
 ax.legend(loc="best", prop={'size':6})
 #ax.set_yscale("log")
-plt.savefig("multiplicitiesResume.png", bbox_inches='tight')
+plt.savefig("multiplicitiesResume.svg", bbox_inches='tight')
