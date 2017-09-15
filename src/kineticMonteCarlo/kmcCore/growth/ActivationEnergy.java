@@ -131,7 +131,7 @@ public class ActivationEnergy {
             if (atom.isOccupied()) {
               if (atom.getType() == CO) {
                 histogramPossibleDesorption[CO][atom.getLatticeSite()][0] += elapsedTime/4.0; // it goes throw 4 times
-              } else if (neighbour.getType() == O) { // Two O together
+              } else if (neighbour.getType() == O && neighbour.isOccupied()) { // Two O together
                 histogramPossibleDesorption[O][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
               }
             }
