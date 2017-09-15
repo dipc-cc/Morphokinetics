@@ -174,55 +174,37 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
         ax.scatter(x, y, color=cm(abs(alfa/20)), alpha=0.75, edgecolors='none', marker=markers[alfa%7])#, "o", lw=0.5)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         putLabels(ax, co2, alfa)
-    # first point(s)
-    for i in range(0,l):
-        a,b = fitFirst(x,y,i,l)
-        slopes.append(b)
-    # all but last(s)
-    for i in range(l,len(x)-l):
-        a, b = fit(x,y,i,l)
+    # all
+    s = allSlopes(x,y)
+    for i in range(0,len(x)):
+        a, b = fitA(x,y,s,i)
         slopes.append(b)
         if showPlot:
             ax.set_yscale("log")
-            ax.semilogy(x[i-l:i+l+1], np.exp(fun.linear(x[i-l:i+l+1], a, b)), ls="-", color=cm1(i/30), alpha=0.5)
+            ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1(i/30), alpha=0.5)
             xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
             if alfa == -1:
-                ax.text(xHalf, 2e1, r"$"+roman.toRoman(i+1)+r"$", color="gray", ha="right", va="center")#, transform=axarr[i].transAxes)
                 xHalf *= 1
                 yHalf *= 5
                 text = r"$E_a="+text+r"$"
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            #ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
-    # last point(s)
-    for i in range(-l,0):
-        a,b = fitLast(x,y,i,l)
-        slopes.append(b)
+            if alfa == -1:
+                ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])
         ax.yaxis.set_major_locator(locator)
     return slopes
 
-def fitFirst(x,y,i,l):
-    mn = 0
-    mx = i+l+1
-    return fitLow(x,y,i,mn,mx)
 
-def fit(x,y,i,l):
-    mn = i-l
-    mx = i+l+1
-    return fitLow(x,y,i,mn,mx)
-        
-def fitLast(x,y,i,l):
-    mn = i-l-1
-    mx = -1
-    return fitLow(x,y,i,mn,mx)
+def allSlopes(x,y):
+    return fun.timeDerivative(np.log(y),x)
 
-def fitLow(x,y,i,mn,mx):
-    retFun = fun.timeDerivative(np.log(y[mn:mx]),x[mn:mx])
-    b = retFun[1] # slope of the point in the middle
+
+def fitA(x,y,slopes, i):
+    b = slopes[i]
     if np.isinf(b) or np.isnan(b):
         b = 0
         a = 0
@@ -230,6 +212,7 @@ def fitLow(x,y,i,mn,mx):
     else:
         a = np.log(y[i])-b*x[i]
     return a,b
+
 
 def plotSimple(x, targt, rcmpt, error, ax, maxRanges, i, legend):
     #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))
