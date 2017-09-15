@@ -57,7 +57,7 @@ def plot(x,y,p,meskinePlot):
     ax.plot(data[:,0],data[:,1],label="ref", ls="-", marker="^")
     ax.legend(loc="best", prop={'size':6})
 
-    fig.savefig("tof.png", bbox_inches='tight')
+    fig.savefig("tof.svg", bbox_inches='tight')
     
 def plotPressures(x,y,p):
     fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,4))
