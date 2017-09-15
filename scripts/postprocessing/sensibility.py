@@ -19,9 +19,14 @@ kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
 maxCo2 = 100
-maxAlfa = 4
-labelAlfa = ["$CO^B+O^B$","$CO^B+O^C$","$CO^C+O^B$","$CO^C+O^C$"]
-energies = e.catalysisEnergies(p)
+maxAlfa = 20
+labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$", #Reaction
+             r"$V\rightarrow CO$",r"$V\rightarrow O$", # Adsorption
+             r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$", # Desorption CO
+             r"$O^B+O^B\rightarrow V^B+V^B$",r"$O^B+O^C\rightarrow V^B+V^C$",r"$O^C+O^B\rightarrow V^C+V^B$",r"$O^C+O^C\rightarrow V^C+V^C$", # Desorption O
+             r"$CO^B\rightarrow CO^B$",r"$CO^B\rightarrow CO^C$",r"$CO^C\rightarrow CO^B$",r"$CO^C\rightarrow CO^C$",  # Diffusion CO
+             r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
+energies = e.catalysisEnergiesTotal(p)
 tempMavg = []
 tempOavg = []
 tempRavg = []
@@ -37,7 +42,7 @@ for t in temperatures:
         os.chdir(runFolder[-1])
     except FileNotFoundError:
         continue
-    tmp1, tmp2, tmp3 = mi.computeMavgAndOmegaOverRuns()
+    tmp1, tmp2, tmp3 = mi.computeMavgAndOmegaOverRuns(total=True)
     tempMavg.append(tmp1)
     tempOavg.append(tmp2)
     tempRavg.append(tmp3)
@@ -103,14 +108,24 @@ B = np.sum(tempOmegaCo2*(tempEaRCo2),axis=1)
 A = tempEaCo2
 C = energies# + kb * temperatures#corrections
 D = np.sum(tempOmegaCo2)
-correction = kb * temperatures
+correction = np.zeros(shape=(20,len(temperatures)))
+correction[0:4,:] = kb*temperatures
+correction[4:6,:] = -kb*temperatures/2.0
+correction[6:8,:] = 3.0*kb*temperatures+e.getDesorptionCorrection(temperatures,0)
+correction[8:12,:] = 3.0*kb*temperatures+e.getDesorptionCorrection(temperatures,1)
+correction[12:20,:] = kb*temperatures
+correctionReaction = kb * temperatures
 sensibilityCo2 = []
-for i in range(0,4):
-    sensibilityCo2.append(tempOmegaCo2[:,i,:] + (A-B)/(C[i]+correction))
+for i in range(0,20):
+    sensibilityCo2.append(tempOmegaCo2[:,i,:] + (A-B)/(C[i]+correction[i]))
 sensibilityCo2 = np.array(sensibilityCo2)
 
-for i in range(0,4):
-    axarr.plot(1000/temperatures, sensibilityCo2[i,-1,:], label=labelAlfa)
+cm = plt.get_cmap('tab20')
+markers=["o", "s","D","^","d","h","p","o"]
+for i in range(0,20):
+    axarr.plot(1000/temperatures, sensibilityCo2[i,-1,:], label=labelAlfa[i],color=cm(abs(i/20)), marker=markers[i%8] )
 
-fig.savefig("sensibility.png", bbox_inches='tight')
+axarr.set_ylim(-2,6)
+axarr.legend(loc=(1.10,0.0), prop={'size':6})
+fig.savefig("sensibility.svg", bbox_inches='tight')
 
