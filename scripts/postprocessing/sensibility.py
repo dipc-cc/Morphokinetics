@@ -19,7 +19,7 @@ kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
 maxCo2 = 100
-total = True
+total = False
 if total:
     maxAlfa = 20
     p.maxA = 20
@@ -84,7 +84,6 @@ tempOmegaCo2 = np.array(tempOmegaCo2) # [co2, type (alfa), temperature range]
 tempEaCo2 = -np.array(tempEaCo2) # [co2, temperature range]
 tempEaMCo2 = np.array(tempEaMCo2) # [co2, type (alfa), temperature range]
 tempEaRCo2 = np.zeros(np.shape(tempEaMCo2))
-print(maxAlfa)
 for alfa in range(0,maxAlfa):
     tempEaRCo2[:,alfa,:] = energies[alfa]
 
@@ -103,7 +102,6 @@ if total:
     correction[8:12,:] = 3.0*kb*temperatures+e.getDesorptionCorrection(temperatures,1)
     correction[12:20,:] = kb*temperatures
     correction = np.zeros(shape=(20,len(temperatures)))
-correctionReaction = kb * temperatures
 sensibilityCo2 = []
 for i in range(0,maxAlfa):
     sensibilityCo2.append(tempOmegaCo2[:,i,:] + (A-B)/(C[i]+correction[i]))
