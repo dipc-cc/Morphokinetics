@@ -20,6 +20,7 @@ reducedMass[1] = 15.9994 / (2.0 * Na);
 sigma = np.zeros(2)
 sigma[0] = 0.98;
 sigma[1] = 1.32;
+h = 6.6260695729e-34 #Planck constant (J·s).
 
 
 def agUc(self):
@@ -334,7 +335,6 @@ def computeAdsorptionRate(p,pressure,type):
     return pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
     
 def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
-    h = 6.6260695729e-34 #Planck constant (J·s).
     qt = np.zeros(2)
     qt[type] = pow(2.0 * np.pi * mass[type] * kBInt * p.temp / pow(h, 2.0), (3.0 / 2.0))
     qr = np.zeros(2)
@@ -353,3 +353,7 @@ def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
     #correction = type + 1 # adsorption rate for O is for an atom, this is for a O2 molecule.
 
     return correction * adsorptionRate * np.exp(-(energy + mu[type]) / (kb * p.temp));
+
+def getDesorptionCorrection(temperatures, type):
+    qv = h * V[type] * np.exp(-h * V[type] / (kBInt * temperatures)) / (1.0 - np.exp(-h * V[type] / (kBInt * temperatures)))
+    return qv
