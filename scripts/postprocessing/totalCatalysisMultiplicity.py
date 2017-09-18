@@ -99,6 +99,13 @@ tempEaMCo2 = np.array(tempEaMCo2) # [co2, type (alfa), temperature range]
 tempEaRCo2 = np.zeros(np.shape(tempEaMCo2))
 for alfa in range(0,maxAlfa):
     tempEaRCo2[:,alfa,:] = energies[alfa]
+correction = np.zeros(shape=(20,len(temperatures)))
+correction[0:4,:] = kb*temperatures
+correction[4:6,:] = -kb*temperatures/2.0
+correction[6:8,:] = 3.0*kb*temperatures+e.getDesorptionCorrection(temperatures,0)
+correction[8:12,:] = 3.0*kb*temperatures+e.getDesorptionCorrection(temperatures,1)
+correction[12:20,:] = kb*temperatures
+tempEaRCo2 += correction
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
