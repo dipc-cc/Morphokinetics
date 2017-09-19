@@ -94,6 +94,7 @@ tempEaMCo2 = np.array(tempEaMCo2) # [co2, type (alfa), temperature range]
 tempEaRCo2 = np.zeros(np.shape(tempEaMCo2))
 for alfa in range(0,maxAlfa):
     tempEaRCo2[:,alfa,:] = energies[alfa]
+tempEaRCo2 += e.getEaCorrections(temperatures)[0:4]
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)

@@ -358,6 +358,8 @@ def getDesorptionCorrection(temperatures, type):
     qv = h * V[type] * np.exp(-h * V[type] / (kBInt * temperatures)) / (1.0 - np.exp(-h * V[type] / (kBInt * temperatures)))
     return qv
 
+
+# In catalysis, prefactor changes with temperature.
 def getEaCorrections(temperatures):
     correction = np.zeros(shape=(20,len(temperatures)))
     correction[0:4,:] = kb*temperatures
