@@ -1,4 +1,5 @@
 import sys
+import re
 import info as inf
 import energies as e
 import matplotlib.pyplot as plt
@@ -19,7 +20,15 @@ maxRanges = len(temperatures)
 kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
-total = True
+total = False
+sp=False
+rAndM = False
+omegas = False
+if len(sys.argv) > 1:
+    total = "t" in sys.argv[1]
+    sp = "p" in sys.argv[1]
+    rAndM = "r" in sys.argv[1]
+    omegas = "o" in sys.argv[1]
 if total:
     maxAlfa = 20
     p.maxA = 20
@@ -39,10 +48,6 @@ tempMavg, tempOavg, tempRavg = mi.getMavgAndOmega(temperatures,workingPath,total
 os.chdir(workingPath)
 
 print(np.shape(tempMavg))
-sp=False
-if len(sys.argv) > 1:
-    sp = sys.argv[1] == "p"
-
 
 tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg)
 for alfa in range(0,maxAlfa):
@@ -53,11 +58,6 @@ fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
 tempEaCov2 = np.sum(tempOmegaCo2*(tempEaRCo2-tempEaMCo2), axis=1)
 
-rAndM = False
-omegas = False
-if len(sys.argv) > 1:
-    rAndM = sys.argv[1] == "r"
-    omegas = sys.argv[1] == "o"
     
 axarr[0].set_ylabel("eV")
 minCo2 = 0
