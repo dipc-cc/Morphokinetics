@@ -357,3 +357,12 @@ def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
 def getDesorptionCorrection(temperatures, type):
     qv = h * V[type] * np.exp(-h * V[type] / (kBInt * temperatures)) / (1.0 - np.exp(-h * V[type] / (kBInt * temperatures)))
     return qv
+
+def getEaCorrections(temperatures):
+    correction = np.zeros(shape=(20,len(temperatures)))
+    correction[0:4,:] = kb*temperatures
+    correction[4:6,:] = -kb*temperatures/2.0
+    correction[6:8,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
+    correction[8:12,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,1)
+    correction[12:20,:] = kb*temperatures
+    return correction
