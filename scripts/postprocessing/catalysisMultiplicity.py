@@ -24,11 +24,13 @@ total = False
 sp=False
 rAndM = False
 omegas = False
+sensibility = False
 if len(sys.argv) > 1:
     total = "t" in sys.argv[1]
     sp = "p" in sys.argv[1]
     rAndM = "r" in sys.argv[1]
     omegas = "o" in sys.argv[1]
+    sensibility = "s" in sys.argv[1]
 if total:
     maxAlfa = 20
     p.maxA = 20
@@ -53,6 +55,27 @@ tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2 = mi.getEaMandEaR(p,temperatures
 for alfa in range(0,maxAlfa):
     tempEaRCo2[:,alfa,:] = energies[alfa]
 tempEaRCo2 += e.getEaCorrections(temperatures)[0:maxAlfa]
+
+if sensibility:
+    fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
+    fig.subplots_adjust(wspace=0.1)
+
+    sensibilityCo2 = []  
+    for i in range(0,maxAlfa):
+        sensibilityCo2.append(tempOmegaCo2[:,i,:]*(1-tempEaMCo2[:,i,:]/tempEaRCo2[:,i,:]))
+    sensibilityCo2 = np.array(sensibilityCo2)
+    
+    cm = plt.get_cmap('tab20')
+    markers=["o", "s","D","^","d","h","p","o"]
+    for i in range(0,maxAlfa):
+        if any(abs(sensibilityCo2[i,-1,:]) > 0.05):
+            axarr.plot(1000/temperatures, sensibilityCo2[i,-1,:], label=labelAlfa[i],color=cm(abs(i/20)), marker=markers[i%8] )
+    #axarr.set_ylim(-1,1)
+    #axarr.set_yscale("log")
+    axarr.legend(loc=(1.10,0.0), prop={'size':6})
+    os.chdir(workingPath)
+    fig.savefig("sensibility.svg", bbox_inches='tight')
+
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
