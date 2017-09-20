@@ -39,11 +39,10 @@ def plot(x,y,p,meskinePlot):
     area = p.sizI * p.sizJ * ucArea * toCm * toCm
     x = np.array(x)
     y = np.array(y)
+    x = 1000 / x
     if meskinePlot:
-        x = 1000 / x
         y = y / (p.sizI * p.sizJ)
     else:
-        x = 1000 / x
         #y = np.log(y / area) # for different pressures
         y = np.log(y / (p.sizI * p.sizJ))
 

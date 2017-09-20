@@ -24,7 +24,7 @@ def getTotalRate():
     return rate, rates
         
 
-def plot(x,y,p,ax,label=""):
+def plot(x,y,p,ax,meskinePlot,label=""):
     kb = 8.617332e-5
     # Labels
     ax.set_title("TOF "+str(p.sizI)+"x"+str(p.sizJ))
@@ -40,14 +40,20 @@ def plot(x,y,p,ax,label=""):
     x = np.array(x)
     y = np.array(y)
     x = 1000 / x
-    #y = np.log(y / area) # for different pressures
-    y = np.log(y / (p.sizI * p.sizJ))
-
+    if meskinePlot:
+        y = y / (p.sizI * p.sizJ)
+    else:
+        #y = np.log(y / area) # for different pressures
+        y = np.log(y / (p.sizI * p.sizJ))
+    
     ax.plot(x,y,label=label, ls="-")
     # reference
     if ref:
         scriptDir = os.path.dirname(os.path.realpath(__file__))
         data = np.loadtxt(scriptDir+"/tof"+p.rLib.title()+".txt")
+        if meskinePlot:
+            ax.set_yscale("log")
+            data = np.loadtxt(scriptDir+"/tofMeskine.txt")
         ax.plot(data[:,0],data[:,1],label="ref TOF", ls="-", marker="^")
     ax.legend(loc="best", prop={'size':6})
 
@@ -96,9 +102,9 @@ if len(sys.argv) > 1:
     meskinePlot = True
 
 fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,4))
-plot(x,y,p,ax)
+plot(x,y,p,ax,meskinePlot)
 labels=["Adsorption", "Desorption", "Reaction", "Diffusion"]
 for i in range(0,4):
-    plot(x, y2[:,i], p, ax, labels[i])
+    plot(x, y2[:,i], p, ax, meskinePlot, labels[i])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
 fig.savefig("totalRate.svg", bbox_inches='tight')
