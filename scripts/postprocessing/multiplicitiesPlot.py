@@ -291,3 +291,20 @@ def plotRandM(x, sum1, sum2, ax, handles, legend):
 def plotOmega(x, y, ax, maxRanges, i):
     cm = plt.get_cmap('Set2')
     ax.fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i])
+
+def plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False):
+    maxAlfa = 20
+    fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
+    fig.subplots_adjust(wspace=0.1)
+    cm = plt.get_cmap('tab20')
+    markers=["o", "s","D","^","d","h","p","o"]
+    for i in range(0,maxAlfa):
+        if any(abs(sensibilityCo2[i,-1,:]) > 0.05):
+            axarr.plot(1000/temperatures, sensibilityCo2[i,-1,:], label=labelAlfa[i],color=cm(abs(i/20)), marker=markers[i%8] )
+    #axarr.set_ylim(-1,1)
+    #axarr.set_yscale("log")
+    axarr.legend(loc=(1.10,0.0), prop={'size':6})
+    name = "sensibility"
+    if total:
+        name += "T"
+    fig.savefig(name+".svg", bbox_inches='tight')
