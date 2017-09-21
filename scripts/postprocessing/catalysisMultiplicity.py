@@ -21,11 +21,12 @@ kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
 total = False
-sp=False
+sp = False
 rAndM = False
 omegas = False
 sensibility = False
 tofSensibility = False
+ext = ""
 if len(sys.argv) > 1:
     total = "t" in sys.argv[1]
     sp = "p" in sys.argv[1]
@@ -38,6 +39,7 @@ if total:
     maxAlfa = 20
     p.maxA = 20
     energies = e.catalysisEnergiesTotal(p)
+    ext = "T"
 else:
     minAlfa = 0
     maxAlfa = 4
@@ -109,7 +111,7 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     rct.append(rcmpt[-1])
     err.append(error[-1])
 
-plt.savefig("multiplicities.png", bbox_inches='tight')
+plt.savefig("multiplicities"+ext+".svg", bbox_inches='tight')
 
 
 if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
@@ -121,7 +123,7 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
         mp.plotRandM(co2, partialSum1, partialSum2, axarr[maxRanges-1-j],
                      handles, j == maxRanges-1)
 
-    plt.savefig("multiplicitiesRandM.png", bbox_inches='tight')
+    plt.savefig("multiplicitiesRandM"+ext+".png", bbox_inches='tight')
 
 lastOmegas = np.zeros(shape=(maxRanges,maxAlfa-minAlfa))
 if (omegas):
@@ -145,7 +147,7 @@ if (omegas):
         myLabels.append(labelAlfa[i])
     myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
-    plt.savefig("multiplicitiesOmegasP.png", bbox_inches='tight')
+    plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
 
 figR, ax = plt.subplots(1, figsize=(5,4))
 ax.plot(x, tgt, label="target", color="red")
@@ -160,4 +162,4 @@ for i in range(minAlfa,maxAlfa):
 ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
 ax.legend(loc=(1.10,0.0), prop={'size':6})
 #ax.set_yscale("log")
-plt.savefig("multiplicitiesResume.svg", bbox_inches='tight')
+plt.savefig("multiplicitiesResume"+ext+".svg", bbox_inches='tight')
