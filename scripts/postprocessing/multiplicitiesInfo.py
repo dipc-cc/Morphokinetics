@@ -87,7 +87,6 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
                   # [co2, type (alfa), temperature range]
-    tempOmegaCo2 = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     tempEaMCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     tempEaCo2    = np.zeros(shape=(maxCo2,maxRanges))
     tempEafCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
@@ -112,9 +111,8 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
             if showPlot:
                 y = np.sum(tempOavg[co2,:,i:i+1], axis=1)
                 mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
-        tempOmegaCo2[co2,:,p.minA:p.maxA] = tempOavg[co2, :, p.minA:p.maxA]
         if showPlot:
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
     tempEaCo2 = -tempEaCo2
-    return tempOmegaCo2, tempEaCo2, tempEaMCo2
+    return tempEaCo2, tempEaMCo2

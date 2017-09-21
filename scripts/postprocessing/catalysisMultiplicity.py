@@ -56,12 +56,12 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
 
 workingPath = os.getcwd()
-tempMavg, tempOavg, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath,total)
+tempMavg, tempOmegaCo2, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath,total)
 os.chdir(workingPath)
 
 print(np.shape(tempMavg))
 
-tempOmegaCo2, tempEaCo2, tempEaMCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg)
+tempEaCo2, tempEaMCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOmegaCo2,tempRavg)
 tempEaRCo2 = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
 for alfa in range(minAlfa,maxAlfa):
     tempEaRCo2[:,:,alfa] = energies[alfa]
