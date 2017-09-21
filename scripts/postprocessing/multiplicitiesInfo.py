@@ -121,5 +121,4 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
     tempEaCo2 = -tempEaCo2
-    tempEaRCo2 = np.zeros(np.shape(tempEaMCo2))
-    return tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2
+    return tempOmegaCo2, tempEaCo2, tempEaMCo2

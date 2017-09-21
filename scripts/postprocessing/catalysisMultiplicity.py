@@ -61,7 +61,8 @@ os.chdir(workingPath)
 
 print(np.shape(tempMavg))
 
-tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg)
+tempOmegaCo2, tempEaCo2, tempEaMCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg)
+tempEaRCo2 = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
 for alfa in range(minAlfa,maxAlfa):
     tempEaRCo2[:,:,alfa] = energies[alfa]
 
