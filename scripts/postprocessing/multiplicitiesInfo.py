@@ -72,12 +72,12 @@ def getMavgAndOmega(p,temperatures,workingPath,total):
         except FileNotFoundError:
             continue
         tmp1, tmp2, tmp3 = computeMavgAndOmegaOverRuns(total)
-        tempMavg[:,i,:] = tmp1
-        tempOavg[:,i,:] = tmp2
+        tempMavg[:,i,:] = tmp1[:,p.minA:p.maxA]
+        tempOavg[:,i,:] = tmp2[:,p.minA:p.maxA]
         tempRavg[:,i] = tmp3
         
-    tempMavg = tempMavg[:,:,p.minA:p.maxA]
-    tempOavg = tempOavg[:,:,p.minA:p.maxA]
+    #tempMavg = tempMavg[:,:,p.minA:p.maxA]
+    #tempOavg = tempOavg[:,:,p.minA:p.maxA]
 
     return tempMavg, tempOavg, tempRavg
 
@@ -86,6 +86,7 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
     maxCo2 = int(p.nCo2/10)
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
+                  # [co2, type (alfa), temperature range]
     tempOmegaCo2 = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     tempEaMCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     tempEaCo2    = np.zeros(shape=(maxCo2,maxRanges))
@@ -119,8 +120,6 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
         if showPlot:
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
-    tempOmegaCo2 = np.array(tempOmegaCo2) # [co2, type (alfa), temperature range]
-    tempEaCo2 = -np.array(tempEaCo2) # [co2, temperature range]
-    tempEaMCo2 = np.array(tempEaMCo2) # [co2, type (alfa), temperature range]
+    tempEaCo2 = -tempEaCo2
     tempEaRCo2 = np.zeros(np.shape(tempEaMCo2))
     return tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2

@@ -46,6 +46,8 @@ else:
     p.minA = 0
     p.maxA = 4
     energies = e.catalysisEnergies(p)
+    #energies = e.catalysisEnergiesTotal(p)
+    #total = True
 labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$", #Reaction
              r"$V\rightarrow CO$",r"$V\rightarrow O$", # Adsorption
              r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$", # Desorption CO
@@ -62,7 +64,7 @@ print(np.shape(tempMavg))
 tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg)
 for alfa in range(minAlfa,maxAlfa):
     tempEaRCo2[:,:,alfa] = energies[alfa]
-corrections = e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
+
 tempEaRCo2 += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
 
 if tofSensibility:
@@ -91,8 +93,7 @@ if sensibility:
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
-tempEaCov2 = np.sum(tempOmegaCo2*(tempEaRCo2-tempEaMCo2), axis=2)
-
+tempEaCov2 = np.sum(tempOmegaCo2[:,:,minAlfa:maxAlfa]*(tempEaRCo2[:,:,minAlfa:maxAlfa]-tempEaMCo2[:,:,minAlfa:maxAlfa]), axis=2)
     
 axarr[0].set_ylabel("eV")
 minCo2 = 0
@@ -136,7 +137,7 @@ if (omegas):
         lgs = []
         for i in range(minAlfa,maxAlfa): #alfa
             lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
-            lastOmegas[maxRanges-1-j][i] = partialSum[-1]
+            lastOmegas[maxRanges-1-j,i] = partialSum[-1]
             partialSum -= tempOmegaCo2[:,j,i]*(tempEaRCo2[:,j,i]-tempEaMCo2[:,j,i])
     
     myLegends = []
@@ -153,7 +154,7 @@ figR, ax = plt.subplots(1, figsize=(5,4))
 ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('tab20c')
-for i in range(minAlfa,maxAlfa):
+for i,a in enumerate(range(minAlfa,maxAlfa)):
     #ax.plot(x, lastOmegas[:,i], "--", label=i)
     ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[i], color=cm(i/(maxAlfa-1)))
 # ax2 = ax.twinx()
