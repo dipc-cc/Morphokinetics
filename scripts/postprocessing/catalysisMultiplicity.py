@@ -65,7 +65,7 @@ tempOmegaCo2, tempEaCo2, tempEaMCo2, tempEaRCo2 = mi.getEaMandEaR(p,temperatures
 for alfa in range(minAlfa,maxAlfa):
     tempEaRCo2[:,:,alfa] = energies[alfa]
 
-tempEaRCo2 += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
+tempEaRCo2[:,:,minAlfa:maxAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
 
 if tofSensibility:
     sensibilityCo2 = []
