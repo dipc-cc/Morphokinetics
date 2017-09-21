@@ -89,7 +89,6 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
                   # [co2, type (alfa), temperature range]
     tempEaMCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     tempEaCo2    = np.zeros(shape=(maxCo2,maxRanges))
-    tempEafCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
         showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
         if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
