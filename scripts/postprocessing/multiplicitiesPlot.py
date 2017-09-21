@@ -176,12 +176,15 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
         putLabels(ax, co2, alfa)
     # all
     s = allSlopes(x,y)
+    if any(np.isinf(s)) or any(np.isnan(s)):
+        print("error fitting",alfa)
+        
     for i in range(0,len(x)):
         a, b = fitA(x,y,s,i)
         slopes.append(b)
         if showPlot:
             ax.set_yscale("log")
-            ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1(i/30), alpha=0.5)
+            ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1(i/30), alpha=0)
             xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
@@ -191,7 +194,7 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
                 text = r"$E_a="+text+r"$"
 
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
-            if alfa == -1:
+            if alfa == -10:
                 ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
     if showPlot and alfa > -1:
         locator = LogLocator(100,[1e-1])
@@ -208,7 +211,6 @@ def fitA(x,y,slopes, i):
     if np.isinf(b) or np.isnan(b):
         b = 0
         a = 0
-        print("error fitting")
     else:
         a = np.log(y[i])-b*x[i]
     return a,b
@@ -299,9 +301,9 @@ def plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False):
     cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p","o"]
     for i in range(0,maxAlfa):
-        if any(abs(sensibilityCo2[i,-1,:]) > 0.05):
-            axarr.plot(1000/temperatures, sensibilityCo2[i,-1,:], label=labelAlfa[i],color=cm(abs(i/20)), marker=markers[i%8] )
-    #axarr.set_ylim(-1,1)
+        if any(abs(sensibilityCo2[-1,:,i]) > 0.05):
+            axarr.plot(1000/temperatures, sensibilityCo2[-1,:,i], label=labelAlfa[i],color=cm(abs(i/20)), marker=markers[i%8] )
+    #axarr.set_ylim(-0.5,0.5)
     #axarr.set_yscale("log")
     axarr.legend(loc=(1.10,0.0), prop={'size':6})
     name = "sensibility"

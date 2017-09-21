@@ -115,3 +115,21 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
 
     tempEaCo2 = -tempEaCo2
     return tempEaCo2, tempEaMCo2
+
+def getTofSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2):
+    sensibilityCo2 = np.zeros(np.shape(tempOmegaCo2))
+    sumBeta = 0
+    sumOmegaBeta = 0
+    for beta in range(0,4):
+        sumBeta += tempOmegaCo2[:,:,beta]*(tempEaRCo2[:,:,beta]-tempEaMCo2[:,:,beta])
+        sumOmegaBeta += tempOmegaCo2[:,:,beta]
+    for a in range(p.minA,p.maxA):
+        sensibilityCo2[:,:,a] = tempOmegaCo2[:,:,a]/sumOmegaBeta*(sumBeta/tempEaRCo2[:,:,a])
+
+    return sensibilityCo2
+
+def getTotalSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2):
+    sensibilityCo2 = np.zeros(np.shape(tempOmegaCo2))
+    for i in range(p.minA,p.maxA):
+        sensibilityCo2[:,:,i] = tempOmegaCo2[:,:,i]*(1-tempEaMCo2[:,:,i]/tempEaRCo2[:,:,i])
+    return sensibilityCo2

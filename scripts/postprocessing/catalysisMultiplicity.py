@@ -69,25 +69,12 @@ for alfa in range(minAlfa,maxAlfa):
 tempEaRCo2[:,:,minAlfa:maxAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
 
 if tofSensibility:
-    sensibilityCo2 = []
-    sumBeta = 0
-    sumOmegaBeta = 0
-    for beta in range(0,4):
-        sumBeta += tempOmegaCo2[:,:,beta]*(tempEaRCo2[:,:,beta]-tempEaMCo2[:,:,beta])
-        sumOmegaBeta += tempOmegaCo2[:,beta,:]
-    for alfa in range(minAlfa,maxAlfa):
-        sensibilityCo2.append(tempOmegaCo2[:,:,alfa]/sumOmegaBeta*(sumBeta/tempEaRCo2[:,:,alfa]))
-    sensibilityCo2 = np.array(sensibilityCo2)
-
+    sensibilityCo2 = mi.getTofSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False)
     os.chdir(workingPath)
 
 if sensibility:
-    sensibilityCo2 = []  
-    for i in range(minAlfa,maxAlfa):
-        sensibilityCo2.append(tempOmegaCo2[:,:,i]*(1-tempEaMCo2[:,:,i]/tempEaRCo2[:,:,i]))
-    sensibilityCo2 = np.array(sensibilityCo2)
-    
+    sensibilityCo2 = mi.getTotalSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=True)
     os.chdir(workingPath)
 
