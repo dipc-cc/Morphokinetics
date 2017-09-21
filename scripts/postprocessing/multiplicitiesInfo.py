@@ -110,7 +110,7 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
             tempEaMCo2[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
             if showPlot:
                 y = np.sum(tempOavg[co2,:,i:i+1], axis=1)
-                mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
+                mp.plotOmegas(x, y, axarr[-1], i, tempOavg[co2,i], rngt, labelAlfa)
         if showPlot:
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
