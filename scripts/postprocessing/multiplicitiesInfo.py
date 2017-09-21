@@ -55,7 +55,7 @@ def computeMavgAndOmegaOverRuns(total=False):
     return runMavg, runOavg, runRavg
 
 
-def getMavgAndOmega(temperatures,workingPath,total=False):
+def getMavgAndOmega(p,temperatures,workingPath,total):
     tempMavg = []
     tempOavg = []
     tempRavg = []
@@ -75,13 +75,14 @@ def getMavgAndOmega(temperatures,workingPath,total=False):
         tempRavg.append(tmp3)
         
     tempMavg = np.array(tempMavg)
+    tempMavg = tempMavg[:,:,p.minA:p.maxA]
     tempOavg = np.array(tempOavg)
+    tempOavg = tempOavg[:,:,p.minA:p.maxA]
     tempRavg = np.array(tempRavg)
     return tempMavg, tempOavg, tempRavg
 
 def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
     maxCo2 = int(p.nCo2/10)
-    maxAlfa = p.maxA
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
     tempOmegaCo2 = []
@@ -102,10 +103,10 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
             axarr = np.zeros(3)
         # N_h
         tempEaCo2.append(mp.localAvgAndPlotLinear(x, y[:,co2], axarr[0], -1, showPlot, co2))
-        tempOmega = np.zeros((maxAlfa,maxRanges))
+        tempOmega = np.zeros((p.maxA,maxRanges))
         tempEaM = []
         
-        for i in range(0,maxAlfa): # alfa
+        for i in range(p.minA,p.maxA): # alfa
             y = np.sum(tempMavg[:,co2,i:i+1], axis=1)
             tempEaM.append(mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2))
             if showPlot:
