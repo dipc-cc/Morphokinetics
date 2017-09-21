@@ -143,7 +143,7 @@ if (omegas):
     myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
     myLegends += lgs
         
-    for i in range(maxAlfa-1,minAlfa,-1): #alfa
+    for i in range(maxAlfa-1,minAlfa-1,-1): #alfa
         myLabels.append(labelAlfa[i])
     myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
