@@ -367,4 +367,5 @@ def getEaCorrections(temperatures):
     correction[6:8,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
     correction[8:12,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,1)
     correction[12:20,:] = kb*temperatures
+    correction = correction.transpose() # temperatures, alfa
     return correction

@@ -23,6 +23,7 @@ class fileData:
         self.nCo2 = data[10] # created CO2 molecules. For catalysis
         self.prCO = data[11] # pressure. For catalysis
         self.prO2 = data[12] # pressure. For catalysis
+        self.minA = 0 # min alfa: possible transition types (i.e. different energies)
 
         
     def getRatios(self):

@@ -37,10 +37,10 @@ def computeMavgAndOmegaOverRuns(total=False):
     files.sort()
     filesNumber = len(files)-1
     matrix = np.loadtxt(fname=files[0])
-    length = len(matrix)
-    sumMavg = np.zeros(shape=(length,p.maxA))  # [time, alfa]
-    sumOmega = np.zeros(shape=(length,p.maxA)) # [time, alfa]
-    sumRate = np.zeros(length)
+    maxCO2 = len(matrix)
+    sumMavg = np.zeros(shape=(maxCO2,p.maxA))  # [time|CO2, alfa]
+    sumOmega = np.zeros(shape=(maxCO2,p.maxA)) # [time|CO2, alfa]
+    sumRate = np.zeros(maxCO2)
     #iterating over runs
     for i in range(0,filesNumber):
         tmpMavg, tmpOmega, tmpRate = computeMavgAndOmega(i, p, total)
@@ -56,10 +56,12 @@ def computeMavgAndOmegaOverRuns(total=False):
 
 
 def getMavgAndOmega(p,temperatures,workingPath,total):
-    tempMavg = []
-    tempOavg = []
-    tempRavg = []
-    for t in temperatures:
+    maxTemp = len(temperatures)
+    maxCo2 = int(p.nCo2/10)
+    tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA))
+    tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA))
+    tempRavg = np.zeros(shape=(maxCo2,maxTemp))
+    for i,t in enumerate(temperatures):
         print(t)
         os.chdir(workingPath)
         try:
@@ -70,26 +72,24 @@ def getMavgAndOmega(p,temperatures,workingPath,total):
         except FileNotFoundError:
             continue
         tmp1, tmp2, tmp3 = computeMavgAndOmegaOverRuns(total)
-        tempMavg.append(tmp1)
-        tempOavg.append(tmp2)
-        tempRavg.append(tmp3)
+        tempMavg[:,i,:] = tmp1
+        tempOavg[:,i,:] = tmp2
+        tempRavg[:,i] = tmp3
         
-    tempMavg = np.array(tempMavg)
     tempMavg = tempMavg[:,:,p.minA:p.maxA]
-    tempOavg = np.array(tempOavg)
     tempOavg = tempOavg[:,:,p.minA:p.maxA]
-    tempRavg = np.array(tempRavg)
+
     return tempMavg, tempOavg, tempRavg
 
 def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
+    maxRanges = len(temperatures)
     maxCo2 = int(p.nCo2/10)
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
-    tempOmegaCo2 = []
-    tempEaMCo2 = []
-    tempEaCo2 = []
-    tempEafCo2 = []
-    maxRanges = len(temperatures)
+    tempOmegaCo2 = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
+    tempEaMCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
+    tempEaCo2    = np.zeros(shape=(maxCo2,maxRanges))
+    tempEafCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
     for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
         showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
         if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
@@ -102,20 +102,20 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
         else:
             axarr = np.zeros(3)
         # N_h
-        tempEaCo2.append(mp.localAvgAndPlotLinear(x, y[:,co2], axarr[0], -1, showPlot, co2))
-        tempOmega = np.zeros((p.maxA,maxRanges))
-        tempEaM = []
+
+        tempEaCo2[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, showPlot, co2)
+        tempOmega = np.zeros(shape=(maxRanges,p.maxA))
+        tempEaM = np.zeros(shape=(maxRanges,p.maxA))
         
         for i in range(p.minA,p.maxA): # alfa
-            y = np.sum(tempMavg[:,co2,i:i+1], axis=1)
-            tempEaM.append(mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2))
+            y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
+            tempEaM[:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
             if showPlot:
                 y = np.sum(tempOavg[:,co2,i:i+1], axis=1)
                 mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
-            tempOmega[i] = list(tempOavg[:, co2, i:i+1])
-        
-        tempOmegaCo2.append(tempOmega)
-        tempEaMCo2.append(tempEaM)
+        tempOmega = tempOavg[co2, :, :]
+        tempOmegaCo2[co2,:,:] = tempOmega
+        tempEaMCo2[co2,:,:] = tempEaM
         if showPlot:
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
