@@ -105,18 +105,14 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
         # N_h
 
         tempEaCo2[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, showPlot, co2)
-        tempOmega = np.zeros(shape=(maxRanges,p.maxA))
-        tempEaM = np.zeros(shape=(maxRanges,p.maxA))
         
         for i in range(p.minA,p.maxA): # alfa
             y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
-            tempEaM[:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
+            tempEaMCo2[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
             if showPlot:
                 y = np.sum(tempOavg[co2,:,i:i+1], axis=1)
                 mp.plotOmegas(x, y, axarr[-1], i, tempOmega[i], rngt, labelAlfa)
-        tempOmega = tempOavg[co2, :, p.minA:p.maxA]
-        tempOmegaCo2[co2,:,p.minA:p.maxA] = tempOmega
-        tempEaMCo2[co2,:,p.minA:p.maxA] = tempEaM
+        tempOmegaCo2[co2,:,p.minA:p.maxA] = tempOavg[co2, :, p.minA:p.maxA]
         if showPlot:
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
