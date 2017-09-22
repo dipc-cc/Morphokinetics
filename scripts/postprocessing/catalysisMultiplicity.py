@@ -38,16 +38,14 @@ if total:
     minAlfa = 0
     maxAlfa = 20
     p.maxA = 20
-    energies = e.catalysisEnergiesTotal(p)
     ext = "T"
 else:
     minAlfa = 0
     maxAlfa = 4
     p.minA = minAlfa
     p.maxA = maxAlfa
-    energies = e.catalysisEnergies(p)
-    #energies = e.catalysisEnergiesTotal(p)
-    #total = True
+
+energies = e.catalysisEnergiesTotal(p)
 labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$", #Reaction
              r"$V\rightarrow CO$",r"$V\rightarrow O$", # Adsorption
              r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$", # Desorption CO
