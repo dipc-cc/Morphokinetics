@@ -111,20 +111,20 @@ def getCatalysisEnergiesReuterTotal():
     energies[3] = 0.9  # CO^C + O^C -> CO_2#
     energies[4] = 0.    # rate must be obtained in another way
     energies[5] = 0.    # rate must be obtained in another way
-    energies[6] = 1.85  # CO^B -> V
-    energies[7] = 1.32  # CO^C -> V
-    energies[8] = 4.82  # O^B + O^B -> V^B + V^B
+    energies[6] = 1.60  # CO^B -> V
+    energies[7] = 1.30  # CO^C -> V
+    energies[8] = 4.60  # O^B + O^B -> V^B + V^B
     energies[9] = 3.30  # O^B + O^C -> V^B + V^C
-    energies[10] = 3.0  # O^C + O^B -> V^C + V^B
-    energies[11] = 1.78 # O^C + O^C -> V^C + V^C
-    energies[12] = 0.70 # CO^B -> CO^B
-    energies[13] = 2.06 # CO^B -> CO^C
-    energies[14] = 1.40 # CO^C -> CO^B
-    energies[15] = 1.57 # CO^C -> CO^C
-    energies[16] = 0.90 # O^B  -> O^B
-    energies[17] = 1.97 # O^B  -> O^C
-    energies[18] = 0.70 # O^C  -> O^B
-    energies[19] = 1.53 # O^C  -> O^C
+    energies[10] = 3.30 # O^C + O^B -> V^C + V^B
+    energies[11] = 2.00 # O^C + O^C -> V^C + V^C
+    energies[12] = 0.60 # CO^B -> CO^B
+    energies[13] = 1.60 # CO^B -> CO^C
+    energies[14] = 1.30 # CO^C -> CO^B
+    energies[15] = 1.70 # CO^C -> CO^C
+    energies[16] = 0.70 # O^B  -> O^B
+    energies[17] = 2.30 # O^B  -> O^C
+    energies[18] = 1.00 # O^C  -> O^B
+    energies[19] = 1.60 # O^C  -> O^C
     return energies
 
 def getCatalysisEnergiesReuterOver():
@@ -330,6 +330,11 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
     # Execute the function
     return func(temperatures)
 
+def computeReactionRate(p,energy):
+    hev = 4.136e-15
+    pre = 0.5 * kb * p.temp / hev
+    return pre * np.exp(-energy/kb/p.temp)
+    
 def computeAdsorptionRate(p,pressure,type):
     areaHalfUc = 10.0308e-20
     return pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
@@ -347,12 +352,17 @@ def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
     mu = np.zeros(2)
     mu[type] = -kb * p.temp * np.log(kBInt * p.temp / pressure * qt[type] * qr[type] * qv[type]);
     correction = 1
-    if (type == 0):
-        correction = 0.5
+    if (type == 1):
+        correction = 2
 
     #correction = type + 1 # adsorption rate for O is for an atom, this is for a O2 molecule.
 
     return correction * adsorptionRate * np.exp(-(energy + mu[type]) / (kb * p.temp));
+
+def computeDiffusionRate(p,energy):
+    hev = 4.136e-15
+    pre = kb * p.temp / hev
+    return pre * np.exp(-energy/kb/p.temp)
 
 def getDesorptionCorrection(temperatures, type):
     qv = h * V[type] * np.exp(-h * V[type] / (kBInt * temperatures)) / (1.0 - np.exp(-h * V[type] / (kBInt * temperatures)))

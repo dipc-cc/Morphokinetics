@@ -42,6 +42,9 @@ if total:
 else:
     minAlfa = 0
     maxAlfa = 4
+    if len(sys.argv) > 3:
+        minAlfa = int(sys.argv[2])
+        maxAlfa = int(sys.argv[3])
     p.minA = minAlfa
     p.maxA = maxAlfa
 
@@ -55,7 +58,7 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
 
 workingPath = os.getcwd()
 tempMavg, omega, totalRate, totalRateEvents = mi.getMavgAndOmega(p,temperatures,workingPath)
-os.chdir(workingPath
+os.chdir(workingPath)
 
 print(np.shape(tempMavg))
 
