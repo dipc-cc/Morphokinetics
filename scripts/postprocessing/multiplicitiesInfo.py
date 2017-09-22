@@ -17,21 +17,21 @@ def computeMavgAndOmega(fileNumber, p):
     for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
         Mavg[:,i] = possiblesFromList[:,a]/time
 
-    avgTotalRate = np.array(ratios.dot(np.transpose(Mavg)))
+    totalRate = np.array(ratios.dot(np.transpose(Mavg)))
     # define omegas 
     omega = np.zeros(shape=(length,p.maxA-p.minA)) # [co2amount, alfa]
     for i in range(0,length):
-        omega[i,:] =  Mavg[i,:] * ratios / avgTotalRate[i]
-    return Mavg, omega, avgTotalRate
+        omega[i,:] =  Mavg[i,:] * ratios / totalRate[i]
+    return Mavg, omega, totalRate
 
 
 def computeMavgAndOmegaOverRuns(pAlfa):
     p = inf.getInputParameters()
     p.minA = pAlfa.minA
     p.maxA = pAlfa.maxA
-    files = glob.glob("dataAePossibleFromList*")
+    files = glob.glob("dataAeAll*")
     files.sort()
-    filesNumber = len(files)-1
+    filesNumber = len(files)
     matrix = np.loadtxt(fname=files[0])
     maxCO2 = len(matrix)
     sumMavg = np.zeros(shape=(maxCO2,p.maxA-p.minA))  # [time|CO2, alfa]
@@ -46,9 +46,10 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     
     runMavg = sumMavg / filesNumber
     runOavg = sumOmega / filesNumber
-    runRavg = sumRate / filesNumber
+    totalRate = sumRate / filesNumber
 
-    return runMavg, runOavg, runRavg
+    totalRateEvents, rates = getTotalRate()
+    return runMavg, runOavg, totalRate, totalRateEvents
 
 
 def getMavgAndOmega(p,temperatures,workingPath):
@@ -56,7 +57,8 @@ def getMavgAndOmega(p,temperatures,workingPath):
     maxCo2 = int(p.nCo2/10)
     tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
     tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
-    tempRavg = np.zeros(shape=(maxCo2,maxTemp))
+    totalRate = np.zeros(shape=(maxCo2,maxTemp))
+    totalRateEvents = np.zeros(shape=(maxCo2,maxTemp))
     for i,t in enumerate(temperatures):
         print(t)
         os.chdir(workingPath)
@@ -67,14 +69,15 @@ def getMavgAndOmega(p,temperatures,workingPath):
             os.chdir(runFolder[-1])
         except FileNotFoundError:
             continue
-        tmp1, tmp2, tmp3 = computeMavgAndOmegaOverRuns(p)
+        tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns(p)
         tempMavg[:,i,:] = tmp1
         tempOavg[:,i,:] = tmp2
-        tempRavg[:,i] = tmp3
+        totalRate[:,i] = tmp3
+        totalRateEvents[:,i] = tmp4
         
-    return tempMavg, tempOavg, tempRavg
+    return tempMavg, tempOavg, totalRate, totalRateEvents
 
-def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
+def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,totalRate):
     maxRanges = len(temperatures)
     maxCo2 = int(p.nCo2/10)
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
@@ -87,7 +90,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
         if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
             print(co2)
         x = 1/kb/temperatures
-        y = tempRavg
+        y = totalRate
         if showPlot:
             fig, axarr = plt.subplots(3, sharex=True, figsize=(5,6))
             fig.subplots_adjust(right=0.7, hspace=0.1)
@@ -126,3 +129,21 @@ def getTotalSensibility(p,omega,ratioEa,multiplicityEa):
     for i in range(p.minA,p.maxA):
         sensibilityCo2[:,:,i] = omega[:,:,i]*(1-multiplicityEa[:,:,i]/ratioEa[:,:,i])
     return sensibilityCo2
+
+
+def getTotalRate():
+    files = glob.glob("dataCatalysis0*.txt")
+    totalRate = 0
+    rates = np.zeros(4)
+    for t in files:
+        data = np.loadtxt(t)
+        events = 0
+        eventsA = np.zeros(4)
+        for i in range(5,9):
+            events += data[-1,i] - data[0,i]
+            eventsA[i-5] += data[-1,i] - data[0,i]
+        totalRate += events / data[-1,0] # last time
+        rates += eventsA / data[-1,0]
+    totalRate = totalRate / len(files)
+    rates = rates / len(files)
+    return totalRate, rates

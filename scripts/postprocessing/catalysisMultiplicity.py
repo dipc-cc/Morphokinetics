@@ -54,12 +54,12 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
 
 workingPath = os.getcwd()
-tempMavg, omega, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath)
-os.chdir(workingPath)
+tempMavg, omega, totalRate, totalRateEvents = mi.getMavgAndOmega(p,temperatures,workingPath)
+os.chdir(workingPath
 
 print(np.shape(tempMavg))
 
-activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,tempRavg)
+activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents)
 ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     ratioEa[:,:,i] = energies[a]

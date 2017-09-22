@@ -5,23 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import info as inf
 import math
-
-def getTotalRate():
-    files = glob.glob("dataCatalysis0*.txt")
-    rate = 0
-    rates = np.zeros(4)
-    for t in files:
-        data = np.loadtxt(t)
-        events = 0
-        eventsA = np.zeros(4)
-        for i in range(5,9):
-            events += data[-1,i] - data[0,i]
-            eventsA[i-5] += data[-1,i] - data[0,i]
-        rate += events / data[-1,0] # last time
-        rates += eventsA / data[-1,0]
-    rate = rate / len(files)
-    rates = rates / len(files)
-    return rate, rates
+import multiplicitiesInfo as mi
         
 
 def plot(x,y,p,ax,meskinePlot,label=""):
@@ -83,7 +67,7 @@ for f in iter:
     os.getcwd()
     rate = 0
     try:
-        rate, rates = getTotalRate()
+        rate, rates = mi.getTotalRate()
     except ZeroDivisionError:
         rate = 0
     except IndexError:
