@@ -81,14 +81,14 @@ def getMavgAndOmega(p,temperatures,workingPath,total):
 
     return tempMavg, tempOavg, tempRavg
 
-def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
+def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
     maxRanges = len(temperatures)
     maxCo2 = int(p.nCo2/10)
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
                   # [co2, type (alfa), temperature range]
-    tempEaMCo2   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
-    tempEaCo2    = np.zeros(shape=(maxCo2,maxRanges))
+    multiplicityEa   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
+    activationEnergy    = np.zeros(shape=(maxCo2,maxRanges))
     for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
         showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
         if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
@@ -102,34 +102,34 @@ def getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
             axarr = np.zeros(3)
         # N_h
 
-        tempEaCo2[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, showPlot, co2)
+        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, showPlot, co2)
         
         for i in range(p.minA,p.maxA): # alfa
             y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
-            tempEaMCo2[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
+            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
             if showPlot:
                 y = np.sum(tempOavg[co2,:,i:i+1], axis=1)
                 mp.plotOmegas(x, y, axarr[-1], i, tempOavg[co2,i], rngt, labelAlfa)
         if showPlot:
             fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
 
-    tempEaCo2 = -tempEaCo2
-    return tempEaCo2, tempEaMCo2
+    activationEnergy = -activationEnergy
+    return activationEnergy, multiplicityEa
 
-def getTofSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2):
-    sensibilityCo2 = np.zeros(np.shape(tempOmegaCo2))
+def getTofSensibility(p,omega,ratioEa,multiplicityEa):
+    sensibilityCo2 = np.zeros(np.shape(omega))
     sumBeta = 0
     sumOmegaBeta = 0
     for beta in range(0,4):
-        sumBeta += tempOmegaCo2[:,:,beta]*(tempEaRCo2[:,:,beta]-tempEaMCo2[:,:,beta])
-        sumOmegaBeta += tempOmegaCo2[:,:,beta]
+        sumBeta += omega[:,:,beta]*(ratioEa[:,:,beta]-multiplicityEa[:,:,beta])
+        sumOmegaBeta += omega[:,:,beta]
     for a in range(p.minA,p.maxA):
-        sensibilityCo2[:,:,a] = tempOmegaCo2[:,:,a]/sumOmegaBeta*(sumBeta/tempEaRCo2[:,:,a])
+        sensibilityCo2[:,:,a] = omega[:,:,a]/sumOmegaBeta*(sumBeta/ratioEa[:,:,a])
 
     return sensibilityCo2
 
-def getTotalSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2):
-    sensibilityCo2 = np.zeros(np.shape(tempOmegaCo2))
+def getTotalSensibility(p,omega,ratioEa,multiplicityEa):
+    sensibilityCo2 = np.zeros(np.shape(omega))
     for i in range(p.minA,p.maxA):
-        sensibilityCo2[:,:,i] = tempOmegaCo2[:,:,i]*(1-tempEaMCo2[:,:,i]/tempEaRCo2[:,:,i])
+        sensibilityCo2[:,:,i] = omega[:,:,i]*(1-multiplicityEa[:,:,i]/ratioEa[:,:,i])
     return sensibilityCo2

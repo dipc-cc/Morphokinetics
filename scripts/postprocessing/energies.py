@@ -362,10 +362,10 @@ def getDesorptionCorrection(temperatures, type):
 # In catalysis, prefactor changes with temperature.
 def getEaCorrections(temperatures):
     correction = np.zeros(shape=(20,len(temperatures)))
-    correction[0:4,:] = kb*temperatures
-    correction[4:6,:] = -kb*temperatures/2.0
-    correction[6:8,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
-    correction[8:12,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,1)
-    correction[12:20,:] = kb*temperatures
+    correction[0:4,:] = kb*temperatures # reaction
+    correction[4:6,:] = -kb*temperatures/2.0 # adsorption
+    correction[6:8,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0) # desorption CO
+    correction[8:12,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,1) # desorption O
+    correction[12:20,:] = kb*temperatures # diffusion
     correction = correction.transpose() # temperatures, alfa
     return correction

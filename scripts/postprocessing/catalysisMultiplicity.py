@@ -43,8 +43,8 @@ if total:
 else:
     minAlfa = 0
     maxAlfa = 4
-    p.minA = 0
-    p.maxA = 4
+    p.minA = minAlfa
+    p.maxA = maxAlfa
     energies = e.catalysisEnergies(p)
     #energies = e.catalysisEnergiesTotal(p)
     #total = True
@@ -56,32 +56,30 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
 
 workingPath = os.getcwd()
-tempMavg, tempOmegaCo2, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath,total)
+tempMavg, omega, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath,total)
 os.chdir(workingPath)
 
 print(np.shape(tempMavg))
 
-tempEaCo2, tempEaMCo2 = mi.getEaMandEaR(p,temperatures,labelAlfa,sp,tempMavg,tempOmegaCo2,tempRavg)
-tempEaRCo2 = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
+activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,tempRavg)
+ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
 for alfa in range(minAlfa,maxAlfa):
-    tempEaRCo2[:,:,alfa] = energies[alfa]
-
-tempEaRCo2[:,:,minAlfa:maxAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
+    ratioEa[:,:,alfa] = energies[alfa]
 
 if tofSensibility:
-    sensibilityCo2 = mi.getTofSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2)
+    sensibilityCo2 = mi.getTofSensibility(p,omega,ratioEa,multiplicityEa)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False)
     os.chdir(workingPath)
 
 if sensibility:
-    sensibilityCo2 = mi.getTotalSensibility(p,tempOmegaCo2,tempEaRCo2,tempEaMCo2)
+    sensibilityCo2 = mi.getTotalSensibility(p,omega,ratioEa,multiplicityEa)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=True)
     os.chdir(workingPath)
 
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
-tempEaCov2 = np.sum(tempOmegaCo2[:,:,minAlfa:maxAlfa]*(tempEaRCo2[:,:,minAlfa:maxAlfa]-tempEaMCo2[:,:,minAlfa:maxAlfa]), axis=2)
+activationEnergyC = np.sum(omega[:,:,minAlfa:maxAlfa]*(ratioEa[:,:,minAlfa:maxAlfa]-multiplicityEa[:,:,minAlfa:maxAlfa]), axis=2)
     
 axarr[0].set_ylabel("eV")
 minCo2 = 0
@@ -91,9 +89,9 @@ rct = []
 x = []
 err = []
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    rcmpt = tempEaCov2[minCo2:-1,maxRanges-1-i]
-    targt = tempEaCo2[minCo2:-1,maxRanges-1-i]
-    error = abs(1-tempEaCov2[minCo2:-1,maxRanges-1-i]/tempEaCo2[minCo2:-1,maxRanges-1-i])
+    rcmpt = activationEnergyC[minCo2:-1,maxRanges-1-i]
+    targt = activationEnergy[minCo2:-1,maxRanges-1-i]
+    error = abs(1-activationEnergyC[minCo2:-1,maxRanges-1-i]/activationEnergy[minCo2:-1,maxRanges-1-i])
     handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not rAndM and not omegas)
     x.append(1000/temperatures[maxRanges-1-i])
@@ -108,8 +106,8 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
     label = ["multiplicity", "sum", "ratio"]
     cm = plt.get_cmap('Accent')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
-        partialSum1 = np.sum(tempOmegaCo2[:,j,:]*(-tempEaMCo2[:,j,:]), axis=1)
-        partialSum2 = np.sum(tempOmegaCo2[:,j,:]*(tempEaRCo2[:,j,:]), axis=1)
+        partialSum1 = np.sum(omega[:,j,:]*(-multiplicityEa[:,j,:]), axis=1)
+        partialSum2 = np.sum(omega[:,j,:]*(ratioEa[:,j,:]), axis=1)
         mp.plotRandM(co2, partialSum1, partialSum2, axarr[maxRanges-1-j], handles, j == maxRanges-1)
 
     plt.savefig("multiplicitiesRandM"+ext+".png", bbox_inches='tight')
@@ -121,12 +119,12 @@ if (omegas):
     cm = plt.get_cmap('tab20c')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
-        partialSum = np.sum(tempOmegaCo2[:,j,:]*(tempEaRCo2[:,j,:]-tempEaMCo2[:,j,:]), axis=1)
+        partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
         lgs = []
         for i,a in enumerate(range(minAlfa,maxAlfa)): #alfa
             lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(a/(maxAlfa-1)), label=labelAlfa[a]))
             lastOmegas[maxRanges-1-j,i] = partialSum[-1]
-            partialSum -= tempOmegaCo2[:,j,i]*(tempEaRCo2[:,j,i]-tempEaMCo2[:,j,i])
+            partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
     
     myLegends = []
     myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
