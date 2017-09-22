@@ -66,6 +66,8 @@ ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
 for alfa in range(minAlfa,maxAlfa):
     ratioEa[:,:,alfa] = energies[alfa]
 
+ratioEa[:,:,minAlfa:maxAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
+
 if tofSensibility:
     sensibilityCo2 = mi.getTofSensibility(p,omega,ratioEa,multiplicityEa)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False)
