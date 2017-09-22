@@ -60,11 +60,11 @@ os.chdir(workingPath)
 print(np.shape(tempMavg))
 
 activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,tempRavg)
-ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
-for alfa in range(minAlfa,maxAlfa):
-    ratioEa[:,:,alfa] = energies[alfa]
+ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
+for i,a in enumerate(range(minAlfa,maxAlfa)):
+    ratioEa[:,:,i] = energies[a]
 
-ratioEa[:,:,minAlfa:maxAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
+ratioEa[:,:,0:maxAlfa-minAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
 
 if tofSensibility:
     sensibilityCo2 = mi.getTofSensibility(p,omega,ratioEa,multiplicityEa)
@@ -79,7 +79,7 @@ if sensibility:
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
-activationEnergyC = np.sum(omega[:,:,minAlfa:maxAlfa]*(ratioEa[:,:,minAlfa:maxAlfa]-multiplicityEa[:,:,minAlfa:maxAlfa]), axis=2)
+activationEnergyC = np.sum(omega*(ratioEa-multiplicityEa), axis=2)
     
 axarr[0].set_ylabel("eV")
 minCo2 = 0

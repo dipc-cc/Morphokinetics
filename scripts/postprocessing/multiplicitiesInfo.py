@@ -13,13 +13,13 @@ def computeMavgAndOmega(fileNumber, p):
     time = np.array(possiblesFromList[:,0])
     possiblesFromList = possiblesFromList[:,1:] # remove time
     length = len(time)
-    Mavg = np.zeros(shape=(length,p.maxA))
-    for i in range(0,p.maxA): # iterate alfa
-        Mavg[:,i] = possiblesFromList[:,i]/time
+    Mavg = np.zeros(shape=(length,p.maxA-p.minA))
+    for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
+        Mavg[:,i] = possiblesFromList[:,a]/time
 
     avgTotalRate = np.array(ratios.dot(np.transpose(Mavg)))
     # define omegas 
-    omega = np.zeros(shape=(length,p.maxA)) # [co2amount, alfa]
+    omega = np.zeros(shape=(length,p.maxA-p.minA)) # [co2amount, alfa]
     for i in range(0,length):
         omega[i,:] =  Mavg[i,:] * ratios / avgTotalRate[i]
     return Mavg, omega, avgTotalRate
@@ -34,8 +34,8 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     filesNumber = len(files)-1
     matrix = np.loadtxt(fname=files[0])
     maxCO2 = len(matrix)
-    sumMavg = np.zeros(shape=(maxCO2,p.maxA))  # [time|CO2, alfa]
-    sumOmega = np.zeros(shape=(maxCO2,p.maxA)) # [time|CO2, alfa]
+    sumMavg = np.zeros(shape=(maxCO2,p.maxA-p.minA))  # [time|CO2, alfa]
+    sumOmega = np.zeros(shape=(maxCO2,p.maxA-p.minA)) # [time|CO2, alfa]
     sumRate = np.zeros(maxCO2)
     #iterating over runs
     for i in range(0,filesNumber):
@@ -54,8 +54,8 @@ def computeMavgAndOmegaOverRuns(pAlfa):
 def getMavgAndOmega(p,temperatures,workingPath):
     maxTemp = len(temperatures)
     maxCo2 = int(p.nCo2/10)
-    tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA))
-    tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA))
+    tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
+    tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
     tempRavg = np.zeros(shape=(maxCo2,maxTemp))
     for i,t in enumerate(temperatures):
         print(t)
@@ -68,13 +68,10 @@ def getMavgAndOmega(p,temperatures,workingPath):
         except FileNotFoundError:
             continue
         tmp1, tmp2, tmp3 = computeMavgAndOmegaOverRuns(p)
-        tempMavg[:,i,:] = tmp1[:,p.minA:p.maxA]
-        tempOavg[:,i,:] = tmp2[:,p.minA:p.maxA]
+        tempMavg[:,i,:] = tmp1
+        tempOavg[:,i,:] = tmp2
         tempRavg[:,i] = tmp3
         
-    #tempMavg = tempMavg[:,:,p.minA:p.maxA]
-    #tempOavg = tempOavg[:,:,p.minA:p.maxA]
-
     return tempMavg, tempOavg, tempRavg
 
 def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
@@ -83,7 +80,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
                   # [co2, type (alfa), temperature range]
-    multiplicityEa   = np.zeros(shape=(maxCo2,maxRanges,p.maxA))
+    multiplicityEa   = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
     activationEnergy    = np.zeros(shape=(maxCo2,maxRanges))
     for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
         showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
@@ -100,7 +97,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,tempOavg,tempRavg):
 
         activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, showPlot, co2)
         
-        for i in range(p.minA,p.maxA): # alfa
+        for i,a in enumerate(range(p.minA,p.maxA)): # alfa
             y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
             multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
             if showPlot:
