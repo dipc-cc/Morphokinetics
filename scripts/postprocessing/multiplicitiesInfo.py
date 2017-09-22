@@ -6,13 +6,9 @@ import multiplicitiesPlot as mp
 import matplotlib.pyplot as plt
 import energies as e
 
-def computeMavgAndOmega(fileNumber, p, total):
-    if total:
-        name = "dataAeAll"
-        ratios = p.getRatiosTotal()
-    else:
-        name = "dataAePossibleFromList"
-        ratios = p.getRatios()
+def computeMavgAndOmega(fileNumber, p):
+    name = "dataAeAll"
+    ratios = p.getRatiosTotal()[p.minA:p.maxA]
     possiblesFromList = np.loadtxt(fname=name+"{:03d}".format(fileNumber)+".txt")
     time = np.array(possiblesFromList[:,0])
     possiblesFromList = possiblesFromList[:,1:] # remove time
@@ -29,10 +25,10 @@ def computeMavgAndOmega(fileNumber, p, total):
     return Mavg, omega, avgTotalRate
 
 
-def computeMavgAndOmegaOverRuns(total=False):
+def computeMavgAndOmegaOverRuns(pAlfa):
     p = inf.getInputParameters()
-    if total:
-        p.maxA = 20
+    p.minA = pAlfa.minA
+    p.maxA = pAlfa.maxA
     files = glob.glob("dataAePossibleFromList*")
     files.sort()
     filesNumber = len(files)-1
@@ -43,7 +39,7 @@ def computeMavgAndOmegaOverRuns(total=False):
     sumRate = np.zeros(maxCO2)
     #iterating over runs
     for i in range(0,filesNumber):
-        tmpMavg, tmpOmega, tmpRate = computeMavgAndOmega(i, p, total)
+        tmpMavg, tmpOmega, tmpRate = computeMavgAndOmega(i, p)
         sumMavg = sumMavg + tmpMavg
         sumOmega = sumOmega + tmpOmega
         sumRate = sumRate + tmpRate
@@ -55,7 +51,7 @@ def computeMavgAndOmegaOverRuns(total=False):
     return runMavg, runOavg, runRavg
 
 
-def getMavgAndOmega(p,temperatures,workingPath,total):
+def getMavgAndOmega(p,temperatures,workingPath):
     maxTemp = len(temperatures)
     maxCo2 = int(p.nCo2/10)
     tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA))
@@ -71,7 +67,7 @@ def getMavgAndOmega(p,temperatures,workingPath,total):
             os.chdir(runFolder[-1])
         except FileNotFoundError:
             continue
-        tmp1, tmp2, tmp3 = computeMavgAndOmegaOverRuns(total)
+        tmp1, tmp2, tmp3 = computeMavgAndOmegaOverRuns(p)
         tempMavg[:,i,:] = tmp1[:,p.minA:p.maxA]
         tempOavg[:,i,:] = tmp2[:,p.minA:p.maxA]
         tempRavg[:,i] = tmp3

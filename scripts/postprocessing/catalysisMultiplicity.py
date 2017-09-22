@@ -54,7 +54,7 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
 
 workingPath = os.getcwd()
-tempMavg, omega, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath,total)
+tempMavg, omega, tempRavg = mi.getMavgAndOmega(p,temperatures,workingPath)
 os.chdir(workingPath)
 
 print(np.shape(tempMavg))
