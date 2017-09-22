@@ -123,8 +123,8 @@ if (omegas):
         axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
         partialSum = np.sum(tempOmegaCo2[:,j,:]*(tempEaRCo2[:,j,:]-tempEaMCo2[:,j,:]), axis=1)
         lgs = []
-        for i in range(minAlfa,maxAlfa): #alfa
-            lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(i/(maxAlfa-1)), label=labelAlfa[i]))
+        for i,a in enumerate(range(minAlfa,maxAlfa)): #alfa
+            lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(a/(maxAlfa-1)), label=labelAlfa[a]))
             lastOmegas[maxRanges-1-j,i] = partialSum[-1]
             partialSum -= tempOmegaCo2[:,j,i]*(tempEaRCo2[:,j,i]-tempEaMCo2[:,j,i])
     
@@ -143,8 +143,8 @@ ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('tab20c')
 for i,a in enumerate(range(minAlfa,maxAlfa)):
-    #ax.plot(x, lastOmegas[:,i], "--", label=i)
-    ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[i], color=cm(i/(maxAlfa-1)))
+    #ax.plot(x, lastOmegas[:,i], "--", label=labelAlfa[a])
+    ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a/(19)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
 # ax2.set_ylim(0,1)
