@@ -47,6 +47,7 @@ else:
         maxAlfa = int(sys.argv[3])
     p.minA = minAlfa
     p.maxA = maxAlfa
+    ratesI = 2 # reaction
 
 energies = e.catalysisEnergiesTotal(p)
 labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$", #Reaction
@@ -57,7 +58,10 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
 
 workingPath = os.getcwd()
-tempMavg, omega, totalRate, totalRateEvents = mi.getMavgAndOmega(p,temperatures,workingPath)
+tempMavg, omega, totalRate, totalRateEvents, rates = mi.getMavgAndOmega(p,temperatures,workingPath)
+print(np.shape(rates))
+if not total:
+    totalRateEvents = np.copy(rates[:,:,ratesI]) # it is a inner rate
 os.chdir(workingPath)
 fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
 fig.subplots_adjust(wspace=0.1)

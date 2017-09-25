@@ -49,7 +49,7 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     totalRate = sumRate / filesNumber
 
     totalRateEvents, rates = getTotalRate()
-    return runMavg, runOavg, totalRate, totalRateEvents
+    return runMavg, runOavg, totalRate, totalRateEvents, rates
 
 
 def getMavgAndOmega(p,temperatures,workingPath):
@@ -59,6 +59,7 @@ def getMavgAndOmega(p,temperatures,workingPath):
     tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
     totalRate = np.zeros(shape=(maxCo2,maxTemp))
     totalRateEvents = np.zeros(shape=(maxCo2,maxTemp))
+    rates = np.zeros(shape=(maxCo2,maxTemp,4)) # adsorption, desorption, reaction and diffusion rates
     for i,t in enumerate(temperatures):
         print(t)
         os.chdir(workingPath)
@@ -69,9 +70,9 @@ def getMavgAndOmega(p,temperatures,workingPath):
             os.chdir(runFolder[-1])
         except FileNotFoundError:
             continue
-        tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i] = computeMavgAndOmegaOverRuns(p)
+        tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i], rates[:,i,:] = computeMavgAndOmegaOverRuns(p)
         
-    return tempMavg, tempOavg, totalRate, totalRateEvents
+    return tempMavg, tempOavg, totalRate, totalRateEvents, rates
 
 def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
     maxRanges = len(temperatures)
@@ -127,6 +128,7 @@ def getTotalSensibility(p,omega,ratioEa,multiplicityEa):
     return sensibilityCo2
 
 
+# Computes total rates from number of events
 def getTotalRate():
     files = glob.glob("dataCatalysis0*.txt")
     totalRate = 0
