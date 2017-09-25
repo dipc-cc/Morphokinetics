@@ -17,7 +17,6 @@ import multiplicitiesInfo as mi
 
 temperatures = inf.getTemperatures("float")
 maxRanges = len(temperatures)
-kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
 total = False
