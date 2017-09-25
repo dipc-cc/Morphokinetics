@@ -59,6 +59,13 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
 workingPath = os.getcwd()
 tempMavg, omega, totalRate, totalRateEvents = mi.getMavgAndOmega(p,temperatures,workingPath)
 os.chdir(workingPath)
+fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
+fig.subplots_adjust(wspace=0.1)
+axarr.plot(1000/temperatures, totalRateEvents[-1], label="Total rate from events")
+axarr.plot(1000/temperatures, totalRate[-1], label="Total rate from M")
+axarr.set_yscale("log")
+axarr.legend(loc="best", prop={'size':6})
+fig.savefig("totalRates.svg",  bbox_inches='tight')
 
 print(np.shape(tempMavg))
 
@@ -105,7 +112,7 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
 plt.savefig("multiplicities"+ext+".svg", bbox_inches='tight')
 
 
-if (rAndM): # plot total activation energy as the sum of ratios and multiplicities
+if rAndM: # plot total activation energy as the sum of ratios and multiplicities
     label = ["multiplicity", "sum", "ratio"]
     cm = plt.get_cmap('Accent')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
@@ -116,7 +123,8 @@ if (rAndM): # plot total activation energy as the sum of ratios and multipliciti
     plt.savefig("multiplicitiesRandM"+ext+".png", bbox_inches='tight')
 
 lastOmegas = np.zeros(shape=(maxRanges,maxAlfa-minAlfa))
-if (omegas):
+epsilon = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
+if omegas:
     co2.append(maxCo2)
     labels = ["0", "20", "40", "60", "80", "100"]
     cm = plt.get_cmap('tab20c')
@@ -128,7 +136,8 @@ if (omegas):
             lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(a/(maxAlfa-1)), label=labelAlfa[a]))
             lastOmegas[maxRanges-1-j,i] = partialSum[-1]
             partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
-    
+            epsilon[:,j,i] = omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+
     myLegends = []
     myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
     myLegends += lgs
@@ -143,9 +152,11 @@ figR, ax = plt.subplots(1, figsize=(5,4))
 ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('tab20c')
+markers=["o", "s","D","^","d","h","p","o"]
 for i,a in enumerate(range(minAlfa,maxAlfa)):
-    #ax.plot(x, lastOmegas[:,i], "--", label=labelAlfa[a])
-    ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a/(19)))
+    if any(abs(epsilon[-1,::-1,i]) > 0.005):
+        #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
+        ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a/(19)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
 # ax2.set_ylim(0,1)
