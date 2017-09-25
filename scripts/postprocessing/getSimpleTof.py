@@ -58,7 +58,7 @@ def plot(x,y,p,meskinePlot):
 
     fig.savefig("tof.svg", bbox_inches='tight')
     
-def plotPressures(x,y,p):
+def plotPressures(x,y,p,meskinePlot=False):
     fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,4))
     # Labels
     ax.set_title("TOF "+str(p.sizI)+"x"+str(p.sizJ))
@@ -74,10 +74,14 @@ def plotPressures(x,y,p):
     # reference
     scriptDir = os.path.dirname(os.path.realpath(__file__))
     data = np.loadtxt(scriptDir+"/tofP"+p.rLib.title()+".txt")
-    print(scriptDir+"/tofP"+p.rLib.title()+".txt")
+    if meskinePlot:
+        y = y / 1e15
+        ax.set_yscale("log")
+        ax.set_xscale("log")
+        data = np.loadtxt(scriptDir+"/tofPMeskine.txt")
     ax.set_yscale("log")
-    ax.set_ylim(1e11,1e14)
-    ax.plot(x,y,label=p.rLib.title(), ls="-", marker="+")
+    #ax.set_ylim(1e11,1e14)
+    ax.plot(x,y,label=p.rLib.title(), marker="+")
     ax.plot(data[:,0],data[:,1],label="ref", ls="-", marker="^")
     ax.legend(loc="best", prop={'size':6})
 
@@ -122,4 +126,4 @@ if len(sys.argv) > 1:
 if temperatures:
     plot(x,y,p,meskinePlot)
 else:
-    plotPressures(x,y,p)
+    plotPressures(x,y,p,meskinePlot)
