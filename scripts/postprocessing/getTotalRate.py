@@ -10,9 +10,10 @@ import multiplicitiesInfo as mi
         
 
 def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
+    kb = 8.6173324e-5
     # Labels
     ax.set_ylabel(r"TOF ($\times 10^{-15}$ cm$^{-2} \cdot s^{-1}$)")
-    ax.set_xlabel(r"$1000/T(1/K)$")
+    ax.set_xlabel(r"$1/k_BT$")
     ref = False
     if label=="":
         label = p.rLib.title()
@@ -22,14 +23,14 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         font = FontProperties()
         font.set_size(6)
-        ax.text(1.7,1e-5,"TOF\nLibrary: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ),
+        ax.text(20,1e-5,"Library: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ),
                 bbox=bbox_props, fontproperties=font)
     ucArea = 3.12*6.43/4
     toCm = 1e-8
     area = p.sizI * p.sizJ * ucArea * toCm * toCm
     x = np.array(x)
     y = np.array(y)
-    x = 1000 / x
+    x = 1 / kb / x
     if meskinePlot:
         y = y / (p.sizI * p.sizJ)
     else:
@@ -43,6 +44,7 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
         if meskinePlot:
             ax.set_yscale("log")
             data = np.loadtxt(scriptDir+"/tofMeskine.txt")
+        data[:,0] = 1/(1000 / data[:,0])/kb
         ax.plot(data[:,0],data[:,1],label="Reference", ls="-")#, marker="^")
     ax.plot(x,y,label=label+" rate", ls="-", marker=marker)
     ax.legend(loc="best", prop={'size':6})
@@ -98,4 +100,4 @@ markers=["o", "s","^","D","p","d","h","o"]
 for i in range(0,4):
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
-fig.savefig("totalRate.pdf")#, bbox_inches='tight')
+fig.savefig("totalRate.pdf", bbox_inches='tight')
