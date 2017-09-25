@@ -69,11 +69,7 @@ def getMavgAndOmega(p,temperatures,workingPath):
             os.chdir(runFolder[-1])
         except FileNotFoundError:
             continue
-        tmp1, tmp2, tmp3, tmp4 = computeMavgAndOmegaOverRuns(p)
-        tempMavg[:,i,:] = tmp1
-        tempOavg[:,i,:] = tmp2
-        totalRate[:,i] = tmp3
-        totalRateEvents[:,i] = tmp4
+        tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i] = computeMavgAndOmegaOverRuns(p)
         
     return tempMavg, tempOavg, totalRate, totalRateEvents
 
