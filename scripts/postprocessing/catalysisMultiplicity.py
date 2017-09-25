@@ -59,7 +59,6 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
 
 workingPath = os.getcwd()
 tempMavg, omega, totalRate, totalRateEvents, rates = mi.getMavgAndOmega(p,temperatures,workingPath)
-print(np.shape(rates))
 if not total:
     totalRateEvents = np.copy(rates[:,:,ratesI]) # it is a inner rate
 os.chdir(workingPath)
