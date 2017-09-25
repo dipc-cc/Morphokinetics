@@ -10,7 +10,6 @@ import multiplicitiesInfo as mi
         
 
 def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
-    kb = 8.617332e-5
     # Labels
     ax.set_ylabel(r"TOF ($\times 10^{-15}$ cm$^{-2} \cdot s^{-1}$)")
     ax.set_xlabel(r"$1000/T(1/K)$")
