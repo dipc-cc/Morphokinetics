@@ -99,7 +99,7 @@ def putLabels(ax, co2, alfa):
 def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     inf.smallerFont(axis, 8)
     cm = plt.get_cmap('tab20')
-    markers=["o", "s","D","^","d","h","p","o"]
+    markers=["o", "s","D","^","d","h","p"]
     # #newax = fig.add_axes([0.43, 0.15, 0.25, 0.25])
     # newax.scatter(x, y, color=cm(abs(i/9)), alpha=0.75, edgecolors='none', label=labelAlfa[i], marker=markers[i])
     # newax.set_ylim(-0.05,1.05)
@@ -113,7 +113,7 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     # lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     # newax.add_artist(lg)
     # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs(i/20)), label=labelAlfa[i], marker=markers[i%8], mec='none',alpha=0.75)
+    axis.semilogy(x, y, ls="",color=cm(abs(i/20)), label=labelAlfa[i], marker=markers[i%7], mec='none',alpha=0.75)
 
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
@@ -164,7 +164,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
 
 def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
     showPlot = sp# and (alfa == 4 or alfa == 5)
-    markers=["o", "s","D","^","d","h","p","o"]
+    markers=["o", "s","D","^","d","h","p"]
     cm = plt.get_cmap('tab20')
     cm1 = plt.get_cmap('hsv')
     slopes = []

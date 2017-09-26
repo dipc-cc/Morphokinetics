@@ -102,7 +102,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
             spl = False
             if showPlot:
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
-                if any(abs(y) > 0):
+                if any(abs(y) >= 1e-4):
                     mp.plotOmegas(x, y, axarr[1], i, omega[co2,:,i], rngt, labelAlfa)
                     spl = True
                 else:

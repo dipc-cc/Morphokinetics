@@ -130,7 +130,7 @@ epsilon = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 if omegas:
     co2.append(maxCo2)
     labels = ["0", "20", "40", "60", "80", "100"]
-    cm = plt.get_cmap('tab20c')
+    cm = plt.get_cmap('tab20')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
         axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
         partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
@@ -155,8 +155,8 @@ figR, ax = plt.subplots(1, figsize=(5,3))
 figR.subplots_adjust(top=0.95,right=0.95,bottom=0.15)
 ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
-cm = plt.get_cmap('tab20c')
-markers=["o", "s","D","^","d","h","p","o"]
+cm = plt.get_cmap('tab20')
+markers=["o", "s","D","^","d","h","p"]
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     if any(abs(epsilon[-1,::-1,i]) > 0.005):
         #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
