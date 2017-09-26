@@ -1,18 +1,20 @@
+
 import glob
 import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.font_manager import FontProperties
+import matplotlib.ticker as ticker
 import info as inf
 import math
 import multiplicitiesInfo as mi
         
+kb = 8.6173324e-5
 
 def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
-    kb = 8.6173324e-5
     # Labels
-    ax.set_ylabel(r"TOF ($\times 10^{-15}$ cm$^{-2} \cdot s^{-1}$)")
+    ax.set_ylabel(r"events/site/s")
     ax.set_xlabel(r"$1/k_BT$")
     ref = False
     color = "w"
@@ -33,20 +35,22 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
     x = np.array(x)
     y = np.array(y)
     x = 1 / kb / x
-    if meskinePlot:
-        y = y / (p.sizI * p.sizJ)
-    else:
-        #y = np.log(y / area) # for different pressures
-        y = np.log(y / (p.sizI * p.sizJ))
+    #if meskinePlot:
+    y = y / (p.sizI * p.sizJ)
+    #else:
+    #    #y = np.log(y / area) # for different pressures
+    #    y = np.log(y / (p.sizI * p.sizJ))
     
     # reference
     if ref:
         scriptDir = os.path.dirname(os.path.realpath(__file__))
         data = np.loadtxt(scriptDir+"/tof"+p.rLib.title()+".txt")
+        ax.set_yscale("log")
         if meskinePlot:
-            ax.set_yscale("log")
             data = np.loadtxt(scriptDir+"/tofMeskine.txt")
         data[:,0] = 1/(1000 / data[:,0])/kb
+        if not meskinePlot:
+            data[:,1] = np.exp(data[:,1])
         ax.plot(data[:,0],data[:,1],label="Reference", ls="-", lw=2)#, marker="^")
     ax.plot(x,y,label=label+" rate", ls="-", marker=marker, mfc=color)
     ax.legend(loc="best", prop={'size':6})
@@ -95,8 +99,8 @@ meskinePlot = False
 if len(sys.argv) > 1:
     meskinePlot = True
 
-fig, ax = plt.subplots(1, 1, sharey=True, figsize=(2.5,3))
-fig.subplots_adjust(top=0.92, bottom=0.15, left=0.30, right=0.95, hspace=0.25,
+fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
+fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
                     wspace=0.35)
 labels=["Adsorption", "Desorption", "Reaction", "Diffusion"]
 markers=["o", "+","x","1","s","d","h","o"]
@@ -104,4 +108,11 @@ for i in range(0,4):
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
 plot(x,y,p,ax,meskinePlot)
+ax2 = ax.twiny()
+ax2.set_xlim(1/kb/ax.get_xlim()[0],1/kb/ax.get_xlim()[1])
+ax2.set_xlim(ax.get_xlim()[0],ax.get_xlim()[1])
+#ax2.set_xscale("log")
+ticks_x = ticker.FuncFormatter(lambda x, pos: '${0:d}$'.format(int(1/kb/x)))
+ax2.xaxis.set_major_formatter(ticks_x)
+ax2.set_xlabel("temperature (T)")
 fig.savefig("totalRate.pdf")#, bbox_inches='tight')
