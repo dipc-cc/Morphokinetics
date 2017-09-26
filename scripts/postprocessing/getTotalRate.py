@@ -114,5 +114,8 @@ ax2.set_xlim(ax.get_xlim()[0],ax.get_xlim()[1])
 #ax2.set_xscale("log")
 ticks_x = ticker.FuncFormatter(lambda x, pos: '${0:d}$'.format(int(1/kb/x)))
 ax2.xaxis.set_major_formatter(ticks_x)
+majors = np.array(list(np.arange(200,400,20))+list(np.arange(400,760,50)))
+majors = 1/kb/majors
+ax2.xaxis.set_major_locator(ticker.FixedLocator(majors))
 ax2.set_xlabel("temperature (T)")
 fig.savefig("totalRate.pdf")#, bbox_inches='tight')
