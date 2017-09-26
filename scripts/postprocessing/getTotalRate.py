@@ -15,7 +15,9 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
     ax.set_ylabel(r"TOF ($\times 10^{-15}$ cm$^{-2} \cdot s^{-1}$)")
     ax.set_xlabel(r"$1/k_BT$")
     ref = False
+    color = "w"
     if label=="":
+        color = "C5"
         label = p.rLib.title()
         label = "Total "
         ref = True
@@ -23,8 +25,8 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         font = FontProperties()
         font.set_size(6)
-        ax.annotate("Library: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ), xy=(0.3, 0.2), xycoords="axes fraction",
-                    bbox=bbox_props, fontproperties=font)
+        ax.annotate("Library: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ), xy=(0.97, 0.96), xycoords="axes fraction",
+                    bbox=bbox_props, fontproperties=font, horizontalalignment='right', verticalalignment='top',)
     ucArea = 3.12*6.43/4
     toCm = 1e-8
     area = p.sizI * p.sizJ * ucArea * toCm * toCm
@@ -45,8 +47,8 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
             ax.set_yscale("log")
             data = np.loadtxt(scriptDir+"/tofMeskine.txt")
         data[:,0] = 1/(1000 / data[:,0])/kb
-        ax.plot(data[:,0],data[:,1],label="Reference", ls="-")#, marker="^")
-    ax.plot(x,y,label=label+" rate", ls="-", marker=marker)
+        ax.plot(data[:,0],data[:,1],label="Reference", ls="-", lw=2)#, marker="^")
+    ax.plot(x,y,label=label+" rate", ls="-", marker=marker, mfc=color)
     ax.legend(loc="best", prop={'size':6})
 
     
@@ -93,11 +95,13 @@ meskinePlot = False
 if len(sys.argv) > 1:
     meskinePlot = True
 
-fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3))
-plot(x,y,p,ax,meskinePlot)
+fig, ax = plt.subplots(1, 1, sharey=True, figsize=(2.5,3))
+fig.subplots_adjust(top=0.92, bottom=0.15, left=0.30, right=0.95, hspace=0.25,
+                    wspace=0.35)
 labels=["Adsorption", "Desorption", "Reaction", "Diffusion"]
-markers=["o", "s","^","D","p","d","h","o"]
+markers=["o", "+","x","1","s","d","h","o"]
 for i in range(0,4):
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
-fig.savefig("totalRate.pdf", bbox_inches='tight')
+plot(x,y,p,ax,meskinePlot)
+fig.savefig("totalRate.pdf")#, bbox_inches='tight')
