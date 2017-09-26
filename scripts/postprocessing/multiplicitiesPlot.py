@@ -86,10 +86,10 @@ def putLabels(ax, co2, alfa):
                     bbox=bbox_props)
     elif alfa == 0:
          ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$", size=8)
-         ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction", size=8)
+         ax.annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
          label = r"$CO_2="+str(co2*10)+r"$"
-         ax.annotate(label, xy=(0.78,0.55), xycoords="axes fraction",
-                     bbox=bbox_props, size=8)
+         ax.annotate(label, xy=(0.97,0.95), xycoords="axes fraction",
+                     bbox=bbox_props, size=8, horizontalalignment='right', verticalalignment='top')
     # if alfa < 1:
     #     ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
     #     ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
@@ -117,15 +117,15 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
 
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
-    axis.set_ylim(2e-4,2)
+    axis.set_ylim(1e-4,2)
     axis.set_ylabel(r"$\omega_\alpha$", size=8)
     axis.set_xlabel(r"$1/k_BT$", size=8)
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-    axis.legend(prop={'size': 7}, loc=(1.1,1.55), scatterpoints=1)
+    axis.legend(prop={'size': 5}, loc="best", scatterpoints=1)
     if i == 0: # range separation lines
         axis.annotate("", xy=(45,2e-4), xytext=(45,2), arrowprops=arrow)
         axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
-        axis.annotate("(b)", xy=(-0.2, 0.93), xycoords="axes fraction", size=8)
+        axis.annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
 
 
 def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
@@ -162,7 +162,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
     return slopes
 
 
-def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
+def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
     showPlot = sp# and (alfa == 4 or alfa == 5)
     markers=["o", "s","D","^","d","h","p","o"]
     cm = plt.get_cmap('tab20')
@@ -173,7 +173,10 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2):
         #inf.smallerFont(ax, 8)
         ax.scatter(x, y, color=cm(abs(alfa/20)), alpha=0.75, edgecolors='none', marker=markers[alfa%7])#, "o", lw=0.5)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-        putLabels(ax, co2, alfa)
+        a = alfa
+        if first:
+            a = 0
+        putLabels(ax, co2+1, a)
     # all
     s = allSlopes(x,y)
     if any(np.isinf(s)) or any(np.isnan(s)):

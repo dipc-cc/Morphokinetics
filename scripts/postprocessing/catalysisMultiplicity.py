@@ -17,6 +17,7 @@ import multiplicitiesInfo as mi
 
 temperatures = inf.getTemperatures("float")
 maxRanges = len(temperatures)
+kb = 8.6173324e-5
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 maxCo2 = int(p.nCo2/10)
 total = False
@@ -63,8 +64,8 @@ if not total:
 os.chdir(workingPath)
 fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
 fig.subplots_adjust(wspace=0.1)
-axarr.plot(1000/temperatures, totalRateEvents[-1], label="Total rate from events")
-axarr.plot(1000/temperatures, totalRate[-1], label="Total rate from M")
+axarr.plot(1/kb/temperatures, totalRateEvents[-1], label="Total rate from events")
+axarr.plot(1/kb/temperatures, totalRate[-1], label="Total rate from M")
 axarr.set_yscale("log")
 axarr.legend(loc="best", prop={'size':6})
 fig.savefig("totalRates.svg",  bbox_inches='tight')
@@ -106,7 +107,7 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
     error = abs(1-activationEnergyC[minCo2:-1,maxRanges-1-i]/activationEnergy[minCo2:-1,maxRanges-1-i])
     handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not rAndM and not omegas)
-    x.append(1000/temperatures[maxRanges-1-i])
+    x.append(1/kb/temperatures[maxRanges-1-i])
     tgt.append(targt[-1])
     rct.append(rcmpt[-1])
     err.append(error[-1])
@@ -150,7 +151,8 @@ if omegas:
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
     plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
 
-figR, ax = plt.subplots(1, figsize=(5,4))
+figR, ax = plt.subplots(1, figsize=(5,3))
+figR.subplots_adjust(top=0.95,right=0.95,bottom=0.15)
 ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('tab20c')
@@ -163,6 +165,8 @@ for i,a in enumerate(range(minAlfa,maxAlfa)):
 # ax2.plot(x, err, label="Relative error")
 # ax2.set_ylim(0,1)
 ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error")
-ax.legend(loc=(1.10,0.0), prop={'size':6})
+ax.legend(loc="best", prop={'size':6})
+ax.set_xlabel(r"$1/k_BT$")
+ax.set_ylabel(r"Activation energy $(eV)$")
 #ax.set_yscale("log")
-plt.savefig("multiplicitiesResume"+ext+".svg", bbox_inches='tight')
+plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')

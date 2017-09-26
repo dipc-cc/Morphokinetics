@@ -31,7 +31,7 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     p.maxA = pAlfa.maxA
     files = glob.glob("dataAeAll*")
     files.sort()
-    filesNumber = len(files)
+    filesNumber = len(files)-1
     matrix = np.loadtxt(fname=files[0])
     maxCO2 = len(matrix)
     sumMavg = np.zeros(shape=(maxCO2,p.maxA-p.minA))  # [time|CO2, alfa]
@@ -89,22 +89,30 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
         x = 1/kb/temperatures
         y = totalRate
         if showPlot:
-            fig, axarr = plt.subplots(3, sharex=True, figsize=(5,6))
-            fig.subplots_adjust(right=0.7, hspace=0.1)
+            fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
+            fig.subplots_adjust(top=0.95,right=0.95)
         else:
             axarr = np.zeros(3)
         # N_h
 
-        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, showPlot, co2)
-        
+        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2)
+
+        first = True
         for i,a in enumerate(range(p.minA,p.maxA)): # alfa
-            y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
-            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[1], i, showPlot, co2)
+            spl = False
             if showPlot:
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
-                mp.plotOmegas(x, y, axarr[-1], i, omega[co2,:,i], rngt, labelAlfa)
+                if any(abs(y) > 0):
+                    mp.plotOmegas(x, y, axarr[1], i, omega[co2,:,i], rngt, labelAlfa)
+                    spl = True
+                else:
+                    spl = False
+            y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
+            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[0], i, spl, co2, first)
+            if spl and first:
+                first = False
         if showPlot:
-            fig.savefig("plot"+str(co2)+".svg", bbox_inches='tight') 
+            fig.savefig("plot"+str(co2)+".pdf")#, bbox_inches='tight') 
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa
