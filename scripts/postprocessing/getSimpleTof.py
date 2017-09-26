@@ -85,7 +85,7 @@ def plotPressures(x,y,p,meskinePlot=False):
     ax.plot(data[:,0],data[:,1],label="ref", ls="-", marker="^")
     ax.legend(loc="best", prop={'size':6})
 
-    fig.savefig("tof.png", bbox_inches='tight')
+    fig.savefig("tof.svg", bbox_inches='tight')
 
 workingPath = os.getcwd()
 x = []
