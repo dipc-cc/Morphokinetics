@@ -23,8 +23,8 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         font = FontProperties()
         font.set_size(6)
-        ax.text(20,1e-5,"Library: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ),
-                bbox=bbox_props, fontproperties=font)
+        ax.annotate("Library: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ), xy=(0.3, 0.2), xycoords="axes fraction",
+                    bbox=bbox_props, fontproperties=font)
     ucArea = 3.12*6.43/4
     toCm = 1e-8
     area = p.sizI * p.sizJ * ucArea * toCm * toCm
