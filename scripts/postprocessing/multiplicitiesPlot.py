@@ -85,11 +85,11 @@ def putLabels(ax, co2, alfa):
         ax.annotate(label, xy=(0.75,0.85), xycoords="axes fraction",
                     bbox=bbox_props)
     elif alfa == 0:
-         ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$", size=8)
-         ax.annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
-         label = r"$CO_2="+str(co2*10)+r"$"
-         ax.annotate(label, xy=(0.97,0.95), xycoords="axes fraction",
-                     bbox=bbox_props, size=8, horizontalalignment='right', verticalalignment='top')
+         ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
+         #ax.annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
+         #label = r"$CO_2="+str(co2*10)+r"$"
+         #ax.annotate(label, xy=(0.97,0.95), xycoords="axes fraction",
+         #            bbox=bbox_props, size=8, horizontalalignment='right', verticalalignment='top')
     # if alfa < 1:
     #     ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
     #     ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
@@ -118,14 +118,13 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(1e-4,2)
-    axis.set_ylabel(r"$\omega_\alpha$", size=8)
-    axis.set_xlabel(r"$1/k_BT$", size=8)
+    axis.set_ylabel(r"$\omega_\alpha$")
+    axis.set_xlabel(r"$1/k_BT$")
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
     axis.legend(prop={'size': 5}, loc="best", scatterpoints=1)
     if i == 0: # range separation lines
         axis.annotate("", xy=(45,2e-4), xytext=(45,2), arrowprops=arrow)
         axis.annotate("", xy=(94,2e-4), xytext=(94,2), arrowprops=arrow)
-        axis.annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
 
 
 def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
@@ -187,7 +186,7 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
         slopes.append(b)
         if showPlot:
             ax.set_yscale("log")
-            ax.semilogy(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1(i/30), alpha=0)
+            ax.plot(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1(i/30), alpha=0)
             xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
@@ -199,9 +198,6 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
             bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.6)
             if alfa == -10:
                 ax.text(xHalf,yHalf, text, color=cm(abs(alfa/9)), bbox=bbox_props, ha="center", va="center", size=6)
-    if showPlot and alfa > -1:
-        locator = LogLocator(100,[1e-1])
-        ax.yaxis.set_major_locator(locator)
     return slopes
 
 

@@ -90,7 +90,9 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
         y = totalRate
         if showPlot:
             fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
-            fig.subplots_adjust(top=0.95,right=0.95)
+            axarr[0].annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
+            axarr[1].annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
+            fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
         else:
             axarr = np.zeros(3)
         # N_h
@@ -112,7 +114,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
             if spl and first:
                 first = False
         if showPlot:
-            fig.savefig("plot"+str(co2)+".pdf")#, bbox_inches='tight') 
+            fig.savefig("plot"+str(co2)+".svg")#, bbox_inches='tight') 
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa
