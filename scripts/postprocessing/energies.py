@@ -225,20 +225,20 @@ def getCatalysisEnergiesFarkasTotal():
     
     energies[4] = 0.    # rate must be obtained in another way
     energies[5] = 0.    # rate must be obtained in another way
-    energies[6] = 1.85  # CO^B -> V
-    energies[7] = 1.32  # CO^C -> V
-    energies[8] = 4.82  # O^B + O^B -> V^B + V^B
-    energies[9] = 3.30  # O^B + O^C -> V^B + V^C
-    energies[10] = 3.0  # O^C + O^B -> V^C + V^B
-    energies[11] = 1.78 # O^C + O^C -> V^C + V^C
-    energies[12] = 0.70 # CO^B -> CO^B
-    energies[13] = 2.06 # CO^B -> CO^C
-    energies[14] = 1.40 # CO^C -> CO^B
-    energies[15] = 1.57 # CO^C -> CO^C
-    energies[16] = 0.90 # O^B  -> O^B
-    energies[17] = 1.97 # O^B  -> O^C
-    energies[18] = 0.70 # O^C  -> O^B
-    energies[19] = 1.53 # O^C  -> O^C
+    energies[6] = 193  / kJtoeV # CO^B -> V
+    energies[7] = 129  / kJtoeV # CO^C -> V
+    energies[8] = 414  / kJtoeV # O^B + O^B -> V^B + V^B
+    energies[9] = 291  / kJtoeV # O^B + O^C -> V^B + V^C
+    energies[10] = 291 / kJtoeV # O^C + O^B -> V^C + V^B
+    energies[11] = 168 / kJtoeV # O^C + O^C -> V^C + V^C
+    energies[12] =  87 / kJtoeV # CO^B -> CO^B
+    energies[13] = 122 / kJtoeV # CO^B -> CO^C
+    energies[14] = 58  / kJtoeV # CO^C -> CO^B
+    energies[15] = 106 / kJtoeV # CO^C -> CO^C
+    energies[16] = 87  / kJtoeV # O^B  -> O^B
+    energies[17] = 191 / kJtoeV # O^B  -> O^C
+    energies[18] = 68  / kJtoeV # O^C  -> O^B
+    energies[19] = 106 / kJtoeV # O^C  -> O^C
     
     return energies
     
