@@ -36,8 +36,8 @@ if len(sys.argv) > 1:
     tofSensibility = "f" in sys.argv[1]
 if total:
     minAlfa = 0
-    maxAlfa = 20
-    p.maxA = 20
+    maxAlfa = 20#27
+    p.maxA = 20#27
     ext = "T"
 else:
     minAlfa = 0
@@ -55,8 +55,10 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$", # Desorption CO
              r"$O^B+O^B\rightarrow V^B+V^B$",r"$O^B+O^C\rightarrow V^B+V^C$",r"$O^C+O^B\rightarrow V^C+V^B$",r"$O^C+O^C\rightarrow V^C+V^C$", # Desorption O
              r"$CO^B\rightarrow CO^B$",r"$CO^B\rightarrow CO^C$",r"$CO^C\rightarrow CO^B$",r"$CO^C\rightarrow CO^C$",  # Diffusion CO
-             r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$"] # Diffusion O
-
+             r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$", # Diffusion O
+             r"$CO^C\rightarrow V$ (1 neighour)",r"$CO^C\rightarrow V$ (2 neighours)", # Desorption CO
+             r"$CO^C+O^B\rightarrow CO_2$ (1 neighour)",r"$CO^C+O^B\rightarrow CO_2$ (2 neighours)",r"$CO^C+O^C\rightarrow CO_2$ (1 neighour)", #Reaction
+             r"$CO^C\rightarrow CO^B$ (1 neighour)",r"$CO^C\rightarrow CO^B$ (2 neighours)",r"$CO^C\rightarrow CO^C$ (1 neighour)"] # Diffusion CO
 workingPath = os.getcwd()
 tempMavg, omega, totalRate, totalRateEvents, rates = mi.getMavgAndOmega(p,temperatures,workingPath)
 if not total:
@@ -160,7 +162,7 @@ markers=["o", "s","D","^","d","h","p"]
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     if any(abs(epsilon[-1,::-1,i]) > 0.005):
         #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
-        ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a/(19)))
+        ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
 # ax2.set_ylim(0,1)
