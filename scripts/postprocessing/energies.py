@@ -162,10 +162,6 @@ def getCatalysisEnergiesKiejna():
 
 def getCatalysisEnergiesKiejnaTotal():
     energies = 99999999*np.ones(20, dtype=float)
-    energies[0] = 1.48  # CO^B + O^B -> CO_2 
-    energies[1] = 0.61  # CO^B + O^C -> CO_2 
-    energies[2] = 0.99  # CO^C + O^B -> CO_2 
-    energies[3] = 0.78  # CO^C + O^C -> CO_2#
     energies[4] = 0.    # rate must be obtained in another way
     energies[5] = 0.    # rate must be obtained in another way
     energies[6] = 1.69  # CO^B -> V
@@ -174,6 +170,10 @@ def getCatalysisEnergiesKiejnaTotal():
     energies[9] = 3.19  # O^B + O^C -> V^B + V^C
     energies[10] = 3.19  # O^C + O^B -> V^C + V^B
     energies[11] = 1.72 # O^C + O^C -> V^C + V^C
+    energies[0] = 1.48  # CO^B + O^B -> CO_2 
+    energies[1] = 0.61  # CO^B + O^C -> CO_2 
+    energies[2] = 0.99  # CO^C + O^B -> CO_2 
+    energies[3] = 0.78  # CO^C + O^C -> CO_2#
     energies[12] = 0.6 # CO^B -> CO^B
     energies[13] = 1.6 # CO^B -> CO^C
     energies[14] = 1.3 # CO^C -> CO^B
@@ -217,11 +217,7 @@ def getCatalysisEnergiesFarkas():
     return energies[0:4]
 
 def getCatalysisEnergiesFarkasTotal():
-    energies = 99999999*np.ones(20, dtype=float)
-    energies[0] = 133 / kJtoeV  # CO^B + O^B -> CO_2 
-    energies[1] =  91 / kJtoeV  # CO^B + O^C -> CO_2 
-    energies[2] =  89 / kJtoeV  # CO^C + O^B -> CO_2 
-    energies[3] =  89 / kJtoeV  # CO^C + O^C -> CO_2#
+    energies = 99999999*np.ones(28, dtype=float)
     
     energies[4] = 0.    # rate must be obtained in another way
     energies[5] = 0.    # rate must be obtained in another way
@@ -231,6 +227,10 @@ def getCatalysisEnergiesFarkasTotal():
     energies[9] = 291  / kJtoeV # O^B + O^C -> V^B + V^C
     energies[10] = 291 / kJtoeV # O^C + O^B -> V^C + V^B
     energies[11] = 168 / kJtoeV # O^C + O^C -> V^C + V^C
+    energies[0] = 133 / kJtoeV  # CO^B + O^B -> CO_2 
+    energies[1] =  91 / kJtoeV  # CO^B + O^C -> CO_2 
+    energies[2] =  89 / kJtoeV  # CO^C + O^B -> CO_2 
+    energies[3] =  89 / kJtoeV  # CO^C + O^C -> CO_2#
     energies[12] =  87 / kJtoeV # CO^B -> CO^B
     energies[13] = 122 / kJtoeV # CO^B -> CO^C
     energies[14] = 58  / kJtoeV # CO^C -> CO^B
@@ -239,7 +239,20 @@ def getCatalysisEnergiesFarkasTotal():
     energies[17] = 191 / kJtoeV # O^B  -> O^C
     energies[18] = 68  / kJtoeV # O^C  -> O^B
     energies[19] = 106 / kJtoeV # O^C  -> O^C
+
+    repulsion = 10.6 / 2.0
+    # With CO^C neighbour(s)
+    energies[20] = (129 - repulsion) / kJtoeV # CO^C -> V (1 neighbour)
+    energies[21] = (129 - 2*repulsion) / kJtoeV # CO^C -> V (2 neighbours)
     
+    energies[22] =  (89 - repulsion)/ kJtoeV  # CO^C + O^B -> CO_2 (1 neighbour)
+    energies[23] =  (89 - 2*repulsion)/ kJtoeV  # CO^C + O^B -> CO_2 (2 neighbours)
+    energies[24] =  (89 - repulsion)/ kJtoeV  # CO^C + O^C -> CO_2 (1 neighbour)
+
+    energies[25] = (58 - repulsion)  / kJtoeV # CO^C   -> CO^B (1 neighbour)
+    energies[26] = (58 - 2*repulsion)  / kJtoeV # CO^C -> CO^B (2 neighbours)
+    energies[27] = (106 - repulsion) / kJtoeV # CO^C   -> CO^C (1 neighbour)
+
     return energies
     
 
@@ -337,7 +350,8 @@ def computeReactionRate(p,energy):
     
 def computeAdsorptionRate(p,pressure,type):
     areaHalfUc = 10.0308e-20
-    return pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
+    correction = 1.0
+    return correction*pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
     
 def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
     qt = np.zeros(2)
@@ -371,11 +385,14 @@ def getDesorptionCorrection(temperatures, type):
 
 # In catalysis, prefactor changes with temperature.
 def getEaCorrections(temperatures):
-    correction = np.zeros(shape=(20,len(temperatures)))
+    correction = np.zeros(shape=(28,len(temperatures)))
     correction[0:4,:] = kb*temperatures # reaction
     correction[4:6,:] = -kb*temperatures/2.0 # adsorption
     correction[6:8,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0) # desorption CO
     correction[8:12,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,1) # desorption O
     correction[12:20,:] = kb*temperatures # diffusion
+    correction[21:23,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
+    correction[23:26,:] = kb*temperatures # reaction
+    correction[26:29,:] = kb*temperatures # diffusion
     correction = correction.transpose() # temperatures, alfa
     return correction
