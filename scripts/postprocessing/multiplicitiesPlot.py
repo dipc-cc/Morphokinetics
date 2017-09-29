@@ -309,3 +309,34 @@ def plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False):
     if total:
         name += "T"
     fig.savefig(name+".svg", bbox_inches='tight')
+
+def plotKindOfSensibility(x,y,label,name):
+    markers=["o", "s","D","^","d","h","p"]
+    cm = plt.get_cmap('tab20')
+    fig, axarr = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(10,8))
+    fig.subplots_adjust(wspace=0.1)
+
+    i=0
+    axarr[0][0].plot(x, y[:,0],label=label[i],color=cm(abs(i/20)), marker=markers[i%8])  #adsorption
+    i=1
+    axarr[0][0].plot(x, y[:,1],label=label[i],color=cm(abs(i/20)), marker=markers[i%8])  #adsorption
+    axarr[0][0].set_title("Adsorption")
+    axarr[0][0].legend(loc="best", prop={'size':6})
+
+    print(np.shape(y))
+    # desorption
+    for i in range(6,12):
+        axarr[0][1].set_title("Desorption")
+        axarr[0][1].plot(x, y[:,i],label=label[i],color=cm(abs(i/20)), marker=markers[i%7])
+        axarr[0][1].legend(loc="best", prop={'size':6})
+    # reaction
+    for i in range(0,4):
+        axarr[1][0].set_title("Reaction")
+        axarr[1][0].plot(x, y[:,i],label=label[i],color=cm(abs(i/20)), marker=markers[i%7])
+        axarr[1][0].legend(loc="best", prop={'size':6})
+    # diffusion
+    for i in range(12,20):
+        axarr[1][1].set_title("Diffusion")
+        axarr[1][1].plot(x, y[:,i],label=label[i],color=cm(abs(i/20)), marker=markers[i%7])
+        axarr[1][1].legend(loc="best", prop={'size':6})
+    fig.savefig(name+".svg")

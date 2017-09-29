@@ -81,6 +81,12 @@ for i,a in enumerate(range(minAlfa,maxAlfa)):
 
 ratioEa[:,:,0:maxAlfa-minAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
 
+localAe = np.zeros(shape=(maxRanges,maxAlfa))
+for i in range(0,maxAlfa):
+    localAe[:,i] = activationEnergy[-1,:]
+mp.plotKindOfSensibility(1/kb/temperatures,localAe-multiplicityEa[-1,:,:]-ratioEa[-1,:,:],labelAlfa,"omega")
+mp.plotKindOfSensibility(1/kb/temperatures,-multiplicityEa[-1,:,:],labelAlfa,"M")
+
 if tofSensibility:
     sensibilityCo2 = mi.getTofSensibility(p,omega,ratioEa,multiplicityEa)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False)
