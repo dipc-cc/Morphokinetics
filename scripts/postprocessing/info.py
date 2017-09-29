@@ -41,8 +41,7 @@ class fileData:
     # For catalysis
     def getRatiosTotal(self):
         energies = e.catalysisEnergiesTotal(self)
-        ratios = np.zeros(20)
-        ratios[0:4] = e.computeReactionRate(self,energies[0:4])
+        ratios = np.zeros(28)
         ratios[4] = e.computeAdsorptionRate(self,self.prCO, 0)/2.0
         ratios[5] = e.computeAdsorptionRate(self,self.prO2, 1)/2.0
         ratios[6] = e.computeDesorptionRate(self,self.prCO, 0, ratios[4],  energies[6]) #CO^B
@@ -51,7 +50,12 @@ class fileData:
         ratios[9] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5],  energies[9]) #O^B + O^C
         ratios[10] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5], energies[10]) #O^C + O^B
         ratios[11] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5], energies[11]) #O^C + O^C
+        ratios[0:4] = e.computeReactionRate(self,energies[0:4])
         ratios[12:20] = e.computeDiffusionRate(self,energies[12:20])
+        if self.rLib == "farkas":
+            ratios[20:22] = e.computeDesorptionRate(self,self.prCO, 0, ratios[4],  energies[20:22])
+            ratios[22:25] = e.computeReactionRate(self, energies[22:25])
+            ratios[25:28] = e.computeDiffusionRate(self,energies[25:28])
         return ratios
         
 
