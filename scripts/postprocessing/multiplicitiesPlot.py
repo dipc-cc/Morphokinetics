@@ -316,14 +316,13 @@ def plotKindOfSensibility(x,y,label,name):
     fig, axarr = plt.subplots(2, 2, sharex=True, sharey=True, figsize=(10,8))
     fig.subplots_adjust(wspace=0.1)
 
-    i=0
+    i=4
     axarr[0][0].plot(x, y[:,0],label=label[i],color=cm(abs(i/20)), marker=markers[i%8])  #adsorption
-    i=1
+    i=5
     axarr[0][0].plot(x, y[:,1],label=label[i],color=cm(abs(i/20)), marker=markers[i%8])  #adsorption
     axarr[0][0].set_title("Adsorption")
     axarr[0][0].legend(loc="best", prop={'size':6})
 
-    print(np.shape(y))
     # desorption
     for i in range(6,12):
         axarr[0][1].set_title("Desorption")
