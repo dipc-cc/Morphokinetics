@@ -20,6 +20,7 @@ public class CatalysisSeitsonenRates extends CatalysisRates {
 
   public CatalysisSeitsonenRates(float temperature) {
     super(temperature);
+    setCorrectionFactor(1.0);
     
     double[] desorptionEnergiesCo = new double[2];
     desorptionEnergiesCo[BR] = 1.85;
