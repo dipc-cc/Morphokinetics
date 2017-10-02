@@ -342,11 +342,6 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
     func = switcher.get(ratesLibrary, lambda: "nothing")
     # Execute the function
     return func(temperatures)
-
-def computeReactionRate(p,energy):
-    hev = 4.136e-15
-    pre = 0.5 * kb * p.temp / hev
-    return pre * np.exp(-energy/kb/p.temp)
     
 def computeAdsorptionRate(p,pressure,type):
     areaHalfUc = 10.0308e-20
@@ -372,6 +367,12 @@ def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
     #correction = type + 1 # adsorption rate for O is for an atom, this is for a O2 molecule.
 
     return correction * adsorptionRate * np.exp(-(energy + mu[type]) / (kb * p.temp));
+
+def computeReactionRate(p,energy):
+    hev = 4.136e-15
+    correction = 1.0
+    pre = correction * kb * p.temp / hev
+    return pre * np.exp(-energy/kb/p.temp)
 
 def computeDiffusionRate(p,energy):
     hev = 4.136e-15
