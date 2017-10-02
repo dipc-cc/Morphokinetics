@@ -26,6 +26,7 @@ import utils.LinearRegression;
  */
 public class CatalysisLattice extends AbstractGrowthLattice {
 
+  private final String ratesLibrary;
   /**
    * Current CO and O coverages, for sites BR, CUS.
    */
@@ -35,8 +36,9 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   private final int MAX;
   ArrayList<LinearRegression> regressions;
 
-  public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
+  public CatalysisLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
     super(hexaSizeI, hexaSizeJ, null);
+    this.ratesLibrary = ratesLibrary;
     coverage = new int[2][2];
     MAX = (int) Math.sqrt(hexaSizeI*hexaSizeJ)*20;
     last1000events = new LinkedList<>();
@@ -350,17 +352,19 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
 
   /**
-   * Check whether two CO^CUS atoms are together.
+   * Check whether two CO^CUS atoms are together. Only for Farkas
    * 
    * @param atom
    */
   private void updateCoCus(CatalysisAtom atom) {
-    if (atom.isOccupied() && atom.getLatticeSite() == CUS && atom.getType() == CO) {
-      atom.cleanCoCusNeighbours();
-      for (int i = 0; i < atom.getNumberOfNeighbours(); i += 2) { // Only up and down neighbours
-        CatalysisAtom neighbour = atom.getNeighbour(i);
-        if (neighbour.isOccupied() && neighbour.getType() == CO) {
-          atom.addCoCusNeighbours(1);
+    if (ratesLibrary.equals("farkas")) {
+      if (atom.isOccupied() && atom.getLatticeSite() == CUS && atom.getType() == CO) {
+        atom.cleanCoCusNeighbours();
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i += 2) { // Only up and down neighbours
+          CatalysisAtom neighbour = atom.getNeighbour(i);
+          if (neighbour.isOccupied() && neighbour.getType() == CO) {
+            atom.addCoCusNeighbours(1);
+          }
         }
       }
     }
