@@ -38,8 +38,13 @@ if len(sys.argv) > 1:
     kindOfSensibility = "k" in sys.argv[1]
 if total:
     minAlfa = 0
-    maxAlfa = 20#27
-    p.maxA = 20#27
+    maxAlfa = 20
+    p.maxA = 20
+    if len(sys.argv) > 3:
+        minAlfa = int(sys.argv[2])
+        maxAlfa = int(sys.argv[3])
+    p.minA = minAlfa
+    p.maxA = maxAlfa
     ext = "T"
 else:
     minAlfa = 0
