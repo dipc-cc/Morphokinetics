@@ -26,6 +26,7 @@ rAndM = False
 omegas = False
 sensibility = False
 tofSensibility = False
+kindOfSensibility = False
 ext = ""
 if len(sys.argv) > 1:
     total = "t" in sys.argv[1]
@@ -34,6 +35,7 @@ if len(sys.argv) > 1:
     omegas = "o" in sys.argv[1]
     sensibility = "s" in sys.argv[1]
     tofSensibility = "f" in sys.argv[1]
+    kindOfSensibility = "k" in sys.argv[1]
 if total:
     minAlfa = 0
     maxAlfa = 20#27
@@ -81,12 +83,13 @@ for i,a in enumerate(range(minAlfa,maxAlfa)):
 
 ratioEa[:,:,0:maxAlfa-minAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
 
-localAe = np.zeros(shape=(maxRanges,maxAlfa))
-for i in range(0,maxAlfa):
-    localAe[:,i] = activationEnergy[-1,:]
-mp.plotKindOfSensibility(1/kb/temperatures,localAe-multiplicityEa[-1,:,:]-ratioEa[-1,:,:],labelAlfa,"omega")
-mp.plotKindOfSensibility(1/kb/temperatures,-multiplicityEa[-1,:,:],labelAlfa,"M")
-
+if kindOfSensibility:
+    localAe = np.zeros(shape=(maxRanges,maxAlfa))
+    for i in range(0,maxAlfa):
+        localAe[:,i] = activationEnergy[-1,:]
+    mp.plotKindOfSensibility(1/kb/temperatures,(-multiplicityEa[-1,:,:]),labelAlfa,"M")
+    mp.plotKindOfSensibility(1/kb/temperatures,(localAe-multiplicityEa[-1,:,:]-ratioEa[-1,:,:]),labelAlfa,"omega")
+    
 if tofSensibility:
     sensibilityCo2 = mi.getTofSensibility(p,omega,ratioEa,multiplicityEa)
     mp.plotSensibility(sensibilityCo2,temperatures,labelAlfa,total=False)
