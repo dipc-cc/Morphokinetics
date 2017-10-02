@@ -51,8 +51,8 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
         data[:,0] = 1/(1000 / data[:,0])/kb
         if not meskinePlot:
             data[:,1] = np.exp(data[:,1])
-        ax.plot(data[:,0],data[:,1],label="Reference", ls="-", lw=2)#, marker="^")
-    ax.plot(x,y,label=label+" rate", ls="-", marker=marker, mfc=color)
+        ax.plot(data[:,0],data[:,1],label="Reference (TOF)", ls="-", lw=2)#, marker="^")
+    ax.plot(x,y,label=label, ls="-", marker=marker, mfc=color)
     ax.legend(loc="best", prop={'size':6})
 
     
@@ -102,7 +102,7 @@ if len(sys.argv) > 1:
 fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
 fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
                     wspace=0.35)
-labels=["Adsorption", "Desorption", "Reaction", "Diffusion"]
+labels=["Adsorption", "Desorption", "Reaction (TOF)", "Diffusion"]
 markers=["o", "+","x","1","s","d","h","o"]
 for i in range(0,4):
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
@@ -118,4 +118,4 @@ majors = np.array(list(np.arange(200,400,20))+list(np.arange(400,760,50)))
 majors = 1/kb/majors
 ax2.xaxis.set_major_locator(ticker.FixedLocator(majors))
 ax2.set_xlabel("temperature (T)")
-fig.savefig("totalRate.pdf")#, bbox_inches='tight')
+fig.savefig("totalRate.svg")#, bbox_inches='tight')
