@@ -24,6 +24,10 @@ class fileData:
         self.prCO = data[11] # pressure. For catalysis
         self.prO2 = data[12] # pressure. For catalysis
         self.minA = 0 # min alfa: possible transition types (i.e. different energies)
+        self.corr = 1 # corrections for rates
+        if self.rLib == "reuter":
+            self.corr = 0.5
+
 
         
     def getRatios(self):
@@ -42,8 +46,8 @@ class fileData:
     def getRatiosTotal(self):
         energies = e.catalysisEnergiesTotal(self)
         ratios = np.zeros(28)
-        ratios[4] = e.computeAdsorptionRate(self,self.prCO, 0)/2.0
-        ratios[5] = e.computeAdsorptionRate(self,self.prO2, 1)/2.0
+        ratios[4] = e.computeAdsorptionRate(self,self.prCO, 0)
+        ratios[5] = e.computeAdsorptionRate(self,self.prO2, 1)
         ratios[6] = e.computeDesorptionRate(self,self.prCO, 0, ratios[4],  energies[6]) #CO^B
         ratios[7] = e.computeDesorptionRate(self,self.prCO, 0, ratios[4],  energies[7]) #CO^C
         ratios[8] = e.computeDesorptionRate(self,self.prO2, 1, ratios[5],  energies[8]) #O^B + O^B

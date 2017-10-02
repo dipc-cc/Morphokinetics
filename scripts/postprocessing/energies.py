@@ -345,8 +345,7 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
     
 def computeAdsorptionRate(p,pressure,type):
     areaHalfUc = 10.0308e-20
-    correction = 1.0
-    return correction*pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
+    return p.corr*pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
     
 def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
     qt = np.zeros(2)
@@ -370,8 +369,7 @@ def computeDesorptionRate(p,pressure,type, adsorptionRate, energy):
 
 def computeReactionRate(p,energy):
     hev = 4.136e-15
-    correction = 1.0
-    pre = correction * kb * p.temp / hev
+    pre = p.corr * kb * p.temp / hev
     return pre * np.exp(-energy/kb/p.temp)
 
 def computeDiffusionRate(p,energy):
