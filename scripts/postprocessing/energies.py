@@ -55,7 +55,13 @@ def catalysisEnergiesTotal(self):
         "farkas": getCatalysisEnergiesFarkasTotal,
     }
     func = libSwitcher.get(self.rLib)
-    return func()
+    values = func()
+    if self.maxA == 7:  # for farkas TOF
+        values[4] = values[22]
+        values[5] = values[23]
+        values[6] = values[24]
+        
+    return values
     
 def getHexagonalEnergies():
     energies = 999999999*np.ones(49, dtype=float)
@@ -383,7 +389,7 @@ def getDesorptionCorrection(temperatures, type):
 
 
 # In catalysis, prefactor changes with temperature.
-def getEaCorrections(temperatures):
+def getEaCorrections(p,temperatures):
     correction = np.zeros(shape=(28,len(temperatures)))
     correction[0:4,:] = kb*temperatures # reaction
     correction[4:6,:] = -kb*temperatures/2.0 # adsorption
@@ -393,5 +399,10 @@ def getEaCorrections(temperatures):
     correction[21:23,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
     correction[23:26,:] = kb*temperatures # reaction
     correction[26:29,:] = kb*temperatures # diffusion
+
+    if p.maxA == 7:  # for farkas TOF
+        correction[4,:] = correction[22,:]
+        correction[5,:] = correction[23,:]
+        correction[6,:] = correction[24,:]
     correction = correction.transpose() # temperatures, alfa
     return correction

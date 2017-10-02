@@ -12,6 +12,15 @@ def computeMavgAndOmega(fileNumber, p):
     possiblesFromList = np.loadtxt(fname=name+"{:03d}".format(fileNumber)+".txt")
     time = np.array(possiblesFromList[:,0])
     possiblesFromList = possiblesFromList[:,1:] # remove time
+    if p.maxA == 7: # for farkas TOF
+        possiblesFromList[:,4] = possiblesFromList[:,22]
+        possiblesFromList[:,5] = possiblesFromList[:,23]
+        possiblesFromList[:,6] = possiblesFromList[:,24]
+        ratios = p.getRatiosTotal()
+        ratios[4] = ratios[22]
+        ratios[5] = ratios[23]
+        ratios[6] = ratios[24]
+        ratios = ratios[0:7]
     length = len(time)
     Mavg = np.zeros(shape=(length,p.maxA-p.minA))
     for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa

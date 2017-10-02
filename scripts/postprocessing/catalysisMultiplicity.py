@@ -61,6 +61,10 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$CO^C\rightarrow V$ (1 neighour)",r"$CO^C\rightarrow V$ (2 neighours)", # Desorption CO
              r"$CO^C+O^B\rightarrow CO_2$ (1 neighour)",r"$CO^C+O^B\rightarrow CO_2$ (2 neighours)",r"$CO^C+O^C\rightarrow CO_2$ (1 neighour)", #Reaction
              r"$CO^C\rightarrow CO^B$ (1 neighour)",r"$CO^C\rightarrow CO^B$ (2 neighours)",r"$CO^C\rightarrow CO^C$ (1 neighour)"] # Diffusion CO
+if maxAlfa == 7:  # for farkas TOF
+    labelAlfa[4] = labelAlfa[22]
+    labelAlfa[5] = labelAlfa[23]
+    labelAlfa[6] = labelAlfa[24]
 workingPath = os.getcwd()
 tempMavg, omega, totalRate, totalRateEvents, rates = mi.getMavgAndOmega(p,temperatures,workingPath)
 if not total:
@@ -81,7 +85,7 @@ ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     ratioEa[:,:,i] = energies[a]
 
-ratioEa[:,:,0:maxAlfa-minAlfa] += e.getEaCorrections(temperatures)[:,minAlfa:maxAlfa]
+ratioEa[:,:,0:maxAlfa-minAlfa] += e.getEaCorrections(p,temperatures)[:,minAlfa:maxAlfa]
 
 if kindOfSensibility:
     localAe = np.zeros(shape=(maxRanges,maxAlfa))
