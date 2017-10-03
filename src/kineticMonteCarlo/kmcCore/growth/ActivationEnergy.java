@@ -137,46 +137,45 @@ public class ActivationEnergy {
             if (!atom.isIsolated()) {
               histogramPossibleAdsorption[O] += elapsedTime;
             }
-          }
-          for (int pos = 0; pos < numberOfNeighbours; pos++) {
-            CatalysisAtom neighbour = atom.getNeighbour(pos);
-            // Desorption
-            if (atom.isOccupied()) {
+          } else {
+            for (int pos = 0; pos < numberOfNeighbours; pos++) {
+              CatalysisAtom neighbour = atom.getNeighbour(pos);
+              // Desorption
               if (atom.getType() == CO) {
-                histogramPossibleDesorption[CO][atom.getLatticeSite()][numberOfCoNeighbours] += elapsedTime/4.0; // it goes throw 4 times
+                histogramPossibleDesorption[CO][atom.getLatticeSite()][numberOfCoNeighbours] += elapsedTime / 4.0; // it goes throw 4 times
               } else if (neighbour.getType() == O && neighbour.isOccupied()) { // Two O together
                 histogramPossibleDesorption[O][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
               }
-            }
-            
-            // Diffusion
-            if (atom.isOccupied() && !neighbour.isOccupied()) {
-              histogramPossibleDiffusion[atom.getType()][atom.getLatticeSite()][neighbour.getLatticeSite()][numberOfCoNeighbours] += elapsedTime;
-            }
 
-            // Reaction
-            if (!atom.isOccupied() || atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
-              continue;
-            }
-            // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-            if (atom.getType() == CO) {
-              if (numberOfCoNeighbours > 0) {
-                int index = 2 * neighbour.getLatticeSite() + numberOfCoNeighbours - 1;
-                histogramPossibleReactionCoCus[index] += elapsedTime / 2.0;
-              } else {
-                histogramPossible[atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime / 2.0;
-                //histogramPossibleCounter[atom.getLatticeSite()][neighbour.getLatticeSite()]++;
-                histogramPossibleTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
+              // Diffusion
+              if (!neighbour.isOccupied()) {
+                histogramPossibleDiffusion[atom.getType()][atom.getLatticeSite()][neighbour.getLatticeSite()][numberOfCoNeighbours] += elapsedTime;
               }
-            } else {
-              numberOfCoNeighbours = neighbour.getCoCusNeighbours();
-              if (numberOfCoNeighbours > 0) {
-                int index = 2 * atom.getLatticeSite() + numberOfCoNeighbours - 1;
-                histogramPossibleReactionCoCus[index] += elapsedTime / 2.0;
+
+              // Reaction
+              if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+                continue;
+              }
+              // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+              if (atom.getType() == CO) {
+                if (numberOfCoNeighbours > 0) {
+                  int index = 2 * neighbour.getLatticeSite() + numberOfCoNeighbours - 1;
+                  histogramPossibleReactionCoCus[index] += elapsedTime / 2.0;
+                } else {
+                  histogramPossible[atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime / 2.0;
+                  //histogramPossibleCounter[atom.getLatticeSite()][neighbour.getLatticeSite()]++;
+                  histogramPossibleTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
+                }
               } else {
-                histogramPossible[neighbour.getLatticeSite()][atom.getLatticeSite()] += elapsedTime / 2.0;
-                //histogramPossibleCounter[neighbour.getLatticeSite()][atom.getLatticeSite()]++;
-                histogramPossibleTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
+                numberOfCoNeighbours = neighbour.getCoCusNeighbours();
+                if (numberOfCoNeighbours > 0) {
+                  int index = 2 * atom.getLatticeSite() + numberOfCoNeighbours - 1;
+                  histogramPossibleReactionCoCus[index] += elapsedTime / 2.0;
+                } else {
+                  histogramPossible[neighbour.getLatticeSite()][atom.getLatticeSite()] += elapsedTime / 2.0;
+                  //histogramPossibleCounter[neighbour.getLatticeSite()][atom.getLatticeSite()]++;
+                  histogramPossibleTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
+                }
               }
             }
           }
