@@ -139,10 +139,6 @@ def getCatalysisEnergiesReuterOver():
 
 def getCatalysisEnergiesReuterOverTotal():
     energies = 99999999*np.ones(20, dtype=float)
-    energies[0] = 1.54  # CO^B + O^B -> CO_2 
-    energies[1] = 0.76  # CO^B + O^C -> CO_2 
-    energies[2] = 1.25  # CO^C + O^B -> CO_2 
-    energies[3] = 0.89  # CO^C + O^C -> CO_2#
     energies[4] = 0.    # rate must be obtained in another way
     energies[5] = 0.    # rate must be obtained in another way
     energies[6] = 1.6   # CO^B -> V
@@ -151,6 +147,10 @@ def getCatalysisEnergiesReuterOverTotal():
     energies[9] = 3.3   # O^B + O^C -> V^B + V^C
     energies[10] = 3.3  # O^C + O^B -> V^C + V^B
     energies[11] = 2.0  # O^C + O^C -> V^C + V^C
+    energies[0] = 1.54  # CO^B + O^B -> CO_2 
+    energies[1] = 0.76  # CO^B + O^C -> CO_2 
+    energies[2] = 1.25  # CO^C + O^B -> CO_2 
+    energies[3] = 0.89  # CO^C + O^C -> CO_2#
     
     energies[12] = 0.6 # CO^B -> CO^B
     energies[13] = 1.6 # CO^B -> CO^C
