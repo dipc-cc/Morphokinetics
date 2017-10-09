@@ -9,6 +9,7 @@ import matplotlib.ticker as ticker
 import info as inf
 import math
 import multiplicitiesInfo as mi
+import multiplicitiesPlot as mp
         
 kb = 8.6173324e-5
 
@@ -108,14 +109,5 @@ for i in range(0,4):
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
 plot(x,y,p,ax,meskinePlot)
-ax2 = ax.twiny()
-ax2.set_xlim(1/kb/ax.get_xlim()[0],1/kb/ax.get_xlim()[1])
-ax2.set_xlim(ax.get_xlim()[0],ax.get_xlim()[1])
-#ax2.set_xscale("log")
-ticks_x = ticker.FuncFormatter(lambda x, pos: '${0:d}$'.format(int(1/kb/x)))
-ax2.xaxis.set_major_formatter(ticks_x)
-majors = np.array(list(np.arange(200,400,20))+list(np.arange(400,760,50)))
-majors = 1/kb/majors
-ax2.xaxis.set_major_locator(ticker.FixedLocator(majors))
-ax2.set_xlabel("temperature (T)")
+mp.setY2TemperatureLabels(ax,kb)
 fig.savefig("totalRate.svg")#, bbox_inches='tight')
