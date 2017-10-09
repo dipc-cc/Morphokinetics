@@ -94,7 +94,12 @@ def putLabels(ax, co2, alfa):
     #     ax.annotate("", xy=(xI,yMin), xytext=(xI,yMax), arrowprops=arrow, ha="center", va="center")
     #     ax.annotate("", xy=(xII,yMin), xytext=(xII,yMax), arrowprops=arrow, ha="center", va="center")
 
-
+def getMec(i):
+    if i < 4 or i  == 24 or i == 22 or i == 23:
+        mec="black"
+    else:
+        mec="none"
+    return mec
 
 def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     inf.smallerFont(axis, 8)
@@ -113,7 +118,7 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     # lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     # newax.add_artist(lg)
     # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs(i/20)), label=labelAlfa[i], marker=markers[i%7], mec='none',alpha=0.75)
+    axis.semilogy(x, y, ls="",color=cm(abs((i%20)/20)), label=labelAlfa[i], marker=markers[i%7], mec=getMec(i), alpha=0.75)
 
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
@@ -170,7 +175,8 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
     l = 1
     if showPlot:
         #inf.smallerFont(ax, 8)
-        ax.scatter(x, y, color=cm(abs(alfa/20)), alpha=0.75, edgecolors='none', marker=markers[alfa%7])#, "o", lw=0.5)
+        y = [float("NaN") if v < 1e-50 else v for v in y] # remove almost 0 multiplicities
+        ax.scatter(x, y, color=cm(abs((alfa%20)/20)), alpha=0.75, edgecolors=getMec(alfa), marker=markers[alfa%7])
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         a = alfa
         if first:
@@ -339,3 +345,15 @@ def plotKindOfSensibility(x,y,label,name):
         axarr[1][1].plot(x, y[:,i],label=label[i],color=cm(abs(i/20)), marker=markers[i%7])
         axarr[1][1].legend(loc="best", prop={'size':6})
     fig.savefig(name+".svg")
+
+def setY2TemperatureLabels(ax,kb):
+    ax2 = ax.twiny()
+    ax2.set_xlim(1/kb/ax.get_xlim()[0],1/kb/ax.get_xlim()[1])
+    ax2.set_xlim(ax.get_xlim()[0],ax.get_xlim()[1])
+    #ax2.set_xscale("log")
+    ticks_x = plticker.FuncFormatter(lambda x, pos: '${0:d}$'.format(int(1/kb/x)))
+    ax2.xaxis.set_major_formatter(ticks_x)
+    majors = np.array(list(np.arange(200,400,20))+list(np.arange(400,760,50)))
+    majors = 1/kb/majors
+    ax2.xaxis.set_major_locator(plticker.FixedLocator(majors))
+    ax2.set_xlabel("temperature (T)")
