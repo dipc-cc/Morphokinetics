@@ -18,7 +18,8 @@ import multiplicitiesInfo as mi
 temperatures = inf.getTemperatures("float")
 maxRanges = len(temperatures)
 kb = 8.6173324e-5
-p = inf.getInputParameters(glob.glob("*/output*")[0])
+p = inf.getInputParameters(inf.getLastOutputFile("*"))
+print("Reference file is ",inf.getLastOutputFile("*"))
 maxCo2 = int(p.nCo2/10)
 total = False
 sp = False
@@ -79,6 +80,8 @@ fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
 fig.subplots_adjust(wspace=0.1)
 axarr.plot(1/kb/temperatures, totalRateEvents[-1], label="Total rate from events")
 axarr.plot(1/kb/temperatures, totalRate[-1], label="Total rate from M")
+axarr.plot(1/kb/temperatures, abs(totalRateEvents[-1]-totalRate[-1]), label="Error abs")
+axarr.plot(1/kb/temperatures, abs(totalRateEvents[-1]-totalRate[-1])/totalRateEvents[-1], label="Error rel")
 axarr.set_yscale("log")
 axarr.legend(loc="best", prop={'size':6})
 fig.savefig("totalRates.svg",  bbox_inches='tight')
@@ -183,7 +186,8 @@ for i,a in enumerate(range(minAlfa,maxAlfa)):
         ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
-# ax2.set_ylim(0,1)
+#ax.set_ylim(0,3.2)
+#ax.set_xlim(20,30)
 labels = [item for item in ax.get_xticklabels()]
 #labels[1] = 'Testing'
 ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error", color="black")

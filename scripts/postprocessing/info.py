@@ -98,13 +98,17 @@ def getInputParameters(fileName = ""):
         maxA = 4 # Production of CO2, CO^B+O^B | CO^B+O^C | CO^C+O^B | CO^C+O^C
     return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2, prCO, prO2])
 
+def getLastOutputFile(folder="."):
+    files = glob.glob(folder+"/output*")
+    files.sort()
+    return files[-1]
 
 def getInformationFromFile(fileName):
     if fileName == "":
         try:
-            fileName = glob.glob("../output*")[0]
+            fileName = getLastOutputFile("..")
         except IndexError:
-            fileName = glob.glob("../../output*")[-1]
+            fileName = getLastOutputFile("../..")
     f = open(fileName)
     hit = False
     for line in f:
