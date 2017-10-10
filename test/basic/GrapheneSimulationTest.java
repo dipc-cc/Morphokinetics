@@ -54,7 +54,7 @@ public class GrapheneSimulationTest {
     parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
     parser.print();
     assertEquals("graphene", parser.getCalculationMode());
-    assertEquals(1273, parser.getTemperature());
+    assertEquals(1273.0, parser.getTemperature(),1e-10);
     assertEquals(1, parser.getNumberOfSimulations());
     assertEquals(200, parser.getCartSizeX());
     assertEquals(200, parser.getCartSizeY());

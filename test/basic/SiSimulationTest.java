@@ -48,7 +48,7 @@ public class SiSimulationTest {
     parser.print();
 
     assertEquals("Si", parser.getCalculationMode());
-    assertEquals(135, parser.getTemperature());
+    assertEquals(135.0, parser.getTemperature(),1e-10);
     assertEquals(1, parser.getNumberOfSimulations());
     assertEquals(96, parser.getCartSizeX());
     assertEquals(96, parser.getCartSizeY());
