@@ -83,7 +83,7 @@ def getMavgAndOmega(p,temperatures,workingPath):
         
     return tempMavg, tempOavg, totalRate, totalRateEvents, rates
 
-def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
+def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext=""):
     maxRanges = len(temperatures)
     maxCo2 = int(p.nCo2/10)
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
@@ -123,7 +123,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate):
             if spl and first:
                 first = False
         if showPlot:
-            fig.savefig("plot"+str(co2)+".svg")#, bbox_inches='tight') 
+            fig.savefig("plot"+str(co2)+ext+".pdf")#, bbox_inches='tight') 
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa
