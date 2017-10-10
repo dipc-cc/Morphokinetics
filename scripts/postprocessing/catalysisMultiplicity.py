@@ -88,7 +88,7 @@ fig.savefig("totalRates.svg",  bbox_inches='tight')
 
 print(np.shape(tempMavg))
 
-activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents)
+activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext)
 ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     ratioEa[:,:,i] = energies[a]
@@ -175,7 +175,7 @@ if omegas:
     plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
 
 figR, ax = plt.subplots(1, figsize=(5,3))
-figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.05)
+figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
 ax.plot(x, tgt, label="target", color="red")
 ax.plot(x, rct, "--", label="recomputed")
 cm = plt.get_cmap('tab20')
@@ -196,4 +196,5 @@ ax.set_xticklabels(labels)
 #ax.set_xlabel(r"$1/k_BT$")
 ax.set_ylabel(r"Activation energy $(eV)$")
 #ax.set_yscale("log")
+mp.setY2TemperatureLabels(ax,kb)
 plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')
