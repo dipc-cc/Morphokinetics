@@ -7,7 +7,6 @@ package basic;
 
 import basic.io.OutputType;
 import basic.io.OutputType.formatFlag;
-import basic.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import java.util.EnumSet;
 import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
@@ -220,48 +219,6 @@ public class Parser {
    */
   private int outputEvery;
   
-  // For evolutionary algorithm
-  /** Can be original or dcma. */
-  private String evolutionaryAlgorithm;
-  /** Can be serial or threaded. */
-  private boolean parallelEvaluator; 
-  private int populationSize;
-  private int offspringSize;
-  private int populationReplacement;
-  /**
-   *  See {@link #getTotalIterations()}.
-   */
-  private int totalIterations;
-  private int repetitions;
-  private boolean readReference;
-  private double stopError;
-  /** Minimum possible value that a gene can have. */
-  private double minValueGene;
-  /** Maximum possible value that a gene can have. */
-  private double maxValueGene;
-  /** Chooses between exponential distribution of the random genes (true) or linear distribution
-   * (false).
-   */
-  private boolean expDistribution;
-  /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
-   * and HIERARCHY.
-   */
-  private final EvaluatorType evaluatorType;
-  /** This numbers reflect the power of two and gives the chance to choose between inclusively among
-   * PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the
-   * evaluators) has to be chosen.
-   */
-  private long numericStatusCode;
-  private JSONArray evaluator;
-  /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options:
-   * "basic", "step", "reference" and "Frobenius".
-   */
-  private String hierarchyEvaluator;
-  /** Search for "rates" or "energies". */
-  private String evolutionarySearchType;
-  /** Decides if diffusion must be fixed. */
-  private boolean fixDiffusion;
-  
   /**
    * Constructor
    */
@@ -313,24 +270,6 @@ public class Parser {
     catalysisStart = "O";
     catalysisO2Dissociation = true;
     automaticCollections = false;
-    
-    evolutionaryAlgorithm = "original";
-    parallelEvaluator = false;
-    populationSize = 5;
-    offspringSize = 32;
-    populationReplacement = 5;
-    totalIterations = 100;
-    repetitions = 18;
-    readReference = true;
-    stopError = 0.022;
-    minValueGene = 0.1;
-    maxValueGene = 1e11;
-    expDistribution = true;
-    evaluatorType = new EvaluatorType();
-    numericStatusCode = 3;
-    hierarchyEvaluator = "basic";
-    evolutionarySearchType = "rates";
-    fixDiffusion = true;
     
     restart = new Restart(".");
   }
@@ -636,104 +575,6 @@ public class Parser {
       outputEvery = 10;
     }
     
-    //  -------------- Evolutionary Algorithm ----------------------
-    try {
-      evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
-    } catch (JSONException e) {
-      evolutionaryAlgorithm = "original";
-    }    
-    try {
-      parallelEvaluator = json.getBoolean("parallelEvaluator");
-    } catch (JSONException e) {
-      parallelEvaluator = false;
-    }
-    try {
-      populationSize = json.getInt("populationSize");
-    } catch (JSONException e) {
-      populationSize = 5;
-    }  
-    try {
-      offspringSize = json.getInt("offspringSize");
-    } catch (JSONException e) {
-      offspringSize = 32;
-    }    
-    try {
-      populationReplacement = json.getInt("populationReplacement");
-    } catch (JSONException e) {
-      populationReplacement = 5;
-    } 
-    try {
-      totalIterations = json.getInt("totalIterations");
-    } catch (JSONException e) {
-      totalIterations = 100;
-    }
-    try {
-      repetitions = json.getInt("repetitions");
-    } catch (JSONException e) {
-      repetitions = 18;
-    }
-    try {
-      readReference = json.getBoolean("readReference");
-    } catch (JSONException e) {
-      readReference = true;
-    }
-    try {
-      stopError = json.getDouble("stopError");
-    } catch (JSONException e) {
-      stopError = 0.022;
-    }
-    try {
-      evolutionarySearchType = json.getString("evolutionarySearchType");
-    } catch (JSONException e) {
-      evolutionarySearchType = "rates";
-    }
-    try {
-      minValueGene = json.getDouble("minValueGene");
-    } catch (JSONException e) {
-      if (evolutionarySearchType.equals("energies")) minValueGene = 0.05;
-      else minValueGene = 0.1;
-    }
-    try {
-      maxValueGene = json.getDouble("maxValueGene");
-    } catch (JSONException e) {
-      if (evolutionarySearchType.equals("energies")) maxValueGene = 1;
-      else maxValueGene = 1e11;
-    }
-    try {
-      expDistribution = json.getBoolean("expDistribution");
-    } catch (JSONException e) {
-      expDistribution = !evolutionarySearchType.equals("energies");
-    }  
-    try {
-      hierarchyEvaluator = json.getString("hierarchyEvaluator");
-    } catch (JSONException e) {
-      hierarchyEvaluator = "basic";
-    }
-    try {
-      numericStatusCode = 0;
-      evaluator = json.getJSONArray("evaluator");
-      for (int i = 0; i < evaluator.length(); i++) {
-        JSONObject currentEvaluator = evaluator.getJSONObject(i);
-        String type = currentEvaluator.getString("type");
-     	// This values must agree with those ones in evaluatorFlag of file EvaluatorType.java
-        if (type.equals("psd")) {
-          numericStatusCode += 1;
-        }
-        if (type.equals("time")) {
-          numericStatusCode += 2;
-        }
-        if (type.equals("hierarchy")){
-          numericStatusCode +=4;
-        }
-      }
-    } catch (JSONException e) {
-        numericStatusCode = 1 + 2 + 4; // All the evaluators by default
-    }
-    try {
-      fixDiffusion = json.getBoolean("fixDiffusion");
-    } catch (JSONException e) {
-      fixDiffusion = true;
-    }
     return 0;
   }
 
@@ -796,35 +637,7 @@ public class Parser {
       System.out.printf("],\n");
     } else {
       System.out.printf("%32s: [ {\"type\": \"mko\"},],\n", "\"outputDataFormat\"");
-    }
-    System.out.printf("%32s: %s,\n", "\"outputEvery\"", outputEvery);
-    System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
-    System.out.printf("%32s: %s,\n", "\"parallelEvaluator\"", parallelEvaluator);
-    System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
-    System.out.printf("%32s: %s,\n", "\"offspringSize\"", offspringSize);
-    System.out.printf("%32s: %s,\n", "\"populationReplacement\"", populationReplacement);
-    System.out.printf("%32s: %s,\n", "\"totalIterations\"", totalIterations);
-    System.out.printf("%32s: %s,\n", "\"repetitions\"", repetitions);
-    System.out.printf("%32s: %s,\n", "\"readReference\"", readReference);
-    System.out.printf("%32s: %s,\n", "\"stopError\"", stopError);
-    System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
-    System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
-    System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);    
-    if (evaluator != null) {
-      System.out.printf("%32s: [", "\"evaluator\"");
-      
-      for (int i = 0; i < evaluator.length(); i++) {
-        JSONObject currentEvaluator = evaluator.getJSONObject(i);
-        System.out.printf(" {%s: \"%s\"},", "\"type\"", currentEvaluator.getString("type"));
-      }
-      System.out.printf("],\n");
-    } else {
-      System.out.printf("%32s: [ {\"type\": \"psd\"}, {\"type\": \"time\"}, {\"type\": \"hierarchy\"},],\n", "\"evaluator\"");
-    }
-    System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
-    System.out.printf("%32s: %s,\n", "\"evolutionarySearchType\"", evolutionarySearchType);
-    System.out.printf("%32s: %s,\n", "\"fixDiffusion\"", fixDiffusion);
-    
+    }    
   }
 
   /**
@@ -1565,142 +1378,5 @@ public class Parser {
    */
   public boolean areCollectionsAutomatic() {
     return automaticCollections;
-  }
-  
-  public String getEvolutionaryAlgorithm() {
-    return evolutionaryAlgorithm;
-  }
-  
-  public boolean isEvaluatorParallel() {
-    return parallelEvaluator;
-  }
-  
-  public int getPopulationSize() {
-    return populationSize;
-  }
-  
-  public int getOffspringSize() {
-    return offspringSize;
-  }
-  
-  public int getPopulationReplacement() {
-    return populationReplacement;
-  }
-  
-  /**
-   * Total number of iterations that the evolutionary algorithm has to do.
-   *
-   * @return total number of iterations.
-   */
-  public int getTotalIterations() {
-    return totalIterations;
-  }
-  
-  /**
-   * Number of repetitions or evaluations that a single Gene has to do.
-   *
-   * @return by default 18.
-   */
-  public int getRepetitions() {
-    return repetitions;
-  }
-  
-  /**
-   * Chooses between to read a reference PSD or doing an initial run to be the objective for the
-   * Evolutionary run
-   *
-   * @return read reference?
-   */
-  public boolean getReadReference() {
-    return readReference;
-  }
-          
-  public void setCalculationMode(String mode) {
-    this.calculationMode = mode;
-  }
-  
-  public void setPopulation(int populationSize) {
-    this.populationSize = populationSize;
-  }
-  
-  public void setEvolutionaryAlgorithm(String name) {
-    this.evolutionaryAlgorithm = name;
-  }
-  
-  /**
-   * For evolutionary algorithm run mode target minimum error
-   * @return minimum error
-   */
-  public double getStopError() {
-    return stopError;
-  }
-
-  /**
-   * For evolutionary algorithm, minimum possible value of a gene.
-   *
-   * @return minimum error
-   */
-  public double getMinValueGene() {
-    return minValueGene;
-  }  
-  
-  /**
-   * For evolutionary algorithm, maximum possible value of a gene.
-   *
-   * @return minimum error
-   */
-  public double getMaxValueGene() {
-    return maxValueGene;
-  } 
-  
-  /**
-   * Chooses between exponential distribution of the random genes (true) or linear distribution (false)
-   * 
-   * @return true exponential distribution; false linear
-   */
-  public boolean isExpDistribution() {
-    return expDistribution;
-  } 
-  
-  /**
-   * To have the possibility to choose between different evaluators in genetic algorithm runs. For
-   * the moment only PSD, TIME and HIERARCHY.
-   *
-   * @return evaluator type. Either: PSD, TIME and HIERARCHY.
-   */
-  public EnumSet<evaluatorFlag> getEvaluatorTypes() {
-    return evaluatorType.getStatusFlags(numericStatusCode);
-  }
-  
-  /**
-   * If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options:
-   * "basic", "step", "reference" and "Frobenius".
-   *
-   * @return "basic", "step", "reference" or "Frobenius".
-   */
-  public String getHierarchyEvaluator() {
-    return hierarchyEvaluator;
-  }
-    
-  public String getEvolutionarySearchType() {
-    if (evolutionarySearchType.equals("rates") || evolutionarySearchType.equals("energies")) {
-      return evolutionarySearchType;
-    } else {
-      System.out.println("Not valid search type. It must be \"rates\" of \"energies\".");
-      return null;
-    }
-  }
-  
-  public boolean isEnergySearch() {
-    return evolutionarySearchType.equals("energies");
-  }
-  
-  /**
-   * Decides if diffusion must be fixed.
-   *
-   * @return true if fixed, false otherwise
-   */
-  public boolean isDiffusionFixed() {
-    return fixDiffusion;
   }
 }
