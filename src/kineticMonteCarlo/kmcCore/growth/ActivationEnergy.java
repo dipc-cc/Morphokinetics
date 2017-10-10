@@ -79,30 +79,32 @@ public class ActivationEnergy {
         histogramPossibleAdsorption = new Double[2];
         histogramPossibleDesorption = new Double[2][2][3];
         histogramPossibleDiffusion = new Double[2][2][2][3];
+        histogramPossibleReactionCoCus = new Double[3];
+        for (int i = 0; i < 2; i++) {
+          histogramPossibleAdsorption[i] = new Double(0);
+          histogramPossibleReactionCoCus[i] = new Double(0);
+          for (int j = 0; j < 2; j++) {
+            for (int k = 0; k < 2; k++) {
+              histogramPossibleDesorption[i][j][k] = new Double(0);
+              for (int l = 0; l < 3; l++) {
+                histogramPossibleDiffusion[i][j][k][l] = new Double(0);
+              }
+            }
+          }
+        }
       }
       histogramPossible = new Double[length][length];
-      histogramPossibleReactionCoCus = new Double[3];
       histogramPossibleCounter = new Long[length][length];
       histogramPossibleTmp = new Double[length][length];
       histogramPossibleCounterTmp = new Long[length][length];
       histogramSuccess = new Integer[length][length];
       for (int i = 0; i < length; i++) {
-        histogramPossibleAdsorption[i] = new Double(0);
-        histogramPossibleReactionCoCus[i] = new Double(0);
         for (int j = 0; j < length; j++) {
           histogramPossible[i][j] = new Double(0);
           histogramPossibleCounter[i][j] = new Long(0);
           histogramPossibleTmp[i][j] = new Double(0);
           histogramPossibleCounterTmp[i][j] = new Long(0);
           histogramSuccess[i][j] = new Integer(0);
-          for (int k = 0; k < histogramSuccess.length; k++) {
-            for (int l = 0; l < histogramSuccess.length; l++) {
-              histogramPossibleDiffusion[i][j][k][l] = new Double(0);
-            }
-          }
-          for (int k = 0; k < histogramPossibleDesorption.length; k++) {
-            histogramPossibleDesorption[i][j][k] = new Double(0);
-          }
         }
       }
     }
