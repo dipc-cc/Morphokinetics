@@ -40,7 +40,7 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     p.maxA = pAlfa.maxA
     files = glob.glob("dataAeAll*")
     files.sort()
-    filesNumber = len(files)-1
+    filesNumber = len(files)
     matrix = np.loadtxt(fname=files[0])
     maxCO2 = len(matrix)
     sumMavg = np.zeros(shape=(maxCO2,p.maxA-p.minA))  # [time|CO2, alfa]
@@ -48,10 +48,13 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     sumRate = np.zeros(maxCO2)
     #iterating over runs
     for i in range(0,filesNumber):
-        tmpMavg, tmpOmega, tmpRate = computeMavgAndOmega(i, p)
-        sumMavg = sumMavg + tmpMavg
-        sumOmega = sumOmega + tmpOmega
-        sumRate = sumRate + tmpRate
+        try:
+            tmpMavg, tmpOmega, tmpRate = computeMavgAndOmega(i, p)
+            sumMavg = sumMavg + tmpMavg
+            sumOmega = sumOmega + tmpOmega
+            sumRate = sumRate + tmpRate
+        except (FileNotFoundError,ValueError): # there is no file, or the file has less lines that previous lines
+            filesNumber -= 1
     
     runMavg = sumMavg / filesNumber
     runOavg = sumOmega / filesNumber
