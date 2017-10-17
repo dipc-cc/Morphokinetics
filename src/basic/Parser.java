@@ -1470,40 +1470,40 @@ public class Parser {
   }
   
   /**
-   * Adsorb atoms during catalysis simulation
+   * Adsorb atoms during catalysis simulation.
    *
    * Input "parameters" variable: {@code catalysisAdsorption}.
    * 
-   * @return do diffusion.
+   * @return do adsorption.
    */
   public boolean doCatalysisAdsorption() {
     return !catalysisAdsorption.equals("false");
   }
   
   /**
-   * Desorb atoms during catalysis simulation
+   * Desorb atoms during catalysis simulation.
    *
    * Input "parameters" variable: {@code catalysisDesorption}.
    * 
-   * @return do diffusion.
+   * @return do desorption.
    */
   public boolean doCatalysisDesorption() {
     return !catalysisDesorption.equals("false");
   }
   
   /**
-   * Allow to react atoms during catalysis simulation
+   * Allow to react atoms during catalysis simulation.
    *
    * Input "parameters" variable: {@code catalysisReaction}.
    * 
-   * @return do diffusion.
+   * @return do reaction.
    */
   public boolean doCatalysisReaction() {
     return !catalysisReaction.equals("false");
   }
   
   /**
-   * Diffuse atom during catalysis simulation
+   * Diffuse atom during catalysis simulation.
    *
    * Input "parameters" variable: {@code catalysisDiffusion}.
    * 
