@@ -6,10 +6,9 @@ This is Morphokinetics software developed at the Donostia International Physics 
 
 Simple instructions to "compile" the code 
 cd src/
-javac -source 8 -target 8 -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar main/Morphokinetics.java
+javac -source 8 -target 8 -encoding "UTF-8" -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/colt.jar graphicInterfaces/growth/GrowthKmcFrame.java main/PcConfigurator.java main/Morphokinetics.java
 mkdir ../perimeterData
-cp ../scripts/perimeterStatistics/reentrancesPerAngleHexagonal* ../perimeterData/
-cp ../scripts/perimeterStatistics/hopsPerAngleHexagonal* ../perimeterData/
+cp ../scripts/perimeterStatistics/*txt ../perimeterData/
 
 ==========================================
 ====== RUN                    ============
@@ -41,7 +40,7 @@ To create a portable JAR file, follow this instructions:
 cd src
 jar cfm morphokinetics.jar manifest.txt . ../lib/jtransforms-2.4.jar ../lib/j3dcore.jar  ../lib/j3dutils.jar ../lib/vecmath.jar ../lib/colt.jar  ../lib/json-20141113.jar
 
-If you want to move the jar to another folder, you have to also move the lib folder.
+If you want to move the JAR file to another folder, you have to also move the lib, perimeterData and resources/png/ folders.
 
 
 ==========================================

@@ -38,13 +38,13 @@ public class Configurator {
   }
       
   
-  public static Configurator getConfigurator(){
-    if (configurator == null){
+  public static Configurator getConfigurator() {
+    if (configurator == null) {
       configurator = new Configurator();
     }
     return configurator;
   }
-  
+
   public void setContext(Object context) {
     concreteConfigurator.setContext(context);
   }
@@ -54,7 +54,6 @@ public class Configurator {
   }
 
   public BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
-      return concreteConfigurator.getBufferedReader(fileName);
+    return concreteConfigurator.getBufferedReader(fileName);
   }
-  
 }

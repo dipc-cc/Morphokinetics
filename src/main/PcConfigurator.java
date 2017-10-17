@@ -43,12 +43,10 @@ public class PcConfigurator implements IConfigurator {
    * 
    * @param fileName
    * @return BufferedReader
-   * @throws FileNotFoundException 
+   * @throws FileNotFoundException
    */
   @Override
   public BufferedReader getBufferedReader(String fileName) throws FileNotFoundException {
     return new BufferedReader(new FileReader(fileName));
   }
-
-
 }
