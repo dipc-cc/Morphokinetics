@@ -111,6 +111,9 @@ def getInformationFromFile(fileName):
             fileName = getLastOutputFile("../..")
     f = open(fileName)
     hit = False
+    nCO2 = 0
+    prCO = 0
+    prO2 = 0
     for line in f:
         if re.search("calculationMode", line):
             calc = list(filter(None,re.split(" |,",line)))[1]
