@@ -1,8 +1,10 @@
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import sys
 import re
 import info as inf
 import energies as e
-import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedFormatter
 import os
 import glob
@@ -176,8 +178,8 @@ if omegas:
 
 figR, ax = plt.subplots(1, figsize=(5,3))
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
-ax.plot(x, tgt, label="target", color="red")
-ax.plot(x, rct, "--", label="recomputed")
+ax.plot(x, tgt, label=r"$E^{TOF}_{app}$", color="red")
+ax.plot(x, rct, "--", label=r"$\sum \epsilon^{TOF}_\alpha$")
 cm = plt.get_cmap('tab20')
 markers=["o", "s","D","^","d","h","p"]
 for i,a in enumerate(range(minAlfa,maxAlfa)):
@@ -194,7 +196,8 @@ ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error", color="blac
 ax.legend(loc="best", prop={'size':6})
 ax.set_xticklabels(labels)
 #ax.set_xlabel(r"$1/k_BT$")
-ax.set_ylabel(r"Activation energy $(eV)$")
+ax.set_ylabel(r"Energy $(eV)$")
 #ax.set_yscale("log")
 mp.setY2TemperatureLabels(ax,kb)
+ax.annotate(r"$\epsilon^{TOF}_\alpha=\omega^{TOF}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
 plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')

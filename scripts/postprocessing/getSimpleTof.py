@@ -3,6 +3,7 @@ import os
 import sys
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.font_manager import FontProperties
 import info as inf
 import math
 
@@ -89,12 +90,20 @@ def plotPressures(x,y,p,meskinePlot=False):
         data = np.loadtxt(scriptDir+"/tofPMeskine.txt")
     else:
         ax.set_xlim(0,10)
+        ax.plot(dataE[:,0],dataE[:,1],label="Experiment (TOF)", ls="-", lw=2)# marker="^")
+
     ax.set_yscale("log")
     #ax.set_ylim(1e11,1e14)
-    #ax.plot(dataE[:,0],dataE[:,1],label="Experiment (TOF)", ls="-", lw=2)# marker="^")
     ax.plot(data[:,0],data[:,1],label="Reference (TOF)", ls="-", lw=2, marker="x")
-    ax.plot(x,y,label=p.rLib.title(), marker="+")
+    ax.plot(x,y,label=r"$R_r$ (TOF)", marker="+")
+
     ax.legend(loc="best", prop={'size':6})
+    bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
+    font = FontProperties()
+    font.set_size(6)
+    ax.annotate("10 runs\nSize: "+str(p.sizI)+"x"+str(p.sizJ)+"\n"+r"$T=350 K$", xy=(0.97, 0.16), xycoords="axes fraction",
+                bbox=bbox_props, fontproperties=font, horizontalalignment='right', verticalalignment='top',)
+    ax.annotate("TOF",xy=(0.4,0.7), xycoords="axes fraction")
 
     fig.savefig("tof.pdf")#, bbox_inches='tight')
 

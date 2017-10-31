@@ -1,4 +1,5 @@
-
+import matplotlib
+matplotlib.use("Agg")
 import glob
 import os
 import sys
@@ -22,14 +23,20 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
     if label=="":
         color = "C5"
         label = p.rLib.title()
-        label = "Total "
+        label = r"$R=R_a+R_d+R_r+R_h$ (total) "
         ref = True
         cm = plt.get_cmap('Set1')
         bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
         font = FontProperties()
         font.set_size(6)
-        ax.annotate("Library: "+p.rLib.title()+"\nSize: "+str(p.sizI)+"x"+str(p.sizJ), xy=(0.97, 0.96), xycoords="axes fraction",
-                    bbox=bbox_props, fontproperties=font, horizontalalignment='right', verticalalignment='top',)
+        if meskinePlot:
+            ax.annotate("10 runs\nSize: "+str(p.sizI)+"x"+str(p.sizJ)+"\n"+r"$P_{CO} = 2$ atm, $P_O = 1$ atm ", xy=(0.95, 0.95), xycoords="axes fraction",
+                        bbox=bbox_props, fontproperties=font, horizontalalignment='right', verticalalignment='top',)
+            ax.annotate("TOF",xy=(0.5,0.65), xycoords="axes fraction",zorder=+1)
+        else:
+            ax.annotate("10 runs\nSize: "+str(p.sizI)+"x"+str(p.sizJ)+"\n"+r"$P_{CO} = 2$ mbar, $P_O = 1$ mbar ", xy=(0.07, 0.16), xycoords="axes fraction",
+                        bbox=bbox_props, fontproperties=font, horizontalalignment='left', verticalalignment='top',)
+            ax.annotate("TOF",xy=(0.3,0.5), xycoords="axes fraction",zorder=+1)
     ucArea = 3.12*6.43/4
     toCm = 1e-8
     area = p.sizI * p.sizJ * ucArea * toCm * toCm
@@ -103,11 +110,11 @@ if len(sys.argv) > 1:
 fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
 fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
                     wspace=0.35)
-labels=["Adsorption", "Desorption", "Reaction (TOF)", "Diffusion"]
+labels=[r"$R_a$ (adsorption)", r"$R_d$ (desorption)", r"$R_r$ (TOF)", r"$R_h$ (diffusion)"]
 markers=["o", "+","x","1","s","d","h","o"]
 for i in range(0,4):
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
 plot(x,y,p,ax,meskinePlot)
 mp.setY2TemperatureLabels(ax,kb)
-fig.savefig("totalRate.svg")#, bbox_inches='tight')
+fig.savefig("totalRate.pdf")#, bbox_inches='tight')

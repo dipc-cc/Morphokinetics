@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use("Agg")
 import info as inf
 import glob as glob
 import numpy as np
@@ -102,8 +104,8 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
         y = totalRate
         if showPlot:
             fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
-            axarr[0].annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
-            axarr[1].annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
+            #axarr[0].annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
+            #axarr[1].annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
             fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
         else:
             axarr = np.zeros(3)

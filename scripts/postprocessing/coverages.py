@@ -14,10 +14,13 @@ def getOneCoverage(fileNumber):
 def getAvgCoverages():
     p = inf.getInputParameters()
     files = glob.glob("dataCatalysis*")
-    filesNumber = len(files)-1
+    filesNumber = len(files)
     coverages = np.zeros(4)
     for i in range(0,filesNumber):
-        coverages += getOneCoverage(i)
+        try:
+            coverages += getOneCoverage(i)
+        except FileNotFoundError:
+            filesNumber -= 1 
     coverages = coverages / filesNumber
     coveragesWithEmpty = np.zeros(6)
     coveragesWithEmpty[0:4] = coverages
@@ -41,13 +44,17 @@ def getCoverages(p,temperatures,workingPath):
     return coverages
 
 def plotCoverages(x,coverages):
+    markers=["o", "s","D","^","d","h","p"]
     fig, ax = plt.subplots(1, figsize=(5,4))
     fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
     labels = [r"$CO^B$",r"$CO^C$",r"$O^B$",r"$O^C$",r"$V^B$",r"$V^C$"]
     for i in range(0,6):
-        ax.plot(x, coverages[:,i], "o-",label=labels[i])
+        ax.plot(x, coverages[:,i], marker=markers[i],label=labels[i])
     ax.legend(loc="best", prop={'size':6})
     ax.set_yscale("log")
+    ax.set_ylabel(r"$\theta$")
+    ax.set_xlabel(r"$1/k_BT$")
+    ax.set_ylim(1e-4,2)
     fig.savefig("avgCoverages.svg")
     
 temperatures = inf.getTemperatures("float")

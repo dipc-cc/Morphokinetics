@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use("Agg")
 import sys
 import info as inf
 import energies as e
@@ -80,12 +82,12 @@ def putLabels(ax, co2, alfa):
     bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
     if alfa == -1:
         ax.set_ylabel(r"$CO_2$ Molecules/s");
-        ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
+        #ax.annotate("(a)", xy=(-0.2, 0.93), xycoords="axes fraction")
         label = r"$CO_2="+str(co2*10)+r"$"
         ax.annotate(label, xy=(0.75,0.85), xycoords="axes fraction",
                     bbox=bbox_props)
     elif alfa == 0:
-         ax.set_ylabel(r"$\overline{\langle M_\alpha \rangle}$")
+         ax.set_ylabel(r"$M^{TOF}_\alpha$")
          #ax.annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
          #label = r"$CO_2="+str(co2*10)+r"$"
          #ax.annotate(label, xy=(0.97,0.95), xycoords="axes fraction",
@@ -123,7 +125,7 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(1e-4,2)
-    axis.set_ylabel(r"$\omega_\alpha$")
+    axis.set_ylabel(r"$\omega^{TOF}_\alpha$")
     axis.set_xlabel(r"$1/k_BT$")
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
     axis.legend(prop={'size': 5}, loc="best", scatterpoints=1)
@@ -192,7 +194,7 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
         slopes.append(b)
         if showPlot:
             ax.set_yscale("log")
-            ax.plot(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color=cm1(i/30), alpha=0)
+            ax.plot(x[i-1:i+2], np.exp(fun.linear(x[i-1:i+2], a, b)), ls="-", color="gray", alpha=0)
             xHalf = x[i]
             text = "{:03.3f}".format(-b)
             yHalf = np.exp(fun.linear(xHalf, a, b))
