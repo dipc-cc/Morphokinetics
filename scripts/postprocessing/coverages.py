@@ -1,8 +1,10 @@
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 import info as inf
 import glob
 import os
 import numpy as np
-import matplotlib.pyplot as plt
 
 def getOneCoverage(fileNumber):
     name = "dataCatalysis"
@@ -45,17 +47,19 @@ def getCoverages(p,temperatures,workingPath):
 
 def plotCoverages(x,coverages):
     markers=["o", "s","D","^","d","h","p"]
+    cm = plt.get_cmap('tab20')
     fig, ax = plt.subplots(1, figsize=(5,4))
     fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
     labels = [r"$CO^B$",r"$CO^C$",r"$O^B$",r"$O^C$",r"$V^B$",r"$V^C$"]
+    lines = ["-",":"]
     for i in range(0,6):
-        ax.plot(x, coverages[:,i], marker=markers[i],label=labels[i])
+        ax.plot(x, coverages[:,i], marker=markers[i],label=labels[i],color=cm(i), linestyle=lines[i%2])
     ax.legend(loc="best", prop={'size':6})
     ax.set_yscale("log")
     ax.set_ylabel(r"$\theta$")
     ax.set_xlabel(r"$1/k_BT$")
     ax.set_ylim(1e-4,2)
-    fig.savefig("avgCoverages.svg")
+    fig.savefig("avgCoverages.pdf")
     
 temperatures = inf.getTemperatures("float")
 maxRanges = len(temperatures)
