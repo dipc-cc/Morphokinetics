@@ -67,9 +67,9 @@ labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C
              r"$O^B+O^B\rightarrow V^B+V^B$",r"$O^B+O^C\rightarrow V^B+V^C$",r"$O^C+O^B\rightarrow V^C+V^B$",r"$O^C+O^C\rightarrow V^C+V^C$", # Desorption O
              r"$CO^B\rightarrow CO^B$",r"$CO^B\rightarrow CO^C$",r"$CO^C\rightarrow CO^B$",r"$CO^C\rightarrow CO^C$",  # Diffusion CO
              r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$", # Diffusion O
-             r"$CO^C\rightarrow V$ (1 neighour)",r"$CO^C\rightarrow V$ (2 neighours)", # Desorption CO
-             r"$CO^C+O^B\rightarrow CO_2$ (1 neighour)",r"$CO^C+O^B\rightarrow CO_2$ (2 neighours)",r"$CO^C+O^C\rightarrow CO_2$ (1 neighour)", #Reaction
-             r"$CO^C\rightarrow CO^B$ (1 neighour)",r"$CO^C\rightarrow CO^B$ (2 neighours)",r"$CO^C\rightarrow CO^C$ (1 neighour)"] # Diffusion CO
+             r"$CO^C\rightarrow V$ (1 NN)",r"$CO^C\rightarrow V$ (2 NN)", # Desorption CO
+             r"$CO^C+O^B\rightarrow CO_2$ (1 NN)",r"$CO^C+O^B\rightarrow CO_2$ (2 NN)",r"$CO^C+O^C\rightarrow CO_2$ (1 NN)", #Reaction
+             r"$CO^C\rightarrow CO^B$ (1 NN)",r"$CO^C\rightarrow CO^B$ (2 NN)",r"$CO^C\rightarrow CO^C$ (1 NN)"] # Diffusion CO
 if maxAlfa == 7:  # for farkas TOF
     labelAlfa[4] = labelAlfa[22]
     labelAlfa[5] = labelAlfa[23]
