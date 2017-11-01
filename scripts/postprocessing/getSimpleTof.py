@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+import matplotlib
+matplotlib.use("Agg")
 import glob
 import os
 import sys
