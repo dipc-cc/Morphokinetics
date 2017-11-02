@@ -51,7 +51,7 @@ def plotCoverages(x,coverages):
     cm = plt.get_cmap('tab20')
     fig, ax = plt.subplots(1, figsize=(5,4))
     fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
-    labels = [r"$CO^B$",r"$CO^C$",r"$O^B$",r"$O^C$",r"$V^B$",r"$V^C$"]
+    labels = [r"$CO_B$",r"$CO_C$",r"$O_B$",r"$O_C$",r"$V_B$",r"$V_C$"]
     lines = ["-",":"]
     for i in range(0,6):
         ax.plot(x, coverages[:,i], marker=markers[i],label=labels[i],color=cm(i), linestyle=lines[i%2])
