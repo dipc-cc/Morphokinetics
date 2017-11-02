@@ -61,15 +61,15 @@ else:
     ratesI = 2 # reaction
 
 energies = e.catalysisEnergiesTotal(p)
-labelAlfa = [r"$CO^B+O^B\rightarrow CO_2$",r"$CO^B+O^C\rightarrow CO_2$",r"$CO^C+O^B\rightarrow CO_2$",r"$CO^C+O^C\rightarrow CO_2$", #Reaction
+labelAlfa = [r"$CO_B+O_B\rightarrow CO_2$",r"$CO_B+O_C\rightarrow CO_2$",r"$CO_C+O_B\rightarrow CO_2$",r"$CO_C+O_C\rightarrow CO_2$", #Reaction
              r"$V\rightarrow CO$",r"$V\rightarrow O$", # Adsorption
-             r"$CO^B\rightarrow V$",r"$CO^C\rightarrow V$", # Desorption CO
-             r"$O^B+O^B\rightarrow V^B+V^B$",r"$O^B+O^C\rightarrow V^B+V^C$",r"$O^C+O^B\rightarrow V^C+V^B$",r"$O^C+O^C\rightarrow V^C+V^C$", # Desorption O
-             r"$CO^B\rightarrow CO^B$",r"$CO^B\rightarrow CO^C$",r"$CO^C\rightarrow CO^B$",r"$CO^C\rightarrow CO^C$",  # Diffusion CO
-             r"$O^B\rightarrow O^B$",r"$O^B\rightarrow O^C$",r"$O^C\rightarrow O^B$",r"$O^C\rightarrow O^C$", # Diffusion O
-             r"$CO^C\rightarrow V$ (1 NN)",r"$CO^C\rightarrow V$ (2 NN)", # Desorption CO
-             r"$CO^C+O^B\rightarrow CO_2$ (1 NN)",r"$CO^C+O^B\rightarrow CO_2$ (2 NN)",r"$CO^C+O^C\rightarrow CO_2$ (1 NN)", #Reaction
-             r"$CO^C\rightarrow CO^B$ (1 NN)",r"$CO^C\rightarrow CO^B$ (2 NN)",r"$CO^C\rightarrow CO^C$ (1 NN)"] # Diffusion CO
+             r"$CO_B\rightarrow V$",r"$CO_C\rightarrow V$", # Desorption CO
+             r"$O_B+O_B\rightarrow V_B+V_B$",r"$O_B+O_C\rightarrow V_B+V_C$",r"$O_C+O_B\rightarrow V_C+V_B$",r"$O_C+O_C\rightarrow V_C+V_C$", # Desorption O
+             r"$CO_B\rightarrow CO_B$",r"$CO_B\rightarrow CO_C$",r"$CO_C\rightarrow CO_B$",r"$CO_C\rightarrow CO_C$",  # Diffusion CO
+             r"$O_B\rightarrow O_B$",r"$O_B\rightarrow O_C$",r"$O_C\rightarrow O_B$",r"$O_C\rightarrow O_C$", # Diffusion O
+             r"$CO_C\rightarrow V$ (1 NN)",r"$CO_C\rightarrow V$ (2 NN)", # Desorption CO
+             r"$CO_C+O_B\rightarrow CO_2$ (1 NN)",r"$CO_C+O_B\rightarrow CO_2$ (2 NN)",r"$CO_C+O_C\rightarrow CO_2$ (1 NN)", #Reaction
+             r"$CO_C\rightarrow CO_B$ (1 NN)",r"$CO_C\rightarrow CO_B$ (2 NN)",r"$CO_C\rightarrow CO_C$ (1 NN)"] # Diffusion CO
 if maxAlfa == 7:  # for farkas TOF
     labelAlfa[4] = labelAlfa[22]
     labelAlfa[5] = labelAlfa[23]
@@ -200,5 +200,9 @@ ax.set_xticklabels(labels)
 ax.set_ylabel(r"Energy $(eV)$")
 #ax.set_yscale("log")
 mp.setY2TemperatureLabels(ax,kb)
-ax.annotate(r"$\epsilon^{TOF}_\alpha=\omega^{TOF}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
+if total:
+    rl = "R"
+else:
+    rl = "TOF"
+ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
 plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')
