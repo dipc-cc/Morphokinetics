@@ -96,6 +96,8 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
                   # [co2, type (alfa), temperature range]
     multiplicityEa   = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
     activationEnergy    = np.zeros(shape=(maxCo2,maxRanges))
+    total = ext == "T"
+    print(total)
     for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
         showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
         if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
@@ -111,7 +113,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             axarr = np.zeros(3)
         # N_h
 
-        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2)
+        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2, total=total)
 
         first = True
         for i,a in enumerate(range(p.minA,p.maxA)): # alfa
@@ -119,12 +121,12 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             if showPlot:
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
                 if any(abs(y) >= 1e-4):
-                    mp.plotOmegas(x, y, axarr[1], i, omega[co2,:,i], rngt, labelAlfa)
+                    mp.plotOmegas(x, y, axarr[1], i, omega[co2,:,i], ext=="T", labelAlfa)
                     spl = True
                 else:
                     spl = False
             y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
-            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[0], i, spl, co2, first)
+            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[0], i, spl, co2, first, total)
             if spl and first:
                 first = False
         if showPlot:

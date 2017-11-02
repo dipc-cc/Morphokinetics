@@ -68,7 +68,7 @@ def computeMavgAndOmegaOverRuns():
 
     return runMavg, runOavg, runR1avg, runR2avg, runR3avg
 
-def putLabels(ax, co2, alfa):
+def putLabels(ax, co2, alfa, total=False):
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
     xI = 59
     xII = 77
@@ -87,7 +87,12 @@ def putLabels(ax, co2, alfa):
         ax.annotate(label, xy=(0.75,0.85), xycoords="axes fraction",
                     bbox=bbox_props)
     elif alfa == 0:
-         ax.set_ylabel(r"$M^{TOF}_\alpha$")
+        if total:
+            rl = "R"
+        else:
+            rl = "TOF"
+ 
+        ax.set_ylabel(r"$M^{"+rl+r"}_\alpha$")
          #ax.annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
          #label = r"$CO_2="+str(co2*10)+r"$"
          #ax.annotate(label, xy=(0.97,0.95), xycoords="axes fraction",
@@ -103,7 +108,7 @@ def getMec(i):
         mec="none"
     return mec
 
-def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
+def plotOmegas(x, y, axis, i, averageLines, total, labelAlfa):
     inf.smallerFont(axis, 8)
     cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p"]
@@ -125,7 +130,11 @@ def plotOmegas(x, y, axis, i, averageLines, rngt, labelAlfa):
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(1e-4,2)
-    axis.set_ylabel(r"$\omega^{TOF}_\alpha$")
+    if total:
+        rl = "R"
+    else:
+        rl = "TOF"
+    axis.set_ylabel(r"$\omega^{"+rl+r"}_\alpha$")
     axis.set_xlabel(r"$1/k_BT$")
     arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
     axis.legend(prop={'size': 5}, loc="best", scatterpoints=1)
@@ -168,13 +177,14 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
     return slopes
 
 
-def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
+def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False, total=False):
     showPlot = sp# and (alfa == 4 or alfa == 5)
     markers=["o", "s","D","^","d","h","p"]
     cm = plt.get_cmap('tab20')
     cm1 = plt.get_cmap('hsv')
     slopes = []
     l = 1
+
     if showPlot:
         #inf.smallerFont(ax, 8)
         y = [float("NaN") if v < 1e-50 else v for v in y] # remove almost 0 multiplicities
@@ -183,7 +193,7 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False):
         a = alfa
         if first:
             a = 0
-        putLabels(ax, co2+1, a)
+        putLabels(ax, co2+1, a, total)
     # all
     s = allSlopes(x,y)
     if any(np.isinf(s)) or any(np.isnan(s)):
