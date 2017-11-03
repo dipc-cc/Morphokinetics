@@ -152,6 +152,7 @@ if rAndM: # plot total activation energy as the sum of ratios and multiplicities
     plt.savefig("multiplicitiesRandM"+ext+".png", bbox_inches='tight')
 
 lastOmegas = np.zeros(shape=(maxRanges,maxAlfa-minAlfa))
+#lastM = np.zeros(shape=(maxRanges
 epsilon = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 if omegas:
     co2.append(maxCo2)
@@ -176,6 +177,18 @@ if omegas:
     myLabels.append("Rel. err.")
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
     plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
+
+figR, ax = plt.subplots(1, figsize=(5,2))
+figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.1)
+cm = plt.get_cmap('tab20')
+markers=["o", "s","D","^","d","h","p"]
+for i,a in enumerate(range(minAlfa,maxAlfa)):
+    if any(abs(omega[-1,:,i]) >= 1e-4):
+        #ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
+        ax.plot(x, multiplicityEa[-1,:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
+ax.legend(loc="best", prop={'size':6})
+ax.set_ylabel(r"$E^M_\alpha$")
+plt.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
 
 figR, ax = plt.subplots(1, figsize=(5,3))
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
