@@ -62,6 +62,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
   private Point3D cartesianPosition;
   private Point3D cartesianSuperCell;
   private AbstractGrowthAtomAttributes attributes;
+  private int occupiedNeighbours;
   
   public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
     this.id = id;
@@ -336,6 +337,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     outerPerimeter = false;
   }
   
+  public int getOccupiedNeighbours(){
+    return occupiedNeighbours;
+  }
+  
+  public void addOccupiedNeighbour(int value) {
+    occupiedNeighbours += value;
+  }
+  
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
@@ -438,6 +447,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     outerPerimeter = false;
     setList(false);
     cartesianSuperCell = new Point3D(0, 0, 0);
+    occupiedNeighbours = 0; // current atom has no neighbour
   }
   
   /**
