@@ -33,7 +33,7 @@ def computeMavgAndOmega(fileNumber, p):
     omega = np.zeros(shape=(length,p.maxA-p.minA)) # [co2amount, alfa]
     for i in range(0,length):
         omega[i,:] =  Mavg[i,:] * ratios / totalRate[i]
-    return Mavg, omega, totalRate
+    return Mavg, omega, totalRate, ratios
 
 
 def computeMavgAndOmegaOverRuns(pAlfa):
@@ -51,7 +51,7 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     #iterating over runs
     for i in range(0,filesNumber):
         try:
-            tmpMavg, tmpOmega, tmpRate = computeMavgAndOmega(i, p)
+            tmpMavg, tmpOmega, tmpRate, ratios = computeMavgAndOmega(i, p)
             sumMavg = sumMavg + tmpMavg
             sumOmega = sumOmega + tmpOmega
             sumRate = sumRate + tmpRate
@@ -63,7 +63,7 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     totalRate = sumRate / filesNumber
 
     totalRateEvents, rates = getTotalRate()
-    return runMavg, runOavg, totalRate, totalRateEvents, rates
+    return runMavg, runOavg, totalRate, totalRateEvents, rates, ratios
 
 
 def getMavgAndOmega(p,temperatures,workingPath):
@@ -72,6 +72,7 @@ def getMavgAndOmega(p,temperatures,workingPath):
     tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
     tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
     totalRate = np.zeros(shape=(maxCo2,maxTemp))
+    ratios = np.zeros(shape=(maxTemp,p.maxA-p.minA)) # Used ratios for simulation
     totalRateEvents = np.zeros(shape=(maxCo2,maxTemp))
     rates = np.zeros(shape=(maxCo2,maxTemp,4)) # adsorption, desorption, reaction and diffusion rates
     for i,t in enumerate(temperatures):
@@ -84,9 +85,9 @@ def getMavgAndOmega(p,temperatures,workingPath):
             os.chdir(runFolder[-1])
         except FileNotFoundError:
             continue
-        tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i], rates[:,i,:] = computeMavgAndOmegaOverRuns(p)
+        tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i], rates[:,i,:], ratios[i,:] = computeMavgAndOmegaOverRuns(p)
         
-    return tempMavg, tempOavg, totalRate, totalRateEvents, rates
+    return tempMavg, tempOavg, totalRate, totalRateEvents, rates, ratios
 
 def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext=""):
     maxRanges = len(temperatures)
