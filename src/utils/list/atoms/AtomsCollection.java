@@ -5,8 +5,8 @@
  */
 package utils.list.atoms;
 
-import kineticMonteCarlo.atom.CatalysisAtom;
-import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
 /**
@@ -20,12 +20,12 @@ public class AtomsCollection {
    */
   private final AvlTree tree;
 
-  public AtomsCollection(CatalysisLattice lattice) {
+  public AtomsCollection(AbstractGrowthLattice lattice) {
     tree = new AvlTree();
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisAtom a = (CatalysisAtom) uc.getAtom(j);
+        AbstractGrowthAtom a = uc.getAtom(j);
         tree.insert(a);
       }
     }

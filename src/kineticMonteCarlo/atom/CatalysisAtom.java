@@ -15,7 +15,7 @@ import utils.StaticRandom;
  *
  * @author Karmele Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
+public class CatalysisAtom extends AbstractGrowthAtom {
 
   public static final byte CO = 0;
   public static final byte O = 1;
@@ -351,30 +351,6 @@ public class CatalysisAtom extends AbstractGrowthAtom implements Comparable {
     this.attributes = (CatalysisAtomAttributes) atom.getAttributes();
     this.attributes.addOneHop();
     atom.setAttributes(tmpAttributes);
-  }
-
-  /**
-   * Compares desorption probabilities of two CatalysisAtom.
-   * 
-   * @param o other atom.
-   * @return 
-   */
-  @Override
-  public int compareTo(Object o) {
-    if (o instanceof CatalysisAtom) {
-      CatalysisAtom a = (CatalysisAtom) o;
-      double otherId = a.getId();
-      if (getId() < otherId) {
-        return -1;
-      } else if (getId() > otherId) {
-        return 1;
-      } else {
-        return 0;
-      }
-    } else {
-      throw new IllegalArgumentException("obj must be an "
-              + " instance of a TestScores object.");
-    }
   }
   
   public void equalRate(byte process) {

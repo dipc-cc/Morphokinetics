@@ -10,7 +10,7 @@ import javafx.geometry.Point3D;
  *
  * @author Nestor
  */
-public abstract class AbstractGrowthAtom extends AbstractAtom {
+public abstract class AbstractGrowthAtom extends AbstractAtom implements Comparable {
   /** TODO document the types and change them to constants
    * 
    */
@@ -481,6 +481,30 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
     }
     return false;
   }  
+  
+  /**
+   * Compares IDs of two atoms.
+   * 
+   * @param o other atom.
+   * @return 
+   */
+  @Override
+  public int compareTo(Object o) {
+    if (o instanceof CatalysisAtom) {
+      CatalysisAtom a = (CatalysisAtom) o;
+      double otherId = a.getId();
+      if (getId() < otherId) {
+        return -1;
+      } else if (getId() > otherId) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } else {
+      throw new IllegalArgumentException("obj must be an "
+              + " instance of a TestScores object.");
+    }
+  }
   
   @Override
   public String toString() {
