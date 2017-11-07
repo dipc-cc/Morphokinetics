@@ -43,7 +43,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   /** Previous instant co2sum. For output */
   private long co2prv;
   private final int co2max;
-  private long maxSteps;
+  private final long maxSteps;
   private int outputEvery;
   private ArrayList<CatalysisData> adsorptionData;
   // Adsorption
