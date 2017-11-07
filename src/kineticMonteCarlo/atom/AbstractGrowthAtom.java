@@ -480,5 +480,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom {
       }
     }
     return false;
+  }  
+  
+  @Override
+  public String toString() {
+    String returnString = "Atom Id " + getId();
+    return returnString;
   }
 }
