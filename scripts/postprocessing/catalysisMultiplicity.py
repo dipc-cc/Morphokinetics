@@ -12,7 +12,7 @@ import glob
 import numpy as np
 import multiplicitiesPlot as mp
 import multiplicitiesInfo as mi
-
+import rds
 
 ##########################################################
 ##########           Main function   #####################
@@ -31,6 +31,7 @@ omegas = False
 sensibility = False
 tofSensibility = False
 kindOfSensibility = False
+sigmas = False
 ext = ""
 if len(sys.argv) > 1:
     total = "t" in sys.argv[1]
@@ -40,6 +41,7 @@ if len(sys.argv) > 1:
     sensibility = "s" in sys.argv[1]
     tofSensibility = "f" in sys.argv[1]
     kindOfSensibility = "k" in sys.argv[1]
+    sigmas = "g" in sys.argv[1]
 if total:
     minAlfa = 0
     maxAlfa = 20
@@ -179,20 +181,41 @@ if omegas:
     plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
     plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
 
-figR, ax = plt.subplots(1, figsize=(5,2))
-figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
-cm = plt.get_cmap('tab20')
-markers=["o", "s","D","^","d","h","p"]
-ax.plot(1/kb/temperatures, rates[-1,:,2])
-for i,a in enumerate(range(minAlfa,maxAlfa)):
-    if any(abs(omega[-1,:,i]) >= 1e-4):
-        ax.plot(1/kb/temperatures, (tempMavg[-1,:,i]*ratios[:,i]),label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
-ax.legend(loc="best", prop={'size':6})
-ax.set_ylabel(r"$E^M_\alpha$")
-ax.set_yscale("log")
-plt.savefig("rds"+ext+".pdf")#, bbox_inches='tight')
-
-
+if sigmas:
+    sigma = rds.plotRds(temperatures,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa)
+    p.minA = 0; p.maxA = 4; p.maxA = 4
+    if p.rLib == "farkas":
+        p.minA = 0; p.maxA = 7; p.maxA = 7
+    tempMavgS, omegaS, totalRateS, totalRateEventsS, ratesS, ratiosS = mi.getMavgAndOmega(p,temperatures,workingPath)
+    totalRateEventsS = np.copy(rates[:,:,2]) # it is a inner rate
+    os.chdir(workingPath)
+    activationEnergyT, multiplicityEaS = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavgS,omegaS,totalRateEventsS,ext="")
+    os.chdir(workingPath)
+    activationEnergyS = np.sum(sigma*(ratioEa-multiplicityEa), axis=2)
+    ####
+    lastSigmas = np.zeros(shape=(maxRanges,maxAlfa-minAlfa))
+    xi = np.zeros(shape=(maxCo2,maxRanges,maxAlfa-minAlfa))
+    for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
+        partialSumS = np.sum(sigma[j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
+        for i,a in enumerate(range(minAlfa,maxAlfa)): #alfa
+            lastSigmas[j,i] = partialSumS[-1] # kontuz indizeekin, agian: [maxRanges-1-j,i]
+            partialSumS -= sigma[j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+            xi[:,j,i] = sigma[j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+    ####
+    fig, ax = plt.subplots(1, figsize=(5,3))
+    fig.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
+    cm = plt.get_cmap('tab20')
+    ax.plot(1/kb/temperatures, activationEnergyT[-1,:], label=r"$E^{TOF}_{app}$", color="red")
+    ax.plot(1/kb/temperatures, activationEnergyS[-1,:], "--", label=r"$\sum \xi^{TOF}_\alpha$")
+    ax.plot(1/kb/temperatures, abs(activationEnergyT[-1,:]-activationEnergyS[-1,:]), label="Absolute error", color="black")
+    for i,a in enumerate(range(minAlfa,maxAlfa)):
+        if any(abs(xi[-1,:,i]) > 0.005):
+            ax.fill_between(1/kb/temperatures, lastSigmas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
+    rl = "TOF"
+    ax.annotate(r"$\xi^{"+rl+r"}_\alpha=\sigma^{"+rl+r"}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
+    ax.legend(loc="best", prop={'size':6})
+    fig.savefig("sigmas.pdf")
+    plt.close(fig)
 
 figR, ax = plt.subplots(1, figsize=(5,2))
 figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
