@@ -120,12 +120,12 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
-        addOccupiedNeighbour(atom.getNeighbour(i), originalPosition, forceNucleation);
+        addNeighbour(atom.getNeighbour(i), originalPosition, forceNucleation);
       }
     }
 
     addAtom(atom);
-    if (atom.getOccupiedNeighbours()> 0) {
+    if (atom.getOccupiedNeighbours() > 0) {
       addBondAtom(atom);
     }
     atom.resetProbability();
@@ -139,7 +139,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
-        removeOccupied(atom.getNeighbour(i), originalPosition);
+        removeNeighbour(atom.getNeighbour(i), originalPosition);
       }
     }
 
@@ -388,7 +388,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * @param neighbourPosition the position of the neighbour.
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
+  private void addNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
     byte newType;
 
     newType = neighbourAtom.getNewType(1); 
@@ -425,7 +425,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom.
    */
-  private void removeOccupied(BasicGrowthAtom neighbourAtom, int neighbourPosition) {
+  private void removeNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition) {
     byte newType = neighbourAtom.getNewType(-1); // one less atom
     neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 
