@@ -33,7 +33,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   private HopsPerStep distancePerStep;
 
   public GrapheneAtom(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
-    super(id, iHexa, jHexa, 12);
+    super(id, iHexa, jHexa, 12, 2);
   
     this.distancePerStep = distancePerStep;
     if (typesTable == null) {

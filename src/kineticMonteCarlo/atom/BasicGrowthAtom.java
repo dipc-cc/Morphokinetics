@@ -23,7 +23,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   private final BasicGrowthAtom[] neighbours = new BasicGrowthAtom[4];
 
   public BasicGrowthAtom(int id, short iHexa, short jHexa) {
-    super(id, iHexa, jHexa, 4);
+    super(id, iHexa, jHexa, 4, 2);
   }
   
   /**

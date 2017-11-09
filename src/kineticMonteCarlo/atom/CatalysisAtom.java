@@ -48,7 +48,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private int coCusWithCoCus;
   
   public CatalysisAtom(int id, short iHexa, short jHexa) {
-    super(id, iHexa, jHexa, 4);
+    super(id, iHexa, jHexa, 4, 4);
     occupiedNeighbours = 0; 
     if (iHexa % 2 == 0) {
       latticeSite = BR;
@@ -62,43 +62,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     processes[DESORPTION] = new CatalysisProcess();
     processes[REACTION] = new CatalysisProcess();
     processes[DIFFUSION] = new CatalysisProcess();
+    setProcceses(processes);
     coCusWithCoCus = 0;
-  }
-  
-  public boolean isOnList(byte process) {
-    return processes[process].isActive();
-  }
-  
-  public void setOnList(byte process, boolean onList) {
-    processes[process].setActive(onList);
-  }
-  
-  public double getRate(byte process) {
-    return processes[process].getRate();
-  }
-  
-  public double getEdgeRate(byte process, int neighbourPos) {
-    return processes[process].getEdgeRate(neighbourPos);
-  }
-  
-  public void setRate(byte process, double rate) {
-    processes[process].setRate(rate);
-  }
-
-  public void addRate(byte process, double rate, int neighbourPos) {
-    processes[process].addRate(rate, neighbourPos);
-  }
-  
-  public double getSumRate(byte process) {
-    return processes[process].getSumRate();
-  }
-  
-  public void setSumRate(byte process, double rate) {
-    processes[process].setSumRate(rate);
-  }
-
-  public void addToSumRate(byte process, double rate) {
-    processes[process].addSumRate(rate);
   }
   
   @Override

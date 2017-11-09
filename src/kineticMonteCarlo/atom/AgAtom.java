@@ -39,7 +39,7 @@ public class AgAtom extends AbstractGrowthAtom {
   private final int pos;
   
   public AgAtom(int id, short iHexa, short jHexa) {
-    super(id, iHexa, jHexa, 6);
+    super(id, iHexa, jHexa, 6, 2);
     if (typesTable == null) {
       typesTable = new AgTypesTable();
     }

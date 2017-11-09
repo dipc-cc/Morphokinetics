@@ -5,6 +5,7 @@
 package kineticMonteCarlo.atom;
 
 import javafx.geometry.Point3D;
+import kineticMonteCarlo.process.AbstractProcess;
 
 /**
  *
@@ -63,8 +64,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   private Point3D cartesianSuperCell;
   private AbstractGrowthAtomAttributes attributes;
   private int occupiedNeighbours;
+  /** Different processes that atom can do. In catalysis: adsorption, desorption, reaction and diffusion. */
+  private AbstractProcess[] processes;
   
-  public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours) {
+  public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     this.id = id;
     setOccupied(false);
     outside = false;
@@ -343,6 +346,46 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   
   public void addOccupiedNeighbour(int value) {
     occupiedNeighbours += value;
+  }
+  
+  public final void setProcceses(AbstractProcess[] processes) {
+    this.processes = processes;
+  }
+  
+  public boolean isOnList(byte process) {
+    return processes[process].isActive();
+  }
+  
+  public void setOnList(byte process, boolean onList) {
+    processes[process].setActive(onList);
+  }
+  
+  public double getRate(byte process) {
+    return processes[process].getRate();
+  }
+  
+  public double getEdgeRate(byte process, int neighbourPos) {
+    return processes[process].getEdgeRate(neighbourPos);
+  }
+  
+  public void setRate(byte process, double rate) {
+    processes[process].setRate(rate);
+  }
+
+  public void addRate(byte process, double rate, int neighbourPos) {
+    processes[process].addRate(rate, neighbourPos);
+  }
+  
+  public double getSumRate(byte process) {
+    return processes[process].getSumRate();
+  }
+  
+  public void setSumRate(byte process, double rate) {
+    processes[process].setSumRate(rate);
+  }
+
+  public void addToSumRate(byte process, double rate) {
+    processes[process].addSumRate(rate);
   }
   
   /**
