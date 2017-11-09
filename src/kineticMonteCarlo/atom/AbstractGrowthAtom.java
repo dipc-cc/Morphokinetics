@@ -9,7 +9,7 @@ import kineticMonteCarlo.process.AbstractProcess;
 
 /**
  *
- * @author Nestor
+ * @author Nestor, J. Alberdi-Rodriguez
  */
 public abstract class AbstractGrowthAtom extends AbstractAtom implements Comparable {
   /** TODO document the types and change them to constants
