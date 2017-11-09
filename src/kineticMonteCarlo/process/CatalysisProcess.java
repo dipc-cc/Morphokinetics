@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package kineticMonteCarlo.atom;
+package kineticMonteCarlo.process;
 
 /**
  * Class to store a process of catalysis. Possible processes are adsorption, desorption, reaction

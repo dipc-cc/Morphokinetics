@@ -5,10 +5,11 @@
  */
 package kineticMonteCarlo.atom;
 
-import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
-import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
-import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
-import static kineticMonteCarlo.atom.CatalysisProcess.REACTION;
+import kineticMonteCarlo.process.CatalysisProcess;
+import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
+import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
+import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
+import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
 import utils.StaticRandom;
 
 /**

@@ -2,10 +2,10 @@ package utils.list;
 
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
-import static kineticMonteCarlo.atom.CatalysisProcess.ADSORPTION;
-import static kineticMonteCarlo.atom.CatalysisProcess.DESORPTION;
-import static kineticMonteCarlo.atom.CatalysisProcess.DIFFUSION;
-import static kineticMonteCarlo.atom.CatalysisProcess.REACTION;
+import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
+import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
+import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
+import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
 import utils.StaticRandom;
 
 public abstract class AbstractList implements IProbabilityHolder {
