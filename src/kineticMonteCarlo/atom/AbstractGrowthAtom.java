@@ -533,8 +533,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
    */
   @Override
   public int compareTo(Object o) {
-    if (o instanceof CatalysisAtom) {
-      CatalysisAtom a = (CatalysisAtom) o;
+    if (o instanceof AbstractGrowthAtom) {
+      AbstractGrowthAtom a = (AbstractGrowthAtom) o;
       double otherId = a.getId();
       if (getId() < otherId) {
         return -1;
