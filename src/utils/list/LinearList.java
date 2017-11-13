@@ -20,7 +20,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
   
   
   public LinearList(Parser parser) {
-    super();
+    super(parser);
     surface = new ArrayList();
     this.setLevel(-1);
     clean = false;
