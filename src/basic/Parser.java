@@ -1198,7 +1198,7 @@ public class Parser {
     if (calculationMode.equals("basic")|| getCalculationMode().equals("catalysis")) {
       return cartSizeX;
     }
-    if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc")) {
+    if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
       return cartSizeX;
     } else { // graphene, always even number
       int sizeI = (int) Math.ceil(cartSizeX / 1.5f);
@@ -1221,7 +1221,7 @@ public class Parser {
     if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis")) {
       return cartSizeY;
     }
-    if (getCalculationMode().equals("AgUc")) {
+    if (getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
       return Math.round(getCartSizeY() / (2 * AbstractGrowthLattice.Y_RATIO));
     } else {
       return (int) (getCartSizeY() / AbstractGrowthLattice.Y_RATIO);
