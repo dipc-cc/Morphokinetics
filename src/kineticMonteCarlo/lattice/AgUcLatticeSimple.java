@@ -11,8 +11,18 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
  */
 public class AgUcLatticeSimple extends AgUcLattice {
   
-  public AgUcLatticeSimple(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep) {
-    super(hexaSizeI, hexaSizeJ, modified, distancePerStep, true);
+  /**
+   * Creates a lattice to work with hexagonal Ag simulation, based on unit cells
+   * (UC) in the super class.
+   *
+   * @param hexaSizeI size in I direction. How many points horizontally.
+   * @param hexaSizeJ size in J direction. How many points vertically.
+   * @param modified temporary buffer.
+   * @param distancePerStep auxiliary class for Devita.
+   * @param type whether to use Ag simple, normal or concerted
+   */
+  public AgUcLatticeSimple(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep, int type) {
+    super(hexaSizeI, hexaSizeJ, modified, distancePerStep, type);
   }
   
   @Override 
