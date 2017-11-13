@@ -1,11 +1,11 @@
 package utils.list;
 
+import basic.Parser;
 import kineticMonteCarlo.atom.AbstractAtom;
 import java.util.ListIterator;
+import kineticMonteCarlo.process.CatalysisProcess;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
-import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
-import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
-import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
+import kineticMonteCarlo.process.ConcertedProcess;
 import utils.StaticRandom;
 
 public abstract class AbstractList implements IProbabilityHolder {
@@ -16,21 +16,34 @@ public abstract class AbstractList implements IProbabilityHolder {
   private boolean autoCleanup;
 
   private double time;
-  private double depositionProbability;
-  private double desorptionProbability;
-  private double reactionProbability;
-  private double diffusionProbability;
+  private double[] rates;
   private int totalAtoms;
   private IProbabilityHolder parent;
   private int level;
   private boolean computeTime;
   private double deltaTime;
+  private final int ratesLength;
+  private final int diffusionIndex;
   
-  public AbstractList() {
+  public AbstractList(Parser parser) {
     time = 0;
-    depositionProbability = 0;
-    desorptionProbability = 0;
-    reactionProbability = 0;
+    switch (parser.getCalculationMode()) {
+      case "catalysis":
+        ratesLength = 4; // Adsorption, desorption, reaction, diffusion
+        diffusionIndex = CatalysisProcess.DIFFUSION;
+        break;
+      case "concerted":
+        ratesLength = 3; // Adsorption, single (diffusion), concerted (diffusion)
+        diffusionIndex = ConcertedProcess.SINGLE;
+        break;
+      default:
+        ratesLength = 2; // Adsorption, diffusion
+        diffusionIndex = 1;
+    }
+    rates = new double[ratesLength];
+    for (int i = 0; i < ratesLength; i++) {
+      rates[i] = 0.0;
+    }
     autoCleanup = false;
     removalsSinceLastCleanup = 0;
     deltaTime = 0;
@@ -74,18 +87,15 @@ public abstract class AbstractList implements IProbabilityHolder {
   }
 
   double getDepositionProbability() {
-    return depositionProbability;
+    return rates[ADSORPTION];
   }
 
   public void setDepositionProbability(double depositionProbability) {
-    this.depositionProbability = depositionProbability;
+    rates[ADSORPTION] = depositionProbability;
   }
 
   public void setRates(double[] rates) {
-    depositionProbability = rates[ADSORPTION];
-    desorptionProbability = rates[DESORPTION];
-    reactionProbability = rates[REACTION];
-    diffusionProbability = rates[DIFFUSION];
+    this.rates = rates;
   }
 
   public int getRemovalsSinceLastCleanup() {
@@ -101,7 +111,7 @@ public abstract class AbstractList implements IProbabilityHolder {
   }
 
   void setDiffusionProbability(double probability) {
-    this.diffusionProbability = probability;
+    this.rates[diffusionIndex] = probability;
   }
   
   public void setParent(IProbabilityHolder parent) {
@@ -124,7 +134,7 @@ public abstract class AbstractList implements IProbabilityHolder {
    * @return total probability (always >= 0)
    */
   public double getDiffusionProbability() {
-    return diffusionProbability > 0 ? diffusionProbability : 0;
+    return rates[diffusionIndex] > 0 ? rates[diffusionIndex] : 0;
   }
   
   /**
@@ -134,13 +144,23 @@ public abstract class AbstractList implements IProbabilityHolder {
    * @return total movement + deposition + desorption + reaction.
    */
   public double getGlobalProbability() {
-    return getDiffusionProbability() + depositionProbability + desorptionProbability + reactionProbability;
+    double globalProbability = 0.0;
+    for (int i = 0; i < rates.length; i++) {
+      globalProbability += rates[i];
+    }
+    return globalProbability;
   }
 
   public void reset() {
     time = 0;
-    diffusionProbability = 0;
-    totalAtoms = 0;
+    if (ratesLength > 2) { // adsorption rate does not have to be reset in growth.
+      for (int i = 0; i < rates.length; i++) {
+        rates[i] = 0;
+      }
+    } else {
+      rates[diffusionIndex] = 0;
+    }
+    totalAtoms  = 0;
     removalsSinceLastCleanup = 0;
     computeTime = true;
   }
@@ -190,15 +210,13 @@ public abstract class AbstractList implements IProbabilityHolder {
 
     addTime();
 
-    if (position < depositionProbability) {
-      return ADSORPTION;
+    double sumRate = 0.0;
+    for (byte process = 0; process < rates.length; process++) { //Adsorption, desorption, reaction, diffusion
+      sumRate += rates[process];
+      if (position < sumRate) {
+        return process;
+      }
     }
-    if (position < depositionProbability + desorptionProbability) {
-      return DESORPTION;
-    }
-    if (position < depositionProbability + desorptionProbability + reactionProbability) {
-      return REACTION;
-    }
-    return DIFFUSION;
+    return (byte) (rates.length - 1);
   }
 }

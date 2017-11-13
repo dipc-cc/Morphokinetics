@@ -26,7 +26,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   private boolean clean;
 
   public BinnedList(Parser parser, int binAmount, int extraBinLevels) {
-    super();
+    super(parser);
     this.setLevel(extraBinLevels);
 
     if (extraBinLevels > 0) {
