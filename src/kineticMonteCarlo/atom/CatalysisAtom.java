@@ -192,24 +192,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
   
   /**
-   * How many neighbours are occupied.
-   *
-   * @return occupied neighbours.
-   */
-  public int getOccupiedNeighbours() {
-    return occupiedNeighbours;
-  }
-  
-  /**
-   * An atom is added to current neighbourhood (can be negative).
-   * 
-   * @param value to be added or removed.
-   */
-  public void addOccupiedNeighbour(int value) {
-    occupiedNeighbours += value;
-  }
-  
-  /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
    * @param position position is the original one; has to be inverted.
