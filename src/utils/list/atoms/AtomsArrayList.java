@@ -7,7 +7,7 @@ package utils.list.atoms;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import utils.StaticRandom;
 
 /**
@@ -38,7 +38,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
    */
   @Override
   public void insert(T atom) {
-    CatalysisAtom a = (CatalysisAtom) atom;
+    AbstractGrowthAtom a = (AbstractGrowthAtom) atom;
     a.setOnList(process, a.getRate(process) > 0);
     if (a.getRate(process) > 0) {
       add(atom);
@@ -56,7 +56,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
   
   private void add(T atom) {
-    CatalysisAtom a = (CatalysisAtom) atom;
+    AbstractGrowthAtom a = (AbstractGrowthAtom) atom;
     totalRate += a.getRate(process);
     atomsArray.add(atom);
   }
@@ -68,7 +68,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
 
   @Override
   public void removeAtomRate(T atom) {
-    CatalysisAtom a = (CatalysisAtom) atom;
+    AbstractGrowthAtom a = (AbstractGrowthAtom) atom;
     totalRate -= a.getRate(process);
     a.setRate(process, 0.0);
     atomsArray.remove(atom);
@@ -95,7 +95,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   public void recomputeTotalRate(byte process) {
     double sum = 0.0;
     for (int i = 0; i < atomsArray.size(); i++) {
-      sum += ((CatalysisAtom) atomsArray.get(i)).getRate(process);
+      sum += ((AbstractGrowthAtom) atomsArray.get(i)).getRate(process);
     }
     totalRate = sum;
   }
@@ -119,7 +119,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     double sum = 0.0;
     int i;
     for (i = 0; i < atomsArray.size(); i++) {
-      sum += ((CatalysisAtom) atomsArray.get(i)).getRate(process);
+      sum += ((AbstractGrowthAtom) atomsArray.get(i)).getRate(process);
       if (sum > randomNumber) {
         a = atomsArray.get(i);
         break;
