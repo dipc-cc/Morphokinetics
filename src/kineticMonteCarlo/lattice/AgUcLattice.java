@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.ConcertedAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
@@ -227,10 +228,10 @@ public class AgUcLattice extends AgLattice {
             atom0 = new AgAtom(id++, 0);
             atom1 = new AgAtom(id++, 1);
             break;
-          //case 2:
-            //atom0 = new ConcertedAtom(id++, 0);
-            //atom1 = new ConcertedAtom(id++, 1);
-            //break;
+          case 2:
+            atom0 = new ConcertedAtom(id++, 0);
+            atom1 = new ConcertedAtom(id++, 1);
+            break;
           default:
             atom0 = null;
             atom1 = null; // it should not happen!
