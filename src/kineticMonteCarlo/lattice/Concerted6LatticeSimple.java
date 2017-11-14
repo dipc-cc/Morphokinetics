@@ -38,10 +38,6 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
       removeNeighbour(atom.getNeighbour(i));
     }
 
-    if (((ConcertedAtom) atom).getNMobile() > 0) {
-      addBondAtom(atom);
-    }
-
     atom.resetProbability();
     atom.setList(false);
     return probabilityChange;
@@ -64,10 +60,6 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
 
     // Always changes the type of neighbour
     neighbourAtom.setType(newType);
-    /*addAtom(neighbourAtom);
-    if (((ConcertedAtom) neighbourAtom).getNMobile() > 0 && !neighbourAtom.isOccupied()) {
-      addBondAtom(neighbourAtom);
-    }//*/
   }
   
   /**
@@ -84,9 +76,5 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
     ((ConcertedAtom) neighbourAtom).addNMobile(-1); // remove one mobile atom (original atom has been extracted)
 
     neighbourAtom.setType(newType);
-    /*addAtom(neighbourAtom);
-    if (((ConcertedAtom) neighbourAtom).getNMobile() > 0 && !neighbourAtom.isOccupied()) {
-      addBondAtom(neighbourAtom);
-    }//*/
   }
 }
