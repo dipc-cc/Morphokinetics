@@ -21,7 +21,7 @@ public class ConcertedAtom extends AgAtomSimple {
   
   public ConcertedAtom(int id, int i) {
     super(id, i);
-    processes = new ConcertedProcess[4];
+    processes = new ConcertedProcess[3];
     processes[ADSORB] = new ConcertedProcess();
     processes[SINGLE] = new ConcertedProcess();
     processes[CONCERTED] = new ConcertedProcess();
@@ -41,5 +41,21 @@ public class ConcertedAtom extends AgAtomSimple {
     }
     // raise an error
     return null;
+  }
+  
+  /**
+   * Resets current atom; TERRACE type, no occupied, no outside and no probability.
+   */
+  @Override
+  public void clear() {
+    super.clear();
+    setType(TERRACE);
+    
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      setBondsProbability(0, i);
+    }
+    for (int i = 0; i < 3; i++) {
+      processes[i].clear();
+    }
   }
 }
