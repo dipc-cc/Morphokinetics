@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.ConcertedAtom;
 import kineticMonteCarlo.atom.AgAtom;
 import static kineticMonteCarlo.atom.AgAtom.EDGE;
 import static kineticMonteCarlo.atom.AgAtom.TERRACE;
@@ -54,13 +55,13 @@ public class AgUcLattice extends AgLattice {
    * @param hexaSizeJ size in J direction. How many points vertically.
    * @param modified temporary buffer.
    * @param distancePerStep auxiliary class for Devita.
-   * @param simple whether using simple Ag atoms.
+   * @param type whether to use Ag simple, normal or concerted
    */
-  public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep, boolean simple) {
+  public AgUcLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified, HopsPerStep distancePerStep, int type) {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
     setUnitCellSize(2);
     ucList = new ArrayList<>();
-    createAtoms(simple);
+    createAtoms(type);
     
     // We assume that central unit cell, position 0 is the centre
     centralCartesianLocation = new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));
@@ -204,9 +205,10 @@ public class AgUcLattice extends AgLattice {
   /**
    * Creates all atoms and assigns it neighbours. How are computed the neighbours is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
-   *
+   *  
+   * @param type 0 = AgAtomSimple, type 1 = AgAtom, type 2 = ConcertedAtom.
    */
-  private void createAtoms(boolean simple) {
+  private void createAtoms(int type) {
     sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
     sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
     // Initialise unit cells (with atoms)
@@ -217,12 +219,22 @@ public class AgUcLattice extends AgLattice {
         List<AgAtom> atomsList = new ArrayList<>(2);
         AgAtom atom0;
         AgAtom atom1;
-        if (simple) {
-          atom0 = new AgAtomSimple(id++, 0);
-          atom1 = new AgAtomSimple(id++, 1);
-        } else {
-          atom0 = new AgAtom(id++, 0);
-          atom1 = new AgAtom(id++, 1);
+        switch (type) {
+          case 0:
+            atom0 = new AgAtomSimple(id++, 0);
+            atom1 = new AgAtomSimple(id++, 1);
+            break;
+          case 1:
+            atom0 = new AgAtom(id++, 0);
+            atom1 = new AgAtom(id++, 1);
+            break;
+          case 2:
+            atom0 = new ConcertedAtom(id++, 0);
+            atom1 = new ConcertedAtom(id++, 1);
+            break;
+          default:
+            atom0 = null;
+            atom1 = null; // it should not happen!
         }
         atomsList.add(atom0);
         atomsList.add(atom1);

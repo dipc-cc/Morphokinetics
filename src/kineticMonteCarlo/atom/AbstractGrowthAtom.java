@@ -340,10 +340,21 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     outerPerimeter = false;
   }
   
+  /**
+   * How many neighbours are occupied.
+   *
+   * @return occupied neighbours.
+   */
   public int getOccupiedNeighbours(){
     return occupiedNeighbours;
   }
   
+  /**
+   * An occupied atom is added to current neighbourhood (for the addition, can
+   * be a negative number).
+   *
+   * @param value to be added or removed.
+   */
   public void addOccupiedNeighbour(int value) {
     occupiedNeighbours += value;
   }
@@ -533,8 +544,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
    */
   @Override
   public int compareTo(Object o) {
-    if (o instanceof CatalysisAtom) {
-      CatalysisAtom a = (CatalysisAtom) o;
+    if (o instanceof AbstractGrowthAtom) {
+      AbstractGrowthAtom a = (AbstractGrowthAtom) o;
       double otherId = a.getId();
       if (getId() < otherId) {
         return -1;

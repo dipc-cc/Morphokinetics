@@ -10,6 +10,7 @@ import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.BasicGrowthSimulation;
 import basic.CatalysisSimulation;
+import basic.ConcertedSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import basic.SiSimulation;
@@ -95,6 +96,9 @@ public class Morphokinetics {
       case "catalysis":
         simulation = new CatalysisSimulation(parser);
         break;
+      case "concerted":
+        simulation = new ConcertedSimulation(parser);
+        break;      
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
         throw new IllegalArgumentException("This simulation mode is not implemented");

@@ -19,7 +19,7 @@ import utils.list.LinearList;
  */
 public abstract class AbstractKmc implements IKmc {
 
-  private AbstractList list;
+  private final AbstractList list;
   private AbstractLattice lattice;
   private int iterationsForLastSimulation;
   
