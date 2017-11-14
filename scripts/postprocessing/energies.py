@@ -396,9 +396,9 @@ def getEaCorrections(p,temperatures):
     correction[6:8,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0) # desorption CO
     correction[8:12,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,1) # desorption O
     correction[12:20,:] = kb*temperatures # diffusion
-    correction[21:23,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
-    correction[23:26,:] = kb*temperatures # reaction
-    correction[26:29,:] = kb*temperatures # diffusion
+    correction[20:22,:] = 3.0*kb*temperatures + getDesorptionCorrection(temperatures,0)
+    correction[22:25,:] = kb*temperatures # reaction
+    correction[25:27,:] = kb*temperatures # diffusion
 
     if p.maxA == 7:  # for farkas TOF
         correction[4,:] = correction[22,:]
