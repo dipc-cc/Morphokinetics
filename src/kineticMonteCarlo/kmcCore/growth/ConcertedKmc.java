@@ -104,7 +104,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       if (performSimulationStep()) {
         break;
       }
-      //checkSizes();
+      checkSizes();
     }
     return returnValue;
   }
@@ -370,7 +370,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         }
       }
     }
-  }//*/
+  }
   
   /**
    * Changes current collection from array/tree to tree/array.
