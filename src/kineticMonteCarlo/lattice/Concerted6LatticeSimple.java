@@ -21,6 +21,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       addNeighbour(atom.getNeighbour(i));
     }
+    addOccupied();
     atom.resetProbability();
   }
   
@@ -35,6 +36,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
 
     atom.resetProbability();
     atom.setList(false);
+    subtractOccupied();
     return probabilityChange;
   }
   
