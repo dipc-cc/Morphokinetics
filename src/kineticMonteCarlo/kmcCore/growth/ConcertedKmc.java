@@ -342,7 +342,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   
   double getDiffusionRate(ConcertedAtom atom, ConcertedAtom neighbour) {
     double probability;
-    probability = diffusionRatePerAtom[atom.getType()][neighbour.getType()];
+    probability = diffusionRatePerAtom[atom.getType()][neighbour.getType() - 1];
     return probability;
   }
   
