@@ -399,6 +399,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     processes[process].addSumRate(rate);
   }
   
+  public void equalRate(byte process) {
+    processes[process].equalRate();
+  }
+  
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *

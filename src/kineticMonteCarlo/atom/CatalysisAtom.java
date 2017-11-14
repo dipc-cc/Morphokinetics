@@ -301,10 +301,6 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     atom.setAttributes(tmpAttributes);
   }
   
-  public void equalRate(byte process) {
-    processes[process].equalRate();
-  }
-  
   @Override
   public String toString() {
     String returnString = "Atom Id " + getId() + " desorptionRate " + processes[DESORPTION].getRate() + " " + processes[DESORPTION].getSumRate();

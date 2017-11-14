@@ -5,7 +5,7 @@
 */
 package utils.list.atoms;
 import java.util.Iterator;
-import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import utils.StaticRandom;
 import utils.list.Node;
 
@@ -37,7 +37,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (tree.getRoot() == null) {
       return 0;
     }
-    return ((CatalysisAtom) tree.getRoot().getData()).getSumRate(process);
+    return ((AbstractGrowthAtom) tree.getRoot().getData()).getSumRate(process);
   }
   
   /**
@@ -63,7 +63,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumRate(process, diff);
+    ((AbstractGrowthAtom) n.getData()).addToSumRate(process, diff);
     if (n.getData().compareTo(data) == 0) {
       return;
     }
@@ -90,9 +90,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumRate(process, -((CatalysisAtom) data).getRate(process));
+    ((AbstractGrowthAtom) n.getData()).addToSumRate(process, -((AbstractGrowthAtom) data).getRate(process));
     if (n.getData().compareTo(data) == 0) {
-      ((CatalysisAtom) data).setRate(process, 0.0);
+      ((AbstractGrowthAtom) data).setRate(process, 0.0);
       return;
     }
     if (n.getData().compareTo(data) > 0) {
@@ -123,7 +123,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     if (n == null) {
       return;
     }
-    ((CatalysisAtom) n.getData()).addToSumRate(process, ((CatalysisAtom) data).getRate(process));
+    ((AbstractGrowthAtom) n.getData()).addToSumRate(process, ((AbstractGrowthAtom) data).getRate(process));
     if (n.getData().compareTo(data) == 0) {
       return;
     }
@@ -144,7 +144,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   private void clear(Node n) {
     if (n == null)
       return;
-    ((CatalysisAtom) n.getData()).setSumRate(process, 0.0);
+    ((AbstractGrowthAtom) n.getData()).setSumRate(process, 0.0);
     clear(n.getLeft());
     clear(n.getRight());
   }
@@ -160,7 +160,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public void populate() {
-    populateCatalysisAtom(tree.getRoot());
+    populateAtom(tree.getRoot());
   }
   
   /**
@@ -169,28 +169,28 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    * @param n
    * @return 
    */
-  private double populateCatalysisAtom(Node n) {
+  private double populateAtom(Node n) {
     if (n == null) {
       return 0;
     }
 
-    if (((CatalysisAtom) n.getData()).getRate(process) > 0) {
+    if (((AbstractGrowthAtom) n.getData()).getRate(process) > 0) {
       occupied++;
     }
     if (n.isLeaf()) {
-      ((CatalysisAtom) n.getData()).equalRate(process);
-      return ((CatalysisAtom) n.getData()).getRate(process);
+      ((AbstractGrowthAtom) n.getData()).equalRate(process);
+      return ((AbstractGrowthAtom) n.getData()).getRate(process);
     }
     // add current rate to the sum
-    ((CatalysisAtom) n.getData()).setSumRate(process, ((CatalysisAtom) n.getData()).getRate(process));
+    ((AbstractGrowthAtom) n.getData()).setSumRate(process, ((AbstractGrowthAtom) n.getData()).getRate(process));
     if (n.getLeft() != null) {
       // add left childen rate sum 
-      ((CatalysisAtom) n.getData()).addToSumRate(process, populateCatalysisAtom(n.getLeft()));
+      ((AbstractGrowthAtom) n.getData()).addToSumRate(process, populateAtom(n.getLeft()));
     }
     if (n.getRight() != null) {
-      ((CatalysisAtom) n.getData()).addToSumRate(process, populateCatalysisAtom(n.getRight()));
+      ((AbstractGrowthAtom) n.getData()).addToSumRate(process, populateAtom(n.getRight()));
     }
-    return ((CatalysisAtom) n.getData()).getSumRate(process);
+    return ((AbstractGrowthAtom) n.getData()).getSumRate(process);
   }
   
   /**
@@ -201,11 +201,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   @Override
   public T randomAtom() {
     double randomNumber = StaticRandom.raw() * getTotalRate(process);
-    CatalysisAtom atom = (CatalysisAtom) randomAtom(tree.getRoot(), randomNumber).getData();
+    AbstractGrowthAtom atom = (AbstractGrowthAtom) randomAtom(tree.getRoot(), randomNumber).getData();
     while (atom.getRate(process) == 0) {
       //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
       randomNumber = StaticRandom.raw() * getTotalRate(process);
-      atom = (CatalysisAtom) randomAtom(tree.getRoot(), randomNumber).getData();
+      atom = (AbstractGrowthAtom) randomAtom(tree.getRoot(), randomNumber).getData();
     }
     return (T) atom;
   }
@@ -216,10 +216,10 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
     double leftRate = 0.0;
     if (n.getLeft() != null) 
-      leftRate = ((CatalysisAtom) n.getLeft().getData()).getSumRate(process);
+      leftRate = ((AbstractGrowthAtom) n.getLeft().getData()).getSumRate(process);
     double rightRate = 0.0;
     if (n.getRight() != null) 
-      rightRate = ((CatalysisAtom) n.getRight().getData()).getSumRate(process);
+      rightRate = ((AbstractGrowthAtom) n.getRight().getData()).getSumRate(process);
 
     if (r < leftRate) {
       return randomAtom(n.getLeft(), r);
