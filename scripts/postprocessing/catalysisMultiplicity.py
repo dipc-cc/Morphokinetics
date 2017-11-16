@@ -188,7 +188,6 @@ if lmbdas:
     inf.smallerFont(axar[0], 8)
     inf.smallerFont(axar[1], 8)
 
-    lmbda, maxI = rds.plotRds(temperatures,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axar[0])
     p.minA = 0; p.maxA = 4; p.maxA = 4
     if p.rLib == "farkas":
         p.minA = 0; p.maxA = 7; p.maxA = 7
@@ -199,11 +198,12 @@ if lmbdas:
     os.chdir(workingPath)
     ratioEaTmp = np.zeros(len(temperatures))
     multiplicityEaTmp = np.zeros(len(temperatures))
+    lmbda, maxI = rds.plotRds(temperatures,activationEnergyT,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axar[0],ratioEa,multiplicityEa)
     for u,t in enumerate(temperatures):
         ratioEaTmp[u] = ratioEa[-1,u,maxI[u]]
         multiplicityEaTmp[u] = multiplicityEa[-1,u,maxI[u]]
-    activationEnergyS = ratioEaTmp - multiplicityEaTmp
     
+    activationEnergyS = ratioEaTmp - multiplicityEaTmp
     fig, ax = plt.subplots(1, figsize=(5,3))
     fig.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
     cm = plt.get_cmap('tab20')
@@ -225,19 +225,19 @@ if lmbdas:
     fig.savefig(p.rLib+"Lambdas.pdf")
     plt.close(fig)
 
-cm = plt.get_cmap('tab20')
-markers=["o", "s","D","^","d","h","p"]
-for i,a in enumerate(range(minAlfa,maxAlfa)):
-    if any(abs(omega[-1,:,i]) >= 1e-8):
-        #ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
-        axar[1].plot(1/kb/temperatures, -multiplicityEa[-1,:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
-axar[1].legend(loc="best", prop={'size':6})
-axar[1].set_ylabel(r"$E^M_\alpha$")
-axar[1].set_ylabel(r"Energy $(eV)$")
-axar[1].set_xlabel(r"$1/k_BT$")
-
-figS.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
-plt.close(figS)
+    cm = plt.get_cmap('tab20')
+    markers=["o", "s","D","^","d","h","p"]
+    for i,a in enumerate(range(minAlfa,maxAlfa)):
+        if any(abs(omega[-1,:,i]) >= 1e-8):
+            #ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
+            axar[1].plot(1/kb/temperatures, -multiplicityEa[-1,:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
+    axar[1].legend(loc="best", prop={'size':6})
+    axar[1].set_ylabel(r"$E^M_\alpha$")
+    axar[1].set_ylabel(r"Energy $(eV)$")
+    axar[1].set_xlabel(r"$1/k_BT$")
+    
+    figS.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
+    plt.close(figS)
 
 figR, ax = plt.subplots(1, figsize=(5,3))
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
