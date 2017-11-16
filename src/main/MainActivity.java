@@ -25,6 +25,7 @@ import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.AgUcSimulation;
 import basic.BasicGrowthSimulation;
+import basic.CatalysisSimulation;
 import basic.GrapheneSimulation;
 import basic.Parser;
 import eus.ehu.dipc.morphokinetics.R;
@@ -86,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
     if (((RadioButton) findViewById(R.id.radioButtonGraphene)).isChecked()) {
       parser.setCalculationMode("graphene");
     }
+    if (((RadioButton) findViewById(R.id.radioButtonCatalysis)).isChecked()) {
+      parser.setCalculationMode("catalysis");
+    }
 
     parser.setTemperature(Integer.parseInt(String.valueOf(((EditText) findViewById(R.id.editTextTemperature)).getText())));
     parser.setCartSizeX(Integer.parseInt(String.valueOf(((EditText) findViewById(R.id.editTextSize)).getText())));
@@ -109,12 +113,15 @@ public class MainActivity extends AppCompatActivity {
       case "basic":
         simulation = new BasicGrowthSimulation(parser);
         break;
+      case "catalysis":
+        simulation = new CatalysisSimulation(parser);
+        break;
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");
         throw new IllegalArgumentException("This simulation mode is not implemented");
     }
 
-    PaintLoop paintLoop = new PaintLoop();
+    final PaintLoop paintLoop = new PaintLoop();
     paintLoop.start();
 
     new Thread(new Runnable() {
@@ -125,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         simulation.doSimulation();
         simulation.finishSimulation();
 
-        TextView tv0 = (TextView) findViewById(R.id.textViewResults);
+        final TextView tv0 = (TextView) findViewById(R.id.textViewResults);
         tv0.post(new Runnable() {
           @Override
           public void run() {
@@ -152,8 +159,8 @@ public class MainActivity extends AppCompatActivity {
     public void run() {
       while (running) {
         try {
-          ImageView iv = (ImageView) findViewById(R.id.imageView);
-          Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
+          final ImageView iv = (ImageView) findViewById(R.id.imageView);
+          final Bitmap bm = paint((AbstractGrowthLattice) simulation.getKmc().getLattice());
           iv.post(new Runnable() {
             @Override
             public void run() {
