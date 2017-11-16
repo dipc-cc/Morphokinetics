@@ -64,14 +64,15 @@ else:
 
 energies = e.catalysisEnergiesTotal(p)
 labelAlfa = [r"$CO_B+O_B\rightarrow CO_2$",r"$CO_B+O_C\rightarrow CO_2$",r"$CO_C+O_B\rightarrow CO_2$",r"$CO_C+O_C\rightarrow CO_2$", #Reaction
-             r"$V\rightarrow CO$",r"$V\rightarrow O$", # Adsorption
+             r"$V\rightarrow CO$",r"$V_2 \rightarrow O_2 $", # Adsorption
              r"$CO_B\rightarrow V$",r"$CO_C\rightarrow V$", # Desorption CO
              r"$O_B+O_B\rightarrow V_B+V_B$",r"$O_B+O_C\rightarrow V_B+V_C$",r"$O_C+O_B\rightarrow V_C+V_B$",r"$O_C+O_C\rightarrow V_C+V_C$", # Desorption O
              r"$CO_B\rightarrow CO_B$",r"$CO_B\rightarrow CO_C$",r"$CO_C\rightarrow CO_B$",r"$CO_C\rightarrow CO_C$",  # Diffusion CO
              r"$O_B\rightarrow O_B$",r"$O_B\rightarrow O_C$",r"$O_C\rightarrow O_B$",r"$O_C\rightarrow O_C$", # Diffusion O
              r"$CO_C\rightarrow V$ (1 NN)",r"$CO_C\rightarrow V$ (2 NN)", # Desorption CO
              r"$CO_C+O_B\rightarrow CO_2$ (1 NN)",r"$CO_C+O_B\rightarrow CO_2$ (2 NN)",r"$CO_C+O_C\rightarrow CO_2$ (1 NN)", #Reaction
-             r"$CO_C\rightarrow CO_B$ (1 NN)",r"$CO_C\rightarrow CO_B$ (2 NN)",r"$CO_C\rightarrow CO_C$ (1 NN)"] # Diffusion CO
+             r"$CO_C\rightarrow CO_B$ (1 NN)",r"$CO_C\rightarrow CO_B$ (2 NN)",r"$CO_C\rightarrow CO_C$ (1 NN)", # Diffusion CO
+             r"$V\rightarrow O$"] # adsorption of one unique O atom, which is not counted in the program
 if maxAlfa == 7:  # for farkas TOF
     labelAlfa[4] = labelAlfa[22]
     labelAlfa[5] = labelAlfa[23]
@@ -187,7 +188,6 @@ if lmbdas:
     inf.smallerFont(axar[0], 8)
     inf.smallerFont(axar[1], 8)
 
-    lmbda, maxI = rds.plotRds(temperatures,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axar[0])
     p.minA = 0; p.maxA = 4; p.maxA = 4
     if p.rLib == "farkas":
         p.minA = 0; p.maxA = 7; p.maxA = 7
@@ -198,11 +198,12 @@ if lmbdas:
     os.chdir(workingPath)
     ratioEaTmp = np.zeros(len(temperatures))
     multiplicityEaTmp = np.zeros(len(temperatures))
+    lmbda, maxI = rds.plotRds(temperatures,activationEnergyT,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axar[0],ratioEa,multiplicityEa)
     for u,t in enumerate(temperatures):
         ratioEaTmp[u] = ratioEa[-1,u,maxI[u]]
         multiplicityEaTmp[u] = multiplicityEa[-1,u,maxI[u]]
-    activationEnergyS = ratioEaTmp - multiplicityEaTmp
     
+    activationEnergyS = ratioEaTmp - multiplicityEaTmp
     fig, ax = plt.subplots(1, figsize=(5,3))
     fig.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
     cm = plt.get_cmap('tab20')
@@ -224,19 +225,19 @@ if lmbdas:
     fig.savefig(p.rLib+"Lambdas.pdf")
     plt.close(fig)
 
-cm = plt.get_cmap('tab20')
-markers=["o", "s","D","^","d","h","p"]
-for i,a in enumerate(range(minAlfa,maxAlfa)):
-    if any(abs(omega[-1,:,i]) >= 1e-8):
-        #ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
-        axar[1].plot(1/kb/temperatures, -multiplicityEa[-1,:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
-axar[1].legend(loc="best", prop={'size':6})
-axar[1].set_ylabel(r"$E^M_\alpha$")
-axar[1].set_ylabel(r"Energy $(eV)$")
-axar[1].set_xlabel(r"$1/k_BT$")
-
-figS.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
-plt.close(figS)
+    cm = plt.get_cmap('tab20')
+    markers=["o", "s","D","^","d","h","p"]
+    for i,a in enumerate(range(minAlfa,maxAlfa)):
+        if any(abs(omega[-1,:,i]) >= 1e-8):
+            #ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
+            axar[1].plot(1/kb/temperatures, -multiplicityEa[-1,:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
+    axar[1].legend(loc="best", prop={'size':6})
+    axar[1].set_ylabel(r"$E^M_\alpha$")
+    axar[1].set_ylabel(r"Energy $(eV)$")
+    axar[1].set_xlabel(r"$1/k_BT$")
+    
+    figS.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
+    plt.close(figS)
 
 figR, ax = plt.subplots(1, figsize=(5,3))
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
