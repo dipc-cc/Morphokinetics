@@ -34,3 +34,6 @@ Remove branch remotely and locally
 Grep in all code
   git grep <regexp> $(git rev-list --all -- lib/util) -- lib/util
   git branch --contains <commit>
+
+Determine remote URL
+  git remote show origin
