@@ -106,7 +106,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
         x = 1/kb/temperatures
         y = totalRate
         if showPlot:
-            fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
+            fig, axarr = plt.subplots(1, sharex=True, figsize=(5,4))
             #axarr[0].annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
             #axarr[1].annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
             fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
@@ -114,23 +114,37 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             axarr = np.zeros(3)
         # N_h
 
-        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2, total=total)
+        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr, -1, False, co2, total=total)
 
         first = True
+        omegaSumTof = np.zeros(shape=(len(temperatures)))
+        totalSum = np.zeros(shape=(len(temperatures)))
         for i,a in enumerate(range(p.minA,p.maxA)): # alfa
             spl = False
             if showPlot:
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
-                if any(abs(y) >= 1e-4):
-                    mp.plotOmegas(x, y, axarr[1], i, omega[co2,:,i], ext=="T", labelAlfa)
+                totalSum += y
+                if i < 4:
+                    omegaSumTof += y
+                if p.maxA == 28 and (i == 22 or i == 23 or i == 24):
+                    omegaSumTof += y
+                if any(abs(y) >= 1e-8):
+                    mp.plotOmegas(x, y, axarr, i, omega[co2,:,i], ext=="T", labelAlfa)
                     spl = True
                 else:
                     spl = False
             y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
-            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[0], i, spl, co2, first, total)
+
+            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr, i, False, co2, first, total)
             if spl and first:
                 first = False
         if showPlot:
+            axarr.plot(x,omegaSumTof,ls="-", label=r"TOF/R", color="C2")
+            axarr.plot(x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
+            axarr.plot(x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
+            #axarr.plot(x,totalSum,ls="-")
+            print(totalSum)
+            axarr.legend(prop={'size': 5}, loc="best", scatterpoints=1) 
             fig.savefig("plot"+str(co2)+ext+".pdf")#, bbox_inches='tight') 
 
     activationEnergy = -activationEnergy
