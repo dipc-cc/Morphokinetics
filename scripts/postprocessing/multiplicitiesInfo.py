@@ -149,7 +149,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             #axarr.plot(x,totalSum,ls="-")
             print(totalSum)
             axarr.legend(prop={'size': 5}, loc="best", scatterpoints=1) 
-            fig.savefig("plot"+str(co2)+ext+".pdf")#, bbox_inches='tight') 
+            fig.savefig(p.rLib+"Plot"+str(co2)+ext+".pdf")#, bbox_inches='tight') 
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa
