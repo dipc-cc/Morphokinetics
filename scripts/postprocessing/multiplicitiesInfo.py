@@ -118,12 +118,10 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
 
         first = True
         omegaSumTof = np.zeros(shape=(len(temperatures)))
-        totalSum = np.zeros(shape=(len(temperatures)))
         for i,a in enumerate(range(p.minA,p.maxA)): # alfa
             spl = False
             if showPlot:
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
-                totalSum += y
                 if i < 4:
                     omegaSumTof += y
                 if p.maxA == 28 and (i == 22 or i == 23 or i == 24):
@@ -146,10 +144,8 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             axarr.plot(x,omegaSumTof,ls="-", label=r"TOF/R", color="C2")
             axarr.plot(x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
             axarr.plot(x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
-            #axarr.plot(x,totalSum,ls="-")
-            print(totalSum)
             axarr.legend(prop={'size': 5}, loc="best", scatterpoints=1) 
-            fig.savefig(p.rLib+"Plot"+str(co2)+ext+".pdf")#, bbox_inches='tight') 
+            fig.savefig(p.rLib+"Plot"+str(co2)+ext+".pdf")
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa
