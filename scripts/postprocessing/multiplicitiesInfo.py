@@ -127,10 +127,6 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
                 if p.maxA == 28 and (i == 22 or i == 23 or i == 24):
                     omegaSumTof += y
                 if any(abs(y) >= 1e-8):
-                    if i == 5:
-                        cm = plt.get_cmap('tab20')
-                        axarr.plot(x, omega[co2,:,i]*2, ls="", color=cm(abs((6%20)/20)), 
-                                   label=labelAlfa[-1], marker="x", alpha=0.75)
                     mp.plotOmegas(x, y, axarr, i, omega[co2,:,i], ext=="T", labelAlfa)
                     spl = True
                 else:
