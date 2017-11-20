@@ -234,16 +234,19 @@ if lmbdas:
             axar[1].plot(1/kb/temperatures, -multiplicityEa[-1,:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
     axar[1].legend(loc="best", prop={'size':6})
     axar[1].set_ylabel(r"$E^M_\alpha$")
-    axar[1].set_ylabel(r"Energy $(eV)$")
     axar[1].set_xlabel(r"$1/k_BT$")
-    
+    #axar[1].set_ylim(-5,5)
     figS.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
     plt.close(figS)
 
 figR, ax = plt.subplots(1, figsize=(5,3))
+if total:
+    rl = "R"
+else:
+    rl = "TOF"
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
-ax.plot(x, tgt, label=r"$E^{TOF}_{app}$", color="red")
-ax.plot(x, rct, "--", label=r"$\sum \epsilon^{TOF}_\alpha$")
+ax.plot(x, tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
+ax.plot(x, rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$")
 cm = plt.get_cmap('tab20')
 markers=["o", "s","D","^","d","h","p"]
 for i,a in enumerate(range(minAlfa,maxAlfa)):
@@ -263,9 +266,5 @@ ax.set_xticklabels(labels)
 ax.set_ylabel(r"Energy $(eV)$")
 #ax.set_yscale("log")
 mp.setY2TemperatureLabels(ax,kb)
-if total:
-    rl = "R"
-else:
-    rl = "TOF"
 ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
 plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')
