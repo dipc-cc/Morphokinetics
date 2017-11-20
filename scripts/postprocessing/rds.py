@@ -10,7 +10,7 @@ import functions as fun
 kb = 8.6173324e-5
 
 def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axarr,ratioEa,multiplicityEa):
-    #ratios[:,5] = 2*ratios[:,5] # correct O adsorption
+    ratios[:,5] = 2*ratios[:,5] # correct O adsorption, just for RDS
     cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p"]
     one = np.ones(len(temperatures))
@@ -153,7 +153,7 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
 
     #### new sigma
     newSigma = np.zeros(shape=(len(temperatures)))
-    myMax = np.argmax(similarity,axis=1)
+    myMax = np.argmax(dominance,axis=1)
     print(np.shape(myMax),myMax)
 #    for i in range(0,len(myMax)):
 #        myMax[i] = 5
