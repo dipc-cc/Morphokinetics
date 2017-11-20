@@ -64,15 +64,16 @@ else:
 
 energies = e.catalysisEnergiesTotal(p)
 labelAlfa = [r"$CO_B+O_B\rightarrow CO_2$",r"$CO_B+O_C\rightarrow CO_2$",r"$CO_C+O_B\rightarrow CO_2$",r"$CO_C+O_C\rightarrow CO_2$", #Reaction
-             r"$V\rightarrow CO$",r"$V_2 \rightarrow O_2 $", # Adsorption
+             #r"$V\rightarrow CO$",r"$V_2 \rightarrow O_2 $", # Adsorption
+             r"$V\rightarrow CO$",r"$V \rightarrow O $", # Adsorption
              r"$CO_B\rightarrow V$",r"$CO_C\rightarrow V$", # Desorption CO
              r"$O_B+O_B\rightarrow V_B+V_B$",r"$O_B+O_C\rightarrow V_B+V_C$",r"$O_C+O_B\rightarrow V_C+V_B$",r"$O_C+O_C\rightarrow V_C+V_C$", # Desorption O
              r"$CO_B\rightarrow CO_B$",r"$CO_B\rightarrow CO_C$",r"$CO_C\rightarrow CO_B$",r"$CO_C\rightarrow CO_C$",  # Diffusion CO
              r"$O_B\rightarrow O_B$",r"$O_B\rightarrow O_C$",r"$O_C\rightarrow O_B$",r"$O_C\rightarrow O_C$", # Diffusion O
              r"$CO_C\rightarrow V$ (1 NN)",r"$CO_C\rightarrow V$ (2 NN)", # Desorption CO
              r"$CO_C+O_B\rightarrow CO_2$ (1 NN)",r"$CO_C+O_B\rightarrow CO_2$ (2 NN)",r"$CO_C+O_C\rightarrow CO_2$ (1 NN)", #Reaction
-             r"$CO_C\rightarrow CO_B$ (1 NN)",r"$CO_C\rightarrow CO_B$ (2 NN)",r"$CO_C\rightarrow CO_C$ (1 NN)", # Diffusion CO
-             r"$V\rightarrow O$"] # adsorption of one unique O atom, which is not counted in the program
+             r"$CO_C\rightarrow CO_B$ (1 NN)",r"$CO_C\rightarrow CO_B$ (2 NN)",r"$CO_C\rightarrow CO_C$ (1 NN)"]#, # Diffusion CO
+             #r"$V\rightarrow O$"] # adsorption of one unique O atom, which is not counted in the program
 if maxAlfa == 7:  # for farkas TOF
     labelAlfa[4] = labelAlfa[22]
     labelAlfa[5] = labelAlfa[23]
