@@ -88,7 +88,7 @@ def putLabels(ax, co2, alfa, total=False):
                     bbox=bbox_props)
     elif alfa == 0:
         if total:
-            rl = "R"
+            rl = ""
         else:
             rl = "TOF"
  
@@ -131,7 +131,7 @@ def plotOmegas(x, y, axis, i, averageLines, total, labelAlfa):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(1e-4,2)
     if total:
-        rl = "R"
+        rl = ""
     else:
         rl = "TOF"
     axis.set_ylabel(r"$\omega^{"+rl+r"}_\alpha$")
