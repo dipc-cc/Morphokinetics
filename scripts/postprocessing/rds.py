@@ -39,13 +39,13 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
     fig2.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
     ax.plot(1/kb/temperatures,zero,ls="-",color="red")
-    ax2.plot(1/kb/temperatures,activationEnergyTOF[-1,:],ls="-",color="red")
+    ax2.plot(1/kb/temperatures,activationEnergyTOF,ls="-",color="red")
     for i,a in enumerate(range(minAlfa,maxAlfa)):
         # slopes = fun.timeDerivative(np.log(tempMavg[-1,:,i]*ratios[:,i]),1/kb/temperatures[::-1])
         #slopes = omega[-1,:,i]*(ratioEa[-1,:,i] - multiplicityEa[-1,:,i])
         slopes = (ratioEa[-1,:,i] - multiplicityEa[-1,:,i])
         #slopes = (tempMavg[-1,:,i]*ratios[:,i])
-        error3[:,i] =  abs(one-(slopes/activationEnergyTOF[-1,:]))
+        error3[:,i] =  abs(one-(slopes/activationEnergyTOF))
         #error3[:,i] =  abs(one-(slopes/rates[-1,:,2]))
         if any(abs(omega[-1,:,i]) >= minOmega):
             ax.plot(1/kb/temperatures,error3[:,i],label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
@@ -63,7 +63,7 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     ####
     figR, ax = plt.subplots(1, figsize=(5,2))
     figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
-    ax.plot(1/kb/temperatures,activationEnergyTOF[-1,:],ls="-",color="red")
+    ax.plot(1/kb/temperatures,activationEnergyTOF,ls="-",color="red")
     for i,a in enumerate(range(minAlfa,maxAlfa)):
         if any(abs(omega[-1,:,i]) >= minOmega):
             ax.plot(1/kb/temperatures,slopes,label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
@@ -80,7 +80,7 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
     ax.plot(1/kb/temperatures,zero,ls="-",color="red")
     for i,a in enumerate(range(minAlfa,maxAlfa)):
-        delta[:,i] =  abs(one-((tempMavg[-1,:,i]*ratios[:,i])/rates[-1,:,2]))
+        delta[:,i] =  abs(one-((tempMavg[-1,:,i]*ratios[:,i])/activationEnergyTOF))
         if any(abs(omega[-1,:,i]) >= minOmega):
             ax.plot(1/kb/temperatures,delta[:,i],
                     label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)

@@ -202,7 +202,14 @@ if lmbdas:
     os.chdir(workingPath)
     ratioEaTmp = np.zeros(len(temperatures))
     multiplicityEaTmp = np.zeros(len(temperatures))
-    lmbda, maxI = rds.plotRds(temperatures,activationEnergyT,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axar[0],ratioEa,multiplicityEa)
+    totalRateTOF = np.zeros(len(temperatures))
+    Mk = tempMavg[-1]*ratios
+    for i in range(0,4):
+        totalRateTOF += Mk[:,i]
+    if p.rLib == "farkas":
+        for i in range(22,25):
+            totalRateTOF += Mk[:,i]
+    lmbda, maxI = rds.plotRds(temperatures,totalRateTOF,tempMavg,rates,ratios,omega,minAlfa,maxAlfa,labelAlfa,axar[0],ratioEa,multiplicityEa)
     for u,t in enumerate(temperatures):
         ratioEaTmp[u] = ratioEa[-1,u,maxI[u]]
         multiplicityEaTmp[u] = multiplicityEa[-1,u,maxI[u]]
