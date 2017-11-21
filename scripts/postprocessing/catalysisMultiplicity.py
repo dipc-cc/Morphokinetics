@@ -192,6 +192,9 @@ if lmbdas:
     p.minA = 0; p.maxA = 4; p.maxA = 4
     if p.rLib == "farkas":
         p.minA = 0; p.maxA = 7; p.maxA = 7
+        labelAlfa[4] = labelAlfa[22]
+        labelAlfa[5] = labelAlfa[23]
+        labelAlfa[6] = labelAlfa[24]
     tempMavgS, omegaS, totalRateS, totalRateEventsS, ratesS, ratiosS = mi.getMavgAndOmega(p,temperatures,workingPath)
     totalRateEventsS = np.copy(rates[:,:,2]) # it is a inner rate
     os.chdir(workingPath)
