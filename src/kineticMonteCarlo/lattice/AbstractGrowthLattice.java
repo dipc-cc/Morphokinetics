@@ -272,6 +272,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return null;
   }
   
+  public void swapIsland(Island origin, Island destination, int i) {
+    islands.remove(i);
+    islands.add(destination);
+  }
+  
   /**
    * Computes the average distances to the centre of mass for all islands.
    *
@@ -724,7 +729,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param atom atom to be classified.
    * @param fromNeighbour whether is called from outside or recursively.
    */
-  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
+  public void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
     int xRef = xDiference;
     int yRef = yDiference;
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
