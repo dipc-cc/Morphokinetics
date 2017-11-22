@@ -67,6 +67,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   final boolean doDesorption;
   final boolean doReaction;
   final boolean doDiffusion;
+  final boolean doPrintAllIterations;
   private final boolean doO2Dissociation;
   private final String start;
   private final Restart restart;
@@ -113,6 +114,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     doDesorption = parser.doCatalysisDesorption();
     doReaction = parser.doCatalysisReaction();
     start = parser.catalysisStart();
+    doPrintAllIterations = parser.doPrintAllIterations();
     doO2Dissociation = parser.doCatalysisO2Dissociation();
     if (start.equals("empty")) {
       maxCoverage = (float) parser.getCoverage() / 100;
@@ -270,7 +272,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
       }
     }
-    if (stationary && co2sum % 10 == 0 && co2prv != co2sum) {
+    if ((stationary && co2sum % 10 == 0 && co2prv != co2sum) || doPrintAllIterations) {
       if (outputData) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
                 (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
