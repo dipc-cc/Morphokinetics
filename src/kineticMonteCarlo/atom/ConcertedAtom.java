@@ -58,4 +58,22 @@ public class ConcertedAtom extends AgAtomSimple {
       processes[i].clear();
     }
   }
+
+  public boolean isDimer() {
+    if (isOccupied()) {
+      if (getOccupiedNeighbours() > 0) {
+        //System.out.println("neighbour " + getOccupiedNeighbours());
+      }
+      if (getOccupiedNeighbours() == 1) {
+        for (int i = 0; i < getNumberOfNeighbours(); i++) {
+          AbstractGrowthAtom neighbour = getNeighbour(i);
+          if (neighbour.isOccupied() && neighbour.getOccupiedNeighbours() > 1) {
+            return false;
+          }
+        }
+        return true; // only one neighbour atom with one occupied neighbour
+      }
+    }
+    return false;
+  }
 }
