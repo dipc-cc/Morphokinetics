@@ -5,11 +5,13 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
+import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.ConcertedAtom;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.lattice.Concerted6LatticeSimple;
+import kineticMonteCarlo.lattice.Island;
 import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
@@ -181,21 +183,66 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     destinationAtom.swapAttributes(originAtom);
     updateRates(originAtom);
     updateRates(destinationAtom);
+    updateRatesIslands(destinationAtom);
   }
 
   /**
    * Moves an island.
    */
   private void diffuseIsland() {
-    ConcertedAtom originAtom = (ConcertedAtom) sites[CONCERTED].randomAtom();
-    ConcertedAtom destinationAtom = originAtom.getRandomNeighbour(CONCERTED);
-    destinationAtom.setType(originAtom.getType());
-    getLattice().extract(originAtom);    
-    getLattice().deposit(destinationAtom, false);
+    Island originIsland = getLattice().getIsland(0);
+    Island destinationIsland = new Island(originIsland.getIslandNumber());
+    int direction = originIsland.getRandomDirection();
+    ArrayList<AbstractGrowthAtom> modifiedAtoms = new ArrayList<>();
+    ArrayList<AbstractGrowthAtom> postponedAtoms = new ArrayList<>();
+    int islandSize = originIsland.getNumberOfAtoms();
+    for (int i = 0; i < islandSize; i++) { // Move atoms one by one
+      AbstractGrowthAtom iOrigAtom = originIsland.getAtomAt(0); // hau aldatu in behar da
+      AbstractGrowthAtom iDestAtom = iOrigAtom.getNeighbour(direction);
+      originIsland.removeAtom(iOrigAtom);
+      
+      if (iDestAtom.isOccupied()) {
+        postponedAtoms.add(iOrigAtom);
+        continue;
+      }
+      getLattice().extract(iOrigAtom);
+      getLattice().deposit(iDestAtom, false);
+      iDestAtom.swapAttributes(iOrigAtom);
+      modifiedAtoms.add(iOrigAtom);
+      modifiedAtoms.add(iDestAtom);
+      // add both neighbourhoods
+      for (int j = 0; j < iOrigAtom.getNumberOfNeighbours(); j++) {
+        modifiedAtoms.add(iOrigAtom.getNeighbour(j));
+        modifiedAtoms.add(iDestAtom.getNeighbour(j));
+      }
+      
+      destinationIsland.addAtom(iDestAtom);
+    }
+    for (int i = 0; i < postponedAtoms.size(); i++) { // Move rest of the atoms
+      AbstractGrowthAtom iOrigAtom = postponedAtoms.get(i);
+      AbstractGrowthAtom iDestAtom = iOrigAtom.getNeighbour(direction);
+      
+      getLattice().extract(iOrigAtom);
+      getLattice().deposit(iDestAtom, false);
+      iDestAtom.swapAttributes(iOrigAtom);
+      modifiedAtoms.add(iOrigAtom);
+      modifiedAtoms.add(iDestAtom);
+      
+      // add both neighbourhoods
+      for (int j = 0; j < iOrigAtom.getNumberOfNeighbours(); j++) {
+        modifiedAtoms.add(iOrigAtom.getNeighbour(j));
+        modifiedAtoms.add(iDestAtom.getNeighbour(j));
+      }
+        
+      destinationIsland.addAtom(iDestAtom);
+    }
     
-    destinationAtom.swapAttributes(originAtom);
-    updateRates(originAtom);
-    updateRates(destinationAtom);
+    //for (int i = 0; i < originIsland.getNumberOfAtoms(); i++) {
+    for (int i = 0; i < modifiedAtoms.size(); i++) { // Update all touched area
+      ConcertedAtom atom = (ConcertedAtom) modifiedAtoms.get(i);
+      updateRates(atom);
+    }
+    getLattice().swapIsland(originIsland, destinationIsland, 0);
   }
   
   /**
@@ -255,6 +302,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     
     // tell to the list new probabilities
     getList().setRates(totalRate);
+  }
+  
+  public void updateRatesIslands(ConcertedAtom atom) {
+    if (atom.isDimer()) {
+      atom.isDimer();
+      //getLattice().countIslands(null);
+      getLattice().identifyIsland(atom, false, 0, 0);
+    }
   }
             
   private void recomputeAdsorptionProbability(ConcertedAtom atom) {
