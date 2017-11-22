@@ -197,6 +197,10 @@ public class Parser {
    */
   private String catalysisStart;
   /**
+   * See {@link #doPrintAllIterations()}
+   */
+  private String printAllIterations;
+  /**
    * See {@link #doCatalysisO2Dissociation()}
    */
   private boolean catalysisO2Dissociation;
@@ -310,6 +314,7 @@ public class Parser {
     catalysisDesorption = "true";
     catalysisReaction = "true";
     catalysisDiffusion = "true";
+    printAllIterations = "false";
     catalysisStart = "O";
     catalysisO2Dissociation = true;
     automaticCollections = false;
@@ -543,6 +548,15 @@ public class Parser {
         catalysisAdsorption = Boolean.toString(json.getBoolean("catalysisAdsorption"));
       } catch (JSONException ex) {
         catalysisAdsorption = "true";
+      }
+    }
+    try {
+      printAllIterations = json.getString("printAllIterations");
+    } catch (JSONException e) {
+      try {
+        printAllIterations = Boolean.toString(json.getBoolean("printAllIterations"));
+      } catch (JSONException ex) {
+        printAllIterations = "true";
       }
     }
     try {
@@ -1489,6 +1503,17 @@ public class Parser {
    */
   public boolean doCatalysisDesorption() {
     return !catalysisDesorption.equals("false");
+  }
+  
+  /**
+   * Print all iterations during catalysis simulation.
+   *
+   * Input "parameters" variable: {@code printAllIterations}.
+   * 
+   * @return do print all iterations.
+   */
+  public boolean doPrintAllIterations() {
+    return !printAllIterations.equals("false");
   }
   
   /**
