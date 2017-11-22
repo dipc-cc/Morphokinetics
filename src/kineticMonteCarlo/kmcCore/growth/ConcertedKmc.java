@@ -7,6 +7,8 @@ package kineticMonteCarlo.kmcCore.growth;
 import basic.Parser;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.ConcertedAtom;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
@@ -103,10 +105,18 @@ public class ConcertedKmc extends AbstractGrowthKmc {
 
     while (getLattice().getCoverage() < maxCoverage) {
       getList().getDeltaTime(true);
-      if (performSimulationStep()) {
-        break;
+      if (getLattice().isPaused()) {
+        try {
+          Thread.sleep(250);
+        } catch (InterruptedException ex) {
+          Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      } else {
+        if (performSimulationStep()) {
+          break;
+        }
+        checkSizes();
       }
-      checkSizes();
     }
     return returnValue;
   }
