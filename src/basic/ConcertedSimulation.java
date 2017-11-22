@@ -1,10 +1,12 @@
 package basic;
 
 import kineticMonteCarlo.kmcCore.growth.ConcertedKmc;
-import ratesLibrary.AgRatesFromPrbCox;
-import ratesLibrary.AgSimpleRates;
-import ratesLibrary.Concerted6Rates;
+import ratesLibrary.concerted.ConcertedAgAgRates;
+import ratesLibrary.concerted.ConcertedCuNiRates;
+import ratesLibrary.concerted.ConcertedNiCuRates;
 import ratesLibrary.IRates;
+import ratesLibrary.concerted.AbstractConcertedRates;
+import ratesLibrary.concerted.ConcertedPdPdRates;
 
 
 /*
@@ -15,7 +17,7 @@ import ratesLibrary.IRates;
 
 /**
  *
- * @author J. Alberdi-Rodriguez
+ * @author J. Alberdi-Rodriguez, 
  */
 public class ConcertedSimulation  extends AbstractGrowthSimulation {
 
@@ -27,7 +29,22 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
   public void initialiseKmc() {
     super.initialiseKmc();
 
-    setRates(new Concerted6Rates(getParser().getTemperature()));
+    switch (getParser().getRatesLibrary()) {
+      case "CuNi":
+        setRates(new ConcertedCuNiRates(getParser().getTemperature()));
+        break;
+      case "NiCu":
+        setRates(new ConcertedNiCuRates(getParser().getTemperature()));
+        break;
+      case "AgAg":
+        setRates(new ConcertedAgAgRates(getParser().getTemperature()));
+        break;
+      case "PdPd":
+        setRates(new ConcertedPdPdRates(getParser().getTemperature()));
+        break;   
+      default:
+        System.out.println("Rates not set. Execution will fail.");
+    }
     
     setKmc(new ConcertedKmc(getParser()));
     initialiseRates(getRates(), getParser());
@@ -35,7 +52,7 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
   
   @Override
   void initialiseRates(IRates rates, Parser parser) {
-    Concerted6Rates r = (Concerted6Rates) rates;
+    AbstractConcertedRates r = (AbstractConcertedRates) rates;
     
     double depositionRatePerSite;
     rates.setDepositionFlux(parser.getDepositionFlux());

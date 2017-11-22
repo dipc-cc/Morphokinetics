@@ -17,7 +17,7 @@ import kineticMonteCarlo.lattice.Island;
 import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
-import ratesLibrary.Concerted6Rates;
+import ratesLibrary.concerted.AbstractConcertedRates;
 import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
 import utils.list.atoms.AtomsCollection;
@@ -66,7 +66,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     maxCoverage = (float) parser.getCoverage() / 100;
   }
 
-  public void setRates(Concerted6Rates rates) {
+  public void setRates(AbstractConcertedRates rates) {
     diffusionRatePerAtom = new double[7][7]; // empty
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     
