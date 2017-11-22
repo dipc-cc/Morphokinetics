@@ -8,12 +8,13 @@ package kineticMonteCarlo.lattice;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import utils.StaticRandom;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class Island {
+public class Island  implements Comparable {
 
   private int islandNumber;
   private int numberOfAtoms;
@@ -66,7 +67,17 @@ public class Island {
   }
   
   public void addAtom(AbstractGrowthAtom atom) {
+    numberOfAtoms++;
     atoms.add(atom);
+  }
+  
+  public void removeAtom(AbstractGrowthAtom atom) {
+    numberOfAtoms--;
+    atoms.remove(atom);
+  }
+  
+  public AbstractGrowthAtom getAtomAt(int i) {
+    return atoms.get(i);
   }
   
   /**
@@ -89,6 +100,39 @@ public class Island {
   private void updateMax(double distance) {
     if (distance > maxDistance) {
       maxDistance = distance;
+    }
+  }
+  
+  /**
+   * Selects a random direction for the island to move.
+   * 
+   * @return random direction out of 6 possible directions.
+   */
+  public int getRandomDirection() {
+    return StaticRandom.rawInteger(6);
+  }
+  
+  /**
+   * Compares island numbers of two islands.
+   * 
+   * @param o other atom.
+   * @return 
+   */
+  @Override
+  public int compareTo(Object o) {
+    if (o instanceof AbstractGrowthAtom) {
+      AbstractGrowthAtom a = (AbstractGrowthAtom) o;
+      double otherId = a.getId();
+      if (getIslandNumber() < otherId) {
+        return -1;
+      } else if (getIslandNumber()> otherId) {
+        return 1;
+      } else {
+        return 0;
+      }
+    } else {
+      throw new IllegalArgumentException("obj must be an "
+              + " instance of a Island object.");
     }
   }
 }
