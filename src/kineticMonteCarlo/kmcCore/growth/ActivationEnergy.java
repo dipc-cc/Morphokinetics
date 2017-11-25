@@ -67,7 +67,9 @@ public class ActivationEnergy {
           numberOfNeighbours = 12;
         }
       }
-      if (parser.getCalculationMode().equals("Ag") || parser.getCalculationMode().equals("AgUc")) {
+      if (parser.getCalculationMode().equals("Ag") || 
+          parser.getCalculationMode().equals("AgUc") || 
+          parser.getCalculationMode().equals("concerted"))   {
         doActivationEnergyStudy = true;
         length = 7;
         numberOfNeighbours = 6;
