@@ -412,6 +412,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       islands.get(i).setCentreOfMass(new Point2D.Double(centreX, centreY));
     }
   }
+
+  public void setAtomsTypesCounter(int length) {
+    atomTypesCounter = new int[length];
+    emptyTypesCounter = new int[length];
+  }
   
   public String getAtomTypesCounter() {
     String sentence = "";
