@@ -76,4 +76,15 @@ public class ConcertedAtom extends AgAtomSimple {
     }
     return false;
   }
+  
+  /**
+   * Get probability in the given neighbour position.
+   *
+   * @param i neighbour position.
+   * @return probability (rate).
+   */
+  @Override
+  public double getBondsProbability(int i) {
+    return processes[SINGLE].getEdgeRate(i);
+  }
 }
