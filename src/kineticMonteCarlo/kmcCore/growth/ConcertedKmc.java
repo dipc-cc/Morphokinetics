@@ -125,7 +125,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   public void depositSeed() {
     totalRate = new double[3];
     getLattice().resetOccupied();
-    initAdsorptionProbability();
+    initRates();
     simulatedSteps = 0;
   }
 
@@ -258,7 +258,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   /**
    * Iterates over all lattice sites and initialises adsorption probabilities.
    */
-  private void initAdsorptionProbability() {
+  private void initRates() {
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
