@@ -46,7 +46,7 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
         System.out.println("Rates not set. Execution will fail.");
     }
     
-    setKmc(new ConcertedKmc(getParser()));
+    setKmc(new ConcertedKmc(getParser(), getRestartFolderName()));
     initialiseRates(getRates(), getParser());
   }
   
