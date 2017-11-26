@@ -5,6 +5,9 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
+import basic.io.OutputType;
+import basic.io.Restart;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -18,6 +21,7 @@ import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
 import ratesLibrary.concerted.AbstractConcertedRates;
+import utils.list.LinearList;
 import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
 import utils.list.atoms.AtomsCollection;
@@ -43,8 +47,18 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private double[][] diffusionRatePerAtom;
   // Total rates
   private double[] totalRate;
+  /**
+   * Attribute to control the output of data every 1% and nucleation.
+   */
+  private final boolean extraOutput;
+  /**
+   * Activation energy output at the end of execution
+   */
+  private final boolean aeOutput;
+  private final ActivationEnergy activationEnergy;
+  private final Restart restart;
  
-  public ConcertedKmc(Parser parser) {
+  public ConcertedKmc(Parser parser, String restartFolder) {
     super(parser);
     Concerted6LatticeSimple concertedLattice;
     concertedLattice = new Concerted6LatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), null);
@@ -64,6 +78,10 @@ public class ConcertedKmc extends AbstractGrowthKmc {
 
     maxSteps = parser.getNumberOfSteps();
     maxCoverage = (float) parser.getCoverage() / 100;
+    extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
+    aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
+    activationEnergy = new ActivationEnergy(parser);
+    restart = new Restart(parser.outputData(), restartFolder);
   }
 
   public void setRates(AbstractConcertedRates rates) {
@@ -71,6 +89,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     
     diffusionRatePerAtom = rates.getDiffusionRates();
+    getLattice().setAtomsTypesCounter(7);
   }
 
   /**
@@ -101,6 +120,8 @@ public class ConcertedKmc extends AbstractGrowthKmc {
 
   @Override
   public int simulate() {
+    int coverageThreshold = 1;
+    int limit = 100000;
     int returnValue = 0;
 
     while (getLattice().getCoverage() < maxCoverage) {
@@ -112,12 +133,28 @@ public class ConcertedKmc extends AbstractGrowthKmc {
           Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
         }
       } else {
+        activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+        if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+	  if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
+	    limit = limit / 10;
+	    coverageThreshold = 1;
+	  }
+	  printData(null, activationEnergy, restart);
+	  coverageThreshold++;
+	}
         if (performSimulationStep()) {
           break;
         }
         checkSizes();
       }
     }
+    if (aeOutput) {
+      double ri = ((LinearList) getList()).getRi_DeltaI();
+      double time = getList().getTime();
+      System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
+      PrintWriter standardOutputWriter = new PrintWriter(System.out);
+      activationEnergy.printAe(restart.getExtraWriters(), getCoverage());
+    } 
     return returnValue;
   }
 
@@ -186,11 +223,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private void diffuseAtom() {
     ConcertedAtom originAtom = (ConcertedAtom) sites[SINGLE].randomAtom();
     ConcertedAtom destinationAtom = originAtom.getRandomNeighbour(SINGLE);
-    //destinationAtom.setType(originAtom.getType());
+    int oldType = originAtom.getType();
     getLattice().extract(originAtom);    
     getLattice().deposit(destinationAtom, false);
     
     destinationAtom.swapAttributes(originAtom);
+    if (aeOutput) {
+      activationEnergy.updateSuccess(oldType, destinationAtom.getType());
+    }
     updateRates(originAtom);
     updateRates(destinationAtom);
     updateRatesIslands(destinationAtom);
@@ -275,6 +315,10 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     sites[ADSORB].populate();
     sites[SINGLE].populate();
     sites[CONCERTED].populate();
+    
+    if (aeOutput) {
+      activationEnergy.setRates(diffusionRatePerAtom);
+    }
   }
   
   /**
@@ -488,5 +532,28 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     System.out.format("%s\t%1.1e\n", "O^BR -> O^CUS   ", diffusionRateO[1]);
     System.out.format("%s\t%1.1e\n", "O^CUS -> O^BR   ", diffusionRateO[2]);
     System.out.format("%s\t%1.1e\n", "O^CUS -> O^CUS  ", diffusionRateO[3]);//*/
+  }
+
+  /**
+   * Print current information to extra file.
+   *
+   * @param coverage used to have exactly the coverage and to be easily greppable.
+   */
+  void printData(Integer coverage, ActivationEnergy ae, Restart rt) {
+    float printCoverage;
+    if (coverage != null) {
+      printCoverage = (float) (coverage) / 100;
+    } else {
+      printCoverage = getCoverage();
+    }
+    restart.writeExtraOutput(getLattice(), printCoverage, 0, getTime(), 
+			     //(double) (depositionRatePerSite * freeArea),
+			     0,
+			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);
+    
+    if (aeOutput) {
+      ae.printAe(rt.getExtraWriters(), printCoverage);
+    }
+    restart.flushExtra();
   }
 }
