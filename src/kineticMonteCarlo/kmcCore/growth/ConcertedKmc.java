@@ -168,6 +168,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
 
   @Override
   public void reset() {
+    activationEnergy.reset();
     Iterator iter = getList().getIterator();
     while (iter.hasNext()) {
       ConcertedAtom atom = (ConcertedAtom) iter.next();
@@ -175,6 +176,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     getLattice().reset();
     getList().reset();
+    restart.reset();
     sites[ADSORB].clear();
     sites[SINGLE].clear();
     sites[CONCERTED].clear();
