@@ -68,7 +68,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }   
     sites = new IAtomsCollection[3];
     automaticCollections = parser.areCollectionsAutomatic();
-    col = new AtomsCollection(concertedLattice);
+    col = new AtomsCollection(concertedLattice, "concerted");
     // Either a tree or array 
     sites[ADSORB] = col.getCollection(false, ADSORB);
     sites[SINGLE] = col.getCollection(false, SINGLE);

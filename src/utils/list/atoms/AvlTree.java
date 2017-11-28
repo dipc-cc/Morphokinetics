@@ -8,7 +8,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Consumer;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
 import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.atom.ConcertedAtom;
 import utils.list.Node;
 
 /**
@@ -212,14 +214,27 @@ public class AvlTree<T extends Comparable<T>> {
   }
 
   /**
-   * Creates a list inside the tree. It is aimed to iterate over the tree faster.
+   * Creates a list inside the tree. It is aimed to iterate over the tree
+   * faster.
+   *
+   * @param type it is used just to decide the actual class to be used
    */
-  public void createList() {
+  public void createList(String type) {
     current = getMinimumNode();
     int i = 0;
     while (current != null) {
       i++;
-      T a  = (T) new CatalysisAtom(i, (short)-1, (short)-1);
+      T a;
+      switch (type) {
+        case "catalysis":
+          a = (T) new CatalysisAtom(i, (short)-1, (short)-1);
+          break;
+        case "concerted":
+         a = (T) new ConcertedAtom(i, -1);
+         break;
+        default:
+          a = null;
+      }
       next = findNode(a);
       current.setNext(next);
       current = next;
@@ -254,13 +269,13 @@ public class AvlTree<T extends Comparable<T>> {
       if (next == null) { // We have reached the end of the list
         return false;
       } else {
-        CatalysisAtom atom = (CatalysisAtom) next.getData();
-        while (!atom.isOnList(process)) {
+        T atom = next.getData();
+        while (!((AbstractGrowthAtom) atom).isOnList(process)) {
           next = next.next();
           if (next == null) { // We have reached the end of the list
             return false;
           } else {
-            atom = (CatalysisAtom) next.getData();
+            atom = next.getData();
           }
         }
         current = next;

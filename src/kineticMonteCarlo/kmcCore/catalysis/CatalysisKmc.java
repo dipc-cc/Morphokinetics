@@ -103,7 +103,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     co2max = parser.getNumberOfCo2();
     restart = new Restart(outputData, restartFolder);
     sites = new IAtomsCollection[4];
-    col = new AtomsCollection((CatalysisLattice) getLattice());
+    col = new AtomsCollection((CatalysisLattice) getLattice(), "catalysis");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
     sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);

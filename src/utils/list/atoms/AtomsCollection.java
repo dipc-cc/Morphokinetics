@@ -20,7 +20,7 @@ public class AtomsCollection {
    */
   private final AvlTree tree;
 
-  public AtomsCollection(AbstractGrowthLattice lattice) {
+  public AtomsCollection(AbstractGrowthLattice lattice, String type) {
     tree = new AvlTree();
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
@@ -29,7 +29,7 @@ public class AtomsCollection {
         tree.insert(a);
       }
     }
-    tree.createList();
+    tree.createList(type);
   }
   
   public IAtomsCollection getCollection(boolean isTree, byte process) {
