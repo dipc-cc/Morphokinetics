@@ -67,7 +67,6 @@ public class Island  implements Comparable {
   }
   
   public void addAtom(AbstractGrowthAtom atom) {
-    numberOfAtoms++;
     atoms.add(atom);
   }
   
