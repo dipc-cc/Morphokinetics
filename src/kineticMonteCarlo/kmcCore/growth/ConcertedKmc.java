@@ -81,7 +81,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     activationEnergy = new ActivationEnergy(parser);
-    restart = new Restart(parser.outputData(), restartFolder);
+    restart = new Restart(false, restartFolder);
   }
 
   public void setRates(AbstractConcertedRates rates) {
@@ -135,13 +135,13 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       } else {
         activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
         if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
-	  if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
-	    limit = limit / 10;
-	    coverageThreshold = 1;
-	  }
-	  printData(null, activationEnergy, restart);
-	  coverageThreshold++;
-	}
+            if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
+              limit = limit / 10;
+              coverageThreshold = 1;
+            }
+            printData();
+            coverageThreshold++;
+          }
         if (performSimulationStep()) {
           break;
         }
@@ -152,8 +152,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       double ri = ((LinearList) getList()).getRi_DeltaI();
       double time = getList().getTime();
       System.out.println("Needed steps " + simulatedSteps + " time " + time + " Ri_DeltaI " + ri + " R " + ri / time + " R " + simulatedSteps / time);
-      PrintWriter standardOutputWriter = new PrintWriter(System.out);
-      activationEnergy.printAe(restart.getExtraWriters(), getCoverage());
+      printData();
     } 
     return returnValue;
   }
@@ -535,26 +534,18 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     System.out.format("%s\t%1.1e\n", "O^CUS -> O^BR   ", diffusionRateO[2]);
     System.out.format("%s\t%1.1e\n", "O^CUS -> O^CUS  ", diffusionRateO[3]);//*/
   }
-
+  
   /**
    * Print current information to extra file.
    *
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
-  void printData(Integer coverage, ActivationEnergy ae, Restart rt) {
-    float printCoverage;
-    if (coverage != null) {
-      printCoverage = (float) (coverage) / 100;
-    } else {
-      printCoverage = getCoverage();
-    }
-    restart.writeExtraOutput(getLattice(), printCoverage, 0, getTime(), 
-			     //(double) (depositionRatePerSite * freeArea),
-			     0,
+  private void printData() {
+    restart.writeExtraOutput(getLattice(), getCoverage(), 0, getTime(), totalRate[ADSORB],
 			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);
     
     if (aeOutput) {
-      ae.printAe(rt.getExtraWriters(), printCoverage);
+      activationEnergy.printAe(restart.getExtraWriters(), getTime());
     }
     restart.flushExtra();
   }
