@@ -363,36 +363,38 @@ public class ActivationEnergy {
       }
     }
     printAeLow(print[5], "", printLineBreak, multiplicity); //AeMultiplicity
-
-    // new print with everything
-    print[6].print(time + "\t");
-    printAeLow(print[6], "", printLineBreak, histogramPossible); //AePossibleFromList REACTION
-    for (int i = 0; i < histogramPossibleAdsorption.length; i++) {
-      print[6].print(histogramPossibleAdsorption[i] + "\t");   
-    }
-    print[6].print(histogramPossibleDesorption[CO][BR][0] + "\t");
-    print[6].print(histogramPossibleDesorption[CO][CUS][0] + "\t");
-    for (int i = 0; i < histogramPossibleDesorption[O].length; i++) {
-      for (int j = 0; j < 2; j++) {
-        print[6].print(histogramPossibleDesorption[O][i][j] + "\t");
+    
+    if (print.length > 6) {
+      // new print with everything, only for catalysis
+      print[6].print(time + "\t");
+      printAeLow(print[6], "", printLineBreak, histogramPossible); //AePossibleFromList REACTION
+      for (int i = 0; i < histogramPossibleAdsorption.length; i++) {
+        print[6].print(histogramPossibleAdsorption[i] + "\t");   
       }
-    }
-    for (int i = 0; i < histogramPossibleDiffusion.length; i++) {
-      for (int j = 0; j < histogramPossibleDiffusion[0].length; j++) {
-        for (int k = 0; k < histogramPossibleDiffusion[0][0].length; k++) {
-          print[6].print(histogramPossibleDiffusion[i][j][k][0] + "\t");
+      print[6].print(histogramPossibleDesorption[CO][BR][0] + "\t");
+      print[6].print(histogramPossibleDesorption[CO][CUS][0] + "\t");
+      for (int i = 0; i < histogramPossibleDesorption[O].length; i++) {
+        for (int j = 0; j < 2; j++) {
+          print[6].print(histogramPossibleDesorption[O][i][j] + "\t");
         }
       }
+      for (int i = 0; i < histogramPossibleDiffusion.length; i++) {
+        for (int j = 0; j < histogramPossibleDiffusion[0].length; j++) {
+          for (int k = 0; k < histogramPossibleDiffusion[0][0].length; k++) {
+            print[6].print(histogramPossibleDiffusion[i][j][k][0] + "\t");
+          }
+        }
+      }
+      // Extra for Farkas
+      print[6].print(histogramPossibleDesorption[CO][CUS][1] + "\t");
+      print[6].print(histogramPossibleDesorption[CO][CUS][2] + "\t");
+      print[6].print(histogramPossibleReactionCoCus[0] + "\t");
+      print[6].print(histogramPossibleReactionCoCus[1] + "\t");
+      print[6].print(histogramPossibleReactionCoCus[2] + "\t");
+      print[6].print(histogramPossibleDiffusion[CO][CUS][BR][1] + "\t");
+      print[6].print(histogramPossibleDiffusion[CO][CUS][BR][2] + "\t");
+      print[6].print(histogramPossibleDiffusion[CO][CUS][CUS][1] + "\t");
     }
-    // Extra for Farkas
-    print[6].print(histogramPossibleDesorption[CO][CUS][1] + "\t");
-    print[6].print(histogramPossibleDesorption[CO][CUS][2] + "\t");
-    print[6].print(histogramPossibleReactionCoCus[0] + "\t");
-    print[6].print(histogramPossibleReactionCoCus[1] + "\t");
-    print[6].print(histogramPossibleReactionCoCus[2] + "\t");
-    print[6].print(histogramPossibleDiffusion[CO][CUS][BR][1] + "\t");
-    print[6].print(histogramPossibleDiffusion[CO][CUS][BR][2] + "\t");
-    print[6].print(histogramPossibleDiffusion[CO][CUS][CUS][1] + "\t");
     for (int i = 0; i < print.length; i++) {
       print[i].println();
       print[i].flush();
