@@ -323,7 +323,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   /**
-   * Updates total adsorption, desorption, reaction and diffusion probabilities.
+   * Updates total adsorption and diffusion probabilities.
    *
    * @param atom
    */
