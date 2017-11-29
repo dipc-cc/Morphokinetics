@@ -89,29 +89,45 @@ public class ConcertedAtom extends AgAtomSimple {
     return processes[SINGLE].getEdgeRate(i);
   }
   
+  /**
+   * Defines 11 atom types:
+   *  0   -> 0
+   *  1   -> 1
+   *  2,0 -> 2
+   *  2,1 -> 3
+   *  2,2 -> 4
+   *  3,0 -> 5
+   *  3,1 -> 6
+   *  4,0 -> 7
+   *  4,1 -> 8
+   *  4,2 -> 9
+   *  5   -> 10
+   * 
+   * @return 0 <= type < 11.
+   */
   @Override
-  public byte getRealType(){
+  public byte getRealType() {
+    byte type = getType();
     byte subtype = 0;
-    int occupationCode;
     BitSet bits = getCode();
-    switch (getType()) {
+    switch (type) {
       case 0: // no subtype
-        break;
+        return type;
       case 1: // no subtype
-        break;
+        return type;
       case 2: // 3 subtypes
         subtype = getEdgeSubtype(bits);
-        break;
+        return (byte) (type + subtype);
       case 3: // 2 subtypes
         subtype = getKinkSubtype(bits);
-        break;
+        return (byte) (5 + subtype); 
       case 4: // 3 subtypes
-        getType4Subtype(bits);
-        break;
+        subtype = getType4Subtype(bits);
+        return (byte) (7 + subtype);
       case 5: // no subtype
-        break;
+        return 10;
     }
-    return getType();
+    return type;
   }
 
   /**
