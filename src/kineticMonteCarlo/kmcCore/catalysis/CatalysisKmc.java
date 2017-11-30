@@ -227,8 +227,16 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return ((CatalysisLattice) getLattice()).getCoverage(type);
   }
   
+  public float getCoverage() {
+    return ((CatalysisLattice) getLattice()).getCoverage();
+  }
+  
   public float[] getCoverages() {
     return ((CatalysisLattice) getLattice()).getCoverages();
+  }
+  
+  public float getGapCoverage() {
+    return ((CatalysisLattice) getLattice()).getGapCoverage();
   }
 
   /**
@@ -276,7 +284,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (outputData) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
                 (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
-                (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
+                getGapCoverage()));
         int[] sizes = new int[4];
         sizes[ADSORPTION] = sites[ADSORPTION].size();
         sizes[DESORPTION] = sites[DESORPTION].size();
@@ -312,8 +320,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     if (outputData) {
       adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O), 
-              (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()), 
-              (float) (numGaps / (getLattice().getCartSizeX() * getLattice().getCartSizeY()))));
+              (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
+                getGapCoverage()));
       if (stationary) {
         restart.flushCatalysis();
         int[] sizes = new int[4];

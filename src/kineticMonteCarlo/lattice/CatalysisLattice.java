@@ -250,6 +250,17 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     super.reset();
   }
   
+  @Override
+  public float getCoverage() {
+    float cov = (float) coverage[CO][BR] + (float) coverage[CO][CUS] + (float) coverage[O][BR] + (float) coverage[O][CUS];
+    float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
+    return cov / hexaArea;
+  }
+  
+  public float getGapCoverage() {
+    return (float) (1 - getCoverage());
+  }
+  
   /**
    * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
    * experimental and only works with AgUc simulation mode. If fails, the execution continues
