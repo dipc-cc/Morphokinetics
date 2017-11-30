@@ -167,13 +167,15 @@ public class ConcertedAtom extends AgAtomSimple {
    */
   private byte getKinkSubtype(BitSet bits) {
     int first = bits.nextSetBit(0);
-    int second = bits.nextSetBit(first+1);
-    int third = bits.nextSetBit(second+1);
+    int second = bits.nextSetBit(first + 1);
+    int third = bits.nextSetBit(second + 1);
     int number = (1 << first) | (1 << second) | (1 << third);
     if (number % 7 == 0) { // all three atoms are together (multiple of 7)
       return 0;
-    } else { // one atom is separated 
+    } else if (number % 21 == 0) { // all three atoms are separated (21 or 42)
       return 1;
+    } else { // one atom is separated 
+      return 2;
     }
   }
   
