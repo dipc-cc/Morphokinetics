@@ -32,6 +32,7 @@ sensibility = False
 tofSensibility = False
 kindOfSensibility = False
 lmbdas = False
+one = False
 ext = ""
 if len(sys.argv) > 1:
     total = "t" in sys.argv[1]
@@ -42,6 +43,7 @@ if len(sys.argv) > 1:
     tofSensibility = "f" in sys.argv[1]
     kindOfSensibility = "k" in sys.argv[1]
     lmbdas = "l" in sys.argv[1]
+    one = "1" in sys.argv[1]
 if total:
     minAlfa = 0
     maxAlfa = 20
@@ -96,7 +98,7 @@ fig.savefig("totalRates.svg",  bbox_inches='tight')
 
 print(np.shape(tempMavg))
 
-activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext)
+activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext,one)
 ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     ratioEa[:,:,i] = energies[a]

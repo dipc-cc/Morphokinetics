@@ -89,7 +89,7 @@ def getMavgAndOmega(p,temperatures,workingPath):
         
     return tempMavg, tempOavg, totalRate, totalRateEvents, rates, ratios
 
-def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext=""):
+def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="",one=False):
     maxRanges = len(temperatures)
     maxCo2 = int(p.nCo2/10)
     rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
@@ -106,7 +106,16 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
         x = 1/kb/temperatures
         y = totalRate
         if showPlot:
-            fig, axarr = plt.subplots(1, sharex=True, figsize=(5,4))
+            if one:
+                axarr = list()
+                fig, ax = plt.subplots(1, sharex=True, figsize=(5,4))
+                axarr.append(ax)
+                o = 0
+                ymin = 1e-8
+            else:
+                fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
+                o = 1
+                ymin = 1e-4
             #axarr[0].annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
             #axarr[1].annotate("(b)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)
             fig.subplots_adjust(top=0.95,left=0.15, right=0.95)
@@ -114,7 +123,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             axarr = np.zeros(3)
         # N_h
 
-        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr, -1, False, co2, total=total)
+        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2, total=total)
 
         first = True
         omegaSumTof = np.zeros(shape=(len(temperatures)))
@@ -126,22 +135,22 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
                     omegaSumTof += y
                 if p.maxA == 28 and (i == 22 or i == 23 or i == 24):
                     omegaSumTof += y
-                if any(abs(y) >= 1e-8):
-                    mp.plotOmegas(x, y, axarr, i, omega[co2,:,i], ext=="T", labelAlfa)
+                if any(abs(y) >= ymin):
+                    mp.plotOmegas(x, y, axarr[o], i, omega[co2,:,i], ext=="T", labelAlfa,ymin)
                     spl = True
                 else:
                     spl = False
             y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
-
-            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr, i, False, co2, first, total)
+            multiplicityEa[co2,:,i] = mp.localAvgAndPlotLinear(x, y, axarr[0], i, spl and not one, co2, first, total)
             if spl and first:
                 first = False
         if showPlot:
-            axarr.plot(x,omegaSumTof,ls="-", label=r"TOF/R", color="C2")
-            axarr.plot(x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
-            axarr.plot(x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
-            axarr.legend(prop={'size': 5}, loc="best", scatterpoints=1) 
-            fig.savefig(p.rLib+"Plot"+str(co2)+ext+".pdf")
+            if one:
+                axarr[0].plot(x,omegaSumTof,ls="-", label=r"TOF/R", color="C2")
+                axarr[0].plot(x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
+                axarr[0].plot(x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
+                axarr[0].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
+            fig.savefig(p.rLib+"Plot"+str(one)+str(co2)+ext+".pdf")
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa

@@ -108,7 +108,7 @@ def getMec(i):
         mec="none"
     return mec
 
-def plotOmegas(x, y, axis, i, averageLines, total, labelAlfa):
+def plotOmegas(x, y, axis, i, averageLines, total, labelAlfa, ymin):
     inf.smallerFont(axis, 8)
     cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p"]
@@ -129,7 +129,7 @@ def plotOmegas(x, y, axis, i, averageLines, total, labelAlfa):
 
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
-    axis.set_ylim(1e-4,2)
+    axis.set_ylim(ymin,2)
     if total:
         rl = ""
     else:
