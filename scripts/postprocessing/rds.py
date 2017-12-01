@@ -24,10 +24,10 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
     for i,a in enumerate(range(minAlfa,maxAlfa)):
         if any(abs(omega[-1,:,i]) >= minOmega):
-            ax.plot(1/kb/temperatures, (tempMavg[-1,:,i]*ratios[:,i]),label=labelAlfa[a], ls="--", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
+            ax.plot(1/kb/temperatures, (tempMavg[-1,:,i]*ratios[:,i]),label=labelAlfa[a], ls=" ", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
     ax.plot(1/kb/temperatures, rates[-1,:,2])
     ax.legend(loc="best", prop={'size':6})
-    ax.set_ylabel(r"$E^M_\alpha$")
+    ax.set_ylabel(r"$M_\alpha k_\alpha$")
     ax.set_yscale("log")
     ax.set_ylim(1e-7,1e2)
     plt.savefig("rds"+ext+".pdf")#, bbox_inches='tight')
