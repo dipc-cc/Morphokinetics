@@ -26,7 +26,7 @@ def computeMavgAndOmega(fileNumber, p):
     length = len(time)
     Mavg = np.zeros(shape=(length,p.maxA-p.minA))
     for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
-        Mavg[:,i] = possiblesFromList[:,a]/time
+        Mavg[:,i] = possiblesFromList[:,a]/time/p.sizI/p.sizJ
 
     totalRate = np.array(ratios.dot(np.transpose(Mavg)))
     # define omegas 
