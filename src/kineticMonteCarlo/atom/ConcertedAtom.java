@@ -135,7 +135,8 @@ public class ConcertedAtom extends AgAtomSimple {
   }
   
   /**
-   * Returns the type of the neighbour atom if current one would not exist.
+   * Returns the type of the neighbour atom if current one would not exist. It
+   * has to also consider detaching atoms.
    *
    * @param position this position is the original one; has to be inverted.
    * @return the type.
@@ -151,13 +152,14 @@ public class ConcertedAtom extends AgAtomSimple {
     BitSet bits = new BitSet(6);
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       ConcertedAtom neighbour = (ConcertedAtom) getNeighbour(i);
-      if (i != myPositionForNeighbour && neighbour.isOccupied()) {
+      if (i != myPositionForNeighbour && neighbour.isOccupied()) { // exclude origin atom
         bits.set(i);
       }
     }
     type = getTypeCode(type, bits);
     return type;
   }
+  
   /**
    * Gets a BitSet of the current occupancy.
    * 
