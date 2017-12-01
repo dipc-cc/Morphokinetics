@@ -129,7 +129,22 @@ public class ConcertedAtom extends AgAtomSimple {
     }
     return type;
   }
-
+  
+  /**
+   * Returns the type of the neighbour atom if current one would not exist.
+   *
+   * @param position this position is the original one; has to be inverted.
+   * @return the type.
+   */
+  @Override
+  public byte getTypeWithoutNeighbour(int position) {
+    int myPositionForNeighbour = (position + 3) % getNumberOfNeighbours();
+    if (!getNeighbour(myPositionForNeighbour).isOccupied()) return getType(); // impossible to happen
+    
+    byte type = (byte) (getType() - 1);
+    
+    return type;
+  }
   /**
    * Gets a BitSet of the current occupancy.
    * 
@@ -159,9 +174,9 @@ public class ConcertedAtom extends AgAtomSimple {
   }
   
   /**
-   * If the given number from bits is multiple of 7,
-   * all 3 atoms are together.
-   * 
+   * If the given number from bits is multiple of 21 all atoms are separated,
+   * other multiples of 7, all 3 atoms are together.
+   *
    * @param bits
    * @return one subtype or the other.
    */
@@ -170,9 +185,9 @@ public class ConcertedAtom extends AgAtomSimple {
     int second = bits.nextSetBit(first + 1);
     int third = bits.nextSetBit(second + 1);
     int number = (1 << first) | (1 << second) | (1 << third);
-    if (number % 7 == 0) { // all three atoms are together (multiple of 7)
+    if (number % 21 == 0) { // all three atoms are separated (21 or 42)
       return 0;
-    } else if (number % 21 == 0) { // all three atoms are separated (21 or 42)
+    } else if (number % 7 == 0) { // all three atoms are together (multiple of 7)
       return 1;
     } else { // one atom is separated 
       return 2;
