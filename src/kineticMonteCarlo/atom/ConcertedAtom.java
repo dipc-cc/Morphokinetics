@@ -108,8 +108,12 @@ public class ConcertedAtom extends AgAtomSimple {
   @Override
   public byte getRealType() {
     byte type = getType();
-    byte subtype = 0;
     BitSet bits = getCode();
+    return getTypeCode(type,bits);
+  }
+  
+  private byte getTypeCode(byte type, BitSet bits) {
+    byte subtype;
     switch (type) {
       case 0: // no subtype
         return type;
@@ -143,6 +147,15 @@ public class ConcertedAtom extends AgAtomSimple {
     
     byte type = (byte) (getType() - 1);
     
+    //byte subtype = getRealType();
+    BitSet bits = new BitSet(6);
+    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+      ConcertedAtom neighbour = (ConcertedAtom) getNeighbour(i);
+      if (i != myPositionForNeighbour && neighbour.isOccupied()) {
+        bits.set(i);
+      }
+    }
+    type = getTypeCode(type, bits);
     return type;
   }
   /**
@@ -185,7 +198,7 @@ public class ConcertedAtom extends AgAtomSimple {
     int second = bits.nextSetBit(first + 1);
     int third = bits.nextSetBit(second + 1);
     int number = (1 << first) | (1 << second) | (1 << third);
-    if (number % 21 == 0) { // all three atoms are separated (21 or 42)
+    if (number % 21 == 0) { // all three atoms are separated (21 or 42) 
       return 0;
     } else if (number % 7 == 0) { // all three atoms are together (multiple of 7)
       return 1;
