@@ -173,8 +173,12 @@ public class ConcertedAtom extends AgAtomSimple {
    * @return 
    */
   private byte getDetachedType(byte type, int position) {
-    AbstractGrowthAtom neigh1 = getNeighbour(position + 1 % 6);
-    AbstractGrowthAtom neigh2 = getNeighbour(position - 1 % 6);
+    AbstractGrowthAtom neigh1 = getNeighbour((position + 1) % 6);
+    position = position - 1;
+    if (position == -1) {
+      position = 5;
+    }
+    AbstractGrowthAtom neigh2 = getNeighbour(position);
     
     if (!neigh1.isOccupied() && !neigh2.isOccupied()) { // it is detaching, no common neighbours
       return (byte) (type+10);
