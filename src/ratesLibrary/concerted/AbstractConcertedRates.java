@@ -17,7 +17,7 @@ public class AbstractConcertedRates implements IRates {
   private double diffusionMl;
   private double[][] energies;
   
-  private final double prefactor;
+    private final double prefactor;
   /** Temperature (K). */
   private final float temperature;
   
@@ -92,22 +92,22 @@ public class AbstractConcertedRates implements IRates {
 
   @Override
   public double[] getRates(double temperature) {
-    double[] rates = new double[49];
+    double[] rates = new double[192];
 
-    for (int i = 0; i < 7; i++) {
-      for (int j = 0; j < 7; j++) {
-        rates[i * 7 + j] = (getRate(i, j, temperature));
+    for (int i = 0; i < 12; i++) {
+      for (int j = 0; j < 16; j++) {
+        rates[i * 11 + j] = getRate(i, j, temperature);
       }
     }
     return rates;
   }
 
   public double[][] getDiffusionRates() {
-    double[][] rates = new double[7][7];
+    double[][] rates = new double[12][16];
 
-    for (int i = 0; i < 7; i++) {
-      for (int j = 0; j < 7; j++) {
-        rates[i][j] = (getRate(i, j, temperature));
+    for (int i = 0; i < 12; i++) {
+      for (int j = 0; j < 16; j++) {
+        rates[i][j] = getRate(i, j, temperature);
       }
     }
     return rates;
