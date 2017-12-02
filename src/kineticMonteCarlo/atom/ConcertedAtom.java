@@ -151,15 +151,36 @@ public class ConcertedAtom extends AgAtomSimple {
     //byte subtype = getRealType();
     BitSet bits = new BitSet(6);
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      ConcertedAtom neighbour = (ConcertedAtom) getNeighbour(i);
+      AbstractGrowthAtom neighbour = getNeighbour(i);
       if (i != myPositionForNeighbour && neighbour.isOccupied()) { // exclude origin atom
         bits.set(i);
       }
     }
     type = getTypeCode(type, bits);
+    if (type == 1 || type == 2 || type == 3 || type == 5) {
+      AbstractGrowthAtom origin = getNeighbour(myPositionForNeighbour);
+      if (origin.getType() != 0)
+        getDetachedType(type, myPositionForNeighbour);
+    }
     return type;
   }
   
+  /** 
+   * When detaching from an island, the energy has to be different.
+   * 
+   * @param type
+   * @param position
+   * @return 
+   */
+  private byte getDetachedType(byte type, int position) {
+    AbstractGrowthAtom neigh1 = getNeighbour(position + 1 % 6);
+    AbstractGrowthAtom neigh2 = getNeighbour(position - 1 % 6);
+    
+    if (!neigh1.isOccupied() && !neigh2.isOccupied()) { // it is detaching, no common neighbours
+      return (byte) (type+10);
+    }
+    return type;
+  }
   /**
    * Gets a BitSet of the current occupancy.
    * 
