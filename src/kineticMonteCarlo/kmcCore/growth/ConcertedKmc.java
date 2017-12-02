@@ -85,11 +85,10 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
 
   public void setRates(AbstractConcertedRates rates) {
-    diffusionRatePerAtom = new double[7][7]; // empty
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     
     diffusionRatePerAtom = rates.getDiffusionRates();
-    getLattice().setAtomsTypesCounter(7);
+    getLattice().setAtomsTypesCounter(12); // There are 7 types and some have subtypes. See {@link ConcertedAtom#getRealType()} for more information
   }
 
   /**
@@ -392,7 +391,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       ConcertedAtom neighbour = (ConcertedAtom) atom.getNeighbour(i);
       if (!neighbour.isOccupied()) {
-        double probability = getDiffusionRate(atom, neighbour);
+        double probability = getDiffusionRate(atom, neighbour, i);
         atom.addRate(SINGLE, probability, i);
       }
     }
@@ -450,9 +449,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
   }
   
-  private double getDiffusionRate(ConcertedAtom atom, ConcertedAtom neighbour) {
+  private double getDiffusionRate(ConcertedAtom atom, ConcertedAtom neighbour, int position) {
     double probability;
-    probability = diffusionRatePerAtom[atom.getType()][neighbour.getType() - 1];
+    int origType = atom. getRealType();
+    int destType = neighbour.getTypeWithoutNeighbour(position);
+    probability = diffusionRatePerAtom[origType][destType];
     return probability;
   }
   
