@@ -160,7 +160,7 @@ public class ConcertedAtom extends AgAtomSimple {
     if (type == 1 || type == 2 || type == 3 || type == 5) {
       AbstractGrowthAtom origin = getNeighbour(myPositionForNeighbour);
       if (origin.getType() != 0)
-        getDetachedType(type, myPositionForNeighbour);
+        type = getDetachedType(type, myPositionForNeighbour);
     }
     return type;
   }
