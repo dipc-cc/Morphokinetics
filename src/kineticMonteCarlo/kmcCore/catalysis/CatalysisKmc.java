@@ -84,6 +84,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   /** Stores all collections of atoms; either in a tree or an array. */
   AtomsCollection col;
   private final boolean automaticCollections;
+  private final double goMultiplier;
   
   public CatalysisKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -131,6 +132,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     stationary = false;
     stationaryStep = -1;
     automaticCollections = parser.areCollectionsAutomatic();
+    goMultiplier = parser.getGOMultiplier();
   }
 
   @Override
@@ -192,6 +194,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (doDesorption) {
       desorptionRateCOPerSite = rates.getDesorptionRates(CO);
       desorptionRateOPerSite = rates.getDesorptionRates(O);
+      for(int i = 0; i< desorptionRateOPerSite.length; i++){
+          desorptionRateOPerSite[i] = desorptionRateOPerSite[i] *  goMultiplier;
+      }
     }
     if (doReaction) {
       reactionRateCoO = rates.getReactionRates();
@@ -280,7 +285,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
       }
     }
-    if ((stationary && co2sum % 10 == 0 && co2prv != co2sum) || doPrintAllIterations) {
+    if ((stationary && co2sum % 10 == 0 && co2prv != co2sum) || (doPrintAllIterations && simulatedSteps % outputEvery == 0)) {
       if (outputData) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
                 (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),

@@ -246,6 +246,9 @@ public class Parser {
   /** Chooses between exponential distribution of the random genes (true) or linear distribution
    * (false).
    */
+  private double GOmultiplier;
+  /* gets O desorption rate multiplied by a factor for plotting resolution problems */
+  
   private boolean expDistribution;
   /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
    * and HIERARCHY.
@@ -336,6 +339,7 @@ public class Parser {
     hierarchyEvaluator = "basic";
     evolutionarySearchType = "rates";
     fixDiffusion = true;
+    GOmultiplier = 1.0;
     
     restart = new Restart(".");
   }
@@ -743,6 +747,11 @@ public class Parser {
       fixDiffusion = json.getBoolean("fixDiffusion");
     } catch (JSONException e) {
       fixDiffusion = true;
+    }    
+    try {
+      GOmultiplier = json.getDouble("goMultiplier");
+    } catch (JSONException e) {
+      GOmultiplier = 1.0;
     }
     return 0;
   }
@@ -925,6 +934,15 @@ public class Parser {
    */
   public double getPressureO2() {
     return pressureO2;
+  }
+
+  /**
+   * GO Multplier for plotting resolution problem solving.
+   * 
+   * @return GO multiplier.
+   */
+  public double getGOMultiplier() {
+    return GOmultiplier;
   }
   
   /**
