@@ -937,7 +937,7 @@ public class Parser {
   }
 
   /**
-   * GO Multplier for plotting resolution problem solving.
+   * GO multiplier for plotting resolution problem solving.
    * 
    * @return GO multiplier.
    */
