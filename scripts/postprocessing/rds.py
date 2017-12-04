@@ -25,11 +25,11 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     for i,a in enumerate(range(minAlfa,maxAlfa)):
         if any(abs(omega[-1,:,i]) >= minOmega):
             ax.plot(1/kb/temperatures, (tempMavg[-1,:,i]*ratios[:,i]),label=labelAlfa[a], ls=" ", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
-    ax.plot(1/kb/temperatures, rates[-1,:,2])
+    ax.plot(1/kb/temperatures, rates[-1,:,2]/900)
     ax.legend(loc="best", prop={'size':6})
     ax.set_ylabel(r"$M_\alpha k_\alpha$")
     ax.set_yscale("log")
-    ax.set_ylim(1e-7,1e2)
+    ax.set_ylim(1e-9,1e0)
     plt.savefig("rds"+ext+".pdf")#, bbox_inches='tight')
     ##### Relative error (error3)
     error3 = np.zeros(shape=(len(temperatures),maxAlfa-minAlfa))
@@ -80,7 +80,7 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
     ax.plot(1/kb/temperatures,zero,ls="-",color="red")
     for i,a in enumerate(range(minAlfa,maxAlfa)):
-        delta[:,i] =  abs(one-((tempMavg[-1,:,i]*ratios[:,i])/activationEnergyTOF))
+        delta[:,i] =  abs(one-((tempMavg[-1,:,i]*ratios[:,i])/(rates[-1,:,2]/900)))
         if any(abs(omega[-1,:,i]) >= minOmega):
             ax.plot(1/kb/temperatures,delta[:,i],
                     label=labelAlfa[a], ls="", color=cm(abs((a%20)/20)),marker=markers[i%7], mec=mp.getMec(i), alpha=0.75)
