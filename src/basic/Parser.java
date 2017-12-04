@@ -242,13 +242,13 @@ public class Parser {
   /** Minimum possible value that a gene can have. */
   private double minValueGene;
   /** Maximum possible value that a gene can have. */
-  private double maxValueGene;
+  private double maxValueGene;  
+  /** Gets O desorption rate multiplied by a factor for plotting resolution problems. */
+  private double goMultiplier;
+
   /** Chooses between exponential distribution of the random genes (true) or linear distribution
    * (false).
-   */
-  private double GOmultiplier;
-  /* gets O desorption rate multiplied by a factor for plotting resolution problems */
-  
+   */  
   private boolean expDistribution;
   /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
    * and HIERARCHY.
@@ -339,7 +339,7 @@ public class Parser {
     hierarchyEvaluator = "basic";
     evolutionarySearchType = "rates";
     fixDiffusion = true;
-    GOmultiplier = 1.0;
+    goMultiplier = 1.0;
     
     restart = new Restart(".");
   }
@@ -749,9 +749,9 @@ public class Parser {
       fixDiffusion = true;
     }    
     try {
-      GOmultiplier = json.getDouble("goMultiplier");
+      goMultiplier = json.getDouble("goMultiplier");
     } catch (JSONException e) {
-      GOmultiplier = 1.0;
+      goMultiplier = 1.0;
     }
     return 0;
   }
@@ -942,7 +942,7 @@ public class Parser {
    * @return GO multiplier.
    */
   public double getGOMultiplier() {
-    return GOmultiplier;
+    return goMultiplier;
   }
   
   /**
