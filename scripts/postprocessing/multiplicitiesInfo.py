@@ -136,7 +136,11 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
                 if p.maxA == 28 and (i == 22 or i == 23 or i == 24):
                     omegaSumTof += y
                 if any(abs(y) >= ymin):
-                    mp.plotOmegas(x, y, axarr[o], i, omega[co2,:,i], ext=="T", labelAlfa,ymin)
+                    if i == 5:
+                        y *= 2 # adsorption of O has to be double. Rate is from atom and we need to compute molecule.
+                        mp.plotOmegas(x, y, axarr[o], i, omega[co2,:,i], ext=="T", labelAlfa,ymin)
+                    else:
+                        mp.plotOmegas(x, y, axarr[o], i, omega[co2,:,i], ext=="T", labelAlfa,ymin)
                     spl = True
                 else:
                     spl = False
