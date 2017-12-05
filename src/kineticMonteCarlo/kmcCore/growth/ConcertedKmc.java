@@ -21,6 +21,7 @@ import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
 import ratesLibrary.concerted.AbstractConcertedRates;
+import utils.StaticRandom;
 import utils.list.LinearList;
 import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
@@ -240,16 +241,20 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * Moves an island.
    */
   private void diffuseIsland() {
-    Island originIsland = getLattice().getIsland(0);
+    AbstractGrowthAtom iOrigAtom;
+    AbstractGrowthAtom iDestAtom;
+    int randomIsland = StaticRandom.rawInteger(getLattice().getIslandCount());
+    Island originIsland = getLattice().getIsland(randomIsland);
     Island destinationIsland = new Island(originIsland.getIslandNumber());
     int direction = originIsland.getRandomDirection();
     ArrayList<AbstractGrowthAtom> modifiedAtoms = new ArrayList<>();
     ArrayList<AbstractGrowthAtom> postponedAtoms = new ArrayList<>();
     int islandSize = originIsland.getNumberOfAtoms();
     for (int i = 0; i < islandSize; i++) { // Move atoms one by one
-      AbstractGrowthAtom iOrigAtom = originIsland.getAtomAt(0); // hau aldatu in behar da
-      AbstractGrowthAtom iDestAtom = iOrigAtom.getNeighbour(direction);
+      iOrigAtom = originIsland.getAtomAt(0); // hau aldatu in behar da
+      iDestAtom = iOrigAtom.getNeighbour(direction);
       originIsland.removeAtom(iOrigAtom);
+      iOrigAtom.setIslandNumber(0);
       
       if (iDestAtom.isOccupied()) {
         postponedAtoms.add(iOrigAtom);
@@ -267,10 +272,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       }
       
       destinationIsland.addAtom(iDestAtom);
+      iDestAtom.setIslandNumber(randomIsland + 1);
     }
     for (int i = 0; i < postponedAtoms.size(); i++) { // Move rest of the atoms
-      AbstractGrowthAtom iOrigAtom = postponedAtoms.get(i);
-      AbstractGrowthAtom iDestAtom = iOrigAtom.getNeighbour(direction);
+      iOrigAtom = postponedAtoms.get(i);
+      iDestAtom = iOrigAtom.getNeighbour(direction);
       
       getLattice().extract(iOrigAtom);
       getLattice().deposit(iDestAtom, false);
@@ -285,6 +291,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       }
         
       destinationIsland.addAtom(iDestAtom);
+      iDestAtom.setIslandNumber(randomIsland + 1);
     }
     
     //for (int i = 0; i < originIsland.getNumberOfAtoms(); i++) {
