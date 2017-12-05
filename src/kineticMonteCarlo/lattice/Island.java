@@ -67,6 +67,7 @@ public class Island  implements Comparable {
   }
   
   public void addAtom(AbstractGrowthAtom atom) {
+    numberOfAtoms++;
     atoms.add(atom);
   }
   
@@ -87,7 +88,6 @@ public class Island  implements Comparable {
    */
   public void update(double distanceX, double distanceY) {
     double distance = distanceX * distanceX + distanceY * distanceY;
-    numberOfAtoms++;
     updateAvg(distance);
     updateMax(distance);
   }
