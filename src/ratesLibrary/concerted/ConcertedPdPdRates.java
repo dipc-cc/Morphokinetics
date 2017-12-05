@@ -137,5 +137,15 @@ public class ConcertedPdPdRates extends AbstractConcertedRates {
     energies[11][11] = 0; // type 5//*/
     
     setEnergies(energies);
+    
+    double[] concertedEnergies = new double[9]; // up to 8 atom islands
+    concertedEnergies[2] = 0.060; // dimer
+    concertedEnergies[3] = 0.160; 
+    concertedEnergies[4] = 0.180; 
+    concertedEnergies[5] = 0.223; 
+    concertedEnergies[6] = 0.300; 
+    concertedEnergies[7] = 0.400; 
+    concertedEnergies[8] = 0.370; 
+    setConcertedEnergies(concertedEnergies);
   }
 }

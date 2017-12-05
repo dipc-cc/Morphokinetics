@@ -16,6 +16,7 @@ public class AbstractConcertedRates implements IRates {
   
   private double diffusionMl;
   private double[][] energies;
+  private double[] concertedEnergies;
   
     private final double prefactor;
   /** Temperature (K). */
@@ -30,10 +31,21 @@ public class AbstractConcertedRates implements IRates {
     this.energies = energies;
   }
   
+  final void setConcertedEnergies(double[] energies) {
+    this.concertedEnergies = energies;
+  }
+  
   private double getRate(int sourceType, int destinationType, double temperature) {
     return prefactor * Math.exp(-energies[sourceType][destinationType] / (kB * temperature));
   }
 
+  /**
+   * Concerted version.
+   */
+  private double getRate(int size, double temperature) {
+    return prefactor * Math.exp(-concertedEnergies[size] / (kB * temperature));
+  }
+  
   /**
    * In principle, deposition rate is constant to 0.0035 ML/s. What changes is island density.
    * Consequently, deposition rate in practice varies with the temperature.
@@ -109,6 +121,14 @@ public class AbstractConcertedRates implements IRates {
       for (int j = 0; j < 16; j++) {
         rates[i][j] = getRate(i, j, temperature);
       }
+    }
+    return rates;
+  }
+  
+  public double[] getIslandDiffusionRates() {
+    double[] rates = new double[concertedEnergies.length];
+    for (int i = 0; i < concertedEnergies.length; i++) {
+      rates[i] = getRate(i, temperature);
     }
     return rates;
   }
