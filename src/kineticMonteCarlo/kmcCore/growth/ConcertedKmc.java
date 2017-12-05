@@ -72,7 +72,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     // Either a tree or array 
     sites[ADSORB] = col.getCollection(false, ADSORB);
     sites[SINGLE] = col.getCollection(false, SINGLE);
-    sites[CONCERTED] = col.getCollection(false, SINGLE);
+    sites[CONCERTED] = col.getCollection(false, CONCERTED);
 
     totalRate = new double[3]; // adsorption, diffusion, island diffusion
 
