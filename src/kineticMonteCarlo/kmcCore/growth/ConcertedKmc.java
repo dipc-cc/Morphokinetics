@@ -334,12 +334,23 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     recomputeAdsorptionProbability(atom);
     recomputeDiffusionProbability(atom);
     recomputeConcertedDiffusionProbability(atom);
-    // recompute the probability of the neighbour atoms
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      ConcertedAtom neighbour = (ConcertedAtom) atom.getNeighbour(i);
-      recomputeAdsorptionProbability(neighbour);
-      recomputeDiffusionProbability(neighbour);
-      recomputeConcertedDiffusionProbability(neighbour);
+    // recompute the probability of the first and second neighbour atoms
+    int possibleDistance = 0;
+    int thresholdDistance = 2;
+    while (true) {
+      atom = (ConcertedAtom) atom.getNeighbour(4); // get the first neighbour
+      for (int direction = 0; direction < 6; direction++) {
+        for (int j = 0; j <= possibleDistance; j++) {
+          recomputeAdsorptionProbability(atom);
+          recomputeDiffusionProbability(atom);
+          recomputeConcertedDiffusionProbability(atom);
+          atom = (ConcertedAtom) atom.getNeighbour(direction);
+        }
+      }
+      possibleDistance++;
+      if (possibleDistance == thresholdDistance) {
+        break;
+      }
     }
     
     // recompute the probability of the first and scond neighbour atoms
