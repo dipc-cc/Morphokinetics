@@ -215,7 +215,7 @@ public class Parser {
   private final OutputType outputType;
   /**
    * This numbers reflect the power of two and gives the chance to choose between inclusively among
-   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4), XYZ(5), EXTRA2(6), CAT(7) and AETOTAL(8). So a number
+   * TXT(0), MKO(1), PNG(2), EXTRA(3), AE(4), XYZ(5), EXTRA2(6), CAT(7), AETOTAL(8) and SVG(9). So a number
    * between 0 and 2⁸ has to be chosen.
    */
   private long numericFormatCode;
@@ -639,6 +639,9 @@ public class Parser {
         }
         if (type.equals("aetotal")){
           numericFormatCode += 256;
+        }
+        if (type.equals("svg")){
+          numericFormatCode += 512;
         }
       }
     } catch (JSONException e) {

@@ -321,7 +321,8 @@ class RestartLow {
   }
 
   /**
-   * Writes a XYZ format file. 
+   * Writes a XYZ format file.
+   * 
    * @param fileName
    * @param lattice 
    */
@@ -402,6 +403,50 @@ class RestartLow {
       printWriter.close();
       surface.flush();
       surface.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  }
+  
+  /**
+   * Writes a SVG format file.
+   * 
+   * @param fileName
+   * @param lattice 
+   */
+  static void writeSvg(String fileName, AbstractLattice lattice) {
+    // Check that is growth simulation, in etching are missing getUc in AbstractLattice and getPos and isOccupied in AbstractAtom
+ 
+    double scale = 5; // default distance to big enough picture
+    // create file descriptor. It will be automatically closed.
+    try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))){
+      String s = format("<svg height=\"%f\" width=\"%f\">",
+          ((AbstractGrowthLattice) lattice).getCartSizeX() * scale,
+          ((AbstractGrowthLattice) lattice).getCartSizeY() * scale);
+      printWriter.write(s +"\n");
+      IUc uc;
+      double posX;
+      double posY;
+      // for each atom in the uc
+      for (int i = 0; i < lattice.size(); i++) {
+        uc = lattice.getUc(i);
+        for (int j = 0; j < uc.size(); j++) {
+          IAtom atom = uc.getAtom(j);
+          posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
+          posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
+          String colour = "white";
+          if (atom.isOccupied()) {
+            colour = "blue";
+          }
+          s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"2.5\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
+          printWriter.write(s + "\n");
+        }
+      }
+      
+      printWriter.write("</svg>\n");
+      printWriter.flush();
+      printWriter.close();
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();

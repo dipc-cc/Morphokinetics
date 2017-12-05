@@ -300,6 +300,9 @@ public abstract class AbstractSimulation {
         if (parser.getOutputFormats().contains(formatFlag.XYZ)) {
           restart.writeXyz(simulations, getKmc().getLattice());
         }
+        if (parser.getOutputFormats().contains(formatFlag.SVG)) {
+          restart.writeSvg(simulations, getKmc().getLattice());
+        }
         if (parser.getOutputFormats().contains(formatFlag.PNG) && parser.withGui()) {
           printToImage(restartFolderName, simulations);
         }

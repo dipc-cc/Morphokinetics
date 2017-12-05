@@ -318,6 +318,11 @@ public class Restart {
     RestartLow.writeXyz(fileName, lattice);
   }
   
+  public void writeSvg(int simulationNumber, AbstractLattice lattice) {
+    String fileName = format("%ssurface%03d.svg", folder, simulationNumber);
+    RestartLow.writeSvg(fileName, lattice);
+  }
+  
   public void writeExtraOutput(AbstractGrowthLattice lattice, float coverage, int nucleations,
           double time, double adsorptionRate, double diffusionRate, long simulatedSteps, double sumProbabilities) {
     if (extraOutput) {
