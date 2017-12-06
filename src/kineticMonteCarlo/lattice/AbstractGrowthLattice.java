@@ -272,9 +272,12 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return null;
   }
   
-  public void swapIsland(Island origin, Island destination, int i) {
-    islands.remove(i);
-    islands.add(destination);
+  public void swapIsland(Island origin, Island destination) {
+    destination.setTotalRate(origin.getTotalRate());
+    destination.setIslandNumber(origin.getIslandNumber());
+    int number = destination.getIslandNumber();
+    islands.remove(number);
+    islands.add(number, destination);
   }
   
   /**
