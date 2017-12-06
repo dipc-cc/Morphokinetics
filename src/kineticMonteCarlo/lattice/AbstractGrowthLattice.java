@@ -786,4 +786,48 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       emptyTypesCounter[atom.getType()]++;
     }
   }
+  
+  /**
+   * Counts the number of islands from current atom. It iterates trough all neighbours, to set 
+   * all them the same island number.
+   *
+   * @param atom atom to be classified.
+   * @param first previously has detected that a neighbour atom is in an island.
+   * @param fromNeighbour whether is called from outside or recursively.
+   */
+  public void identifyIsland(AbstractGrowthAtom atom, boolean first, boolean fromNeighbour) {
+    if (atom.isOccupied() && first) { // Check all neighbours if they're already in an island
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+        AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+        if (neighbour.getIslandNumber() > 0) {
+          atom.setIslandNumber(neighbour.getIslandNumber());
+          islands.get(neighbour.getIslandNumber() - 1).addAtom(atom);
+          return;
+        }
+      }
+    }
+    if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
+      if (atom.isIsolated()) {
+        atom.setIslandNumber(monomerCount);
+        atom.setVisited(true);
+      } else {
+        islands.add(new Island(islandCount));
+        islandCount++;
+      }
+    }
+    if (atom.isVisited())
+      return;
+    atom.setVisited(true);
+    if (atom.isOccupied()) {
+      // Get atom type
+      atom.setIslandNumber(islandCount);
+      islands.get(islandCount-1).addAtom(atom);
+      for (int pos = 0; pos < atom.getNumberOfNeighbours(); pos++) {
+        AbstractGrowthAtom neighbour = atom.getNeighbour(pos);
+        if (!neighbour.isVisited()) {
+          identifyIsland(neighbour, false, true);
+        }
+      }
+    }
+  }
 }
