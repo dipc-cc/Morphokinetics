@@ -727,6 +727,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     centreMassDistance = Math.pow(distanceXTotal, 2) + Math.pow(distanceYTotal, 2);
     return tracerDistance;
   }
+  
   /**
    * Counts the number of islands that the simulation has. It iterates trough all neighbours, to set 
    * all them the same island number.
@@ -734,7 +735,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param atom atom to be classified.
    * @param fromNeighbour whether is called from outside or recursively.
    */
-  public void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
+  private void identifyIsland(AbstractGrowthAtom atom, boolean fromNeighbour, int xDiference, int yDiference) {
     int xRef = xDiference;
     int yRef = yDiference;
     if (!atom.isVisited() && atom.isOccupied() && !fromNeighbour) {
