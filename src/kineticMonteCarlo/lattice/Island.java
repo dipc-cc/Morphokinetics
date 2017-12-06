@@ -134,4 +134,10 @@ public class Island  implements Comparable {
               + " instance of a Island object.");
     }
   }
+  
+  @Override
+  public String toString() {
+    String returnString = "Island " + islandNumber + " atoms " + numberOfAtoms;
+    return returnString;
+  }
 }
