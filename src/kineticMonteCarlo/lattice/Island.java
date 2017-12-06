@@ -22,6 +22,8 @@ public class Island  implements Comparable {
   private double sumDistance;
   private Point2D centreOfMass;
   private ArrayList<AbstractGrowthAtom> atoms;
+  /** In concerted mode, all island can diffuse with certain rate. */
+  private double totalRate; 
 
   public Island(int islandNumber) {
     this.islandNumber = islandNumber;
@@ -78,6 +80,14 @@ public class Island  implements Comparable {
   
   public AbstractGrowthAtom getAtomAt(int i) {
     return atoms.get(i);
+  }
+
+  public double getTotalRate() {
+    return totalRate;
+  }
+
+  public void setTotalRate(double totalRate) {
+    this.totalRate = totalRate;
   }
   
   /**
