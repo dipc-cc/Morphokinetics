@@ -20,10 +20,15 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   private final ArrayList<T> atomsArray;
   private double totalRate;
   /**
-   * Adsorption, desorption, reaction or diffusion.
+   * The "movements" that atom can do. For example: Adsorption, desorption, reaction or diffusion.
    */
   private final byte process;
   
+  /**
+   * Array List implementation for atom collection storing.
+   * 
+   * @param process The "movements" that atom can do. For example: Adsorption, desorption, reaction or diffusion.
+   */
   public AtomsArrayList(byte process) {
     atomsArray = new ArrayList();
     totalRate = 0.0;
