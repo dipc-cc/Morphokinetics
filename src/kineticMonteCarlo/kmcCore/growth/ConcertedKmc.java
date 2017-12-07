@@ -58,6 +58,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private final boolean aeOutput;
   private final ActivationEnergy activationEnergy;
   private final Restart restart;
+  private final boolean doIslandDiffusion;
  
   public ConcertedKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -83,13 +84,18 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     activationEnergy = new ActivationEnergy(parser);
     restart = new Restart(false, restartFolder);
+    doIslandDiffusion = parser.doIslandDiffusion();
   }
 
   public void setRates(AbstractConcertedRates rates) {
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     
     diffusionRatePerAtom = rates.getDiffusionRates();
-    diffusionRatePerIslandSize = rates.getIslandDiffusionRates();
+    if (doIslandDiffusion) {
+      diffusionRatePerIslandSize = rates.getIslandDiffusionRates();
+    } else {
+      diffusionRatePerIslandSize = new double[9]; // 0 rate for all islands
+    }
     getLattice().setAtomsTypesCounter(12); // There are 7 types and some have subtypes. See {@link ConcertedAtom#getRealType()} for more information
   }
 

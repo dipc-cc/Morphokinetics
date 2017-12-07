@@ -45,6 +45,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   private final short jHexa;
   private int multiplier;
   /**
+   * If current atom belong to an island, its number is stored, otherwise is 0.
+   */
+  private int islandNumber;
+  /**
    * Helper attribute used when counting islands, to check if current atom has
    * been already visited.
    */
@@ -73,6 +77,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     setNumberOfNeighbours(numberOfNeighbours);
     bondsProbability = new double[numberOfNeighbours];
     multiplier = 1;
+    islandNumber = 0;
     visited = false;
     innerPerimeter = false;
     outerPerimeter = false;
@@ -275,11 +280,11 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   }
   
   public void setIslandNumber(int islandNumber) {
-    attributes.setIslandNumber(islandNumber);
+    this.islandNumber = islandNumber;
   }
   
   public int getIslandNumber() {
-    return attributes.getIslandNumber();
+    return islandNumber;
   }
   
   /**

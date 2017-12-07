@@ -208,6 +208,10 @@ public class Parser {
    * See {@link #areCollectionsAutomatic()}.
    */
   private boolean automaticCollections;
+  /**
+   * See {@link #doIslandDiffusion() ()}.
+   */
+  private boolean doIslandDiffusion;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -321,6 +325,7 @@ public class Parser {
     catalysisStart = "O";
     catalysisO2Dissociation = true;
     automaticCollections = false;
+    doIslandDiffusion = true;
     
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -602,6 +607,11 @@ public class Parser {
       automaticCollections = false;
     }
     try {
+      doIslandDiffusion = json.getBoolean("doIslandDiffusion");
+    } catch (JSONException e) {
+      doIslandDiffusion = true;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -807,6 +817,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"catalysisStart\"", catalysisStart);
     System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
     System.out.printf("%32s: %s,\n", "\"automaticCollections\"", automaticCollections);
+    System.out.printf("%32s: %s,\n", "\"doIslandDiffusion\"", doIslandDiffusion);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1607,6 +1618,17 @@ public class Parser {
    */
   public boolean areCollectionsAutomatic() {
     return automaticCollections;
+  }
+  
+  /**
+   * In concerted calculation mode, allow to island to move.
+   * 
+   * Input "parameter" variable: {@code doIslandDiffusion}.
+   * 
+   * @return island moving
+   */
+  public boolean doIslandDiffusion() {
+    return doIslandDiffusion;
   }
   
   public String getEvolutionaryAlgorithm() {
