@@ -250,7 +250,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         return i;
       }
     }
-    return -1;
+    throw new ArrayIndexOutOfBoundsException("\nTotal rate " + totalRate[CONCERTED]
+        + " random number " + randomNumber + " number of islands " + getLattice().getIslandCount()
+        + " sum " + sum);
   }
 
   /**
