@@ -7,7 +7,6 @@ package kineticMonteCarlo.kmcCore.growth;
 import basic.Parser;
 import basic.io.OutputType;
 import basic.io.Restart;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
