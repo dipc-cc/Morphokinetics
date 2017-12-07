@@ -27,7 +27,10 @@ public class AbstractGrowthAtomAttributes {
    * Number of hops that atom has done. How many steps the atom has moved.
    */
   private int hops;
-  
+  /**
+   * If current atom belong to an island, its number is stored, otherwise is 0.
+   */
+  private int islandNumber;
   /**
    * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
    * has to be moved with the corresponding diffusion.
@@ -64,6 +67,14 @@ public class AbstractGrowthAtomAttributes {
   
   public void addOneHop() {
     hops++;
+  }
+
+  public int getIslandNumber() {
+    return islandNumber;
+  }
+
+  public void setIslandNumber(int islandNumber) {
+    this.islandNumber = islandNumber;
   }
   
   public void clear() {
