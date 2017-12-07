@@ -265,16 +265,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     Island destinationIsland = new Island(originIsland.getIslandNumber());
     int direction = originIsland.getRandomDirection();
     ArrayList<AbstractGrowthAtom> modifiedAtoms = new ArrayList<>();
-    ArrayList<AbstractGrowthAtom> postponedAtoms = new ArrayList<>();
-    int islandSize = originIsland.getNumberOfAtoms();
-    for (int i = 0; i < islandSize; i++) { // Move atoms one by one
+    while (originIsland.getNumberOfAtoms() > 0) {     
       iOrigAtom = originIsland.getAtomAt(0); // hau aldatu in behar da
       iDestAtom = iOrigAtom.getNeighbour(direction);
       originIsland.removeAtom(iOrigAtom);
       iOrigAtom.setIslandNumber(0);
       
       if (iDestAtom.isOccupied()) {
-        postponedAtoms.add(iOrigAtom);
+        originIsland.addAtom(iOrigAtom);// move to the back and try again
         continue;
       }
       getLattice().extract(iOrigAtom);
@@ -291,48 +289,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       destinationIsland.addAtom(iDestAtom);
       iDestAtom.setIslandNumber(randomIsland + 1);
     }
-    while (postponedAtoms.size() > 0) { // Move rest of the atoms
-      iOrigAtom = postponedAtoms.get(0);
-      iDestAtom = iOrigAtom.getNeighbour(direction);
-      postponedAtoms.remove(iOrigAtom);
-      if (iDestAtom.isOccupied()) {
-        postponedAtoms.add(iOrigAtom); // move to the back and try again
-        continue;
-      }
-      
-      getLattice().extract(iOrigAtom);
-      getLattice().deposit(iDestAtom, false);
-      iDestAtom.swapAttributes(iOrigAtom);
-      modifiedAtoms.add(iOrigAtom);
-      modifiedAtoms.add(iDestAtom);      
-      // add both neighbourhoods
-      for (int j = 0; j < iOrigAtom.getNumberOfNeighbours(); j++) {
-        modifiedAtoms.add(iOrigAtom.getNeighbour(j));
-        modifiedAtoms.add(iDestAtom.getNeighbour(j));
-      }
-      destinationIsland.addAtom(iDestAtom);
-      iDestAtom.setIslandNumber(randomIsland + 1);
-    }
-    for (int i = 0; i < postponedAtoms.size(); i++) { // Move rest of the atoms
-      iOrigAtom = postponedAtoms.get(i);
-      iDestAtom = iOrigAtom.getNeighbour(direction);
-      
-      getLattice().extract(iOrigAtom);
-      getLattice().deposit(iDestAtom, false);
-      iDestAtom.swapAttributes(iOrigAtom);
-      modifiedAtoms.add(iOrigAtom);
-      modifiedAtoms.add(iDestAtom);      
-      // add both neighbourhoods
-      for (int j = 0; j < iOrigAtom.getNumberOfNeighbours(); j++) {
-        modifiedAtoms.add(iOrigAtom.getNeighbour(j));
-        modifiedAtoms.add(iDestAtom.getNeighbour(j));
-      }
-        
-      destinationIsland.addAtom(iDestAtom);
-      iDestAtom.setIslandNumber(randomIsland + 1);
-    }
     
-    //for (int i = 0; i < originIsland.getNumberOfAtoms(); i++) {
     for (int i = 0; i < modifiedAtoms.size(); i++) { // Update all touched area
       ConcertedAtom atom = (ConcertedAtom) modifiedAtoms.get(i);
       updateRates(atom);
