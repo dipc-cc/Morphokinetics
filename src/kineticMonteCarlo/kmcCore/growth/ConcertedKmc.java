@@ -46,6 +46,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private final float maxCoverage;
   private double adsorptionRatePerSite;
   private double[][] diffusionRatePerAtom;
+  private double[] diffusionRatePerIslandSize;
   // Total rates
   private double[] totalRate;
   /**
@@ -89,6 +90,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     
     diffusionRatePerAtom = rates.getDiffusionRates();
+    diffusionRatePerIslandSize = rates.getIslandDiffusionRates();
     getLattice().setAtomsTypesCounter(12); // There are 7 types and some have subtypes. See {@link ConcertedAtom#getRealType()} for more information
   }
 
@@ -212,6 +214,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     depositAtom(destinationAtom);
     
     updateRates(destinationAtom);
+    updateRatesIslands(null, destinationAtom, false);
     
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
@@ -225,6 +228,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     ConcertedAtom originAtom = (ConcertedAtom) sites[SINGLE].randomAtom();
     ConcertedAtom destinationAtom = originAtom.getRandomNeighbour(SINGLE);
     int oldType = originAtom.getType();
+    boolean wasDimer = originAtom.isDimer();
     getLattice().extract(originAtom);    
     getLattice().deposit(destinationAtom, false);
     
@@ -234,7 +238,19 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     updateRates(originAtom);
     updateRates(destinationAtom);
-    updateRatesIslands(destinationAtom);
+    updateRatesIslands(originAtom, destinationAtom, wasDimer);
+  }
+  
+  private int getRandomIsland() {
+    double randomNumber = StaticRandom.raw() * totalRate[CONCERTED];
+    double sum = 0.0;
+    for (int i = 0; i < getLattice().getIslandCount(); i++) {
+      sum += getLattice().getIsland(i).getTotalRate();
+      if (sum > randomNumber) {
+        return i;
+      }
+    }
+    return -1;
   }
 
   /**
@@ -243,7 +259,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private void diffuseIsland() {
     AbstractGrowthAtom iOrigAtom;
     AbstractGrowthAtom iDestAtom;
-    int randomIsland = StaticRandom.rawInteger(getLattice().getIslandCount());
+    int randomIsland = getRandomIsland();
     Island originIsland = getLattice().getIsland(randomIsland);
     Island destinationIsland = new Island(originIsland.getIslandNumber());
     int direction = originIsland.getRandomDirection();
@@ -274,6 +290,28 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       destinationIsland.addAtom(iDestAtom);
       iDestAtom.setIslandNumber(randomIsland + 1);
     }
+    while (postponedAtoms.size() > 0) { // Move rest of the atoms
+      iOrigAtom = postponedAtoms.get(0);
+      iDestAtom = iOrigAtom.getNeighbour(direction);
+      postponedAtoms.remove(iOrigAtom);
+      if (iDestAtom.isOccupied()) {
+        postponedAtoms.add(iOrigAtom); // move to the back and try again
+        continue;
+      }
+      
+      getLattice().extract(iOrigAtom);
+      getLattice().deposit(iDestAtom, false);
+      iDestAtom.swapAttributes(iOrigAtom);
+      modifiedAtoms.add(iOrigAtom);
+      modifiedAtoms.add(iDestAtom);      
+      // add both neighbourhoods
+      for (int j = 0; j < iOrigAtom.getNumberOfNeighbours(); j++) {
+        modifiedAtoms.add(iOrigAtom.getNeighbour(j));
+        modifiedAtoms.add(iDestAtom.getNeighbour(j));
+      }
+      destinationIsland.addAtom(iDestAtom);
+      iDestAtom.setIslandNumber(randomIsland + 1);
+    }
     for (int i = 0; i < postponedAtoms.size(); i++) { // Move rest of the atoms
       iOrigAtom = postponedAtoms.get(i);
       iDestAtom = iOrigAtom.getNeighbour(direction);
@@ -282,8 +320,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       getLattice().deposit(iDestAtom, false);
       iDestAtom.swapAttributes(iOrigAtom);
       modifiedAtoms.add(iOrigAtom);
-      modifiedAtoms.add(iDestAtom);
-      
+      modifiedAtoms.add(iDestAtom);      
       // add both neighbourhoods
       for (int j = 0; j < iOrigAtom.getNumberOfNeighbours(); j++) {
         modifiedAtoms.add(iOrigAtom.getNeighbour(j));
@@ -299,9 +336,52 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       ConcertedAtom atom = (ConcertedAtom) modifiedAtoms.get(i);
       updateRates(atom);
     }
-    getLattice().swapIsland(originIsland, destinationIsland, 0);
+    //updateRatesIslands((ConcertedAtom) modifiedAtoms.get(1));
+    getLattice().swapIsland(originIsland, destinationIsland);
+    checkMergeIslands(destinationIsland);
   }
   
+  private void checkMergeIslands(Island island) {
+    int islandNumber = island.getIslandNumber() + 1;
+    for (int i = 0; i < island.getNumberOfAtoms(); i++) {
+      AbstractGrowthAtom atom = island.getAtomAt(i);
+      for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
+        AbstractGrowthAtom neighbour = atom.getNeighbour(j);
+        if (neighbour.isOccupied() && neighbour.getIslandNumber() != islandNumber) {
+          // two islands have collided
+          mergeIslands();
+          return;
+        }
+      }
+    }
+  }
+  
+  private void checkMergeIslands(AbstractGrowthAtom atom) {
+    int islandNumber = atom.getIslandNumber();
+    if (islandNumber > 0) {
+      for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
+        AbstractGrowthAtom neighbour = atom.getNeighbour(j);
+        if (neighbour.isOccupied()
+            && neighbour.getIslandNumber() > 0
+            && neighbour.getIslandNumber() != islandNumber) {
+          // two islands have collided
+          mergeIslands();
+          return;
+        }
+      }
+    }
+  }
+  
+  private void mergeIslands() {
+    totalRate[CONCERTED] = 0;
+    getLattice().countIslands(null);
+    for (int i = 0; i < getLattice().getIslandCount(); i++) {
+      double rate = getConcertedDiffusionRate(i + 1);
+      totalRate[CONCERTED] += rate;
+      getLattice().getIsland(i).setTotalRate(rate);
+    }
+  }
+
   /**
    * Iterates over all lattice sites and initialises adsorption probabilities.
    */
@@ -341,6 +421,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     recomputeAdsorptionProbability(atom);
     recomputeDiffusionProbability(atom);
     recomputeConcertedDiffusionProbability(atom);
+    atom.setVisited(false);
     // recompute the probability of the first and second neighbour atoms
     int possibleDistance = 0;
     int thresholdDistance = 2;
@@ -352,6 +433,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
           recomputeDiffusionProbability(atom);
           recomputeConcertedDiffusionProbability(atom);
           atom = (ConcertedAtom) atom.getNeighbour(direction);
+          atom.setVisited(false);
         }
       }
       possibleDistance++;
@@ -376,11 +458,47 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     getList().setRates(totalRate);
   }
   
-  public void updateRatesIslands(ConcertedAtom atom) {
-    if (atom.isDimer()) {
-      atom.isDimer();
-      //getLattice().countIslands(null);
-      getLattice().identifyIsland(atom, false, 0, 0);
+  private void updateRatesIslands(ConcertedAtom origin, ConcertedAtom atom, boolean wasDimer) {
+    boolean checked = false;
+    boolean fromNeighbour = false;
+    if (atom.getIslandNumber() <= 0) {
+      if (atom.getOccupiedNeighbours() > 0) {
+        // Previously one neighbour in an island
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+          if (neighbour.isOccupied() && neighbour.getIslandNumber() > 0) {
+            totalRate[CONCERTED] -= getConcertedDiffusionRate(neighbour.getIslandNumber());
+            getLattice().identifyIsland(atom, true, true);
+            totalRate[CONCERTED] += getConcertedDiffusionRate(atom.getIslandNumber());
+            getLattice().getIsland(atom.getIslandNumber() - 1).setTotalRate(
+                getConcertedDiffusionRate(atom.getIslandNumber()));
+            checked = true;
+            break;
+          }
+        }
+        if (!checked) {
+          getLattice().identifyIsland(atom, false, fromNeighbour);
+          totalRate[CONCERTED] += getConcertedDiffusionRate(atom.getIslandNumber());
+          getLattice().getIsland(atom.getIslandNumber() - 1).setTotalRate(
+              getConcertedDiffusionRate(atom.getIslandNumber()));
+        }
+      }
+    } else {
+      Island island = getLattice().getIsland(atom.getIslandNumber()-1);
+      island.removeAtom(origin);
+      // Check detached
+      if (atom.getOccupiedNeighbours() == 0) {
+        atom.setIslandNumber(0);
+        if (wasDimer) {// A dimer can detach also!
+          mergeIslands(); //recompute again all islands (easiest to implement)
+        }
+      } else {
+        island.addAtom(atom);
+      }
+      
+      
+      // TODO: an atom can go to one island to another.
+      checkMergeIslands(atom);
     }
   }
             
@@ -474,6 +592,19 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     probability = diffusionRatePerAtom[origType][destType];
     return probability;
   }
+  
+  private double getConcertedDiffusionRate(int islandNumber) {
+    Island island = getLattice().getIsland(islandNumber - 1);
+    int numberOfAtoms = island.getNumberOfAtoms();
+    if (numberOfAtoms < 0) {
+      throw new ArrayIndexOutOfBoundsException("The number of atoms in the island is <0, which is in practice impossible");
+    }
+    if (numberOfAtoms < 9)
+      return diffusionRatePerIslandSize[numberOfAtoms];
+    else
+      return 0; // bigger than 8 does not diffuse.
+  }
+  
   
   private void updateRateFromList(byte process) {
     sites[process].recomputeTotalRate(process);
