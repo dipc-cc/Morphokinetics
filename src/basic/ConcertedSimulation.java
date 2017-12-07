@@ -1,5 +1,8 @@
 package basic;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.ConcertedKmc;
 import ratesLibrary.concerted.ConcertedAgAgRates;
 import ratesLibrary.concerted.ConcertedCuNiRates;
@@ -28,24 +31,16 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
  @Override
   public void initialiseKmc() {
     super.initialiseKmc();
-
-    switch (getParser().getRatesLibrary()) {
-      case "CuNi":
-        setRates(new ConcertedCuNiRates(getParser().getTemperature()));
-        break;
-      case "NiCu":
-        setRates(new ConcertedNiCuRates(getParser().getTemperature()));
-        break;
-      case "AgAg":
-        setRates(new ConcertedAgAgRates(getParser().getTemperature()));
-        break;
-      case "PdPd":
-        setRates(new ConcertedPdPdRates(getParser().getTemperature()));
-        break;   
-      default:
-        System.out.println("Rates not set. Execution will fail.");
+    AbstractConcertedRates rates = null;
+    String className;
+    className = "ratesLibrary.concerted.Concerted" + getParser().getRatesLibrary() + "Rates";
+    try {
+      Class<?> genericClass = Class.forName(className);
+      rates = (AbstractConcertedRates) genericClass.getConstructors()[0].newInstance(getParser().getTemperature());
+    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+      Logger.getLogger(ConcertedSimulation.class.getName()).log(Level.SEVERE, null, ex);
     }
-    
+    setRates(rates);
     setKmc(new ConcertedKmc(getParser(), getRestartFolderName()));
     initialiseRates(getRates(), getParser());
   }
