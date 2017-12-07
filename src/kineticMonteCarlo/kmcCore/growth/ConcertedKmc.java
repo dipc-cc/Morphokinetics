@@ -422,47 +422,50 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     getList().setRates(totalRate);
   }
   
-  private void updateRatesIslands(ConcertedAtom origin, ConcertedAtom atom, boolean wasDimer) {
+  private void updateRatesIslands(ConcertedAtom origin, ConcertedAtom destination, boolean wasDimer) {
     boolean checked = false;
     boolean fromNeighbour = false;
-    if (atom.getIslandNumber() <= 0) {
-      if (atom.getOccupiedNeighbours() > 0) {
-        // Previously one neighbour in an island
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-          AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+    if (origin != null && origin.getIslandNumber() > 0) { // origin atom was on a island; remove it.
+      getLattice().getIsland(origin.getIslandNumber() - 1).removeAtom(origin);
+      origin.setIslandNumber(0);
+    }
+    if (destination.getIslandNumber() <= 0) { // destination atom was not on an island
+      if (destination.getOccupiedNeighbours() > 0) { // previously one neighbour was in an island
+        for (int i = 0; i < destination.getNumberOfNeighbours(); i++) {
+          AbstractGrowthAtom neighbour = destination.getNeighbour(i);
           if (neighbour.isOccupied() && neighbour.getIslandNumber() > 0) {
-            totalRate[CONCERTED] -= getConcertedDiffusionRate(neighbour.getIslandNumber());
-            getLattice().identifyIsland(atom, true, true);
-            totalRate[CONCERTED] += getConcertedDiffusionRate(atom.getIslandNumber());
-            getLattice().getIsland(atom.getIslandNumber() - 1).setTotalRate(
-                getConcertedDiffusionRate(atom.getIslandNumber()));
+            totalRate[CONCERTED] -= getLattice().getIsland(neighbour.getIslandNumber()-1).getTotalRate();
+            getLattice().identifyIsland(destination, true, true);
+            totalRate[CONCERTED] += getConcertedDiffusionRate(destination.getIslandNumber());
+            getLattice().getIsland(destination.getIslandNumber() - 1).setTotalRate(
+                getConcertedDiffusionRate(destination.getIslandNumber()));
             checked = true;
             break;
           }
         }
         if (!checked) {
-          getLattice().identifyIsland(atom, false, fromNeighbour);
-          totalRate[CONCERTED] += getConcertedDiffusionRate(atom.getIslandNumber());
-          getLattice().getIsland(atom.getIslandNumber() - 1).setTotalRate(
-              getConcertedDiffusionRate(atom.getIslandNumber()));
+          getLattice().identifyIsland(destination, false, fromNeighbour);
+          totalRate[CONCERTED] += getConcertedDiffusionRate(destination.getIslandNumber());
+          getLattice().getIsland(destination.getIslandNumber() - 1).setTotalRate(
+              getConcertedDiffusionRate(destination.getIslandNumber()));
         }
       }
     } else {
-      Island island = getLattice().getIsland(atom.getIslandNumber()-1);
+      Island island = getLattice().getIsland(destination.getIslandNumber()-1);
       island.removeAtom(origin);
       // Check detached
-      if (atom.getOccupiedNeighbours() == 0) {
-        atom.setIslandNumber(0);
+      if (destination.getOccupiedNeighbours() == 0) {
+        destination.setIslandNumber(0);
         if (wasDimer) {// A dimer can detach also!
           mergeIslands(); //recompute again all islands (easiest to implement)
         }
       } else {
-        island.addAtom(atom);
+        island.addAtom(destination);
       }
       
       
       // TODO: an atom can go to one island to another.
-      checkMergeIslands(atom);
+      checkMergeIslands(destination);
     }
   }
             
