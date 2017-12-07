@@ -131,7 +131,7 @@ public class ConcertedAtom extends AgAtomSimple {
       case 5: // no subtype
         return 10;
     }
-    return type;
+    throw new ArrayIndexOutOfBoundsException("Origin type has to be 0 <= x <= 5");
   }
   
   /**
