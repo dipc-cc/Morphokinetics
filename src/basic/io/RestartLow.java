@@ -437,7 +437,15 @@ class RestartLow {
           posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
           String colour = "white";
           if (atom.isOccupied()) {
-            colour = "blue";
+            colour = "black";
+            switch ((int) atom.getType()) {
+              case 0:
+                colour = "blue";
+                break;
+              case 1:
+                colour = "red";
+                break;
+            }
           }
           s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"2.5\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
           printWriter.write(s + "\n");
