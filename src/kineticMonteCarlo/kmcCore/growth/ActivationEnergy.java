@@ -43,7 +43,8 @@ public class ActivationEnergy {
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
   private double previousProbability;
-  private int length;
+  private int lengthI;
+  private int lengthJ;
   private int numberOfNeighbours;
   private double[][] rates;
 
@@ -54,29 +55,32 @@ public class ActivationEnergy {
     if (aeOutput) {
       if (parser.getCalculationMode().equals("basic")) {
         doActivationEnergyStudy = true;
-        length = 4;
+        lengthI = 4;
+        lengthJ = lengthI;
         numberOfNeighbours = 4;
       }
       if (parser.getCalculationMode().equals("graphene")) {
         doActivationEnergyStudy = true;
         if (parser.getRatesLibrary().equals("GaillardSimple")) {
-          length = 4;
+          lengthI = 4;
+          lengthJ = lengthI;
           numberOfNeighbours = 3;
         } else {
-          length = 8;
+          lengthI = 8;
+          lengthJ = lengthI;
           numberOfNeighbours = 12;
         }
       }
       if (parser.getCalculationMode().equals("Ag") || 
-          parser.getCalculationMode().equals("AgUc") || 
-          parser.getCalculationMode().equals("concerted"))   {
+          parser.getCalculationMode().equals("AgUc"))   {
         doActivationEnergyStudy = true;
-        length = 7;
+        lengthI = 7;
+        lengthJ = lengthI;
         numberOfNeighbours = 6;
       }
       if (parser.getCalculationMode().equals("catalysis")){
         doActivationEnergyStudy = true;
-        length = 2;
+        lengthI = 2;
         numberOfNeighbours = 4;
         histogramPossibleAdsorption = new Double[2];
         histogramPossibleDesorption = new Double[2][2][3];
@@ -95,13 +99,19 @@ public class ActivationEnergy {
           }
         }
       }
-      histogramPossible = new Double[length][length];
-      histogramPossibleCounter = new Long[length][length];
-      histogramPossibleTmp = new Double[length][length];
-      histogramPossibleCounterTmp = new Long[length][length];
-      histogramSuccess = new Integer[length][length];
-      for (int i = 0; i < length; i++) {
-        for (int j = 0; j < length; j++) {
+      if (parser.getCalculationMode().equals("concerted")) {
+        doActivationEnergyStudy = true;
+        lengthI = 12;
+        lengthJ = 15;
+        numberOfNeighbours = 6;
+      }
+      histogramPossible = new Double[lengthI][lengthJ];
+      histogramPossibleCounter = new Long[lengthI][lengthJ];
+      histogramPossibleTmp = new Double[lengthI][lengthJ];
+      histogramPossibleCounterTmp = new Long[lengthI][lengthJ];
+      histogramSuccess = new Integer[lengthI][lengthJ];
+      for (int i = 0; i < lengthI; i++) {
+        for (int j = 0; j < lengthJ; j++) {
           histogramPossible[i][j] = new Double(0);
           histogramPossibleCounter[i][j] = new Long(0);
           histogramPossibleTmp[i][j] = new Double(0);
@@ -126,7 +136,7 @@ public class ActivationEnergy {
    */
   public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy && stationary) {
-      histogramPossibleTmp = initDouble(length);
+      histogramPossibleTmp = initDouble();
       for (int i = 0; i < lattice.size(); i++) {
         SimpleUc uc = (SimpleUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
@@ -206,7 +216,7 @@ public class ActivationEnergy {
     if (doActivationEnergyStudy && stationary) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       
-      histogramPossibleTmp = initDouble(length);
+      histogramPossibleTmp = initDouble();
       while (surface.hasNext()) {
         CatalysisAtom atom = surface.next();
         for (int pos = 0; pos < numberOfNeighbours; pos++) {
@@ -239,8 +249,8 @@ public class ActivationEnergy {
   public void updatePossibles(Iterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
-        histogramPossibleTmp = initDouble(length);
-        histogramPossibleCounterTmp = initLong(length);
+        histogramPossibleTmp = initDouble();
+        histogramPossibleCounterTmp = initLong();
         // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
         while (surface.hasNext()) {
           AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.next();
@@ -258,8 +268,8 @@ public class ActivationEnergy {
         }
         previousProbability = totalAndDepositionProbability;
       } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
-        for (int i = 0; i < length; i++) {
-          for (int j = 0; j < length; j++) {
+        for (int i = 0; i < lengthI; i++) {
+          for (int j = 0; j < lengthJ; j++) {
             histogramPossible[i][j] += histogramPossibleTmp[i][j];
             histogramPossibleCounter[i][j] += histogramPossibleCounterTmp[i][j];
           }
@@ -280,16 +290,16 @@ public class ActivationEnergy {
     surface.clear();
     previousProbability = 0;
     if (aeOutput) {
-      histogramPossible = initDouble(length);
-      histogramPossibleCounter = initLong(length);
-      histogramPossibleTmp = initDouble(length);
-      histogramPossibleCounterTmp = initLong(length);
-      histogramSuccess = initInt(length);
+      histogramPossible = initDouble();
+      histogramPossibleCounter = initLong();
+      histogramPossibleTmp = initDouble();
+      histogramPossibleCounterTmp = initLong();
+      histogramSuccess = initInt();
       
       histogramPossibleReactionCoCus = initDouble1(3);
-      histogramPossibleAdsorption = initDouble1(length);
-      histogramPossibleDesorption = initDouble3(length);
-      histogramPossibleDiffusion = initDouble4(length);
+      histogramPossibleAdsorption = initDouble1(lengthI);
+      histogramPossibleDesorption = initDouble3();
+      histogramPossibleDiffusion = initDouble4();
     }
   }
   
@@ -419,10 +429,10 @@ public class ActivationEnergy {
     return histogram;
   }
   
-  private Double[][][] initDouble3(int length) {
-    Double[][][] histogram = new Double[length][length][3];
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
+  private Double[][][] initDouble3() {
+    Double[][][] histogram = new Double[lengthI][lengthJ][3];
+    for (int i = 0; i < lengthI; i++) {
+      for (int j = 0; j < lengthJ; j++) {
         for (int k = 0; k < 3; k++) {
           histogram[i][j][k] = new Double(0);
         }
@@ -431,11 +441,11 @@ public class ActivationEnergy {
     return histogram;
   }
   
-  private Double[][][][] initDouble4(int length) {
-    Double[][][][] histogram = new Double[length][length][length][3];
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
-        for (int k = 0; k < length; k++) {
+  private Double[][][][] initDouble4() {
+    Double[][][][] histogram = new Double[lengthI][lengthJ][lengthI][3];
+    for (int i = 0; i < lengthI; i++) {
+      for (int j = 0; j < lengthJ; j++) {
+        for (int k = 0; k < lengthI; k++) {
           for (int l = 0; l < 3; l++) {
             histogram[i][j][k][l] = new Double(0);
           }
@@ -446,30 +456,30 @@ public class ActivationEnergy {
   }
   
   
-  private Double[][] initDouble(int length) {
-    Double[][] histogram = new Double[length][length];
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
+  private Double[][] initDouble() {
+    Double[][] histogram = new Double[lengthI][lengthJ];
+    for (int i = 0; i < lengthI; i++) {
+      for (int j = 0; j < lengthJ; j++) {
         histogram[i][j] = new Double(0);
       }
     }
     return histogram;
   }
   
-  private Long[][] initLong(int length) {
-    Long[][] histogram = new Long[length][length];
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
+  private Long[][] initLong() {
+    Long[][] histogram = new Long[lengthI][lengthJ];
+    for (int i = 0; i < lengthI; i++) {
+      for (int j = 0; j < lengthJ; j++) {
         histogram[i][j] = new Long(0);
       }
     }
     return histogram;
   }
   
-  private Integer[][] initInt(int length) {
-    Integer[][] histogram = new Integer[length][length];
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
+  private Integer[][] initInt() {
+    Integer[][] histogram = new Integer[lengthI][lengthJ];
+    for (int i = 0; i < lengthI; i++) {
+      for (int j = 0; j < lengthJ; j++) {
         histogram[i][j] = new Integer(0);
       }
     }
