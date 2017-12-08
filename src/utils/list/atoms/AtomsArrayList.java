@@ -154,4 +154,22 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   public boolean isEmpty() {
     return size() == 0;
   }
+  
+  /**
+   * Return an atom with the same atom Id that was given from the list.
+   * 
+   * @param atom fake atom with correct Id to search for.
+   * @return found atom, null otherwise.
+   */
+  @Override
+  public T search(T atom) {
+    Iterator<T> iter = atomsArray.iterator();
+    while (iter.hasNext()) {
+      T current = iter.next();
+      if (current.compareTo(atom) == 0) {
+        return current;
+      }
+    }
+    return null;
+  }
 }

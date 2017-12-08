@@ -44,4 +44,6 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   public int size();
   
   public boolean isEmpty();
+  
+  public T search(T atom);
 }

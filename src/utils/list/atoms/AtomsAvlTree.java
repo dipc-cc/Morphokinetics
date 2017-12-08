@@ -249,4 +249,15 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   public Iterator<T> iterator() {
     return tree.iterator(process);
   }
+  
+  /**
+   * Not yet implemented.
+   * 
+   * @param atom
+   * @return 
+   */
+  @Override
+  public T search(T atom) {
+    return null;
+  }
 }
