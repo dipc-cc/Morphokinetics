@@ -147,6 +147,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
               coverageThreshold = 1;
             }
             printData();
+            mergeIslands(); // recompute island's rate, after island counting have been deleted in previous islands counting.
             coverageThreshold++;
           }
         if (performSimulationStep()) {
