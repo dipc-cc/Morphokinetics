@@ -618,41 +618,6 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   /**
-   * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).
-   */
-  public void printRates() {
-    /*System.out.println(" Process ");
-    System.out.println(" ------- ");
-    System.out.format("%s\t%1.1e\n", "CO adsorption\t", adsorptionRateCOPerSite);
-    System.out.format("%s\t%1.1e\t%1.1e\n", " O adsorption\t",adsorptionRateOPerSite, adsorptionRateOPerSite * 2);
-    System.out.println(" ------- ");
-    System.out.println("Desorption");
-    System.out.format("%s\t\t%1.1e\n","CO^BR", desorptionRateCOPerSite[0]);
-    System.out.format("%s\t\t%1.1e\n", "CO^CUS", desorptionRateCOPerSite[1]);
-    System.out.format("%s\t%1.1e\n", "O^BR + O^BR", desorptionRateOPerSite[0]);
-    System.out.format("%s\t%1.1e\n", "O^BR + O^CUS", desorptionRateOPerSite[1]);
-    System.out.format("%s\t%1.1e\n", "O^CUS + O^BR", desorptionRateOPerSite[2]);
-    System.out.format("%s\t%1.1e\n", "O^CUS + O^CUS", desorptionRateOPerSite[3]);
-    System.out.println(" ------- ");
-    System.out.println("Reaction");
-    System.out.format("%s\t%1.1e\n", "CO^BR + O^BR", reactionRateCoO[0]);
-    System.out.format("%s\t%1.1e\n", "CO^BR + O^CUS", reactionRateCoO[1]);
-    System.out.format("%s\t%1.1e\n", "CO^CUS + O^BR", reactionRateCoO[2]);
-    System.out.format("%s\t%1.1e\n", "CO^CUS + O^CUS", reactionRateCoO[3]);
-    System.out.println(" ------- ");
-    System.out.println("Diffusion");
-    System.out.format("%s\t%1.1e\n", "CO^BR -> CO^BR  ", diffusionRateCO[0]);
-    System.out.format("%s\t%1.1e\n", "CO^BR -> CO^CUS ", diffusionRateCO[1]);
-    System.out.format("%s\t%1.1e\n", "CO^CUS -> CO^BR ", diffusionRateCO[2]);
-    System.out.format("%s\t%1.1e\n", "CO^CUS -> CO^CUS", diffusionRateCO[3]);
-    System.out.println(" ------- ");
-    System.out.format("%s\t%1.1e\n", "O^BR -> O^BR    ", diffusionRateO[0]);
-    System.out.format("%s\t%1.1e\n", "O^BR -> O^CUS   ", diffusionRateO[1]);
-    System.out.format("%s\t%1.1e\n", "O^CUS -> O^BR   ", diffusionRateO[2]);
-    System.out.format("%s\t%1.1e\n", "O^CUS -> O^CUS  ", diffusionRateO[3]);//*/
-  }
-  
-  /**
    * Print current information to extra file.
    *
    * @param coverage used to have exactly the coverage and to be easily greppable.
