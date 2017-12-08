@@ -198,16 +198,30 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   private ConcertedAtom depositNewAtom() {
+    return depositNewAtom(-1);
+  }
+  
+  /**
+   * Deposit new atom in with the given label.
+   * 
+   * @param id if negative, random number is chosen.
+   * @return 
+   */
+  private ConcertedAtom depositNewAtom(int id) {
     ConcertedAtom destinationAtom = null;
     int ucIndex = 0;
     byte atomType;
-    
-     if (sites[ADSORB].isEmpty()) {
+
+    if (sites[ADSORB].isEmpty()) {
       // can not deposit anymore
       return null;
     }
-
-    destinationAtom = (ConcertedAtom) sites[ADSORB].randomAtom();
+    
+    if (id < 0) {
+      destinationAtom = (ConcertedAtom) sites[ADSORB].randomAtom();
+    } else {
+      destinationAtom = (ConcertedAtom) sites[ADSORB].search(new ConcertedAtom(id, -1));
+    }
 
     if (destinationAtom == null || destinationAtom.getRate(ADSORB) == 0 || destinationAtom.isOccupied()) {
       boolean isThereAnAtom = destinationAtom == null;
@@ -462,9 +476,6 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       } else {
         island.addAtom(destination);
       }
-      
-      
-      // TODO: an atom can go to one island to another.
       checkMergeIslands(destination);
     }
   }
