@@ -108,7 +108,7 @@ public class AbstractConcertedRates implements IRates {
 
     for (int i = 0; i < 12; i++) {
       for (int j = 0; j < 16; j++) {
-        rates[i * 11 + j] = getRate(i, j, temperature);
+        rates[i * 16 + j] = getRate(i, j, temperature);
       }
     }
     return rates;
