@@ -4,12 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.ConcertedKmc;
-import ratesLibrary.concerted.ConcertedAgAgRates;
-import ratesLibrary.concerted.ConcertedCuNiRates;
-import ratesLibrary.concerted.ConcertedNiCuRates;
 import ratesLibrary.IRates;
 import ratesLibrary.concerted.AbstractConcertedRates;
-import ratesLibrary.concerted.ConcertedPdPdRates;
 
 
 /*
@@ -83,5 +79,13 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
     }
     System.out.println("Deposition rate (per site): " + getRates().getDepositionRatePerSite());
     System.out.println("Island density:             " + getRates().getIslandDensity(parser.getTemperature()));
+    
+    double[] concertedRates = ((AbstractConcertedRates) getRates()).getIslandDiffusionRates();
+    
+    System.out.println("Island diffusion rates:");
+    for (int i = 0; i < concertedRates.length; i++) {
+      System.out.print(concertedRates[i] + " ");
+    }
+    System.out.println("");
   }
 }
