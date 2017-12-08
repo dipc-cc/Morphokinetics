@@ -57,4 +57,31 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
     ((ConcertedKmc) getKmc()).setRates(r);
   }
   
+  @Override
+  public void printRates(Parser parser) {
+    double[] rates = getRates().getRates(parser.getTemperature());
+    //we modify the 1D array into a 2D array;
+    int columns = 16;
+    int rows = 12;
+    
+    // print header
+    System.out.println("   0          1          12         2          13         3          14         4"+
+        "          5          15         6          7          8          9          10         11");
+    System.out.println("   0          1           2         3           4         5           6         7"+
+        "          8           9         10         11         12         13         14         15");
+
+    for (int i = 0; i < rows; i++) {
+      System.out.printf("%02d ",i);
+      for (int j = 0; j < columns; j++) {
+        if (rates[i * columns + j] < 1e-120) {
+          System.out.printf("           ");
+        } else {
+          System.out.printf("%1.3E  ", rates[i * columns + j]);
+        }
+      }
+      System.out.println(" ");
+    }
+    System.out.println("Deposition rate (per site): " + getRates().getDepositionRatePerSite());
+    System.out.println("Island density:             " + getRates().getIslandDensity(parser.getTemperature()));
+  }
 }
