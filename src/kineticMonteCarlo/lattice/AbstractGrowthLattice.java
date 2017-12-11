@@ -498,6 +498,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         atom.clear();
       }
     }
+    islands = new ArrayList<>(); // empty islands
+    islandCount = 0;
   }
 
   /**
