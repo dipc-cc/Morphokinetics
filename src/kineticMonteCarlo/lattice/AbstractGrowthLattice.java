@@ -698,7 +698,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return abs(value) < 1e-10 ? -0.0d : value;
   }
 
-  double computeDiffusivity() {
+  private double computeDiffusivity() {
     tracerDistance = 0;
     centreMassDistance = 0;
     hops = 0;
