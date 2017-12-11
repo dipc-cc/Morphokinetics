@@ -35,7 +35,15 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   
   public void recomputeTotalRate(byte process);
   
+  /**
+   * Used to recompute the collection.
+   */
   public void clear();
+  
+  /**
+   * Used to empty the collection.
+   */
+  public void reset();
   
   public T randomAtom();
   

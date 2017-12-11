@@ -117,6 +117,11 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
 
   @Override
+  public void reset() {
+    clear();
+  }
+  
+  @Override
   public T randomAtom() {
     T a = null;
     double randomNumber = StaticRandom.raw() * totalRate;

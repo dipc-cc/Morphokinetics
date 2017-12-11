@@ -135,6 +135,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     }
   }
 
+  /**
+   * Used to recompute the tree/total rate.
+   */
   @Override
   public void clear() {
     occupied = 0;
@@ -149,6 +152,22 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     clear(n.getRight());
   }
   
+  /**
+   * Empties current tree.
+   */
+  @Override
+  public void reset() {
+    occupied = 0;
+    reset(tree.getRoot());
+  }
+  
+  private void reset(Node n) {
+    if (n == null)
+      return;
+    ((AbstractGrowthAtom) n.getData()).clear();
+    reset(n.getLeft());
+    reset(n.getRight());
+  }
   @Override
   public void recomputeTotalRate(byte process) {
     clear();
