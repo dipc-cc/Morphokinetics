@@ -81,5 +81,6 @@ public class AbstractGrowthAtomAttributes {
     depositionPosition = null;
     depositionTime = 0;
     hops = 0;
+    islandNumber = 0;
   }
 }
