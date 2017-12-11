@@ -438,6 +438,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   private void updateRatesIslands(ConcertedAtom origin, ConcertedAtom destination, boolean wasDimer) {
+    if (!doIslandDiffusion) {
+      return;
+    }
     boolean checked = false;
     boolean fromNeighbour = false;
     if (origin != null && origin.getIslandNumber() > 0) { // origin atom was on a island; remove it.
