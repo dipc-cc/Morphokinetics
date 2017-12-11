@@ -184,9 +184,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     getLattice().reset();
     getList().reset();
     restart.reset();
-    sites[ADSORB].clear();
-    sites[SINGLE].clear();
-    sites[CONCERTED].clear();
+    sites[ADSORB].reset();
+    sites[SINGLE].reset();
+    sites[CONCERTED].reset();
   }
   
   private boolean depositAtom(ConcertedAtom atom) {
