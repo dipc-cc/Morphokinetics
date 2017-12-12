@@ -19,6 +19,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CO;
 import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.unitCell.SimpleUc;
 
 /**
@@ -39,6 +40,8 @@ public class ActivationEnergy {
   private Long[][] histogramPossibleCounter;
   private Double[][] histogramPossibleTmp;
   private Long[][] histogramPossibleCounterTmp;
+  private Double[] histogramPossibleConcerted;
+  private Double[] histogramPossibleConcertedTmp;
   private final ArrayList<AbstractAtom> surface;
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
@@ -104,6 +107,8 @@ public class ActivationEnergy {
         lengthI = 12;
         lengthJ = 15;
         numberOfNeighbours = 6;
+        histogramPossibleConcerted = new Double[8];
+        histogramPossibleConcertedTmp = new Double[8];
       }
       histogramPossible = new Double[lengthI][lengthJ];
       histogramPossibleCounter = new Long[lengthI][lengthJ];
@@ -278,6 +283,23 @@ public class ActivationEnergy {
     }
   }
 
+  public void updatePossiblesIslands(Iterator<Island> islands, double totalAndDepositionProbability, double elapsedTime) {
+    if (doActivationEnergyStudy) {
+      if (previousProbability != totalAndDepositionProbability) {
+        histogramPossibleConcertedTmp = new Double[8];
+        // iterate over all islands of the surface to get all possible hops (only to compute multiplicity)
+        while (islands.hasNext()) {
+          Island island = (Island) islands.next();
+          histogramPossibleConcerted[island.getNumberOfAtoms()]++;
+        }
+      } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
+        for (int i = 0; i < 8; i++) {
+          histogramPossibleConcerted[i] += histogramPossibleConcertedTmp[i];
+        }
+
+      }
+    }
+  }
   public void updateSuccess(int oldType, int newType) {
     histogramSuccess[oldType][newType]++;
   }
