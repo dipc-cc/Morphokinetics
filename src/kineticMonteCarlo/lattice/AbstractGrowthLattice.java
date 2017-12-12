@@ -24,6 +24,7 @@ import static java.lang.Math.sin;
 import static java.lang.Math.round;
 import static java.lang.Math.abs;
 import static java.lang.Math.floorDiv;
+import java.util.Iterator;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -297,6 +298,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   @Override
   public int getIslandCount() {
     return islandCount;
+  }
+
+  public Iterator<Island> getIslandIterator() {
+    return islands.iterator();
   }
 
   @Override
