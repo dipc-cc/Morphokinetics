@@ -141,6 +141,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         }
       } else {
         activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+        //activationEnergy.updatePossiblesIslands(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
         if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
@@ -479,6 +480,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         }
       } else {
         island.addAtom(destination);
+      }
+      //check attached (by diffusion)
+      int currentIsland = destination.getIslandNumber();
+      for (int i = 0; i < destination.getNumberOfNeighbours(); i++) {
+        AbstractGrowthAtom neighbour = destination.getNeighbour(i);
+        if (neighbour.isOccupied() && neighbour.getIslandNumber() != currentIsland) {
+          mergeIslands(); //recompute again all islands (easiest to implement)
+        }
       }
       checkMergeIslands(destination);
     }
