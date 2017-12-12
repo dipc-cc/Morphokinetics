@@ -105,7 +105,7 @@ public class ActivationEnergy {
       if (parser.getCalculationMode().equals("concerted")) {
         doActivationEnergyStudy = true;
         lengthI = 12;
-        lengthJ = 15;
+        lengthJ = 16;
         numberOfNeighbours = 6;
         histogramPossibleConcerted = new Double[8];
         histogramPossibleConcertedTmp = new Double[8];
