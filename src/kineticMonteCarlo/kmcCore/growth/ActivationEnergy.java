@@ -107,8 +107,8 @@ public class ActivationEnergy {
         lengthI = 12;
         lengthJ = 16;
         numberOfNeighbours = 6;
-        histogramPossibleConcerted = new Double[8];
-        histogramPossibleConcertedTmp = new Double[8];
+        histogramPossibleConcerted = new Double[9];
+        histogramPossibleConcertedTmp = new Double[9];
       }
       histogramPossible = new Double[lengthI][lengthJ];
       histogramPossibleCounter = new Long[lengthI][lengthJ];
@@ -285,19 +285,20 @@ public class ActivationEnergy {
 
   public void updatePossiblesIslands(Iterator<Island> islands, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
-      if (previousProbability != totalAndDepositionProbability) {
-        histogramPossibleConcertedTmp = new Double[8];
+      //if (previousProbability != totalAndDepositionProbability) {
+        histogramPossibleConcertedTmp = new Double[9];
         // iterate over all islands of the surface to get all possible hops (only to compute multiplicity)
         while (islands.hasNext()) {
           Island island = (Island) islands.next();
-          histogramPossibleConcerted[island.getNumberOfAtoms()]++;
+          if (island.getNumberOfAtoms() < 9) {
+            histogramPossibleConcerted[island.getNumberOfAtoms()] += elapsedTime;
+          }
         }
-      } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
-        for (int i = 0; i < 8; i++) {
+      /*} else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
+        for (int i = 0; i < 9; i++) {
           histogramPossibleConcerted[i] += histogramPossibleConcertedTmp[i];
         }
-
-      }
+      }*/
     }
   }
   public void updateSuccess(int oldType, int newType) {
@@ -323,8 +324,8 @@ public class ActivationEnergy {
       histogramPossibleDesorption = initDouble3();
       histogramPossibleDiffusion = initDouble4();
       
-      histogramPossibleConcerted = initDouble1(8);
-      histogramPossibleConcertedTmp = initDouble1(8);
+      histogramPossibleConcerted = initDouble1(9);
+      histogramPossibleConcertedTmp = initDouble1(9);
     }
   }
   
