@@ -322,6 +322,9 @@ public class ActivationEnergy {
       histogramPossibleAdsorption = initDouble1(lengthI);
       histogramPossibleDesorption = initDouble3();
       histogramPossibleDiffusion = initDouble4();
+      
+      histogramPossibleConcerted = initDouble1(8);
+      histogramPossibleConcertedTmp = initDouble1(8);
     }
   }
   
@@ -446,7 +449,7 @@ public class ActivationEnergy {
   private Double[] initDouble1(int length) {
     Double[] histogram = new Double[length];
     for (int i = 0; i < length; i++) {
-        histogram[i] = new Double(0);
+      histogram[i] = new Double(0);
     }
     return histogram;
   }
