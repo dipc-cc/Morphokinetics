@@ -378,6 +378,9 @@ public class ActivationEnergy {
     printAeLow(print[1], "", printLineBreak, histogramSuccess); //AeSuccess 
     print[2].print(time + "\t");
     printAeLow(print[2], "", printLineBreak, histogramPossible); //AePossibleFromList
+    for (int i = 0; i < 8; i++) {
+      print[2].print(histogramPossibleConcerted[i] + "\t");
+    }
     print[3].print(time + "\t");
     printAeLow(print[3], "", printLineBreak, histogramPossibleCounter); //AePossibleDiscrete
 
