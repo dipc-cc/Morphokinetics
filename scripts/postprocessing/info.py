@@ -107,6 +107,10 @@ def getInputParameters(fileName = ""):
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
     if re.match("catalysis", calcType):
         maxA = 4 # Production of CO2, CO^B+O^B | CO^B+O^C | CO^C+O^B | CO^C+O^C
+    if re.match("concerted", calcType):
+        sizJ = round(sizJ / math.sin(math.radians(60)))
+        maxN = 6
+        maxA = 192 # will be higher
     return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2, prCO, prO2])
 
 def getLastOutputFile(folder="."):
