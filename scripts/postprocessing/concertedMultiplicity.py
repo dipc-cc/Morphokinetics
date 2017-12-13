@@ -13,6 +13,34 @@ import multiplicitiesPlot as mp
 import multiplicitiesInfo as mi
 
 
+def defineTypesLabels():
+    code = ["0",
+             "1",
+             "2,0",
+             "2,1",
+             "2,2",
+             "3,0",
+             "3,1",
+             "3,2",
+             "4,0",
+             "4,1",
+             "4,2",
+             "5"]
+    types = []
+    for i in range(0,12):
+        types.append(r"D_{"+code[i]+r"}")
+    # detachs
+    types.append(r"D_{1}'")
+    types.append(r"D_{2,0}'")
+    types.append(r"D_{2,1}'")
+    types.append(r"D_{3,0}'")
+    return types
+
+def getLabel(i,j):
+    types = defineTypesLabels()
+    label = r"$" + types[i] + r"\rightarrow " + types[j] + r"$"
+    return label
+
 temperatures = inf.getTemperatures("float")
 maxRanges = len(temperatures)
 kb = 8.6173324e-5
@@ -33,13 +61,11 @@ if p.nCo2 == -1: # dirty way to use same script for growth and catalysis
     matrix = np.loadtxt(fname=files[0])
     maxCo2 = len(matrix)
     p.nCo2 = maxCo2 * 10
-labelAlfa = [r"$D_0\rightarrow D_0$", r"$D_0\rightarrow D_1$", r"$D_0\rightarrow D_2$", r"$D_0\rightarrow D_3$", r"$D_0\rightarrow D_4$", r"$D_0\rightarrow D_5$", r"$D_0\rightarrow D_6$", 
-r"$D_1\rightarrow D_0$", r"$D_1\rightarrow D_1$", r"$D_1\rightarrow D_2$", r"$D_1\rightarrow D_3$", r"$D_1\rightarrow D_4$", r"$D_1\rightarrow D_5$", r"$D_1\rightarrow D_6$", 
-r"$D_2\rightarrow D_0$", r"$D_2\rightarrow D_1$", r"$D_2\rightarrow D_2$", r"$D_2\rightarrow D_3$", r"$D_2\rightarrow D_4$", r"$D_2\rightarrow D_5$", r"$D_2\rightarrow D_6$", 
-r"$D_3\rightarrow D_0$", r"$D_3\rightarrow D_1$", r"$D_3\rightarrow D_2$", r"$D_3\rightarrow D_3$", r"$D_3\rightarrow D_4$", r"$D_3\rightarrow D_5$", r"$D_3\rightarrow D_6$", 
-r"$D_4\rightarrow D_0$", r"$D_4\rightarrow D_1$", r"$D_4\rightarrow D_2$", r"$D_4\rightarrow D_3$", r"$D_4\rightarrow D_4$", r"$D_4\rightarrow D_5$", r"$D_4\rightarrow D_6$", 
-r"$D_5\rightarrow D_0$", r"$D_5\rightarrow D_1$", r"$D_5\rightarrow D_2$", r"$D_5\rightarrow D_3$", r"$D_5\rightarrow D_4$", r"$D_5\rightarrow D_5$", r"$D_5\rightarrow D_6$", 
-r"$D_6\rightarrow D_0$", r"$D_6\rightarrow D_1$", r"$D_6\rightarrow D_2$", r"$D_6\rightarrow D_3$", r"$D_6\rightarrow D_4$", r"$D_6\rightarrow D_5$", r"$D_6\rightarrow D_6$"]
+
+labelAlfa = []
+for i in range(0,12):
+    for j in range(0,16):
+        labelAlfa.append(getLabel(i,j))
 
 energies = e.concertedEnergies(p)
 print(energies)
@@ -56,7 +82,6 @@ axarr.plot(1/kb/temperatures, totalRate[-2], "o",label="Total rate from M")
 #axarr.plot(1/kb/temperatures, abs(totalRateEvents[-1]-totalRate[-1]), label="Error abs", ls=":")
 #axarr.plot(1/kb/temperatures, abs(totalRateEvents[-1]-totalRate[-1])/totalRateEvents[-1], label="Error rel",ls=":")
 axarr.set_yscale("log")
-#axarr.set_ylim(1e6,1e7)
 axarr.legend(loc="best", prop={'size':6})
 fig.savefig("totalRates.svg",  bbox_inches='tight')
 
@@ -66,16 +91,6 @@ activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa
 ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 for i,a in enumerate(range(p.minA,p.maxA)):
     ratioEa[:,:,i] = energies[a]
-
-#ratioEa[:,:,0:maxAlfa-minAlfa] += e.getEaCorrections(p,temperatures)[:,minAlfa:maxAlfa]
-
-# fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
-# fig.subplots_adjust(wspace=0.1)
-# axarr.plot(1/kb/temperatures, totalRate[-1], label="Total rate from M")
-# for i in range(p.minA,p.maxA):
-#     axarr.plot(1/kb/temperatures, tempMavg[-1,:,i], label=labelAlfa[i])
-# axarr.set_yscale("log")
-# fig.savefig("Mk.svg",  bbox_inches='tight')
 
 fig, axarr = plt.subplots(1, maxRanges, sharey=True, figsize=(maxRanges,4))
 fig.subplots_adjust(wspace=0.1)
@@ -103,11 +118,9 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
 plt.savefig("multiplicities"+ext+".svg", bbox_inches='tight')
 
 minCo2 = 0
-#co2 = list(range(minCo2,p.nCo2-1))
 co2 = list(range(minCo2,maxCo2-1))
 
 lastOmegas = np.zeros(shape=(maxRanges,p.maxA-p.minA))
-#lastM = np.zeros(shape=(maxRanges
 epsilon = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
 if omegas:
     co2.append(maxCo2)
@@ -159,3 +172,4 @@ ax.set_ylabel(r"Energy $(eV)$")
 mp.setY2TemperatureLabels(ax,kb)
 ax.annotate(r"$\epsilon_\alpha=\omega_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
 plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')
+
