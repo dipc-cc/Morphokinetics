@@ -92,7 +92,6 @@ def getMavgAndOmega(p,temperatures,workingPath):
 def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="",one=False):
     maxRanges = len(temperatures)
     maxCo2 = int(p.nCo2/10)
-    rngt = e.defineRangesCatalysis(p.calc, p.rLib, temperatures) #list([0, 3])
     kb = 8.6173324e-5
                   # [co2, type (alfa), temperature range]
     multiplicityEa   = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
