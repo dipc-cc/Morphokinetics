@@ -348,7 +348,8 @@ def defineRangesCatalysis(calculationMode, ratesLibrary, temperatures):
     func = switcher.get(ratesLibrary, lambda: "nothing")
     # Execute the function
     return func(temperatures)
-    
+   
+# Adsorption rate for CO molecule and for O2 molecule 
 def computeAdsorptionRate(p,pressure,type):
     areaHalfUc = 10.0308e-20
     return p.corr*pressure * areaHalfUc / (np.sqrt(2.0 * np.pi * mass[type] * kBInt * p.temp))
