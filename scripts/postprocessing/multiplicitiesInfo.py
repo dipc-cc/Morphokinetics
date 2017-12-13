@@ -188,7 +188,7 @@ def getTotalRate(p):
     if p.calc == "catalysis":
         return getTotalRateCatalysis()
     else:
-        return getTotalRateConcerted()
+        return getTotalRateConcerted(p)
 
 def getTotalRateCatalysis():
     files = glob.glob("dataCatalysis0*.txt")
@@ -207,12 +207,12 @@ def getTotalRateCatalysis():
     rates = rates / len(files)
     return totalRate, rates
 
-def getTotalRateConcerted():
+def getTotalRateConcerted(p):
     files = glob.glob("dataAe0*.txt")
     totalRate = 0
     for t in files:
         data = np.loadtxt(t,comments=['#', '[', 'h'])
         events = data[:,7] # column number 8 is "number of events"
         totalRate += events / data[-1,1] # last time
-    totalRate = totalRate / len(files)
+    totalRate = totalRate / len(files) / p.sizI / p.sizJ
     return totalRate, -1
