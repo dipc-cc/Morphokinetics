@@ -9,7 +9,10 @@ import matplotlib.pyplot as plt
 import energies as e
 
 def computeMavgAndOmega(fileNumber, p):
-    name = "dataAeAll"
+    if p.calc == "catalysis":
+        name = "dataAeAll"
+    else:
+        name = "dataAePossibleFromList"
     ratios = p.getRatiosTotal()[p.minA:p.maxA]
     possiblesFromList = np.loadtxt(fname=name+"{:03d}".format(fileNumber)+".txt")
     time = np.array(possiblesFromList[:,0])
@@ -40,7 +43,10 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     p = inf.getInputParameters()
     p.minA = pAlfa.minA
     p.maxA = pAlfa.maxA
-    files = glob.glob("dataAeAll*")
+    if p.calc == "catalysis":
+        files = glob.glob("dataAeAll*")
+    else:
+        files = glob.glob("dataAePossibleFromList*")
     files.sort()
     filesNumber = len(files)
     matrix = np.loadtxt(fname=files[0])
