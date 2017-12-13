@@ -68,7 +68,7 @@ def computeMavgAndOmegaOverRuns(pAlfa):
     runOavg = sumOmega / filesNumber
     totalRate = sumRate / filesNumber
 
-    totalRateEvents, rates = getTotalRate()
+    totalRateEvents, rates = getTotalRate(p)
     return runMavg, runOavg, totalRate, totalRateEvents, rates, ratios
 
 
@@ -184,7 +184,13 @@ def getTotalSensibility(p,omega,ratioEa,multiplicityEa):
 
 
 # Computes total rates from number of events
-def getTotalRate():
+def getTotalRate(p):
+    if p.calc == "catalysis":
+        return getTotalRateCatalysis()
+    else:
+        return getTotalRateConcerted()
+
+def getTotalRateCatalysis():
     files = glob.glob("dataCatalysis0*.txt")
     totalRate = 0
     rates = np.zeros(4)
@@ -200,3 +206,13 @@ def getTotalRate():
     totalRate = totalRate / len(files)
     rates = rates / len(files)
     return totalRate, rates
+
+def getTotalRateConcerted():
+    files = glob.glob("dataAe0*.txt")
+    totalRate = 0
+    for t in files:
+        data = np.loadtxt(t,comments=['#', '[', 'h'])
+        events = data[:,7] # column number 8 is "number of events"
+        totalRate += events / data[-1,1] # last time
+    totalRate = totalRate / len(files)
+    return totalRate, -1
