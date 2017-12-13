@@ -69,10 +69,10 @@ def getRatiosCatalysis(self):
         ratios[25:28] = e.computeDiffusionRate(self,energies[25:28])
     return ratios
 
-def getRatiosConcerted(self):
-    energies = e.concertedEnergies(self)
+def getRatiosConcerted(p):
+    energies = e.concertedEnergies(p)
     ratios = np.zeros(192)
-    ratios = e.computeDiffusionRate(self,energies)
+    ratios = e.getRatio(p.calc, p.temp, energies)
     return ratios
 
 def getFluxes():
