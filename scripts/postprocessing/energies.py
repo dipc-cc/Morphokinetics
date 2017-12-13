@@ -1,4 +1,5 @@
 import numpy as np
+import concertedEnergies as c
 
 kJtoeV = 96.485
 kb = 8.617332e-5
@@ -62,6 +63,9 @@ def catalysisEnergiesTotal(self):
         values[6] = values[24]
         
     return values
+    
+def concertedEnergies(self):
+    return c.getConcertedEnergies(self)
     
 def getHexagonalEnergies():
     energies = 999999999*np.ones(49, dtype=float)
