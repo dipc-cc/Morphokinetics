@@ -46,8 +46,6 @@ maxRanges = len(temperatures)
 kb = 8.6173324e-5
 p = inf.getInputParameters(inf.getLastOutputFile("*"))
 print("Reference file is ",inf.getLastOutputFile("*"))
-p.maxA = 49
-p.minA = 0
 ext = ""
 sp = False
 omegas = False
