@@ -23,6 +23,8 @@ class fileData:
         self.nCo2 = data[10] # created CO2 molecules. For catalysis
         self.prCO = data[11] # pressure. For catalysis
         self.prO2 = data[12] # pressure. For catalysis
+        self.mCov = data[13] # max coverage to analyse, similar to nCo2.
+        self.mMsr = data[14] # place to gather p.mCov and p.nCo2
         self.minA = 0 # min alfa: possible transition types (i.e. different energies)
         self.corr = 1 # corrections for rates
         if self.rLib == "reuter":
@@ -71,7 +73,7 @@ def getRatiosCatalysis(self):
 
 def getRatiosConcerted(p):
     energies = e.concertedEnergies(p)
-    ratios = np.zeros(192)
+    ratios = np.zeros(201)
     ratios = e.getRatio(p.calc, p.temp, energies)
     return ratios
 
@@ -88,7 +90,7 @@ def getTemperatures(*types):
     else:
         temperatures = np.array(temperatures).astype(int)
     temperatures.sort()
-    return temperatures
+    return temperatures[5:]
 
 
 def getPressures():
@@ -101,6 +103,8 @@ def getInputParameters(fileName = ""):
     r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxC, nCO2, prCO, prO2 = getInformationFromFile(fileName)
     maxN = 3
     maxA = 16
+    mCov = -1 # last simulated coverage
+    mMsr = -1 
     if re.match("Ag", calcType): # Adjust J in hexagonal lattices
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
@@ -110,8 +114,8 @@ def getInputParameters(fileName = ""):
     if re.match("concerted", calcType):
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
-        maxA = 192 # will be higher
-    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2, prCO, prO2])
+        maxA = 201
+    return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2, prCO, prO2, mCov, mMsr])
 
 def getLastOutputFile(folder="."):
     files = glob.glob(folder+"/output*")
