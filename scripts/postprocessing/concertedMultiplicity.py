@@ -170,5 +170,5 @@ ax.set_ylabel(r"Energy $(eV)$")
 #ax.set_yscale("log")
 mp.setY2TemperatureLabels(ax,kb)
 ax.annotate(r"$\epsilon_\alpha=\omega_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
-plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')
+plt.savefig("multiplicitiesResume"+ext+".svg")#, bbox_inches='tight')
 
