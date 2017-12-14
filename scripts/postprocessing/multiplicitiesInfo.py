@@ -24,7 +24,8 @@ def computeMavgAndOmega(fileNumber, p):
         name = "dataAeAll"
     else:
         name = "dataAePossibleFromList"
-    ratios = p.getRatiosTotal()[p.minA:p.maxA]
+    pTemp = inf.getInputParameters()
+    ratios = pTemp.getRatiosTotal()[p.minA:p.maxA]
     possiblesFromList = np.loadtxt(fname=name+"{:03d}".format(fileNumber)+".txt")
     time = np.array(possiblesFromList[:p.mMsr,0])
     possiblesFromList = possiblesFromList[:,1:] # remove time
