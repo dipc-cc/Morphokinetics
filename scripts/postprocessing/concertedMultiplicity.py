@@ -57,8 +57,9 @@ if p.nCo2 == -1: # dirty way to use same script for growth and catalysis
     files = glob.glob("*/results/run*/dataAePossibleFromList000.txt")
     files.sort()
     matrix = np.loadtxt(fname=files[0])
-    maxCo2 = len(matrix)
-    p.nCo2 = maxCo2 * 10
+    p.mCov = len(matrix)
+    p.mCov = 50
+    #p.nCo2 = maxCo2 * 10
 
 labelAlfa = []
 for i in range(0,12):
@@ -96,18 +97,18 @@ fig.subplots_adjust(wspace=0.1)
 activationEnergyC = np.sum(omega*(ratioEa-multiplicityEa), axis=2)
     
 axarr[0].set_ylabel("eV")
-minCo2 = 0
+minCov = 0
 
-co2 = list(range(minCo2,maxCo2-1))
+cov = list(range(minCov,p.mCov-1))
 tgt = []
 rct = []
 x = []
 err = []
 for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    rcmpt = activationEnergyC[minCo2:-1,maxRanges-1-i]
-    targt = activationEnergy[minCo2:-1,maxRanges-1-i]
-    error = abs(1-activationEnergyC[minCo2:-1,maxRanges-1-i]/activationEnergy[minCo2:-1,maxRanges-1-i])
-    handles = mp.plotSimple(co2, targt, rcmpt, error, axarr[i],
+    rcmpt = activationEnergyC[minCov:-1,maxRanges-1-i]
+    targt = activationEnergy[minCov:-1,maxRanges-1-i]
+    error = abs(1-activationEnergyC[minCov:-1,maxRanges-1-i]/activationEnergy[minCov:-1,maxRanges-1-i])
+    handles = mp.plotSimple(cov, targt, rcmpt, error, axarr[i],
                              maxRanges, i, not omegas)
     x.append(1/kb/temperatures[maxRanges-1-i])
     tgt.append(targt[-1])
@@ -116,13 +117,13 @@ for i in range(0,maxRanges): # different temperature ranges (low, medium, high)
 
 plt.savefig("multiplicities"+ext+".svg", bbox_inches='tight')
 
-minCo2 = 0
-co2 = list(range(minCo2,maxCo2-1))
+minCov = 0
+cov = list(range(minCov,p.mCov-1))
 
 lastOmegas = np.zeros(shape=(maxRanges,p.maxA-p.minA))
-epsilon = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
+epsilon = np.zeros(shape=(p.mCov,maxRanges,p.maxA-p.minA))
 if omegas:
-    co2.append(maxCo2)
+    cov.append(p.mCov)
     labels = ["0", "20", "40", "60", "80", "100"]
     cm = plt.get_cmap('tab20')
     for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
@@ -130,7 +131,7 @@ if omegas:
         partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
         lgs = []
         for i,a in enumerate(range(p.minA,p.maxA)): #alfa
-            lgs.append(axarr[maxRanges-1-j].fill_between(co2, partialSum, color=cm(a/(p.maxA-1)), label=labelAlfa[a]))
+            lgs.append(axarr[maxRanges-1-j].fill_between(cov, partialSum, color=cm(a/(p.maxA-1)), label=labelAlfa[a]))
             lastOmegas[maxRanges-1-j,i] = partialSum[-1]
             partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
             epsilon[:,j,i] = omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
