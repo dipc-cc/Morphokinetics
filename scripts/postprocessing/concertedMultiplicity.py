@@ -87,8 +87,7 @@ fig.savefig("totalRates.svg",  bbox_inches='tight')
 
 print(np.shape(tempMavg))
 
-activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext)
-ratioEa = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
+ratioEa = np.zeros(shape=(p.mCov,maxRanges,p.maxA-p.minA))
 for i,a in enumerate(range(p.minA,p.maxA)):
     ratioEa[:,:,i] = energies[a]
 
