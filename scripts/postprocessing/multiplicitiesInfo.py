@@ -8,6 +8,17 @@ import multiplicitiesPlot as mp
 import matplotlib.pyplot as plt
 import energies as e
 
+def printRatios(ratios):
+    rows = 12
+    columns = 16
+    for i in range(0,rows):
+        for j in range(0,columns):
+            if ratios[i*columns + j] < 1e-120:
+                print("          ", end="")
+            else:
+                print("%1.3E"% (ratios[i*columns + j]), end=" ")
+        print()
+
 def computeMavgAndOmega(fileNumber, p):
     if p.calc == "catalysis":
         name = "dataAeAll"
