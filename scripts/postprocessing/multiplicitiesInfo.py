@@ -44,7 +44,7 @@ def computeMavgAndOmegaOverRuns(p):
     else:
         files = glob.glob("dataAePossibleFromList*")
     files.sort()
-    filesNumber = len(files)-1
+    filesNumber = len(files)
     sumMavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))  # [time|CO2, alfa]
     sumOmega = np.zeros(shape=(p.mMsr,p.maxA-p.minA)) # [time|CO2, alfa]
     sumRate = np.zeros(p.mMsr)
@@ -203,10 +203,12 @@ def getTotalRateCatalysis():
 
 def getTotalRateConcerted(p):
     files = glob.glob("dataAe0*.txt")
+    files.sort()
+    #files = files[:-1]
     totalRate = 0
     for t in files:
         data = np.loadtxt(t,comments=['#', '[', 'h'])
-        events = data[:,7] # column number 8 is "number of events"
-        totalRate += events / data[-1,1] # last time
+        events = data[p.mMsr,7] # column number 8 is "number of events"
+        totalRate += events / data[p.mMsr,1] # last time, column 2
     totalRate = totalRate / len(files) / p.sizI / p.sizJ
     return totalRate, -1
