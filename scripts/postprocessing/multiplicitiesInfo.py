@@ -15,7 +15,7 @@ def computeMavgAndOmega(fileNumber, p):
         name = "dataAePossibleFromList"
     ratios = p.getRatiosTotal()[p.minA:p.maxA]
     possiblesFromList = np.loadtxt(fname=name+"{:03d}".format(fileNumber)+".txt")
-    time = np.array(possiblesFromList[:,0])
+    time = np.array(possiblesFromList[:p.mMsr,0])
     possiblesFromList = possiblesFromList[:,1:] # remove time
     if p.maxA == 7: # for farkas TOF
         possiblesFromList[:,4] = possiblesFromList[:,22]
@@ -26,34 +26,28 @@ def computeMavgAndOmega(fileNumber, p):
         ratios[5] = ratios[23]
         ratios[6] = ratios[24]
         ratios = ratios[0:7]
-    length = len(time)
-    Mavg = np.zeros(shape=(length,p.maxA-p.minA))
+    Mavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))
     for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
-        Mavg[:,i] = possiblesFromList[:,a]/time/p.sizI/p.sizJ
+        Mavg[:,i] = possiblesFromList[:p.mMsr,a]/time/p.sizI/p.sizJ
 
     totalRate = np.array(ratios.dot(np.transpose(Mavg)))
     # define omegas 
-    omega = np.zeros(shape=(length,p.maxA-p.minA)) # [co2amount, alfa]
-    for i in range(0,length):
+    omega = np.zeros(shape=(p.mMsr,p.maxA-p.minA)) # [co2amount, alfa]
+    for i in range(0,p.mMsr):
         omega[i,:] =  Mavg[i,:] * ratios / totalRate[i]
     return Mavg, omega, totalRate, ratios
 
 
-def computeMavgAndOmegaOverRuns(pAlfa):
-    p = inf.getInputParameters()
-    p.minA = pAlfa.minA
-    p.maxA = pAlfa.maxA
+def computeMavgAndOmegaOverRuns(p):
     if p.calc == "catalysis":
         files = glob.glob("dataAeAll*")
     else:
         files = glob.glob("dataAePossibleFromList*")
     files.sort()
-    filesNumber = len(files)
-    matrix = np.loadtxt(fname=files[0])
-    maxCO2 = len(matrix)
-    sumMavg = np.zeros(shape=(maxCO2,p.maxA-p.minA))  # [time|CO2, alfa]
-    sumOmega = np.zeros(shape=(maxCO2,p.maxA-p.minA)) # [time|CO2, alfa]
-    sumRate = np.zeros(maxCO2)
+    filesNumber = len(files)-1
+    sumMavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))  # [time|CO2, alfa]
+    sumOmega = np.zeros(shape=(p.mMsr,p.maxA-p.minA)) # [time|CO2, alfa]
+    sumRate = np.zeros(p.mMsr)
     #iterating over runs
     for i in range(0,filesNumber):
         try:
@@ -74,13 +68,13 @@ def computeMavgAndOmegaOverRuns(pAlfa):
 
 def getMavgAndOmega(p,temperatures,workingPath):
     maxTemp = len(temperatures)
-    maxCo2 = int(p.nCo2/10)
-    tempMavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
-    tempOavg = np.zeros(shape=(maxCo2,maxTemp,p.maxA-p.minA))
-    totalRate = np.zeros(shape=(maxCo2,maxTemp))
+    p.mMsr = max(int(p.nCo2/10),p.mCov)
+    tempMavg = np.zeros(shape=(p.mMsr,maxTemp,p.maxA-p.minA))
+    tempOavg = np.zeros(shape=(p.mMsr,maxTemp,p.maxA-p.minA))
+    totalRate = np.zeros(shape=(p.mMsr,maxTemp))
     ratios = np.zeros(shape=(maxTemp,p.maxA-p.minA)) # Used ratios for simulation
-    totalRateEvents = np.zeros(shape=(maxCo2,maxTemp))
-    rates = np.zeros(shape=(maxCo2,maxTemp,4)) # adsorption, desorption, reaction and diffusion rates
+    totalRateEvents = np.zeros(shape=(p.mMsr,maxTemp))
+    rates = np.zeros(shape=(p.mMsr,maxTemp,4)) # adsorption, desorption, reaction and diffusion rates
     for i,t in enumerate(temperatures):
         print(t)
         os.chdir(workingPath)
@@ -97,16 +91,15 @@ def getMavgAndOmega(p,temperatures,workingPath):
 
 def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="",one=False):
     maxRanges = len(temperatures)
-    maxCo2 = int(p.nCo2/10)
     kb = 8.6173324e-5
                   # [co2, type (alfa), temperature range]
-    multiplicityEa   = np.zeros(shape=(maxCo2,maxRanges,p.maxA-p.minA))
-    activationEnergy    = np.zeros(shape=(maxCo2,maxRanges))
+    multiplicityEa   = np.zeros(shape=(p.mMsr,maxRanges,p.maxA-p.minA))
+    activationEnergy    = np.zeros(shape=(p.mMsr,maxRanges))
     total = ext == "T"
-    print(total)
-    for co2 in range(0,maxCo2): # created co2: 10,20,30...1000
-        showPlot = sp and float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0
-        if float(co2+(maxCo2/10)+1) % float(maxCo2/10) == 0:
+    for co2 in range(0,p.mMsr): # created co2: 10,20,30...1000
+        print(co2,"/",p.mMsr,sp)
+        showPlot = sp #and float(co2+(p.mMsr/10)+1) % float(p.mMsr/10) == 0
+        if float(co2+(p.mMsr/10)+1) % float(p.mMsr/10) == 0:
             print(co2)
         x = 1/kb/temperatures
         y = totalRate
@@ -159,7 +152,8 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
                 axarr[0].plot(x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
                 axarr[0].plot(x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
                 axarr[0].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
-            fig.savefig(p.rLib+"Plot"+str(one)+str(co2)+ext+".pdf")
+            fig.savefig(p.rLib+"Plot"+str(one)+str(co2)+ext+".svg")
+            plt.close(fig)
 
     activationEnergy = -activationEnergy
     return activationEnergy, multiplicityEa
