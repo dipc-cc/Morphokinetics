@@ -64,6 +64,8 @@ labelAlfa = []
 for i in range(0,12):
     for j in range(0,16):
         labelAlfa.append(getLabel(i,j))
+for i in range(0,9):
+    labelAlfa.append(r"$I_{"+str(i)+"}$")
 
 energies = e.concertedEnergies(p)
 print(energies)
