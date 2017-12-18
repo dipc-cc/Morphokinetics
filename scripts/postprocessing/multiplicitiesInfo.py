@@ -133,7 +133,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
             axarr = np.zeros(3)
         # N_h
 
-        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2, total=total)
+        activationEnergy[co2,:] = mp.localAvgAndPlotLinear(x, y[co2,:], axarr[0], -1, False, co2, total=total, verbose=True)
 
         first = True
         omegaSumTof = np.zeros(shape=(len(temperatures)))
