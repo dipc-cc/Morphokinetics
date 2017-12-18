@@ -11,8 +11,9 @@ def getConcertedEnergies(self):
     single, concerted = func()
 
     single = single.reshape(192)
+    allEnergies = np.concatenate([single, concerted])
     
-    return single
+    return allEnergies
 
 def getConcertedEnergiesAgAg():
     energies = 99999999*np.ones(dtype=float, shape=(12,16))
