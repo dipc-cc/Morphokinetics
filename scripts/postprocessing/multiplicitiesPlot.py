@@ -358,6 +358,18 @@ def plotKindOfSensibility(x,y,label,name):
         axarr[1][1].legend(loc="best", prop={'size':6})
     fig.savefig(name+".svg")
 
+def plotTotalRates(x, y1, y2,i):
+    fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
+    fig.subplots_adjust(wspace=0.1)
+    axarr.plot(x, y1, "-x",label="Total rate from events")
+    axarr.plot(x, y2, "-o",label="Total rate from M")
+    #axarr.plot(x, abs(y1-y2), label="Error abs", ls=":")
+    #axarr.plot(x, abs(y1-y2)/y1, label="Error rel",ls=":")
+    axarr.set_yscale("log")
+    axarr.legend(loc="best", prop={'size':6})
+    fig.savefig("totalRates"+str(i)+".svg",  bbox_inches='tight')
+    plt.close(fig)
+
 def setY2TemperatureLabels(ax,kb):
     ax2 = ax.twiny()
     ax2.set_xlim(1/kb/ax.get_xlim()[0],1/kb/ax.get_xlim()[1])
