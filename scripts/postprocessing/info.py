@@ -90,7 +90,7 @@ def getTemperatures(*types):
     else:
         temperatures = np.array(temperatures).astype(int)
     temperatures.sort()
-    return temperatures[5:]
+    return temperatures
 
 
 def getPressures():
