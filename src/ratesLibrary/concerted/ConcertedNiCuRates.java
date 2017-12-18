@@ -131,22 +131,21 @@ public class ConcertedNiCuRates extends AbstractConcertedRates {
     energies[10][11] = 1.1; // to type 5
     // From  type 5
     energies[11][3] = 1.507; // to type 2, subtype 1
-    energies[11][15] = 1.382; // to type 3, subtype 0, detach
-    energies[11][6] = 1.482; // to type 3, subtype 1
-    energies[11][7] = 1.326; // to type 3, subtype 2
-    energies[11][9] = 1.405; // to type 4, subtype 1
-    energies[11][10] = 1.317; // to type 4, subtype 2
-    energies[11][11] = 1.174; // to type 5
+    energies[11][6] = 1.382; // to type 3, subtype 1
+    energies[11][7] = 1.482; // to type 3, subtype 2
+    energies[11][9] = 1.326; // to type 4, subtype 1
+    energies[11][10] = 1.405; // to type 4, subtype 2
+    energies[11][11] = 1.317; // to type 5
     setEnergies(energies);
     
     double[] concertedEnergies = new double[9]; // up to 8 atom islands
     concertedEnergies[0] = eImpossible; 
     concertedEnergies[1] = eImpossible; 
-    concertedEnergies[2] = 0.031; // dimer
-    concertedEnergies[3] = 0.008; 
-    concertedEnergies[4] = 0.046; 
-    concertedEnergies[5] = 0.115; 
-    concertedEnergies[6] = 0.172; 
+    concertedEnergies[2] = 0.008; // dimer
+    concertedEnergies[3] = 0.046; 
+    concertedEnergies[4] = 0.115; 
+    concertedEnergies[5] = 0.172; 
+    concertedEnergies[6] = 0.167; 
     concertedEnergies[7] = 0.250; 
     concertedEnergies[8] = 0.330; 
     setConcertedEnergies(concertedEnergies);    

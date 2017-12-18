@@ -131,19 +131,18 @@ public class ConcertedPdPdRates extends AbstractConcertedRates {
     energies[10][11] = 1.05; // to type 5
     // From  type 5
     energies[11][3] = 1.47; // to type 2, subtype 1
-    energies[11][15] = 1.3; // to type 3, subtype 0, detach
-    energies[11][6] = 1.413; // to type 3, subtype 1
-    energies[11][7] = 1.236; // to type 3, subtype 2
-    energies[11][9] = 1.293; // to type 4, subtype 1
-    energies[11][10] = 1.205; // to type 4, subtype 2
-    energies[11][11] = 1.076; // to type 5 
+    energies[11][6] = 1.3; // to type 3, subtype 1
+    energies[11][7] = 1.413; // to type 3, subtype 2
+    energies[11][9] = 1.236; // to type 4, subtype 1
+    energies[11][10] = 1.293; // to type 4, subtype 2
+    energies[11][11] = 1.205; // to type 5
     setEnergies(energies);
     
     double[] concertedEnergies = new double[9]; // up to 8 atom islands
     concertedEnergies[0] = eImpossible; 
     concertedEnergies[1] = eImpossible; 
-    concertedEnergies[2] = 0.099; // dimer
-    concertedEnergies[3] = 0.168; 
+    concertedEnergies[2] = 0.021; // dimer
+    concertedEnergies[3] = 0.094; 
     concertedEnergies[4] = 0.179; 
     concertedEnergies[5] = 0.242; 
     concertedEnergies[6] = 0.253; 

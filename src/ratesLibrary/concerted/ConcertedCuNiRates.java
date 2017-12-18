@@ -131,12 +131,11 @@ public class ConcertedCuNiRates extends AbstractConcertedRates {
     energies[10][11] = 0.91; // to type 5
     // From  type 5
     energies[11][3] = 1.144; // to type 2, subtype 1
-    energies[11][15] = 1.01; // to type 3, subtype 0, detach
-    energies[11][6] = 1.13; // to type 3, subtype 1
-    energies[11][7] = 1.008; // to type 3, subtype 2
-    energies[11][9] = 0.904; // to type 4, subtype 1
-    energies[11][10] = 0.908; // to type 4, subtype 2
-    energies[11][11] = 0.729; // to type 5
+    energies[11][6] = 1.01; // to type 3, subtype 1
+    energies[11][7] = 1.13; // to type 3, subtype 2
+    energies[11][9] = 1.008; // to type 4, subtype 1
+    energies[11][10] = 0.904; // to type 4, subtype 2
+    energies[11][11] = 0.908; // to type 5
     setEnergies(energies);
     
     double[] concertedEnergies = new double[9]; // up to 8 atom islands

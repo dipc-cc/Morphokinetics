@@ -131,22 +131,21 @@ public class ConcertedAgAgRates extends AbstractConcertedRates {
     energies[10][11] = 1.1; // to type 5
     // From  type 5
     energies[11][3] = 1.06; // to type 2, subtype 1
-    energies[11][15] = 1.01; // to type 3, subtype 0, detach
-    energies[11][6] = 1.05; // to type 3, subtype 1
-    energies[11][7] = 0.999; // to type 3, subtype 2
-    energies[11][9] = 1.02; // to type 4, subtype 1
-    energies[11][10] = 0.993; // to type 4, subtype 2
-    energies[11][11] = 0.873; // to type 5    
+    energies[11][6] = 1.01; // to type 3, subtype 1
+    energies[11][7] = 1.05; // to type 3, subtype 2
+    energies[11][9] = 0.999; // to type 4, subtype 1
+    energies[11][10] = 1.02; // to type 4, subtype 2
+    energies[11][11] = 0.993; // to type 5
     setEnergies(energies);
 
     double[] concertedEnergies = new double[9]; // up to 8 atom islands
     concertedEnergies[0] = eImpossible; 
     concertedEnergies[1] = eImpossible; 
-    concertedEnergies[2] = 0.059; // dimer
-    concertedEnergies[3] = 0.097; 
-    concertedEnergies[4] = 0.152; 
-    concertedEnergies[5] = 0.188; 
-    concertedEnergies[6] = 0.278; 
+    concertedEnergies[2] = 0.097; // dimer
+    concertedEnergies[3] = 0.152; 
+    concertedEnergies[4] = 0.188; 
+    concertedEnergies[5] = 0.278; 
+    concertedEnergies[6] = 0.239; 
     concertedEnergies[7] = 0.376; 
     concertedEnergies[8] = 0.401; 
     setConcertedEnergies(concertedEnergies);
