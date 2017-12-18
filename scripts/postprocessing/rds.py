@@ -155,6 +155,10 @@ def plotRds(temperatures,activationEnergyTOF,tempMavg,rates,ratios,omega,minAlfa
     newSigma = np.zeros(shape=(len(temperatures)))
     myMax = np.argmax(dominance,axis=1)
     print(np.shape(myMax),myMax)
-#    for i in range(0,len(myMax)):
-#        myMax[i] = 5
+    # med = 15
+    # for i in range(0,med):
+    #     myMax[i] = 5
+    # for i in range(med,len(myMax)):
+    #     myMax[i] = 3
+    
     return sigma, myMax
