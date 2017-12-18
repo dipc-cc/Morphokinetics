@@ -220,7 +220,10 @@ def getTotalRateConcerted(p):
     totalRate = 0
     for t in files:
         data = np.loadtxt(t,comments=['#', '[', 'h'])
-        events = data[p.mMsr,7] # column number 8 is "number of events"
-        totalRate += events / data[p.mMsr,1] # last time, column 2
+        events = data[:p.mMsr,7] # column number 8 is "number of events"
+        try:
+            totalRate += events / data[:p.mMsr,1] # last time, column 2
+        except ValueError:
+            continue
     totalRate = totalRate / len(files) / p.sizI / p.sizJ
     return totalRate, -1
