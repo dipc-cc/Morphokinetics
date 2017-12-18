@@ -117,27 +117,39 @@ lastOmegas = np.zeros(shape=(maxRanges,p.maxA-p.minA))
 epsilon = np.zeros(shape=(p.mCov,maxRanges,p.maxA-p.minA))
 if omegas:
     cov.append(p.mCov)
-    labels = ["0", "20", "40", "60", "80", "100"]
-    cm = plt.get_cmap('tab20')
-    for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
-        axarr[maxRanges-1-j].get_xaxis().set_major_formatter(FixedFormatter(labels))
-        partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
-        lgs = []
-        for i,a in enumerate(range(p.minA,p.maxA)): #alfa
-            lgs.append(axarr[maxRanges-1-j].fill_between(cov, partialSum, color=cm(a/(p.maxA-1)), label=labelAlfa[a]))
-            lastOmegas[maxRanges-1-j,i] = partialSum[-1]
-            partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
-            epsilon[:,j,i] = omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+    # cm = plt.get_cmap('tab20')
+    # for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
+    #     partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
+    #     lgs = []
+    #     for i,a in enumerate(range(p.minA,p.maxA)): #alfa
+    #         if any(omega[:,j,a] > 1e-2):
+    #             #print(j,a,omega[:,j,a])
+    #             lgs.append(axarr[maxRanges-1-j].fill_between(cov, partialSum, color=cm(a/(p.maxA-1)), label=labelAlfa[a]))
+    #             lastOmegas[maxRanges-1-j,i] = partialSum[-1]
+    #             partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+    #             epsilon[:,j,i] = omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
 
-    myLegends = []
-    myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
-    myLegends += lgs
+    # myLegends = []
+    # myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
+    # myLegends += lgs
         
-    for i in range(p.maxA-1,p.minA-1,-1): #alfa
-        myLabels.append(labelAlfa[i])
-    myLabels.append("Rel. err.")
-    plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
-    plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
+    # for i in range(p.maxA-1,p.minA-1,-1): #alfa
+    #     myLabels.append(labelAlfa[i])
+    # myLabels.append("Rel. err.")
+    # plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
+    # plt.savefig("multiplicitiesOmegas"+ext+".svg", bbox_inches='tight')
+
+    cm = plt.get_cmap('tab20')
+    markers=["o", "s","D","^","d","h","p"]
+    for t in range(0,maxRanges): # different temperature ranges (low, medium, high)
+        mk = np.sum(omega[:,t,:]*(ratioEa[:,t,:]-multiplicityEa[:,t,:]), axis=1)
+        for i,a in enumerate(range(p.minA,p.maxA)): #alfa
+            mk = omega[:,t,a]*(ratioEa[:,t,a]-multiplicityEa[:,t,a])
+            if any(omega[:,t,a] > 1e-2):
+                axarr[maxRanges-1-t].plot(cov, mk, ls="", label=labelAlfa[a],color=cm(abs((a%20)/20)), alpha=0.75, marker=markers[a%7], markersize=0.2)
+        axarr[maxRanges-1-t].legend(loc="best",  prop={'size':4})
+    #plt.figlegend(myLegends, myLabels, loc=(0.68,0.15), prop={'size':11})
+    plt.savefig("multiplicitiesOmegas"+ext+"2.svg", bbox_inches='tight')
 
 
 figR, ax = plt.subplots(1, figsize=(5,3))
