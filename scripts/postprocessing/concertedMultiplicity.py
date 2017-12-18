@@ -76,15 +76,8 @@ os.chdir(workingPath)
 activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext)
 os.chdir(workingPath)
 
-fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
-fig.subplots_adjust(wspace=0.1)
-axarr.plot(1/kb/temperatures, totalRateEvents[-1], "x",label="Total rate from events")
-axarr.plot(1/kb/temperatures, totalRate[-2], "o",label="Total rate from M")
-#axarr.plot(1/kb/temperatures, abs(totalRateEvents[-1]-totalRate[-1]), label="Error abs", ls=":")
-#axarr.plot(1/kb/temperatures, abs(totalRateEvents[-1]-totalRate[-1])/totalRateEvents[-1], label="Error rel",ls=":")
-axarr.set_yscale("log")
-axarr.legend(loc="best", prop={'size':6})
-fig.savefig("totalRates.svg",  bbox_inches='tight')
+for i in range(p.mMsr-2,p.mMsr):
+    mp.plotTotalRates(1/kb/temperatures, totalRateEvents[i], totalRate[i], i)
 
 print(np.shape(tempMavg))
 
