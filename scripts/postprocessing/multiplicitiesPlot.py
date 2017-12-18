@@ -177,7 +177,7 @@ def fitAndPlotLinear(x, y, rngt, ax, alfa, showPlot, labelAlfa, co2):
     return slopes
 
 
-def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False, total=False):
+def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False, total=False, verbose=False):
     showPlot = sp# and (alfa == 4 or alfa == 5)
     markers=["o", "s","D","^","d","h","p"]
     cm = plt.get_cmap('tab20')
@@ -196,7 +196,7 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False, total=False):
         putLabels(ax, co2+1, a, total)
     # all
     s = allSlopes(x,y)
-    if any(np.isinf(s)) or any(np.isnan(s)):
+    if verbose and (any(np.isinf(s)) or any(np.isnan(s))):
         print("error fitting",alfa)
         
     for i in range(0,len(x)):
