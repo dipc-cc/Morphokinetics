@@ -146,7 +146,7 @@ public abstract class AbstractGrowthSimulation extends AbstractSimulation {
       } else {
         width = (int) getParser().getCoverage();
       }
-      if (!getParser().getCalculationMode().equals("catalysis")) {
+      if (false) {
         while (true) {
           try {
             TerminalLoop.sleep(1000);
