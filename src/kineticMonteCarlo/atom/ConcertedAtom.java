@@ -122,7 +122,7 @@ public class ConcertedAtom extends AgAtomSimple {
       case 2: // 3 subtypes
         subtype = getEdgeSubtype(bits);
         return (byte) (type + subtype);
-      case 3: // 2 subtypes
+      case 3: // 3 subtypes
         subtype = getKinkSubtype(bits);
         return (byte) (5 + subtype); 
       case 4: // 3 subtypes
