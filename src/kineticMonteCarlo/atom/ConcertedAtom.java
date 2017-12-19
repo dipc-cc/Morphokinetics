@@ -90,7 +90,7 @@ public class ConcertedAtom extends AgAtomSimple {
   }
   
   /**
-   * Defines 11 atom types:
+   * Defines 11 atom types,subtypes:
    *  0   -> 0
    *  1   -> 1
    *  2,0 -> 2
@@ -102,6 +102,8 @@ public class ConcertedAtom extends AgAtomSimple {
    *  4,1 -> 8
    *  4,2 -> 9
    *  5   -> 10
+   *  6   -> 16
+   * with some of them as detaching destination.
    * 
    * @return 0 <= type < 11.
    */
@@ -109,7 +111,7 @@ public class ConcertedAtom extends AgAtomSimple {
   public byte getRealType() {
     byte type = getType();
     BitSet bits = getCode();
-    return getTypeCode(type,bits);
+    return getTypeCode(type, bits);
   }
   
   private byte getTypeCode(byte type, BitSet bits) {
