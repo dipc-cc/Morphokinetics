@@ -32,6 +32,10 @@ public class AbstractGrowthAtomAttributes {
    */
   private int islandNumber;
   /**
+   * If current atom can move along with another atom inside an island, otherwise is 0.
+   */
+  private int multiAtomNumber;
+  /**
    * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
    * has to be moved with the corresponding diffusion.
    *
@@ -76,11 +80,21 @@ public class AbstractGrowthAtomAttributes {
   public void setIslandNumber(int islandNumber) {
     this.islandNumber = islandNumber;
   }
+
+  public int getMultiAtomNumber() {
+    return multiAtomNumber;
+  }
+
+  public void setMultiAtomNumber(int multiAtomNumber) {
+    this.multiAtomNumber = multiAtomNumber;
+  }
+  
   
   public void clear() {
     depositionPosition = null;
     depositionTime = 0;
     hops = 0;
     islandNumber = 0;
+    multiAtomNumber = 0;
   }
 }
