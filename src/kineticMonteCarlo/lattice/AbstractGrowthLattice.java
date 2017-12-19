@@ -51,6 +51,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int[] emptyTypesCounter;
   private int atomTypesAmount;
   private ArrayList<Island> islands;
+  private ArrayList<Island> multiAtoms;
   private int innerPerimeter;
   private int outerPerimeter;
   private double tracerDistance;
@@ -76,6 +77,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     innerPerimeter = 0;
     outerPerimeter = 0;
     islands = new ArrayList<>();
+    multiAtoms = new ArrayList<>();
   }
 
   public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
@@ -281,6 +283,13 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     islands.add(number, destination);
   }
   
+  public Island getMultiAtom(int i) {
+    if (multiAtoms != null) {
+      return multiAtoms.get(i);
+    }
+    return null;
+  }
+  
   /**
    * Computes the average distances to the centre of mass for all islands.
    *
@@ -304,6 +313,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return islands.iterator();
   }
 
+  public int getMultiAtomCount() {
+    return multiAtoms.size();
+  }
+  
   @Override
   public int size() {
     return getHexaSizeI() * getHexaSizeJ();
