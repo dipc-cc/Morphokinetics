@@ -17,6 +17,7 @@ public class AbstractConcertedRates implements IRates {
   private double diffusionMl;
   private double[][] energies;
   private double[] concertedEnergies;
+  private double[] multiAtomEnergies;
   
     private final double prefactor;
   /** Temperature (K). */
@@ -35,6 +36,10 @@ public class AbstractConcertedRates implements IRates {
     this.concertedEnergies = energies;
   }
   
+  final void setMultiAtomEnergies(double[] energies) {
+    this.multiAtomEnergies = energies;
+  }
+  
   private double getRate(int sourceType, int destinationType, double temperature) {
     return prefactor * Math.exp(-energies[sourceType][destinationType] / (kB * temperature));
   }
@@ -44,6 +49,13 @@ public class AbstractConcertedRates implements IRates {
    */
   private double getRate(int size, double temperature) {
     return prefactor * Math.exp(-concertedEnergies[size] / (kB * temperature));
+  }
+  
+  /**
+   * Multi atom version.
+   */
+  private double getMultiAtomRate(int size, double temperature) {
+    return prefactor * Math.exp(-multiAtomEnergies[size] / (kB * temperature));
   }
   
   /**
@@ -129,6 +141,14 @@ public class AbstractConcertedRates implements IRates {
     double[] rates = new double[concertedEnergies.length];
     for (int i = 0; i < concertedEnergies.length; i++) {
       rates[i] = getRate(i, temperature);
+    }
+    return rates;
+  }
+  
+  public double[] getMultiAtomRates() {
+    double[] rates = new double[multiAtomEnergies.length];
+    for (int i = 0; i < multiAtomEnergies.length; i++) {
+      rates[i] = getMultiAtomRate(i, temperature);
     }
     return rates;
   }

@@ -149,5 +149,10 @@ public class ConcertedCuNiRates extends AbstractConcertedRates {
     concertedEnergies[7] = 0.291; 
     concertedEnergies[8] = 0.340; 
     setConcertedEnergies(concertedEnergies);
+    
+    double[] multiAtomEnergies = new double[2]; // 2 atoms can move in an edge
+    multiAtomEnergies[0] = 0.478; // type 1, one of the atoms goes from 2 to 1 neighbour
+    multiAtomEnergies[1] = 0.434; // type 2, both atom go from 2 to 2 neighbours.
+    setMultiAtomEnergies(multiAtomEnergies);
   }
 }
