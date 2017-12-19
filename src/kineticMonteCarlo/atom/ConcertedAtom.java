@@ -130,6 +130,8 @@ public class ConcertedAtom extends AgAtomSimple {
         return (byte) (7 + subtype);
       case 5: // no subtype
         return 10;
+      case 6: // all neighbour atoms occupied
+        return 16; // does not really matter
     }
     throw new ArrayIndexOutOfBoundsException("Origin type has to be 0 <= x <= 5");
   }
