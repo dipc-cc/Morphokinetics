@@ -212,6 +212,10 @@ public class Parser {
    * See {@link #doIslandDiffusion() ()}.
    */
   private boolean doIslandDiffusion;
+  /**
+   * See {@link #doMultiAtomDiffusion() ()}.
+   */
+  private boolean doMultiAtomDiffusion;
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -326,6 +330,7 @@ public class Parser {
     catalysisO2Dissociation = true;
     automaticCollections = false;
     doIslandDiffusion = true;
+    doMultiAtomDiffusion = true;
     
     evolutionaryAlgorithm = "original";
     parallelEvaluator = false;
@@ -612,6 +617,11 @@ public class Parser {
       doIslandDiffusion = true;
     }
     try {
+      doMultiAtomDiffusion = json.getBoolean("doMultiAtomDiffusion");
+    } catch (JSONException e) {
+      doMultiAtomDiffusion = true;
+    }
+    try {
       outputData = json.getBoolean("outputData");
     } catch (JSONException e) {
       outputData = false;
@@ -818,6 +828,7 @@ public class Parser {
     System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
     System.out.printf("%32s: %s,\n", "\"automaticCollections\"", automaticCollections);
     System.out.printf("%32s: %s,\n", "\"doIslandDiffusion\"", doIslandDiffusion);
+    System.out.printf("%32s: %s,\n", "\"doMultiAtomDiffusion\"", doMultiAtomDiffusion);
     System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
@@ -1629,6 +1640,17 @@ public class Parser {
    */
   public boolean doIslandDiffusion() {
     return doIslandDiffusion;
+  }
+  
+  /**
+   * In concerted calculation mode, allow to atoms on the edge to move. For example, two atoms can diffuse together.
+   * 
+   * Input "parameter" variable: {@code doMultiAtomDiffusion}.
+   * 
+   * @return multi-atom moving
+   */
+  public boolean doMultiAtomDiffusion() {
+    return doMultiAtomDiffusion;
   }
   
   public String getEvolutionaryAlgorithm() {
