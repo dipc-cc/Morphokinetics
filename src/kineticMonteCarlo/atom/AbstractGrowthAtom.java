@@ -282,6 +282,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     return attributes.getIslandNumber();
   }
   
+  public void setMultiAtomNumber(int multiAtomNumber) {
+    attributes.setMultiAtomNumber(multiAtomNumber);
+  }
+  
+  public int getMultiAtomNumber() {
+    return attributes.getMultiAtomNumber();
+  }
+  
   /**
    * When counting islands, we have to keep track of the visited atoms.
    * 
