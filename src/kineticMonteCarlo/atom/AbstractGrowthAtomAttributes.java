@@ -5,6 +5,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.HashSet;
+import java.util.Set;
 import javafx.geometry.Point3D;
 
 /**
@@ -34,7 +36,11 @@ public class AbstractGrowthAtomAttributes {
   /**
    * If current atom can move along with another atom inside an island, otherwise is 0.
    */
-  private int multiAtomNumber;
+  private Set<Integer> multiAtomNumber;
+  
+  public AbstractGrowthAtomAttributes() {
+    multiAtomNumber = new HashSet();
+  }
   /**
    * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
    * has to be moved with the corresponding diffusion.
@@ -81,12 +87,12 @@ public class AbstractGrowthAtomAttributes {
     this.islandNumber = islandNumber;
   }
 
-  public int getMultiAtomNumber() {
+  public Set getMultiAtomNumber() {
     return multiAtomNumber;
   }
 
-  public void setMultiAtomNumber(int multiAtomNumber) {
-    this.multiAtomNumber = multiAtomNumber;
+  public void addMultiAtomNumber(int multiAtomNumber) {
+    this.multiAtomNumber.add(multiAtomNumber);
   }
   
   
@@ -95,6 +101,6 @@ public class AbstractGrowthAtomAttributes {
     depositionTime = 0;
     hops = 0;
     islandNumber = 0;
-    multiAtomNumber = 0;
+    multiAtomNumber = new HashSet<>();
   }
 }

@@ -4,6 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.Set;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.AbstractProcess;
 
@@ -283,10 +284,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   }
   
   public void setMultiAtomNumber(int multiAtomNumber) {
-    attributes.setMultiAtomNumber(multiAtomNumber);
+    attributes.addMultiAtomNumber(multiAtomNumber);
   }
   
-  public int getMultiAtomNumber() {
+  public Set getMultiAtomNumber() {
     return attributes.getMultiAtomNumber();
   }
   
