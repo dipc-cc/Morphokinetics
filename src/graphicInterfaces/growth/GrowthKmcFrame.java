@@ -78,6 +78,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private final int maxCoverage;
   private JCheckBoxMenuItem idMi;
   private JCheckBoxMenuItem islandsMi;
+  private JCheckBoxMenuItem multiAtomMi;
   private ImageIcon pauseIcon;
   private ImageIcon resumeIcon;
   private int pngLastTmpFile;
@@ -384,11 +385,16 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     idMi.setMnemonic(KeyEvent.VK_I);
     idMi.setDisplayedMnemonicIndex(10);
     idMi.setSelected(true);
-        
+
     islandsMi = new JCheckBoxMenuItem("Show island numbers");
     islandsMi.setMnemonic(KeyEvent.VK_N);
     islandsMi.setDisplayedMnemonicIndex(12);
     islandsMi.setSelected(false);
+    
+    multiAtomMi = new JCheckBoxMenuItem("Show multi atom numbers");
+    multiAtomMi.setMnemonic(KeyEvent.VK_M);
+    multiAtomMi.setDisplayedMnemonicIndex(5);
+    multiAtomMi.setSelected(false);
     
     perimeterMi = new JCheckBoxMenuItem("Print perimeter");
     perimeterMi.setMnemonic(KeyEvent.VK_P);
@@ -404,6 +410,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     viewMenu.add(bwMi);
     viewMenu.add(idMi);
     viewMenu.add(islandsMi);
+    viewMenu.add(multiAtomMi);
     viewMenu.add(centresMi);
     viewMenu.add(perimeterMi);
     viewMenu.setMnemonic(KeyEvent.VK_V);
@@ -444,6 +451,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
 
     idMi.addItemListener(new MenuItemHandler());
     islandsMi.addItemListener(new MenuItemHandler());
+    multiAtomMi.addItemListener(new MenuItemHandler());
     
     centresMi.addItemListener((ItemEvent e) -> {
       canvas.changePrintIslandCentres();
@@ -455,19 +463,21 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   }
 
   private void idButtonPressed() {
-    idButtonState = (idButtonState + 1) % 3; // Three different states are possible
+    idButtonState = (idButtonState + 1) % 4; // Four different states are possible
     switch (idButtonState) {
       case 0: // prints nothing
         idMi.setSelected(false);
         islandsMi.setSelected(false);
+        multiAtomMi.setSelected(false);
         break;
       case 1: // prints atom identifiers
         idMi.setSelected(true);
         break;
       case 2: // prints island numbers
         islandsMi.setSelected(true);
-        islandsMi.setSelected(true);
         break;
+      case 3: // prints multi atom numbers (dimers that can diffuse through the edge...)
+        multiAtomMi.setSelected(true);
     }    
   }
     
@@ -482,18 +492,27 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     public void itemStateChanged(ItemEvent e) {
       AbstractButton button = (AbstractButton) e.getItem();
       
-      if (idMi.equals(button)){
-        if (idMi.isSelected() && islandsMi.isSelected()) {
+      if (idMi.equals(button)) {
+        if (idMi.isSelected() && (islandsMi.isSelected() || multiAtomMi.isSelected())) {
           islandsMi.setSelected(false);
+          multiAtomMi.setSelected(false);
         }
       }
-      if (islandsMi.equals(button)){
-        if (idMi.isSelected() && islandsMi.isSelected()) {
+      if (islandsMi.equals(button)) {
+        if (islandsMi.isSelected() && (idMi.isSelected() || multiAtomMi.isSelected())) {
           idMi.setSelected(false);
+          multiAtomMi.setSelected(false);
+        }
+      }
+      if (multiAtomMi.equals(button)) {
+        if (multiAtomMi.isSelected() && (idMi.isSelected() || islandsMi.isSelected())) {
+          idMi.setSelected(false);
+          islandsMi.setSelected(false);
         }
       }
       canvas.setPrintId(idMi.isSelected());
       canvas.setPrintIslandNumber(islandsMi.isSelected());
+      canvas.setPrintMultiAtom(multiAtomMi.isSelected());
     }
   }
 }

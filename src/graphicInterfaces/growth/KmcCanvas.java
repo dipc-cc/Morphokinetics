@@ -51,6 +51,7 @@ public class KmcCanvas extends Canvas {
   private boolean paused;
   private boolean printId;
   private boolean printIslandNumber;
+  private boolean printMultiAtom;
   private boolean printIslandCentres;
   private Restart restart;
   
@@ -121,6 +122,10 @@ public class KmcCanvas extends Canvas {
   
   public void setPrintIslandNumber(boolean printIslandNumber) {
     this.printIslandNumber = printIslandNumber;
+  }
+  
+  public void setPrintMultiAtom(boolean printMultiAtom) {
+    this.printMultiAtom = printMultiAtom;
   }
   
   public void changePrintIslandCentres() {
@@ -301,6 +306,9 @@ public class KmcCanvas extends Canvas {
             if (printIslandNumber) {
               String text = Integer.toString(atom.getIslandNumber());
               g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+            }
+            if (printMultiAtom) {
+              g.drawString(atom.getAttributes().getMultiAtomNumber().toString(), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
             }
           }
         } else if (!atom.isOutside()) {
