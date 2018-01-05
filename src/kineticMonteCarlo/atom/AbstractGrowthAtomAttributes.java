@@ -36,10 +36,10 @@ public class AbstractGrowthAtomAttributes {
   /**
    * If current atom can move along with another atom inside an island, otherwise is 0.
    */
-  private Set<Integer> multiAtomNumber;
+  private Set<Integer> multiAtomNumberSet;
   
   public AbstractGrowthAtomAttributes() {
-    multiAtomNumber = new HashSet();
+    multiAtomNumberSet = new HashSet();
   }
   /**
    * Stores when the atom has been deposited. It is defined first when an atom is deposited and it
@@ -88,19 +88,29 @@ public class AbstractGrowthAtomAttributes {
   }
 
   public Set getMultiAtomNumber() {
-    return multiAtomNumber;
+    return multiAtomNumberSet;
   }
 
   public void addMultiAtomNumber(int multiAtomNumber) {
-    this.multiAtomNumber.add(multiAtomNumber);
+    this.multiAtomNumberSet.add(multiAtomNumber);
   }
   
+  public void removeMultiAtomNumber(int multiAtomNumber) {
+    this.multiAtomNumberSet.remove(multiAtomNumber);
+  }
+  
+  /**
+   * Removes all multi atoms that current atoms belonged to.
+   */
+  public void removeMultiAtoms() {
+    multiAtomNumberSet = new HashSet<>();
+  }    
   
   public void clear() {
     depositionPosition = null;
     depositionTime = 0;
     hops = 0;
     islandNumber = 0;
-    multiAtomNumber = new HashSet<>();
+    multiAtomNumberSet = new HashSet<>();
   }
 }

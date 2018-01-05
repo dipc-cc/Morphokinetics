@@ -174,7 +174,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
 
   public int getMultiplier() {
     return multiplier;
-  }  
+  }
 
   /**
    * @return the bondsProbability.
@@ -286,6 +286,17 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   
   public void setMultiAtomNumber(int multiAtomNumber) {
     attributes.addMultiAtomNumber(multiAtomNumber);
+  }
+  
+  public void removeMultiAtomNumber(int multiAtomNumber) {
+    attributes.removeMultiAtomNumber(multiAtomNumber);
+  }
+  
+  /**
+   * Removes all multi atoms that current atoms belonged to.
+   */
+  public void removeMultiAtoms() {
+    attributes.removeMultiAtoms();
   }
   
   public Set getMultiAtomNumber() {
