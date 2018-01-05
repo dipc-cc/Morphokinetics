@@ -6,6 +6,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.Arrays;
+import java.util.List;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import utils.StaticRandom;
 
@@ -110,6 +112,12 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   public GrapheneAtom getNeighbour(int pos) {
     return neighbours[pos];
   }
+  
+  @Override
+  public List getAllNeighbours() {
+    return Arrays.asList(neighbours);
+  }
+  
 
   @Override
   public int getOrientation() {

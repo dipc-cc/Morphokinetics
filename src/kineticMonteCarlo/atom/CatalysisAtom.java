@@ -5,6 +5,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.Arrays;
+import java.util.List;
 import kineticMonteCarlo.process.CatalysisProcess;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
@@ -130,6 +132,11 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   @Override
   public void setNeighbour(AbstractGrowthAtom a, int pos) {
     neighbours[pos] = (CatalysisAtom) a;
+  }
+  
+  @Override
+  public List getAllNeighbours() {
+    return Arrays.asList(neighbours);
   }
 
   @Override

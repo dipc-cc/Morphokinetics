@@ -4,6 +4,7 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.AbstractProcess;
@@ -428,6 +429,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   public abstract void setNeighbour(AbstractGrowthAtom a, int pos);
 
   public abstract AbstractGrowthAtom getNeighbour(int pos);
+  
+  public abstract List getAllNeighbours();
 
   public abstract double updateOneBound(int bond);
   

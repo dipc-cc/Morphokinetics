@@ -4,6 +4,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.Arrays;
+import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import utils.StaticRandom;
@@ -91,6 +93,11 @@ public class AgAtom extends AbstractGrowthAtom {
     return neighbours[pos];
   }
 
+  @Override
+  public List getAllNeighbours() {
+    return Arrays.asList(neighbours);
+  }
+  
   @Override
   public boolean isEligible() {
     return isOccupied() && getType() < KINK_A;

@@ -5,6 +5,8 @@
  */
 package kineticMonteCarlo.atom;
 
+import java.util.Arrays;
+import java.util.List;
 import utils.StaticRandom;
 
 /**
@@ -50,6 +52,11 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   @Override
   public BasicGrowthAtom getNeighbour(int pos) {
     return neighbours[pos];
+  }
+  
+  @Override
+  public List getAllNeighbours() {
+    return Arrays.asList(neighbours);
   }
   
   /**
