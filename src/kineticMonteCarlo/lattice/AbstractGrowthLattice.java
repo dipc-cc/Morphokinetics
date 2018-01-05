@@ -867,7 +867,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   public void swapAtomsInMultiAtom(AbstractGrowthAtom origin, AbstractGrowthAtom destination) {
-    Object a = null;
     if (!destination.getMultiAtomNumber().isEmpty()) {
       Iterator iter = destination.getMultiAtomNumber().iterator();
       while (iter.hasNext()) {
