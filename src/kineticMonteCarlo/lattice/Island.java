@@ -32,6 +32,21 @@ public class Island  implements Comparable {
     atoms = new ArrayList<>();
   }
   
+  /**
+   * To clone.
+   * 
+   * @param another 
+   */
+  public Island(Island another) {
+    this.islandNumber = another.islandNumber;
+    this.numberOfAtoms = another.numberOfAtoms;
+    this.maxDistance = another.maxDistance;
+    this.sumDistance = another.sumDistance;
+    this.centreOfMass = another.centreOfMass;
+    this.atoms = new ArrayList<>(another.atoms);
+    this.totalRate = another.totalRate;            
+  }
+  
   public int getIslandNumber() {
     return islandNumber;
   }
