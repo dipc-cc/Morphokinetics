@@ -24,7 +24,12 @@ import static java.lang.Math.sin;
 import static java.lang.Math.round;
 import static java.lang.Math.abs;
 import static java.lang.Math.floorDiv;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -46,12 +51,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private final int hexaArea;
   private int occupied;
   private int islandCount;
+  private int multiAtomsCount;
+  private int multiAtomsIndex;
   private int monomerCount;
   private int[] atomTypesCounter;
   private int[] emptyTypesCounter;
   private int atomTypesAmount;
   private ArrayList<Island> islands;
-  private ArrayList<Island> multiAtoms;
+  private final Map<Integer, Island> multiAtomsMap;
   private int innerPerimeter;
   private int outerPerimeter;
   private double tracerDistance;
@@ -77,7 +84,9 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     innerPerimeter = 0;
     outerPerimeter = 0;
     islands = new ArrayList<>();
-    multiAtoms = new ArrayList<>();
+    multiAtomsMap = new HashMap<>();
+    multiAtomsCount = 0;
+    multiAtomsIndex = 1;
   }
 
   public abstract AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour);
@@ -284,10 +293,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   public Island getMultiAtom(int i) {
-    if (multiAtoms != null) {
-      return multiAtoms.get(i);
+    if (multiAtomsMap != null) {
+      return multiAtomsMap.get(i);
     }
     return null;
+  }
+  
+  public Iterator getMultiAtomsIterator() {
+    return multiAtomsMap.values().iterator();
   }
   
   /**
@@ -314,7 +327,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
 
   public int getMultiAtomCount() {
-    return multiAtoms.size();
+    return multiAtomsMap.size();
   }
   
   @Override
@@ -518,6 +531,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
     islands = new ArrayList<>(); // empty islands
     islandCount = 0;
+    multiAtomsCount = 0;
+    multiAtomsIndex = 1;
   }
 
   /**
@@ -849,5 +864,130 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         }
       }
     }
+  }
+  
+  public void swapAtomsInMultiAtom(AbstractGrowthAtom origin, AbstractGrowthAtom destination) {
+    Object a = null;
+    if (!destination.getMultiAtomNumber().isEmpty()) {
+      Iterator iter = destination.getMultiAtomNumber().iterator();
+      while (iter.hasNext()) {
+        Integer multiAtomNumber = ((Integer) iter.next());
+        Island multiAtom = multiAtomsMap.get(multiAtomNumber);
+        multiAtom.removeAtom(origin);
+        multiAtom.addAtom(destination);
+      }
+    }
+  }
+  
+  /**
+   * Counts the number of islands from current atom. It iterates trough all neighbours, to set 
+   * all them the same island number.
+   *
+   * @param atom Atom to be classified.
+   * @return Created Island, null otherwise.
+   */
+  public ArrayList<Island> identifyAddMultiAtom(AbstractGrowthAtom atom) {
+    ArrayList<Island> foundMultiAtoms = new ArrayList<>();
+    if (atom.isOccupied()) {
+      if (atom.getRealType() == 5) {// 3 consecutive occupied neighbours.
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+          if (neighbour.isOccupied() && neighbour.getRealType() == 5) {
+            Island found = addMultiAtomIsland(atom, neighbour);
+            if (found != null)
+              foundMultiAtoms.add(found);
+          }
+        }
+      }
+    }
+    return foundMultiAtoms;
+  }
+ 
+  private Island addMultiAtomIsland(AbstractGrowthAtom atom, AbstractGrowthAtom neighbour) {
+    if (onlyOneNeighbourInCommon(atom, neighbour)) {
+      if (atom.getMultiAtomNumber().isEmpty() || neighbour.getMultiAtomNumber().isEmpty() ||
+              allMultiAtomsDifferent(atom, neighbour)) { // an atom can belong to many multi-atom
+        multiAtomsCount++;
+        Island multiAtomIsland = new Island(multiAtomsIndex);
+        multiAtomsMap.put(multiAtomsIndex,multiAtomIsland);
+        atom.setMultiAtomNumber(multiAtomsIndex);
+        neighbour.setMultiAtomNumber(multiAtomsIndex);
+        multiAtomsIndex++;
+        multiAtomIsland.addAtom(atom);
+        multiAtomIsland.addAtom(neighbour);
+        return multiAtomIsland;
+      }
+    }
+    return null;
+  }
+  
+  private boolean allMultiAtomsDifferent(AbstractGrowthAtom atom, AbstractGrowthAtom neighbour) {
+    boolean overlap = neighbour.getMultiAtomNumber().stream().noneMatch(s -> atom.getMultiAtomNumber().contains(s));
+    return overlap;
+  }
+  
+  /**
+   * Edge diffusion can only happen when two atoms are in an edge. This can be identified by
+   * counting common neighbours: if only one neighbour is in common, true edge diffusion; if there
+   * are two, is not possible edge diffusion.
+   *
+   * @param atom
+   * @param neighbour
+   * @return
+   */
+  private boolean onlyOneNeighbourInCommon(AbstractGrowthAtom atom, AbstractGrowthAtom neighbour) {
+    ArrayList<AbstractGrowthAtom> allNeighbours = new ArrayList(neighbour.getAllNeighbours());
+    allNeighbours.addAll(atom.getAllNeighbours());
+    List sameNeighbours = (List) allNeighbours.stream().filter(i -> Collections.frequency(allNeighbours, i) > 1).collect(Collectors.toList()); // always two common neighbours.
+    return !((AbstractGrowthAtom)sameNeighbours.get(0)).isOccupied() ||
+            !((AbstractGrowthAtom)sameNeighbours.get(1)).isOccupied();
+  }
+  
+  public int identifyRemoveMultiAtomIsland(AbstractGrowthAtom atom) {
+    int removedCount = 0;
+    boolean separated = false;
+    if (!atom.getMultiAtomNumber().isEmpty()) {
+      
+      if (!atom.isOccupied()) {
+        separated = true;
+      }
+      if (atom.getRealType() != 5) {
+        separated = true;
+      } 
+      
+      if (atom.isOccupied() && atom.getRealType() == 5) { // atom is occupied and it is of type 5
+        separated = true;
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+          if (neighbour.isOccupied() && neighbour.getRealType() == 5) {
+            separated = false;
+          }
+        }
+      }
+      if (separated) {
+        removedCount += removeMultiAtom(atom);
+      }
+    }
+    return removedCount;
+  }
+  
+  private int removeMultiAtom(AbstractGrowthAtom atom) {
+    int removedCount = 0;
+    Iterator iter = new HashSet(atom.getMultiAtomNumber()).iterator(); // iterate over a copy
+    while (iter.hasNext()) {
+      removedCount++;
+      int multiAtomIndex = (int) iter.next();
+      Island multiAtom = multiAtomsMap.get(multiAtomIndex);
+      while (multiAtom.getNumberOfAtoms() > 0) {
+        AbstractGrowthAtom neighbour = multiAtom.getAtomAt(0);
+        multiAtom.removeAtom(neighbour);
+        atom.removeMultiAtomNumber(multiAtomIndex);
+        neighbour.removeMultiAtomNumber(multiAtomIndex);
+      }
+      multiAtomsMap.remove(multiAtomIndex);
+      multiAtomsCount--;
+    }
+
+    return removedCount;
   }
 }
