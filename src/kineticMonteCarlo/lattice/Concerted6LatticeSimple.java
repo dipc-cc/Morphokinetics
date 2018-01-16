@@ -68,7 +68,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
     neighbourAtom.addOccupiedNeighbour(-1);
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {
-      throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible");
+      throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible " + neighbourAtom + neighbourAtom.getType());
     }
     ((ConcertedAtom) neighbourAtom).addNMobile(-1); // remove one mobile atom (original atom has been extracted)
 
