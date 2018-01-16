@@ -410,7 +410,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       return null;
     }
 
-    destinationAtom = (CatalysisAtom) sites[ADSORPTION].randomAtom();
+    destinationAtom = (CatalysisAtom) sites[ADSORPTION].randomElement();
 
     if (destinationAtom == null || destinationAtom.getRate(ADSORPTION) == 0 || destinationAtom.isOccupied()) {
       boolean isThereAnAtom = destinationAtom == null;
@@ -450,7 +450,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void desorpAtom() {    
-    CatalysisAtom atom = (CatalysisAtom) sites[DESORPTION].randomAtom();
+    CatalysisAtom atom = (CatalysisAtom) sites[DESORPTION].randomElement();
     int atomsToDesorp = 1;
     CatalysisAtom neighbour = null;
     if (atom.getType() == O) { // it has to desorp with another O to create O2
@@ -468,7 +468,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private void reactAtom() {
-    CatalysisAtom atom = (CatalysisAtom) sites[REACTION].randomAtom();
+    CatalysisAtom atom = (CatalysisAtom) sites[REACTION].randomElement();
     // it has to react with another atom
     CatalysisAtom neighbour = atom.getRandomNeighbour(REACTION);
     getLattice().extract(neighbour);
@@ -493,7 +493,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    * Moves an atom.
    */
   private void diffuseAtom() {
-    CatalysisAtom originAtom = (CatalysisAtom) sites[DIFFUSION].randomAtom();
+    CatalysisAtom originAtom = (CatalysisAtom) sites[DIFFUSION].randomElement();
     CatalysisAtom destinationAtom = originAtom.getRandomNeighbour(DIFFUSION);
     destinationAtom.setType(originAtom.getType());
     getLattice().extract(originAtom);    

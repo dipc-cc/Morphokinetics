@@ -45,7 +45,11 @@ public interface IAtomsCollection<T extends Comparable<T>> {
    */
   public void reset();
   
-  public T randomAtom();
+  /**
+   * Chooses a random atom or island.
+   * @return atom/island.
+   */
+  public T randomElement();
   
   public Iterator<T> iterator();
   

@@ -7,7 +7,7 @@ package utils.list.atoms;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
 
 /**
@@ -43,7 +43,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
    */
   @Override
   public void insert(T atom) {
-    AbstractGrowthAtom a = (AbstractGrowthAtom) atom;
+    IElement a = (IElement) atom;
     a.setOnList(process, a.getRate(process) > 0);
     if (a.getRate(process) > 0) {
       add(atom);
@@ -61,7 +61,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
   
   private void add(T atom) {
-    AbstractGrowthAtom a = (AbstractGrowthAtom) atom;
+    IElement a = (IElement) atom;
     totalRate += a.getRate(process);
     atomsArray.add(atom);
   }
@@ -73,7 +73,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
 
   @Override
   public void removeAtomRate(T atom) {
-    AbstractGrowthAtom a = (AbstractGrowthAtom) atom;
+    IElement a = (IElement) atom;
     totalRate -= a.getRate(process);
     a.setRate(process, 0.0);
     atomsArray.remove(atom);
@@ -100,7 +100,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   public void recomputeTotalRate(byte process) {
     double sum = 0.0;
     for (int i = 0; i < atomsArray.size(); i++) {
-      sum += ((AbstractGrowthAtom) atomsArray.get(i)).getRate(process);
+      sum += ((IElement) atomsArray.get(i)).getRate(process);
     }
     totalRate = sum;
   }
@@ -122,14 +122,14 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
   
   @Override
-  public T randomAtom() {
+  public T randomElement() {
     T a = null;
     double randomNumber = StaticRandom.raw() * totalRate;
     
     double sum = 0.0;
     int i;
     for (i = 0; i < atomsArray.size(); i++) {
-      sum += ((AbstractGrowthAtom) atomsArray.get(i)).getRate(process);
+      sum += ((IElement) atomsArray.get(i)).getRate(process);
       if (sum > randomNumber) {
         a = atomsArray.get(i);
         break;
@@ -139,7 +139,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     if (a == null) { // Search has failed
       // Recompute total rate and try again
       recomputeTotalRate(process);
-      a = randomAtom();
+      a = randomElement();
     }
     
     return a;

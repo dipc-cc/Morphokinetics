@@ -236,7 +236,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     
     if (id < 0) {
-      destinationAtom = (ConcertedAtom) sites[ADSORB].randomAtom();
+      destinationAtom = (ConcertedAtom) sites[ADSORB].randomElement();
     } else {
       destinationAtom = (ConcertedAtom) sites[ADSORB].search(new ConcertedAtom(id, -1));
     }
@@ -263,7 +263,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * Moves an atom.
    */
   private void diffuseAtom() {
-    ConcertedAtom originAtom = (ConcertedAtom) sites[SINGLE].randomAtom();
+    ConcertedAtom originAtom = (ConcertedAtom) sites[SINGLE].randomElement();
     ConcertedAtom destinationAtom = originAtom.getRandomNeighbour(SINGLE);
     int oldType = originAtom.getType();
     boolean wasDimer = originAtom.isDimer();

@@ -8,13 +8,14 @@ package kineticMonteCarlo.lattice;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class Island  implements Comparable {
+public class Island implements Comparable, IElement {
 
   private int islandNumber;
   private int numberOfAtoms;
@@ -101,9 +102,50 @@ public class Island  implements Comparable {
   public double getTotalRate() {
     return totalRate;
   }
+  
+  @Override
+  public double getRate(byte process) {
+    return totalRate;
+  }
 
   public void setTotalRate(double totalRate) {
     this.totalRate = totalRate;
+  }
+  
+  @Override
+  public void setRate(byte process, double rate) {
+    totalRate = rate;
+  }
+  
+  @Override
+  public void setOnList(byte process, boolean onList) {
+    // to be done
+  }
+  
+  @Override
+  public double getSumRate(byte process) {
+    // to be done
+    return 0.0;
+  }
+  
+  @Override
+  public void setSumRate(byte process, double rate) {
+    // to be done
+  }
+
+  @Override
+  public void addToSumRate(byte process, double rate) {
+    // to be done
+  }
+  
+  @Override
+  public void equalRate(byte process) {
+    // to be done
+  }
+  
+  @Override
+  public void clear() {
+    // do nothing
   }
   
   /**

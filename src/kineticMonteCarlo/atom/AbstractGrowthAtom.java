@@ -8,12 +8,13 @@ import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.AbstractProcess;
+import kineticMonteCarlo.process.IElement;
 
 /**
  *
  * @author Nestor, J. Alberdi-Rodriguez
  */
-public abstract class AbstractGrowthAtom extends AbstractAtom implements Comparable {
+public abstract class AbstractGrowthAtom extends AbstractAtom implements Comparable,IElement {
   /** TODO document the types and change them to constants
    * 
    */
@@ -383,10 +384,12 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     return processes[process].isActive();
   }
   
+  @Override
   public void setOnList(byte process, boolean onList) {
     processes[process].setActive(onList);
   }
   
+  @Override
   public double getRate(byte process) {
     return processes[process].getRate();
   }
@@ -395,6 +398,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     return processes[process].getEdgeRate(neighbourPos);
   }
   
+  @Override
   public void setRate(byte process, double rate) {
     processes[process].setRate(rate);
   }
@@ -403,18 +407,22 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     processes[process].addRate(rate, neighbourPos);
   }
   
+  @Override
   public double getSumRate(byte process) {
     return processes[process].getSumRate();
   }
   
+  @Override
   public void setSumRate(byte process, double rate) {
     processes[process].setSumRate(rate);
   }
 
+  @Override
   public void addToSumRate(byte process, double rate) {
     processes[process].addSumRate(rate);
   }
   
+  @Override
   public void equalRate(byte process) {
     processes[process].equalRate();
   }
@@ -513,6 +521,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   /**
    * Resets current atom; TERRACE type, no neighbours, no occupied, no outside and no probability.
    */
+  @Override
   public void clear(){
     visited = false;
     setOccupied(false);
