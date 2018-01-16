@@ -194,8 +194,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     if (doDesorption) {
       desorptionRateCOPerSite = rates.getDesorptionRates(CO);
       desorptionRateOPerSite = rates.getDesorptionRates(O);
-      for(int i = 0; i< desorptionRateOPerSite.length; i++){
-          desorptionRateOPerSite[i] = desorptionRateOPerSite[i] *  goMultiplier;
+      for (int i = 0; i < desorptionRateOPerSite.length; i++) {
+        desorptionRateOPerSite[i] = desorptionRateOPerSite[i] * goMultiplier;
       }
     }
     if (doReaction) {
@@ -232,6 +232,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     return ((CatalysisLattice) getLattice()).getCoverage(type);
   }
   
+  @Override
   public float getCoverage() {
     return ((CatalysisLattice) getLattice()).getCoverage();
   }
