@@ -73,13 +73,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
     }   
-    sites = new IAtomsCollection[3];
+    sites = new IAtomsCollection[4];
     automaticCollections = parser.areCollectionsAutomatic();
     col = new AtomsCollection(concertedLattice, "concerted");
     // Either a tree or array 
     sites[ADSORB] = col.getCollection(false, ADSORB);
     sites[SINGLE] = col.getCollection(false, SINGLE);
     sites[CONCERTED] = col.getCollection(false, CONCERTED);
+    sites[MULTI] = col.getCollection(false, MULTI);
 
     totalRate = new double[4]; // adsorption, diffusion, island diffusion, multi-atom
 
@@ -202,6 +203,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     sites[ADSORB].reset();
     sites[SINGLE].reset();
     sites[CONCERTED].reset();
+    sites[MULTI].reset();
   }
   
   private boolean depositAtom(ConcertedAtom atom) {
@@ -427,12 +429,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         sites[ADSORB].insert(a);
         sites[SINGLE].insert(a);
         sites[CONCERTED].insert(a);
+        sites[MULTI].insert(a);
       }
     }
     getList().setRates(totalRate);
     sites[ADSORB].populate();
     sites[SINGLE].populate();
     sites[CONCERTED].populate();
+    sites[MULTI].populate();
     
     if (aeOutput) {
       activationEnergy.setRates(diffusionRatePerAtom);

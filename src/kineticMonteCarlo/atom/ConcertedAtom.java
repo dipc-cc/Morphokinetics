@@ -9,6 +9,7 @@ import java.util.BitSet;
 import kineticMonteCarlo.process.ConcertedProcess;
 import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
+import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
 import utils.StaticRandom;
 
@@ -22,10 +23,11 @@ public class ConcertedAtom extends AgAtomSimple {
   
   public ConcertedAtom(int id, int i) {
     super(id, i);
-    processes = new ConcertedProcess[3];
+    processes = new ConcertedProcess[4];
     processes[ADSORB] = new ConcertedProcess();
     processes[SINGLE] = new ConcertedProcess();
     processes[CONCERTED] = new ConcertedProcess();
+    processes[MULTI] = new ConcertedProcess();
     setProcceses(processes);
   }
   
