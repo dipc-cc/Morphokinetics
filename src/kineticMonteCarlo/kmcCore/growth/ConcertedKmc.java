@@ -419,9 +419,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private void initRates() {
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
-      for (int j = 0; j < uc.size(); j++) { // it will be always 0
+      for (int j = 0; j < uc.size(); j++) { // UC has two atoms
         ConcertedAtom a = (ConcertedAtom) uc.getAtom(j);
-        a.setRate(ADSORB, adsorptionRatePerSite); // there is no neighbour
+        a.setRate(ADSORB, adsorptionRatePerSite); // all empty sites have the same adsorption rate
         a.setOnList(ADSORB, true);
         totalRate[ADSORB] += a.getRate(ADSORB);
         sites[ADSORB].insert(a);
