@@ -89,8 +89,9 @@ public class Island  implements Comparable {
   }
   
   public void removeAtom(AbstractGrowthAtom atom) {
-    numberOfAtoms--;
-    atoms.remove(atom);
+    if (atoms.remove(atom)) {
+      numberOfAtoms--;
+    }
   }
   
   public AbstractGrowthAtom getAtomAt(int i) {
