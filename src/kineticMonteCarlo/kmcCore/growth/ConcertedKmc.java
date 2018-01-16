@@ -39,7 +39,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private long simulatedSteps;
   private final IAtomsCollection[] sites;
   /** Stores all collections of atoms; either in a tree or an array. */
-  AtomsCollection col;
+  private AtomsCollection col;
   private final boolean automaticCollections;
   private final long maxSteps;
   /**
@@ -717,7 +717,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   /**
    * Changes current collection from array/tree to tree/array.
    * 
-   * @param process ADSORPTION, DESORPTION, REACTION, DIFFUSION.
+   * @param process ADSORPTION, SINGLE diffusion, CONCERTED island diffusion or MULTI atom diffusion.
    * @param toTree if true from array to tree, otherwise from tree to array.
    */
   private void changeCollection(byte process, boolean toTree) {
