@@ -1,4 +1,4 @@
-This is Morphokinetics software developed at the Donostia International Physics Center 
+This is Morphokinetics software developed at the Donostia International Physics Center. Morphokinetics is a software to simulate kinetics Monte Carlo (KMC) processes. It can simulate  etching, CVD growing and catalysis processes. To specify simulation mode "parameters" file must be present in the current working directory (more details in {@link Parser}).
 
 ==========================================
 ======   COMPILATION           ===========
