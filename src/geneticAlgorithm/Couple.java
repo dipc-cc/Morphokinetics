@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018 J. Alberdi-Rodriguez
+ * Copyright (C) 2018 N. Ferrando
  *
  * This file is part of Morphokinetics.
  *
@@ -20,7 +20,7 @@ package geneticAlgorithm;
 
 /**
  *
- * @author Nestor
+ * @author N. Ferrando
  */
 public class Couple {
 

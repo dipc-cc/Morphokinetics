@@ -46,7 +46,7 @@ import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
 /**
  *
- * @author Nestor
+ * @author N. Ferrando, J. Alberdi-Rodriguez
  */
 public class KmcCanvas extends Canvas {
 
