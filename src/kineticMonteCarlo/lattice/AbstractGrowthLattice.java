@@ -285,7 +285,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   }
   
   public void swapIsland(Island origin, Island destination) {
-    destination.setTotalRate(origin.getTotalRate());
+    destination.setRate((byte) 0, origin.getRate((byte) 0));
     destination.setIslandNumber(origin.getIslandNumber());
     int number = destination.getIslandNumber();
     islands.remove(number);

@@ -98,20 +98,12 @@ public class Island implements Comparable, IElement {
   public AbstractGrowthAtom getAtomAt(int i) {
     return atoms.get(i);
   }
-
-  public double getTotalRate() {
-    return totalRate;
-  }
   
   @Override
   public double getRate(byte process) {
     return totalRate;
   }
 
-  public void setTotalRate(double totalRate) {
-    this.totalRate = totalRate;
-  }
-  
   @Override
   public void setRate(byte process, double rate) {
     totalRate = rate;
