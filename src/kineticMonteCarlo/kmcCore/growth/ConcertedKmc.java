@@ -136,6 +136,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         diffuseMultiAtom();
         break;
     }
+            
     simulatedSteps++;
     return simulatedSteps == maxSteps;
   }
@@ -340,6 +341,58 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   /**
+   * A copy of moveIsland(): Moves an island and recomputes all the neighbourhood.
+   * Should be merged in the future.
+   *
+   * @param originIsland Island to be moved.
+   * @param direction Moving direction.
+   * @return New island with the number of the original one.
+   */
+  private Island moveMultiAtom(Island originIsland, int direction) {
+    ConcertedAtom iOrigAtom;
+    ConcertedAtom iDestAtom;
+    Island destinationIsland = new Island(originIsland.getIslandNumber());
+    Set<ConcertedAtom> modifiedAtoms = new HashSet<>();
+    //clone
+    Island originIslandCopy = new Island(originIsland);
+    
+    while (originIslandCopy.getNumberOfAtoms() > 0) {     
+      iOrigAtom = (ConcertedAtom) originIslandCopy.getAtomAt(0); // hau aldatu in behar da
+      iDestAtom = (ConcertedAtom) iOrigAtom.getNeighbour(direction);
+      originIslandCopy.removeAtom(iOrigAtom);
+      
+      if (iDestAtom.isOccupied()) {
+        originIslandCopy.addAtom(iOrigAtom);// move to the back and try again
+        continue;
+      }
+      getLattice().extract(iOrigAtom);
+      getLattice().deposit(iDestAtom, false);
+      iDestAtom.swapAttributes(iOrigAtom);              
+      getLattice().swapAtomsInMultiAtom(iOrigAtom, iDestAtom);
+      // Different lines. start
+      //swapIslands!!!!
+      int islandNumber = iDestAtom.getIslandNumber()-1;
+      Island island = getLattice().getIsland(islandNumber);
+      island.removeAtom(iOrigAtom);
+      island.addAtom(iDestAtom);
+      // Different lines. end
+      modifiedAtoms.add(iOrigAtom);
+      modifiedAtoms.add(iDestAtom);
+      
+      destinationIsland.addAtom(iDestAtom);
+    }
+    
+    ArrayList<ConcertedAtom> tmpAtoms = new ArrayList<>();
+    tmpAtoms.addAll(modifiedAtoms); // we need to copy the set to be able to iterate it, while modifying it.
+    for (int i = 0; i < tmpAtoms.size(); i++) { // Update all touched area
+      addModifiedAtoms(modifiedAtoms, tmpAtoms.get(i));
+    }
+    updateRates(modifiedAtoms);
+    
+    return destinationIsland;
+  }
+  
+  /**
    * Moves an island.
    */
   private void diffuseIsland() {
@@ -371,7 +424,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private void diffuseMultiAtom() {
     Island multiAtom = getRandomMultiAtom();
     int direction = multiAtom.getRandomMultiAtomDirection();
-    moveIsland(multiAtom, direction);
+    moveMultiAtom(multiAtom, direction);
   }
   
   private void checkMergeIslands(Island island) {
