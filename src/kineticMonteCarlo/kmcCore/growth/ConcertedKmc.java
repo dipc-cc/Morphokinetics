@@ -428,15 +428,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
         totalRate[ADSORB] += a.getRate(ADSORB);
         sites[ADSORB].insert(a);
         sites[SINGLE].insert(a);
-        sites[CONCERTED].insert(a);
-        sites[MULTI].insert(a);
       }
     }
     getList().setRates(totalRate);
     sites[ADSORB].populate();
     sites[SINGLE].populate();
-    sites[CONCERTED].populate();
-    sites[MULTI].populate();
     
     if (aeOutput) {
       activationEnergy.setRates(diffusionRatePerAtom);
