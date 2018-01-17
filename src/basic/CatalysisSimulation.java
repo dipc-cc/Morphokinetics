@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018 J. Alberdi-Rodriguez
+ * Copyright (C) 2018 K. Valencia, J. Alberdi-Rodriguez
  *
  * This file is part of Morphokinetics.
  *
@@ -31,7 +31,7 @@ import ratesLibrary.IRates;
 
 /**
  *
- * @author karmele, J. Alberdi-Rodriguez
+ * @author K. Valencia, J. Alberdi-Rodriguez
  */
 public class CatalysisSimulation extends AbstractGrowthSimulation {
     
