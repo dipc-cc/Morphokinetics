@@ -46,7 +46,7 @@ import javax.vecmath.Vector3f;
 
 /**
  *
- * @author Administrador
+ * @author N. Ferrando
  */
 public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 

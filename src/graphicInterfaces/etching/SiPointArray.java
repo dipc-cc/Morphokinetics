@@ -30,7 +30,7 @@ import javax.media.j3d.PointArray;
 
 /**
  *
- * @author nesferjo
+ * @author N. Ferrando
  */
 public class SiPointArray extends PointArray {
 

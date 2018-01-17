@@ -25,7 +25,7 @@ import utils.MathUtils;
 
 /**
  *
- * @author U010531
+ * @author N. Ferrando, J. Alberdi-Rodriguez
  */
 public class Panel2D extends javax.swing.JPanel {
 

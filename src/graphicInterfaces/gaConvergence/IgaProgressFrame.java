@@ -22,7 +22,7 @@ import geneticAlgorithm.Individual;
 
 /**
  *
- * @author  N. Ferrando
+ * @author N. Ferrando
  */
 public interface IgaProgressFrame {
 

@@ -41,7 +41,7 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  *
- * @author  N. Ferrando, J. Alberdi-Rodriguez
+ * @author N. Ferrando, J. Alberdi-Rodriguez
  */
 public class GaProgressPanel extends JPanel implements IgaProgressFrame {
 
