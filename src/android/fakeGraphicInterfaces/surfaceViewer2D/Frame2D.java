@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018 N. Ferrando, J. Alberdi-Rodriguez
+ * Copyright (C) 2018 J. Alberdi-Rodriguez
  *
  * This file is part of Morphokinetics.
  *
@@ -20,9 +20,6 @@ package android.fakeGraphicInterfaces.surfaceViewer2D;
 
 import graphicInterfacesCommon.surfaceViewer2D.IFrame2D;
 
-/**
- * Created by jalberdi004 on 10/3/16.
- */
 
 public class Frame2D implements IFrame2D{
   @Override

@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018 N. Ferrando, J. Alberdi-Rodriguez
+ * Copyright (C) 2018 J. Alberdi-Rodriguez
  *
  * This file is part of Morphokinetics.
  *
