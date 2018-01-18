@@ -72,7 +72,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private int[] emptyTypesCounter;
   private int atomTypesAmount;
   private ArrayList<Island> islands;
-  private final Map<Integer, Island> multiAtomsMap;
+  private final Map<Integer, MultiAtom> multiAtomsMap;
   private int innerPerimeter;
   private int outerPerimeter;
   private double tracerDistance;
@@ -306,7 +306,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     islands.add(number, destination);
   }
   
-  public Island getMultiAtom(int i) {
+  public MultiAtom getMultiAtom(int i) {
     if (multiAtomsMap != null) {
       return multiAtomsMap.get(i);
     }
@@ -885,7 +885,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       Iterator iter = destination.getMultiAtomNumber().iterator();
       while (iter.hasNext()) {
         Integer multiAtomNumber = ((Integer) iter.next());
-        Island multiAtom = multiAtomsMap.get(multiAtomNumber);
+        MultiAtom multiAtom = multiAtomsMap.get(multiAtomNumber);
         multiAtom.removeAtom(origin);
         multiAtom.addAtom(destination);
       }
@@ -899,14 +899,14 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    * @param atom Atom to be classified.
    * @return Created Island, null otherwise.
    */
-  public ArrayList<Island> identifyAddMultiAtom(AbstractGrowthAtom atom) {
-    ArrayList<Island> foundMultiAtoms = new ArrayList<>();
+  public ArrayList<MultiAtom> identifyAddMultiAtom(AbstractGrowthAtom atom) {
+    ArrayList<MultiAtom> foundMultiAtoms = new ArrayList<>();
     if (atom.isOccupied()) {
       if (atom.getRealType() == 5) {// 3 consecutive occupied neighbours.
         for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
           AbstractGrowthAtom neighbour = atom.getNeighbour(i);
           if (neighbour.isOccupied() && neighbour.getRealType() == 5) {
-            Island found = addMultiAtomIsland(atom, neighbour);
+            MultiAtom found = addMultiAtomIsland(atom, neighbour, i);
             if (found != null)
               foundMultiAtoms.add(found);
           }
@@ -916,18 +916,19 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return foundMultiAtoms;
   }
  
-  private Island addMultiAtomIsland(AbstractGrowthAtom atom, AbstractGrowthAtom neighbour) {
+  private MultiAtom addMultiAtomIsland(AbstractGrowthAtom atom, AbstractGrowthAtom neighbour, int i) {
     if (onlyOneNeighbourInCommon(atom, neighbour)) {
       if (atom.getMultiAtomNumber().isEmpty() || neighbour.getMultiAtomNumber().isEmpty() ||
               allMultiAtomsDifferent(atom, neighbour)) { // an atom can belong to many multi-atom
         multiAtomsCount++;
-        Island multiAtomIsland = new Island(multiAtomsIndex);
+        MultiAtom multiAtomIsland = new MultiAtom(multiAtomsIndex);
         multiAtomsMap.put(multiAtomsIndex,multiAtomIsland);
         atom.setMultiAtomNumber(multiAtomsIndex);
         neighbour.setMultiAtomNumber(multiAtomsIndex);
         multiAtomsIndex++;
         multiAtomIsland.addAtom(atom);
         multiAtomIsland.addAtom(neighbour);
+        multiAtomIsland.setDirection(i);
         return multiAtomIsland;
       }
     }
@@ -990,7 +991,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     while (iter.hasNext()) {
       removedCount++;
       int multiAtomIndex = (int) iter.next();
-      Island multiAtom = multiAtomsMap.get(multiAtomIndex);
+      MultiAtom multiAtom = multiAtomsMap.get(multiAtomIndex);
       while (multiAtom.getNumberOfAtoms() > 0) {
         AbstractGrowthAtom neighbour = multiAtom.getAtomAt(0);
         multiAtom.removeAtom(neighbour);

@@ -32,6 +32,7 @@ import kineticMonteCarlo.atom.ConcertedAtom;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.lattice.Concerted6LatticeSimple;
 import kineticMonteCarlo.lattice.Island;
+import kineticMonteCarlo.lattice.MultiAtom;
 import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
@@ -691,7 +692,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     if (!doMultiAtomDiffusion) {
       return;
     }
-    ArrayList<Island> multiAtomIsland = getLattice().identifyAddMultiAtom(atom);
+    ArrayList<MultiAtom> multiAtomIsland = getLattice().identifyAddMultiAtom(atom);
     for (int i = 0; i < multiAtomIsland.size(); i++) {
       double rate = getMultiAtomDiffusionRate(1);
       totalRate[MULTI] += rate;

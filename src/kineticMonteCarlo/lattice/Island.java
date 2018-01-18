@@ -37,7 +37,7 @@ public class Island implements Comparable, IElement {
   private Point2D centreOfMass;
   private ArrayList<AbstractGrowthAtom> atoms;
   /** In concerted mode, all island can diffuse with certain rate. */
-  private double totalRate; 
+  private double totalRate;
 
   public Island(int islandNumber) {
     this.islandNumber = islandNumber;
@@ -182,29 +182,6 @@ public class Island implements Comparable, IElement {
    */
   public int getRandomDirection() {
     return StaticRandom.rawInteger(6);
-  }
-  
-  /**
-   * Selects a random direction for the multi atom to move.
-   * 
-   * @return random direction out of 2 possible directions.
-   */
-  public int getRandomMultiAtomDirection() {
-    double random = StaticRandom.raw(); 
-    AbstractGrowthAtom atom1 = atoms.get(0);
-    AbstractGrowthAtom atom2 = atoms.get(1);
-    int direction = -1;
-    for (int i = 0; i < atom1.getNumberOfNeighbours(); i++) {
-      AbstractGrowthAtom neighbour = atom1.getNeighbour(i);
-      if (neighbour.equals(atom2)) {
-        direction = i;
-        break;
-      }
-    }
-    if (random > 0.5) { // half of the times, the other direction
-      return (direction + 3) % 6;
-    }
-    return direction;
   }
 
   /**
