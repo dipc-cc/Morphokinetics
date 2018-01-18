@@ -419,13 +419,13 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     checkMergeIslands(destinationIsland);
   }
   
-  private Island getRandomMultiAtom() {
+  private MultiAtom getRandomMultiAtom() {
     // take into account that the indexes are not consecutive
     double randomNumber = StaticRandom.raw() * totalRate[MULTI];
     double sum = 0.0;
     Iterator iter = getLattice().getMultiAtomsIterator();
     while (iter.hasNext()) {
-      Island multiAtom = ((Island) iter.next());
+      MultiAtom multiAtom = ((MultiAtom) iter.next());
       sum += multiAtom.getRate(MULTI);
       if (sum > randomNumber) {
         return multiAtom;
@@ -437,7 +437,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   private void diffuseMultiAtom() {
-    Island multiAtom = getRandomMultiAtom();
+    MultiAtom multiAtom = getRandomMultiAtom();
     int direction = multiAtom.getRandomMultiAtomDirection();
     moveMultiAtom(multiAtom, direction);
   }
