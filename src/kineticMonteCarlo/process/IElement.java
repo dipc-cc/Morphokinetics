@@ -28,6 +28,8 @@ public interface IElement {
   
   public void setRate(byte process, double rate);
   
+  public void addRate(byte process, double rate, int neighbourPos);
+  
   public void setOnList(byte process, boolean onList);
   
   public double getSumRate(byte process);

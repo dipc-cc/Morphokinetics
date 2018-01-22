@@ -18,7 +18,9 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.process.ConcertedProcess;;
+import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
+import kineticMonteCarlo.process.MultiAtomProcess;
 import utils.StaticRandom;
 
 /**
@@ -27,26 +29,31 @@ import utils.StaticRandom;
  */
 public class MultiAtom extends Island {
   
-  private final ConcertedProcess process;
-  /** MultiAtom has a certain direction. */
+  private final MultiAtomProcess process;
+  /** MultiAtom has a certain direction that goes from atom 0 to atom 1. */
   private int direction;
 
   public MultiAtom(int islandNumber) {
     super(islandNumber);
-    process = new ConcertedProcess();
+    process = new MultiAtomProcess();
   }
 
   public MultiAtom(Island another) {
     super(another);
-    process = new ConcertedProcess();
+    process = new MultiAtomProcess();
   }
 
   public int getDirection() {
     return direction;
   }
 
+  /**
+   * Set the direction of the MultiAtom, from atom at position 0 to atom 1.
+   * 
+   * @param direction [0-5]
+   */
   public void setDirection(int direction) {
-    this.direction = direction % 3;
+    this.direction = direction;
   }
 
   /**
@@ -55,20 +62,45 @@ public class MultiAtom extends Island {
    * @return random direction out of 2 possible directions.
    */
   public int getRandomMultiAtomDirection() {
-    double random = StaticRandom.raw();
-    /*AbstractGrowthAtom atom1 = atoms.get(0);
-    AbstractGrowthAtom atom2 = atoms.get(1);
-    int direction = -1;
-    for (int i = 0; i < atom1.getNumberOfNeighbours(); i++) {
-      AbstractGrowthAtom neighbour = atom1.getNeighbour(i);
-      if (neighbour.equals(atom2)) {
-        direction = i;
-        break;
-      }
-    }//*/
-    if (random > 0.5) { // half of the times, the other direction
+     double randomNumber = StaticRandom.raw() * getRate(MULTI);
+    if (randomNumber < getEdgeRate(0)) {
       return (direction + 3) % 6;
     }
     return direction;
+  }
+  
+  public double getEdgeRate(int pos) {
+    return process.getEdgeRate(pos);
+  }
+  
+  @Override
+  public void addRate(byte ignored, double rate, int pos) {
+    process.addRate(rate, pos);
+  }
+  
+  /**
+   * Edge 0 is the neighbour of atom 0, and
+   * edge 1 is the neighbour of atom 1.
+   * 
+   * @param pos edge 0 or 1
+   * @return type of the possible diffusion: 0 or 1.
+   */
+  public int getEdgeType(int pos) {
+    AbstractGrowthAtom atom;
+    if (pos == 0) { // get neighbour of atom 0
+      atom = getAtomAt(0).getNeighbour((direction + 3) % 6);
+    } else { // get neighbour of atom 1
+      atom = getAtomAt(1).getNeighbour(direction);
+    }
+    if (atom.getType() == 2) 
+      return 0;
+    if (atom.getType() == 3)
+      return 1;
+    if (atom.getType() == 4)
+      return 2;
+    if (atom.getType() == 5)
+      return 3;
+    System.out.println("Error");
+    return -1;
   }
 }

@@ -122,6 +122,12 @@ public class Island implements Comparable, IElement {
     totalRate = rate;
   }
   
+  
+  @Override
+  public void addRate(byte process, double rate, int pos) {
+    // do nothing, not used
+  }
+  
   @Override
   public void setOnList(byte process, boolean onList) {
     // to be done
