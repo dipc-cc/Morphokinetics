@@ -340,6 +340,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   public Iterator<Island> getIslandIterator() {
     return islands.iterator();
   }
+  
+  public Iterator<MultiAtom> getMultiAtomIterator() {
+    return multiAtomsMap.values().iterator();
+  }
 
   public int getMultiAtomCount() {
     return multiAtomsMap.size();

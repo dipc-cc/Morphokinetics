@@ -33,6 +33,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
 import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
+import kineticMonteCarlo.lattice.MultiAtom;
 import kineticMonteCarlo.unitCell.SimpleUc;
 
 /**
@@ -53,8 +54,9 @@ public class ActivationEnergy {
   private Long[][] histogramPossibleCounter;
   private Double[][] histogramPossibleTmp;
   private Long[][] histogramPossibleCounterTmp;
-  private Double[] histogramPossibleConcerted;
-  private Double[] histogramPossibleConcertedTmp;
+  private Double[] histogramPossibleIsland;
+  private Double[] histogramPossibleIslandTmp;
+  private Double[] histogramPossibleMultiAtom;
   private final ArrayList<AbstractAtom> surface;
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
@@ -120,8 +122,9 @@ public class ActivationEnergy {
         lengthI = 12;
         lengthJ = 16;
         numberOfNeighbours = 6;
-        histogramPossibleConcerted = new Double[9];
-        histogramPossibleConcertedTmp = new Double[9];
+        histogramPossibleIsland = new Double[9];
+        histogramPossibleIslandTmp = new Double[9];
+        histogramPossibleMultiAtom = new Double[4];
       }
       histogramPossible = new Double[lengthI][lengthJ];
       histogramPossibleCounter = new Long[lengthI][lengthJ];
@@ -299,12 +302,12 @@ public class ActivationEnergy {
   public void updatePossiblesIslands(Iterator<Island> islands, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       //if (previousProbability != totalAndDepositionProbability) {
-        histogramPossibleConcertedTmp = new Double[9];
+        histogramPossibleIslandTmp = new Double[9];
         // iterate over all islands of the surface to get all possible hops (only to compute multiplicity)
         while (islands.hasNext()) {
           Island island = (Island) islands.next();
           if (island.getNumberOfAtoms() < 9) {
-            histogramPossibleConcerted[island.getNumberOfAtoms()] += elapsedTime;
+            histogramPossibleIsland[island.getNumberOfAtoms()] += elapsedTime;
           }
         }
       /*} else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
@@ -314,6 +317,19 @@ public class ActivationEnergy {
       }*/
     }
   }
+
+  public void updatePossiblesMultiAtoms(Iterator<MultiAtom> islands, double totalAndDepositionProbability, double elapsedTime) {
+    if (doActivationEnergyStudy) {
+      // iterate over all MultiAtom of the surface to get all possible hops (only to compute multiplicity)
+      while (islands.hasNext()) {
+        Island island = (Island) islands.next();
+        if (island.getNumberOfAtoms() < 9) {
+          histogramPossibleMultiAtom[island.getNumberOfAtoms()] += elapsedTime;
+        }
+      }
+    }
+  }
+  
   public void updateSuccess(int oldType, int newType) {
     histogramSuccess[oldType][newType]++;
   }
@@ -337,8 +353,9 @@ public class ActivationEnergy {
       histogramPossibleDesorption = initDouble3();
       histogramPossibleDiffusion = initDouble4();
       
-      histogramPossibleConcerted = initDouble1(9);
-      histogramPossibleConcertedTmp = initDouble1(9);
+      histogramPossibleIsland = initDouble1(9);
+      histogramPossibleIslandTmp = initDouble1(9);
+      histogramPossibleMultiAtom = initDouble1(4);
     }
   }
   
@@ -393,7 +410,10 @@ public class ActivationEnergy {
     print[2].print(time + "\t");
     printAeLow(print[2], "", printLineBreak, histogramPossible); //AePossibleFromList
     for (int i = 0; i < 9; i++) {
-      print[2].print(histogramPossibleConcerted[i] + "\t");
+      print[2].print(histogramPossibleIsland[i] + "\t");
+    }
+    for (int i = 0; i < histogramPossibleMultiAtom.length; i++) {
+      print[2].print(histogramPossibleMultiAtom[i] + "\t");
     }
     print[3].print(time + "\t");
     printAeLow(print[3], "", printLineBreak, histogramPossibleCounter); //AePossibleDiscrete
