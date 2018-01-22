@@ -36,11 +36,9 @@ public class ConcertedAtom extends AgAtomSimple {
   
   public ConcertedAtom(int id, int i) {
     super(id, i);
-    processes = new ConcertedProcess[4];
+    processes = new ConcertedProcess[2];
     processes[ADSORB] = new ConcertedProcess();
     processes[SINGLE] = new ConcertedProcess();
-    processes[CONCERTED] = new ConcertedProcess();
-    processes[MULTI] = new ConcertedProcess();
     setProcceses(processes);
   }
   
@@ -70,7 +68,7 @@ public class ConcertedAtom extends AgAtomSimple {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       setBondsProbability(0, i);
     }
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < processes.length; i++) {
       processes[i].clear();
     }
   }
