@@ -417,6 +417,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     processes[process].setRate(rate);
   }
 
+  @Override
   public void addRate(byte process, double rate, int neighbourPos) {
     processes[process].addRate(rate, neighbourPos);
   }
