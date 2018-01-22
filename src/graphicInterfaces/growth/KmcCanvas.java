@@ -198,7 +198,8 @@ public class KmcCanvas extends Canvas {
     }
     imageName = fileName;
     performDrawToImage();
-    writeXYZ();    
+    writeXyz();
+    writeSvg();
   }
 
   /**
@@ -431,7 +432,11 @@ public class KmcCanvas extends Canvas {
     }
   }
   
-  private void writeXYZ() {
+  private void writeXyz() {
     restart.writeXyz(1, lattice);
+  }
+  
+  private void writeSvg() {
+    restart.writeSvg(1, lattice);
   }
 }
