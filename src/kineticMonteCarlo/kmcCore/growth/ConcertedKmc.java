@@ -121,7 +121,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     if (doMultiAtomDiffusion) {
       diffusionRateMultiAtom = rates.getMultiAtomRates();
     } else {
-      diffusionRateMultiAtom = new double[2];
+      diffusionRateMultiAtom = new double[4];
     }    
     getLattice().setAtomsTypesCounter(12); // There are 7 types and some have subtypes. See {@link ConcertedAtom#getRealType()} for more information
   }
@@ -359,25 +359,26 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * A copy of moveIsland(): Moves an island and recomputes all the neighbourhood.
    * Should be merged in the future.
    *
-   * @param originIsland Island to be moved.
+   * @param originMultiAtom Island to be moved.
    * @param direction Moving direction.
    * @return New island with the number of the original one.
    */
-  private Island moveMultiAtom(Island originIsland, int direction) {
+  private Island moveMultiAtom(MultiAtom originMultiAtom, int direction) {
     ConcertedAtom iOrigAtom;
     ConcertedAtom iDestAtom;
-    Island destinationIsland = new Island(originIsland.getIslandNumber());
+    MultiAtom destinationMultiAtom = new MultiAtom(originMultiAtom.getIslandNumber());
     Set<ConcertedAtom> modifiedAtoms = new HashSet<>();
     //clone
-    Island originIslandCopy = new Island(originIsland);
+    Island originMultiAtomCopy = new MultiAtom(originMultiAtom);
     
-    while (originIslandCopy.getNumberOfAtoms() > 0) {     
-      iOrigAtom = (ConcertedAtom) originIslandCopy.getAtomAt(0); // hau aldatu in behar da
+    //move occupied
+    while (originMultiAtomCopy.getNumberOfAtoms() > 0) {
+      iOrigAtom = (ConcertedAtom) originMultiAtomCopy.getAtomAt(0); // hau aldatu in behar da
       iDestAtom = (ConcertedAtom) iOrigAtom.getNeighbour(direction);
-      originIslandCopy.removeAtom(iOrigAtom);
+      originMultiAtomCopy.removeAtom(iOrigAtom);
       
       if (iDestAtom.isOccupied()) {
-        originIslandCopy.addAtom(iOrigAtom);// move to the back and try again
+        originMultiAtomCopy.addAtom(iOrigAtom);// move to the back and try again
         continue;
       }
       getLattice().extract(iOrigAtom);
@@ -394,7 +395,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       modifiedAtoms.add(iOrigAtom);
       modifiedAtoms.add(iDestAtom);
       
-      destinationIsland.addAtom(iDestAtom);
+      destinationMultiAtom.addAtom(iDestAtom);
     }
     
     ArrayList<ConcertedAtom> tmpAtoms = new ArrayList<>();
@@ -404,7 +405,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     updateRates(modifiedAtoms);
     
-    return destinationIsland;
+    return destinationMultiAtom;
   }
   
   /**
@@ -694,16 +695,13 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     ArrayList<MultiAtom> multiAtomIsland = getLattice().identifyAddMultiAtom(atom);
     for (int i = 0; i < multiAtomIsland.size(); i++) {
-      double rate = getMultiAtomDiffusionRate(1);
+      MultiAtom multiAtom = multiAtomIsland.get(i);
+      double rate = getMultiAtomDiffusionRate(multiAtom);
       totalRate[MULTI] += rate;
-      multiAtomIsland.get(i).setRate(MULTI, rate);
+      multiAtom.setRate(MULTI, rate);
     }
-    int removedCount = getLattice().identifyRemoveMultiAtomIsland(atom);
-    for (int i = 0; i < removedCount; i++) {
-      double rate = getMultiAtomDiffusionRate(1);
-      totalRate[MULTI] -= rate;
-    }
-    // set rate for each multi-atom
+    double removedRate = getLattice().identifyRemoveMultiAtomIsland(atom);
+    totalRate[MULTI] -= removedRate;
   }
   
   private void recomputeCollection(byte process, ConcertedAtom atom, double oldRate) {
@@ -752,8 +750,12 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       return 0; // bigger than 8 does not diffuse.
   }
   
-  private double getMultiAtomDiffusionRate(int type) {
-    return diffusionRateMultiAtom[1];
+  private double getMultiAtomDiffusionRate(MultiAtom multiAtom) {
+    double edgeRate0 = diffusionRateMultiAtom[multiAtom.getEdgeType(0)];
+    double edgeRate1 = diffusionRateMultiAtom[multiAtom.getEdgeType(1)];
+    multiAtom.addRate(MULTI, edgeRate0, 0);
+    multiAtom.addRate(MULTI, edgeRate1, 1);
+    return edgeRate0 + edgeRate1;
   }
 
   private void updateRateFromList(byte process) {
