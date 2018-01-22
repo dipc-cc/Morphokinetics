@@ -44,6 +44,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
+import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -957,8 +958,8 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
             !((AbstractGrowthAtom)sameNeighbours.get(1)).isOccupied();
   }
   
-  public int identifyRemoveMultiAtomIsland(AbstractGrowthAtom atom) {
-    int removedCount = 0;
+  public double identifyRemoveMultiAtomIsland(AbstractGrowthAtom atom) {
+    double removedCount = 0;
     boolean separated = false;
     if (!atom.getMultiAtomNumber().isEmpty()) {
       
@@ -985,13 +986,13 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return removedCount;
   }
   
-  private int removeMultiAtom(AbstractGrowthAtom atom) {
-    int removedCount = 0;
+  private double removeMultiAtom(AbstractGrowthAtom atom) {
+    double removedRate = 0;
     Iterator iter = new HashSet(atom.getMultiAtomNumber()).iterator(); // iterate over a copy
     while (iter.hasNext()) {
-      removedCount++;
       int multiAtomIndex = (int) iter.next();
       MultiAtom multiAtom = multiAtomsMap.get(multiAtomIndex);
+      removedRate += multiAtom.getRate(MULTI);
       while (multiAtom.getNumberOfAtoms() > 0) {
         AbstractGrowthAtom neighbour = multiAtom.getAtomAt(0);
         multiAtom.removeAtom(neighbour);
@@ -1002,6 +1003,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       multiAtomsCount--;
     }
 
-    return removedCount;
+    return removedRate;
   }
 }
