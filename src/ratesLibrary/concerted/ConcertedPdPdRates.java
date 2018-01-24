@@ -164,10 +164,10 @@ public class ConcertedPdPdRates extends AbstractConcertedRates {
     setConcertedEnergies(concertedEnergies);
     
     double[] multiAtomEnergies = new double[4]; // 2 atoms can move in an edge
-    multiAtomEnergies[0] = 0.448; // type 1, one of the atoms goes from 2 to 1 neighbour.
-    multiAtomEnergies[1] = 0.357; // type 2, both atom go from 2 to 2 neighbours.
-    multiAtomEnergies[2] = 0.257; // type 3, one of the atoms goes from 2 to 3 neighbours. (not real)
-    multiAtomEnergies[3] = 0.157; // type 4, one of the atoms goes from 2 to 4 neighbours. (not real)
+    multiAtomEnergies[0] = 0.412; // type 1, one of the atoms goes from 2 to 1 neighbour.
+    multiAtomEnergies[1] = 0.376; // type 2, both atom go from 2 to 2 neighbours.
+    multiAtomEnergies[2] = 0.313; // type 3, one of the atoms goes from 2 to 3 neighbours.
+    multiAtomEnergies[3] = 0.225; // type 4, one of the atoms goes from 2 to 4 neighbours.
     setMultiAtomEnergies(multiAtomEnergies);
   }
 }
