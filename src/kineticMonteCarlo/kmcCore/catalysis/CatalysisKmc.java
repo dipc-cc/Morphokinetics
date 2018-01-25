@@ -287,7 +287,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     }
     simulatedSteps++;
     if (outputData && simulatedSteps % outputEvery == 0) {
-      if (((CatalysisLattice) getLattice()).isStationary(getTime()) && !stationary) {
+      if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
         System.out.println("stationary");
         stationary = true;
         stationaryStep = simulatedSteps;
