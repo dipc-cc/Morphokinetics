@@ -53,7 +53,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     super(hexaSizeI, hexaSizeJ, null);
     this.ratesLibrary = ratesLibrary;
     coverage = new int[2][2];
-    MAX = (int) Math.sqrt(hexaSizeI*hexaSizeJ)*20;
+    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
   }
@@ -85,7 +85,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     for (int i = 0; i < last1000events.size(); i++) {
       for (int j = 0; j < 2; j++) {
         for (int k = 0; k < 2; k++) {
-          int index = j*2  + k ;
+          int index = j * 2 + k;
           y[index][i] = last1000events.get(i)[j][k];
         }
       }
