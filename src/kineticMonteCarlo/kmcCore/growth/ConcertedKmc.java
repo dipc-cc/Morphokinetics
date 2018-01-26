@@ -629,8 +629,8 @@ public class ConcertedKmc extends AbstractGrowthKmc {
           mergeIslands(); //recompute again all islands (easiest to implement)
         }
       }
-      checkMergeIslands(destination);
     }
+    checkMergeIslands(destination);
   }
   
   private void recomputeAdsorptionProbability(ConcertedAtom atom) {
