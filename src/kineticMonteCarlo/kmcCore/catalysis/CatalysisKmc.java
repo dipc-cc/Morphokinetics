@@ -294,6 +294,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
         getList().resetTime();
         restart.resetCatalysis();
         co2prv = 0;
+        co2 = new long[4];
         int[] sizes = new int[2];
         sizes[0] = getLattice().getHexaSizeI();
         sizes[1] = getLattice().getHexaSizeJ();
