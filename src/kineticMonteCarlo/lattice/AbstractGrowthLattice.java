@@ -550,6 +550,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
     islands = new ArrayList<>(); // empty islands
     islandCount = 0;
+    multiAtomsMap.clear();
     multiAtomsCount = 0;
     multiAtomsIndex = 1;
   }
