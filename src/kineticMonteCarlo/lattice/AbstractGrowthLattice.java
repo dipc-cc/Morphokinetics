@@ -66,7 +66,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private final int hexaArea;
   private int occupied;
   private int islandCount;
-  private int multiAtomsCount;
   private int multiAtomsIndex;
   private int monomerCount;
   private int[] atomTypesCounter;
@@ -100,7 +99,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     outerPerimeter = 0;
     islands = new ArrayList<>();
     multiAtomsMap = new HashMap<>();
-    multiAtomsCount = 0;
     multiAtomsIndex = 1;
   }
 
@@ -551,7 +549,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     islands = new ArrayList<>(); // empty islands
     islandCount = 0;
     multiAtomsMap.clear();
-    multiAtomsCount = 0;
     multiAtomsIndex = 1;
   }
 
@@ -926,7 +923,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     if (onlyOneNeighbourInCommon(atom, neighbour)) {
       if (atom.getMultiAtomNumber().isEmpty() || neighbour.getMultiAtomNumber().isEmpty() ||
               allMultiAtomsDifferent(atom, neighbour)) { // an atom can belong to many multi-atom
-        multiAtomsCount++;
         MultiAtom multiAtomIsland = new MultiAtom(multiAtomsIndex);
         multiAtomsMap.put(multiAtomsIndex,multiAtomIsland);
         atom.setMultiAtomNumber(multiAtomsIndex);
@@ -1005,7 +1001,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         neighbour.removeMultiAtomNumber(multiAtomIndex);
       }
       multiAtomsMap.remove(multiAtomIndex);
-      multiAtomsCount--;
     }
 
     return removedRate;
