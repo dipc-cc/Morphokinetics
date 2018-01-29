@@ -266,13 +266,13 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     atomType = (byte) destinationAtom.getOccupiedNeighbours();
     destinationAtom.setType(atomType);
     depositAtom(destinationAtom);
+    destinationAtom.setDepositionTime(getTime());
+    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
     Set<ConcertedAtom> modifiedAtoms = addModifiedAtoms(null, destinationAtom);
     updateRates(modifiedAtoms);
     updateRatesIslands(null, destinationAtom, false);
     
-    destinationAtom.setDepositionTime(getTime());
-    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     return destinationAtom;
   }
   
