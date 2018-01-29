@@ -809,6 +809,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
   private void printData() {
+    restart.writeSvg(1000+(int)(getCoverage()*100), getLattice());
     restart.writeExtraOutput(getLattice(), getCoverage(), 0, getTime(), totalRate[ADSORB],
 			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);
     
