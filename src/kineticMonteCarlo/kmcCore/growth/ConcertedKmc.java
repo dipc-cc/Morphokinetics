@@ -52,6 +52,7 @@ import utils.list.atoms.IAtomsCollection;
 public class ConcertedKmc extends AbstractGrowthKmc {
 
   private long simulatedSteps;
+  private int simulationNumber;
   private final IAtomsCollection[] sites;
   /** Stores all collections of atoms; either in a tree or an array. */
   private AtomsCollection col;
@@ -82,6 +83,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
  
   public ConcertedKmc(Parser parser, String restartFolder) {
     super(parser);
+    simulationNumber = 0;
     Concerted6LatticeSimple concertedLattice;
     concertedLattice = new Concerted6LatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), null);
     setLattice(concertedLattice);
@@ -158,6 +160,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
 
   @Override
   public int simulate() {
+    simulationNumber++;
     int coverageThreshold = 1;
     int limit = 100000;
     int returnValue = 0;
@@ -808,7 +811,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
   private void printData() {
-    restart.writeSvg(1000+(int)(getCoverage()*100), getLattice());
+    int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
+    restart.writeSurfaceBinary2D(
+            getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
+            surfaceNumber);
+    restart.writeSvg(surfaceNumber, getLattice());
     restart.writeExtraOutput(getLattice(), getCoverage(), 0, getTime(), totalRate[ADSORB],
 			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);
     
