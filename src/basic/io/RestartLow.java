@@ -430,7 +430,7 @@ class RestartLow {
    */
   static void writeSvg(String fileName, AbstractLattice lattice) {
     // Check that is growth simulation, in etching are missing getUc in AbstractLattice and getPos and isOccupied in AbstractAtom
- 
+    String[] colours = {"white", "indianred", "blueviolet", "gray", "cornflowerblue", "darkblue", "gold", "green"};
     double scale = 5; // default distance to big enough picture
     // create file descriptor. It will be automatically closed.
     try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))){
@@ -450,15 +450,7 @@ class RestartLow {
           posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
           String colour = "white";
           if (atom.isOccupied()) {
-            colour = "black";
-            switch ((int) atom.getType()) {
-              case 0:
-                colour = "blue";
-                break;
-              case 1:
-                colour = "red";
-                break;
-            }
+            colour = colours[(int) atom.getType()];
           }
           s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"2.5\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
           printWriter.write(s + "\n");
