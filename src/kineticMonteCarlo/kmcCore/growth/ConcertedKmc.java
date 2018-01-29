@@ -465,7 +465,6 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       for (int j = 0; j < atom.getNumberOfNeighbours(); j++) {
         AbstractGrowthAtom neighbour = atom.getNeighbour(j);
         if (neighbour.isOccupied()
-            && neighbour.getIslandNumber() > 0
             && neighbour.getIslandNumber() != islandNumber) {
           // two islands have collided
           mergeIslands();
