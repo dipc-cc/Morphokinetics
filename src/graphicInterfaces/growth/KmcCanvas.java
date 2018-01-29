@@ -72,14 +72,17 @@ public class KmcCanvas extends Canvas {
   private final static Color GRAY = new Color (220,220,220);
   private final static Color WHITE_GRAY = new Color (230,230,230);
   // Colours from: https://github.com/Gnuplotting/gnuplot-palettes/blob/master/set3.pal
-  private final static Color TEAL = new Color (141,211,199);
-  private final static Color BANANA = new Color (255,255,179); 
-  private final static Color LILAC = new Color (190,186,218);
-  private final static Color RED=  new Color (251,128,114);
+  private final static Color RED =  new Color (251,128,114);
   private final static Color BLUE = new Color (128,177,211);
   private final static Color ORANGE = new Color (253,180,98);
   private final static Color GREEN = new Color (179,222,105);
-  private final static Color MAUVE = new Color (252,205,229);
+  private final static Color WHITE = new Color(255,255,255);
+  private final static Color INDIANRED = new Color(205,92,92);
+  private final static Color BLUEVIOLET = new Color(138,43,226);
+  private final static Color CORNFLOWERBLUE = new Color(100,149,237);
+  private final static Color DARKBLUE = new Color(0,0,139);
+  private final static Color GOLD = new Color(255,215,0);
+  private final Color[] colours = {WHITE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   
   public KmcCanvas(AbstractGrowthLattice lattice, RoundPerimeter perimeter) {
     this.lattice = lattice;
@@ -272,32 +275,7 @@ public class KmcCanvas extends Canvas {
             }
           }
         } else {
-          switch (atom.getType()) { // the cases are for graphene
-            case AbstractAtom.TERRACE:
-              g.setColor(WHITE_GRAY);
-              break;
-            case AbstractAtom.CORNER:
-              g.setColor(RED);
-              break;
-            case AbstractAtom.EDGE:
-              g.setColor(LILAC);
-              break;
-            case AbstractAtom.ARMCHAIR_EDGE: // == Ag KINK
-              g.setColor(Color.WHITE);
-              break;
-            case AbstractAtom.ZIGZAG_WITH_EXTRA: // == Ag ISLAND
-              g.setColor(Color.CYAN);
-              break;
-            case AbstractAtom.SICK:
-              g.setColor(Color.BLUE);
-              break;
-            case AbstractAtom.KINK:
-              g.setColor(BANANA);
-              break;
-            case AbstractAtom.BULK:
-              g.setColor(GREEN);
-              break;
-          }
+          g.setColor(colours[atom.getType()]);
           if (printPerimeter && perimeter != null) {
             if (perimeter.contains(atom))
               g.setColor(ORANGE);
