@@ -98,5 +98,12 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
       System.out.print(concertedRates[i] + " ");
     }
     System.out.println("");
+    
+    double[] multiAtomRates = ((AbstractConcertedRates) getRates()).getMultiAtomRates();
+    System.out.println("Multi atom rates:");
+    for (int i = 0; i < multiAtomRates.length; i++) {
+      System.out.print(multiAtomRates[i] + " ");
+    }
+    System.out.println("");
   }
 }
