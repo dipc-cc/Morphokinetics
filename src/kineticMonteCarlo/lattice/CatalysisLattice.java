@@ -309,7 +309,8 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
   
   /**
-   * There are no islands in catalysis  --- why?
+   * There are no islands in catalysis.
+   * 
    * @param print
    * @return -1
    */
