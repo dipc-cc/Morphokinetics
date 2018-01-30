@@ -32,7 +32,7 @@ public class AbstractConcertedRates implements IRates {
   private double[] concertedEnergies;
   private double[] multiAtomEnergies;
   
-    private final double prefactor;
+  private final double prefactor;
   /** Temperature (K). */
   private final float temperature;
   
