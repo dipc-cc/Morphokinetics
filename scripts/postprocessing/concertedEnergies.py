@@ -25,7 +25,6 @@ def getConcertedEnergies(self):
         "CuNi": getConcertedEnergiesCuNi,
     }
     func = libSwitcher.get(self.rLib)
-    print(func)
     single, concerted = func()
 
     single = single.reshape(192)
