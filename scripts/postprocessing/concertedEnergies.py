@@ -25,10 +25,10 @@ def getConcertedEnergies(self):
         "CuNi": getConcertedEnergiesCuNi,
     }
     func = libSwitcher.get(self.rLib)
-    single, concerted = func()
+    single, concerted, multi = func()
 
     single = single.reshape(192)
-    allEnergies = np.concatenate([single, concerted])
+    allEnergies = np.concatenate([single, concerted, multi])
     
     return allEnergies
 
@@ -162,7 +162,12 @@ def getConcertedEnergiesAgAg():
     concertedEnergies[7] = 0.376; 
     concertedEnergies[8] = 0.401; 
 
-    return energies, concertedEnergies
+    multiAtomEnergies = 99999999*np.ones(4,dtype=float)
+    multiAtomEnergies[0] = 0.281; # type 1, one of the atoms goes from 2 to 1 neighbour
+    multiAtomEnergies[1] = 0.275; # type 2, both atom go from 2 to 2 neighbours.
+    multiAtomEnergies[2] = 0.257; # type 3, one of the atoms goes from 2 to 3 neighbours.
+    multiAtomEnergies[3] = 0.231; # type 4, one of the atoms goes from 2 to 4 neighbours.
+    return energies, concertedEnergies, multiAtomEnergies
     
 def getConcertedEnergiesPdPd():
     energies = 99999999*np.ones(dtype=float, shape=(12,16))
@@ -295,7 +300,12 @@ def getConcertedEnergiesPdPd():
     concertedEnergies[7] = 0.325; 
     concertedEnergies[8] = 0.438; 
 
-    return energies, concertedEnergies
+    multiAtomEnergies = 99999999*np.ones(4,dtype=float)
+    multiAtomEnergies[0] = 0.412; # type 1, one of the atoms goes from 2 to 1 neighbour.
+    multiAtomEnergies[1] = 0.376; # type 2, both atom go from 2 to 2 neighbours.
+    multiAtomEnergies[2] = 0.313; # type 3, one of the atoms goes from 2 to 3 neighbours.
+    multiAtomEnergies[3] = 0.225; # type 4, one of the atoms goes from 2 to 4 neighbours.
+    return energies, concertedEnergies, multiAtomEnergies
 
 def getConcertedEnergiesNiCu():
     energies = 99999999*np.ones(dtype=float, shape=(12,16))
