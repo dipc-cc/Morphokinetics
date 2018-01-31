@@ -331,7 +331,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
       if (outputAeTotal) {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
-	activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
+        activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
       }	      
       if (performSimulationStep()) {
         break;
