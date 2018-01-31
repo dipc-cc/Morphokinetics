@@ -1,4 +1,23 @@
 #!/usr/bin/env python3
+
+# Copyright (C) 2018 J. Alberdi-Rodriguez
+#
+# This file is part of Morphokinetics.
+#
+# Morphokinetics is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Morphokinetics is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
+
+
 import matplotlib
 matplotlib.use("Agg")
 import os
@@ -41,7 +60,7 @@ def getLabel(i,j):
     label = r"$" + types[i] + r"\rightarrow " + types[j] + r"$"
     return label
 
-temperatures = inf.getTemperatures("float")
+temperatures = inf.getTemperatures()
 maxRanges = len(temperatures)
 kb = 8.6173324e-5
 p = inf.getInputParameters(inf.getLastOutputFile("*"))
@@ -58,7 +77,7 @@ if p.nCo2 == -1: # dirty way to use same script for growth and catalysis
     files.sort()
     matrix = np.loadtxt(fname=files[0])
     p.mCov = len(matrix)
-    p.mCov = 50
+    p.mCov = 10
     #p.nCo2 = maxCo2 * 10
 
 labelAlfa = []
@@ -67,6 +86,8 @@ for i in range(0,12):
         labelAlfa.append(getLabel(i,j))
 for i in range(0,9):
     labelAlfa.append(r"$I_{"+str(i)+"}$")
+for i in range(0,4):
+    labelAlfa.append(r"$M_{"+str(i)+"}$")
 
 energies = e.concertedEnergies(p)
 print(energies)
@@ -76,7 +97,7 @@ os.chdir(workingPath)
 activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext)
 os.chdir(workingPath)
 
-for i in range(p.mMsr-2,p.mMsr):
+for i in range(0,p.mMsr):
     mp.plotTotalRates(1/kb/temperatures, totalRateEvents[i], totalRate[i], i)
 
 print(np.shape(tempMavg))
