@@ -174,9 +174,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
           Logger.getLogger(AbstractGrowthKmc.class.getName()).log(Level.SEVERE, null, ex);
         }
       } else {
-        activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
-        activationEnergy.updatePossiblesIslands(getLattice().getIslandIterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
-        activationEnergy.updatePossiblesMultiAtoms(getLattice().getMultiAtomIterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+        updatePossibles();
         if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
             if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
               limit = limit / 10;
@@ -804,7 +802,16 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     sites[process].populate();
   }
-  
+  private void updatePossibles() {
+    activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+    if (doIslandDiffusion) {
+      activationEnergy.updatePossiblesIslands(getLattice().getIslandIterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+    }
+    if (doMultiAtomDiffusion) {
+      activationEnergy.updatePossiblesMultiAtoms(getLattice().getMultiAtomIterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+    }
+  }
+    
   /**
    * Print current information to extra file.
    *
