@@ -1,3 +1,6 @@
+<html>
+<body>
+
 This is Morphokinetics software developed at the Donostia International Physics Center. Morphokinetics is a software to simulate kinetics Monte Carlo (KMC) processes. It can simulate  etching, CVD growing and catalysis processes. To specify simulation mode "parameters" file must be present in the current working directory (more details in {@link Parser}).
 
 ==========================================
@@ -49,3 +52,6 @@ If you want to move the JAR file to another folder, you have to also move the li
 
 To profile this code within NetBeans 8.1 next line has to be added:
 -XX:+UseLinuxPosixThreadCPUClocks -agentpath:/home/jalberdi004/software/netbeans-8.1/profiler/lib/deployed/jdk16/linux-amd64/libprofilerinterface.so=/home/jalberdi004/software/netbeans-8.1/profiler/lib,5140
+
+</body>
+</html>
