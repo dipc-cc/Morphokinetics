@@ -39,6 +39,8 @@ public class PsdFromSurfaces {
     boolean showGui;
     boolean doTent;
     boolean print = parser.outputData();
+    int coverage = (int) parser.getCoverage();
+    System.out.println(coverage);
     ExecuteShellCommand com = new ExecuteShellCommand();
 
     surfaceFileName = "dummy";
@@ -52,7 +54,7 @@ public class PsdFromSurfaces {
     double scale = parser.getPsdScale();
     for (int i = 0; i < parser.getNumberOfSimulations(); i++) {
       try {
-        surfaceFileName = format("surface%03d", i);
+        surfaceFileName = format("surface%d0%02d", i + 1, coverage);
         surface = restart.readSurfaceBinary2D(surfaceFileName);
         surface = MathUtils.scale(surface, scale);
         if (psd == null) {
@@ -62,7 +64,7 @@ public class PsdFromSurfaces {
           psd = new PsdSignature2D(sizes[0], sizes[1], 1);
         }
       } catch (Exception e){
-        System.err.println("Provided filename [" + surfaceFileName + i + ".mko] does not exist. Continuing");
+        System.err.println("Provided filename [" + surfaceFileName + ".mko] does not exist. Continuing");
         continue;
       }
       if (doTent) {
