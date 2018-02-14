@@ -27,13 +27,9 @@ for j in cf.generateParams():
     print(os.getcwd())
     try:
         psd = PsdPreparator()
-        print(os.getcwd())
         for i in psd.generateParams():
-            print(os.getcwd())
             psd.writeParameters(i)
-            print(os.getcwd())
             psd.runPsd()
-            print(os.getcwd())
             psd.plotPsd()
     except FileNotFoundError:
         continue
