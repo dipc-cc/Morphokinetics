@@ -811,11 +811,13 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
   private void printData() {
-    int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
-    restart.writeSurfaceBinary2D(
-            getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
-            surfaceNumber);
-    restart.writeSvg(surfaceNumber, getLattice());
+    if ((int) (getCoverage() * 100) % 5 == 0) {
+      int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
+      restart.writeSurfaceBinary2D(
+              getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
+              surfaceNumber);
+      restart.writeSvg(surfaceNumber, getLattice());
+    }
     restart.writeExtraOutput(getLattice(), getCoverage(), 0, getTime(), totalRate[ADSORB],
 			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);
     
