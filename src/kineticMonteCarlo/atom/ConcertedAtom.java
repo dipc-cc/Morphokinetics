@@ -21,8 +21,6 @@ package kineticMonteCarlo.atom;
 import java.util.BitSet;
 import kineticMonteCarlo.process.ConcertedProcess;
 import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
-import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
-import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
 import utils.StaticRandom;
 
