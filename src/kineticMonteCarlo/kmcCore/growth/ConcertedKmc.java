@@ -224,15 +224,6 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     sites[MULTI].reset();
   }
   
-  private boolean depositAtom(ConcertedAtom atom) {
-    if (atom.isOccupied()) {
-      return false;
-    }
-    getLattice().deposit(atom, false);
-    
-    return true;
-  }
-  
   private ConcertedAtom depositNewAtom() {
     return depositNewAtom(-1);
   }
@@ -266,7 +257,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     //check neighbourhood
     atomType = (byte) destinationAtom.getOccupiedNeighbours();
     destinationAtom.setType(atomType);
-    depositAtom(destinationAtom);
+    getLattice().deposit(destinationAtom, false);
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
