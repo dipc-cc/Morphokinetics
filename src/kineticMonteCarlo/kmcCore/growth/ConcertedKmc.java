@@ -128,34 +128,12 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     getLattice().setAtomsTypesCounter(12); // There are 7 types and some have subtypes. See {@link ConcertedAtom#getRealType()} for more information
   }
 
-  /**
-   * Performs a simulation step.
-   *
-   * @return true if a stop condition happened (all atom etched, all surface covered).
-   */
   @Override
-  protected boolean performSimulationStep() {
-    if (getList().getGlobalProbability() == 0) {
-      return true; // there is nothing more we can do
-    }
-    byte reaction = getList().nextReaction();
-    switch (reaction) {
-      case ADSORB:
-        depositNewAtom();
-        break;
-      case SINGLE:
-        diffuseAtom(); 
-        break;
-      case CONCERTED:
-        diffuseIsland();
-        break;
-      case MULTI:
-        diffuseMultiAtom();
-        break;
-    }
-            
-    simulatedSteps++;
-    return simulatedSteps == maxSteps;
+  public void depositSeed() {
+    totalRate = new double[4];
+    getLattice().resetOccupied();
+    initRates();
+    simulatedSteps = 0;
   }
 
   @Override
@@ -198,13 +176,35 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     } 
     return returnValue;
   }
-
+	
+  /**
+   * Performs a simulation step.
+   *
+   * @return true if a stop condition happened (all atom etched, all surface covered).
+   */
   @Override
-  public void depositSeed() {
-    totalRate = new double[4];
-    getLattice().resetOccupied();
-    initRates();
-    simulatedSteps = 0;
+  protected boolean performSimulationStep() {
+    if (getList().getGlobalProbability() == 0) {
+      return true; // there is nothing more we can do
+    }
+    byte reaction = getList().nextReaction();
+    switch (reaction) {
+      case ADSORB:
+        depositNewAtom();
+        break;
+      case SINGLE:
+        diffuseAtom(); 
+        break;
+      case CONCERTED:
+        diffuseIsland();
+        break;
+      case MULTI:
+        diffuseMultiAtom();
+        break;
+    }
+            
+    simulatedSteps++;
+    return simulatedSteps == maxSteps;
   }
 
   @Override
@@ -290,13 +290,30 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     updateRatesIslands(originAtom, destinationAtom, wasDimer);
   }
   
-  private int getRandomIsland() {
+  /**
+   * Moves an island.
+   */
+  private void diffuseIsland() {
+    Island originIsland = getRandomIsland();
+    int direction = originIsland.getRandomDirection();
+    Island destinationIsland = moveIsland(originIsland, direction);
+    getLattice().swapIsland(originIsland, destinationIsland);
+    checkMergeIslands(destinationIsland);
+  }
+  
+  private void diffuseMultiAtom() {
+    MultiAtom multiAtom = getRandomMultiAtom();
+    int direction = multiAtom.getRandomMultiAtomDirection();
+    moveMultiAtom(multiAtom, direction);
+  }
+	
+  private Island getRandomIsland() {
     double randomNumber = StaticRandom.raw() * totalRate[CONCERTED];
     double sum = 0.0;
     for (int i = 0; i < getLattice().getIslandCount(); i++) {
       sum += getLattice().getIsland(i).getRate(CONCERTED);
       if (sum > randomNumber) {
-        return i;
+        return getLattice().getIsland(i);
       }
     }
     throw new ArrayIndexOutOfBoundsException("\nTotal rate " + totalRate[CONCERTED]
@@ -348,6 +365,23 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     return destinationIsland;
   }
   
+  private MultiAtom getRandomMultiAtom() {
+    // take into account that the indexes are not consecutive
+    double randomNumber = StaticRandom.raw() * totalRate[MULTI];
+    double sum = 0.0;
+    Iterator iter = getLattice().getMultiAtomsIterator();
+    while (iter.hasNext()) {
+      MultiAtom multiAtom = ((MultiAtom) iter.next());
+      sum += multiAtom.getRate(MULTI);
+      if (sum > randomNumber) {
+        return multiAtom;
+      }
+    }
+    throw new ArrayIndexOutOfBoundsException("\nTotal rate " + totalRate[MULTI]
+        + " random number " + randomNumber + " number of islands " + getLattice().getMultiAtomCount()
+        + " sum " + sum);
+  }
+	
   /**
    * A copy of moveIsland(): Moves an island and recomputes all the neighbourhood.
    * Should be merged in the future.
@@ -400,42 +434,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     
     return destinationMultiAtom;
   }
-  
-  /**
-   * Moves an island.
-   */
-  private void diffuseIsland() {
-    int randomIsland = getRandomIsland();
-    Island originIsland = getLattice().getIsland(randomIsland);
-    int direction = originIsland.getRandomDirection();
-    Island destinationIsland = moveIsland(originIsland, direction);
-    getLattice().swapIsland(originIsland, destinationIsland);
-    checkMergeIslands(destinationIsland);
-  }
-  
-  private MultiAtom getRandomMultiAtom() {
-    // take into account that the indexes are not consecutive
-    double randomNumber = StaticRandom.raw() * totalRate[MULTI];
-    double sum = 0.0;
-    Iterator iter = getLattice().getMultiAtomsIterator();
-    while (iter.hasNext()) {
-      MultiAtom multiAtom = ((MultiAtom) iter.next());
-      sum += multiAtom.getRate(MULTI);
-      if (sum > randomNumber) {
-        return multiAtom;
-      }
-    }
-    throw new ArrayIndexOutOfBoundsException("\nTotal rate " + totalRate[MULTI]
-        + " random number " + randomNumber + " number of islands " + getLattice().getMultiAtomCount()
-        + " sum " + sum);
-  }
-  
-  private void diffuseMultiAtom() {
-    MultiAtom multiAtom = getRandomMultiAtom();
-    int direction = multiAtom.getRandomMultiAtomDirection();
-    moveMultiAtom(multiAtom, direction);
-  }
-  
+    
   private void checkMergeIslands(Island island) {
     int islandNumber = island.getIslandNumber() + 1;
     for (int i = 0; i < island.getNumberOfAtoms(); i++) {
@@ -795,6 +794,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     sites[process].populate();
   }
+	
   private void updatePossibles() {
     activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
     if (doIslandDiffusion) {
