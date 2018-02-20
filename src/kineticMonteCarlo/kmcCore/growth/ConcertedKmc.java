@@ -563,15 +563,17 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }
     
     // recalculate total probability, if needed
-    if (totalRate[ADSORB] / previousRate[ADSORB] < 1e-1) {
+    if (totalRate[ADSORB] / previousRate[ADSORB] < 1e-10) {
       updateRateFromList(ADSORB);
     }
-    if (totalRate[SINGLE] / previousRate[SINGLE] < 1e-1) {
-      //System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + sites[DESORPTION].getDesorptionRate());
+    if (totalRate[SINGLE] / previousRate[SINGLE] < 1e-10) {
       updateRateFromList(SINGLE);
     }
-    if (totalRate[CONCERTED] / previousRate[CONCERTED] < 1e-1) {
+    if (totalRate[CONCERTED] / previousRate[CONCERTED] < 1e-10) {
       updateRateFromList(CONCERTED);
+    }
+    if (totalRate[MULTI] / previousRate[MULTI] < 1e-10) {
+      updateRateFromList(MULTI);
     }
     
     // tell to the list new probabilities
