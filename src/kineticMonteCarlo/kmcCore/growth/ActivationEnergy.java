@@ -34,6 +34,7 @@ import static kineticMonteCarlo.atom.CatalysisAtom.O;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.lattice.MultiAtom;
+import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
 import kineticMonteCarlo.unitCell.SimpleUc;
 
 /**
@@ -65,6 +66,8 @@ public class ActivationEnergy {
   private int lengthJ;
   private int numberOfNeighbours;
   private double[][] rates;
+  
+  private int[][] transitionsHistogram;
 
   public ActivationEnergy(Parser parser) {
     surface = new ArrayList();
@@ -125,6 +128,7 @@ public class ActivationEnergy {
         histogramPossibleIsland = new Double[9];
         histogramPossibleIslandTmp = new Double[9];
         histogramPossibleMultiAtom = new Double[4];
+        transitionsHistogram = new int[lengthI][lengthJ];
       }
       histogramPossible = new Double[lengthI][lengthJ];
       histogramPossibleCounter = new Long[lengthI][lengthJ];
@@ -148,6 +152,28 @@ public class ActivationEnergy {
     this.rates = rates;
   }
   
+  public void addTransitions(AbstractGrowthAtom atom) {
+    updateTransitions(atom, 1);
+  }
+
+  public void removeTransitions(AbstractGrowthAtom atom) {
+    updateTransitions(atom, -1);
+  }
+  
+  private void updateTransitions(AbstractGrowthAtom atom, int add) {
+    byte type;
+    if (add == -1) {
+      type = atom.getOldType();
+    } else {
+      type = atom.getRealType();
+    }
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      byte neighbourType = atom.getEdgeType(SINGLE, i);
+      if (neighbourType > -1) {
+        transitionsHistogram[type][neighbourType] += add;
+      }
+    }
+  }
   /**
    * Computes possibles for catalysis for all kind of processes
    *
@@ -262,6 +288,30 @@ public class ActivationEnergy {
         for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
           histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j].longValue();
           histogramPossibleCounterTmp[i][j] = histogramPossibleTmp[i][j].longValue();
+        }
+      }
+    }
+  }
+  
+  public void updatePossiblesLocal(double totalAndDepositionProbability, double elapsedTime) {
+    if (doActivationEnergyStudy) {
+      if (previousProbability != totalAndDepositionProbability) {
+        for (int i = 0; i < transitionsHistogram.length; i++) {
+          for (int j = 0; j < transitionsHistogram[0].length; j++) {
+            for (int k = 0; k < transitionsHistogram[i][j]; k++) {
+              histogramPossible[i][j] += elapsedTime;
+              histogramPossibleCounter[i][j]++;
+              histogramPossibleTmp[i][j] += elapsedTime;
+              histogramPossibleCounterTmp[i][j]++;
+            }
+          }
+        }
+      } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
+        for (int i = 0; i < lengthI; i++) {
+          for (int j = 0; j < lengthJ; j++) {
+            histogramPossible[i][j] += histogramPossibleTmp[i][j];
+            histogramPossibleCounter[i][j] += histogramPossibleCounterTmp[i][j];
+          }
         }
       }
     }
