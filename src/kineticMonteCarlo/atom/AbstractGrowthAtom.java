@@ -447,6 +447,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     processes[process].setEdgeType(type, neighbourPos);
   }
   
+  public byte getEdgeType(byte process, int neighbourPos) {
+    return processes[process].getEdgeType(neighbourPos);
+  }
+  
   @Override
   public void equalRate(byte process) {
     processes[process].equalRate();

@@ -112,6 +112,10 @@ public abstract class AbstractProcess {
     edgeType[pos] = type;
   }
   
+  public byte getEdgeType(int pos) {
+    return edgeType[pos];
+  }
+  
   public void clear() {
     sumRate = 0.0;
     rate = 0.0;
