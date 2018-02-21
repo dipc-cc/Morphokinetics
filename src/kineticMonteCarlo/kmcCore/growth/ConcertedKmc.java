@@ -545,11 +545,18 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     ConcertedAtom atom;
     while (i.hasNext()) {
       atom = (ConcertedAtom) i.next();
+      if (aeOutput) {
+        activationEnergy.removeTransitions(atom);
+      }
       recomputeAdsorptionProbability(atom);
       recomputeDiffusionProbability(atom);
       recomputeConcertedDiffusionProbability(atom);
       recomputeMultiAtomProbability(atom);
       atom.setVisited(false);
+      if (aeOutput) {
+        activationEnergy.addTransitions(atom);
+        atom.setOldType(atom.getRealType());
+      }
     }
     
     // recalculate total probability, if needed
@@ -797,7 +804,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
 	
   private void updatePossibles() {
-    activationEnergy.updatePossibles(sites[SINGLE].iterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
+    activationEnergy.updatePossiblesLocal(getList().getGlobalProbability(), getList().getDeltaTime(false));
     if (doIslandDiffusion) {
       activationEnergy.updatePossiblesIslands(getLattice().getIslandIterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
     }
