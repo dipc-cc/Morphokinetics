@@ -37,6 +37,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
    * in child classes.
    */
   private byte type;
+  /** Type of the atom in the previous step. */
+  private byte oldType;
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
    * jump from terrace to edge.
@@ -180,6 +182,14 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
 
   public void setType(byte type) {
     this.type = type;
+  }
+  
+  public byte getOldType() {
+    return oldType;
+  }
+
+  public void setOldType(byte type) {
+    oldType = type;
   }
   
   public void setMultiplier(int multiplier) {
