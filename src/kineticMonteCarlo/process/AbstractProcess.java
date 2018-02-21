@@ -30,10 +30,13 @@ public abstract class AbstractProcess {
   private double[] edgeRate;
   private boolean active;
   private final int numberOfProcesses;
+  /** Stores the type of the neighbours. It is used for activation energy study; to be able to check old neighbour types. */
+  private byte[] edgeType;
   
   public AbstractProcess(int numberOfProcesses) {
     edgeRate = new double[numberOfProcesses];
     this.numberOfProcesses = numberOfProcesses;
+    resetEdgeType();
   }
   
   public void setSumRate(double rate) {
@@ -56,6 +59,7 @@ public abstract class AbstractProcess {
     this.rate = rate;
     if (rate == 0.0) {
       edgeRate = new double[numberOfProcesses];
+      resetEdgeType();
     }
   }
   
@@ -96,10 +100,29 @@ public abstract class AbstractProcess {
   public void equalRate() {
     sumRate = rate;
   }
+
+  /**
+   * Stores the type of the neighbours. It is used for activation energy study; to be able to check
+   * old neighbour types.
+   * 
+   * @param type type of the neighbour.
+   * @param pos position of the neighbour.
+   */
+  public void setEdgeType(byte type, int pos) {
+    edgeType[pos] = type;
+  }
   
   public void clear() {
     sumRate = 0.0;
     rate = 0.0;
     active = false;
+  }
+  
+  private void resetEdgeType() {
+    edgeType = new byte[6];
+    for (int i = 0; i < edgeType.length; i++) {
+      edgeType[i] = (byte) -1;      
+    }
+    //return edgeType;
   }
 }

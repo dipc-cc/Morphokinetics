@@ -652,6 +652,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       if (!neighbour.isOccupied()) {
         double probability = getDiffusionRate(atom, neighbour, i);
         atom.addRate(SINGLE, probability, i);
+        atom.setEdgeType(SINGLE, neighbour.getTypeWithoutNeighbour(i), i);
       }
     }
     recomputeCollection(SINGLE, atom, oldDiffusionRate);

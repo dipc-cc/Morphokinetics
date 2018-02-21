@@ -111,7 +111,6 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     setNumberOfNeighbours(numberOfNeighbours);
     cartesianSuperCell = new Point3D(0, 0, 0);
     attributes = new AbstractGrowthAtomAttributes();
-    
   }
   
   public AbstractGrowthAtomAttributes getAttributes() {
@@ -435,6 +434,17 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   @Override
   public void addToSumRate(byte process, double rate) {
     processes[process].addSumRate(rate);
+  }
+  
+  /**
+   * Stores the types of the neighbours. Used for activation energy study.
+   * 
+   * @param process process type.
+   * @param type type of the neighbour.
+   * @param neighbourPos position of the neighbour.
+   */
+  public void setEdgeType(byte process, byte type, int neighbourPos) {
+    processes[process].setEdgeType(type, neighbourPos);
   }
   
   @Override
