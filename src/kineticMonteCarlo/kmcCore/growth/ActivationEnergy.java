@@ -272,7 +272,7 @@ public class ActivationEnergy {
       if (previousProbability != totalAndDepositionProbability) {
         histogramPossibleTmp = initDouble();
         histogramPossibleCounterTmp = initLong();
-        // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
+        // iterate over ALL(!) atoms of the surface to get all possible hops (only to compute multiplicity)
         while (surface.hasNext()) {
           AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.next();
           for (int pos = 0; pos < numberOfNeighbours; pos++) {
