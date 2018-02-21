@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018 N. Ferrando, J. Alberdi-Rodriguez, E. Sanchez
+ * Copyright (C) 2018 N. Ferrando, J. Alberdi-Rodriguez
  *
  * This file is part of Morphokinetics.
  *
@@ -40,7 +40,7 @@ import utils.list.LinearList;
 
 /**
  *
- * @author N. Ferrando, J. Alberdi-Rodriguez, E. Sanchez
+ * @author N. Ferrando, J. Alberdi-Rodriguez
  */
 public abstract class AbstractGrowthKmc extends AbstractKmc {
 
