@@ -109,14 +109,15 @@ public class ConcertedAtom extends AgAtomSimple {
    *  2,2 -> 4
    *  3,0 -> 5
    *  3,1 -> 6
-   *  4,0 -> 7
-   *  4,1 -> 8
-   *  4,2 -> 9
-   *  5   -> 10
+   *  3,2 -> 7
+   *  4,0 -> 8
+   *  4,1 -> 9
+   *  4,2 -> 10
+   *  5   -> 11
    *  6   -> 16
    * with some of them as detaching destination.
    * 
-   * @return 0 <= type < 11.
+   * @return 0 <= type < 12.
    */
   @Override
   public byte getRealType() {
@@ -140,9 +141,9 @@ public class ConcertedAtom extends AgAtomSimple {
         return (byte) (5 + subtype); 
       case 4: // 3 subtypes
         subtype = getType4Subtype(bits);
-        return (byte) (7 + subtype);
+        return (byte) (8 + subtype);
       case 5: // no subtype
-        return 10;
+        return 11;
       case 6: // all neighbour atoms occupied
         return 16; // does not really matter
     }
