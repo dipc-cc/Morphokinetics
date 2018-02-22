@@ -6,14 +6,14 @@
   "visualize": false, 
   "withGui"  : false,
   "justCentralFlake": true,
-  "listType": binned,
+  "listType": "binned",
   "printToImage": false,
   "psd": true,
-  "calculationMode": Si,
+  "calculationMode": "Si",
   "binsLevels": 20,
   "extraLevels": 1,
   "outputData": true, 
   "randomSeed": false,
   "useMaxPerimeter": false,
-  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"},],
+  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"}]
 }

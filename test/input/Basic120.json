@@ -1,4 +1,4 @@
-{ "calculationMode": basic,
+{ "calculationMode": "basic",
   "temperature": 120,
   "numberOfSimulations": 1,
   "cartSizeX": 100,
@@ -6,8 +6,8 @@
   "justCentralFlake": false,
   "coverage": 10,
   "outputData": true,
-  "outputDataFormat": [ {"type": "txt"},],
+  "outputDataFormat": [ {"type": "txt"}],
   "randomSeed": false,
   "depositionFlux": 3.5E-3,
-  "psdScale": 1,
+  "psdScale": 1
 }

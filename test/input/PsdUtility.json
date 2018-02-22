@@ -1,5 +1,5 @@
 { 
-  "calculationType": psd,
+  "calculationType": "psd",
   "temperature": 60,
   "numberOfSimulations": 5,
   "cartSizeX": 100,
@@ -7,15 +7,15 @@
   "visualize": true, 
   "withGui"  : true,
   "justCentralFlake": true,
-  "listType": linear,
+  "listType": "linear",
   "printToImage": true,
   "psd": true,
-  "calculationMode": AgUc,
+  "calculationMode": "AgUc",
   "binsLevels": 100,
   "extraLevels": 0,
   "outputData": true, 
   "randomSeed": true,
   "useMaxPerimeter": false,
-  "perimeterType": circle,
-  "psdScale": 1,
+  "perimeterType": "circle",
+  "psdScale": 1
 }

@@ -14,5 +14,5 @@
   "ratesLibrary": "AgAg",
   "depositionFlux":  1.5e20,
   "coverage": 100,
-  "temperature": 350,
+  "temperature": 350
 }

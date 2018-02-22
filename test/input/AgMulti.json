@@ -5,11 +5,11 @@
   "visualize": true,
   "withGui"  : true,
   "justCentralFlake": false,
-  "listType": linear,
+  "listType": "linear",
   "psd": true,
-  "calculationMode": Ag,
+  "calculationMode": "Ag",
   "outputData": true,
-  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"},],
+  "outputDataFormat": [ {"type": "png"}, {"type": "txt"}, {"type": "mko"}],
   "randomSeed": false,
-  "coverage": 5,
+  "coverage": 5
 }  

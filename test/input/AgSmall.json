@@ -5,14 +5,14 @@
   "visualize": false, 
   "withGui"  : false,
   "justCentralFlake": true,
-  "listType": linear,
+  "listType": "linear",
   "printToImage": true,
   "psd": true,
-  "calculationMode": Ag,
+  "calculationMode": "Ag",
   "binsLevels": 100,
   "extraLevels": 0,
   "outputData": true, 
   "randomSeed": false,
   "useMaxPerimeter": false,
-  "perimeterType": square
+  "perimeterType": "square"
 }
