@@ -63,7 +63,7 @@ public class CatalysisSimulationTest {
   public void testCatalysis() {
     AbstractSimulation.printHeader("Catalysis test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Catalysis.json");
     parser.print();
 
     doCatalysisTest(parser);
@@ -85,7 +85,7 @@ public class CatalysisSimulationTest {
   public void testCatalysisDiffusion() {
     AbstractSimulation.printHeader("Catalysis diffusion test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisDiffusionParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisDiffusion.json");
     parser.print();
 
     doCatalysisTest(parser);
@@ -107,7 +107,7 @@ public class CatalysisSimulationTest {
   public void testCatalysisDesorption() {
     AbstractSimulation.printHeader("Catalysis desorption test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisDesorptionParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisDesorption.json");
     parser.print();
 
     doCatalysisTest(parser);
@@ -129,7 +129,7 @@ public class CatalysisSimulationTest {
   public void testCatalysisAdsorptionDesorptionDiffusion() {
     AbstractSimulation.printHeader("Catalysis adsorption desorption diffusion test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisAddParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisAdd.json");
     parser.print();
 
     doCatalysisTest(parser);
@@ -151,7 +151,7 @@ public class CatalysisSimulationTest {
   public void testCatalysisReaction() {
     AbstractSimulation.printHeader("Catalysis reaction test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisReactionParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisReaction.json");
     parser.print();
 
     doCatalysisTest(parser);
@@ -173,7 +173,7 @@ public class CatalysisSimulationTest {
   public void testCatalysisDesorptionReaction() {
     AbstractSimulation.printHeader("Catalysis desorption reaction test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisDesorptionReactionParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisDesorptionReaction.json");
     parser.print();
 
     doCatalysisTest(parser);
@@ -195,7 +195,7 @@ public class CatalysisSimulationTest {
   public void testCatalysisTof() {
     AbstractSimulation.printHeader("Catalysis TOF reaction test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisTofParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/CatalysisTof.json");
     parser.print();
 
     doCatalysisTest(parser);

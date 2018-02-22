@@ -65,7 +65,7 @@ public class AgUcSimulationTest {
   public void testAgUc180() {
     AbstractSimulation.printHeader("AgUc 180 test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUc180Parameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUc180.json");
     parser.print();
 
     doAgTest(parser);
@@ -87,7 +87,7 @@ public class AgUcSimulationTest {
   public void testAgUcPsd() {
     AbstractSimulation.printHeader("AgUc PSD test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUcPsdParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUcPsd.json");
     parser.print();
 
     doAgTest(parser);
@@ -121,7 +121,7 @@ public class AgUcSimulationTest {
   public void testAgUcExtraOutput() {
     AbstractSimulation.printHeader("AgUc extra output test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUcExtraParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgUcExtra.json");
     parser.print();
 
     doAgTest(parser);

@@ -68,7 +68,7 @@ public class AgSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Ag.json");
     parser.print();
     assertEquals("Ag", parser.getCalculationMode());
     assertEquals(135.0f, parser.getTemperature(),0);
@@ -93,7 +93,7 @@ public class AgSimulationTest {
   public void testAg() {
     AbstractSimulation.printHeader("Ag test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Ag.json");
     parser.print();
 
     doAgTest(parser);
@@ -120,7 +120,7 @@ public class AgSimulationTest {
   public void testAgSimple() {
     AbstractSimulation.printHeader("Ag simple test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgSmallParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgSmall.json");
     parser.print();
 
     doAgTest(parser);
@@ -130,7 +130,7 @@ public class AgSimulationTest {
   public void testAgPsd() {
     AbstractSimulation.printHeader("Ag PSD test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgPsdParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgPsd.json");
     parser.print();
     
     doAgTest(parser);
@@ -163,7 +163,7 @@ public class AgSimulationTest {
   public void testAgMulti() {
     AbstractSimulation.printHeader("Ag test multi-flake");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgMultiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/AgMulti.json");
     parser.print();
 
     doAgTest(parser);

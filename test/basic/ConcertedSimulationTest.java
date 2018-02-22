@@ -63,7 +63,7 @@ public class ConcertedSimulationTest {
   public void testConcertedAdsorptionExtra() {
     AbstractSimulation.printHeader("Concerted only adsorption with extra output test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/ConcertedAdsorptionExtraParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/ConcertedAdsorptionExtra.json");
     parser.print();
 
     doConcertedTest(parser);

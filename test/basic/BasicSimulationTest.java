@@ -62,7 +62,7 @@ public class BasicSimulationTest {
   public void testBasic120() {
     AbstractSimulation.printHeader("Basic 120 test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/Basic120Parameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Basic120.json");
     parser.print();
 
     doBasicGrowthTest(parser);
@@ -86,7 +86,7 @@ public class BasicSimulationTest {
   public void testBasic180() {
     AbstractSimulation.printHeader("Basic 180 test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/Basic180Parameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Basic180.json");
     parser.print();
 
     doBasicGrowthTest(parser);

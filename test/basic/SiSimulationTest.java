@@ -57,7 +57,7 @@ public class SiSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/SiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Si.json");
     parser.print();
 
     assertEquals("Si", parser.getCalculationMode());
@@ -83,7 +83,7 @@ public class SiSimulationTest {
   public void testSi() {
     AbstractSimulation.printHeader("Si test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/SiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Si.json");
     parser.print();
 
     AbstractSimulation simulation = new SiSimulation(parser);

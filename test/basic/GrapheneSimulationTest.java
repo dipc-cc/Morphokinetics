@@ -63,7 +63,7 @@ public class GrapheneSimulationTest {
   @Test
   public void testParameterFile() {
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Graphene.json");
     parser.print();
     assertEquals("graphene", parser.getCalculationMode());
     assertEquals(1273.0, parser.getTemperature(),1e-10);
@@ -88,7 +88,7 @@ public class GrapheneSimulationTest {
   public void testGraphene() {
     AbstractSimulation.printHeader("Graphene test");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/Graphene.json");
     parser.print();
 
     doGrapheneTest(parser);
@@ -112,7 +112,7 @@ public class GrapheneSimulationTest {
   public void testGrapheneMany() {
     AbstractSimulation.printHeader("Graphene test many");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneManyParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneMany.json");
     parser.print();
 
     doGrapheneTest(parser);
@@ -146,7 +146,7 @@ public class GrapheneSimulationTest {
   public void testGrapheneMulti() {
     AbstractSimulation.printHeader("Graphene test multi-flake");
     Parser parser = new Parser();
-    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneMultiParameters");
+    parser.readFile(TestHelper.getBaseDir() + "/test/input/GrapheneMulti.json");
     parser.print();
 
     doGrapheneTest(parser);
