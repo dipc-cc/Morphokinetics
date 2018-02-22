@@ -65,7 +65,7 @@ public class BasicSimulationTest {
     parser.readFile(TestHelper.getBaseDir() + "/test/input/Basic120Parameters");
     parser.print();
 
-    doAgTest(parser);
+    doBasicGrowthTest(parser);
     
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
@@ -89,7 +89,7 @@ public class BasicSimulationTest {
     parser.readFile(TestHelper.getBaseDir() + "/test/input/Basic180Parameters");
     parser.print();
 
-    doAgTest(parser);
+    doBasicGrowthTest(parser);
     
     Restart restart = new Restart(TestHelper.getBaseDir() + "/test/references/");
     int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};
@@ -106,7 +106,7 @@ public class BasicSimulationTest {
     assertEquals(29.7818787698688, simulatedTime, 0.0);
   }
   
-  private void doAgTest(Parser parser) {
+  private void doBasicGrowthTest(Parser parser) {
     AbstractSimulation simulation = new BasicGrowthSimulation(parser);
 
     simulation.initialiseKmc();
