@@ -28,7 +28,7 @@ import kineticMonteCarlo.lattice.AgLattice;
 
 /**
  *
- * @author N. Ferrando, J. Alberdi-Rodriguez, E. Sanchez
+ * @author N. Ferrando, J. Alberdi-Rodriguez
  */
 public class AgKmc extends AbstractGrowthKmc {
 
