@@ -18,8 +18,8 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.ConcertedAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.ConcertedSite;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 
@@ -34,7 +34,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
   }
   
   @Override 
-  public void deposit(AbstractGrowthAtom atom, boolean forceNucleation) {
+  public void deposit(AbstractGrowthSite atom, boolean forceNucleation) {
     atom.setOccupied(true);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       addNeighbour(atom.getNeighbour(i));
@@ -44,7 +44,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
   }
   
   @Override
-  public double extract(AbstractGrowthAtom atom) {
+  public double extract(AbstractGrowthSite atom) {
     atom.setOccupied(false);
     double probabilityChange = atom.getProbability();
     
@@ -65,13 +65,13 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void addNeighbour(AbstractGrowthAtom neighbourAtom) {
+  private void addNeighbour(AbstractGrowthSite neighbourAtom) {
     neighbourAtom.addOccupiedNeighbour(1);
     byte newType = (byte) (neighbourAtom.getType() + 1);
     if (newType > 6) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >6, which is in practice impossible");
     }
-    ((ConcertedAtom) neighbourAtom).addNMobile(1);
+    ((ConcertedSite) neighbourAtom).addNMobile(1);
 
     // Always changes the type of neighbour
     neighbourAtom.setType(newType);
@@ -82,13 +82,13 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
    * 
    * @param neighbourAtom neighbour atom of the original atom
    */
-  private void removeNeighbour(AbstractGrowthAtom neighbourAtom) {
+  private void removeNeighbour(AbstractGrowthSite neighbourAtom) {
     neighbourAtom.addOccupiedNeighbour(-1);
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible " + neighbourAtom + neighbourAtom.getType());
     }
-    ((ConcertedAtom) neighbourAtom).addNMobile(-1); // remove one mobile atom (original atom has been extracted)
+    ((ConcertedSite) neighbourAtom).addNMobile(-1); // remove one mobile atom (original atom has been extracted)
 
     neighbourAtom.setType(newType);
   }

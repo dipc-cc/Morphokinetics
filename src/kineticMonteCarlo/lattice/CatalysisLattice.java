@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.CatalysisAtom;
-import static kineticMonteCarlo.atom.CatalysisAtom.BR;
-import static kineticMonteCarlo.atom.CatalysisAtom.CO;
-import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
-import static kineticMonteCarlo.atom.CatalysisAtom.O;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.CatalysisSite;
+import static kineticMonteCarlo.atom.CatalysisSite.BR;
+import static kineticMonteCarlo.atom.CatalysisSite.CO;
+import static kineticMonteCarlo.atom.CatalysisSite.CUS;
+import static kineticMonteCarlo.atom.CatalysisSite.O;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import utils.LinearRegression;
 
@@ -127,16 +127,16 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public CatalysisAtom getCentralAtom() {
+  public CatalysisSite getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
-    return (CatalysisAtom) getAtom(iCentre, jCentre, 0);
+    return (CatalysisSite) getSite(iCentre, jCentre, 0);
   }
   
   @Override
-  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+  public AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour) {
     int index = jHexa * getHexaSizeI() + iHexa;
-    return ((CatalysisAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
+    return ((CatalysisSite) getUc(index).getSite(0)).getNeighbour(neighbour);
   }
 
   @Override
@@ -211,7 +211,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     for (int i = 0; i < size(); i++) {
       AbstractGrowthUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
+        CatalysisSite atom = (CatalysisSite) uc.getSite(j);
         atom.initialiseRates(probabilities);
       }
     }
@@ -223,13 +223,13 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }    
 
   @Override
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    CatalysisAtom atom = (CatalysisAtom) a;
+  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+    CatalysisSite atom = (CatalysisSite) a;
     atom.setOccupied(true);
 
     updateCoCus(atom);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
+      CatalysisSite neighbour = atom.getNeighbour(i);
       atom.getNeighbour(i).addOccupiedNeighbour(1);
       updateCoCus(neighbour);
     }
@@ -238,12 +238,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthAtom a) {
-    CatalysisAtom atom = (CatalysisAtom) a;
+  public double extract(AbstractGrowthSite a) {
+    CatalysisSite atom = (CatalysisSite) a;
     atom.setOccupied(false);
     atom.cleanCoCusNeighbours();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisAtom neighbour = atom.getNeighbour(i);
+      CatalysisSite neighbour = atom.getNeighbour(i);
       atom.getNeighbour(i).addOccupiedNeighbour(-1);
       updateCoCus(neighbour);
     }
@@ -299,7 +299,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
 
     if (atom.isOccupied()) {
       extract(atom);
@@ -320,12 +320,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+  public int getAvailableDistance(AbstractGrowthSite atom, int thresholdDistance) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+  public AbstractGrowthSite getFarSite(AbstractGrowthSite atom, int distance) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
@@ -333,12 +333,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     return j * getHexaSizeI() + i;
   }
   
-  private CatalysisAtom[][] createAtoms() {
+  private CatalysisSite[][] createAtoms() {
     //Instantiate atoms
-    CatalysisAtom[][] atoms = new CatalysisAtom[getHexaSizeI()][getHexaSizeJ()];
+    CatalysisSite[][] atoms = new CatalysisSite[getHexaSizeI()][getHexaSizeJ()];
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new CatalysisAtom(createId(i, j), (short) i, (short) j);
+        atoms[i][j] = new CatalysisSite(createId(i, j), (short) i, (short) j);
       }
     }
     
@@ -346,31 +346,31 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
-        CatalysisAtom atom = (CatalysisAtom) atoms[iHexa][jHexa];
+        CatalysisSite atom = (CatalysisSite) atoms[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
-        atom.setNeighbour((CatalysisAtom) atoms[i][j], 0);
+        atom.setNeighbour((CatalysisSite) atoms[i][j], 0);
 
         // east neighbour
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
-        atom.setNeighbour((CatalysisAtom) atoms[i][j], 1);
+        atom.setNeighbour((CatalysisSite) atoms[i][j], 1);
 
         // south neighbour
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
-        atom.setNeighbour((CatalysisAtom) atoms[i][j], 2);
+        atom.setNeighbour((CatalysisSite) atoms[i][j], 2);
         
         // west neighbour
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((CatalysisAtom) atoms[i][j], 3);
+        atom.setNeighbour((CatalysisSite) atoms[i][j], 3);
       }
     }
     return atoms;
@@ -381,12 +381,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
    * 
    * @param atom
    */
-  private void updateCoCus(CatalysisAtom atom) {
+  private void updateCoCus(CatalysisSite atom) {
     if (ratesLibrary.equals("farkas")) {
       if (atom.isOccupied() && atom.getLatticeSite() == CUS && atom.getType() == CO) {
         atom.cleanCoCusNeighbours();
         for (int i = 0; i < atom.getNumberOfNeighbours(); i += 2) { // Only up and down neighbours
-          CatalysisAtom neighbour = atom.getNeighbour(i);
+          CatalysisSite neighbour = atom.getNeighbour(i);
           if (neighbour.isOccupied() && neighbour.getType() == CO) {
             atom.addCoCusNeighbours(1);
           }

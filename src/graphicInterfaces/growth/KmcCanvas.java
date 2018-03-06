@@ -23,7 +23,6 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
 import static java.awt.Color.BLACK;
-import static java.awt.Color.WHITE;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -34,11 +33,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import static java.lang.String.format;
 import java.text.DecimalFormat;
-import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.atom.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
@@ -258,7 +256,7 @@ public class KmcCanvas extends Canvas {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        AbstractGrowthSite atom = uc.getSite(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
         
@@ -374,16 +372,16 @@ public class KmcCanvas extends Canvas {
 
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        AbstractGrowthSite atom = uc.getSite(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
 
         g.fillRect(X, Y, scale, scale);
         switch (atom.getType()) { // the cases are for graphene
-          case CatalysisAtom.O:
+          case CatalysisSite.O:
             g.setColor(RED);
             break;
-          case CatalysisAtom.CO:
+          case CatalysisSite.CO:
             g.setColor(Color.BLUE);
             break;
         }

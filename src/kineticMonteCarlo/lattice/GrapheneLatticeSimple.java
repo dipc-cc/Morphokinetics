@@ -18,8 +18,8 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.GrapheneAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.GrapheneSite;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 
@@ -38,8 +38,8 @@ public class GrapheneLatticeSimple extends GrapheneLattice {
    * @param forceNucleation ignored.
    */
   @Override
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    GrapheneAtom atom = (GrapheneAtom) a;
+  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+    GrapheneSite atom = (GrapheneSite) a;
     atom.setOccupied(true);
 
     for (int i = 0; i < 3; i++) {
@@ -54,8 +54,8 @@ public class GrapheneLatticeSimple extends GrapheneLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthAtom a) {
-    GrapheneAtom atom = (GrapheneAtom) a;
+  public double extract(AbstractGrowthSite a) {
+    GrapheneSite atom = (GrapheneSite) a;
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     
@@ -78,7 +78,7 @@ public class GrapheneLatticeSimple extends GrapheneLattice {
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void add1stOccupiedNeighbour(GrapheneAtom neighbourAtom) {
+  private void add1stOccupiedNeighbour(GrapheneSite neighbourAtom) {
     byte newType = (byte) (neighbourAtom.getType() + 1);
     if (newType > 6) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >6, which is in practice impossible");
@@ -98,7 +98,7 @@ public class GrapheneLatticeSimple extends GrapheneLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom
    */
-  private void remove1stOccupiedNeighbour(GrapheneAtom neighbourAtom) {
+  private void remove1stOccupiedNeighbour(GrapheneSite neighbourAtom) {
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible");

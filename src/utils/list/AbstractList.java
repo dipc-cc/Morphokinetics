@@ -19,7 +19,7 @@
 package utils.list;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractSite;
 import java.util.ListIterator;
 import kineticMonteCarlo.process.CatalysisProcess;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
@@ -68,11 +68,11 @@ public abstract class AbstractList implements IProbabilityHolder {
     computeTime = true;
   }
 
-  public abstract void addAtom(AbstractAtom a);
+  public abstract void addAtom(AbstractSite a);
   
-  public abstract void deleteAtom(AbstractAtom a);
+  public abstract void deleteAtom(AbstractSite a);
 
-  public abstract AbstractAtom nextEvent();
+  public abstract AbstractSite nextEvent();
 
   public double getTime() {
     return time;
@@ -190,7 +190,7 @@ public abstract class AbstractList implements IProbabilityHolder {
     time = 0;
   }
     
-  public abstract AbstractAtom getAtomAt(int pos);
+  public abstract AbstractSite getAtomAt(int pos);
 
   public abstract int getSize();
 

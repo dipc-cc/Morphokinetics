@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 
 /**
  * Really simple unit cell, which will contain only one atom.
@@ -28,7 +28,7 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
  */
 public class SimpleUc extends AbstractGrowthUc implements IUc {
 
-  private final AbstractGrowthAtom atom;
+  private final AbstractGrowthSite atom;
   private final int size; // how many atoms
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
@@ -36,7 +36,7 @@ public class SimpleUc extends AbstractGrowthUc implements IUc {
   private double posX;
   private double posY;
 
-  public SimpleUc(int posI, int posJ, AbstractGrowthAtom atom) {
+  public SimpleUc(int posI, int posJ, AbstractGrowthSite atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
@@ -50,7 +50,7 @@ public class SimpleUc extends AbstractGrowthUc implements IUc {
    * @return current atom.
    */
   @Override
-  public AbstractGrowthAtom getAtom(int pos) {
+  public AbstractGrowthSite getSite(int pos) {
     return atom;
   }
 

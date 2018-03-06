@@ -23,12 +23,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.ConcertedAtom;
-import kineticMonteCarlo.atom.AgAtom;
-import static kineticMonteCarlo.atom.AgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAtom.TERRACE;
-import kineticMonteCarlo.atom.AgAtomSimple;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.ConcertedSite;
+import kineticMonteCarlo.atom.AgSite;
+import static kineticMonteCarlo.atom.AgSite.EDGE;
+import static kineticMonteCarlo.atom.AgSite.TERRACE;
+import kineticMonteCarlo.atom.AgSiteSimple;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import utils.StaticRandom;
@@ -117,7 +117,7 @@ public class AgUcLattice extends AgLattice {
   }
   
   @Override
-  public AgAtom getAtom(int iHexa, int jHexa) {
+  public AgSite getSite(int iHexa, int jHexa) {
     return null;
   }
   
@@ -130,15 +130,15 @@ public class AgUcLattice extends AgLattice {
    * @return an atom.
    */
   @Override
-  public AgAtom getAtom(int iHexa, int jHexa, int pos) {
-    return ucArray[iHexa][jHexa].getAtom(pos);
+  public AgSite getSite(int iHexa, int jHexa, int pos) {
+    return ucArray[iHexa][jHexa].getSite(pos);
   }
   
   @Override
-  public AgAtom getCentralAtom() {
+  public AgSite getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
-    return getAtom(iCentre, jCentre, 0);
+    return getSite(iCentre, jCentre, 0);
   }
   
   @Override
@@ -151,7 +151,7 @@ public class AgUcLattice extends AgLattice {
   }
   
   @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+  public int getAvailableDistance(AbstractGrowthSite atom, int thresholdDistance) {
     switch (atom.getType()) {
       case TERRACE:
         //return getClearAreaTerrace(atom, thresholdDistance, true, 0, 0, 0, (byte) 0);
@@ -164,7 +164,7 @@ public class AgUcLattice extends AgLattice {
   }
   
   @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+  public AbstractGrowthSite getFarSite(AbstractGrowthSite atom, int distance) {
     switch (atom.getType()) {
       case TERRACE:
         return chooseClearAreaTerrace(atom, distance);
@@ -206,7 +206,7 @@ public class AgUcLattice extends AgLattice {
       }
     }
 
-    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
 
     if (atom.isOccupied()) {
       extract(atom);
@@ -229,21 +229,21 @@ public class AgUcLattice extends AgLattice {
     int id = 0;
     for (int i = 0; i < sizeI; i++) {
       for (int j = 0; j < sizeJ; j++) {
-        List<AgAtom> atomsList = new ArrayList<>(2);
-        AgAtom atom0;
-        AgAtom atom1;
+        List<AgSite> atomsList = new ArrayList<>(2);
+        AgSite atom0;
+        AgSite atom1;
         switch (type) {
           case 0:
-            atom0 = new AgAtomSimple(id++, 0);
-            atom1 = new AgAtomSimple(id++, 1);
+            atom0 = new AgSiteSimple(id++, 0);
+            atom1 = new AgSiteSimple(id++, 1);
             break;
           case 1:
-            atom0 = new AgAtom(id++, 0);
-            atom1 = new AgAtom(id++, 1);
+            atom0 = new AgSite(id++, 0);
+            atom1 = new AgSite(id++, 1);
             break;
           case 2:
-            atom0 = new ConcertedAtom(id++, 0);
-            atom1 = new ConcertedAtom(id++, 1);
+            atom0 = new ConcertedSite(id++, 0);
+            atom1 = new ConcertedSite(id++, 1);
             break;
           default:
             atom0 = null;
@@ -268,66 +268,66 @@ public class AgUcLattice extends AgLattice {
       AgUc uc = ucList.get(k);
 
       // First atom of unit cell
-      AgAtom atom = uc.getAtom(0);
+      AgSite atom = uc.getSite(0);
 
       int i = uc.getPosI() - 1;
       int j = uc.getPosJ() - 1;
       if (i < 0) i = sizeI - 1;
       if (j < 0) j = sizeJ - 1;
-      atom.setNeighbour(ucArray[i][j].getAtom(1), 0);
+      atom.setNeighbour(ucArray[i][j].getSite(1), 0);
 
       i = uc.getPosI();
       j = uc.getPosJ() - 1;
       if (j < 0) j = sizeJ - 1;
-      atom.setNeighbour(ucArray[i][j].getAtom(1), 1);
+      atom.setNeighbour(ucArray[i][j].getSite(1), 1);
 
       i = uc.getPosI() + 1;
       j = uc.getPosJ();
       if (i == sizeI) i = 0;
-      atom.setNeighbour(ucArray[i][j].getAtom(0), 2);
+      atom.setNeighbour(ucArray[i][j].getSite(0), 2);
 
       i = uc.getPosI();
       j = uc.getPosJ();
-      atom.setNeighbour(ucArray[i][j].getAtom(1), 3);
+      atom.setNeighbour(ucArray[i][j].getSite(1), 3);
 
       i = uc.getPosI() - 1;
       j = uc.getPosJ();
       if (i < 0) i = sizeI - 1;
-      atom.setNeighbour(ucArray[i][j].getAtom(1), 4);
+      atom.setNeighbour(ucArray[i][j].getSite(1), 4);
 
       i = uc.getPosI() - 1;
       j = uc.getPosJ();
       if (i < 0) i = sizeI - 1;
-      atom.setNeighbour(ucArray[i][j].getAtom(0), 5);
+      atom.setNeighbour(ucArray[i][j].getSite(0), 5);
 
       // Second atom of unit cell
-      atom = uc.getAtom(1);
+      atom = uc.getSite(1);
 
       i = uc.getPosI();
       j = uc.getPosJ();
-      atom.setNeighbour(ucArray[i][j].getAtom(0), 0);
+      atom.setNeighbour(ucArray[i][j].getSite(0), 0);
 
       i = uc.getPosI() + 1;
       j = uc.getPosJ();
       if (i == sizeI) i = 0;
-      atom.setNeighbour(ucArray[i][j].getAtom(0), 1);
-      atom.setNeighbour(ucArray[i][j].getAtom(1), 2);
+      atom.setNeighbour(ucArray[i][j].getSite(0), 1);
+      atom.setNeighbour(ucArray[i][j].getSite(1), 2);
 
       i = uc.getPosI() + 1;
       j = uc.getPosJ() + 1;
       if (i == sizeI) i = 0;
       if (j == sizeJ) j = 0;
-      atom.setNeighbour(ucArray[i][j].getAtom(0), 3);
+      atom.setNeighbour(ucArray[i][j].getSite(0), 3);
 
       i = uc.getPosI();
       j = uc.getPosJ() + 1;
       if (j == sizeJ) j = 0;
-      atom.setNeighbour(ucArray[i][j].getAtom(0), 4);
+      atom.setNeighbour(ucArray[i][j].getSite(0), 4);
 
       i = uc.getPosI() - 1;
       j = uc.getPosJ();
       if (i < 0) i = sizeI - 1;
-      atom.setNeighbour(ucArray[i][j].getAtom(1), 5);
+      atom.setNeighbour(ucArray[i][j].getSite(1), 5);
     }
 
   }
@@ -339,7 +339,7 @@ public class AgUcLattice extends AgLattice {
    * @param thresholdDistance
    * @return clear distance.
    */
-  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
+  private int getClearAreaTerrace(AbstractGrowthSite atom, int thresholdDistance) {
     byte errorCode = 0;
     int possibleDistance = 0;
     while (true) {
@@ -366,9 +366,9 @@ public class AgUcLattice extends AgLattice {
     }
   }
   
-  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance, boolean changeLevel, int currentLevel, int position, int turnDirection, byte errorCode) {
+  private int getClearAreaTerrace(AbstractGrowthSite atom, int thresholdDistance, boolean changeLevel, int currentLevel, int position, int turnDirection, byte errorCode) {
     int possibleDistance = 1; // = currentLevel
-    AbstractGrowthAtom currentAtom;
+    AbstractGrowthSite currentAtom;
     if (changeLevel) {
       currentAtom = atom.getNeighbour(0).getNeighbour(2); // Skip the first possition, to avoid counting more than once
       if (currentLevel == 0) {
@@ -425,7 +425,7 @@ public class AgUcLattice extends AgLattice {
    * @param distance how far we have to move.
    * @return destination atom.
    */
-  private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
+  private AbstractGrowthSite chooseClearAreaTerrace(AbstractGrowthSite atom, int distance) {
     int sizeOfPerimeter = distance * 6;
     int randomNumber = StaticRandom.rawInteger(sizeOfPerimeter);
     int quotient = randomNumber / distance; // far direction
@@ -442,11 +442,11 @@ public class AgUcLattice extends AgLattice {
     return atom;
   }
   
-  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
+  private int getClearAreaStep(AbstractGrowthSite atom, int thresholdDistance) {
     int distance = 1;
-    AbstractGrowthAtom currentAtom;
-    AbstractGrowthAtom lastRight = atom;
-    AbstractGrowthAtom lastLeft = atom;
+    AbstractGrowthSite currentAtom;
+    AbstractGrowthSite lastRight = atom;
+    AbstractGrowthSite lastLeft = atom;
     int right;
     int left;
     // select the neighbours depending on the orientation of the source atom
@@ -490,7 +490,7 @@ public class AgUcLattice extends AgLattice {
     }
   }
   
-  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {
+  private AbstractGrowthSite chooseClearAreaStep(AbstractGrowthSite atom, int distance) {
     double randomNumber = StaticRandom.raw();
     int neighbour = 0;
     switch (atom.getOrientation()) {

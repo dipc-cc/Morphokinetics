@@ -28,11 +28,11 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class ConcertedAtom extends AgAtomSimple {
+public class ConcertedSite extends AgSiteSimple {
   
   private final ConcertedProcess[] processes;
   
-  public ConcertedAtom(int id, int i) {
+  public ConcertedSite(int id, int i) {
     super(id, i);
     processes = new ConcertedProcess[2];
     processes[ADSORB] = new ConcertedProcess();
@@ -40,14 +40,14 @@ public class ConcertedAtom extends AgAtomSimple {
     setProcceses(processes);
   }
   
-  public ConcertedAtom getRandomNeighbour(byte process) {
-    ConcertedAtom neighbour;
+  public ConcertedSite getRandomNeighbour(byte process) {
+    ConcertedSite neighbour;
     double randomNumber = StaticRandom.raw() * getRate(process);
     double sum = 0.0;
     for (int j = 0; j < getNumberOfNeighbours(); j++) {
       sum += processes[process].getEdgeRate(j);
       if (sum > randomNumber) {
-        neighbour = (ConcertedAtom) getNeighbour(j);
+        neighbour = (ConcertedSite) getNeighbour(j);
         return neighbour;
       }
     }
@@ -78,7 +78,7 @@ public class ConcertedAtom extends AgAtomSimple {
       }
       if (getOccupiedNeighbours() == 1) {
         for (int i = 0; i < getNumberOfNeighbours(); i++) {
-          AbstractGrowthAtom neighbour = getNeighbour(i);
+          AbstractGrowthSite neighbour = getNeighbour(i);
           if (neighbour.isOccupied() && neighbour.getOccupiedNeighbours() > 1) {
             return false;
           }
@@ -167,14 +167,14 @@ public class ConcertedAtom extends AgAtomSimple {
     //byte subtype = getRealType();
     BitSet bits = new BitSet(6);
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      AbstractGrowthAtom neighbour = getNeighbour(i);
+      AbstractGrowthSite neighbour = getNeighbour(i);
       if (i != myPositionForNeighbour && neighbour.isOccupied()) { // exclude origin atom
         bits.set(i);
       }
     }
     type = getTypeCode(type, bits);
     if (type == 1 || type == 2 || type == 3 || type == 5) {
-      AbstractGrowthAtom origin = getNeighbour(myPositionForNeighbour);
+      AbstractGrowthSite origin = getNeighbour(myPositionForNeighbour);
       if (origin.getType() != 0)
         type = getDetachedType(type, myPositionForNeighbour);
     }
@@ -193,8 +193,8 @@ public class ConcertedAtom extends AgAtomSimple {
     if (pos2 == -1) {
       pos2 = 5;
     }
-    AbstractGrowthAtom neigh1 = getNeighbour((position + 1) % 6);
-    AbstractGrowthAtom neigh2 = getNeighbour(pos2);
+    AbstractGrowthSite neigh1 = getNeighbour((position + 1) % 6);
+    AbstractGrowthSite neigh2 = getNeighbour(pos2);
     int detachedType = 11;
     if (type == 5)
       detachedType = 10;

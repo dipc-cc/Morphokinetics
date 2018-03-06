@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.BasicAtom;
+import kineticMonteCarlo.atom.BasicSite;
 import kineticMonteCarlo.unitCell.IUc;
 import kineticMonteCarlo.unitCell.Simple3dUc;
 
@@ -28,7 +28,7 @@ import kineticMonteCarlo.unitCell.Simple3dUc;
  */
 public class BasicLattice extends AbstractLattice {
 
-  private BasicAtom[] atoms;
+  private BasicSite[] atoms;
   private Simple3dUc[] ucList;
   
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
@@ -37,14 +37,14 @@ public class BasicLattice extends AbstractLattice {
     setHexaSizeK(1);
     setUnitCellSize(1);
     
-    atoms = new BasicAtom[hexaSizeI * hexaSizeJ];
+    atoms = new BasicSite[hexaSizeI * hexaSizeJ];
     ucList = new Simple3dUc[hexaSizeI * hexaSizeJ];
     createAtoms(hexaSizeI, hexaSizeJ);
     interconnectAtoms();
   }
 
   @Override
-  public BasicAtom getAtom(int iHexa, int jHexa, int kHexa, int unitCellPos) {
+  public BasicSite getSite(int iHexa, int jHexa, int kHexa, int unitCellPos) {
     return atoms[((jHexa) * getHexaSizeI() + iHexa) * getUnitCellSize() + unitCellPos];
   }
 
@@ -107,7 +107,7 @@ public class BasicLattice extends AbstractLattice {
   private void createAtoms(int hexaSizeI, int hexaSizeJ) {
     for (short i = 0; i < hexaSizeJ; i++) {
       for (short j = 0; j < hexaSizeI; j++) {
-        atoms[i * hexaSizeI + j] = new BasicAtom(j, i);
+        atoms[i * hexaSizeI + j] = new BasicSite(j, i);
         ucList[i * hexaSizeI + j] = new Simple3dUc(j, i, atoms[i * hexaSizeI + j]);
       }
     }

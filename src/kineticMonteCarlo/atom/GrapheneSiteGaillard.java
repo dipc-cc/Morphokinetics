@@ -27,11 +27,11 @@ import ratesLibrary.GrapheneGaillardRates;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class GrapheneAtomGaillard extends GrapheneAtom {
+public class GrapheneSiteGaillard extends GrapheneSite {
 
   private GrapheneGaillardRates rates;
 
-  public GrapheneAtomGaillard(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public GrapheneSiteGaillard(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);
     setNumberOfNeighbours(9);
     rates = new GrapheneGaillardRates();
@@ -46,7 +46,7 @@ public class GrapheneAtomGaillard extends GrapheneAtom {
    */
   @Override
   public double probJumpToNeighbour(int originType, int pos) {
-    GrapheneAtomGaillard atom = (GrapheneAtomGaillard) getNeighbour(pos);
+    GrapheneSiteGaillard atom = (GrapheneSiteGaillard) getNeighbour(pos);
     if (atom.isOccupied()) {
       return 0;
     }

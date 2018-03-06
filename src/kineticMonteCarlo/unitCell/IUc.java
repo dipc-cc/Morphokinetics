@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractSite;
 
 /**
  *
@@ -31,7 +31,13 @@ public interface IUc {
   static final float SIZE_Y = 1; // Cartesian size Y per unit
   static final float SIZE_Z = 1; // Cartesian size Z per unit
   
-  public AbstractAtom getAtom(int pos);
+  /**
+   * Returns the site of the given position; an atom or an empty site.
+   * 
+   * @param pos position inside the unit cell.
+   * @return Site object.
+   */
+  public AbstractSite getSite(int pos);
   
   /**
    * Cartesian size of the unit cell in X axis

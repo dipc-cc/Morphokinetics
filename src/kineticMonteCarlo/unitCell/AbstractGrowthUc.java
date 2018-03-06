@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 
 /**
  *
@@ -27,6 +27,6 @@ import kineticMonteCarlo.atom.AbstractGrowthAtom;
 public abstract class AbstractGrowthUc implements IUc {
   
   @Override
-  public abstract AbstractGrowthAtom getAtom(int pos);
+  public abstract AbstractGrowthSite getSite(int pos);
   
 }

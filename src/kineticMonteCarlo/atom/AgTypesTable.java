@@ -19,11 +19,11 @@
 package kineticMonteCarlo.atom;
 
 import java.util.Arrays;
-import static kineticMonteCarlo.atom.AgAtom.CORNER;
-import static kineticMonteCarlo.atom.AgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAtom.ISLAND;
-import static kineticMonteCarlo.atom.AgAtom.KINK;
-import static kineticMonteCarlo.atom.AgAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgSite.CORNER;
+import static kineticMonteCarlo.atom.AgSite.EDGE;
+import static kineticMonteCarlo.atom.AgSite.ISLAND;
+import static kineticMonteCarlo.atom.AgSite.KINK;
+import static kineticMonteCarlo.atom.AgSite.TERRACE;
 
 public class AgTypesTable {
 

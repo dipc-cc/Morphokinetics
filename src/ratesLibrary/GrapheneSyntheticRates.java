@@ -18,14 +18,14 @@
  */
 package ratesLibrary;
 
-import static kineticMonteCarlo.atom.AbstractAtom.ARMCHAIR_EDGE;
-import static kineticMonteCarlo.atom.AbstractAtom.BULK;
-import static kineticMonteCarlo.atom.AbstractAtom.CORNER;
-import static kineticMonteCarlo.atom.AbstractAtom.KINK;
-import static kineticMonteCarlo.atom.AbstractAtom.SICK;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
-import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
-import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_WITH_EXTRA;
+import static kineticMonteCarlo.atom.AbstractSite.ARMCHAIR_EDGE;
+import static kineticMonteCarlo.atom.AbstractSite.BULK;
+import static kineticMonteCarlo.atom.AbstractSite.CORNER;
+import static kineticMonteCarlo.atom.AbstractSite.KINK;
+import static kineticMonteCarlo.atom.AbstractSite.SICK;
+import static kineticMonteCarlo.atom.AbstractSite.TERRACE;
+import static kineticMonteCarlo.atom.AbstractSite.ZIGZAG_EDGE;
+import static kineticMonteCarlo.atom.AbstractSite.ZIGZAG_WITH_EXTRA;
 
 /**
  *

@@ -20,7 +20,7 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import java.util.List;
 import java.util.TreeMap;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.perimeterStatistics.AbstractPerimeterStatistics;
 import kineticMonteCarlo.lattice.perimeterStatistics.PerimeterStatisticsFactory;
 import utils.StaticRandom;
@@ -41,8 +41,8 @@ public class RoundPerimeter {
   /**
    * Atoms vector belonging to the perimeter.
    */
-  private List<AbstractGrowthAtom> currentPerimeter;
-  private TreeMap<Integer, AbstractGrowthAtom> currentPerimeterTreeMap;
+  private List<AbstractGrowthSite> currentPerimeter;
+  private TreeMap<Integer, AbstractGrowthSite> currentPerimeterTreeMap;
   private AbstractPerimeterStatistics perimeterStatistics;
   private short type;
   private int neededSteps;
@@ -82,11 +82,11 @@ public class RoundPerimeter {
    * 
    * @return atoms vector belonging to the perimeter.
    */
-  public List<AbstractGrowthAtom> getCurrentPerimeter(){
+  public List<AbstractGrowthSite> getCurrentPerimeter(){
     return currentPerimeter;
   }
   
-  public void setCurrentPerimeter(List<AbstractGrowthAtom> perimeter) {
+  public void setCurrentPerimeter(List<AbstractGrowthSite> perimeter) {
     currentPerimeter = perimeter;
     currentPerimeterTreeMap = new TreeMap<>();
     perimeter.stream().forEach(atom -> currentPerimeterTreeMap.put(atom.getId(), atom));
@@ -96,7 +96,7 @@ public class RoundPerimeter {
     currentRadius = (int) Math.max(sizeX, sizeY) / 2;
   }
   
-  public boolean contains(AbstractGrowthAtom atom) {
+  public boolean contains(AbstractGrowthSite atom) {
     if (currentPerimeterTreeMap != null) {
       return currentPerimeterTreeMap.containsKey(atom.getId());
     } else {
@@ -114,7 +114,7 @@ public class RoundPerimeter {
     return currentRadius;
   }
 
-  public AbstractGrowthAtom getPerimeterReentrance(AbstractGrowthAtom originAtom) {
+  public AbstractGrowthSite getPerimeterReentrance(AbstractGrowthSite originAtom) {
 
     int angle = searchPerimeterOffsetReentrance();
     neededSteps = perimeterStatistics.getHopsCount(currentRadius, angle);
@@ -132,7 +132,7 @@ public class RoundPerimeter {
     int initialLocation = (int) (destinationAngleDegree * currentPerimeter.size() / 360.0);
     double destinationAngleRad = destinationAngleDegree * Math.PI / 180.0f;
 
-    AbstractGrowthAtom destinationAtom = null;
+    AbstractGrowthSite destinationAtom = null;
     int position = 0;
     double error = currentPerimeter.get(initialLocation).getAngle() - destinationAngleRad;
 
@@ -184,7 +184,7 @@ public class RoundPerimeter {
 
   }
 
-  public AbstractGrowthAtom getRandomPerimeterAtom() {
+  public AbstractGrowthSite getRandomPerimeterAtom() {
     return currentPerimeter.get(utils.StaticRandom.rawInteger(currentPerimeter.size()));
   }
 

@@ -19,12 +19,12 @@
 package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.BasicGrowthAtom;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
-import kineticMonteCarlo.atom.BasicGrowthSimpleAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.BasicGrowthSite;
+import static kineticMonteCarlo.atom.BasicGrowthSite.ISLAND;
+import static kineticMonteCarlo.atom.BasicGrowthSite.TERRACE;
+import static kineticMonteCarlo.atom.BasicGrowthSite.EDGE;
+import kineticMonteCarlo.atom.BasicGrowthSimpleSite;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import utils.StaticRandom;
 
@@ -41,16 +41,16 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public BasicGrowthAtom getCentralAtom() {
+  public BasicGrowthSite getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
-    return (BasicGrowthAtom) getAtom(iCentre, jCentre, 0);
+    return (BasicGrowthSite) getSite(iCentre, jCentre, 0);
   }
   
   @Override
-  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+  public AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour) {
     int index = jHexa * getHexaSizeI() + iHexa;
-    return ((BasicGrowthAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
+    return ((BasicGrowthSite) getUc(index).getSite(0)).getNeighbour(neighbour);
   }
 
   @Override
@@ -94,7 +94,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+  public int getAvailableDistance(AbstractGrowthSite atom, int thresholdDistance) {
     switch (atom.getType()) {
       case TERRACE:
         return getClearAreaTerrace(atom, thresholdDistance);
@@ -106,7 +106,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+  public AbstractGrowthSite getFarSite(AbstractGrowthSite atom, int distance) {
     switch (atom.getType()) {
       case TERRACE:
         return chooseClearAreaTerrace(atom, distance);
@@ -123,8 +123,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }    
 
   @Override
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    BasicGrowthAtom atom = (BasicGrowthAtom) a;
+  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+    BasicGrowthSite atom = (BasicGrowthSite) a;
     atom.setOccupied(true);
     if (forceNucleation) {
       atom.setType(ISLAND);
@@ -145,8 +145,8 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthAtom a) {
-    BasicGrowthAtom atom = (BasicGrowthAtom) a;
+  public double extract(AbstractGrowthSite a) {
+    BasicGrowthSite atom = (BasicGrowthSite) a;
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
@@ -190,7 +190,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
 
     if (atom.isOccupied()) {
       extract(atom);
@@ -203,20 +203,20 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     return j * getHexaSizeI() + i;
   }
   
-  private BasicGrowthAtom[][] createAtoms() {
-    BasicGrowthAtom[][] atoms;
+  private BasicGrowthSite[][] createAtoms() {
+    BasicGrowthSite[][] atoms;
     //Instantiate atoms
     if (simple) {
-      atoms = new BasicGrowthSimpleAtom[getHexaSizeI()][getHexaSizeJ()];
+      atoms = new BasicGrowthSimpleSite[getHexaSizeI()][getHexaSizeJ()];
     } else {
-      atoms = new BasicGrowthAtom[getHexaSizeI()][getHexaSizeJ()];
+      atoms = new BasicGrowthSite[getHexaSizeI()][getHexaSizeJ()];
     }
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
         if (simple) {
-          atoms[i][j] = new BasicGrowthSimpleAtom(createId(i, j), (short) i, (short) j);
+          atoms[i][j] = new BasicGrowthSimpleSite(createId(i, j), (short) i, (short) j);
         } else {
-          atoms[i][j] = new BasicGrowthAtom(createId(i, j), (short) i, (short) j);
+          atoms[i][j] = new BasicGrowthSite(createId(i, j), (short) i, (short) j);
         }
       }
     }
@@ -225,31 +225,31 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
-        BasicGrowthAtom atom = (BasicGrowthAtom) atoms[iHexa][jHexa];
+        BasicGrowthSite atom = (BasicGrowthSite) atoms[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
-        atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 0);
+        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 0);
 
         // east neighbour
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
-        atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 1);
+        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 1);
 
         // south neighbour
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
-        atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 2);
+        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 2);
         
         // west neighbour
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((BasicGrowthAtom) atoms[i][j], 3);
+        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 3);
       }
     }
     return atoms;
@@ -262,7 +262,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * @param thresholdDistance
    * @return clear distance.
    */
-  private int getClearAreaTerrace(AbstractGrowthAtom atom, int thresholdDistance) {
+  private int getClearAreaTerrace(AbstractGrowthSite atom, int thresholdDistance) {
     byte errorCode = 0;
     int possibleDistance = 0;
     
@@ -300,7 +300,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * @param distance how far we have to move.
    * @return destination atom.
    */
-  private AbstractGrowthAtom chooseClearAreaTerrace(AbstractGrowthAtom atom, int distance) {
+  private AbstractGrowthSite chooseClearAreaTerrace(AbstractGrowthSite atom, int distance) {
     int sizeOfPerimeter = distance * 2 * 4;
     int randomNumber = StaticRandom.rawInteger(sizeOfPerimeter);
     int quotient = randomNumber / (distance*2); // far direction
@@ -325,11 +325,11 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     return atom;
   }
   
-  private int getClearAreaStep(AbstractGrowthAtom atom, int thresholdDistance) {
+  private int getClearAreaStep(AbstractGrowthSite atom, int thresholdDistance) {
     int distance = 1;
-    AbstractGrowthAtom currentAtom;
-    AbstractGrowthAtom lastRight = atom;
-    AbstractGrowthAtom lastLeft = atom;
+    AbstractGrowthSite currentAtom;
+    AbstractGrowthSite lastRight = atom;
+    AbstractGrowthSite lastLeft = atom;
     int right;
     int left;
     // select the neighbours depending on the orientation of the source atom
@@ -366,7 +366,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     }
   }
   
-  private AbstractGrowthAtom chooseClearAreaStep(AbstractGrowthAtom atom, int distance) {
+  private AbstractGrowthSite chooseClearAreaStep(AbstractGrowthSite atom, int distance) {
     double randomNumber = StaticRandom.raw();
     int neighbour = 0;
     switch (atom.getOrientation()) {
@@ -401,7 +401,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * @param neighbourPosition the position of the neighbour.
    * @param forceNucleation
    */
-  private void addNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition, boolean forceNucleation) {
+  private void addNeighbour(BasicGrowthSite neighbourAtom, int neighbourPosition, boolean forceNucleation) {
     byte newType;
 
     newType = neighbourAtom.getNewType(1); 
@@ -427,7 +427,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     }
   }
 
-  private void updateSecondNeighbour(BasicGrowthAtom secondNeighbourAtom) {
+  private void updateSecondNeighbour(BasicGrowthSite secondNeighbourAtom) {
     if (secondNeighbourAtom.isOccupied()) {
       addAtom(secondNeighbourAtom);
     }
@@ -438,7 +438,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom.
    */
-  private void removeNeighbour(BasicGrowthAtom neighbourAtom, int neighbourPosition) {
+  private void removeNeighbour(BasicGrowthSite neighbourAtom, int neighbourPosition) {
     byte newType = neighbourAtom.getNewType(-1); // one less atom
     neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 

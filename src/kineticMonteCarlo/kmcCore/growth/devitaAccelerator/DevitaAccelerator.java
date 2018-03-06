@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth.devitaAccelerator;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.IDevitaLattice;
 import java.util.HashMap;
 import java.util.Map;
@@ -47,7 +47,7 @@ public class DevitaAccelerator {
     updateRemainingHops(type, 0);
   }
 
-  public AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom) {
+  public AbstractGrowthSite chooseRandomHop(AbstractGrowthSite originAtom) {
     int originAtomType = (int) originAtom.getType();
 
     if (!hopsPerStep.isAccelerationEnabled(originAtomType)) {
@@ -57,7 +57,7 @@ public class DevitaAccelerator {
     int desiredHopDistance = hopsPerStep.getDistancePerStep(originAtomType, originAtomType);
     int remainingHops = desiredHopDistance * desiredHopDistance + remainingHopsMap.get(originAtomType);
 
-    AbstractGrowthAtom destinationAtom;
+    AbstractGrowthSite destinationAtom;
 
     int remainingDistance = (int) Math.sqrt(remainingHops);
     int possibleDistance = lattice.getAvailableDistance(originAtom, remainingDistance);

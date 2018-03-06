@@ -19,7 +19,7 @@
 package utils.list;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractSite;
 import java.util.ListIterator;
 import utils.StaticRandom;
 
@@ -67,7 +67,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public void addAtom(AbstractAtom atom) {
+  public void addAtom(AbstractSite atom) {
     clean = false;
     updateCurrentList();
     setTotalAtoms(getTotalAtoms() + 1);
@@ -80,7 +80,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
    * @param atom atom to be deleted.
    */
   @Override
-  public void deleteAtom(AbstractAtom atom) {
+  public void deleteAtom(AbstractSite atom) {
     updateCurrentList();
     setTotalAtoms(getTotalAtoms() - 1);
     bins[currentBin].deleteAtom(atom);
@@ -101,7 +101,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
   
   @Override
-  public AbstractAtom nextEvent() {
+  public AbstractSite nextEvent() {
     clean = false;
     if (autoCleanup() && getRemovalsSinceLastCleanup() > EVENTS_PER_CLEANUP) {
       this.cleanup();
@@ -128,7 +128,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
       accumulation += bins[selectedBin].getDiffusionProbabilityFromList();
     }
     
-    AbstractAtom atom = bins[selectedBin].nextEvent();
+    AbstractSite atom = bins[selectedBin].nextEvent();
     if (atom != null) { //this never happens (with no extra levels at least)
       setTotalAtoms(getTotalAtoms() - 1);
     }
@@ -172,7 +172,7 @@ public class BinnedList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public AbstractAtom getAtomAt(int position) {
+  public AbstractSite getAtomAt(int position) {
     int cont = 0;
     int i = 0;
     while (position >= cont + bins[i].getSize()) {

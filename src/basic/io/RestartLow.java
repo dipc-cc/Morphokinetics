@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import kineticMonteCarlo.atom.IAtom;
+import kineticMonteCarlo.atom.ISite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AgLattice;
@@ -374,7 +374,7 @@ class RestartLow {
       for (int i = 0; i < lattice.size(); i++) {
         uc = lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          IAtom atom = uc.getAtom(j);
+          ISite atom = uc.getSite(j);
           posX = (uc.getPos().getX() + atom.getPos().getX()) * scale+scale/2;
           posY = (uc.getPos().getY() + atom.getPos().getY()) * scale+scale/3;
           posZ = ((uc.getPos().getZ() + atom.getPos().getZ()) * scale)-scale;
@@ -445,7 +445,7 @@ class RestartLow {
       for (int i = 0; i < lattice.size(); i++) {
         uc = lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          IAtom atom = uc.getAtom(j);
+          ISite atom = uc.getSite(j);
           posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
           posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
           String colour = "white";

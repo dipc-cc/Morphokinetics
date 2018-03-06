@@ -20,7 +20,7 @@ package kineticMonteCarlo.unitCell;
 
 import java.util.List;
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AgAtom;
+import kineticMonteCarlo.atom.AgSite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**
@@ -30,13 +30,13 @@ import kineticMonteCarlo.lattice.AbstractGrowthLattice;
  */
 public class AgUc extends AbstractGrowthUc implements IUc {
 
-  private final List<AgAtom> atoms;
+  private final List<AgSite> atoms;
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
   private static final float SIZE_X = 1; // Cartesian size X
   private static final float SIZE_Y = 2 * AbstractGrowthLattice.Y_RATIO; // Cartesian size Y
 
-  public AgUc(int posI, int posJ, List<AgAtom> atoms) {
+  public AgUc(int posI, int posJ, List<AgSite> atoms) {
     this.posI = posI;
     this.posJ = posJ;
     this.atoms = atoms;
@@ -71,7 +71,7 @@ public class AgUc extends AbstractGrowthUc implements IUc {
   }
   
   @Override
-  public AgAtom getAtom(int pos) {
+  public AgSite getSite(int pos) {
     return atoms.get(pos);
   }
 

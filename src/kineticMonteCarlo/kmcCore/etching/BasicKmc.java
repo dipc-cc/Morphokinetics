@@ -19,8 +19,8 @@
 package kineticMonteCarlo.kmcCore.etching;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.BasicAtom;
+import kineticMonteCarlo.atom.AbstractSite;
+import kineticMonteCarlo.atom.BasicSite;
 import kineticMonteCarlo.lattice.BasicLattice;
 import java.util.ListIterator;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
@@ -49,10 +49,10 @@ public class BasicKmc extends AbstractKmc {
     float[][] surface = new float[binX][binY];
 
     double scaleX = binX / (float) getLattice().getHexaSizeI();
-    ListIterator<AbstractAtom> iterator = getList().getIterator();
+    ListIterator<AbstractSite> iterator = getList().getIterator();
 
     while (iterator.hasNext()) {
-      BasicAtom atom = (BasicAtom) iterator.next();
+      BasicSite atom = (BasicSite) iterator.next();
       int sampledPosX = (int) (atom.getX() * scaleX);
       if (surface[0][sampledPosX] < atom.getY()) {
         surface[0][sampledPosX] = atom.getY();
@@ -78,7 +78,7 @@ public class BasicKmc extends AbstractKmc {
       for (int j = 0; j < getLattice().getHexaSizeJ(); j++) {
         for (int k = 0; k < getLattice().getHexaSizeK(); k++) {
           for (int l = 0; l < getLattice().getUnitCellSize(); l++) {
-            BasicAtom atom = (BasicAtom) getLattice().getAtom(i, j, k, l);
+            BasicSite atom = (BasicSite) getLattice().getSite(i, j, k, l);
             if (atom.getType() < 4 && atom.getType() > 0 && !atom.isRemoved()) {
               getList().addAtom(atom);
               getList().addDiffusionProbability(atom.getProbability());
@@ -92,7 +92,7 @@ public class BasicKmc extends AbstractKmc {
 
   @Override
   protected boolean performSimulationStep() {
-    BasicAtom atom = (BasicAtom) getList().nextEvent();
+    BasicSite atom = (BasicSite) getList().nextEvent();
     if (atom == null) return false;
     if (atom.getY() > getLattice().getHexaSizeJ() - minHeight) {
       return true;

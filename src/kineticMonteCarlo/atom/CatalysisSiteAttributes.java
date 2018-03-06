@@ -18,47 +18,22 @@
  */
 package kineticMonteCarlo.atom;
 
-import javafx.geometry.Point3D;
-
 /**
- * This interface defines the minimum methods that an atom class have to have.
- * 
+ *
  * @author J. Alberdi-Rodriguez
  */
-public interface IAtom {
-    
-  public void setProbabilities(double[] probabilities);
-
-  public double[] getProbabilities();
-
-  public void setList(Boolean list);
-
-  public boolean isOnList();
-
-  public double getProbability();
-
-  public boolean isEligible();
-
-  public boolean isRemoved();
+public class CatalysisSiteAttributes extends AbstractGrowthAtomAttributes{
   
-  public boolean isOccupied();
-
-  public void unRemove();
+  /**
+   * CO or O.
+   */
+  private byte typeOfAtom;
   
-  public void setRemoved();
+  public byte getType() {
+    return typeOfAtom;
+  }
   
-  public double remove();
-  
-  public byte getType();
-  
-  public byte getRealType();
-
-  public int getNumberOfNeighbours();
-
-  public void setNumberOfNeighbours(int numberOfNeighbours);
-
-  public void setNeighbour(AbstractAtom atom, int i);
-  
-  public Point3D getPos();
-  
+  public void setType(byte newType) {
+    typeOfAtom = newType;
+  }
 }

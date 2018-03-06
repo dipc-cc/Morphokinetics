@@ -25,7 +25,7 @@ import graphicInterfaces.etching.mouseBehaviors.MouseTranslate;
 import graphicInterfaces.etching.mouseBehaviors.MouseRotate;
 import graphicInterfaces.etching.mouseBehaviors.MouseRocking;
 import utils.list.AbstractList;
-import kineticMonteCarlo.atom.SiAtom;
+import kineticMonteCarlo.atom.SiSite;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import java.awt.GraphicsConfiguration;
 import javax.media.j3d.AmbientLight;
@@ -185,7 +185,7 @@ public class SiFrame extends javax.swing.JFrame implements KmcGraphics {
 
     float max_Z = 0;
     for (int i = 0; i < surface.getSize(); i++) {
-      SiAtom atom = (SiAtom) surface.getAtomAt(i);
+      SiSite atom = (SiSite) surface.getAtomAt(i);
       surfacePoints[i * 3] = (float) atom.getX();
       sizeX = (float) Math.max(atom.getX(), sizeX);
       surfacePoints[i * 3 + 1] = (float) atom.getY();

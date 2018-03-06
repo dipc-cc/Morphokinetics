@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.SiAtom;
+import kineticMonteCarlo.atom.SiSite;
 import kineticMonteCarlo.unitCell.SiUnitCell;
 import kineticMonteCarlo.unitCell.Simple3dUc;
 
@@ -29,7 +29,7 @@ import kineticMonteCarlo.unitCell.Simple3dUc;
 public class SiLattice extends AbstractLattice {
 
   private SiUnitCell unitCell;
-  private SiAtom[] atoms;
+  private SiSite[] atoms;
   private Simple3dUc[] ucList;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
@@ -70,7 +70,7 @@ public class SiLattice extends AbstractLattice {
       setHexaSizeJ((int) Math.round((int) sizeY * tamX / tamY));
     }
 
-    atoms = new SiAtom[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
+    atoms = new SiSite[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
     ucList = new Simple3dUc[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
 
     createAtoms(coords, unitCell);
@@ -89,7 +89,7 @@ public class SiLattice extends AbstractLattice {
   }
 
   @Override
-  public SiAtom getAtom(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
+  public SiSite getSite(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
     return atoms[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
   }
 
@@ -171,7 +171,7 @@ public class SiLattice extends AbstractLattice {
             float y = coords[j * 3 + 1] + b * (float) uc.getLimitY();
             float z = -coords[j * 3 + 2] + (a + 1) * (float) uc.getLimitZ();
 
-            atoms[cont] = new SiAtom(x, y, z);
+            atoms[cont] = new SiSite(x, y, z);
             ucList[cont] = new Simple3dUc(a, b, c, atoms[cont]);
             ucList[cont].setPosX(x);
             ucList[cont].setPosY(y);
@@ -240,7 +240,7 @@ public class SiLattice extends AbstractLattice {
               }
               if (zNeighbour < getHexaSizeK()) {
                 atoms[((z * getHexaSizeJ() + y) * getHexaSizeI() + x) * getUnitCellSize() + j].
-                        setNeighbour((SiAtom)atoms[((zNeighbour * getHexaSizeJ() + yNeighbour) * getHexaSizeI() + xNeighbour) * getUnitCellSize() + posNeighbour], i);
+                        setNeighbour((SiSite)atoms[((zNeighbour * getHexaSizeJ() + yNeighbour) * getHexaSizeI() + xNeighbour) * getUnitCellSize() + posNeighbour], i);
               } else {
                 atoms[((z * getHexaSizeJ() + y) * getHexaSizeI() + x) * getUnitCellSize() + j].setNeighbour(null, i);
               }

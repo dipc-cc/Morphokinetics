@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import utils.MathUtils;
@@ -360,7 +360,7 @@ public class Restart {
     }
   }
   
-  public void writeExtra2Output(AbstractGrowthLattice lattice, AbstractGrowthAtom atom, 
+  public void writeExtra2Output(AbstractGrowthLattice lattice, AbstractGrowthSite atom, 
           float coverage, double time, double diffusionRate) {
     if (extraOutput2) {
       int islandCount = lattice.countIslands(null);

@@ -18,7 +18,7 @@
  */
 package graphicInterfaces.basic;
 
-import kineticMonteCarlo.atom.BasicAtom;
+import kineticMonteCarlo.atom.BasicSite;
 import kineticMonteCarlo.kmcCore.etching.BasicKmc;
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -71,7 +71,7 @@ public class BasicPanel extends javax.swing.JPanel {
     for (int i = 0; i < sizeX; i++) {
       for (int j = 0; j < sizeY; j++) {
 
-        BasicAtom atom = (BasicAtom) kmc.getLattice().getAtom(i, j, 0, 0);
+        BasicSite atom = (BasicSite) kmc.getLattice().getSite(i, j, 0, 0);
         byte type = atom.getType();
 
         if (atom.isRemoved()) {

@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractSite;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_X;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_Z;
@@ -31,7 +31,7 @@ import static kineticMonteCarlo.unitCell.IUc.SIZE_Z;
  */
 public class Simple3dUc implements IUc{
 
-  private final AbstractAtom atom;
+  private final AbstractSite atom;
   private final int size; // how many atoms
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
@@ -41,7 +41,7 @@ public class Simple3dUc implements IUc{
   private double posY;
   private double posZ;
 
-  public Simple3dUc(int posI, int posJ, AbstractAtom atom) {
+  public Simple3dUc(int posI, int posJ, AbstractSite atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
@@ -49,7 +49,7 @@ public class Simple3dUc implements IUc{
     this.atom = atom;
   }
   
-  public Simple3dUc(int posI, int posJ, int posK, AbstractAtom atom) {
+  public Simple3dUc(int posI, int posJ, int posK, AbstractSite atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
@@ -64,7 +64,7 @@ public class Simple3dUc implements IUc{
    * @return current atom.
    */
   @Override
-  public AbstractAtom getAtom(int pos) {
+  public AbstractSite getSite(int pos) {
     return atom;
   }
 

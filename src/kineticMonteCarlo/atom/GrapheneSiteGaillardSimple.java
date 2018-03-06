@@ -26,14 +26,14 @@ import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class GrapheneAtomGaillardSimple extends GrapheneAtom {
+public class GrapheneSiteGaillardSimple extends GrapheneSite {
   
   public static final byte NEIGH0 = 0;
   public static final byte NEIGH1 = 1;
   public static final byte NEIGH2 = 2;
   public static final byte NEIGH3 = 3;
   
-  public GrapheneAtomGaillardSimple(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public GrapheneSiteGaillardSimple(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);
     setNumberOfNeighbours(3);
   }

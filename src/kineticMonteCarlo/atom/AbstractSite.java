@@ -24,7 +24,7 @@ import javafx.geometry.Point3D;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public abstract class AbstractAtom implements IAtom {
+public abstract class AbstractSite implements ISite {
 
   // Atoms types
   public static final byte TERRACE = 0;
@@ -110,7 +110,7 @@ public abstract class AbstractAtom implements IAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractAtom lattice, int i) {
+  public void setNeighbour(AbstractSite lattice, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   

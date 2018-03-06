@@ -18,10 +18,10 @@
  */
 package ratesLibrary;
 
-import static kineticMonteCarlo.atom.BasicGrowthAtom.EDGE;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.ISLAND;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.KINK;
-import static kineticMonteCarlo.atom.BasicGrowthAtom.TERRACE;
+import static kineticMonteCarlo.atom.BasicGrowthSite.EDGE;
+import static kineticMonteCarlo.atom.BasicGrowthSite.ISLAND;
+import static kineticMonteCarlo.atom.BasicGrowthSite.KINK;
+import static kineticMonteCarlo.atom.BasicGrowthSite.TERRACE;
 
 /**
  *

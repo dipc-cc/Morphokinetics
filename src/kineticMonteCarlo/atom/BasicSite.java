@@ -24,18 +24,18 @@ import javafx.geometry.Point3D;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public class BasicAtom extends AbstractAtom {
+public class BasicSite extends AbstractSite {
 
-  private BasicAtom[] neighbours;
+  private BasicSite[] neighbours;
   private byte type;
   private final short x;
   private final short y;
 
-  public BasicAtom(short x, short y) {
+  public BasicSite(short x, short y) {
     this.x = x;
     this.y = y;
     setNumberOfNeighbours(4);
-    neighbours = new BasicAtom[getNumberOfNeighbours()];
+    neighbours = new BasicSite[getNumberOfNeighbours()];
   }
   
   public short getX() {
@@ -52,11 +52,11 @@ public class BasicAtom extends AbstractAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractAtom a, int pos) {
-    neighbours[pos] = (BasicAtom) a;
+  public void setNeighbour(AbstractSite a, int pos) {
+    neighbours[pos] = (BasicSite) a;
   }
 
-  public BasicAtom getNeighbour(int pos) {
+  public BasicSite getNeighbour(int pos) {
     return neighbours[pos];
   }
 

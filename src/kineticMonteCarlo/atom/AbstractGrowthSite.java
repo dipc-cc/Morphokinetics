@@ -28,7 +28,7 @@ import kineticMonteCarlo.process.IElement;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public abstract class AbstractGrowthAtom extends AbstractAtom implements Comparable,IElement {
+public abstract class AbstractGrowthSite extends AbstractSite implements Comparable, IElement {
   /** TODO document the types and change them to constants
    * 
    */
@@ -82,7 +82,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
   /** Different processes that atom can do. In catalysis: adsorption, desorption, reaction and diffusion. */
   private AbstractProcess[] processes;
   
-  public AbstractGrowthAtom(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
+  public AbstractGrowthSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     this.id = id;
     setOccupied(false);
     outside = false;
@@ -105,7 +105,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
    * @param id atom identifier.
    * @param numberOfNeighbours number of neighbours that each atom has.
    */
-  public AbstractGrowthAtom(int id, int numberOfNeighbours) {
+  public AbstractGrowthSite(int id, int numberOfNeighbours) {
     this.id = id;
     iHexa = 0;
     jHexa = 0;
@@ -476,7 +476,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
 
   public abstract boolean areTwoTerracesTogether();
 
-  public abstract AbstractGrowthAtom chooseRandomHop();
+  public abstract AbstractGrowthSite chooseRandomHop();
 
   public abstract int getOrientation();
 
@@ -484,9 +484,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
 
   public abstract double probJumpToNeighbour(int originType, int position);
 
-  public abstract void setNeighbour(AbstractGrowthAtom a, int pos);
+  public abstract void setNeighbour(AbstractGrowthSite a, int pos);
 
-  public abstract AbstractGrowthAtom getNeighbour(int pos);
+  public abstract AbstractGrowthSite getNeighbour(int pos);
   
   public abstract List getAllNeighbours();
 
@@ -515,10 +515,10 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     if (obj == null) {
       return false;
     }
-    if (!(obj instanceof AbstractGrowthAtom)) {
+    if (!(obj instanceof AbstractGrowthSite)) {
       return false;
     }
-    AbstractGrowthAtom other = (AbstractGrowthAtom) obj;
+    AbstractGrowthSite other = (AbstractGrowthSite) obj;
     if (getId() != other.getId()) {
       return false;
     }
@@ -531,7 +531,7 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
     return true;
   }
   
-  public void swapAttributes(AbstractGrowthAtom atom) {
+  public void swapAttributes(AbstractGrowthSite atom) {
     AbstractGrowthAtomAttributes tmpAttributes = this.attributes;
     this.attributes = atom.getAttributes();
     this.attributes.addOneHop();
@@ -596,9 +596,9 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
    * @param originAtom has one neighbour and it is a terrace.
    * @return true if a dimer is going to be created, false otherwise.
    */
-  public boolean areTwoTerracesTogetherInPerimeter(AbstractGrowthAtom originAtom) {
+  public boolean areTwoTerracesTogetherInPerimeter(AbstractGrowthSite originAtom) {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      AbstractGrowthAtom neighbour = getNeighbour(i);
+      AbstractGrowthSite neighbour = getNeighbour(i);
       if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE) {
         return true;
       }
@@ -614,8 +614,8 @@ public abstract class AbstractGrowthAtom extends AbstractAtom implements Compara
    */
   @Override
   public int compareTo(Object o) {
-    if (o instanceof AbstractGrowthAtom) {
-      AbstractGrowthAtom a = (AbstractGrowthAtom) o;
+    if (o instanceof AbstractGrowthSite) {
+      AbstractGrowthSite a = (AbstractGrowthSite) o;
       double otherId = a.getId();
       if (getId() < otherId) {
         return -1;

@@ -19,8 +19,8 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import static kineticMonteCarlo.atom.AgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgSite.EDGE;
+import static kineticMonteCarlo.atom.AgSite.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
@@ -62,8 +62,8 @@ public class AgUcKmc extends AbstractGrowthKmc {
       double ucY = uc.getPos().getY();
       System.out.println(i + ") UC " + ucX + " " + ucY);
       for (int j = 0; j < uc.size(); j++) {
-        double atomX = uc.getAtom(j).getPos().getX();
-        double atomY = uc.getAtom(j).getPos().getY();
+        double atomX = uc.getSite(j).getPos().getX();
+        double atomY = uc.getSite(j).getPos().getY();
         System.out.println("Atom " + i + " position " + atomX + " " + atomY);
         System.out.println("uc position " + (ucX + atomX) + " " + (ucY + atomY));
       }

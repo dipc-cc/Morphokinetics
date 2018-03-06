@@ -20,7 +20,7 @@ package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
 
@@ -35,7 +35,7 @@ public class Island implements Comparable, IElement {
   private double maxDistance;
   private double sumDistance;
   private Point2D centreOfMass;
-  private ArrayList<AbstractGrowthAtom> atoms;
+  private ArrayList<AbstractGrowthSite> atoms;
   /** In concerted mode, all island can diffuse with certain rate. */
   private double totalRate;
 
@@ -97,18 +97,18 @@ public class Island implements Comparable, IElement {
     this.centreOfMass = centreOfMass;
   }
   
-  public void addAtom(AbstractGrowthAtom atom) {
+  public void addAtom(AbstractGrowthSite atom) {
     numberOfAtoms++;
     atoms.add(atom);
   }
   
-  public void removeAtom(AbstractGrowthAtom atom) {
+  public void removeAtom(AbstractGrowthSite atom) {
     if (atoms.remove(atom)) {
       numberOfAtoms--;
     }
   }
   
-  public AbstractGrowthAtom getAtomAt(int i) {
+  public AbstractGrowthSite getAtomAt(int i) {
     return atoms.get(i);
   }
   
@@ -198,8 +198,8 @@ public class Island implements Comparable, IElement {
    */
   @Override
   public int compareTo(Object o) {
-    if (o instanceof AbstractGrowthAtom) {
-      AbstractGrowthAtom a = (AbstractGrowthAtom) o;
+    if (o instanceof AbstractGrowthSite) {
+      AbstractGrowthSite a = (AbstractGrowthSite) o;
       double otherId = a.getId();
       if (getIslandNumber() < otherId) {
         return -1;

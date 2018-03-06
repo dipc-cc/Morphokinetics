@@ -22,18 +22,14 @@ package kineticMonteCarlo.atom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisAtomAttributes extends AbstractGrowthAtomAttributes{
+public class BasicGrowthSimpleSite extends BasicGrowthSite {
   
-  /**
-   * CO or O.
-   */
-  private byte typeOfAtom;
-  
-  public byte getType() {
-    return typeOfAtom;
+  public BasicGrowthSimpleSite(int id, short iHexa, short jHexa) {
+    super(id, iHexa, jHexa);
   }
   
-  public void setType(byte newType) {
-    typeOfAtom = newType;
+  @Override
+  public boolean isPartOfImmobilSubstrate() {
+    return isOccupied() && getType() == ISLAND && getOccupiedNeighbours() == 4;
   }
 }

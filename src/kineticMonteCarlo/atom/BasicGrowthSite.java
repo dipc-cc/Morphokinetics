@@ -26,7 +26,7 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class BasicGrowthAtom extends AbstractGrowthAtom {
+public class BasicGrowthSite extends AbstractGrowthSite {
 
   public static final byte TERRACE = 0;
   public static final byte EDGE = 1;
@@ -35,9 +35,9 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
 
   private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
 
-  private final BasicGrowthAtom[] neighbours = new BasicGrowthAtom[4];
+  private final BasicGrowthSite[] neighbours = new BasicGrowthSite[4];
 
-  public BasicGrowthAtom(int id, short iHexa, short jHexa) {
+  public BasicGrowthSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 2);
   }
   
@@ -58,12 +58,12 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractGrowthAtom a, int pos) {
-    neighbours[pos] = (BasicGrowthAtom) a;
+  public void setNeighbour(AbstractGrowthSite a, int pos) {
+    neighbours[pos] = (BasicGrowthSite) a;
   }
 
   @Override
-  public BasicGrowthAtom getNeighbour(int pos) {
+  public BasicGrowthSite getNeighbour(int pos) {
     return neighbours[pos];
   }
   
@@ -140,7 +140,7 @@ public class BasicGrowthAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public AbstractGrowthAtom chooseRandomHop() {
+  public AbstractGrowthSite chooseRandomHop() {
     double linearSearch = StaticRandom.raw() * getProbability();
 
     double sum = 0;

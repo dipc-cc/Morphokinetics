@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractSite;
 import kineticMonteCarlo.unitCell.IUc;
 
 /**
@@ -72,7 +72,7 @@ public abstract class AbstractLattice {
   }
 
   @Deprecated
-  public abstract AbstractAtom getAtom(int i, int j, int k, int unitCellPos);
+  public abstract AbstractSite getSite(int i, int j, int k, int unitCellPos);
   
   public abstract IUc getUc(int pos);
 

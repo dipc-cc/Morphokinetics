@@ -21,7 +21,7 @@ package utils.list;
 import basic.Parser;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import kineticMonteCarlo.atom.AbstractAtom;
+import kineticMonteCarlo.atom.AbstractSite;
 import utils.StaticRandom;
 
 /**
@@ -30,7 +30,7 @@ import utils.StaticRandom;
  */
 public class LinearList extends AbstractList implements IProbabilityHolder {
 
-  private final ArrayList<AbstractAtom> surface;
+  private final ArrayList<AbstractSite> surface;
   /**
    * Stores if the current totalProbability and the probability calculated from the list are the same.
    */
@@ -53,9 +53,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
     } else {
       double diffusionProbability = 0;
 
-      ListIterator<AbstractAtom> li = surface.listIterator();
+      ListIterator<AbstractSite> li = surface.listIterator();
       while (li.hasNext()) {
-        AbstractAtom atom = li.next();
+        AbstractSite atom = li.next();
         if (atom.isEligible()) {
           diffusionProbability += atom.getProbability();
         }
@@ -88,9 +88,9 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
   @Override
   public int cleanup() {
     int tmp = getTotalAtoms();
-    ListIterator<AbstractAtom> li = surface.listIterator();
+    ListIterator<AbstractSite> li = surface.listIterator();
     while (li.hasNext()) {
-      AbstractAtom atom = li.next();
+      AbstractSite atom = li.next();
       if (!atom.isEligible()) {
         li.remove();
         setTotalAtoms(getTotalAtoms() - 1);
@@ -100,7 +100,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public void addAtom(AbstractAtom atom) {
+  public void addAtom(AbstractSite atom) {
     clean = false;
     surface.add(0, atom);
     atom.setList(true);
@@ -108,12 +108,12 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
   }
   
   @Override
-  public void deleteAtom(AbstractAtom atom) {
+  public void deleteAtom(AbstractSite atom) {
     surface.remove(atom);
   }
 
   @Override
-  public AbstractAtom nextEvent() {
+  public AbstractSite nextEvent() {
     addRemovalsSinceLastCleanup();
     if (autoCleanup() && getRemovalsSinceLastCleanup() > EVENTS_PER_CLEANUP) {
       this.cleanup();
@@ -132,7 +132,7 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
     position -= getDepositionProbability();
     double currentProbability = 0;
 
-    AbstractAtom atom = null;
+    AbstractSite atom = null;
     for (int i = 0; i < surface.size(); i++) {
       clean = false;
       atom = surface.get(i);
@@ -159,12 +159,12 @@ public class LinearList extends AbstractList implements IProbabilityHolder {
   }
 
   @Override
-  public AbstractAtom getAtomAt(int position) {
+  public AbstractSite getAtomAt(int position) {
     return surface.get(position);
   }
 
   @Override
-  public ListIterator<AbstractAtom> getIterator() {
+  public ListIterator<AbstractSite> getIterator() {
     return surface.listIterator();
   }
 

@@ -18,28 +18,47 @@
  */
 package kineticMonteCarlo.atom;
 
-import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
+import javafx.geometry.Point3D;
 
 /**
- * Based on paper P. Gaillard, T. Chanier, L. Henrard, P. Moskovkin, S. Lucas. Surface Science,
- * Volumes 637–638, July–August 2015, Pages 11-18, http://dx.doi.org/10.1016/j.susc.2015.02.014.
- *
+ * This interface defines the minimum methods that an atom class have to have.
+ * 
  * @author J. Alberdi-Rodriguez
  */
-public class GrapheneAtomGaillard1Neighbour extends GrapheneAtom {
+public interface ISite {
+    
+  public void setProbabilities(double[] probabilities);
+
+  public double[] getProbabilities();
+
+  public void setList(Boolean list);
+
+  public boolean isOnList();
+
+  public double getProbability();
+
+  public boolean isEligible();
+
+  public boolean isRemoved();
   
-  public GrapheneAtomGaillard1Neighbour(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
-    super(id, iHexa, jHexa, distancePerStep);
-    setNumberOfNeighbours(3);
-  }
+  public boolean isOccupied();
+
+  public void unRemove();
   
-  /**
-   * Only BULK atom types are considered immobile atoms. From page 15 of the paper.
-   * 
-   * @return  true if current atom can be moved, false otherwise.
-   */
-  @Override
-  public boolean isEligible() {
-    return isOccupied() && (getType() <= KINK);
-  }
+  public void setRemoved();
+  
+  public double remove();
+  
+  public byte getType();
+  
+  public byte getRealType();
+
+  public int getNumberOfNeighbours();
+
+  public void setNumberOfNeighbours(int numberOfNeighbours);
+
+  public void setNeighbour(AbstractSite atom, int i);
+  
+  public Point3D getPos();
+  
 }

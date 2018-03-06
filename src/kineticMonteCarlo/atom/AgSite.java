@@ -28,7 +28,7 @@ import utils.StaticRandom;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public class AgAtom extends AbstractGrowthAtom {
+public class AgSite extends AbstractGrowthSite {
 
   // Redefined atom types
   public static final byte TERRACE = 0;
@@ -44,7 +44,7 @@ public class AgAtom extends AbstractGrowthAtom {
   
   // Attributes
   private static AgTypesTable typesTable;
-  private final AgAtom[] neighbours = new AgAtom[6];
+  private final AgSite[] neighbours = new AgSite[6];
   /** Number of immobile neighbours. */
   private int nImmobile;
   /** Number of mobile neighbours. */
@@ -54,7 +54,7 @@ public class AgAtom extends AbstractGrowthAtom {
    */
   private final int pos;
   
-  public AgAtom(int id, short iHexa, short jHexa) {
+  public AgSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 6, 2);
     if (typesTable == null) {
       typesTable = new AgTypesTable();
@@ -70,7 +70,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param id atom identifier.
    * @param pos position within the unit cell
    */
-  public AgAtom(int id, int pos) {
+  public AgSite(int id, int pos) {
     super(id, 6);
     if (typesTable == null) {
       typesTable = new AgTypesTable();
@@ -98,12 +98,12 @@ public class AgAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractGrowthAtom a, int pos) {
-    neighbours[pos] = (AgAtom) a;
+  public void setNeighbour(AbstractGrowthSite a, int pos) {
+    neighbours[pos] = (AgSite) a;
   }
 
   @Override
-  public AgAtom getNeighbour(int pos) {
+  public AgSite getNeighbour(int pos) {
     return neighbours[pos];
   }
 
@@ -213,7 +213,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param atom atom to be excluded to compute the orientation. If null, none is excluded.
    * @return a number between 0 and 5 inclusive. Even number if A type or odd if B type.
    */
-  public int getOrientation(AgAtom atom) {
+  public int getOrientation(AgSite atom) {
     byte type = getType();
     int neighbourPosition = 0;
     // Create the occupation code shifting the number of positions with the neighbours of the current atom
@@ -246,7 +246,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @return atom to be moved.
    */
   @Override
-  public AbstractGrowthAtom chooseRandomHop() {
+  public AbstractGrowthSite chooseRandomHop() {
     double linearSearch = StaticRandom.raw() * getProbability();
     double sum = 0;
     int cont = 0;
@@ -460,7 +460,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param cornerPosition position of the neighbour, from current atom
    * @return other type edge
    */
-  private AgAtom aheadCornerAtom(int cornerPosition) {
+  private AgSite aheadCornerAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) { // B type edge
 
       switch (cornerPosition) {
@@ -506,7 +506,7 @@ public class AgAtom extends AbstractGrowthAtom {
    * @param cornerPosition position of the neighbour, from current atom
    * @return any other type (EDGE, KINK or BULK)
    */
-  private AgAtom ahead2CornersAtom(int cornerPosition) {
+  private AgSite ahead2CornersAtom(int cornerPosition) {
     if ((getOrientation() & 1) != 0) {
 
       switch (cornerPosition) {

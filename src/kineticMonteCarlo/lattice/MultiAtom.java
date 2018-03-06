@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 import kineticMonteCarlo.process.MultiAtomProcess;
 import utils.StaticRandom;
@@ -86,7 +86,7 @@ public class MultiAtom extends Island {
    * @return type of the possible diffusion: 0 or 1.
    */
   public int getEdgeType(int pos) {
-    AbstractGrowthAtom atom;
+    AbstractGrowthSite atom;
     if (pos == 0) { // get neighbour of atom 0
       atom = getAtomAt(0).getNeighbour((direction + 3) % 6);
     } else { // get neighbour of atom 1

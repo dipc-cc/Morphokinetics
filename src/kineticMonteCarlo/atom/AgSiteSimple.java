@@ -24,13 +24,13 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgAtomSimple extends AgAtom {
+public class AgSiteSimple extends AgSite {
   
-  public AgAtomSimple(int id, short iHexa, short jHexa) {
+  public AgSiteSimple(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa);
   }
 
-  public AgAtomSimple(int id, int i) {
+  public AgSiteSimple(int id, int i) {
     super(id, i);
   }
   
@@ -69,13 +69,13 @@ public class AgAtomSimple extends AgAtom {
   }
   
   /**
-   * Simpler implementation than {@link AgAtom#chooseRandomHop()}. This one, does not consider
+   * Simpler implementation than {@link AgSite#chooseRandomHop()}. This one, does not consider
    * corner rounding.
    *
    * @return
    */
   @Override
-  public AbstractGrowthAtom chooseRandomHop() {
+  public AbstractGrowthSite chooseRandomHop() {
 
     double linearSearch = StaticRandom.raw() * getProbability();
 

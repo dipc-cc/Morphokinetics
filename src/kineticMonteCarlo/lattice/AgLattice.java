@@ -18,15 +18,15 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.AgAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.AgSite;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import java.awt.geom.Point2D;
-import static kineticMonteCarlo.atom.AgAtom.EDGE;
-import static kineticMonteCarlo.atom.AgAtom.ISLAND;
-import static kineticMonteCarlo.atom.AgAtom.KINK_A;
-import static kineticMonteCarlo.atom.AgAtom.TERRACE;
+import static kineticMonteCarlo.atom.AgSite.EDGE;
+import static kineticMonteCarlo.atom.AgSite.ISLAND;
+import static kineticMonteCarlo.atom.AgSite.KINK_A;
+import static kineticMonteCarlo.atom.AgSite.TERRACE;
 import utils.StaticRandom;
 
 /**
@@ -43,12 +43,12 @@ public class AgLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public AgAtom getCentralAtom() {
+  public AgSite getCentralAtom() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2) - (getHexaSizeJ() / 4);
     
     int index = jCentre * getHexaSizeI() + iCentre;
-    return (AgAtom) getUc(index).getAtom(0);
+    return (AgSite) getUc(index).getSite(0);
   }
       
   @Override
@@ -156,13 +156,13 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthAtom getNeighbour(int iHexa, int jHexa, int neighbour) {
+  public AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour) {
     int index = jHexa * getHexaSizeI() + iHexa;
-    return ((AgAtom) getUc(index).getAtom(0)).getNeighbour(neighbour);
+    return ((AgSite) getUc(index).getSite(0)).getNeighbour(neighbour);
   }
 
   @Override
-  public int getAvailableDistance(AbstractGrowthAtom atom, int thresholdDistance) {
+  public int getAvailableDistance(AbstractGrowthSite atom, int thresholdDistance) {
     short iHexa = atom.getiHexa();
     short jHexa = atom.getjHexa();
     switch (atom.getType()) {
@@ -176,7 +176,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthAtom getFarSite(AbstractGrowthAtom atom, int distance) {
+  public AbstractGrowthSite getFarSite(AbstractGrowthSite atom, int distance) {
     short iHexa = atom.getiHexa();
     short jHexa = atom.getjHexa();
     switch (atom.getType()) {
@@ -195,8 +195,8 @@ public class AgLattice extends AbstractGrowthLattice {
   }    
 
   @Override
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    AgAtom atom = (AgAtom) a;
+  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+    AgSite atom = (AgSite) a;
     atom.setOccupied(true);
     if (forceNucleation) {
       atom.setType(ISLAND);
@@ -217,8 +217,8 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public double extract(AbstractGrowthAtom a) {
-    AgAtom atom = (AgAtom) a;
+  public double extract(AbstractGrowthSite a) {
+    AgSite atom = (AgSite) a;
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     
@@ -262,7 +262,7 @@ public class AgLattice extends AbstractGrowthLattice {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthAtom atom = getUc(iLattice, jLattice).getAtom(pos);
+    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
 
     if (atom.isOccupied()) {
       extract(atom);
@@ -271,50 +271,50 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
       
-  private AgAtom[][] createAtoms() {
+  private AgSite[][] createAtoms() {
     //Instantiate atoms
-    AgAtom[][] atoms = new AgAtom[getHexaSizeI()][getHexaSizeJ()];
+    AgSite[][] atoms = new AgSite[getHexaSizeI()][getHexaSizeJ()];
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new AgAtom(createId(i, j), (short) i, (short) j);
+        atoms[i][j] = new AgSite(createId(i, j), (short) i, (short) j);
       }
     }
     
     //Interconect atoms
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-        AgAtom atom = (AgAtom) atoms[iHexa][jHexa];
+        AgSite atom = (AgSite) atoms[iHexa][jHexa];
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
 
-        atom.setNeighbour((AgAtom) atoms[i][j], 0);
+        atom.setNeighbour((AgSite) atoms[i][j], 0);
         i = iHexa + 1;
         j = jHexa - 1;
         if (i == getHexaSizeI()) i = 0;
         if (j < 0) j = getHexaSizeJ() - 1;
 
-        atom.setNeighbour((AgAtom) atoms[i][j], 1);
+        atom.setNeighbour((AgSite) atoms[i][j], 1);
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
 
-        atom.setNeighbour((AgAtom) atoms[i][j], 2);
+        atom.setNeighbour((AgSite) atoms[i][j], 2);
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
 
-        atom.setNeighbour((AgAtom) atoms[i][j], 3);
+        atom.setNeighbour((AgSite) atoms[i][j], 3);
         i = iHexa - 1;
         j = jHexa + 1;
         if (i < 0) i = getHexaSizeI() - 1;
         if (j == getHexaSizeJ()) j = 0;
 
-        atom.setNeighbour((AgAtom) atoms[i][j], 4);
+        atom.setNeighbour((AgSite) atoms[i][j], 4);
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((AgAtom) atoms[i][j], 5);
+        atom.setNeighbour((AgSite) atoms[i][j], 5);
       }
     }
     return atoms;
@@ -342,22 +342,22 @@ public class AgLattice extends AbstractGrowthLattice {
     while (true) {
       for (int iter = 0; iter < possibleDistance; iter++) {
         index = j * getHexaSizeI() + i;
-        if (getUc(index).getAtom(0).isOutside()) errorCode |= 1;
-        if (getUc(index).getAtom(0).isOccupied()) {errorCode |= 2; break out;}
+        if (getUc(index).getSite(0).isOutside()) errorCode |= 1;
+        if (getUc(index).getSite(0).isOccupied()) {errorCode |= 2; break out;}
         i++;
         if (i == getHexaSizeI()) i = 0;
       }
       for (int iter = 0; iter < possibleDistance; iter++) {
         index = j * getHexaSizeI() + i;
-        if (getUc(index).getAtom(0).isOutside()) errorCode |= 1;
-        if (getUc(index).getAtom(0).isOccupied()) {errorCode |= 2; break out;}
+        if (getUc(index).getSite(0).isOutside()) errorCode |= 1;
+        if (getUc(index).getSite(0).isOccupied()) {errorCode |= 2; break out;}
         j++;
         if (j == getHexaSizeJ()) j = 0;
       }
       for (int iter = 0; iter < possibleDistance; iter++) {
         index = j * getHexaSizeI() + i;
-        if (getUc(index).getAtom(0).isOutside()) errorCode |= 1;
-        if (getUc(index).getAtom(0).isOccupied()) {errorCode |= 2; break out;}
+        if (getUc(index).getSite(0).isOutside()) errorCode |= 1;
+        if (getUc(index).getSite(0).isOccupied()) {errorCode |= 2; break out;}
         j++;
         i--;
         if (j == getHexaSizeJ()) j = 0;
@@ -365,22 +365,22 @@ public class AgLattice extends AbstractGrowthLattice {
       }
       for (int iter = 0; iter < possibleDistance; iter++) {
         index = j * getHexaSizeI() + i;
-        if (getUc(index).getAtom(0).isOutside()) errorCode |= 1;
-        if (getUc(index).getAtom(0).isOccupied()) {errorCode |= 2; break out;}
+        if (getUc(index).getSite(0).isOutside()) errorCode |= 1;
+        if (getUc(index).getSite(0).isOccupied()) {errorCode |= 2; break out;}
         i--;
         if (i < 0) i = getHexaSizeI() - 1;
       }
       for (int iter = 0; iter < possibleDistance; iter++) {
         index = j * getHexaSizeI() + i;
-        if (getUc(index).getAtom(0).isOutside()) errorCode |= 1;
-        if (getUc(index).getAtom(0).isOccupied()) {errorCode |= 2; break out;}
+        if (getUc(index).getSite(0).isOutside()) errorCode |= 1;
+        if (getUc(index).getSite(0).isOccupied()) {errorCode |= 2; break out;}
         j--;
         if (j < 0) j = getHexaSizeJ() - 1;
       }
       for (int iter = 0; iter < possibleDistance; iter++) {
         index = j * getHexaSizeI() + i;
-        if (getUc(index).getAtom(0).isOutside()) errorCode |= 1;
-        if (getUc(index).getAtom(0).isOccupied()) {errorCode |= 2; break out;}
+        if (getUc(index).getSite(0).isOutside()) errorCode |= 1;
+        if (getUc(index).getSite(0).isOccupied()) {errorCode |= 2; break out;}
         j--;
         i++;
         if (j < 0) j = getHexaSizeJ() - 1;
@@ -399,7 +399,7 @@ public class AgLattice extends AbstractGrowthLattice {
     return -1;
   }
 
-  private AbstractGrowthAtom chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
+  private AbstractGrowthSite chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
     int randomNumber = (int) (raw * (distance * 6));
     int i = iHexaOrigin;
     int j = jHexaOrigin - distance;
@@ -411,21 +411,21 @@ public class AgLattice extends AbstractGrowthLattice {
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > randomNumber) return getUc(index).getAtom(0);
+      if (counter > randomNumber) return getUc(index).getSite(0);
       i++;
       if (i == getHexaSizeI()) i = 0;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > randomNumber) return getUc(index).getAtom(0);
+      if (counter > randomNumber) return getUc(index).getSite(0);
       j++;
       if (j == getHexaSizeJ()) j = 0;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > randomNumber) return getUc(index).getAtom(0);
+      if (counter > randomNumber) return getUc(index).getSite(0);
       j++;
       i--;
       if (j == getHexaSizeJ()) j = 0;
@@ -434,21 +434,21 @@ public class AgLattice extends AbstractGrowthLattice {
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > randomNumber) return getUc(index).getAtom(0);
+      if (counter > randomNumber) return getUc(index).getSite(0);
       i--;
       if (i < 0) i = getHexaSizeI() - 1;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > randomNumber) return getUc(index).getAtom(0);
+      if (counter > randomNumber) return getUc(index).getSite(0);
       j--;
       if (j < 0) j = getHexaSizeJ() - 1;
     }
     for (int iter = 0; iter < distance; iter++) {
       index = j * getHexaSizeI() + i;
       counter++;
-      if (counter > randomNumber) return getUc(index).getAtom(0);
+      if (counter > randomNumber) return getUc(index).getSite(0);
       j--;
       i++;
       if (j < 0) j = getHexaSizeJ() - 1;
@@ -464,20 +464,20 @@ public class AgLattice extends AbstractGrowthLattice {
     int j;
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
     
-    switch (getUc(index).getAtom(0).getOrientation()) {
+    switch (getUc(index).getSite(0).getOrientation()) {
       case 0:
       case 3:
         while (true) {
           i = iHexaOrigin + distance;
           if (i >= getHexaSizeI()) i = 0;
           index = jHexaOrigin * getHexaSizeI() + i;
-          if (getUc(index).getAtom(0).isOccupied() || getUc(index).getAtom(0).getType() < 2) {
+          if (getUc(index).getSite(0).isOccupied() || getUc(index).getSite(0).getType() < 2) {
             return distance - 1;
           }
           i = iHexaOrigin - distance;
           if (i < 0) i = getHexaSizeI() - 1;
           index = jHexaOrigin * getHexaSizeI() + i;
-          if (getUc(index).getAtom(0).isOccupied() || getUc(index).getAtom(0).getType() < 2) {
+          if (getUc(index).getSite(0).isOccupied() || getUc(index).getSite(0).getType() < 2) {
             return distance - 1;
           }
           if (distance == thresholdDistance) {
@@ -492,13 +492,13 @@ public class AgLattice extends AbstractGrowthLattice {
           j = jHexaOrigin + distance;
           if (j >= getHexaSizeJ()) j = 0;
           index = j * getHexaSizeI() + iHexaOrigin;
-          if (getUc(index).getAtom(0).isOccupied() || getUc(index).getAtom(0).getType() < 2) {
+          if (getUc(index).getSite(0).isOccupied() || getUc(index).getSite(0).getType() < 2) {
             return distance - 1;
           }
           j = jHexaOrigin - distance;
           if (j < 0) j = getHexaSizeJ() - 1;
           index = j * getHexaSizeI() + iHexaOrigin;
-          if (getUc(index).getAtom(0).isOccupied() || getUc(index).getAtom(0).getType() < 2) {
+          if (getUc(index).getSite(0).isOccupied() || getUc(index).getSite(0).getType() < 2) {
             return distance - 1;
           }
           if (distance == thresholdDistance) {
@@ -515,7 +515,7 @@ public class AgLattice extends AbstractGrowthLattice {
           j = jHexaOrigin + distance;
           if (j >= getHexaSizeJ()) j = 0;
           index = j * getHexaSizeI() + i;
-          if (getUc(index).getAtom(0).isOccupied() || getUc(index).getAtom(0).getType() < 2) {
+          if (getUc(index).getSite(0).isOccupied() || getUc(index).getSite(0).getType() < 2) {
             return distance - 1;
           }
           i = iHexaOrigin + distance;
@@ -523,7 +523,7 @@ public class AgLattice extends AbstractGrowthLattice {
           j = jHexaOrigin - distance;
           if (j < 0) j = getHexaSizeJ() - 1;
           index = j * getHexaSizeI() + i;
-          if (getUc(index).getAtom(0).isOccupied() || getUc(index).getAtom(0).getType() < 2) {
+          if (getUc(index).getSite(0).isOccupied() || getUc(index).getSite(0).getType() < 2) {
             return distance - 1;
           }
           if (distance == thresholdDistance) {
@@ -537,24 +537,24 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
 
-  private AbstractGrowthAtom chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
+  private AbstractGrowthSite chooseClearAreaStep(short iHexaOrigin, short jHexaOrigin, int distance, double raw) {
     int i;
     int j;
     int index = jHexaOrigin * getHexaSizeI() + iHexaOrigin;
     
-    switch (getUc(index).getAtom(0).getOrientation()) {
+    switch (getUc(index).getSite(0).getOrientation()) {
       case 0:
       case 3:
         if (raw > 0.5) {
           i = iHexaOrigin + distance;
           if (i >= getHexaSizeI()) i = 0;
           index = jHexaOrigin * getHexaSizeI() + i;
-          return getUc(index).getAtom(0);
+          return getUc(index).getSite(0);
         } else {
           i = iHexaOrigin - distance;
           if (i < 0) i = getHexaSizeI() - 1;
           index = jHexaOrigin * getHexaSizeI() + i;
-          return getUc(index).getAtom(0);
+          return getUc(index).getSite(0);
         }
       case 1:
       case 4:
@@ -562,12 +562,12 @@ public class AgLattice extends AbstractGrowthLattice {
           j = jHexaOrigin + distance;
           if (j >= getHexaSizeJ()) j = 0;
           index = j * getHexaSizeI() + iHexaOrigin;
-          return getUc(index).getAtom(0);
+          return getUc(index).getSite(0);
         } else {
           j = jHexaOrigin - distance;
           if (j < 0) j = getHexaSizeJ() - 1;
           index = j * getHexaSizeI() + iHexaOrigin;
-          return getUc(index).getAtom(0);
+          return getUc(index).getSite(0);
         }
       case 2:
       case 5:
@@ -577,20 +577,20 @@ public class AgLattice extends AbstractGrowthLattice {
           j = jHexaOrigin + distance;
           if (j >= getHexaSizeJ()) j = 0;
           index = j * getHexaSizeI() + i;
-          return getUc(index).getAtom(0);
+          return getUc(index).getSite(0);
         } else {
           i = iHexaOrigin + distance;
           if (i >= getHexaSizeI()) i = 0;
           j = jHexaOrigin - distance;
           if (j < 0) j = getHexaSizeJ() - 1;
           index = j * getHexaSizeI() + i;
-          return getUc(index).getAtom(0);
+          return getUc(index).getSite(0);
         }
     }
     return null;
   }
   
-  private void removeImmobilAddMobile(AgAtom atom) {
+  private void removeImmobilAddMobile(AgSite atom) {
     if (atom.getNImmobile() == 0) {  //estado de transición
       atom.addNMobile(1); // nMobile++;
       atom.addNImmobile(-1); // nImmobile--;
@@ -619,7 +619,7 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
   
-  private void removeMobileAddImmobile(AgAtom atom, boolean forceNucleation) {
+  private void removeMobileAddImmobile(AgSite atom, boolean forceNucleation) {
     if (atom.getNMobile() == 0) {
       atom.addNMobile(-1); // nMobile--
       atom.addNImmobile(1); // nImmobile++
@@ -658,7 +658,7 @@ public class AgLattice extends AbstractGrowthLattice {
    * @param originType type of the original atom.
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(AgAtom neighbourAtom, byte originType, boolean forceNucleation) {
+  private void addOccupiedNeighbour(AgSite neighbourAtom, byte originType, boolean forceNucleation) {
     byte newType;
 
     if (originType < KINK_A) { // was a TERRACE, CORNER or EDGE
@@ -699,7 +699,7 @@ public class AgLattice extends AbstractGrowthLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom.
    */
-  private void removeMobileOccupied(AgAtom neighbourAtom) {
+  private void removeMobileOccupied(AgSite neighbourAtom) {
 
     byte newType = neighbourAtom.getNewType(0, -1); //nImmobile, --nMobile
     neighbourAtom.addNMobile(-1); // remove one mobile atom (original atom has been extracted)

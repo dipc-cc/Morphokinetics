@@ -18,10 +18,10 @@
  */
 package ratesLibrary;
 
-import static kineticMonteCarlo.atom.CatalysisAtom.BR;
-import static kineticMonteCarlo.atom.CatalysisAtom.CO;
-import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
-import static kineticMonteCarlo.atom.CatalysisAtom.O;
+import static kineticMonteCarlo.atom.CatalysisSite.BR;
+import static kineticMonteCarlo.atom.CatalysisSite.CO;
+import static kineticMonteCarlo.atom.CatalysisSite.CUS;
+import static kineticMonteCarlo.atom.CatalysisSite.O;
 
 /**
  *

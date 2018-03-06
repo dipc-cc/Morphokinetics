@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.CatalysisAtom;
+import kineticMonteCarlo.atom.CatalysisSite;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_X;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
 
@@ -30,7 +30,7 @@ import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
  */
 public class CatalysisUc extends AbstractGrowthUc implements IUc{
 
-  private final CatalysisAtom atom;
+  private final CatalysisSite atom;
   private final int size; // how many atoms
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
@@ -38,7 +38,7 @@ public class CatalysisUc extends AbstractGrowthUc implements IUc{
   private double posX;
   private double posY;
 
-  public CatalysisUc(int posI, int posJ, CatalysisAtom atom) {
+  public CatalysisUc(int posI, int posJ, CatalysisSite atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
@@ -52,7 +52,7 @@ public class CatalysisUc extends AbstractGrowthUc implements IUc{
    * @return current atom
    */
   @Override
-  public CatalysisAtom getAtom(int pos) {
+  public CatalysisSite getSite(int pos) {
     return atom;
   }
 

@@ -23,11 +23,11 @@ import java.util.List;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 import utils.StaticRandom;
 
-public class GrapheneAtom extends AbstractGrowthAtom {
+public class GrapheneSite extends AbstractGrowthSite {
 
   private static GrapheneTypesTable typesTable;
   private boolean allRatesTheSame;
-  private GrapheneAtom[] neighbours = new GrapheneAtom[12];
+  private GrapheneSite[] neighbours = new GrapheneSite[12];
   
   /**
    * Total number of 1st neighbours.
@@ -46,7 +46,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   private int n3;
   private HopsPerStep distancePerStep;
 
-  public GrapheneAtom(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public GrapheneSite(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, 12, 2);
   
     this.distancePerStep = distancePerStep;
@@ -56,7 +56,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
     allRatesTheSame = false;
   }
 
-  public void setNeighbours(GrapheneAtom[] neighbours) {
+  public void setNeighbours(GrapheneSite[] neighbours) {
     this.neighbours = neighbours;
   }
 
@@ -116,12 +116,12 @@ public class GrapheneAtom extends AbstractGrowthAtom {
   }
   
   @Override
-  public void setNeighbour(AbstractGrowthAtom a, int pos) {
-    neighbours[pos] = (GrapheneAtom) a;
+  public void setNeighbour(AbstractGrowthSite a, int pos) {
+    neighbours[pos] = (GrapheneSite) a;
   }
 
   @Override
-  public GrapheneAtom getNeighbour(int pos) {
+  public GrapheneSite getNeighbour(int pos) {
     return neighbours[pos];
   }
   
@@ -160,7 +160,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    * @return destination atom
    */
   @Override
-  public AbstractGrowthAtom chooseRandomHop() {
+  public AbstractGrowthSite chooseRandomHop() {
     double raw = StaticRandom.raw();
 
     if (allRatesTheSame) {
@@ -262,7 +262,7 @@ public class GrapheneAtom extends AbstractGrowthAtom {
    */
   @Override
   public double probJumpToNeighbour(int originType, int pos) {
-    AbstractGrowthAtom atom = neighbours[pos];
+    AbstractGrowthSite atom = neighbours[pos];
     if (atom.isOccupied()) {
       return 0;
     }

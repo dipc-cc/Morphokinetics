@@ -24,13 +24,13 @@ import javafx.geometry.Point3D;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public class SiAtom extends AbstractAtom {
+public class SiSite extends AbstractSite {
 
   //we reduce the amount of memory use by not using an array neighbour[4] and directly adding the neighbours as part of the object
-  private SiAtom neighbour0;
-  private SiAtom neighbour1;
-  private SiAtom neighbour2;
-  private SiAtom neighbour3;
+  private SiSite neighbour0;
+  private SiSite neighbour1;
+  private SiSite neighbour2;
+  private SiSite neighbour3;
 
   /**
    * Number of 1st neighbours.
@@ -48,7 +48,7 @@ public class SiAtom extends AbstractAtom {
   private float limitZ;
   private short id;
 
-  public SiAtom(double x, double y, double z) {
+  public SiSite(double x, double y, double z) {
     this.x = x;
     this.y = y;
     this.z = z;
@@ -72,7 +72,7 @@ public class SiAtom extends AbstractAtom {
     return new Point3D(x, y, z);
   }    
 
-  public SiAtom getNeighbour(int pos) {
+  public SiSite getNeighbour(int pos) {
     switch (pos) {
       case 0:
         return neighbour0;
@@ -86,19 +86,19 @@ public class SiAtom extends AbstractAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractAtom atom, int pos) {
+  public void setNeighbour(AbstractSite atom, int pos) {
     switch (pos) {
       case 0:
-        neighbour0 = (SiAtom) atom;
+        neighbour0 = (SiSite) atom;
         break;
       case 1:
-        neighbour1 = (SiAtom) atom;
+        neighbour1 = (SiSite) atom;
         break;
       case 2:
-        neighbour2 = (SiAtom) atom;
+        neighbour2 = (SiSite) atom;
         break;
       default:
-        neighbour3 = (SiAtom) atom;
+        neighbour3 = (SiSite) atom;
         break;
     }
   }
@@ -175,11 +175,11 @@ public class SiAtom extends AbstractAtom {
       }
       setRemoved();
       for (int i = 0; i < getNumberOfNeighbours(); i++) {
-        SiAtom atom1st = getNeighbour(i);
+        SiSite atom1st = getNeighbour(i);
         if (atom1st != null) {
           probabilityChange += atom1st.remove1st();
           for (int j = 0; j < getNumberOfNeighbours(); j++) {
-            SiAtom atom2nd = atom1st.getNeighbour(j);
+            SiSite atom2nd = atom1st.getNeighbour(j);
             if (atom2nd != null && atom2nd != this && !atom2nd.isRemoved()) {
               probabilityChange += atom2nd.remove2nd();
             }

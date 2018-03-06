@@ -19,22 +19,22 @@
 package utils;
 
 import java.util.List;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 
 /** 
  * QuickSort algorithm
  */
 public class QuickSort {
 
-  public static void orderByAngle(List<AbstractGrowthAtom> a, int sizeEvent) {
+  public static void orderByAngle(List<AbstractGrowthSite> a, int sizeEvent) {
     //quicksort(a, 0, a.length - 1);
     orderByAngle(a, 0, sizeEvent);
   }
 
-  private static void orderByAngle(List<AbstractGrowthAtom> atom, int left, int right) {
+  private static void orderByAngle(List<AbstractGrowthSite> atom, int left, int right) {
     int i = left;
     int j = right;
-    AbstractGrowthAtom aux;
+    AbstractGrowthSite aux;
     double pivote = atom.get((left + right) / 2).getAngle();
     do {
       while (atom.get(i).getAngle() < pivote) {

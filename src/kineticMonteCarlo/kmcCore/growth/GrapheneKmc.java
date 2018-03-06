@@ -19,14 +19,14 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import static kineticMonteCarlo.atom.AbstractAtom.ARMCHAIR_EDGE;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
-import static kineticMonteCarlo.atom.AbstractAtom.ZIGZAG_EDGE;
-import kineticMonteCarlo.atom.GrapheneAtom;
-import kineticMonteCarlo.atom.GrapheneAtomGaillard;
-import kineticMonteCarlo.atom.GrapheneAtomGaillard1Neighbour;
-import kineticMonteCarlo.atom.GrapheneAtomGaillardSimple;
-import kineticMonteCarlo.atom.GrapheneAtomSchoenhalz;
+import static kineticMonteCarlo.atom.AbstractSite.ARMCHAIR_EDGE;
+import static kineticMonteCarlo.atom.AbstractSite.TERRACE;
+import static kineticMonteCarlo.atom.AbstractSite.ZIGZAG_EDGE;
+import kineticMonteCarlo.atom.GrapheneSite;
+import kineticMonteCarlo.atom.GrapheneSiteGaillard;
+import kineticMonteCarlo.atom.GrapheneSiteGaillard1Neighbour;
+import kineticMonteCarlo.atom.GrapheneSiteGaillardSimple;
+import kineticMonteCarlo.atom.GrapheneSiteSchoenhalz;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
@@ -47,19 +47,19 @@ public class GrapheneKmc extends AbstractGrowthKmc {
     GrapheneLattice lattice;
     switch (parser.getRatesLibrary()) {
       case "GaillardSimple":
-        lattice = new GrapheneLatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillardSimple.class);
+        lattice = new GrapheneLatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneSiteGaillardSimple.class);
         break;
       case "Gaillard1Neighbour":
-        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillard1Neighbour.class);
+        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneSiteGaillard1Neighbour.class);
         break;
       case "Gaillard2Neighbours":
-        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomGaillard.class);
+        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneSiteGaillard.class);
         break;
       case "Schoenhalz":
-        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtomSchoenhalz.class);
+        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneSiteSchoenhalz.class);
         break;
       default:
-        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneAtom.class);
+        lattice = new GrapheneLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, GrapheneSite.class);
         break;
     }
     setLattice(lattice);

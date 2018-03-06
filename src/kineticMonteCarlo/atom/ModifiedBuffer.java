@@ -29,8 +29,8 @@ import java.util.List;
  */
 public class ModifiedBuffer {
 
-  private final List<AbstractGrowthAtom> buffer;
-  private final List<AbstractGrowthAtom> bufferL;
+  private final List<AbstractGrowthSite> buffer;
+  private final List<AbstractGrowthSite> bufferL;
 
   public ModifiedBuffer() {
     buffer = new ArrayList<>(8);
@@ -42,7 +42,7 @@ public class ModifiedBuffer {
    *
    * @param atom atom to be added.
    */
-  public void addOwnAtom(AbstractGrowthAtom atom) {
+  public void addOwnAtom(AbstractGrowthSite atom) {
     buffer.add(atom); 
   }
 
@@ -51,7 +51,7 @@ public class ModifiedBuffer {
    *
    * @param atom atom to be added.
    */
-  public void addBondAtom(AbstractGrowthAtom atom) {
+  public void addBondAtom(AbstractGrowthSite atom) {
     bufferL.add(atom);
   }
 
@@ -61,7 +61,7 @@ public class ModifiedBuffer {
    * @param list list to be changed.
    */
   public void updateAtoms(AbstractList list) {
-    Iterator<AbstractGrowthAtom> it = buffer.iterator();
+    Iterator<AbstractGrowthSite> it = buffer.iterator();
     while (it.hasNext()) {
       updateAllRates(it.next(), list);
     }
@@ -73,7 +73,7 @@ public class ModifiedBuffer {
     clear();
   }
 
-  private void updateAllRates(AbstractGrowthAtom atom, AbstractList list) {
+  private void updateAllRates(AbstractGrowthSite atom, AbstractList list) {
     double probabilityChange = atom.updateRate();
     if (list != null) {
       if (atom.isEligible() && !atom.isOnList()) {
@@ -89,9 +89,9 @@ public class ModifiedBuffer {
     }
   }
 
-  private void updateAllNeighbours(AbstractGrowthAtom atom, AbstractList list) {
+  private void updateAllNeighbours(AbstractGrowthSite atom, AbstractList list) {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      AbstractGrowthAtom neighbour = atom.getNeighbour(i);
+      AbstractGrowthSite neighbour = atom.getNeighbour(i);
       if (neighbour.isEligible() && !buffer.contains(neighbour)) {
         double probabilityChange = neighbour.updateOneBound(i);
         list.addDiffusionProbability(probabilityChange);

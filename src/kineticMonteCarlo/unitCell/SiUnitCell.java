@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import java.util.ArrayList;
-import kineticMonteCarlo.atom.SiAtom;
+import kineticMonteCarlo.atom.SiSite;
 
 /**
  *
@@ -39,23 +39,23 @@ public class SiUnitCell {
   private double limitXnt;
   private double limitYnt;
   private double limitZnt;
-  private SiAtom[][][] red0;
-  private SiAtom[][][] red1;
-  private SiAtom[][][] red2;
-  private SiAtom[][][] red3;
+  private SiSite[][][] red0;
+  private SiSite[][][] red1;
+  private SiSite[][][] red2;
+  private SiSite[][][] red3;
   private int iInit;
   private int iSize;
   private int jInit;
   private int jSize;
   private int kInit;
   private int kSize;
-  private SiAtom[] cellsPointer;
+  private SiSite[] cellsPointer;
 
   public SiUnitCell() {
     rotation = new double[3][3];
   }
 
-  public SiAtom[] getCellsP() {
+  public SiSite[] getCellsP() {
     return cellsPointer;
   }
 
@@ -432,10 +432,10 @@ public class SiUnitCell {
     kInit = (int) Math.round(K_i) - 2;
     kSize = (int) Math.round(K_s) + 2;
 
-    red0 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
-    red1 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
-    red2 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
-    red3 = new SiAtom[iSize - iInit][jSize - jInit][kSize - kInit];
+    red0 = new SiSite[iSize - iInit][jSize - jInit][kSize - kInit];
+    red1 = new SiSite[iSize - iInit][jSize - jInit][kSize - kInit];
+    red2 = new SiSite[iSize - iInit][jSize - jInit][kSize - kInit];
+    red3 = new SiSite[iSize - iInit][jSize - jInit][kSize - kInit];
 
     //-------------------------------------------------------------------------
     // Creamos los atomos
@@ -454,7 +454,7 @@ public class SiUnitCell {
     // Asignamos la celula origen y numeramos
     //----------------------------------------
     neighs = new short[4 * cuantos];
-    cellsPointer = new SiAtom[cuantos];
+    cellsPointer = new SiSite[cuantos];
     nBlock = new byte[4 * cuantos];
 
 //--------------------------------------------------------------------------
@@ -572,7 +572,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
 
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red0[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
+            red0[i - iInit][j - jInit][k - kInit] = new SiSite(Xr, Yr, Zr);
             //System.out.println(">"+posX+" "+posY+" "+posZ+"|new|"+Xr+" "+Yr+" "+Zr);
             red0[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
@@ -600,7 +600,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red1[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
+            red1[i - iInit][j - jInit][k - kInit] = new SiSite(Xr, Yr, Zr);
 
             red1[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
@@ -629,7 +629,7 @@ public class SiUnitCell {
 
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red2[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
+            red2[i - iInit][j - jInit][k - kInit] = new SiSite(Xr, Yr, Zr);
 
             red2[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
@@ -656,7 +656,7 @@ public class SiUnitCell {
           double Zr = truncate((posX * rotation[0][2] + posY * rotation[1][2] + posZ * rotation[2][2]), 5);
           //if (i==1 && j==2 && k==4) {System.out.println(Xr);}
           if (Xr >= 0 && Yr >= 0 && Zr >= 0 && Xr < limitX && Yr < limitY && Zr < limitZ) {
-            red3[i - iInit][j - jInit][k - kInit] = new SiAtom(Xr, Yr, Zr);
+            red3[i - iInit][j - jInit][k - kInit] = new SiSite(Xr, Yr, Zr);
             red3[i - iInit][j - jInit][k - kInit].setId((short) cont);
             cont++;
           }//else System.out.println(Math.abs(Xr-limitX)+Math.abs(Zr-limitZ)+Math.abs(Yr-limitY) );

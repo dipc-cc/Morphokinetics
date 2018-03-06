@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Consumer;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.CatalysisAtom;
-import kineticMonteCarlo.atom.ConcertedAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.CatalysisSite;
+import kineticMonteCarlo.atom.ConcertedSite;
 import utils.list.Node;
 
 /**
@@ -240,10 +240,10 @@ public class AvlTree<T extends Comparable<T>> {
       T a;
       switch (type) {
         case "catalysis":
-          a = (T) new CatalysisAtom(i, (short)-1, (short)-1);
+          a = (T) new CatalysisSite(i, (short)-1, (short)-1);
           break;
         case "concerted":
-         a = (T) new ConcertedAtom(i, -1);
+         a = (T) new ConcertedSite(i, -1);
          break;
         default:
           a = null;
@@ -283,7 +283,7 @@ public class AvlTree<T extends Comparable<T>> {
         return false;
       } else {
         T atom = next.getData();
-        while (!((AbstractGrowthAtom) atom).isOnList(process)) {
+        while (!((AbstractGrowthSite) atom).isOnList(process)) {
           next = next.next();
           if (next == null) { // We have reached the end of the list
             return false;

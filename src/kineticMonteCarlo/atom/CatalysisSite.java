@@ -31,7 +31,7 @@ import utils.StaticRandom;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisAtom extends AbstractGrowthAtom {
+public class CatalysisSite extends AbstractGrowthSite {
 
   public static final byte CO = 0;
   public static final byte O = 1;
@@ -43,7 +43,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
 
   private int occupiedNeighbours;
-  private final CatalysisAtom[] neighbours = new CatalysisAtom[4];
+  private final CatalysisSite[] neighbours = new CatalysisSite[4];
   /**
    * Bridge or CUS.
    */
@@ -57,12 +57,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
    */
   private double[][][] probabilities;
   
-  private CatalysisAtomAttributes attributes;
+  private CatalysisSiteAttributes attributes;
   
   /** Current atom is CO^CUS and it has as many CO^CUS neighbours. */
   private int coCusWithCoCus;
   
-  public CatalysisAtom(int id, short iHexa, short jHexa) {
+  public CatalysisSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 4);
     occupiedNeighbours = 0; 
     if (iHexa % 2 == 0) {
@@ -70,7 +70,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
     } else {
       latticeSite = CUS;
     }
-    attributes = new CatalysisAtomAttributes();
+    attributes = new CatalysisSiteAttributes();
     eligible = true;
     processes = new CatalysisProcess[4];
     processes[ADSORPTION] = new CatalysisProcess();
@@ -88,7 +88,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   
   @Override
   public void setAttributes(AbstractGrowthAtomAttributes attributes) {
-    this.attributes = (CatalysisAtomAttributes) attributes;
+    this.attributes = (CatalysisSiteAttributes) attributes;
   }
   
   public byte getLatticeSite() {
@@ -143,8 +143,8 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public void setNeighbour(AbstractGrowthAtom a, int pos) {
-    neighbours[pos] = (CatalysisAtom) a;
+  public void setNeighbour(AbstractGrowthSite a, int pos) {
+    neighbours[pos] = (CatalysisSite) a;
   }
   
   @Override
@@ -153,12 +153,12 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public CatalysisAtom getNeighbour(int pos) {
+  public CatalysisSite getNeighbour(int pos) {
     return neighbours[pos];
   }
   
-  public CatalysisAtom getRandomNeighbour(byte process) {
-    CatalysisAtom neighbour;
+  public CatalysisSite getRandomNeighbour(byte process) {
+    CatalysisSite neighbour;
     double randomNumber = StaticRandom.raw() * getRate(process);
     double sum = 0.0;
     for (int j = 0; j < getNumberOfNeighbours(); j++) {
@@ -253,7 +253,7 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
 
   @Override
-  public AbstractGrowthAtom chooseRandomHop() {
+  public AbstractGrowthSite chooseRandomHop() {
     double linearSearch = StaticRandom.raw() * getProbability();
 
     double sum = 0;
@@ -313,10 +313,10 @@ public class CatalysisAtom extends AbstractGrowthAtom {
   }
   
   @Override
-  public void swapAttributes(AbstractGrowthAtom a) {
-    CatalysisAtom atom = (CatalysisAtom) a;
-    CatalysisAtomAttributes tmpAttributes = this.attributes;
-    this.attributes = (CatalysisAtomAttributes) atom.getAttributes();
+  public void swapAttributes(AbstractGrowthSite a) {
+    CatalysisSite atom = (CatalysisSite) a;
+    CatalysisSiteAttributes tmpAttributes = this.attributes;
+    this.attributes = (CatalysisSiteAttributes) atom.getAttributes();
     this.attributes.addOneHop();
     atom.setAttributes(tmpAttributes);
   }

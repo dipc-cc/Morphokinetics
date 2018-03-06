@@ -21,7 +21,7 @@ package kineticMonteCarlo.kmcCore.growth;
 import basic.Parser;
 import basic.io.OutputType;
 import basic.io.Restart;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
@@ -31,7 +31,7 @@ import static java.lang.Math.abs;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point3D;
-import static kineticMonteCarlo.atom.AbstractAtom.TERRACE;
+import static kineticMonteCarlo.atom.AbstractSite.TERRACE;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import utils.MathUtils;
@@ -165,7 +165,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
     for (int i = 0; i < lattice.getHexaSizeJ(); i++) {
       for (int j = 0; j < lattice.getHexaSizeI(); j++) {
-        if (lattice.getAtom(j, i).isOccupied()) {
+        if (lattice.getSite(j, i).isOccupied()) {
           surface[j][i] = 0;
         }
       }
@@ -204,9 +204,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       double posUcX = uc.getPos().getX();
       double posUcY = uc.getPos().getY();
       for (int j = 0; j < uc.size(); j++) {
-        if (uc.getAtom(j).isOccupied()) {
-          double posAtomX = uc.getAtom(j).getPos().getX();
-          double posAtomY = uc.getAtom(j).getPos().getY();
+        if (uc.getSite(j).isOccupied()) {
+          double posAtomX = uc.getSite(j).getPos().getX();
+          double posAtomY = uc.getSite(j).getPos().getY();
           x = (int) ((posUcX + posAtomX - corner1.getX()) * scaleX);
           y = (int) ((posUcY + posAtomY - corner1.getY()) * scaleY);
 
@@ -321,7 +321,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean computeTime = false;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
-    terraceToTerraceProbability = lattice.getUc(0).getAtom(0).getProbability(0, 0);
+    terraceToTerraceProbability = lattice.getUc(0).getSite(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
     } else {
@@ -378,13 +378,13 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
       setAtomPerimeter();
       setCurrentOccupiedArea(8); // Seed will have 8 atoms
       int depositedAtoms = 1;
-      AbstractGrowthAtom centralAtom = lattice.getCentralAtom();
+      AbstractGrowthSite centralAtom = lattice.getCentralAtom();
       centralAtom.setDepositionPosition(new Point3D(0, 0, 0));
       deposition:
       while (true) {
         depositAtom(centralAtom);
         for (int i = 0; i < centralAtom.getNumberOfNeighbours(); i++) {
-          AbstractGrowthAtom atom = centralAtom.getNeighbour(i);
+          AbstractGrowthSite atom = centralAtom.getNeighbour(i);
           if (depositAtom(atom)) {
             depositedAtoms++;
             atom.setDepositionPosition(new Point3D(0, 0, 0));
@@ -408,8 +408,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    */
   @Override
   protected boolean performSimulationStep() {
-    AbstractGrowthAtom originAtom = (AbstractGrowthAtom) getList().nextEvent();
-    AbstractGrowthAtom destinationAtom;
+    AbstractGrowthSite originAtom = (AbstractGrowthSite) getList().nextEvent();
+    AbstractGrowthSite destinationAtom;
 
     if (originAtom == null) {
       destinationAtom = depositNewAtom();
@@ -473,7 +473,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     }
   }
 
-  private boolean depositAtom(AbstractGrowthAtom atom) {
+  private boolean depositAtom(AbstractGrowthSite atom) {
     if (atom.isOccupied()) {
       return false;
     }
@@ -494,8 +494,8 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param times how many times it has been called recursively
    * @return destinationAtom.
    */
-  private AbstractGrowthAtom chooseRandomHop(AbstractGrowthAtom originAtom, int times) {
-    AbstractGrowthAtom destinationAtom;
+  private AbstractGrowthSite chooseRandomHop(AbstractGrowthSite originAtom, int times) {
+    AbstractGrowthSite destinationAtom;
     if (accelerator != null) {
       destinationAtom = accelerator.chooseRandomHop(originAtom);
     } else {
@@ -552,7 +552,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        if (uc.getAtom(j).isOccupied() || !uc.getAtom(j).isOutside()) {
+        if (uc.getSite(j).isOccupied() || !uc.getSite(j).isOutside()) {
           totalArea++;
         }
       }
@@ -575,7 +575,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthAtom atom = uc.getAtom(j);
+        AbstractGrowthSite atom = uc.getSite(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
         double y = atom.getPos().getY() + uc.getPos().getY();
         double distance = lattice.getDistanceToCenter(x, y);
@@ -595,7 +595,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param destinationAtom destination atom.
    * @return true if atom has moved, false otherwise.
    */
-  private boolean diffuseAtom(AbstractGrowthAtom originAtom, AbstractGrowthAtom destinationAtom) {
+  private boolean diffuseAtom(AbstractGrowthSite originAtom, AbstractGrowthSite destinationAtom) {
     //If is not eligible, it can not be diffused
     if (!originAtom.isEligible()) {
       return false;
@@ -659,12 +659,12 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param destination destination atom is required to compute time difference.
    *
    */
-  private void atomAttachedToIsland(AbstractGrowthAtom destination) {
+  private void atomAttachedToIsland(AbstractGrowthSite destination) {
     restart.writeExtra2Output(lattice, destination, getCoverage(), getTime(), getList().getDiffusionProbabilityFromList());
   }
 
-  private AbstractGrowthAtom depositNewAtom() {
-    AbstractGrowthAtom destinationAtom;
+  private AbstractGrowthSite depositNewAtom() {
+    AbstractGrowthSite destinationAtom;
     int ucIndex = 0;
     if (justCentralFlake) {
       do {
@@ -677,7 +677,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
         ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
-        destinationAtom = lattice.getUc(ucIndex).getAtom(atomIndex);
+        destinationAtom = lattice.getUc(ucIndex).getSite(atomIndex);
       } while (!depositAtom(destinationAtom));
       // update the free area and the deposition rate counting just deposited atom
       freeArea--;
@@ -689,7 +689,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return destinationAtom;
   }
 
-  private boolean perimeterMustBeEnlarged(AbstractGrowthAtom destinationAtom) {
+  private boolean perimeterMustBeEnlarged(AbstractGrowthSite destinationAtom) {
     if (perimeterType == RoundPerimeter.SQUARE) {
       Point2D centreCart = lattice.getCentralCartesianLocation();
       double left = centreCart.getX() - perimeter.getCurrentRadius();

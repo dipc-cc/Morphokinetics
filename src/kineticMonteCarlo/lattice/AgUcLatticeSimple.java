@@ -18,8 +18,8 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.AgAtom;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.AgSite;
 import kineticMonteCarlo.atom.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
 
@@ -44,8 +44,8 @@ public class AgUcLatticeSimple extends AgUcLattice {
   }
   
   @Override 
-  public void deposit(AbstractGrowthAtom a, boolean forceNucleation) {
-    AgAtom atom = (AgAtom) a;
+  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+    AgSite atom = (AgSite) a;
     atom.setOccupied(true);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       addOccupiedNeighbour(atom.getNeighbour(i));
@@ -59,8 +59,8 @@ public class AgUcLatticeSimple extends AgUcLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthAtom a) {
-    AgAtom atom = (AgAtom) a;
+  public double extract(AbstractGrowthSite a) {
+    AgSite atom = (AgSite) a;
     atom.setOccupied(false);
     double probabilityChange = a.getProbability();
     
@@ -84,7 +84,7 @@ public class AgUcLatticeSimple extends AgUcLattice {
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(AgAtom neighbourAtom) {
+  private void addOccupiedNeighbour(AgSite neighbourAtom) {
     byte newType = (byte) (neighbourAtom.getType() + 1);
     if (newType > 6) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is >6, which is in practice impossible");
@@ -104,7 +104,7 @@ public class AgUcLatticeSimple extends AgUcLattice {
    * 
    * @param neighbourAtom neighbour atom of the original atom
    */
-  private void removeMobileOccupied(AgAtom neighbourAtom) {
+  private void removeMobileOccupied(AgSite neighbourAtom) {
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {
       throw new ArrayIndexOutOfBoundsException("The sum of neighbours is <0, which is in practice impossible");

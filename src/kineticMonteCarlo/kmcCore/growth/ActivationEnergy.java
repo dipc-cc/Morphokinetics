@@ -24,13 +24,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
-import kineticMonteCarlo.atom.AbstractAtom;
-import kineticMonteCarlo.atom.AbstractGrowthAtom;
-import kineticMonteCarlo.atom.CatalysisAtom;
-import static kineticMonteCarlo.atom.CatalysisAtom.BR;
-import static kineticMonteCarlo.atom.CatalysisAtom.CO;
-import static kineticMonteCarlo.atom.CatalysisAtom.CUS;
-import static kineticMonteCarlo.atom.CatalysisAtom.O;
+import kineticMonteCarlo.atom.AbstractSite;
+import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.atom.CatalysisSite;
+import static kineticMonteCarlo.atom.CatalysisSite.BR;
+import static kineticMonteCarlo.atom.CatalysisSite.CO;
+import static kineticMonteCarlo.atom.CatalysisSite.CUS;
+import static kineticMonteCarlo.atom.CatalysisSite.O;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.lattice.MultiAtom;
@@ -58,7 +58,7 @@ public class ActivationEnergy {
   private Double[] histogramPossibleIsland;
   private Double[] histogramPossibleIslandTmp;
   private Double[] histogramPossibleMultiAtom;
-  private final ArrayList<AbstractAtom> surface;
+  private final ArrayList<AbstractSite> surface;
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
   private double previousProbability;
@@ -152,15 +152,15 @@ public class ActivationEnergy {
     this.rates = rates;
   }
   
-  public void addTransitions(AbstractGrowthAtom atom) {
+  public void addTransitions(AbstractGrowthSite atom) {
     updateTransitions(atom, 1);
   }
 
-  public void removeTransitions(AbstractGrowthAtom atom) {
+  public void removeTransitions(AbstractGrowthSite atom) {
     updateTransitions(atom, -1);
   }
   
-  private void updateTransitions(AbstractGrowthAtom atom, int add) {
+  private void updateTransitions(AbstractGrowthSite atom, int add) {
     byte type;
     if (add == -1) {
       type = atom.getOldType();
@@ -187,7 +187,7 @@ public class ActivationEnergy {
       for (int i = 0; i < lattice.size(); i++) {
         SimpleUc uc = (SimpleUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          CatalysisAtom atom = (CatalysisAtom) uc.getAtom(j);
+          CatalysisSite atom = (CatalysisSite) uc.getSite(j);
           int numberOfCoNeighbours = 0;
           if (atom.getLatticeSite() == CUS) {
             numberOfCoNeighbours = atom.getCoCusNeighbours();
@@ -200,7 +200,7 @@ public class ActivationEnergy {
             }
           } else {
             for (int pos = 0; pos < numberOfNeighbours; pos++) {
-              CatalysisAtom neighbour = atom.getNeighbour(pos);
+              CatalysisSite neighbour = atom.getNeighbour(pos);
               // Desorption
               if (atom.getType() == CO) {
                 histogramPossibleDesorption[CO][atom.getLatticeSite()][numberOfCoNeighbours] += elapsedTime / 4.0; // it goes throw 4 times
@@ -259,15 +259,15 @@ public class ActivationEnergy {
    * @param elapsedTime 
    * @param stationary
    */
-  public void updatePossibles(Iterator<CatalysisAtom> surface, double elapsedTime, boolean stationary) {
+  public void updatePossibles(Iterator<CatalysisSite> surface, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy && stationary) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       
       histogramPossibleTmp = initDouble();
       while (surface.hasNext()) {
-        CatalysisAtom atom = surface.next();
+        CatalysisSite atom = surface.next();
         for (int pos = 0; pos < numberOfNeighbours; pos++) {
-          CatalysisAtom neighbour = atom.getNeighbour(pos);
+          CatalysisSite neighbour = atom.getNeighbour(pos);
           if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
             continue;
           }
@@ -317,16 +317,16 @@ public class ActivationEnergy {
     }
   }
   
-  public void updatePossibles(Iterator<AbstractAtom> surface, double totalAndDepositionProbability, double elapsedTime) {
+  public void updatePossibles(Iterator<AbstractSite> surface, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy) {
       if (previousProbability != totalAndDepositionProbability) {
         histogramPossibleTmp = initDouble();
         histogramPossibleCounterTmp = initLong();
         // iterate over ALL(!) atoms of the surface to get all possible hops (only to compute multiplicity)
         while (surface.hasNext()) {
-          AbstractGrowthAtom atom = (AbstractGrowthAtom) surface.next();
+          AbstractGrowthSite atom = (AbstractGrowthSite) surface.next();
           for (int pos = 0; pos < numberOfNeighbours; pos++) {
-            AbstractGrowthAtom neighbourAtom = atom.getNeighbour(pos);
+            AbstractGrowthSite neighbourAtom = atom.getNeighbour(pos);
             byte destination = neighbourAtom.getTypeWithoutNeighbour(pos);
             byte origin = atom.getRealType();
             if (atom.getBondsProbability(pos) > 0) {
@@ -384,7 +384,7 @@ public class ActivationEnergy {
     histogramSuccess[oldType][newType]++;
   }
   
-  public void update(ArrayList<AbstractAtom> surface)  {
+  public void update(ArrayList<AbstractSite> surface)  {
     
   }
   

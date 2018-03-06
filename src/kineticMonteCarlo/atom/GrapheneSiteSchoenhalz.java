@@ -27,28 +27,28 @@ import ratesLibrary.GrapheneSchoenhalzRates;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class GrapheneAtomSchoenhalz extends GrapheneAtom {
+public class GrapheneSiteSchoenhalz extends GrapheneSite {
 
   private GrapheneSchoenhalzRates rates;
 
-  private GrapheneAtomSchoenhalz[] neighbours = new GrapheneAtomSchoenhalz[12];
+  private GrapheneSiteSchoenhalz[] neighbours = new GrapheneSiteSchoenhalz[12];
   
-  public GrapheneAtomSchoenhalz(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
+  public GrapheneSiteSchoenhalz(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);
     setNumberOfNeighbours(9);
     rates = new GrapheneSchoenhalzRates();
   }
   
   @Override
-  public void setNeighbours(GrapheneAtom[] neighbours) {
+  public void setNeighbours(GrapheneSite[] neighbours) {
     super.setNeighbours(neighbours);
     for (int i = 0; i < neighbours.length; i++) {
-      this.neighbours[i] = (GrapheneAtomSchoenhalz) neighbours[i];
+      this.neighbours[i] = (GrapheneSiteSchoenhalz) neighbours[i];
     }
   }  
   
   @Override
-  public GrapheneAtomSchoenhalz getNeighbour(int pos) {
+  public GrapheneSiteSchoenhalz getNeighbour(int pos) {
     return neighbours[pos];
   }
  
@@ -72,7 +72,7 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
    */
   @Override
   public double probJumpToNeighbour(int originType, int pos) {
-    GrapheneAtomSchoenhalz atom = neighbours[pos];
+    GrapheneSiteSchoenhalz atom = neighbours[pos];
     if (atom.isOccupied()) {
       return 0;
     }
@@ -90,7 +90,7 @@ public class GrapheneAtomSchoenhalz extends GrapheneAtom {
       if (originN1 == 1 && originN2 == 2 && destinationN1 == 1 && destinationN2 == 3) { // probable zigzag edge diffusion
         boolean zigzag = false;
         for (int i = 0; i < 3; i++) {
-          GrapheneAtomSchoenhalz tmpAtom = neighbours[i];
+          GrapheneSiteSchoenhalz tmpAtom = neighbours[i];
           if (tmpAtom.getN1() == 3) {
             zigzag = true;
             break;
