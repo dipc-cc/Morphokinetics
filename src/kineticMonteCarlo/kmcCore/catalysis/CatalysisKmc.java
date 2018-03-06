@@ -148,11 +148,6 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     automaticCollections = parser.areCollectionsAutomatic();
     goMultiplier = parser.getGOMultiplier();
   }
-
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
-  }
   
   @Override
   public float[][] getSampledSurface(int binX, int binY) {

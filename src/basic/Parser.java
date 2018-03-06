@@ -1395,20 +1395,10 @@ public class Parser {
   }
 
   /**
-   * The options below are for "Ag" calculationMode (see {@link #getCalculationMode()}). Instead of
-   * using this calculation mode, it is recommended to use "AgUc" calculation mode, which has the
-   * correct periodicity and shape.
+   * This variable can be used for the PSD utility (see {@link #getCalculationType()}) to choose
+   * between to do the tents for the surfaces or not.
    *
-   * Can be "cartesian" or "periodic". If "cartesian" is chosen, the surface (islands) will have the
-   * same shape as in the GUI, but the periodicity will not be correct in top-bottom (there is a
-   * shift of 60º). If "periodic" is chosen, the shape will be shifted by 60º and periodicity will
-   * be correct in 2D. This option will change the PSD; "cartesian" will have vertical and
-   * horizontal symmetry and in "periodic" the symmetry will be shifted by 60º.
-   * 
-   * This variable can be also used for the PSD utility (see {@link #getCalculationType()}) to
-   * choose between to do the tents for the surfaces or not.
-   *
-   * @return surface type. For "Ag" either: "cartesian" or "periodic". For PSD utility: "tent" or "plane".
+   * @return surface type. For PSD utility: "tent" or "plane".
    */
   public String getSurfaceType() {
     return surfaceType;

@@ -293,11 +293,8 @@ public abstract class AbstractSimulation {
     System.out.format("\t%.4f", kmc.getCoverage());
     
     if (parser.outputData() || parser.doPsd()) {
-      if (parser.getSurfaceType().equals("cartesian")) {
-        sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface
-      } else { // "periodic"
-        sampledSurface = kmc.getHexagonalPeriodicSurface(surfaceSizes[0], surfaceSizes[1]);
-      }
+      sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface
+      
       float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
       if (parser.outputData()) {
         if (parser.getOutputFormats().contains(formatFlag.CAT)) {

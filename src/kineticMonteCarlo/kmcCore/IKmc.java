@@ -33,8 +33,6 @@ public interface IKmc {
 
   public void setDepositionRate(double depositionRatePerSite, double islandDensity);
 
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY);
-
   /**
    * Returns a sampled topological measurement of the KMC surface
    *

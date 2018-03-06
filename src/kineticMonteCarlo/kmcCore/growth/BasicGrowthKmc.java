@@ -48,11 +48,6 @@ public class BasicGrowthKmc extends AbstractGrowthKmc {
       configureDevitaAccelerator(distancePerStep);
     }
   }
-
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
-  }
   
   private void configureDevitaAccelerator(HopsPerStep distancePerStep) {
     setAccelerator(new DevitaAccelerator(getLattice(), distancePerStep));

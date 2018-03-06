@@ -116,11 +116,6 @@ public class AgUcLattice extends AgLattice {
     return ucList.size();
   }
   
-  @Override
-  public AgSite getSite(int iHexa, int jHexa) {
-    return null;
-  }
-  
   /**
    * Returns an atom of given unit cell and lattice position.
    *

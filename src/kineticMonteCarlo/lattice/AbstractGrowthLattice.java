@@ -141,18 +141,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
    */
   public abstract int getjHexa(double yCart);
   
-  /**
-   * We ignore the unitCellPos by now, we get directly the atom of i,j hexagonal location.
-   *
-   * @param iHexa
-   * @param jHexa
-   * @return required atom.
-   */
-  @Deprecated
-  public AbstractGrowthSite getSite(int iHexa, int jHexa) {
-    return ucArray[iHexa][jHexa].getSite(0);
-  }
-  
   public AbstractGrowthSite getSite(int iHexa, int jHexa, int unitCellPos) {
     int index = jHexa * getHexaSizeI() + iHexa;
     return getUc(index).getSite(0);

@@ -38,11 +38,6 @@ public class BasicKmc extends AbstractKmc {
     setLattice(new BasicLattice(parser.getCartSizeX(), parser.getCartSizeY()));
 
   }
-
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
-  }
   
   @Override
   public float[][] getSampledSurface(int binX, int binY) {

@@ -51,11 +51,6 @@ public class SiKmc extends AbstractKmc {
   }
   
   @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    return getSampledSurface(binX, binY);
-  }
-  
-  @Override
   public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
     

@@ -154,28 +154,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return perimeter.getCurrentRadius();
   }
   
-  
-  @Override
-  public float[][] getHexagonalPeriodicSurface(int binX, int binY) {
-    float[][] surface = new float[lattice.getHexaSizeI()][lattice.getHexaSizeJ()];
-    for (int i = 0; i < lattice.getHexaSizeI(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeJ(); j++) {
-        surface[i][j] = -1;
-      }
-    }
-    for (int i = 0; i < lattice.getHexaSizeJ(); i++) {
-      for (int j = 0; j < lattice.getHexaSizeI(); j++) {
-        if (lattice.getSite(j, i).isOccupied()) {
-          surface[j][i] = 0;
-        }
-      }
-    }
-
-    MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
-    MathUtils.normalise(surface);
-    return surface;
-  }
-  
   @Override
   public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
