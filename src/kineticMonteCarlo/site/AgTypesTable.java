@@ -16,14 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.atom;
+package kineticMonteCarlo.site;
 
 import java.util.Arrays;
-import static kineticMonteCarlo.atom.AgSite.CORNER;
-import static kineticMonteCarlo.atom.AgSite.EDGE;
-import static kineticMonteCarlo.atom.AgSite.ISLAND;
-import static kineticMonteCarlo.atom.AgSite.KINK;
-import static kineticMonteCarlo.atom.AgSite.TERRACE;
+import static kineticMonteCarlo.site.AgSite.CORNER;
+import static kineticMonteCarlo.site.AgSite.EDGE;
+import static kineticMonteCarlo.site.AgSite.ISLAND;
+import static kineticMonteCarlo.site.AgSite.KINK;
+import static kineticMonteCarlo.site.AgSite.TERRACE;
 
 public class AgTypesTable {
 

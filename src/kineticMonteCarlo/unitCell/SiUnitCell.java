@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import java.util.ArrayList;
-import kineticMonteCarlo.atom.SiSite;
+import kineticMonteCarlo.site.SiSite;
 
 /**
  *

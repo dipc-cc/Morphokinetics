@@ -19,7 +19,7 @@
 package utils.list;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractSite;
+import kineticMonteCarlo.site.AbstractSite;
 import java.util.ListIterator;
 import utils.StaticRandom;
 

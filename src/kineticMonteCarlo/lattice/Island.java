@@ -20,7 +20,7 @@ package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
 

@@ -18,14 +18,14 @@
  */
 package ratesLibrary;
 
-import static kineticMonteCarlo.atom.AbstractSite.ARMCHAIR_EDGE;
-import static kineticMonteCarlo.atom.AbstractSite.BULK;
-import static kineticMonteCarlo.atom.AbstractSite.CORNER;
-import static kineticMonteCarlo.atom.AbstractSite.KINK;
-import static kineticMonteCarlo.atom.AbstractSite.SICK;
-import static kineticMonteCarlo.atom.AbstractSite.TERRACE;
-import static kineticMonteCarlo.atom.AbstractSite.ZIGZAG_EDGE;
-import static kineticMonteCarlo.atom.AbstractSite.ZIGZAG_WITH_EXTRA;
+import static kineticMonteCarlo.site.AbstractSite.ARMCHAIR_EDGE;
+import static kineticMonteCarlo.site.AbstractSite.BULK;
+import static kineticMonteCarlo.site.AbstractSite.CORNER;
+import static kineticMonteCarlo.site.AbstractSite.KINK;
+import static kineticMonteCarlo.site.AbstractSite.SICK;
+import static kineticMonteCarlo.site.AbstractSite.TERRACE;
+import static kineticMonteCarlo.site.AbstractSite.ZIGZAG_EDGE;
+import static kineticMonteCarlo.site.AbstractSite.ZIGZAG_WITH_EXTRA;
 import static ratesLibrary.IRates.kB;
 
 /**
@@ -33,8 +33,8 @@ import static ratesLibrary.IRates.kB;
  * Science, Volumes 637–638, July–August 2015, Pages 11-18,
  * http://dx.doi.org/10.1016/j.susc.2015.02.014.
  *
- * Only the first neighbour of {@link kineticMonteCarlo.atom.AbstractSite} and
- * {@link kineticMonteCarlo.atom.GrapheneTypesTable} are considered. Therefore, TERRACE -> 0,
+ * Only the first neighbour of {@link kineticMonteCarlo.site.AbstractSite} and
+ * {@link kineticMonteCarlo.site.GrapheneTypesTable} are considered. Therefore, TERRACE -> 0,
  * CORNER, ZIGZAG_EDGE, SICK, ARMCHAIR_EDGE, ZIGZAG_WITH_EXTRA -> 1, KINK -> 2, BULK -> 3 are the
  * equivalences.
  *

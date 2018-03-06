@@ -20,7 +20,7 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import java.util.List;
 import java.util.TreeMap;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.perimeterStatistics.AbstractPerimeterStatistics;
 import kineticMonteCarlo.lattice.perimeterStatistics.PerimeterStatisticsFactory;
 import utils.StaticRandom;

@@ -18,7 +18,7 @@
  */
 package graphicInterfaces.basic;
 
-import kineticMonteCarlo.atom.BasicSite;
+import kineticMonteCarlo.site.BasicSite;
 import kineticMonteCarlo.kmcCore.etching.BasicKmc;
 import java.awt.Color;
 import java.awt.GradientPaint;

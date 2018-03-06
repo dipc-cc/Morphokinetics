@@ -25,7 +25,7 @@ import graphicInterfaces.etching.mouseBehaviors.MouseTranslate;
 import graphicInterfaces.etching.mouseBehaviors.MouseRotate;
 import graphicInterfaces.etching.mouseBehaviors.MouseRocking;
 import utils.list.AbstractList;
-import kineticMonteCarlo.atom.SiSite;
+import kineticMonteCarlo.site.SiSite;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import java.awt.GraphicsConfiguration;
 import javax.media.j3d.AmbientLight;

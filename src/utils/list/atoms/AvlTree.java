@@ -21,9 +21,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Consumer;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
-import kineticMonteCarlo.atom.CatalysisSite;
-import kineticMonteCarlo.atom.ConcertedSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.CatalysisSite;
+import kineticMonteCarlo.site.ConcertedSite;
 import utils.list.Node;
 
 /**

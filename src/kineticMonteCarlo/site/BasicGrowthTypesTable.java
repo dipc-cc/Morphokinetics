@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.atom;
+package kineticMonteCarlo.site;
 
-import static kineticMonteCarlo.atom.BasicGrowthSite.EDGE;
-import static kineticMonteCarlo.atom.BasicGrowthSite.ISLAND;
-import static kineticMonteCarlo.atom.BasicGrowthSite.KINK;
-import static kineticMonteCarlo.atom.BasicGrowthSite.TERRACE;
+import static kineticMonteCarlo.site.BasicGrowthSite.EDGE;
+import static kineticMonteCarlo.site.BasicGrowthSite.ISLAND;
+import static kineticMonteCarlo.site.BasicGrowthSite.KINK;
+import static kineticMonteCarlo.site.BasicGrowthSite.TERRACE;
 
 public class BasicGrowthTypesTable {
 

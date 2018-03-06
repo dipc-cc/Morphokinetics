@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 
-import kineticMonteCarlo.atom.ISite;
+import kineticMonteCarlo.site.ISite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AgLattice;

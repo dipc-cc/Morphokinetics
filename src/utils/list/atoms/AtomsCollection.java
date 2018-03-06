@@ -18,7 +18,7 @@
  */
 package utils.list.atoms;
 
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 

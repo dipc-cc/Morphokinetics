@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 import kineticMonteCarlo.process.MultiAtomProcess;
 import utils.StaticRandom;

@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
-import kineticMonteCarlo.atom.CatalysisSite;
-import static kineticMonteCarlo.atom.CatalysisSite.BR;
-import static kineticMonteCarlo.atom.CatalysisSite.CO;
-import static kineticMonteCarlo.atom.CatalysisSite.CUS;
-import static kineticMonteCarlo.atom.CatalysisSite.O;
+import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.CatalysisSite;
+import static kineticMonteCarlo.site.CatalysisSite.BR;
+import static kineticMonteCarlo.site.CatalysisSite.CO;
+import static kineticMonteCarlo.site.CatalysisSite.CUS;
+import static kineticMonteCarlo.site.CatalysisSite.O;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import utils.LinearRegression;
 

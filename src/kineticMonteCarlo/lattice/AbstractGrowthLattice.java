@@ -19,12 +19,12 @@
 package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.unitCell.SimpleUc;
-import kineticMonteCarlo.atom.AbstractSite;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import java.awt.geom.Point2D;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.site.ModifiedBuffer;
 import utils.QuickSort;
 import java.util.List;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;

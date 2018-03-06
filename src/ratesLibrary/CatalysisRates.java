@@ -22,11 +22,11 @@ import static java.lang.Math.PI;
 import static java.lang.Math.exp;
 import static java.lang.Math.log;
 import static java.lang.Math.pow;
-import static kineticMonteCarlo.atom.CatalysisSite.BR;
-import static kineticMonteCarlo.atom.CatalysisSite.CUS;
-import static kineticMonteCarlo.atom.CatalysisSite.O;
-import static kineticMonteCarlo.atom.CatalysisSite.CO;
-import static kineticMonteCarlo.atom.CatalysisSite.O2;
+import static kineticMonteCarlo.site.CatalysisSite.BR;
+import static kineticMonteCarlo.site.CatalysisSite.CUS;
+import static kineticMonteCarlo.site.CatalysisSite.O;
+import static kineticMonteCarlo.site.CatalysisSite.CO;
+import static kineticMonteCarlo.site.CatalysisSite.O2;
 
 /**
  *

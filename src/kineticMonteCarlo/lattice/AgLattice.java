@@ -18,15 +18,15 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthSite;
-import kineticMonteCarlo.atom.AgSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.AgSite;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.site.ModifiedBuffer;
 import java.awt.geom.Point2D;
-import static kineticMonteCarlo.atom.AgSite.EDGE;
-import static kineticMonteCarlo.atom.AgSite.ISLAND;
-import static kineticMonteCarlo.atom.AgSite.KINK_A;
-import static kineticMonteCarlo.atom.AgSite.TERRACE;
+import static kineticMonteCarlo.site.AgSite.EDGE;
+import static kineticMonteCarlo.site.AgSite.ISLAND;
+import static kineticMonteCarlo.site.AgSite.KINK_A;
+import static kineticMonteCarlo.site.AgSite.TERRACE;
 import utils.StaticRandom;
 
 /**

@@ -1,5 +1,5 @@
 /* 
- * Copyright (C) 2018 N. Ferrando, J. Alberdi-Rodriguez
+ * Copyright (C) 2018 J. Alberdi-Rodriguez
  *
  * This file is part of Morphokinetics.
  *
@@ -16,40 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.atom;
-
-import java.util.ArrayDeque;
-import java.util.Deque;
+package kineticMonteCarlo.site;
 
 /**
  *
- * Heaps de arrays de probabilidades ([12] doubles)
- *
- * Tras una inicializacióin, se van sirviendo o realmacenando a petición de los átomos del KMC
- * evaluado.
- *
- *
+ * @author J. Alberdi-Rodriguez
  */
-public class ArrayStack {
-
-  private int arraySize;
-  private Deque<double[]> stack;
-
-  public ArrayStack(int arraySize) {
-    this.arraySize = arraySize;
-    stack = new ArrayDeque();
+public class BasicGrowthSimpleSite extends BasicGrowthSite {
+  
+  public BasicGrowthSimpleSite(int id, short iHexa, short jHexa) {
+    super(id, iHexa, jHexa);
   }
-
-  public double[] getProbArray() {
-
-    if (stack.isEmpty()) {
-      return new double[arraySize];
-    } else {
-      return stack.pop();
-    }
-  }
-
-  public void returnProbArray(double[] array) {
-    stack.push(array);
+  
+  @Override
+  public boolean isPartOfImmobilSubstrate() {
+    return isOccupied() && getType() == ISLAND && getOccupiedNeighbours() == 4;
   }
 }

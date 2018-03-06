@@ -16,20 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.atom;
+package kineticMonteCarlo.site;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class BasicGrowthSimpleSite extends BasicGrowthSite {
+public class CatalysisSiteAttributes extends AbstractGrowthAtomAttributes{
   
-  public BasicGrowthSimpleSite(int id, short iHexa, short jHexa) {
-    super(id, iHexa, jHexa);
+  /**
+   * CO or O.
+   */
+  private byte typeOfAtom;
+  
+  public byte getType() {
+    return typeOfAtom;
   }
   
-  @Override
-  public boolean isPartOfImmobilSubstrate() {
-    return isOccupied() && getType() == ISLAND && getOccupiedNeighbours() == 4;
+  public void setType(byte newType) {
+    typeOfAtom = newType;
   }
 }

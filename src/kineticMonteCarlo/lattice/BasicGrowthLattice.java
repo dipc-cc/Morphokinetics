@@ -19,13 +19,13 @@
 package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
-import kineticMonteCarlo.atom.BasicGrowthSite;
-import static kineticMonteCarlo.atom.BasicGrowthSite.ISLAND;
-import static kineticMonteCarlo.atom.BasicGrowthSite.TERRACE;
-import static kineticMonteCarlo.atom.BasicGrowthSite.EDGE;
-import kineticMonteCarlo.atom.BasicGrowthSimpleSite;
-import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.BasicGrowthSite;
+import static kineticMonteCarlo.site.BasicGrowthSite.ISLAND;
+import static kineticMonteCarlo.site.BasicGrowthSite.TERRACE;
+import static kineticMonteCarlo.site.BasicGrowthSite.EDGE;
+import kineticMonteCarlo.site.BasicGrowthSimpleSite;
+import kineticMonteCarlo.site.ModifiedBuffer;
 import utils.StaticRandom;
 
 /**

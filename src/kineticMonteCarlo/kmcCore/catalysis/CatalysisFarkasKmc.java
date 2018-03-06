@@ -19,9 +19,9 @@
 package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.CatalysisSite;
-import static kineticMonteCarlo.atom.CatalysisSite.CO;
-import static kineticMonteCarlo.atom.CatalysisSite.CUS;
+import kineticMonteCarlo.site.CatalysisSite;
+import static kineticMonteCarlo.site.CatalysisSite.CO;
+import static kineticMonteCarlo.site.CatalysisSite.CUS;
 import ratesLibrary.CatalysisRates;
 
 /**

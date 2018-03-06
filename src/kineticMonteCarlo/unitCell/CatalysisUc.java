@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.CatalysisSite;
+import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_X;
 import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
 

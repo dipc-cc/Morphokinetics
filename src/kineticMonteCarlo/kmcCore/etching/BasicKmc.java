@@ -19,8 +19,8 @@
 package kineticMonteCarlo.kmcCore.etching;
 
 import basic.Parser;
-import kineticMonteCarlo.atom.AbstractSite;
-import kineticMonteCarlo.atom.BasicSite;
+import kineticMonteCarlo.site.AbstractSite;
+import kineticMonteCarlo.site.BasicSite;
 import kineticMonteCarlo.lattice.BasicLattice;
 import java.util.ListIterator;
 import kineticMonteCarlo.kmcCore.AbstractKmc;

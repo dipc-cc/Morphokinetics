@@ -19,7 +19,7 @@
 package utils;
 
 import graphicInterfaces.growth.GrowthKmcFrame;
-import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.site.ModifiedBuffer;
 import kineticMonteCarlo.lattice.AgUcLattice;
 
 /**

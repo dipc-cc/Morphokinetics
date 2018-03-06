@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth.devitaAccelerator;
 
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.IDevitaLattice;
 import java.util.HashMap;
 import java.util.Map;

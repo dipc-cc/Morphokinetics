@@ -19,7 +19,7 @@
 package utils;
 
 import java.util.List;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 
 /** 
  * QuickSort algorithm

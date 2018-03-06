@@ -19,14 +19,14 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import static kineticMonteCarlo.atom.AbstractSite.ARMCHAIR_EDGE;
-import static kineticMonteCarlo.atom.AbstractSite.TERRACE;
-import static kineticMonteCarlo.atom.AbstractSite.ZIGZAG_EDGE;
-import kineticMonteCarlo.atom.GrapheneSite;
-import kineticMonteCarlo.atom.GrapheneSiteGaillard;
-import kineticMonteCarlo.atom.GrapheneSiteGaillard1Neighbour;
-import kineticMonteCarlo.atom.GrapheneSiteGaillardSimple;
-import kineticMonteCarlo.atom.GrapheneSiteSchoenhalz;
+import static kineticMonteCarlo.site.AbstractSite.ARMCHAIR_EDGE;
+import static kineticMonteCarlo.site.AbstractSite.TERRACE;
+import static kineticMonteCarlo.site.AbstractSite.ZIGZAG_EDGE;
+import kineticMonteCarlo.site.GrapheneSite;
+import kineticMonteCarlo.site.GrapheneSiteGaillard;
+import kineticMonteCarlo.site.GrapheneSiteGaillard1Neighbour;
+import kineticMonteCarlo.site.GrapheneSiteGaillardSimple;
+import kineticMonteCarlo.site.GrapheneSiteSchoenhalz;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;

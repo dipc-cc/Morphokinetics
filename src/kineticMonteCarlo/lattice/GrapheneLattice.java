@@ -18,16 +18,16 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
-import kineticMonteCarlo.atom.GrapheneSite;
-import kineticMonteCarlo.atom.ModifiedBuffer;
+import kineticMonteCarlo.site.GrapheneSite;
+import kineticMonteCarlo.site.ModifiedBuffer;
 import java.awt.geom.Point2D;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static kineticMonteCarlo.atom.AbstractSite.BULK;
+import static kineticMonteCarlo.site.AbstractSite.BULK;
 import utils.StaticRandom;
 
 /**

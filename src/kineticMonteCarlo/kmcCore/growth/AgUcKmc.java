@@ -19,8 +19,8 @@
 package kineticMonteCarlo.kmcCore.growth;
 
 import basic.Parser;
-import static kineticMonteCarlo.atom.AgSite.EDGE;
-import static kineticMonteCarlo.atom.AgSite.TERRACE;
+import static kineticMonteCarlo.site.AgSite.EDGE;
+import static kineticMonteCarlo.site.AgSite.TERRACE;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaHopsConfig;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;

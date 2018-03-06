@@ -21,7 +21,7 @@ package utils.list;
 import basic.Parser;
 import java.util.ArrayList;
 import java.util.ListIterator;
-import kineticMonteCarlo.atom.AbstractSite;
+import kineticMonteCarlo.site.AbstractSite;
 import utils.StaticRandom;
 
 /**

@@ -19,7 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 
 /**
  * Really simple unit cell, which will contain only one atom.

@@ -20,7 +20,7 @@ package kineticMonteCarlo.unitCell;
 
 import java.util.List;
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.atom.AgSite;
+import kineticMonteCarlo.site.AgSite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 
 /**

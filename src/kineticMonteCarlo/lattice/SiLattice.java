@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.atom.SiSite;
+import kineticMonteCarlo.site.SiSite;
 import kineticMonteCarlo.unitCell.SiUnitCell;
 import kineticMonteCarlo.unitCell.Simple3dUc;
 
