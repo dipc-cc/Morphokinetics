@@ -18,7 +18,6 @@
  */
 package kineticMonteCarlo.site;
 
-import java.util.Arrays;
 import java.util.List;
 import kineticMonteCarlo.process.CatalysisProcess;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
@@ -122,7 +121,7 @@ public class CatalysisSite extends AbstractGrowthSite {
   
   @Override
   public List getAllNeighbours() {
-    return Arrays.asList(neighbours);
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
