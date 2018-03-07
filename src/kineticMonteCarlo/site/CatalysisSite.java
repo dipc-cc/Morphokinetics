@@ -47,12 +47,6 @@ public class CatalysisSite extends AbstractGrowthSite {
   private final byte latticeSite;
   private final CatalysisProcess[] processes;
   
-  /**
-   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
-   * jump from terrace to edge.
-   */
-  private double[][][] probabilities;
-  
   private CatalysisSiteAttributes attributes;
   
   /** Current atom is CO^CUS and it has as many CO^CUS neighbours. */
@@ -97,16 +91,6 @@ public class CatalysisSite extends AbstractGrowthSite {
   @Override
   public boolean isIsolated() {
     return getOccupiedNeighbours() == 4;
-  }
-  
-  /**
-   * Default rates to jump from one type to the other. For example, this matrix stores the rates to
-   * jump from terrace to edge.
-   *
-   * @param probabilities Default rates.
-   */
-  public void initialiseRates(double[][][] probabilities) {
-    this.probabilities = probabilities;
   }
     
   /**
