@@ -408,14 +408,14 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   private CatalysisSite depositNewAtom() {
-    CatalysisSite destinationAtom = null;
+    CatalysisSite destinationAtom;
     int ucIndex = 0;
     byte atomType;
       
     CatalysisSite neighbourAtom = null;
     int random;
     
-     if (sites[ADSORPTION].isEmpty()) {
+    if (sites[ADSORPTION].isEmpty()) {
       // can not deposit anymore
       return null;
     }
