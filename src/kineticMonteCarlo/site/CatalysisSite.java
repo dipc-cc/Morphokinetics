@@ -39,16 +39,12 @@ public class CatalysisSite extends AbstractGrowthSite {
   public static final byte O2 = 1;
   public static final byte BR = 0;
   public static final byte CUS = 1;
-  
-  private final static BasicGrowthTypesTable TYPE_TABLE = new BasicGrowthTypesTable();
 
-  private int occupiedNeighbours;
   private final CatalysisSite[] neighbours = new CatalysisSite[4];
   /**
    * Bridge or CUS.
    */
   private final byte latticeSite;
-  private boolean eligible;
   private final CatalysisProcess[] processes;
   
   /**
@@ -64,14 +60,12 @@ public class CatalysisSite extends AbstractGrowthSite {
   
   public CatalysisSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 4);
-    occupiedNeighbours = 0; 
     if (iHexa % 2 == 0) {
       latticeSite = BR;
     } else {
       latticeSite = CUS;
     }
     attributes = new CatalysisSiteAttributes();
-    eligible = true;
     processes = new CatalysisProcess[4];
     processes[ADSORPTION] = new CatalysisProcess();
     processes[DESORPTION] = new CatalysisProcess();
@@ -123,7 +117,7 @@ public class CatalysisSite extends AbstractGrowthSite {
    */
   @Override
   public double getProbability(int originType, int targetType) {
-    return 0;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   /**
@@ -134,12 +128,7 @@ public class CatalysisSite extends AbstractGrowthSite {
    */
   @Override
   public int getOrientation() {
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      if (neighbours[i].isOccupied()) {
-        return i % 2;
-      }
-    }
-    return -1;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
@@ -184,26 +173,14 @@ public class CatalysisSite extends AbstractGrowthSite {
     return coCusWithCoCus;
   }
 
-  /**
-   * 
-   * @param pos position of the neighbour
-   * @return change in the probability
-   */
   @Override
   public double updateOneBound(int pos) {
-    // Store previous probability
-    double probabilityChange = -getBondsProbability(pos);
-    // Update to the new probability and save
-    setBondsProbability(probJumpToNeighbour(1, pos), pos);
-    probabilityChange += getBondsProbability(pos);
-    addProbability(probabilityChange);
-
-    return probabilityChange;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public boolean isEligible() {
-    return isOccupied() && eligible;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   @Override
@@ -211,88 +188,29 @@ public class CatalysisSite extends AbstractGrowthSite {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
-  /**
-   * Returns the type of the neighbour atom if current one would not exist.
-   *
-   * @param position position is the original one; has to be inverted.
-   * @return the type.
-   */
   @Override
   public byte getTypeWithoutNeighbour(int position) {
-    return TYPE_TABLE.getCurrentType(occupiedNeighbours - 1);
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public boolean areTwoTerracesTogether() {
-    if (occupiedNeighbours != 2) {
-      return false;
-    }
-    int cont = 0;
-    int i = 0;
-    while (cont < 2 && i < getNumberOfNeighbours()) {
-      if (neighbours[i].isOccupied()) {
-        if (neighbours[i].getType() != TERRACE) {
-          return false;
-        }
-        cont++;
-      }
-      i++;
-    }
-    return true;
-  }
-  
-  /**
-   * Makes this atom "immobile" if it is surrounded by 4 neighbours. Thus, it will not be eligible
-   * for diffusion.
-   */
-  public void checkImmobile() {
-    eligible = true;
-    if (getOccupiedNeighbours() == 4) {
-      eligible = false;
-    }
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AbstractGrowthSite chooseRandomHop() {
-    double linearSearch = StaticRandom.raw() * getProbability();
-
-    double sum = 0;
-    int cont = 0;
-    while (true) {
-      sum += getBondsProbability(cont++);
-      if (sum >= linearSearch) {
-        break;
-      }
-      if (cont == getNumberOfNeighbours()) {
-        break;
-      }
-    }
-    cont--;
-
-    return neighbours[cont];
+  public AbstractGrowthSite chooseRandomHop() {    
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void obtainRateFromNeighbours() {
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      setBondsProbability(probJumpToNeighbour(1, i), i);
-      addProbability(getBondsProbability(i));
-    }
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
   @Override
   public double probJumpToNeighbour(int ignored, int position) {
-    if (neighbours[position].isOccupied()) {
-      return 0;
-    }
-
-    byte originSite = latticeSite; // cus or bridge
-    byte originType = attributes.getType(); // O or CO
-    byte destinationSite = originSite; // cus or bridge
-    if (position % 2 != 0) {
-      destinationSite = (byte) (originSite ^ 1); // the opposite of cus or bridge
-    }
-    return probabilities[originSite][originType][destinationSite];
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   /**
@@ -302,7 +220,6 @@ public class CatalysisSite extends AbstractGrowthSite {
   public void clear() {
     super.clear();
     setType(TERRACE);
-    occupiedNeighbours = 0; // current atom has no neighbour
     
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       setBondsProbability(0, i);
