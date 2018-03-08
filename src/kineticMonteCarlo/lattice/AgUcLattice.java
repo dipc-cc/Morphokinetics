@@ -217,8 +217,9 @@ public class AgUcLattice extends AgLattice {
    * @param type 0 = AgAtomSimple, type 1 = AgAtom, type 2 = ConcertedAtom.
    */
   private void createAtoms(int type) {
-    sizeI = Math.round(getCartSizeX() / AgUc.getSizeX());
-    sizeJ = Math.round(getCartSizeY() / AgUc.getSizeY());
+    AgUc dummyAgUc = new AgUc(-1, -1, null);
+    sizeI = Math.round(getCartSizeX() / dummyAgUc.getSizeX());
+    sizeJ = Math.round(getCartSizeY() / dummyAgUc.getSizeY());
     // Initialise unit cells (with atoms)
     ucArray = new AgUc[sizeI][sizeJ];
     int id = 0;

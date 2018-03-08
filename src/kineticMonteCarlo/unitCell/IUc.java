@@ -27,10 +27,6 @@ import kineticMonteCarlo.site.AbstractSite;
  */
 public interface IUc {
   
-  static final float SIZE_X = 1; // Cartesian size X per unit
-  static final float SIZE_Y = 1; // Cartesian size Y per unit
-  static final float SIZE_Z = 1; // Cartesian size Z per unit
-  
   /**
    * Returns the site of the given position; an atom or an empty site.
    * 
@@ -44,27 +40,21 @@ public interface IUc {
    *
    * @return size in X
    */
-  public static float getSizeX() {
-    return SIZE_X;
-  }
+  abstract public float getSizeX();
 
   /**
    * Cartesian size of the unit cell in Y axis
    *
    * @return size in Y
    */
-  public static float getSizeY() {
-    return SIZE_Y;
-  }
+  abstract public float getSizeY();
 
   /**
    * Cartesian size of the unit cell in Z axis
    *
    * @return size in Z
    */
-  public static float getSizeZ() {
-    return SIZE_Z;
-  }
+  abstract public float getSizeZ();
 
   public int getPosI();
 

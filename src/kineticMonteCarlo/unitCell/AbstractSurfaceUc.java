@@ -35,12 +35,17 @@ public abstract class AbstractSurfaceUc implements IUc {
   
   private double posX;
   private double posY;
+  
+  private float sizX;
+  private float sizY;
 
   public AbstractSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
     this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
     this.atom = atom;
+    sizX = 1.0f;
+    sizY = 1.0f;
   }
 
   /**
@@ -56,25 +61,7 @@ public abstract class AbstractSurfaceUc implements IUc {
 
   @Override
   public Point3D getPos() {
-    return new Point3D(SIZE_X * posX, SIZE_Y * posY, 0);
-  }
-
-  /**
-   * Cartesian size of the unit cell in X axis.
-   *
-   * @return size in X.
-   */
-  public static float getSizeX() {
-    return SIZE_X;
-  }
-
-  /**
-   * Cartesian size of the unit cell in Y axis.
-   *
-   * @return size in Y.
-   */
-  public static float getSizeY() {
-    return SIZE_Y;
+    return new Point3D(getSizeX() * posX, getSizeY() * posY, 0);
   }
 
   @Override
@@ -103,5 +90,38 @@ public abstract class AbstractSurfaceUc implements IUc {
   @Override
   public int size() {
     return size;
+  }
+  
+  /**
+   * Cartesian size of the unit cell in X axis
+   *
+   * @return size in X
+   */
+  @Override
+  public float getSizeX() {
+    return sizX;
+  }
+
+  /**
+   * Cartesian size of the unit cell in Y axis
+   *
+   * @return size in Y
+   */
+  @Override
+  public float getSizeY() {
+    return sizY;
+  }
+
+  @Override
+  public float getSizeZ() {
+    return 0.0f;
+  }
+  
+  public final void setSizeX(float x) {
+    sizX = x;
+  }
+  
+  public final void setSizeY(float y) {
+    sizY = y;
   }
 }

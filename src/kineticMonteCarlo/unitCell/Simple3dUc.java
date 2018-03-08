@@ -20,9 +20,6 @@ package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.site.AbstractSite;
-import static kineticMonteCarlo.unitCell.IUc.SIZE_X;
-import static kineticMonteCarlo.unitCell.IUc.SIZE_Y;
-import static kineticMonteCarlo.unitCell.IUc.SIZE_Z;
 
 /**
  * Really simple unit cell, which will contain only one atom.
@@ -70,7 +67,7 @@ public class Simple3dUc implements IUc{
 
   @Override
   public Point3D getPos() {
-    return new Point3D(SIZE_X * posX, SIZE_Y * posY, SIZE_Z * posZ);
+    return new Point3D(getSizeX() * posX, getSizeY() * posY, getSizeZ() * posZ);
   }
 
   @Override
@@ -103,5 +100,20 @@ public class Simple3dUc implements IUc{
   @Override
   public int size() {
     return size;
+  }
+
+  @Override
+  public float getSizeX() {
+    return 1.0f;
+  }
+
+  @Override
+  public float getSizeY() {
+    return 1.0f;
+  }
+
+  @Override
+  public float getSizeZ() {
+    return 1.0f;
   }
 }
