@@ -450,12 +450,8 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     updateRates(destinationAtom);
     if (neighbourAtom != null) {
       updateRates(neighbourAtom);
-      neighbourAtom.setDepositionTime(getTime());
-      //neighbourAtom.setDepositionPosition(-1);
     }
     
-    destinationAtom.setDepositionTime(getTime());
-    destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     return destinationAtom;
   }
   
