@@ -201,7 +201,7 @@ public class AgSimulationTest {
 
     simulatedSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX(), parser.getCartSizeY());
     simulatedPsd = simulation.getPsd().getPsd();
-    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedIslands = simulation.countIslands();
     simulatedTime = simulation.getSimulatedTime();
     Restart readResults = new Restart(simulation.getRestartFolderName());
     int[] sizes = {parser.getCartSizeX(), parser.getCartSizeY()};

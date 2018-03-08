@@ -236,7 +236,6 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
    *
    * @return average gyradius.
    */
-  @Override
   public float getAverageGyradius() {
     float sumAvg = 0.0f;
     for (int i = 0; i < islandCount; i++) {
@@ -245,7 +244,6 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
     return (float) (sumAvg / islandCount);
   }
   
-  @Override
   public int getIslandCount() {
     return islandCount;
   }

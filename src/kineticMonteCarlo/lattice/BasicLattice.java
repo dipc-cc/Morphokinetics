@@ -59,26 +59,6 @@ public class BasicLattice extends AbstractLattice {
   public IUc getUc(int pos) {
     return ucList[pos];
   }
-
-  /**
-   * Number of islands has no sense in etching.
-   *
-   * @return -1 always.
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
-  
-  /**
-   * Gyradius is not implemented in etching.
-   *
-   * @return -1.0 always.
-   */
-  @Override
-  public float getAverageGyradius() {
-    return -1.0f;
-  }
   
   @Override
   public void reset() {

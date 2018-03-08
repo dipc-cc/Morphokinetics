@@ -87,20 +87,6 @@ public abstract class AbstractLattice {
   public int size() {
     return hexaSizeI * hexaSizeJ * hexaSizeK;
   }
-
-  /**
-   * Only defined in growth lattice.
-   *
-   * @return number of island of simulation (or -1)
-   */
-  public abstract int getIslandCount();
-
-  /**
-   * Only defined in growth lattice.
-   *
-   * @return average gyradius of all islands (or -1)
-   */
-  public abstract float getAverageGyradius();
   
   public abstract void reset();
 

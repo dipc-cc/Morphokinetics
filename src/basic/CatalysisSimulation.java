@@ -78,17 +78,22 @@ public class CatalysisSimulation extends AbstractSurfaceSimulation {
   }
   
   @Override
+  public CatalysisKmc getKmc() {
+    return (CatalysisKmc) super.getKmc();
+  }
+  
+  @Override
   void initialiseRates(IRates rates, Parser parser) {
     CatalysisRates r = (CatalysisRates) rates;
     r.setPressureO2(parser.getPressureO2());
     r.setPressureCO(parser.getPressureCO());
     r.computeAdsorptionRates();
-    ((CatalysisKmc) getKmc()).setRates(r);
+    getKmc().setRates(r);
   }
   
   @Override
   public void printRates(Parser parser) {
-    ((CatalysisKmc) getKmc()).printRates();
+    getKmc().printRates();
   }
   
   @Override
@@ -98,22 +103,17 @@ public class CatalysisSimulation extends AbstractSurfaceSimulation {
   }
   
   @Override
+  void printBottom() {
+    getKmc().printIteration();
+  }
+  
+  @Override
   float[] getCoverage() {
     CatalysisKmc kmc = (CatalysisKmc) getKmc();
     coverage[0] = kmc.getCoverage();
     coverage[CO+1] += kmc.getCoverage(CO);
     coverage[O+1] += kmc.getCoverage(O);
     return coverage;
-  }
-  
-  @Override
-  int countIslands() {
-    return -1;
-  }
-  
-  @Override
-  float getGyradius() {
-    return -1.0f;
   }
   
   @Override

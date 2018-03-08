@@ -98,26 +98,6 @@ public class SiLattice extends AbstractLattice {
     return ucList[pos];
   }
   
-  /**
-   * Number of islands has no sense in etching.
-   *
-   * @return -1 always.
-   */
-  @Override
-  public int getIslandCount() {
-    return -1;
-  }
-  
-  /**
-   * Gyradius is not implemented in etching.
-   *
-   * @return -1.0 always.
-   */
-  @Override
-  public float getAverageGyradius() {
-    return -1.0f;
-  }
-  
   @Override
   public void reset() {
     //Unremove atoms and set to bulk mode (4,12)

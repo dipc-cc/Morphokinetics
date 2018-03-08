@@ -376,14 +376,4 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
   public AbstractSite getSite(int i, int j, int k, int unitCellPos) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-
-  @Override
-  public int getIslandCount() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public float getAverageGyradius() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 }

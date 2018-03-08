@@ -52,6 +52,22 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
     getKmc().initialiseRates(rates.getRates(parser.getTemperature()));
   }
   
+  
+  @Override
+  public AbstractGrowthKmc getKmc() {
+    return (AbstractGrowthKmc) super.getKmc();
+  }
+  
+  @Override
+  int countIslands() {
+    return getKmc().getLattice().getIslandCount();
+  }
+  
+  @Override
+  float getGyradius() {
+    return getKmc().getLattice().getAverageGyradius();
+  }
+  
   @Override
   public void createFrame() {
     boolean error = false;

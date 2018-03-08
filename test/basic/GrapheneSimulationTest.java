@@ -200,7 +200,7 @@ public class GrapheneSimulationTest {
     simulation.finishSimulation();
     
     simulatedSurface = simulation.getKmc().getSampledSurface(parser.getCartSizeX() / 2, parser.getCartSizeY() / 2);
-    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedIslands = simulation.countIslands();
     simulatedTime = simulation.getSimulatedTime();
     /*Restart readResults = new Restart(simulation.getRestartFolderName());
     int[] sizes = {parser.getCartSizeX() / 2, parser.getCartSizeY() / 2};

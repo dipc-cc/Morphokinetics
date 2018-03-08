@@ -191,11 +191,11 @@ public abstract class AbstractSimulation {
   }
   
   int countIslands() {
-    return kmc.getLattice().getIslandCount();
+    return -1;
   }
   
   float getGyradius() {
-    return kmc.getLattice().getAverageGyradius();
+    return -1.0f;
   }
   
   void initPsd() {
@@ -326,12 +326,7 @@ public abstract class AbstractSimulation {
     }
 
     System.out.print("\t" + (System.currentTimeMillis() - iterationStartTime));
-    if (kmc instanceof CatalysisKmc) {
-      ((CatalysisKmc) kmc).printIteration();
-    } else {
-      System.out.print("\t" + kmc.getLattice().getIslandCount());
-      System.out.format("\t%.4f", kmc.getLattice().getAverageGyradius());
-    }
+    printBottom();
     System.out.println("");
   }
 
@@ -359,6 +354,12 @@ public abstract class AbstractSimulation {
     System.out.println("    I\tSimul time\tCover.\tCPU\tIslands\tFractal d.");
     return "";
   }
+  
+  void printBottom() {
+    System.out.print("\t" + countIslands());
+    System.out.format("\t%.4f", getGyradius());
+  }
+    
   
   public String printFooter() {
     int i = parser.getNumberOfSimulations();

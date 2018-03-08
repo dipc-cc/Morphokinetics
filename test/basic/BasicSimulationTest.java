@@ -115,7 +115,7 @@ public class BasicSimulationTest {
     simulation.finishSimulation();
 
     simulatedSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
-    simulatedIslands = simulation.getKmc().getLattice().getIslandCount();
+    simulatedIslands = simulation.countIslands();
     simulatedTime = simulation.getSimulatedTime();
   }
 
