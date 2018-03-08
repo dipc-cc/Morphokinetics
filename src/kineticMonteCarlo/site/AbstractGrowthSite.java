@@ -60,7 +60,6 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   private boolean outerPerimeter;
   private Point3D cartesianSuperCell;
   private GrowthAtomAttributes attributes;
-  private int occupiedNeighbours;
   
   public AbstractGrowthSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     super(id, iHexa, jHexa, numberOfNeighbours, numberOfProcesses);
@@ -279,20 +278,6 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     return attributes.getMultiAtomNumber();
   }
 
-  /**
-   * Checks if the current atom has occupied neighbours.
-   *
-   * @return true if the current atoms has no any occupied neighbour, false otherwise.
-   */
-  public boolean isIsolated() {
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      if (getNeighbour(i).isOccupied()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
   public void setInnerPerimeter() {
     innerPerimeter = true;
   }
@@ -313,26 +298,7 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     innerPerimeter = false;
     outerPerimeter = false;
   }
-  
-  /**
-   * How many neighbours are occupied.
-   *
-   * @return occupied neighbours.
-   */
-  public int getOccupiedNeighbours(){
-    return occupiedNeighbours;
-  }
-  
-  /**
-   * An occupied atom is added to current neighbourhood (for the addition, can
-   * be a negative number).
-   *
-   * @param value to be added or removed.
-   */
-  public void addOccupiedNeighbour(int value) {
-    occupiedNeighbours += value;
-  }
-  
+ 
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
@@ -417,15 +383,12 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   @Override
   public void clear(){
     super.clear();
-    setOccupied(false);
     outside = false;
     probability = 0;
     attributes.clear();
     innerPerimeter = false;
     outerPerimeter = false;
-    setList(false);
     cartesianSuperCell = new Point3D(0, 0, 0);
-    occupiedNeighbours = 0; // current atom has no neighbour
   }
   
   /**
@@ -458,36 +421,6 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
       }
     }
     return false;
-  }  
-  
-  /**
-   * Compares IDs of two atoms.
-   * 
-   * @param o other atom.
-   * @return 
-   */
-  @Override
-  public int compareTo(Object o) {
-    if (o instanceof AbstractGrowthSite) {
-      AbstractGrowthSite a = (AbstractGrowthSite) o;
-      double otherId = a.getId();
-      if (getId() < otherId) {
-        return -1;
-      } else if (getId() > otherId) {
-        return 1;
-      } else {
-        return 0;
-      }
-    } else {
-      throw new IllegalArgumentException("obj must be an "
-              + " instance of a AbstractGrowthSite object.");
-    }
-  }
-  
-  @Override
-  public String toString() {
-    String returnString = "Atom Id " + getId();
-    return returnString;
   }
   
   public abstract AbstractGrowthSite getNeighbour(int pos);
