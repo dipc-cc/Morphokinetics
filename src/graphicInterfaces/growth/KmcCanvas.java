@@ -254,94 +254,95 @@ public class KmcCanvas extends Canvas {
   @Override
   public void paint(Graphics g) { //real drawing method
     super.paint(g);
-    g.setFont(new Font("Arial", Font.PLAIN, 10)); 
+    g.setFont(new Font("Arial", Font.PLAIN, 10));
     g.setColor(GRAY);
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
     if (lattice instanceof CatalysisLattice) {
       paintCatalysis(g);
     } else {
       AbstractGrowthLattice l = (AbstractGrowthLattice) lattice;
-    for (int i = 0; i < l.size(); i++) {
-      AbstractGrowthUc uc = (AbstractGrowthUc) l.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
-        int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
-        int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
-        
-        if (blackAndWhite) {
-          if (atom.isOccupied()) {
-            g.setColor(BLUE);
-            if (atom.isInnerPerimeter() && printPerimeter) {
-              g.setColor(RED);
+      for (int i = 0; i < l.size(); i++) {
+        AbstractGrowthUc uc = (AbstractGrowthUc) l.getUc(i);
+        for (int j = 0; j < uc.size(); j++) {
+          AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
+          int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
+          int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
+
+          if (blackAndWhite) {
+            if (atom.isOccupied()) {
+              g.setColor(BLUE);
+              if (atom.isInnerPerimeter() && printPerimeter) {
+                g.setColor(RED);
+              }
+            } else {
+              g.setColor(WHITE_GRAY);
+              if (atom.isOuterPerimeter() && printPerimeter) {
+                g.setColor(BLACK);
+              }
             }
           } else {
-            g.setColor(WHITE_GRAY);
-            if (atom.isOuterPerimeter() && printPerimeter) {
-              g.setColor(BLACK);
+            g.setColor(colours[atom.getType()]);
+            if (printPerimeter && perimeter != null) {
+              if (perimeter.contains(atom)) {
+                g.setColor(ORANGE);
+              }
             }
           }
-        } else {
-          g.setColor(colours[atom.getType()]);
-          if (printPerimeter && perimeter != null) {
-            if (perimeter.contains(atom))
-              g.setColor(ORANGE);
-          }
-        }
 
-        if (scale < 3) {
-          if (atom.isOccupied()) {
-            g.fillRect(X, Y, scale, scale);
+          if (scale < 3) {
+            if (atom.isOccupied()) {
+              g.fillRect(X, Y, scale, scale);
+            } else if (!atom.isOutside()) {
+              g.drawRect(X, Y, scale, scale);
+            }
+
+          } else if (atom.isOccupied()) {
+            g.fillOval(X, Y, scale, scale);
+            if (scale > 8) {
+              g.setColor(getContrastColor(g.getColor()));
+              if (printId) {
+                g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+              }
+              if (printIslandNumber) {
+                String text = Integer.toString(atom.getIslandNumber());
+                g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+              }
+              if (printMultiAtom) {
+                g.drawString(atom.getAttributes().getMultiAtomNumber().toString(), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
+              }
+            }
           } else if (!atom.isOutside()) {
-            g.drawRect(X, Y, scale, scale);
+            g.drawOval(X, Y, scale, scale);
           }
-
-        } else if (atom.isOccupied()) {
-          g.fillOval(X, Y, scale, scale);
-          if (scale > 8) {
-            g.setColor(getContrastColor(g.getColor()));
-            if (printId) {
-              g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-            }
-            if (printIslandNumber) {
-              String text = Integer.toString(atom.getIslandNumber());
-              g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-            }
-            if (printMultiAtom) {
-              g.drawString(atom.getAttributes().getMultiAtomNumber().toString(), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-            }
-          }
-        } else if (!atom.isOutside()) {
-          g.drawOval(X, Y, scale, scale);
         }
       }
-    }
-    if (printIslandCentres) {
-      try {
-        for (int i = 0; i < l.getIslandCount(); i++) {
-          Island island = l.getIsland(i);
-          Point2D point = island.getCentreOfMass();
-          int Y = (int) Math.round((point.getY()) * scale) + baseY;
-          int X = (int) Math.round((point.getX()) * scale) + baseX;
-          g.setColor(BLACK);
-          g.drawLine(X - 5, Y - 5, X + 5, Y + 5);
-          g.drawLine(X - 5, Y + 5, X + 5, Y - 5);
-          g.drawOval(X - 5, Y - 5, 10, 10);
-          g.setColor(RED);
-          int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
-          int radius = (int) Math.round(scale * island.getMaxDistance());
-          g.drawOval(X - radius, Y - radius, diameter, diameter);
-          g.drawString(new DecimalFormat("##.##").format(island.getMaxDistance()), X, Y + 40);
-          g.setColor(GREEN);
-          diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
-          radius = (int) Math.round(scale * island.getAvgDistance());
-          g.drawOval(X - radius, Y - radius, diameter, diameter);
-          g.setColor(BLACK);
-          g.drawString(new DecimalFormat("##.##").format(island.getAvgDistance()), X, Y + 10);
+      if (printIslandCentres) {
+        try {
+          for (int i = 0; i < l.getIslandCount(); i++) {
+            Island island = l.getIsland(i);
+            Point2D point = island.getCentreOfMass();
+            int Y = (int) Math.round((point.getY()) * scale) + baseY;
+            int X = (int) Math.round((point.getX()) * scale) + baseX;
+            g.setColor(BLACK);
+            g.drawLine(X - 5, Y - 5, X + 5, Y + 5);
+            g.drawLine(X - 5, Y + 5, X + 5, Y - 5);
+            g.drawOval(X - 5, Y - 5, 10, 10);
+            g.setColor(RED);
+            int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
+            int radius = (int) Math.round(scale * island.getMaxDistance());
+            g.drawOval(X - radius, Y - radius, diameter, diameter);
+            g.drawString(new DecimalFormat("##.##").format(island.getMaxDistance()), X, Y + 40);
+            g.setColor(GREEN);
+            diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
+            radius = (int) Math.round(scale * island.getAvgDistance());
+            g.drawOval(X - radius, Y - radius, diameter, diameter);
+            g.setColor(BLACK);
+            g.drawString(new DecimalFormat("##.##").format(island.getAvgDistance()), X, Y + 10);
+          }
+        } catch (NullPointerException e) {
+          System.err.println("Some island centre or gyradius can not be printed. Ignoring and continuing... ");
         }
-      } catch (NullPointerException e) {
-        System.err.println("Some island centre or gyradius can not be printed. Ignoring and continuing... ");
       }
-    }
     }
 
     g.dispose();
