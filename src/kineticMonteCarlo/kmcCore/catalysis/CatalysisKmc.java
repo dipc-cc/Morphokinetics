@@ -345,13 +345,13 @@ public class CatalysisKmc extends AbstractSurfaceKmc {
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
                 getGapCoverage()));
       if (stationary) {
-        restart.flushCatalysis();
         int[] sizes = new int[4];
         sizes[ADSORPTION] = sites[ADSORPTION].size();
         sizes[DESORPTION] = sites[DESORPTION].size();
         sizes[REACTION] = sites[REACTION].size();
         sizes[DIFFUSION] = sites[DIFFUSION].size();
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
+        restart.flushCatalysis();
       }
     }
     return returnValue;

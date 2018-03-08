@@ -220,7 +220,7 @@ public class CatalysisSimulationTest {
     }
     ArrayList readDataLastLine = data.get(data.size() - 1);
     Double[] ref = new Double[]{4.52115e-05, 0.005, 0.05, 0.995, 0.95, 5014.0, 4938.0,
-      47.0, 1.0, 0.0, 5.0, 1.0, 41.0, 0.0, 400.0, 33.0, 0.0};
+      47.0, 1.0, 0.0, 5.0, 1.0, 18.0, 0.0, 400.0, 33.0, 0.0};
     Object[] read = readDataLastLine.toArray();
     
     assertArrayEquals(ref, read);
