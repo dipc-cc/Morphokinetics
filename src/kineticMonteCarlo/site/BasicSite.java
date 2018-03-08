@@ -106,7 +106,6 @@ public class BasicSite extends AbstractSite {
     return probabilityChange;
   }
 
-  @Override
   public double getProbability() {
     return getProbabilities()[type];
   }

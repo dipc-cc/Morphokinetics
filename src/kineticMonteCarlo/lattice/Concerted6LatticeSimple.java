@@ -22,6 +22,7 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.ConcertedSite;
 import kineticMonteCarlo.site.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 
 /**
  *
@@ -34,7 +35,8 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
   }
   
   @Override 
-  public void deposit(AbstractGrowthSite atom, boolean forceNucleation) {
+  public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
+    AbstractGrowthSite atom = (AbstractGrowthSite) a;
     atom.setOccupied(true);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       addNeighbour(atom.getNeighbour(i));
@@ -44,7 +46,8 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
   }
   
   @Override
-  public double extract(AbstractGrowthSite atom) {
+  public double extract(AbstractSurfaceSite a) {
+    AbstractGrowthSite atom = (AbstractGrowthSite) a;
     atom.setOccupied(false);
     double probabilityChange = atom.getProbability();
     
@@ -65,7 +68,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
    * @param originType type of the original atom
    * @param forceNucleation
    */
-  private void addNeighbour(AbstractGrowthSite neighbourAtom) {
+  private void addNeighbour(AbstractSurfaceSite neighbourAtom) {
     neighbourAtom.addOccupiedNeighbour(1);
     byte newType = (byte) (neighbourAtom.getType() + 1);
     if (newType > 6) {
@@ -82,7 +85,7 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
    * 
    * @param neighbourAtom neighbour atom of the original atom
    */
-  private void removeNeighbour(AbstractGrowthSite neighbourAtom) {
+  private void removeNeighbour(AbstractSurfaceSite neighbourAtom) {
     neighbourAtom.addOccupiedNeighbour(-1);
     byte newType = (byte) (neighbourAtom.getType() - 1);
     if (newType < 0) {

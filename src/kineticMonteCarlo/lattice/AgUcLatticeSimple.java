@@ -22,6 +22,7 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AgSite;
 import kineticMonteCarlo.site.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 
 /**
  *
@@ -44,7 +45,7 @@ public class AgUcLatticeSimple extends AgUcLattice {
   }
   
   @Override 
-  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+  public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
     AgSite atom = (AgSite) a;
     atom.setOccupied(true);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
@@ -59,10 +60,10 @@ public class AgUcLatticeSimple extends AgUcLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthSite a) {
+  public double extract(AbstractSurfaceSite a) {
     AgSite atom = (AgSite) a;
     atom.setOccupied(false);
-    double probabilityChange = a.getProbability();
+    double probabilityChange = atom.getProbability();
     
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       removeMobileOccupied(atom.getNeighbour(i));

@@ -18,7 +18,6 @@
  */
 package kineticMonteCarlo.site;
 
-import java.util.List;
 import kineticMonteCarlo.process.CatalysisProcess;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
@@ -30,7 +29,7 @@ import utils.StaticRandom;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisSite extends AbstractGrowthSite {
+public class CatalysisSite extends AbstractSurfaceSite {
 
   public static final byte CO = 0;
   public static final byte O = 1;
@@ -91,37 +90,10 @@ public class CatalysisSite extends AbstractGrowthSite {
   public boolean isIsolated() {
     return getOccupiedNeighbours() == 4;
   }
-    
-  /**
-   * Dummy method. Just to run.
-   * @param originType
-   * @param targetType
-   * @return 
-   */
-  @Override
-  public double getProbability(int originType, int targetType) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  /**
-   * For the orientation they are only available two position. Orientation is either | or _. It is
-   * assumed that current atom is of type EDGE.
-   *
-   * @return horizontal (0) or vertical (1).
-   */
-  @Override
-  public int getOrientation() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 
   @Override
-  public void setNeighbour(AbstractGrowthSite a, int pos) {
+  public void setNeighbour(AbstractSurfaceSite a, int pos) {
     neighbours[pos] = (CatalysisSite) a;
-  }
-  
-  @Override
-  public List getAllNeighbours() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
@@ -157,43 +129,8 @@ public class CatalysisSite extends AbstractGrowthSite {
   }
 
   @Override
-  public double updateOneBound(int pos) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
   public boolean isEligible() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  @Override
-  public boolean isPartOfImmobilSubstrate() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  @Override
-  public byte getTypeWithoutNeighbour(int position) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public boolean areTwoTerracesTogether() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public AbstractGrowthSite chooseRandomHop() {    
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public void obtainRateFromNeighbours() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
-  @Override
-  public double probJumpToNeighbour(int ignored, int position) {
-    throw new UnsupportedOperationException("Not supported yet.");
   }
 
   /**
@@ -204,16 +141,16 @@ public class CatalysisSite extends AbstractGrowthSite {
     super.clear();
     setType(TERRACE);
     
-    for (int i = 0; i < getNumberOfNeighbours(); i++) {
+    /*for (int i = 0; i < getNumberOfNeighbours(); i++) {
       setBondsProbability(0, i);
-    }
+    }*/
     for (int i = 0; i < 4; i++) {
       processes[i].clear();
     }
   }
   
   @Override
-  public void swapAttributes(AbstractGrowthSite a) {
+  public void swapAttributes(AbstractSurfaceSite a) {
     CatalysisSite atom = (CatalysisSite) a;
     CatalysisSiteAttributes tmpAttributes = this.attributes;
     this.attributes = (CatalysisSiteAttributes) atom.getAttributes();
@@ -225,5 +162,10 @@ public class CatalysisSite extends AbstractGrowthSite {
   public String toString() {
     String returnString = "Atom Id " + getId() + " desorptionRate " + processes[DESORPTION].getRate() + " " + processes[DESORPTION].getSumRate();
     return returnString;
+  }
+
+  @Override
+  public double getProbability() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

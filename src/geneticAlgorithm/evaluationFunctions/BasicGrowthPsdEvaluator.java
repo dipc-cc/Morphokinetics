@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import ratesLibrary.AgRatesFromPrbCox;
 import utils.psdAnalysis.PsdSignature2D;
 
@@ -71,7 +72,7 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
     }
     sampledSurface = null;
     this.temperature = temperature;
-    kmc.setTerraceToTerraceProbability(kmc.getLattice().getUc(0).getSite(0).getProbability(0, 0));
+    kmc.setTerraceToTerraceProbability(((AbstractGrowthSite) kmc.getLattice().getUc(0).getSite(0)).getProbability(0, 0));
   }
   
    /**

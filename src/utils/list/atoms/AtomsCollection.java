@@ -18,8 +18,8 @@
  */
 package utils.list.atoms;
 
-import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
 /**
@@ -38,7 +38,7 @@ public class AtomsCollection {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        AbstractGrowthSite a = uc.getSite(j);
+        AbstractSurfaceSite a = uc.getSite(j);
         tree.insert(a);
       }
     }

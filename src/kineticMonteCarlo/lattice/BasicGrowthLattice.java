@@ -20,6 +20,7 @@ package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
 import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BasicGrowthSite;
 import static kineticMonteCarlo.site.BasicGrowthSite.ISLAND;
 import static kineticMonteCarlo.site.BasicGrowthSite.TERRACE;
@@ -123,7 +124,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }    
 
   @Override
-  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+  public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
     BasicGrowthSite atom = (BasicGrowthSite) a;
     atom.setOccupied(true);
     if (forceNucleation) {
@@ -145,10 +146,10 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthSite a) {
+  public double extract(AbstractSurfaceSite a) {
     BasicGrowthSite atom = (BasicGrowthSite) a;
     atom.setOccupied(false);
-    double probabilityChange = a.getProbability();
+    double probabilityChange = atom.getProbability();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         int originalPosition = (i + 2) % 4;
@@ -190,7 +191,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
+    AbstractSurfaceSite atom = getUc(iLattice, jLattice).getSite(pos);
 
     if (atom.isOccupied()) {
       extract(atom);

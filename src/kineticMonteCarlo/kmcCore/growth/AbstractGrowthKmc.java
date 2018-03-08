@@ -299,7 +299,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean computeTime = false;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
-    terraceToTerraceProbability = lattice.getUc(0).getSite(0).getProbability(0, 0);
+    terraceToTerraceProbability = ((AbstractGrowthSite) lattice.getUc(0).getSite(0)).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
     } else {
@@ -530,7 +530,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        if (uc.getSite(j).isOccupied() || !uc.getSite(j).isOutside()) {
+        if (uc.getSite(j).isOccupied() || !((AbstractGrowthSite) uc.getSite(j)).isOutside()) {
           totalArea++;
         }
       }
@@ -553,7 +553,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthSite atom = uc.getSite(j);
+        AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
         double y = atom.getPos().getY() + uc.getPos().getY();
         double distance = lattice.getDistanceToCenter(x, y);
@@ -655,7 +655,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
         ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
-        destinationAtom = lattice.getUc(ucIndex).getSite(atomIndex);
+        destinationAtom = (AbstractGrowthSite) lattice.getUc(ucIndex).getSite(atomIndex);
       } while (!depositAtom(destinationAtom));
       // update the free area and the deposition rate counting just deposited atom
       freeArea--;

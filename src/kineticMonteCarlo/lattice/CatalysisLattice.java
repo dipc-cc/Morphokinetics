@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.BR;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
@@ -127,19 +128,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public CatalysisSite getCentralAtom() {
-    int jCentre = (getHexaSizeJ() / 2);
-    int iCentre = (getHexaSizeI() / 2);
-    return (CatalysisSite) getSite(iCentre, jCentre, 0);
-  }
-  
-  @Override
-  public AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour) {
-    int index = jHexa * getHexaSizeI() + iHexa;
-    return ((CatalysisSite) getUc(index).getSite(0)).getNeighbour(neighbour);
-  }
-
-  @Override
   public float getCartSizeX() {
     return getHexaSizeI();
   }
@@ -201,11 +189,10 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   
   public void init() {
     setAtoms(createAtoms());
-    setAngles();
   }    
 
   @Override
-  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+  public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
     CatalysisSite atom = (CatalysisSite) a;
     atom.setOccupied(true);
 
@@ -220,7 +207,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthSite a) {
+  public double extract(AbstractSurfaceSite a) {
     CatalysisSite atom = (CatalysisSite) a;
     atom.setOccupied(false);
     atom.cleanCoCusNeighbours();
@@ -281,7 +268,7 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
+    AbstractSurfaceSite atom = getUc(iLattice, jLattice).getSite(pos);
 
     if (atom.isOccupied()) {
       extract(atom);
@@ -375,5 +362,15 @@ public class CatalysisLattice extends AbstractGrowthLattice {
         }
       }
     }
+  }
+
+  @Override
+  public AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public AbstractGrowthSite getCentralAtom() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

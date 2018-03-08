@@ -22,6 +22,7 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.GrapheneSite;
 import kineticMonteCarlo.site.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 
 /**
  *
@@ -38,7 +39,7 @@ public class GrapheneLatticeSimple extends GrapheneLattice {
    * @param forceNucleation ignored.
    */
   @Override
-  public void deposit(AbstractGrowthSite a, boolean forceNucleation) {
+  public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
     GrapheneSite atom = (GrapheneSite) a;
     atom.setOccupied(true);
 
@@ -54,10 +55,10 @@ public class GrapheneLatticeSimple extends GrapheneLattice {
   }
   
   @Override
-  public double extract(AbstractGrowthSite a) {
+  public double extract(AbstractSurfaceSite a) {
     GrapheneSite atom = (GrapheneSite) a;
     atom.setOccupied(false);
-    double probabilityChange = a.getProbability();
+    double probabilityChange = atom.getProbability();
     
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
       remove1stOccupiedNeighbour(atom.getNeighbour(i));

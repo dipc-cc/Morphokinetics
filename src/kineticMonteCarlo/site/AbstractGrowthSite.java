@@ -21,24 +21,16 @@ package kineticMonteCarlo.site;
 import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.process.AbstractProcess;
 import kineticMonteCarlo.process.IElement;
 
 /**
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public abstract class AbstractGrowthSite extends AbstractSite implements Comparable, IElement {
+public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements Comparable, IElement {
   /** TODO document the types and change them to constants
    * 
    */
-  /**
-   * Type of the atom. Some examples are; TERRACE, EDGE, KINK, ISLAND... Precise types are defined
-   * in child classes.
-   */
-  private byte type;
-  /** Type of the atom in the previous step. */
-  private byte oldType;
   /**
    * Default rates to jump from one type to the other. For example, this matrix stores the rates to
    * jump from terrace to edge.
@@ -63,27 +55,15 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
    */
   private final short jHexa;
   private int multiplier;
-  /**
-   * Helper attribute used when counting islands, to check if current atom has
-   * been already visited.
-   */
-  private boolean visited;
-  /**
-   * Unique identifier.
-   */
-  private final int id;
   
   private boolean innerPerimeter;
   private boolean outerPerimeter;
-  private Point3D cartesianPosition;
   private Point3D cartesianSuperCell;
   private AbstractGrowthAtomAttributes attributes;
   private int occupiedNeighbours;
-  /** Different processes that atom can do. In catalysis: adsorption, desorption, reaction and diffusion. */
-  private AbstractProcess[] processes;
   
   public AbstractGrowthSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
-    this.id = id;
+    super(id, iHexa, jHexa, numberOfNeighbours, numberOfProcesses);
     setOccupied(false);
     outside = false;
     this.iHexa = iHexa;
@@ -92,12 +72,11 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
     setNumberOfNeighbours(numberOfNeighbours);
     bondsProbability = new double[numberOfNeighbours];
     multiplier = 1;
-    visited = false;
     innerPerimeter = false;
     outerPerimeter = false;
     cartesianSuperCell = new Point3D(0, 0, 0);
     attributes = new AbstractGrowthAtomAttributes();
-  }
+  }//*/
   
   /**
    * Dummy constructor to be able to have a proper AgAtom(pos) constructor.
@@ -106,25 +85,23 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
    * @param numberOfNeighbours number of neighbours that each atom has.
    */
   public AbstractGrowthSite(int id, int numberOfNeighbours) {
-    this.id = id;
+    super(id, (short) 0, (short) 0, numberOfNeighbours, numberOfNeighbours);
     iHexa = 0;
     jHexa = 0;
     bondsProbability = new double[numberOfNeighbours];
     setNumberOfNeighbours(numberOfNeighbours);
     cartesianSuperCell = new Point3D(0, 0, 0);
     attributes = new AbstractGrowthAtomAttributes();
-  }
+  }//*/
   
+  @Override
   public AbstractGrowthAtomAttributes getAttributes() {
     return attributes;
   }
   
+  @Override
   public void setAttributes(AbstractGrowthAtomAttributes attributes) {
     this.attributes = attributes;
-  }
-  
-  public int getId() {
-    return id;
   }
   
   /**
@@ -141,14 +118,6 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
    */
   public short getjHexa() {
     return jHexa;
-  }
-
-  public Point3D getCartesianPosition() {
-    return cartesianPosition;
-  }
-
-  public void setCartesianPosition(Point3D cartesianPosition) {
-    this.cartesianPosition = cartesianPosition;
   }
 
   public Point3D getCartesianSuperCell() {
@@ -173,23 +142,6 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
 
   public void setOutside(boolean outside) {
     this.outside = outside;
-  }
-
-  @Override
-  public byte getType() {
-    return type;
-  }
-
-  public void setType(byte type) {
-    this.type = type;
-  }
-  
-  public byte getOldType() {
-    return oldType;
-  }
-
-  public void setOldType(byte type) {
-    oldType = type;
   }
   
   public void setMultiplier(int multiplier) {
@@ -234,7 +186,6 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
     bondsProbability[i] = value;
   }
 
-  @Override
   public double getProbability() {
     return probability;
   }
@@ -326,25 +277,7 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
   public Set getMultiAtomNumber() {
     return attributes.getMultiAtomNumber();
   }
-  
-  /**
-   * When counting islands, we have to keep track of the visited atoms.
-   * 
-   * @return whether current atoms has been previously visited.
-   */
-  public boolean isVisited() {
-    return visited;
-  }
 
-  /**
-   * When counting islands, we have to keep track of the visited atoms.
-   *
-   * @param visited whether current atoms is visited.
-   */
-  public void setVisited(boolean visited) {
-    this.visited = visited;
-  }
-  
   /**
    * Checks if the current atom has occupied neighbours.
    *
@@ -399,73 +332,6 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
     occupiedNeighbours += value;
   }
   
-  public final void setProcceses(AbstractProcess[] processes) {
-    this.processes = processes;
-  }
-  
-  public boolean isOnList(byte process) {
-    return processes[process].isActive();
-  }
-  
-  @Override
-  public void setOnList(byte process, boolean onList) {
-    processes[process].setActive(onList);
-  }
-  
-  @Override
-  public double getRate(byte process) {
-    return processes[process].getRate();
-  }
-  
-  public double getEdgeRate(byte process, int neighbourPos) {
-    return processes[process].getEdgeRate(neighbourPos);
-  }
-  
-  @Override
-  public void setRate(byte process, double rate) {
-    processes[process].setRate(rate);
-  }
-
-  @Override
-  public void addRate(byte process, double rate, int neighbourPos) {
-    processes[process].addRate(rate, neighbourPos);
-  }
-  
-  @Override
-  public double getSumRate(byte process) {
-    return processes[process].getSumRate();
-  }
-  
-  @Override
-  public void setSumRate(byte process, double rate) {
-    processes[process].setSumRate(rate);
-  }
-
-  @Override
-  public void addToSumRate(byte process, double rate) {
-    processes[process].addSumRate(rate);
-  }
-  
-  /**
-   * Stores the types of the neighbours. Used for activation energy study.
-   * 
-   * @param process process type.
-   * @param type type of the neighbour.
-   * @param neighbourPos position of the neighbour.
-   */
-  public void setEdgeType(byte process, byte type, int neighbourPos) {
-    processes[process].setEdgeType(type, neighbourPos);
-  }
-  
-  public byte getEdgeType(byte process, int neighbourPos) {
-    return processes[process].getEdgeType(neighbourPos);
-  }
-  
-  @Override
-  public void equalRate(byte process) {
-    processes[process].equalRate();
-  }
-  
   /**
    * Returns the type of the neighbour atom if current one would not exist.
    *
@@ -483,26 +349,12 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
   public abstract void obtainRateFromNeighbours();
 
   public abstract double probJumpToNeighbour(int originType, int position);
-
-  public abstract void setNeighbour(AbstractGrowthSite a, int pos);
-
-  public abstract AbstractGrowthSite getNeighbour(int pos);
   
   public abstract List getAllNeighbours();
 
   public abstract double updateOneBound(int bond);
   
   abstract public boolean isPartOfImmobilSubstrate();
-  
-  /**
-   * Every atom will have an unique Id. So, we can use it as hash.
-   *
-   * @return hash value, based on Id.
-   */
-  @Override
-  public int hashCode() {
-    return id;
-  }
 
   /**
    * In general two atoms are equal if the have the same Id.
@@ -531,7 +383,8 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
     return true;
   }
   
-  public void swapAttributes(AbstractGrowthSite atom) {
+  @Override
+  public void swapAttributes(AbstractSurfaceSite atom) {
     AbstractGrowthAtomAttributes tmpAttributes = this.attributes;
     this.attributes = atom.getAttributes();
     this.attributes.addOneHop();
@@ -562,7 +415,7 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
    */
   @Override
   public void clear(){
-    visited = false;
+    super.clear();
     setOccupied(false);
     outside = false;
     probability = 0;
@@ -598,7 +451,7 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
    */
   public boolean areTwoTerracesTogetherInPerimeter(AbstractGrowthSite originAtom) {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      AbstractGrowthSite neighbour = getNeighbour(i);
+      AbstractSurfaceSite neighbour = getNeighbour(i);
       if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE) {
         return true;
       }
@@ -626,7 +479,7 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
       }
     } else {
       throw new IllegalArgumentException("obj must be an "
-              + " instance of a TestScores object.");
+              + " instance of a AbstractGrowthSite object.");
     }
   }
   
@@ -635,4 +488,6 @@ public abstract class AbstractGrowthSite extends AbstractSite implements Compara
     String returnString = "Atom Id " + getId();
     return returnString;
   }
+  
+  public abstract AbstractGrowthSite getNeighbour(int pos);
 }

@@ -58,7 +58,7 @@ public class BasicGrowthSite extends AbstractGrowthSite {
   }
 
   @Override
-  public void setNeighbour(AbstractGrowthSite a, int pos) {
+  public void setNeighbour(AbstractSurfaceSite a, int pos) {
     neighbours[pos] = (BasicGrowthSite) a;
   }
 

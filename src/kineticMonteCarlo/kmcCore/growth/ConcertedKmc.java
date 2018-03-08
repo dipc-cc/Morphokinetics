@@ -37,6 +37,7 @@ import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 import ratesLibrary.concerted.AbstractConcertedRates;
 import utils.StaticRandom;
 import utils.list.LinearList;
@@ -796,7 +797,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        AbstractGrowthSite a = uc.getSite(j);
+        AbstractSurfaceSite a = uc.getSite(j);
         sites[process].insert(a);
       }
     }

@@ -190,7 +190,6 @@ public class SiSite extends AbstractSite {
     return probabilityChange;
   }
   
-  @Override
   public double getProbability() {
     return getProbabilities()[n1 * 16 + n2];
   }

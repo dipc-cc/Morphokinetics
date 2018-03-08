@@ -40,6 +40,7 @@ import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 
 /**
@@ -256,7 +257,7 @@ public class KmcCanvas extends Canvas {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthSite atom = uc.getSite(j);
+        AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
         
@@ -372,7 +373,7 @@ public class KmcCanvas extends Canvas {
 
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthSite atom = uc.getSite(j);
+        AbstractSurfaceSite atom = uc.getSite(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
 
