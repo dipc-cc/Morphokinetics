@@ -40,7 +40,6 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
    * been already visited.
    */
   private boolean visited;
-  private Point3D cartesianPosition;
   /**
    * Unique identifier.
    */
@@ -95,14 +94,6 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
    */
   public void setVisited(boolean visited) {
     this.visited = visited;
-  }
-  
-  public Point3D getCartesianPosition() {
-    return cartesianPosition;
-  }
-
-  public void setCartesianPosition(Point3D cartesianPosition) {
-    this.cartesianPosition = cartesianPosition;
   }
   
   /**

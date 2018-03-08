@@ -26,18 +26,19 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.site.CatalysisSite;
-import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
+import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
 import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.O;
-import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
 import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
+import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
+import kineticMonteCarlo.unitCell.CatalysisUc;
 import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
 import utils.list.atoms.AtomsCollection;
@@ -47,7 +48,7 @@ import utils.list.atoms.IAtomsCollection;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisKmc extends AbstractGrowthKmc {
+public class CatalysisKmc extends AbstractSurfaceKmc {
 
   private final boolean outputData;
   private long simulatedSteps;
@@ -118,7 +119,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     co2max = parser.getNumberOfCo2();
     restart = new Restart(outputData, restartFolder);
     sites = new IAtomsCollection[4];
-    col = new AtomsCollection((CatalysisLattice) getLattice(), "catalysis");
+    col = new AtomsCollection(getLattice(), "catalysis");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
     sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
@@ -150,6 +151,11 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   }
   
   @Override
+  public CatalysisLattice getLattice() {
+    return (CatalysisLattice) super.getLattice();
+  }
+  
+  @Override
   public float[][] getSampledSurface(int binX, int binY) {
     float[][] surface = new float[binX][binY];
     
@@ -173,7 +179,7 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     int x;
     int y;
     for (int i = 0; i < getLattice().size(); i++) {
-      AbstractGrowthUc uc = getLattice().getUc(i);
+      AbstractSurfaceUc uc = getLattice().getUc(i);
       double posUcX = uc.getPos().getX();
       double posUcY = uc.getPos().getY();
       for (int j = 0; j < uc.size(); j++) {
@@ -515,9 +521,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private void initAdsorptionProbability() {
     for (int i = 0; i < getLattice().size(); i++) {
-      AbstractGrowthUc uc = getLattice().getUc(i);
+      CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = (CatalysisSite) uc.getSite(j);
+        CatalysisSite a = uc.getSite(j);
         a.setRate(ADSORPTION, adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
         a.setOnList(ADSORPTION, true);
         totalRate[ADSORPTION] += a.getRate(ADSORPTION);
@@ -541,9 +547,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
    */
   private void initCovered() {
     for (int i = 0; i < getLattice().size(); i++) {
-      AbstractGrowthUc uc = getLattice().getUc(i);
+      CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = (CatalysisSite) uc.getSite(j);
+        CatalysisSite a = uc.getSite(j);
         switch (start) {
           case "O":
             a.setType(O);
@@ -561,9 +567,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
 
     totalRate[DESORPTION] = 0;
     for (int i = 0; i < getLattice().size(); i++) {
-      AbstractGrowthUc uc = getLattice().getUc(i);
+      CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = (CatalysisSite) uc.getSite(j);
+        CatalysisSite a = uc.getSite(j);
         a.setOnList(ADSORPTION, false);
         sites[ADSORPTION].insert(a);
         sites[DIFFUSION].insert(a);
@@ -592,9 +598,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
     
     totalRate[REACTION] = 0;
     for (int i = 0; i < getLattice().size(); i++) {
-      AbstractGrowthUc uc = getLattice().getUc(i);
+      CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = (CatalysisSite) uc.getSite(j);
+        CatalysisSite a = uc.getSite(j);
         if (a.getType() == CO) {
           for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
             CatalysisSite neighbour = a.getNeighbour(k);
@@ -868,9 +874,9 @@ public class CatalysisKmc extends AbstractGrowthKmc {
   private void changeCollection(byte process, boolean toTree) {
     sites[process] = col.getCollection(toTree, process);
     for (int i = 0; i < getLattice().size(); i++) {
-      AbstractGrowthUc uc = getLattice().getUc(i);
+      CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = (CatalysisSite) uc.getSite(j);
+        CatalysisSite a = uc.getSite(j);
         sites[process].insert(a);
       }
     }

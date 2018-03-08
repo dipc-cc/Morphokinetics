@@ -19,26 +19,26 @@
 package kineticMonteCarlo.lattice;
 
 import java.awt.geom.Point2D;
-import java.io.PrintWriter;
+import static java.lang.Math.floorDiv;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.BR;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.CUS;
 import static kineticMonteCarlo.site.CatalysisSite.O;
-import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import kineticMonteCarlo.unitCell.CatalysisUc;
 import utils.LinearRegression;
 
 /**
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisLattice extends AbstractGrowthLattice {
+public class CatalysisLattice extends AbstractSurfaceLattice {
 
   private final String ratesLibrary;
   /**
@@ -49,15 +49,44 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   private final List<Double> last1000eventsTime;
   private final int MAX;
   ArrayList<LinearRegression> regressions;
+  /**
+   * Unit cell array, where all the atoms are located.
+   */
+  private final CatalysisUc[][] ucArray;
 
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
-    super(hexaSizeI, hexaSizeJ, null);
+    super(hexaSizeI, hexaSizeJ);
     this.ratesLibrary = ratesLibrary;
     coverage = new int[2][2];
     MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
+    ucArray = new CatalysisUc[hexaSizeI][hexaSizeJ];
   }
+  
+  @Override
+  public CatalysisUc getUc(int pos) {
+    int j = floorDiv(pos, getHexaSizeI());
+    int i = pos - (j * getHexaSizeI());
+
+    return ucArray[i][j];
+  }
+  
+  public CatalysisUc getUc(int iLattice, int jLattice) {
+    return ucArray[iLattice][jLattice];
+  }
+  
+  public final void setAtoms(AbstractSurfaceSite[][] atoms) {
+    for (int i = 0; i < getHexaSizeI(); i++) {
+      for (int j = 0; j < getHexaSizeJ(); j++) {
+        AbstractSurfaceSite atom = atoms[i][j];
+        ucArray[i][j] = new CatalysisUc(i, j, (CatalysisSite) atom);
+
+        ucArray[i][j].setPosX(getCartX(i, j));
+        ucArray[i][j].setPosY(getCartY(j));
+      }
+    }
+  }  
   
   /**
    * Identifies stationary situation, when sufficient number of previous steps are saved and their
@@ -147,12 +176,12 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     return jHexa;
   }
 
-  @Override
+//KONTUZ (kentzeko)  @Override
   public int getiHexa(double xCart, double yCart) {
     return (int) xCart;
   }
 
-  @Override
+//KONTUZ (kentzeko)    @Override
   public int getjHexa(double yCart) {
     return (int) yCart;
   }
@@ -277,27 +306,6 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     }
   }
   
-  /**
-   * There are no islands in catalysis.
-   * 
-   * @param print
-   * @return -1
-   */
-  @Override
-  public int countIslands(PrintWriter print) {
-    return -1;
-  }
-
-  @Override
-  public int getAvailableDistance(AbstractGrowthSite atom, int thresholdDistance) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  public AbstractGrowthSite getFarSite(AbstractGrowthSite atom, int distance) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-  
   private int createId(int i, int j) {
     return j * getHexaSizeI() + i;
   }
@@ -315,31 +323,31 @@ public class CatalysisLattice extends AbstractGrowthLattice {
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
-        CatalysisSite atom = (CatalysisSite) atoms[iHexa][jHexa];
+        CatalysisSite atom = atoms[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
-        atom.setNeighbour((CatalysisSite) atoms[i][j], 0);
+        atom.setNeighbour(atoms[i][j], 0);
 
         // east neighbour
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
-        atom.setNeighbour((CatalysisSite) atoms[i][j], 1);
+        atom.setNeighbour(atoms[i][j], 1);
 
         // south neighbour
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
-        atom.setNeighbour((CatalysisSite) atoms[i][j], 2);
+        atom.setNeighbour(atoms[i][j], 2);
         
         // west neighbour
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((CatalysisSite) atoms[i][j], 3);
+        atom.setNeighbour(atoms[i][j], 3);
       }
     }
     return atoms;
@@ -365,12 +373,17 @@ public class CatalysisLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour) {
+  public AbstractSite getSite(int i, int j, int k, int unitCellPos) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
-  public AbstractGrowthSite getCentralAtom() {
+  public int getIslandCount() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public float getAverageGyradius() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

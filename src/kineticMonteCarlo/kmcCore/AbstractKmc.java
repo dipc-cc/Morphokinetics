@@ -174,7 +174,7 @@ public abstract class AbstractKmc implements IKmc {
   }
 
   /**
-   * Initialises the rates of the simulation. It has to be called once, and only once (not within a loop.
+   * Initialises the rates of the simulation. It has to be called once, and only once (not within a loop).
    * @param rates 
    */
   @Override

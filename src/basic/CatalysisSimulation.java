@@ -20,6 +20,8 @@ package basic;
 
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisFarkasKmc;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
+import static kineticMonteCarlo.site.CatalysisSite.CO;
+import static kineticMonteCarlo.site.CatalysisSite.O;
 import ratesLibrary.CatalysisKiejnaRates;
 import ratesLibrary.CatalysisRates;
 import ratesLibrary.CatalysisReuterRates;
@@ -33,10 +35,13 @@ import ratesLibrary.IRates;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisSimulation extends AbstractGrowthSimulation {
+public class CatalysisSimulation extends AbstractSurfaceSimulation {
     
+  private float[] coverage;
+  
   public CatalysisSimulation(Parser parser) {
     super(parser);
+    coverage = new float[3]; // Coverage, Coverage CO, Coverage O
   } 
   
   @Override
@@ -84,5 +89,39 @@ public class CatalysisSimulation extends AbstractGrowthSimulation {
   @Override
   public void printRates(Parser parser) {
     ((CatalysisKmc) getKmc()).printRates();
+  }
+  
+  @Override
+  String secondLine() {
+    System.out.println("    I\tSimul time\tCover.\tCPU\tCoverage\tCO2\tSteps\tStationary");
+    return "\tCO\tO";
+  }
+  
+  @Override
+  float[] getCoverage() {
+    CatalysisKmc kmc = (CatalysisKmc) getKmc();
+    coverage[0] = kmc.getCoverage();
+    coverage[CO+1] += kmc.getCoverage(CO);
+    coverage[O+1] += kmc.getCoverage(O);
+    return coverage;
+  }
+  
+  @Override
+  int countIslands() {
+    return -1;
+  }
+  
+  @Override
+  float getGyradius() {
+    return -1.0f;
+  }
+  
+  @Override
+  String printCoverages() {
+    int i = getParser().getNumberOfSimulations();
+    String kmcResult = "";
+    kmcResult += "\t\t" + coverage[CO+1] / (float) (i);
+    kmcResult += "\t" + coverage[O+1] / (float) i + "\n";
+    return kmcResult;
   }
 }

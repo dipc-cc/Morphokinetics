@@ -60,6 +60,7 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   private boolean outerPerimeter;
   private Point3D cartesianSuperCell;
   private GrowthAtomAttributes attributes;
+  private Point3D cartesianPosition;
   
   public AbstractGrowthSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     super(id, iHexa, jHexa, numberOfNeighbours, numberOfProcesses);
@@ -77,6 +78,14 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     attributes = new GrowthAtomAttributes();
   }
   
+  
+  public Point3D getCartesianPosition() {
+    return cartesianPosition;
+  }
+
+  public void setCartesianPosition(Point3D cartesianPosition) {
+    this.cartesianPosition = cartesianPosition;
+  }
   /**
    * Dummy constructor to be able to have a proper AgAtom(pos) constructor.
    * 

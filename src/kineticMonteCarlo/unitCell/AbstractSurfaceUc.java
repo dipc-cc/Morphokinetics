@@ -18,44 +18,60 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import java.util.List;
 import javafx.geometry.Point3D;
-import kineticMonteCarlo.site.AgSite;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.site.AbstractSurfaceSite;
 
 /**
- * Unit cell of Ag (Silver) lattice.
+ * Really simple unit cell, which will contain only one atom.
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AgUc extends AbstractGrowthUc implements IUc {
+public abstract class AbstractSurfaceUc implements IUc {
 
-  private final List<AgSite> atoms;
+  private final AbstractSurfaceSite atom;
+  private final int size; // how many atoms
   private final int posI; // index in X axis
   private final int posJ; // index in Y axis
-  private static final float SIZE_X = 1; // Cartesian size X
-  private static final float SIZE_Y = 2 * AbstractGrowthLattice.Y_RATIO; // Cartesian size Y
+  
+  private double posX;
+  private double posY;
 
-  public AgUc(int posI, int posJ, List<AgSite> atoms) {
-    super(posI, posJ, null);
+  public AbstractSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
+    this.size = 1;
     this.posI = posI;
     this.posJ = posJ;
-    this.atoms = atoms;
+    this.atom = atom;
   }
 
   /**
-   * Cartesian size of the unit cell in X axis
+   * Always returns the current atom.
    *
-   * @return size in X
+   * @param pos ignored.
+   * @return current atom.
+   */
+  @Override
+  public AbstractSurfaceSite getSite(int pos) {
+    return atom;
+  }
+
+  @Override
+  public Point3D getPos() {
+    return new Point3D(SIZE_X * posX, SIZE_Y * posY, 0);
+  }
+
+  /**
+   * Cartesian size of the unit cell in X axis.
+   *
+   * @return size in X.
    */
   public static float getSizeX() {
     return SIZE_X;
   }
 
   /**
-   * Cartesian size of the unit cell in Y axis
+   * Cartesian size of the unit cell in Y axis.
    *
-   * @return size in Y
+   * @return size in Y.
    */
   public static float getSizeY() {
     return SIZE_Y;
@@ -71,24 +87,21 @@ public class AgUc extends AbstractGrowthUc implements IUc {
     return posJ;
   }
   
-  @Override
-  public AgSite getSite(int pos) {
-    return atoms.get(pos);
+  public void setPosX(double x) {
+    posX = x;
   }
-
-  @Override
-  public Point3D getPos() {
-    return new Point3D(SIZE_X * posI, SIZE_Y * posJ, 0);
+  
+  public void setPosY(double y) {
+    posY = y;
   }
-
+  
   /**
-   * Number of elements per unit cell.
+   * Number of elements.
    *
-   * @return quantity of unit cells
+   * @return quantity of unit cells.
    */
   @Override
   public int size() {
-    return atoms.size();
+    return size;
   }
-
 }

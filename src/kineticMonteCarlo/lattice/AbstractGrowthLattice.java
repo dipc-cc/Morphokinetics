@@ -18,7 +18,6 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.unitCell.SimpleUc;
 import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import java.awt.geom.Point2D;
@@ -45,7 +44,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
-import kineticMonteCarlo.site.AbstractSurfaceSite;
+import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
+import kineticMonteCarlo.unitCell.SimpleUc;
 
 /**
  * In this case we assume that the unit cell is one and it only contains one element. Thus, we can
@@ -53,19 +53,12 @@ import kineticMonteCarlo.site.AbstractSurfaceSite;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public abstract class AbstractGrowthLattice extends AbstractLattice implements IDevitaLattice {
+public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice implements IDevitaLattice {
 
   public static final float Y_RATIO = (float) sqrt(3) / 2.0F; // it is the same as: sin 60º
 
-  /**
-   * Unit cell array, where all the atoms are located.
-   */
-  private final SimpleUc[][] ucArray;
-
   private final ModifiedBuffer modified;
   private final ArrayList<Integer> includePerimeterList; 
-  private final int hexaArea;
-  private int occupied;
   private int islandCount;
   private int multiAtomsIndex;
   private int monomerCount;
@@ -80,50 +73,29 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
   private double centreMassDistance;
   private int mobileAtoms;
   private long hops;
+  /**
+   * Unit cell array, where all the atoms are located.
+   */
+  private final SimpleUc[][] ucArray;
 
   public AbstractGrowthLattice(int hexaSizeI, int hexaSizeJ, ModifiedBuffer modified) {
-    setHexaSizeI(hexaSizeI);
-    setHexaSizeJ(hexaSizeJ);
-    setHexaSizeK(1);
-    setUnitCellSize(1);
+    super(hexaSizeI, hexaSizeJ);
     this.modified = modified;
-    hexaArea = hexaSizeI * hexaSizeJ;
-    occupied = 0;
     
     // Initialise the square perimeter include points. This is required because the number of points in the horizontal and vertical perimeters should be as equal as possible.
     includePerimeterList = new ArrayList<>();
     for (int i = 0; i < 256; i++) {
       includePerimeterList.add(round(2 * Y_RATIO + 2 * i * Y_RATIO));
     }
-    ucArray = new SimpleUc[hexaSizeI][hexaSizeJ];
     innerPerimeter = 0;
     outerPerimeter = 0;
     islands = new ArrayList<>();
     multiAtomsMap = new HashMap<>();
     multiAtomsIndex = 1;
+    ucArray = new SimpleUc[hexaSizeI][hexaSizeJ];
   }
 
   public abstract AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour);
-
-  /**
-   * Obtains the spatial location of certain atom, the distance between atoms is considered as 1
-   * Returns the Cartesian position, given the hexagonal (lattice) location.
-   *
-   * @param iHexa i index in the hexagonal mesh.
-   * @param jHexa j index in the hexagonal mesh.
-   * @return spatial location in Cartesian.
-   */
-  public abstract Point2D getCartesianLocation(int iHexa, int jHexa);
-
-  public abstract Point2D getCentralCartesianLocation();
-
-  public abstract float getCartSizeX();
-
-  public abstract float getCartSizeY();
-  
-  public abstract double getCartX(int iHexa, int jHexa);
-  
-  public abstract double getCartY(int jHexa);  
   
   /**
    * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
@@ -162,6 +134,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return ucArray[i][j];
   }
   
+  public AbstractGrowthUc getUc(int iLattice, int jLattice) {
+    return ucArray[iLattice][jLattice];
+  }
+  
   @Override
   public AbstractSite getSite(int iHexa, int jHexa, int kHexa, int unitCellPos) {
     if (kHexa != 0 || unitCellPos != 0) {
@@ -170,10 +146,11 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return AbstractGrowthLattice.this.getSite(iHexa, jHexa, unitCellPos);
   }
   
-  public final void setAtoms(AbstractSurfaceSite[][] atoms) {
+  
+  public final void setAtoms(AbstractGrowthSite[][] atoms) {
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        AbstractSurfaceSite atom = atoms[i][j];
+        AbstractGrowthSite atom = atoms[i][j];
         ucArray[i][j] = new SimpleUc(i, j, atom);
 
         ucArray[i][j].setPosX(getCartX(i, j));
@@ -227,46 +204,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return outerPerimeter;
   }
 
-  /**
-   * Adds an occupied location to the counter.
-   */
-  public void addOccupied() {
-    occupied++;
-  }
-  
-  /**
-   * Subtracts an occupied location from the counter.
-   */
-  public void subtractOccupied() {
-    occupied--;
-  }
-  
-  /**
-   * Resets to zero the number of occupied locations.
-   */
-  public void resetOccupied() {
-    occupied = 0;
-  }
-  
-  /**
-   * 
-   * @return the coverage of the lattice.
-   */
-  public float getCoverage() {
-    return (float) occupied / (float) hexaArea;
-  }
-  
-  /**
-   * 
-   * @return  number of occupied positions.
-   */
-  public int getOccupied() {
-    return occupied;
-  }
-  
-  public AbstractGrowthUc getUc(int iLattice, int jLattice) {
-    return ucArray[iLattice][jLattice];
-  }
   
   public Island getIsland(int i) {
     if (islands != null) {
@@ -330,17 +267,6 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     return getHexaSizeI() * getHexaSizeJ();
   }
   
-  public abstract void changeOccupationByHand(double xMouse, double yMouse, int scale);
-  
-  public abstract void deposit(AbstractSurfaceSite atom, boolean forceNucleation);
-
-  /**
-   * Extract the given atom from the lattice.
-   * 
-   * @param atom the atom to be extracted.
-   * @return probability change (positive value).
-   */
-  public abstract double extract(AbstractSurfaceSite atom);
   
   public double getDistanceToCenter(int iHexa, int jHexa) {
     return getCentralCartesianLocation().distance(getCartesianLocation(iHexa, jHexa));
@@ -507,7 +433,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     atomTypesCounter = new int[atomTypesAmount];
     emptyTypesCounter = new int[atomTypesAmount];
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      AbstractSurfaceUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         atom.initialiseRates(probabilities);
@@ -517,13 +443,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
 
   @Override
   public void reset() {
-    for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractSurfaceSite atom = uc.getSite(j);
-        atom.clear();
-      }
-    }
+    super.reset();
     islands = new ArrayList<>(); // empty islands
     islandCount = 0;
     multiAtomsMap.clear();
@@ -543,7 +463,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     ArrayList<AbstractGrowthSite> perimeterList = new ArrayList();
 
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      AbstractSurfaceUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
@@ -590,7 +510,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
         if (left <= position.getX() && position.getX() <= right
                 && bottom <= position.getY() + Y_RATIO
                 && position.getY() - Y_RATIO <= top) {
-          ((AbstractGrowthSite) ucArray[iHexa][jHexa].getSite(0)).setOutside(false);
+          getUc(iHexa, jHexa).getSite(0).setOutside(false);
           if (abs(left - position.getX()) < 0.49
                   || abs(right - position.getX()) < 0.49
                   || abs(top - position.getY()) < Y_RATIO / 2
@@ -607,10 +527,10 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
                 continue;
               }
             }
-            perimeterList.add(((AbstractGrowthSite) ucArray[iHexa][jHexa].getSite(0)));
+            perimeterList.add(getUc(iHexa, jHexa).getSite(0));
           }
         } else {
-          ((AbstractGrowthSite) ucArray[iHexa][jHexa].getSite(0)).setOutside(true);
+          getUc(iHexa, jHexa).getSite(0).setOutside(true);
         }
       }
     }
@@ -647,7 +567,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     }
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
-      AbstractGrowthUc uc = getUc(i);
+      AbstractSurfaceUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         identifyIsland((AbstractGrowthSite) uc.getSite(j), false, 0, 0);
       }
@@ -661,7 +581,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
       }
       // iterate all atoms and add to the corresponding island
       for (int i = 0; i < size(); i++) {
-        AbstractGrowthUc uc = getUc(i);
+        AbstractSurfaceUc uc = getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           int island = ((AbstractGrowthSite) uc.getSite(j)).getIslandNumber();
           if (island >= 0) {
@@ -686,7 +606,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     outerPerimeter = 0;
     for (int i = 0; i < size(); i++) {
       // visit all the atoms within the unit cell
-      AbstractGrowthUc uc = getUc(i);
+      AbstractSurfaceUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         occupiedNeighbours = 0;
@@ -741,7 +661,7 @@ public abstract class AbstractGrowthLattice extends AbstractLattice implements I
     mobileAtoms = 0;
     // reset all the atoms
     for (int i = 0; i < size(); i++) {
-      AbstractGrowthUc uc = getUc(i);
+      AbstractSurfaceUc uc = getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         atom.setVisited(false);

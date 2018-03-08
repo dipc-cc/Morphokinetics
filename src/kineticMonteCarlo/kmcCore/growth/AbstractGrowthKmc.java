@@ -32,9 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.site.AbstractSite.TERRACE;
-import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import utils.MathUtils;
 import utils.StaticRandom;
 import utils.list.LinearList;
 
@@ -42,7 +40,7 @@ import utils.list.LinearList;
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public abstract class AbstractGrowthKmc extends AbstractKmc {
+public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
 
   private AbstractGrowthLattice lattice;
   private final ModifiedBuffer modifiedBuffer;
@@ -56,7 +54,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
-  private final float maxCoverage; 
+  private final float maxCoverage;
   /**
    * Total area of a single flake simulation.
    */
@@ -154,49 +152,6 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     return perimeter.getCurrentRadius();
   }
   
-  @Override
-  public float[][] getSampledSurface(int binX, int binY) {
-    float[][] surface = new float[binX][binY];
-    
-    Point2D corner1 = lattice.getCartesianLocation(0, 0);
-    double scaleX = binX / lattice.getCartSizeX();
-    double scaleY = binY / lattice.getCartSizeY();
-
-    if (scaleX > 1.01 || scaleY > 1.02) {
-      System.err.println("Error:Sampled surface more detailed than model surface, sampling requires not implemented additional image processing operations");
-      System.err.println("The size of the surface should be " + binX + " and it is " + lattice.getCartSizeX() + "/" + scaleX+" (hexagonal size is "+lattice.getHexaSizeI()+")");
-      System.err.println("The size of the surface should be " + binY + " and it is " + lattice.getCartSizeY() + "/" + scaleY+" (hexagonal size is "+lattice.getHexaSizeJ()+")");
-      System.err.println("X scale is " + scaleX + " Y scale is " + scaleY);
-      return null;
-    }
-
-    for (int i = 0; i < binX; i++) {
-      for (int j = 0; j < binY; j++) {
-        surface[i][j] = -1;
-      }
-    }
-    int x;
-    int y;
-    for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
-      double posUcX = uc.getPos().getX();
-      double posUcY = uc.getPos().getY();
-      for (int j = 0; j < uc.size(); j++) {
-        if (uc.getSite(j).isOccupied()) {
-          double posAtomX = uc.getSite(j).getPos().getX();
-          double posAtomY = uc.getSite(j).getPos().getY();
-          x = (int) ((posUcX + posAtomX - corner1.getX()) * scaleX);
-          y = (int) ((posUcY + posAtomY - corner1.getY()) * scaleY);
-
-          surface[x][y] = 0;
-        }
-      }
-    }
-    MathUtils.applyGrowthAccordingDistanceToPerimeter(surface);
-    MathUtils.normalise(surface);
-    return surface;
-  }
-  
   /**
    * Returns the coverage of the simulation. 
    * Thus, the number of occupied locations divided by the total number of locations.
@@ -224,6 +179,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
    * @param lattice the lattice to set
    */
   public final void setLattice(AbstractGrowthLattice lattice) {
+    super.setLattice(lattice);
     this.lattice = lattice;
   }
 
@@ -277,12 +233,9 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
 
   @Override
   public void reset() {
-    lattice.reset();
-    getList().reset();
-    activationEnergy.reset();
+    super.reset();
     freeArea = calculateAreaAsInKmcCanvas();
-
-    restart.reset();
+    activationEnergy.reset();
     nucleations = 0;
   }
   
@@ -299,7 +252,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     boolean computeTime = false;
     simulatedSteps = 0;
     sumProbabilities = 0.0d;
-    terraceToTerraceProbability = ((AbstractGrowthSite) lattice.getUc(0).getSite(0)).getProbability(0, 0);
+    terraceToTerraceProbability = lattice.getUc(0).getSite(0).getProbability(0, 0);
     if (justCentralFlake) {
       returnValue = super.simulate();
     } else {
@@ -530,7 +483,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        if (uc.getSite(j).isOccupied() || !((AbstractGrowthSite) uc.getSite(j)).isOutside()) {
+        if (uc.getSite(j).isOccupied() || !(uc.getSite(j).isOutside())) {
           totalArea++;
         }
       }
@@ -553,7 +506,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
     for (int i = 0; i < lattice.size(); i++) {
       AbstractGrowthUc uc = lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
-        AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
+        AbstractGrowthSite atom = uc.getSite(j);
         double x = atom.getPos().getX() + uc.getPos().getX();
         double y = atom.getPos().getY() + uc.getPos().getY();
         double distance = lattice.getDistanceToCenter(x, y);
@@ -655,7 +608,7 @@ public abstract class AbstractGrowthKmc extends AbstractKmc {
         int random = StaticRandom.rawInteger(lattice.size() * lattice.getUnitCellSize());
         ucIndex = Math.floorDiv(random, lattice.getUnitCellSize());
         int atomIndex = random % lattice.getUnitCellSize();
-        destinationAtom = (AbstractGrowthSite) lattice.getUc(ucIndex).getSite(atomIndex);
+        destinationAtom = lattice.getUc(ucIndex).getSite(atomIndex);
       } while (!depositAtom(destinationAtom));
       // update the free area and the deposition rate counting just deposited atom
       freeArea--;

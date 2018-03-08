@@ -71,7 +71,7 @@ public abstract class AbstractSimulation {
     staticRandom = new StaticRandom(parser.randomSeed());
     restartFolderName = "results/run" + System.currentTimeMillis();
     restart = new Restart(restartFolderName);
-    coverage = new float[3]; // Coverage, Coverage CO, Coverage O
+    coverage = new float[1]; // Coverage
   }
 
   public static void printHeader() {
@@ -159,41 +159,9 @@ public abstract class AbstractSimulation {
     coverage[0] = 0.0f;
     islands = 0;
     gyradius = 0.0f;
-    boolean printPsd = (parser.doPsd() && parser.outputData());
 
-    surfaceSizes = new int[2];
-    // More precise (more points) the PSD better precision we get
-    surfaceSizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
-    surfaceSizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
-    extentSizes = new int[2];
-    extentSizes[0] = (int) (surfaceSizes[0] * parser.getPsdExtend());
-    extentSizes[1] = (int) (surfaceSizes[1] * parser.getPsdExtend());
-    
-    if (parser.doPsd()) {
-      psd = new PsdSignature2D(surfaceSizes[0], surfaceSizes[1], parser.getPsdExtend());
-      psd.setRestart(restart); // All the output should go the same folder
-    }
-
-    System.out.println("_____________________________________________________________________________");
-    System.out.println("These are simulation rates: ");
-    printRates(parser);
-    
-    System.out.println("_____________________________________________________________________________");
-    System.out.println("Surface output: " + parser.printToImage());
-    System.out.println("PSD     output: " + printPsd);
-    System.out.println("Output format : " + parser.getOutputFormats());
-    System.out.println("Output folder : " + restartFolderName);
-    System.out.println("_____________________________________________________________________________");
-
-    String secondLine = "    \t(units) \t(%)\t(ms)";
-    if (kmc instanceof CatalysisKmc) {
-      System.out.println("    I\tSimul time\tCover.\tCPU\tCoverage\tCO2\tSteps\tStationary");
-      secondLine += "\tCO\tO";
-    } else {
-      System.out.println("    I\tSimul time\tCover.\tCPU\tIslands\tFractal d.");
-    }
-    System.out.println(secondLine);
-    System.out.println("    _________________________________________________________________________");
+    initPsd();
+    printTop();
     // Main loop
     for (simulations = 0; simulations < parser.getNumberOfSimulations(); simulations++) {
       currentProgress = 0;
@@ -208,17 +176,44 @@ public abstract class AbstractSimulation {
       
       printOutput();
       totalTime += kmc.getTime();
-      coverage[0] += kmc.getCoverage();
-      islands += kmc.getLattice().getIslandCount();
-      gyradius += kmc.getLattice().getAverageGyradius();
-      if (kmc instanceof CatalysisKmc) {
-        coverage[CO+1] += ((CatalysisKmc) kmc).getCoverage(CO);
-        coverage[O+1] += ((CatalysisKmc) kmc).getCoverage(O);
-      }
+      coverage = getCoverage();
+      islands += countIslands();
+      gyradius += getGyradius();
     }
 
     printFooter();
+    doPsd();
+  }
 
+  float[] getCoverage() {
+    coverage[0] += kmc.getCoverage();
+    return coverage;
+  }
+  
+  int countIslands() {
+    return kmc.getLattice().getIslandCount();
+  }
+  
+  float getGyradius() {
+    return kmc.getLattice().getAverageGyradius();
+  }
+  
+  void initPsd() {
+    surfaceSizes = new int[2];
+    // More precise (more points) the PSD better precision we get
+    surfaceSizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
+    surfaceSizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
+    extentSizes = new int[2];
+    extentSizes[0] = (int) (surfaceSizes[0] * parser.getPsdExtend());
+    extentSizes[1] = (int) (surfaceSizes[1] * parser.getPsdExtend());
+    
+    if (parser.doPsd()) {
+      psd = new PsdSignature2D(surfaceSizes[0], surfaceSizes[1], parser.getPsdExtend());
+      psd.setRestart(restart); // All the output should go the same folder
+    }
+  }
+  
+  void doPsd() {
     if (parser.doPsd()) {
       if (parser.isPsdSymmetric()) {
         psd.applySymmetryFold(PsdSignature2D.HORIZONTAL_SYMMETRY);
@@ -254,8 +249,7 @@ public abstract class AbstractSimulation {
       psd.printAvgToFile();
     }
   }
-
-
+  
   public void updateCurrentProgress() {
     if (parser.justCentralFlake()) {
       currentProgress = kmc.getCurrentRadius();
@@ -287,7 +281,7 @@ public abstract class AbstractSimulation {
     //Do nothing
   }
 
-  private void printOutput() {
+  void printOutput() {
     System.out.format("    %03d", simulations);
     System.out.format("\t%.3g", (double) kmc.getTime());
     System.out.format("\t%.4f", kmc.getCoverage());
@@ -341,6 +335,31 @@ public abstract class AbstractSimulation {
     System.out.println("");
   }
 
+  void printTop() {
+    boolean printPsd = (parser.doPsd() && parser.outputData());
+    
+    System.out.println("_____________________________________________________________________________");
+    System.out.println("These are simulation rates: ");
+    printRates(parser);
+    
+    System.out.println("_____________________________________________________________________________");
+    System.out.println("Surface output: " + parser.printToImage());
+    System.out.println("PSD     output: " + printPsd);
+    System.out.println("Output format : " + parser.getOutputFormats());
+    System.out.println("Output folder : " + restartFolderName);
+    System.out.println("_____________________________________________________________________________");
+
+    String secondLine = "    \t(units) \t(%)\t(ms)";
+    secondLine += secondLine();
+    System.out.println(secondLine);
+    System.out.println("    _________________________________________________________________________");
+  }
+  
+  String secondLine() {
+    System.out.println("    I\tSimul time\tCover.\tCPU\tIslands\tFractal d.");
+    return "";
+  }
+  
   public String printFooter() {
     int i = parser.getNumberOfSimulations();
     String kmcResult = "";
@@ -365,6 +384,14 @@ public abstract class AbstractSimulation {
       kmcResult += "\t" + gyradius / (float) i + "\n";
     }
     System.out.println(kmcResult);
+    return kmcResult;
+  }
+  
+  String printCoverages() {
+    int i = parser.getNumberOfSimulations();
+    String kmcResult = "";
+    kmcResult += "\t\t" + (float) (islands) / (float) (i);
+    kmcResult += "\t" + gyradius / (float) i + "\n";
     return kmcResult;
   }
 }

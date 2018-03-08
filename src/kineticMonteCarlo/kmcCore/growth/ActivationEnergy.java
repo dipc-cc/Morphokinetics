@@ -35,7 +35,7 @@ import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.lattice.MultiAtom;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
-import kineticMonteCarlo.unitCell.SimpleUc;
+import kineticMonteCarlo.unitCell.CatalysisUc;
 
 /**
  *
@@ -185,7 +185,7 @@ public class ActivationEnergy {
     if (doActivationEnergyStudy && stationary) {
       histogramPossibleTmp = initDouble();
       for (int i = 0; i < lattice.size(); i++) {
-        SimpleUc uc = (SimpleUc) lattice.getUc(i);
+        CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
           CatalysisSite atom = (CatalysisSite) uc.getSite(j);
           int numberOfCoNeighbours = 0;

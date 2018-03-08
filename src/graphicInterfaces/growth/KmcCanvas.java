@@ -38,10 +38,12 @@ import static java.lang.String.format;
 import java.text.DecimalFormat;
 import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
+import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import kineticMonteCarlo.unitCell.CatalysisUc;
 
 /**
  *
@@ -55,7 +57,7 @@ public class KmcCanvas extends Canvas {
    * Buffer Strategy. Makes the connection with the execution to be able to print it
    */
   private BufferStrategy strategy;
-  private AbstractGrowthLattice lattice;
+  private AbstractSurfaceLattice lattice;
   private RoundPerimeter perimeter;
   private int scale;
   private String imageName;
@@ -83,9 +85,13 @@ public class KmcCanvas extends Canvas {
   private final static Color GOLD = new Color(255,215,0);
   private final Color[] colours = {WHITE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   
-  public KmcCanvas(AbstractGrowthLattice lattice, RoundPerimeter perimeter) {
-    this.lattice = lattice;
+  public KmcCanvas(AbstractSurfaceLattice lattice, RoundPerimeter perimeter) {
+    this(lattice);
     this.perimeter = perimeter;
+  }
+  
+  public KmcCanvas(AbstractSurfaceLattice lattice) {
+    this.lattice = lattice;
     baseX = 0;
     baseY = 0;
     scale = 2;
@@ -96,6 +102,7 @@ public class KmcCanvas extends Canvas {
     printIslandNumber = false;
     printIslandCentres = false;
     restart = new Restart();
+    
   }
 
   public void setBaseLocation(int baseX, int baseY) {
@@ -253,9 +260,9 @@ public class KmcCanvas extends Canvas {
     if (lattice instanceof CatalysisLattice) {
       paintCatalysis(g);
     } else {
-
-    for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
+      AbstractGrowthLattice l = (AbstractGrowthLattice) lattice;
+    for (int i = 0; i < l.size(); i++) {
+      AbstractGrowthUc uc = (AbstractGrowthUc) l.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
@@ -308,12 +315,10 @@ public class KmcCanvas extends Canvas {
         }
       }
     }
-    }
-
     if (printIslandCentres) {
       try {
-        for (int i = 0; i < lattice.getIslandCount(); i++) {
-          Island island = lattice.getIsland(i);
+        for (int i = 0; i < l.getIslandCount(); i++) {
+          Island island = l.getIsland(i);
           Point2D point = island.getCentreOfMass();
           int Y = (int) Math.round((point.getY()) * scale) + baseY;
           int X = (int) Math.round((point.getX()) * scale) + baseX;
@@ -337,6 +342,8 @@ public class KmcCanvas extends Canvas {
         System.err.println("Some island centre or gyradius can not be printed. Ignoring and continuing... ");
       }
     }
+    }
+
     g.dispose();
   }
   
@@ -371,7 +378,7 @@ public class KmcCanvas extends Canvas {
         g.setColor(WHITE);
       }
 
-      AbstractGrowthUc uc = lattice.getUc(i);
+      CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractSurfaceSite atom = uc.getSite(j);
         int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;

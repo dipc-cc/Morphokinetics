@@ -18,15 +18,22 @@
  */
 package kineticMonteCarlo.unitCell;
 
+import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class AbstractGrowthUc implements IUc {
+public abstract class AbstractGrowthUc extends AbstractSurfaceUc {
+
+  public AbstractGrowthUc(int posI, int posJ, AbstractSurfaceSite atom) {
+    super(posI, posJ, atom);
+  }
   
   @Override
-  public abstract AbstractSurfaceSite getSite(int pos);
+  public AbstractGrowthSite getSite(int pos) {
+    return (AbstractGrowthSite) super.getSite(pos);
+  }
   
 }

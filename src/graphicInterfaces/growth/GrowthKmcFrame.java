@@ -60,7 +60,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 
 public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
 
@@ -97,11 +97,14 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
    * @param lattice
    * @param max maximum value for the progress bar
    */
-  public GrowthKmcFrame(AbstractGrowthLattice lattice, RoundPerimeter perimeter, int max) {
+  public GrowthKmcFrame(AbstractSurfaceLattice lattice, Object perimeter, int max) {
     createMenuBar();
     maxCoverage = max;
     initComponents();
-    canvas = new KmcCanvas(lattice, perimeter);
+    if (perimeter instanceof RoundPerimeter) 
+      canvas = new KmcCanvas(lattice, (RoundPerimeter) perimeter);
+    else
+      canvas = new KmcCanvas(lattice);
     canvas.setSize(canvas.getSizeX(), canvas.getSizeY());
     panel.add(canvas);
     canvas.initialise();
@@ -124,6 +127,10 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     labelScale.getActionMap().put("pause", new Pause());
     idButtonState = 1;
     pngLastTmpFile = 111;
+  }
+  
+  public GrowthKmcFrame(AbstractSurfaceLattice lattice, int max) {
+    this(lattice, null, max);
   }
 
   @Override

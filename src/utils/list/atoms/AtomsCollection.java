@@ -18,9 +18,10 @@
  */
 package utils.list.atoms;
 
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
-import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
+import kineticMonteCarlo.unitCell.IUc;
 
 /**
  *
@@ -33,10 +34,10 @@ public class AtomsCollection {
    */
   private final AvlTree tree;
 
-  public AtomsCollection(AbstractGrowthLattice lattice, String type) {
+  public AtomsCollection(AbstractSurfaceLattice lattice, String type) {
     tree = new AvlTree();
     for (int i = 0; i < lattice.size(); i++) {
-      AbstractGrowthUc uc = lattice.getUc(i);
+      AbstractSurfaceUc uc = (AbstractSurfaceUc) lattice.getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         AbstractSurfaceSite a = uc.getSite(j);
         tree.insert(a);
