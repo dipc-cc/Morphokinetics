@@ -68,12 +68,12 @@ public class CatalysisSite extends AbstractSurfaceSite {
   }
   
   @Override
-  public AbstractGrowthAtomAttributes getAttributes() {
+  public GrowthAtomAttributes getAttributes() {
     return attributes;
   }
   
   @Override
-  public void setAttributes(AbstractGrowthAtomAttributes attributes) {
+  public void setAttributes(GrowthAtomAttributes attributes) {
     this.attributes = (CatalysisSiteAttributes) attributes;
   }
   

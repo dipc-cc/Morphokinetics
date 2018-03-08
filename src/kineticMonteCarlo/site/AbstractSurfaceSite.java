@@ -209,9 +209,9 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
 
   public abstract AbstractSurfaceSite getNeighbour(int pos);
   
-  public abstract AbstractGrowthAtomAttributes getAttributes();
+  public abstract GrowthAtomAttributes getAttributes();
   
-  public abstract void setAttributes(AbstractGrowthAtomAttributes a);
+  public abstract void setAttributes(GrowthAtomAttributes a);
   
   /**
    * Every atom will have an unique Id. So, we can use it as hash.

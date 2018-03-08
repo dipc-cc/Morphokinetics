@@ -22,7 +22,7 @@ package kineticMonteCarlo.site;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisSiteAttributes extends AbstractGrowthAtomAttributes{
+public class CatalysisSiteAttributes extends GrowthAtomAttributes{
   
   /**
    * CO or O.

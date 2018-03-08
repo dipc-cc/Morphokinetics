@@ -27,7 +27,7 @@ import javafx.geometry.Point3D;
  * 
  * @author J. Alberdi-Rodriguez
  */
-public class AbstractGrowthAtomAttributes {
+public class GrowthAtomAttributes {
   
   /**
    * Stores when the atom has been deposited. It has to be moved with the
@@ -51,7 +51,7 @@ public class AbstractGrowthAtomAttributes {
    */
   private Set<Integer> multiAtomNumberSet;
   
-  public AbstractGrowthAtomAttributes() {
+  public GrowthAtomAttributes() {
     multiAtomNumberSet = new HashSet();
   }
   /**

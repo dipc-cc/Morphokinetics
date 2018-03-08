@@ -59,7 +59,7 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   private boolean innerPerimeter;
   private boolean outerPerimeter;
   private Point3D cartesianSuperCell;
-  private AbstractGrowthAtomAttributes attributes;
+  private GrowthAtomAttributes attributes;
   private int occupiedNeighbours;
   
   public AbstractGrowthSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
@@ -75,8 +75,8 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     innerPerimeter = false;
     outerPerimeter = false;
     cartesianSuperCell = new Point3D(0, 0, 0);
-    attributes = new AbstractGrowthAtomAttributes();
-  }//*/
+    attributes = new GrowthAtomAttributes();
+  }
   
   /**
    * Dummy constructor to be able to have a proper AgAtom(pos) constructor.
@@ -91,16 +91,16 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     bondsProbability = new double[numberOfNeighbours];
     setNumberOfNeighbours(numberOfNeighbours);
     cartesianSuperCell = new Point3D(0, 0, 0);
-    attributes = new AbstractGrowthAtomAttributes();
-  }//*/
+    attributes = new GrowthAtomAttributes();
+  }
   
   @Override
-  public AbstractGrowthAtomAttributes getAttributes() {
+  public GrowthAtomAttributes getAttributes() {
     return attributes;
   }
   
   @Override
-  public void setAttributes(AbstractGrowthAtomAttributes attributes) {
+  public void setAttributes(GrowthAtomAttributes attributes) {
     this.attributes = attributes;
   }
   
@@ -186,6 +186,7 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     bondsProbability[i] = value;
   }
 
+  @Override
   public double getProbability() {
     return probability;
   }
@@ -385,7 +386,7 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   
   @Override
   public void swapAttributes(AbstractSurfaceSite atom) {
-    AbstractGrowthAtomAttributes tmpAttributes = this.attributes;
+    GrowthAtomAttributes tmpAttributes = this.attributes;
     this.attributes = atom.getAttributes();
     this.attributes.addOneHop();
     atom.setAttributes(tmpAttributes);
