@@ -29,8 +29,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.O;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
 import ratesLibrary.IRates;
@@ -131,10 +129,6 @@ public abstract class AbstractSimulation {
     return currentProgress + 1;
   }
   
-  String getRestartFolderName() {
-    return restartFolderName;
-  }
-  
   public abstract void printRates(Parser parser);
 
   public abstract void finishSimulation();
@@ -144,13 +138,20 @@ public abstract class AbstractSimulation {
    */
   public abstract void createFrame();
 
-  abstract void initialiseRates(IRates ratesFactory, Parser myParser);
   /**
    * Initialises Kmc, the basic simulation class
    */
   public void initialiseKmc() {
     this.kmc = null;
     this.rates = null;
+  }
+
+  public void updateCurrentProgress() {
+    currentProgress = calculateCurrentProgress();
+  }
+  
+  public double getSimulatedTime() {
+    return totalTime / parser.getNumberOfSimulations();
   }
 
   public void doSimulation() {
@@ -182,6 +183,12 @@ public abstract class AbstractSimulation {
 
     printFooter();
     doPsd();
+  }
+  
+  abstract void initialiseRates(IRates ratesFactory, Parser myParser);
+  
+  String getRestartFolderName() {
+    return restartFolderName;
   }
 
   float[] getCoverage() {
@@ -253,14 +260,6 @@ public abstract class AbstractSimulation {
     }
   }
   
-  public void updateCurrentProgress() {
-    currentProgress = calculateCurrentProgress();
-  }
-  
-  public double getSimulatedTime() {
-    return totalTime / parser.getNumberOfSimulations();
-  }
-
   /**
    * Does nothing. Used to have a common interface
    *
