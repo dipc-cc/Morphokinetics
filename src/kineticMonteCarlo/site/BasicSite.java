@@ -56,6 +56,7 @@ public class BasicSite extends AbstractSite {
     neighbours[pos] = (BasicSite) a;
   }
 
+  @Override
   public BasicSite getNeighbour(int pos) {
     return neighbours[pos];
   }

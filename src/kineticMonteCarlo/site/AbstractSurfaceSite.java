@@ -18,7 +18,6 @@
  */
 package kineticMonteCarlo.site;
 
-import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.AbstractProcess;
 import kineticMonteCarlo.process.IElement;
 
@@ -198,6 +197,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
 
   public abstract void setNeighbour(AbstractSurfaceSite a, int pos);
 
+  @Override
   public abstract AbstractSurfaceSite getNeighbour(int pos);
   
   public abstract GrowthAtomAttributes getAttributes();

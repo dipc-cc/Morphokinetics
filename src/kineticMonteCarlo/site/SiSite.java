@@ -72,6 +72,7 @@ public class SiSite extends AbstractSite {
     return new Point3D(x, y, z);
   }    
 
+  @Override
   public SiSite getNeighbour(int pos) {
     switch (pos) {
       case 0:
@@ -190,6 +191,7 @@ public class SiSite extends AbstractSite {
     return probabilityChange;
   }
   
+  @Override
   public double getProbability() {
     return getProbabilities()[n1 * 16 + n2];
   }

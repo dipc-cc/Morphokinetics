@@ -331,7 +331,17 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   public abstract double updateOneBound(int bond);
   
   abstract public boolean isPartOfImmobilSubstrate();
-
+ 
+  /**
+   * Every atom will have an unique Id. So, we can use it as hash.
+   *
+   * @return hash value, based on Id.
+   */
+  @Override
+  public int hashCode() {
+    return super.getId();
+  }
+  
   /**
    * In general two atoms are equal if the have the same Id.
    *
@@ -409,11 +419,6 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
   public void initialiseRates(double[][] probabilities) {
     this.probabilities = probabilities;
   }
-  
-  @Override
-  public double remove() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
 
   /**
    * It has one neighbour. Check if one neighbour of the current atom is a terrace. This is useful
@@ -424,7 +429,7 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
    */
   public boolean areTwoTerracesTogetherInPerimeter(AbstractGrowthSite originAtom) {
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      AbstractSurfaceSite neighbour = getNeighbour(i);
+      AbstractGrowthSite neighbour = getNeighbour(i);
       if (neighbour.isOccupied() && !neighbour.equals(originAtom) && neighbour.getType() == TERRACE) {
         return true;
       }
@@ -432,5 +437,6 @@ public abstract class AbstractGrowthSite extends AbstractSurfaceSite implements 
     return false;
   }
   
+  @Override
   public abstract AbstractGrowthSite getNeighbour(int pos);
 }

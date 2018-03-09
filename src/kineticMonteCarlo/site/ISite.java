@@ -59,6 +59,8 @@ public interface ISite {
 
   public void setNeighbour(AbstractSite atom, int i);
   
+  public ISite getNeighbour(int pos);
+  
   public Point3D getPos();
   
 }

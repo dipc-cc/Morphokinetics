@@ -32,8 +32,8 @@ import java.util.Deque;
  */
 public class ArrayStack {
 
-  private int arraySize;
-  private Deque<double[]> stack;
+  private final int arraySize;
+  private final Deque<double[]> stack;
 
   public ArrayStack(int arraySize) {
     this.arraySize = arraySize;
