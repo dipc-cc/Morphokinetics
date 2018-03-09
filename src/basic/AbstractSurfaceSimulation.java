@@ -100,7 +100,6 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
    */
   @Override
   public void finishSimulation() {
-
   }
   
   /**

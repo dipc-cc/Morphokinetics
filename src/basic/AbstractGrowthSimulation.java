@@ -31,7 +31,28 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
   }
+  
+  @Override
+  public AbstractGrowthKmc getKmc() {
+    return (AbstractGrowthKmc) super.getKmc();
+  }
+  
+  @Override
+  public void printRates(Parser parser) {
+    double[] rates = getRates().getRates(parser.getTemperature());
+    //we modify the 1D array into a 2D array;
+    int length = (int) Math.sqrt(rates.length);
 
+    for (int i = 0; i < length; i++) {
+      for (int j = 0; j < length; j++) {
+        System.out.printf("%1.3E  ", rates[i * length + j]);
+      }
+      System.out.println(" ");
+    }
+    System.out.println("Deposition rate (per site): " + getRates().getDepositionRatePerSite());
+    System.out.println("Island density:             " + getRates().getIslandDensity(parser.getTemperature()));
+  }
+  
   @Override
   void initialiseRates(IRates rates, Parser parser) {
     double depositionRatePerSite;
@@ -45,16 +66,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
   @Override
   IGrowthKmcFrame constructFrame(Class<?> genericClass, int max) throws Exception {
     return (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance(getKmc().getLattice(), ((AbstractGrowthKmc) getKmc()).getPerimeter(), max);
-  }
-  
-  @Override
-  boolean isGrowth() {
-    return true;
-  }
-  
-  @Override
-  public AbstractGrowthKmc getKmc() {
-    return (AbstractGrowthKmc) super.getKmc();
   }
   
   @Override
@@ -78,35 +89,14 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
     return progress;
   }
   
-  /**
-   * Do nothing.
-   */
   @Override
-  public void finishSimulation() {
-
+  boolean isGrowth() {
+    return true;
   }
   
   @Override
   boolean shouldPrint() {
     return ((getParser().justCentralFlake() && getKmc().getCurrentRadius() >= getCurrentProgress())
             || (getKmc().getCoverage() * 100 >= getCurrentProgress()));
-  }
-
- 
-
-  @Override
-  public void printRates(Parser parser) {
-    double[] rates = getRates().getRates(parser.getTemperature());
-    //we modify the 1D array into a 2D array;
-    int length = (int) Math.sqrt(rates.length);
-
-    for (int i = 0; i < length; i++) {
-      for (int j = 0; j < length; j++) {
-        System.out.printf("%1.3E  ", rates[i * length + j]);
-      }
-      System.out.println(" ");
-    }
-    System.out.println("Deposition rate (per site): " + getRates().getDepositionRatePerSite());
-    System.out.println("Island density:             " + getRates().getIslandDensity(parser.getTemperature()));
   }
 }
