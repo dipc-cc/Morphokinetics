@@ -176,16 +176,6 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
     return jHexa;
   }
 
-//KONTUZ (kentzeko)  @Override
-  public int getiHexa(double xCart, double yCart) {
-    return (int) xCart;
-  }
-
-//KONTUZ (kentzeko)    @Override
-  public int getjHexa(double yCart) {
-    return (int) yCart;
-  }
-
   @Override
   public Point2D getCartesianLocation(int iHexa, int jHexa) {
     return new Point2D.Double(iHexa, jHexa);
