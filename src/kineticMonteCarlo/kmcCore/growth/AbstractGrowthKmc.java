@@ -146,7 +146,6 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
    * 
    * @return current radius of the single flake simulation.
    */
-  @Override
   public int getCurrentRadius() {
     return perimeter.getCurrentRadius();
   }

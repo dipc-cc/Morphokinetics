@@ -198,6 +198,10 @@ public abstract class AbstractSimulation {
     return -1.0f;
   }
   
+  int calculateCurrentProgress() {
+    return -1;
+  }
+  
   void initPsd() {
     surfaceSizes = new int[2];
     // More precise (more points) the PSD better precision we get
@@ -251,11 +255,7 @@ public abstract class AbstractSimulation {
   }
   
   public void updateCurrentProgress() {
-    if (parser.justCentralFlake()) {
-      currentProgress = kmc.getCurrentRadius();
-    } else {
-      currentProgress = (int) Math.floor(getCoverage()[0] * 100);
-    }
+    currentProgress = calculateCurrentProgress();
   }
   
   public double getSimulatedTime() {

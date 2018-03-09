@@ -89,15 +89,6 @@ public abstract class AbstractKmc implements IKmc {
   public final AbstractList getList() {
     return list;
   }
-
-  /**
-   * It only makes sence in {@link AbstractGrowthKmc#getCurrentRadius()}. Used to have a common interface
-   *
-   * @return nothing meaningful
-   */
-  public int getCurrentRadius() {
-    return -1;
-  }
   
   /**
    * Does the actual simulation. It has to be called after reset() and depositSeed().

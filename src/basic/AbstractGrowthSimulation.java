@@ -69,6 +69,17 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
   }
   
   @Override
+  int calculateCurrentProgress() {
+    int progress;
+    if (getParser().justCentralFlake()) {
+      progress = getKmc().getCurrentRadius();
+    } else {
+      progress = (int) Math.floor(getCoverage()[0] * 100);
+    }
+    return progress;
+  }
+  
+  @Override
   public void createFrame() {
     boolean error = false;
     if (getParser().withGui()) {
