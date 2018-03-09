@@ -44,7 +44,7 @@ public abstract class AbstractSurfaceKmc extends AbstractKmc {
    * an atom is deposited and attached to an island.
    */
   private final boolean extraOutput2;
-  private Restart restart;
+  private final Restart restart;
 
   public AbstractSurfaceKmc(Parser parser) {
     super(parser);
