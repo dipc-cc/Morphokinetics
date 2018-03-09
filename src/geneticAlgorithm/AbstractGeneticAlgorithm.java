@@ -18,6 +18,7 @@
  */
 package geneticAlgorithm;
 
+import basic.AbstractGrowthSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.BasicGrowthSimulation;
@@ -48,6 +49,7 @@ import graphicInterfaces.gaConvergence.IgaProgressFrame;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.kmcCore.IKmc;
+import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.kmcCore.growth.AgKmc;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.AgRatesFromPrbCox;
@@ -129,7 +131,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         simulation.initialiseKmc();
         depositionRatePerSite = new BasicGrowthSyntheticRates().getDepositionRatePerSite();
         islandDensity = new BasicGrowthSyntheticRates().getIslandDensity(parser.getTemperature());
-        simulation.getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
+        ((AbstractGrowthKmc) simulation.getKmc()).setDepositionRate(depositionRatePerSite, islandDensity);
         initialisation = new BasicGrowthInitialisator();
         restriction = new BasicGrowthRestriction(dimensions, 1e-6, 1e9, parser.isEnergySearch());
         break;
@@ -139,7 +141,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
         float experitentalTemp = parser.getTemperature();
         depositionRatePerSite = new AgRatesFromPrbCox().getDepositionRatePerSite();
         islandDensity = new AgRatesFromPrbCox().getIslandDensity(experitentalTemp);
-        simulation.getKmc().setDepositionRate(depositionRatePerSite, islandDensity);
+        ((AbstractGrowthKmc) simulation.getKmc()).setDepositionRate(depositionRatePerSite, islandDensity);
         initialisation = new AgReduced6Initialisator();
         restriction = new AgReduced6Restriction(dimensions, parser.getMinValueGene(), parser.getMaxValueGene(), parser.isEnergySearch());
         if (parser.isDiffusionFixed()) ((AgReduced6Restriction) restriction).fixDiffusion();

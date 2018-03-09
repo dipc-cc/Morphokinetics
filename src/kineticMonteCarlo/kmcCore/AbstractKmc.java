@@ -67,11 +67,6 @@ public abstract class AbstractKmc implements IKmc {
     return list.getTime();
   }
 
-  @Override
-  public void setDepositionRate(double depositionRatePerSite, double islandDensity) {
-    throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
-  }
-
   /**
    * @return the lattice
    */

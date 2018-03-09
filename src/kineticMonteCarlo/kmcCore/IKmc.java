@@ -31,8 +31,6 @@ public interface IKmc {
 
   public double getTime();
 
-  public void setDepositionRate(double depositionRatePerSite, double islandDensity);
-
   /**
    * Returns a sampled topological measurement of the KMC surface
    *

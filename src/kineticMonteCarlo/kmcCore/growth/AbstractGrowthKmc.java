@@ -125,7 +125,6 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
    * @param depositionRateML deposition rate per site (synonyms: deposition flux and diffusion mono layer).
    * @param islandDensitySite only used for single flake simulations to properly calculate deposition rate.
    */
-  @Override
   public final void setDepositionRate(double depositionRateML, double islandDensitySite) {
     area = calculateAreaAsInLattice();
     depositionRatePerSite = depositionRateML;
