@@ -18,7 +18,6 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.GrapheneSite;
 import kineticMonteCarlo.site.ModifiedBuffer;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.HopsPerStep;
