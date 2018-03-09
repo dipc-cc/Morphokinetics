@@ -176,7 +176,6 @@ public abstract class AbstractSimulation {
       
       printOutput();
       totalTime += kmc.getTime();
-      coverage = getCoverage();
       islands += countIslands();
       gyradius += getGyradius();
     }
@@ -282,9 +281,10 @@ public abstract class AbstractSimulation {
   }
 
   void printOutput() {
+    coverage = getCoverage();
     System.out.format("    %03d", simulations);
     System.out.format("\t%.3g", (double) kmc.getTime());
-    System.out.format("\t%.4f", getCoverage()[0]);
+    System.out.format("\t%.4f", coverage[0]);
     
     if (parser.outputData() || parser.doPsd()) {
       sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface
@@ -361,7 +361,7 @@ public abstract class AbstractSimulation {
   }
     
   
-  public String printFooter() {
+  private String printFooter() {
     int i = parser.getNumberOfSimulations();
     String kmcResult = "";
     kmcResult += "\n\t__________________________________________________\n";
@@ -377,13 +377,7 @@ public abstract class AbstractSimulation {
     kmcResult += "\t" + coverage[0] / i;
     long msSimulationTime = (System.currentTimeMillis() - startTime) / i;
     kmcResult += "\t" + msSimulationTime + "/" + msSimulationTime / 1000 + "/" + msSimulationTime / 1000 / 60;
-    if (kmc instanceof CatalysisKmc) {
-      kmcResult += "\t\t" + coverage[CO+1] / (float) (i);
-      kmcResult += "\t" + coverage[O+1] / (float) i + "\n";
-    } else {
-      kmcResult += "\t\t" + (float) (islands) / (float) (i);
-      kmcResult += "\t" + gyradius / (float) i + "\n";
-    }
+    kmcResult += printCoverages();
     System.out.println(kmcResult);
     return kmcResult;
   }
