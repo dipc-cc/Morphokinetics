@@ -20,7 +20,6 @@ package basic;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import basic.io.OutputType.formatFlag;
 import graphicInterfacesCommon.growth.IGrowthKmcFrame;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
@@ -34,11 +33,13 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
   private IGrowthKmcFrame frame;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
+  private boolean isGrowth;
   
   public AbstractSurfaceSimulation(Parser parser) {
     super(parser);
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
+    isGrowth = false;
   }
    
   @Override
@@ -53,6 +54,14 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
     return coverage;
   }  
 
+  final void setGrowth(boolean isGrowth) {
+    this.isGrowth = isGrowth;
+  }
+  
+  IGrowthKmcFrame constructFrame(Class<?> genericClass, int max) throws Exception {
+    return (IGrowthKmcFrame) genericClass.getConstructors()[1].newInstance(getKmc().getLattice(), max);
+  }
+  
   @Override
   public void createFrame() {
     boolean error = false;
@@ -66,8 +75,8 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
         } else {
           className = "graphicInterfaces.growth.GrowthKmcFrame";
         }
-        Class<?> genericClass = Class.forName(className); 
-        frame = (IGrowthKmcFrame) genericClass.getConstructors()[1].newInstance(getKmc().getLattice(), max);
+        Class<?> genericClass = Class.forName(className);
+        frame = constructFrame(genericClass, max);
        // frame = new GrowthKmcFrame((AbstractSurfaceLattice) getKmc().getLattice(), max);
       } catch (Exception e) {
         Logger.getLogger(AbstractGrowthSimulation.class.getName()).log(Level.SEVERE, null, e);
@@ -80,6 +89,10 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
     if (getParser().visualise() && !error) {
       frame.setVisible(true);
       p = new PaintLoop();
+      p.start();
+    } else if (isGrowth) {
+      p = new TerminalLoop();
+      p.setDaemon(true); // make the progress bar finish, when main program fails
       p.start();
     }
   }
@@ -114,6 +127,15 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
   }
   
   /**
+   * Auxiliary method to choose to print intermediate files
+   * 
+   * @return true if should print.
+   */
+  boolean shouldPrint() {
+    return getKmc().getCoverage() * 100 >= getCurrentProgress();
+  }
+  
+  /**
    * Private class responsible to repaint every 100 ms the KMC frame.
    */
   final class PaintLoop extends Thread {
@@ -125,7 +147,7 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
         try {
           PaintLoop.sleep(100);
           if (// If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
-                  (getKmc().getCoverage() * 100 >= getCurrentProgress())) {
+                  shouldPrint()) {
             if (printIntermediatePngFiles) {
               frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
             }
@@ -134,6 +156,44 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
             totalSavedImages++;
           }
         } catch (Exception e) {
+        }
+      }
+    }
+  }
+  
+  /**
+   * Private class responsible to repaint every 1000 ms the progress bar to the terminal.
+   */
+  final class TerminalLoop extends Thread {
+
+    @Override
+    public void run() {
+      final int width; // progress bar width in chars
+      if (getParser().justCentralFlake()) {
+        width = (int) Math.max(getKmc().getLattice().getHexaSizeI() / 2, getKmc().getLattice().getHexaSizeJ() / 2);
+      } else {
+        width = (int) getParser().getCoverage();
+      }
+      if (false) {
+        while (true) {
+          try {
+            TerminalLoop.sleep(1000);
+            if (shouldPrint()) {
+
+              System.out.print("\r[");
+              int i = 0;
+              for (; i < getCurrentProgress(); i++) {
+                System.out.print(".");
+              }
+              for (; i < width; i++) {
+                System.out.print(" ");
+              }
+              System.out.print("] ");
+              updateCurrentProgress();
+
+            }
+          } catch (Exception e) {
+          }
         }
       }
     }
