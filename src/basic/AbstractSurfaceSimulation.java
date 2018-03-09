@@ -33,13 +33,11 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
   private IGrowthKmcFrame frame;
   private int totalSavedImages;
   private final boolean printIntermediatePngFiles;
-  private boolean isGrowth;
   
   public AbstractSurfaceSimulation(Parser parser) {
     super(parser);
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
-    isGrowth = false;
   }
    
   @Override
@@ -53,10 +51,6 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
     coverage[0] = getKmc().getCoverage();
     return coverage;
   }  
-
-  final void setGrowth(boolean isGrowth) {
-    this.isGrowth = isGrowth;
-  }
   
   IGrowthKmcFrame constructFrame(Class<?> genericClass, int max) throws Exception {
     return (IGrowthKmcFrame) genericClass.getConstructors()[1].newInstance(getKmc().getLattice(), max);
@@ -90,11 +84,15 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
       frame.setVisible(true);
       p = new PaintLoop();
       p.start();
-    } else if (isGrowth) {
+    } else if (isGrowth()) {
       p = new TerminalLoop();
       p.setDaemon(true); // make the progress bar finish, when main program fails
       p.start();
     }
+  }
+  
+  boolean isGrowth() {
+    return false;
   }
   
   /**

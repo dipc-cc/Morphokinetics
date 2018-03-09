@@ -30,7 +30,6 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
   
   public AbstractGrowthSimulation(Parser parser) {
     super(parser);
-    setGrowth(true);
   }
 
   @Override
@@ -46,6 +45,11 @@ public abstract class AbstractGrowthSimulation extends AbstractSurfaceSimulation
   @Override
   IGrowthKmcFrame constructFrame(Class<?> genericClass, int max) throws Exception {
     return (IGrowthKmcFrame) genericClass.getConstructors()[0].newInstance(getKmc().getLattice(), ((AbstractGrowthKmc) getKmc()).getPerimeter(), max);
+  }
+  
+  @Override
+  boolean isGrowth() {
+    return true;
   }
   
   @Override
