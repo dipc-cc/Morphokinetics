@@ -29,7 +29,7 @@ import ratesLibrary.GrapheneGaillardRates;
  */
 public class GrapheneSiteGaillard extends GrapheneSite {
 
-  private GrapheneGaillardRates rates;
+  private final GrapheneGaillardRates rates;
 
   public GrapheneSiteGaillard(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);

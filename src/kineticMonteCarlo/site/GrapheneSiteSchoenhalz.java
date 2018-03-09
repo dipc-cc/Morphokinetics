@@ -29,14 +29,15 @@ import ratesLibrary.GrapheneSchoenhalzRates;
  */
 public class GrapheneSiteSchoenhalz extends GrapheneSite {
 
-  private GrapheneSchoenhalzRates rates;
+  private final GrapheneSchoenhalzRates rates;
 
-  private GrapheneSiteSchoenhalz[] neighbours = new GrapheneSiteSchoenhalz[12];
+  private final GrapheneSiteSchoenhalz[] neighbours;
   
   public GrapheneSiteSchoenhalz(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, distancePerStep);
     setNumberOfNeighbours(9);
     rates = new GrapheneSchoenhalzRates();
+    neighbours = new GrapheneSiteSchoenhalz[12];
   }
   
   @Override
@@ -106,14 +107,10 @@ public class GrapheneSiteSchoenhalz extends GrapheneSite {
         if (originN2 == 0 && destinationN2 == 1) {
           System.out.println("happened");
         }
-      }
-      
-      else {
+      } else {
         return 0;
       }
     }
-
     return rates.getRate(originN1, originN2, destinationN1, destinationN2, secondNeighbour, 873);
-  }  
- 
+  }
 }

@@ -44,7 +44,7 @@ public class GrapheneSite extends AbstractGrowthSite {
    * 0 <= n3 <= 3
    */
   private int n3;
-  private HopsPerStep distancePerStep;
+  private final HopsPerStep distancePerStep;
 
   public GrapheneSite(int id, short iHexa, short jHexa, HopsPerStep distancePerStep) {
     super(id, iHexa, jHexa, 12, 2);
