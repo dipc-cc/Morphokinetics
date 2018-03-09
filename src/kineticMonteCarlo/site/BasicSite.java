@@ -26,7 +26,7 @@ import javafx.geometry.Point3D;
  */
 public class BasicSite extends AbstractSite {
 
-  private BasicSite[] neighbours;
+  private final BasicSite[] neighbours;
   private byte type;
   private final short x;
   private final short y;
@@ -106,6 +106,7 @@ public class BasicSite extends AbstractSite {
     return probabilityChange;
   }
 
+  @Override
   public double getProbability() {
     return getProbabilities()[type];
   }
