@@ -188,7 +188,7 @@ public class RoundPerimeter {
     return currentPerimeter.get(utils.StaticRandom.rawInteger(currentPerimeter.size()));
   }
 
-  int searchPerimeterOffsetReentrance() {
+  private int searchPerimeterOffsetReentrance() {
     int linearSearch = (int) (perimeterStatistics.getTotalCount(currentRadius) * StaticRandom.raw());
     int actualCount = 0;
     int angle = 0;
