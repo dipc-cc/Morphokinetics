@@ -103,15 +103,15 @@ public abstract class AbstractSurfaceKmc extends AbstractKmc {
   }
   
   /**
-   * Returns the coverage of the simulation. 
-   * Thus, the number of occupied locations divided by the total number of locations.
+   * Returns the coverage of the simulation. Thus, the number of occupied locations divided by the
+   * total number of locations.
+   *
    * @return A value between 0 and 1.
    */
-  @Override
   public float getCoverage() {
     return lattice.getCoverage();
   }
-  
+
   /**
    * @param lattice the lattice to set
    */

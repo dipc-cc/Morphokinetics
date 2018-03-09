@@ -186,7 +186,7 @@ public abstract class AbstractSimulation {
   }
 
   float[] getCoverage() {
-    coverage[0] += kmc.getCoverage();
+    coverage[0] = -1;
     return coverage;
   }
   
@@ -254,7 +254,7 @@ public abstract class AbstractSimulation {
     if (parser.justCentralFlake()) {
       currentProgress = kmc.getCurrentRadius();
     } else {
-      currentProgress = (int) Math.floor(kmc.getCoverage() * 100);
+      currentProgress = (int) Math.floor(getCoverage()[0] * 100);
     }
   }
   
@@ -284,7 +284,7 @@ public abstract class AbstractSimulation {
   void printOutput() {
     System.out.format("    %03d", simulations);
     System.out.format("\t%.3g", (double) kmc.getTime());
-    System.out.format("\t%.4f", kmc.getCoverage());
+    System.out.format("\t%.4f", getCoverage()[0]);
     
     if (parser.outputData() || parser.doPsd()) {
       sampledSurface = kmc.getSampledSurface(surfaceSizes[0], surfaceSizes[1]); // get the just simulated surface

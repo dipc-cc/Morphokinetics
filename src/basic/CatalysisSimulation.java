@@ -37,7 +37,7 @@ import ratesLibrary.IRates;
  */
 public class CatalysisSimulation extends AbstractSurfaceSimulation {
     
-  private float[] coverage;
+  private final float[] coverage;
   
   public CatalysisSimulation(Parser parser) {
     super(parser);

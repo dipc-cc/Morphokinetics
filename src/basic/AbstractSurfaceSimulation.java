@@ -22,10 +22,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import basic.io.OutputType.formatFlag;
-import graphicInterfaces.growth.GrowthKmcFrame;
 import graphicInterfacesCommon.growth.IGrowthKmcFrame;
-import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
-import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
+import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
 
 /**
  *
@@ -42,7 +40,19 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
     totalSavedImages = 0;
     printIntermediatePngFiles = parser.outputData() && parser.getOutputFormats().contains(formatFlag.PNG);
   }
+   
+  @Override
+  public AbstractSurfaceKmc getKmc() {
+    return (AbstractSurfaceKmc) super.getKmc();
+  }
   
+  @Override
+  float[] getCoverage() {
+    float[] coverage = new float[1];
+    coverage[0] = getKmc().getCoverage();
+    return coverage;
+  }  
+
   @Override
   public void createFrame() {
     boolean error = false;

@@ -71,14 +71,6 @@ public abstract class AbstractKmc implements IKmc {
   public void setDepositionRate(double depositionRatePerSite, double islandDensity) {
     throw new UnsupportedOperationException("Not supported for this simulation mode."); //To change body of generated methods, choose Tools | Templates.
   }
-  
-  /**
-   * Coverage is not defined in the etching. So, by default is not defined and returns -1.
-   * @return -1 always
-   */
-  public float getCoverage() {
-    return -1;
-  }
 
   /**
    * @return the lattice
