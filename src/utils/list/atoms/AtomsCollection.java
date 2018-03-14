@@ -21,7 +21,6 @@ package utils.list.atoms;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
-import kineticMonteCarlo.unitCell.IUc;
 
 /**
  *
