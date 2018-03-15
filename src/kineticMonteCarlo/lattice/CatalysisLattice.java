@@ -89,7 +89,6 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    * @return
    */
   public boolean isStationary(double time) {
-    double hexaArea = (double) getHexaSizeI() * getHexaSizeJ() / 2.0;
     double[][] covTmp = new double[2][2];
    
     for (int j = 0; j < 2; j++) {
