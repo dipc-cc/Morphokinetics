@@ -19,6 +19,8 @@
 package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
+import kineticMonteCarlo.lattice.CatalysisCoFarkasLattice;
+import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.CUS;
@@ -37,6 +39,13 @@ public class CatalysisFarkasKmc extends CatalysisKmc {
   
   public CatalysisFarkasKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
+  }
+  
+  @Override
+  void init(Parser parser) {
+    CatalysisLattice catalysisLattice = new CatalysisCoFarkasLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
+    catalysisLattice.init();
+    setLattice(catalysisLattice);
   }
   
   @Override

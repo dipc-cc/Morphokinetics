@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
+import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.BR;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.CUS;
@@ -87,5 +88,14 @@ public class CatalysisCoLattice extends CatalysisLattice {
     coverage[O][BR] = 0;
     coverage[O][CUS] = 0;
     super.reset();
-  }    
+  }   
+
+  /**
+   * Check whether two CO^CUS atoms are together. Only for Farkas
+   * 
+   * @param atom
+   */
+  @Override
+  void updateCoCus(CatalysisSite atom) {
+  }
 }

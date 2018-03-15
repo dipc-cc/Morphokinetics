@@ -104,9 +104,7 @@ public class CatalysisKmc extends AbstractSurfaceKmc {
   
   public CatalysisKmc(Parser parser, String restartFolder) {
     super(parser);
-    CatalysisLattice catalysisLattice = new CatalysisCoLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
-    catalysisLattice.init();
-    setLattice(catalysisLattice);
+    init(parser);
     totalRate = new double[4]; // adsorption, desorption, reaction, diffusion
     numGaps = 0;
 
@@ -149,6 +147,12 @@ public class CatalysisKmc extends AbstractSurfaceKmc {
     stationaryStep = -1;
     automaticCollections = parser.areCollectionsAutomatic();
     goMultiplier = parser.getGOMultiplier();
+  }
+  
+  void init(Parser parser) {
+    CatalysisLattice catalysisLattice = new CatalysisCoLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
+    catalysisLattice.init();
+    setLattice(catalysisLattice);
   }
   
   @Override

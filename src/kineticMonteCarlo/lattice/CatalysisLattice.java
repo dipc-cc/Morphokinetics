@@ -322,19 +322,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    * 
    * @param atom
    */
-  private void updateCoCus(CatalysisSite atom) {
-    if (ratesLibrary.equals("farkas")) {
-      if (atom.isOccupied() && atom.getLatticeSite() == CUS && atom.getType() == CO) {
-        atom.cleanCoCusNeighbours();
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i += 2) { // Only up and down neighbours
-          CatalysisSite neighbour = atom.getNeighbour(i);
-          if (neighbour.isOccupied() && neighbour.getType() == CO) {
-            atom.addCoCusNeighbours(1);
-          }
-        }
-      }
-    }
-  }
+  abstract void updateCoCus(CatalysisSite atom);
 
   @Override
   public AbstractSite getSite(int i, int j, int k, int unitCellPos) {
