@@ -27,10 +27,8 @@ import java.util.List;
 import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.BR;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.CUS;
-import static kineticMonteCarlo.site.CatalysisSite.O;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import utils.LinearRegression;
 
@@ -38,13 +36,9 @@ import utils.LinearRegression;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public class CatalysisLattice extends AbstractSurfaceLattice {
+abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
   private final String ratesLibrary;
-  /**
-   * Current CO and O coverages, for sites BR, CUS.
-   */
-  private final int[][] coverage;
   private final List<double[][]> last1000events;
   private final List<Double> last1000eventsTime;
   private final int MAX;
@@ -57,7 +51,6 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
     super(hexaSizeI, hexaSizeJ);
     this.ratesLibrary = ratesLibrary;
-    coverage = new int[2][2];
     MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
@@ -101,7 +94,7 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
    
     for (int j = 0; j < 2; j++) {
       for (int k = 0; k < 2; k++) {
-        covTmp[j][k] = (double) coverage[j][k] / hexaArea;
+        covTmp[j][k] = getCoverage(j, k);
       }
     }
     last1000events.add(covTmp);
@@ -186,25 +179,18 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
     return new Point2D.Float(getHexaSizeI() / 2, getHexaSizeJ() / 2);
   }
   
-  public float getCoverage(byte type) {
-    float cov = (float) coverage[type][BR] + (float) coverage[type][CUS];
-    float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
-    return cov / hexaArea;
-  }
+  abstract public float getCoverage(byte type);
   
   /**
    * Computes a partial coverage for CO and O in BR and CUS sites.
    * 
    * @return coverage CO^BR, CO^CUS, O^BR, CO^CUS
    */
-  public float[] getCoverages() {
-    float[] cov = new float[4];
-    float hexaArea = (float) ((float) getHexaSizeI() * getHexaSizeJ() / 2.0);
-    for (int i = 0; i < cov.length; i++) {
-      cov[i] = coverage[i / 2][i % 2] / hexaArea;
-    }
-    return cov;
-  }
+  abstract public float[] getCoverages();
+  
+  abstract void setCoverage(int type, int site, int change);
+  
+  abstract double getCoverage(int type, int site);
   
   public void init() {
     setAtoms(createAtoms());
@@ -222,7 +208,7 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
       updateCoCus(neighbour);
     }
     addOccupied();
-    coverage[a.getType()][atom.getLatticeSite()]++;
+    setCoverage(a.getType(), atom.getLatticeSite(), 1);
   }
   
   @Override
@@ -236,26 +222,15 @@ public class CatalysisLattice extends AbstractSurfaceLattice {
       updateCoCus(neighbour);
     }
     subtractOccupied();
-    coverage[a.getType()][atom.getLatticeSite()]--;
+    setCoverage(a.getType(), atom.getLatticeSite(), -1);
     return 0;
   }
   
   @Override
   public void reset() {
-    coverage[CO][BR] = 0;
-    coverage[CO][CUS] = 0;
-    coverage[O][BR] = 0;
-    coverage[O][CUS] = 0;
     last1000events.clear();
     last1000eventsTime.clear();
     super.reset();
-  }
-  
-  @Override
-  public float getCoverage() {
-    float cov = (float) coverage[CO][BR] + (float) coverage[CO][CUS] + (float) coverage[O][BR] + (float) coverage[O][CUS];
-    float hexaArea = (float) getHexaSizeI() * getHexaSizeJ();
-    return cov / hexaArea;
   }
   
   public float getGapCoverage() {
