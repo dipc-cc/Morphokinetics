@@ -30,7 +30,7 @@ import ratesLibrary.CatalysisRates;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisFarkasKmc extends CatalysisKmc {
+public class CatalysisFarkasKmc extends CatalysisCoKmc {
   
   
   private double[] desorptionRateCoCusCoCus; // Only for Farkas
