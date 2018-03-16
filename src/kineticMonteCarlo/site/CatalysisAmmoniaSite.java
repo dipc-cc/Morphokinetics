@@ -87,4 +87,15 @@ public class CatalysisAmmoniaSite extends CatalysisSite  {
     // raise an error
     return null;
   }
+  
+  /**
+   * Resets current atom.
+   */
+  @Override
+  public void clear() {
+    super.clear();
+    for (int i = 0; i < 13; i++) {
+      processes[i].clear();
+    }
+  }
 }
