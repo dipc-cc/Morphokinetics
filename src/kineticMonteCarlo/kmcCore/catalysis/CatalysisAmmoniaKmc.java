@@ -40,11 +40,11 @@ import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
 
 /**
+ * Catalysis simulation of ammonia oxidation based on S. Hong et atl. Journal of Catalysis 276
+ * (2010) 371-381.
  *
  * @author J. Alberdi-Rodriguez
  */
-
-
 public class CatalysisAmmoniaKmc extends CatalysisKmc {
 
   private static final byte P5 = 4;
