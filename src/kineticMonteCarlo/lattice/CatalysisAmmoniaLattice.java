@@ -18,84 +18,67 @@
  */
 package kineticMonteCarlo.lattice;
 
+import kineticMonteCarlo.site.CatalysisAmmoniaSite;
 import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.BR;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.CUS;
-import static kineticMonteCarlo.site.CatalysisSite.O;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoLattice extends CatalysisLattice {
+public class CatalysisAmmoniaLattice extends CatalysisLattice {
   
   /**
-   * Current CO and O coverages, for sites BR, CUS.
+   * Current species coverages, for sites BR, CUS.
    */
   private final int[][] coverage;
   private final float hexaArea;
   
-  public CatalysisCoLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
+  public CatalysisAmmoniaLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
     super(hexaSizeI, hexaSizeJ);
-    coverage = new int[2][2];
+    coverage = new int[11][2];
     hexaArea = (float) hexaSizeI * hexaSizeJ;
   }
-  
+
   @Override
   public float getCoverage(byte type) {
     float cov = (float) coverage[type][BR] + (float) coverage[type][CUS];
     return cov / hexaArea;
   }
-  
-  /**
-   * Computes a partial coverage for CO and O in BR and CUS sites.
-   * 
-   * @return coverage CO^BR, CO^CUS, O^BR, CO^CUS
-   */
+
   @Override
   public float[] getCoverages() {
-    float[] cov = new float[4];
-    for (int i = 0; i < cov.length; i++) {
-      cov[i] = coverage[i / 2][i % 2] / (hexaArea / 2.0f);
-    }
-    return cov;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-  
-  @Override
-  public float getCoverage() {
-    float cov = (float) coverage[CO][BR] + (float) coverage[CO][CUS] + (float) coverage[O][BR] + (float) coverage[O][CUS];
-    return cov / hexaArea;
-  }
-  
-  @Override
-  double getCoverage(int type, int site) {
-    return (double) coverage[type][site] / (hexaArea / 2.0f);
-  }    
-  
-  /**
-   * Package private method to set the coverage for a type (CO or O) in a site (BR or CUS).
-   */
+
   @Override
   void setCoverage(int type, int site, int change) {
     coverage[type][site] += change;
   }
-  
+
   @Override
-  public void reset() {
-    coverage[CO][BR] = 0;
-    coverage[CO][CUS] = 0;
-    coverage[O][BR] = 0;
-    coverage[O][CUS] = 0;
-    super.reset();
-  }   
+  double getCoverage(int type, int site) {
+    return (double) coverage[type][site] / (hexaArea / 2.0f);
+  }
 
   /**
-   * Check whether two CO^CUS atoms are together. Only for Farkas.
+   * Check whether two CO^CUS atoms are together. Only for CO for Farkas.
    * 
    * @param atom
    */
   @Override
   void updateCoCus(CatalysisSite atom) {
   }
+  
+  @Override
+  CatalysisAmmoniaSite[][] instantiateAtoms() {
+    return new CatalysisAmmoniaSite[getHexaSizeI()][getHexaSizeJ()];
+  }
+  
+  @Override
+  CatalysisAmmoniaSite newAtom(int i, int j) {
+    return new CatalysisAmmoniaSite(createId(i, j), (short) i, (short) j);
+  }
+  
 }

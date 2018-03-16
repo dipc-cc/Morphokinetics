@@ -27,8 +27,6 @@ import java.util.List;
 import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import utils.LinearRegression;
 
@@ -38,7 +36,6 @@ import utils.LinearRegression;
  */
 abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
-  private final String ratesLibrary;
   private final List<double[][]> last1000events;
   private final List<Double> last1000eventsTime;
   private final int MAX;
@@ -48,9 +45,8 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    */
   private final CatalysisUc[][] ucArray;
 
-  public CatalysisLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
+  public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ);
-    this.ratesLibrary = ratesLibrary;
     MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
@@ -270,16 +266,24 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
     }
   }
   
-  private int createId(int i, int j) {
+  int createId(int i, int j) {
     return j * getHexaSizeI() + i;
+  }
+  
+  CatalysisSite[][] instantiateAtoms() {
+    return new CatalysisSite[getHexaSizeI()][getHexaSizeJ()];
+  }
+  
+  CatalysisSite newAtom(int i, int j) {
+    return new CatalysisSite(createId(i, j), (short) i, (short) j);
   }
   
   private CatalysisSite[][] createAtoms() {
     //Instantiate atoms
-    CatalysisSite[][] atoms = new CatalysisSite[getHexaSizeI()][getHexaSizeJ()];
+    CatalysisSite[][] atoms = instantiateAtoms();
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new CatalysisSite(createId(i, j), (short) i, (short) j);
+        atoms[i][j] = newAtom(i, j);
       }
     }
     

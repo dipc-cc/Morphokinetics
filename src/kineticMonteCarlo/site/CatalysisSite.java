@@ -51,7 +51,7 @@ public class CatalysisSite extends AbstractSurfaceSite {
   private int coCusWithCoCus;
   
   public CatalysisSite(int id, short iHexa, short jHexa) {
-    super(id, iHexa, jHexa, 4, 4);
+    super(id, iHexa, jHexa, 4, 12);
     if (iHexa % 2 == 0) {
       latticeSite = BR;
     } else {

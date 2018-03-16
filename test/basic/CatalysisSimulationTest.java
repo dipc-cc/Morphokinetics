@@ -227,7 +227,7 @@ public class CatalysisSimulationTest {
   }
   
   private void doCatalysisTest(Parser parser) {
-    AbstractSimulation simulation = new CatalysisSimulation(parser);
+    AbstractSimulation simulation = new CatalysisCoSimulation(parser);
 
     simulation.initialiseKmc();
     simulation.createFrame();

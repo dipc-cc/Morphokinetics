@@ -22,6 +22,8 @@ import basic.AgUcSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.BasicGrowthSimulation;
+import basic.CatalysisAmmoniaSimulation;
+import basic.CatalysisCoSimulation;
 import basic.CatalysisSimulation;
 import basic.ConcertedSimulation;
 import basic.GrapheneSimulation;
@@ -107,7 +109,10 @@ public class Morphokinetics {
         simulation = new BasicGrowthSimulation(parser);
         break;
       case "catalysis":
-        simulation = new CatalysisSimulation(parser);
+        simulation = new CatalysisCoSimulation(parser);
+        break;
+      case "ammonia":
+        simulation = new CatalysisAmmoniaSimulation(parser);
         break;
       case "concerted":
         simulation = new ConcertedSimulation(parser);

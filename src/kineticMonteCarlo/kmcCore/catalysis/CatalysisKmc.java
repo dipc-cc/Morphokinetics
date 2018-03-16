@@ -32,7 +32,6 @@ import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.O;
-import utils.StaticRandom;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
@@ -75,7 +74,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
   private final float maxCoverage;
-  private final boolean doAdsorption;
+  final boolean doAdsorption;
   final boolean doDesorption;
   final boolean doReaction;
   final boolean doDiffusion;
@@ -88,7 +87,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
    */
   private final boolean outputAe;
   private final boolean outputAeTotal;
-  private int numGaps;
   int counterSitesWith4OccupiedNeighbours;
   boolean stationary;
   private long stationaryStep;
@@ -99,8 +97,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   public CatalysisKmc(Parser parser, String restartFolder) {
     super(parser);
     init(parser);
-    totalRate = new double[4]; // adsorption, desorption, reaction, diffusion
-    numGaps = 0;
+    totalRate = new double[13]; // adsorption, desorption, reaction, diffusion
 
     simulatedSteps = 0;
     outputData = parser.outputData();
@@ -111,7 +108,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     }
     co2max = parser.getNumberOfCo2();
     restart = new Restart(outputData, restartFolder);
-    sites = new IAtomsCollection[4];
+    sites = new IAtomsCollection[13];
     col = new AtomsCollection(getLattice(), "catalysis");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
@@ -129,7 +126,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     } else {
       maxCoverage = 2; // it will never end because of coverage
     }
-    steps = new long[4];
+    steps = new long[13];
     co2 = new long[4];
     co2sum = 0;
     activationEnergy = new ActivationEnergy(parser);
@@ -246,6 +243,8 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       case DIFFUSION:
         diffuseAtom();
         break;
+      default:
+        System.out.println("Error");
     }
     simulatedSteps++;
     if (outputData && simulatedSteps % outputEvery == 0) {
@@ -325,7 +324,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   
   @Override
   public void depositSeed() {
-    totalRate = new double[4];
+    totalRate = new double[13];
     getLattice().resetOccupied();
     if (!start.equals("empty")) {
       initCovered();
@@ -342,6 +341,8 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     simulatedSteps = 0;
   }
 
+  abstract int getNumberOfReactions();
+  
   @Override
   public void reset() {
     activationEnergy.reset();
@@ -356,8 +357,8 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     if (outputData) {
       adsorptionData = new ArrayList<>();
     }
-    steps = new long[4];
-    co2 = new long[4];
+    steps = new long[getNumberOfReactions()];
+    co2 = new long[getNumberOfReactions()];
     co2sum = 0;
     sites[ADSORPTION].clear();
     sites[DESORPTION].clear();
@@ -366,7 +367,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
     stationaryStep = -1;
-    numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
   
   /**
@@ -470,5 +470,36 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     System.out.format("\t%d", co2sum);
     System.out.format("\t%1.1e", (double)simulatedSteps);
     System.out.format("\t%d", stationaryStep);
+  }
+  
+  void updateRateFromList(byte process) {
+    sites[process].recomputeTotalRate(process);
+    totalRate[process] = sites[process].getTotalRate(process);
+  }
+  
+  void recomputeCollection(byte process, CatalysisSite atom, double oldRate) {
+    totalRate[process] += atom.getRate(process);
+    if (atom.getRate(process) > 0) {
+      if (atom.isOnList(process)) {
+        if (oldRate != atom.getRate(process)) {
+          sites[process].updateRate(atom, -(oldRate - atom.getRate(process)));
+        } else { // rate is the same as it was.
+          //do nothing.
+        }
+      } else { // atom it was not in the list
+        sites[process].addRate(atom);
+      }
+      atom.setOnList(process, true);
+    } else { // reaction == 0
+      if (atom.isOnList(process)) {
+        if (oldRate > 0) {
+          sites[process].updateRate(atom, -oldRate);
+          sites[process].removeAtomRate(atom);
+        }
+      } else { // not on list
+        // do nothing
+      }
+      atom.setOnList(process, false);
+    }
   }
 }

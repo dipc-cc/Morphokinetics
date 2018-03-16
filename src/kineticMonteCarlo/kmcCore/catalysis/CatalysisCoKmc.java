@@ -76,6 +76,11 @@ public class CatalysisCoKmc extends CatalysisKmc {
   }
   
   @Override
+  int getNumberOfReactions() {
+    return 4;
+  }
+  
+  @Override
   public void setRates(CatalysisRates rates) {
     desorptionRateCOPerSite = new double[2]; // empty
     desorptionRateOPerSite = new double[4]; // empty 
@@ -473,37 +478,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
       }
     }
     recomputeCollection(DIFFUSION, atom, oldDiffusionRate);
-  }
-  
-  private void recomputeCollection(byte process, CatalysisSite atom, double oldRate) {
-    totalRate[process] += atom.getRate(process);
-    if (atom.getRate(process) > 0) {
-      if (atom.isOnList(process)) {
-        if (oldRate != atom.getRate(process)) {
-          sites[process].updateRate(atom, -(oldRate - atom.getRate(process)));
-        } else { // rate is the same as it was.
-          //do nothing.
-        }
-      } else { // atom it was not in the list
-        sites[process].addRate(atom);
-      }
-      atom.setOnList(process, true);
-    } else { // reaction == 0
-      if (atom.isOnList(process)) {
-        if (oldRate > 0) {
-          sites[process].updateRate(atom, -oldRate);
-          sites[process].removeAtomRate(atom);
-        }
-      } else { // not on list
-        // do nothing
-      }
-      atom.setOnList(process, false);
-    }
-  }
-
-  private void updateRateFromList(byte process) {
-    sites[process].recomputeTotalRate(process);
-    totalRate[process] = sites[process].getTotalRate(process);
   }
   
   /**
