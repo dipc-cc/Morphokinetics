@@ -215,12 +215,9 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     double totalReactionRate = sites[REACTION].getTotalRate(REACTION);
     double randomNumber = StaticRandom.raw();
     double random = randomNumber * totalReactionRate;
-    
-    double number; 
-    
-    //System.out.println("REACT "+h2oCounter+" "+(totalReactionRate-(sites[P5].getTotalRate(P5) + sites[P6].getTotalRate(P6))));
+ 
     double sum = 0.0;
-    byte i = 0;
+    byte i;
     for (i = P5; i <= P18 ; i++) {
       sum += sites[i].getTotalRate(i);
       if (sum > random) {
@@ -231,7 +228,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     
     CatalysisSite atom = (CatalysisSite) sites[i].randomElement();
     // it has to react with another atom
-    CatalysisSite neighbour = atom.getRandomNeighbour(i);;
+    CatalysisSite neighbour = atom.getRandomNeighbour(i);
     switch (i) {
       case P5:
         reactP5(atom, neighbour);
@@ -263,17 +260,6 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       default:
         System.out.println("Error in reaction");
     }
-           
-    /*number = sites[P5].getTotalRate(P5);
-    CatalysisSite atom;
-    CatalysisSite neighbour;
-    if (random < number) {
-    reactP5();
-    } else {
-    reactP6();
-    }*/
-    
-    
     updateRates(neighbour);
     updateRates(atom);
   }
@@ -561,20 +547,14 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     recomputeReactionP(atom, P16, NH_OH_reaction_NH2_O, NH, OH);
     recomputeReactionP(atom, P17, NH2_OH_reaction_NH3_O, NH2, OH);
     recomputeReactionP(atom, P18, N_OH_reaction_NH_O, N, OH);
-    //recomputeReactionP5(atom);
-    //recomputeReactionP6(atom);
     
     recomputeCollection(REACTION, atom, oldReactionRate);
-    // ZALANTZAN ! jarri...
-    //recomputeCollection(P5, atom, oldReactionRates[P5]);
-    //recomputeCollection(P6, atom, oldReactionRates[P6]);
     for (byte i= P5; i<=P18; i++) {
       recomputeCollection(i, atom, oldReactionRates[i]);
     }
   }
   
   private void recomputeReactionP(CatalysisAmmoniaSite atom, byte p, double rate, byte prod1, byte prod2) {
-  
     if (atom.getType() == prod1) {
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
         CatalysisAmmoniaSite neighbour = atom.getNeighbour(i);
@@ -616,5 +596,4 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
     recomputeCollection(DIFFUSION, atom, oldDiffusionRate);
   }
-  
 }
