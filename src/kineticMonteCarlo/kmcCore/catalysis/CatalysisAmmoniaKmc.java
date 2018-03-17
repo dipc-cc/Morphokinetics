@@ -418,7 +418,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
         sites[DESORPTION].insert(s);
         sites[REACTION].insert(s);
         sites[DIFFUSION].insert(s);
-        for (int k = P5; k < P18+1; k++) {
+        for (int k = P5; k <= P18; k++) {
           sites[k].insert(s);
         }
       }
@@ -428,7 +428,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     sites[DESORPTION].populate();
     sites[REACTION].populate();
     sites[DIFFUSION].populate();
-    for (int k = P5; k < P18+1; k++) {
+    for (int k = P5; k <= P18; k++) {
       sites[k].populate();
     }
   }
@@ -532,8 +532,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       return;
     }
     atom.setRate(REACTION, 0);
-    atom.setRate(P5, 0);
-    atom.setRate(P6, 0);
+    for (byte i = P5; i <=P18; i++) {
+      atom.setRate(i, 0);
+    }
+
   
     recomputeReactionP(atom, P5, NH3_O_reaction_NH2_OH, NH3, O);
     recomputeReactionP(atom, P6, NH2_OH_reaction_NH_H2O, NH2, OH);
@@ -543,19 +545,19 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     recomputeReactionP(atom, P15, NH2_O_reaction_NH_OH, NH2, O);
     recomputeReactionP(atom, P16, NH_OH_reaction_NH2_O, NH, OH);
     recomputeReactionP(atom, P17, NH2_OH_reaction_NH3_O, NH2, OH);
-    recomputeReactionP(atom, P18, N_OH_reaction_NH_O, N, OH);
+    recomputeReactionP(atom, P18, N_OH_reaction_NH_O, N, OH);//*/
     
     recomputeCollection(REACTION, atom, oldReactionRate);
-    double sumRates = 0.0;
+    double batura = 0.0;
     for (byte i = P5; i <= P18; i++) {
       recomputeCollection(i, atom, oldReactionRates[i]);
-      sumRates += totalRate[i];
+      batura += totalRate[i];
       if (totalRate[i] < -1e-3) {
         System.out.println(i+" "+totalRate[REACTION] + totalRate[i] + " Error "+oldReactionRates[i] + " "+sites[i].getTotalRate(i));
       }
     }
-    if (Math.abs(sumRates - totalRate[REACTION]) > 1e-1){
-      System.out.println("error. Total reaction rate is not the same as its sums "+Math.abs(sumRates - totalRate[REACTION]));
+    if (Math.abs(batura - totalRate[REACTION]) > 1e-1){
+      System.out.println("error. Total reaction rate is not the same as its sums "+Math.abs(batura - totalRate[REACTION]));
     } //*/
   }
   
