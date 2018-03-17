@@ -210,7 +210,6 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   }
 
   @Override
-  //void reactAtom(int reaction) {
   void reactAtom() {
     double totalReactionRate = sites[REACTION].getTotalRate(REACTION);
     double randomNumber = StaticRandom.raw();
@@ -221,7 +220,6 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     for (i = P5; i <= P18 ; i++) {
       sum += sites[i].getTotalRate(i);
       if (sum > random) {
-        //System.out.println(i+" it's the chosen one");
         break;
       }
     }
@@ -460,20 +458,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
     
     // recalculate total probability, if needed
-    if (totalRate[ADSORPTION] / previousRate[ADSORPTION] < 1e-1) {
-      updateRateFromList(ADSORPTION);
+    for (byte i = 0; i <= P18; i++) {
+      if (totalRate[i] / previousRate[i] < 1e-1) {
+        updateRateFromList(i);
+      }
     }
-    if (totalRate[DESORPTION] / previousRate[DESORPTION] < 1e-1 || 1.0 - totalRate[DESORPTION] / sites[DESORPTION].getTotalRate(DESORPTION) > 1e-3 || simulatedSteps % 10000000 == 0) {
-      //System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + sites[DESORPTION].getDesorptionRate());
-      updateRateFromList(DESORPTION);
-    }
-    if (totalRate[REACTION] / previousRate[REACTION] < 1e-1) {
-      updateRateFromList(REACTION);
-    }
-    if (totalRate[DIFFUSION] / previousRate[DIFFUSION] < 1e-1) {
-      updateRateFromList(DIFFUSION);
-    }
-    
     // tell to the list new probabilities
     getList().setRates(totalRate);
   }
@@ -519,12 +508,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   
   private void recomputeReactionProbability(CatalysisAmmoniaSite atom) {
     totalRate[REACTION] -= atom.getRate(REACTION);
-    for (byte i = 0; i < 13; i++) {
+    for (byte i = P5; i <= P18; i++) {
       totalRate[i] -= atom.getRate(i);
     }
     double oldReactionRate = atom.getRate(REACTION);
     double[] oldReactionRates = new double[13];
-    for (byte i = 0; i < oldReactionRates.length; i++) {
+    for (byte i = P5; i <= P18; i++) {
       oldReactionRates[i] = atom.getRate(i);
     }
     if (!atom.isOccupied()) {
@@ -532,6 +521,14 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
         sites[REACTION].removeAtomRate(atom);
       }
       atom.setOnList(REACTION, false);
+      
+      for (byte i = P5; i <= P18; i++) {
+        if (atom.isOnList(i)) {
+          sites[i].removeAtomRate(atom);
+        }
+        atom.setOnList(i, false);
+      }
+      
       return;
     }
     atom.setRate(REACTION, 0);
@@ -549,9 +546,17 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     recomputeReactionP(atom, P18, N_OH_reaction_NH_O, N, OH);
     
     recomputeCollection(REACTION, atom, oldReactionRate);
-    for (byte i= P5; i<=P18; i++) {
+    double sumRates = 0.0;
+    for (byte i = P5; i <= P18; i++) {
       recomputeCollection(i, atom, oldReactionRates[i]);
+      sumRates += totalRate[i];
+      if (totalRate[i] < -1e-3) {
+        System.out.println(i+" "+totalRate[REACTION] + totalRate[i] + " Error "+oldReactionRates[i] + " "+sites[i].getTotalRate(i));
+      }
     }
+    if (Math.abs(sumRates - totalRate[REACTION]) > 1e-1){
+      System.out.println("error. Total reaction rate is not the same as its sums "+Math.abs(sumRates - totalRate[REACTION]));
+    } //*/
   }
   
   private void recomputeReactionP(CatalysisAmmoniaSite atom, byte p, double rate, byte prod1, byte prod2) {
