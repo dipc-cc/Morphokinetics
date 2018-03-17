@@ -18,7 +18,6 @@
  */
 package geneticAlgorithm;
 
-import basic.AbstractGrowthSimulation;
 import basic.AbstractSimulation;
 import basic.AgSimulation;
 import basic.BasicGrowthSimulation;
@@ -66,7 +65,7 @@ public abstract class AbstractGeneticAlgorithm implements IGeneticAlgorithm{
   
   private Population population;
   private BasicEvaluator evaluator;
-  private AbstractPsdEvaluator mainEvaluator;
+  private final AbstractPsdEvaluator mainEvaluator;
   private List<IEvaluation> otherEvaluators;
   private IInitialisator initialisation;
   private ISelection selection;
