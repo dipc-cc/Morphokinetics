@@ -19,6 +19,7 @@
 package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
+import java.util.Arrays;
 import kineticMonteCarlo.lattice.CatalysisAmmoniaLattice;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
@@ -423,7 +424,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
         }
       }
     }
-    getList().setRates(totalRate);
+    getList().setRates(Arrays.copyOfRange(totalRate, 0, 4));
     sites[ADSORPTION].populate();
     sites[DESORPTION].populate();
     sites[REACTION].populate();
@@ -463,8 +464,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
         updateRateFromList(i);
       }
     }
-    // tell to the list new probabilities
-    getList().setRates(totalRate);
+    // tell to the list new probabilities. But only adsorption, desorption, (all) reaction (together) and diffusion.
+    getList().setRates(Arrays.copyOfRange(totalRate, 0, 4));
   }
   
   private void recomputeAdsorptionProbability(CatalysisAmmoniaSite site) {
