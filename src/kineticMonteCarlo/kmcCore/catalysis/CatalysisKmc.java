@@ -486,7 +486,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
         } else { // rate is the same as it was.
           //do nothing.
         }
-      } else { // atom it was not in the list
+      } else { // atom was not in the list
         sites[process].addRate(atom);
       }
       atom.setOnList(process, true);
