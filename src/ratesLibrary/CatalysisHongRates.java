@@ -19,17 +19,13 @@
 package ratesLibrary;
 
 import static java.lang.Math.exp;
-import static kineticMonteCarlo.site.CatalysisAmmoniaSite.H2O;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.N;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.N2;
-import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH;
-import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH2;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH3;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NO;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.O;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.O2;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.OH;
-import static kineticMonteCarlo.site.CatalysisAmmoniaSite.VAC;
 
 /**
  *
@@ -45,15 +41,6 @@ public class CatalysisHongRates extends CatalysisRates {
   private final double[] desorptionEnergies;
   private final double[] diffusionEnergies;
   private final double[] reactionEnergies;
-  private double NH3_O_reaction_NH2_OH;
-  private double NH2_OH_reaction_NH_H2O;
-  private double NH_OH_reaction_N_H2O;
-  private double NH_O_reaction_N_OH;
-  private double N_O_reaction_NO;
-  private double NH2_O_reaction_NH_OH;
-  private double NH_OH_reaction_NH2_O;
-  private double NH2_OH_reaction_NH3_O;
-  private double N_OH_reaction_NH_O;
   private final double prefactor;
   private final double[] adsorptionRates;
   
@@ -72,7 +59,7 @@ public class CatalysisHongRates extends CatalysisRates {
     prefactor = 1e13;
 
     mass = new double[11]; // kg/molecule
-    mass[NH3] = (14.006 * 3 + 1.007)/ Na; 
+    mass[NH3] = (14.006 + 1.007 * 3)/ Na; 
     mass[O2] = 2 * 15.9994 / Na;
     stickingCoefficient = 1;
     adsorptionRates = new double[11]; // Only NH3 and O can adsorb
@@ -87,16 +74,6 @@ public class CatalysisHongRates extends CatalysisRates {
     diffusionEnergies[N] = 0.96; // P12
     diffusionEnergies[O] = 0.93; // P13
     diffusionEnergies[OH] = 1.12; // P14
-    
-    NH3_O_reaction_NH2_OH = 0.01;//0.55; // P5;
-    NH2_OH_reaction_NH_H2O = 0.001;//0.27; // P6;
-    NH_OH_reaction_N_H2O= 0; // P7;
-    NH_O_reaction_N_OH = 0; // P8;
-    N_O_reaction_NO = 0.14; // P9;
-    NH2_O_reaction_NH_OH = 1.0; // P15;
-    NH_OH_reaction_NH2_O = 0; // P16;
-    NH2_OH_reaction_NH3_O = 0.26; // P17;
-    N_OH_reaction_NH_O = 0.9; // P18;
 
     reactionEnergies = new double[19];
     reactionEnergies[5] = 0.55; // P5
@@ -108,15 +85,6 @@ public class CatalysisHongRates extends CatalysisRates {
     reactionEnergies[16] = 0; // P16
     reactionEnergies[17] = 0.26; // P17
     reactionEnergies[18] = 0.9; // P18
-    /*reactionEnergies[NH3][O][NH2][OH] = 0.55; // P5
-    reactionEnergies[NH2][OH][NH][H2O] = 0.27; // P6
-    reactionEnergies[NH2][OH][NH3][O] = 0.26; // P17
-    reactionEnergies[NH2][O][NH][OH] = 1.0; // P15
-    reactionEnergies[NH][OH][N][H2O] = 0; // P7
-    reactionEnergies[NH][OH][NH2][O] = 0; // P16
-    reactionEnergies[NH][O][N][OH] = 0; // P8
-    reactionEnergies[N][O][NO][VAC] = 0.14; // P9
-    reactionEnergies[N][OH][NH][O] = 0.9; // P18*/
 
     pressures = new double[11];
     this.temperature = temperature;
