@@ -68,6 +68,7 @@ public class CatalysisHongRates extends CatalysisRates {
     desorptionEnergies[NH3] = 1.46; // P2
     desorptionEnergies[O] = 1.26; // P4
     desorptionEnergies[N2] = 0.27; // P10
+    desorptionEnergies[N] = 0.27; // P10
     desorptionEnergies[NO] = 1.49; // P11
     
     diffusionEnergies = new double[11];
