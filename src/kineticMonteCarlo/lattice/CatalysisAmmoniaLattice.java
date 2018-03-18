@@ -20,8 +20,6 @@ package kineticMonteCarlo.lattice;
 
 import kineticMonteCarlo.site.CatalysisAmmoniaSite;
 import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.BR;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
 
 /**
  *
@@ -30,36 +28,46 @@ import static kineticMonteCarlo.site.CatalysisSite.CUS;
 public class CatalysisAmmoniaLattice extends CatalysisLattice {
   
   /**
-   * Current species coverages, for sites BR, CUS.
+   * Current species coverages, for sites CUS.
    */
-  private final int[][] coverage;
+  private final int[] coverage;
   private final float hexaArea;
   
   public CatalysisAmmoniaLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
     super(hexaSizeI, hexaSizeJ);
-    coverage = new int[11][2];
+    coverage = new int[11];
     hexaArea = (float) hexaSizeI * hexaSizeJ;
   }
 
   @Override
   public float getCoverage(byte type) {
-    float cov = (float) coverage[type][BR] + (float) coverage[type][CUS];
+    float cov = (float) coverage[type];
     return cov / hexaArea;
   }
 
+  /**
+   * Computes a partial coverage for NH3, NH2, NH, O, OH, N, NO
+   * in CUS sites (BR sites are always empty).
+   * 
+   * @return coverage for particles in CUS sites.
+   */
   @Override
   public float[] getCoverages() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    float[] cov = new float[11];
+    for (int i = 0; i < cov.length; i++) {
+      cov[i] = coverage[i] / (hexaArea / 2.0f);
+    }
+    return cov;
   }
 
   @Override
   void setCoverage(int type, int site, int change) {
-    coverage[type][site] += change;
+    coverage[type] += change;
   }
 
   @Override
   double getCoverage(int type, int site) {
-    return (double) coverage[type][site] / (hexaArea / 2.0f);
+    return (double) coverage[type] / (hexaArea / 2.0f);
   }
 
   /**
@@ -81,4 +89,9 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
     return new CatalysisAmmoniaSite(createId(i, j), (short) i, (short) j);
   }
   
+  public void transformTo(CatalysisSite specie, byte type) {
+    coverage[specie.getType()]--;
+    coverage[type]++;
+    specie.setType(type);
+  }  
 }

@@ -97,6 +97,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   int getNumberOfReactions() {
     return P18 + 1;
   }
+  
+  @Override
+  public CatalysisAmmoniaLattice getLattice() {
+    return (CatalysisAmmoniaLattice) super.getLattice();
+  }
 
   @Override
   void init(Parser parser) {
@@ -268,11 +273,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP5(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH3) {
-      atom.setType(NH2);
-      neighbour.setType(OH);
+      getLattice().transformTo(atom, NH2);
+      getLattice().transformTo(neighbour, OH);
     } else {
-      atom.setType(OH);
-      neighbour.setType(NH2);
+      getLattice().transformTo(atom, OH);
+      getLattice().transformTo(neighbour, NH2);
     }
   }
   
@@ -281,11 +286,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP6(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH2) {
-      atom.setType(NH);
+      getLattice().transformTo(atom, NH);
       getLattice().extract(neighbour); // H2O
     } else {
       getLattice().extract(atom); // H2O
-      neighbour.setType(NH);
+      getLattice().transformTo(neighbour, NH);
     }
     h2oCounter++;
   }
@@ -295,11 +300,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP7(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH) {
-      atom.setType(N);
+      getLattice().transformTo(atom, N);
       getLattice().extract(neighbour); // H2O
     } else {
       getLattice().extract(atom); // H2O
-      neighbour.setType(N);
+      getLattice().transformTo(neighbour, N);
+      
     }
     h2oCounter++;
   }
@@ -308,11 +314,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP8(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH) {
-      atom.setType(N);
-      neighbour.setType(OH);
+      getLattice().transformTo(atom, N);
+      getLattice().transformTo(neighbour, OH);
     } else {
-      atom.setType(OH);
-      neighbour.setType(N);
+      getLattice().transformTo(atom, OH);
+      getLattice().transformTo(neighbour, N);
     }
   }
   /**
@@ -320,11 +326,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP9(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == N) {
-      atom.setType(NO);
+      getLattice().transformTo(atom, NO);
       getLattice().extract(neighbour);
     } else {
       getLattice().extract(atom);
-      neighbour.setType(NO);
+      getLattice().transformTo(neighbour, NO);
     }
     noCounter++;
   }
@@ -333,11 +339,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP15(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH2) {
-      atom.setType(NH);
-      neighbour.setType(OH);
+      getLattice().transformTo(atom, NH);
+      getLattice().transformTo(neighbour, OH);
     } else {
-      atom.setType(OH);
-      neighbour.setType(NH);
+      getLattice().transformTo(atom, OH);
+      getLattice().transformTo(neighbour, NH);
     }
   }
   /**
@@ -345,11 +351,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP16(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH) {
-      atom.setType(NH2);
-      neighbour.setType(O);
+      getLattice().transformTo(atom, NH2);
+      getLattice().transformTo(neighbour, O);
     } else {
-      atom.setType(O);
-      neighbour.setType(NH2);
+      getLattice().transformTo(atom, O);
+      getLattice().transformTo(neighbour, NH2);
     }
   }
   /**
@@ -357,11 +363,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP17(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == NH2) {
-      atom.setType(NH3);
-      neighbour.setType(O);
+      getLattice().transformTo(atom, NH3);
+      getLattice().transformTo(neighbour, O);
     } else {
-      atom.setType(O);
-      neighbour.setType(NH3);
+      getLattice().transformTo(atom, O);
+      getLattice().transformTo(neighbour, NH3);
     }
   }
   /**
@@ -369,11 +375,11 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    */
   private void reactP18(CatalysisSite atom, CatalysisSite neighbour) {
     if (atom.getType() == N) {
-      atom.setType(NH);
-      neighbour.setType(O);
+      getLattice().transformTo(atom, NH);
+      getLattice().transformTo(neighbour, O);
     } else {
-      atom.setType(O);
-      neighbour.setType(NH);
+      getLattice().transformTo(atom, O);
+      getLattice().transformTo(neighbour, NH);
     }
   }
     
