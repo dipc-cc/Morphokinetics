@@ -16,8 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package basic;
+package kineticMonteCarlo.simulation;
 
+import basic.Parser;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisAmmoniaKmc;
 import ratesLibrary.CatalysisHongRates;
 import ratesLibrary.IRates;
