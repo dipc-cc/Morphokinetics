@@ -527,7 +527,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
   
   @Override
   void updatePrevious() {
-      co2prv = co2sum;
+    co2prv = co2sum;
   }
   
   @Override

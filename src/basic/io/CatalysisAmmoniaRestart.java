@@ -39,36 +39,42 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
   private PrintWriter outTof;
   private PrintWriter outData;
   private PrintWriter outDataAe[];
+  /**
+   * Previous moment of production amount: NO and N2, H2O is also stored.
+   */
+  private long[] noN2P;
+  /**
+   * Current moment of production amount: NO and N2, H2O is also stored.
+   */
+  private long[] noN2C;
+  private long counterNoN2;
   
   public CatalysisAmmoniaRestart(boolean catalysisOutput, String restartFolder) {
     super(catalysisOutput, restartFolder);
   }
   @Override
-  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2, int[] sizes) {
-    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], co2[0], co2[1], co2[2], co2[3], sizes[0], sizes[1], sizes[2], sizes[3]);
-    //co2C = co2;
+  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] production, int[] sizes) {
+    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], coverages[4], coverages[5], coverages[6],
+            steps[0], steps[1], steps[2], steps[3], 
+            production[0], production[1], production[2], 
+            sizes[0], sizes[1], sizes[2], sizes[3]);
+    noN2C = production;
     currentTime = time;
   }
 
   @Override
   void initCatalysis(int simulationNumber) {
     String folder = getFolder();
-    //co2P = new long[4];
-    //counterCo2 = 0;
+    noN2P = new long[3];
+    counterNoN2 = 0;
     // new file
     try {
       String fileName = format("%sdataCatalysis%03d.txt", folder, simulationNumber);
       outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outCatalysis.println("# File " + fileName);
-      outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion, 10. CO[BR]+O[BR], 11. CO[BR]+O[CUS], 12. CO[CUS]+O[BR], 13. CO[CUS]+O[CUS], 14. sizeAdsorption, 15. sizeDesorption, 16. sizeReaction, 17. sizeDiffusion, ");
+      outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[NH3], 3. coverage[NH2], 4. coverage[NH], 5. coverage[NO], 6. coverage[N], 7. coverage[O], 8. coverage[OH], 9. nAdsorption, 10. nDesorption, 11. nReaction, 12. nDiffusion, 13. H2O, 14. N2, 15. NO, 15. sizeAdsorption, 16. sizeDesorption, 17. sizeReaction, 18. sizeDiffusion, ");
       //outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
-      outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
-      outDataFormat = "%g"; // time
-      for (int i = 0; i < 11; i++) {
-        outDataFormat += "\t%g"; // coverages
-      }
-      outDataFormat += "%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
-      System.out.println(outDataFormat);
+      outDataFormat = "%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
       fileName = format("%sdataTof%03d.txt", folder, simulationNumber);
       outTof = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outTof.println("# File " + fileName);
@@ -90,13 +96,43 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
       Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
     }
   }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    noN2P = new long[4];
+    initCatalysis(getIteration());
+    setIteration(getIteration()+1);
+  }
+  
   @Override
   public void resetCatalysis() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    noN2P = new long[3];
+    noN2C = new long[3];
   }
 
   @Override
   public void flushCatalysis() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    double deltaTime = currentTime - previousTime;
+    outTof.print(currentTime + "\t");
+    // compute TOF
+    for (int i = 0; i < noN2P.length; i++) {
+      double tof = (noN2C[i] - noN2P[i]) / deltaTime;
+      outTof.print(tof + "\t");
+    }
+    long sumNoN2 = 0;
+    for (int i = 0; i < 2; i++) { // Only NO and N2, not H2O
+      long molecules =  noN2C[i] - noN2P[i];
+      outTof.print(molecules + "\t");
+      sumNoN2 += molecules;
+      noN2P[i] = noN2C[i];
+    }
+    counterNoN2 += sumNoN2;
+    outTof.print(counterNoN2);
+    
+    outTof.println();
+    previousTime = currentTime;
+    outCatalysis.flush();
+    outTof.flush();
   }
 }

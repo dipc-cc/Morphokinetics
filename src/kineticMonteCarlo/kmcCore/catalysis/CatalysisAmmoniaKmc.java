@@ -19,6 +19,7 @@
 package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
+import basic.io.CatalysisAmmoniaRestart;
 import java.util.Arrays;
 import kineticMonteCarlo.lattice.CatalysisAmmoniaLattice;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
@@ -75,7 +76,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
 
   private long h2oCounter;
   private long noCounter;
-  private long nCounter;
+  private long n2Counter;
+  private long noN2sum;
+  /** Previous instant noN2sum. For output */
+  private long noN2prv;
+  private final int noN2max;
+  private long[] noN2; // [NO], [N2], [H2O]
 
   public CatalysisAmmoniaKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
@@ -91,6 +97,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     sites[P16] = col.getCollection(useTree, P16);
     sites[P17] = col.getCollection(useTree, P17);
     sites[P18] = col.getCollection(useTree, P18);
+    boolean outputData = parser.outputData();
+    CatalysisAmmoniaRestart restart = new CatalysisAmmoniaRestart(outputData, restartFolder);
+    setRestart(restart);
+    noN2max = parser.getNumberOfCo2();
   }
   
   @Override
@@ -204,8 +214,14 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       neighbour = atom.getRandomNeighbour(DESORPTION);
       getLattice().extract(neighbour);
       if (atom.getType() == N) {
-        nCounter++;
+        n2Counter++;
+        noN2sum++;
       }
+    }
+    
+    if (atom.getType() == NO) {
+      noCounter++;
+      noN2sum++;
     }
     
     getLattice().extract(atom);
@@ -332,7 +348,6 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       getLattice().extract(atom);
       getLattice().transformTo(neighbour, NO);
     }
-    noCounter++;
   }
   /**
    * NH2 + O -> NH + OH.
@@ -402,9 +417,33 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+  /**
+   * Method to print rates. Equivalent to table 4 of Hong et al.
+   */
   @Override
   public void printRates() {
-    System.out.println("Rates are not known yet");
+    System.out.println("_____________________________________________________");
+    System.out.println("    \tReactants\t\tProducts\tPrefactor\tRate");
+    System.out.println("    \t---------\t\t--------");
+    System.out.println("____________________________________________________");
+    System.out.format("P1\t*\tNH3(g)\t\tNH3\t\t1.0\t\t%1.1e\n",adsorptionRateNH3PerSite);
+    System.out.format("P2\tNH3\t\t\t*\tNH3(g)\t1e13\t\t%1.1e\n",desorptionRatePerSite[NH3]);
+    System.out.format("P3\t2*\tO2(g)\t\tO\tO\t1.0\t\t%1.1e\n",adsorptionRateOPerSite);
+    System.out.format("P4\tO\tO\t\t2*\tO2(g)\t1e13\t\t%1.1e\n",desorptionRatePerSite[O]);
+    System.out.format("P5\tNH3\tO\t\tNH2\tOH\t1e13\t\t%1.1e\n",NH3_O_reaction_NH2_OH);
+    System.out.format("P6\tNH2\tOH\t\tNH\tH2O(g)\t1e13\t\t%1.1e\n",NH2_OH_reaction_NH_H2O);
+    System.out.format("P7\tNH\tOH\t\tN\tH2O(g)\t1e13\t\t%1.1e\n",NH_OH_reaction_N_H2O);
+    System.out.format("P8\tNH\tO\t\tN\tOH\t1e13\t\t%1.1e\n",NH_O_reaction_N_OH);
+    System.out.format("P9\tN\tO\t\tNO\t*\t1e13\t\t%1.1e\n",N_O_reaction_NO);
+    System.out.format("P10\tN\tN\t\t2*\tN2(g)\t1e13\t\t%1.1e\n",desorptionRatePerSite[N]);
+    System.out.format("P11\tNO\t\t\t*\tNO(g)\t1e13\t\t%1.1e\n",desorptionRatePerSite[NO]);
+    System.out.format("P12\tN\t*\t\t*\tN\t1e13\t\t%1.1e\n",diffusionRates[N]);
+    System.out.format("P13\tO\t*\t\t*\tO\t1e13\t\t%1.1e\n",diffusionRates[O]);
+    System.out.format("P14\tOH\t*\t\t*\tOH\t1e13\t\t%1.1e\n",diffusionRates[OH]);
+    System.out.format("P15\tNH2\tO\t\tNH\tOH\t1e13\t\t%1.1e\n",NH2_O_reaction_NH_OH);
+    System.out.format("P16\tNH\tOH\t\tNH2\tO\t1e13\t\t%1.1e\n",NH_OH_reaction_NH2_O);
+    System.out.format("P17\tNH2\tOH\t\tNH3\tO\t1e13\t\t%1.1e\n",NH2_OH_reaction_NH3_O);
+    System.out.format("P18\tN\tOH\t\tNH\tO\t1e13\t\t%1.1e\n",N_OH_reaction_NH_O);
   }
 
   /**
@@ -613,31 +652,36 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
 
   @Override
   void initStationary() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    noN2prv = 0;
+    noN2 = new long[3];
   }
 
   @Override
   long[] getProduction() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    long[] production = new long[3];
+    production[0] = h2oCounter;
+    production[1] = n2Counter;
+    production[2] = noCounter;
+    return production;
   }
 
   @Override
   long getSumProduction() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return noN2sum;
   }
 
   @Override
   boolean writeNow() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return noN2sum % 10 == 0 && noN2prv != noN2sum;
   }
 
   @Override
   void updatePrevious() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    noN2prv = noN2sum;
   }
 
   @Override
   boolean maxProduction() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    return noN2sum != noN2max;
   }
 }
