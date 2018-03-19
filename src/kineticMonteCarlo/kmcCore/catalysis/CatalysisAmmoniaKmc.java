@@ -542,10 +542,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     if (atom.getType() == NH3 || atom.getType() == NO) {
       atom.setRate(DESORPTION, rate);
     } else { // O or N
-      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-        CatalysisSite neighbour = atom.getNeighbour(i);
-        if (neighbour.isOccupied() && neighbour.getType() == O) {
-          atom.addRate(DESORPTION, rate, i);
+      if (atom.getType() == O || atom.getType() == N) {
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+          CatalysisSite neighbour = atom.getNeighbour(i);
+          if (neighbour.isOccupied() && neighbour.getType() == atom.getType()) {
+            atom.addRate(DESORPTION, rate, i);
+          }
         }
       }
     }
