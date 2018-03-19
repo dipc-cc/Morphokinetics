@@ -1,4 +1,4 @@
-/*
+/* 
  * Copyright (C) 2018 J. Alberdi-Rodriguez
  *
  * This file is part of Morphokinetics.
@@ -16,37 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package basic;
+package kineticMonteCarlo.simulation;
 
-import kineticMonteCarlo.kmcCore.catalysis.CatalysisAmmoniaKmc;
-import ratesLibrary.CatalysisHongRates;
-import ratesLibrary.IRates;
+import basic.Parser;
+import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
+import ratesLibrary.BasicGrowth2Rates;
+import ratesLibrary.BasicGrowth3Rates;
+import ratesLibrary.BasicGrowthSimpleRates;
+import ratesLibrary.BasicGrowthSyntheticRates;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisAmmoniaSimulation extends CatalysisSimulation {
-
-  public CatalysisAmmoniaSimulation(Parser parser) {
+public class BasicGrowthSimulation extends AbstractGrowthSimulation{
+  
+  public BasicGrowthSimulation(Parser parser) {
     super(parser);
   }
-  
+
   @Override
   public void initialiseKmc() {
     super.initialiseKmc();
-    setRates(new CatalysisHongRates(getParser().getTemperature()));
-    setKmc(new CatalysisAmmoniaKmc(getParser(), getRestartFolderName()));
+
+    switch (getParser().getRatesLibrary()) {
+      case "simple":
+        setRates(new BasicGrowthSimpleRates());
+        break;
+      case "version2":
+        setRates(new BasicGrowth2Rates());
+        break;
+      case "version3":
+        setRates(new BasicGrowth3Rates());
+        break;
+      default:
+        setRates(new BasicGrowthSyntheticRates());
+    }
+    setKmc(new BasicGrowthKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
-  
-  @Override
-  void initialiseRates(IRates rates, Parser parser) {
-    CatalysisHongRates r = (CatalysisHongRates) rates;
-    r.setPressureO2(parser.getPressureO2());
-    r.setPressureCO(parser.getPressureCO());
-    r.computeAdsorptionRates();
-    getKmc().setRates(r);
-  }
-  
 }

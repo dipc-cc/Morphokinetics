@@ -18,6 +18,8 @@
  */
 package basic;
 
+import kineticMonteCarlo.simulation.BasicGrowthSimulation;
+import kineticMonteCarlo.simulation.AbstractSimulation;
 import basic.io.Restart;
 import java.io.FileNotFoundException;
 import java.util.logging.Level;

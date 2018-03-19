@@ -18,17 +18,17 @@
  */
 package main;
 
-import basic.AgUcSimulation;
-import basic.AbstractSimulation;
-import basic.AgSimulation;
-import basic.BasicGrowthSimulation;
-import basic.CatalysisAmmoniaSimulation;
-import basic.CatalysisCoSimulation;
-import basic.CatalysisSimulation;
-import basic.ConcertedSimulation;
-import basic.GrapheneSimulation;
+import kineticMonteCarlo.simulation.AgUcSimulation;
+import kineticMonteCarlo.simulation.AbstractSimulation;
+import kineticMonteCarlo.simulation.AgSimulation;
+import kineticMonteCarlo.simulation.BasicGrowthSimulation;
+import kineticMonteCarlo.simulation.CatalysisAmmoniaSimulation;
+import kineticMonteCarlo.simulation.CatalysisCoSimulation;
+import kineticMonteCarlo.simulation.CatalysisSimulation;
+import kineticMonteCarlo.simulation.ConcertedSimulation;
+import kineticMonteCarlo.simulation.GrapheneSimulation;
 import basic.Parser;
-import basic.SiSimulation;
+import kineticMonteCarlo.simulation.SiSimulation;
 import basic.io.Restart;
 import geneticAlgorithm.GeneticAlgorithm;
 import geneticAlgorithm.AbstractGeneticAlgorithm;

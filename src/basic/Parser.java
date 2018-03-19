@@ -1140,7 +1140,7 @@ public class Parser {
    * @see kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc#increaseEmptyArea(float[][], double) 
    * @return psdExtend
    */
-  double getPsdExtend() {
+  public double getPsdExtend() {
     return psdExtend;
   }
   

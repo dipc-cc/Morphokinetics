@@ -16,42 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package basic;
+package kineticMonteCarlo.simulation;
 
-import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
-import ratesLibrary.BasicGrowth2Rates;
-import ratesLibrary.BasicGrowth3Rates;
-import ratesLibrary.BasicGrowthSimpleRates;
-import ratesLibrary.BasicGrowthSyntheticRates;
+import basic.Parser;
+import kineticMonteCarlo.kmcCore.growth.AgUcKmc;
+import ratesLibrary.AgRatesFromPrbCox;
+import ratesLibrary.AgSimpleRates;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class BasicGrowthSimulation extends AbstractGrowthSimulation{
-  
-  public BasicGrowthSimulation(Parser parser) {
+public class AgUcSimulation  extends AbstractGrowthSimulation {
+
+  public AgUcSimulation(Parser parser) {
     super(parser);
   }
-
-  @Override
+  
+ @Override
   public void initialiseKmc() {
     super.initialiseKmc();
 
     switch (getParser().getRatesLibrary()) {
       case "simple":
-        setRates(new BasicGrowthSimpleRates());
-        break;
-      case "version2":
-        setRates(new BasicGrowth2Rates());
-        break;
-      case "version3":
-        setRates(new BasicGrowth3Rates());
+        setRates(new AgSimpleRates());
         break;
       default:
-        setRates(new BasicGrowthSyntheticRates());
+        setRates(new AgRatesFromPrbCox());
     }
-    setKmc(new BasicGrowthKmc(getParser()));
+    if (getParser().getHexaSizeI() == -1 || getParser().getHexaSizeJ() == -1) {
+      double area = 1 / getRates().getIslandDensity(getParser().getTemperature()); // the inverse of the density is the area of the island
+      int sizeX = (int) Math.ceil(Math.sqrt(area));
+      int sizeY = (int) Math.ceil(Math.sqrt(area));
+      getParser().setCartSizeX(sizeX);
+      getParser().setCartSizeY(sizeY);
+      System.out.println("Automatic size of the island is " + area + " " + sizeX + "x" + sizeY);
+    }
+    setKmc(new AgUcKmc(getParser()));
     initialiseRates(getRates(), getParser());
   }
 }
