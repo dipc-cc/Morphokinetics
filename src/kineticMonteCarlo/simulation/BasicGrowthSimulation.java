@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.simulation;
+package basic;
 
-import basic.Parser;
 import kineticMonteCarlo.kmcCore.growth.BasicGrowthKmc;
 import ratesLibrary.BasicGrowth2Rates;
 import ratesLibrary.BasicGrowth3Rates;

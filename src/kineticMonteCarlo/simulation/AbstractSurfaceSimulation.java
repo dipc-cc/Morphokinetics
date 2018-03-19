@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.simulation;
+package basic;
 
-import basic.Parser;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import basic.io.OutputType.formatFlag;

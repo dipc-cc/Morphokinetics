@@ -18,8 +18,6 @@
  */
 package basic;
 
-import kineticMonteCarlo.simulation.AgSimulation;
-import kineticMonteCarlo.simulation.AbstractSimulation;
 import basic.io.Restart;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import java.io.FileNotFoundException;

@@ -18,8 +18,6 @@
  */
 package basic;
 
-import kineticMonteCarlo.simulation.ConcertedSimulation;
-import kineticMonteCarlo.simulation.AbstractSimulation;
 import basic.io.Restart;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;

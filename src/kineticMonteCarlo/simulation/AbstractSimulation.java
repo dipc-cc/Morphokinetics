@@ -16,9 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package kineticMonteCarlo.simulation;
+package basic;
 
-import basic.Parser;
 import basic.io.OutputType.formatFlag;
 import basic.io.Restart;
 import graphicInterfacesCommon.surfaceViewer2D.IFrame2D;
