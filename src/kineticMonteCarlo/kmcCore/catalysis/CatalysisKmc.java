@@ -22,7 +22,6 @@ import basic.Parser;
 import basic.io.AbstractCatalysisRestart;
 import basic.io.CatalysisData;
 import basic.io.OutputType;
-import basic.io.Restart;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
