@@ -18,11 +18,11 @@
  */
 package geneticAlgorithm;
 
-import basic.AbstractSimulation;
-import basic.AgSimulation;
-import basic.BasicGrowthSimulation;
+import kineticMonteCarlo.simulation.AbstractSimulation;
+import kineticMonteCarlo.simulation.AgSimulation;
+import kineticMonteCarlo.simulation.BasicGrowthSimulation;
 import basic.Parser;
-import basic.SiSimulation;
+import kineticMonteCarlo.simulation.SiSimulation;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgBasicPsdEvaluator;
 import geneticAlgorithm.evaluationFunctions.AgThreadedPsdEvaluator;
