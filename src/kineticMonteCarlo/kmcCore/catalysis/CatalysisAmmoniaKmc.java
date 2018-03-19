@@ -495,7 +495,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     if (doReaction) recomputeReactionProbability(s);
     if (doDiffusion) recomputeDiffusionProbability(s);
     // recompute the probability of the neighbour atoms
-    for (int i = 0; i < s.getNumberOfNeighbours(); i++) {
+    for (int i = 0; i < s.getNumberOfNeighbours(); i+=2) {
       CatalysisAmmoniaSite neighbour = (CatalysisAmmoniaSite) s.getNeighbour(i);
       if (doAdsorption) recomputeAdsorptionProbability(neighbour);
       if (doDesorption) recomputeDesorptionProbability(neighbour);
@@ -543,7 +543,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       atom.setRate(DESORPTION, rate);
     } else { // O or N
       if (atom.getType() == O || atom.getType() == N) {
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+        for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
           CatalysisSite neighbour = atom.getNeighbour(i);
           if (neighbour.isOccupied() && neighbour.getType() == atom.getType()) {
             atom.addRate(DESORPTION, rate, i);
@@ -611,7 +611,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   
   private void recomputeReactionP(CatalysisAmmoniaSite atom, byte p, double rate, byte prod1, byte prod2) {
     if (atom.getType() == prod1) {
-      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
         CatalysisAmmoniaSite neighbour = atom.getNeighbour(i);
         if (neighbour.isOccupied() && neighbour.getType() == prod2) {
           atom.addRate(REACTION, rate/2.0, i);
@@ -621,7 +621,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
     
     if (atom.getType() == prod2) {
-      for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+      for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
         CatalysisAmmoniaSite neighbour = atom.getNeighbour(i);
         if (neighbour.isOccupied() && neighbour.getType() == prod1) {
           atom.addRate(REACTION, rate/2.0, i);
@@ -642,7 +642,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       return;
     }
     atom.setRate(DIFFUSION, 0);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
+    for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
       CatalysisSite neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied() && neighbour.getLatticeSite() == CUS) {
         double probability = diffusionRates[atom.getType()];
