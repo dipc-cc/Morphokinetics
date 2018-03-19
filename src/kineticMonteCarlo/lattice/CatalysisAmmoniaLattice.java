@@ -53,7 +53,7 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
    */
   @Override
   public float[] getCoverages() {
-    float[] cov = new float[11];
+    float[] cov = new float[7];
     for (int i = 0; i < cov.length; i++) {
       cov[i] = coverage[i] / (hexaArea / 2.0f);
     }
