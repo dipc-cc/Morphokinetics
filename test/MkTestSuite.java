@@ -29,9 +29,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-  basic.AgSimulationTest.class,
-  basic.GrapheneSimulationTest.class,
-  basic.SiSimulationTest.class})
+  kineticMonteCarlo.simulation.AgSimulationTest.class,
+  kineticMonteCarlo.simulation.GrapheneSimulationTest.class,
+  kineticMonteCarlo.simulation.SiSimulationTest.class})
 public class MkTestSuite {
 
   @BeforeClass
