@@ -36,7 +36,7 @@ import utils.LinearRegression;
  */
 abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
-  private final List<double[][]> last1000events;
+  private final List<float[]> last1000events;
   private final List<Double> last1000eventsTime;
   private final int MAX;
   ArrayList<LinearRegression> regressions;
@@ -85,13 +85,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    * @return
    */
   public boolean isStationary(double time) {
-    double[][] covTmp = new double[2][2];
-   
-    for (int j = 0; j < 2; j++) {
-      for (int k = 0; k < 2; k++) {
-        covTmp[j][k] = getCoverage(j, k);
-      }
-    }
+    float[] covTmp = getCoverages();
     last1000events.add(covTmp);
     last1000eventsTime.add(time);
     if (last1000events.size() > MAX) {
@@ -99,13 +93,10 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
       last1000eventsTime.remove(0);
     }
 
-    double[][] y = new double[4][last1000events.size()];
+    double[][] y = new double[covTmp.length][last1000events.size()];
     for (int i = 0; i < last1000events.size(); i++) {
-      for (int j = 0; j < 2; j++) {
-        for (int k = 0; k < 2; k++) {
-          int index = j * 2 + k;
-          y[index][i] = last1000events.get(i)[j][k];
-        }
+      for (int j = 0; j < covTmp.length; j++) {
+        y[j][i] = last1000events.get(i)[j];
       }
     }
 
@@ -116,20 +107,16 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
       x[i++] = (double) iter.next();
     }
     regressions = new ArrayList();
-    regressions.add(new LinearRegression(x, y[0]));
-    regressions.add(new LinearRegression(x, y[1]));
-    regressions.add(new LinearRegression(x, y[2]));
-    regressions.add(new LinearRegression(x, y[3]));
+    for (int j = 0; j < covTmp.length; j++) {
+      regressions.add(new LinearRegression(x, y[j]));
+    }
 
     boolean stationary = false;
     if (last1000events.size() == MAX) {
       stationary = true;
-      for (int j = 0; j < 2; j++) {
-        for (int k = 0; k < 2; k++) {
-          int index = j * 2 + k;
-          if (regressions.get(index).R2() > 0.1) {
-            stationary = false;
-          }
+      for (int j = 0; j < covTmp.length; j++) {
+        if (regressions.get(j).R2() > 0.1) {
+          stationary = false;
         }
       }
     }
