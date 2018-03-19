@@ -19,6 +19,7 @@
 package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
+import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
 import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
@@ -61,6 +62,11 @@ public class CatalysisCoKmc extends CatalysisKmc {
   private final boolean outputAeTotal;
   private final ActivationEnergy activationEnergy;
   private final boolean doO2Dissociation;
+  private long co2sum;
+  /** Previous instant co2sum. For output */
+  private long co2prv;
+  private final int co2max;
+  private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   
   public CatalysisCoKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
@@ -73,6 +79,12 @@ public class CatalysisCoKmc extends CatalysisKmc {
     outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     outputAeTotal = parser.getOutputFormats().contains(OutputType.formatFlag.AETOTAL);
     activationEnergy = new ActivationEnergy(parser);
+    boolean outputData = parser.outputData();
+    CatalysisCoRestart restart = new CatalysisCoRestart(outputData, restartFolder);
+    setRestart(restart);
+    co2max = parser.getNumberOfCo2();
+    co2 = new long[4];
+    co2sum = 0;
   }
   
   @Override
@@ -491,6 +503,50 @@ public class CatalysisCoKmc extends CatalysisKmc {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     return desorptionRateOPerSite[index];
   }
+  
+  @Override
+  void initStationary() {
+    co2prv = 0;
+    co2 = new long[4];
+  }
+
+  @Override
+  long[] getProduction() {
+    return co2;
+  }
+  
+  @Override
+  long getSumProduction() {
+    return co2sum;
+  }
+
+  @Override
+  boolean writeNow() {
+    return co2sum % 10 == 0 && co2prv != co2sum;
+  }
+  
+  @Override
+  void updatePrevious() {
+      co2prv = co2sum;
+  }
+  
+  @Override
+  boolean maxProduction() {
+    return co2sum != co2max;
+  }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    co2 = new long[getNumberOfReactions()];
+    co2sum = 0;
+  }
+  /*@Override
+  void writeData() {
+    super.writeData();
+    //co2prv = 0;
+    co2 = new long[4];
+  }//*/
   
   /**
    * Method to print rates. Equivalent to table 1 of Temel et al. J. Chem. Phys. 126 (2007).

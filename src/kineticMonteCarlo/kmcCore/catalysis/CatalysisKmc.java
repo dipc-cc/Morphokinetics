@@ -19,6 +19,7 @@
 package kineticMonteCarlo.kmcCore.catalysis;
 
 import basic.Parser;
+import basic.io.AbstractCatalysisRestart;
 import basic.io.CatalysisData;
 import basic.io.OutputType;
 import basic.io.Restart;
@@ -53,11 +54,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   private final boolean outputData;
   long simulatedSteps;
   private long[] steps;
-  long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-  long co2sum;
-  /** Previous instant co2sum. For output */
-  private long co2prv;
-  private final int co2max;
   private final long maxSteps;
   private int outputEvery;
   private ArrayList<CatalysisData> adsorptionData;
@@ -80,7 +76,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   final boolean doDiffusion;
   final boolean doPrintAllIterations;
   final String start;
-  private final Restart restart;
+  private AbstractCatalysisRestart restart;
   private final ActivationEnergy activationEnergy;
   /**
    * Activation energy output during the execution
@@ -106,8 +102,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       outputEvery = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
-    co2max = parser.getNumberOfCo2();
-    restart = new Restart(outputData, restartFolder);
     sites = new IAtomsCollection[13];
     col = new AtomsCollection(getLattice(), "catalysis");
     // Either a tree or array 
@@ -127,8 +121,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       maxCoverage = 2; // it will never end because of coverage
     }
     steps = new long[13];
-    co2 = new long[4];
-    co2sum = 0;
     activationEnergy = new ActivationEnergy(parser);
     outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     outputAeTotal = parser.getOutputFormats().contains(OutputType.formatFlag.AETOTAL);
@@ -150,6 +142,10 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   }
   
   public abstract void setRates(CatalysisRates rates);
+  
+  public final void setRestart(AbstractCatalysisRestart restart) {
+    this.restart = restart;
+  }
   
   @Override
   public float[][] getSampledSurface(int binX, int binY) {
@@ -249,20 +245,20 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     simulatedSteps++;
     if (outputData && simulatedSteps % outputEvery == 0) {
       if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
+        //writeData();
         System.out.println("stationary");
         stationary = true;
         stationaryStep = simulatedSteps;
         getList().resetTime();
         restart.resetCatalysis();
-        co2prv = 0;
-        co2 = new long[4];
+        initStationary();
         int[] sizes = new int[2];
         sizes[0] = getLattice().getHexaSizeI();
         sizes[1] = getLattice().getHexaSizeJ();
-        restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
+        restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));//*/
       }
     }
-    if ((stationary && co2sum % 10 == 0 && co2prv != co2sum) || (doPrintAllIterations && simulatedSteps % outputEvery == 0)) {
+    if ((stationary && writeNow()) || (doPrintAllIterations && simulatedSteps % outputEvery == 0)) {
       if (outputData) {
         adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
                 (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
@@ -272,23 +268,42 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
         sizes[DESORPTION] = sites[DESORPTION].size();
         sizes[REACTION] = sites[REACTION].size();
         sizes[DIFFUSION] = sites[DIFFUSION].size();
-        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
+        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, getProduction(), sizes);
         restart.flushCatalysis();
       }
 
       if (outputAe || outputAeTotal) {
         activationEnergy.printAe(restart.getExtraWriters(), getTime());
       }
-      co2prv = co2sum;
+      updatePrevious();
     }
     return simulatedSteps == maxSteps;
   }
-
+  
+  abstract void initStationary();
+  abstract long[] getProduction();
+  abstract long getSumProduction();
+  abstract boolean writeNow();
+  abstract void updatePrevious();
+  abstract boolean maxProduction();
+  
+  /*void writeData() {
+    System.out.println("stationary");
+    stationary = true;
+    stationaryStep = simulatedSteps;
+    getList().resetTime();
+    restart.resetCatalysis();
+    int[] sizes = new int[2];
+    sizes[0] = getLattice().getHexaSizeI();
+    sizes[1] = getLattice().getHexaSizeJ();
+    restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
+  }//*/
+  
   @Override
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage && co2sum != co2max) {
+    while (getLattice().getCoverage() < maxCoverage && maxProduction()) {
       if (outputAeTotal) {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
@@ -310,7 +325,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
         sizes[DESORPTION] = sites[DESORPTION].size();
         sizes[REACTION] = sites[REACTION].size();
         sizes[DIFFUSION] = sites[DIFFUSION].size();
-        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, co2, sizes);
+        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, getProduction(), sizes);
         restart.flushCatalysis();
       }
     }
@@ -358,8 +373,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       adsorptionData = new ArrayList<>();
     }
     steps = new long[getNumberOfReactions()];
-    co2 = new long[getNumberOfReactions()];
-    co2sum = 0;
     sites[ADSORPTION].clear();
     sites[DESORPTION].clear();
     sites[REACTION].clear();
@@ -467,7 +480,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   public void printIteration() {
     System.out.format("\t%.4f", getCoverage(CO));
     System.out.format("\t%.4f", getCoverage(O));
-    System.out.format("\t%d", co2sum);
+    System.out.format("\t%d", getSumProduction());
     System.out.format("\t%1.1e", (double)simulatedSteps);
     System.out.format("\t%d", stationaryStep);
   }

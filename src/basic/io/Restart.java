@@ -50,7 +50,6 @@ public class Restart {
   private String folder;
   final static Charset ENCODING = StandardCharsets.UTF_8;
   private int iteration;
-  private int counterCo2;
   
   /**
    * Attribute to control the output of data every 1% and nucleation.
@@ -68,20 +67,9 @@ public class Restart {
   private PrintWriter outDataAe[];
   private PrintWriter outDeltaAttachments;
   private PrintWriter outPerAtom;
-  private PrintWriter outCatalysis;
-  private PrintWriter outTof;
   private List<Double> deltaTimeBetweenTwoAttachments;
   private List<Double> deltaTimePerAtom;
-  private double currentTime;
   private double previousTime;
-  /**
-   * Previous moment CO2 amount.
-   */
-  private long[] co2P;
-  /**
-   * Current moment CO2 amount.
-   */
-  private long[] co2C;
 
   public Restart() {
     folder = "results/";
@@ -154,6 +142,14 @@ public class Restart {
       isConcerted = true;
       extraOutput = true;
     }
+  }//*/
+
+  public int getIteration() {
+    return iteration;
+  }
+
+  public void setIteration(int iteration) {
+    this.iteration = iteration;
   }
   
   /**
@@ -382,9 +378,6 @@ public class Restart {
   }
 
   public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2, int[] sizes) {
-    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], steps[0], steps[1], steps[2], steps[3], co2[0], co2[1], co2[2], co2[3], sizes[0], sizes[1], sizes[2], sizes[3]);
-    co2C = co2;
-    currentTime = time;
   }
 
   public PrintWriter getExtraWriter() {
@@ -473,80 +466,17 @@ public class Restart {
     }
   }
   
-  public void resetCatalysis() {
-    co2P = new long[4];
-    co2C = new long[4];
-    counterCo2 = 0;
-  }
-    
-  public void flushCatalysis() {
-    double deltaTime = currentTime - previousTime;
-    outTof.print(currentTime + "\t");
-    // compute TOF
-    for (int i = 0; i < co2P.length; i++) {
-      double tof = (co2C[i] - co2P[i]) / deltaTime;
-      outTof.print(tof + "\t");
-    }
-    long sumCo2 = 0;
-    for (int i = 0; i < co2P.length; i++) {
-      long molecules =  co2C[i] - co2P[i];
-      outTof.print(molecules + "\t");
-      sumCo2 += molecules;
-      co2P[i] = co2C[i];
-    }
-    counterCo2 += sumCo2;
-    outTof.print(counterCo2);
-    
-    outTof.println();
-    previousTime = currentTime;
-    outCatalysis.flush();
-    outTof.flush();
-  }
-  
   public void reset() {
     if (extraOutput2) {
       deltaTimeBetweenTwoAttachments.clear();
       deltaTimePerAtom.clear();
     }
     previousTime = 0;
-    co2P = new long[4];
-    if (isCatalysis) {
+    /*if (isCatalysis) {
       initCatalysis(iteration++);
-    }
+    }*/
     if (isConcerted) {
       initConcerted(iteration++);
-    }
-  }
-  
-  private void initCatalysis(int simulationNumber) {
-    co2P = new long[4];
-    counterCo2 = 0;
-    // new file
-    try {
-      String fileName = format("%sdataCatalysis%03d.txt", folder, simulationNumber);
-      outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outCatalysis.println("# File " + fileName);
-      outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[CO][BR], 3. coverage[CO][CUS], 4. coverage[O][BR], 5. coverage[O][CUS], 6. nAdsorption, 7. nDesorption, 8. nReaction, 9. nDiffusion, 10. CO[BR]+O[BR], 11. CO[BR]+O[CUS], 12. CO[CUS]+O[BR], 13. CO[CUS]+O[CUS], 14. sizeAdsorption, 15. sizeDesorption, 16. sizeReaction, 17. sizeDiffusion, ");
-      outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
-      fileName = format("%sdataTof%03d.txt", folder, simulationNumber);
-      outTof = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outTof.println("# File " + fileName);
-      outTof.println("# Information about TOF\n# [1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
-      fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
-      outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outData.println("# File " + fileName);
-      outDataAe = new PrintWriter[7];
-      
-      String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList", 
-        "PossibleDiscrete", "RatioTimesPossible", "Multiplicity", "All"};
-      for (int i = 0; i < names.length; i++) {
-        fileName = format("%sdataAe%s%03d.txt", folder, names[i], simulationNumber);
-        outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-        outData.println("# File " + fileName);
-        outDataAe[i] = outData;
-      }
-    } catch (IOException e) {
-      Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
     }
   }
 
@@ -573,7 +503,7 @@ public class Restart {
     }
   }
   
-  private void createFolder(String restartFolder) {
+  final void createFolder(String restartFolder) {
     try {
       File file = new File(restartFolder);
       file.mkdirs();
