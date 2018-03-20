@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
-import kineticMonteCarlo.kmcCore.growth.ActivationEnergy;
+import kineticMonteCarlo.activationEnergy.ActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisSite.CO;

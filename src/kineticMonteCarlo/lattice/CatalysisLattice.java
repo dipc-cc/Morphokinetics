@@ -119,6 +119,10 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
           stationary = false;
         }
       }
+      if (stationary)
+        for (int j = 0; j < covTmp.length; j++)
+          System.out.println(regressions.get(j).R2()+" ");
+        
     }
     return stationary;
   }

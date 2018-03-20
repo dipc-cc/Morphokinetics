@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
+import kineticMonteCarlo.activationEnergy.ActivationEnergy;
 import basic.Parser;
 import basic.io.OutputType;
 import basic.io.Restart;
