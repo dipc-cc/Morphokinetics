@@ -1284,7 +1284,7 @@ public class Parser {
    * @return lattice size in J direction. 
    */
   public int getHexaSizeJ() {
-    if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis")) {
+    if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
       return cartSizeY;
     }
     if (getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
