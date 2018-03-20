@@ -125,8 +125,11 @@ def plotOmegas(x, y, axis, i, averageLines, total, labelAlfa, ymin):
     # lg = newax.legend(prop={'size': 7}, loc=(0.5,0.13), scatterpoints=1)
     # newax.add_artist(lg)
     # newax.legend(prop={'size': 7}, loc=(0.5,1.55), scatterpoints=1)
-    axis.semilogy(x, y, ls="",color=cm(abs((i%20)/20)), label=labelAlfa[i], marker=markers[i%7], mec=getMec(i), alpha=0.75)
+    
+    cm = ["green", "lime", "fuchsia", "cyan", "red", "purple"]
+    #axis.semilogy(x, y, ls="", label=labelAlfa[i], marker=markers[i%7], mec=cm[i], lw=25, color="white", alpha=0.75)
 
+    axis.semilogy(x, y, ls="",color=cm[i], label=labelAlfa[i], marker=markers[i%7], mec=getMec(i), alpha=0.75)
     #for j in range(0,len(rngt)-1):
     #    axis.semilogy(x[rngt[j]:rngt[j+1]], fun.constant(x[rngt[j]:rngt[j+1]], averageLines[j]), color=cm(abs(i/9)))
     axis.set_ylim(ymin,2)
@@ -185,10 +188,11 @@ def localAvgAndPlotLinear(x, y, ax, alfa, sp, co2, first=False, total=False, ver
     slopes = []
     l = 1
 
+    cm = ["green", "lime", "fuchsia", "cyan", "red", "purple"]
     if showPlot:
         #inf.smallerFont(ax, 8)
         y = [float("NaN") if v < 1e-50 else v for v in y] # remove almost 0 multiplicities
-        ax.scatter(x, y, color=cm(abs((alfa%20)/20)), alpha=0.75, edgecolors=getMec(alfa), marker=markers[alfa%7])
+        ax.scatter(x, y, color=cm[alfa], alpha=0.75, edgecolors=getMec(alfa), marker=markers[alfa%7])
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         a = alfa
         if first:

@@ -21,6 +21,7 @@ import json
 import shutil as sh
 import glob
 from pathlib import Path
+import datetime
 
 class PsdPreparator:
     """ Creates simple parameter files"""
@@ -57,8 +58,7 @@ class PsdPreparator:
     def runPsd(self):
         cmd = "java -jar $HOME/ownCloud/ekmc-project/dist/morphokinetics.jar 2>&1 >/dev/null"
         fname = "results/psd"+str(self.cov).zfill(2)+".txt"
-        resultFile = Path(fname)
-        if not resultFile.is_file(): #run only if it is not done
+        if self.isNewer(fname, "../../output"): #run only if it is not done
             print("Running Morphokinetics...")
             os.system(cmd)
 
@@ -67,8 +67,17 @@ class PsdPreparator:
         sh.copy("psdAvgRaw.txt", "psd"+str(self.cov).zfill(2)+".txt")
         cmd = "plot_psd.sh"
         fname = "psd"+str(self.cov).zfill(2)+".png"
-        resultFile = Path(fname)
-        if not resultFile.is_file(): #run only if it is not done
+        if self.isNewer(fname,"../../../output"):
             print("Running GNUplot")
             os.system(cmd)
             sh.copy("psd.png", fname)
+            
+    def isNewer(self, firstFile, secondFile):
+        
+        try:
+            fmtime = os.path.getmtime(firstFile)
+            smtime = os.path.getmtime(secondFile)
+        except OSError:
+            fmtime = 1
+            smtime = 0
+        return fmtime < smtime

@@ -11,7 +11,6 @@
   "justCentralFlake": false,
   "listType": "linear",
   "psd": false,
-  "temperature": 600, 
   "calculationMode": "catalysis",
   "outputData": true,
   "outputDataFormat": [{"type": "catalysis"},{"type": "mko"}],

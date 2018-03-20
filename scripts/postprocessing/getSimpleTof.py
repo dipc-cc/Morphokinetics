@@ -32,7 +32,7 @@ def getSimpleTof():
 
 def plot(x,y,p,meskinePlot):
     kb = 8.617332e-5
-    fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,4))
+    fig, ax = plt.subplots(1, 1, sharey=True, figsize=(4,3.5))
     # Labels
     ax.set_ylabel(r"$\log(\frac{TOF}{molecules/sec})$")
     ax.set_xlabel(r"$1000/T(1/K)$")
@@ -62,7 +62,7 @@ def plot(x,y,p,meskinePlot):
     fig.savefig("tof.svg", bbox_inches='tight')
     
 def plotPressures(x,y,p,meskinePlot=False):
-    fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
+    fig, ax = plt.subplots(1, 1, sharey=True, figsize=(4,3.5))
     fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
                         wspace=0.35)
     # Labels
@@ -97,18 +97,18 @@ def plotPressures(x,y,p,meskinePlot=False):
 
     ax.set_yscale("log")
     #ax.set_ylim(1e11,1e14)
-    ax.plot(data[:,0],data[:,1],label="Reference (TOF)", ls="-", lw=2, marker="x")
-    ax.plot(x,y,label=r"$R_r$ (TOF)", marker="+")
+    ax.plot(data[:,0],data[:,1],label="Modelo", ls="-", lw=4, color="red")
+    ax.plot(x,y,label=r"Simulado", marker="o", color="blue")
 
     ax.legend(loc="best", prop={'size':6})
     bbox_props = dict(boxstyle="round", fc="w", ec="0.5", alpha=0.3)
     font = FontProperties()
     font.set_size(6)
-    ax.annotate("10 runs\nSize: "+str(p.sizI)+"x"+str(p.sizJ)+"\n"+r"$T=350 K$", xy=(0.97, 0.16), xycoords="axes fraction",
-                bbox=bbox_props, fontproperties=font, horizontalalignment='right', verticalalignment='top',)
+    #ax.annotate("10 runs\nSize: "+str(p.sizI)+"x"+str(p.sizJ)+"\n"+r"$T=350 K$", xy=(0.97, 0.16), xycoords="axes fraction",
+    #            bbox=bbox_props, fontproperties=font, horizontalalignment='right', verticalalignment='top',)
     ax.annotate("TOF",xy=(0.4,0.7), xycoords="axes fraction")
 
-    fig.savefig("tof.pdf")#, bbox_inches='tight')
+    fig.savefig("tofKarmele.pdf")#, bbox_inches='tight')
 
 workingPath = os.getcwd()
 x = []

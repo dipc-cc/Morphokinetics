@@ -38,6 +38,8 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
             ax.annotate("10 runs\nSize: "+str(p.sizI)+"x"+str(p.sizJ)+"\n"+r"$P_{CO} = 2$ mbar, $P_O = 1$ mbar ", xy=(0.07, 0.16), xycoords="axes fraction",
                         bbox=bbox_props, fontproperties=font, horizontalalignment='left', verticalalignment='top',)
             ax.annotate("TOF",xy=(0.3,0.5), xycoords="axes fraction",zorder=+1)
+    print(ref)
+    ref = True
     ucArea = 3.12*6.43/4
     toCm = 1e-8
     area = p.sizI * p.sizJ * ucArea * toCm * toCm
@@ -60,13 +62,15 @@ def plot(x,y,p,ax,meskinePlot,label="",marker="o"):
         data[:,0] = 1/(1000 / data[:,0])/kb
         if not meskinePlot:
             data[:,1] = np.exp(data[:,1])
-        ax.plot(data[:,0],data[:,1],label="Reference (TOF)", ls="-", lw=2)#, marker="^")
-    ax.plot(x,y,label=label, ls="-", marker=marker, mfc=color)
+        ax.plot(data[:,0],data[:,1],label="Modelo", ls="-", lw=4, color="red")#, marker="^")
+        print("here")
+    ax.plot(x,y,label="Simulado", ls="-", marker="o", markersize=7, mfc="blue", lw=4, color="blue")
     ax.legend(loc="best", prop={'size':6})
 
     
 
 workingPath = os.getcwd()
+p = inf.getInputParameters(glob.glob("*/output*")[0])
 x = []
 y = []
 temperatures = True
@@ -90,7 +94,7 @@ for f in iter:
     os.getcwd()
     rate = 0
     try:
-        rate, rates = mi.getTotalRate()
+        rate, rates = mi.getTotalRate(p)
     except ZeroDivisionError:
         rate = 0
     except IndexError:
@@ -103,19 +107,20 @@ for f in iter:
     os.chdir(workingPath)
     i += 1
 
-p = inf.getInputParameters(glob.glob("*/output*")[0])
 meskinePlot = False
 if len(sys.argv) > 1:
     meskinePlot = True
 
-fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
+fig, ax = plt.subplots(1, 1, sharey=True, figsize=(4,3.5))
 fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
                     wspace=0.35)
 labels=[r"$R_a$ (adsorption)", r"$R_d$ (desorption)", r"$R_r$ (TOF)", r"$R_h$ (diffusion)"]
 markers=["o", "+","x","1","s","d","h","o"]
-for i in range(0,4):
+for i in range(2,3):
+    print("plot1!")
     plot(x, y2[:,i], p, ax, meskinePlot, labels[i], markers[i+1])
 #plot(x,np.sum(y2[:,:],axis=1),p, ax, "sum")
-plot(x,y,p,ax,meskinePlot)
+print("plot 2")
+#plot(x,y,p,ax,meskinePlot)
 mp.setY2TemperatureLabels(ax,kb)
-fig.savefig("totalRate.pdf")#, bbox_inches='tight')
+fig.savefig("totalRateKarmele.pdf")#, bbox_inches='tight')
