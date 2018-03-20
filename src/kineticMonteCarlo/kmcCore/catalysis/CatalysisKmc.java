@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
-import kineticMonteCarlo.activationEnergy.ActivationEnergy;
+import kineticMonteCarlo.activationEnergy.CatalysisCoActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
@@ -76,7 +76,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   final boolean doPrintAllIterations;
   final String start;
   private AbstractCatalysisRestart restart;
-  private final ActivationEnergy activationEnergy;
+  private final CatalysisCoActivationEnergy activationEnergy;
   /**
    * Activation energy output during the execution
    */
@@ -120,7 +120,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       maxCoverage = 2; // it will never end because of coverage
     }
     steps = new long[13];
-    activationEnergy = new ActivationEnergy(parser);
+    activationEnergy = new CatalysisCoActivationEnergy(parser);
     outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     outputAeTotal = parser.getOutputFormats().contains(OutputType.formatFlag.AETOTAL);
     counterSitesWith4OccupiedNeighbours = 0;
@@ -140,7 +140,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     return (CatalysisLattice) super.getLattice();
   }
   
-  ActivationEnergy getActivationEnergy() {
+  CatalysisCoActivationEnergy getActivationEnergy() {
     return activationEnergy;
   }
   
@@ -288,18 +288,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   abstract boolean writeNow();
   abstract void updatePrevious();
   abstract boolean maxProduction();
-  
-  /*void writeData() {
-    System.out.println("stationary");
-    stationary = true;
-    stationaryStep = simulatedSteps;
-    getList().resetTime();
-    restart.resetCatalysis();
-    int[] sizes = new int[2];
-    sizes[0] = getLattice().getHexaSizeI();
-    sizes[1] = getLattice().getHexaSizeJ();
-    restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));
-  }//*/
   
   @Override
   public int simulate() {
