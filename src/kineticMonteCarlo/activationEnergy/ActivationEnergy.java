@@ -102,6 +102,7 @@ public class ActivationEnergy {
       if (parser.getCalculationMode().equals("catalysis")){
         doActivationEnergyStudy = true;
         lengthI = 2;
+        lengthJ = lengthI;
         numberOfNeighbours = 4;
         histogramPossibleAdsorption = new Double[2];
         histogramPossibleDesorption = new Double[2][2][3];
