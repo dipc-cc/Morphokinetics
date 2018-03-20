@@ -60,7 +60,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
    */
   private final boolean outputAe;
   private final boolean outputAeTotal;
-  private final ActivationEnergy activationEnergy;
   private final boolean doO2Dissociation;
   private long co2sum;
   /** Previous instant co2sum. For output */
@@ -78,7 +77,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
     goMultiplier = parser.getGOMultiplier();
     outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     outputAeTotal = parser.getOutputFormats().contains(OutputType.formatFlag.AETOTAL);
-    activationEnergy = new ActivationEnergy(parser);
     boolean outputData = parser.outputData();
     CatalysisCoRestart restart = new CatalysisCoRestart(outputData, restartFolder);
     setRestart(restart);
@@ -126,7 +124,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
           processProbs2D[i][j] = rates.getReactionRates()[i * 2 + j];
         }
       }
-      activationEnergy.setRates(processProbs2D);
+      getActivationEnergy().setRates(processProbs2D);
     }
     numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
