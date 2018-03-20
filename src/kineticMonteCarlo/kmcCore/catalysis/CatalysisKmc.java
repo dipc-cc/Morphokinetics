@@ -230,7 +230,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
         depositNewAtom();
         break;
       case DESORPTION:
-        desorpAtom(); 
+        desorbAtom(); 
         break;
       case REACTION:
         reactAtom();
@@ -244,8 +244,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     simulatedSteps++;
     if (outputData && simulatedSteps % outputEvery == 0) {
       if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
-        //writeData();
-        System.out.println("stationary");
+        System.out.println("stationary in step " + simulatedSteps);
         stationary = true;
         stationaryStep = simulatedSteps;
         getList().resetTime();
@@ -332,7 +331,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   }
 
   abstract void depositNewAtom();
-  abstract void desorpAtom(); 
+  abstract void desorbAtom(); 
   abstract void reactAtom();
   abstract void diffuseAtom();
   
@@ -343,7 +342,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     if (!start.equals("empty")) {
       initCovered();
     } else if (doAdsorption) {
-      initAdsorptionProbability();
+      initAdsorptionRates();
     }
     /*for (int i = 0; i < getLattice().size(); i++) {
       AbstractGrowthUc uc = getLattice().getUc(i);
@@ -382,9 +381,9 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   }
   
   /**
-   * Iterates over all lattice sites and initialises adsorption probabilities.
+   * Iterates over all lattice sites and initialises adsorption rates.
    */
-  abstract void initAdsorptionProbability();
+  abstract void initAdsorptionRates();
   
   /**
    * Start with fully covered surface.
@@ -392,7 +391,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   abstract void initCovered();
        
   /**
-   * Computes desorption probability.
+   * Computes desorption rate.
    * 
    * @param atom CO molecule.
    * @return 
@@ -416,20 +415,18 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     } else {
       index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
     }
-    double probability = reactionRateCoO[index];
-    
-    return probability;
+    return reactionRateCoO[index];
   }
   
   double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-    double probability;
+    double rate;
     if (atom.getType() == CO) {
-      probability = diffusionRateCO[index];
+      rate = diffusionRateCO[index];
     } else {
-      probability = diffusionRateO[index];
+      rate = diffusionRateO[index];
     }
-    return probability;
+    return rate;
   }
 
   /**

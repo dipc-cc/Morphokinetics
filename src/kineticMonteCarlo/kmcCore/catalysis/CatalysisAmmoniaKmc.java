@@ -207,7 +207,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   }
 
   @Override
-  void desorpAtom() { 
+  void desorbAtom() { 
     CatalysisSite atom = (CatalysisSite) sites[DESORPTION].randomElement();
     CatalysisSite neighbour = null;
     if (atom.getType() == O || atom.getType() == N) { // it has to desorp with another O to create O2
@@ -447,10 +447,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   }
 
   /**
-   * Iterates over all lattice sites and initialises adsorption probabilities.
+   * Iterates over all lattice sites and initialises adsorption rate.
    */
   @Override
-  void initAdsorptionProbability() {
+  void initAdsorptionRates() {
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
@@ -480,7 +480,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   }
   
   /**
-   * Updates total adsorption, desorption, reaction and diffusion probabilities.
+   * Updates total adsorption, desorption, reaction and diffusion rates.
    *
    * @param atom
    */
@@ -489,31 +489,31 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     double[] previousRate = totalRate.clone();
     
     CatalysisAmmoniaSite s = (CatalysisAmmoniaSite) site;
-    // recompute the probability of the current atom
-    if (doAdsorption) recomputeAdsorptionProbability(s);
-    if (doDesorption) recomputeDesorptionProbability(s);
-    if (doReaction) recomputeReactionProbability(s);
-    if (doDiffusion) recomputeDiffusionProbability(s);
-    // recompute the probability of the neighbour atoms
+    // recompute the rate of the current site
+    if (doAdsorption) recomputeAdsorptionRate(s);
+    if (doDesorption) recomputeDesorptionRate(s);
+    if (doReaction) recomputeReactionRate(s);
+    if (doDiffusion) recomputeDiffusionRate(s);
+    // recompute the rate of the neighbour sites
     for (int i = 0; i < s.getNumberOfNeighbours(); i+=2) {
       CatalysisAmmoniaSite neighbour = (CatalysisAmmoniaSite) s.getNeighbour(i);
-      if (doAdsorption) recomputeAdsorptionProbability(neighbour);
-      if (doDesorption) recomputeDesorptionProbability(neighbour);
-      if (doReaction) recomputeReactionProbability(neighbour);
-      if (doDiffusion) recomputeDiffusionProbability(neighbour);
+      if (doAdsorption) recomputeAdsorptionRate(neighbour);
+      if (doDesorption) recomputeDesorptionRate(neighbour);
+      if (doReaction) recomputeReactionRate(neighbour);
+      if (doDiffusion) recomputeDiffusionRate(neighbour);
     }
     
-    // recalculate total probability, if needed
+    // recalculate total rate, if needed
     for (byte i = 0; i <= P18; i++) {
       if (totalRate[i] / previousRate[i] < 1e-1) {
         updateRateFromList(i);
       }
     }
-    // tell to the list new probabilities. But only adsorption, desorption, (all) reaction (together) and diffusion.
+    // tell to the list new rates. But only adsorption, desorption, (all) reaction (together) and diffusion.
     getList().setRates(Arrays.copyOfRange(totalRate, 0, 4));
   }
   
-  private void recomputeAdsorptionProbability(CatalysisAmmoniaSite site) {
+  private void recomputeAdsorptionRate(CatalysisAmmoniaSite site) {
     double oldAdsorptionRate = site.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
     if (site.isOccupied()) {
@@ -527,7 +527,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     recomputeCollection(ADSORPTION, site, oldAdsorptionRate);
   }
   
-  private void recomputeDesorptionProbability(CatalysisSite atom) {
+  private void recomputeDesorptionRate(CatalysisSite atom) {
     totalRate[DESORPTION] -= atom.getRate(DESORPTION);
     if (!atom.isOccupied()) {
       if (atom.isOnList(DESORPTION)) {
@@ -536,7 +536,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       atom.setOnList(DESORPTION, false);
       return;
     }
-    double oldDesorptionProbability = atom.getRate(DESORPTION);
+    double oldDesorptionRate = atom.getRate(DESORPTION);
     atom.setRate(DESORPTION, 0);
     byte type = atom.getType();
     double rate = desorptionRatePerSite[type];
@@ -552,10 +552,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
         }
       }
     }
-    recomputeCollection(DESORPTION, atom, oldDesorptionProbability);
+    recomputeCollection(DESORPTION, atom, oldDesorptionRate);
   }
   
-  private void recomputeReactionProbability(CatalysisAmmoniaSite atom) {
+  private void recomputeReactionRate(CatalysisAmmoniaSite atom) {
     totalRate[REACTION] -= atom.getRate(REACTION);
     for (byte i = P5; i <= P18; i++) {
       totalRate[i] -= atom.getRate(i);
@@ -632,7 +632,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
   }
   
-  private void recomputeDiffusionProbability(CatalysisSite atom) {
+  private void recomputeDiffusionRate(CatalysisSite atom) {
     totalRate[DIFFUSION] -= atom.getRate(DIFFUSION);
     double oldDiffusionRate = atom.getRate(DIFFUSION);
     if (!atom.isOccupied()) {
@@ -646,8 +646,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
       CatalysisSite neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied() && neighbour.getLatticeSite() == CUS) {
-        double probability = diffusionRates[atom.getType()];
-        atom.addRate(DIFFUSION, probability, i);
+        double rate = diffusionRates[atom.getType()];
+        atom.addRate(DIFFUSION, rate, i);
       }
     }
     recomputeCollection(DIFFUSION, atom, oldDiffusionRate);
