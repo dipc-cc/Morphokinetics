@@ -44,6 +44,7 @@ public class CatalysisHongRates extends CatalysisRates {
   private final double prefactor;
   private final double[] adsorptionRates;
   
+  private final double[] epsilon;  
   private final double stickingCoefficient;
   /**
    * Partial pressures in Pascal (Pa).
@@ -70,6 +71,10 @@ public class CatalysisHongRates extends CatalysisRates {
     desorptionEnergies[N2] = 0.27; // P10
     desorptionEnergies[N] = 0.27; // P10
     desorptionEnergies[NO] = 1.49; // P11
+    
+    epsilon = new double[11];
+    epsilon[NH3] = 0.34;
+    epsilon[NO] = 0.16;
     
     diffusionEnergies = new double[11];
     diffusionEnergies[N] = 0.96; // P12
@@ -154,6 +159,17 @@ public class CatalysisHongRates extends CatalysisRates {
 
   public double getDesorptionRate(int type) {
     return getRate(desorptionEnergies[type]);
+  }
+  
+  /**
+   * Coverage dependent interaction for desorption of NH3 and NO.
+   * 
+   * @param coverage coverage of NH3 or NO.
+   * @param type NH3 or NO.
+   * @return factor to be multiplied by the rate.
+   */
+  public double desorptionRepulsionRate(double coverage, byte type) {
+    return exp(epsilon[type] * coverage / (kB * temperature));
   }
   
   public double getDiffusionRate(int type) {
