@@ -63,6 +63,11 @@ public class CatalysisCoRestart extends AbstractCatalysisRestart {
   }
   
   @Override
+  public PrintWriter[] getExtraWriters() {
+    return outDataAe;
+  }
+  
+  @Override
   void initCatalysis(int simulationNumber) {
     String folder = getFolder();
     co2P = new long[4];
