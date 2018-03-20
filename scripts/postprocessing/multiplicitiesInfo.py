@@ -123,7 +123,7 @@ def getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="
                 o = 0
                 ymin = 1e-8
             else:
-                fig, axarr = plt.subplots(2, sharex=True, figsize=(4,7))
+                fig, axarr = plt.subplots(2, sharex=True, figsize=(5,4))
                 o = 1
                 ymin = 1e-4
             #axarr[0].annotate("(a)", xy=(-0.13, 0.93), xycoords="axes fraction", size=8)

@@ -251,7 +251,7 @@ if lmbdas:
     figS.savefig("multiplicitiesSlope"+ext+".pdf")#, bbox_inches='tight')
     plt.close(figS)
 
-figR, ax = plt.subplots(1, figsize=(4,3.5))
+figR, ax = plt.subplots(1, figsize=(5,3))
 if total:
     rl = "R"
 else:
@@ -259,13 +259,12 @@ else:
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
 ax.plot(x, tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
 ax.plot(x, rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$")
-cm = plt.get_cmap('hsv')
-cm = ["green", "lime", "fuchsia", "cyan", "red", "purple"]
+cm = plt.get_cmap('tab20')
 markers=["o", "s","D","^","d","h","p"]
 for i,a in enumerate(range(minAlfa,maxAlfa)):
     if any(abs(epsilon[-1,::-1,i]) > 0.005):
         #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
-        ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm[a])
+        ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
 #ax.set_ylim(0,3.2)
@@ -280,4 +279,4 @@ ax.set_ylabel(r"Energy $(eV)$")
 #ax.set_yscale("log")
 mp.setY2TemperatureLabels(ax,kb)
 ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
-plt.savefig("multiplicitiesResume"+ext+"Karmele.pdf")#, bbox_inches='tight')
+plt.savefig("multiplicitiesResume"+ext+".pdf")#, bbox_inches='tight')
