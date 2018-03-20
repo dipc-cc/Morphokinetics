@@ -82,6 +82,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   private long noN2prv;
   private final int noN2max;
   private long[] noN2; // [NO], [N2], [H2O]
+  
+  private float temperature;
 
   public CatalysisAmmoniaKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
@@ -101,6 +103,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     CatalysisAmmoniaRestart restart = new CatalysisAmmoniaRestart(outputData, restartFolder);
     setRestart(restart);
     noN2max = parser.getNumberOfCo2();
+    
+    temperature = parser.getTemperature();
   }
   
   @Override
@@ -553,6 +557,23 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       }
     }
     recomputeCollection(DESORPTION, atom, oldDesorptionRate);
+  }
+  
+  private double desorptionRepulsionRate(byte type) {
+    double epsilon;
+    double coverage = getCoverage(type);
+    double totalR = getList().getGlobalProbability();
+    double temp = (double) temperature;
+    if (type == NH3) {
+      epsilon = 0.34;
+    } else {
+      epsilon = 0.16;
+    }
+    double factor = Math.exp(epsilon * coverage / (totalR * temp));
+    if (factor > 1+1e-10) System.out.println(" "+factor);
+    if (factor < 1) System.out.println(" "+factor);
+    double rate = desorptionRatePerSite[type] * factor;
+    return rate;
   }
   
   private void recomputeReactionRate(CatalysisAmmoniaSite atom) {
