@@ -140,6 +140,10 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     return (CatalysisLattice) super.getLattice();
   }
   
+  ActivationEnergy getActivationEnergy() {
+    return activationEnergy;
+  }
+  
   public abstract void setRates(CatalysisRates rates);
   
   public final void setRestart(AbstractCatalysisRestart restart) {
