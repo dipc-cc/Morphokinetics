@@ -538,14 +538,15 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
     double oldDesorptionProbability = atom.getRate(DESORPTION);
     atom.setRate(DESORPTION, 0);
-    double rate = desorptionRatePerSite[atom.getType()];
-    if (atom.getType() == NH3 || atom.getType() == NO) {
+    byte type = atom.getType();
+    double rate = desorptionRatePerSite[type];
+    if (type == NH3 || type == NO) {
       atom.setRate(DESORPTION, rate);
     } else { // O or N
-      if (atom.getType() == O || atom.getType() == N) {
+      if (type == O || type == N) {
         for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
           CatalysisSite neighbour = atom.getNeighbour(i);
-          if (neighbour.isOccupied() && neighbour.getType() == atom.getType()) {
+          if (neighbour.isOccupied() && neighbour.getType() == type) {
             atom.addRate(DESORPTION, rate, i);
           }
         }
