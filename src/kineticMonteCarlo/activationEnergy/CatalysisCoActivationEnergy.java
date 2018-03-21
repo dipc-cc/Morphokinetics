@@ -40,7 +40,6 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
   /** CO|O, from BR|CUS to BR|CUS. For Farkas, number of CO^C with CO^C neighbours */
   private Double[][][][] histogramPossibleDiffusion;
   
-  private Double[][] histogramCounterTmp;
   private int numberOfNeighbours;
   
   public CatalysisCoActivationEnergy(Parser parser) {
@@ -75,7 +74,7 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
    */
   public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
-      histogramCounterTmp = initDouble();
+      Double[][] histogramCounterTmp = initDouble();
       for (int i = 0; i < lattice.size(); i++) {
         CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
@@ -209,6 +208,4 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
     }
     return histogram;
   }
-  
-    
 }
