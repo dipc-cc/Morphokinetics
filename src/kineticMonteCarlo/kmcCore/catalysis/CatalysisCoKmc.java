@@ -519,7 +519,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
    * @param neighbour
    * @return 
    */
-  @Override
   double getReactionRate(CatalysisSite atom, CatalysisSite neighbour) {
     int index;
     if (atom.getType() == CO) {
@@ -530,7 +529,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
     return reactionRateCoO[index];
   }
   
-  @Override
   double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     double rate;
@@ -541,8 +539,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
     }
     return rate;
   }
-
-  
   
   @Override
   void initStationary() {

@@ -375,10 +375,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
    * Start with fully covered surface.
    */
   abstract void initCovered();
-  
-  abstract double getReactionRate(CatalysisSite atom, CatalysisSite neighbour);
-  
-  abstract double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour);
 
   /**
    * If a process is stored in a array and it is too big, change to be a tree. If a tree is too
