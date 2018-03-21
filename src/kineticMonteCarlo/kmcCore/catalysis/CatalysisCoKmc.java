@@ -21,7 +21,6 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
-import kineticMonteCarlo.activationEnergy.ActivationEnergy;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
@@ -47,12 +46,12 @@ public class CatalysisCoKmc extends CatalysisKmc {
   private double adsorptionRateCOPerSite;
   private double adsorptionRateOPerSite;
   // Desorption
-  //double[] desorptionRateCOPerSite; // BRIDGE or CUS
+  private double[] desorptionRateCOPerSite; // BRIDGE or CUS
   private double[] desorptionRateOPerSite;  // [BR][BR], [BR][CUS], [CUS][BR], [CUS][CUS]
   // Reaction
- /* double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-  double[] diffusionRateCO;
-  double[] diffusionRateO;*/
+  private double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+  private double[] diffusionRateCO;
+  private double[] diffusionRateO;
   private final double goMultiplier;
   private int numGaps;
   /**
@@ -371,7 +370,8 @@ public class CatalysisCoKmc extends CatalysisKmc {
    */
   private void updateRates(CatalysisSite atom) {
     // save previous rates
-    double[] previousRate = totalRate.clone();
+    double[] previousRate = new double[4];
+    System.arraycopy(totalRate, 0, previousRate, 0, previousRate.length);
     
     // recompute the probability of the current atom
     if (doAdsorption) recomputeAdsorptionRate(atom);
@@ -501,6 +501,48 @@ public class CatalysisCoKmc extends CatalysisKmc {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     return desorptionRateOPerSite[index];
   }
+  
+  /**
+   * Computes desorption rate.
+   * 
+   * @param atom CO molecule.
+   * @return 
+   */
+  double getDesorptionRate(CatalysisSite atom) {
+    return desorptionRateCOPerSite[atom.getLatticeSite()];
+  }
+  
+  /**
+   * One atom is O and the other CO, for sure.
+   * 
+   * @param atom
+   * @param neighbour
+   * @return 
+   */
+  @Override
+  double getReactionRate(CatalysisSite atom, CatalysisSite neighbour) {
+    int index;
+    if (atom.getType() == CO) {
+      index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
+    } else {
+      index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
+    }
+    return reactionRateCoO[index];
+  }
+  
+  @Override
+  double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
+    int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
+    double rate;
+    if (atom.getType() == CO) {
+      rate = diffusionRateCO[index];
+    } else {
+      rate = diffusionRateO[index];
+    }
+    return rate;
+  }
+
+  
   
   @Override
   void initStationary() {

@@ -56,12 +56,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   private final long maxSteps;
   private int outputEvery;
   private ArrayList<CatalysisData> adsorptionData;
-  // Desorption
-  double[] desorptionRateCOPerSite; // BRIDGE or CUS
-  // Reaction
-  double[] reactionRateCoO; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-  double[] diffusionRateCO;
-  double[] diffusionRateO;
   // Total rates
   double[] totalRate;
   final IAtomsCollection[] sites;
@@ -381,45 +375,10 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
    * Start with fully covered surface.
    */
   abstract void initCovered();
-       
-  /**
-   * Computes desorption rate.
-   * 
-   * @param atom CO molecule.
-   * @return 
-   */
-  double getDesorptionRate(CatalysisSite atom) {
-    return desorptionRateCOPerSite[atom.getLatticeSite()];
-  }
   
+  abstract double getReactionRate(CatalysisSite atom, CatalysisSite neighbour);
   
-  /**
-   * One atom is O and the other CO, for sure.
-   * 
-   * @param atom
-   * @param neighbour
-   * @return 
-   */
-  double getReactionRate(CatalysisSite atom, CatalysisSite neighbour) {
-    int index;
-    if (atom.getType() == CO) {
-      index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-    } else {
-      index = 2 * neighbour.getLatticeSite() + atom.getLatticeSite();
-    }
-    return reactionRateCoO[index];
-  }
-  
-  double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
-    int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-    double rate;
-    if (atom.getType() == CO) {
-      rate = diffusionRateCO[index];
-    } else {
-      rate = diffusionRateO[index];
-    }
-    return rate;
-  }
+  abstract double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour);
 
   /**
    * If a process is stored in a array and it is too big, change to be a tree. If a tree is too

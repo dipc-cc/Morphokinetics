@@ -66,7 +66,7 @@ public class CatalysisFarkasKmc extends CatalysisCoKmc {
   
   @Override
   double getDesorptionRate(CatalysisSite atom) {
-    double rate = desorptionRateCOPerSite[atom.getLatticeSite()];
+    double rate = super.getDesorptionRate(atom);
     if (atom.getLatticeSite() == CUS) {
       if (atom.getCoCusNeighbours() > 0) {
         rate = desorptionRateCoCusCoCus[atom.getCoCusNeighbours() - 1];
@@ -84,43 +84,33 @@ public class CatalysisFarkasKmc extends CatalysisCoKmc {
    */
   @Override
   double getReactionRate(CatalysisSite atom, CatalysisSite neighbour) {
-    int index;
     CatalysisSite atomCo;
-    CatalysisSite atomO;
     if (atom.getType() == CO) {
       atomCo = atom;
-      atomO = neighbour;
     } else {
       atomCo = neighbour;
-      atomO = atom;
     }
     double rate;
     if (atomCo.getCoCusNeighbours() > 0) { // repulsion
       rate = reactionRateCoOCoCusCoCus[atomCo.getCoCusNeighbours() - 1];
     } else {
-      index = 2 * atomCo.getLatticeSite() + atomO.getLatticeSite();
-      rate = reactionRateCoO[index];
+      rate = super.getReactionRate(atom, neighbour);
     }
     return rate;
   }
 
   @Override
   double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
-    int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
-    double rate;
     if (atom.getType() == CO) {
-      rate = diffusionRateCO[index];
       if (atom.getCoCusNeighbours() == 1) { // repulsion
         // C -> B, with one CO neighbour
         // C -> C, with one CO neighbour
-        rate = diffusionRateCoCusCoCus[neighbour.getLatticeSite()];
+        return diffusionRateCoCusCoCus[neighbour.getLatticeSite()];
       }
       if (atom.getCoCusNeighbours() == 2) // repulsion
         // C -> B, with two CO neighbours
-        rate = diffusionRateCoCusCoCus[2];
-    } else {
-      rate = diffusionRateO[index];
-    }
-    return rate;
+        return diffusionRateCoCusCoCus[2];
+    } 
+    return super.getDiffusionRate(atom, neighbour);
   }
 }
