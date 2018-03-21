@@ -93,5 +93,13 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
     coverage[specie.getType()]--;
     coverage[type]++;
     specie.setType(type);
-  }  
+  }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    for (int i = 0; i < coverage.length; i++) {
+      coverage[i] = 0;
+    }
+  }
 }
