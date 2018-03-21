@@ -47,6 +47,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
   private int occupiedNeighbours;
   /** Different processes that atom can do. In catalysis: adsorption, desorption, reaction and diffusion. */
   private AbstractProcess[] processes;
+  private int processSize;
   
   public AbstractSurfaceSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     this.id = id;
@@ -54,6 +55,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     
     setNumberOfNeighbours(numberOfNeighbours);
     visited = false;
+    processSize = 0;
   }
   
   public int getId() {
@@ -130,6 +132,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
   
   public final void setProcceses(AbstractProcess[] processes) {
     this.processes = processes;
+    processSize = processes.length;
   }
   
   public boolean isOnList(byte process) {
@@ -245,9 +248,9 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     occupiedNeighbours = 0; // current atom has no neighbour
     type = 0;
     oldType = 0;
-    for (int i = 0; i < processes.length; i++) {
+    for (int i = 0; i < processSize; i++) {
       processes[i].clear();
-    }          
+    }
   }
   
   @Override
