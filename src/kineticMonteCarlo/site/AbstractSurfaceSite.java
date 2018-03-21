@@ -243,6 +243,11 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     setOccupied(false);
     setList(false);
     occupiedNeighbours = 0; // current atom has no neighbour
+    type = 0;
+    oldType = 0;
+    for (int i = 0; i < processes.length; i++) {
+      processes[i].clear();
+    }          
   }
   
   @Override
