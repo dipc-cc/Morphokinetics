@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.kmcCore.growth;
 
-import kineticMonteCarlo.activationEnergy.ActivationEnergy;
+import kineticMonteCarlo.activationEnergy.ConcertedActivationEnergy;
 import basic.Parser;
 import basic.io.OutputType;
 import basic.io.Restart;
@@ -78,7 +78,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * Activation energy output at the end of execution
    */
   private final boolean aeOutput;
-  private final ActivationEnergy activationEnergy;
+  private final ConcertedActivationEnergy activationEnergy;
   private final Restart restart;
   private final boolean doIslandDiffusion;
   private final boolean doMultiAtomDiffusion;
@@ -107,7 +107,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     maxCoverage = (float) parser.getCoverage() / 100;
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
-    activationEnergy = new ActivationEnergy(parser);
+    activationEnergy = new ConcertedActivationEnergy(parser);
     restart = new Restart(false, restartFolder);
     doIslandDiffusion = parser.doIslandDiffusion();
     doMultiAtomDiffusion = parser.doMultiAtomDiffusion();
@@ -806,7 +806,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
 	
   private void updatePossibles() {
-    activationEnergy.updatePossiblesLocal(getList().getGlobalProbability(), getList().getDeltaTime(false));
+    activationEnergy.updatePossibles(getList().getGlobalProbability(), getList().getDeltaTime(false));
     if (doIslandDiffusion) {
       activationEnergy.updatePossiblesIslands(getLattice().getIslandIterator(), getList().getGlobalProbability(), getList().getDeltaTime(false));
     }
