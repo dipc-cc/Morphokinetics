@@ -28,8 +28,6 @@ import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
-import kineticMonteCarlo.lattice.Island;
-import kineticMonteCarlo.lattice.MultiAtom;
 
 /**
  *
@@ -44,9 +42,6 @@ public class ActivationEnergy {
   private Long[][] histogramPossibleCounter;
   private Double[][] histogramPossibleTmp;
   private Long[][] histogramPossibleCounterTmp;
-  private Double[] histogramPossibleIsland;
-  private Double[] histogramPossibleIslandTmp;
-  private Double[] histogramPossibleMultiAtom;
   private final ArrayList<AbstractSite> surface;
   private final boolean aeOutput;
   private boolean doActivationEnergyStudy;
@@ -89,9 +84,6 @@ public class ActivationEnergy {
         lengthI = 12;
         lengthJ = 16;
         numberOfNeighbours = 6;
-        histogramPossibleIsland = new Double[9];
-        histogramPossibleIslandTmp = new Double[9];
-        histogramPossibleMultiAtom = new Double[4];
       }
       histogramPossible = new Double[lengthI][lengthJ];
       histogramPossibleCounter = new Long[lengthI][lengthJ];
@@ -200,37 +192,6 @@ public class ActivationEnergy {
       }
     }
   }
-
-  public void updatePossiblesIslands(Iterator<Island> islands, double totalAndDepositionProbability, double elapsedTime) {
-    if (doActivationEnergyStudy) {
-      //if (previousProbability != totalAndDepositionProbability) {
-        histogramPossibleIslandTmp = new Double[9];
-        // iterate over all islands of the surface to get all possible hops (only to compute multiplicity)
-        while (islands.hasNext()) {
-          Island island = (Island) islands.next();
-          if (island.getNumberOfAtoms() < 9) {
-            histogramPossibleIsland[island.getNumberOfAtoms()] += elapsedTime;
-          }
-        }
-      /*} else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
-        for (int i = 0; i < 9; i++) {
-          histogramPossibleConcerted[i] += histogramPossibleConcertedTmp[i];
-        }
-      }*/
-    }
-  }
-
-  public void updatePossiblesMultiAtoms(Iterator<MultiAtom> islands, double totalAndDepositionProbability, double elapsedTime) {
-    if (doActivationEnergyStudy) {
-      // iterate over all MultiAtom of the surface to get all possible hops (only to compute multiplicity)
-      while (islands.hasNext()) {
-        Island island = (Island) islands.next();
-        if (island.getNumberOfAtoms() < 9) {
-          histogramPossibleMultiAtom[island.getNumberOfAtoms()] += elapsedTime;
-        }
-      }
-    }
-  }
   
   public void updateSuccess(int oldType, int newType) {
     histogramSuccess[oldType][newType]++;
@@ -249,10 +210,6 @@ public class ActivationEnergy {
       histogramPossibleTmp = initDouble();
       histogramPossibleCounterTmp = initLong();
       histogramSuccess = initInt();
-      
-      histogramPossibleIsland = initDouble1(9);
-      histogramPossibleIslandTmp = initDouble1(9);
-      histogramPossibleMultiAtom = initDouble1(4);
     }
   }
   
@@ -304,14 +261,7 @@ public class ActivationEnergy {
     printAeLow(print[0], "", printLineBreak, histogramPossibleCounterTmp); //AeInstantaneousDiscrete
     print[1].print(time + "\t");
     printAeLow(print[1], "", printLineBreak, histogramSuccess); //AeSuccess 
-    print[2].print(time + "\t");
-    printAeLow(print[2], "", printLineBreak, histogramPossible); //AePossibleFromList
-    for (int i = 0; i < 9; i++) {
-      print[2].print(histogramPossibleIsland[i] + "\t");
-    }
-    for (int i = 0; i < histogramPossibleMultiAtom.length; i++) {
-      print[2].print(histogramPossibleMultiAtom[i] + "\t");
-    }
+    printPossibles(print[2], time); //AePossibleFromList
     print[3].print(time + "\t");
     printAeLow(print[3], "", printLineBreak, histogramPossibleCounter); //AePossibleDiscrete
 
@@ -343,6 +293,11 @@ public class ActivationEnergy {
       print[i].flush();
     }
   }
+  
+  void printPossibles(PrintWriter print, double time) {
+    print.print(time + "\t");
+    printAeLow(print, "", false, histogramPossible); //AePossibleFromList
+  }    
   
   void updatePossible(int i, int j, double elapsedTime) {
     histogramPossible[i][j] += elapsedTime;

@@ -19,6 +19,10 @@
 package kineticMonteCarlo.activationEnergy;
 
 import basic.Parser;
+import java.io.PrintWriter;
+import java.util.Iterator;
+import kineticMonteCarlo.lattice.Island;
+import kineticMonteCarlo.lattice.MultiAtom;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 
@@ -32,6 +36,8 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
   private Double[][] histogramPossibleTmp;
   private Double[][] histogramPossibleCounterTmp;
   private double previousProbability;
+  private Double[] histogramPossibleIsland;
+  private Double[] histogramPossibleMultiAtom;
 
   
   public ConcertedActivationEnergy(Parser parser) {
@@ -39,6 +45,8 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
     transitionsHistogram = new int[12][16];
     setLengthI(12);
     setLengthJ(16);
+    histogramPossibleIsland = new Double[9];
+    histogramPossibleMultiAtom = new Double[4];
   }
   
   public void addTransitions(AbstractGrowthSite atom) {
@@ -93,9 +101,54 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
     }
   }
   
+  public void updatePossiblesIslands(Iterator<Island> islands, double totalAndDepositionProbability, double elapsedTime) {
+    if (doActivationEnergyStudy()) {
+      //if (previousProbability != totalAndDepositionProbability) {
+        //histogramPossibleIslandTmp = new Double[9];
+        // iterate over all islands of the surface to get all possible hops (only to compute multiplicity)
+        while (islands.hasNext()) {
+          Island island = (Island) islands.next();
+          if (island.getNumberOfAtoms() < 9) {
+            histogramPossibleIsland[island.getNumberOfAtoms()] += elapsedTime;
+          }
+        }
+      /*} else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
+        for (int i = 0; i < 9; i++) {
+          histogramPossibleConcerted[i] += histogramPossibleConcertedTmp[i];
+        }
+      }*/
+    }
+  }
+
+  public void updatePossiblesMultiAtoms(Iterator<MultiAtom> islands, double totalAndDepositionProbability, double elapsedTime) {
+    if (doActivationEnergyStudy()) {
+      // iterate over all MultiAtom of the surface to get all possible hops (only to compute multiplicity)
+      while (islands.hasNext()) {
+        Island island = (Island) islands.next();
+        if (island.getNumberOfAtoms() < 9) {
+          histogramPossibleMultiAtom[island.getNumberOfAtoms()] += elapsedTime;
+        }
+      }
+    }
+  }
+  
   @Override
   public void reset() {
     super.reset();
     transitionsHistogram = new int[12][16];
+    histogramPossibleIsland = initDouble1(9);
+    histogramPossibleMultiAtom = initDouble1(4);
   }
+  
+  @Override
+  void printPossibles(PrintWriter print, double time) {
+    super.printPossibles(print, time);
+    for (int i = 0; i < 9; i++) {
+      print.print(histogramPossibleIsland[i] + "\t");
+    }
+    for (int i = 0; i < histogramPossibleMultiAtom.length; i++) {
+      print.print(histogramPossibleMultiAtom[i] + "\t");
+    }
+  }
+    
 }
