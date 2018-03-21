@@ -691,4 +691,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   boolean maxProduction() {
     return noN2sum != noN2max;
   }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    for (int i = P5; i <= P18; i++) {
+      sites[i].clear();
+    }
+  }
 }
