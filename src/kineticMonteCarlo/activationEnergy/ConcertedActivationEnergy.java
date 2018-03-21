@@ -42,7 +42,9 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
   }
   
   public void addTransitions(AbstractGrowthSite atom) {
-    updateTransitions(atom, 1);
+    if (atom.isOccupied()) {
+      updateTransitions(atom, 1);
+    }
   }
 
   public void removeTransitions(AbstractGrowthSite atom) {
