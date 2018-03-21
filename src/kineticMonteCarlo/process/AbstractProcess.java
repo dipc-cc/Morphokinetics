@@ -120,6 +120,7 @@ public abstract class AbstractProcess {
     sumRate = 0.0;
     rate = 0.0;
     active = false;
+    resetEdgeType();
   }
   
   private void resetEdgeType() {
