@@ -146,7 +146,6 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
   public void updatePossibles(Iterator<CatalysisSite> surface, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
-      
       Double[][] histogramPossibleTmp = initDouble();
       while (surface.hasNext()) {
         CatalysisSite atom = surface.next();
@@ -158,23 +157,14 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
           // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
           if (atom.getType() == CO) {
             updatePossible(atom.getLatticeSite(), neighbour.getLatticeSite(), elapsedTime / 2.0);
-            //histogramPossibleCounter[atom.getLatticeSite()][neighbour.getLatticeSite()]++;
             histogramPossibleTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
           } else {
             updatePossible(neighbour.getLatticeSite(), atom.getLatticeSite(), elapsedTime / 2.0);
-            //histogramPossibleCounter[neighbour.getLatticeSite()][atom.getLatticeSite()]++;
             histogramPossibleTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
           }
         }
       }
       updateCounter(histogramPossibleTmp);
-      /*// it is counting twice each reaction, so dividing by 2
-      for (int i = 0; i < histogramPossibleCounter.length; i++) {
-        for (int j = 0; j < histogramPossibleCounter[0].length; j++) {
-          histogramPossibleCounter[i][j] += histogramPossibleTmp[i][j].longValue();
-          histogramPossibleCounterTmp[i][j] = histogramPossibleTmp[i][j].longValue();
-        }
-      }*/
     }
   }
   
