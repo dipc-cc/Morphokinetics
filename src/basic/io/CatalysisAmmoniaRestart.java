@@ -67,33 +67,34 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
     String folder = getFolder();
     noN2P = new long[3];
     counterNoN2 = 0;
-    // new file
-    try {
-      String fileName = format("%sdataCatalysis%03d.txt", folder, simulationNumber);
-      outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outCatalysis.println("# File " + fileName);
-      outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[NH3], 3. coverage[NH2], 4. coverage[NH], 5. coverage[NO], 6. coverage[N], 7. coverage[O], 8. coverage[OH], 9. nAdsorption, 10. nDesorption, 11. nReaction, 12. nDiffusion, 13. H2O, 14. N2, 15. NO, 15. sizeAdsorption, 16. sizeDesorption, 17. sizeReaction, 18. sizeDiffusion, ");
-      //outDataFormat = "%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
-      outDataFormat = "%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
-      fileName = format("%sdataTof%03d.txt", folder, simulationNumber);
-      outTof = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outTof.println("# File " + fileName);
-      outTof.println("# Information about TOF\n# [1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
-      fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
-      outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outData.println("# File " + fileName);
-      outDataAe = new PrintWriter[7];
-      
-      String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList", 
-        "PossibleDiscrete", "RatioTimesPossible", "Multiplicity", "All"};
-      for (int i = 0; i < names.length; i++) {
-        fileName = format("%sdataAe%s%03d.txt", folder, names[i], simulationNumber);
+    if (super.isOutput()) {
+      // new file
+      try {
+        String fileName = format("%sdataCatalysis%03d.txt", folder, simulationNumber);
+        outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+        outCatalysis.println("# File " + fileName);
+        outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[NH3], 3. coverage[NH2], 4. coverage[NH], 5. coverage[NO], 6. coverage[N], 7. coverage[O], 8. coverage[OH], 9. nAdsorption, 10. nDesorption, 11. nReaction, 12. nDiffusion, 13. H2O, 14. N2, 15. NO, 15. sizeAdsorption, 16. sizeDesorption, 17. sizeReaction, 18. sizeDiffusion, ");
+        outDataFormat = "%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
+        fileName = format("%sdataTof%03d.txt", folder, simulationNumber);
+        outTof = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+        outTof.println("# File " + fileName);
+        outTof.println("# Information about TOF\n# [1.CO[BR]+O[BR], 2. CO[BR]+O[CUS], 3. CO[CUS]+O[BR], 4. CO[CUS]+O[CUS]]");
+        fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
         outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
         outData.println("# File " + fileName);
-        outDataAe[i] = outData;
+        outDataAe = new PrintWriter[7];
+
+        String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList",
+          "PossibleDiscrete", "RatioTimesPossible", "Multiplicity", "All"};
+        for (int i = 0; i < names.length; i++) {
+          fileName = format("%sdataAe%s%03d.txt", folder, names[i], simulationNumber);
+          outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
+          outData.println("# File " + fileName);
+          outDataAe[i] = outData;
+        }
+      } catch (IOException e) {
+        Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
-    } catch (IOException e) {
-      Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
     }
   }
   

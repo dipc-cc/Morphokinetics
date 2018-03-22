@@ -25,19 +25,28 @@ package basic.io;
 public abstract class AbstractCatalysisRestart extends Restart {
   
   private String folder;
+  private boolean output;
   
   public AbstractCatalysisRestart(boolean catalysisOutput, String restartFolder){
-    folder = restartFolder;
-    if (!folder.endsWith("/")) {
-      folder += "/";
+    if (catalysisOutput) {
+      folder = restartFolder;
+      if (!folder.endsWith("/")) {
+        folder += "/";
+      }
+      createFolder(restartFolder);
     }
-    createFolder(restartFolder);
+    output = catalysisOutput;
   }
+  
   abstract public void resetCatalysis();
   abstract public void flushCatalysis();
   abstract void initCatalysis(int simulationNumber);
 
   public String getFolder() {
     return folder;
+  }
+
+  public boolean isOutput() {
+    return output;
   }
 }
