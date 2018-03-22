@@ -25,7 +25,7 @@ package basic.io;
 public abstract class AbstractCatalysisRestart extends Restart {
   
   private String folder;
-  private boolean output;
+  private final boolean output;
   
   public AbstractCatalysisRestart(boolean catalysisOutput, String restartFolder){
     if (catalysisOutput) {
