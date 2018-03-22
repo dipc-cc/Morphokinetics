@@ -27,7 +27,7 @@ public abstract class AbstractProcess {
   private double rate;
   /** Attribute for AVL tree. */
   private double sumRate;
-  private double[] edgeRate;
+  private final double[] edgeRate;
   private boolean active;
   private final int numberOfProcesses;
   /** Stores the type of the neighbours. It is used for activation energy study; to be able to check old neighbour types. */
@@ -58,8 +58,7 @@ public abstract class AbstractProcess {
   
   public void setRate(double rate) {
     this.rate = rate;
-    if (rate == 0.0) {
-      edgeRate = new double[numberOfProcesses];
+    if (rate == 0.0) { 
       resetEdgeType();
     }
   }
@@ -128,6 +127,8 @@ public abstract class AbstractProcess {
     for (int i = 0; i < edgeType.length; i++) {
       edgeType[i] = (byte) -1;      
     }
-    //return edgeType;
+    for (int i = 0; i < edgeRate.length; i++) {
+      edgeRate[i] = 0.0;
+    }
   }
 }
