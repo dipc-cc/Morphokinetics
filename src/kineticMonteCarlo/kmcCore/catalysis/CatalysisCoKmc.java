@@ -65,6 +65,8 @@ public class CatalysisCoKmc extends CatalysisKmc {
   private long co2prv;
   private final int co2max;
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
+  /** For previous rates. It is a local variable, but this way, garbage collector works better.*/
+  double[] previousRate; 
   
   public CatalysisCoKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
@@ -82,6 +84,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     co2max = parser.getNumberOfCo2();
     co2 = new long[4];
     co2sum = 0;
+    previousRate = new double[4];
   }
   
   @Override
@@ -370,7 +373,6 @@ public class CatalysisCoKmc extends CatalysisKmc {
    */
   private void updateRates(CatalysisSite atom) {
     // save previous rates
-    double[] previousRate = new double[4];
     System.arraycopy(totalRate, 0, previousRate, 0, previousRate.length);
     
     // recompute the probability of the current atom
