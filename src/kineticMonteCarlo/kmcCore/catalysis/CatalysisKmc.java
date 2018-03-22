@@ -288,13 +288,11 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     int returnValue = 0;
 
     while (getLattice().getCoverage() < maxCoverage && maxProduction()) {
-      if (outputAe) {
-        if (outputAeTotal) {
-          activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
-        } else {
-          activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
-        }
-      }        
+      if (outputAeTotal) {
+        activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
+      } else {
+        activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
+      }	      
       if (performSimulationStep()) {
         break;
       }
