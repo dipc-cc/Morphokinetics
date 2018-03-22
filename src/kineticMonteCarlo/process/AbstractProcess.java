@@ -31,11 +31,12 @@ public abstract class AbstractProcess {
   private boolean active;
   private final int numberOfProcesses;
   /** Stores the type of the neighbours. It is used for activation energy study; to be able to check old neighbour types. */
-  private byte[] edgeType;
+  private final byte[] edgeType;
   
   public AbstractProcess(int numberOfProcesses) {
     edgeRate = new double[numberOfProcesses];
     this.numberOfProcesses = numberOfProcesses;
+    edgeType = new byte[6];
     resetEdgeType();
   }
   
@@ -124,7 +125,6 @@ public abstract class AbstractProcess {
   }
   
   private void resetEdgeType() {
-    edgeType = new byte[6];
     for (int i = 0; i < edgeType.length; i++) {
       edgeType[i] = (byte) -1;      
     }
