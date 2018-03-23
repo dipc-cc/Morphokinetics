@@ -153,8 +153,10 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
   
   @Override
   public void updatePossibles(Iterator<CatalysisSite> surface, double elapsedTime, boolean stationary) {
-    System.out.println("This method should not be called");
-    System.out.println("Call instead public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary)");
+    if (doActivationEnergyStudy() && stationary) {
+      System.out.println("This method should not be called");
+      System.out.println("Call instead public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary)");
+    }
   }
   
   @Override
