@@ -52,6 +52,12 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
   public CatalysisAmmoniaRestart(boolean catalysisOutput, String restartFolder) {
     super(catalysisOutput, restartFolder);
   }
+  
+  @Override
+  public PrintWriter[] getExtraWriters() {
+    return outDataAe;
+  }
+  
   @Override
   public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] production, int[] sizes) {
     outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], coverages[4], coverages[5], coverages[6],

@@ -21,6 +21,7 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
+import kineticMonteCarlo.activationEnergy.CatalysisCoActivationEnergy;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
@@ -85,6 +86,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     co2 = new long[4];
     co2sum = 0;
     previousRate = new double[4];
+    setActivationEnergy(new CatalysisCoActivationEnergy(parser));
   }
   
   @Override

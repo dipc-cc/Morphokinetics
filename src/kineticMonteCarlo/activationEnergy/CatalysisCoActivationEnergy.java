@@ -33,7 +33,7 @@ import kineticMonteCarlo.unitCell.CatalysisUc;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoActivationEnergy extends ActivationEnergy {
+public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEnergy {
   
   private Double[] histogramPossibleReactionCoCus;
   private Double[] histogramPossibleAdsorption;
@@ -41,7 +41,7 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
   /** CO|O, from BR|CUS to BR|CUS. For Farkas, number of CO^C with CO^C neighbours */
   private Double[][][][] histogramPossibleDiffusion;
   
-  private int numberOfNeighbours;
+  private final int numberOfNeighbours;
   
   public CatalysisCoActivationEnergy(Parser parser) {
     super(parser);
@@ -63,7 +63,7 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
           }
         }
       }
-    }//-**/
+    }
   }
   
   /**
@@ -73,6 +73,7 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
    * @param elapsedTime
    * @param stationary
    */
+  @Override
   public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
       Double[][] histogramCounterTmp = initDouble();
@@ -143,6 +144,7 @@ public class CatalysisCoActivationEnergy extends ActivationEnergy {
    * @param elapsedTime 
    * @param stationary
    */
+  @Override
   public void updatePossibles(Iterator<CatalysisSite> surface, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)

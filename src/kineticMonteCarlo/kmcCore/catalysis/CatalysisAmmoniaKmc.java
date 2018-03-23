@@ -21,6 +21,7 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import basic.io.CatalysisAmmoniaRestart;
 import java.util.Arrays;
+import kineticMonteCarlo.activationEnergy.CatalysisAmmoniaActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisAmmoniaLattice;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
@@ -103,6 +104,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     CatalysisAmmoniaRestart restart = new CatalysisAmmoniaRestart(outputData, restartFolder);
     setRestart(restart);
     noN2max = parser.getNumberOfCo2();
+    setActivationEnergy(new CatalysisAmmoniaActivationEnergy(parser));
   }
   
   @Override
@@ -152,6 +154,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       NH2_OH_reaction_NH3_O = r.getReactionRate(17);
       N_OH_reaction_NH_O = r.getReactionRate(18);
     }
+    double[][] localRates = {{adsorptionRateNH3PerSite}, { desorptionRatePerSite[NH3]}, { adsorptionRateOPerSite}, { desorptionRatePerSite[O]}, { NH3_O_reaction_NH2_OH}, { NH2_OH_reaction_NH_H2O}, { NH_OH_reaction_N_H2O}, { NH_O_reaction_N_OH}, { N_O_reaction_NO}, { desorptionRatePerSite[N]}, { desorptionRatePerSite[NO]}, { diffusionRates[N]}, { diffusionRates[O]}, { diffusionRates[OH]}, { NH2_O_reaction_NH_OH}, { NH_OH_reaction_NH2_O}, { NH2_OH_reaction_NH3_O}, { N_OH_reaction_NH_O}};
+    getActivationEnergy().setRates(localRates);
   }
   
   @Override

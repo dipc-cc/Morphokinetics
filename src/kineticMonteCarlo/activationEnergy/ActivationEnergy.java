@@ -26,8 +26,6 @@ import java.util.Iterator;
 import java.util.Locale;
 import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractGrowthSite;
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
 
 /**
  *

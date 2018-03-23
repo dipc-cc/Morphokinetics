@@ -25,9 +25,9 @@ import basic.io.OutputType;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
+import kineticMonteCarlo.activationEnergy.AbstractCatalysisActivationEnergy;
 import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
-import kineticMonteCarlo.activationEnergy.CatalysisCoActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
@@ -70,7 +70,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   final boolean doPrintAllIterations;
   final String start;
   private AbstractCatalysisRestart restart;
-  private final CatalysisCoActivationEnergy activationEnergy;
+  private AbstractCatalysisActivationEnergy activationEnergy;
   /**
    * Activation energy output during the execution
    */
@@ -114,7 +114,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       maxCoverage = 2; // it will never end because of coverage
     }
     steps = new long[13];
-    activationEnergy = new CatalysisCoActivationEnergy(parser);
     outputAe = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     outputAeTotal = parser.getOutputFormats().contains(OutputType.formatFlag.AETOTAL);
     counterSitesWith4OccupiedNeighbours = 0;
@@ -134,7 +133,11 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     return (CatalysisLattice) super.getLattice();
   }
   
-  CatalysisCoActivationEnergy getActivationEnergy() {
+  final void setActivationEnergy(AbstractCatalysisActivationEnergy ae) {
+    activationEnergy = ae;
+  }
+  
+  AbstractCatalysisActivationEnergy getActivationEnergy() {
     return activationEnergy;
   }
   
@@ -292,7 +295,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
         activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
-      }	      
+      }      
       if (performSimulationStep()) {
         break;
       }
