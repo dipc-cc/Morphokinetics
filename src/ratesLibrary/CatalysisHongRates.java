@@ -28,7 +28,8 @@ import static kineticMonteCarlo.site.CatalysisAmmoniaSite.O2;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.OH;
 
 /**
- *
+ * Rates from S. Hong et al. Journal of Catalysis 276 (2010) 371-381.
+ * 
  * @author J. Alberdi-Rodriguez
  */
 public class CatalysisHongRates extends CatalysisRates {
@@ -153,7 +154,8 @@ public class CatalysisHongRates extends CatalysisRates {
    */
   private double computeAdsorptionRate(int sourceType) {
     double areaHalfUc = 10.0308e-20; // Angstrom²
-    return pressures[sourceType] * areaHalfUc /
+    double correction = 2.0; // This correction is need to reproduce fig 7 of the paper.
+    return correction * pressures[sourceType] * areaHalfUc /
             (Math.sqrt(2.0 * Math.PI * mass[sourceType] * kBInt * temperature));
   }
 
@@ -183,5 +185,4 @@ public class CatalysisHongRates extends CatalysisRates {
   private double getRate(double energy) {
     return prefactor * exp(-energy / kB / temperature);
   }
-  
 }
