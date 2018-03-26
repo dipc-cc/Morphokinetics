@@ -69,6 +69,15 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
   double getCoverage(int type, int site) {
     return (double) coverage[type] / (hexaArea / 2.0f);
   }
+  
+  @Override
+  public float getCoverage() {
+    float cov = 0.f;
+    for (int i = 0; i < coverage.length; i++) {
+      cov += coverage[i];
+    }
+    return cov / (hexaArea / 2.0f);
+  }
 
   /**
    * Check whether two CO^CUS atoms are together. Only for CO for Farkas.
