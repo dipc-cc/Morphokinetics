@@ -58,7 +58,7 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
   }
   
   @Override
-  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] production, double[] sizes) {
+  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] production, int[] sizes) {
     String frmt = "%g";
     outCatalysis.format(frmt, time);
     frmt = "\t%g";
@@ -72,7 +72,7 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
     for (int i = 0; i < production.length; i++) {
       outCatalysis.format(frmt, production[i]);
     }
-    frmt = "\t%g";
+    frmt = "\t%d";
     for (int i = 0; i < sizes.length; i++) {
       outCatalysis.format(frmt, sizes[i]);
     }
