@@ -75,14 +75,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   private double NH2_OH_reaction_NH3_O;
   private double N_OH_reaction_NH_O;
 
-  private long h2oCounter;
-  private long noCounter;
-  private long n2Counter;
-  private long noN2sum;
   /** Previous instant noN2sum. For output */
   private long noN2prv;
   private final int noN2max;
-  private long[] noN2; // [NO], [N2], [H2O]
+  private final long[] productionCounter; // [NO], [N2], [H2O]
   
   private CatalysisHongRates rates;
 
@@ -105,6 +101,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     setRestart(restart);
     noN2max = parser.getNumberOfCo2();
     setActivationEnergy(new CatalysisAmmoniaActivationEnergy(parser));
+    productionCounter = new long[3];
   }
   
   @Override
@@ -221,14 +218,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       neighbour = atom.getRandomNeighbour(DESORPTION);
       getLattice().extract(neighbour);
       if (atom.getType() == N) {
-        n2Counter++;
-        noN2sum++;
+        productionCounter[1]++; // N2
       }
     }
     
     if (atom.getType() == NO) {
-      noCounter++;
-      noN2sum++;
+      productionCounter[0]++; // NO
     }
     
     getLattice().extract(atom);
@@ -315,7 +310,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       getLattice().extract(atom); // H2O
       getLattice().transformTo(neighbour, NH);
     }
-    h2oCounter++;
+    productionCounter[2]++; // H2O
   }
 
   /**
@@ -330,7 +325,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       getLattice().transformTo(neighbour, N);
       
     }
-    h2oCounter++;
+    productionCounter[2]++; // H2O
   }
   /**
    * NH + O -> N + OH.
@@ -664,36 +659,34 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   @Override
   void initStationary() {
     noN2prv = 0;
-    noN2 = new long[3];
+    for (int i = 0; i < productionCounter.length; i++) {
+      productionCounter[i] = 0;
+    }
   }
 
   @Override
   long[] getProduction() {
-    long[] production = new long[3];
-    production[0] = h2oCounter;
-    production[1] = n2Counter;
-    production[2] = noCounter;
-    return production;
+    return productionCounter;
   }
 
   @Override
   long getSumProduction() {
-    return noN2sum;
+    return productionCounter[0] + productionCounter[1]; //NO + N2 production
   }
 
   @Override
   boolean writeNow() {
-    return noN2sum % 10 == 0 && noN2prv != noN2sum;
+    return getSumProduction() % 10 == 0 && noN2prv != getSumProduction();
   }
 
   @Override
   void updatePrevious() {
-    noN2prv = noN2sum;
+    noN2prv = getSumProduction();
   }
 
   @Override
   boolean maxProduction() {
-    return noN2sum != noN2max;
+    return getSumProduction() != noN2max;
   }
   
   @Override
