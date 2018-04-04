@@ -33,7 +33,6 @@ import java.util.logging.Logger;
 public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
   
   private PrintWriter outCatalysis;
-  private String outDataFormat;
   private double currentTime;
   private double previousTime;
   private PrintWriter outTof;
@@ -59,11 +58,26 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
   }
   
   @Override
-  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] production, int[] sizes) {
-    outCatalysis.format(outDataFormat, time, coverages[0], coverages[1], coverages[2], coverages[3], coverages[4], coverages[5], coverages[6],
-            steps[0], steps[1], steps[2], steps[3], 
-            production[0], production[1], production[2], 
-            sizes[0], sizes[1], sizes[2], sizes[3]);
+  public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] production, double[] sizes) {
+    String frmt = "%g";
+    outCatalysis.format(frmt, time);
+    frmt = "\t%g";
+    for (int i = 0; i < coverages.length; i++) {
+      outCatalysis.format(frmt, coverages[i]);
+    }
+    frmt = "\t%d";
+    for (int i = 0; i < steps.length; i++) {
+      outCatalysis.format(frmt, steps[i]);
+    }
+    for (int i = 0; i < production.length; i++) {
+      outCatalysis.format(frmt, production[i]);
+    }
+    frmt = "\t%g";
+    for (int i = 0; i < sizes.length; i++) {
+      outCatalysis.format(frmt, sizes[i]);
+    }
+    frmt = "\n";
+    outCatalysis.format(frmt, "");
     noN2C = production;
     currentTime = time;
   }
@@ -80,7 +94,6 @@ public class CatalysisAmmoniaRestart extends AbstractCatalysisRestart {
         outCatalysis = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
         outCatalysis.println("# File " + fileName);
         outCatalysis.println("# Information about the system every fixed number of events\n# [1. time 2. coverage[NH3], 3. coverage[NH2], 4. coverage[NH], 5. coverage[NO], 6. coverage[N], 7. coverage[O], 8. coverage[OH], 9. nAdsorption, 10. nDesorption, 11. nReaction, 12. nDiffusion, 13. H2O, 14. N2, 15. NO, 15. sizeAdsorption, 16. sizeDesorption, 17. sizeReaction, 18. sizeDiffusion, ");
-        outDataFormat = "%g\t%g\t%g\t%g\t%g\t%g\t%g\t%g\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\t%d\n";
         fileName = format("%sdataTof%03d.txt", folder, simulationNumber);
         outTof = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
         outTof.println("# File " + fileName);
