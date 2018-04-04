@@ -23,6 +23,11 @@ import basic.io.OutputType.formatFlag;
 import basic.EvaluatorType.evaluatorFlag;
 import basic.io.Restart;
 import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
@@ -52,183 +57,12 @@ public class Parser {
    * Restart object to read "parameters" file.
    */
   private final Restart restart;
-  /** 
-   * See {@link #getCalculationType()}.
-   */
-  private String calculationType;
-  /**
-   * See {@link #getRatesLibrary()}.
-   */
-  private String ratesLibrary;
-  /**
-   * See {@link #getListType()}.
-   */
-  private String listType;
-  /**
-   * See {@link #getPerimeterType()}.
-   */
-  private String perimeterType;
-  /**
-   * See {@link #getCalculationMode()}.
-   */
-  private String calculationMode;
-  /**
-   * See {@link #getSurfaceType()}.
-   */
-  private String surfaceType;
-  /**
-   * See {@link #getTemperature()}.
-   */
-  private float temperature;
-  /**
-   * See {@link #getPressureO2()} and {@link #getPressureCO()}.
-   */
-  private double pressureCO;
-  private double pressureO2;
-  /**
-   * See {@link #getDepositionFlux()}.
-   */
-  private double depositionFlux;
-  /**
-   * See {@link #getEndTime()}.
-   */
-  private double endTime;
-  /**
-   * See {@link #getCoverage()}.
-   */
-  private double coverage;
-  /**
-   * See {@link #getPsdScale()}.
-   */
-  private double psdScale;
-  /**
-   * See {@link #getPsdExtend()}.
-   */
-  private double psdExtend;
-  /**
-   * See {@link #getNumberOfSimulations() }.
-   */
-  private int numberOfSimulations;
-  /**
-   * See {@link #getNumberOfSteps() }.
-   */
-  private long numberOfSteps;
-  /**
-   * See {@link #getNumberOfCo2()}.
-   */
-  private int numberOfCo2;
-  /**
-   * See {@link #getCartSizeX()}.
-   */
-  private int cartSizeX;
-  /**
-   * See {@link #getCartSizeY()}.
-   */
-  private int cartSizeY;
-  /**
-   * See {@link #getCartSizeZ()}.
-   */
-  private int cartSizeZ;
-  private int millerX;
-  private int millerY;
-  private int millerZ;
-  /**
-   * See {@link #getBinsLevels()}.
-   */
-  private int binsLevels;
-  /**
-   * See {@link #getExtraLevels()}.
-   */
-  private int extraLevels;
-  private boolean multithreaded;
-  /**
-   * See {@link #visualise()}.
-   */
-  private boolean visualise;
-  /**
-   * See {@link #withGui()}.
-   */
-  private boolean withGui;
-  /**
-   * See {@link #justCentralFlake()}.
-   */
-  private boolean justCentralFlake;
-  /**
-   * See {@link #printToImage()}.
-   */
-  private boolean printToImage;
-  /**
-   * See {@link #doPsd()}.
-   */
-  private boolean psd;
-  /**
-   * See {@link #isPsdSymmetric()}.
-   */
-  private boolean psdSymmetry;
-  /**
-   * See {@link #isPeriodicSingleFlake()}.
-   */
-  private boolean periodicSingleFlake;
-  /**
-   * See {@link #outputData()} and {@link #getOutputFormats()}.
-   */
-  private boolean outputData;
-  /**
-   * See {@link #randomSeed()}.
-   */
-  private boolean randomSeed;
-  /**
-   * See {@link #useMaxPerimeter()}.
-   */
-  private boolean useMaxPerimeter;
-  /**
-   * See {@link #forceNucleation()}
-   */
-  private boolean forceNucleation;
-  /**
-   * See {@link #useDevita()}
-   */
-  private boolean devita;
-  /**
-   * See {@link #doCatalysisAdsorption()}
-   */
-  private String catalysisAdsorption;
-  /**
-   * See {@link #doCatalysisDesorption()}
-   */
-  private String catalysisDesorption;
-  /**
-   * See {@link #doCatalysisReaction()}
-   */
-  private String catalysisReaction;
-  /**
-   * See {@link #doCatalysisDiffusion()}
-   */
-  private String catalysisDiffusion;
-  /**
-   * See {@link #calalysisStart()}
-   */
-  private String catalysisStart;
-  /**
-   * See {@link #doPrintAllIterations()}
-   */
-  private boolean printAllIterations;
-  /**
-   * See {@link #doCatalysisO2Dissociation()}
-   */
-  private boolean catalysisO2Dissociation;
-  /**
-   * See {@link #areCollectionsAutomatic()}.
-   */
-  private boolean automaticCollections;
-  /**
-   * See {@link #doIslandDiffusion() ()}.
-   */
-  private boolean doIslandDiffusion;
-  /**
-   * See {@link #doMultiAtomDiffusion() ()}.
-   */
-  private boolean doMultiAtomDiffusion;
+  
+  private final Map<String, String> mapString;
+  private final Map<String, Double> mapDouble;
+  private final Map<String, Integer> mapInt;
+  private final Map<String, Boolean> mapBoolean;
+
   private JSONArray outputDataFormat;
   /**
    * See {@link #getOutputFormats()}.
@@ -240,129 +74,91 @@ public class Parser {
    * between 0 and 2⁸ has to be chosen.
    */
   private long numericFormatCode;
-  /**
-   * See {@link #getOutputEvery()].
-   */
-  private int outputEvery;
-  
-  // For evolutionary algorithm
-  /** Can be original or dcma. */
-  private String evolutionaryAlgorithm;
-  /** Can be serial or threaded. */
-  private boolean parallelEvaluator; 
-  private int populationSize;
-  private int offspringSize;
-  private int populationReplacement;
-  /**
-   *  See {@link #getTotalIterations()}.
-   */
-  private int totalIterations;
-  private int repetitions;
-  private boolean readReference;
-  private double stopError;
-  /** Minimum possible value that a gene can have. */
-  private double minValueGene;
-  /** Maximum possible value that a gene can have. */
-  private double maxValueGene;  
-  /** Gets O desorption rate multiplied by a factor for plotting resolution problems. */
-  private double goMultiplier;
-
-  /** Chooses between exponential distribution of the random genes (true) or linear distribution
-   * (false).
-   */  
-  private boolean expDistribution;
+  private long numericStatusCode;
+  private JSONArray evaluator;
   /** To have the possibility to choose between different evaluators. For the moment only PSD, TIME
    * and HIERARCHY.
    */
   private final EvaluatorType evaluatorType;
-  /** This numbers reflect the power of two and gives the chance to choose between inclusively among
-   * PSD(0), TIME(1) and HIERARCHY(2). So a number between 0 (no evaluator) and 7 (all the
-   * evaluators) has to be chosen.
-   */
-  private long numericStatusCode;
-  private JSONArray evaluator;
-  /** If a hierarchy evaluator has been chosen, select the type of hierarchy evaluator. Options:
-   * "basic", "step", "reference" and "Frobenius".
-   */
-  private String hierarchyEvaluator;
-  /** Search for "rates" or "energies". */
-  private String evolutionarySearchType;
-  /** Decides if diffusion must be fixed. */
-  private boolean fixDiffusion;
   
   /**
-   * Constructor
+   * Constructor.
    */
   public Parser() {
-    calculationType = "batch";
-    ratesLibrary = "COX_PRB";
-    listType = "linear";
-    perimeterType = "circle";
-    calculationMode = "Ag";
-    surfaceType = "cartesian";
-    temperature = 135.0f;
-    pressureO2 = 1.0;
-    pressureCO = 7.0;
-    depositionFlux = 0.0035;
-    coverage = 30.0;
-    psdScale = 1;
-    psdExtend = 1;
-    endTime = -1;
-    numberOfSimulations = 10;
-    numberOfSteps = -1;
-    numberOfCo2 = -1;
-    cartSizeX = 256;
-    cartSizeY = 256;
-    cartSizeZ = 256;
-    millerX = 0;
-    millerY = 1;
-    millerZ = 1;
-    binsLevels = 100;
-    extraLevels = 0;
-    multithreaded = true;
-    visualise = true;
-    withGui = true;
-    justCentralFlake = true;
-    printToImage = false;
-    psd = false;
-    psdSymmetry = true;
-    outputData = false;
-    numericFormatCode = 2;
+    mapString = new LinkedHashMap<>(); // Insertion order is preserved
+    mapString.put("calculationType", "batch");
+    mapString.put("ratesLibrary", "COX_PRB");
+    mapString.put("listType", "linear");
+    mapString.put("perimeterType", "circle");
+    mapString.put("calculationMode", "Ag");
+    mapString.put("surfaceType", "cartesian");
+    mapString.put("catalysisAdsorption", "true");
+    mapString.put("catalysisDesorption", "true");
+    mapString.put("catalysisReaction", "true");
+    mapString.put("catalysisDiffusion", "true");
+    mapString.put("catalysisStart", "O");
+    mapDouble = new LinkedHashMap<>();
+    mapDouble.put("temperature", 135.0);
+    mapDouble.put("pressureO2", 1.0);
+    mapDouble.put("pressureCO", 7.0);
+    mapDouble.put("depositionFlux", 0.0035);
+    mapDouble.put("coverage", 30.0);
+    mapDouble.put("psdScale", 1.0);
+    mapDouble.put("psdExtend", 1.0);
+    mapDouble.put("endTime", -1.0);
+    mapDouble.put("numberOfSteps", -1.0);
+    mapInt = new LinkedHashMap<>();
+    mapInt.put("numberOfSimulations", 10);
+    mapInt.put("numberOfCo2", -1);
+    mapInt.put("cartSizeX", 256);
+    mapInt.put("cartSizeY", 256);
+    mapInt.put("cartSizeZ", 256);
+    mapInt.put("millerX", 0);
+    mapInt.put("millerY", 1);
+    mapInt.put("millerZ", 1);
+    mapInt.put("binsLevels", 100);
+    mapInt.put("extraLevels", 0);
+    mapInt.put("outputEvery", 10);
+    mapBoolean = new LinkedHashMap<>();
+    mapBoolean.put("multithreaded", true);
+    mapBoolean.put("visualise", true);
+    mapBoolean.put("withGui", true);
+    mapBoolean.put("justCentralFlake", true);
+    mapBoolean.put("printToImage", false);
+    mapBoolean.put("psd", false);
+    mapBoolean.put("psdSymmetry", true);
+    mapBoolean.put("outputData", false);
+    mapBoolean.put("randomSeed", true);
+    mapBoolean.put("useMaxPerimeter", false);
+    mapBoolean.put("periodicSingleFlake", false);
+    mapBoolean.put("forceNucleation", true);
+    mapBoolean.put("devita", true);
+    mapBoolean.put("printAllIterations", false);
+    mapBoolean.put("catalysisO2Dissociation", true);
+    mapBoolean.put("automaticCollections", false);
+    mapBoolean.put("doIslandDiffusion", true);
+    mapBoolean.put("doMultiAtomDiffusion", true);
     outputType = new OutputType();
-    outputEvery = 10;
-    randomSeed = true;
-    useMaxPerimeter = false;
-    forceNucleation = true;
-    devita = true;
-    catalysisAdsorption = "true";
-    catalysisDesorption = "true";
-    catalysisReaction = "true";
-    catalysisDiffusion = "true";
-    printAllIterations = false;
-    catalysisStart = "O";
-    catalysisO2Dissociation = true;
-    automaticCollections = false;
-    doIslandDiffusion = true;
-    doMultiAtomDiffusion = true;
+    numericFormatCode = 2;
     
-    evolutionaryAlgorithm = "original";
-    parallelEvaluator = false;
-    populationSize = 5;
-    offspringSize = 32;
-    populationReplacement = 5;
-    totalIterations = 100;
-    repetitions = 18;
-    readReference = true;
-    stopError = 0.022;
-    minValueGene = 0.1;
-    maxValueGene = 1e11;
-    expDistribution = true;
+    mapString.put("evolutionaryAlgorithm", "original");
+    mapString.put("hierarchyEvaluator", "basic");
+    mapString.put("evolutionarySearchType", "rates");
+    mapDouble.put("stopError", 0.022);
+    mapDouble.put("minValueGene", 0.1);
+    mapDouble.put("maxValueGene", 1e11);
+    mapDouble.put("goMultiplier", 1.0);
+    mapInt.put("populationSize", 5);
+    mapInt.put("offspringSize", 32);
+    mapInt.put("populationReplacement", 5);
+    mapInt.put("totalIterations", 100);
+    mapInt.put("repetitions", 18);
+    mapInt.put("numericStatusCode", 3);
+    mapBoolean.put("expDistribution", true);
+    mapBoolean.put("parallelEvaluator", false);
+    mapBoolean.put("readReference", true);
+    mapBoolean.put("fixDiffusion", true);
     evaluatorType = new EvaluatorType();
-    numericStatusCode = 3;
-    hierarchyEvaluator = "basic";
-    evolutionarySearchType = "rates";
-    fixDiffusion = true;
-    goMultiplier = 1.0;
     
     restart = new Restart(".");
   }
@@ -379,266 +175,60 @@ public class Parser {
 
     // Once the file is read, proceed to read the parameters
     JSONObject json = new JSONObject(str);
-    try {
-      calculationType = json.getString("calculationType");
-    } catch (JSONException e) {
-      calculationType = "batch";
-    }    
-    try {
-      ratesLibrary = json.getString("ratesLibrary");
-    } catch (JSONException e) {
-      ratesLibrary = "COX_PRB";
-    }
-    try {
-      listType = json.getString("listType");
-    } catch (JSONException e) {
-      listType = "linear";
-    }
-    try {
-      perimeterType = json.getString("perimeterType");
-    } catch (JSONException e) {
-      perimeterType = "circle";
-    }
-    try {
-      calculationMode = json.getString("calculationMode");
-    } catch (JSONException e) {
-      calculationMode = "Ag";
-    }
-    try {
-      surfaceType = json.getString("surfaceType");
-    } catch (JSONException e) {
-      surfaceType = "cartesian";
-    }
-    try {
-      temperature = (float) json.getDouble("temperature");
-    } catch (JSONException e) {
-      temperature = 135.0f;
-    }
-    try {
-      pressureO2 = json.getDouble("pressureO2");
-    } catch (JSONException e) {
-      pressureO2 = 1.0;
-    }
-    try {
-      pressureCO = json.getDouble("pressureCO");
-    } catch (JSONException e) {
-      pressureCO = 7.0;
-    }
-    try {
-      depositionFlux = json.getDouble("depositionFlux");
-    } catch (JSONException e) {
-      if (calculationMode.equals("Ag") || calculationMode.equals("AgUc")) {
-        depositionFlux = 0.0035;
-      } else { // Graphene (or etching, where it does not matter the deposition
-        depositionFlux = 0.000035;
-      }
-    }
-    try {
-      endTime = json.getDouble("endTime");
-    } catch (JSONException e) {
-      endTime = -1;
-    }
-    try {
-      coverage = json.getDouble("coverage");
-    } catch (JSONException e) {
-      coverage = 30.0;
-    }
-    try {
-      psdScale = json.getDouble("psdScale");
-    } catch (JSONException e) {
-      psdScale = 1;
-    }
-    try {
-      psdExtend = json.getDouble("psdExtend");
-    } catch (JSONException e) {
-      psdExtend = 1;
-    }
-    try {
-      numberOfSimulations = json.getInt("numberOfSimulations");
-    } catch (JSONException e) {
-      numberOfSimulations = 10;
-    }
-    try {
-      numberOfSteps = (long) json.getDouble("numberOfSteps");
-    } catch (JSONException e) {
-      numberOfSteps = -1;
-    }
-    try {
-      numberOfCo2 = (int) json.getDouble("numberOfCo2");
-    } catch (JSONException e) {
-      numberOfCo2 = -1;
-    }
-    try {
-      cartSizeX = json.getInt("cartSizeX");
-    } catch (JSONException e) {
-      cartSizeX = 256;
-    }  
-    try {
-      cartSizeY = json.getInt("cartSizeY");
-    } catch (JSONException e) {
-      cartSizeY = cartSizeX;
-    }
-    try {
-      cartSizeZ = json.getInt("cartSizeZ");
-    } catch (JSONException e) {
-      cartSizeZ = cartSizeX;
-    }
-   try {
-      millerX = json.getInt("millerX");
-    } catch (JSONException e) {
-      millerX = 0;
-    }  
-    try {
-      millerY = json.getInt("millerY");
-    } catch (JSONException e) {
-      millerY = 1;
-    }
-    try {
-      millerZ = json.getInt("millerZ");
-    } catch (JSONException e) {
-      millerZ = 1;
-    }
-    try {
-      binsLevels = json.getInt("binsLevels");
-    } catch (JSONException e) {
-      binsLevels = 100;
-    }
-    try {
-      extraLevels = json.getInt("extraLevels");
-    } catch (JSONException e) {
-      extraLevels = 0;
-    }
-    try {
-      multithreaded = json.getBoolean("multithreaded");
-    } catch (JSONException e) {
-      multithreaded = true;
-    }
-    try {
-      visualise = json.getBoolean("visualise");
-    } catch (JSONException e) {
-      visualise = true;
-    }
-    try {
-      withGui = json.getBoolean("withGui");
-    } catch (JSONException e) {
-      withGui = true;
-    }
-    try {
-      justCentralFlake = json.getBoolean("justCentralFlake");
-    } catch (JSONException e) {
-      justCentralFlake = true;
-    }
-    try {
-      printToImage = json.getBoolean("printToImage");
-    } catch (JSONException e) {
-      printToImage = false;
-    }
-    try {
-      psd = json.getBoolean("psd");
-    } catch (JSONException e) {
-      psd = false;
-    }
-    try {
-      psdSymmetry = json.getBoolean("psdSymmetry");
-    } catch (JSONException e) {
-      psdSymmetry = true;
-    }
-    try {
-      periodicSingleFlake = json.getBoolean("periodicSingleFlake");
-    } catch (JSONException e) {
-      periodicSingleFlake = false;
-    }
-    try {
-      randomSeed = json.getBoolean("randomSeed");
-    } catch (JSONException e) {
-      randomSeed = true;
-    }
-    try {
-      useMaxPerimeter = json.getBoolean("useMaxPerimeter");
-    } catch (JSONException e) {
-      useMaxPerimeter = false;
-    }
-    try {
-      forceNucleation = json.getBoolean("forceNucleation");
-    } catch (JSONException e) {
-      forceNucleation = true;
-    }
-    try {
-      devita = json.getBoolean("devita");
-    } catch (JSONException e) {
-      devita = justCentralFlake; // By default Devita works with single-flake simulations only
-    }
-    try {
-      catalysisAdsorption = json.getString("catalysisAdsorption");
-    } catch (JSONException e) {
+    
+    Set<String> keys = new HashSet<>(mapString.keySet()); // copy the keys
+    Iterator iter = keys.iterator();
+    while (iter.hasNext()) {
+      String key = (String) iter.next();
       try {
-        catalysisAdsorption = Boolean.toString(json.getBoolean("catalysisAdsorption"));
-      } catch (JSONException ex) {
-        catalysisAdsorption = "true";
-      }
-    }
-    try {
-      printAllIterations = json.getBoolean("printAllIterations");
-    } catch (JSONException e) {
-      printAllIterations = false;
-    }
-    try {
-      catalysisDesorption = json.getString("catalysisDesorption");
-    } catch (JSONException e) {
-      try {
-        catalysisDesorption = Boolean.toString(json.getBoolean("catalysisDesorption"));
-      } catch (JSONException ex) {
-        catalysisDesorption = "true";
-      }
-    }
-    try {
-      catalysisReaction = json.getString("catalysisReaction");
+        mapString.put(key, json.getString(key));
       } catch (JSONException e) {
-      try {
-        catalysisReaction = Boolean.toString(json.getBoolean("catalysisReaction"));
-      } catch (JSONException ex) {
-        catalysisReaction = "true";
       }
     }
-    try {
-      catalysisDiffusion = json.getString("catalysisDiffusion");
-    } catch (JSONException e) {
+    keys = new HashSet<>(mapDouble.keySet()); // copy the keys
+    iter = keys.iterator();
+    while (iter.hasNext()) {
+      String key = (String) iter.next();
       try {
-        catalysisDiffusion = Boolean.toString(json.getBoolean("catalysisDiffusion"));
-      } catch (JSONException ex) {
-        catalysisDiffusion = "true";
+        mapDouble.put(key, json.getDouble(key));
+      } catch (JSONException e) {
       }
     }
-    try {
-      catalysisStart = json.getString("catalysisStart");
-    } catch (JSONException e) {
-      catalysisStart = "O";
+    keys = new HashSet<>(mapInt.keySet()); // copy the keys
+    iter = keys.iterator();
+    while (iter.hasNext()) {
+      String key = (String) iter.next();
+      try {
+        mapInt.put(key, json.getInt(key));
+      } catch (JSONException e) {
+      }
     }
-    try {
-      catalysisO2Dissociation = json.getBoolean("catalysisO2Dissociation");
-    } catch (JSONException e) {
-      catalysisO2Dissociation = true;
+    keys = new HashSet<>(mapBoolean.keySet()); // copy the keys
+    iter = keys.iterator();
+    while (iter.hasNext()) {
+      String key = (String) iter.next();
+      try {
+        mapBoolean.put(key, json.getBoolean(key));
+      } catch (JSONException e) {
+      }
     }
+    
     try {
-      automaticCollections = json.getBoolean("automaticCollections");
+      mapDouble.put("depositionFlux", json.getDouble("depositionFlux"));
     } catch (JSONException e) {
-      automaticCollections = false;
+      if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc")) {
+        mapDouble.put("depositionFlux", 0.0035);
+      } else { // Graphene (or etching, where it does not matter the deposition
+        mapDouble.put("depositionFlux", 0.000035);
+      }
     }
+
     try {
-      doIslandDiffusion = json.getBoolean("doIslandDiffusion");
+      mapBoolean.put("devita", json.getBoolean("devita"));
     } catch (JSONException e) {
-      doIslandDiffusion = true;
+      mapBoolean.put("devita", mapBoolean.get("justCentralFlake")); // By default Devita works with single-flake simulations only
     }
-    try {
-      doMultiAtomDiffusion = json.getBoolean("doMultiAtomDiffusion");
-    } catch (JSONException e) {
-      doMultiAtomDiffusion = true;
-    }
-    try {
-      outputData = json.getBoolean("outputData");
-    } catch (JSONException e) {
-      outputData = false;
-    }
+    
     try {
       numericFormatCode = 0;
       outputDataFormat = json.getJSONArray("outputDataFormat");
@@ -681,85 +271,6 @@ public class Parser {
         numericFormatCode = 2; // Only mko (binary) output by default
     }
     try {
-      outputEvery = json.getInt("outputEvery");
-    } catch (JSONException e) {
-      outputEvery = 10;
-    }
-    
-    //  -------------- Evolutionary Algorithm ----------------------
-    try {
-      evolutionaryAlgorithm = json.getString("evolutionaryAlgorithm");
-    } catch (JSONException e) {
-      evolutionaryAlgorithm = "original";
-    }    
-    try {
-      parallelEvaluator = json.getBoolean("parallelEvaluator");
-    } catch (JSONException e) {
-      parallelEvaluator = false;
-    }
-    try {
-      populationSize = json.getInt("populationSize");
-    } catch (JSONException e) {
-      populationSize = 5;
-    }  
-    try {
-      offspringSize = json.getInt("offspringSize");
-    } catch (JSONException e) {
-      offspringSize = 32;
-    }    
-    try {
-      populationReplacement = json.getInt("populationReplacement");
-    } catch (JSONException e) {
-      populationReplacement = 5;
-    } 
-    try {
-      totalIterations = json.getInt("totalIterations");
-    } catch (JSONException e) {
-      totalIterations = 100;
-    }
-    try {
-      repetitions = json.getInt("repetitions");
-    } catch (JSONException e) {
-      repetitions = 18;
-    }
-    try {
-      readReference = json.getBoolean("readReference");
-    } catch (JSONException e) {
-      readReference = true;
-    }
-    try {
-      stopError = json.getDouble("stopError");
-    } catch (JSONException e) {
-      stopError = 0.022;
-    }
-    try {
-      evolutionarySearchType = json.getString("evolutionarySearchType");
-    } catch (JSONException e) {
-      evolutionarySearchType = "rates";
-    }
-    try {
-      minValueGene = json.getDouble("minValueGene");
-    } catch (JSONException e) {
-      if (evolutionarySearchType.equals("energies")) minValueGene = 0.05;
-      else minValueGene = 0.1;
-    }
-    try {
-      maxValueGene = json.getDouble("maxValueGene");
-    } catch (JSONException e) {
-      if (evolutionarySearchType.equals("energies")) maxValueGene = 1;
-      else maxValueGene = 1e11;
-    }
-    try {
-      expDistribution = json.getBoolean("expDistribution");
-    } catch (JSONException e) {
-      expDistribution = !evolutionarySearchType.equals("energies");
-    }  
-    try {
-      hierarchyEvaluator = json.getString("hierarchyEvaluator");
-    } catch (JSONException e) {
-      hierarchyEvaluator = "basic";
-    }
-    try {
       numericStatusCode = 0;
       evaluator = json.getJSONArray("evaluator");
       for (int i = 0; i < evaluator.length(); i++) {
@@ -779,16 +290,6 @@ public class Parser {
     } catch (JSONException e) {
         numericStatusCode = 1 + 2 + 4; // All the evaluators by default
     }
-    try {
-      fixDiffusion = json.getBoolean("fixDiffusion");
-    } catch (JSONException e) {
-      fixDiffusion = true;
-    }    
-    try {
-      goMultiplier = json.getDouble("goMultiplier");
-    } catch (JSONException e) {
-      goMultiplier = 1.0;
-    }
     return 0;
   }
 
@@ -796,53 +297,18 @@ public class Parser {
    * Prints all the parameters; either read from "parameter" file or the default value.
    */
   public void print() throws JSONException {
-    System.out.printf("%32s: %s,\n", "\"calculationType\"", calculationType);
-    System.out.printf("%32s: %s,\n", "\"ratesLibrary\"", ratesLibrary);
-    System.out.printf("%32s: %s,\n", "\"justCentralFlake\"", justCentralFlake);
-    System.out.printf("%32s: %s,\n", "\"listType\"", listType);
-    System.out.printf("%32s: %s,\n", "\"perimeterType\"", perimeterType);
-    System.out.printf("%32s: %s,\n", "\"multithreaded\"", multithreaded);
-    System.out.printf("%32s: %s,\n", "\"numberOfSimulations\"", numberOfSimulations);
-    System.out.printf("%32s: %s,\n", "\"numberOfSteps\"", numberOfSteps);
-    System.out.printf("%32s: %s,\n", "\"numberOfCo2\"", numberOfCo2);
-    System.out.printf("%32s: %s,\n", "\"cartSizeX\"", cartSizeX);
-    System.out.printf("%32s: %s,\n", "\"cartSizeY\"", cartSizeY);
-    System.out.printf("%32s: %s,\n", "\"cartSizeZ\"", cartSizeZ);
-    System.out.printf("%32s: %s,\n", "\"millerX\"", millerX);
-    System.out.printf("%32s: %s,\n", "\"millerY\"", millerY);
-    System.out.printf("%32s: %s,\n", "\"millerZ\"", millerZ);
-    System.out.printf("%32s: %s,\n", "\"binsLevels\"", binsLevels);
-    System.out.printf("%32s: %s,\n", "\"extraLevels\"", extraLevels);
-    System.out.printf("%32s: %s,\n", "\"pressureO2\"", pressureO2);
-    System.out.printf("%32s: %s,\n", "\"pressureCO\"", pressureCO);
-    System.out.printf("%32s: %s,\n", "\"temperature\"", temperature);
-    System.out.printf("%32s: %s,\n", "\"depositionFlux\"", depositionFlux);
-    System.out.printf("%32s: %s,\n", "\"endTime\"", endTime);
-    System.out.printf("%32s: %s,\n", "\"coverage\"", coverage);
-    System.out.printf("%32s: %s,\n", "\"psdScale\"", psdScale);
-    System.out.printf("%32s: %s,\n", "\"psdExtend\"", psdExtend);
-    System.out.printf("%32s: %s,\n", "\"visualise\"", visualise);
-    System.out.printf("%32s: %s,\n", "\"withGui\"", withGui);
-    System.out.printf("%32s: %s,\n", "\"printToImage\"", printToImage);
-    System.out.printf("%32s: %s,\n", "\"calculationMode\"", calculationMode);
-    System.out.printf("%32s: %s,\n", "\"surfaceType\"", surfaceType);
-    System.out.printf("%32s: %s,\n", "\"psd\"", psd);
-    System.out.printf("%32s: %s,\n", "\"psdSymmetry\"", psdSymmetry);
-    System.out.printf("%32s: %s,\n", "\"periodicSingleFlake\"", periodicSingleFlake);
-    System.out.printf("%32s: %s,\n", "\"randomSeed\"", randomSeed);
-    System.out.printf("%32s: %s,\n", "\"useMaxPerimeter\"", useMaxPerimeter);
-    System.out.printf("%32s: %s,\n", "\"forceNucleation\"", forceNucleation);
-    System.out.printf("%32s: %s,\n", "\"devita\"", devita);
-    System.out.printf("%32s: %s,\n", "\"catalysisAdsorption\"", catalysisAdsorption);
-    System.out.printf("%32s: %s,\n", "\"catalysisDesorption\"", catalysisDesorption);
-    System.out.printf("%32s: %s,\n", "\"catalysisReaction\"", catalysisReaction);
-    System.out.printf("%32s: %s,\n", "\"catalysisDiffusion\"", catalysisDiffusion);
-    System.out.printf("%32s: %s,\n", "\"catalysisStart\"", catalysisStart);
-    System.out.printf("%32s: %s,\n", "\"catalysisO2Dissociation\"", catalysisO2Dissociation);
-    System.out.printf("%32s: %s,\n", "\"automaticCollections\"", automaticCollections);
-    System.out.printf("%32s: %s,\n", "\"doIslandDiffusion\"", doIslandDiffusion);
-    System.out.printf("%32s: %s,\n", "\"doMultiAtomDiffusion\"", doMultiAtomDiffusion);
-    System.out.printf("%32s: %s,\n", "\"outputData\"", outputData);
+    for (String key : mapString.keySet()) {
+      System.out.printf("%32s: %s,\n", "\"" + key + "\"", "\"" + mapString.get(key) + "\"");
+    }
+    for (String key : mapDouble.keySet()) {
+      System.out.printf("%32s: %s,\n", "\"" + key + "\"", mapDouble.get(key));
+    }
+    for (String key : mapInt.keySet()) {
+      System.out.printf("%32s: %s,\n", "\"" + key + "\"", mapInt.get(key));
+    }
+    for (String key : mapBoolean.keySet()) {
+      System.out.printf("%32s: %s,\n", "\"" + key + "\"", mapBoolean.get(key));
+    }
     if (outputDataFormat != null) {
       System.out.printf("%32s: [", "\"outputDataFormat\"");
       
@@ -854,19 +320,6 @@ public class Parser {
     } else {
       System.out.printf("%32s: [ {\"type\": \"mko\"},],\n", "\"outputDataFormat\"");
     }
-    System.out.printf("%32s: %s,\n", "\"outputEvery\"", outputEvery);
-    System.out.printf("%32s: %s,\n", "\"evolutionaryAlgorithm\"", evolutionaryAlgorithm);
-    System.out.printf("%32s: %s,\n", "\"parallelEvaluator\"", parallelEvaluator);
-    System.out.printf("%32s: %s,\n", "\"populationSize\"", populationSize);
-    System.out.printf("%32s: %s,\n", "\"offspringSize\"", offspringSize);
-    System.out.printf("%32s: %s,\n", "\"populationReplacement\"", populationReplacement);
-    System.out.printf("%32s: %s,\n", "\"totalIterations\"", totalIterations);
-    System.out.printf("%32s: %s,\n", "\"repetitions\"", repetitions);
-    System.out.printf("%32s: %s,\n", "\"readReference\"", readReference);
-    System.out.printf("%32s: %s,\n", "\"stopError\"", stopError);
-    System.out.printf("%32s: %s,\n", "\"minValueGene\"", minValueGene);
-    System.out.printf("%32s: %s,\n", "\"maxValueGene\"", maxValueGene);
-    System.out.printf("%32s: %s,\n", "\"expDistribution\"", expDistribution);    
     if (evaluator != null) {
       System.out.printf("%32s: [", "\"evaluator\"");
       
@@ -878,9 +331,6 @@ public class Parser {
     } else {
       System.out.printf("%32s: [ {\"type\": \"psd\"}, {\"type\": \"time\"}, {\"type\": \"hierarchy\"},],\n", "\"evaluator\"");
     }
-    System.out.printf("%32s: %s,\n", "\"hierarchyEvaluator\"", hierarchyEvaluator);
-    System.out.printf("%32s: %s,\n", "\"evolutionarySearchType\"", evolutionarySearchType);
-    System.out.printf("%32s: %s,\n", "\"fixDiffusion\"", fixDiffusion);
     
   }
 
@@ -895,7 +345,7 @@ public class Parser {
    * @return "batch", "evolutionary" or "psd".
    */
   public String getCalculationType() {
-    return calculationType;
+    return mapString.get("calculationType");
   }
 
   /**
@@ -912,7 +362,7 @@ public class Parser {
    * basic growth. "simple" or anything else for AgUc.
    */
   public String getRatesLibrary() {
-    return ratesLibrary;
+    return mapString.get("ratesLibrary");
   }
 
   /**
@@ -923,7 +373,7 @@ public class Parser {
    * @return "linear" or "binned".
    */
   public String getListType() {
-    return listType;
+    return mapString.get("listType");
   }
 
   /**
@@ -932,7 +382,7 @@ public class Parser {
    * @param listType linear or binned.
    */
   public void setListType(String listType) {
-    this.listType = listType;
+    mapString.put("listType", listType);
   }
 
   /**
@@ -941,7 +391,7 @@ public class Parser {
    * @return properly formated "SQUARE" or "CIRCLE" (default option).
    */
   public short getPerimeterType() {
-    switch (perimeterType) {
+    switch (mapString.get("perimeterType")) {
       case "square":
         return RoundPerimeter.SQUARE;
       case "circle":
@@ -951,7 +401,7 @@ public class Parser {
   }
 
   public void setTemperature(float temperature) {
-    this.temperature = temperature;
+    mapDouble.put("temperature", (double) temperature);
   }
   
   /**
@@ -962,7 +412,7 @@ public class Parser {
    * @return temperature
    */
   public float getTemperature() {
-    return temperature;
+    return new Float(mapDouble.get("temperature"));
   }
 
   /**
@@ -971,7 +421,7 @@ public class Parser {
    * @return O2 pressure.
    */
   public double getPressureO2() {
-    return pressureO2;
+    return mapDouble.get("pressureO2");
   }
 
   /**
@@ -980,7 +430,7 @@ public class Parser {
    * @return GO multiplier.
    */
   public double getGOMultiplier() {
-    return goMultiplier;
+    return mapDouble.get("goMultiplier");
   }
   
   /**
@@ -989,7 +439,7 @@ public class Parser {
    * @return CO pressure.
    */
   public double getPressureCO() {
-    return pressureCO;
+    return mapDouble.get("pressureCO");
   }
 
   /**
@@ -1002,7 +452,7 @@ public class Parser {
    * @see ratesLibrary.IRates#getDepositionRatePerSite()
    */
   public double getDepositionFlux() {
-    return depositionFlux;
+    return mapDouble.get("depositionFlux");
   }
 
   /**
@@ -1013,7 +463,7 @@ public class Parser {
    * @return ending time of simulation or -1 (no time limit).
    */
   public double getEndTime() {
-    return endTime;
+    return mapDouble.get("endTime");
   }
   
   /**
@@ -1025,7 +475,7 @@ public class Parser {
    * @return final coverage.
    */
   public double getCoverage() {
-    return coverage;
+    return mapDouble.get("coverage");
   }
   
   /**
@@ -1076,7 +526,7 @@ public class Parser {
    * @return psdScale
    */
   public double getPsdScale() {
-    return psdScale;
+    return mapDouble.get("psdScale");
   }
   
   /**
@@ -1141,11 +591,11 @@ public class Parser {
    * @return psdExtend
    */
   public double getPsdExtend() {
-    return psdExtend;
+    return mapDouble.get("psdExtend");
   }
   
   public void setNumberOfSimulations(int numberOfSimulations){
-    this.numberOfSimulations = numberOfSimulations;
+    mapInt.put("numberOfSimulations", numberOfSimulations);
   }
   
   /**
@@ -1156,7 +606,7 @@ public class Parser {
    * @return number of simulations.
    */
   public int getNumberOfSimulations() {
-    return numberOfSimulations;
+    return mapInt.get("numberOfSimulations");
   }
   
   /**
@@ -1168,7 +618,8 @@ public class Parser {
    * @return number of simulations.
    */
   public long getNumberOfSteps() {
-    return numberOfSteps;
+    double steps = mapDouble.get("numberOfSteps");
+    return (long) steps;
   }
   
   /**
@@ -1180,7 +631,7 @@ public class Parser {
    * @return number of simulations.
    */
   public int getNumberOfCo2() {
-    return numberOfCo2;
+    return mapInt.get("numberOfCo2");
   }
 
   /**
@@ -1191,11 +642,11 @@ public class Parser {
    * @return Cartesian size in X direction. 
    */
   public int getCartSizeX() {
-    return cartSizeX;
+    return mapInt.get("cartSizeX");
   }
 
   public void setCartSizeX(int sizeX) {
-    cartSizeX = sizeX;
+    mapInt.put("cartSizeX", sizeX);
   }
   
   /**
@@ -1206,11 +657,11 @@ public class Parser {
    * @return Cartesian size in Y direction. 
    */
   public int getCartSizeY() {
-    return cartSizeY;
+    return mapInt.get("cartSizeY");
   }
     
   public void setCartSizeY(int sizeY) {
-    cartSizeY = sizeY;
+    mapInt.put("cartSizeY", sizeY);
   }
   
   /**
@@ -1222,35 +673,35 @@ public class Parser {
    * @return Cartesian size in Z direction.
    */
   public int getCartSizeZ() {
-    return cartSizeZ;
+    return mapInt.get("cartSizeZ");
   }
   
   public void setCartSizeZ(int sizeZ) {
-    cartSizeZ = sizeZ;
+    mapInt.put("cartSizeZ", sizeZ);
   }
   
   public int getMillerX() {
-    return millerX;
+    return mapInt.get("millerX");
   }
 
   public void setMillerX(int sizeX) {
-    millerX = sizeX;
+    mapInt.put("millerX", sizeX);
   }
   
   public int getMillerY() {
-    return millerY;
+    return mapInt.get("millerY");
   }
     
   public void setMillerY(int sizeY) {
-    millerY = sizeY;
+   mapInt.put("millerY", sizeY);
   }
   
   public int getMillerZ() {
-    return millerZ;
+    return mapInt.get("millerZ");
   }
   
   public void setMillerZ(int sizeZ) {
-    millerZ = sizeZ;
+    mapInt.put("millerZ", sizeZ);
   }  
   
   /**
@@ -1261,7 +712,8 @@ public class Parser {
    * @return lattice size in I direction. 
    */
   public int getHexaSizeI() {
-    if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
+    int cartSizeX = mapInt.get("cartSizeX");
+    if (getCalculationMode().equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
       return cartSizeX;
     }
     if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
@@ -1284,8 +736,8 @@ public class Parser {
    * @return lattice size in J direction. 
    */
   public int getHexaSizeJ() {
-    if (calculationMode.equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
-      return cartSizeY;
+    if (getCalculationMode().equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
+      return mapInt.get("cartSizeY");
     }
     if (getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
       return Math.round(getCartSizeY() / (2 * AbstractGrowthLattice.Y_RATIO));
@@ -1302,23 +754,23 @@ public class Parser {
    * @return number of levels of the bin.
    */
   public int getBinsLevels() {
-    return binsLevels;
+    return mapInt.get("binsLevels");
   }
 
   public void setBinsLevels(int binsLevels) {
-    this.binsLevels = binsLevels;
+    mapInt.put("binsLevels", binsLevels);
   }
 
   public int getExtraLevels() {
-    return extraLevels;
+    return mapInt.get("extraLevels");
   }
   
   public void setExtraLevels(int extraLevels) {
-    this.extraLevels = extraLevels;
+    mapInt.put("extraLevels", extraLevels);
   }
 
   public boolean isMultithreaded() {
-    return multithreaded;
+    return mapBoolean.get("multithreaded");
   }
 
   /**
@@ -1330,7 +782,7 @@ public class Parser {
    */
   public boolean visualise() {
     if (withGui()) {
-      return visualise;
+      return mapBoolean.get("visualise");
     } else {
       return false;
     }
@@ -1345,7 +797,7 @@ public class Parser {
    * @return whether to simulate just a single flake.
    */
   public boolean justCentralFlake() {
-    return justCentralFlake;
+    return mapBoolean.get("justCentralFlake");
   }
 
   /**
@@ -1358,7 +810,7 @@ public class Parser {
    * @return whether to enable GUI.
    */
   public boolean withGui() {
-    return withGui;
+    return mapBoolean.get("withGui");
   }
 
   /**
@@ -1370,10 +822,10 @@ public class Parser {
    * @return whether to print to a PNG file.
    */
   public boolean printToImage() {
-    if (!withGui) {
+    if (!withGui()) {
       return false;
     }
-    return printToImage;
+    return mapBoolean.get("printToImage");
   }
   
   /**
@@ -1391,7 +843,7 @@ public class Parser {
    * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic", "graphene", "catalysis" or "ammonia".
    */
   public String getCalculationMode() {
-    return calculationMode;
+    return mapString.get("calculationMode");
   }
 
   /**
@@ -1401,7 +853,7 @@ public class Parser {
    * @return surface type. For PSD utility: "tent" or "plane".
    */
   public String getSurfaceType() {
-    return surfaceType;
+    return mapString.get("surfaceType");
   }
   
   /**
@@ -1414,7 +866,7 @@ public class Parser {
    * @return whether to do a PSD.
    */
   public boolean doPsd() {
-    return psd;
+    return mapBoolean.get("psd");
   }
 
   /**
@@ -1428,7 +880,7 @@ public class Parser {
    * @return psdSymmetry
    */
   public boolean isPsdSymmetric() {
-    return psdSymmetry;
+    return mapBoolean.get("psdSymmetry");
   }
 
   /**
@@ -1441,7 +893,7 @@ public class Parser {
    * @return whether periodic in single flake.
    */
   public boolean isPeriodicSingleFlake() {
-    return periodicSingleFlake;
+    return mapBoolean.get("periodicSingleFlake");
   }
   
   /**
@@ -1453,7 +905,7 @@ public class Parser {
    * @return whether to output data.
    */
   public boolean outputData() {
-    return outputData;
+    return mapBoolean.get("outputData");
   }
   
   /**
@@ -1474,7 +926,7 @@ public class Parser {
    * @return output frequency.
    */
   public int getOutputEvery() {
-    return outputEvery;
+    return mapInt.get("outputEvery");
   }
   
   /**
@@ -1485,7 +937,7 @@ public class Parser {
    * @return whether to use random seed.
    */
   public boolean randomSeed() {
-    return randomSeed;
+    return mapBoolean.get("randomSeed");
   }
 
   /**
@@ -1497,7 +949,7 @@ public class Parser {
    * @return whether to use maximum possible perimeter.
    */
   public boolean useMaxPerimeter() {
-    return useMaxPerimeter;
+    return mapBoolean.get("useMaxPerimeter");
   }
   
   /**
@@ -1510,7 +962,7 @@ public class Parser {
    * @return whether to force nucleation.
    */
   public boolean forceNucleation() {
-    return forceNucleation;
+    return mapBoolean.get("forceNucleation");
   }
   
   /**
@@ -1522,29 +974,7 @@ public class Parser {
    * @return whether to use Devita accelerator.
    */
   public boolean useDevita() {
-    return devita;
-  }
-  
-  /**
-   * Adsorb atoms during catalysis simulation.
-   *
-   * Input "parameters" variable: {@code catalysisAdsorption}.
-   * 
-   * @return do adsorption.
-   */
-  public boolean doCatalysisAdsorption() {
-    return !catalysisAdsorption.equals("false");
-  }
-  
-  /**
-   * Desorb atoms during catalysis simulation.
-   *
-   * Input "parameters" variable: {@code catalysisDesorption}.
-   * 
-   * @return do desorption.
-   */
-  public boolean doCatalysisDesorption() {
-    return !catalysisDesorption.equals("false");
+    return mapBoolean.get("devita");
   }
   
   /**
@@ -1555,7 +985,29 @@ public class Parser {
    * @return print all iterations.
    */
   public boolean doPrintAllIterations() {
-    return printAllIterations;
+    return mapBoolean.get("printAllIterations");
+  }
+  
+  /**
+   * Adsorb atoms during catalysis simulation.
+   *
+   * Input "parameters" variable: {@code catalysisAdsorption}.
+   * 
+   * @return do adsorption.
+   */
+  public boolean doCatalysisAdsorption() {
+    return !mapString.get("catalysisAdsorption").equals("false");
+  }
+  
+  /**
+   * Desorb atoms during catalysis simulation.
+   *
+   * Input "parameters" variable: {@code catalysisDesorption}.
+   * 
+   * @return do desorption.
+   */
+  public boolean doCatalysisDesorption() {
+    return !mapString.get("catalysisDesorption").equals("false");
   }
   
   /**
@@ -1566,7 +1018,7 @@ public class Parser {
    * @return do reaction.
    */
   public boolean doCatalysisReaction() {
-    return !catalysisReaction.equals("false");
+    return !mapString.get("catalysisReaction").equals("false");
   }
   
   /**
@@ -1577,15 +1029,15 @@ public class Parser {
    * @return do diffusion.
    */
   public boolean doCatalysisDiffusion() {
-    return !catalysisDiffusion.equals("false");
+    return !mapString.get("catalysisDiffusion").equals("false");
   }
   
   private void computeTree() {
     catalysisTree = new boolean[4];
-    catalysisTree[ADSORPTION] = catalysisAdsorption.equals("tree");
-    catalysisTree[DESORPTION] = catalysisDesorption.equals("tree");
-    catalysisTree[REACTION] = catalysisReaction.equals("tree");
-    catalysisTree[DIFFUSION] = catalysisDiffusion.equals("tree");
+    catalysisTree[ADSORPTION] = mapString.get("catalysisAdsorption").equals("tree");
+    catalysisTree[DESORPTION] = mapString.get("catalysisDesorption").equals("tree");
+    catalysisTree[REACTION] = mapString.get("catalysisReaction").equals("tree");
+    catalysisTree[DIFFUSION] = mapString.get("catalysisDiffusion").equals("tree");
   }
 
   /**
@@ -1609,7 +1061,7 @@ public class Parser {
    * @return do diffusion.
    */
   public String catalysisStart() {
-    return catalysisStart;
+    return mapString.get("catalysisStart");
   }
   
   /**
@@ -1620,7 +1072,7 @@ public class Parser {
    * @return do O2 dissociation.
    */
   public boolean doCatalysisO2Dissociation() {
-    return catalysisO2Dissociation;
+    return mapBoolean.get("catalysisO2Dissociation");
   }
   
   /**
@@ -1631,7 +1083,7 @@ public class Parser {
    * @return "automatically" change between tree/array.
    */
   public boolean areCollectionsAutomatic() {
-    return automaticCollections;
+    return mapBoolean.get("automaticCollections");
   }
   
   /**
@@ -1642,7 +1094,7 @@ public class Parser {
    * @return island moving
    */
   public boolean doIslandDiffusion() {
-    return doIslandDiffusion;
+    return mapBoolean.get("doIslandDiffusion");
   }
   
   /**
@@ -1653,27 +1105,27 @@ public class Parser {
    * @return multi-atom moving
    */
   public boolean doMultiAtomDiffusion() {
-    return doMultiAtomDiffusion;
+    return mapBoolean.get("doMultiAtomDiffusion");
   }
   
   public String getEvolutionaryAlgorithm() {
-    return evolutionaryAlgorithm;
+    return mapString.get("evolutionaryAlgorithm");
   }
   
   public boolean isEvaluatorParallel() {
-    return parallelEvaluator;
+    return mapBoolean.get("parallelEvaluator");
   }
   
   public int getPopulationSize() {
-    return populationSize;
+    return mapInt.get("populationSize");
   }
   
   public int getOffspringSize() {
-    return offspringSize;
+    return mapInt.get("offspringSize");
   }
   
   public int getPopulationReplacement() {
-    return populationReplacement;
+    return mapInt.get("populationReplacement");
   }
   
   /**
@@ -1682,7 +1134,7 @@ public class Parser {
    * @return total number of iterations.
    */
   public int getTotalIterations() {
-    return totalIterations;
+    return mapInt.get("totalIterations");
   }
   
   /**
@@ -1691,7 +1143,7 @@ public class Parser {
    * @return by default 18.
    */
   public int getRepetitions() {
-    return repetitions;
+    return mapInt.get("repetitions");
   }
   
   /**
@@ -1701,19 +1153,19 @@ public class Parser {
    * @return read reference?
    */
   public boolean getReadReference() {
-    return readReference;
+    return mapBoolean.get("readReference");
   }
           
   public void setCalculationMode(String mode) {
-    this.calculationMode = mode;
+    mapString.put("calculationMode", mode);
   }
   
   public void setPopulation(int populationSize) {
-    this.populationSize = populationSize;
+    mapInt.put("populationSize", populationSize);
   }
   
   public void setEvolutionaryAlgorithm(String name) {
-    this.evolutionaryAlgorithm = name;
+    mapString.put("evolutionaryAlgorithm", name);
   }
   
   /**
@@ -1721,7 +1173,7 @@ public class Parser {
    * @return minimum error
    */
   public double getStopError() {
-    return stopError;
+    return mapDouble.get("stopError");
   }
 
   /**
@@ -1730,7 +1182,7 @@ public class Parser {
    * @return minimum error
    */
   public double getMinValueGene() {
-    return minValueGene;
+    return mapDouble.get("minValueGene");
   }  
   
   /**
@@ -1739,7 +1191,7 @@ public class Parser {
    * @return minimum error
    */
   public double getMaxValueGene() {
-    return maxValueGene;
+    return mapDouble.get("maxValueGene");
   } 
   
   /**
@@ -1748,7 +1200,7 @@ public class Parser {
    * @return true exponential distribution; false linear
    */
   public boolean isExpDistribution() {
-    return expDistribution;
+    return mapBoolean.get("expDistribution");
   } 
   
   /**
@@ -1768,12 +1220,13 @@ public class Parser {
    * @return "basic", "step", "reference" or "Frobenius".
    */
   public String getHierarchyEvaluator() {
-    return hierarchyEvaluator;
+    return mapString.get("hierarchyEvaluator");
   }
     
   public String getEvolutionarySearchType() {
-    if (evolutionarySearchType.equals("rates") || evolutionarySearchType.equals("energies")) {
-      return evolutionarySearchType;
+    String type = mapString.get("evolutionarySearchType");
+    if (type.equals("rates") || type.equals("energies")) {
+      return type;
     } else {
       System.out.println("Not valid search type. It must be \"rates\" of \"energies\".");
       return null;
@@ -1781,7 +1234,7 @@ public class Parser {
   }
   
   public boolean isEnergySearch() {
-    return evolutionarySearchType.equals("energies");
+    return getEvolutionarySearchType().equals("energies");
   }
   
   /**
@@ -1790,6 +1243,6 @@ public class Parser {
    * @return true if fixed, false otherwise
    */
   public boolean isDiffusionFixed() {
-    return fixDiffusion;
+    return mapBoolean.get("fixDiffusion");
   }
 }
