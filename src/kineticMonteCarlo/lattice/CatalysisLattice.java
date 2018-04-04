@@ -128,7 +128,8 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
   }
 
   public double[] getR2() {
-    double[] r2 = new double[4];
+    float[] covTmp = getCoverages();
+    double[] r2 = new double[covTmp.length];
     for (int i = 0; i < 4; i++) {
       r2[i] = regressions.get(i).R2();
     }
