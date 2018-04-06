@@ -144,8 +144,8 @@ public class CatalysisHongRates extends CatalysisRates {
   }
   
   /**
-   * Equation (3) of Reuter & Scheffler, PRB 73, 2006.
-   * k_i = \frac{p_A A_s}{\sqrt{2\pi m_A K_B T}}
+   * Equation of Hong et atl.
+   * \Gamma = \frac{sP}{\sigma\sqrt{2\pi mkT}}
    * 
    * @param sourceType
    * @param pressures
@@ -153,10 +153,12 @@ public class CatalysisHongRates extends CatalysisRates {
    * @return 
    */
   private double computeAdsorptionRate(int sourceType) {
-    double areaHalfUc = 10.0308e-20; // Angstrom²
+    double area = 20.992e-20; //Angstrom² x 10⁻¹⁰ x 10⁻¹⁰
+    double sites = 3.0; // 3 sites in a unit cell of 3x1
+    double density = sites / area;
     double correction = 2.0; // This correction is need to reproduce fig 7 of the paper.
-    return correction * pressures[sourceType] * areaHalfUc /
-            (Math.sqrt(2.0 * Math.PI * mass[sourceType] * kBInt * temperature));
+    return correction * pressures[sourceType] / 
+            (density * Math.sqrt(2.0 * Math.PI * mass[sourceType] * kBInt * temperature));
   }
 
   public double getDesorptionRate(int type) {
