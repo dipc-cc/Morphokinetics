@@ -47,7 +47,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ);
-    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
+    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 10;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
     ucArray = new CatalysisUc[hexaSizeI][hexaSizeJ];
@@ -116,13 +116,11 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
       stationary = true;
       for (int j = 0; j < covTmp.length; j++) {
         if (regressions.get(j).R2() > 0.1) {
-          stationary = false;
+          if (covTmp[j] > 0.05) { // species below 5% ignored
+            stationary = false;
+          }
         }
-      }
-      if (stationary)
-        for (int j = 0; j < covTmp.length; j++)
-          System.out.println(regressions.get(j).R2()+" ");
-        
+      }        
     }
     return stationary;
   }
