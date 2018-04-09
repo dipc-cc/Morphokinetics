@@ -699,5 +699,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     for (int i = P5; i <= P18; i++) {
       sites[i].clear();
     }
+    for (int i = 0; i < productionCounter.length; i++) {
+      productionCounter[i] = 0;
+    }
   }
 }
