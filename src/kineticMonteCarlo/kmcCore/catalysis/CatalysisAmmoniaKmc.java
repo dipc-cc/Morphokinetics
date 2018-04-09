@@ -217,12 +217,12 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     if (atom.getType() == O || atom.getType() == N) { // it has to desorp with another O to create O2
       neighbour = atom.getRandomNeighbour(DESORPTION);
       getLattice().extract(neighbour);
-      if (atom.getType() == N) {
+      if (stationary && atom.getType() == N) {
         productionCounter[1]++; // N2
       }
     }
     
-    if (atom.getType() == NO) {
+    if (stationary && atom.getType() == NO) {
       productionCounter[0]++; // NO
     }
     
@@ -310,7 +310,9 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       getLattice().extract(atom); // H2O
       getLattice().transformTo(neighbour, NH);
     }
-    productionCounter[2]++; // H2O
+    if (stationary) {
+      productionCounter[2]++; // H2O
+    }
   }
 
   /**
@@ -325,7 +327,9 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       getLattice().transformTo(neighbour, N);
       
     }
-    productionCounter[2]++; // H2O
+    if (stationary) {
+      productionCounter[2]++; // H2O
+    }
   }
   /**
    * NH + O -> N + OH.
