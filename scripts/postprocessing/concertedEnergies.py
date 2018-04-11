@@ -17,6 +17,13 @@
 
 import numpy as np
 
+def normalise(lib):
+    if lib[0] == "\"":
+        lib = lib[1:]
+    if lib[-1] == "\"":
+        lib = lib[0:-1]
+    return lib
+
 def getConcertedEnergies(self):
     libSwitcher = {
         "AgAg": getConcertedEnergiesAgAg,
@@ -24,7 +31,7 @@ def getConcertedEnergies(self):
         "NiCu": getConcertedEnergiesNiCu,
         "CuNi": getConcertedEnergiesCuNi,
     }
-    func = libSwitcher.get(self.rLib)
+    func = libSwitcher.get(normalise(self.rLib))
     single, concerted, multi = func()
 
     single = single.reshape(192)
@@ -134,6 +141,7 @@ def getConcertedEnergiesAgAg():
     # From  type 4, subtype 1
     energies[9][3] = 0.952; # to type 2, subtype 1
     energies[9][6] = 0.954; # to type 3, subtype 1
+    energies[9][7] = 0.943; # to type 3, subtype 2
     energies[9][8] = 0.9; # to type 4, subtype 0
     energies[9][9] = 0.951; # to type 4, subtype 1
     energies[9][10] = 0.855; # to type 4, subtype 2
