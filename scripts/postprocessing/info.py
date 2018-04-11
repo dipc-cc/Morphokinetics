@@ -73,7 +73,7 @@ def getRatiosCatalysis(self):
 
 def getRatiosConcerted(p):
     energies = e.concertedEnergies(p)
-    ratios = np.zeros(201)
+    ratios = np.zeros(205)
     ratios = e.getRatio(p.calc, p.temp, energies)
     return ratios
 
@@ -114,7 +114,7 @@ def getInputParameters(fileName = ""):
     if re.match("concerted", normalise(calcType)):
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
-        maxA = 201
+        maxA = 205
     return fileData([r_tt, temp, flux, calcType, ratesLib, sizI, sizJ, maxN, maxC, maxA, nCO2, prCO, prO2, mCov, mMsr])
 
 def getLastOutputFile(folder="."):
