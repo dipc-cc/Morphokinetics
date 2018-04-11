@@ -16,13 +16,7 @@
 # along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy as np
-
-def normalise(lib):
-    if lib[0] == "\"":
-        lib = lib[1:]
-    if lib[-1] == "\"":
-        lib = lib[0:-1]
-    return lib
+import info as inf
 
 def getConcertedEnergies(self):
     libSwitcher = {
@@ -31,7 +25,7 @@ def getConcertedEnergies(self):
         "NiCu": getConcertedEnergiesNiCu,
         "CuNi": getConcertedEnergiesCuNi,
     }
-    func = libSwitcher.get(normalise(self.rLib))
+    func = libSwitcher.get(inf.normalise(self.rLib))
     single, concerted, multi = func()
 
     single = single.reshape(192)

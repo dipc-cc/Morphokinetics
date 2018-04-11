@@ -41,7 +41,7 @@ class fileData:
             "catalysis": e.catalysisEnergies,
             "concerted": e.concertedEnergies,
         }
-        func = calcSwitcher.get(self.calc, lambda: "nothing")
+        func = calcSwitcher.get(normalise(self.calc), lambda: "nothing")
         ratios = e.getRatio(self.calc, self.temp, func(self))
         return ratios
 
@@ -111,7 +111,7 @@ def getInputParameters(fileName = ""):
         maxA = 49 # maximum possible transitions (from terrace to terrace, edge to edge and so on
     if re.match("catalysis", calcType):
         maxA = 4 # Production of CO2, CO^B+O^B | CO^B+O^C | CO^C+O^B | CO^C+O^C
-    if re.match("concerted", calcType):
+    if re.match("concerted", normalise(calcType)):
         sizJ = round(sizJ / math.sin(math.radians(60)))
         maxN = 6
         maxA = 201
@@ -473,6 +473,12 @@ def smallerFont(ax, size=10):
     for tick in ax.yaxis.get_major_ticks():
         tick.label.set_fontsize(size)
 
+def normalise(txt):
+    if txt[0] == "\"":
+        txt = txt[1:]
+    if txt[-1] == "\"":
+        txt = txt[0:-1]
+    return txt
 
 def writeAe(fileName, data):
     """ https://stackoverflow.com/questions/3685265/how-to-write-a-multidimensional-array-to-a-text-file """
