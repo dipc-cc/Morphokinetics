@@ -131,7 +131,7 @@ public class ConcertedAgAgRates extends AbstractConcertedRates {
     // From  type 4, subtype 1
     energies[9][3] = 0.952; // to type 2, subtype 1
     energies[9][6] = 0.954; // to type 3, subtype 1
-    energies[9][7] = 0.954; // to type 3, subtype 1
+    energies[9][7] = 0.943; // to type 3, subtype 1
     energies[9][8] = 0.9; // to type 4, subtype 0
     energies[9][9] = 0.951; // to type 4, subtype 1
     energies[9][10] = 0.855; // to type 4, subtype 2
