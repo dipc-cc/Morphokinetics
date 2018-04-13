@@ -14,10 +14,17 @@ def printRatios(ratios):
     for i in range(0,rows):
         for j in range(0,columns):
             if ratios[i*columns + j] < 1e-120:
-                print("          ", end="")
+                print("\t", end="")
             else:
-                print("%1.3E"% (ratios[i*columns + j]), end=" ")
+                print("%1.3E"% (ratios[i*columns + j]), end="\t")
         print()
+    print("Island diffusion rates")
+    for i in range(192,201):
+        print("%1.3E"% (ratios[i]), end="\t")
+    print("\nMulti atom rates:")
+    for i in range(201,205):
+        print("%1.3E"% (ratios[i]), end="\t")
+    print()
 
 def computeMavgAndOmega(fileNumber, p):
     if p.calc == "catalysis":
