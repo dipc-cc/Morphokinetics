@@ -131,6 +131,22 @@ def karmeleLinearFit(x, y, initI, finishI):
     return list([a,b])
 
 
+def realLinearFit(x, y, initI, finishI):
+    """ https://stackoverflow.com/questions/20115272/calculate-coefficient-of-determination-r2-and-root-mean-square-error-rmse-fo """
+    indexes = np.array(range(initI,finishI))
+    x1 = x[indexes]
+    y1 = y[indexes]
+    popt,pcov = curve_fit(linear, x1, y1)# p0=[1e10,-0.10])
+    a = popt[0]
+    b = popt[1]
+    ss_res = np.dot((y - linear(x1, *popt)),(y1 - linear(x1, *popt)))
+    ymean = np.mean(y1)
+    ss_tot = np.dot((y1-ymean),(y1-ymean))
+
+    r2 = 1-ss_res/ss_tot
+    return list([a,b,r2])
+
+
 def linearFit(x, y, initI, finishI):
     """ linear fit of an exponential function """
     indexes = np.array(range(initI,finishI))
