@@ -47,7 +47,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ);
-    MAX = 100;//(int) Math.sqrt(hexaSizeI * hexaSizeJ) * 10;
+    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 10;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
     ucArray = new CatalysisUc[hexaSizeI][hexaSizeJ];
