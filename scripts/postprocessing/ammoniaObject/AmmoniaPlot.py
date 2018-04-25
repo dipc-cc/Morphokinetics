@@ -20,7 +20,6 @@ class AmmoniaPlot:
         
         fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
         fig.subplots_adjust(wspace=0.1)
-        #ammonia.totalRate[-1] = 2.4e3*ammonia.totalRate[-1]
         axarr.plot(1/self.kb/ammonia.temperatures, ammonia.totalRateEvents[-1], "x", label="Total rate from events")
         axarr.plot(1/self.kb/ammonia.temperatures, ammonia.totalRate[-1], "+",label="Total rate from M")
         axarr.plot(1/self.kb/ammonia.temperatures, abs(ammonia.totalRateEvents[-1]-ammonia.totalRate[-1]), label="Error abs")
@@ -88,7 +87,6 @@ class AmmoniaPlot:
         #ax.set_ylim(0,3.2)
         #ax.set_xlim(20,30)
         labels = [item for item in ax.get_xticklabels()]
-        #labels[1] = 'Testing'
         ax.plot(x, abs(np.array(ammonia.tgt)-np.array(ammonia.rct)), label="Absolute error", color="black")
         ax.legend(loc="best", prop={'size':6})
         #ax.set_xticklabels(labels)
@@ -96,8 +94,7 @@ class AmmoniaPlot:
         ax.set_ylabel(r"Energy $(eV)$")
         #ax.set_yscale("log")
         #mp.setY2TemperatureLabels(ax,self.kb)
-        ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^{k0}_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
-        pdb.set_trace()
+        ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
         plt.savefig("multiplicitiesResume"+ammonia.ext+self.out)#, bbox_inches='tight')
 
     def __plotSimple(self, x, targt, rcmpt, error, ax, maxRanges, i, legend):
@@ -149,3 +146,10 @@ class AmmoniaPlot:
         if legend and i == maxRanges-1:
             ax.legend(handles=handles, loc="upper right", prop={'size':8})
         return handles
+
+    def getMec(self, i):
+        if i  == 9 or i == 10:
+            mec = "black"
+        else:
+            mec = "none"
+        return mec

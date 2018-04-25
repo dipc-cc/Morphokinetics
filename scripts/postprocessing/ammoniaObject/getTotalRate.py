@@ -11,6 +11,8 @@ import matplotlib.ticker as ticker
 import info as inf
 import math
 import multiplicitiesPlot as mp
+
+import pdb
         
 kb = 8.6173324e-5
 

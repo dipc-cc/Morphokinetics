@@ -34,8 +34,8 @@ class AmmoniaCatalysis:
                           r"$NH_2 + OH \rightarrow NH + H_2O(g)$", # P6
                           r"$NH + OH \rightarrow N + H_2O(g)$"   , # P7
                           r"$NH + O \rightarrow N + OH$",          # P8
-                          r"$N + O \rightarrow NO + V$",           # P9
-                          r"$N + N \rightarrow N_2(g)$",           # P10
+                          r"$N + O \rightarrow NO + V$",           # P9   TOF
+                          r"$N + N \rightarrow N_2(g)$",           # P10  TOF
                           r"$NO \rightarrow V$",                   # P11
                           r"$N \rightarrow N$",                    # P12
                           r"$O \rightarrow O$",                    # P13

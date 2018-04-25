@@ -2,7 +2,7 @@
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import AmmoniaPlotIntermediate as api
+import AmmoniaPlot as api
 import numpy as np
 import operator
 import functions as fun
@@ -11,7 +11,7 @@ import pdb
 
 class Rds:
     def __init__(self, temperatures):
-        self.api = api.AmmoniaPlotIntermediate(-1, False)
+        self.api = api.AmmoniaPlot()
         self.temperatures = temperatures
         self.kb = 8.6173324e-5
         self.cm = plt.get_cmap('tab20')
@@ -54,7 +54,6 @@ class Rds:
             self.dominance[:,i] =  self.one-np.amin(m,axis=0)
       
         self.maxI = np.argmax(self.dominance,axis=1)
-        pdb.set_trace()
         ratioEaTmp = np.zeros(len(self.temperatures))
         multiplicityEaTmp = np.zeros(len(self.temperatures))
         for u,t in enumerate(self.temperatures):
@@ -99,14 +98,13 @@ class Rds:
         self.axR.legend(loc="best", prop={'size':6})
         self.axR.set_ylabel(r"$M_\alpha k_\alpha$")
         self.axR.set_yscale("log")
-        self.axR.set_ylim(1e-9,1e0)
+        #self.axR.set_ylim(1e-9,1e0)
         self.figR.savefig("rds"+self.out)#, bbox_inches='tight')
 
         
     def plotLambdas(self, activationEnergyT, activationEnergyS, labelAlfa):
         self.axL.plot(1/self.kb/self.temperatures, activationEnergyT[-1,:], label=r"$E^{TOF}_{app}$", color="red")
         self.axL.plot(1/self.kb/self.temperatures, activationEnergyS[:], "--", label=r"$\sum \xi^{TOF}_\alpha$")
-        pdb.set_trace()
         self.axL.plot(1/self.kb/self.temperatures, abs(activationEnergyT[-1,:]-activationEnergyS[:]), label="Absolute error", color="black")
         maxI = np.array(self.maxI)
         first = 0

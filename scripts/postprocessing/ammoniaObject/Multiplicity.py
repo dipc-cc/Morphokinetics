@@ -120,25 +120,25 @@ class Multiplicity:
         activationEnergy    = np.zeros(shape=(p.mMsr,maxRanges))
         total = ext == "T"
         for co2 in range(0,p.mMsr): # created co2: 10,20,30...1000
-            self.api = AmmoniaPlotIntermediate.AmmoniaPlotIntermediate(co2, sp)
-            print(co2,"/",p.mMsr,sp)
             x = 1/kb/temperatures
+            self.api = AmmoniaPlotIntermediate.AmmoniaPlotIntermediate(x, co2, sp, total, one)
+            print(co2,"/",p.mMsr,sp)
             y = totalRate
             # N_h
             activationEnergy[co2,:] = self.getSlopes(x, y[co2,:], -1, verbose=True)
-            self.api.plotLinear(x, y[co2,:], -1, co2, verbose=True)
     
             first = True
             omegaSumTof = np.zeros(shape=(len(temperatures)))
             for i,a in enumerate(range(p.minA,p.maxA)): # alfa
-                omegaSumTof += 0 # Auskalo # NO eta N2
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
-                self.api.plotOmegas(x, y, i, omega[co2,:,i], labelAlfa)
+                if i == 9 or i == 10:
+                    omegaSumTof += y # NO eta N2
+                self.api.plotOmegas(y, a, labelAlfa)
 
                 y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
                 multiplicityEa[co2,:,i] = self.getSlopes(x, y, i)
-                self.api.plotLinear(x, y, i, co2)
-                self.api.flush()
+                self.api.plotLinear(y, a)
+            self.api.flush(omegaSumTof)
         activationEnergy = -activationEnergy
         return activationEnergy, multiplicityEa
     
