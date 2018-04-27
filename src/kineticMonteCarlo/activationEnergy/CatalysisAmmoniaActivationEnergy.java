@@ -76,19 +76,19 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
               // Desorption
               switch (atom.getType()) {
                 case NH3:
-                  histogramPossibles[2] +=elapsedTime / 2.0; // P2, it goes throw 2 times
+                    histogramPossibles[2] += elapsedTime; // P2
                   break;
                 case NO:
-                  histogramPossibles[11] +=elapsedTime / 2.0; // P11, it goes throw 2 times
+                  histogramPossibles[11] += elapsedTime; // P11
                   break;
                 case O:
                   if (neighbour.getType()== O && neighbour.isOccupied()) { // Two O together
-                    histogramPossibles[4] = elapsedTime * 0.5; // P4, it will be visited twice
+                    histogramPossibles[4] += elapsedTime * 0.5; // P4, it will be visited twice
                   }
                   break;
                 case N:
                   if (neighbour.getType()== N && neighbour.isOccupied()) { // Two N together
-                    histogramPossibles[10] = elapsedTime * 0.5; // P10, it will be visited twice
+                    histogramPossibles[10] += elapsedTime * 0.5; // P10, it will be visited twice
                   }
                   break;
               }
