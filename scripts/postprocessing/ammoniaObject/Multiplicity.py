@@ -122,7 +122,7 @@ class Multiplicity:
         for co2 in range(0,p.mMsr): # created co2: 10,20,30...1000
             x = 1/kb/temperatures
             self.api = AmmoniaPlotIntermediate.AmmoniaPlotIntermediate(x, co2, sp, total, one)
-            print(co2,"/",p.mMsr,sp)
+            print(co2+1,"/",p.mMsr,sp)
             y = totalRate
             # N_h
             activationEnergy[co2,:] = self.getSlopes(x, y[co2,:], -1, verbose=True)
@@ -177,8 +177,8 @@ class Multiplicity:
             eventsA[6] = eventsA[4] + eventsA[5] # TOF: NO + N2
             totalRate += events / data[-1,0] # last time
             rates += eventsA / data[-1,0]
-        totalRate = totalRate / len(files) #/ self.info.sizI / self.info.sizJ / 2
-        rates = rates / len(files) #/ self.info.sizI / self.info.sizJ / 2#* self.info.sizI * self.info.sizJ
+        totalRate = totalRate / len(files) / self.info.sizI / self.info.sizJ / 2
+        rates = rates / len(files) / self.info.sizI / self.info.sizJ / 2
         return totalRate, rates
     
     def getSlopes(self, x, y, alfa, verbose=False):

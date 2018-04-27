@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import Info as inf
 import Energy
 import Multiplicity as m
@@ -26,24 +24,24 @@ class AmmoniaCatalysis:
         self.lmbdas = False
         self.one = False
         self.ext = ""
-        self.labelAlfa = [r"$V \rightarrow NH_3$",                 # P1
-                          r"$NH_3 \rightarrow V$",                 # P2
-                          r"$2V + O_2(g) \rightarrow 2O$",         # P3
-                          r"$2O \rightarrow 2V + O_2(g)$",         # P4
-                          r"$NH_3 + O \rightarrow NH_2 + OH$",     # P5
-                          r"$NH_2 + OH \rightarrow NH + H_2O(g)$", # P6
-                          r"$NH + OH \rightarrow N + H_2O(g)$"   , # P7
-                          r"$NH + O \rightarrow N + OH$",          # P8
-                          r"$N + O \rightarrow NO + V$",           # P9   TOF
-                          r"$N + N \rightarrow N_2(g)$",           # P10  TOF
-                          r"$NO \rightarrow V$",                   # P11
-                          r"$N \rightarrow N$",                    # P12
-                          r"$O \rightarrow O$",                    # P13
-                          r"$OH \rightarrow OH$",                  # P14
-                          r"$NH_2 + O \rightarrow NH + OH$",       # P15
-                          r"$NH + OH \rightarrow NH_2 + O$",       # P16
-                          r"$NH_2 + OH \rightarrow NH_3 + O$",     # P17
-                          r"$N + OH \rightarrow NH + O$"]          # P18
+        self.labelAlfa = [r"P1  $V \rightarrow NH_3$",                 # P1
+                          r"P2  $NH_3 \rightarrow V$",                 # P2
+                          r"P3  $2V + O_2(g) \rightarrow 2O$",         # P3
+                          r"P4  $2O \rightarrow 2V + O_2(g)$",         # P4
+                          r"P5  $NH_3 + O \rightarrow NH_2 + OH$",     # P5
+                          r"P6  $NH_2 + OH \rightarrow NH + H_2O(g)$", # P6
+                          r"P7  $NH + OH \rightarrow N + H_2O(g)$"   , # P7
+                          r"P8  $NH + O \rightarrow N + OH$",          # P8
+                          r"P9  $N + O \rightarrow NO + V$",           # P9   TOF
+                          r"P10$N + N \rightarrow N_2(g)$",           # P10  TOF
+                          r"P11$NO \rightarrow V$",                   # P11
+                          r"P12$N \rightarrow N$",                    # P12
+                          r"P13$O \rightarrow O$",                    # P13
+                          r"P14$OH \rightarrow OH$",                  # P14
+                          r"P15$NH_2 + O \rightarrow NH + OH$",       # P15
+                          r"P16$NH + OH \rightarrow NH_2 + O$",       # P16
+                          r"P17$NH_2 + OH \rightarrow NH_3 + O$",     # P17
+                          r"P18$N + OH \rightarrow NH + O$"]          # P18
                  
     def init(self, argv):
         self.multi = m.Multiplicity()
@@ -65,6 +63,7 @@ class AmmoniaCatalysis:
             if len(argv) > 3:
                 self.minAlfa = int(argv[2])
                 self.maxAlfa = int(argv[3])
+                #konpondu hau!!!
             self.info.minA = 1#minAlfa
             self.info.maxA = 10#maxAlfa
             self.ext = "T"
@@ -127,15 +126,14 @@ class AmmoniaCatalysis:
             tempMavgS, omegaS, totalRateS, totalRateEventsS, ratesS, ratiosS = self.multiL.getMavgAndOmega(self.temperatures,self.workingPath)
             totalRateEventsS = np.copy(self.rates[:,:,self.ratesI]) # it is a inner rate
             os.chdir(self.workingPath)
-            #activationEnergyT, multiplicityEaS = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavgS,omegaS,totalRateEventsS,ext="")
             activationEnergyT, multiplicityEaS = self.multiL.getMultiplicityEa(self.temperatures,self.labelAlfa,self.sp,tempMavgS,omegaS,totalRateEventsS,self.ext,self.one)
 
             
             rds = Rds.Rds(self.temperatures)
-            activationEnergyS = rds.computeRds(self.tempMavg,self.rates,self.ratios,self.minAlfa,self.maxAlfa,self.ratioEa, self.multiplicityEa)
+            rds.computeRds(self.tempMavg,self.rates,self.ratios,self.minAlfa,self.maxAlfa,self.ratioEa, self.multiplicityEa)
             rds.plotRds(self.omega, self.minAlfa, self.maxAlfa, self.labelAlfa, self.multiplicityEa)
             
-            rds.plotLambdas(activationEnergyT, activationEnergyS, self.labelAlfa)
+            rds.plotLambdas(activationEnergyT, self.labelAlfa)
 
 
     def plotTotalRate(self):

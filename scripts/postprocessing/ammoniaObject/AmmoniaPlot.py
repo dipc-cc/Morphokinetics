@@ -73,7 +73,7 @@ class AmmoniaPlot:
             rl = "R"
         else:
             rl = "TOF"
-        figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.15)
+        figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
         ax.plot(x, ammonia.tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
         ax.plot(x, ammonia.rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$")
         cm = plt.get_cmap('tab20')
@@ -84,7 +84,7 @@ class AmmoniaPlot:
                 ax.fill_between(x, ammonia.lastOmegas[:,i], label=ammonia.labelAlfa[a], color=cm(a%20/(19)))
         # ax2 = ax.twinx()
         # ax2.plot(x, err, label="Relative error")
-        #ax.set_ylim(0,3.2)
+        ax.set_ylim(-0.1,2.2)
         #ax.set_xlim(20,30)
         labels = [item for item in ax.get_xticklabels()]
         ax.plot(x, abs(np.array(ammonia.tgt)-np.array(ammonia.rct)), label="Absolute error", color="black")
@@ -147,9 +147,18 @@ class AmmoniaPlot:
             ax.legend(handles=handles, loc="upper right", prop={'size':8})
         return handles
 
+
     def getMec(self, i):
         if i  == 9 or i == 10:
             mec = "black"
         else:
             mec = "none"
         return mec
+
+    
+    def smallerFont(self, ax, size=10):
+        ax.tick_params(axis='both', which='major', labelsize=size)
+        for tick in ax.xaxis.get_major_ticks():
+            tick.label.set_fontsize(size)
+        for tick in ax.yaxis.get_major_ticks():
+            tick.label.set_fontsize(size)

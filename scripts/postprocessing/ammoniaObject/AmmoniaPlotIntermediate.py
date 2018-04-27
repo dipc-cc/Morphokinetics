@@ -61,18 +61,12 @@ class AmmoniaPlotIntermediate:
             self.axarr[1].plot(self.x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
             self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
         else:
-            self.__smallerFont(self.axarr[0], 8)
-        self.__smallerFont(self.axarr[1], 8)
+            self.ap.smallerFont(self.axarr[0], 8)
+        self.ap.smallerFont(self.axarr[1], 8)
         self.__putLabels()
         self.fig.savefig("../../../plot"+str(self.prod)+self.out)
         plt.close(self.fig)
-
-    def __smallerFont(self, ax, size=10):
-        ax.tick_params(axis='both', which='major', labelsize=size)
-        for tick in ax.xaxis.get_major_ticks():
-            tick.label.set_fontsize(size)
-        for tick in ax.yaxis.get_major_ticks():
-            tick.label.set_fontsize(size)
+        
             
     def __putLabels(self):
         if self.total:
