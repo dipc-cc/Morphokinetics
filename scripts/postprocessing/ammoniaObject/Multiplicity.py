@@ -49,7 +49,7 @@ class Multiplicity:
         Mavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))
         for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
             Mavg[:,i] = (possiblesFromList[:p.mMsr,a])/time/p.sizI/p.sizJ
-    
+
         totalRate = np.array(ratios.dot(np.transpose(Mavg)))#/time/p.sizI/p.sizJ
         #totalRate = (totalRate+occupied)/time/p.sizI/p.sizJ
         # define omegas 
@@ -166,7 +166,7 @@ class Multiplicity:
         files = glob.glob("dataCatalysis0*.txt")
         totalRate = 0
         rates = np.zeros(7)
-        indexes = list(range(8,12)) + [21, 22]
+        indexes = list(range(8,12)) + [21, 22] # Columns of the file
         for t in files:
             data = np.loadtxt(t)
             events = 0
@@ -177,8 +177,8 @@ class Multiplicity:
             eventsA[6] = eventsA[4] + eventsA[5] # TOF: NO + N2
             totalRate += events / data[-1,0] # last time
             rates += eventsA / data[-1,0]
-        totalRate = totalRate / len(files) / self.info.sizI / self.info.sizJ / 2
-        rates = rates / len(files) / self.info.sizI / self.info.sizJ / 2
+        totalRate = totalRate / len(files) / self.info.sizI / self.info.sizJ 
+        rates = rates / len(files) / self.info.sizI / self.info.sizJ
         return totalRate, rates
     
     def getSlopes(self, x, y, alfa, verbose=False):

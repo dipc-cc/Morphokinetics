@@ -49,14 +49,14 @@ class AmmoniaPlot:
             
         axarr[0].set_ylabel("eV")
         minCo2 = 0
-        co2 = list(range(minCo2,ammonia.maxCo2-1))
+        co2 = list(range(minCo2,ammonia.maxCo2))
         ammonia.tgt = []
         ammonia.rct = []
         ammonia.err = []
         for i in range(0,maxR): # different temperature ranges (low, medium, high)
-            rcmpt = ammonia.activationEnergyC[minCo2:-1,maxR-1-i]
-            targt = ammonia.activationEnergy[minCo2:-1,maxR-1-i]
-            error = abs(1-ammonia.activationEnergyC[minCo2:-1,maxR-1-i]/ammonia.activationEnergy[minCo2:-1,maxR-1-i])
+            rcmpt = ammonia.activationEnergyC[minCo2:,maxR-1-i]
+            targt = ammonia.activationEnergy[minCo2:,maxR-1-i]
+            error = abs(1-ammonia.activationEnergyC[minCo2:,maxR-1-i]/ammonia.activationEnergy[minCo2:,maxR-1-i])
             handles = self.__plotSimple(co2, targt, rcmpt, error, axarr[i],
                                      maxR, i, not ammonia.rAndM and not ammonia.omegas)
             ammonia.tgt.append(targt[-1])
@@ -80,20 +80,15 @@ class AmmoniaPlot:
         markers=["o", "s","D","^","d","h","p"]
         for i,a in enumerate(range(ammonia.minAlfa,ammonia.maxAlfa)):
             if any(abs(ammonia.epsilon[-1,::-1,i]) > 0.005):
-                #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
+                #ax.plot(x, ammonia.epsilon[-1,::-1,i], label=ammonia.labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
                 ax.fill_between(x, ammonia.lastOmegas[:,i], label=ammonia.labelAlfa[a], color=cm(a%20/(19)))
-        # ax2 = ax.twinx()
-        # ax2.plot(x, err, label="Relative error")
+
         ax.set_ylim(-0.1,2.2)
-        #ax.set_xlim(20,30)
         labels = [item for item in ax.get_xticklabels()]
         ax.plot(x, abs(np.array(ammonia.tgt)-np.array(ammonia.rct)), label="Absolute error", color="black")
         ax.legend(loc="best", prop={'size':6})
-        #ax.set_xticklabels(labels)
         ax.set_xlabel(r"$1/k_BT$")
         ax.set_ylabel(r"Energy $(eV)$")
-        #ax.set_yscale("log")
-        #mp.setY2TemperatureLabels(ax,self.kb)
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
         plt.savefig("multiplicitiesResume"+ammonia.ext+self.out)#, bbox_inches='tight')
 

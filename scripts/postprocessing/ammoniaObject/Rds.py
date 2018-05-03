@@ -42,7 +42,6 @@ class Rds:
         ##### Relative error (delta)
         delta = np.zeros(shape=(len(self.temperatures),maxAlfa-minAlfa))
         for i,a in enumerate(range(minAlfa,maxAlfa)):
-            delta[:,i] =  abs(self.one-((tempMavg[-1,:,i]*ratios[:,i])/(rates[-1,:,4]/30/40)))
             delta[:,i] =  abs(self.one-((tempMavg[-1,:,i]*ratios[:,i])/(rates[-1,:,self.ratesI])))
 
         #### Dominance
@@ -55,11 +54,10 @@ class Rds:
         ratioEaTmp = np.zeros(len(self.temperatures))
         multiplicityEaTmp = np.zeros(len(self.temperatures))
         for i,t in enumerate(self.temperatures):
-
-            if i == len(self.temperatures) -1:
-                continue
-            ratioEaTmp[i] = ratioEa[-1,i,self.maxI[i+1]]
-            multiplicityEaTmp[i] = multiplicityEa[-1,i,self.maxI[i+1]]
+            #if i == len(self.temperatures) -1:
+            #    continue
+            ratioEaTmp[i] = ratioEa[-1,i,self.maxI[i]]
+            multiplicityEaTmp[i] = multiplicityEa[-1,i,self.maxI[i]]
         self.activationEnergyS = ratioEaTmp - multiplicityEaTmp
 
     
@@ -102,7 +100,6 @@ class Rds:
         maxI = np.array(self.maxI)
         for i,a in enumerate(maxI):
             if i == 0:
-                print("continue")
                 continue
             self.axL.fill_between(1/self.kb/self.temperatures[i-1:i+1],self.activationEnergyS[i-1:i+1],label=labelAlfa[a], color=self.cm(a%20/(19)))
         self.axL.legend(loc="best", prop={'size':6})

@@ -63,9 +63,6 @@ class AmmoniaCatalysis:
             if len(argv) > 3:
                 self.minAlfa = int(argv[2])
                 self.maxAlfa = int(argv[3])
-                #konpondu hau!!!
-            self.info.minA = 1#minAlfa
-            self.info.maxA = 10#maxAlfa
             self.ext = "T"
         else:
             self.minAlfa = 9

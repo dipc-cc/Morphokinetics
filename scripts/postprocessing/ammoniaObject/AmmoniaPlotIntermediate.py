@@ -28,7 +28,7 @@ class AmmoniaPlotIntermediate:
             self.out = ".svg"
             if total:
                 self.out = "T.svg"
-            self.ymin = 1e-4
+            self.ymin = 1e-3
             self.fig, ax = plt.subplots(2, sharex=True, figsize=(5,4))
             for i in range(0,len(ax)):
                 self.axarr.append(ax[i])
