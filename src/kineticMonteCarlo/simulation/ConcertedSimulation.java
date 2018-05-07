@@ -73,37 +73,37 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
     int rows = 12;
     
     // print header
-    System.out.println("   0          1          12         2          13         3          14         4"+
-        "          5          15         6          7          8          9          10         11");
-    System.out.println("   0          1           2         3           4         5           6         7"+
-        "          8           9         10         11         12         13         14         15");
+    System.out.println("\t0\t1\t12\t2\t13\t3\t14\t4"+
+        "\t5\t15\t6\t7\t8\t9\t10\t11");
+    System.out.println("\t0\t1\t 2\t3\t 4\t5\t6\t7"+
+        "\t8\t 9\t10\t11\t12\t13\t14\t15");
 
     for (int i = 0; i < rows; i++) {
-      System.out.printf("%02d ",i);
+      System.out.printf("%02d\t",i);
       for (int j = 0; j < columns; j++) {
         if (rates[i * columns + j] < 1e-120) {
-          System.out.printf("           ");
+          System.out.printf("\t");
         } else {
-          System.out.printf("%1.3E  ", rates[i * columns + j]);
+          System.out.printf("%1.3E\t", rates[i * columns + j]);
         }
       }
       System.out.println(" ");
     }
     System.out.println("Deposition rate (per site): " + getRates().getDepositionRatePerSite());
-    System.out.println("Island density:             " + getRates().getIslandDensity(parser.getTemperature()));
+    System.out.println("Island density:\t   " + getRates().getIslandDensity(parser.getTemperature()));
     
     double[] concertedRates = ((AbstractConcertedRates) getRates()).getIslandDiffusionRates();
     
     System.out.println("Island diffusion rates:");
     for (int i = 0; i < concertedRates.length; i++) {
-      System.out.print(concertedRates[i] + " ");
+      System.out.printf("%1.3E\t", concertedRates[i]);
     }
     System.out.println("");
     
     double[] multiAtomRates = ((AbstractConcertedRates) getRates()).getMultiAtomRates();
     System.out.println("Multi atom rates:");
     for (int i = 0; i < multiAtomRates.length; i++) {
-      System.out.print(multiAtomRates[i] + " ");
+      System.out.printf("%1.3E\t", multiAtomRates[i]);
     }
     System.out.println("");
   }
