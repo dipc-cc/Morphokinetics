@@ -42,6 +42,7 @@ import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import kineticMonteCarlo.lattice.Island;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
+import kineticMonteCarlo.site.CatalysisAmmoniaSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 
@@ -84,6 +85,7 @@ public class KmcCanvas extends Canvas {
   private final static Color DARKBLUE = new Color(0,0,139);
   private final static Color GOLD = new Color(255,215,0);
   private final Color[] colours = {WHITE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
+  //private final Color[] colours = {GREEN, INDIANRED, BLUEVIOLET, BLACK, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   
   public KmcCanvas(AbstractSurfaceLattice lattice, RoundPerimeter perimeter) {
     this(lattice);
@@ -387,13 +389,23 @@ public class KmcCanvas extends Canvas {
 
         g.fillRect(X, Y, scale, scale);
         switch (atom.getType()) { // the cases are for graphene
-          case CatalysisSite.O:
+          case CatalysisAmmoniaSite.O:
             g.setColor(RED);
             break;
-          case CatalysisSite.CO:
+          case CatalysisAmmoniaSite.NH3:
             g.setColor(Color.BLUE);
             break;
+          case CatalysisAmmoniaSite.NH2:
+            g.setColor(Color.GREEN);
+            break;
+          case CatalysisAmmoniaSite.NH:
+            g.setColor(Color.PINK);
+            break;
+          case CatalysisAmmoniaSite.OH:
+            g.setColor(BLACK);
+            break;
         }
+        g.setColor(colours[atom.getType()]);
 
         if (scale < 10) {
           if (atom.isOccupied()) {
