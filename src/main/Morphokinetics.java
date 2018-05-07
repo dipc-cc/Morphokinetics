@@ -38,6 +38,7 @@ import geneticAlgorithm.Individual;
 import geneticAlgorithm.evaluationFunctions.AbstractPsdEvaluator;
 import graphicInterfaces.MainInterface;
 import graphicInterfaces.growth.KmcCanvas;
+import graphicInterfaces.growth.KmcCanvasGrowth;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -144,7 +145,7 @@ public class Morphokinetics {
 
     AbstractGrowthKmc kmc = (AbstractGrowthKmc) ga.getKmc();
     AbstractGrowthLattice lattice = kmc.getLattice();
-    KmcCanvas canvas = new KmcCanvas(lattice, kmc.getPerimeter());
+    KmcCanvas canvas = new KmcCanvasGrowth(lattice, kmc.getPerimeter());
     MainInterface mainInterface = null;
     if (parser.withGui()) mainInterface = new MainInterface(canvas);
     if (parser.withGui() && parser.visualise()) {

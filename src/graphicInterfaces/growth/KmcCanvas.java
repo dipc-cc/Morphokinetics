@@ -19,38 +19,26 @@
 package graphicInterfaces.growth;
 
 import basic.io.Restart;
-import kineticMonteCarlo.lattice.AbstractGrowthLattice;
 import java.awt.Canvas;
 import java.awt.Color;
-import static java.awt.Color.BLACK;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import kineticMonteCarlo.site.AbstractGrowthSite;
 import static java.lang.String.format;
-import java.text.DecimalFormat;
-import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
-import kineticMonteCarlo.lattice.CatalysisLattice;
-import kineticMonteCarlo.lattice.Island;
-import kineticMonteCarlo.site.AbstractSurfaceSite;
-import kineticMonteCarlo.site.CatalysisAmmoniaSite;
-import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import kineticMonteCarlo.unitCell.CatalysisUc;
 
 /**
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
  */
-public class KmcCanvas extends Canvas {
+public abstract class KmcCanvas extends Canvas {
 
   private int baseX;
   private int baseY;
@@ -59,37 +47,33 @@ public class KmcCanvas extends Canvas {
    */
   private BufferStrategy strategy;
   private AbstractSurfaceLattice lattice;
-  private RoundPerimeter perimeter;
   private int scale;
   private String imageName;
-  private boolean blackAndWhite; 
-  private boolean printPerimeter; 
   private boolean paused;
-  private boolean printId;
-  private boolean printIslandNumber;
-  private boolean printMultiAtom;
   private boolean printIslandCentres;
   private Restart restart;
   
-  private final static Color GRAY = new Color (220,220,220);
-  private final static Color WHITE_GRAY = new Color (230,230,230);
+  static Color GRAY = new Color (220,220,220);
+  static Color WHITE_GRAY = new Color (230,230,230);
   // Colours from: https://github.com/Gnuplotting/gnuplot-palettes/blob/master/set3.pal
-  private final static Color RED =  new Color (251,128,114);
-  private final static Color BLUE = new Color (128,177,211);
-  private final static Color ORANGE = new Color (253,180,98);
-  private final static Color GREEN = new Color (179,222,105);
-  private final static Color WHITE = new Color(255,255,255);
-  private final static Color INDIANRED = new Color(205,92,92);
-  private final static Color BLUEVIOLET = new Color(138,43,226);
-  private final static Color CORNFLOWERBLUE = new Color(100,149,237);
-  private final static Color DARKBLUE = new Color(0,0,139);
-  private final static Color GOLD = new Color(255,215,0);
-  private final Color[] colours = {WHITE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
+  final static Color RED =  new Color (251,128,114);
+  final static Color BLUE = new Color (128,177,211);
+  final static Color ORANGE = new Color (253,180,98);
+  final static Color GREEN = new Color (179,222,105);
+  final static Color WHITE = new Color(255,255,255);
+  final static Color INDIANRED = new Color(205,92,92);
+  final static Color BLUEVIOLET = new Color(138,43,226);
+  final static Color CORNFLOWERBLUE = new Color(100,149,237);
+  final static Color DARKBLUE = new Color(0,0,139);
+  final static Color GOLD = new Color(255,215,0);
+  final Color[] colours = {WHITE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   //private final Color[] colours = {GREEN, INDIANRED, BLUEVIOLET, BLACK, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
+  
+  public KmcCanvas() {   //constructor
+  }
   
   public KmcCanvas(AbstractSurfaceLattice lattice, RoundPerimeter perimeter) {
     this(lattice);
-    this.perimeter = perimeter;
   }
   
   public KmcCanvas(AbstractSurfaceLattice lattice) {
@@ -97,19 +81,25 @@ public class KmcCanvas extends Canvas {
     baseX = 0;
     baseY = 0;
     scale = 2;
-    blackAndWhite = false;
-    printPerimeter = false;
     paused = false;
-    printId = true;
-    printIslandNumber = false;
-    printIslandCentres = false;
     restart = new Restart();
-    
+  }
+  
+  public AbstractSurfaceLattice getLattice() {
+    return lattice;
   }
 
   public void setBaseLocation(int baseX, int baseY) {
     this.baseX += baseX;
     this.baseY += baseY;
+  }
+  
+  public int getBaseX() {
+    return baseX;
+  }
+  
+  public int getBaseY() {
+    return baseY;
   }
 
   public int getScale() {
@@ -127,30 +117,10 @@ public class KmcCanvas extends Canvas {
   public void setScale(int scale) {
     this.scale = scale;
   }
-
-  public void changeBlackAndWhite() {
-    blackAndWhite = !blackAndWhite;
-  }
-  
-  public void changePrintPerimeter() {
-    printPerimeter = !printPerimeter;
-  }
   
   public void setPaused(boolean pause) {
     this.paused = pause;
     lattice.setPaused(pause);
-  }
-  
-  public void setPrintId(boolean printId) {
-    this.printId = printId;
-  }
-  
-  public void setPrintIslandNumber(boolean printIslandNumber) {
-    this.printIslandNumber = printIslandNumber;
-  }
-  
-  public void setPrintMultiAtom(boolean printMultiAtom) {
-    this.printMultiAtom = printMultiAtom;
   }
   
   public void changePrintIslandCentres() {
@@ -160,14 +130,10 @@ public class KmcCanvas extends Canvas {
   public boolean isPaused() {
     return paused;
   }
-    
-  public KmcCanvas() {   //constructor
-  }
 
   public void dispose() {
     setIgnoreRepaint(true); //we repaint manually
     setFocusable(false);
-    strategy.dispose();
   }
 
   /**
@@ -195,7 +161,6 @@ public class KmcCanvas extends Canvas {
     if (!strategy.contentsLost()) {
       strategy.show();
     }
-
   }
 
   /**
@@ -259,95 +224,6 @@ public class KmcCanvas extends Canvas {
     g.setFont(new Font("Arial", Font.PLAIN, 10));
     g.setColor(GRAY);
     g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
-    if (lattice instanceof CatalysisLattice) {
-      paintCatalysis(g);
-    } else {
-      AbstractGrowthLattice l = (AbstractGrowthLattice) lattice;
-      for (int i = 0; i < l.size(); i++) {
-        AbstractGrowthUc uc = (AbstractGrowthUc) l.getUc(i);
-        for (int j = 0; j < uc.size(); j++) {
-          AbstractGrowthSite atom = (AbstractGrowthSite) uc.getSite(j);
-          int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
-          int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
-
-          if (blackAndWhite) {
-            if (atom.isOccupied()) {
-              g.setColor(BLUE);
-              if (atom.isInnerPerimeter() && printPerimeter) {
-                g.setColor(RED);
-              }
-            } else {
-              g.setColor(WHITE_GRAY);
-              if (atom.isOuterPerimeter() && printPerimeter) {
-                g.setColor(BLACK);
-              }
-            }
-          } else {
-            g.setColor(colours[atom.getType()]);
-            if (printPerimeter && perimeter != null) {
-              if (perimeter.contains(atom)) {
-                g.setColor(ORANGE);
-              }
-            }
-          }
-
-          if (scale < 3) {
-            if (atom.isOccupied()) {
-              g.fillRect(X, Y, scale, scale);
-            } else if (!atom.isOutside()) {
-              g.drawRect(X, Y, scale, scale);
-            }
-
-          } else if (atom.isOccupied()) {
-            g.fillOval(X, Y, scale, scale);
-            if (scale > 8) {
-              g.setColor(getContrastColor(g.getColor()));
-              if (printId) {
-                g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-              }
-              if (printIslandNumber) {
-                String text = Integer.toString(atom.getIslandNumber());
-                g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-              }
-              if (printMultiAtom) {
-                g.drawString(atom.getAttributes().getMultiAtomNumber().toString(), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-              }
-            }
-          } else if (!atom.isOutside()) {
-            g.drawOval(X, Y, scale, scale);
-          }
-        }
-      }
-      if (printIslandCentres) {
-        try {
-          for (int i = 0; i < l.getIslandCount(); i++) {
-            Island island = l.getIsland(i);
-            Point2D point = island.getCentreOfMass();
-            int Y = (int) Math.round((point.getY()) * scale) + baseY;
-            int X = (int) Math.round((point.getX()) * scale) + baseX;
-            g.setColor(BLACK);
-            g.drawLine(X - 5, Y - 5, X + 5, Y + 5);
-            g.drawLine(X - 5, Y + 5, X + 5, Y - 5);
-            g.drawOval(X - 5, Y - 5, 10, 10);
-            g.setColor(RED);
-            int diameter = (int) Math.round(2.0 * scale * island.getMaxDistance());
-            int radius = (int) Math.round(scale * island.getMaxDistance());
-            g.drawOval(X - radius, Y - radius, diameter, diameter);
-            g.drawString(new DecimalFormat("##.##").format(island.getMaxDistance()), X, Y + 40);
-            g.setColor(GREEN);
-            diameter = (int) Math.round(2.0 * scale * island.getAvgDistance());
-            radius = (int) Math.round(scale * island.getAvgDistance());
-            g.drawOval(X - radius, Y - radius, diameter, diameter);
-            g.setColor(BLACK);
-            g.drawString(new DecimalFormat("##.##").format(island.getAvgDistance()), X, Y + 10);
-          }
-        } catch (NullPointerException e) {
-          System.err.println("Some island centre or gyradius can not be printed. Ignoring and continuing... ");
-        }
-      }
-    }
-
-    g.dispose();
   }
   
   /**
@@ -362,73 +238,6 @@ public class KmcCanvas extends Canvas {
     lattice.changeOccupationByHand(xMouse, yMouse, scale);
   }
   
-  /**
-   * Method taken from http://stackoverflow.com/questions/4672271/reverse-opposing-colors
-   *
-   * @param colour base colour.
-   * @return black or white; the one with highest contrast.
-   */
-  private Color getContrastColor(Color colour) {
-    double y = (299 * colour.getRed() + 587 * colour.getGreen() + 114 * colour.getBlue()) / 1000;
-    return y >= 128 ? Color.black : Color.white;
-  }
-  
-  private void paintCatalysis(Graphics g) {
-    for (int i = 0; i < lattice.size(); i++) {
-      if (i % 2 == 0) {
-        g.setColor(GRAY);
-      } else {
-        g.setColor(WHITE);
-      }
-
-      CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
-      for (int j = 0; j < uc.size(); j++) {
-        AbstractSurfaceSite atom = uc.getSite(j);
-        int Y = (int) Math.round((atom.getPos().getY() + uc.getPos().getY()) * scale) + baseY;
-        int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * scale) + baseX;
-
-        g.fillRect(X, Y, scale, scale);
-        switch (atom.getType()) { // the cases are for graphene
-          case CatalysisAmmoniaSite.O:
-            g.setColor(RED);
-            break;
-          case CatalysisAmmoniaSite.NH3:
-            g.setColor(Color.BLUE);
-            break;
-          case CatalysisAmmoniaSite.NH2:
-            g.setColor(Color.GREEN);
-            break;
-          case CatalysisAmmoniaSite.NH:
-            g.setColor(Color.PINK);
-            break;
-          case CatalysisAmmoniaSite.OH:
-            g.setColor(BLACK);
-            break;
-        }
-        g.setColor(colours[atom.getType()]);
-
-        if (scale < 10) {
-          if (atom.isOccupied()) {
-            g.fillRect(X, Y, scale, scale);
-          }
-
-        } else if (atom.isOccupied()) {
-          g.fillOval(X, Y, scale, scale);
-          /*if (scale > 8) {
-            g.setColor(getContrastColor(g.getColor()));
-            if (printId) {
-              g.drawString(Integer.toString(atom.getId()), X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-            }
-            if (printIslandNumber) {
-              String text = Integer.toString(atom.getIslandNumber());
-              g.drawString(text, X + (scale / 2) - (scale / 4), Y + (scale / 2) + (scale / 4));
-            }
-          }//*/
-        }
-      }
-    }
-  }
-  
   private void writeXyz() {
     restart.writeXyz(1, lattice);
   }
@@ -436,4 +245,10 @@ public class KmcCanvas extends Canvas {
   private void writeSvg() {
     restart.writeSvg(1, lattice);
   }
+
+  abstract void changeBlackAndWhite();
+  abstract void changePrintPerimeter();
+  abstract void setPrintId(boolean selected);
+  abstract void setPrintIslandNumber(boolean selected);
+  abstract void setPrintMultiAtom(boolean selected);
 }
