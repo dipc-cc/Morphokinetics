@@ -904,7 +904,7 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
     return removedRate;
   }
 
-  public Set<AbstractGrowthSite> getModifiedAtoms(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+  public Set<AbstractGrowthSite> getModifiedSites(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

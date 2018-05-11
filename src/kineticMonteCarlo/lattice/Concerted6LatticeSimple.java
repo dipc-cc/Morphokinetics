@@ -65,20 +65,20 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
   
     
   /**
-   * Includes all the first and second neighbourhood of the current atom in a
+   * Includes all the first and second neighbourhood of the current site in a
    * list without repeated elements.
    *
-   * @param modifiedSites previously added atoms, can be null.
-   * @param site current central atom.
-   * @return A list with of atoms that should be recomputed their rate.
+   * @param modifiedSites previously added sites, can be null.
+   * @param site current central site.
+   * @return A list with of sites that should be recomputed their rate.
    */
   @Override
-  public Set<AbstractGrowthSite> getModifiedAtoms(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+  public Set<AbstractGrowthSite> getModifiedSites(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
     if (modifiedSites == null) {
       modifiedSites = new HashSet<>();
     }
     modifiedSites.add(site);
-    // collect first and second neighbour atoms
+    // collect first and second neighbour sites
     int possibleDistance = 0;
     int thresholdDistance = 2;
     while (true) {
