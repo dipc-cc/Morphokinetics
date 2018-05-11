@@ -82,11 +82,11 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
     int possibleDistance = 0;
     int thresholdDistance = 2;
     while (true) {
-      site = (ConcertedSite) site.getNeighbour(4); // get the first neighbour
+      site = site.getNeighbour(4); // get the first neighbour
       for (int direction = 0; direction < 6; direction++) {
         for (int j = 0; j <= possibleDistance; j++) {
           modifiedSites.add(site);
-          site = (ConcertedSite) site.getNeighbour(direction);
+          site = site.getNeighbour(direction);
         }
       }
       possibleDistance++;
