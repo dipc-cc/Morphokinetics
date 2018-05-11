@@ -1,0 +1,74 @@
+/*
+ * Copyright (C) 2018 J. Alberdi-Rodriguez
+ *
+ * This file is part of Morphokinetics.
+ *
+ * Morphokinetics is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Morphokinetics is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package ratesLibrary.bda;
+
+import ratesLibrary.IRates;
+
+/**
+ *
+ * @author J. Alberdi-Rodriguez
+ */
+public abstract class AbstractBdaRates implements IRates{
+  
+  private double diffusionMl;
+  private final double prefactor;
+  /** Temperature (K). */
+  private final float temperature;
+  
+  public AbstractBdaRates(float temperature) {
+    this.temperature = temperature;
+    prefactor = 1e13;
+  }
+
+  /**
+   * Diffusion Mono Layer (F). Utilised to calculate absorption rate. Cox et al. define to be 
+   * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
+   * @param diffusionMl diffusion mono layer (deposition flux)
+   */
+  
+  @Override
+  public void setDepositionFlux(double diffusionMl) {
+    this.diffusionMl = diffusionMl;
+  }
+  
+  /**
+   * In principle, deposition rate is constant.
+   *
+   * @return diffusion mono layer (or deposition flux)
+   */
+  @Override
+  public double getDepositionRatePerSite() {
+    return 1;//diffusionMl;
+  }
+  
+
+  public double[][] getDiffusionRates() {
+    double[][] rates = new double[1][4];
+
+    for (int i = 0; i < 1; i++) {
+      for (int j = 0; j < 4; j++) {
+        //rates[i][j] = getRate(i, j, temperature);
+        rates[i][j] = 1;
+      }
+    }
+    rates[0][0] = rates[0][2] = 5;
+    rates[0][1] = rates[0][3] = 20;
+    return rates;
+  }
+}

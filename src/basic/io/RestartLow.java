@@ -42,6 +42,9 @@ import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
+import kineticMonteCarlo.site.BdaMoleculeSite;
+import kineticMonteCarlo.unitCell.BdaMoleculeUc;
+import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import kineticMonteCarlo.unitCell.IUc;
 import main.Configurator;
 
@@ -463,6 +466,72 @@ class RestartLow {
     } catch (Exception e) {
       // if any I/O error occurs
       e.printStackTrace();
+    }
+  }
+  
+  /**
+   * Writes a double lattice (for BDA) SVG format file.
+   * 
+   * @param fileName
+   * @param lattice 
+   */
+  static void writeSvgBda(String fileName, AbstractLattice lattice) {
+    // Check that is growth simulation, in etching are missing getUc in AbstractLattice and getPos and isOccupied in AbstractAtom
+    String[] colours = {"white", "indianred", "blueviolet", "gray", "cornflowerblue", "darkblue", "gold", "green"};
+    double scale = 2.89; // default distance from Ag to Ag
+    List<BdaSurfaceUc> moleculeList = new  ArrayList<>();
+    // create file descriptor. It will be automatically closed.
+    try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))){
+      String s = format("<svg height=\"%f\" width=\"%f\">",
+          ((AbstractGrowthLattice) lattice).getCartSizeX() * scale,
+          ((AbstractGrowthLattice) lattice).getCartSizeY() * scale);
+      printWriter.write(s +"\n");
+      IUc uc;
+      double posX;
+      double posY;
+      // for each atom in the uc
+      for (int i = 0; i < lattice.size(); i++) {
+        uc = lattice.getUc(i);
+        for (int j = 0; j < uc.size(); j++) {
+          ISite agAtom = uc.getSite(j);
+          posX = (uc.getPos().getX() + agAtom.getPos().getX()) * scale;
+          posY = (uc.getPos().getY() + agAtom.getPos().getY()) * scale;
+          String colour = "white";
+          s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"1.44\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
+          printWriter.write(s + "\n");
+        }
+        if (((BdaSurfaceUc)uc).isOccupied()) {
+          moleculeList.add(((BdaSurfaceUc)uc));
+        }
+      }
+      for (int i = 0; i < moleculeList.size(); i++) {
+        paintBdaMolecule(printWriter, moleculeList.get(i));
+      }
+      
+      printWriter.write("</svg>\n");
+      printWriter.flush();
+      printWriter.close();
+    } catch (Exception e) {
+      // if any I/O error occurs
+      e.printStackTrace();
+    }
+  }
+  
+  static private void paintBdaMolecule(PrintWriter printWriter, BdaSurfaceUc sUc) {
+    double distanceAg = 2.89;
+    double scale = 1;
+    BdaMoleculeUc muc = sUc.getBdaUc();
+    String colour = "black";
+    for (int j = 0; j < muc.size()-1; j++) {
+      BdaMoleculeSite atom = (BdaMoleculeSite) muc.getSite(j);
+
+      double posY = ((atom.getPos().getY() + (sUc.getPos().getY() + muc.getPos().getY()) * distanceAg) * scale);
+      double posX = ((atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg) * scale);
+      if (j > 13) // Oxygen, instead of Carbon
+        colour = "red";
+
+      String s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"0.75\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
+      printWriter.write(s + "\n");
     }
   }
   

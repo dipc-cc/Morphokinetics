@@ -713,12 +713,7 @@ public class Parser {
    */
   public int getHexaSizeI() {
     int cartSizeX = mapInt.get("cartSizeX");
-    if (getCalculationMode().equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
-      return cartSizeX;
-    }
-    if (getCalculationMode().equals("Ag") || getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
-      return cartSizeX;
-    } else { // graphene, always even number
+    if (getCalculationMode().equals("graphene")) { // graphene, always even number
       int sizeI = (int) Math.ceil(cartSizeX / 1.5f);
       if (sizeI % 2 == 0) {
         return sizeI;
@@ -726,6 +721,7 @@ public class Parser {
         return sizeI + 1;
       }
     }
+    return cartSizeX;
   }
    
   /**
@@ -736,7 +732,8 @@ public class Parser {
    * @return lattice size in J direction. 
    */
   public int getHexaSizeJ() {
-    if (getCalculationMode().equals("basic") || getCalculationMode().equals("catalysis") || getCalculationMode().equals("ammonia")) {
+    if (getCalculationMode().equals("basic") || getCalculationMode().equals("catalysis")
+            || getCalculationMode().equals("ammonia") || getCalculationMode().equals("bda")) {
       return mapInt.get("cartSizeY");
     }
     if (getCalculationMode().equals("AgUc") || getCalculationMode().equals("concerted")) {
@@ -829,18 +826,21 @@ public class Parser {
   }
   
   /**
-   * Selects the type of system to be calculated. Can be Si (for silicon etching), Ag (2D Ag/Ag
-   * growth in former mode), AgUc (same as previous Ag/Ag growth, with correct periodicity), basic
-   * (synthetic simulation mode in a square lattice), graphene (graphene 2D growth simulation),
-   * Catalysis (CO2 catalysis on RuO2 (110)) or Ammonia (Oxidation of ammonia on RuO2(110). For the
-   * graphene and catalysis pay attention to the used rates library with {@link #getRatesLibrary()}.
+   * Selects the type of system to be calculated. Can be Si (for silicon
+   * etching), Ag (2D Ag/Ag growth in former mode), AgUc (same as previous Ag/Ag
+   * growth, with correct periodicity), basic (synthetic simulation mode in a
+   * square lattice), graphene (graphene 2D growth simulation), Catalysis (CO2
+   * catalysis on RuO2 (110)) or Ammonia (Oxidation of ammonia on RuO2(110); OSS
+   * growth of BDA on Ag is available. For the graphene and catalysis pay
+   * attention to the used rates library with {@link #getRatesLibrary()}.
    *
-   * The temperature ({@link #getTemperature()}) has to be between 120 and 180 for Ag, between 120
-   * and 220 for basic and 1273 for graphene.
+   * The temperature ({@link #getTemperature()}) has to be between 120 and 180
+   * for Ag, between 120 and 220 for basic and 1273 for graphene.
    *
    * Input "parameters" variable: {@code calculationMode}.
    *
-   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic", "graphene", "catalysis" or "ammonia".
+   * @return calculation mode. Either: "Si", "Ag", "AgUc", "basic", "graphene",
+   * "catalysis", "ammonia" or "bda".
    */
   public String getCalculationMode() {
     return mapString.get("calculationMode");

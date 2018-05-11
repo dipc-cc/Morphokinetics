@@ -24,7 +24,6 @@ import kineticMonteCarlo.simulation.AgSimulation;
 import kineticMonteCarlo.simulation.BasicGrowthSimulation;
 import kineticMonteCarlo.simulation.CatalysisAmmoniaSimulation;
 import kineticMonteCarlo.simulation.CatalysisCoSimulation;
-import kineticMonteCarlo.simulation.CatalysisSimulation;
 import kineticMonteCarlo.simulation.ConcertedSimulation;
 import kineticMonteCarlo.simulation.GrapheneSimulation;
 import basic.Parser;
@@ -44,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import kineticMonteCarlo.kmcCore.growth.AbstractGrowthKmc;
 import kineticMonteCarlo.lattice.AbstractGrowthLattice;
+import kineticMonteCarlo.simulation.BdaSimulation;
 import org.json.JSONException;
 import ratesLibrary.AgRatesFromPrbCox;
 import ratesLibrary.BasicGrowthSyntheticRates;
@@ -117,6 +117,9 @@ public class Morphokinetics {
         break;
       case "concerted":
         simulation = new ConcertedSimulation(parser);
+        break;
+      case "bda":
+        simulation = new BdaSimulation(parser);
         break;      
       default:
         System.err.println("Error: Default case calculation mode. This simulation mode is not implemented!");

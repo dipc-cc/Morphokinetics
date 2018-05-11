@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.function.Consumer;
 import kineticMonteCarlo.site.AbstractGrowthSite;
+import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.site.ConcertedSite;
 import utils.list.Node;
@@ -243,8 +244,11 @@ public class AvlTree<T extends Comparable<T>> {
           a = (T) new CatalysisSite(i, (short)-1, (short)-1);
           break;
         case "concerted":
-         a = (T) new ConcertedSite(i, -1);
-         break;
+          a = (T) new ConcertedSite(i, -1);
+          break;
+        case "bda":
+          a = (T) new BdaAgSurfaceSite(i, (short)-1, (short)-1);
+          break;
         default:
           a = null;
       }

@@ -21,6 +21,7 @@ package utils.list;
 import basic.Parser;
 import kineticMonteCarlo.site.AbstractSite;
 import java.util.ListIterator;
+import kineticMonteCarlo.process.BdaProcess;
 import kineticMonteCarlo.process.CatalysisProcess;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import kineticMonteCarlo.process.ConcertedProcess;
@@ -53,6 +54,10 @@ public abstract class AbstractList implements IProbabilityHolder {
       case "concerted":
         ratesLength = 3; // Adsorption, single (diffusion), concerted (diffusion)
         diffusionIndex = ConcertedProcess.SINGLE;
+        break;
+      case "bda":
+        ratesLength = 6; // Adsorption, desorption, reaction (not used), diffusion, rotation, transformation
+        diffusionIndex = BdaProcess.DIFFUSION;
         break;
       default:
         ratesLength = 2; // Adsorption, diffusion
