@@ -38,6 +38,7 @@ import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.CONCERTED;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
+import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import ratesLibrary.concerted.AbstractConcertedRates;
 import utils.StaticRandom;
@@ -86,8 +87,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   public ConcertedKmc(Parser parser, String restartFolder) {
     super(parser);
     simulationNumber = 0;
-    Concerted6LatticeSimple concertedLattice;
-    concertedLattice = new Concerted6LatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), null);
+    Concerted6LatticeSimple concertedLattice = new Concerted6LatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), null);
     setLattice(concertedLattice);
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
@@ -263,7 +263,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     destinationAtom.setDepositionTime(getTime());
     destinationAtom.setDepositionPosition(getLattice().getUc(ucIndex).getPos().add(destinationAtom.getPos()));
     
-    Set<ConcertedSite> modifiedAtoms = addModifiedAtoms(null, destinationAtom);
+    Set<AbstractGrowthSite> modifiedAtoms = getLattice().getModifiedAtoms(null, destinationAtom);
     updateRates(modifiedAtoms);
     updateRatesIslands(null, destinationAtom, false);
     
@@ -286,8 +286,8 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     if (aeOutput) {
       activationEnergy.updateSuccess(oldType, destinationAtom.getType());
     }
-    Set<ConcertedSite> modifiedAtoms = addModifiedAtoms(null, originAtom);
-    modifiedAtoms = addModifiedAtoms(modifiedAtoms, destinationAtom);
+    Set<AbstractGrowthSite> modifiedAtoms = getLattice().getModifiedAtoms(null, originAtom);
+    modifiedAtoms = getLattice().getModifiedAtoms(modifiedAtoms, destinationAtom);
     updateRates(modifiedAtoms);
     updateRatesIslands(originAtom, destinationAtom, wasDimer);
   }
@@ -334,7 +334,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     ConcertedSite iOrigAtom;
     ConcertedSite iDestAtom;
     Island destinationIsland = new Island(originIsland.getIslandNumber());
-    Set<ConcertedSite> modifiedAtoms = new HashSet<>();
+    Set<AbstractGrowthSite> modifiedAtoms = new HashSet<>();
     //clone
     Island originIslandCopy = new Island(originIsland);
     
@@ -357,10 +357,10 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       destinationIsland.addAtom(iDestAtom);
     }
     
-    ArrayList<ConcertedSite> tmpAtoms = new ArrayList<>();
+    ArrayList<AbstractGrowthSite> tmpAtoms = new ArrayList<>();
     tmpAtoms.addAll(modifiedAtoms); // we need to copy the set to be able to iterate it, while modifying it.
     for (int i = 0; i < tmpAtoms.size(); i++) { // Update all touched area
-      addModifiedAtoms(modifiedAtoms, tmpAtoms.get(i));
+      getLattice().getModifiedAtoms(modifiedAtoms, tmpAtoms.get(i));
     }
     updateRates(modifiedAtoms);
     
@@ -396,7 +396,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     ConcertedSite iOrigAtom;
     ConcertedSite iDestAtom;
     MultiAtom destinationMultiAtom = new MultiAtom(originMultiAtom.getIslandNumber());
-    Set<ConcertedSite> modifiedAtoms = new HashSet<>();
+    Set<AbstractGrowthSite> modifiedAtoms = new HashSet<>();
     //clone
     Island originMultiAtomCopy = new MultiAtom(originMultiAtom);
     
@@ -427,10 +427,10 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       destinationMultiAtom.addAtom(iDestAtom);
     }
     
-    ArrayList<ConcertedSite> tmpAtoms = new ArrayList<>();
+    ArrayList<AbstractGrowthSite> tmpAtoms = new ArrayList<>();
     tmpAtoms.addAll(modifiedAtoms); // we need to copy the set to be able to iterate it, while modifying it.
     for (int i = 0; i < tmpAtoms.size(); i++) { // Update all touched area
-      addModifiedAtoms(modifiedAtoms, tmpAtoms.get(i));
+      getLattice().getModifiedAtoms(modifiedAtoms, tmpAtoms.get(i));
     }
     updateRates(modifiedAtoms);
     
@@ -502,43 +502,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   /**
-   * Includes all the first and second neighbourhood of the current atom in a
-   * list without repeated elements.
-   *
-   * @param modifiedAtoms previously added atoms, can be null.
-   * @param atom current central atom.
-   * @return A list with of atoms that should be recomputed their rate.
-   */
-  private Set<ConcertedSite> addModifiedAtoms(Set<ConcertedSite> modifiedAtoms, ConcertedSite atom) {
-    if (modifiedAtoms == null) {
-      modifiedAtoms = new HashSet<>();
-    }
-    modifiedAtoms.add(atom);
-    // collect first and second neighbour atoms
-    int possibleDistance = 0;
-    int thresholdDistance = 2;
-    while (true) {
-      atom = (ConcertedSite) atom.getNeighbour(4); // get the first neighbour
-      for (int direction = 0; direction < 6; direction++) {
-        for (int j = 0; j <= possibleDistance; j++) {
-          modifiedAtoms.add(atom);
-          atom = (ConcertedSite) atom.getNeighbour(direction);
-        }
-      }
-      possibleDistance++;
-      if (possibleDistance == thresholdDistance) {
-        break;
-      }
-    }
-    return modifiedAtoms;
-  }
-  
-  /**
    * Updates total adsorption and diffusion probabilities.
    *
    * @param atom
    */
-  private void updateRates(Set<ConcertedSite> modifiedAtoms) {
+  private void updateRates(Set<AbstractGrowthSite> modifiedAtoms) {
     // save previous rates
     double[] previousRate = totalRate.clone();
     

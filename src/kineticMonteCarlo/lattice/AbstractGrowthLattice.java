@@ -42,8 +42,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import static kineticMonteCarlo.process.ConcertedProcess.MULTI;
+import kineticMonteCarlo.site.ConcertedSite;
 import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
 import kineticMonteCarlo.unitCell.SimpleUc;
 
@@ -900,5 +902,9 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
     }
 
     return removedRate;
+  }
+
+  public Set<AbstractGrowthSite> getModifiedAtoms(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

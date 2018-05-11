@@ -18,6 +18,8 @@
  */
 package kineticMonteCarlo.lattice;
 
+import java.util.HashSet;
+import java.util.Set;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.ConcertedSite;
 import kineticMonteCarlo.site.ModifiedBuffer;
@@ -59,6 +61,40 @@ public class Concerted6LatticeSimple extends AgUcLatticeSimple {
     atom.setList(false);
     subtractOccupied();
     return probabilityChange;
+  }
+  
+    
+  /**
+   * Includes all the first and second neighbourhood of the current atom in a
+   * list without repeated elements.
+   *
+   * @param modifiedSites previously added atoms, can be null.
+   * @param site current central atom.
+   * @return A list with of atoms that should be recomputed their rate.
+   */
+  @Override
+  public Set<AbstractGrowthSite> getModifiedAtoms(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+    if (modifiedSites == null) {
+      modifiedSites = new HashSet<>();
+    }
+    modifiedSites.add(site);
+    // collect first and second neighbour atoms
+    int possibleDistance = 0;
+    int thresholdDistance = 2;
+    while (true) {
+      site = (ConcertedSite) site.getNeighbour(4); // get the first neighbour
+      for (int direction = 0; direction < 6; direction++) {
+        for (int j = 0; j <= possibleDistance; j++) {
+          modifiedSites.add(site);
+          site = (ConcertedSite) site.getNeighbour(direction);
+        }
+      }
+      possibleDistance++;
+      if (possibleDistance == thresholdDistance) {
+        break;
+      }
+    }
+    return modifiedSites;
   }
   
   /**
