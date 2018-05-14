@@ -25,98 +25,30 @@ import javafx.geometry.Point3D;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class BdaMoleculeSite extends AbstractGrowthSite {
-  
-  private final BdaAtomSite[] atoms;
+public class BdaAtomSite extends AbstractGrowthSite {
+  /**
+   * Cardinal position within unit cell.
+   */
+  private final int pos;
+  private Point3D cartPos;
   /** Alpha, Beta (1 or 2), Gamma or Delta. */
   private byte type;
-  private boolean rotated;
-  private BdaMoleculeSite[] neighbours;
-  private final double[][] alphaXyz = {{3.7500, 0.0000},
-  {3.0000, 1.2990},
-  {1.5000, 1.2991},
-  {0.7500, 0.0000},
-  {1.5000, -1.2991},
-  {3.0000, -1.2990},
-  {-3.7500, 0.0000},
-  {-3.0000, -1.2990},
-  {-1.5000, -1.2991},
-  {-0.7500, 0.0000},
-  {-1.5000, 1.2990},
-  {-3.0000, 1.2990},
-  {-5.2500, 0.0000},
-  {5.2500, 0.0000},
-  {-6.0000, -1.2991},
-  {-6.0000, 1.2991},
-  {6.0000, 1.2991},
-  {6.0000, -1.2991},
-  {0.0000, 0.0000}};
 
-  private final double[][] beta1Xyz = alphaXyz;
-  private final double[][] beta2Xyz = {{3.665, 0.7937},
-  {2.657, 1.9045},
-  {1.191, 1.5871},
-  {0.733, 0.1587},
-  {1.741, -0.9522},
-  {3.2069, -0.6346},
-  {-3.6651, -0.7938},
-  {-2.6571, -1.9046},
-  {-1.1911, -1.5872},
-  {-0.733, -0.1588},
-  {-1.741, 0.952},
-  {-3.207, 0.6345},
-  {-5.1311, -1.1113},
-  {5.131, 1.1112},
-  {-5.5891, -2.5397},
-  {-6.1391, -0.0004},
-  {5.589, 2.5396},
-  {6.139, 0.0003},
-  {0, 0}};
-  
-  public BdaMoleculeSite(int id, boolean rotated) { // int type (alpha, beta...)
+
+  public BdaAtomSite(int id, int pos, Point3D cartPos) {
     super(id, (short) -1, (short) -1, 0, -1);
-    atoms = new BdaAtomSite[19];
-    for (int pos = 0; pos < atoms.length; pos++) {
-      Point3D cartPos;
-      if (rotated) {
-        cartPos = new Point3D(alphaXyz[pos][1], alphaXyz[pos][0], 0);
-      } else {
-        cartPos = new Point3D(alphaXyz[pos][0], alphaXyz[pos][1], 0);
-      }
-
-      atoms[pos] = new BdaAtomSite(pos, pos, cartPos);
-      atoms[pos].setOccupied(true);
-    }
-    this.rotated = rotated;
-    neighbours = new BdaMoleculeSite[4];
-  }
-  
-  public boolean isRotated() {
-    return rotated;
+    this.pos = pos;
+    this.cartPos = cartPos;
   }
 
-  public void setRotated(boolean rotated) {
-    this.rotated = rotated;
-  }
-  
   /**
-   * Number of elements.
+   * Cartesian X,Y,Z position within unit cell.
    *
-   * @return quantity of unit cells.
+   * @return X,Y,Z coordinates in unit cell
    */
-  //@Override
-  public int size() {
-    return atoms.length;
-  }
-  
-  /**
-   * Choose the corresponding atom of the molecule.
-   *
-   * @param pos position in the array of atoms.
-   * @return an atom.
-   */
-  public AbstractGrowthSite getSite(int pos) {
-    return atoms[pos];
+  @Override
+  public Point3D getPos() {
+    return cartPos;
   }
 
   @Override
@@ -165,13 +97,13 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   }
 
   @Override
-  public AbstractGrowthSite getNeighbour(int pos) {
-    return neighbours[pos];
+  public BdaAtomSite getNeighbour(int pos) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override
   public void setNeighbour(AbstractSurfaceSite m, int pos) {
-    neighbours[pos]= (BdaMoleculeSite) m;
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
   @Override

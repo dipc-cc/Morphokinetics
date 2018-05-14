@@ -42,6 +42,7 @@ import kineticMonteCarlo.lattice.AbstractLattice;
 import kineticMonteCarlo.lattice.AgLattice;
 import kineticMonteCarlo.lattice.GrapheneLattice;
 import kineticMonteCarlo.lattice.SiLattice;
+import kineticMonteCarlo.site.BdaAtomSite;
 import kineticMonteCarlo.site.BdaMoleculeSite;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
@@ -489,6 +490,7 @@ class RestartLow {
       IUc uc;
       double posX;
       double posY;
+      printWriter.write("<g>\n");
       // for each atom in the uc
       for (int i = 0; i < lattice.size(); i++) {
         uc = lattice.getUc(i);
@@ -504,6 +506,7 @@ class RestartLow {
           moleculeList.add(((BdaSurfaceUc)uc));
         }
       }
+      printWriter.write("</g>\n");
       for (int i = 0; i < moleculeList.size(); i++) {
         paintBdaMolecule(printWriter, moleculeList.get(i));
       }
@@ -522,8 +525,9 @@ class RestartLow {
     BdaMoleculeUc muc = sUc.getBdaUc();
     String colour = "black";
     printWriter.write("<g>\n");
-    for (int j = 0; j < muc.size() - 1; j++) {
-      BdaMoleculeSite atom = (BdaMoleculeSite) muc.getSite(j);
+    BdaMoleculeSite bdaMolecule = (BdaMoleculeSite) muc.getSite(-1);
+    for (int j = 0; j < bdaMolecule.size() - 1; j++) {
+      BdaAtomSite atom = (BdaAtomSite) bdaMolecule.getSite(j);
 
       double posY = atom.getPos().getY() + (sUc.getPos().getY() + muc.getPos().getY()) * distanceAg;
       double posX = atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg;

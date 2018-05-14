@@ -23,7 +23,7 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
-import kineticMonteCarlo.site.BdaMoleculeSite;
+import kineticMonteCarlo.site.BdaAtomSite;
 import java.util.List;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import static java.lang.Math.floorDiv;
@@ -227,7 +227,7 @@ public class BdaLattice extends AbstractGrowthLattice {
 
   @Override
   public double extract(AbstractSurfaceSite m) {
-    BdaMoleculeSite molecule = (BdaMoleculeSite) m;
+    BdaAtomSite molecule = (BdaAtomSite) m;
     moleculeList.remove(molecule);
     return 0;
   }

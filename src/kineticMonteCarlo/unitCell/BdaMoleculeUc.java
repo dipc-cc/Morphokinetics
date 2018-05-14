@@ -29,19 +29,15 @@ import kineticMonteCarlo.site.BdaMoleculeSite;
  */
 public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   
-  private final BdaMoleculeSite[] atoms;
   /** Central position is in this AgUc. */
   //private BdaSurfaceUc agUc;
   private final BdaSurfaceUc[] neighbours;
+  private BdaMoleculeSite bdaMolecule;
   
   public BdaMoleculeUc() {
     super(-1, -1, null);
-    
-    atoms = new BdaMoleculeSite[19];
-    for (int i = 0; i < atoms.length; i++) {
-      atoms[i] = new BdaMoleculeSite(i, i);
-      atoms[i].setOccupied(true);
-    }
+    bdaMolecule = new BdaMoleculeSite(-1, false);
+   
     neighbours = new BdaSurfaceUc[4];
   }
    
@@ -61,7 +57,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
    */
   @Override
   public AbstractGrowthSite getSite(int pos) {
-    return atoms[pos];
+    return bdaMolecule;
   }
   
   /**
@@ -71,35 +67,26 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
    */
   @Override
   public int size() {
-    return atoms.length;
+    return 1;
   }
-  
-  /*public void setAgUc(BdaSurfaceUc agUc) {
-    this.agUc = agUc;
-    agUc.setOccupied(true);
-  }
-  
-  public BdaSurfaceUc getAgUc() {
-    return agUc;
-  }//*/
   
   @Override
   public Point3D getPos(){
     Point3D pos;
     // bridge
-    if (isRotated())
+    if (bdaMolecule.isRotated()) {
       pos = new Point3D(-0.5, 0, 0);
-    else
+    } else {
       pos = new Point3D(0, 0.5, 0);
+    }
     return pos;
-  }//*/
+  }
+  
   public boolean isRotated() {
-    return atoms[0].isRotated();
+    return bdaMolecule.isRotated();
   }
 
   public void setRotated(boolean rotated) {
-    for (int i = 0; i < atoms.length; i++) {
-      atoms[i].setRotated(rotated);
-    }
+    bdaMolecule.setRotated(rotated);
   }
 }

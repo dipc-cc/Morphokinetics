@@ -34,7 +34,7 @@ import static kineticMonteCarlo.process.BdaProcess.TRANSFORMATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
-import kineticMonteCarlo.site.BdaMoleculeSite;
+import kineticMonteCarlo.site.BdaAtomSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
@@ -211,7 +211,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void rotateMolecule() {
     BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
     lattice.extract(agUc);
-    agUc.getBdaUc().setRotated(!agUc.getBdaUc().isRotated());
+    //agUc.getBdaUc().setRotated(!agUc.getBdaUc().isRotated());
     lattice.deposit(agUc, agUc.getBdaUc());
   }
   
@@ -226,7 +226,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     while (i.hasNext()) {
       site = (BdaAgSurfaceSite) i.next();
       recomputeAdsorptionProbability(site);
-      //recomputeDiffusionProbability(site);
+      recomputeDiffusionProbability(site);
     }
   }
 
@@ -243,8 +243,8 @@ public class BdaKmc extends AbstractGrowthKmc {
   }
 
   private void recomputeDiffusionProbability(BdaAgSurfaceSite agSite) {
-    BdaSurfaceUc agUc = lattice.getAgUc(agSite);
-    BdaMoleculeSite bdaSite = (BdaMoleculeSite) agUc.getBdaUc().getSite(0);
+    /*BdaSurfaceUc agUc = lattice.getAgUc(agSite);
+    BdaAtomSite bdaSite = (BdaAtomSite) agUc.getBdaUc().getSite(0);
     if (bdaSite == null) 
       return;
     /*agUc.isOccupied();
