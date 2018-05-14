@@ -84,8 +84,9 @@ public class KmcCanvasBda extends KmcCanvas {
       int X = (int) Math.round(((atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseX();
 
       g.setColor(BLACK);
-      if (i > 13)
+      if (i > 13) { // Oxygen, instead of Carbon
         g.setColor(RED);
+      }
       int width = (int) Math.round(getScale() * sizeBall);
       int height = (int) Math.round(getScale() * sizeBall);
       g.fillOval(X, Y, width, height);
