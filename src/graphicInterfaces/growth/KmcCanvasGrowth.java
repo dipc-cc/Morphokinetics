@@ -57,6 +57,7 @@ public class KmcCanvasGrowth extends KmcCanvas {
     printId = true;
   }
   
+  @Override
   public void setPrintId(boolean printId) {
     this.printId = printId;
   }

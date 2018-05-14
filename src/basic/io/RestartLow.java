@@ -522,17 +522,19 @@ class RestartLow {
     double scale = 1;
     BdaMoleculeUc muc = sUc.getBdaUc();
     String colour = "black";
+    printWriter.write("<g>\n");
     for (int j = 0; j < muc.size()-1; j++) {
       BdaMoleculeSite atom = (BdaMoleculeSite) muc.getSite(j);
 
-      double posY = ((atom.getPos().getY() + (sUc.getPos().getY() + muc.getPos().getY()) * distanceAg) * scale);
-      double posX = ((atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg) * scale);
+      double posY = atom.getPos().getY() + (sUc.getPos().getY() + muc.getPos().getY()) * distanceAg;
+      double posX = atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg;
       if (j > 13) // Oxygen, instead of Carbon
         colour = "red";
 
       String s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"0.75\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
       printWriter.write(s + "\n");
     }
+    printWriter.write("</g>\n");
   }
   
   static void writeAdsorptionLowSimulationDataText(double[][] data, String fileName) {

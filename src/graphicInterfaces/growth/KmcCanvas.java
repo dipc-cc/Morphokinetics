@@ -85,7 +85,7 @@ public abstract class KmcCanvas extends Canvas {
     restart = new Restart();
   }
   
-  public AbstractSurfaceLattice getLattice() {
+  AbstractSurfaceLattice getLattice() {
     return lattice;
   }
 
@@ -223,7 +223,7 @@ public abstract class KmcCanvas extends Canvas {
     super.paint(g);
     g.setFont(new Font("Arial", Font.PLAIN, 10));
     g.setColor(GRAY);
-    g.fillRect(baseX, baseY, (int) (lattice.getCartSizeX() * scale), (int) (lattice.getCartSizeY() * scale));
+    g.fillRect(baseX, baseY, getSizeX(), getSizeY());
   }
   
   /**
@@ -242,7 +242,7 @@ public abstract class KmcCanvas extends Canvas {
     restart.writeXyz(1, lattice);
   }
   
-  private void writeSvg() {
+  void writeSvg() {
     restart.writeSvg(1, lattice);
   }
 

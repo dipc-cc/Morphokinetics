@@ -28,7 +28,7 @@ import kineticMonteCarlo.lattice.AbstractLattice;
  */
 public class BdaRestart extends Restart {
   
-  private String folder;
+  private final String folder;
   
   public BdaRestart(String restartFolder) {
     super(restartFolder);
@@ -38,6 +38,6 @@ public class BdaRestart extends Restart {
   @Override
   public void writeSvg(int simulationNumber, AbstractLattice lattice) {
     String fileName = format("%ssurface%03d.svg", folder, simulationNumber);
-    //RestartLow.writeSvgBda(fileName, lattice);
+    RestartLow.writeSvgBda(fileName, lattice);
   }
 }

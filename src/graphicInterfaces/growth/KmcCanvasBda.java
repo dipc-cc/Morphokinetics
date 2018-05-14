@@ -127,7 +127,7 @@ public class KmcCanvasBda extends KmcCanvas {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
-  //@Override
+  @Override
   void writeSvg() {
     restart.writeSvg(1, getLattice());
   }
