@@ -20,6 +20,7 @@ package graphicInterfaces.growth;
 
 import basic.io.BdaRestart;
 import java.awt.Color;
+import static java.awt.Color.BLACK;
 import java.awt.Graphics;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
@@ -33,16 +34,14 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
  */
 public class KmcCanvasBda extends KmcCanvas {
   
-  //double sizeAg;
   /** Distance between centres of Ag molecules (from ASE) in Angstrom. */
   double distanceAg;
-  int sizeAgBall;
+  double sizeAgBall;
   BdaRestart restart;
   
   public KmcCanvasBda(AbstractSurfaceLattice lattice) {
     super(lattice);
-    //sizeAg = 4.09;
-    sizeAgBall = 3;
+    sizeAgBall = 2.892;
     distanceAg = 2.892;
     restart = new BdaRestart("results/");
   }
@@ -51,25 +50,20 @@ public class KmcCanvasBda extends KmcCanvas {
   @Override
   public void paint(Graphics g) {
     super.paint(g);
-    /*for (int i = 0; i < ((BdaLattice)getLattice()).getMoleculeUcSize(); i++) {
-      BdaMoleculeUc muc = ((BdaLattice)getLattice()).getMoleculeUc(i);
-      paintBdaMolecule(g, muc);
-    }*/
-    if (!painted){
     for (int i = 0; i < getLattice().size(); i++) {
       BdaSurfaceUc uc = (BdaSurfaceUc) getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) {
         AbstractSurfaceSite site = uc.getSite(j);
-        //System.out.println(site.getPos().getX()+" "+uc.getPos().getX()+" "+site.getPos().getY()+" "+uc.getPos().getY());
         int Y = (int) Math.round(((site.getPos().getY() + uc.getPos().getY()) * getScale() * distanceAg) - (sizeAgBall* getScale() / 2.0)) + getBaseY();
         int X = (int) Math.round(((site.getPos().getX() + uc.getPos().getX()) * getScale() * distanceAg) - (sizeAgBall* getScale() / 2.0)) + getBaseX();
 
         g.setColor(colours[2]);
-        g.drawOval(X, Y, getScale() * sizeAgBall, getScale() * sizeAgBall);
+        int ball = (int) Math.round(getScale() * sizeAgBall);
+        g.drawOval(X, Y, ball, ball);
         if (!uc.isAvailable()) {
           g.setColor(RED);
-          g.drawOval(X, Y, getScale() * sizeAgBall, getScale() * sizeAgBall);
-        }//*/
+          g.drawOval(X, Y, ball, ball);
+        }
         if (getScale() >= 8 && true) {
           g.setColor(Color.BLACK);
           g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2*getScale());
@@ -79,21 +73,19 @@ public class KmcCanvasBda extends KmcCanvas {
         paintBdaMolecule(g, uc, uc.getBdaUc());
       }
     }
-    //painted = true;
-    }
   }
   
   private void paintBdaMolecule(Graphics g, BdaSurfaceUc sUc, BdaMoleculeUc muc) {
     double sizeBall = 2.0;
-    for (int j = 0; j < muc.size(); j++) {
-      BdaMoleculeSite atom = (BdaMoleculeSite) muc.getSite(j);
+    for (int i = 0; i < muc.size() - 1; i++) {
+      BdaMoleculeSite atom = (BdaMoleculeSite) muc.getSite(i);
 
       int Y = (int) Math.round(((atom.getPos().getY() + (sUc.getPos().getY() + muc.getPos().getY()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseY();
       int X = (int) Math.round(((atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseX();
-      //int Y = (int) Math.round(((atom.getPos().getY() + (0.5+sUc.getPos().getY()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseY();
-      //int X = (int) Math.round(((atom.getPos().getX() + (sUc.getPos().getX()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseX();
 
-      g.setColor(colours[4]);//colours[j % 8]);
+      g.setColor(BLACK);
+      if (i > 13)
+        g.setColor(RED);
       int width = (int) Math.round(getScale() * sizeBall);
       int height = (int) Math.round(getScale() * sizeBall);
       g.fillOval(X, Y, width, height);
