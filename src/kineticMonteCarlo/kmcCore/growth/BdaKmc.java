@@ -34,8 +34,9 @@ import static kineticMonteCarlo.process.BdaProcess.TRANSFORMATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
-import kineticMonteCarlo.site.BdaAtomSite;
+import kineticMonteCarlo.site.BdaMoleculeSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
 import utils.StaticRandom;
@@ -192,27 +193,41 @@ public class BdaKmc extends AbstractGrowthKmc {
     lattice.deposit(destinationSite, false);
     
     updateRates(lattice.getModifiedSites(null, destinationSite));
+    updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
   }
   
   private void desorbMolecule() {
-    int random = StaticRandom.rawInteger(lattice.getMoleculeUcSize());
+    BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) sites[DESORPTION].randomElement();
+    //int random = StaticRandom.rawInteger(lattice.getMoleculeUcSize());
     //BdaMoleculeUc m = lattice.getMoleculeUc(random);
-    lattice.extract(random);
+    lattice.extract(agSite);
   }
   
   private void diffuseMolecule() {
-    BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
-    lattice.extract(agUc);
-    int randomDirection = StaticRandom.rawInteger(4);
-    BdaSurfaceUc neighbour = agUc.getNeighbour(randomDirection);
-    lattice.deposit(neighbour);
+    BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[DIFFUSION].randomElement();
+    AbstractGrowthSite destination = (AbstractGrowthSite) origin.getRandomNeighbour(DIFFUSION);
+    //BdaMoleculeSite bdaSite = (BdaMoleculeSite) sites[DIFFUSION].randomElement();
+    //lattice.extract(agUc);
+    //BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
+    lattice.extract(origin);
+    //int randomDirection = StaticRandom.rawInteger(4);
+    //AbstractGrowthSite neighbour = origin.getNeighbour(randomDirection);
+    lattice.deposit(destination, false);
+    
+    updateRates(lattice.getModifiedSites(null, origin));
+    updateRates(lattice.getModifiedSites(null, destination));
+    
+    // far away positions, where another BDA molecule could be
+    updateRates(lattice.getModifiedSitesDiffusion(null,origin));
+    updateRates(lattice.getModifiedSitesDiffusion(null,destination));
+
   }
   
   private void rotateMolecule() {
-    BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
+    /*BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
     lattice.extract(agUc);
     //agUc.getBdaUc().setRotated(!agUc.getBdaUc().isRotated());
-    lattice.deposit(agUc, agUc.getBdaUc());
+    lattice.deposit(agUc, agUc.getBdaUc());//*/
   }
   
   private void transformMolecule() {}
@@ -234,39 +249,46 @@ public class BdaKmc extends AbstractGrowthKmc {
     double oldAdsorptionRate = site.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
     BdaSurfaceUc sUc = lattice.getAgUc(site);
-    if (sUc.isAvailable()) {
+    if (sUc.isAvailable(ADSORPTION)) {
       site.setRate(ADSORPTION, adsorptionRatePerSite);
     } else {
       site.setRate(ADSORPTION, 0);
     }
     recomputeCollection(ADSORPTION, site, oldAdsorptionRate);
   }
-
+  
+  private BdaAgSurfaceSite getNeighbour(BdaAgSurfaceSite agSite, int i) {
+    int[] stencil = {-2, +5, +2, -5};
+    for (int j = 0; j < Math.abs(stencil[i]); j++) {
+      agSite = (BdaAgSurfaceSite) agSite.getNeighbour(i);
+    }
+    return agSite;
+  }
+  
   private void recomputeDiffusionProbability(BdaAgSurfaceSite agSite) {
-    /*BdaSurfaceUc agUc = lattice.getAgUc(agSite);
-    BdaAtomSite bdaSite = (BdaAtomSite) agUc.getBdaUc().getSite(0);
-    if (bdaSite == null) 
-      return;
-    /*agUc.isOccupied();
-    totalRate[DIFFUSION] -= site.getRate(DIFFUSION);
-    double oldDiffusionRate = site.getRate(DIFFUSION);
-    if (!site.isOccupied()) {
-      if (site.isOnList(DIFFUSION)) {
-        sites[DIFFUSION].removeAtomRate(site);
+    totalRate[DIFFUSION] -= agSite.getRate(DIFFUSION);
+    double oldDiffusionRate = agSite.getRate(DIFFUSION);
+    if (!agSite.isOccupied()) {
+      if (agSite.isOnList(DIFFUSION)) {
+        sites[DIFFUSION].removeAtomRate(agSite);
       }
-      site.setOnList(DIFFUSION, false);
+      agSite.setOnList(DIFFUSION, false);
       return;
     }
-    site.setRate(DIFFUSION, 0);
-    for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) site.getNeighbour(i);
+    agSite.setRate(DIFFUSION, 0);
+    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+      if (lattice.canDiffuse(agSite, i)) {
+        double probability = getDiffusionRate(agSite, null, i);
+        agSite.addRate(DIFFUSION, probability, i);
+      }
+/*      AbstractGrowthSite neighbour = agSite.getNeighbour(i);
       if (!neighbour.isOccupied()) {
-        double probability = getDiffusionRate(site, neighbour, i);
-        site.addRate(DIFFUSION, probability, i);
-        site.setEdgeType(DIFFUSION, neighbour.getTypeWithoutNeighbour(i), i);
-      }
+        double probability = getDiffusionRate(agSite, null, i);
+        agSite.addRate(DIFFUSION, probability, i);
+        //site.setEdgeType(DIFFUSION, neighbour.getTypeWithoutNeighbour(i), i);
+      }*/
     }
-    recomputeCollection(DIFFUSION, site, oldDiffusionRate);*/
+    recomputeCollection(DIFFUSION, agSite, oldDiffusionRate);
   }
   
   private double getDiffusionRate(BdaAgSurfaceSite origin, BdaAgSurfaceSite destination, int position) {
@@ -274,7 +296,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     /*int origType = atom. getRealType();
     int destType = neighbour.getTypeWithoutNeighbour(position);
     rate = diffusionRatePerMolecule[origType][destType];*/
-    rate = diffusionRatePerMolecule[0][0];
+    rate = diffusionRatePerMolecule[0][position];
     return rate;
   }
   
@@ -284,7 +306,7 @@ public class BdaKmc extends AbstractGrowthKmc {
    * @param site
    * @param oldRate 
    */
-  private void recomputeCollection(byte process, BdaAgSurfaceSite site, double oldRate) {
+  private void recomputeCollection(byte process, AbstractSurfaceSite site, double oldRate) {
     totalRate[process] += site.getRate(process);
     if (site.getRate(process) > 0) {
       if (site.isOnList(process)) {

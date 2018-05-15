@@ -21,9 +21,15 @@ package graphicInterfaces.growth;
 import basic.io.BdaRestart;
 import java.awt.Color;
 import static java.awt.Color.BLACK;
+import static java.awt.Color.white;
 import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.List;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
+import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
+import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
+import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.site.BdaAtomSite;
 import kineticMonteCarlo.site.BdaMoleculeSite;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
@@ -49,6 +55,7 @@ public class KmcCanvasBda extends KmcCanvas {
   @Override
   public void paint(Graphics g) {
     super.paint(g);
+    List<BdaSurfaceUc> moleculeList = new  ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       BdaSurfaceUc uc = (BdaSurfaceUc) getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) {
@@ -58,24 +65,32 @@ public class KmcCanvasBda extends KmcCanvas {
 
         g.setColor(colours[2]);
         int ball = (int) Math.round(getScale() * distanceAg);
-        g.drawOval(X, Y, ball, ball);
-        if (!uc.isAvailable()) {
-          g.setColor(RED);
-          g.drawOval(X, Y, ball, ball);
+        if (!uc.isAvailable(DIFFUSION)) {
+          g.setColor(BLUE);
         }
+        if (!uc.isAvailable(ADSORPTION)) {
+          g.setColor(white);
+          g.fillOval(X, Y, ball, ball);
+        } else
+          g.drawOval(X, Y, ball, ball);
         if (getScale() >= 8 && true) {
           g.setColor(Color.BLACK);
           g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2*getScale());
         }
       }
-      if (uc.isOccupied()) {
-        paintBdaMolecule(g, uc, uc.getBdaUc());
+      if (uc.getSite(0).isOccupied()) {
+        moleculeList.add(((BdaSurfaceUc)uc));
       }
+    }
+    for (int i = 0; i < moleculeList.size(); i++) {
+      paintBdaMolecule(g,moleculeList.get(i));
+      //paintBdaMolecule(g, uc, ((BdaAgSurfaceSite) uc.getSite(0)).getBdaUc());
     }
   }
   
-  private void paintBdaMolecule(Graphics g, BdaSurfaceUc sUc, BdaMoleculeUc muc) {
+  private void paintBdaMolecule(Graphics g, BdaSurfaceUc sUc) {
     double sizeBall = 2.0;
+    BdaMoleculeUc muc = ((BdaAgSurfaceSite) sUc.getSite(0)).getBdaUc();
     BdaMoleculeSite bdaMolecule = (BdaMoleculeSite) muc.getSite(-1);
     for (int i = 0; i < bdaMolecule.size() - 1; i++) {
       BdaAtomSite atom = (BdaAtomSite) bdaMolecule.getSite(i);

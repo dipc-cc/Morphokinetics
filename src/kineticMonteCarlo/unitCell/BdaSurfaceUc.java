@@ -30,17 +30,15 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
     
   private final BdaSurfaceUc[] neighbours;
   /** Whether an atom can deposit on top (at any position) of this unit cell. */
-  private boolean available;
-  /** This object is set as occupied if it is a central atom of a BDA molecule. */
-  private boolean occupied;
-  
-  private BdaMoleculeUc bdaUc;
+  private boolean[] available;  
   
   public BdaSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
     super(posI, posJ, atom);
     neighbours = new BdaSurfaceUc[4];
-    available = true;
-    bdaUc = null;
+    available = new boolean[6];
+    for (int i = 0; i < 6; i++) {
+      available[i] = true;
+    }
   }
   
   @Override
@@ -70,35 +68,14 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
     return neighbours[pos];
   }
 
-  public boolean isAvailable() {
-    return available;
+  public boolean isAvailable(int process) {
+    return available[process];
   }
 
-  public void setAvailable(boolean available) {
-    this.available = available;
+  public void setAvailable(int process, boolean available) {
+    this.available[process] = available;
   }
  
-  /**
-   * This object is set as occupied if it is a central atom of a BDA molecule.
-   *
-   * @return
-   */
-  public boolean isOccupied() {
-    return occupied;
-  }
-
-  public void setOccupied(boolean occupied) {
-    this.occupied = occupied;
-  }
-
-  public BdaMoleculeUc getBdaUc() {
-    return bdaUc;
-  }
-
-  public void setBdaUc(BdaMoleculeUc bdaUc) {
-    this.bdaUc = bdaUc;
-    occupied = true;
-  }
   
   @Override
   public String toString() {

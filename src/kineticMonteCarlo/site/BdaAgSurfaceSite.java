@@ -20,6 +20,7 @@ package kineticMonteCarlo.site;
 
 import java.util.List;
 import kineticMonteCarlo.process.BdaProcess;
+import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 
 /**
  *
@@ -29,17 +30,30 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   
   private final BdaAgSurfaceSite[] neighbours;
   private final BdaProcess[] processes;
+  private BdaMoleculeUc bdaUc;
+  /** This object is set as occupied if it is a central atom of a BDA molecule. */
+  private boolean occupied;
 
   public BdaAgSurfaceSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 5);
-    neighbours= new BdaAgSurfaceSite[4];
+    neighbours = new BdaAgSurfaceSite[4];
     processes = new BdaProcess[6];
     for (int i = 0; i < 6; i++) {
-      processes[i]= new BdaProcess();
+      processes[i] = new BdaProcess();
     }
     setProcceses(processes);
+    bdaUc = null;
   }
 
+  public BdaMoleculeUc getBdaUc() {
+    return bdaUc;
+  }
+
+  public void setBdaUc(BdaMoleculeUc bdaUc) {
+    this.bdaUc = bdaUc;
+    setOccupied(true);
+  }
+  
   @Override
   public byte getTypeWithoutNeighbour(int posNeighbour) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

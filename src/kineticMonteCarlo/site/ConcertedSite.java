@@ -40,21 +40,6 @@ public class ConcertedSite extends AgSiteSimple {
     setProcceses(processes);
   }
   
-  public ConcertedSite getRandomNeighbour(byte process) {
-    ConcertedSite neighbour;
-    double randomNumber = StaticRandom.raw() * getRate(process);
-    double sum = 0.0;
-    for (int j = 0; j < getNumberOfNeighbours(); j++) {
-      sum += processes[process].getEdgeRate(j);
-      if (sum > randomNumber) {
-        neighbour = (ConcertedSite) getNeighbour(j);
-        return neighbour;
-      }
-    }
-    // raise an error
-    return null;
-  }
-  
   /**
    * Resets current atom; TERRACE type, no occupied, no outside and no probability.
    */

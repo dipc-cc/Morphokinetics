@@ -20,6 +20,7 @@ package kineticMonteCarlo.site;
 
 import java.util.List;
 import javafx.geometry.Point3D;
+import kineticMonteCarlo.process.BdaProcess;
 
 /**
  *
@@ -28,10 +29,11 @@ import javafx.geometry.Point3D;
 public class BdaMoleculeSite extends AbstractGrowthSite {
   
   private final BdaAtomSite[] atoms;
+  private final BdaProcess[] processes;
   /** Alpha, Beta (1 or 2), Gamma or Delta. */
   private byte type;
   private boolean rotated;
-  private BdaMoleculeSite[] neighbours;
+  private final BdaMoleculeSite[] neighbours;
   private final double[][] alphaXyz = {{3.7500, 0.0000},
   {3.0000, 1.2990},
   {1.5000, 1.2991},
@@ -89,6 +91,12 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     }
     this.rotated = rotated;
     neighbours = new BdaMoleculeSite[4];
+    processes = new BdaProcess[6];
+    for (int i = 0; i < processes.length; i++) {
+      processes[i]= new BdaProcess();
+    }
+    setProcceses(processes);
+    setNumberOfNeighbours(4);
   }
   
   public boolean isRotated() {

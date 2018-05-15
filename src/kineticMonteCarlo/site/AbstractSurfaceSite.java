@@ -20,6 +20,7 @@ package kineticMonteCarlo.site;
 
 import kineticMonteCarlo.process.AbstractProcess;
 import kineticMonteCarlo.process.IElement;
+import utils.StaticRandom;
 
 /**
  *
@@ -256,6 +257,21 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
   @Override
   public double remove() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+  
+  public AbstractSurfaceSite getRandomNeighbour(byte process) {
+    AbstractSurfaceSite neighbour;
+    double randomNumber = StaticRandom.raw() * getRate(process);
+    double sum = 0.0;
+    for (int j = 0; j < getNumberOfNeighbours(); j++) {
+      sum += processes[process].getEdgeRate(j);
+      if (sum > randomNumber) {
+        neighbour = getNeighbour(j);
+        return neighbour;
+      }
+    }
+    // raise an error
+    return null;
   }
   
   /**

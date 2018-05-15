@@ -274,7 +274,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    */
   private void diffuseAtom() {
     ConcertedSite originAtom = (ConcertedSite) sites[SINGLE].randomElement();
-    ConcertedSite destinationSite = originAtom.getRandomNeighbour(SINGLE);
+    ConcertedSite destinationSite = (ConcertedSite) originAtom.getRandomNeighbour(SINGLE);
     int oldType = originAtom.getType();
     boolean wasDimer = originAtom.isDimer();
     getLattice().extract(originAtom);
