@@ -18,21 +18,24 @@
  */
 package kineticMonteCarlo.site;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import kineticMonteCarlo.process.BdaProcess;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 
 /**
- *
+ *This object is set as occupied if it is a central atom of a BDA molecule.
+ * 
  * @author J. Alberdi-Rodriguez
  */
 public class BdaAgSurfaceSite extends AbstractGrowthSite {
   
   private final BdaAgSurfaceSite[] neighbours;
   private final BdaProcess[] processes;
+  private final Set<BdaMoleculeUc> bdaUcSet;
+  /** Only if it is the central position for BDA molecule. */
   private BdaMoleculeUc bdaUc;
-  /** This object is set as occupied if it is a central atom of a BDA molecule. */
-  private boolean occupied;
 
   public BdaAgSurfaceSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 5);
@@ -42,7 +45,7 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
       processes[i] = new BdaProcess();
     }
     setProcceses(processes);
-    bdaUc = null;
+    bdaUcSet = new HashSet<>();
   }
 
   public BdaMoleculeUc getBdaUc() {
@@ -50,8 +53,21 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   }
 
   public void setBdaUc(BdaMoleculeUc bdaUc) {
-    this.bdaUc = bdaUc;
-    setOccupied(true);
+    if (isOccupied()) {
+      this.bdaUc = bdaUc;
+    }
+    this.bdaUcSet.add(bdaUc);
+  }
+  
+  public void removeBdaUc(BdaMoleculeUc bdaUc) {
+    bdaUcSet.remove(bdaUc);
+    if (bdaUc.equals(this.bdaUc)) {
+      this.bdaUc = null;
+    }
+  }
+  
+  public int getBdaSize() {
+    return bdaUcSet.size();
   }
   
   @Override

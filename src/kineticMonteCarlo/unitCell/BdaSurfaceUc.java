@@ -20,6 +20,7 @@ package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
+import kineticMonteCarlo.site.BdaAgSurfaceSite;
 
 /**
  * This unit cell is for the Ag below the molecules.
@@ -74,6 +75,11 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
 
   public void setAvailable(int process, boolean available) {
     this.available[process] = available;
+    if (available) { // do not make available if the current point is fixed to several BDA molecules
+      if (((BdaAgSurfaceSite) getSite(0)).getBdaSize() > 0){
+        this.available[process] = false;
+      }
+    }
   }
  
   

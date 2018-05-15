@@ -60,6 +60,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     if (!agUc.isAvailable(ADSORPTION))
       return; // should not happen
     BdaMoleculeUc bdaUc = new BdaMoleculeUc();
+    agUc.getSite(0).setOccupied(true);
     ((BdaAgSurfaceSite) agUc.getSite(0)).setBdaUc(bdaUc);
     changeAvailability(agUc, false);
 
@@ -73,8 +74,8 @@ public class BdaLattice extends AbstractGrowthLattice {
   public double extract(AbstractSurfaceSite m) {
     BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) m;
     BdaSurfaceUc agUc = getAgUc(agSite);
-    changeAvailability(agUc, true);
     agUc.getSite(0).setOccupied(false);
+    changeAvailability(agUc, true);
     return 0;
   }
 
@@ -85,11 +86,16 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @param makeAvailable change availability.
    */
   private void changeAvailability(BdaSurfaceUc origin, boolean makeAvailable){
-    BdaSurfaceUc neighbourAgUc = origin.getNeighbour(alphaTravelling[0]);
-    neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
-    neighbourAgUc.setAvailable(DIFFUSION, makeAvailable);
-    for (int i = 1; i < alphaTravelling.length; i++) {
-      neighbourAgUc = neighbourAgUc.getNeighbour(getNeighbourIndex(origin, i));
+    BdaMoleculeUc bdaUc = ((BdaAgSurfaceSite) origin.getSite(0)).getBdaUc();
+    BdaSurfaceUc neighbourAgUc = origin;
+    for (int i = 0; i < alphaTravelling.length; i++) {
+      neighbourAgUc = neighbourAgUc.getNeighbour(getNeighbourIndex(i));
+      if (makeAvailable) {
+        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
+      }
+      if (!makeAvailable) { // can not adsorb at this position.
+        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).setBdaUc(bdaUc);
+      }
       neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
       if (i < 10) {
         neighbourAgUc.setAvailable(DIFFUSION, makeAvailable);
@@ -162,17 +168,18 @@ public class BdaLattice extends AbstractGrowthLattice {
   }
   
 
-  private int getNeighbourIndex(BdaSurfaceUc origin, int i) {
-    BdaMoleculeSite mSite = (BdaMoleculeSite) ((BdaAgSurfaceSite) origin.getSite(0)).getBdaUc().getSite(0);
+  private int getNeighbourIndex(int i) {
+    /*BdaMoleculeSite mSite = (BdaMoleculeSite) origin.getSite(0);
     if (mSite.isRotated()) {
       return (alphaTravelling[i] + 3) % 4;
     } else {
       return alphaTravelling[i];
-    }
+    }//*/
+    return alphaTravelling[i];
   }
   
   private int getNeighbourIndex(BdaAgSurfaceSite agSite, int i) {
-    return getNeighbourIndex(getAgUc(agSite), i);
+    return getNeighbourIndex(i);
   }
 
   private void changeNeighbourhood(BdaMoleculeUc mUc) {
