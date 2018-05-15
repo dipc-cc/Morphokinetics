@@ -34,12 +34,9 @@ import static kineticMonteCarlo.process.BdaProcess.TRANSFORMATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
-import kineticMonteCarlo.site.BdaMoleculeSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
-import utils.StaticRandom;
 import utils.list.LinearList;
 import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
@@ -54,6 +51,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private final BdaLattice lattice;
   private long simulatedSteps;
+  private long[] steps;
   private final BdaRestart restart;
   private int simulationNumber;
   private final IAtomsCollection[] sites;
@@ -105,7 +103,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     
-    
+    steps = new long[6];
    }
   
   @Override
@@ -161,6 +159,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       return true; // there is nothing more we can do
     }
     byte reaction = getList().nextReaction();
+    steps[reaction]++;
     switch (reaction) {
       case ADSORPTION:
         depositNewMolecule();
@@ -198,20 +197,13 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private void desorbMolecule() {
     BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) sites[DESORPTION].randomElement();
-    //int random = StaticRandom.rawInteger(lattice.getMoleculeUcSize());
-    //BdaMoleculeUc m = lattice.getMoleculeUc(random);
     lattice.extract(agSite);
   }
   
   private void diffuseMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[DIFFUSION].randomElement();
     AbstractGrowthSite destination = (AbstractGrowthSite) origin.getRandomNeighbour(DIFFUSION);
-    //BdaMoleculeSite bdaSite = (BdaMoleculeSite) sites[DIFFUSION].randomElement();
-    //lattice.extract(agUc);
-    //BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
     lattice.extract(origin);
-    //int randomDirection = StaticRandom.rawInteger(4);
-    //AbstractGrowthSite neighbour = origin.getNeighbour(randomDirection);
     lattice.deposit(destination, false);
     
     updateRates(lattice.getModifiedSites(null, origin));
