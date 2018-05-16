@@ -31,6 +31,7 @@ import java.util.Set;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
+import kineticMonteCarlo.site.BdaMoleculeSite;
 
 /**
  *
@@ -127,17 +128,24 @@ public class BdaLattice extends AbstractGrowthLattice {
     return startingSite;
   }
   
-  public boolean canDiffuse(BdaAgSurfaceSite agSite, int direction) {
+  /**
+   * 
+   * @param origin must be occupied.
+   * @param direction
+   * @return 
+   */
+  public boolean canDiffuse(BdaAgSurfaceSite origin, int direction) {
     boolean canDiffuse = true;
-    AbstractGrowthSite startingSite = getStartingSite(agSite, direction);
+    AbstractGrowthSite startingSite = getStartingSite(origin, direction);
     Set<AbstractGrowthSite> modifiedSites = getDiffusionSites(startingSite, direction);
     Iterator iter = modifiedSites.iterator();
     while (iter.hasNext()) {
-      BdaAgSurfaceSite site = (BdaAgSurfaceSite) iter.next();
-      BdaSurfaceUc agUc = getAgUc(site);
-      if (site.isOccupied()) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
+      if (neighbour.isOccupied()) {
         canDiffuse = false;
         // set the neighbourhood. Where to unset???
+        origin.getBdaUc().setNeighbour(getAgUc(neighbour), direction);
+        neighbour.getBdaUc().setNeighbour(getAgUc(origin), (direction + 2) % 4);
       }
       /*if (!agUc.isAvailable(DIFFUSION)){
         canDiffuse = false;
@@ -145,6 +153,15 @@ public class BdaLattice extends AbstractGrowthLattice {
     }
     return canDiffuse;
   }
+  
+  public void resetNeighbourhood(BdaAgSurfaceSite agSite) {
+    BdaMoleculeUc mUc = agSite.getBdaUc();
+
+    for (int i = 0; i < 4; i++) {
+      mUc.setNeighbour(null, i);
+    }
+  }
+  
   
   private Set<AbstractGrowthSite> getDiffusionSites(AbstractGrowthSite site, int direction) {
     Set<AbstractGrowthSite> modifiedSites = new HashSet<>();
@@ -185,19 +202,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     return getNeighbourIndex(i);
   }
 
-  private void changeNeighbourhood(BdaMoleculeUc mUc) {
-    // check east/west
-    /*BdaSurfaceUc agUc = mUc.getAgUc();
-    int i = agUc.getPosI();
-    int iEast = i + 5;
-    if (iEast >= getHexaSizeI())
-      iEast = iEast % getHexaSizeI();
-    int j = agUc.getPosJ();
-    if (agUcArray[i][j].isOccupied()) {
-      mUc.setNeighbour(agUc, j);
-    }*/
-  }
-  
   /**
    * Includes all -2, +2 in main molecule axis and -1,+1 in the other axis of the current site in a
    * list without repeated elements.

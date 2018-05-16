@@ -35,6 +35,7 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
 import utils.list.LinearList;
@@ -213,8 +214,8 @@ public class BdaKmc extends AbstractGrowthKmc {
     updateRates(lattice.getModifiedSites(null, destination));
     
     // far away positions, where another BDA molecule could be
-    updateRates(lattice.getModifiedSitesDiffusion(null,origin));
-    updateRates(lattice.getModifiedSitesDiffusion(null,destination));
+    updateRates(lattice.getModifiedSitesDiffusion(null, origin));
+    updateRates(lattice.getModifiedSitesDiffusion(null, destination));
 
   }
   
@@ -271,6 +272,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       return;
     }
     agSite.setRate(DIFFUSION, 0);
+    lattice.resetNeighbourhood(agSite);
     for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
       if (lattice.canDiffuse(agSite, i)) {
         double probability = getDiffusionRate(agSite, null, i);
@@ -288,10 +290,11 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private double getDiffusionRate(BdaAgSurfaceSite origin, BdaAgSurfaceSite destination, int position) {
     double rate;
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
     /*int origType = atom. getRealType();
     int destType = neighbour.getTypeWithoutNeighbour(position);
     rate = diffusionRatePerMolecule[origType][destType];*/
-    rate = diffusionRatePerMolecule[0][position];
+    rate = diffusionRatePerMolecule[bdaUc.getOccupiedNeighbours()][position];
     return rate;
   }
   

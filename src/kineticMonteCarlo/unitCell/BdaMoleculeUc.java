@@ -48,6 +48,16 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   public BdaSurfaceUc getNeighbour(int pos) {
     return neighbours[pos];
   }
+  
+  public int getOccupiedNeighbours() {
+    int occupied = 0;
+    for (int i = 0; i < neighbours.length; i++) {
+      if (neighbours[i] != null) {
+        occupied++;
+      }
+    }
+    return occupied;
+  } 
 
   /**
    * Always returns the current atom.

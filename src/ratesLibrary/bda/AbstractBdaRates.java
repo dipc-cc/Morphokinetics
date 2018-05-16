@@ -59,16 +59,18 @@ public abstract class AbstractBdaRates implements IRates{
   
 
   public double[][] getDiffusionRates() {
-    double[][] rates = new double[1][4];
+    double[][] rates = new double[4][4];
 
-    for (int i = 0; i < 1; i++) {
-      for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < 4; i++) { // type (number of neighbours)
+      for (int j = 0; j < 4; j++) { // direction
+        double base = 20;
+        if (j % 2 == 0) {
+          base = 5;
+        }
         //rates[i][j] = getRate(i, j, temperature);
-        rates[i][j] = 1;
+        rates[i][j] = base / (Math.pow(2, i));
       }
     }
-    rates[0][0] = rates[0][2] = 5;
-    rates[0][1] = rates[0][3] = 20;
     return rates;
   }
 }
