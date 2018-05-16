@@ -143,15 +143,39 @@ public class BdaLattice extends AbstractGrowthLattice {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
       if (neighbour.isOccupied()) {
         canDiffuse = false;
-        // set the neighbourhood. Where to unset???
-        origin.getBdaUc().setNeighbour(getAgUc(neighbour), direction);
-        neighbour.getBdaUc().setNeighbour(getAgUc(origin), (direction + 2) % 4);
+        // set the neighbourhood
+        int neighbourCode = getNeighbourCode(origin, neighbour, direction);
+        origin.getBdaUc().setNeighbour(getAgUc(neighbour), neighbourCode);
+        neighbour.getBdaUc().setNeighbour(getAgUc(origin), (neighbourCode + 6) % 12);
       }
-      /*if (!agUc.isAvailable(DIFFUSION)){
-        canDiffuse = false;
-      }//*/
     }
     return canDiffuse;
+  }
+  
+  private int getNeighbourCode(BdaAgSurfaceSite origin, BdaAgSurfaceSite neighbour, int direction) {
+    int x1 = getAgUc(origin).getPosI();
+    int y1 = getAgUc(origin).getPosJ();
+    int x2 = getAgUc(neighbour).getPosI();
+    int y2 = getAgUc(neighbour).getPosJ();
+    switch (direction){
+      case 0:
+        if (x1 >  x2) return 0;
+        if (x1 == x2) return 1;
+        if (x1 <  x2) return 2;
+      case 1:
+        if (y1 >  y2) return 3;
+        if (y1 == y2) return 4;
+        if (y1 <  y2) return 5;
+      case 2:
+        if (x1 <  x2) return 6;
+        if (x1 == x2) return 7;
+        if (x1 >  x2) return 8;
+      case 3:
+        if (y1 <  y2) return 9;
+        if (y1 == y2) return 10;
+        if (y1 >  y2) return 11;
+    }    
+    return -1;
   }
   
   public void resetNeighbourhood(BdaAgSurfaceSite agSite) {

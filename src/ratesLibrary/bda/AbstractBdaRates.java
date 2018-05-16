@@ -54,7 +54,7 @@ public abstract class AbstractBdaRates implements IRates{
    */
   @Override
   public double getDepositionRatePerSite() {
-    return 1;//diffusionMl;
+    return diffusionMl;
   }
   
 
@@ -68,7 +68,7 @@ public abstract class AbstractBdaRates implements IRates{
           base = 5;
         }
         //rates[i][j] = getRate(i, j, temperature);
-        rates[i][j] = base / (Math.pow(2, i));
+        rates[i][j] = base / (Math.pow(100, i));
       }
     }
     return rates;

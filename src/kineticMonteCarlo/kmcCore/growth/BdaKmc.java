@@ -278,12 +278,6 @@ public class BdaKmc extends AbstractGrowthKmc {
         double probability = getDiffusionRate(agSite, null, i);
         agSite.addRate(DIFFUSION, probability, i);
       }
-/*      AbstractGrowthSite neighbour = agSite.getNeighbour(i);
-      if (!neighbour.isOccupied()) {
-        double probability = getDiffusionRate(agSite, null, i);
-        agSite.addRate(DIFFUSION, probability, i);
-        //site.setEdgeType(DIFFUSION, neighbour.getTypeWithoutNeighbour(i), i);
-      }*/
     }
     recomputeCollection(DIFFUSION, agSite, oldDiffusionRate);
   }
@@ -291,9 +285,6 @@ public class BdaKmc extends AbstractGrowthKmc {
   private double getDiffusionRate(BdaAgSurfaceSite origin, BdaAgSurfaceSite destination, int position) {
     double rate;
     BdaMoleculeUc bdaUc = origin.getBdaUc();
-    /*int origType = atom. getRealType();
-    int destType = neighbour.getTypeWithoutNeighbour(position);
-    rate = diffusionRatePerMolecule[origType][destType];*/
     rate = diffusionRatePerMolecule[bdaUc.getOccupiedNeighbours()][position];
     return rate;
   }

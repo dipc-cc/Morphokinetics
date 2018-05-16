@@ -23,8 +23,10 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.BdaMoleculeSite;
 
 /**
- * BDA molecules on top of Ag (BdaSurfaceUc).
- * 
+ * BDA molecules on top of Ag (BdaSurfaceUc). There are 12 possible neighbours. It can have 8 neighbours at the
+ * same time: north-west, north-east, east-north, east-south, south-east,
+ * south-west, east-south, east-north. North, east, south and west also exists.
+ *
  * @author J. Alberdi-Rodriguez
  */
 public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
@@ -38,7 +40,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     super(-1, -1, null);
     bdaMolecule = new BdaMoleculeSite(-1, false);
    
-    neighbours = new BdaSurfaceUc[4];
+    neighbours = new BdaSurfaceUc[12];
   }
    
   public void setNeighbour(BdaSurfaceUc uc, int pos) {
@@ -56,8 +58,8 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
         occupied++;
       }
     }
-    return occupied;
-  } 
+    return occupied < 4 ? occupied : 3;
+  }
 
   /**
    * Always returns the current atom.
