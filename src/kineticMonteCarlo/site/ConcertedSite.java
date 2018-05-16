@@ -22,7 +22,6 @@ import java.util.BitSet;
 import kineticMonteCarlo.process.ConcertedProcess;
 import static kineticMonteCarlo.process.ConcertedProcess.ADSORB;
 import static kineticMonteCarlo.process.ConcertedProcess.SINGLE;
-import utils.StaticRandom;
 
 /**
  *
@@ -149,7 +148,6 @@ public class ConcertedSite extends AgSiteSimple {
     
     byte type = (byte) (getType() - 1);
     
-    //byte subtype = getRealType();
     BitSet bits = new BitSet(6);
     for (int i = 0; i < getNumberOfNeighbours(); i++) {
       AbstractGrowthSite neighbour = getNeighbour(i);
@@ -160,8 +158,9 @@ public class ConcertedSite extends AgSiteSimple {
     type = getTypeCode(type, bits);
     if (type == 1 || type == 2 || type == 3 || type == 5) {
       AbstractGrowthSite origin = getNeighbour(myPositionForNeighbour);
-      if (origin.getType() != 0)
+      if (origin.getType() != 0) {
         type = getDetachedType(type, myPositionForNeighbour);
+      }
     }
     return type;
   }
@@ -190,6 +189,7 @@ public class ConcertedSite extends AgSiteSimple {
     }
     return type;
   }
+  
   /**
    * Gets a BitSet of the current occupancy.
    * 
@@ -249,6 +249,7 @@ public class ConcertedSite extends AgSiteSimple {
     bitSet.flip(0, 6);
     return getEdgeSubtype(bitSet);
   }
+  
   /**
    * Takes into account that maximum distance can be 3. This is because is a
    * periodic 1D surface with 6 positions.
