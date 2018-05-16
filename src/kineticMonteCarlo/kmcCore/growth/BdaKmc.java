@@ -236,12 +236,12 @@ public class BdaKmc extends AbstractGrowthKmc {
     BdaAgSurfaceSite site;
     while (i.hasNext()) {
       site = (BdaAgSurfaceSite) i.next();
-      recomputeAdsorptionProbability(site);
-      recomputeDiffusionProbability(site);
+      recomputeAdsorptionRate(site);
+      recomputeDiffusionRate(site);
     }
   }
 
-  private void recomputeAdsorptionProbability(BdaAgSurfaceSite site) {
+  private void recomputeAdsorptionRate(BdaAgSurfaceSite site) {
     double oldAdsorptionRate = site.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
     BdaSurfaceUc sUc = lattice.getAgUc(site);
@@ -253,15 +253,8 @@ public class BdaKmc extends AbstractGrowthKmc {
     recomputeCollection(ADSORPTION, site, oldAdsorptionRate);
   }
   
-  private BdaAgSurfaceSite getNeighbour(BdaAgSurfaceSite agSite, int i) {
-    int[] stencil = {-2, +5, +2, -5};
-    for (int j = 0; j < Math.abs(stencil[i]); j++) {
-      agSite = (BdaAgSurfaceSite) agSite.getNeighbour(i);
-    }
-    return agSite;
-  }
   
-  private void recomputeDiffusionProbability(BdaAgSurfaceSite agSite) {
+  private void recomputeDiffusionRate(BdaAgSurfaceSite agSite) {
     totalRate[DIFFUSION] -= agSite.getRate(DIFFUSION);
     double oldDiffusionRate = agSite.getRate(DIFFUSION);
     if (!agSite.isOccupied()) {
@@ -275,8 +268,8 @@ public class BdaKmc extends AbstractGrowthKmc {
     lattice.resetNeighbourhood(agSite);
     for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
       if (lattice.canDiffuse(agSite, i)) {
-        double probability = getDiffusionRate(agSite, null, i);
-        agSite.addRate(DIFFUSION, probability, i);
+        double rate = getDiffusionRate(agSite, null, i);
+        agSite.addRate(DIFFUSION, rate, i);
       }
     }
     recomputeCollection(DIFFUSION, agSite, oldDiffusionRate);
