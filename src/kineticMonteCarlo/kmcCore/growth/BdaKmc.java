@@ -113,7 +113,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     int limit = 100000;
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage) {
+    while (true) {
       getList().getDeltaTime(true);
       if (getLattice().isPaused()) {
         try {
@@ -136,6 +136,9 @@ public class BdaKmc extends AbstractGrowthKmc {
           break;
         }
         checkSizes();
+        if (getLattice().getCoverage() > maxCoverage) {
+          stopAdsorption();
+        }
       }
     }
     if (aeOutput) {
@@ -393,6 +396,24 @@ public class BdaKmc extends AbstractGrowthKmc {
         a.setOnList(ADSORPTION, true);
         totalRate[ADSORPTION] += a.getRate(ADSORPTION);
         sites[ADSORPTION].insert(a);
+      }
+    }
+    getList().setRates(totalRate);
+    sites[ADSORPTION].populate();
+  }
+  
+  /**
+   * Iterates over all lattice sites and sets to 0 the adsorption probabilities.
+   */
+  private void stopAdsorption() {
+    totalRate[ADSORPTION] = 0;
+    for (int i = 0; i < lattice.size(); i++) {
+      BdaSurfaceUc uc = lattice.getUc(i);
+      for (int j = 0; j < uc.size(); j++) { // UC has two atoms
+        BdaAgSurfaceSite a = (BdaAgSurfaceSite) uc.getSite(j);
+        a.setRate(ADSORPTION, 0);
+        a.setOnList(ADSORPTION, false);
+        sites[ADSORPTION].remove(a);
       }
     }
     getList().setRates(totalRate);
