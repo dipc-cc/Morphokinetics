@@ -61,7 +61,7 @@ public abstract class AbstractBdaRates implements IRates{
   public double[] getDesorptionRates() {
     double[] rates = new double[12];
     for (int i = 0; i < rates.length; i++) {
-      rates[i] = 1e-4;      
+      rates[i] = 1e-5;      
     }
     return rates;
   }
