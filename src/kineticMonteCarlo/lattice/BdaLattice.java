@@ -31,7 +31,6 @@ import java.util.Set;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
-import kineticMonteCarlo.site.BdaMoleculeSite;
 
 /**
  *
@@ -42,10 +41,8 @@ public class BdaLattice extends AbstractGrowthLattice {
    * Unit cell array, where all the surface Ag atoms are located.
    */
   private final BdaSurfaceUc[][] agUcArray;
-  
-  //private final int[] alphaTravelling = {3,0,3,2,3,0,3,2,2,1,1,1,1,1,1,1,1,0,0,3,2,3,0,3,2,3,0};
   private final int[] alphaTravelling = {3,3,2,1,1,0,1,2,1,0,1,2,1,0,0,3,3,3,3,3,3,3,2,2,3,0,0};
-    
+  
 
   public BdaLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ, null);
@@ -63,7 +60,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     agUc.getSite(0).setOccupied(true);
     ((BdaAgSurfaceSite) agUc.getSite(0)).setBdaUc(bdaUc);
     changeAvailability(agUc, false);
-
+    addOccupied();
   }
   
   public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
@@ -76,9 +73,15 @@ public class BdaLattice extends AbstractGrowthLattice {
     BdaSurfaceUc agUc = getAgUc(agSite);
     agUc.getSite(0).setOccupied(false);
     changeAvailability(agUc, true);
+    subtractOccupied();
     return 0;
   }
 
+  @Override
+  public float getCoverage() {
+    return 10 * (float) getOccupied() / (float) (getHexaSizeI() * getHexaSizeJ());
+  }
+  
   /**
    * Reserve or release the space for current BDA molecule.
    * 
