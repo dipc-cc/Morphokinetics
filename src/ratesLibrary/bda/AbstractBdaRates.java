@@ -58,6 +58,14 @@ public abstract class AbstractBdaRates implements IRates{
   }
   
 
+  public double[] getDesorptionRates() {
+    double[] rates = new double[12];
+    for (int i = 0; i < rates.length; i++) {
+      rates[i] = 1e-4;      
+    }
+    return rates;
+  }
+  
   public double[][] getDiffusionRates() {
     double[][] rates = new double[4][4];
 
@@ -73,4 +81,5 @@ public abstract class AbstractBdaRates implements IRates{
     }
     return rates;
   }
+  
 }

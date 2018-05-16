@@ -75,8 +75,8 @@ public class BdaKmc extends AbstractGrowthKmc {
   private final boolean aeOutput;
   private final long maxSteps;
   private double adsorptionRatePerSite;
+  private double[] desorptionRatePerMolecule;
   private double[][] diffusionRatePerMolecule;
-  private double[] diffusionRatePerIslandSize;
   private double[] diffusionRateMultiAtom;
   
   public BdaKmc(Parser parser, String restartFolder) {
@@ -200,8 +200,10 @@ public class BdaKmc extends AbstractGrowthKmc {
   }
   
   private void desorbMolecule() {
-    BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) sites[DESORPTION].randomElement();
-    lattice.extract(agSite);
+    BdaAgSurfaceSite destinationSite = (BdaAgSurfaceSite) sites[DESORPTION].randomElement();
+    lattice.extract(destinationSite);
+    updateRates(lattice.getModifiedSites(null, destinationSite));
+    updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
   }
   
   private void diffuseMolecule() {
@@ -237,6 +239,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     while (i.hasNext()) {
       site = (BdaAgSurfaceSite) i.next();
       recomputeAdsorptionRate(site);
+      recomputeDesorptionRate(site);
       recomputeDiffusionRate(site);
     }
   }
@@ -253,6 +256,26 @@ public class BdaKmc extends AbstractGrowthKmc {
     recomputeCollection(ADSORPTION, site, oldAdsorptionRate);
   }
   
+  private void recomputeDesorptionRate(BdaAgSurfaceSite site) {
+    totalRate[DESORPTION] -= site.getRate(DESORPTION);
+    if (!site.isOccupied()) {
+      if (site.isOnList(DESORPTION)) {
+        sites[DESORPTION].removeAtomRate(site);
+      }
+      site.setOnList(DESORPTION, false);
+      return;
+    }
+    double oldDesorptionRate = site.getRate(DESORPTION);
+    site.setRate(DESORPTION, 0);
+    double rate = getDesorptionRate(site);
+    site.setRate(DESORPTION, rate);
+    
+    recomputeCollection(DESORPTION, site, oldDesorptionRate);
+  }
+  
+  private double getDesorptionRate(BdaAgSurfaceSite agSite) {
+    return desorptionRatePerMolecule[0];
+  }
   
   private void recomputeDiffusionRate(BdaAgSurfaceSite agSite) {
     totalRate[DIFFUSION] -= agSite.getRate(DIFFUSION);
@@ -410,5 +433,6 @@ public class BdaKmc extends AbstractGrowthKmc {
   public void setRates(AbstractBdaRates rates) {
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     diffusionRatePerMolecule = rates.getDiffusionRates();
+    desorptionRatePerMolecule = rates.getDesorptionRates();
   }
 }
