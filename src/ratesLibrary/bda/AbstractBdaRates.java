@@ -70,29 +70,16 @@ public abstract class AbstractBdaRates implements IRates {
     }
     return rates;
   }
-  
-  public double[][] getDiffusionRates() {
-    double[][] rates = new double[4][4];
 
-    for (int i = 0; i < 4; i++) { // type (number of neighbours)
-      for (int j = 0; j < 4; j++) { // direction
-        double base = 20;
-        if (j % 2 == 0) {
-          base = 5;
-        }
-        //rates[i][j] = getRate(i, j, temperature);
-        rates[i][j] = base / (Math.pow(100, i));
-      }
-    }
-    return rates;
-  }
-  
+  /**
+   * Base energy of the molecule - the actual energy (depending on the neighbourhood).
+   * 
+   * @param bdaUc unit cell that contains the BDA molecule.
+   * @param direction diffusion direction.
+   * @return rate.
+   */
   public double getDiffusionRate(BdaMoleculeUc bdaUc, int direction) {
-    double rate;
-    double baseEnergy = bdaUc.getEnergy();
-    double deltaEnergy = diffusionEnergy[direction % 2];
-    rate = getRate(deltaEnergy - baseEnergy);
-    return rate;
+    return getRate(diffusionEnergy[direction % 2] - bdaUc.getEnergy());
   }
   
   private double getRate(double energy) {
