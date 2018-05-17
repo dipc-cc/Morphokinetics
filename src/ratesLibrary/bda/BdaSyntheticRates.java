@@ -25,12 +25,14 @@ package ratesLibrary.bda;
 public class BdaSyntheticRates extends AbstractBdaRates {
 
   private final double[] diffusionEnergy;
+  private final double rotationEnergy;
   
   public BdaSyntheticRates(float temperature) {
     super(temperature);
     diffusionEnergy = new double[2];
-    diffusionEnergy[0] = 0.4;
-    diffusionEnergy[1] = 0.3;
+    diffusionEnergy[0] = 0.4; // vertical diffusion
+    diffusionEnergy[1] = 0.3; // horizontal diffusion
+    rotationEnergy = 0.6;
   }
 
   @Override
@@ -51,5 +53,10 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   @Override
   double getDiffusionEnergy(int direction) {
     return diffusionEnergy[direction % 2];
+  }
+  
+  @Override
+  double getRotationEnergy() {
+    return rotationEnergy;
   }
 }

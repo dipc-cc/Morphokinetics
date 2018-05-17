@@ -82,4 +82,10 @@ public abstract class AbstractBdaRates implements IRates {
   }
  
   abstract double getDiffusionEnergy(int direction);
+  
+  public double getRotationRate(BdaMoleculeUc bdaUc) {
+    return getRate(getRotationEnergy() - bdaUc.getEnergy());
+  }
+  
+  abstract double getRotationEnergy();
 }

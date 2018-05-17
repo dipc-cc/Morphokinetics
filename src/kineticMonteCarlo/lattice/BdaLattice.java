@@ -31,7 +31,6 @@ import java.util.Set;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
-import kineticMonteCarlo.site.BdaMoleculeSite;
 
 /**
  *
@@ -145,11 +144,27 @@ public class BdaLattice extends AbstractGrowthLattice {
         canDiffuse = false;
         // set the neighbourhood
         int neighbourCode = getNeighbourCode(origin, neighbour, direction);
-        origin.getBdaUc().setNeighbour(getAgUc(neighbour), neighbourCode);
-        neighbour.getBdaUc().setNeighbour(getAgUc(origin), (neighbourCode + 6) % 12);
+        origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
+        neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
       }
     }
     return canDiffuse;
+  }
+  
+  /**
+   * 
+   * @param origin must be occupied.
+   * @return 
+   */
+  public boolean canRotate(BdaAgSurfaceSite origin) {
+    boolean canRotate = true;
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
+    for (int i = 0; i < bdaUc.getNumberOfNeighbours(); i++) {
+      BdaMoleculeUc neighbour = bdaUc.getNeighbour(i);
+      if (neighbour != null && bdaUc.getNeighbour(i).getSite(0).isOccupied())
+        canRotate = false;
+    }
+    return canRotate;
   }
  
   // it doesn't consider the periodicity!!!

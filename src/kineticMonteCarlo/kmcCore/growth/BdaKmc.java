@@ -35,7 +35,6 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
-import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
 import utils.list.LinearList;
@@ -245,6 +244,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       recomputeAdsorptionRate(site);
       recomputeDesorptionRate(site);
       recomputeDiffusionRate(site);
+      recomputeRotationRate(site);
     }
   }
 
@@ -309,6 +309,36 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private double getDiffusionRate(BdaAgSurfaceSite origin, int direction) {
     return rates.getDiffusionRate(origin.getBdaUc(), direction);
+  }
+  
+  private void recomputeRotationRate(BdaAgSurfaceSite agSite) {
+    totalRate[ROTATION] -= agSite.getRate(ROTATION);
+    if (!agSite.isOccupied()) {
+      if (agSite.isOnList(ROTATION)) {
+        sites[ROTATION].removeAtomRate(agSite);
+      }
+      agSite.setOnList(ROTATION, false);
+      return;
+    }
+    double oldDesorptionRate = agSite.getRate(ROTATION);
+    agSite.setRate(ROTATION, 0); 
+    //agSite.getBdaUc().resetNeighbourhood();   
+    boolean[] canRotate = new boolean[4];
+    // it needs a first check, to get all the neighbourhood occupancy
+    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+      canRotate[i] = lattice.canRotate(agSite);
+    }
+    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+      if (canRotate[i]) {
+        double rate = getRotationRate(agSite);
+        agSite.setRate(ROTATION, rate);
+      }
+    }
+    recomputeCollection(ROTATION, agSite, oldDesorptionRate);
+  }
+  
+  private double getRotationRate(BdaAgSurfaceSite origin) {
+    return rates.getRotationRate(origin.getBdaUc());//grotationRatePerMolecule[0];
   }
   
   /**
