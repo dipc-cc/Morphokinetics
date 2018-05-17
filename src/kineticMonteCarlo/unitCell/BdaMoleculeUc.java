@@ -35,16 +35,50 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   //private BdaSurfaceUc agUc;
   private final BdaSurfaceUc[] neighbours;
   private final BdaMoleculeSite bdaMolecule;
+  /** Base energy of the molecule. It will be updated with the neighbourhood.*/
+  private double energy;
   
   public BdaMoleculeUc() {
     super(-1, -1, null);
     bdaMolecule = new BdaMoleculeSite(-1, false);
    
     neighbours = new BdaSurfaceUc[12];
+    energy = 0;
   }
    
   public void setNeighbour(BdaSurfaceUc uc, int pos) {
     neighbours[pos] = uc;
+    if (uc != null) {
+      switch (pos) {
+        case 0:
+        case 2:
+        case 6:
+        case 8:
+          energy -= 0.05;
+          break;
+        case 1:
+        case 7:
+          energy += 0.2;
+          break;
+        case 3:
+        case 5:
+        case 9:
+        case 11:
+          energy += 0.1;
+          break;
+        case 4:
+        case 10:
+          energy -= 0.1;
+          break;
+      }
+    }
+  }
+  
+  public void resetNeighbourhood() {
+    for (int i = 0; i < neighbours.length; i++) {
+      neighbours[i] = null;
+    }
+    energy = 0.0; // reset the energy too
   }
 
   public BdaSurfaceUc getNeighbour(int pos) {
@@ -58,7 +92,16 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
         occupied++;
       }
     }
-    return occupied < 4 ? occupied : 3;
+    return occupied;
+  }
+  
+  /**
+   * Base energy of the molecule.
+   * 
+   * @return energy in eV.
+   */
+  public double getEnergy() {
+    return energy;
   }
 
   /**

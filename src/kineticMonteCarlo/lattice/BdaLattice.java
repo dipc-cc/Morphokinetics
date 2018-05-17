@@ -131,7 +131,7 @@ public class BdaLattice extends AbstractGrowthLattice {
   /**
    * 
    * @param origin must be occupied.
-   * @param direction
+   * @param direction 0-4
    * @return 
    */
   public boolean canDiffuse(BdaAgSurfaceSite origin, int direction) {
@@ -151,7 +151,8 @@ public class BdaLattice extends AbstractGrowthLattice {
     }
     return canDiffuse;
   }
-  
+ 
+  // it doesn't consider the periodicity!!!
   private int getNeighbourCode(BdaAgSurfaceSite origin, BdaAgSurfaceSite neighbour, int direction) {
     int x1 = getAgUc(origin).getPosI();
     int y1 = getAgUc(origin).getPosJ();
@@ -177,15 +178,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     }    
     return -1;
   }
-  
-  public void resetNeighbourhood(BdaAgSurfaceSite agSite) {
-    BdaMoleculeUc mUc = agSite.getBdaUc();
-
-    for (int i = 0; i < 4; i++) {
-      mUc.setNeighbour(null, i);
-    }
-  }
-  
   
   private Set<AbstractGrowthSite> getDiffusionSites(AbstractGrowthSite site, int direction) {
     Set<AbstractGrowthSite> modifiedSites = new HashSet<>();

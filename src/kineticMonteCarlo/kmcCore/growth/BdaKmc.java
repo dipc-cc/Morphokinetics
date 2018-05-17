@@ -76,8 +76,8 @@ public class BdaKmc extends AbstractGrowthKmc {
   private final long maxSteps;
   private double adsorptionRatePerSite;
   private double[] desorptionRatePerMolecule;
-  private double[][] diffusionRatePerMolecule;
   private double[] diffusionRateMultiAtom;
+  private AbstractBdaRates rates;
   
   public BdaKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -292,9 +292,14 @@ public class BdaKmc extends AbstractGrowthKmc {
       return;
     }
     agSite.setRate(DIFFUSION, 0);
-    lattice.resetNeighbourhood(agSite);
+    agSite.getBdaUc().resetNeighbourhood();
+    boolean[] canDiffuse = new boolean[4];
+    // it needs a first check, to get all the neighbourhood occupancy
     for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-      if (lattice.canDiffuse(agSite, i)) {
+      canDiffuse[i] = lattice.canDiffuse(agSite, i);
+    }
+    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+      if (canDiffuse[i]) {
         double rate = getDiffusionRate(agSite, null, i);
         agSite.addRate(DIFFUSION, rate, i);
       }
@@ -305,7 +310,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private double getDiffusionRate(BdaAgSurfaceSite origin, BdaAgSurfaceSite destination, int position) {
     double rate;
     BdaMoleculeUc bdaUc = origin.getBdaUc();
-    rate = diffusionRatePerMolecule[bdaUc.getOccupiedNeighbours()][position];
+    rate = rates.getDiffusionRate(bdaUc, position);
     return rate;
   }
   
@@ -436,7 +441,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     
   public void setRates(AbstractBdaRates rates) {
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
-    diffusionRatePerMolecule = rates.getDiffusionRates();
     desorptionRatePerMolecule = rates.getDesorptionRates();
+    this.rates = rates;
   }
 }

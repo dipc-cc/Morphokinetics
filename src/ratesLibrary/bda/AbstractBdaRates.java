@@ -18,22 +18,27 @@
  */
 package ratesLibrary.bda;
 
+import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import ratesLibrary.IRates;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public abstract class AbstractBdaRates implements IRates{
+public abstract class AbstractBdaRates implements IRates {
   
   private double diffusionMl;
   private final double prefactor;
   /** Temperature (K). */
   private final float temperature;
+  private final double[] diffusionEnergy;
   
   public AbstractBdaRates(float temperature) {
     this.temperature = temperature;
     prefactor = 1e13;
+    diffusionEnergy = new double[2];
+    diffusionEnergy[0] = 0.4;
+    diffusionEnergy[1] = 0.3;
   }
 
   /**
@@ -80,6 +85,18 @@ public abstract class AbstractBdaRates implements IRates{
       }
     }
     return rates;
+  }
+  
+  public double getDiffusionRate(BdaMoleculeUc bdaUc, int direction) {
+    double rate;
+    double baseEnergy = bdaUc.getEnergy();
+    double deltaEnergy = diffusionEnergy[direction % 2];
+    rate = getRate(deltaEnergy - baseEnergy);
+    return rate;
+  }
+  
+  private double getRate(double energy) {
+    return prefactor * Math.exp(-energy / (kB * temperature));
   }
   
 }
