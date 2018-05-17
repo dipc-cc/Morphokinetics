@@ -85,16 +85,6 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     return neighbours[pos];
   }
   
-  public int getOccupiedNeighbours() {
-    int occupied = 0;
-    for (int i = 0; i < neighbours.length; i++) {
-      if (neighbours[i] != null) {
-        occupied++;
-      }
-    }
-    return occupied;
-  }
-  
   /**
    * Base energy of the molecule.
    * 
