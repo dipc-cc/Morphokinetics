@@ -78,17 +78,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   public BdaMoleculeSite(int id, boolean rotated) { // int type (alpha, beta...)
     super(id, (short) -1, (short) -1, 0, -1);
     atoms = new BdaAtomSite[19];
-    for (int pos = 0; pos < atoms.length; pos++) {
-      Point3D cartPos;
-      if (rotated) {
-        cartPos = new Point3D(alphaXyz[pos][1], alphaXyz[pos][0], 0);
-      } else {
-        cartPos = new Point3D(alphaXyz[pos][0], alphaXyz[pos][1], 0);
-      }
-
-      atoms[pos] = new BdaAtomSite(pos, pos, cartPos);
-      atoms[pos].setOccupied(true);
-    }
+    rotateAtoms();
     this.rotated = rotated;
     neighbours = new BdaMoleculeSite[4];
     processes = new BdaProcess[6];
@@ -105,6 +95,21 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
 
   public void setRotated(boolean rotated) {
     this.rotated = rotated;
+    rotateAtoms();
+  }
+  
+  private void rotateAtoms() {
+    for (int pos = 0; pos < atoms.length; pos++) {
+      Point3D cartPos;
+      if (rotated) {
+        cartPos = new Point3D(alphaXyz[pos][1], alphaXyz[pos][0], 0);
+      } else {
+        cartPos = new Point3D(alphaXyz[pos][0], alphaXyz[pos][1], 0);
+      }
+
+      atoms[pos] = new BdaAtomSite(pos, pos, cartPos);
+      atoms[pos].setOccupied(true);
+    }
   }
   
   /**
