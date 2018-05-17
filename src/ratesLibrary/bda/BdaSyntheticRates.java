@@ -24,8 +24,13 @@ package ratesLibrary.bda;
  */
 public class BdaSyntheticRates extends AbstractBdaRates {
 
+  private final double[] diffusionEnergy;
+  
   public BdaSyntheticRates(float temperature) {
     super(temperature);
+    diffusionEnergy = new double[2];
+    diffusionEnergy[0] = 0.4;
+    diffusionEnergy[1] = 0.3;
   }
 
   @Override
@@ -42,4 +47,9 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   public double getIslandDensity(double temperature) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   } 
+  
+  @Override
+  double getDiffusionEnergy(int direction) {
+    return diffusionEnergy[direction % 2];
+  }
 }

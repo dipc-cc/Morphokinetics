@@ -31,22 +31,17 @@ public abstract class AbstractBdaRates implements IRates {
   private final double prefactor;
   /** Temperature (K). */
   private final float temperature;
-  private final double[] diffusionEnergy;
   
   public AbstractBdaRates(float temperature) {
     this.temperature = temperature;
     prefactor = 1e13;
-    diffusionEnergy = new double[2];
-    diffusionEnergy[0] = 0.4;
-    diffusionEnergy[1] = 0.3;
   }
 
   /**
-   * Diffusion Mono Layer (F). Utilised to calculate absorption rate. Cox et al. define to be 
-   * F=0.0035 ML/s. The perimeter deposition is calculated multiplying F (this) and island density.
+   * Diffusion Mono Layer (F). Utilised to calculate absorption rate.
+   *
    * @param diffusionMl diffusion mono layer (deposition flux)
    */
-  
   @Override
   public void setDepositionFlux(double diffusionMl) {
     this.diffusionMl = diffusionMl;
@@ -79,11 +74,12 @@ public abstract class AbstractBdaRates implements IRates {
    * @return rate.
    */
   public double getDiffusionRate(BdaMoleculeUc bdaUc, int direction) {
-    return getRate(diffusionEnergy[direction % 2] - bdaUc.getEnergy());
+    return getRate(getDiffusionEnergy(direction) - bdaUc.getEnergy());
   }
   
   private double getRate(double energy) {
     return prefactor * Math.exp(-energy / (kB * temperature));
   }
-  
+ 
+  abstract double getDiffusionEnergy(int direction);
 }
