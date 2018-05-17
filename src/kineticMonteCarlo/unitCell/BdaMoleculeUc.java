@@ -34,7 +34,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   /** Central position is in this AgUc. */
   //private BdaSurfaceUc agUc;
   private final BdaSurfaceUc[] neighbours;
-  private BdaMoleculeSite bdaMolecule;
+  private final BdaMoleculeSite bdaMolecule;
   
   public BdaMoleculeUc() {
     super(-1, -1, null);
