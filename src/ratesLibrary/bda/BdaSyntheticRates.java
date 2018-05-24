@@ -32,7 +32,7 @@ public class BdaSyntheticRates extends AbstractBdaRates {
     diffusionEnergy = new double[2];
     diffusionEnergy[0] = 0.4; // vertical diffusion
     diffusionEnergy[1] = 0.3; // horizontal diffusion
-    rotationEnergy = 0.6;
+    rotationEnergy = 0.3;
   }
 
   @Override

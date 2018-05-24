@@ -19,6 +19,7 @@
 package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
+import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
 
@@ -75,7 +76,7 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
 
   public void setAvailable(int process, boolean available) {
     this.available[process] = available;
-    if (available) { // do not make available if the current point is fixed to several BDA molecules
+    if (available && process == ADSORPTION) { // do not make available if the current point is fixed to several BDA molecules
       if (((BdaAgSurfaceSite) getSite(0)).getBdaSize() > 0){
         this.available[process] = false;
       }

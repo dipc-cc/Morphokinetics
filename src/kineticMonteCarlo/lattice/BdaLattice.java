@@ -30,7 +30,7 @@ import java.util.Iterator;
 import java.util.Set;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
-import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
+import static kineticMonteCarlo.process.BdaProcess.ROTATION;
 
 /**
  *
@@ -41,25 +41,27 @@ public class BdaLattice extends AbstractGrowthLattice {
    * Unit cell array, where all the surface Ag atoms are located.
    */
   private final BdaSurfaceUc[][] agUcArray;
-  private final int[] alphaTravelling = {3,3,2,1,1,0,1,2,1,0,1,2,1,0,0,3,3,3,3,3,3,3,2,2,3,0,0};
+  private final BdaLatticeHelper lh; 
   
 
   public BdaLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ, null);
     agUcArray = new BdaSurfaceUc[hexaSizeI][hexaSizeJ];
     createAgUcSurface();
+    lh = new BdaLatticeHelper();
   }
 
   @Override
-  public void deposit(AbstractSurfaceSite agSite, boolean forceNucleation) {
+  public void deposit(AbstractSurfaceSite agSite, boolean rotated) {
     BdaAgSurfaceSite a = (BdaAgSurfaceSite) agSite;
     BdaSurfaceUc agUc = getAgUc(a);
-    if (!agUc.isAvailable(ADSORPTION))
-      return; // should not happen
+    //if (!agUc.isAvailable(ADSORPTION))
+    //  return; // should not happen. It happens in a diffusion. So, it must be allowed with rotations
     BdaMoleculeUc bdaUc = new BdaMoleculeUc();
+    bdaUc.setRotated(rotated);
     agUc.getSite(0).setOccupied(true);
     ((BdaAgSurfaceSite) agUc.getSite(0)).setBdaUc(bdaUc);
-    changeAvailability(agUc, false);
+    lh.changeAvailability(agUc, false);
     addOccupied();
   }
   
@@ -72,7 +74,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) m;
     BdaSurfaceUc agUc = getAgUc(agSite);
     agUc.getSite(0).setOccupied(false);
-    changeAvailability(agUc, true);
+    lh.changeAvailability(agUc, true);
     subtractOccupied();
     return 0;
   }
@@ -80,52 +82,7 @@ public class BdaLattice extends AbstractGrowthLattice {
   @Override
   public float getCoverage() {
     return 10 * (float) getOccupied() / (float) (getHexaSizeI() * getHexaSizeJ());
-  }
-  
-  /**
-   * Reserve or release the space for current BDA molecule.
-   * 
-   * @param origin central atom (position) of the BDA molecule.
-   * @param makeAvailable change availability.
-   */
-  private void changeAvailability(BdaSurfaceUc origin, boolean makeAvailable){
-    BdaMoleculeUc bdaUc = ((BdaAgSurfaceSite) origin.getSite(0)).getBdaUc();
-    BdaSurfaceUc neighbourAgUc = origin;
-    for (int i = 0; i < alphaTravelling.length; i++) {
-      neighbourAgUc = neighbourAgUc.getNeighbour(getNeighbourIndex(i));
-      if (makeAvailable) {
-        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
-      }
-      if (!makeAvailable) { // can not adsorb at this position.
-        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).setBdaUc(bdaUc);
-      }
-      neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
-      if (i < 10) {
-        neighbourAgUc.setAvailable(DIFFUSION, makeAvailable);
-      }
-    }
-  }
-  
-  private AbstractGrowthSite getStartingSite(AbstractGrowthSite site, int direction) {
-    AbstractGrowthSite startingSite;
-    switch (direction) {
-      case 0:
-        startingSite = site.getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(0).getNeighbour(0);
-        break;
-      case 1:
-        startingSite = site.getNeighbour(1).getNeighbour(1).getNeighbour(1).getNeighbour(1).getNeighbour(1).getNeighbour(0);
-        break;
-      case 2:
-        startingSite = site.getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(2).getNeighbour(2);
-        break;
-      case 3:
-        startingSite = site.getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(3).getNeighbour(0);
-        break;
-      default:
-        throw new IllegalArgumentException("BDA molecule can only diffuse in one of the 4 directions");
-    }
-    return startingSite;
-  }
+  }  
   
   /**
    * 
@@ -135,17 +92,28 @@ public class BdaLattice extends AbstractGrowthLattice {
    */
   public boolean canDiffuse(BdaAgSurfaceSite origin, int direction) {
     boolean canDiffuse = true;
-    AbstractGrowthSite startingSite = getStartingSite(origin, direction);
-    Set<AbstractGrowthSite> modifiedSites = getDiffusionSites(startingSite, direction);
+    boolean rotated = origin.getBdaUc().isRotated();
+    AbstractGrowthSite startingSite = lh.getStartingNeighbour(origin, direction, rotated);
+    Set<AbstractGrowthSite> modifiedSites = lh.getNeighbourSites(startingSite, direction, rotated);
     Iterator iter = modifiedSites.iterator();
     while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
       if (neighbour.isOccupied()) {
         canDiffuse = false;
-        // set the neighbourhood
-        int neighbourCode = getNeighbourCode(origin, neighbour, direction);
-        origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
-        neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
+        if (rotated == neighbour.getBdaUc().isRotated()) {// set the neighbourhood
+          int neighbourCode = getNeighbourCode(origin, neighbour, direction);
+          origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
+          neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
+        }//*/
+      }
+    }
+    startingSite = lh.getStartingAvailable(origin, direction, rotated);
+    modifiedSites = lh.getAvailableSites(startingSite, direction, rotated);
+    iter = modifiedSites.iterator();
+     while (iter.hasNext()) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
+      if (!getAgUc(neighbour).isAvailable(DIFFUSION)){
+        canDiffuse = false;
       }
     }
     return canDiffuse;
@@ -156,13 +124,57 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @param origin must be occupied.
    * @return 
    */
-  public boolean canRotate(BdaAgSurfaceSite origin) {
+  /*public boolean canRotate(BdaAgSurfaceSite origin) {
     boolean canRotate = true;
     BdaMoleculeUc bdaUc = origin.getBdaUc();
     for (int i = 0; i < bdaUc.getNumberOfNeighbours(); i++) {
       BdaMoleculeUc neighbour = bdaUc.getNeighbour(i);
       if (neighbour != null && bdaUc.getNeighbour(i).getSite(0).isOccupied())
         canRotate = false;
+    }
+    if (canRotate) { // check upper 2nd neighbours
+      origin = (BdaAgSurfaceSite) origin.getNeighbour(0).getNeighbour(0).getNeighbour(0);
+      canRotate = !origin.isOccupied();
+      AbstractGrowthSite neighbour = origin;
+      for (int i = 0; i < 3; i++) {
+        neighbour = neighbour.getNeighbour(3);
+        if (neighbour.isOccupied()) {
+          canRotate = false;
+        }
+      }
+      neighbour = origin;
+      for (int i = 0; i < 3; i++) {
+        neighbour = neighbour.getNeighbour(1);
+        if (neighbour.isOccupied()) {
+          canRotate = false;
+        }
+      }
+    }
+    return canRotate;
+  }//*/
+  
+  /**
+   * 
+   * @param origin must be occupied.
+   * @return 
+   */
+  public boolean canRotate(BdaAgSurfaceSite origin) {
+    boolean canRotate = true;
+    Set<AbstractGrowthSite> modifiedSites = getModifiedSitesRotation(null, origin);
+    BdaMoleculeUc refBdaUc = origin.getBdaUc();
+    
+    Iterator i = modifiedSites.iterator();
+    BdaAgSurfaceSite site;
+    while (i.hasNext()) {
+      site = (BdaAgSurfaceSite) i.next();
+      BdaSurfaceUc agUc = getAgUc(site);
+      site.getBdaUc();
+      if (!agUc.isAvailable(ROTATION) && !site.hasTheSameBdaUc(refBdaUc)){
+        canRotate = false;
+        agUc.isAvailable(ROTATION);
+        site.hasTheSameBdaUc(refBdaUc);
+        break;
+      }
     }
     return canRotate;
   }
@@ -194,44 +206,38 @@ public class BdaLattice extends AbstractGrowthLattice {
     return -1;
   }
   
-  private Set<AbstractGrowthSite> getDiffusionSites(AbstractGrowthSite site, int direction) {
+  /**
+   * Adds all the neighbour positions of the rotated and not rotated central
+   * position. It iterates in a spiral, and 27 positions are computed in vain.
+   *
+   * @param site central Ag site.
+   * @return all positions to be checked.
+   */
+  private Set<AbstractGrowthSite> getRotationSites(AbstractGrowthSite site) {
     Set<AbstractGrowthSite> modifiedSites = new HashSet<>();
-    switch (direction) {
-      case 0:
-      case 2:
-        for (int i = 0; i < 9; i++) {
+    modifiedSites.add(site);
+    int possibleDistance = 0;
+    int thresholdDistance = 5; 
+    int quantity;
+    while (true) {
+      site = site.getNeighbour(2).getNeighbour(3); // get the first neighbour
+      quantity = (possibleDistance * 2 + 2);
+      for (int direction = 0; direction < 4; direction++) {
+        for (int j = 0; j < quantity; j++) {
+          site = site.getNeighbour(direction);
+          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, true);
+          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, false);
           modifiedSites.add(site);
-          site = site.getNeighbour(1);
         }
+      }
+      possibleDistance++;
+      if (possibleDistance >= thresholdDistance) {
         break;
-      case 1:
-      case 3:
-        for (int i = 0; i < 3; i++) {
-          modifiedSites.add(site);
-          site = site.getNeighbour(2);
-        }
-        break;
-      default:
-        throw new IllegalArgumentException("BDA molecule can only diffuse in one of the 4 directions");
+      }
     }
-    
     return modifiedSites;
   }
   
-
-  private int getNeighbourIndex(int i) {
-    /*BdaMoleculeSite mSite = (BdaMoleculeSite) origin.getSite(0);
-    if (mSite.isRotated()) {
-      return (alphaTravelling[i] + 3) % 4;
-    } else {
-      return alphaTravelling[i];
-    }//*/
-    return alphaTravelling[i];
-  }
-  
-  private int getNeighbourIndex(BdaAgSurfaceSite agSite, int i) {
-    return getNeighbourIndex(i);
-  }
 
   /**
    * Includes all -2, +2 in main molecule axis and -1,+1 in the other axis of the current site in a
@@ -243,17 +249,7 @@ public class BdaLattice extends AbstractGrowthLattice {
    */
   @Override
   public Set<AbstractGrowthSite> getModifiedSites(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
-    if (modifiedSites == null) {
-      modifiedSites = new HashSet<>();
-    }
-    BdaAgSurfaceSite origin = (BdaAgSurfaceSite) site;
-    site = origin.getNeighbour(alphaTravelling[0]);
-    modifiedSites.add(site);
-    for (int i = 1; i < alphaTravelling.length; i++) {
-      site = site.getNeighbour(getNeighbourIndex(origin, i));
-      modifiedSites.add(site);
-    }
-    return modifiedSites;
+    return lh.getModifiedSites(modifiedSites, site);
   }
   
   /**
@@ -268,10 +264,29 @@ public class BdaLattice extends AbstractGrowthLattice {
     if (modifiedSites == null) {
       modifiedSites = new HashSet<>();
     }
+    
+    boolean rotated = ((BdaAgSurfaceSite) site).getBdaUc().isRotated();
     for (int i = 0; i < 4; i++) {
-      AbstractGrowthSite startingSite = getStartingSite(site, i);
-      modifiedSites.addAll(getDiffusionSites(startingSite, i));
+      AbstractGrowthSite startingSite = lh.getStartingNeighbour(site, i, rotated);
+      modifiedSites.addAll(lh.getNeighbourSites(startingSite, i, rotated));
     }
+    return modifiedSites;
+  }  
+  
+  /**
+   * Includes all previous and after rotation positions.
+   *
+   * @param modifiedSites previously added sites, can be null.
+   * @param site current central site.
+   * @return A list with of sites that should be recomputed their rate.
+   */
+  public Set<AbstractGrowthSite> getModifiedSitesRotation(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+    if (modifiedSites == null) {
+      modifiedSites = new HashSet<>();
+    }
+    //AbstractGrowthSite startingSite = getStartingSite(site, i);
+    modifiedSites.addAll(getRotationSites(site));
+
     return modifiedSites;
   }
   

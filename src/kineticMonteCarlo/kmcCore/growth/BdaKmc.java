@@ -37,6 +37,7 @@ import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
+import utils.StaticRandom;
 import utils.list.LinearList;
 import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
@@ -168,7 +169,7 @@ public class BdaKmc extends AbstractGrowthKmc {
         depositNewMolecule();
         break;
       case DESORPTION:
-        desorbMolecule(); 
+        desorbMolecule();
         break;
       case DIFFUSION:
         diffuseMolecule(); 
@@ -185,50 +186,66 @@ public class BdaKmc extends AbstractGrowthKmc {
     return simulatedSteps == maxSteps;
   }
   
+  
   private void depositNewMolecule() {
+    depositNewMolecule(-1);
+  }
+  
+  private void depositNewMolecule(int id) {
     if (sites[ADSORPTION].isEmpty()) {
       // can not deposit anymore
       return;
     }
     
-    BdaAgSurfaceSite destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].randomElement();
-    lattice.deposit(destinationSite, false);
+    boolean rotated = false;
+    BdaAgSurfaceSite destinationSite;
+    if (id < 0) {
+      destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].randomElement();
+      if (StaticRandom.raw() < 0.5) {
+        rotated = true;
+      }
+    } else {
+      destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].search(new BdaAgSurfaceSite(id, (short) -1, (short) -1));
+    }
+    lattice.deposit(destinationSite, rotated);
     
-    updateRates(lattice.getModifiedSites(null, destinationSite));
-    updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
+    //updateRates(lattice.getModifiedSites(null, destinationSite));
+    //updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
+    updateRates(lattice.getModifiedSitesRotation(null, destinationSite));
   }
   
   private void desorbMolecule() {
     BdaAgSurfaceSite destinationSite = (BdaAgSurfaceSite) sites[DESORPTION].randomElement();
     lattice.extract(destinationSite);
-    updateRates(lattice.getModifiedSites(null, destinationSite));
-    updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
+    //updateRates(lattice.getModifiedSites(null, destinationSite));
+    //updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
+    updateRates(lattice.getModifiedSitesRotation(null, destinationSite));
+    
   }
   
   private void diffuseMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[DIFFUSION].randomElement();
     AbstractGrowthSite destination = (AbstractGrowthSite) origin.getRandomNeighbour(DIFFUSION);
+    boolean rotated = origin.getBdaUc().isRotated();
     lattice.extract(origin);
-    lattice.deposit(destination, false);
+    lattice.deposit(destination, rotated);
     
     updateRates(lattice.getModifiedSites(null, origin));
     updateRates(lattice.getModifiedSites(null, destination));
     
     // far away positions, where another BDA molecule could be
-    updateRates(lattice.getModifiedSitesDiffusion(null, origin));
+    //updateRates(lattice.getModifiedSitesDiffusion(null, origin));
     updateRates(lattice.getModifiedSitesDiffusion(null, destination));
+    updateRates(lattice.getModifiedSitesRotation(null, destination));
 
   }
   
   private void rotateMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[ROTATION].randomElement();
-    //lattice.extract(origin);
-    origin.getBdaUc().setRotated(!origin.getBdaUc().isRotated());
-    //lattice.deposit(origin, false);
-    /*BdaSurfaceUc agUc = lattice.getRandomOccupiedUc();
-    lattice.extract(agUc);
-    //agUc.getBdaUc().setRotated(!agUc.getBdaUc().isRotated());
-    lattice.deposit(agUc, agUc.getBdaUc());//*/
+    boolean rotated = !origin.getBdaUc().isRotated();
+    lattice.extract(origin);
+    lattice.deposit(origin, rotated);
+    updateRates(lattice.getModifiedSitesRotation(null, origin));
   }
   
   private void transformMolecule() {}
@@ -320,21 +337,21 @@ public class BdaKmc extends AbstractGrowthKmc {
       agSite.setOnList(ROTATION, false);
       return;
     }
-    double oldDesorptionRate = agSite.getRate(ROTATION);
+    double oldRotationRate = agSite.getRate(ROTATION);
     agSite.setRate(ROTATION, 0); 
     //agSite.getBdaUc().resetNeighbourhood();   
     boolean[] canRotate = new boolean[4];
     // it needs a first check, to get all the neighbourhood occupancy
-    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-      canRotate[i] = lattice.canRotate(agSite);
+    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+    canRotate[0] = lattice.canRotate(agSite);
+    //}
+    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+    if (canRotate[0]) {
+      double rate = getRotationRate(agSite);
+      agSite.setRate(ROTATION, rate);
     }
-    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-      if (canRotate[i]) {
-        double rate = getRotationRate(agSite);
-        agSite.setRate(ROTATION, rate);
-      }
-    }
-    recomputeCollection(ROTATION, agSite, oldDesorptionRate);
+    //}
+    recomputeCollection(ROTATION, agSite, oldRotationRate);
   }
   
   private double getRotationRate(BdaAgSurfaceSite origin) {
@@ -393,13 +410,13 @@ public class BdaKmc extends AbstractGrowthKmc {
       }
     }
   }  
+  
   /**
    * Changes current collection from array/tree to tree/array.
    * 
    * @param process ADSORPTION, DIFFUSION diffusion, CONCERTED island diffusion or MULTI atom diffusion.
    * @param toTree if true from array to tree, otherwise from tree to array.
    */
-  
   private void changeCollection(byte process, boolean toTree) {
     sites[process] = col.getCollection(toTree, process);
     for (int i = 0; i < getLattice().size(); i++) {

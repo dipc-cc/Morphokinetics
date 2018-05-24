@@ -51,6 +51,9 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   public void setNeighbour(BdaMoleculeUc uc, int pos) {
     neighbours[pos] = uc;
     if (uc != null) {
+      if (uc.isRotated()) {
+        pos = (pos + 3) % 12;
+      }
       switch (pos) {
         case 0:
         case 2:
@@ -125,7 +128,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     Point3D pos;
     // bridge
     if (bdaMolecule.isRotated()) {
-      pos = new Point3D(-0.5, 0, 0);
+      pos = new Point3D(0.5, 0, 0);
     } else {
       pos = new Point3D(0, 0.5, 0);
     }

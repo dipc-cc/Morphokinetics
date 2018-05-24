@@ -19,6 +19,7 @@
 package kineticMonteCarlo.site;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import kineticMonteCarlo.process.BdaProcess;
@@ -53,9 +54,11 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   }
 
   public void setBdaUc(BdaMoleculeUc bdaUc) {
-    if (isOccupied()) {
+    if (isOccupied()) { // redundant!!
       this.bdaUc = bdaUc;
     }
+  }
+  public void setBelongingBdaUc(BdaMoleculeUc bdaUc) {
     this.bdaUcSet.add(bdaUc);
   }
   
@@ -68,6 +71,19 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   
   public int getBdaSize() {
     return bdaUcSet.size();
+  }
+  
+  public boolean hasTheSameBdaUc(BdaMoleculeUc other) {
+    Iterator iter = bdaUcSet.iterator();
+    boolean sameBdaUc = false;
+    while (iter.hasNext()) {
+      BdaMoleculeUc currentBdaUc = (BdaMoleculeUc) iter.next();
+      if (currentBdaUc.equals(other)) {
+        sameBdaUc = true;
+        break;
+      }
+    }
+    return sameBdaUc;
   }
   
   @Override
