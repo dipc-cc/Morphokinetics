@@ -76,7 +76,7 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
               // Desorption
               switch (atom.getType()) {
                 case NH3:
-                    histogramPossibles[2] += elapsedTime; // P2
+                  histogramPossibles[2] += elapsedTime; // P2
                   break;
                 case NO:
                   histogramPossibles[11] += elapsedTime; // P11
