@@ -96,16 +96,18 @@ public class BdaLattice extends AbstractGrowthLattice {
     AbstractGrowthSite startingSite = lh.getStartingNeighbour(origin, direction, rotated);
     Set<AbstractGrowthSite> modifiedSites = lh.getNeighbourSites(startingSite, direction, rotated);
     Iterator iter = modifiedSites.iterator();
+    int i = 0;
     while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
       if (neighbour.isOccupied()) {
         canDiffuse = false;
         if (rotated == neighbour.getBdaUc().isRotated()) {// set the neighbourhood
-          int neighbourCode = getNeighbourCode(origin, neighbour, direction);
+          int neighbourCode = getNeighbourCode(i, direction, rotated);
           origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
           neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
         }//*/
       }
+      i++;
     }
     startingSite = lh.getStartingAvailable(origin, direction, rotated);
     modifiedSites = lh.getAvailableSites(startingSite, direction, rotated);
@@ -178,34 +180,31 @@ public class BdaLattice extends AbstractGrowthLattice {
     }
     return canRotate;
   }
- 
-  // it doesn't consider the periodicity!!!
-  private int getNeighbourCode(BdaAgSurfaceSite origin, BdaAgSurfaceSite neighbour, int direction) {
-    int x1 = getAgUc(origin).getPosI();
-    int y1 = getAgUc(origin).getPosJ();
-    int x2 = getAgUc(neighbour).getPosI();
-    int y2 = getAgUc(neighbour).getPosJ();
-    switch (direction){
-      case 0:
-        if (x1 >  x2) return 0;
-        if (x1 == x2) return 1;
-        if (x1 <  x2) return 2;
-      case 1:
-        if (y1 >  y2) return 3;
-        if (y1 == y2) return 4;
-        if (y1 <  y2) return 5;
-      case 2:
-        if (x1 <  x2) return 6;
-        if (x1 == x2) return 7;
-        if (x1 >  x2) return 8;
-      case 3:
-        if (y1 <  y2) return 9;
-        if (y1 == y2) return 10;
-        if (y1 >  y2) return 11;
-    }    
-    return -1;
+
+  private int getNeighbourCode(int pos, int direction, boolean rotated) {
+    int code = 3 * direction;
+    if (rotated) { // to be checked
+      direction = (direction + 1) % 4;
+    }
+    if (direction % 2 == 0) {
+      if (pos == 4) {
+        code += 1;
+      }
+      if (pos > 4) {
+        code += 2;
+      }
+    } else {
+      if (pos == 1) {
+        code += 1;
+      }
+      if (pos > 1) {
+        code += 2;
+      }
+
+    }
+    return code;
   }
-  
+
   /**
    * Adds all the neighbour positions of the rotated and not rotated central
    * position. It iterates in a spiral, and 27 positions are computed in vain.
@@ -253,7 +252,7 @@ public class BdaLattice extends AbstractGrowthLattice {
   }
   
   /**
-   * Includes all -5, +5 in main molecule axis and -2,+2 in the other axis of the current site in a
+   * Includes all -4, +4 in main molecule axis and -1,+1 in the other axis of the current site in a
    * list without repeated elements.
    *
    * @param modifiedSites previously added sites, can be null.
