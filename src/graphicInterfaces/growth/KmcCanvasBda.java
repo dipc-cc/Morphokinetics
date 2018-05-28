@@ -26,6 +26,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
+import static kineticMonteCarlo.process.BdaProcess.ROTATION;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
@@ -42,13 +43,16 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 public class KmcCanvasBda extends KmcCanvas {
   
   /** Distance between centres of Ag molecules (from ASE) in Angstrom. */
-  double distanceAg;
-  BdaRestart restart;
+  private final double distanceAg;
+  private final BdaRestart restart;
+  private boolean detailed;
+  
   
   public KmcCanvasBda(AbstractSurfaceLattice lattice) {
     super(lattice);
     distanceAg = 2.892;
     restart = new BdaRestart("results/");
+    detailed = false;
   }
   
   boolean painted = false;
@@ -65,21 +69,29 @@ public class KmcCanvasBda extends KmcCanvas {
 
         g.setColor(colours[2]);
         int ball = (int) Math.round(getScale() * distanceAg);
-        if (!agUc.isAvailable(DIFFUSION)) {
-          g.setColor(BLUE);
+        if (detailed) {
+          if (!agUc.isAvailable(ADSORPTION)) {
+            g.setColor(white);
+          }
+          if (!agUc.isAvailable(DIFFUSION)) {
+            g.setColor(BLUE);
+            g.fillOval(X, Y, ball, ball);
+          } else {
+            g.drawOval(X, Y, ball, ball);
+          }
+          if (getScale() >= 8 && true) {
+            g.setColor(Color.BLACK);
+            g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2 * getScale());
+          }
         }
-        if (!agUc.isAvailable(ADSORPTION)) {
-          g.setColor(white);
-        } 
-        //g.drawOval(X, Y, ball, ball);
-        if (getScale() >= 8 && true) {
-          g.setColor(Color.BLACK);
-          g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2*getScale());
+        if (site.isOccupied()) {
+          moleculeList.add(((BdaSurfaceUc)agUc));
+          paintBdaMolecule(g, agUc);
         }
-      }
-      if (agUc.getSite(0).isOccupied()) {
-        moleculeList.add(((BdaSurfaceUc)agUc));
-        paintBdaMolecule(g, agUc);
+        if (detailed && site.getRate(ROTATION) > 0) {
+          g.setColor(GREEN);
+          g.fillOval(X, Y, ball, ball);   
+        }
       }
     }
     /*for (int i = 0; i < moleculeList.size(); i++) {
@@ -123,7 +135,7 @@ public class KmcCanvasBda extends KmcCanvas {
 
   @Override
   void changeBlackAndWhite() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    detailed = !detailed;
   }
 
   @Override
