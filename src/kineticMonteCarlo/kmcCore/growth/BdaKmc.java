@@ -207,7 +207,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     BdaAgSurfaceSite destinationSite;
     if (id < 0) {
       destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].randomElement();
-      if (StaticRandom.raw() < 0.5) {
+      if (doP[ROTATION] && StaticRandom.raw() < 0.5) {
         rotated = true;
       }
     } else {
