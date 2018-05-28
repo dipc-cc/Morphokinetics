@@ -19,12 +19,15 @@
 package kineticMonteCarlo.lattice;
 
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ROTATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
+import kineticMonteCarlo.site.ISite;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 
@@ -32,7 +35,7 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
  *
  * @author J. Alberdi-Rodriguez
  */
-class BdaLatticeHelper {
+class BdaLatticeHelper<T> {
 
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
 
@@ -59,6 +62,19 @@ class BdaLatticeHelper {
         neighbourAgUc.setAvailable(ROTATION, makeAvailable);
       }
     }
+    Set<BdaSurfaceUc> modifiedSites = (Set<BdaSurfaceUc>) getSpiralSites((T) origin, 4);
+    Iterator iter = modifiedSites.iterator();
+    while (iter.hasNext()) { // increasing the radious that forbids to adsorb
+      neighbourAgUc = (BdaSurfaceUc) iter.next();
+      if (makeAvailable) {
+        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
+      }
+      if (!makeAvailable) { // can not adsorb at this position.
+        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).setBelongingBdaUc(bdaUc);
+      }
+      neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
+    }
+    
   }
   
   /**
@@ -212,13 +228,59 @@ class BdaLatticeHelper {
   }
   
   private Set<AbstractGrowthSite> getSites(AbstractGrowthSite site, int numberOfSites, int direction) {
-    Set<AbstractGrowthSite> modifiedSites = new HashSet<>();
+    Set<AbstractGrowthSite> modifiedSites = new LinkedHashSet<>();
     for (int i = 0; i < numberOfSites; i++) {
       modifiedSites.add(site);
       site = site.getNeighbour(direction);
     }
     
     return modifiedSites;
-    
   }
+  
+  /**
+   * Adds all the neighbour positions of the rotated and not rotated central
+   * position. It iterates in a spiral -5+5 positions. Thus, 11x11 positions
+   * (121) around the current molecule must be free to be able to rotate.
+   *
+   * @param site central Ag Unit cell site.
+   * @return all positions to be checked.
+   */
+  Set<AbstractGrowthSite> getRotationSites(AbstractGrowthSite site) {
+    return (Set<AbstractGrowthSite>) getSpiralSites((T) site, 5);
+  }
+  
+  /**
+   * It iterates in a spiral from given central site. 
+   *
+   * @param site central Ag site.
+   * @param thresholdDistance how big the square radius have to be. The side of
+   * the square is the double of this number + 1.
+   * @return all positions to be checked.
+   */
+  private Set<T> getSpiralSites(T site, int thresholdDistance) {
+    Set<T> modifiedSites = new HashSet<>();
+    ISite s = (ISite) site;
+    modifiedSites.add(site);
+    int possibleDistance = 0;
+    int quantity;
+    while (true) {
+      s = s.getNeighbour(2).getNeighbour(3); // get the first neighbour
+      quantity = (possibleDistance * 2 + 2);
+      for (int direction = 0; direction < 4; direction++) {
+        for (int j = 0; j < quantity; j++) {
+          s = s.getNeighbour(direction);
+          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, true);
+          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, false);
+          modifiedSites.add((T) s);
+        }
+      }
+      possibleDistance++;
+      if (possibleDistance >= thresholdDistance) {
+        break;
+      }
+    }
+    return modifiedSites;
+  }
+ 
+  
 }

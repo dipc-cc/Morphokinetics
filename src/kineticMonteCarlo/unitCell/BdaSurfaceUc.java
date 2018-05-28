@@ -20,15 +20,18 @@ package kineticMonteCarlo.unitCell;
 
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
+import static kineticMonteCarlo.process.BdaProcess.ROTATION;
+import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
+import kineticMonteCarlo.site.ISite;
 
 /**
  * This unit cell is for the Ag below the molecules.
  * 
  * @author J. Alberdi-Rodriguez
  */
-public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
+public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     
   private final BdaSurfaceUc[] neighbours;
   /** Whether an atom can deposit on top (at any position) of this unit cell. */
@@ -76,7 +79,8 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
 
   public void setAvailable(int process, boolean available) {
     this.available[process] = available;
-    if (available && process == ADSORPTION) { // do not make available if the current point is fixed to several BDA molecules
+    if (available && (process == ADSORPTION || process == ROTATION)) { // do not make available if the current point is fixed to several BDA molecules
+      // if (available || process == DIFFUSION)
       if (((BdaAgSurfaceSite) getSite(0)).getBdaSize() > 0){
         this.available[process] = false;
       }
@@ -88,5 +92,85 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc {
   public String toString() {
     String returnString = "Unit cell "+getPosI()+" "+getPosJ();
     return returnString;
+  }
+
+  @Override
+  public void setProbabilities(double[] probabilities) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public double[] getProbabilities() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setList(Boolean list) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isOnList() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public double getProbability() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isEligible() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isRemoved() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public boolean isOccupied() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void unRemove() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setRemoved() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public double remove() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public byte getType() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public byte getRealType() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public int getNumberOfNeighbours() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setNumberOfNeighbours(int numberOfNeighbours) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setNeighbour(AbstractSite atom, int i) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

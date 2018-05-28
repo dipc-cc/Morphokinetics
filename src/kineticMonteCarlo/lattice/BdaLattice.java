@@ -163,18 +163,13 @@ public class BdaLattice extends AbstractGrowthLattice {
   public boolean canRotate(BdaAgSurfaceSite origin) {
     boolean canRotate = true;
     Set<AbstractGrowthSite> modifiedSites = getModifiedSitesRotation(null, origin);
-    BdaMoleculeUc refBdaUc = origin.getBdaUc();
     
     Iterator i = modifiedSites.iterator();
     BdaAgSurfaceSite site;
     while (i.hasNext()) {
       site = (BdaAgSurfaceSite) i.next();
-      BdaSurfaceUc agUc = getAgUc(site);
-      site.getBdaUc();
-      if (!agUc.isAvailable(ROTATION) && !site.hasTheSameBdaUc(refBdaUc)){
+      if (site.getBdaSize() > 1) {
         canRotate = false;
-        agUc.isAvailable(ROTATION);
-        site.hasTheSameBdaUc(refBdaUc);
         break;
       }
     }
@@ -203,40 +198,7 @@ public class BdaLattice extends AbstractGrowthLattice {
 
     }
     return code;
-  }
-
-  /**
-   * Adds all the neighbour positions of the rotated and not rotated central
-   * position. It iterates in a spiral, and 27 positions are computed in vain.
-   *
-   * @param site central Ag site.
-   * @return all positions to be checked.
-   */
-  private Set<AbstractGrowthSite> getRotationSites(AbstractGrowthSite site) {
-    Set<AbstractGrowthSite> modifiedSites = new HashSet<>();
-    modifiedSites.add(site);
-    int possibleDistance = 0;
-    int thresholdDistance = 5; 
-    int quantity;
-    while (true) {
-      site = site.getNeighbour(2).getNeighbour(3); // get the first neighbour
-      quantity = (possibleDistance * 2 + 2);
-      for (int direction = 0; direction < 4; direction++) {
-        for (int j = 0; j < quantity; j++) {
-          site = site.getNeighbour(direction);
-          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, true);
-          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, false);
-          modifiedSites.add(site);
-        }
-      }
-      possibleDistance++;
-      if (possibleDistance >= thresholdDistance) {
-        break;
-      }
-    }
-    return modifiedSites;
-  }
-  
+  } 
 
   /**
    * Includes all -2, +2 in main molecule axis and -1,+1 in the other axis of the current site in a
@@ -284,7 +246,7 @@ public class BdaLattice extends AbstractGrowthLattice {
       modifiedSites = new HashSet<>();
     }
     //AbstractGrowthSite startingSite = getStartingSite(site, i);
-    modifiedSites.addAll(getRotationSites(site));
+    modifiedSites.addAll(lh.getRotationSites(site));
 
     return modifiedSites;
   }
