@@ -997,7 +997,6 @@ public class Parser {
   public boolean doBdaProcess(String process) {
     String bda = "bdaDo";
     bda += process;
-    System.out.println(bda);
     return !mapString.get(bda).equals("false");
   }
   
