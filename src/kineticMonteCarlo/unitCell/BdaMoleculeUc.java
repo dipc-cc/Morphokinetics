@@ -31,6 +31,9 @@ import kineticMonteCarlo.site.BdaMoleculeSite;
  */
 public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   
+  private static final int ALPHA = 0;
+  private static final int BETA = 1;
+  
   /** Central position is in this AgUc. */
   //private BdaSurfaceUc agUc;
   private final BdaMoleculeUc[] neighbours;
@@ -39,6 +42,8 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   private double energy;
   private final int numberOfNeighbours;
   
+  private int type;
+  
   public BdaMoleculeUc() {
     super(-1, -1, null);
     bdaMolecule = new BdaMoleculeSite(-1, false);
@@ -46,6 +51,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     numberOfNeighbours = 12;
     neighbours = new BdaMoleculeUc[numberOfNeighbours];
     energy = 0;
+    type = BETA;
   }
    
   public void setNeighbour(BdaMoleculeUc uc, int pos) {
@@ -54,27 +60,55 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
       if (uc.isRotated()) {
         pos = (pos + 3) % 12;
       }
-      switch (pos) {
-        case 0:
-        case 2:
-        case 6:
-        case 8:
-          energy -= 0.05;
-          break;
-        case 1:
-        case 7:
-          energy += 0.2;
-          break;
-        case 3:
-        case 5:
-        case 9:
-        case 11:
-          energy += 0.1;
-          break;
-        case 4:
-        case 10:
-          energy -= 0.1;
-          break;
+      if (type == ALPHA) {
+        switch (pos) {
+          case 0:
+          case 2:
+          case 6:
+          case 8:
+            energy -= 0.05;
+            break;
+          case 1:
+          case 7:
+            energy += 0.2;
+            break;
+          case 3:
+          case 5:
+          case 9:
+          case 11:
+            energy += 0.1;
+            break;
+          case 4:
+          case 10:
+            energy -= 0.1;
+            break;
+        }
+      }
+      if (type == BETA) {
+        switch (pos) {
+          case 0:
+          case 2:
+          case 6:
+          case 8:
+            energy -= 0.05;
+            break;
+          case 1:
+          case 7:
+            energy += 0.2;
+            break;
+          case 3:
+          case 9:
+            energy -= 0.2;
+            break;
+          case 5:
+          case 11:
+            energy += 0.1;
+            break;
+          case 4:
+          case 10:
+            energy -= 0.1;
+            break;
+        }
       }
     }
   }
