@@ -78,7 +78,8 @@ public class BdaKmc extends AbstractGrowthKmc {
   private double[] desorptionRatePerMolecule;
   private double[] diffusionRateMultiAtom;
   private AbstractBdaRates rates;
-  
+  private boolean[] doP;
+
   public BdaKmc(Parser parser, String restartFolder) {
     super(parser);
     BdaLattice lat = new BdaLattice(parser.getHexaSizeI(), parser.getHexaSizeJ());
@@ -105,6 +106,11 @@ public class BdaKmc extends AbstractGrowthKmc {
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     
     steps = new long[6];
+    doP = new boolean[6];
+    String[] processes = {"Adsorption", "Desorption", "2", "Diffusion", "Rotation", "Transformation"};
+    for (int i = 0; i < doP.length; i++) {
+      doP[i] = parser.doBdaProcess(processes[i]);
+    }
    }
   
   @Override
@@ -258,10 +264,10 @@ public class BdaKmc extends AbstractGrowthKmc {
     BdaAgSurfaceSite site;
     while (i.hasNext()) {
       site = (BdaAgSurfaceSite) i.next();
-      recomputeAdsorptionRate(site);
-      recomputeDesorptionRate(site);
-      recomputeDiffusionRate(site);
-      recomputeRotationRate(site);
+      if (doP[ADSORPTION]) recomputeAdsorptionRate(site);
+      if (doP[DESORPTION]) recomputeDesorptionRate(site);
+      if (doP[DIFFUSION])  recomputeDiffusionRate(site);
+      if (doP[ROTATION])   recomputeRotationRate(site);
     }
   }
 

@@ -97,6 +97,12 @@ public class Parser {
     mapString.put("catalysisReaction", "true");
     mapString.put("catalysisDiffusion", "true");
     mapString.put("catalysisStart", "O");
+    mapString.put("bdaDoAdsorption", "true");
+    mapString.put("bdaDoDesorption", "true");
+    mapString.put("bdaDo2", "true");
+    mapString.put("bdaDoDiffusion", "true");
+    mapString.put("bdaDoRotation", "true");
+    mapString.put("bdaDoTransformation", "true");
     mapDouble = new LinkedHashMap<>();
     mapDouble.put("temperature", 135.0);
     mapDouble.put("pressureO2", 1.0);
@@ -986,6 +992,13 @@ public class Parser {
    */
   public boolean doPrintAllIterations() {
     return mapBoolean.get("printAllIterations");
+  }
+  
+  public boolean doBdaProcess(String process) {
+    String bda = "bdaDo";
+    bda += process;
+    System.out.println(bda);
+    return !mapString.get(bda).equals("false");
   }
   
   /**
