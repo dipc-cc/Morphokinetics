@@ -35,7 +35,7 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     
   private final BdaSurfaceUc[] neighbours;
   /** Whether an atom can deposit on top (at any position) of this unit cell. */
-  private boolean[] available;  
+  private final boolean[] available;  
   
   public BdaSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
     super(posI, posJ, atom);
@@ -69,6 +69,7 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     neighbours[pos] = uc;
   }
 
+  @Override
   public BdaSurfaceUc getNeighbour(int pos) {
     return neighbours[pos];
   }
@@ -90,7 +91,7 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
   
   @Override
   public String toString() {
-    String returnString = "Unit cell "+getPosI()+" "+getPosJ();
+    String returnString = "Unit cell " + getPosI() + " " + getPosJ();
     return returnString;
   }
 
