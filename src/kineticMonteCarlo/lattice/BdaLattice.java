@@ -116,7 +116,7 @@ public class BdaLattice extends AbstractGrowthLattice {
       if (neighbour.isOccupied()) {
         canDiffuse = false;
         if (rotated == neighbour.getBdaUc().isRotated()) {// set the neighbourhood
-          int neighbourCode = getNeighbourCode(i, direction, rotated);
+          int neighbourCode = lh.getNeighbourCode(i, direction, rotated, ALPHA);
           origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
           neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
         }//*/
@@ -148,7 +148,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     while (iter.hasNext()) { // check and set neighbourhood
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
       if (neighbour.isOccupied()) {
-        int neighbourCode = getNeighbourCode(i, direction, false);
+        int neighbourCode = lh.getNeighbourCode(i, direction, false, BETA);
         if (neighbourCode == 1 || neighbourCode == 7) {
           if (rotated == !neighbour.getBdaUc().isRotated()){
             origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
@@ -233,30 +233,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     }
     return canRotate;
   }
-
-  private int getNeighbourCode(int pos, int direction, boolean rotated) {
-    int code = 3 * direction;
-    if (rotated) { // to be checked
-      direction = (direction + 1) % 4;
-    }
-    if (direction % 2 == 0) {
-      if (pos == 4) {
-        code += 1;
-      }
-      if (pos > 4) {
-        code += 2;
-      }
-    } else {
-      if (pos == 1) {
-        code += 1;
-      }
-      if (pos > 1) {
-        code += 2;
-      }
-
-    }
-    return code;
-  } 
 
   /**
    * Includes all -2, +2 in main molecule axis and -1,+1 in the other axis of the current site in a

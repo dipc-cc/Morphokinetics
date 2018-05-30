@@ -437,6 +437,35 @@ class BdaLatticeHelper<T> {
     }
     return modifiedSites;
   }
- 
-  
+
+  int getNeighbourCode(int pos, int direction, boolean rotated, int type) {
+    int upDown = -1;
+    switch (type) {
+      case ALPHA:
+        upDown = 4;
+      case BETA:
+        upDown = 6;
+    }
+    int code = 3 * direction;
+    if (rotated) { // to be checked
+      direction = (direction + 1) % 4;
+    }
+    if (direction % 2 == 0) {
+      if (pos == upDown) {
+        code += 1;
+      }
+      if (pos > upDown) {
+        code += 2;
+      }
+    } else {
+      if (pos == 1) {
+        code += 1;
+      }
+      if (pos > 1) {
+        code += 2;
+      }
+
+    }
+    return code;
+  }
 }
