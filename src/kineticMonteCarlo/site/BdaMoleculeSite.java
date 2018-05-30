@@ -28,12 +28,20 @@ import kineticMonteCarlo.process.BdaProcess;
  */
 public class BdaMoleculeSite extends AbstractGrowthSite {
   
+  public static final int ALPHA = 1; // 2⁰
+  public static final int BETA = 2; // 2¹
+  public static final int GAMMA = 4; // 2²
+  public static final int DELTA = 8; // 2³
+  
+  public static final int BETA_2 = 2;
+  
   private final BdaAtomSite[] atoms;
   private final BdaProcess[] processes;
   /** Alpha, Beta (1 or 2), Gamma or Delta. */
   private byte type;
   private boolean rotated;
   private final BdaMoleculeSite[] neighbours;
+  
   private final double[][] alphaXyz = {{3.7500, 0.0000},
   {3.0000, 1.2990},
   {1.5000, 1.2991},
@@ -55,24 +63,24 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   {0.0000, 0.0000}};
 
   private final double[][] beta1Xyz = alphaXyz;
-  private final double[][] beta2Xyz = {{3.665, 0.7937},
-  {2.657, 1.9045},
-  {1.191, 1.5871},
-  {0.733, 0.1587},
-  {1.741, -0.9522},
-  {3.2069, -0.6346},
-  {-3.6651, -0.7938},
-  {-2.6571, -1.9046},
-  {-1.1911, -1.5872},
-  {-0.733, -0.1588},
-  {-1.741, 0.952},
-  {-3.207, 0.6345},
-  {-5.1311, -1.1113},
-  {5.131, 1.1112},
-  {-5.5891, -2.5397},
-  {-6.1391, -0.0004},
-  {5.589, 2.5396},
-  {6.139, 0.0003},
+  private final double[][] beta2Xyz = {{3.665, -0.7937},
+  {2.657, -1.9045},
+  {1.191, -1.5871},
+  {0.733, -0.1587},
+  {1.741, +0.9522},
+  {3.2069, +0.6346},
+  {-3.6651, +0.7938},
+  {-2.6571, +1.9046},
+  {-1.1911, +1.5872},
+  {-0.733, +0.1588},
+  {-1.741, -0.952},
+  {-3.207, -0.6345},
+  {-5.1311, +1.1113},
+  {5.131, -1.1112},
+  {-5.5891, +2.5397},
+  {-6.1391, +0.0004},
+  {5.589, -2.5396},
+  {6.139, -0.0003},
   {0, 0}};
   
   public BdaMoleculeSite(int id, boolean rotated) { // int type (alpha, beta...)
@@ -87,6 +95,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     }
     setProcceses(processes);
     setNumberOfNeighbours(4);
+    type = BETA;
   }
   
   public boolean isRotated() {
@@ -100,11 +109,23 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   
   private void rotateAtoms() {
     for (int pos = 0; pos < atoms.length; pos++) {
-      Point3D cartPos;
-      if (rotated) {
-        cartPos = new Point3D(alphaXyz[pos][1], alphaXyz[pos][0], 0);
-      } else {
-        cartPos = new Point3D(alphaXyz[pos][0], alphaXyz[pos][1], 0);
+      Point3D cartPos = null;
+      switch (type) {
+        case ALPHA:
+          if (rotated) {
+            cartPos = new Point3D(alphaXyz[pos][1], alphaXyz[pos][0], 0);
+          } else {
+            cartPos = new Point3D(alphaXyz[pos][0], alphaXyz[pos][1], 0);
+          }
+          break;
+        case BETA:
+          if (rotated) {
+            cartPos = new Point3D(beta2Xyz[pos][0], beta2Xyz[pos][1], 0);
+          } else {
+            cartPos = new Point3D(beta1Xyz[pos][0], beta1Xyz[pos][1], 0);
+          }
+          break;
+
       }
 
       atoms[pos] = new BdaAtomSite(pos, pos, cartPos);
@@ -132,6 +153,11 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     return atoms[pos];
   }
 
+  @Override
+  public byte getType() {
+    return (byte) type;
+  }
+  
   @Override
   public byte getTypeWithoutNeighbour(int posNeighbour) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

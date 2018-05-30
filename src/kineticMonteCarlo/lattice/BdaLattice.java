@@ -30,7 +30,9 @@ import java.util.Iterator;
 import java.util.Set;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
-import static kineticMonteCarlo.process.BdaProcess.ROTATION;
+import kineticMonteCarlo.site.BdaMoleculeSite;
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
+import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 
 /**
  *
@@ -91,6 +93,18 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @return 
    */
   public boolean canDiffuse(BdaAgSurfaceSite origin, int direction) {
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
+    switch (bdaSite.getType()) {
+      case ALPHA:
+        return canDiffuseAlpha(origin, direction);
+      case BETA:
+        return canDiffuseBeta(origin, direction);
+    }
+    return false;
+  }
+  
+  private boolean canDiffuseAlpha(BdaAgSurfaceSite origin, int direction) {
     boolean canDiffuse = true;
     boolean rotated = origin.getBdaUc().isRotated();
     AbstractGrowthSite startingSite = lh.getStartingNeighbour(origin, direction, rotated);
@@ -109,8 +123,52 @@ public class BdaLattice extends AbstractGrowthLattice {
       }
       i++;
     }
+    BdaMoleculeUc mUc = origin.getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
+    byte type = bdaSite.getType();
     startingSite = lh.getStartingAvailable(origin, direction, rotated);
-    modifiedSites = lh.getAvailableSites(startingSite, direction, rotated);
+    modifiedSites = lh.getAvailableSites(startingSite, direction, rotated, type);
+    iter = modifiedSites.iterator();
+     while (iter.hasNext()) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
+      if (!getAgUc(neighbour).isAvailable(DIFFUSION)){
+        canDiffuse = false;
+      }
+    }
+    return canDiffuse;
+  }
+  
+  private boolean canDiffuseBeta(BdaAgSurfaceSite origin, int direction) {
+    boolean canDiffuse = true;
+    boolean rotated = origin.getBdaUc().isRotated();
+    AbstractGrowthSite startingSite = lh.getStartingNeighbour(origin, direction, rotated);
+    Set<AbstractGrowthSite> modifiedSites = lh.getNeighbourSites(startingSite, direction, false);
+    Iterator iter = modifiedSites.iterator();
+    int i = 0;
+    while (iter.hasNext()) { // check and set neighbourhood
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
+      if (neighbour.isOccupied()) {
+        int neighbourCode = getNeighbourCode(i, direction, false);
+        if (neighbourCode == 1 || neighbourCode == 7) {
+          if (rotated == !neighbour.getBdaUc().isRotated()){
+            origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
+            neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
+          }
+        }
+        if (neighbourCode == 3 || neighbourCode == 9) {
+          if (rotated == neighbour.getBdaUc().isRotated()) {
+            origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
+            neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
+          }
+        }
+      }
+      i++;
+    }
+    BdaMoleculeUc mUc = origin.getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
+    byte type = bdaSite.getType();
+    startingSite = lh.getStartingAvailable(origin, direction, rotated);
+    modifiedSites = lh.getAvailableSites(startingSite, direction, rotated, type);
     iter = modifiedSites.iterator();
      while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();

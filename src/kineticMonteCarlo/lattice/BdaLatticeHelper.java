@@ -27,6 +27,9 @@ import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ROTATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
+import kineticMonteCarlo.site.BdaMoleculeSite;
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
+import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 import kineticMonteCarlo.site.ISite;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
@@ -38,6 +41,7 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 class BdaLatticeHelper<T> {
 
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
+  private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
 
   /**
    * Reserve or release the space for current BDA molecule.
@@ -46,10 +50,14 @@ class BdaLatticeHelper<T> {
    * @param makeAvailable change availability.
    */
   void changeAvailability(BdaSurfaceUc origin, boolean makeAvailable){
-    BdaMoleculeUc bdaUc = ((BdaAgSurfaceSite) origin.getSite(0)).getBdaUc();
+    BdaAgSurfaceSite agSite = ((BdaAgSurfaceSite) origin.getSite(0));
+    BdaMoleculeUc bdaUc = agSite.getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
     BdaSurfaceUc neighbourAgUc = origin;
-    for (int i = 0; i < alphaTravelling.length; i++) {
-      neighbourAgUc = neighbourAgUc.getNeighbour(getNeighbourIndex(i, bdaUc.isRotated()));
+    for (int i = 0; i < 11;
+     //       alphaTravelling.length;
+    i++) {
+      neighbourAgUc = neighbourAgUc.getNeighbour(getNeighbourIndex(bdaSite, i));
       if (makeAvailable) {
         ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
       }
@@ -57,7 +65,7 @@ class BdaLatticeHelper<T> {
         ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).setBelongingBdaUc(bdaUc);
       }
       neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
-      if (i < 10) {
+      if (i < 10) { // Beta 11
         neighbourAgUc.setAvailable(DIFFUSION, makeAvailable);
         neighbourAgUc.setAvailable(ROTATION, makeAvailable);
       }
@@ -91,36 +99,58 @@ class BdaLatticeHelper<T> {
     }
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) site;
     site = origin.getNeighbour(alphaTravelling[0]);
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
+
     modifiedSites.add(site);
     for (int i = 1; i < alphaTravelling.length; i++) {
-      site = site.getNeighbour(getNeighbourIndex(origin, i));
+      site = site.getNeighbour(getNeighbourIndex(bdaSite, i));
       modifiedSites.add(site);
     }
     return modifiedSites;
   }
   
-  private int getNeighbourIndex(BdaAgSurfaceSite agSite, int i) {
-    return getNeighbourIndex(i, false);
-  }//*/
-    
-  private int getNeighbourIndex(int i, boolean rotated) {
-    if (rotated) {
-      return (alphaTravelling[i] + 3) % 4;
-    } else {
-      return alphaTravelling[i];
+  private int getNeighbourIndex(BdaMoleculeSite bdaSite, int i) {
+    switch (bdaSite.getType()) {
+      case ALPHA:
+        if (bdaSite.isRotated()) {
+          return (alphaTravelling[i] + 3) % 4;
+        } else {
+          return alphaTravelling[i];
+        }
+      case BETA:
+        if (bdaSite.isRotated()) {
+          return beta2Travelling[i];
+        } else {
+          return alphaTravelling[i];
+        }
     }
+
+    return -1; // should not come to here
+  }
+  
+  AbstractGrowthSite getStartingAvailable(AbstractGrowthSite site, int direction, boolean rotated){
+    BdaMoleculeUc mUc = ((BdaAgSurfaceSite) site).getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
+    switch (bdaSite.getType()) {
+      case ALPHA:
+        return getStartingAvailableAlpha(site, direction, rotated);
+      case BETA:
+        return getStartingAvailableBeta(site, direction, rotated);
+    }
+    return null;
   }
   
   /**
    * Check surrounding sites to check if they're empty. Could happen that two
-   * molecules are rotated (which are not neighbour), but touch it other.
+   * molecules are rotated (which are not neighbours), but touch it other.
    *
    * @param site
    * @param direction
    * @param rotated
    * @return 
    */
-  AbstractGrowthSite getStartingAvailable(AbstractGrowthSite site, int direction, boolean rotated){
+  private AbstractGrowthSite getStartingAvailableAlpha(AbstractGrowthSite site, int direction, boolean rotated){
     int[] travel = new int[4];
     if (rotated) {
       direction = (direction + 1) % 4;
@@ -144,6 +174,32 @@ class BdaLatticeHelper<T> {
     return getStartingSite(site, travel, rotated);
   }
   
+  private AbstractGrowthSite getStartingAvailableBeta(AbstractGrowthSite site, int direction, boolean rotated){
+    if (!rotated) {
+      return getStartingAvailableAlpha(site, direction, rotated);
+    } else {
+      int[] travel = new int[4];
+      rotated = false;
+      switch (direction) {
+        case 0:
+          travel = new int[]{3, 3, 0};
+          break;
+        case 1:
+          travel = new int[]{1, 1, 1, 0};
+          break;
+        case 2:
+          travel = new int[]{1, 1, 2};
+          break;
+        case 3:
+          travel = new int[]{3, 3, 3, 2};
+          break;
+        default:
+          throw new IllegalArgumentException("BDA molecule can only diffuse in one of the 4 directions");
+      }
+      return getStartingSite(site, travel, rotated);
+    }
+  }
+  
   /**
    * Check the possible neighbour in a certain direction
    * 
@@ -153,6 +209,19 @@ class BdaLatticeHelper<T> {
    * @return 
    */
   AbstractGrowthSite getStartingNeighbour(AbstractGrowthSite site, int direction, boolean rotated) {
+    BdaMoleculeUc mUc = ((BdaAgSurfaceSite) site).getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
+    switch (bdaSite.getType()) {
+      case ALPHA:
+        return getStartingNeighbourAlpha(site, direction, rotated);
+      case BETA:
+        return getStartingNeighbourBeta(site, direction, rotated);
+    }
+    
+    return null;
+  }
+  
+  private AbstractGrowthSite getStartingNeighbourAlpha(AbstractGrowthSite site, int direction, boolean rotated) {
     int[] travel = new int[6];
     if (rotated) {
       direction = (direction + 1) % 4;
@@ -176,6 +245,52 @@ class BdaLatticeHelper<T> {
     return getStartingSite(site, travel, rotated);
   }
   
+  private AbstractGrowthSite getStartingNeighbourBeta(AbstractGrowthSite site, int direction, boolean rotated) {
+    int[] travel = new int[6];
+    if (rotated) {
+      //direction = (direction + 1) % 4;
+      rotated = false;
+      switch (direction) {
+        case 0:
+          travel = new int[]{3, 3, 3, 3, 0, 0, 0};
+          //travel = new int[]{3, 3, 3, 3, 0, 0};
+          break;
+        case 1:
+          //travel = new int[]{1, 1, 1, 1, 1, 0, 0};
+          travel = new int[]{1, 1, 1, 1, 1, 0};
+          break;
+        case 2:
+          travel = new int[]{1, 1, 1, 1, 2, 2};
+          break;
+        case 3:
+          //travel = new int[]{3, 3, 3, 3, 3, 2, 2};
+          travel = new int[]{3, 3, 3, 3, 3, 2};
+          break;
+        default:
+          throw new IllegalArgumentException("BDA molecule can only diffuse in one of the 4 directions");
+      }
+    } else {
+      switch (direction) {
+        case 0:
+          travel = new int[]{3, 3, 3, 3, 0, 0};
+          break;
+        case 1:
+          travel = new int[]{1, 1, 1, 1, 1, 0};
+          break;
+        case 2:
+          travel = new int[]{1, 1, 1, 1, 2, 2, 2};
+          break;
+        case 3:
+          travel = new int[]{3, 3, 3, 3, 3, 2};
+          break;
+        default:
+          throw new IllegalArgumentException("BDA molecule can only diffuse in one of the 4 directions");
+      }
+    }
+    return getStartingSite(site, travel, rotated);
+  }
+  
+  
   private AbstractGrowthSite getStartingSite(AbstractGrowthSite site, int[] travel, boolean rotated) {
     if (rotated) {
       for (int i = 0; i < travel.length; i++) {
@@ -188,7 +303,18 @@ class BdaLatticeHelper<T> {
     return site;
   }
   
-  Set<AbstractGrowthSite> getAvailableSites(AbstractGrowthSite site, int direction, boolean rotated) {
+  Set<AbstractGrowthSite> getAvailableSites(AbstractGrowthSite site, int direction, boolean rotated, byte type) {
+    switch (type) {
+      case ALPHA:
+        return getAvailableSitesAlpha(site, direction, rotated);
+      case BETA:
+        return getAvailableSitesBeta(site, direction, rotated);
+    }
+    return null;
+  }
+  
+  
+  private Set<AbstractGrowthSite> getAvailableSitesAlpha(AbstractGrowthSite site, int direction, boolean rotated) {
     int neighbourDirection = (direction + 1) % 4;
     int numberOfSites;
     if (rotated) {
@@ -205,6 +331,36 @@ class BdaLatticeHelper<T> {
       }
     }
     return getSites(site, numberOfSites, neighbourDirection);    
+  }
+
+  private Set<AbstractGrowthSite> getAvailableSitesBeta(AbstractGrowthSite site, int direction, boolean rotated) {
+    int neighbourDirection = (direction + 1) % 4;
+    if (rotated) {
+      Set<AbstractGrowthSite> modifiedSites = new LinkedHashSet<>();
+      modifiedSites.add(site);
+      switch (direction) {
+        case 0:
+        case 2:
+          for (int i = 0; i < 4; i++) {
+            site = site.getNeighbour(neighbourDirection);
+            modifiedSites.add(site);
+            if (i == 0) { // jump the kink
+              site = site.getNeighbour(direction);
+            }
+          }
+          break;
+        case 1:
+        case 3:
+          site = site.getNeighbour(neighbourDirection);
+          modifiedSites.add(site);
+          break;
+        default:
+          throw new IllegalArgumentException("BDA molecule can only diffuse in one of the 4 directions");
+      }
+      return modifiedSites;
+    } else {
+      return getAvailableSitesAlpha(site, direction, rotated);
+    }
   }
 
   

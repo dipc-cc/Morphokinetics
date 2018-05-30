@@ -21,6 +21,8 @@ package kineticMonteCarlo.unitCell;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.BdaMoleculeSite;
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
+import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 
 /**
  * BDA molecules on top of Ag (BdaSurfaceUc). There are 12 possible neighbours. It can have 8 neighbours at the
@@ -31,8 +33,6 @@ import kineticMonteCarlo.site.BdaMoleculeSite;
  */
 public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   
-  private static final int ALPHA = 0;
-  private static final int BETA = 1;
   
   /** Central position is in this AgUc. */
   //private BdaSurfaceUc agUc;
@@ -42,8 +42,6 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   private double energy;
   private final int numberOfNeighbours;
   
-  private int type;
-  
   public BdaMoleculeUc() {
     super(-1, -1, null);
     bdaMolecule = new BdaMoleculeSite(-1, false);
@@ -51,16 +49,15 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     numberOfNeighbours = 12;
     neighbours = new BdaMoleculeUc[numberOfNeighbours];
     energy = 0;
-    type = BETA;
   }
    
   public void setNeighbour(BdaMoleculeUc uc, int pos) {
     neighbours[pos] = uc;
     if (uc != null) {
-      if (uc.isRotated()) {
-        pos = (pos + 3) % 12;
-      }
-      if (type == ALPHA) {
+      if (bdaMolecule.getType() == ALPHA) {
+        if (uc.isRotated()) {
+          pos = (pos + 3) % 12;
+        }
         switch (pos) {
           case 0:
           case 2:
@@ -84,17 +81,17 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
             break;
         }
       }
-      if (type == BETA) {
+      if (bdaMolecule.getType() == BETA) {
         switch (pos) {
           case 0:
           case 2:
           case 6:
           case 8:
-            energy -= 0.05;
+            energy -= 0.00;
             break;
           case 1:
           case 7:
-            energy += 0.2;
+            energy -= 0.2;
             break;
           case 3:
           case 9:
@@ -102,11 +99,11 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
             break;
           case 5:
           case 11:
-            energy += 0.1;
+            energy += 0.0;
             break;
           case 4:
           case 10:
-            energy -= 0.1;
+            energy -= 0.0;
             break;
         }
       }
@@ -158,14 +155,26 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   }
   
   @Override
-  public Point3D getPos(){
-    Point3D pos;
-    // bridge
-    if (bdaMolecule.isRotated()) {
-      pos = new Point3D(0.5, 0, 0);
-    } else {
-      pos = new Point3D(0, 0.5, 0);
+  public Point3D getPos() {
+    Point3D pos = null;
+    switch (bdaMolecule.getType()) {
+      case ALPHA:
+        // bridge
+        if (bdaMolecule.isRotated()) {
+          pos = new Point3D(0.5, 0, 0);
+        } else {
+          pos = new Point3D(0, 0.5, 0);
+        }
+        break;
+      case BETA:
+        if (bdaMolecule.isRotated()) { // top
+          pos = new Point3D(0, 0, 0);
+        } else { // bridge
+          pos = new Point3D(0, 0.5, 0);
+        }
+        break;
     }
+
     return pos;
   }
   
