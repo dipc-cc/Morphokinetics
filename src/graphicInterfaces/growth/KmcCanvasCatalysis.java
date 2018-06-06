@@ -32,6 +32,7 @@ import kineticMonteCarlo.unitCell.CatalysisUc;
  */
 public class KmcCanvasCatalysis extends KmcCanvas {
   
+  private final Color[] colours = {BLUE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   public KmcCanvasCatalysis(AbstractSurfaceLattice lattice) {
     super(lattice);
   }
@@ -53,23 +54,6 @@ public class KmcCanvasCatalysis extends KmcCanvas {
         int X = (int) Math.round((atom.getPos().getX() + uc.getPos().getX()) * getScale()) + getBaseX();
 
         g.fillRect(X, Y, getScale(), getScale());
-        switch (atom.getType()) { // the cases are for graphene
-          case CatalysisAmmoniaSite.O:
-            g.setColor(RED);
-            break;
-          case CatalysisAmmoniaSite.NH3:
-            g.setColor(Color.BLUE);
-            break;
-          case CatalysisAmmoniaSite.NH2:
-            g.setColor(Color.GREEN);
-            break;
-          case CatalysisAmmoniaSite.NH:
-            g.setColor(Color.PINK);
-            break;
-          case CatalysisAmmoniaSite.OH:
-            g.setColor(BLACK);
-            break;
-        }
         g.setColor(colours[atom.getType()]);
 
         if (getScale() < 10) {
