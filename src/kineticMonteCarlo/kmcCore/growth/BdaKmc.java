@@ -74,6 +74,9 @@ public class BdaKmc extends AbstractGrowthKmc {
    */
   private final boolean aeOutput;
   private final long maxSteps;
+  private final boolean outputData;
+  private int outputEvery;
+  private int intermediateWrites;
   private double adsorptionRatePerSite;
   private double[] desorptionRatePerMolecule;
   private double[] diffusionRateMultiAtom;
@@ -100,7 +103,11 @@ public class BdaKmc extends AbstractGrowthKmc {
     
     totalRate = new double[6]; // adsorption, diffusion, island diffusion, multi-atom
 
+    outputData = parser.outputData();
     maxSteps = parser.getNumberOfSteps();
+    if (outputData) {
+      outputEvery = parser.getOutputEvery();
+    }
     maxCoverage = (float) parser.getCoverage() / 100;
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
@@ -119,6 +126,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     int coverageThreshold = 1;
     int limit = 100000;
     int returnValue = 0;
+    intermediateWrites = 0;
 
     while (true) {
       getList().getDeltaTime(true);
@@ -189,6 +197,13 @@ public class BdaKmc extends AbstractGrowthKmc {
     }
             
     simulatedSteps++;
+    if (outputData && simulatedSteps % outputEvery == 0) {
+      intermediateWrites++;
+      int[] sizes = new int[2];
+      sizes[0] = getLattice().getHexaSizeI();
+      sizes[1] = getLattice().getHexaSizeJ();
+      restart.writeSvg(simulationNumber + 10000 + intermediateWrites, lattice);
+    }
     return simulatedSteps == maxSteps;
   }
   
