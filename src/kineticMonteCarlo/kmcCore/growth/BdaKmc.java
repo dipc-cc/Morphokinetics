@@ -192,6 +192,41 @@ public class BdaKmc extends AbstractGrowthKmc {
     return simulatedSteps == maxSteps;
   }
   
+  /**
+   * A simple version of the surface. Only central points are written.
+   * 
+   * @param binX
+   * @param binY
+   * @return 
+   */
+  @Override
+  public float[][] getSampledSurface(int binX, int binY) {
+    float[][] surface = new float[binX][binY];
+
+    for (int i = 0; i < binX; i++) {
+      for (int j = 0; j < binY; j++) {
+        surface[i][j] = -1;
+      }
+    }
+    int x;
+    int y;
+    for (int i = 0; i < lattice.size(); i++) {
+      AbstractGrowthUc uc = lattice.getUc(i);
+      double posUcX = uc.getPos().getX();
+      double posUcY = uc.getPos().getY();
+      for (int j = 0; j < uc.size(); j++) {
+        if (uc.getSite(j).isOccupied()) {
+          double posAtomX = uc.getSite(j).getPos().getX();
+          double posAtomY = uc.getSite(j).getPos().getY();
+          x = (int) (posUcX + posAtomX);
+          y = (int) (posUcY + posAtomY);
+
+          surface[x][y] = 0;
+        }
+      }
+    }
+    return surface;
+  }
   
   private void depositNewMolecule() {
     depositNewMolecule(-1);
