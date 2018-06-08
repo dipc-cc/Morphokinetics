@@ -21,7 +21,6 @@ package kineticMonteCarlo.lattice;
 import java.awt.geom.Point2D;
 import static java.lang.Math.floorDiv;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import kineticMonteCarlo.site.AbstractSite;
@@ -36,9 +35,8 @@ import utils.LinearRegression;
  */
 abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
-  private final List<float[]> last1000events;
-  private final List<Double> last1000eventsTime;
-  private final int MAX;
+  final List<float[]> last1000events;
+  final List<Double> last1000eventsTime;
   ArrayList<LinearRegression> regressions;
   /**
    * Unit cell array, where all the atoms are located.
@@ -47,7 +45,6 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
   public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ);
-    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();
     ucArray = new CatalysisUc[hexaSizeI][hexaSizeJ];
@@ -84,62 +81,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    * @param time
    * @return
    */
-  public boolean isStationary(double time) {
-    float[] covTmp = getCoverages();
-    double[] covMin = new double[covTmp.length];
-    double[] covMax = new double[covTmp.length];
-    for (int i = 0; i < covMin.length; i++) {
-      covMin[i] = 2.f; // max coverage will be always below 1      
-    }
-    last1000events.add(covTmp);
-    last1000eventsTime.add(time);
-    if (last1000events.size() > MAX) {
-      last1000events.remove(0);
-      last1000eventsTime.remove(0);
-    }
-
-    double[][] y = new double[covTmp.length][last1000events.size()];
-    for (int i = 0; i < last1000events.size(); i++) {
-      for (int j = 0; j < covTmp.length; j++) {
-        y[j][i] = last1000events.get(i)[j];
-        if (y[j][i] > covMax[j]) {
-          covMax[j] = y[j][i];
-        }
-        if (y[j][i] < covMin[j]) {
-          covMin[j] = y[j][i];
-        }
-      }
-    }
-
-    double[] x = new double[last1000events.size()];
-    Iterator iter = last1000eventsTime.iterator();
-    int i = 0;
-    while (iter.hasNext() && i < last1000events.size()) {
-      x[i++] = (double) iter.next();
-    }
-    regressions = new ArrayList();
-    for (int j = 0; j < covTmp.length; j++) {
-      regressions.add(new LinearRegression(x, y[j]));
-    }
-
-    boolean stationary = false;
-    if (last1000events.size() == MAX) {
-      stationary = true;
-      for (int j = 0; j < covTmp.length; j++) {
-        if (regressions.get(j).R2() > 0.1) {
-          //if (covTmp[j] > 0.05) { // species below 5% ignored
-            stationary = false;
-          //}
-        }
-      }
-      /*for (int j = 0; j < covTmp.length; j++) {
-        if (covMax[j] - covMin[j] > 0.05) {
-          stationary = false;
-        }
-      } */       
-    }
-    return stationary;
-  }
+  abstract public boolean isStationary(double time);
 
   public double[] getR2() {
     float[] covTmp = getCoverages();

@@ -95,7 +95,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     }
     setProcceses(processes);
     setNumberOfNeighbours(4);
-    type = BETA;
+    type = ALPHA;
   }
   
   public boolean isRotated() {

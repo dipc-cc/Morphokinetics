@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
+import java.util.Iterator;
 import kineticMonteCarlo.site.CatalysisAmmoniaSite;
 import kineticMonteCarlo.site.CatalysisSite;
 
@@ -32,11 +33,13 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
    */
   private final int[] coverage;
   private final float hexaArea;
+  private final int MAX;
   
   public CatalysisAmmoniaLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
     super(hexaSizeI, hexaSizeJ);
     coverage = new int[11];
     hexaArea = (float) hexaSizeI * hexaSizeJ;
+    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 10;
   }
 
   @Override
@@ -111,4 +114,58 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
       coverage[i] = 0;
     }
   }
+  
+  /**
+   * Identifies stationary situation, when sufficient number of previous steps are saved and their
+   * R² is lower than 0.1 for all the species.
+   *
+   * @param time
+   * @return
+   */
+  @Override
+  public boolean isStationary(double time) {
+    float[] covTmp = getCoverages();
+    double[] covMin = new double[covTmp.length];
+    double[] covMax = new double[covTmp.length];
+    for (int i = 0; i < covMin.length; i++) {
+      covMin[i] = 2.f; // max coverage will be always below 1      
+    }
+    last1000events.add(covTmp);
+    last1000eventsTime.add(time);
+    if (last1000events.size() > MAX) {
+      last1000events.remove(0);
+      last1000eventsTime.remove(0);
+    }
+
+    double[][] y = new double[covTmp.length][last1000events.size()];
+    for (int i = 0; i < last1000events.size(); i++) {
+      for (int j = 0; j < covTmp.length; j++) {
+        y[j][i] = last1000events.get(i)[j];
+        if (y[j][i] > covMax[j]) {
+          covMax[j] = y[j][i];
+        }
+        if (y[j][i] < covMin[j]) {
+          covMin[j] = y[j][i];
+        }
+      }
+    }
+
+    double[] x = new double[last1000events.size()];
+    Iterator iter = last1000eventsTime.iterator();
+    int i = 0;
+    while (iter.hasNext() && i < last1000events.size()) {
+      x[i++] = (double) iter.next();
+    }
+    
+    boolean stationary = false;
+    if (last1000events.size() == MAX) {
+      stationary = true;
+      for (int j = 0; j < covTmp.length; j++) {
+        if (covMax[j] - covMin[j] > 0.05) {
+          stationary = false;
+        }
+      }        
+    }
+    return stationary;
+  }  
 }

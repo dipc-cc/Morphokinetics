@@ -18,11 +18,14 @@
  */
 package kineticMonteCarlo.lattice;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import kineticMonteCarlo.site.CatalysisSite;
 import static kineticMonteCarlo.site.CatalysisSite.BR;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
 import static kineticMonteCarlo.site.CatalysisSite.CUS;
 import static kineticMonteCarlo.site.CatalysisSite.O;
+import utils.LinearRegression;
 
 /**
  *
@@ -35,11 +38,13 @@ public class CatalysisCoLattice extends CatalysisLattice {
    */
   private final int[][] coverage;
   private final float hexaArea;
+  private final int MAX;
   
   public CatalysisCoLattice(int hexaSizeI, int hexaSizeJ, String ratesLibrary) {
     super(hexaSizeI, hexaSizeJ);
     coverage = new int[2][2];
     hexaArea = (float) hexaSizeI * hexaSizeJ;
+    MAX = (int) Math.sqrt(hexaSizeI * hexaSizeJ) * 20;
   }
   
   @Override
@@ -90,6 +95,57 @@ public class CatalysisCoLattice extends CatalysisLattice {
     super.reset();
   }   
 
+  /**
+   * Identifies stationary situation, when sufficient number of previous steps are saved and their
+   * R² is lower than 0.1 for all the species.
+   *
+   * @param time
+   * @return
+   */
+  @Override
+  public boolean isStationary(double time) {
+    float[] covTmp = getCoverages();
+    last1000events.add(covTmp);
+    last1000eventsTime.add(time);
+    if (last1000events.size() > MAX) {
+      last1000events.remove(0);
+      last1000eventsTime.remove(0);
+    }
+
+    double[][] y = new double[covTmp.length][last1000events.size()];
+    for (int i = 0; i < last1000events.size(); i++) {
+      for (int j = 0; j < covTmp.length; j++) {
+        y[j][i] = last1000events.get(i)[j];
+      }
+    }
+
+    double[] x = new double[last1000events.size()];
+    Iterator iter = last1000eventsTime.iterator();
+    int i = 0;
+    while (iter.hasNext() && i < last1000events.size()) {
+      x[i++] = (double) iter.next();
+    }
+    regressions = new ArrayList();
+    for (int j = 0; j < covTmp.length; j++) {
+      regressions.add(new LinearRegression(x, y[j]));
+    }
+
+    boolean stationary = false;
+    if (last1000events.size() == MAX) {
+      stationary = true;
+      for (int j = 0; j < covTmp.length; j++) {
+        if (regressions.get(j).R2() > 0.1) {
+          stationary = false;
+        }
+      }
+      if (stationary)
+        for (int j = 0; j < covTmp.length; j++)
+          System.out.println(regressions.get(j).R2()+" ");
+        
+    }
+    return stationary;
+  }
+  
   /**
    * Check whether two CO^CUS atoms are together. Only for Farkas.
    * 

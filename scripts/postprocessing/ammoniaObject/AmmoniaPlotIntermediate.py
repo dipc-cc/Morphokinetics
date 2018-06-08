@@ -5,6 +5,7 @@ import pdb
 
 class AmmoniaPlotIntermediate:
     
+    ext = ".pdf"
     
     def __init__(self, x, prod, sp, total, one):
         self.ap = ap.AmmoniaPlot()
@@ -19,17 +20,19 @@ class AmmoniaPlotIntermediate:
         self.axarr = list()
         self.one = one
         if total and one:
-            self.out = "T1.svg"
-            self.ymin = 1e-10
+            self.out = "T1"+self.ext
+            self.ymin = 1e-8
             self.fig, ax = plt.subplots(1, sharex=True, figsize=(5,4))
+            self.fig.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.10)
             self.axarr.append(0); self.axarr.append(ax)
         else:
             self.minM = 1e4
-            self.out = ".svg"
+            self.out = self.ext
             if total:
-                self.out = "T.svg"
+                self.out = "T"+self.ext
             self.ymin = 1e-3
             self.fig, ax = plt.subplots(2, sharex=True, figsize=(5,4))
+            self.fig.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.10)
             for i in range(0,len(ax)):
                 self.axarr.append(ax[i])
 
@@ -59,7 +62,8 @@ class AmmoniaPlotIntermediate:
             self.axarr[1].plot(self.x,omegaSumTof,ls="-", label=r"TOF/R", color="C2")
             self.axarr[1].plot(self.x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
             self.axarr[1].plot(self.x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
-            self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
+            self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)
+            self.ap.removeXLabel(self.axarr[1])
         else:
             self.ap.smallerFont(self.axarr[0], 8)
         self.ap.smallerFont(self.axarr[1], 8)
@@ -77,8 +81,8 @@ class AmmoniaPlotIntermediate:
             self.axarr[0].set_yscale("log")
             self.axarr[0].set_ylim(self.minM,10)
             self.axarr[0].set_ylabel(r"$M^{"+rl+r"}_\alpha$")
+            self.axarr[1].set_xlabel(r"$1/k_BT$")
         self.axarr[1].set_ylim(self.ymin,2)
         self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"}_\alpha$")
-        self.axarr[1].set_xlabel(r"$1/k_BT$")
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)

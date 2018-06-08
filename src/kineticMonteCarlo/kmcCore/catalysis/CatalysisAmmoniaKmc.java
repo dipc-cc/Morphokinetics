@@ -547,7 +547,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     byte type = atom.getType();
     double rate = desorptionRatePerSite[type];
     if (type == NH3 || type == NO) {
-      rate *= rates.desorptionRepulsionRate(getCoverage(type), type); // coverage dependent interaction
+      //rate *= rates.desorptionRepulsionRate(getCoverage(type), type); // coverage dependent interaction
       atom.setRate(DESORPTION, rate);
     } else { // O or N
       if (type == O || type == N) {

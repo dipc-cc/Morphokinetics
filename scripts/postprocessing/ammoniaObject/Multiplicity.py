@@ -49,7 +49,9 @@ class Multiplicity:
         Mavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))
         for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
             Mavg[:,i] = (possiblesFromList[:p.mMsr,a])/time/p.sizI/p.sizJ
-
+            if a == 2:
+                Mavg[:,i] = 2*Mavg[:,i]
+        
         totalRate = np.array(ratios.dot(np.transpose(Mavg)))#/time/p.sizI/p.sizJ
         #totalRate = (totalRate+occupied)/time/p.sizI/p.sizJ
         # define omegas 
@@ -133,6 +135,8 @@ class Multiplicity:
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
                 if i == 9 or i == 10:
                     omegaSumTof += y # NO eta N2
+                #if i == 2:
+                #    y *= 2 # adsorption of O has to be double. Rate is from atom and we need to compute molecule.
                 self.api.plotOmegas(y, a, labelAlfa)
 
                 y = np.sum(tempMavg[co2,:,i:i+1], axis=1)

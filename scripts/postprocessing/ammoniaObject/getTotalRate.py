@@ -108,7 +108,7 @@ for f in iter:
 
 p = inf.getInputParameters(glob.glob("*/output*")[0])
 
-fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
+fig, ax = plt.subplots(1, 1, sharey=True, figsize=(5,4))
 fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
                     wspace=0.35)
 plot(x,y,p,ax,"total rate","x")

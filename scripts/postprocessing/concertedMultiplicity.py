@@ -77,7 +77,7 @@ if p.nCo2 == -1: # dirty way to use same script for growth and catalysis
     files.sort()
     matrix = np.loadtxt(fname=files[0])
     p.mCov = len(matrix)
-    p.mCov = 10
+    #p.mCov = 100
     #p.nCo2 = maxCo2 * 10
 
 labelAlfa = []
@@ -90,15 +90,14 @@ for i in range(0,4):
     labelAlfa.append(r"$M_{"+str(i)+"}$")
 
 energies = e.concertedEnergies(p)
-print(energies)
 workingPath = os.getcwd()
 tempMavg, omega, totalRate, totalRateEvents, rates, ratios = mi.getMavgAndOmega(p,temperatures,workingPath)
 os.chdir(workingPath)
 activationEnergy, multiplicityEa = mi.getMultiplicityEa(p,temperatures,labelAlfa,sp,tempMavg,omega,totalRateEvents,ext)
 os.chdir(workingPath)
 
-for i in range(0,p.mMsr):
-    mp.plotTotalRates(1/kb/temperatures, totalRateEvents[i], totalRate[i], i)
+#for i in range(0,p.mMsr):
+#    mp.plotTotalRates(1/kb/temperatures, totalRateEvents[i], totalRate[i], i)
 
 print(np.shape(tempMavg))
 
@@ -138,17 +137,17 @@ lastOmegas = np.zeros(shape=(maxRanges,p.maxA-p.minA))
 epsilon = np.zeros(shape=(p.mCov,maxRanges,p.maxA-p.minA))
 if omegas:
     cov.append(p.mCov)
-    # cm = plt.get_cmap('tab20')
-    # for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
-    #     partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
-    #     lgs = []
-    #     for i,a in enumerate(range(p.minA,p.maxA)): #alfa
-    #         if any(omega[:,j,a] > 1e-2):
-    #             #print(j,a,omega[:,j,a])
-    #             lgs.append(axarr[maxRanges-1-j].fill_between(cov, partialSum, color=cm(a/(p.maxA-1)), label=labelAlfa[a]))
-    #             lastOmegas[maxRanges-1-j,i] = partialSum[-1]
-    #             partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
-    #             epsilon[:,j,i] = omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+    cm = plt.get_cmap('tab20')
+    for j in range(0,maxRanges): # different temperature ranges (low, medium, high)
+        partialSum = np.sum(omega[:,j,:]*(ratioEa[:,j,:]-multiplicityEa[:,j,:]), axis=1)
+        lgs = []
+        for i,a in enumerate(range(p.minA,p.maxA)): #alfa
+            if any(omega[:,j,a] > 1e-2):
+                #print(j,a,omega[:,j,a])
+                lgs.append(axarr[maxRanges-1-j].fill_between(cov, partialSum, color=cm(a/(p.maxA-1)), label=labelAlfa[a]))
+                lastOmegas[maxRanges-1-j,i] = partialSum[-1]
+                partialSum -= omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
+                epsilon[:,j,i] = omega[:,j,i]*(ratioEa[:,j,i]-multiplicityEa[:,j,i])
 
     # myLegends = []
     # myLabels = []#[r"$E_a$", r"$E^f + \sum_\alpha \;\epsilon_\alpha$"]
@@ -175,8 +174,8 @@ if omegas:
 
 figR, ax = plt.subplots(1, figsize=(5,3))
 figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.15)
-ax.plot(x, tgt, label=r"$E_{app}$", color="red")
-ax.plot(x, rct, "--", label=r"$\sum \epsilon_\alpha$")
+ax.plot(x, tgt, label="Target "+r"$E_{app}$", color="red")
+ax.plot(x, rct, "--", label="Recomputed "+r"$\sum \epsilon_\alpha$")
 cm = plt.get_cmap('tab20')
 markers=["o", "s","D","^","d","h","p"]
 for i,a in enumerate(range(p.minA,p.maxA)):
@@ -185,11 +184,11 @@ for i,a in enumerate(range(p.minA,p.maxA)):
         ax.fill_between(x, lastOmegas[:,i], label=labelAlfa[a], color=cm(a%20/(19)))
 # ax2 = ax.twinx()
 # ax2.plot(x, err, label="Relative error")
-#ax.set_ylim(0,0.1)
+ax.set_ylim(0,0.1)
 #ax.set_xlim(20,30)
 #labels = [item for item in ax.get_xticklabels()]
 #labels[1] = 'Testing'
-ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error", color="black")
+#ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error", color="black")
 ax.legend(loc="best", prop={'size':6})
 #ax.set_xticklabels(labels)
 ax.set_xlabel(r"$1/k_BT$")

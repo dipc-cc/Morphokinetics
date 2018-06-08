@@ -18,7 +18,7 @@ class Rds:
         self.one = np.ones(len(temperatures))
         self.zero = np.zeros(len(temperatures))
         self.minOmega = 1e-128
-        self.out = ".svg"
+        self.out = ".pdf"
         self.ratesI = 6
 
         self.figS, self.axarr = plt.subplots(2, sharex=True, figsize=(5,4))
@@ -26,12 +26,11 @@ class Rds:
         self.ap.smallerFont(self.axarr[0], 8)
         self.ap.smallerFont(self.axarr[1], 8)
 
-        self.figR, self.axR = plt.subplots(1, figsize=(5,4))
-        self.figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
+        self.figR, self.axR = plt.subplots(1, figsize=(5,2))
+        self.figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.10)
         
         self.figL, self.axL = plt.subplots(1, figsize=(5,3))
         self.figL.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
-        self.figL.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
 
 
     def computeRds(self, tempMavg, rates, ratios, minAlfa, maxAlfa, ratioEa, multiplicityEa):
@@ -51,6 +50,8 @@ class Rds:
             self.dominance[:,i] =  self.one-np.amin(m,axis=0)
       
         self.maxI = np.argmax(self.dominance,axis=1)
+        #pdb.set_trace()
+        self.maxI[0] = 10
         ratioEaTmp = np.zeros(len(self.temperatures))
         multiplicityEaTmp = np.zeros(len(self.temperatures))
         for i,t in enumerate(self.temperatures):
@@ -90,6 +91,8 @@ class Rds:
         self.axR.legend(loc="best", prop={'size':6})
         self.axR.set_ylabel(r"$M_\alpha k_\alpha$")
         self.axR.set_yscale("log")
+        labels = [item for item in self.axR.get_xticklabels()]
+        self.axR.set_xticklabels(labels)
         self.figR.savefig("rds"+self.out)
 
         
@@ -97,13 +100,18 @@ class Rds:
         self.axL.plot(1/self.kb/self.temperatures, activationEnergyT[-1,:], label=r"$E^{TOF}_{app}$", color="red")
         self.axL.plot(1/self.kb/self.temperatures, self.activationEnergyS[:], "--", label=r"$\sum \xi^{TOF}_\alpha$")
         self.axL.plot(1/self.kb/self.temperatures, abs(activationEnergyT[-1,:]-self.activationEnergyS[:]), label="Absolute error", color="black")
+        #pdb.set_trace()
         maxI = np.array(self.maxI)
         for i,a in enumerate(maxI):
             if i == 0:
                 continue
-            self.axL.fill_between(1/self.kb/self.temperatures[i-1:i+1],self.activationEnergyS[i-1:i+1],label=labelAlfa[a], color=self.cm(a%20/(19)))
+            if i == 1:
+                self.axL.fill_between(1/self.kb/self.temperatures[i-1:i+1],self.activationEnergyS[i-1:i+1],label=labelAlfa[a], color=self.cm(a%20/(19)))
+            else: #the same without label
+                self.axL.fill_between(1/self.kb/self.temperatures[i-1:i+1],self.activationEnergyS[i-1:i+1], color=self.cm(a%20/(19)))
         self.axL.legend(loc="best", prop={'size':6})
         self.axL.set_ylabel(r"Energy $(eV)$")
         self.axL.set_ylim(-0.1,2.2)
+        self.ap.setY2TemperatureLabels(self.axL)
         self.figL.savefig("Lambdas"+self.out)
         plt.close(self.figL)

@@ -11,7 +11,7 @@ import pdb
 class AmmoniaPlot:
 
     kb = 8.617332e-5
-    out = ".svg"
+    out = ".pdf"
 
     def plotTotalRate(self, ammonia):
         if not ammonia.total:
@@ -73,7 +73,7 @@ class AmmoniaPlot:
             rl = "R"
         else:
             rl = "TOF"
-        figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.12)
+        figR.subplots_adjust(top=0.85,left=0.15,right=0.95,bottom=0.05)
         ax.plot(x, ammonia.tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
         ax.plot(x, ammonia.rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$")
         cm = plt.get_cmap('tab20')
@@ -87,11 +87,31 @@ class AmmoniaPlot:
         labels = [item for item in ax.get_xticklabels()]
         ax.plot(x, abs(np.array(ammonia.tgt)-np.array(ammonia.rct)), label="Absolute error", color="black")
         ax.legend(loc="best", prop={'size':6})
-        ax.set_xlabel(r"$1/k_BT$")
+        self.setY2TemperatureLabels(ax)
+        #ax.set_xlabel(r"$1/k_BT$")
         ax.set_ylabel(r"Energy $(eV)$")
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
         plt.savefig("multiplicitiesResume"+ammonia.ext+self.out)#, bbox_inches='tight')
 
+    def setY2TemperatureLabels(self,ax):
+        self.removeXLabel(ax)
+        
+        ax2 = ax.twiny()
+        ax2.set_xlim(1/self.kb/ax.get_xlim()[0],1/self.kb/ax.get_xlim()[1])
+        ax2.set_xlim(ax.get_xlim()[0],ax.get_xlim()[1])
+        #ax2.set_xscale("log")
+        ticks_x = plticker.FuncFormatter(lambda x, pos: '${0:d}$'.format(int(1/self.kb/x)))
+        ax2.xaxis.set_major_formatter(ticks_x)
+        majors = np.array(list(np.arange(200,400,20))+list(np.arange(400,760,50)))
+        majors = 1/self.kb/majors
+        ax2.xaxis.set_major_locator(plticker.FixedLocator(majors))
+        ax2.set_xlabel("temperature (T)")
+
+    def removeXLabel(self,ax):
+        labels = [item for item in ax.get_xticklabels()]
+        ax.set_xticklabels(labels)
+        
+        
     def __plotSimple(self, x, targt, rcmpt, error, ax, maxRanges, i, legend):
         #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))
         cm = plt.get_cmap('gist_earth')
