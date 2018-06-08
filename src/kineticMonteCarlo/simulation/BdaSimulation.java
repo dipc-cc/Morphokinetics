@@ -19,6 +19,7 @@
 package kineticMonteCarlo.simulation;
 
 import basic.Parser;
+import basic.io.BdaRestart;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,9 +32,13 @@ import ratesLibrary.bda.AbstractBdaRates;
  * @author J. Alberdi-Rodriguez
  */
 public class BdaSimulation extends AbstractGrowthSimulation {
-    
+  
+  BdaRestart restart;
+  
   public BdaSimulation(Parser parser) {
     super(parser);
+    restart = new BdaRestart(getRestartFolderName());
+    setRestart(restart);
   }
   
  @Override

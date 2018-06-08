@@ -60,7 +60,7 @@ public abstract class AbstractSimulation {
   private float[][] sampledSurface;
   private int[] surfaceSizes;
   private int[] extentSizes;
-  private final Restart restart;
+  private Restart restart;
 
   public AbstractSimulation(Parser parser) {
     kmc = null;
@@ -188,8 +188,12 @@ public abstract class AbstractSimulation {
   
   abstract void initialiseRates(IRates ratesFactory, Parser myParser);
   
-  String getRestartFolderName() {
+  final String getRestartFolderName() {
     return restartFolderName;
+  }
+  
+  final void setRestart(Restart restart) {
+    this.restart = restart;
   }
 
   float[] getCoverage() {
