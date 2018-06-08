@@ -174,4 +174,10 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
   public void setNeighbour(AbstractSite atom, int i) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
+  
+  public void reset() {
+    for (int i = 0; i < 6; i++) {
+      available[i] = true;
+    }
+  }
 }

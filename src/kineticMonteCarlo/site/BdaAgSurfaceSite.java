@@ -146,4 +146,14 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
+  /**
+   * Resets current atom; frees its occupancy.
+   */
+  @Override
+  public void clear(){
+    super.clear();
+    bdaUcSet.clear();
+    bdaUc = null;
+  }
+  
 }

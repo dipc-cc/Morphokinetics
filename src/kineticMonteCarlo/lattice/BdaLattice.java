@@ -414,4 +414,16 @@ public class BdaLattice extends AbstractGrowthLattice {
 
     return agUcArray[i][j];
   }
+  
+  @Override
+  public void reset() {
+    for (int i = 0; i < size(); i++) {
+      BdaSurfaceUc agUc = getUc(i);
+      agUc.reset();
+      for (int j = 0; j < agUc.size(); j++) {
+        AbstractSurfaceSite agSite = agUc.getSite(j);
+        agSite.clear();
+      }
+    }
+  }
 }
