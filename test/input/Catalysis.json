@@ -14,9 +14,9 @@
   "coverage": 100,
   "withGui": true,
   "numberOfSteps": 1e7,
-  "catalysisDiffusion": false,
-  "catalysisDesorption": false,
-  "catalysisReaction": false,
+  "catalysisDiffusion": "false",
+  "catalysisDesorption": "false",
+  "catalysisReaction": "false",
   "ratesLibrary": "reuter",
   "catalysisStart": "empty"
 }
