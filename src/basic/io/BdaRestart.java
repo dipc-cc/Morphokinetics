@@ -37,7 +37,7 @@ public class BdaRestart extends Restart {
   
   @Override
   public void writeSvg(int simulationNumber, AbstractLattice lattice) {
-    String fileName = format("%ssurface%03d.svg", folder, simulationNumber);
+    String fileName = format("%s/surface%03d.svg", folder, simulationNumber);
     RestartLow.writeSvgBda(fileName, lattice);
   }
 }
