@@ -269,6 +269,26 @@ public class BdaKmc extends AbstractGrowthKmc {
       if (doP[DIFFUSION])  recomputeDiffusionRate(site);
       if (doP[ROTATION])   recomputeRotationRate(site);
     }
+    
+    // recalculate total rate, if needed
+    if (totalRate[ADSORPTION] / previousRate[ADSORPTION] < 1e-1) {
+      updateRateFromList(ADSORPTION);
+    }
+    if (totalRate[DESORPTION] / previousRate[DESORPTION] < 1e-1) {
+      updateRateFromList(DESORPTION);
+    }
+    if (totalRate[DIFFUSION] / previousRate[DIFFUSION] < 1e-1) {
+      updateRateFromList(DIFFUSION);
+    }
+    if (totalRate[ROTATION] / previousRate[ROTATION] < 1e-1) {
+      updateRateFromList(ROTATION);
+    }
+  }
+  
+  // copied from CatalysisCoKmc
+  private void updateRateFromList(byte process) {
+    sites[process].recomputeTotalRate(process);
+    totalRate[process] = sites[process].getTotalRate(process);
   }
 
   private void recomputeAdsorptionRate(BdaAgSurfaceSite site) {
