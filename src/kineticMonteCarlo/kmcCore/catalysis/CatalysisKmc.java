@@ -95,7 +95,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       outputEvery = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
-    sites = new IAtomsCollection[13];
+    sites = new IAtomsCollection[4];
     col = new AtomsCollection(getLattice(), "catalysis");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
