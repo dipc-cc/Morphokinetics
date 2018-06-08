@@ -1,0 +1,17 @@
+{ "calculationMode": "bda",
+  "ratesLibrary": "Synthetic",
+  "temperature": 350,
+  "numberOfSimulations": 1,
+  "cartSizeX": 20,
+  "cartSizeY": 20,
+  "justCentralFlake": false,
+  "coverage": 35,
+  "outputData": false,
+  "outputDataFormat": [ {"type": "txt"}, {"type": "svg"}],
+  "outputEvery": 1e3,
+  "randomSeed": false,
+  "depositionFlux": 1e4,
+  "withGui": true,
+  "bdaDoRotation": "false",
+  "numberOfSteps": 1e4
+}
