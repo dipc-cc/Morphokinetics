@@ -82,6 +82,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private double[] diffusionRateMultiAtom;
   private AbstractBdaRates rates;
   private boolean[] doP;
+  private boolean adsorptionStopped;
 
   public BdaKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -118,6 +119,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     for (int i = 0; i < doP.length; i++) {
       doP[i] = parser.doBdaProcess(processes[i]);
     }
+    adsorptionStopped = false;
    }
   
   @Override
@@ -521,6 +523,9 @@ public class BdaKmc extends AbstractGrowthKmc {
     for (int i = 0; i < sites.length; i++) {
       sites[i].reset();
     }
+    adsorptionStopped = false;
+    doP[ADSORPTION] = true;
+    lattice.resetOccupied();
   }
   
   /**
@@ -545,6 +550,9 @@ public class BdaKmc extends AbstractGrowthKmc {
    * Iterates over all lattice sites and sets to 0 the adsorption probabilities.
    */
   private void stopAdsorption() {
+    if (adsorptionStopped){
+      return;
+    }
     totalRate[ADSORPTION] = 0;
     for (int i = 0; i < lattice.size(); i++) {
       BdaSurfaceUc uc = lattice.getUc(i);
@@ -552,11 +560,13 @@ public class BdaKmc extends AbstractGrowthKmc {
         BdaAgSurfaceSite a = (BdaAgSurfaceSite) uc.getSite(j);
         a.setRate(ADSORPTION, 0);
         a.setOnList(ADSORPTION, false);
-        sites[ADSORPTION].remove(a);
+        sites[ADSORPTION].removeAtomRate(a);
       }
     }
     getList().setRates(totalRate);
     sites[ADSORPTION].populate();
+    adsorptionStopped = true;
+    doP[ADSORPTION] = false;
   }
     
   public void setRates(AbstractBdaRates rates) {
