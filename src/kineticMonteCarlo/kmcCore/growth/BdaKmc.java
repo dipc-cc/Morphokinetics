@@ -22,6 +22,7 @@ import basic.Parser;
 import basic.io.BdaRestart;
 import basic.io.OutputType;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -308,7 +309,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private void transformMolecule() {}
   
-  private void updateRates(Set<AbstractGrowthSite> modifiedSites) {
+  private void updateRates(List<AbstractGrowthSite> modifiedSites) {
     // save previous rates
     double[] previousRate = totalRate.clone();
     

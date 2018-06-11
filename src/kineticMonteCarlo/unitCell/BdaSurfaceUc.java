@@ -18,6 +18,11 @@
  */
 package kineticMonteCarlo.unitCell;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.ROTATION;
@@ -35,7 +40,11 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     
   private final BdaSurfaceUc[] neighbours;
   /** Whether an atom can deposit on top (at any position) of this unit cell. */
-  private final boolean[] available;  
+  private final boolean[] available;
+  
+  List<ISite> spiralSitesAll;
+  private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
+  private Map<Integer,List<ISite>> spiralSites;
   
   public BdaSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
     super(posI, posJ, atom);
@@ -44,6 +53,13 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     for (int i = 0; i < 6; i++) {
       available[i] = true;
     }
+    spiralSitesAll = new ArrayList<>();
+    spiralSitesPos = new int[6];
+    spiralSitesPos[0] = 1;
+    for (int i = 1; i < spiralSitesPos.length; i++) {
+      spiralSitesPos[i] = (int) 8*i + spiralSitesPos[i-1];
+    }
+    spiralSites = new HashMap<>();
   }
   
   @Override
@@ -179,5 +195,26 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     for (int i = 0; i < 6; i++) {
       available[i] = true;
     }
+  }
+  
+  @Override
+  public List<ISite> getSpiralSites(int size) {
+    return spiralSites.get(size);
+  }
+  
+  @Override
+  public void setSpiralSites(List<ISite> sites, int size) {
+    this.spiralSitesAll = sites;
+    for (int i = 1; i < 6 ; i++) {
+      spiralSites.put(i, copySublist(sites, 0, spiralSitesPos[i]));
+    }
+  }
+  
+  private List<ISite> copySublist(List inputList, int init, int end) {
+    List resultList = new ArrayList<>();
+    for (int i = init; i < end; i++) {
+      resultList.add(inputList.get(i));
+    }
+    return resultList;
   }
 }

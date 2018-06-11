@@ -25,14 +25,17 @@ import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import static java.lang.Math.floorDiv;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import kineticMonteCarlo.site.BdaMoleculeSite;
 import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
 import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
+import kineticMonteCarlo.site.ISite;
 
 /**
  *
@@ -220,7 +223,7 @@ public class BdaLattice extends AbstractGrowthLattice {
    */
   public boolean canRotate(BdaAgSurfaceSite origin) {
     boolean canRotate = true;
-    Set<AbstractGrowthSite> modifiedSites = getModifiedSitesRotation(null, origin);
+    List<AbstractGrowthSite> modifiedSites = getModifiedSitesRotation(null, origin);
     
     Iterator i = modifiedSites.iterator();
     BdaAgSurfaceSite site;
@@ -255,9 +258,9 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @param site current central site.
    * @return A list with of sites that should be recomputed their rate.
    */
-  public Set<AbstractGrowthSite> getModifiedSitesDiffusion(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+  public List<AbstractGrowthSite> getModifiedSitesDiffusion(List<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
     if (modifiedSites == null) {
-      modifiedSites = new HashSet<>();
+      modifiedSites = new ArrayList<>();
     }
     
     boolean rotated = ((BdaAgSurfaceSite) site).getBdaUc().isRotated();
@@ -275,9 +278,9 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @param site current central site.
    * @return A list with of sites that should be recomputed their rate.
    */
-  public Set<AbstractGrowthSite> getModifiedSitesRotation(Set<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+  public List<AbstractGrowthSite> getModifiedSitesRotation(List<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
     if (modifiedSites == null) {
-      modifiedSites = new HashSet<>();
+      modifiedSites = new ArrayList<>();
     }
     //AbstractGrowthSite startingSite = getStartingSite(site, i);
     modifiedSites.addAll(lh.getRotationSites(site));
@@ -404,6 +407,44 @@ public class BdaLattice extends AbstractGrowthLattice {
         uc.setNeighbour(agUcArray[i][j], 3);
       }
     }
+    
+    //Create large neighbourhood sites
+    int thresholdDistance = 5;
+    for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
+      for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
+        // get current site
+        BdaAgSurfaceSite originSite = (BdaAgSurfaceSite) sites[iHexa][jHexa];
+        BdaSurfaceUc originUc = agUcArray[iHexa][jHexa];
+        List<ISite> modifiedSites = new ArrayList<>(121);
+        List<ISite> modifiedUc = new ArrayList<>(121);
+        AbstractSurfaceSite s = originSite;
+        BdaSurfaceUc uc = originUc;
+        modifiedSites.add(s);
+        modifiedUc.add(uc);
+        int possibleDistance = 0;
+        int quantity;
+        while (true) {
+          s = s.getNeighbour(2).getNeighbour(3); // get the first neighbour
+          quantity = (possibleDistance * 2 + 2);
+          for (int direction = 0; direction < 4; direction++) {
+            for (int j = 0; j < quantity; j++) {
+              s = s.getNeighbour(direction);
+              BdaAgSurfaceSite site = (BdaAgSurfaceSite) s;
+              BdaSurfaceUc u = getAgUc(site);
+              modifiedSites.add(s);
+              modifiedUc.add(u);
+            }
+          }
+          possibleDistance++;
+          if (possibleDistance >= thresholdDistance) {
+            break;
+          }
+        }
+        originSite.setSpiralSites(modifiedSites, thresholdDistance);
+        originUc.setSpiralSites(modifiedUc, thresholdDistance);
+      }
+    }
+        
     return sites;
   }
   

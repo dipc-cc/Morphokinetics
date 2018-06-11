@@ -18,9 +18,11 @@
  */
 package kineticMonteCarlo.lattice;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
@@ -70,7 +72,7 @@ class BdaLatticeHelper<T> {
         neighbourAgUc.setAvailable(ROTATION, makeAvailable);
       }
     }
-    Set<BdaSurfaceUc> modifiedSites = (Set<BdaSurfaceUc>) getSpiralSites((T) origin, 4);
+    List<BdaSurfaceUc> modifiedSites = (List<BdaSurfaceUc>) getSpiralSites((T) origin, 4);
     Iterator iter = modifiedSites.iterator();
     while (iter.hasNext()) { // increasing the radious that forbids to adsorb
       neighbourAgUc = (BdaSurfaceUc) iter.next();
@@ -401,8 +403,8 @@ class BdaLatticeHelper<T> {
    * @param site central Ag Unit cell site.
    * @return all positions to be checked.
    */
-  Set<AbstractGrowthSite> getRotationSites(AbstractGrowthSite site) {
-    return (Set<AbstractGrowthSite>) getSpiralSites((T) site, 5);
+  List<AbstractGrowthSite> getRotationSites(AbstractGrowthSite site) {
+    return (List<AbstractGrowthSite>) getSpiralSites((T) site, 5);
   }
   
   /**
@@ -413,29 +415,9 @@ class BdaLatticeHelper<T> {
    * the square is the double of this number + 1.
    * @return all positions to be checked.
    */
-  private Set<T> getSpiralSites(T site, int thresholdDistance) {
-    Set<T> modifiedSites = new HashSet<>();
-    ISite s = (ISite) site;
-    modifiedSites.add(site);
-    int possibleDistance = 0;
-    int quantity;
-    while (true) {
-      s = s.getNeighbour(2).getNeighbour(3); // get the first neighbour
-      quantity = (possibleDistance * 2 + 2);
-      for (int direction = 0; direction < 4; direction++) {
-        for (int j = 0; j < quantity; j++) {
-          s = s.getNeighbour(direction);
-          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, true);
-          //getAgUc((BdaAgSurfaceSite) site).setAvailable(DIFFUSION, false);
-          modifiedSites.add((T) s);
-        }
-      }
-      possibleDistance++;
-      if (possibleDistance >= thresholdDistance) {
-        break;
-      }
-    }
-    return modifiedSites;
+  private List<T> getSpiralSites(T site, int thresholdDistance) {
+    ISite originSite = (ISite) site;
+    return (List<T>) originSite.getSpiralSites(thresholdDistance);
   }
 
   int getNeighbourCode(int pos, int direction, boolean rotated, int type) {

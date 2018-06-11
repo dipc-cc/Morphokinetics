@@ -18,6 +18,12 @@
  */
 package kineticMonteCarlo.site;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import kineticMonteCarlo.process.AbstractProcess;
 import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
@@ -50,6 +56,11 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
   private AbstractProcess[] processes;
   private int processSize;
   
+  /** It saves the sites in the neighbourhood for a given size. */
+  private List<ISite> spiralSitesAll;
+  private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
+  private Map<Integer,List<ISite>> spiralSites;
+  
   public AbstractSurfaceSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     this.id = id;
     setOccupied(false);
@@ -57,6 +68,14 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     setNumberOfNeighbours(numberOfNeighbours);
     visited = false;
     processSize = 0;
+    spiralSitesAll = new ArrayList<>();
+    
+    spiralSitesPos = new int[6];
+    spiralSitesPos[0] = 1;
+    for (int i = 1; i < spiralSitesPos.length; i++) {
+      spiralSitesPos[i] = (int) 8*i + spiralSitesPos[i-1];
+    }
+    spiralSites = new HashMap<>();
   }
   
   public int getId() {
@@ -272,6 +291,27 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     }
     // raise an error
     return null;
+  }
+  
+  private List<ISite> copySublist(List inputList, int init, int end) {
+    List resultList = new ArrayList<>();
+    for (int i = init; i < end; i++) {
+      resultList.add(inputList.get(i));
+    }
+    return resultList;
+  }
+  
+  @Override
+  public List<ISite> getSpiralSites(int size) {
+    return spiralSites.get(size);
+  }
+  
+  @Override
+  public void setSpiralSites(List<ISite> sites, int size) {
+    this.spiralSitesAll = sites;
+    for (int i = 1; i < 6 ; i++) {
+      spiralSites.put(i, copySublist(sites, 0, spiralSitesPos[i]));
+    }
   }
   
   /**

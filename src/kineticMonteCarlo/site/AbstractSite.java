@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.site;
 
+import java.util.List;
 import javafx.geometry.Point3D;
 
 /**
@@ -130,5 +131,15 @@ public abstract class AbstractSite implements ISite {
   @Override
   public Point3D getPos() {
     return new Point3D(0, 0, 0);
+  }
+  
+  @Override
+  public List<ISite> getSpiralSites(int size) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setSpiralSites(List<ISite> sites, int size) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.site;
 
+import java.util.List;
 import javafx.geometry.Point3D;
 
 /**
@@ -63,4 +64,7 @@ public interface ISite {
   
   public Point3D getPos();
   
+  public List<ISite> getSpiralSites(int size);
+  
+  public void setSpiralSites(List<ISite> sites, int size);
 }
