@@ -21,7 +21,6 @@ package kineticMonteCarlo.simulation;
 import basic.Parser;
 import basic.io.Restart;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -39,7 +38,6 @@ public class BdaSimulationTest {
   
   private float[][] simulatedSurface;
   private double simulatedTime;
-  private String restartFolder;
   
   public BdaSimulationTest() {
   }
@@ -91,7 +89,6 @@ public class BdaSimulationTest {
     simulation.createFrame();
     simulation.doSimulation();
     simulation.finishSimulation();
-    restartFolder = simulation.getRestartFolderName();
 
     simulatedSurface = simulation.getKmc().getSampledSurface((int) (parser.getCartSizeX() * parser.getPsdScale()), (int) (parser.getCartSizeY() * parser.getPsdScale()));
     simulatedTime = simulation.getSimulatedTime();
