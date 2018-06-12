@@ -64,6 +64,7 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
       this.bdaUc = bdaUc;
     }
   }
+  
   public void setBelongingBdaUc(BdaMoleculeUc bdaUc) {
     this.bdaUcSet.add(bdaUc);
   }
@@ -77,19 +78,6 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   
   public int getBdaSize() {
     return bdaUcSet.size();
-  }
-  
-  public boolean hasTheSameBdaUc(BdaMoleculeUc other) {
-    Iterator iter = bdaUcSet.iterator();
-    boolean sameBdaUc = false;
-    while (iter.hasNext()) {
-      BdaMoleculeUc currentBdaUc = (BdaMoleculeUc) iter.next();
-      if (currentBdaUc.equals(other)) {
-        sameBdaUc = true;
-        break;
-      }
-    }
-    return sameBdaUc;
   }
   
   public boolean isAvailable(int process) {
