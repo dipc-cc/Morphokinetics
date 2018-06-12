@@ -74,7 +74,7 @@ class BdaLatticeHelper<T> {
     }
     List<BdaSurfaceUc> modifiedSites = (List<BdaSurfaceUc>) getSpiralSites((T) origin, 4);
     Iterator iter = modifiedSites.iterator();
-    while (iter.hasNext()) { // increasing the radious that forbids to adsorb
+    while (iter.hasNext()) { // increasing the radius that forbids to adsorb
       neighbourAgUc = (BdaSurfaceUc) iter.next();
       if (makeAvailable) {
         ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
@@ -84,7 +84,6 @@ class BdaLatticeHelper<T> {
       }
       neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
     }
-    
   }
   
   /**
