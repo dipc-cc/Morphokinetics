@@ -412,8 +412,10 @@ class BdaLatticeHelper<T> {
     switch (type) {
       case ALPHA:
         upDown = 4;
+        break;
       case BETA:
         upDown = 6;
+        break;
     }
     int code = 3 * direction;
     if (rotated) { // to be checked
