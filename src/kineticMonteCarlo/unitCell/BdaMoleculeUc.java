@@ -41,10 +41,12 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   /** Base energy of the molecule. It will be updated with the neighbourhood.*/
   private double energy;
   private final int numberOfNeighbours;
+  private final int id;
   
-  public BdaMoleculeUc() {
+  public BdaMoleculeUc(int id ) {
     super(-1, -1, null);
-    bdaMolecule = new BdaMoleculeSite(-1, false);
+    this.id = id;
+    bdaMolecule = new BdaMoleculeSite(id, false);
    
     numberOfNeighbours = 12;
     neighbours = new BdaMoleculeUc[numberOfNeighbours];
@@ -184,5 +186,11 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
 
   public void setRotated(boolean rotated) {
     bdaMolecule.setRotated(rotated);
+  }
+  
+  @Override
+  public String toString() {
+    String returnString = "Molecule Id " + id;
+    return returnString;
   }
 }

@@ -46,7 +46,8 @@ public class BdaLattice extends AbstractGrowthLattice {
    * Unit cell array, where all the surface Ag atoms are located.
    */
   private final BdaSurfaceUc[][] agUcArray;
-  private final BdaLatticeHelper lh; 
+  private final BdaLatticeHelper lh;
+  private int depositions;
   
 
   public BdaLattice(int hexaSizeI, int hexaSizeJ) {
@@ -54,6 +55,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     agUcArray = new BdaSurfaceUc[hexaSizeI][hexaSizeJ];
     createAgUcSurface();
     lh = new BdaLatticeHelper();
+    depositions = 0;
   }
 
   @Override
@@ -62,12 +64,13 @@ public class BdaLattice extends AbstractGrowthLattice {
     BdaSurfaceUc agUc = getAgUc(a);
     //if (!agUc.isAvailable(ADSORPTION))
     //  return; // should not happen. It happens in a diffusion. So, it must be allowed with rotations
-    BdaMoleculeUc bdaUc = new BdaMoleculeUc();
+    BdaMoleculeUc bdaUc = new BdaMoleculeUc(depositions);
     bdaUc.setRotated(rotated);
     agUc.getSite(0).setOccupied(true);
     ((BdaAgSurfaceSite) agUc.getSite(0)).setBdaUc(bdaUc);
     lh.changeAvailability(agUc, false);
     addOccupied();
+    depositions++;
   }
   
   public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
@@ -452,5 +455,6 @@ public class BdaLattice extends AbstractGrowthLattice {
         agSite.clear();
       }
     }
+    depositions = 0;
   }
 }
