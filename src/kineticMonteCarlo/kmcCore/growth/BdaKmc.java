@@ -23,7 +23,6 @@ import basic.io.BdaRestart;
 import basic.io.OutputType;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.lattice.BdaLattice;
@@ -35,6 +34,7 @@ import static kineticMonteCarlo.process.BdaProcess.TRANSFORMATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
+import kineticMonteCarlo.site.ISite;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
@@ -270,7 +270,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     
     //updateRates(lattice.getModifiedSites(null, destinationSite));
     //updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
-    updateRates(lattice.getModifiedSitesRotation(null, destinationSite));
+    updateRates(lattice.getModifiedSitesRotation(destinationSite));
   }
   
   private void desorbMolecule() {
@@ -278,7 +278,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     lattice.extract(destinationSite);
     //updateRates(lattice.getModifiedSites(null, destinationSite));
     //updateRates(lattice.getModifiedSitesDiffusion(null,destinationSite));
-    updateRates(lattice.getModifiedSitesRotation(null, destinationSite));
+    updateRates(lattice.getModifiedSitesRotation(destinationSite));
     
   }
   
@@ -295,8 +295,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     // far away positions, where another BDA molecule could be
     //updateRates(lattice.getModifiedSitesDiffusion(null, origin));
     updateRates(lattice.getModifiedSitesDiffusion(null, destination));
-    updateRates(lattice.getModifiedSitesRotation(null, destination));
-
+    updateRates(lattice.getModifiedSitesRotation(destination));
   }
   
   private void rotateMolecule() {
@@ -304,12 +303,12 @@ public class BdaKmc extends AbstractGrowthKmc {
     boolean rotated = !origin.getBdaUc().isRotated();
     lattice.extract(origin);
     lattice.deposit(origin, rotated);
-    updateRates(lattice.getModifiedSitesRotation(null, origin));
+    updateRates(lattice.getModifiedSitesRotation(origin));
   }
   
   private void transformMolecule() {}
   
-  private void updateRates(List<AbstractGrowthSite> modifiedSites) {
+  private void updateRates(List<ISite> modifiedSites) {
     // save previous rates
     double[] previousRate = totalRate.clone();
     

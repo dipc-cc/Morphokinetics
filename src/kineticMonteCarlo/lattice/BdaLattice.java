@@ -223,7 +223,7 @@ public class BdaLattice extends AbstractGrowthLattice {
    */
   public boolean canRotate(BdaAgSurfaceSite origin) {
     boolean canRotate = true;
-    List<AbstractGrowthSite> modifiedSites = getModifiedSitesRotation(null, origin);
+    List<ISite> modifiedSites = getModifiedSitesRotation(origin);
     
     Iterator i = modifiedSites.iterator();
     BdaAgSurfaceSite site;
@@ -258,7 +258,7 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @param site current central site.
    * @return A list with of sites that should be recomputed their rate.
    */
-  public List<AbstractGrowthSite> getModifiedSitesDiffusion(List<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
+  public List<ISite> getModifiedSitesDiffusion(List<ISite> modifiedSites, AbstractGrowthSite site) {
     if (modifiedSites == null) {
       modifiedSites = new ArrayList<>();
     }
@@ -272,20 +272,15 @@ public class BdaLattice extends AbstractGrowthLattice {
   }  
   
   /**
-   * Includes all previous and after rotation positions.
+   * Adds all the neighbour positions of the rotated and not rotated central
+   * position. It iterates in a spiral -5+5 positions. Thus, 11x11 positions
+   * (121) around the current molecule must be free to be able to rotate.
    *
-   * @param modifiedSites previously added sites, can be null.
-   * @param site current central site.
+   * @param site current central site. Central Ag Unit cell site.
    * @return A list with of sites that should be recomputed their rate.
    */
-  public List<AbstractGrowthSite> getModifiedSitesRotation(List<AbstractGrowthSite> modifiedSites, AbstractGrowthSite site) {
-    if (modifiedSites == null) {
-      modifiedSites = new ArrayList<>();
-    }
-    //AbstractGrowthSite startingSite = getStartingSite(site, i);
-    modifiedSites.addAll(lh.getRotationSites(site));
-
-    return modifiedSites;
+  public List<ISite> getModifiedSitesRotation(AbstractGrowthSite site) {
+    return site.getSpiralSites(5);
   }
   
   @Override

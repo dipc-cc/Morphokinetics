@@ -395,18 +395,6 @@ class BdaLatticeHelper<T> {
   }
   
   /**
-   * Adds all the neighbour positions of the rotated and not rotated central
-   * position. It iterates in a spiral -5+5 positions. Thus, 11x11 positions
-   * (121) around the current molecule must be free to be able to rotate.
-   *
-   * @param site central Ag Unit cell site.
-   * @return all positions to be checked.
-   */
-  List<AbstractGrowthSite> getRotationSites(AbstractGrowthSite site) {
-    return (List<AbstractGrowthSite>) getSpiralSites((T) site, 5);
-  }
-  
-  /**
    * It iterates in a spiral from given central site. 
    *
    * @param site central Ag site.
