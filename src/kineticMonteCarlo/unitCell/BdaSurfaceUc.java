@@ -45,8 +45,8 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
   private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
   private final Map<Integer,List<ISite>> spiralSites;
   
-  public BdaSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
-    super(posI, posJ, atom);
+  public BdaSurfaceUc(int posI, int posJ, AbstractSurfaceSite agSite) {
+    super(posI, posJ, agSite);
     neighbours = new BdaSurfaceUc[4];
     available = new boolean[6];
     for (int i = 0; i < 6; i++) {
@@ -56,7 +56,7 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
     spiralSitesPos = new int[6];
     spiralSitesPos[0] = 1;
     for (int i = 1; i < spiralSitesPos.length; i++) {
-      spiralSitesPos[i] = (int) 8*i + spiralSitesPos[i-1];
+      spiralSitesPos[i] = (int) 8 * i + spiralSitesPos[i - 1];
     }
     spiralSites = new HashMap<>();
   }
@@ -102,7 +102,6 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
       }
     }
   }
- 
   
   @Override
   public String toString() {
