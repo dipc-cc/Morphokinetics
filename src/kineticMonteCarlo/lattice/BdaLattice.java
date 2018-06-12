@@ -57,6 +57,15 @@ public class BdaLattice extends AbstractGrowthLattice {
     lh = new BdaLatticeHelper();
     depositions = 0;
   }
+  
+  public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
+    return agUcArray[agSite.getiHexa()][agSite.getjHexa()];
+  }
+  
+  @Override
+  public float getCoverage() {
+    return 10 * (float) getOccupied() / (float) (getHexaSizeI() * getHexaSizeJ());
+  }
 
   @Override
   public void deposit(AbstractSurfaceSite agSite, boolean rotated) {
@@ -73,10 +82,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     depositions++;
   }
   
-  public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
-    return agUcArray[agSite.getiHexa()][agSite.getjHexa()];
-  }
-  
   @Override
   public double extract(AbstractSurfaceSite m) {
     BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) m;
@@ -86,11 +91,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     subtractOccupied();
     return 0;
   }
-
-  @Override
-  public float getCoverage() {
-    return 10 * (float) getOccupied() / (float) (getHexaSizeI() * getHexaSizeJ());
-  }  
   
   /**
    * 
@@ -184,40 +184,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     }
     return canDiffuse;
   }
-  
-  /**
-   * 
-   * @param origin must be occupied.
-   * @return 
-   */
-  /*public boolean canRotate(BdaAgSurfaceSite origin) {
-    boolean canRotate = true;
-    BdaMoleculeUc bdaUc = origin.getBdaUc();
-    for (int i = 0; i < bdaUc.getNumberOfNeighbours(); i++) {
-      BdaMoleculeUc neighbour = bdaUc.getNeighbour(i);
-      if (neighbour != null && bdaUc.getNeighbour(i).getSite(0).isOccupied())
-        canRotate = false;
-    }
-    if (canRotate) { // check upper 2nd neighbours
-      origin = (BdaAgSurfaceSite) origin.getNeighbour(0).getNeighbour(0).getNeighbour(0);
-      canRotate = !origin.isOccupied();
-      AbstractGrowthSite neighbour = origin;
-      for (int i = 0; i < 3; i++) {
-        neighbour = neighbour.getNeighbour(3);
-        if (neighbour.isOccupied()) {
-          canRotate = false;
-        }
-      }
-      neighbour = origin;
-      for (int i = 0; i < 3; i++) {
-        neighbour = neighbour.getNeighbour(1);
-        if (neighbour.isOccupied()) {
-          canRotate = false;
-        }
-      }
-    }
-    return canRotate;
-  }//*/
   
   /**
    * 
