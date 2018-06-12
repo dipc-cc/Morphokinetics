@@ -134,7 +134,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     iter = modifiedSites.iterator();
      while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
-      if (!getAgUc(neighbour).isAvailable(DIFFUSION)){
+      if (!neighbour.isAvailable(DIFFUSION)){
         canDiffuse = false;
       }
     }
@@ -175,7 +175,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     iter = modifiedSites.iterator();
      while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
-      if (!getAgUc(neighbour).isAvailable(DIFFUSION)){
+      if (!neighbour.isAvailable(DIFFUSION)){
         canDiffuse = false;
       }
     }
@@ -378,28 +378,24 @@ public class BdaLattice extends AbstractGrowthLattice {
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
         site.setNeighbour((BdaAgSurfaceSite) sites[i][j], 0);
-        uc.setNeighbour(agUcArray[i][j], 0);
 
         // east neighbour
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
         site.setNeighbour((BdaAgSurfaceSite) sites[i][j], 1);
-        uc.setNeighbour(agUcArray[i][j], 1);
 
         // south neighbour
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
         site.setNeighbour((BdaAgSurfaceSite) sites[i][j], 2);
-        uc.setNeighbour(agUcArray[i][j], 2);
         
         // west neighbour
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
         site.setNeighbour((BdaAgSurfaceSite) sites[i][j], 3);
-        uc.setNeighbour(agUcArray[i][j], 3);
       }
     }
     
@@ -411,11 +407,9 @@ public class BdaLattice extends AbstractGrowthLattice {
         BdaAgSurfaceSite originSite = (BdaAgSurfaceSite) sites[iHexa][jHexa];
         BdaSurfaceUc originUc = agUcArray[iHexa][jHexa];
         List<ISite> modifiedSites = new ArrayList<>(121);
-        List<ISite> modifiedUc = new ArrayList<>(121);
         AbstractSurfaceSite s = originSite;
         BdaSurfaceUc uc = originUc;
         modifiedSites.add(s);
-        modifiedUc.add(uc);
         int possibleDistance = 0;
         int quantity;
         while (true) {
@@ -427,7 +421,6 @@ public class BdaLattice extends AbstractGrowthLattice {
               BdaAgSurfaceSite site = (BdaAgSurfaceSite) s;
               BdaSurfaceUc u = getAgUc(site);
               modifiedSites.add(s);
-              modifiedUc.add(u);
             }
           }
           possibleDistance++;
@@ -436,7 +429,6 @@ public class BdaLattice extends AbstractGrowthLattice {
           }
         }
         originSite.setSpiralSites(modifiedSites, thresholdDistance);
-        originUc.setSpiralSites(modifiedUc, thresholdDistance);
       }
     }
         
@@ -455,7 +447,6 @@ public class BdaLattice extends AbstractGrowthLattice {
   public void reset() {
     for (int i = 0; i < size(); i++) {
       BdaSurfaceUc agUc = getUc(i);
-      agUc.reset();
       for (int j = 0; j < agUc.size(); j++) {
         AbstractSurfaceSite agSite = agUc.getSite(j);
         agSite.clear();

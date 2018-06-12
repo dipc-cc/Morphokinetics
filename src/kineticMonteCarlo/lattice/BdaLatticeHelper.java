@@ -55,34 +55,34 @@ class BdaLatticeHelper<T> {
     BdaAgSurfaceSite agSite = ((BdaAgSurfaceSite) origin.getSite(0));
     BdaMoleculeUc bdaUc = agSite.getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
-    BdaSurfaceUc neighbourAgUc = origin;
+    BdaAgSurfaceSite neighbourSite = (BdaAgSurfaceSite) origin.getSite(0);
     for (int i = 0; i < 11;
      //       alphaTravelling.length;
     i++) {
-      neighbourAgUc = neighbourAgUc.getNeighbour(getNeighbourIndex(bdaSite, i));
+      neighbourSite = (BdaAgSurfaceSite) neighbourSite.getNeighbour(getNeighbourIndex(bdaSite, i));
       if (makeAvailable) {
-        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
+        neighbourSite.removeBdaUc(bdaUc);
       }
       if (!makeAvailable) { // can not adsorb at this position.
-        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).setBelongingBdaUc(bdaUc);
+        neighbourSite.setBelongingBdaUc(bdaUc);
       }
-      neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
+      neighbourSite.setAvailable(ADSORPTION, makeAvailable);
       if (i < 10) { // Beta 11
-        neighbourAgUc.setAvailable(DIFFUSION, makeAvailable);
-        neighbourAgUc.setAvailable(ROTATION, makeAvailable);
+        neighbourSite.setAvailable(DIFFUSION, makeAvailable);
+        neighbourSite.setAvailable(ROTATION, makeAvailable);
       }
     }
-    List<BdaSurfaceUc> modifiedSites = (List<BdaSurfaceUc>) getSpiralSites((T) origin, 4);
+    List<BdaAgSurfaceSite> modifiedSites = (List<BdaAgSurfaceSite>) getSpiralSites((T) agSite, 4);
     Iterator iter = modifiedSites.iterator();
     while (iter.hasNext()) { // increasing the radius that forbids to adsorb
-      neighbourAgUc = (BdaSurfaceUc) iter.next();
+      neighbourSite = (BdaAgSurfaceSite) iter.next();
       if (makeAvailable) {
-        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).removeBdaUc(bdaUc);
+        neighbourSite.removeBdaUc(bdaUc);
       }
       if (!makeAvailable) { // can not adsorb at this position.
-        ((BdaAgSurfaceSite) neighbourAgUc.getSite(0)).setBelongingBdaUc(bdaUc);
+        neighbourSite.setBelongingBdaUc(bdaUc);
       }
-      neighbourAgUc.setAvailable(ADSORPTION, makeAvailable);
+      neighbourSite.setAvailable(ADSORPTION, makeAvailable);
     }
   }
   

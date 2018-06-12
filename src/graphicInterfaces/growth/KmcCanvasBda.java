@@ -23,8 +23,6 @@ import java.awt.Color;
 import static java.awt.Color.BLACK;
 import static java.awt.Color.white;
 import java.awt.Graphics;
-import java.util.ArrayList;
-import java.util.List;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import static kineticMonteCarlo.process.BdaProcess.ROTATION;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
@@ -59,7 +57,6 @@ public class KmcCanvasBda extends KmcCanvas {
   @Override
   public void paint(Graphics g) {
     super.paint(g);
-    List<BdaSurfaceUc> moleculeList = new  ArrayList<>();
     for (int i = 0; i < getLattice().size(); i++) {
       BdaSurfaceUc agUc = (BdaSurfaceUc) getLattice().getUc(i);
       for (int j = 0; j < agUc.size(); j++) {
@@ -70,10 +67,10 @@ public class KmcCanvasBda extends KmcCanvas {
         g.setColor(colours[2]);
         int ball = (int) Math.round(getScale() * distanceAg);
         if (detailed) {
-          if (!agUc.isAvailable(ADSORPTION)) {
+          if (!((BdaAgSurfaceSite)site).isAvailable(ADSORPTION)) {
             g.setColor(white);
           }
-          if (!agUc.isAvailable(DIFFUSION)) {
+          if (!((BdaAgSurfaceSite)site).isAvailable(DIFFUSION)) {
             g.setColor(BLUE);
             g.fillOval(X, Y, ball, ball);
           } else {
@@ -85,7 +82,6 @@ public class KmcCanvasBda extends KmcCanvas {
           }
         }
         if (site.isOccupied()) {
-          moleculeList.add(((BdaSurfaceUc)agUc));
           paintBdaMolecule(g, agUc);
         }
         if (detailed && site.getRate(ROTATION) > 0) {
@@ -94,16 +90,13 @@ public class KmcCanvasBda extends KmcCanvas {
         }
       }
     }
-    /*for (int i = 0; i < moleculeList.size(); i++) {
-      paintBdaMolecule(g, moleculeList.get(i));
-    }//*/
   }
   
   private void paintBdaMolecule(Graphics g, BdaSurfaceUc sUc) {
     double sizeBall = 2.0;
     BdaMoleculeUc muc = ((BdaAgSurfaceSite) sUc.getSite(0)).getBdaUc();
     if (muc == null) {
-      System.out.println("Error");
+      System.out.println("Warning: a molecule could not be printed");
       return;
     }
     BdaMoleculeSite bdaMolecule = (BdaMoleculeSite) muc.getSite(-1);

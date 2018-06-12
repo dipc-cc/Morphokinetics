@@ -346,8 +346,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void recomputeAdsorptionRate(BdaAgSurfaceSite site) {
     double oldAdsorptionRate = site.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
-    BdaSurfaceUc sUc = lattice.getAgUc(site);
-    if (sUc.isAvailable(ADSORPTION)) {
+    if (site.isAvailable(ADSORPTION)) {
       site.setRate(ADSORPTION, adsorptionRatePerSite);
     } else {
       site.setRate(ADSORPTION, 0);

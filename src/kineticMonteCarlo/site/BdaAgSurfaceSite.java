@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import kineticMonteCarlo.process.BdaProcess;
+import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
+import static kineticMonteCarlo.process.BdaProcess.ROTATION;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 
 /**
@@ -38,6 +40,9 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   /** Only if it is the central position for BDA molecule. */
   private BdaMoleculeUc bdaUc;
 
+  /** Whether an atom can deposit on top (at any position) of this Ag site. */
+  private final boolean[] available;
+  
   public BdaAgSurfaceSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 5);
     neighbours = new BdaAgSurfaceSite[4];
@@ -47,6 +52,7 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     }
     setProcceses(processes);
     bdaUcSet = new HashSet<>();
+    available = new boolean[6];
   }
 
   public BdaMoleculeUc getBdaUc() {
@@ -84,6 +90,20 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
       }
     }
     return sameBdaUc;
+  }
+  
+  public boolean isAvailable(int process) {
+    return available[process];
+  }
+
+  public void setAvailable(int process, boolean available) {
+    this.available[process] = available;
+    if (available && (process == ADSORPTION || process == ROTATION)) { // do not make available if the current point is fixed to several BDA molecules
+      // if (available || process == DIFFUSION)
+      if (getBdaSize() > 0){
+        this.available[process] = false;
+      }
+    }
   }
   
   @Override
@@ -154,6 +174,9 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     super.clear();
     bdaUcSet.clear();
     bdaUc = null;
+    for (int i = 0; i < 6; i++) {
+      available[i] = true;
+    }
   }
   
 }
