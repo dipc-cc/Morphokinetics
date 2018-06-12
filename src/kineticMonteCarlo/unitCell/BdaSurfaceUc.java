@@ -20,7 +20,6 @@ package kineticMonteCarlo.unitCell;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import javafx.geometry.Point3D;
@@ -44,7 +43,7 @@ public class BdaSurfaceUc extends AbstractGrowthUc implements IUc, ISite {
   
   List<ISite> spiralSitesAll;
   private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
-  private Map<Integer,List<ISite>> spiralSites;
+  private final Map<Integer,List<ISite>> spiralSites;
   
   public BdaSurfaceUc(int posI, int posJ, AbstractSurfaceSite atom) {
     super(posI, posJ, atom);
