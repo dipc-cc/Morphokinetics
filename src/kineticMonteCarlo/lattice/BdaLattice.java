@@ -26,7 +26,6 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import static java.lang.Math.floorDiv;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -75,8 +74,8 @@ public class BdaLattice extends AbstractGrowthLattice {
     //  return; // should not happen. It happens in a diffusion. So, it must be allowed with rotations
     BdaMoleculeUc bdaUc = new BdaMoleculeUc(depositions);
     bdaUc.setRotated(rotated);
-    agUc.getSite(0).setOccupied(true);
-    ((BdaAgSurfaceSite) agUc.getSite(0)).setBdaUc(bdaUc);
+    a.setOccupied(true);
+    a.setBdaUc(bdaUc);
     lh.changeAvailability(agUc, false);
     addOccupied();
     depositions++;
