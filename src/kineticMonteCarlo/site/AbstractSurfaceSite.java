@@ -57,6 +57,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
   /** It saves the sites in the neighbourhood for a given size. */
   private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
   private final Map<Integer,List<ISite>> spiralSites;
+  private int chosenNeighbourPosition;
   
   public AbstractSurfaceSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
     this.id = id;
@@ -72,6 +73,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
       spiralSitesPos[i] = (int) 8*i + spiralSitesPos[i-1];
     }
     spiralSites = new HashMap<>();
+    chosenNeighbourPosition = -1;
   }
   
   public int getId() {
@@ -267,6 +269,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     for (int i = 0; i < processSize; i++) {
       processes[i].clear();
     }
+    chosenNeighbourPosition = -1;
   }
   
   @Override
@@ -282,11 +285,23 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
       sum += processes[process].getEdgeRate(j);
       if (sum > randomNumber) {
         neighbour = getNeighbour(j);
+        chosenNeighbourPosition = j;
         return neighbour;
       }
     }
     // raise an error
+    chosenNeighbourPosition = -1;
     return null;
+  }
+  
+  /**
+   * It returns the selected random neighbour. It should be called after
+   * {@link #getRandomNeighbour(byte)}.
+   *
+   * @return the selected neighbour position.
+   */
+  public int getRandomNeighbourDirection() {
+    return chosenNeighbourPosition;
   }
   
   private List<ISite> copySublist(List inputList, int init, int end) {
