@@ -285,9 +285,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void diffuseMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[DIFFUSION].randomElement();
     AbstractGrowthSite destination = (AbstractGrowthSite) origin.getRandomNeighbour(DIFFUSION);
-    boolean rotated = origin.getBdaUc().isRotated();
-    lattice.extract(origin);
-    lattice.deposit(destination, rotated);
+    lattice.diffuse(origin, (BdaAgSurfaceSite) destination, origin.getRandomNeighbourDirection());
     
     //updateRates(lattice.getModifiedSites(null, origin));
     //updateRates(lattice.getModifiedSites(null, destination));

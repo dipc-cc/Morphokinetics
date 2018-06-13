@@ -18,7 +18,6 @@
  */
 package kineticMonteCarlo.lattice;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -37,7 +36,7 @@ import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 
 /**
- *
+ *  
  * @author J. Alberdi-Rodriguez
  */
 class BdaLatticeHelper<T> {
@@ -45,6 +44,79 @@ class BdaLatticeHelper<T> {
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
   private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
 
+  /**
+   * It only changes the availability of the required positions: upper/lower
+   * bound for 0/2 directions and left/right for 1/3 directions.
+   *
+   * @param origin
+   * @param bdaUc
+   * @param direction 
+   */
+  void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
+    BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
+    List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
+    int[] affectedSitesOccAdd = null;
+    int[] affectedSitesOccRem = null;
+    int[] affectedSitesSurAdd = new int[9];
+    int[] affectedSitesSurRem = new int[9];
+    switch (direction) {
+      case 0:
+        affectedSitesOccAdd = new int[]{11,2,3,4,17};
+        affectedSitesOccRem = new int[]{9,8,7,6,19};
+        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
+          affectedSitesSurAdd[i] = i + 91;
+          affectedSitesSurRem[i] = i + 72;
+        }
+        break;
+      case 1:
+        affectedSitesOccAdd = new int[]{39,40};
+        affectedSitesOccRem = new int[]{9,10};
+        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
+          affectedSitesSurAdd[i] = i + 101;
+          affectedSitesSurRem[i] = i + 49;
+        }
+        affectedSitesSurRem[8] = 80;
+        break;
+      case 2:
+        affectedSitesOccAdd = new int[]{24,23,22,21,20};
+        affectedSitesOccRem = new int[]{10,1,0,5,18};
+        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
+          affectedSitesSurAdd[i] = i + 111;
+          affectedSitesSurRem[i] = i + 56;
+        }
+        break;
+      case 3:
+        affectedSitesOccAdd = new int[]{26,27};
+        affectedSitesOccRem = new int[]{18,19};
+        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
+          affectedSitesSurAdd[i] = i + 81;
+          affectedSitesSurRem[i] = i + 64;
+        }
+        break;
+      default:
+        System.out.println("Error!!");
+    }
+    for (int i = 0; i < affectedSitesOccAdd.length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesOccAdd[i]);
+      neighbour.setAvailable(DIFFUSION, false);
+    }
+    for (int i = 0; i < affectedSitesOccRem.length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesOccRem[i]);
+      neighbour.setAvailable(DIFFUSION, true);
+      
+    }
+    for (int i = 0; i < affectedSitesSurAdd.length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesSurAdd[i]);
+      neighbour.setAvailable(ADSORPTION, false);
+      neighbour.setBelongingBdaUc(bdaUc);
+    }
+    for (int i = 0; i < affectedSitesSurRem.length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesSurRem[i]);
+      neighbour.removeBdaUc(bdaUc);
+      neighbour.setAvailable(ADSORPTION, true);
+    }
+  }
+  
   /**
    * Reserve or release the space for current BDA molecule.
    * 

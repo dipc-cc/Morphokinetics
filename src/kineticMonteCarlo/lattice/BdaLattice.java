@@ -91,6 +91,16 @@ public class BdaLattice extends AbstractGrowthLattice {
     return 0;
   }
   
+  public void diffuse(BdaAgSurfaceSite agSiteOrigin, BdaAgSurfaceSite agSiteDestination, int direction) {
+    BdaMoleculeUc bdaUc = agSiteOrigin.getBdaUc();
+    agSiteDestination.setOccupied(true);
+    agSiteDestination.setBdaUc(bdaUc);
+    agSiteOrigin.setOccupied(false);
+    
+    BdaSurfaceUc agUc = getAgUc(agSiteOrigin);
+    lh.changeAvailability(agUc, bdaUc, direction);
+  }
+  
   /**
    * 
    * @param origin must be occupied.
