@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -52,8 +53,11 @@ class BdaLatticeHelper<T> {
    * @param bdaUc
    * @param direction 
    */
-  void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
+  List changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
     BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
+    List<ISite> modifiedSites = new ArrayList<>();
+    modifiedSites.add(origin.getSite(0)); // add origin
+    modifiedSites.add(origin.getSite(0).getNeighbour(direction)); // just in case, add destination too
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
     int[] affectedSitesOccAdd = null;
     int[] affectedSitesOccRem = null;
@@ -98,23 +102,27 @@ class BdaLatticeHelper<T> {
     }
     for (int i = 0; i < affectedSitesOccAdd.length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesOccAdd[i]);
+      modifiedSites.add(neighbour);
       neighbour.setAvailable(DIFFUSION, false);
     }
     for (int i = 0; i < affectedSitesOccRem.length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesOccRem[i]);
+      modifiedSites.add(neighbour);
       neighbour.setAvailable(DIFFUSION, true);
-      
     }
     for (int i = 0; i < affectedSitesSurAdd.length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesSurAdd[i]);
+      modifiedSites.add(neighbour);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
     }
     for (int i = 0; i < affectedSitesSurRem.length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesSurRem[i]);
+      modifiedSites.add(neighbour);
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
+    return modifiedSites;
   }
   
   /**
