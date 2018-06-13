@@ -37,12 +37,9 @@ import kineticMonteCarlo.unitCell.AbstractGrowthUc;
 public class KmcCanvasGrowth extends KmcCanvas {
 
   private RoundPerimeter perimeter;
-  private boolean printIslandNumber;
-  private boolean printMultiAtom;
   private boolean printIslandCentres;
   private boolean blackAndWhite; 
   private boolean printPerimeter; 
-  private boolean printId;
   
   public KmcCanvasGrowth(AbstractSurfaceLattice lattice, RoundPerimeter perimeter) {
     this(lattice);
@@ -54,12 +51,6 @@ public class KmcCanvasGrowth extends KmcCanvas {
     printIslandCentres = false;
     blackAndWhite = false;
     printPerimeter = false;
-    printId = true;
-  }
-  
-  @Override
-  public void setPrintId(boolean printId) {
-    this.printId = printId;
   }
   
   @Override
@@ -70,16 +61,6 @@ public class KmcCanvasGrowth extends KmcCanvas {
   @Override
   public void changePrintPerimeter() {
     printPerimeter = !printPerimeter;
-  }
-  
-  @Override
-  public void setPrintIslandNumber(boolean printIslandNumber) {
-    this.printIslandNumber = printIslandNumber;
-  }
-  
-  @Override
-  public void setPrintMultiAtom(boolean printMultiAtom) {
-    this.printMultiAtom = printMultiAtom;
   }
   
   @Override
@@ -125,14 +106,14 @@ public class KmcCanvasGrowth extends KmcCanvas {
           g.fillOval(X, Y, getScale(), getScale());
           if (getScale() > 8) {
             g.setColor(getContrastColor(g.getColor()));
-            if (printId) {
+            if (printId()) {
               g.drawString(Integer.toString(atom.getId()), X + (getScale() / 2) - (getScale() / 4), Y + (getScale() / 2) + (getScale() / 4));
             }
-            if (printIslandNumber) {
+            if (printIslandNumber()) {
               String text = Integer.toString(atom.getIslandNumber());
               g.drawString(text, X + (getScale() / 2) - (getScale() / 4), Y + (getScale() / 2) + (getScale() / 4));
             }
-            if (printMultiAtom) {
+            if (printMultiAtom()) {
               g.drawString(atom.getAttributes().getMultiAtomNumber().toString(), X + (getScale() / 2) - (getScale() / 4), Y + (getScale() / 2) + (getScale() / 4));
             }
           }

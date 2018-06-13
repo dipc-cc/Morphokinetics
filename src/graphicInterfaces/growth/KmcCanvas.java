@@ -69,6 +69,10 @@ public abstract class KmcCanvas extends Canvas {
   final Color[] colours = {WHITE, INDIANRED, BLUEVIOLET, GRAY, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   //private final Color[] colours = {GREEN, INDIANRED, BLUEVIOLET, BLACK, CORNFLOWERBLUE, DARKBLUE, GOLD, GREEN};
   
+  private boolean printId;
+  private boolean printIslandNumber;
+  private boolean printMultiAtom;
+  
   public KmcCanvas() {   //constructor
   }
   
@@ -83,6 +87,7 @@ public abstract class KmcCanvas extends Canvas {
     scale = 2;
     paused = false;
     restart = new Restart();
+    printId = true;
   }
   
   AbstractSurfaceLattice getLattice() {
@@ -131,6 +136,30 @@ public abstract class KmcCanvas extends Canvas {
     return paused;
   }
 
+  public void setPrintId(boolean printId) {
+    this.printId = printId;
+  }
+  
+  public boolean printId() {
+    return printId;
+  }
+  
+  public void setPrintIslandNumber(boolean printIslandNumber) {
+    this.printIslandNumber = printIslandNumber;
+  }
+  
+  public boolean printIslandNumber() {
+    return printIslandNumber;
+  }
+  
+  public void setPrintMultiAtom(boolean printMultiAtom) {
+    this.printMultiAtom = printMultiAtom;
+  }
+  
+  public boolean printMultiAtom() {
+    return printMultiAtom;
+  }
+  
   public void dispose() {
     setIgnoreRepaint(true); //we repaint manually
     setFocusable(false);
@@ -248,7 +277,4 @@ public abstract class KmcCanvas extends Canvas {
 
   abstract void changeBlackAndWhite();
   abstract void changePrintPerimeter();
-  abstract void setPrintId(boolean selected);
-  abstract void setPrintIslandNumber(boolean selected);
-  abstract void setPrintMultiAtom(boolean selected);
 }

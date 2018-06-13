@@ -21,6 +21,7 @@ package graphicInterfaces.growth;
 import basic.io.BdaRestart;
 import java.awt.Color;
 import static java.awt.Color.BLACK;
+import static java.awt.Color.YELLOW;
 import static java.awt.Color.white;
 import java.awt.Graphics;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
@@ -44,7 +45,6 @@ public class KmcCanvasBda extends KmcCanvas {
   private final double distanceAg;
   private final BdaRestart restart;
   private boolean detailed;
-  
   
   public KmcCanvasBda(AbstractSurfaceLattice lattice) {
     super(lattice);
@@ -78,7 +78,13 @@ public class KmcCanvasBda extends KmcCanvas {
           }
           if (getScale() >= 8 && true) {
             g.setColor(Color.BLACK);
-            g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2 * getScale());
+            if (printId()) {
+              g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2 * getScale());
+            }
+            if (printIslandNumber()) {
+              String text = Integer.toString(((BdaAgSurfaceSite) site).getBdaSize());
+              g.drawString(text, X + getScale(), Y + 2 * getScale());
+            }
           }
         }
         if (site.isOccupied()) {
@@ -100,19 +106,24 @@ public class KmcCanvasBda extends KmcCanvas {
       return;
     }
     BdaMoleculeSite bdaMolecule = (BdaMoleculeSite) muc.getSite(-1);
-    for (int i = 0; i < bdaMolecule.size() - 1; i++) {
+    for (int i = 0; i < bdaMolecule.size(); i++) {
       BdaAtomSite atom = (BdaAtomSite) bdaMolecule.getSite(i);
-
       int Y = (int) Math.round(((atom.getPos().getY() + (sUc.getPos().getY() + muc.getPos().getY()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseY();
       int X = (int) Math.round(((atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseX();
 
-      g.setColor(BLACK);
-      if (i > 13) { // Oxygen, instead of Carbon
-        g.setColor(RED);
+      if (i < bdaMolecule.size() - 1) {
+        g.setColor(BLACK);
+        if (i > 13) { // Oxygen, instead of Carbon
+          g.setColor(RED);
+        }
+        int width = (int) Math.round(getScale() * sizeBall);
+        int height = (int) Math.round(getScale() * sizeBall);
+        g.fillOval(X, Y, width, height);
+      } else if (printMultiAtom()) {
+        g.setColor(YELLOW);
+        String text = Integer.toString(bdaMolecule.getId());
+        g.drawString(text, X + getScale(), Y + 2 * getScale());
       }
-      int width = (int) Math.round(getScale() * sizeBall);
-      int height = (int) Math.round(getScale() * sizeBall);
-      g.fillOval(X, Y, width, height);
     }
   }
 
@@ -133,21 +144,6 @@ public class KmcCanvasBda extends KmcCanvas {
 
   @Override
   void changePrintPerimeter() {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  void setPrintId(boolean selected) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  void setPrintIslandNumber(boolean selected) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
-
-  @Override
-  void setPrintMultiAtom(boolean selected) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
   
