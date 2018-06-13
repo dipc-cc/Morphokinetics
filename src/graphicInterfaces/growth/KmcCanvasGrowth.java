@@ -72,10 +72,12 @@ public class KmcCanvasGrowth extends KmcCanvas {
     printPerimeter = !printPerimeter;
   }
   
+  @Override
   public void setPrintIslandNumber(boolean printIslandNumber) {
     this.printIslandNumber = printIslandNumber;
   }
   
+  @Override
   public void setPrintMultiAtom(boolean printMultiAtom) {
     this.printMultiAtom = printMultiAtom;
   }
