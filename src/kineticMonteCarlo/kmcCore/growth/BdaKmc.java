@@ -293,8 +293,8 @@ public class BdaKmc extends AbstractGrowthKmc {
     // far away positions, where another BDA molecule could be
     //updateRates(lattice.getModifiedSitesDiffusion(null, origin));
     //updateRates(lattice.getModifiedSitesDiffusion(null, destination));
-    //updateRates(lattice.getModifiedSitesRotation(destination));
-    updateRates(modifiedSites);
+    updateRates(lattice.getModifiedSitesRotation(destination));
+    //updateRates(modifiedSites);
   }
   
   private void rotateMolecule() {
