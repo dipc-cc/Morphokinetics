@@ -126,6 +126,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     Set<AbstractGrowthSite> modifiedSites = lh.getNeighbourSites(startingSite, direction, rotated);
     Iterator iter = modifiedSites.iterator();
     int i = 0;
+    // Sets the neighbours
     while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
       if (neighbour.isOccupied()) {
@@ -138,6 +139,7 @@ public class BdaLattice extends AbstractGrowthLattice {
       }
       i++;
     }
+    // Checks diffusion
     BdaMoleculeUc mUc = origin.getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
     byte type = bdaSite.getType();
