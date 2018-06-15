@@ -23,6 +23,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
@@ -44,7 +45,30 @@ class BdaLatticeHelper<T> {
 
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
   private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
+  private final int[][][] affectedSites;
 
+  public BdaLatticeHelper() {
+    affectedSites = new int[][][]{
+      // case 0
+      {
+        {11, 2, 3, 4, 17}, {9, 8, 7, 6, 19}, {91, 92, 93, 94, 95, 96, 97, 98, 99}, {72, 73, 74, 75, 76, 77, 78, 79, 80}
+      },
+      // case 1
+      {
+        {39, 40}, {9, 10}, {101, 102, 103, 104, 105, 106, 107, 108, 109}, {49, 50, 51, 52, 53, 54, 55, 56, 80}
+      },
+      // case 2
+      {
+        {24, 23, 22, 21, 20}, {10, 1, 0, 5, 18}, {111, 112, 113, 114, 115, 116, 117, 118, 119}, {56, 57, 58, 59, 60, 61, 62, 63, 64}
+      },
+      // case 3
+      {
+        {26, 27}, {18, 19}, {81, 82, 83, 84, 85, 86, 87, 88, 89}, {64, 65, 66, 67, 68, 69, 70, 71, 72}
+      }
+    };
+  }
+
+  
   /**
    * It only changes the availability of the required positions: upper/lower
    * bound for 0/2 directions and left/right for 1/3 directions.
@@ -59,65 +83,25 @@ class BdaLatticeHelper<T> {
     modifiedSites.add(origin.getSite(0)); // add origin
     modifiedSites.add(origin.getSite(0).getNeighbour(direction)); // just in case, add destination too
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
-    int[] affectedSitesOccAdd = null;
-    int[] affectedSitesOccRem = null;
-    int[] affectedSitesSurAdd = new int[9];
-    int[] affectedSitesSurRem = new int[9];
-    switch (direction) {
-      case 0:
-        affectedSitesOccAdd = new int[]{11,2,3,4,17};
-        affectedSitesOccRem = new int[]{9,8,7,6,19};
-        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
-          affectedSitesSurAdd[i] = i + 91;
-          affectedSitesSurRem[i] = i + 72;
-        }
-        break;
-      case 1:
-        affectedSitesOccAdd = new int[]{39,40};
-        affectedSitesOccRem = new int[]{9,10};
-        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
-          affectedSitesSurAdd[i] = i + 101;
-          affectedSitesSurRem[i] = i + 49;
-        }
-        affectedSitesSurRem[8] = 80;
-        break;
-      case 2:
-        affectedSitesOccAdd = new int[]{24,23,22,21,20};
-        affectedSitesOccRem = new int[]{10,1,0,5,18};
-        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
-          affectedSitesSurAdd[i] = i + 111;
-          affectedSitesSurRem[i] = i + 56;
-        }
-        break;
-      case 3:
-        affectedSitesOccAdd = new int[]{26,27};
-        affectedSitesOccRem = new int[]{18,19};
-        for (int i = 0; i < affectedSitesSurAdd.length; i++) {
-          affectedSitesSurAdd[i] = i + 81;
-          affectedSitesSurRem[i] = i + 64;
-        }
-        break;
-      default:
-        System.out.println("Error!!");
-    }
-    for (int i = 0; i < affectedSitesOccAdd.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesOccAdd[i]);
+    
+    for (int i = 0; i < affectedSites[direction][0].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][0][i]);
       modifiedSites.add(neighbour);
       neighbour.setAvailable(DIFFUSION, false);
     }
-    for (int i = 0; i < affectedSitesOccRem.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesOccRem[i]);
+    for (int i = 0; i < affectedSites[direction][1].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][1][i]);
       modifiedSites.add(neighbour);
       neighbour.setAvailable(DIFFUSION, true);
     }
-    for (int i = 0; i < affectedSitesSurAdd.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesSurAdd[i]);
+    for (int i = 0; i < affectedSites[direction][2].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][2][i]);
       modifiedSites.add(neighbour);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
     }
-    for (int i = 0; i < affectedSitesSurRem.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSitesSurRem[i]);
+    for (int i = 0; i < affectedSites[direction][3].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][3][i]);
       modifiedSites.add(neighbour);
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
