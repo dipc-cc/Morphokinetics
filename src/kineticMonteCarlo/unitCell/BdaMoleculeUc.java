@@ -53,14 +53,14 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     energy = 0;
   }
    
-  public void setNeighbour(BdaMoleculeUc uc, int pos) {
-    neighbours[pos] = uc;
+  public void setNeighbour(BdaMoleculeUc uc, int neighbourCode) {
+    neighbours[neighbourCode] = uc;
     if (uc != null) {
       if (bdaMolecule.getType() == ALPHA) {
         if (uc.isRotated()) {
-          pos = (pos + 3) % 12;
+          neighbourCode = (neighbourCode + 3) % 12;
         }
-        switch (pos) {
+        switch (neighbourCode) {
           case 0:
           case 2:
           case 6:
@@ -84,7 +84,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
         }
       }
       if (bdaMolecule.getType() == BETA) {
-        switch (pos) {
+        switch (neighbourCode) {
           case 0:
           case 2:
           case 6:
