@@ -238,7 +238,7 @@ class BdaLatticeHelper<T> {
     }
     switch (direction) {
       case 0:
-        travel = new int[]{3, 3, 3, 0};
+        travel = new int[]{3, 3, 0};
         break;
       case 1:
         travel = new int[]{1, 1, 1};
