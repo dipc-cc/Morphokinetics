@@ -34,11 +34,17 @@ import ratesLibrary.bda.AbstractBdaRates;
 public class BdaSimulation extends AbstractGrowthSimulation {
   
   BdaRestart restart;
+  private final int outputEvery;
   
   public BdaSimulation(Parser parser) {
     super(parser);
     restart = new BdaRestart(getRestartFolderName());
     setRestart(restart);
+    if (parser.outputData()){
+      outputEvery = parser.getOutputEvery();
+    } else {
+      outputEvery = -1;
+    }
   }
   
  @Override
@@ -73,5 +79,16 @@ public class BdaSimulation extends AbstractGrowthSimulation {
   
   @Override
   public void printRates(Parser parser) {
+  }
+  
+  /**
+   * Auxiliary method to choose to print intermediate files
+   * 
+   * @return true if should print.
+   */
+  @Override
+  boolean shouldPrint() {
+    return outputEvery > 0 &&
+            ((BdaKmc) getKmc()).getSimulatedSteps() % outputEvery == 0;
   }
 }

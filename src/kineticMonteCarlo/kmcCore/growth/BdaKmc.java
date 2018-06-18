@@ -168,6 +168,9 @@ public class BdaKmc extends AbstractGrowthKmc {
     return returnValue;
   }
   
+  public long getSimulatedSteps() {
+    return simulatedSteps;
+  }
   
   /**
    * Performs a simulation step.
