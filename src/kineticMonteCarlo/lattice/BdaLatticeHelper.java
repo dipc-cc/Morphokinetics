@@ -45,19 +45,60 @@ class BdaLatticeHelper<T> {
 
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
   private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
-  /** [direction][edge][atom]. */
-  private final int[][][] affectedSites;
+  /** [rotated][direction][edge][atom]. */
+  private final int[][][][] affectedSites;
 
   public BdaLatticeHelper() {
-    affectedSites = new int[][][]{
+    int[][][] affectedFar = new int[][][] {
+      { // direction 0
+        {91, 92, 93, 94, 95, 96, 97, 98, 99}, {72, 73, 74, 75, 76, 77, 78, 79, 80}},
+      {// direction 1
+        {101, 102, 103, 104, 105, 106, 107, 108, 109}, {49, 50, 51, 52, 53, 54, 55, 56, 80}},
+      {// direction 2
+        {111, 112, 113, 114, 115, 116, 117, 118, 119}, {56, 57, 58, 59, 60, 61, 62, 63, 64}},
+      {// direction 3
+      {81, 82, 83, 84, 85, 86, 87, 88, 89}, {64, 65, 66, 67, 68, 69, 70, 71, 72}}
+    };
+    
+    int[][][] affectedSitesNotRotated = new int[][][]{
       // direction 0
-      {{11, 2, 3, 4, 17}, {9, 8, 7, 6, 19}, {91, 92, 93, 94, 95, 96, 97, 98, 99}, {72, 73, 74, 75, 76, 77, 78, 79, 80}},
+      {{11, 2, 3, 4, 17}, {9, 8, 7, 6, 19}},
       // direction 1
-      {{39, 40}, {9, 10}, {101, 102, 103, 104, 105, 106, 107, 108, 109}, {49, 50, 51, 52, 53, 54, 55, 56, 80}},
+      {{39, 40}, {9, 10}},
       // direction 2
-      {{24, 23, 22, 21, 20}, {10, 1, 0, 5, 18}, {111, 112, 113, 114, 115, 116, 117, 118, 119}, {56, 57, 58, 59, 60, 61, 62, 63, 64}},
+      {{24, 23, 22, 21, 20}, {10, 1, 0, 5, 18}},
       // direction 3
-      {{26, 27}, {18, 19}, {81, 82, 83, 84, 85, 86, 87, 88, 89}, {64, 65, 66, 67, 68, 69, 70, 71, 72}}
+      {{26, 27}, {18, 19}}
+    };
+    int[][][] affectedSitesYesRotated = new int[][][]{
+      // direction 0
+      {{33, 34}, {22, 21}},
+      // direction 1
+      {{16, 17, 18, 19, 20}, {14, 3, 0, 7, 22}},
+      // direction 2
+      {{44, 45}, {14, 15}},
+      // direction 3
+      {{13, 2, 1, 8, 23}, {15, 4, 5, 6, 21}}
+    };
+    //int[][][] pos2 = new int[][][]{affectedSites[0],affectedSites[1],affectedSites[2],affectedSites[3]};
+    affectedSites = new int[][][][]{// not rotated
+      {// direction 0
+        {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+        // direction 1
+        {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+        // direction 2
+        {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+        // direction 3
+        {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+      }, {// direction 0
+        {affectedSitesYesRotated[0][0], affectedSitesYesRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+        // direction 1
+        {affectedSitesYesRotated[1][0], affectedSitesYesRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+        // direction 2
+        {affectedSitesYesRotated[2][0], affectedSitesYesRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+        // direction 3
+        {affectedSitesYesRotated[3][0], affectedSitesYesRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+      }
     };
   }
 
@@ -73,22 +114,23 @@ class BdaLatticeHelper<T> {
   void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
     BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
+    int rotated = bdaUc.isRotated() ? 1 : 0;
     
-    for (int i = 0; i < affectedSites[direction][0].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][0][i]);
+    for (int i = 0; i < affectedSites[rotated][direction][0].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][0][i]);
       neighbour.setAvailable(DIFFUSION, false);
     }
-    for (int i = 0; i < affectedSites[direction][1].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][1][i]);
+    for (int i = 0; i < affectedSites[rotated][direction][1].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][1][i]);
       neighbour.setAvailable(DIFFUSION, true);
     }
-    for (int i = 0; i < affectedSites[direction][2].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][2][i]);
+    for (int i = 0; i < affectedSites[rotated][direction][2].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][2][i]);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
     }
-    for (int i = 0; i < affectedSites[direction][3].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][3][i]);
+    for (int i = 0; i < affectedSites[rotated][direction][3].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][3][i]);
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
