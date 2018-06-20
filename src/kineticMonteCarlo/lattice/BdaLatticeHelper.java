@@ -70,36 +70,28 @@ class BdaLatticeHelper<T> {
    * @param bdaUc
    * @param direction 
    */
-  List changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
+  void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
     BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
-    List<ISite> modifiedSites = new ArrayList<>();
-    modifiedSites.add(origin.getSite(0)); // add origin
-    modifiedSites.add(origin.getSite(0).getNeighbour(direction)); // just in case, add destination too
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
     
     for (int i = 0; i < affectedSites[direction][0].length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][0][i]);
-      modifiedSites.add(neighbour);
       neighbour.setAvailable(DIFFUSION, false);
     }
     for (int i = 0; i < affectedSites[direction][1].length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][1][i]);
-      modifiedSites.add(neighbour);
       neighbour.setAvailable(DIFFUSION, true);
     }
     for (int i = 0; i < affectedSites[direction][2].length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][2][i]);
-      modifiedSites.add(neighbour);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
     }
     for (int i = 0; i < affectedSites[direction][3].length; i++) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[direction][3][i]);
-      modifiedSites.add(neighbour);
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
-    return modifiedSites;
   }
   
   /**
