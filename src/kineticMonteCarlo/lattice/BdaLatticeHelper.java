@@ -178,6 +178,7 @@ class BdaLatticeHelper<T> {
     BdaMoleculeUc bdaUc = agSite.getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
     BdaAgSurfaceSite neighbourSite = (BdaAgSurfaceSite) origin.getSite(0);
+    int diffusionAvailableLimit = bdaSite.getType() == BETA && bdaSite.isRotated() ? 11 : 10;
     for (int i = 0; i < 11;
      //       alphaTravelling.length;
     i++) {
@@ -189,7 +190,7 @@ class BdaLatticeHelper<T> {
         neighbourSite.setBelongingBdaUc(bdaUc);
       }
       neighbourSite.setAvailable(ADSORPTION, makeAvailable);
-      if (i < 10) { // Beta 11
+      if (i < diffusionAvailableLimit) { // Beta 11
         neighbourSite.setAvailable(DIFFUSION, makeAvailable);
         neighbourSite.setAvailable(ROTATION, makeAvailable);
       }
@@ -473,8 +474,15 @@ class BdaLatticeHelper<T> {
           }
           break;
         case 1:
+          site = site.getNeighbour(neighbourDirection);
+          modifiedSites.add(site);
+          site = site.getNeighbour(neighbourDirection).getNeighbour(3).getNeighbour(3);
+          modifiedSites.add(site);
+          break;
         case 3:
           site = site.getNeighbour(neighbourDirection);
+          modifiedSites.add(site);
+          site = site.getNeighbour(neighbourDirection).getNeighbour(1).getNeighbour(1);
           modifiedSites.add(site);
           break;
         default:
