@@ -18,6 +18,7 @@
  */
 package kineticMonteCarlo.lattice;
 
+import static java.lang.Math.log;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -43,8 +44,8 @@ class BdaLatticeHelper<T> {
 
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
   private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
-  /** [rotated][direction][edge][atom]. */
-  private final int[][][][] affectedSites;
+  /** [type][rotated][direction][edge][atom]. */
+  private final int[][][][][] affectedSites;
 
   public BdaLatticeHelper() {
     int[][][] affectedFar = new int[][][] {
@@ -78,24 +79,55 @@ class BdaLatticeHelper<T> {
       // direction 3
       {{13, 2, 1, 8, 23}, {15, 4, 5, 6, 21}}
     };
+    
+    int[][][] affectedSitesYesBetaRot = new int[][][]{
+      // direction 0
+      {{14, 15, 16, 11, 2}, {5, 18, 7, 8, 9}},
+      // direction 1
+      {{38, 39, 6}, {9, 10, 3}},
+      // direction 2
+      {{22, 23, 24, 6, 19}, {3, 4, 17, 10, 1}},
+      // direction 3
+      {{26, 27, 2}, {17, 18, 7}}};
+
     //int[][][] pos2 = new int[][][]{affectedSites[0],affectedSites[1],affectedSites[2],affectedSites[3]};
-    affectedSites = new int[][][][]{// not rotated
-      {// direction 0
-        {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
-        // direction 1
-        {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
-        // direction 2
-        {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
-        // direction 3
-        {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
-      }, {// direction 0
-        {affectedSitesYesRotated[0][0], affectedSitesYesRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
-        // direction 1
-        {affectedSitesYesRotated[1][0], affectedSitesYesRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
-        // direction 2
-        {affectedSitesYesRotated[2][0], affectedSitesYesRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
-        // direction 3
-        {affectedSitesYesRotated[3][0], affectedSitesYesRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+    affectedSites = new int[][][][][]{ //Alpha
+      {// not rotated
+        {// direction 0
+          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+          // direction 1
+          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+          // direction 2
+          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+          // direction 3
+          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+        }, {// direction 0
+          {affectedSitesYesRotated[0][0], affectedSitesYesRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+          // direction 1
+          {affectedSitesYesRotated[1][0], affectedSitesYesRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+          // direction 2
+          {affectedSitesYesRotated[2][0], affectedSitesYesRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+          // direction 3
+          {affectedSitesYesRotated[3][0], affectedSitesYesRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+        }
+      }, { // Beta
+        {// direction 0
+          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+          // direction 1
+          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+          // direction 2
+          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+          // direction 3
+          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+        }, {// direction 0
+          {affectedSitesYesBetaRot[0][0], affectedSitesYesBetaRot[0][1], affectedFar[0][0], affectedFar[0][1]},
+          // direction 1
+          {affectedSitesYesBetaRot[1][0], affectedSitesYesBetaRot[1][1], affectedFar[1][0], affectedFar[1][1]},
+          // direction 2
+          {affectedSitesYesBetaRot[2][0], affectedSitesYesBetaRot[2][1], affectedFar[2][0], affectedFar[2][1]},
+          // direction 3
+          {affectedSitesYesBetaRot[3][0], affectedSitesYesBetaRot[3][1], affectedFar[3][0], affectedFar[3][1]}
+        }
       }
     };
   }
@@ -113,22 +145,23 @@ class BdaLatticeHelper<T> {
     BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
     int rotated = bdaUc.isRotated() ? 1 : 0;
+    int type = (int) (log(bdaUc.getSite(0).getType()) / log(2));
     
-    for (int i = 0; i < affectedSites[rotated][direction][0].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][0][i]);
+    for (int i = 0; i < affectedSites[type][rotated][direction][0].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][0][i]);
       neighbour.setAvailable(DIFFUSION, false);
     }
-    for (int i = 0; i < affectedSites[rotated][direction][1].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][1][i]);
+    for (int i = 0; i < affectedSites[type][rotated][direction][1].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][1][i]);
       neighbour.setAvailable(DIFFUSION, true);
     }
-    for (int i = 0; i < affectedSites[rotated][direction][2].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][2][i]);
+    for (int i = 0; i < affectedSites[type][rotated][direction][2].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][2][i]);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
     }
-    for (int i = 0; i < affectedSites[rotated][direction][3].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[rotated][direction][3][i]);
+    for (int i = 0; i < affectedSites[type][rotated][direction][3].length; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][3][i]);
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
