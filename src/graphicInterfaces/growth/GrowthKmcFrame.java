@@ -85,6 +85,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   private JCheckBoxMenuItem centresMi;
   private JCheckBoxMenuItem perimeterMi;
   private JProgressBar progressBar;
+  private JLabel labelTime;
   private final int maxCoverage;
   private JCheckBoxMenuItem idMi;
   private JCheckBoxMenuItem islandsMi;
@@ -174,12 +175,14 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   /**
    * Updates the progress bar of the bottom of the frame.
    * 
-   * @param coverage 
+   * @param coverage current coverage.
+   * @param time current simulation time.
    */
   @Override
-  public void updateProgressBar(int coverage) {
+  public void updateProgressBar(int coverage, double time) {
     progressBar.setValue(coverage);
     statusbar.setText(Integer.toString(coverage) + "/" + maxCoverage);
+    labelTime.setText("Time: " + Double.toString(time));
   }
 
   /**
@@ -203,6 +206,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     idButton.setIcon(new ImageIcon(Restart.getJarBaseDir() + "/resources/png/id.png"));
     statusbar = new JLabel("Running");
     progressBar = new JProgressBar(0, maxCoverage);
+    labelTime = new JLabel();
 
     JScrollPane scrollPane = new JScrollPane(panel);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -211,6 +215,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     setMinimumSize(new Dimension(300, 110));
 
     labelScale.setText("Scale");
+    labelTime.setText("Time");
 
     spinnerScale.setModel(new SpinnerNumberModel(1, 1, null, 1));
     spinnerScale.setFocusCycleRoot(true);
@@ -255,7 +260,9 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
                             .addGroup(layout.createSequentialGroup()
                                     .addComponent(statusbar)
                                     .addPreferredGap(RELATED)
-                                    .addComponent(progressBar))
+                                    .addComponent(progressBar)
+                                    .addPreferredGap(RELATED).
+                                    addComponent(labelTime))
                             .addComponent(scrollPane, DEFAULT_SIZE, DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                     .addComponent(labelScale)
@@ -290,7 +297,8 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
                     .addContainerGap()
                     .addGroup(layout.createParallelGroup(LEADING)
                               .addComponent(statusbar)
-                    .addComponent(progressBar))
+                    .addComponent(progressBar)
+                    .addComponent(labelTime))
             ));
 
     pack();
