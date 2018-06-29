@@ -68,11 +68,15 @@ public class BdaLattice extends AbstractGrowthLattice {
 
   @Override
   public void deposit(AbstractSurfaceSite agSite, boolean rotated) {
+    deposit(agSite, rotated, null);
+  }
+  
+  public void deposit(AbstractSurfaceSite agSite, boolean rotated, Byte type) {
     BdaAgSurfaceSite a = (BdaAgSurfaceSite) agSite;
     BdaSurfaceUc agUc = getAgUc(a);
     //if (!agUc.isAvailable(ADSORPTION))
     //  return; // should not happen. It happens in a diffusion. So, it must be allowed with rotations
-    BdaMoleculeUc bdaUc = new BdaMoleculeUc(depositions);
+    BdaMoleculeUc bdaUc = new BdaMoleculeUc(depositions, type);
     bdaUc.setRotated(rotated);
     a.setOccupied(true);
     a.setBdaUc(bdaUc);
@@ -204,6 +208,8 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @return 
    */
   public boolean canRotate(BdaAgSurfaceSite origin) {
+    if (origin.getBdaUc().getSite(0).getType() == ALPHA) 
+      return false;
     boolean canRotate = true;
     List<ISite> modifiedSites = getModifiedSitesRotation(origin);
     

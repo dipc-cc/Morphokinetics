@@ -84,7 +84,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     {-6.04042, 1.09589},
     {0, 0}};
 
-  public BdaMoleculeSite(int id, boolean rotated) { // int type (alpha, beta...)
+  public BdaMoleculeSite(int id, boolean rotated, Byte type) { // int type (alpha, beta...)
     super(id, (short) -1, (short) -1, 0, -1);
     atoms = new BdaAtomSite[19];
     rotateAtoms();
@@ -96,7 +96,10 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     }
     setProcceses(processes);
     setNumberOfNeighbours(4);
-    type = ALPHA;
+    if (type == null)
+      this.type = ALPHA;
+    else 
+      this.type = type;
   }
   
   public boolean isRotated() {

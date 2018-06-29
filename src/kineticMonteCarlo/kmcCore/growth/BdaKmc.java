@@ -30,7 +30,6 @@ import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DESORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ROTATION;
-import static kineticMonteCarlo.process.BdaProcess.TRANSFORMATION;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
@@ -44,6 +43,8 @@ import utils.list.atoms.AtomsArrayList;
 import utils.list.atoms.AtomsAvlTree;
 import utils.list.atoms.AtomsCollection;
 import utils.list.atoms.IAtomsCollection;
+import static kineticMonteCarlo.process.BdaProcess.TRANSFORM;
+import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 
 /**
  *
@@ -101,7 +102,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     sites[2] = col.getCollection(false, (byte) 2); // just to keep all the values
     sites[DIFFUSION] = col.getCollection(false, DIFFUSION);
     sites[ROTATION] = col.getCollection(false, ROTATION);
-    sites[TRANSFORMATION] = col.getCollection(false,TRANSFORMATION);
+    sites[TRANSFORM] = col.getCollection(false,TRANSFORM);
     
     totalRate = new double[6]; // adsorption, diffusion, island diffusion, multi-atom
 
@@ -198,7 +199,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       case ROTATION:
         rotateMolecule();
         break;
-      case TRANSFORMATION:
+      case TRANSFORM:
         transformMolecule();
         break;
     }
@@ -265,7 +266,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     if (id < 0) {
       destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].randomElement();
       if (doP[ROTATION] && StaticRandom.raw() < 0.5) {
-        rotated = true;
+        rotated = false;
       }
     } else {
       destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].search(new BdaAgSurfaceSite(id, (short) -1, (short) -1));
@@ -297,12 +298,17 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void rotateMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[ROTATION].randomElement();
     boolean rotated = !origin.getBdaUc().isRotated();
+    byte originType = origin.getBdaUc().getSite(0).getType();
     lattice.extract(origin);
-    lattice.deposit(origin, rotated);
+    lattice.deposit(origin, rotated, originType);
     updateRates(lattice.getModifiedSitesRotation(origin));
   }
   
-  private void transformMolecule() {}
+  private void transformMolecule() {
+    BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[TRANSFORM].randomElement();
+    origin.getBdaUc().getSite(0).setType((byte) BETA);    
+    updateRates(lattice.getModifiedSitesRotation(origin));
+  }
   
   private void updateRates(List<ISite> modifiedSites) {
     // save previous rates
@@ -316,6 +322,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       if (doP[DESORPTION]) recomputeDesorptionRate(site);
       if (doP[DIFFUSION])  recomputeDiffusionRate(site);
       if (doP[ROTATION])   recomputeRotationRate(site);
+      if (doP[TRANSFORM])  recomputeTransformRate(site);
     }
     
     // recalculate total rate, if needed
@@ -429,6 +436,49 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private double getRotationRate(BdaAgSurfaceSite origin) {
     return rates.getRotationRate(origin.getBdaUc());//grotationRatePerMolecule[0];
+  }
+  
+  private void recomputeTransformRate(BdaAgSurfaceSite agSite) {
+    totalRate[TRANSFORM] -= agSite.getRate(TRANSFORM);
+    if (!agSite.isOccupied()) {
+      if (agSite.isOnList(TRANSFORM)) {
+        sites[TRANSFORM].removeAtomRate(agSite);
+      }
+      agSite.setOnList(TRANSFORM, false);
+      return;
+    }
+    if (agSite.isOccupied() && agSite.getBdaUc().getSite(0).getType() == BETA) {
+      if (agSite.isOnList(TRANSFORM)) {
+        sites[TRANSFORM].removeAtomRate(agSite);
+      }
+      agSite.setOnList(TRANSFORM, false);
+      return;
+    }
+    double oldRotationRate = agSite.getRate(TRANSFORM);
+    agSite.setRate(TRANSFORM, 0); 
+    //agSite.getBdaUc().resetNeighbourhood();   
+    boolean[] canTransform = new boolean[4];
+    // it needs a first check, to get all the neighbourhood occupancy
+    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+    canTransform[0] = lattice.canTransform(agSite);
+    //}
+    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+    if (canTransform[0]) {
+      double rate = getTransformRate(agSite);
+      agSite.setRate(TRANSFORM, rate);
+    }
+    //}
+    recomputeCollection(TRANSFORM, agSite, oldRotationRate);
+  }
+  
+  private double getTransformRate(BdaAgSurfaceSite origin) {
+    if (//maxCoverage <= getCoverage() 
+            simulatedSteps> 5e6){
+      
+      return 1e3;//rates.getTransformRate(origin.getBdaUc());
+    }
+    return 0;
+      
   }
   
   /**

@@ -44,10 +44,10 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   private int occupiedNeighbours;
   private final int id;
   
-  public BdaMoleculeUc(int id ) {
+  public BdaMoleculeUc(int id, Byte type) {
     super(-1, -1, null);
     this.id = id;
-    bdaMolecule = new BdaMoleculeSite(id, false);
+    bdaMolecule = new BdaMoleculeSite(id, false, type);
    
     numberOfNeighbours = 12;
     neighbours = new BdaMoleculeUc[numberOfNeighbours];
