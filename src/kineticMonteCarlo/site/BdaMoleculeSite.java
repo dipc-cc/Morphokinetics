@@ -155,6 +155,11 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   }
 
   @Override
+  public void setType(byte type) {
+    this.type = type;
+  }
+  
+  @Override
   public byte getType() {
     return (byte) type;
   }
