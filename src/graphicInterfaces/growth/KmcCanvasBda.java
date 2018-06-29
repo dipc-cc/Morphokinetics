@@ -32,6 +32,7 @@ import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.site.BdaAtomSite;
 import kineticMonteCarlo.site.BdaMoleculeSite;
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 
@@ -112,7 +113,11 @@ public class KmcCanvasBda extends KmcCanvas {
       int X = (int) Math.round(((atom.getPos().getX() + (sUc.getPos().getX() + muc.getPos().getX()) * distanceAg) * getScale()) - sizeBall * getScale() / 2.0) + getBaseX();
 
       if (i < bdaMolecule.size() - 1) {
-        g.setColor(BLACK);
+        if (bdaMolecule.getType() == ALPHA) {
+          g.setColor(BLACK);
+        } else {
+          g.setColor(DARKBLUE);
+        }
         if (i > 13) { // Oxygen, instead of Carbon
           g.setColor(RED);
         }
