@@ -218,6 +218,17 @@ public class BdaLattice extends AbstractGrowthLattice {
     }
     return canRotate;
   }
+  
+  /**
+   * A BDA molecule can transform from alpha to beta if is not bulk.
+   * 
+   * @param origin must be occupied.
+   * @return 
+   */
+  public boolean canTransform(BdaAgSurfaceSite origin) {
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
+    return bdaUc.getOccupiedNeighbours() < 6;
+  }
 
   /**
    * Includes all -2, +2 in main molecule axis and -1,+1 in the other axis of the current site in a
