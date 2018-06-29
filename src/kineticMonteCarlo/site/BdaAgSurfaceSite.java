@@ -54,6 +54,11 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     available = new boolean[6];
   }
 
+  /**
+   * Returns the BDA molecule that its centre is in the current Ag surface site.
+   * 
+   * @return BDA molecule or null.
+   */
   public BdaMoleculeUc getBdaUc() {
     return bdaUc;
   }
