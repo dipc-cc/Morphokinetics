@@ -41,6 +41,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   /** Base energy of the molecule. It will be updated with the neighbourhood.*/
   private double energy;
   private final int numberOfNeighbours;
+  private int occupiedNeighbours;
   private final int id;
   
   public BdaMoleculeUc(int id ) {
@@ -51,11 +52,13 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     numberOfNeighbours = 12;
     neighbours = new BdaMoleculeUc[numberOfNeighbours];
     energy = 0;
+    occupiedNeighbours = 0;
   }
    
   public void setNeighbour(BdaMoleculeUc uc, int neighbourCode) {
     neighbours[neighbourCode] = uc;
     if (uc != null) {
+      occupiedNeighbours++;
       if (bdaMolecule.getType() == ALPHA) {
         if (uc.isRotated()) {
           neighbourCode = (neighbourCode + 3) % 12;
@@ -117,15 +120,31 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
       neighbours[i] = null;
     }
     energy = 0.0; // reset the energy too
+    occupiedNeighbours = 0;
   }
 
   public BdaMoleculeUc getNeighbour(int pos) {
     return neighbours[pos];
   }
   
+  /**
+   * All possible neighbours.
+   * 
+   * @return 
+   */
   public int getNumberOfNeighbours() {
     return numberOfNeighbours;
   }
+  
+  /**
+   * Number of occupied neighbours.
+   * 
+   * @return 
+   */
+  public int getOccupiedNeighbours() {
+    return occupiedNeighbours;
+  }
+  
   /**
    * Base energy of the molecule.
    * 
