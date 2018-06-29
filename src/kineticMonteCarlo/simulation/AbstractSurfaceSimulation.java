@@ -142,6 +142,7 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
     public void run() {
       while (true) {
         frame.repaintKmc();
+        frame.updateProgressBar(getCurrentProgress());
         try {
           PaintLoop.sleep(100);
           if (// If this is true, print a png image to a file. This is true when coverage is multiple of 0.1
@@ -149,7 +150,6 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
             if (printIntermediatePngFiles) {
               frame.printToImage(getRestartFolderName(), 1000 + totalSavedImages);
             }
-            frame.updateProgressBar(getCurrentProgress());
             updateCurrentProgress();
             totalSavedImages++;
           }
