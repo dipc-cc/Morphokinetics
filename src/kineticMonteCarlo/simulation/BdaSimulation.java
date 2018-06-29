@@ -91,4 +91,9 @@ public class BdaSimulation extends AbstractGrowthSimulation {
     return outputEvery > 0 &&
             ((BdaKmc) getKmc()).getSimulatedSteps() % outputEvery == 0;
   }
+  
+  @Override
+  public int getCurrentProgress() {
+    return (int) (getKmc().getCoverage()*100);
+  }
 }
