@@ -142,7 +142,7 @@ public abstract class AbstractSurfaceSimulation extends AbstractSimulation {
     public void run() {
       while (true) {
         frame.repaintKmc();
-        frame.updateProgressBar(getCurrentProgress(),getKmc().getTime());
+        frame.updateProgressBar(getCurrentProgress(),getKmc().getTime(), (double) getKmc().getSimulatedSteps());
         try {
           PaintLoop.sleep(100);
           if (// If this is true, print a png image to a file. This is true when coverage is multiple of 0.1

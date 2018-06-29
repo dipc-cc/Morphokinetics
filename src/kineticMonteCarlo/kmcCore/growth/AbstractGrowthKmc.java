@@ -120,6 +120,11 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
     nucleations = 0;
     activationEnergy = new ActivationEnergy(parser);
   }
+  
+  @Override
+  public long getSimulatedSteps() {
+    return simulatedSteps;
+  }
     
   /**
    * 

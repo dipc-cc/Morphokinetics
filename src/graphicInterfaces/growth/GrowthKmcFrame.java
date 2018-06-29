@@ -177,12 +177,13 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
    * 
    * @param coverage current coverage.
    * @param time current simulation time.
+   * @param steps simulated steps.
    */
   @Override
-  public void updateProgressBar(int coverage, double time) {
+  public void updateProgressBar(int coverage, double time, double steps) {
     progressBar.setValue(coverage);
     statusbar.setText(Integer.toString(coverage) + "/" + maxCoverage);
-    labelTime.setText("Time: " + Double.toString(time));
+    labelTime.setText("Time: " + Double.toString(time) + "| Steps: " + Double.toString(steps));
   }
 
   /**

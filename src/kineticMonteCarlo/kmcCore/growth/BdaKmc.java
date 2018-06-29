@@ -121,7 +121,12 @@ public class BdaKmc extends AbstractGrowthKmc {
       doP[i] = parser.doBdaProcess(processes[i]);
     }
     adsorptionStopped = false;
-   }
+  }
+  
+  @Override
+  public long getSimulatedSteps() {
+    return simulatedSteps;
+  }
   
   @Override
   public int simulate() {    
@@ -166,10 +171,6 @@ public class BdaKmc extends AbstractGrowthKmc {
       //printData();
     } 
     return returnValue;
-  }
-  
-  public long getSimulatedSteps() {
-    return simulatedSteps;
   }
   
   /**

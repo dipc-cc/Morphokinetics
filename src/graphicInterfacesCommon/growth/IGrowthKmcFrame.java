@@ -28,5 +28,5 @@ public interface IGrowthKmcFrame {
 
   public void repaintKmc();
 
-  public void updateProgressBar(int coverage, double time);
+  public void updateProgressBar(int coverage, double time, double steps);
 }
