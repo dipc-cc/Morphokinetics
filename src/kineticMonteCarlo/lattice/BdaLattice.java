@@ -105,6 +105,15 @@ public class BdaLattice extends AbstractGrowthLattice {
     lh.changeAvailability(agUc, bdaUc, direction);
   }
   
+  public void rotate(BdaAgSurfaceSite agSiteOrigin) {
+    BdaMoleculeUc bdaUc = agSiteOrigin.getBdaUc();
+    boolean rotated = !agSiteOrigin.getBdaUc().isRotated();
+    bdaUc.setRotated(rotated);
+    
+    BdaSurfaceUc agUc = getAgUc(agSiteOrigin);
+    lh.changeAvailability(rotated, agUc);
+  }
+  
   /**
    * 
    * @param origin must be occupied.

@@ -297,10 +297,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private void rotateMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[ROTATION].randomElement();
-    boolean rotated = !origin.getBdaUc().isRotated();
-    byte originType = origin.getBdaUc().getSite(0).getType();
-    lattice.extract(origin);
-    lattice.deposit(origin, rotated, originType);
+    lattice.rotate(origin);
     updateRates(lattice.getModifiedSitesRotation(origin));
   }
   
