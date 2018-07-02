@@ -456,7 +456,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     if (//maxCoverage <= getCoverage() 
             simulatedSteps> 5e6){
       
-      return 1e3;//rates.getTransformRate(origin.getBdaUc());
+      return 1e7;//rates.getTransformRate(origin.getBdaUc());
     }
     return 0;
       
