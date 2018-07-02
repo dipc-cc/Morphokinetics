@@ -394,15 +394,16 @@ public class BdaKmc extends AbstractGrowthKmc {
     }
     for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
       if (canDiffuse[i]) {
-        double rate = getDiffusionRate(agSite, i);
+        double rate = getDiffusionRate(agSite);
         agSite.addRate(DIFFUSION, rate, i);
       }
     }
     recomputeCollection(DIFFUSION, agSite, oldDiffusionRate);
   }
   
-  private double getDiffusionRate(BdaAgSurfaceSite origin, int direction) {
-    return rates.getDiffusionRate(origin.getBdaUc(), direction);
+  private double getDiffusionRate(BdaAgSurfaceSite origin) {
+    byte type = origin.getBdaUc().getSite(0).getType();
+    return rates.getDiffusionRate(origin.getBdaUc(), type);
   }
   
   private void recomputeRotationRate(BdaAgSurfaceSite agSite) {

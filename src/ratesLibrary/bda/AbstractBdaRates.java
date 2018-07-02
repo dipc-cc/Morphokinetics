@@ -70,20 +70,18 @@ public abstract class AbstractBdaRates implements IRates {
    * Base energy of the molecule - the actual energy (depending on the neighbourhood).
    * 
    * @param bdaUc unit cell that contains the BDA molecule.
-   * @param direction diffusion direction.
+   * @param type alpha or beta.
    * @return rate.
    */
-  public double getDiffusionRate(BdaMoleculeUc bdaUc, int direction) {
-    if (bdaUc.isRotated())
-      direction = (direction + 1) % 4;
-    return getRate(getDiffusionEnergy(direction) - bdaUc.getEnergy());
+  public double getDiffusionRate(BdaMoleculeUc bdaUc, byte type) {
+    return getRate(getDiffusionEnergy(type) - bdaUc.getEnergy());
   }
   
   private double getRate(double energy) {
     return prefactor * Math.exp(-energy / (kB * temperature));
   }
  
-  abstract double getDiffusionEnergy(int direction);
+  abstract double getDiffusionEnergy(byte type);
   
   public double getRotationRate(BdaMoleculeUc bdaUc) {
     return getRate(getRotationEnergy() - bdaUc.getEnergy());

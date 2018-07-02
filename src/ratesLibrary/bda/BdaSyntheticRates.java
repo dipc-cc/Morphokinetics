@@ -18,6 +18,9 @@
  */
 package ratesLibrary.bda;
 
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
+import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
+
 /**
  * 
  * @author J. Alberdi-Rodriguez
@@ -29,9 +32,9 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   
   public BdaSyntheticRates(float temperature) {
     super(temperature);
-    diffusionEnergy = new double[2];
-    diffusionEnergy[0] = 0.3; // vertical diffusion
-    diffusionEnergy[1] = 0.3; // horizontal diffusion
+    diffusionEnergy = new double[3];
+    diffusionEnergy[ALPHA] = 0.3; // alpha diffusion
+    diffusionEnergy[BETA] = 0.2; // beta diffusion
     rotationEnergy = 0.2;
   }
 
@@ -51,8 +54,8 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   } 
   
   @Override
-  double getDiffusionEnergy(int direction) {
-    return diffusionEnergy[direction % 2];
+  double getDiffusionEnergy(byte type) {
+    return diffusionEnergy[type];
   }
   
   @Override
