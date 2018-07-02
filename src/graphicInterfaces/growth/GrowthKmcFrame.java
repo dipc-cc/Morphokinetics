@@ -183,7 +183,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
   public void updateProgressBar(int coverage, double time, double steps) {
     progressBar.setValue(coverage);
     statusbar.setText(Integer.toString(coverage) + "/" + maxCoverage);
-    labelTime.setText("Time: " + Double.toString(time) + "| Steps: " + Double.toString(steps));
+    labelTime.setText("Time: " + String.format("%1.2e",time) + "| Steps: " + String.format("%1.1e", steps));
   }
 
   /**
