@@ -416,23 +416,15 @@ public class BdaKmc extends AbstractGrowthKmc {
     }
     double oldRotationRate = agSite.getRate(ROTATION);
     agSite.setRate(ROTATION, 0); 
-    //agSite.getBdaUc().resetNeighbourhood();   
-    boolean[] canRotate = new boolean[4];
-    // it needs a first check, to get all the neighbourhood occupancy
-    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-    canRotate[0] = lattice.canRotate(agSite);
-    //}
-    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-    if (canRotate[0]) {
+    if (lattice.canRotate(agSite)) {
       double rate = getRotationRate(agSite);
       agSite.setRate(ROTATION, rate);
     }
-    //}
     recomputeCollection(ROTATION, agSite, oldRotationRate);
   }
   
   private double getRotationRate(BdaAgSurfaceSite origin) {
-    return rates.getRotationRate(origin.getBdaUc());//grotationRatePerMolecule[0];
+    return rates.getRotationRate(origin.getBdaUc());
   }
   
   private void recomputeTransformRate(BdaAgSurfaceSite agSite) {
@@ -453,18 +445,10 @@ public class BdaKmc extends AbstractGrowthKmc {
     }
     double oldRotationRate = agSite.getRate(TRANSFORM);
     agSite.setRate(TRANSFORM, 0); 
-    //agSite.getBdaUc().resetNeighbourhood();   
-    boolean[] canTransform = new boolean[4];
-    // it needs a first check, to get all the neighbourhood occupancy
-    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-    canTransform[0] = lattice.canTransform(agSite);
-    //}
-    //for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-    if (canTransform[0]) {
+    if (lattice.canTransform(agSite)) {
       double rate = getTransformRate(agSite);
       agSite.setRate(TRANSFORM, rate);
     }
-    //}
     recomputeCollection(TRANSFORM, agSite, oldRotationRate);
   }
   
