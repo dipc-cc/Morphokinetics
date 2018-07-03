@@ -44,7 +44,7 @@ import utils.StaticRandom;
 import utils.list.LinearList;
 import utils.list.sites.SitesArrayList;
 import utils.list.sites.SitesAvlTree;
-import utils.list.sites.AtomsCollection;
+import utils.list.sites.SitesCollection;
 import utils.list.sites.ISitesCollection;
 
 /**
@@ -57,7 +57,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private int simulationNumber;
   private final ISitesCollection[] sites;
   /** Stores all collections of atoms; either in a tree or an array. */
-  private AtomsCollection col;
+  private SitesCollection col;
   private final boolean automaticCollections;
   private final long maxSteps;
   /**
@@ -93,7 +93,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     }   
     sites = new ISitesCollection[4];
     automaticCollections = parser.areCollectionsAutomatic();
-    col = new AtomsCollection(concertedLattice, "concerted");
+    col = new SitesCollection(concertedLattice, "concerted");
     // Either a tree or array 
     sites[ADSORB] = col.getCollection(false, ADSORB);
     sites[SINGLE] = col.getCollection(false, SINGLE);

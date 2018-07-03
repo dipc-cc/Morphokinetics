@@ -41,7 +41,7 @@ import kineticMonteCarlo.unitCell.CatalysisUc;
 import ratesLibrary.CatalysisRates;
 import utils.list.sites.SitesArrayList;
 import utils.list.sites.SitesAvlTree;
-import utils.list.sites.AtomsCollection;
+import utils.list.sites.SitesCollection;
 import utils.list.sites.ISitesCollection;
 
 /**
@@ -80,7 +80,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   boolean stationary;
   private long stationaryStep;
   /** Stores all collections of atoms; either in a tree or an array. */
-  AtomsCollection col;
+  SitesCollection col;
   private final boolean automaticCollections;
   
   public CatalysisKmc(Parser parser, String restartFolder) {
@@ -96,7 +96,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       adsorptionData = new ArrayList<>();
     }
     sites = new ISitesCollection[4];
-    col = new AtomsCollection(getLattice(), "catalysis");
+    col = new SitesCollection(getLattice(), "catalysis");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
     sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);

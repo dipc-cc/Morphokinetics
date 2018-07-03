@@ -41,7 +41,7 @@ import utils.StaticRandom;
 import utils.list.LinearList;
 import utils.list.sites.SitesArrayList;
 import utils.list.sites.SitesAvlTree;
-import utils.list.sites.AtomsCollection;
+import utils.list.sites.SitesCollection;
 import static kineticMonteCarlo.process.BdaProcess.TRANSFORM;
 import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 import utils.list.sites.ISitesCollection;
@@ -59,7 +59,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private int simulationNumber;
   private final ISitesCollection[] sites;
   /** Stores all collections of atoms; either in a tree or an array. */
-  private AtomsCollection col;
+  private SitesCollection col;
   private final boolean automaticCollections;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
@@ -95,7 +95,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
     sites = new ISitesCollection[6];
     automaticCollections = parser.areCollectionsAutomatic();
-    col = new AtomsCollection(lattice, "bda");
+    col = new SitesCollection(lattice, "bda");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(false, ADSORPTION);
     sites[DESORPTION] = col.getCollection(false, DESORPTION);

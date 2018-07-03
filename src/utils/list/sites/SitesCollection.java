@@ -26,14 +26,14 @@ import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class AtomsCollection {
+public class SitesCollection {
   
   /**
    * The tree is constructed only once. Thus, changing from array to tree is much faster.
    */
   private final AvlTree tree;
 
-  public AtomsCollection(AbstractSurfaceLattice lattice, String type) {
+  public SitesCollection(AbstractSurfaceLattice lattice, String type) {
     tree = new AvlTree();
     for (int i = 0; i < lattice.size(); i++) {
       AbstractSurfaceUc uc = (AbstractSurfaceUc) lattice.getUc(i);
@@ -46,12 +46,12 @@ public class AtomsCollection {
   }
   
   public ISitesCollection getCollection(boolean isTree, byte process) {
-    ISitesCollection atomsCollection;
+    ISitesCollection sitesCollection;
     if (isTree) {
-      atomsCollection = new SitesAvlTree(process, tree);
+      sitesCollection = new SitesAvlTree(process, tree);
     } else {
-      atomsCollection = new SitesArrayList(process);
+      sitesCollection = new SitesArrayList(process);
     }
-    return atomsCollection;
+    return sitesCollection;
   }
 }
