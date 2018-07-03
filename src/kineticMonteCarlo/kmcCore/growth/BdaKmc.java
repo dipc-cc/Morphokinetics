@@ -447,16 +447,15 @@ public class BdaKmc extends AbstractGrowthKmc {
     double oldRotationRate = agSite.getRate(TRANSFORM);
     agSite.setRate(TRANSFORM, 0); 
     if (lattice.canTransform(agSite)) {
-      double rate = getTransformRate(agSite);
+      double rate = getTransformRate();
       agSite.setRate(TRANSFORM, rate);
     }
     recomputeCollection(TRANSFORM, agSite, oldRotationRate);
   }
   
-  private double getTransformRate(BdaAgSurfaceSite origin) {
+  private double getTransformRate() {
     if (//maxCoverage <= getCoverage() 
-            simulatedSteps> 5e6){
-      
+            simulatedSteps > 1e7) {
       return 1e7;//rates.getTransformRate(origin.getBdaUc());
     }
     return 0;
