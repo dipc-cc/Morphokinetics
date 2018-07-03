@@ -343,32 +343,27 @@ public class BdaKmc extends AbstractGrowthKmc {
     totalRate[process] = sites[process].getTotalRate(process);
   }
 
-  private void recomputeAdsorptionRate(BdaAgSurfaceSite site) {
-    double oldAdsorptionRate = site.getRate(ADSORPTION);
+  private void recomputeAdsorptionRate(BdaAgSurfaceSite agSite) {
+    double oldAdsorptionRate = agSite.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
-    if (site.isAvailable(ADSORPTION)) {
-      site.setRate(ADSORPTION, adsorptionRatePerSite);
+    if (agSite.isAvailable(ADSORPTION)) {
+      agSite.setRate(ADSORPTION, adsorptionRatePerSite);
     } else {
-      site.setRate(ADSORPTION, 0);
+      agSite.setRate(ADSORPTION, 0);
     }
-    recomputeCollection(ADSORPTION, site, oldAdsorptionRate);
+    recomputeCollection(ADSORPTION, agSite, oldAdsorptionRate);
   }
   
-  private void recomputeDesorptionRate(BdaAgSurfaceSite site) {
-    totalRate[DESORPTION] -= site.getRate(DESORPTION);
-    if (!site.isOccupied()) {
-      if (site.isOnList(DESORPTION)) {
-        sites[DESORPTION].removeAtomRate(site);
-      }
-      site.setOnList(DESORPTION, false);
-      return;
+  private void recomputeDesorptionRate(BdaAgSurfaceSite agSite) {
+    totalRate[DESORPTION] -= agSite.getRate(DESORPTION);
+    if (!removeFromCollection(agSite, DESORPTION)) {
+      double oldDesorptionRate = agSite.getRate(DESORPTION);
+      agSite.setRate(DESORPTION, 0);
+      double rate = getDesorptionRate(agSite);
+      agSite.setRate(DESORPTION, rate);
+
+      recomputeCollection(DESORPTION, agSite, oldDesorptionRate);
     }
-    double oldDesorptionRate = site.getRate(DESORPTION);
-    site.setRate(DESORPTION, 0);
-    double rate = getDesorptionRate(site);
-    site.setRate(DESORPTION, rate);
-    
-    recomputeCollection(DESORPTION, site, oldDesorptionRate);
   }
   
   private double getDesorptionRate(BdaAgSurfaceSite agSite) {
@@ -378,29 +373,24 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void recomputeDiffusionRate(BdaAgSurfaceSite agSite) {
     totalRate[DIFFUSION] -= agSite.getRate(DIFFUSION);
     double oldDiffusionRate = agSite.getRate(DIFFUSION);
-    if (!agSite.isOccupied()) {
-      if (agSite.isOnList(DIFFUSION)) {
-        sites[DIFFUSION].removeAtomRate(agSite);
+    if (!removeFromCollection(agSite, DIFFUSION)) {
+      agSite.setRate(DIFFUSION, 0);
+      agSite.getBdaUc().resetNeighbourhood();
+      boolean[] canDiffuse = new boolean[4];
+      // it needs a first check, to get all the neighbourhood occupancy
+      for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+        canDiffuse[i] = lattice.canDiffuse(agSite, i);
       }
-      agSite.setOnList(DIFFUSION, false);
-      return;
-    }
-    agSite.setRate(DIFFUSION, 0);
-    agSite.getBdaUc().resetNeighbourhood();
-    boolean[] canDiffuse = new boolean[4];
-    // it needs a first check, to get all the neighbourhood occupancy
-    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-      canDiffuse[i] = lattice.canDiffuse(agSite, i);
-    }
-    for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
-      if (canDiffuse[i]) {
-        double rate = getDiffusionRate(agSite);
-        agSite.addRate(DIFFUSION, rate, i);
+      for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
+        if (canDiffuse[i]) {
+          double rate = getDiffusionRate(agSite);
+          agSite.addRate(DIFFUSION, rate, i);
+        }
       }
+      recomputeCollection(DIFFUSION, agSite, oldDiffusionRate);
     }
-    recomputeCollection(DIFFUSION, agSite, oldDiffusionRate);
   }
-  
+
   private double getDiffusionRate(BdaAgSurfaceSite origin) {
     byte type = origin.getBdaUc().getSite(0).getType();
     return rates.getDiffusionRate(origin.getBdaUc(), type);
@@ -408,49 +398,39 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private void recomputeRotationRate(BdaAgSurfaceSite agSite) {
     totalRate[ROTATION] -= agSite.getRate(ROTATION);
-    if (!agSite.isOccupied()) {
-      if (agSite.isOnList(ROTATION)) {
-        sites[ROTATION].removeAtomRate(agSite);
+    if (!removeFromCollection(agSite, ROTATION)) {
+      double oldRotationRate = agSite.getRate(ROTATION);
+      agSite.setRate(ROTATION, 0);
+      if (lattice.canRotate(agSite)) {
+        double rate = getRotationRate(agSite);
+        agSite.setRate(ROTATION, rate);
       }
-      agSite.setOnList(ROTATION, false);
-      return;
+      recomputeCollection(ROTATION, agSite, oldRotationRate);
     }
-    double oldRotationRate = agSite.getRate(ROTATION);
-    agSite.setRate(ROTATION, 0); 
-    if (lattice.canRotate(agSite)) {
-      double rate = getRotationRate(agSite);
-      agSite.setRate(ROTATION, rate);
-    }
-    recomputeCollection(ROTATION, agSite, oldRotationRate);
   }
-  
+
   private double getRotationRate(BdaAgSurfaceSite origin) {
     return rates.getRotationRate(origin.getBdaUc());
   }
   
   private void recomputeTransformRate(BdaAgSurfaceSite agSite) {
     totalRate[TRANSFORM] -= agSite.getRate(TRANSFORM);
-    if (!agSite.isOccupied()) {
-      if (agSite.isOnList(TRANSFORM)) {
-        sites[TRANSFORM].removeAtomRate(agSite);
+    if (!removeFromCollection(agSite, TRANSFORM)) {
+      if (agSite.isOccupied() && agSite.getBdaUc().getSite(0).getType() == BETA) {
+        if (agSite.isOnList(TRANSFORM)) {
+          sites[TRANSFORM].removeAtomRate(agSite);
+        }
+        agSite.setOnList(TRANSFORM, false);
+        return;
       }
-      agSite.setOnList(TRANSFORM, false);
-      return;
-    }
-    if (agSite.isOccupied() && agSite.getBdaUc().getSite(0).getType() == BETA) {
-      if (agSite.isOnList(TRANSFORM)) {
-        sites[TRANSFORM].removeAtomRate(agSite);
+      double oldRotationRate = agSite.getRate(TRANSFORM);
+      agSite.setRate(TRANSFORM, 0);
+      if (lattice.canTransform(agSite)) {
+        double rate = getTransformRate();
+        agSite.setRate(TRANSFORM, rate);
       }
-      agSite.setOnList(TRANSFORM, false);
-      return;
+      recomputeCollection(TRANSFORM, agSite, oldRotationRate);
     }
-    double oldRotationRate = agSite.getRate(TRANSFORM);
-    agSite.setRate(TRANSFORM, 0); 
-    if (lattice.canTransform(agSite)) {
-      double rate = getTransformRate();
-      agSite.setRate(TRANSFORM, rate);
-    }
-    recomputeCollection(TRANSFORM, agSite, oldRotationRate);
   }
   
   private double getTransformRate() {
@@ -599,5 +579,16 @@ public class BdaKmc extends AbstractGrowthKmc {
     adsorptionRatePerSite = rates.getDepositionRatePerSite();
     desorptionRatePerMolecule = rates.getDesorptionRates();
     this.rates = rates;
+  }
+  
+  public boolean removeFromCollection(BdaAgSurfaceSite agSite, byte process) {
+    if (!agSite.isOccupied()) {
+      if (agSite.isOnList(process)) {
+        sites[process].removeAtomRate(agSite);
+      }
+      agSite.setOnList(process, false);
+      return true;
+    }
+    return false;
   }
 }
