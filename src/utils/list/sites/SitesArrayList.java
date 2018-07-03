@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package utils.list.atoms;
+package utils.list.sites;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -28,77 +28,77 @@ import utils.StaticRandom;
  * @author J. Alberdi-Rodriguez
  * @param <T>
  */
-public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection<T> {
+public class SitesArrayList<T extends Comparable<T>> implements ISitesCollection<T> {
 
-  private final ArrayList<T> atomsArray;
+  private final ArrayList<T> sitesArray;
   private double totalRate;
   /**
-   * The "movements" that atom can do. For example: Adsorption, desorption, reaction or diffusion.
+   * The "movements" that site can do. For example: Adsorption, desorption, reaction or diffusion.
    */
   private final byte process;
   
   /**
-   * Array List implementation for atom collection storing.
+   * Array List implementation for site collection storing.
    * 
-   * @param process The "movements" that atom can do. For example: Adsorption, desorption, reaction or diffusion.
+   * @param process The "movements" that site can do. For example: Adsorption, desorption, reaction or diffusion.
    */
-  public AtomsArrayList(byte process) {
-    atomsArray = new ArrayList();
+  public SitesArrayList(byte process) {
+    sitesArray = new ArrayList();
     totalRate = 0.0;
     this.process = process;
   }
   
   /**
-   * Current atom is added. This should only be called in the initialisation. Add atoms only if they
+   * Current site is added. This should only be called in the initialisation. Add sites only if they
    * have a rate.
    *
-   * @param atom
+   * @param site
    */
   @Override
-  public void insert(T atom) {
-    IElement a = (IElement) atom;
+  public void insert(T site) {
+    IElement a = (IElement) site;
     a.setOnList(process, a.getRate(process) > 0);
     if (a.getRate(process) > 0) {
-      add(atom);
+      add(site);
     }
   }
 
   /**
-   * Current atom is added.
+   * Current site is added.
    * 
-   * @param atom 
+   * @param site 
    */
   @Override
-  public void addRate(T atom) {
-    add(atom);
+  public void addRate(T site) {
+    add(site);
   }
   
-  private void add(T atom) {
-    IElement a = (IElement) atom;
+  private void add(T site) {
+    IElement a = (IElement) site;
     totalRate += a.getRate(process);
-    atomsArray.add(atom);
+    sitesArray.add(site);
   }
 
   @Override
-  public void remove(T atom) {
-    atomsArray.remove(atom);
+  public void remove(T site) {
+    sitesArray.remove(site);
   }
 
   @Override
-  public void removeAtomRate(T atom) {
-    IElement a = (IElement) atom;
+  public void removeAtomRate(T site) {
+    IElement a = (IElement) site;
     totalRate -= a.getRate(process);
     a.setRate(process, 0.0);
-    atomsArray.remove(atom);
+    sitesArray.remove(site);
   }
 
   /**
    * Updates total rate.
-   * @param atom Ignored.
+   * @param site Ignored.
    * @param diff Value to be added.
    */
   @Override
-  public void updateRate(T atom, double diff) {
+  public void updateRate(T site, double diff) {
     totalRate += diff;
   }
 
@@ -112,8 +112,8 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   @Override
   public void recomputeTotalRate(byte process) {
     double sum = 0.0;
-    for (int i = 0; i < atomsArray.size(); i++) {
-      sum += ((IElement) atomsArray.get(i)).getRate(process);
+    for (int i = 0; i < sitesArray.size(); i++) {
+      sum += ((IElement) sitesArray.get(i)).getRate(process);
     }
     totalRate = sum;
   }
@@ -125,7 +125,7 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   
   @Override
   public void clear() {
-    atomsArray.clear();
+    sitesArray.clear();
     totalRate = 0.0;
   }
 
@@ -141,10 +141,10 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
     
     double sum = 0.0;
     int i;
-    for (i = 0; i < atomsArray.size(); i++) {
-      sum += ((IElement) atomsArray.get(i)).getRate(process);
+    for (i = 0; i < sitesArray.size(); i++) {
+      sum += ((IElement) sitesArray.get(i)).getRate(process);
       if (sum > randomNumber) {
-        a = atomsArray.get(i);
+        a = sitesArray.get(i);
         break;
       }
     }
@@ -160,12 +160,12 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   
   @Override
   public Iterator<T> iterator() {
-    return atomsArray.iterator();
+    return sitesArray.iterator();
   }
   
   @Override
   public int size() {
-    return atomsArray.size();
+    return sitesArray.size();
   }
   
   @Override
@@ -174,17 +174,17 @@ public class AtomsArrayList<T extends Comparable<T>> implements IAtomsCollection
   }
   
   /**
-   * Return an atom with the same atom Id that was given from the list.
+   * Return an site with the same site Id that was given from the list.
    * 
-   * @param atom fake atom with correct Id to search for.
-   * @return found atom, null otherwise.
+   * @param site fake site with correct Id to search for.
+   * @return found site, null otherwise.
    */
   @Override
-  public T search(T atom) {
-    Iterator<T> iter = atomsArray.iterator();
+  public T search(T site) {
+    Iterator<T> iter = sitesArray.iterator();
     while (iter.hasNext()) {
       T current = iter.next();
-      if (current.compareTo(atom) == 0) {
+      if (current.compareTo(site) == 0) {
         return current;
       }
     }

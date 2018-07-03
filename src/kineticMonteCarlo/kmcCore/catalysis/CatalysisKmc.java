@@ -39,10 +39,10 @@ import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
 import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import ratesLibrary.CatalysisRates;
-import utils.list.atoms.AtomsArrayList;
-import utils.list.atoms.AtomsAvlTree;
-import utils.list.atoms.AtomsCollection;
-import utils.list.atoms.IAtomsCollection;
+import utils.list.sites.SitesArrayList;
+import utils.list.sites.SitesAvlTree;
+import utils.list.sites.AtomsCollection;
+import utils.list.sites.ISitesCollection;
 
 /**
  *
@@ -58,7 +58,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   private ArrayList<CatalysisData> adsorptionData;
   // Total rates
   double[] totalRate;
-  final IAtomsCollection[] sites;
+  final ISitesCollection[] sites;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -95,7 +95,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       outputEvery = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
-    sites = new IAtomsCollection[4];
+    sites = new ISitesCollection[4];
     col = new AtomsCollection(getLattice(), "catalysis");
     // Either a tree or array 
     sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
@@ -388,11 +388,11 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       // ADSORPTION, DESORPTION, REACTION, DIFFUSION
       for (byte i = 0; i < sites.length; i++) {
         long startTime = System.currentTimeMillis();
-        if ((sites[i].size() > 1000) && sites[i] instanceof AtomsArrayList) {
+        if ((sites[i].size() > 1000) && sites[i] instanceof SitesArrayList) {
           changeCollection(i, true);
           System.out.println("Changed to Tree " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
-        if ((sites[i].size() < 500) && sites[i] instanceof AtomsAvlTree) {
+        if ((sites[i].size() < 500) && sites[i] instanceof SitesAvlTree) {
           changeCollection(i, false);
           System.out.println("Changed to Array " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package utils.list.atoms;
+package utils.list.sites;
 
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
@@ -45,12 +45,12 @@ public class AtomsCollection {
     tree.createList(type);
   }
   
-  public IAtomsCollection getCollection(boolean isTree, byte process) {
-    IAtomsCollection atomsCollection;
+  public ISitesCollection getCollection(boolean isTree, byte process) {
+    ISitesCollection atomsCollection;
     if (isTree) {
-      atomsCollection = new AtomsAvlTree(process, tree);
+      atomsCollection = new SitesAvlTree(process, tree);
     } else {
-      atomsCollection = new AtomsArrayList(process);
+      atomsCollection = new SitesArrayList(process);
     }
     return atomsCollection;
   }

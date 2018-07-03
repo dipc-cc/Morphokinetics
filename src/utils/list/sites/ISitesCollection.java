@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package utils.list.atoms;
+package utils.list.sites;
 
 import java.util.Iterator;
 
@@ -25,22 +25,22 @@ import java.util.Iterator;
  * @author J. Alberdi-Rodriguez
  * @param <T>
  */
-public interface IAtomsCollection<T extends Comparable<T>> {
+public interface ISitesCollection<T extends Comparable<T>> {
 
-  public void insert(T atom);
+  public void insert(T site);
 
-  public void addRate(T atom);
+  public void addRate(T site);
   
-  public void remove(T atom);
+  public void remove(T site);
 
   /**
-   * Removes atom's rate, with its old desorption rate and sets to zero.
+   * Removes site's rate, with its old desorption rate and sets to zero.
    * 
-   * @param atom
+   * @param site
    */
-  public void removeAtomRate(T atom);
+  public void removeAtomRate(T site);
 
-  public void updateRate(T atom, double diff);
+  public void updateRate(T site, double diff);
 
   public void populate();
 
@@ -59,8 +59,8 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   public void reset();
   
   /**
-   * Chooses a random atom or island.
-   * @return atom/island.
+   * Chooses a random site or island.
+   * @return site/island.
    */
   public T randomElement();
   
@@ -70,5 +70,5 @@ public interface IAtomsCollection<T extends Comparable<T>> {
   
   public boolean isEmpty();
   
-  public T search(T atom);
+  public T search(T site);
 }

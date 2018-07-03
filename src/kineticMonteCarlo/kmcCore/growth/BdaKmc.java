@@ -39,12 +39,12 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import ratesLibrary.bda.AbstractBdaRates;
 import utils.StaticRandom;
 import utils.list.LinearList;
-import utils.list.atoms.AtomsArrayList;
-import utils.list.atoms.AtomsAvlTree;
-import utils.list.atoms.AtomsCollection;
-import utils.list.atoms.IAtomsCollection;
+import utils.list.sites.SitesArrayList;
+import utils.list.sites.SitesAvlTree;
+import utils.list.sites.AtomsCollection;
 import static kineticMonteCarlo.process.BdaProcess.TRANSFORM;
 import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
+import utils.list.sites.ISitesCollection;
 
 /**
  *
@@ -57,7 +57,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private long[] steps;
   private final BdaRestart restart;
   private int simulationNumber;
-  private final IAtomsCollection[] sites;
+  private final ISitesCollection[] sites;
   /** Stores all collections of atoms; either in a tree or an array. */
   private AtomsCollection col;
   private final boolean automaticCollections;
@@ -93,7 +93,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     lattice = lat;
     restart = new BdaRestart(restartFolder);
   
-    sites = new IAtomsCollection[6];
+    sites = new ISitesCollection[6];
     automaticCollections = parser.areCollectionsAutomatic();
     col = new AtomsCollection(lattice, "bda");
     // Either a tree or array 
@@ -503,11 +503,11 @@ public class BdaKmc extends AbstractGrowthKmc {
       // ADSORB, DIFFUSION (diffusion), CONCERTED (diffusion)
       for (byte i = 0; i < sites.length; i++) {
         long startTime = System.currentTimeMillis();
-        if ((sites[i].size() > 1000) && sites[i] instanceof AtomsArrayList) {
+        if ((sites[i].size() > 1000) && sites[i] instanceof SitesArrayList) {
           changeCollection(i, true);
           System.out.println("Changed to Tree " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
-        if ((sites[i].size() < 500) && sites[i] instanceof AtomsAvlTree) {
+        if ((sites[i].size() < 500) && sites[i] instanceof SitesAvlTree) {
           changeCollection(i, false);
           System.out.println("Changed to Array " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }

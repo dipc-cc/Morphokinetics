@@ -42,10 +42,10 @@ import kineticMonteCarlo.site.AbstractSurfaceSite;
 import ratesLibrary.concerted.AbstractConcertedRates;
 import utils.StaticRandom;
 import utils.list.LinearList;
-import utils.list.atoms.AtomsArrayList;
-import utils.list.atoms.AtomsAvlTree;
-import utils.list.atoms.AtomsCollection;
-import utils.list.atoms.IAtomsCollection;
+import utils.list.sites.SitesArrayList;
+import utils.list.sites.SitesAvlTree;
+import utils.list.sites.AtomsCollection;
+import utils.list.sites.ISitesCollection;
 
 /**
  *
@@ -55,7 +55,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
 
   private long simulatedSteps;
   private int simulationNumber;
-  private final IAtomsCollection[] sites;
+  private final ISitesCollection[] sites;
   /** Stores all collections of atoms; either in a tree or an array. */
   private AtomsCollection col;
   private final boolean automaticCollections;
@@ -91,7 +91,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     if (parser.justCentralFlake()) {
       setPerimeter(new RoundPerimeter("Ag"));
     }   
-    sites = new IAtomsCollection[4];
+    sites = new ISitesCollection[4];
     automaticCollections = parser.areCollectionsAutomatic();
     col = new AtomsCollection(concertedLattice, "concerted");
     // Either a tree or array 
@@ -742,11 +742,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       // ADSORB, SINGLE (diffusion), CONCERTED (diffusion)
       for (byte i = 0; i < sites.length; i++) {
         long startTime = System.currentTimeMillis();
-        if ((sites[i].size() > 1000) && sites[i] instanceof AtomsArrayList) {
+        if ((sites[i].size() > 1000) && sites[i] instanceof SitesArrayList) {
           changeCollection(i, true);
           System.out.println("Changed to Tree " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
-        if ((sites[i].size() < 500) && sites[i] instanceof AtomsAvlTree) {
+        if ((sites[i].size() < 500) && sites[i] instanceof SitesAvlTree) {
           changeCollection(i, false);
           System.out.println("Changed to Array " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }

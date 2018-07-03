@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
  */
-package utils.list.atoms;
+package utils.list.sites;
 import java.util.Iterator;
 import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
@@ -27,7 +27,7 @@ import utils.list.Node;
  * @author J. Alberdi-Rodriguez
  * @param <T>
  */
-public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T> {
+public class SitesAvlTree<T extends Comparable<T>> implements ISitesCollection<T> {
 
   /**
    * Adsorption, desorption, reaction or diffusion.
@@ -38,7 +38,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   /** Actual AvlTree. */
   private final AvlTree tree;
 
-  public AtomsAvlTree(byte process, AvlTree tree) {
+  public SitesAvlTree(byte process, AvlTree tree) {
     super();
     occupied = 0;
     this.process = process;
@@ -62,9 +62,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
     
   /**
-   * Method to update rates from root to an atom.
+   * Method to update rates from root to an site.
    * 
-   * @param data atom that has a delta in rate.
+   * @param data site that has a delta in rate.
    * @param diff rate to be added.
    */
   @Override
@@ -89,7 +89,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }    
   
   /**
-   * Removes atom's rate from the tree, with its old rate and sets to zero.
+   * Removes site's rate from the tree, with its old rate and sets to zero.
    * 
    * @param data
    */
@@ -122,9 +122,9 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
   
   /**
-   * Rate of current atom is added in the tree.
+   * Rate of current site is added in the tree.
    * 
-   * @param data current atom.
+   * @param data current site.
    */
   @Override
   public void addRate(T data) {
@@ -192,7 +192,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    */
   @Override
   public void populate() {
-    populateAtom(tree.getRoot());
+    populateSite(tree.getRoot());
   }
   
   /**
@@ -201,7 +201,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
    * @param n
    * @return 
    */
-  private double populateAtom(Node n) {
+  private double populateSite(Node n) {
     if (n == null) {
       return 0;
     }
@@ -217,29 +217,29 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
     ((IElement) n.getData()).setSumRate(process, ((IElement) n.getData()).getRate(process));
     if (n.getLeft() != null) {
       // add left childen rate sum 
-      ((IElement) n.getData()).addToSumRate(process, populateAtom(n.getLeft()));
+      ((IElement) n.getData()).addToSumRate(process, populateSite(n.getLeft()));
     }
     if (n.getRight() != null) {
-      ((IElement) n.getData()).addToSumRate(process, populateAtom(n.getRight()));
+      ((IElement) n.getData()).addToSumRate(process, populateSite(n.getRight()));
     }
     return ((IElement) n.getData()).getSumRate(process);
   }
   
   /**
-   * Chooses a random atom from current tree.
+   * Chooses a random site from current tree.
    *
-   * @return an atom.
+   * @return an site.
    */
   @Override
   public T randomElement() {
     double randomNumber = StaticRandom.raw() * getTotalRate(process);
-    IElement atom = (IElement) randomAtom(tree.getRoot(), randomNumber).getData();
-    while (atom.getRate(process) == 0) {
+    IElement site = (IElement) randomAtom(tree.getRoot(), randomNumber).getData();
+    while (site.getRate(process) == 0) {
       //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
       randomNumber = StaticRandom.raw() * getTotalRate(process);
-      atom = (IElement) randomAtom(tree.getRoot(), randomNumber).getData();
+      site = (IElement) randomAtom(tree.getRoot(), randomNumber).getData();
     }
-    return (T) atom;
+    return (T) site;
   }
   
   private Node randomAtom(Node n, double r) {
@@ -263,7 +263,7 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   }
 
   @Override
-  public void remove(T atom) {
+  public void remove(T site) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
@@ -285,11 +285,11 @@ public class AtomsAvlTree<T extends Comparable<T>> implements IAtomsCollection<T
   /**
    * Not yet implemented.
    * 
-   * @param atom
+   * @param site
    * @return 
    */
   @Override
-  public T search(T atom) {
+  public T search(T site) {
     return null;
   }
 }
