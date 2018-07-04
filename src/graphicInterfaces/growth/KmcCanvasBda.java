@@ -54,7 +54,6 @@ public class KmcCanvasBda extends KmcCanvas {
     detailed = false;
   }
   
-  boolean painted = false;
   @Override
   public void paint(Graphics g) {
     super.paint(g);
