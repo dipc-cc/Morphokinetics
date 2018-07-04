@@ -18,6 +18,9 @@
  */
 package kineticMonteCarlo.site;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
 import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.BdaProcess;
@@ -42,7 +45,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   private boolean rotated;
   private final BdaMoleculeSite[] neighbours;
   
-  private final double[][] alphaXyz = {{3.7500, 0.0000},
+  private final double[][] xyz = {{3.7500, 0.0000},
   {3.0000, 1.2990},
   {1.5000, 1.2991},
   {0.7500, 0.0000},
@@ -61,28 +64,6 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   {6.0000, 1.2991},
   {6.0000, -1.2991},
   {0.0000, 0.0000}};
-
-  private final double[][] beta1Xyz = alphaXyz;
-  private final double[][] beta2Xyz = {
-    {-3.46455, 1.43506},
-    {-2.27453, 2.34817},
-    {-0.88868, 1.77424},
-    {-0.69291, 0.28701},
-    {-1.88296, -0.62619},
-    {-3.26874, -0.05207},
-    {+3.46455, -1.43506},
-    {+2.27453, -2.34817},
-    {+0.88868, -1.77424},
-    {+0.69291, -0.28701},
-    {+1.88293, 0.62609},
-    {+3.26874, 0.05207},
-    {+4.85037, -2.00909},
-    {-4.85037, 2.00909},
-    {+5.04613, -3.49631},
-    {+6.04042, -1.09589},
-    {-5.04613, 3.49631},
-    {-6.04042, 1.09589},
-    {0, 0}};
 
   public BdaMoleculeSite(int id, boolean rotated, Byte type) { // int type (alpha, beta...)
     super(id, (short) -1, (short) -1, 0, -1);
@@ -110,23 +91,28 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     this.rotated = rotated;
     rotateAtoms();
   }
-  
+
   private void rotateAtoms() {
     for (int pos = 0; pos < atoms.length; pos++) {
       Point3D cartPos = null;
       switch (type) {
         case ALPHA:
           if (rotated) {
-            cartPos = new Point3D(alphaXyz[pos][1], alphaXyz[pos][0], 0);
+            cartPos = new Point3D(xyz[pos][1], xyz[pos][0], 0);
           } else {
-            cartPos = new Point3D(alphaXyz[pos][0], alphaXyz[pos][1], 0);
+            cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
           }
           break;
         case BETA:
           if (rotated) {
-            cartPos = new Point3D(beta2Xyz[pos][0], beta2Xyz[pos][1], 0);
+            double x = xyz[pos][0];
+            double y = xyz[pos][1];
+            double angle =  -22.5 * 2 * PI / 360;
+            double xShift = x * cos(angle) - y * sin(angle);
+            y = x * sin(angle) + y * cos(angle);
+            cartPos = new Point3D(xShift, y, 0);
           } else {
-            cartPos = new Point3D(beta1Xyz[pos][0], beta1Xyz[pos][1], 0);
+            cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
           }
           break;
 
