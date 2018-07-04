@@ -60,37 +60,41 @@ public class KmcCanvasBda extends KmcCanvas {
     for (int i = 0; i < getLattice().size(); i++) {
       BdaSurfaceUc agUc = (BdaSurfaceUc) getLattice().getUc(i);
       for (int j = 0; j < agUc.size(); j++) {
-        AbstractSurfaceSite site = agUc.getSite(j);
-        int Y = (int) Math.round(((site.getPos().getY() + agUc.getPos().getY()) * getScale() * distanceAg) - (distanceAg * getScale() / 2.0)) + getBaseY();
-        int X = (int) Math.round(((site.getPos().getX() + agUc.getPos().getX()) * getScale() * distanceAg) - (distanceAg * getScale() / 2.0)) + getBaseX();
+        AbstractSurfaceSite agSite = agUc.getSite(j);
+        int Y = (int) Math.round(((agSite.getPos().getY() + agUc.getPos().getY()) * getScale() * distanceAg) - (distanceAg * getScale() / 2.0)) + getBaseY();
+        int X = (int) Math.round(((agSite.getPos().getX() + agUc.getPos().getX()) * getScale() * distanceAg) - (distanceAg * getScale() / 2.0)) + getBaseX();
 
         g.setColor(colours[2]);
         int ball = (int) Math.round(getScale() * distanceAg);
         if (detailed) {
-          if (!((BdaAgSurfaceSite)site).isAvailable(ADSORPTION)) {
+          if (!((BdaAgSurfaceSite)agSite).isAvailable(ADSORPTION)) {
             g.setColor(white);
           }
-          if (!((BdaAgSurfaceSite)site).isAvailable(DIFFUSION)) {
+          if (!((BdaAgSurfaceSite)agSite).isAvailable(DIFFUSION)) {
             g.setColor(BLUE);
             g.fillOval(X, Y, ball, ball);
           } else {
             g.drawOval(X, Y, ball, ball);
           }
-          if (getScale() >= 8 && true) {
+          if (getScale() >= 8) {
             g.setColor(Color.BLACK);
             if (printId()) {
-              g.drawString(Integer.toString(site.getId()), X + getScale(), Y + 2 * getScale());
+              g.drawString(Integer.toString(agSite.getId()), X + getScale(), Y + 2 * getScale());
             }
             if (printIslandNumber()) {
-              String text = Integer.toString(((BdaAgSurfaceSite) site).getBdaSize());
+              String text = Integer.toString(((BdaAgSurfaceSite) agSite).getBdaSize());
               g.drawString(text, X + getScale(), Y + 2 * getScale());
+            }
+            if (printMultiAtom()) {
+              g.drawString(Integer.toString(agUc.getPosI()) + "," + Integer.toString(agUc.getPosJ()),
+                      X + getScale(), Y + 2 * getScale());
             }
           }
         }
-        if (site.isOccupied()) {
+        if (agSite.isOccupied()) {
           paintBdaMolecule(g, agUc);
         }
-        if (detailed && site.getRate(ROTATION) > 0) {
+        if (detailed && agSite.getRate(ROTATION) > 0) {
           g.setColor(GREEN);
           g.fillOval(X, Y, ball, ball);   
         }
