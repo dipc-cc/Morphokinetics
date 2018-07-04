@@ -430,10 +430,8 @@ public class BdaLattice extends AbstractGrowthLattice {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current site
         BdaAgSurfaceSite originSite = (BdaAgSurfaceSite) sites[iHexa][jHexa];
-        BdaSurfaceUc originUc = agUcArray[iHexa][jHexa];
         List<ISite> modifiedSites = new ArrayList<>(121);
         AbstractSurfaceSite s = originSite;
-        BdaSurfaceUc uc = originUc;
         modifiedSites.add(s);
         int possibleDistance = 0;
         int quantity;
@@ -443,8 +441,6 @@ public class BdaLattice extends AbstractGrowthLattice {
           for (int direction = 0; direction < 4; direction++) {
             for (int j = 0; j < quantity; j++) {
               s = s.getNeighbour(direction);
-              BdaAgSurfaceSite site = (BdaAgSurfaceSite) s;
-              BdaSurfaceUc u = getAgUc(site);
               modifiedSites.add(s);
             }
           }

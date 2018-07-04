@@ -70,7 +70,7 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     spiralSitesPos = new int[6];
     spiralSitesPos[0] = 1;
     for (int i = 1; i < spiralSitesPos.length; i++) {
-      spiralSitesPos[i] = (int) 8*i + spiralSitesPos[i-1];
+      spiralSitesPos[i] = (int) 8 * i + spiralSitesPos[i - 1];
     }
     spiralSites = new HashMap<>();
     chosenNeighbourPosition = -1;
