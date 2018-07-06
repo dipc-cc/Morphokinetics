@@ -51,3 +51,7 @@ To profile this code within NetBeans 8.1 next line has to be added:
 ```bash
 -XX:+UseLinuxPosixThreadCPUClocks -agentpath:$NETBEANS_DIR/profiler/lib/deployed/jdk16/linux-amd64/libprofilerinterface.so=$NETBEANS_DIR/profiler/lib,5140
 ```
+
+## TUTORIAL
+
+A tutorial is provided in the following link: https://github.com/dipc-cc/Morphokinetics/wiki/User-guide#5-examples-parameters-files
