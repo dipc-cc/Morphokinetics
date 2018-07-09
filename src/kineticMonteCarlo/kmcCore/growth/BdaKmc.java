@@ -188,7 +188,15 @@ public class BdaKmc extends AbstractGrowthKmc {
     steps[reaction]++;
     switch (reaction) {
       case ADSORPTION:
-        depositNewMolecule();
+        for (int i = 0; i < 30; i++) {
+          int x = 5*i+50;
+          for (int j = 0; j < 13; j++) {
+            int y = 2*j+25;
+            BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) getLattice().getSite(x, y, 0);
+            depositNewMolecule(agSite.getId());
+          }
+        }
+        stopAdsorption();
         break;
       case DESORPTION:
         desorbMolecule();
@@ -344,14 +352,15 @@ public class BdaKmc extends AbstractGrowthKmc {
   }
 
   private void recomputeAdsorptionRate(BdaAgSurfaceSite agSite) {
-    double oldAdsorptionRate = agSite.getRate(ADSORPTION);
+    return;
+    /*double oldAdsorptionRate = agSite.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
     if (agSite.isAvailable(ADSORPTION)) {
       agSite.setRate(ADSORPTION, adsorptionRatePerSite);
     } else {
       agSite.setRate(ADSORPTION, 0);
     }
-    recomputeCollection(ADSORPTION, agSite, oldAdsorptionRate);
+    recomputeCollection(ADSORPTION, agSite, oldAdsorptionRate);*/
   }
   
   private void recomputeDesorptionRate(BdaAgSurfaceSite agSite) {
@@ -435,7 +444,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private double getTransformRate() {
     if (//maxCoverage <= getCoverage() 
-            simulatedSteps > 1e7) {
+            simulatedSteps > 1e5) {
       return 1e7;//rates.getTransformRate(origin.getBdaUc());
     }
     return 0;
