@@ -47,17 +47,22 @@ class BdaLatticeHelper<T> {
   /** [type][rotated][direction][edge][atom]. */
   private final int[][][][][] affectedSites;
 
-  private int hexaSizeI;
-  private int hexaSizeJ;
+  private final int hexaSizeI;
+  private final int hexaSizeJ;
   /**
    * Unit cell array, where all the surface Ag atoms are located.
    */
-  private final BdaSurfaceUc[][] agUcArray;
+  private final BdaAgSurfaceSite[][] agArray;
 
   public BdaLatticeHelper(int sizeI, int sizeJ, BdaSurfaceUc[][] agUcArray) {
     hexaSizeI = sizeI;
     hexaSizeJ = sizeJ;
-    this.agUcArray = agUcArray;
+    agArray = new BdaAgSurfaceSite[sizeI][sizeJ];
+    for (int i = 0; i < agUcArray.length; i++) {
+      for (int j = 0; j < agUcArray[0].length; j++) {
+        agArray[i][j] = (BdaAgSurfaceSite) agUcArray[i][j].getSite(0);
+      }
+    }
     int[][][] affectedFar = new int[][][] {
       { // direction 0
         {91, 92, 93, 94, 95, 96, 97, 98, 99}, {72, 73, 74, 75, 76, 77, 78, 79, 80}},
@@ -157,13 +162,13 @@ class BdaLatticeHelper<T> {
     for (int[] rmvSite : rmvSites) {
       index0 = getXIndex(x + rmvSite[0]);
       index1 = getYIndex(y + rmvSite[1]);
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index0][index1].getSite(0);
+      BdaAgSurfaceSite neighbour = agArray[index0][index1];
       neighbour.setAvailable(DIFFUSION, true);
     }
     for (int[] addSite : addSites) {
       index0 = getXIndex(x + addSite[0]);
       index1 = getYIndex(y + addSite[1]);
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index0][index1].getSite(0);
+      BdaAgSurfaceSite neighbour = agArray[index0][index1];
       neighbour.setAvailable(DIFFUSION, false);
     }
   }
@@ -216,7 +221,7 @@ class BdaLatticeHelper<T> {
       } else {
         index2 = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index1][index2].getSite(0);
+      BdaAgSurfaceSite neighbour = agArray[index1][index2];
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
@@ -234,7 +239,7 @@ class BdaLatticeHelper<T> {
       } else {
         index2 = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite)  agUcArray[index1][index2].getSite(0);
+      BdaAgSurfaceSite neighbour = agArray[index1][index2];
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
