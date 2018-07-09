@@ -475,7 +475,6 @@ public class BdaLattice extends AbstractGrowthLattice {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current site
         BdaAgSurfaceSite site = (BdaAgSurfaceSite) sites[iHexa][jHexa];
-        BdaSurfaceUc uc = agUcArray[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
