@@ -155,14 +155,14 @@ class BdaLatticeHelper<T> {
     int x = origin.getPosI();
     int y = origin.getPosJ();
     for (int[] rmvSite : rmvSites) {
-      index0 = getXIndex(x+rmvSite[0]);
-      index1 = getXIndex(y+rmvSite[1]);
+      index0 = getXIndex(x + rmvSite[0]);
+      index1 = getYIndex(y + rmvSite[1]);
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index0][index1].getSite(0);
       neighbour.setAvailable(DIFFUSION, true);
     }
     for (int[] addSite : addSites) {
-      index0 = getXIndex(x+addSite[0]);
-      index1 = getXIndex(y+addSite[1]);
+      index0 = getXIndex(x + addSite[0]);
+      index1 = getYIndex(y + addSite[1]);
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index0][index1].getSite(0);
       neighbour.setAvailable(DIFFUSION, false);
     }
