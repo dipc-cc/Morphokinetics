@@ -174,16 +174,6 @@ class BdaLatticeHelper<T> {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][1][i]);
       neighbour.setAvailable(DIFFUSION, true);
     }
-    for (int i = 0; i < affectedSites[type][rotated][direction][2].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][2][i]);
-      neighbour.setAvailable(ADSORPTION, false);
-      neighbour.setBelongingBdaUc(bdaUc);
-    }
-    for (int i = 0; i < affectedSites[type][rotated][direction][3].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][3][i]);
-      neighbour.removeBdaUc(bdaUc);
-      neighbour.setAvailable(ADSORPTION, true);
-    }
   }
   
   /**
