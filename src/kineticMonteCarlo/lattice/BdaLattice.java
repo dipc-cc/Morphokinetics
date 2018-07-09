@@ -54,7 +54,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     super(hexaSizeI, hexaSizeJ, null);
     agUcArray = new BdaSurfaceUc[hexaSizeI][hexaSizeJ];
     createAgUcSurface();
-    lh = new BdaLatticeHelper();
+    lh = new BdaLatticeHelper(hexaSizeI, hexaSizeJ, agUcArray);
     depositions = 0;
   }
   
@@ -104,86 +104,8 @@ public class BdaLattice extends AbstractGrowthLattice {
     
     BdaSurfaceUc agUc = getAgUc(agSiteOrigin);
     lh.changeAvailability(agUc, bdaUc, direction);
-    changeAvailability(agUc, bdaUc, direction);
-  }
-   
-  /**
-   * It only changes the availability of the required positions: upper/lower
-   * bound for 0/2 directions and left/right for 1/3 directions. For diffusion.
-   *
-   * @param origin
-   * @param bdaUc
-   * @param direction 
-   */
-  void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
-    int x = origin.getPosI();
-    int y = origin.getPosJ();
-    
-    int sign = -1;
-    int index1 = 0; // the value should not be used
-    int index2 = 0; // the value should not be used
-    
-    if (direction % 3 == 0) {
-      sign = 1;
-    }
-    
-    // sets fixed index
-    if (direction % 2 == 0) { // x travelling
-      index2 = getYIndex(y + sign * 4); // y fixed
-    } else { // y travelling
-      index1 = getXIndex(x + sign * 4); // x fixed
-    }
-
-    for (int i = -4; i <= 4; i++) {
-      if (direction % 2 == 0) {
-        index1 = getXIndex(x + i);
-      } else {
-        index2 = getYIndex(y + i);
-      }
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) getSite(index1, index2, 0);
-      neighbour.removeBdaUc(bdaUc);
-      neighbour.setAvailable(ADSORPTION, true);
-    }
-    
-    sign *= -1;
-    // sets fixed index
-    if (direction % 2 == 0) { // x travelling
-      index2 = getYIndex(y + sign * 5);
-    } else { // y travelling
-      index1 = getXIndex(x + sign * 5);
-    }
-    for (int i = -4; i <= 4; i++) {
-      if (direction % 2 == 0) {
-        index1 = getXIndex(x + i);
-      } else {
-        index2 = getYIndex(y + i);
-      }
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) getSite(index1, index2, 0);
-      neighbour.removeBdaUc(bdaUc);
-      neighbour.setAvailable(ADSORPTION, false);
-      neighbour.setBelongingBdaUc(bdaUc);
-    }
   }
   
-  private int getXIndex(int x) {
-    if (x < 0) {
-      return getHexaSizeI()+x;
-    }
-    if (x >= getHexaSizeI()) {
-      return x % getHexaSizeI();
-    }
-    return x;
-  }
-  
-  private int getYIndex(int y) {
-    if (y < 0) {
-      return getHexaSizeJ()+y;
-    }
-    if (y >= getHexaSizeJ()) {
-      return y % getHexaSizeJ();
-    }
-    return y;
-  }
   public void rotate(BdaAgSurfaceSite agSiteOrigin) {
     BdaMoleculeUc bdaUc = agSiteOrigin.getBdaUc();
     boolean rotated = !agSiteOrigin.getBdaUc().isRotated();

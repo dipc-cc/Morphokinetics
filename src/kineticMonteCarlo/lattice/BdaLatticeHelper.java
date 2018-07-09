@@ -47,7 +47,17 @@ class BdaLatticeHelper<T> {
   /** [type][rotated][direction][edge][atom]. */
   private final int[][][][][] affectedSites;
 
-  public BdaLatticeHelper() {
+  private int hexaSizeI;
+  private int hexaSizeJ;
+  /**
+   * Unit cell array, where all the surface Ag atoms are located.
+   */
+  private final BdaSurfaceUc[][] agUcArray;
+
+  public BdaLatticeHelper(int sizeI, int sizeJ, BdaSurfaceUc[][] agUcArray) {
+    hexaSizeI = sizeI;
+    hexaSizeJ = sizeJ;
+    this.agUcArray = agUcArray;
     int[][][] affectedFar = new int[][][] {
       { // direction 0
         {91, 92, 93, 94, 95, 96, 97, 98, 99}, {72, 73, 74, 75, 76, 77, 78, 79, 80}},
@@ -174,8 +184,77 @@ class BdaLatticeHelper<T> {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][1][i]);
       neighbour.setAvailable(DIFFUSION, true);
     }
+    
+    // far sites
+    int x = origin.getPosI();
+    int y = origin.getPosJ();
+    
+    int sign = -1;
+    int index1 = 0; // the value should not be used
+    int index2 = 0; // the value should not be used
+    
+    if (direction % 3 == 0) {
+      sign = 1;
   }
   
+    // sets fixed index
+    if (direction % 2 == 0) { // x travelling
+      index2 = getYIndex(y + sign * 4); // y fixed
+    } else { // y travelling
+      index1 = getXIndex(x + sign * 4); // x fixed
+    }
+
+    for (int i = -4; i <= 4; i++) {
+      if (direction % 2 == 0) {
+        index1 = getXIndex(x + i);
+      } else {
+        index2 = getYIndex(y + i);
+      }
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index1][index2].getSite(0);
+      neighbour.removeBdaUc(bdaUc);
+      neighbour.setAvailable(ADSORPTION, true);
+    }
+    
+    sign *= -1;
+    // sets fixed index
+    if (direction % 2 == 0) { // x travelling
+      index2 = getYIndex(y + sign * 5);
+    } else { // y travelling
+      index1 = getXIndex(x + sign * 5);
+    }
+    for (int i = -4; i <= 4; i++) {
+      if (direction % 2 == 0) {
+        index1 = getXIndex(x + i);
+      } else {
+        index2 = getYIndex(y + i);
+      }
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite)  agUcArray[index1][index2].getSite(0);
+      neighbour.removeBdaUc(bdaUc);
+      neighbour.setAvailable(ADSORPTION, false);
+      neighbour.setBelongingBdaUc(bdaUc);
+    }
+  }
+  
+  private int getXIndex(int x) {
+    if (x < 0) {
+      return hexaSizeI + x;
+    }
+    if (x >= hexaSizeI) {
+      return x % hexaSizeI;
+    }
+    return x;
+  }
+  
+  private int getYIndex(int y) {
+    if (y < 0) {
+      return hexaSizeJ + y;
+    }
+    if (y >= hexaSizeJ) {
+      return y % hexaSizeJ;
+    }
+    return y;
+  }
+
   /**
    * Reserve or release the space for current BDA molecule, completely.
    * 
