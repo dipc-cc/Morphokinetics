@@ -103,6 +103,7 @@ public class Parser {
     mapString.put("bdaDoDiffusion", "true");
     mapString.put("bdaDoRotation", "true");
     mapString.put("bdaDoTransformation", "true");
+    mapString.put("bdaDoShift", "true");
     mapDouble = new LinkedHashMap<>();
     mapDouble.put("temperature", 135.0);
     mapDouble.put("pressureO2", 1.0);

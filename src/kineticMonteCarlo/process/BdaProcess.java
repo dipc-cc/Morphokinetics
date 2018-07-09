@@ -30,6 +30,7 @@ public class BdaProcess extends AbstractProcess {
   public static final byte DIFFUSION = 3;
   public static final byte ROTATION = 4;
   public static final byte TRANSFORM = 5;
+  public static final byte SHIFT = 6;
   
   public BdaProcess() {
     super(6);

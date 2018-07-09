@@ -44,14 +44,15 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   
   public BdaAgSurfaceSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 5);
+    int processSize = 7;
     neighbours = new BdaAgSurfaceSite[4];
-    processes = new BdaProcess[6];
-    for (int i = 0; i < 6; i++) {
+    processes = new BdaProcess[processSize];
+    for (int i = 0; i < processSize; i++) {
       processes[i] = new BdaProcess();
     }
     setProcceses(processes);
     bdaUcSet = new HashSet<>();
-    available = new boolean[6];
+    available = new boolean[processSize];
   }
 
   /**
@@ -166,7 +167,7 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     super.clear();
     bdaUcSet.clear();
     bdaUc = null;
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
       available[i] = true;
     }
   }
