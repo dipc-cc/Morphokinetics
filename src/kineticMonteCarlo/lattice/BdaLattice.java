@@ -467,7 +467,6 @@ public class BdaLattice extends AbstractGrowthLattice {
         agUcArray[i][j] = new BdaSurfaceUc(i, j, sites[i][j]);
         agUcArray[i][j].setPosX(getCartX(i, j));
         agUcArray[i][j].setPosY(getCartY(j));
-        //sites[i][j].setCartesianPosition(agUcArray[i][j].getPos());
         sites[i][j].setCartesianPosition(new Point3D(getCartX(i, j),getCartY(j),0 ));
        }
     }//Interconect sites
