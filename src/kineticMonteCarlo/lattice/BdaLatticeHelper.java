@@ -143,21 +143,27 @@ class BdaLatticeHelper<T> {
   }
 
   void changeAvailability(boolean rotated, BdaSurfaceUc origin) {
-    int[] rmvSites = {6, 19};
-    int[] addSites = {3,4,17};
+    int[][] rmvSites = {{1,1},{2,1}};//{6, 19};
+    int[][] addSites = {{0,-1},{1,-1},{2,-1}};//{3,4,17};
     if (!rotated) {
-      int[] tmpSites = rmvSites;
+      int[][] tmpSites = rmvSites;
       rmvSites = addSites;
       addSites = tmpSites;
     }
-    BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
-    List<ISite> allNeighbour = originAgSite.getSpiralSites(2);
-    for (int i = 0; i < rmvSites.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(rmvSites[i]);
+    int index0;
+    int index1;
+    int x = origin.getPosI();
+    int y = origin.getPosJ();
+    for (int[] rmvSite : rmvSites) {
+      index0 = getXIndex(x+rmvSite[0]);
+      index1 = getXIndex(y+rmvSite[1]);
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index0][index1].getSite(0);
       neighbour.setAvailable(DIFFUSION, true);
     }
-    for (int i = 0; i < addSites.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(addSites[i]);
+    for (int[] addSite : addSites) {
+      index0 = getXIndex(x+addSite[0]);
+      index1 = getXIndex(y+addSite[1]);
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) agUcArray[index0][index1].getSite(0);
       neighbour.setAvailable(DIFFUSION, false);
     }
   }
