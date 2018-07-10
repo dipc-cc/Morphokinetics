@@ -179,26 +179,61 @@ class BdaLatticeHelper<T> {
    */
   void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
     BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
+    int x = origin.getPosI();
+    int y = origin.getPosJ();
+    int index0 = 0; // the value should not be used
+    int index1 = 0; // the value should not be used
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
     int rotated = bdaUc.isRotated() ? 1 : 0;
     int type = (int) (log(bdaUc.getSite(0).getType()) / log(2));
     
-    for (int i = 0; i < affectedSites[type][rotated][direction][0].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][0][i]);
+    int[] initFixed = {-1, 3, 2, -3};
+    int init;
+    int end;
+    // Add new "occupied" sites
+    // sets fixed index
+    if (direction % 2 == 0) { // x travelling
+      index1 = getYIndex(y + initFixed[direction]); // y fixed
+      init = -2;
+      end = 2;
+    } else { // y travelling
+      index0 = getXIndex(x + initFixed[direction]); // x fixed
+      init = 0;
+      end = 1;
+    }
+    for (int i = init; i <= end; i++) {
+      if (direction % 2 == 0) {
+        index0 = getXIndex(x + i);
+      } else {
+        index1 = getYIndex(y + i);
+      }
+      BdaAgSurfaceSite neighbour = agArray[index0][index1];
       neighbour.setAvailable(DIFFUSION, false);
     }
-    for (int i = 0; i < affectedSites[type][rotated][direction][1].length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(affectedSites[type][rotated][direction][1][i]);
+
+    // Free sites
+    initFixed = new int[]{1, -2, 0, 2};
+    // sets fixed index
+    if (direction % 2 == 0) { // x travelling
+      index1 = getYIndex(y + initFixed[direction]); // y fixed
+      init = -2;
+      end = 2;
+    } else { // y travelling
+      index0 = getXIndex(x + initFixed[direction]); // x fixed
+      init = 0;
+      end = 1;
+    }
+    for (int i = init; i <= end; i++) {
+      if (direction % 2 == 0) {
+        index0 = getXIndex(x + i);
+      } else {
+        index1 = getYIndex(y + i);
+      }
+      BdaAgSurfaceSite neighbour = agArray[index0][index1];
       neighbour.setAvailable(DIFFUSION, true);
     }
     
     // far sites
-    int x = origin.getPosI();
-    int y = origin.getPosJ();
-    
-    int index0 = 0; // the value should not be used
-    int index1 = 0; // the value should not be used
-    
     int sign = direction % 3 == 0 ? 1 : -1;
   
     // sets fixed index
