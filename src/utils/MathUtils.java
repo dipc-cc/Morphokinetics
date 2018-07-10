@@ -18,6 +18,11 @@
  */
 package utils;
 
+import static java.lang.Math.PI;
+import static java.lang.Math.cos;
+import static java.lang.Math.round;
+import static java.lang.Math.sin;
+
 /**
  *
  * @author N. Ferrando, J. Alberdi-Rodriguez
@@ -39,9 +44,7 @@ public class MathUtils {
   }
 
   public static void fillSurfaceHoles(float[][] surface) {
-
     boolean holesRemaining = true;
-
     while (holesRemaining) {
       holesRemaining = false;
       for (int i = 0; i < surface.length; i++) {
@@ -82,7 +85,6 @@ public class MathUtils {
    * @param surface island surface
    */
   public static void applyGrowthAccordingDistanceToPerimeter(float[][] surface) {
-
     int modified;
     int currentHeight = 0;
     int maxI = surface.length;
@@ -167,10 +169,8 @@ public class MathUtils {
   }
   
   public static float[][] avgFilter(float[][] surface, int radio) {
-
     int binY = surface.length;
     int binX = surface[0].length;
-
     float[][] filtered = new float[binY][binX];
 
     for (int a = 0; a < binY; a++) {
@@ -336,4 +336,16 @@ public class MathUtils {
     return reducedSurface;
   }
 
+  
+  public static int[] rotateAngle(int x, int y, double angle) {
+    double[] result = rotateAngle((double) x, (double) y, angle);
+    return new int[]{(int) round(result[0]), (int) round(result[1])};
+  }
+ 
+  public static double[] rotateAngle(double x, double y, double angle) {
+    angle = -angle * 2 * PI / 360;
+    double xRotated = x * cos(angle) - y * sin(angle);
+    y = x * sin(angle) + y * cos(angle);
+    return new double[]{xRotated, y};
+  }
 }

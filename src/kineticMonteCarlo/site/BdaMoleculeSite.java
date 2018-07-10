@@ -24,6 +24,7 @@ import static java.lang.Math.sin;
 import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.BdaProcess;
+import static utils.MathUtils.rotateAngle;
 
 /**
  *
@@ -105,12 +106,8 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
           break;
         case BETA:
           if (rotated) {
-            double x = xyz[pos][0];
-            double y = xyz[pos][1];
-            double angle =  -22.5 * 2 * PI / 360;
-            double xShift = x * cos(angle) - y * sin(angle);
-            y = x * sin(angle) + y * cos(angle);
-            cartPos = new Point3D(xShift, y, 0);
+            double[] xy = rotateAngle(xyz[pos][0], xyz[pos][1], 22.5);
+            cartPos = new Point3D(xy[0], xy[1], 0);
           } else {
             cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
           }
