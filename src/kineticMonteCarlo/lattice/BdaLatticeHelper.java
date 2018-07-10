@@ -63,16 +63,6 @@ class BdaLatticeHelper<T> {
         agArray[i][j] = (BdaAgSurfaceSite) agUcArray[i][j].getSite(0);
       }
     }
-    int[][][] affectedFar = new int[][][] {
-      { // direction 0
-        {91, 92, 93, 94, 95, 96, 97, 98, 99}, {72, 73, 74, 75, 76, 77, 78, 79, 80}},
-      {// direction 1
-        {101, 102, 103, 104, 105, 106, 107, 108, 109}, {49, 50, 51, 52, 53, 54, 55, 56, 80}},
-      {// direction 2
-        {111, 112, 113, 114, 115, 116, 117, 118, 119}, {56, 57, 58, 59, 60, 61, 62, 63, 64}},
-      {// direction 3
-      {81, 82, 83, 84, 85, 86, 87, 88, 89}, {64, 65, 66, 67, 68, 69, 70, 71, 72}}
-    };
     
     int[][][] affectedSitesNotRotated = new int[][][]{
       // direction 0
@@ -109,39 +99,39 @@ class BdaLatticeHelper<T> {
     affectedSites = new int[][][][][]{ //Alpha
       {// not rotated
         {// direction 0
-          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1]},
           // direction 1
-          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1]},
           // direction 2
-          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1]},
           // direction 3
-          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1]}
         }, {// direction 0
-          {affectedSitesYesRotated[0][0], affectedSitesYesRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+          {affectedSitesYesRotated[0][0], affectedSitesYesRotated[0][1]},
           // direction 1
-          {affectedSitesYesRotated[1][0], affectedSitesYesRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+          {affectedSitesYesRotated[1][0], affectedSitesYesRotated[1][1]},
           // direction 2
-          {affectedSitesYesRotated[2][0], affectedSitesYesRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+          {affectedSitesYesRotated[2][0], affectedSitesYesRotated[2][1]},
           // direction 3
-          {affectedSitesYesRotated[3][0], affectedSitesYesRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+          {affectedSitesYesRotated[3][0], affectedSitesYesRotated[3][1]}
         }
       }, { // Beta
         {// direction 0
-          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1], affectedFar[0][0], affectedFar[0][1]},
+          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1]},
           // direction 1
-          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1], affectedFar[1][0], affectedFar[1][1]},
+          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1]},
           // direction 2
-          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1], affectedFar[2][0], affectedFar[2][1]},
+          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1]},
           // direction 3
-          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1], affectedFar[3][0], affectedFar[3][1]}
+          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1]}
         }, {// direction 0
-          {affectedSitesYesBetaRot[0][0], affectedSitesYesBetaRot[0][1], affectedFar[0][0], affectedFar[0][1]},
+          {affectedSitesYesBetaRot[0][0], affectedSitesYesBetaRot[0][1]},
           // direction 1
-          {affectedSitesYesBetaRot[1][0], affectedSitesYesBetaRot[1][1], affectedFar[1][0], affectedFar[1][1]},
+          {affectedSitesYesBetaRot[1][0], affectedSitesYesBetaRot[1][1]},
           // direction 2
-          {affectedSitesYesBetaRot[2][0], affectedSitesYesBetaRot[2][1], affectedFar[2][0], affectedFar[2][1]},
+          {affectedSitesYesBetaRot[2][0], affectedSitesYesBetaRot[2][1]},
           // direction 3
-          {affectedSitesYesBetaRot[3][0], affectedSitesYesBetaRot[3][1], affectedFar[3][0], affectedFar[3][1]}
+          {affectedSitesYesBetaRot[3][0], affectedSitesYesBetaRot[3][1]}
         }
       }
     };
