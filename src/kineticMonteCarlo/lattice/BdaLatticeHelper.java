@@ -181,33 +181,32 @@ class BdaLatticeHelper<T> {
     BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
     int x = origin.getPosI();
     int y = origin.getPosJ();
-    int index0 = 0; // the value should not be used
-    int index1 = 0; // the value should not be used
+    int[] index = new int[2];
     List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
     int rotated = bdaUc.isRotated() ? 1 : 0;
     int type = (int) (log(bdaUc.getSite(0).getType()) / log(2));
-    
+  
     int[] initFixed = {-1, 3, 2, -3};
     int init;
     int end;
     // Add new "occupied" sites
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
-      index1 = getYIndex(y + initFixed[direction]); // y fixed
+      index[1] = getYIndex(y + initFixed[direction]); // y fixed
       init = -2;
       end = 2;
     } else { // y travelling
-      index0 = getXIndex(x + initFixed[direction]); // x fixed
+      index[0] = getXIndex(x + initFixed[direction]); // x fixed
       init = 0;
       end = 1;
     }
     for (int i = init; i <= end; i++) {
       if (direction % 2 == 0) {
-        index0 = getXIndex(x + i);
+        index[0] = getXIndex(x + i);
       } else {
-        index1 = getYIndex(y + i);
-      }
-      BdaAgSurfaceSite neighbour = agArray[index0][index1];
+        index[1] = getYIndex(y + i);
+      }        
+      BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.setAvailable(DIFFUSION, false);
     }
 
@@ -215,21 +214,21 @@ class BdaLatticeHelper<T> {
     initFixed = new int[]{1, -2, 0, 2};
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
-      index1 = getYIndex(y + initFixed[direction]); // y fixed
+      index[1] = getYIndex(y + initFixed[direction]); // y fixed
       init = -2;
       end = 2;
     } else { // y travelling
-      index0 = getXIndex(x + initFixed[direction]); // x fixed
+      index[0] = getXIndex(x + initFixed[direction]); // x fixed
       init = 0;
       end = 1;
     }
     for (int i = init; i <= end; i++) {
       if (direction % 2 == 0) {
-        index0 = getXIndex(x + i);
+        index[0] = getXIndex(x + i);
       } else {
-        index1 = getYIndex(y + i);
+        index[1] = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = agArray[index0][index1];
+      BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.setAvailable(DIFFUSION, true);
     }
     
@@ -238,18 +237,18 @@ class BdaLatticeHelper<T> {
   
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
-      index1 = getYIndex(y + sign * 4); // y fixed
+      index[1] = getYIndex(y + sign * 4); // y fixed
     } else { // y travelling
-      index0 = getXIndex(x + sign * 4); // x fixed
+      index[0] = getXIndex(x + sign * 4); // x fixed
     }
 
     for (int i = -4; i <= 4; i++) {
       if (direction % 2 == 0) {
-        index0 = getXIndex(x + i);
+        index[0] = getXIndex(x + i);
       } else {
-        index1 = getYIndex(y + i);
+        index[1] = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = agArray[index0][index1];
+      BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
@@ -257,17 +256,17 @@ class BdaLatticeHelper<T> {
     sign *= -1;
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
-      index1 = getYIndex(y + sign * 5);
+      index[1] = getYIndex(y + sign * 5);
     } else { // y travelling
-      index0 = getXIndex(x + sign * 5);
+      index[0] = getXIndex(x + sign * 5);
     }
     for (int i = -4; i <= 4; i++) {
       if (direction % 2 == 0) {
-        index0 = getXIndex(x + i);
+        index[0] = getXIndex(x + i);
       } else {
-        index1 = getYIndex(y + i);
+        index[1] = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = agArray[index0][index1];
+      BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
