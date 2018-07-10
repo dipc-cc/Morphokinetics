@@ -155,22 +155,22 @@ class BdaLatticeHelper<T> {
       rmvSites = addSites;
       addSites = tmpSites;
     }
-    int index0;
-    int index1;
     int x = origin.getPosI();
     int y = origin.getPosJ();
     for (int[] rmvSite : rmvSites) {
-      index0 = getXIndex(x + rmvSite[0]);
-      index1 = getYIndex(y + rmvSite[1]);
-      BdaAgSurfaceSite neighbour = agArray[index0][index1];
+      BdaAgSurfaceSite neighbour = agArray(x + rmvSite[0], y + rmvSite[1]);
       neighbour.setAvailable(DIFFUSION, true);
     }
     for (int[] addSite : addSites) {
-      index0 = getXIndex(x + addSite[0]);
-      index1 = getYIndex(y + addSite[1]);
-      BdaAgSurfaceSite neighbour = agArray[index0][index1];
+      BdaAgSurfaceSite neighbour = agArray(x + addSite[0],y + addSite[1]);
       neighbour.setAvailable(DIFFUSION, false);
     }
+  }
+  
+  private BdaAgSurfaceSite agArray(int x, int y) {
+    int index0 = getXIndex(x);
+    int index1 = getYIndex(y);
+    return agArray[index0][index1];
   }
   
   /**
@@ -201,8 +201,8 @@ class BdaLatticeHelper<T> {
     int y = origin.getPosJ();
     
     int sign = -1;
+    int index0 = 0; // the value should not be used
     int index1 = 0; // the value should not be used
-    int index2 = 0; // the value should not be used
     
     if (direction % 3 == 0) {
       sign = 1;
@@ -210,18 +210,18 @@ class BdaLatticeHelper<T> {
   
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
-      index2 = getYIndex(y + sign * 4); // y fixed
+      index1 = getYIndex(y + sign * 4); // y fixed
     } else { // y travelling
-      index1 = getXIndex(x + sign * 4); // x fixed
+      index0 = getXIndex(x + sign * 4); // x fixed
     }
 
     for (int i = -4; i <= 4; i++) {
       if (direction % 2 == 0) {
-        index1 = getXIndex(x + i);
+        index0 = getXIndex(x + i);
       } else {
-        index2 = getYIndex(y + i);
+        index1 = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = agArray[index1][index2];
+      BdaAgSurfaceSite neighbour = agArray[index0][index1];
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, true);
     }
@@ -229,17 +229,17 @@ class BdaLatticeHelper<T> {
     sign *= -1;
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
-      index2 = getYIndex(y + sign * 5);
+      index1 = getYIndex(y + sign * 5);
     } else { // y travelling
-      index1 = getXIndex(x + sign * 5);
+      index0 = getXIndex(x + sign * 5);
     }
     for (int i = -4; i <= 4; i++) {
       if (direction % 2 == 0) {
-        index1 = getXIndex(x + i);
+        index0 = getXIndex(x + i);
       } else {
-        index2 = getYIndex(y + i);
+        index1 = getYIndex(y + i);
       }
-      BdaAgSurfaceSite neighbour = agArray[index1][index2];
+      BdaAgSurfaceSite neighbour = agArray[index0][index1];
       neighbour.removeBdaUc(bdaUc);
       neighbour.setAvailable(ADSORPTION, false);
       neighbour.setBelongingBdaUc(bdaUc);
