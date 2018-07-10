@@ -190,13 +190,13 @@ class BdaLatticeHelper<T> {
     int x = origin.getPosI();
     int y = origin.getPosJ();
     
-    int sign = -1;
     int index0 = 0; // the value should not be used
     int index1 = 0; // the value should not be used
     
+    int sign = -1;
     if (direction % 3 == 0) {
       sign = 1;
-  }
+    }
   
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
