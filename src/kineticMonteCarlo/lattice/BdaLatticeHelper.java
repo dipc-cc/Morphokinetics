@@ -137,9 +137,15 @@ class BdaLatticeHelper<T> {
     };
   }
 
+  /**
+   * For beta molecule shift.
+   * 
+   * @param rotated molecule is shifted.
+   * @param origin 
+   */
   void changeAvailability(boolean rotated, BdaSurfaceUc origin) {
-    int[][] rmvSites = {{1,1},{2,1}};//{6, 19};
-    int[][] addSites = {{0,-1},{1,-1},{2,-1}};//{3,4,17};
+    int[][] rmvSites = {{1, 1}, {2, 1}};
+    int[][] addSites = {{0, -1}, {1, -1}, {2, -1}};
     if (!rotated) {
       int[][] tmpSites = rmvSites;
       rmvSites = addSites;
@@ -193,10 +199,7 @@ class BdaLatticeHelper<T> {
     int index0 = 0; // the value should not be used
     int index1 = 0; // the value should not be used
     
-    int sign = -1;
-    if (direction % 3 == 0) {
-      sign = 1;
-    }
+    int sign = direction % 3 == 0 ? 1 : -1;
   
     // sets fixed index
     if (direction % 2 == 0) { // x travelling
