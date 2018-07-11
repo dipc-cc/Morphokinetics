@@ -53,6 +53,7 @@ class BdaLatticeHelper<T> {
    * Unit cell array, where all the surface Ag atoms are located.
    */
   private final BdaAgSurfaceSite[][] agArray;
+  Stencil stencil;
 
   public BdaLatticeHelper(int sizeI, int sizeJ, BdaSurfaceUc[][] agUcArray) {
     hexaSizeI = sizeI;
@@ -63,6 +64,7 @@ class BdaLatticeHelper<T> {
         agArray[i][j] = (BdaAgSurfaceSite) agUcArray[i][j].getSite(0);
       }
     }
+    stencil = new Stencil(hexaSizeI, hexaSizeJ);
     
     int[][][] affectedSitesNotRotated = new int[][][]{
       // direction 0
@@ -178,101 +180,52 @@ class BdaLatticeHelper<T> {
    * @param direction 
    */
   void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
-    BdaAgSurfaceSite originAgSite = (BdaAgSurfaceSite) origin.getSite(0);
     int x = origin.getPosI();
     int y = origin.getPosJ();
     int[] index = new int[2];
-    List<ISite> allNeighbour = originAgSite.getSpiralSites(5);
-    int rotated = bdaUc.isRotated() ? 1 : 0;
+    boolean rotated = bdaUc.isRotated();
     int type = (int) (log(bdaUc.getSite(0).getType()) / log(2));
   
-    int[] initFixed = {-1, 3, 2, -3};
-    int init;
-    int end;
+    boolean far = false;
+    boolean add = true;
+    stencil.init(x, y, direction, add, far, rotated);
     // Add new "occupied" sites
-    // sets fixed index
-    if (direction % 2 == 0) { // x travelling
-      index[1] = getYIndex(y + initFixed[direction]); // y fixed
-      init = -2;
-      end = 2;
-    } else { // y travelling
-      index[0] = getXIndex(x + initFixed[direction]); // x fixed
-      init = 0;
-      end = 1;
-    }
-    for (int i = init; i <= end; i++) {
-      if (direction % 2 == 0) {
-        index[0] = getXIndex(x + i);
-      } else {
-        index[1] = getYIndex(y + i);
-      }        
-      BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
-      neighbour.setAvailable(DIFFUSION, false);
-    }
 
-    // Free sites
-    initFixed = new int[]{1, -2, 0, 2};
-    // sets fixed index
-    if (direction % 2 == 0) { // x travelling
-      index[1] = getYIndex(y + initFixed[direction]); // y fixed
-      init = -2;
-      end = 2;
-    } else { // y travelling
-      index[0] = getXIndex(x + initFixed[direction]); // x fixed
-      init = 0;
-      end = 1;
-    }
-    for (int i = init; i <= end; i++) {
-      if (direction % 2 == 0) {
-        index[0] = getXIndex(x + i);
-      } else {
-        index[1] = getYIndex(y + i);
-      }
+    for (int i = 0; i < stencil.size(); i++) {
+      index = stencil.getNextIndex();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
-      neighbour.setAvailable(DIFFUSION, true);
+      neighbour.setAvailable(DIFFUSION, !add);
+    }  
+    
+    add = false;
+    stencil.init(x, y, direction, add, far, rotated);
+    for (int i = 0; i < stencil.size(); i++) {
+      index = stencil.getNextIndex();
+      BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
+      neighbour.setAvailable(DIFFUSION, !add);
     }
     
-    // far sites
-    int sign = direction % 3 == 0 ? 1 : -1;
-  
-    // sets fixed index
-    if (direction % 2 == 0) { // x travelling
-      index[1] = getYIndex(y + sign * 4); // y fixed
-    } else { // y travelling
-      index[0] = getXIndex(x + sign * 4); // x fixed
-    }
-
-    for (int i = -4; i <= 4; i++) {
-      if (direction % 2 == 0) {
-        index[0] = getXIndex(x + i);
-      } else {
-        index[1] = getYIndex(y + i);
-      }
+    far = true;
+    add = false;
+    stencil.init(x, y, direction, add, far, rotated);
+    for (int i = 0; i < stencil.size(); i++) {
+      index = stencil.getNextIndex();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.removeBdaUc(bdaUc);
-      neighbour.setAvailable(ADSORPTION, true);
+      neighbour.setAvailable(ADSORPTION, !add);
     }
     
-    sign *= -1;
-    // sets fixed index
-    if (direction % 2 == 0) { // x travelling
-      index[1] = getYIndex(y + sign * 5);
-    } else { // y travelling
-      index[0] = getXIndex(x + sign * 5);
-    }
-    for (int i = -4; i <= 4; i++) {
-      if (direction % 2 == 0) {
-        index[0] = getXIndex(x + i);
-      } else {
-        index[1] = getYIndex(y + i);
-      }
+    add = true;
+    stencil.init(x, y, direction, add, far, rotated);
+    for (int i = 0; i < stencil.size(); i++) {
+      index = stencil.getNextIndex();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
-      neighbour.removeBdaUc(bdaUc);
-      neighbour.setAvailable(ADSORPTION, false);
+      neighbour.setAvailable(ADSORPTION, !add);
       neighbour.setBelongingBdaUc(bdaUc);
     }
   }
-  
+
+  // kentzeko
   private int getXIndex(int x) {
     if (x < 0) {
       return hexaSizeI + x;
