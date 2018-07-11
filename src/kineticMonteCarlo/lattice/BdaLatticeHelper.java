@@ -44,8 +44,6 @@ class BdaLatticeHelper<T> {
 
   private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
   private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
-  /** [type][rotated][direction][edge][atom]. */
-  private final int[][][][][] affectedSites;
 
   private final int hexaSizeI;
   private final int hexaSizeJ;
@@ -65,78 +63,6 @@ class BdaLatticeHelper<T> {
       }
     }
     stencil = new Stencil(hexaSizeI, hexaSizeJ);
-    
-    int[][][] affectedSitesNotRotated = new int[][][]{
-      // direction 0
-      {{11, 2, 3, 4, 17}, {9, 8, 7, 6, 19}},
-      // direction 1
-      {{39, 40}, {9, 10}},
-      // direction 2
-      {{24, 23, 22, 21, 20}, {10, 1, 0, 5, 18}},
-      // direction 3
-      {{26, 27}, {18, 19}}
-    };
-    int[][][] affectedSitesYesRotated = new int[][][]{
-      // direction 0
-      {{33, 34}, {22, 21}},
-      // direction 1
-      {{16, 17, 18, 19, 20}, {14, 3, 0, 7, 22}},
-      // direction 2
-      {{44, 45}, {14, 15}},
-      // direction 3
-      {{13, 2, 1, 8, 23}, {15, 4, 5, 6, 21}}
-    };
-    
-    int[][][] affectedSitesYesBetaRot = new int[][][]{
-      // direction 0
-      {{14, 15, 16, 11, 2}, {5, 18, 7, 8, 9}},
-      // direction 1
-      {{38, 39, 6}, {9, 10, 3}},
-      // direction 2
-      {{22, 23, 24, 6, 19}, {3, 4, 17, 10, 1}},
-      // direction 3
-      {{26, 27, 2}, {17, 18, 7}}};
-
-    //int[][][] pos2 = new int[][][]{affectedSites[0],affectedSites[1],affectedSites[2],affectedSites[3]};
-    affectedSites = new int[][][][][]{ //Alpha
-      {// not rotated
-        {// direction 0
-          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1]},
-          // direction 1
-          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1]},
-          // direction 2
-          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1]},
-          // direction 3
-          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1]}
-        }, {// direction 0
-          {affectedSitesYesRotated[0][0], affectedSitesYesRotated[0][1]},
-          // direction 1
-          {affectedSitesYesRotated[1][0], affectedSitesYesRotated[1][1]},
-          // direction 2
-          {affectedSitesYesRotated[2][0], affectedSitesYesRotated[2][1]},
-          // direction 3
-          {affectedSitesYesRotated[3][0], affectedSitesYesRotated[3][1]}
-        }
-      }, { // Beta
-        {// direction 0
-          {affectedSitesNotRotated[0][0], affectedSitesNotRotated[0][1]},
-          // direction 1
-          {affectedSitesNotRotated[1][0], affectedSitesNotRotated[1][1]},
-          // direction 2
-          {affectedSitesNotRotated[2][0], affectedSitesNotRotated[2][1]},
-          // direction 3
-          {affectedSitesNotRotated[3][0], affectedSitesNotRotated[3][1]}
-        }, {// direction 0
-          {affectedSitesYesBetaRot[0][0], affectedSitesYesBetaRot[0][1]},
-          // direction 1
-          {affectedSitesYesBetaRot[1][0], affectedSitesYesBetaRot[1][1]},
-          // direction 2
-          {affectedSitesYesBetaRot[2][0], affectedSitesYesBetaRot[2][1]},
-          // direction 3
-          {affectedSitesYesBetaRot[3][0], affectedSitesYesBetaRot[3][1]}
-        }
-      }
-    };
   }
 
   /**
@@ -182,7 +108,7 @@ class BdaLatticeHelper<T> {
   void changeAvailability(BdaSurfaceUc origin, BdaMoleculeUc bdaUc, int direction) {
     int x = origin.getPosI();
     int y = origin.getPosJ();
-    int[] index = new int[2];
+    int[] index;
     boolean rotated = bdaUc.isRotated();
     int type = (int) (log(bdaUc.getSite(0).getType()) / log(2));
   

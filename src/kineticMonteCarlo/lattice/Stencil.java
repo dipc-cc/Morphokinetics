@@ -102,20 +102,17 @@ public class Stencil {
   }
   
   public int[] getNextIndex() {
-    //if (!far) {
-      if (direction % 2 == 0) {
-        index[0] = getXIndex(xIndex + init + iIndex);
-      } else {
-        index[1] = getYIndex(yIndex + init + iIndex);
-      }
+    if (direction % 2 == 0) {
+      index[0] = getXIndex(xIndex + init + iIndex);
+    } else {
+      index[1] = getYIndex(yIndex + init + iIndex);
+    }
 
-      iIndex++;
-      if (rotated) {
-        return new int[]{index[1], index[0]};
-      }
-      return index;
-    //}
-    //return null;
+    iIndex++;
+    if (rotated) {
+      return new int[]{index[1], index[0]};
+    }
+    return index;
   }  
   
   private int getXIndex(int x) {
