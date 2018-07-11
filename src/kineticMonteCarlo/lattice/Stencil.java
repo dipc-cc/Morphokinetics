@@ -75,29 +75,20 @@ public class Stencil {
       if (direction % 2 == 0) { // x travelling
         if (!rotated) {
           index[1] = getYIndex(y + initFixed[direction]); // y fixed
-          init = -2;
-          end = 2;
-          size = 5;
+          initLargeSide();
         } else {
           int[] fixed = rotateAngle(initFixed[direction + 1], 0, 90);
           index[1] = getYIndex(y + fixed[1]); // y fixed
-          init = 0;
-          end = 1;
-          size = 2;
+          initSmallSide();
         }
       } else { // y travelling
-        
         if (!rotated) {
           index[0] = getXIndex(x + initFixed[direction]); // x fixed
-          init = 0;
-          end = 1;
-          size = 2;
+          initSmallSide();
         } else {
           int[] fixed = rotateAngle(0, initFixed[(direction + 1) % 4], 90);
           index[0] = getXIndex(x + fixed[0]); // x fixed
-          init = -2;
-          end = 2;
-          size = 5;
+          initLargeSide();
         }
       }
     } else {// far sites
@@ -113,7 +104,6 @@ public class Stencil {
         index[0] = getXIndex(x + sign * distance); // x fixed
       }
     }
-
   }
   
   public int size() {
@@ -128,12 +118,6 @@ public class Stencil {
     }
 
     iIndex++;
-    if (rotated) {
-      // ez du balio!!!
-      //index = MathUtils.rotateAngle(index[0], index[1], 90);
-      //index = MathUtils.rotateAngle(xIndex, yIndex, 90);
-      //return new int[]{index[1], index[0]};
-    }
     return index;
   }  
   
@@ -155,5 +139,17 @@ public class Stencil {
       return y % latticeSizeY;
     }
     return y;
+  }
+  
+  private void initSmallSide() {
+    init = 0;
+    end = 1;
+    size = 2;
+  }
+  
+  private void initLargeSide() {
+    init = -2;
+    end = 2;
+    size = 5;
   }
 }
