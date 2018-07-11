@@ -18,6 +18,8 @@
  */
 package kineticMonteCarlo.lattice;
 
+import static utils.MathUtils.rotateAngle;
+
 /**
  *
  * @author J. Alberdi-Rodriguez
@@ -71,15 +73,32 @@ public class Stencil {
       }
       // sets fixed index
       if (direction % 2 == 0) { // x travelling
-        index[1] = getYIndex(y + initFixed[direction]); // y fixed
-        init = -2;
-        end = 2;
-        size = 5;
+        if (!rotated) {
+          index[1] = getYIndex(y + initFixed[direction]); // y fixed
+          init = -2;
+          end = 2;
+          size = 5;
+        } else {
+          int[] fixed = rotateAngle(initFixed[direction + 1], 0, 90);
+          index[1] = getYIndex(y + fixed[1]); // y fixed
+          init = 0;
+          end = 1;
+          size = 2;
+        }
       } else { // y travelling
-        index[0] = getXIndex(x + initFixed[direction]); // x fixed
-        init = 0;
-        end = 1;
-        size = 2;
+        
+        if (!rotated) {
+          index[0] = getXIndex(x + initFixed[direction]); // x fixed
+          init = 0;
+          end = 1;
+          size = 2;
+        } else {
+          int[] fixed = rotateAngle(0, initFixed[(direction + 1) % 4], 90);
+          index[0] = getXIndex(x + fixed[0]); // x fixed
+          init = -2;
+          end = 2;
+          size = 5;
+        }
       }
     } else {// far sites
       sign = direction % 3 == 0 ? 1 : -1;
@@ -110,7 +129,10 @@ public class Stencil {
 
     iIndex++;
     if (rotated) {
-      return new int[]{index[1], index[0]};
+      // ez du balio!!!
+      //index = MathUtils.rotateAngle(index[0], index[1], 90);
+      //index = MathUtils.rotateAngle(xIndex, yIndex, 90);
+      //return new int[]{index[1], index[0]};
     }
     return index;
   }  
