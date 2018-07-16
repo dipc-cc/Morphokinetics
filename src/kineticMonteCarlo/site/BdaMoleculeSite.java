@@ -18,9 +18,6 @@
  */
 package kineticMonteCarlo.site;
 
-import static java.lang.Math.PI;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
 import java.util.List;
 import javafx.geometry.Point3D;
 import kineticMonteCarlo.process.BdaProcess;
