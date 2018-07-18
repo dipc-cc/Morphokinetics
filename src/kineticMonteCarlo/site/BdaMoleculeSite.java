@@ -41,6 +41,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
   /** Alpha, Beta (1 or 2), Gamma or Delta. */
   private byte type;
   private boolean rotated;
+  private boolean shifted;
   private final BdaMoleculeSite[] neighbours;
   
   private final double[][] xyz = {{3.7500, 0.0000},
@@ -79,6 +80,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
       this.type = ALPHA;
     else 
       this.type = type;
+    shifted = false;
   }
   
   public boolean isRotated() {
@@ -90,26 +92,25 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
     rotateAtoms();
   }
 
+  public boolean isShifted() {
+    return shifted;
+  }
+
+  public void setShifted(boolean shifted) {
+    this.shifted = shifted;
+  }
+  
   private void rotateAtoms() {
     for (int pos = 0; pos < atoms.length; pos++) {
-      Point3D cartPos = null;
-      switch (type) {
-        case ALPHA:
-          if (rotated) {
-            cartPos = new Point3D(xyz[pos][1], xyz[pos][0], 0);
-          } else {
-            cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
-          }
-          break;
-        case BETA:
-          if (rotated) {
-            double[] xy = rotateAngle(xyz[pos][0], xyz[pos][1], 22.5);
-            cartPos = new Point3D(xy[0], xy[1], 0);
-          } else {
-            cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
-          }
-          break;
-
+      Point3D cartPos;
+      if (rotated) {
+        cartPos = new Point3D(xyz[pos][1], xyz[pos][0], 0);
+      } else {
+        cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
+      }
+      if (shifted) {
+	double[] xy = rotateAngle(xyz[pos][0], xyz[pos][1], 22.5);
+        cartPos = new Point3D(xy[0], xy[1], 0);
       }
 
       atoms[pos] = new BdaAtomSite(pos, pos, cartPos);

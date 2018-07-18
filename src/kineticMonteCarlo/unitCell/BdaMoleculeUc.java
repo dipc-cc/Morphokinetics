@@ -177,25 +177,17 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   
   @Override
   public Point3D getPos() {
-    Point3D pos = null;
-    switch (bdaMolecule.getType()) {
-      case ALPHA:
-        // bridge
-        if (bdaMolecule.isRotated()) {
-          pos = new Point3D(0.5, 0, 0);
-        } else {
-          pos = new Point3D(0, 0.5, 0);
-        }
-        break;
-      case BETA:
-        if (bdaMolecule.isRotated()) { // top
-          pos = new Point3D(0, 0, 0);
-        } else { // bridge
-          pos = new Point3D(0, 0.5, 0);
-        }
-        break;
+    Point3D pos;
+    
+    if (isShifted()) {
+      pos = new Point3D(0, 0, 0);
+    } else {
+      if (isRotated()) {
+        pos = new Point3D(0.5, 0, 0);
+      } else {
+        pos = new Point3D(0, 0.5, 0);
+      }
     }
-
     return pos;
   }
   
@@ -205,6 +197,14 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
 
   public void setRotated(boolean rotated) {
     bdaMolecule.setRotated(rotated);
+  }
+  
+  public boolean isShifted() {
+    return bdaMolecule.isShifted();
+  }
+
+  public void setShifted(boolean shifted) {
+    bdaMolecule.setShifted(shifted);
   }
   
   @Override
