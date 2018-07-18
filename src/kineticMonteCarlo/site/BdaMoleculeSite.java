@@ -98,6 +98,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
 
   public void setShifted(boolean shifted) {
     this.shifted = shifted;
+    rotateAtoms();
   }
   
   private void rotateAtoms() {
@@ -109,7 +110,7 @@ public class BdaMoleculeSite extends AbstractGrowthSite {
         cartPos = new Point3D(xyz[pos][0], xyz[pos][1], 0);
       }
       if (shifted) {
-	double[] xy = rotateAngle(xyz[pos][0], xyz[pos][1], 22.5);
+        double[] xy = rotateAngle(cartPos.getX(), cartPos.getY(), 22.5);
         cartPos = new Point3D(xy[0], xy[1], 0);
       }
 
