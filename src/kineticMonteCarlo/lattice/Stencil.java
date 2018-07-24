@@ -26,14 +26,11 @@ import static utils.MathUtils.rotateAngle;
  */
 public class Stencil {
   private int init;
-  private int end;
   private int size;
-  private int movingIndex; //either x or y
   private int direction;
   private boolean rotated;
   private int shifted;
   private boolean add;
-  private boolean far;
   private int sign;
 
   private int xIndex;
@@ -41,9 +38,8 @@ public class Stencil {
   private int iIndex;
   private final int latticeSizeX;
   private final int latticeSizeY;
-  private int[] index;
+  private final int[] index;
 
-  private int[] initFixed;
   private int[] centre;
   
   private static final int[] TOP = {0, -1};
@@ -52,7 +48,7 @@ public class Stencil {
   private static final int[] LEFT = {-1, 0};
   private static final int[][] MOVE = {TOP, RIGHT, BOTTOM, LEFT};
   /** [TYPE (shifted or not)][side (bottom...)][i,j].*/
-  private int[][][][] stencil;
+  private final int[][][][] stencil;
   
   public Stencil(int x, int y) {
     latticeSizeX = x;
@@ -91,34 +87,7 @@ public class Stencil {
     this.rotated = rotated;
     this.shifted = shifted;
     this.add = add;
-    this.far = far;
-    if (!far) {
-      if (add){
-        initFixed = new int[]{-1, 3, 2, -3};
-      } else {
-        initFixed = new int[]{1, -2, 0, 2};
-      }
-      // sets fixed index
-      if (direction % 2 == 0) { // x travelling
-        if (!rotated) {
-          index[1] = getYIndex(y + initFixed[direction]); // y fixed
-          initLargeSide();
-        } else {
-          int[] fixed = rotateAngle(initFixed[direction + 1], 0, 90);
-          index[1] = getYIndex(y + fixed[1]); // y fixed
-          initSmallSide();
-        }
-      } else { // y travelling
-        if (!rotated) {
-          index[0] = getXIndex(x + initFixed[direction]); // x fixed
-          initSmallSide();
-        } else {
-          int[] fixed = rotateAngle(0, initFixed[(direction + 1) % 4], 90);
-          index[0] = getXIndex(x + fixed[0]); // x fixed
-          initLargeSide();
-        }
-      }
-    } else {// far sites
+    if (far) {// far sites
       sign = direction % 3 == 0 ? 1 : -1;
       sign = add ? -sign : sign;
       int distance = add ? 5 : 4;
@@ -199,17 +168,5 @@ public class Stencil {
       return y % latticeSizeY;
     }
     return y;
-  }
-  
-  private void initSmallSide() {
-    init = 0;
-    end = 1;
-    size = 2;
-  }
-  
-  private void initLargeSide() {
-    init = -2;
-    end = 2;
-    size = 5;
   }
 }
