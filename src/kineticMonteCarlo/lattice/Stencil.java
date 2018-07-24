@@ -77,6 +77,7 @@ public class Stencil {
    * @param add if true, those sites must become unavailable.
    * @param far Ag lattice positions for far sites (to control the adsorption).
    * @param rotated if the molecule is 90º rotated.
+   * @param shifted if the molecule is 22.5º rotated.
    */
   public void init(int x, int y, int direction, boolean add, boolean far, boolean rotated, int shifted) {
     xIndex = x;
@@ -148,7 +149,7 @@ public class Stencil {
 
     iIndex++;
     return index;
-  }  
+  }
   
   private int getXIndex(int x) {
     if (x < 0) {
