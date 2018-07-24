@@ -31,6 +31,8 @@ public class Stencil {
   private int movingIndex; //either x or y
   private int direction;
   private boolean rotated;
+  private int shifted;
+  private boolean add;
   private boolean far;
   private int sign;
 
@@ -42,11 +44,33 @@ public class Stencil {
   private int[] index;
 
   private int[] initFixed;
+  private int[] centre;
+  
+  private static final int[] TOP = {0, -1};
+  private static final int[] RIGHT = {1, 0};
+  private static final int[] BOTTOM = {0, 1};
+  private static final int[] LEFT = {-1, 0};
+  private static final int[][] MOVE = {TOP, RIGHT, BOTTOM, LEFT};
+  /** [TYPE (shifted or not)][side (bottom...)][i,j].*/
+  private int[][][][] stencil;
   
   public Stencil(int x, int y) {
     latticeSizeX = x;
     latticeSizeY = y;
-    index = new int[2]; 
+    index = new int[2];
+    centre = new int[]{x, y};
+    // not shifted
+    int[][] top = {{-2, 0}, {-1, 0}, {0, 0}, {1, 0}, {2, 0}};
+    int[][] right = {{2, 0}, {2, 1}};
+    int[][] bottom = {{-2, 1}, {-1, 1}, {0, 1}, {1, 1}, {2, 1}};
+    int[][] left = {{-2, 0}, {-2, 1}};
+    int[][][] stencil1 = new int[][][]{top, right, bottom, left};
+    top = new int[][]{{-2, 0}, {-1, 0}, {0, -1}, {1, -1}, {2, -1}};
+    right = new int[][]{{2, 0}, {2, -1}, {0, 1}};
+    bottom = new int[][]{{-2, 1}, {-1, 1}, {0, 1}, {1, 0}, {2, 0}};
+    left = new int[][]{{-2, 0}, {-2, 1}, {0, -1}};
+    int[][][] stencil2 = new int[][][]{top, right, bottom, left};
+    stencil = new int[][][][]{stencil1, stencil2};
   }
 
   /**
@@ -58,12 +82,15 @@ public class Stencil {
    * @param far Ag lattice positions for far sites (to control the adsorption).
    * @param rotated if the molecule is 90º rotated.
    */
-  public void init(int x, int y, int direction, boolean add, boolean far, boolean rotated) {
+  public void init(int x, int y, int direction, boolean add, boolean far, boolean rotated, int shifted) {
     xIndex = x;
     yIndex = y;
+    centre = new int[]{x, y};
     iIndex = 0;
     this.direction = direction;
     this.rotated = rotated;
+    this.shifted = shifted;
+    this.add = add;
     this.far = far;
     if (!far) {
       if (add){
@@ -109,6 +136,39 @@ public class Stencil {
   public int size() {
     return size;
   }
+  
+  public boolean hasNext(){
+    int dir = direction;
+    if (rotated) {
+      dir = (dir + 1) % 4;
+    }
+    return iIndex < stencil[shifted][dir].length;
+  }
+  
+  public int[] getNextIndexClose() {
+    int[] move = {0, 0};
+    int dir = direction;
+    if (add) {
+      move = MOVE[direction];
+    } else {
+      dir = (direction + 2) % 4; // remove the opposite side
+    }
+    int[] pos;
+    if (rotated) { // rotate 90º the stencil
+      dir = (dir + 1) % 4;
+      pos = stencil[shifted][dir][iIndex];
+      pos = rotateAngle(pos[0], pos[1], 90);
+    } else {
+      pos = stencil[shifted][dir][iIndex];
+    }
+  
+    index[0] = getXIndex(centre[0] + pos[0] + move[0]);
+    index[1] = getYIndex(centre[1] + pos[1] + move[1]);
+
+    iIndex++;
+    return index;
+  }
+  
   
   public int[] getNextIndex() {
     if (direction % 2 == 0) {

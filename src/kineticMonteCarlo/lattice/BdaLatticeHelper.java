@@ -42,8 +42,8 @@ import kineticMonteCarlo.unitCell.BdaSurfaceUc;
  */
 class BdaLatticeHelper<T> {
 
-  private final int[] alphaTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
-  private final int[] beta2Travelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
+  private final int[] horizontalTravelling = {3, 3, 2, 1, 1, 0, 1, 2, 1, 0, 1, 2, 1, 0, 0, 3, 3, 3, 3, 3, 3, 3, 2, 2, 3, 0, 0};
+  private final int[] shiftedTravelling = {3, 3, 2, 1, 1, 0, 0, 1, 1, 2, 3};
 
   private final int hexaSizeI;
   private final int hexaSizeJ;
@@ -110,30 +110,31 @@ class BdaLatticeHelper<T> {
     int y = origin.getPosJ();
     int[] index;
     boolean rotated = bdaUc.isRotated();
+    int shifted = bdaUc.isShifted() ? 1 : 0;
     int type = (int) (log(bdaUc.getSite(0).getType()) / log(2));
   
     boolean far = false;
     boolean add = true;
-    stencil.init(x, y, direction, add, far, rotated);
+    stencil.init(x, y, direction, add, far, rotated, shifted);
     // Add new "occupied" sites
 
-    for (int i = 0; i < stencil.size(); i++) {
-      index = stencil.getNextIndex();
+    while (stencil.hasNext()) {
+      index = stencil.getNextIndexClose();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.setAvailable(DIFFUSION, !add);
     }  
     
     add = false;
-    stencil.init(x, y, direction, add, far, rotated);
-    for (int i = 0; i < stencil.size(); i++) {
-      index = stencil.getNextIndex();
+    stencil.init(x, y, direction, add, far, rotated, shifted);
+    while (stencil.hasNext()) {
+      index = stencil.getNextIndexClose();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
       neighbour.setAvailable(DIFFUSION, !add);
     }
     
     far = true;
     add = false;
-    stencil.init(x, y, direction, add, far, rotated);
+    stencil.init(x, y, direction, add, far, rotated, shifted);
     for (int i = 0; i < stencil.size(); i++) {
       index = stencil.getNextIndex();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
@@ -142,7 +143,7 @@ class BdaLatticeHelper<T> {
     }
     
     add = true;
-    stencil.init(x, y, direction, add, far, rotated);
+    stencil.init(x, y, direction, add, far, rotated, shifted);
     for (int i = 0; i < stencil.size(); i++) {
       index = stencil.getNextIndex();
       BdaAgSurfaceSite neighbour = agArray[index[0]][index[1]];
@@ -183,10 +184,8 @@ class BdaLatticeHelper<T> {
     BdaMoleculeUc bdaUc = agSite.getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
     BdaAgSurfaceSite neighbourSite = (BdaAgSurfaceSite) origin.getSite(0);
-    int diffusionAvailableLimit = bdaSite.getType() == BETA && bdaSite.isRotated() ? 11 : 10;
-    for (int i = 0; i < 11;
-     //       alphaTravelling.length;
-    i++) {
+    int diffusionAvailableLimit = bdaSite.isShifted() ? 11 : 10;
+    for (int i = 0; i < diffusionAvailableLimit; i++) {
       neighbourSite = (BdaAgSurfaceSite) neighbourSite.getNeighbour(getNeighbourIndex(bdaSite, i));
       if (makeAvailable) {
         neighbourSite.removeBdaUc(bdaUc);
@@ -227,12 +226,12 @@ class BdaLatticeHelper<T> {
       modifiedSites = new HashSet<>();
     }
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) site;
-    site = origin.getNeighbour(alphaTravelling[0]);
+    site = origin.getNeighbour(horizontalTravelling[0]);
     BdaMoleculeUc bdaUc = origin.getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
 
     modifiedSites.add(site);
-    for (int i = 1; i < alphaTravelling.length; i++) {
+    for (int i = 1; i < horizontalTravelling.length; i++) {
       site = site.getNeighbour(getNeighbourIndex(bdaSite, i));
       modifiedSites.add(site);
     }
@@ -240,24 +239,21 @@ class BdaLatticeHelper<T> {
   }
   
   private int getNeighbourIndex(BdaMoleculeSite bdaSite, int i) {
-    switch (bdaSite.getType()) {
-      case ALPHA:
-        if (bdaSite.isRotated()) {
-          return (alphaTravelling[i] + 3) % 4;
-        } else {
-          return alphaTravelling[i];
-        }
-      case BETA:
-        if (bdaSite.isRotated()) {
-          return beta2Travelling[i];
-        } else {
-          return alphaTravelling[i];
-        }
+    if (bdaSite.isRotated() && bdaSite.isShifted()) {
+      return (shiftedTravelling[i] + 3) % 4;
     }
-
-    return -1; // should not come to here
+    if (bdaSite.isRotated() && !bdaSite.isShifted()) {
+      return (horizontalTravelling[i] + 3) % 4;
+    }
+    if (!bdaSite.isRotated() && bdaSite.isShifted()) {
+      return shiftedTravelling[i];
+    }
+    if (!bdaSite.isRotated() && !bdaSite.isShifted()) {
+      return horizontalTravelling[i];
+    }
+    return -1; // impossible to come to here
   }
-  
+
   AbstractGrowthSite getStartingAvailable(AbstractGrowthSite site, int direction, boolean rotated){
     BdaMoleculeUc mUc = ((BdaAgSurfaceSite) site).getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
