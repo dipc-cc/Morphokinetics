@@ -151,7 +151,7 @@ public class Stencil {
     return index;
   }
   
-  private int getXIndex(int x) {
+  int getXIndex(int x) {
     if (x < 0) {
       return latticeSizeX + x;
     }
@@ -161,7 +161,7 @@ public class Stencil {
     return x;
   }
   
-  private int getYIndex(int y) {
+  int getYIndex(int y) {
     if (y < 0) {
       return latticeSizeY + y;
     }
