@@ -35,6 +35,7 @@ import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 import kineticMonteCarlo.site.ISite;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
+import static utils.MathUtils.rotateAngle;
 
 /**
  *  
@@ -68,13 +69,13 @@ class BdaLatticeHelper<T> {
   /**
    * For beta molecule shift.
    * 
-   * @param rotated molecule is shifted.
+   * @param rotated molecule is 90º rotated.
    * @param origin 
    */
-  void changeAvailability(boolean rotated, BdaSurfaceUc origin) {
+  void changeAvailability(boolean shifted, boolean rotated,  BdaSurfaceUc origin) {
     int[][] rmvSites = {{1, 1}, {2, 1}};
     int[][] addSites = {{0, -1}, {1, -1}, {2, -1}};
-    if (!rotated) {
+    if (!shifted) {
       int[][] tmpSites = rmvSites;
       rmvSites = addSites;
       addSites = tmpSites;
@@ -82,16 +83,22 @@ class BdaLatticeHelper<T> {
     int x = origin.getPosI();
     int y = origin.getPosJ();
     for (int[] rmvSite : rmvSites) {
+      if (rotated) {
+        rmvSite = rotateAngle(rmvSite[0], rmvSite[1], 90);
+      }
       BdaAgSurfaceSite neighbour = agArray(x + rmvSite[0], y + rmvSite[1]);
       neighbour.setAvailable(DIFFUSION, true);
     }
     for (int[] addSite : addSites) {
+      if (rotated) {
+        addSite = rotateAngle(addSite[0], addSite[1], 90);
+      }
       BdaAgSurfaceSite neighbour = agArray(x + addSite[0],y + addSite[1]);
       neighbour.setAvailable(DIFFUSION, false);
     }
   }
   
-  private BdaAgSurfaceSite agArray(int x, int y) {
+  BdaAgSurfaceSite agArray(int x, int y) {
     int index0 = getXIndex(x);
     int index1 = getYIndex(y);
     return agArray[index0][index1];
@@ -152,7 +159,6 @@ class BdaLatticeHelper<T> {
     }
   }
 
-  // kentzeko
   private int getXIndex(int x) {
     if (x < 0) {
       return hexaSizeI + x;

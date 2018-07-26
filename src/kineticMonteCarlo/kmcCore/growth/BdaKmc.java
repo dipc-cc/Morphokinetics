@@ -30,6 +30,8 @@ import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DESORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import static kineticMonteCarlo.process.BdaProcess.ROTATION;
+import static kineticMonteCarlo.process.BdaProcess.TRANSFORM;
+import static kineticMonteCarlo.process.BdaProcess.SHIFT;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
@@ -42,7 +44,6 @@ import utils.list.LinearList;
 import utils.list.sites.SitesArrayList;
 import utils.list.sites.SitesAvlTree;
 import utils.list.sites.SitesCollection;
-import static kineticMonteCarlo.process.BdaProcess.TRANSFORM;
 import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 import utils.list.sites.ISitesCollection;
 
@@ -93,7 +94,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     lattice = lat;
     restart = new BdaRestart(restartFolder);
   
-    sites = new ISitesCollection[6];
+    sites = new ISitesCollection[7];
     automaticCollections = parser.areCollectionsAutomatic();
     col = new SitesCollection(lattice, "bda");
     // Either a tree or array 
@@ -102,9 +103,10 @@ public class BdaKmc extends AbstractGrowthKmc {
     sites[2] = col.getCollection(false, (byte) 2); // just to keep all the values
     sites[DIFFUSION] = col.getCollection(false, DIFFUSION);
     sites[ROTATION] = col.getCollection(false, ROTATION);
-    sites[TRANSFORM] = col.getCollection(false,TRANSFORM);
+    sites[TRANSFORM] = col.getCollection(false, TRANSFORM);
+    sites[SHIFT] = col.getCollection(false, SHIFT);
     
-    totalRate = new double[6]; // adsorption, diffusion, island diffusion, multi-atom
+    totalRate = new double[7];
 
     outputData = parser.outputData();
     maxSteps = parser.getNumberOfSteps();
@@ -115,9 +117,9 @@ public class BdaKmc extends AbstractGrowthKmc {
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     
-    steps = new long[6];
-    doP = new boolean[6];
-    String[] processes = {"Adsorption", "Desorption", "2", "Diffusion", "Rotation", "Transformation"};
+    steps = new long[7];
+    doP = new boolean[7];
+    String[] processes = {"Adsorption", "Desorption", "2", "Diffusion", "Rotation", "Transformation", "Shift"};
     for (int i = 0; i < doP.length; i++) {
       doP[i] = parser.doBdaProcess(processes[i]);
     }
@@ -202,6 +204,9 @@ public class BdaKmc extends AbstractGrowthKmc {
       case TRANSFORM:
         transformMolecule();
         break;
+      case SHIFT:
+        shiftMolecule();
+        break;
     }
             
     simulatedSteps++;
@@ -266,7 +271,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     if (id < 0) {
       destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].randomElement();
       if (doP[ROTATION] && StaticRandom.raw() < 0.5) {
-        rotated = false;
+        rotated = true;
       }
     } else {
       destinationSite = (BdaAgSurfaceSite) sites[ADSORPTION].search(new BdaAgSurfaceSite(id, (short) -1, (short) -1));
@@ -307,6 +312,12 @@ public class BdaKmc extends AbstractGrowthKmc {
     updateRates(lattice.getModifiedSitesRotation(origin));
   }
   
+  private void shiftMolecule() {
+    BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[SHIFT].randomElement();
+    lattice.shift(origin);
+    updateRates(lattice.getModifiedSitesRotation(origin));
+  }
+  
   private void updateRates(List<ISite> modifiedSites) {
     // save previous rates
     double[] previousRate = totalRate.clone();
@@ -320,6 +331,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       if (doP[DIFFUSION])  recomputeDiffusionRate(site);
       if (doP[ROTATION])   recomputeRotationRate(site);
       if (doP[TRANSFORM])  recomputeTransformRate(site);
+      if (doP[SHIFT])      recomputeShiftRate(site);
     }
     
     // recalculate total rate, if needed
@@ -439,7 +451,23 @@ public class BdaKmc extends AbstractGrowthKmc {
       return 1e7;//rates.getTransformRate(origin.getBdaUc());
     }
     return 0;
-      
+  }
+  
+  private void recomputeShiftRate(BdaAgSurfaceSite agSite) {
+    totalRate[SHIFT] -= agSite.getRate(SHIFT);
+    if (!removeFromCollection(agSite, SHIFT)) {
+      double oldRotationRate = agSite.getRate(SHIFT);
+      agSite.setRate(SHIFT, 0);
+      if (lattice.canShift(agSite)) {
+        double rate = getShiftRate();
+        agSite.setRate(SHIFT, rate);
+      }
+      recomputeCollection(SHIFT, agSite, oldRotationRate);
+    }
+  }
+  
+  private double getShiftRate() {
+    return 1e10;//rates.getShiftRate(origin.getBdaUc());
   }
   
   /**
@@ -515,7 +543,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   @Override
   public void depositSeed() {
-    totalRate = new double[6];
+    totalRate = new double[7];
     initRates();
     simulatedSteps = 0;
   }

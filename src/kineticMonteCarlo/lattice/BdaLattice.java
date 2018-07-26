@@ -30,12 +30,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import javafx.geometry.Point3D;
-import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DIFFUSION;
 import kineticMonteCarlo.site.BdaMoleculeSite;
 import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
 import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 import kineticMonteCarlo.site.ISite;
+import static utils.MathUtils.rotateAngle;
 
 /**
  *
@@ -48,7 +48,7 @@ public class BdaLattice extends AbstractGrowthLattice {
   private final BdaSurfaceUc[][] agUcArray;
   private final BdaLatticeHelper lh;
   private int depositions;
-  
+  Stencil stencil;  
 
   public BdaLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ, null);
@@ -56,6 +56,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     createAgUcSurface();
     lh = new BdaLatticeHelper(hexaSizeI, hexaSizeJ, agUcArray);
     depositions = 0;
+    stencil = new Stencil(hexaSizeI, hexaSizeJ);
   }
   
   public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
@@ -112,8 +113,49 @@ public class BdaLattice extends AbstractGrowthLattice {
     bdaUc.setRotated(rotated);
     
     BdaSurfaceUc agUc = getAgUc(agSiteOrigin);
-    lh.changeAvailability(rotated, agUc);
+    changeAvailabilityRotation(bdaUc.isShifted(), rotated, agUc);
   }
+  
+  /**
+   * Beta molecules have to position for one rotation, shifted by 22º.
+   * 
+   * @param agSiteOrigin 
+   */
+  public void shift(BdaAgSurfaceSite agSiteOrigin) {
+    BdaMoleculeUc bdaUc = agSiteOrigin.getBdaUc();
+    boolean shifted = !agSiteOrigin.getBdaUc().isShifted();
+    bdaUc.setShifted(shifted);
+    
+    BdaSurfaceUc agUc = getAgUc(agSiteOrigin);
+    lh.changeAvailability(shifted, bdaUc.isRotated(), agUc);
+  }
+  
+  
+  private void changeAvailabilityRotation(boolean shifted, boolean rotated, BdaSurfaceUc origin) {
+    int[][] rmvCoords = {{-2, 1}, {-2, 0}, {-1, 0}, {-1, 1}, {2, 0}, {2, 1}};
+    int[][] addCoords = {{0, -2}, {1, -2}, {0, -1}, {1, -1}, {0, 2}, {1, 2}};
+    if (shifted) {
+      rmvCoords = new int[][]{{-2, 0}, {-2, 1}, {-1, 1}, {1, -1}, {2, -1}, {2, 0}};
+      addCoords = new int[][]{{-1, -1}, {-1, -2}, {0, -2}, {1, 1}, {1, 2}, {0, 2}};
+    }
+    if (!rotated) {
+      int[][] tmpCoords = rmvCoords;
+      rmvCoords = addCoords;
+      addCoords = tmpCoords;
+    }
+    int x = origin.getPosI();
+    int y = origin.getPosJ();
+    for (int i = 0; i < 6; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) getSite(
+              stencil.getXIndex(x + rmvCoords[i][0]), stencil.getYIndex(y + rmvCoords[i][1]), 0);
+      neighbour.setAvailable(DIFFUSION, true);
+    }
+    for (int i = 0; i < 6; i++) {
+      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) getSite(
+              stencil.getXIndex(x + addCoords[i][0]), stencil.getYIndex(y + addCoords[i][1]), 0);
+      neighbour.setAvailable(DIFFUSION, false);
+    }
+  }  
   
   /**
    * 
@@ -172,6 +214,7 @@ public class BdaLattice extends AbstractGrowthLattice {
   private boolean canDiffuseBeta(BdaAgSurfaceSite origin, int direction) {
     boolean canDiffuse = true;
     boolean rotated = origin.getBdaUc().isRotated();
+    boolean shifted = origin.getBdaUc().isShifted();
     AbstractGrowthSite startingSite = lh.getStartingNeighbour(origin, direction, rotated);
     Set<AbstractGrowthSite> modifiedSites = lh.getNeighbourSites(startingSite, direction, false);
     Iterator iter = modifiedSites.iterator();
@@ -182,13 +225,13 @@ public class BdaLattice extends AbstractGrowthLattice {
       if (neighbour.isOccupied()) {
         int neighbourCode = lh.getNeighbourCode(i, direction, false, BETA);
         if (neighbourCode == 1 || neighbourCode == 7) {
-          if (rotated == !neighbour.getBdaUc().isRotated()){
+          if (rotated == neighbour.getBdaUc().isRotated() && shifted == !neighbour.getBdaUc().isShifted()){
             origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
             neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
           }
         }
         if (neighbourCode == 3 || neighbourCode == 9) {
-          if (rotated == neighbour.getBdaUc().isRotated()) {
+          if (rotated == neighbour.getBdaUc().isRotated() && shifted == neighbour.getBdaUc().isShifted()) {
             origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
             neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
           }
@@ -203,7 +246,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     startingSite = lh.getStartingAvailable(origin, direction, rotated);
     modifiedSites = lh.getAvailableSites(startingSite, direction, rotated, type);
     iter = modifiedSites.iterator();
-     while (iter.hasNext()) {
+    while (iter.hasNext()) {
       BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
       if (!neighbour.isAvailable(DIFFUSION)){
         canDiffuse = false;
@@ -217,29 +260,37 @@ public class BdaLattice extends AbstractGrowthLattice {
    * @param origin must be occupied.
    * @return 
    */
-  public boolean canRotate(BdaAgSurfaceSite origin) {
-    if (origin.getBdaUc().getSite(0).getType() == ALPHA) // this is a oversimplification to try to simulate from alpha to beta.
+  public boolean canShift(BdaAgSurfaceSite origin) {
+    if (origin.getBdaUc().getSite(0).getType() == ALPHA) // only beta can shift.
       return false;
-    boolean canRotate = true;
-    
-    List<ISite> allNeighbour = origin.getSpiralSites(2);
+    boolean canShift = true;
 
-    int[] addSites = {3, 4, 17};
-    int[] rmvSites = {6, 19};
-    int[] sites = addSites;
-    if (origin.getBdaUc().isRotated()) {
+    int[][] addSites = {{0, -1}, {1, -1}, {2, -1}};
+    int[][] rmvSites = {{1, 1}, {2, 1}};
+    int[][] sites = addSites;
+    if (origin.getBdaUc().isShifted()) {
       sites = rmvSites;
     }
+    int x = (int) origin.getCartesianPosition().getX();
+    int y = (int) origin.getCartesianPosition().getY();
     for (int i = 0; i < sites.length; i++) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) allNeighbour.get(sites[i]);
+      int[] site = sites[i];
+      if (origin.getBdaUc().isRotated()) {
+        site = rotateAngle(site[0], site[1], 90); 
+      }
+      BdaAgSurfaceSite neighbour = lh.agArray(x + site[0], y + site[1]);
       if (!neighbour.isAvailable(DIFFUSION)) {
-        canRotate = false;
+        canShift = false;
         break;
       }
     }
-    
+    return canShift;
+  }
+  
+  public boolean canRotate(BdaAgSurfaceSite origin) {
+    boolean canRotate = true;
     // General case
-/*    List<ISite> modifiedSites = getModifiedSitesRotation(origin);
+    List<ISite> modifiedSites = getModifiedSitesRotation(origin);
     Iterator i = modifiedSites.iterator();
     BdaAgSurfaceSite site;
     while (i.hasNext()) {
@@ -248,7 +299,7 @@ public class BdaLattice extends AbstractGrowthLattice {
         canRotate = false;
         break;
       }
-    }*/
+    }
     return canRotate;
   }
   
