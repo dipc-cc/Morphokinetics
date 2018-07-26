@@ -87,29 +87,8 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
         }
       }
       if (bdaMolecule.getType() == BETA && uc.getSite(0).getType() == BETA) {
-        switch (neighbourCode) {
-          case 0:
-          case 2:
-          case 6:
-          case 8:
-            energy -= 0.00;
-            break;
-          case 1:
-          case 7:
-            energy -= 0.2;
-            break;
-          case 3:
-          case 9:
-            energy -= 0.2;
-            break;
-          case 5:
-          case 11:
-            energy += 0.0;
-            break;
-          case 4:
-          case 10:
-            energy -= 0.0;
-            break;
+        if (neighbourCode == 1) {
+          energy -= 0.2;
         }
       }
     }
