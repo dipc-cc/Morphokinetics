@@ -37,7 +37,7 @@ public class BdaSyntheticRates extends AbstractBdaRates {
     diffusionEnergy[ALPHA] = 0.3; // alpha diffusion
     diffusionEnergy[BETA] = 0.2; // beta diffusion
     rotationEnergy = 0.2;
-    shiftEnergy = 0.1;
+    shiftEnergy = 0.2;
   }
 
   @Override
