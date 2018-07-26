@@ -459,15 +459,15 @@ public class BdaKmc extends AbstractGrowthKmc {
       double oldRotationRate = agSite.getRate(SHIFT);
       agSite.setRate(SHIFT, 0);
       if (lattice.canShift(agSite)) {
-        double rate = getShiftRate();
+        double rate = getShiftRate(agSite);
         agSite.setRate(SHIFT, rate);
       }
       recomputeCollection(SHIFT, agSite, oldRotationRate);
     }
   }
   
-  private double getShiftRate() {
-    return 1e10;//rates.getShiftRate(origin.getBdaUc());
+  private double getShiftRate(BdaAgSurfaceSite origin) {
+    return rates.getShiftRate(origin.getBdaUc());
   }
   
   /**

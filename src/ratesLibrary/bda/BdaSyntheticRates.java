@@ -29,6 +29,7 @@ public class BdaSyntheticRates extends AbstractBdaRates {
 
   private final double[] diffusionEnergy;
   private final double rotationEnergy;
+  private final double shiftEnergy;
   
   public BdaSyntheticRates(float temperature) {
     super(temperature);
@@ -36,6 +37,7 @@ public class BdaSyntheticRates extends AbstractBdaRates {
     diffusionEnergy[ALPHA] = 0.3; // alpha diffusion
     diffusionEnergy[BETA] = 0.2; // beta diffusion
     rotationEnergy = 0.2;
+    shiftEnergy = 0.1;
   }
 
   @Override
@@ -61,5 +63,10 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   @Override
   double getRotationEnergy() {
     return rotationEnergy;
+  }
+  
+  @Override
+  double getShiftEnergy() {
+    return shiftEnergy;
   }
 }
