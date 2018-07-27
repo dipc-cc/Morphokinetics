@@ -214,7 +214,7 @@ public class BdaLattice extends AbstractGrowthLattice {
       case ALPHA:
         return canDiffuseAlpha(origin, direction);
       case BETA:
-        return canDiffuseBeta(origin, direction);
+        return canDiffuseLow(origin, direction);
     }
     return false;
   }
@@ -240,22 +240,10 @@ public class BdaLattice extends AbstractGrowthLattice {
       i++;
     }
     // Checks diffusion
-    BdaMoleculeUc mUc = origin.getBdaUc();
-    BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
-    byte type = bdaSite.getType();
-    startingSite = lh.getStartingAvailable(origin, direction, rotated);
-    modifiedSites = lh.getAvailableSites(startingSite, direction, rotated, type);
-    iter = modifiedSites.iterator();
-     while (iter.hasNext()) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
-      if (!neighbour.isAvailable(DIFFUSION)){
-        canDiffuse = false;
-      }
-    }
-    return canDiffuse;
+    return canDiffuseLow(origin, direction);
   }
   
-  private boolean canDiffuseBeta(BdaAgSurfaceSite origin, int direction) {
+  private boolean canDiffuseLow(BdaAgSurfaceSite origin, int direction) {
     boolean canDiffuse = true;
     BdaMoleculeUc bdaUc = origin.getBdaUc();
     boolean rotated = bdaUc.isRotated();
