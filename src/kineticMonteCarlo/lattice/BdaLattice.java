@@ -130,7 +130,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     lh.changeAvailability(shifted, bdaUc.isRotated(), agUc);
   }
   
-  
   private void changeAvailabilityRotation(boolean shifted, boolean rotated, BdaSurfaceUc origin) {
     int[][] rmvCoords = {{-2, 1}, {-2, 0}, {-1, 0}, {-1, 1}, {2, 0}, {2, 1}};
     int[][] addCoords = {{0, -2}, {1, -2}, {0, -1}, {1, -1}, {0, 2}, {1, 2}};
@@ -261,9 +260,6 @@ public class BdaLattice extends AbstractGrowthLattice {
     BdaMoleculeUc bdaUc = origin.getBdaUc();
     boolean rotated = bdaUc.isRotated();
     int shifted = bdaUc.isShifted() ? 1 : 0;
-    AbstractGrowthSite startingSite;
-    Set<AbstractGrowthSite> modifiedSites;
-    Iterator iter;
 
     // Checks diffusion
     int[] index;
@@ -279,20 +275,6 @@ public class BdaLattice extends AbstractGrowthLattice {
       }
     }
     
-    /*
-    // Checks diffusion
-    BdaMoleculeUc mUc = origin.getBdaUc();
-    BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
-    byte type = bdaSite.getType();
-    startingSite = lh.getStartingAvailable(origin, direction, rotated);
-    modifiedSites = lh.getAvailableSites(startingSite, direction, rotated, type);
-    iter = modifiedSites.iterator();
-    while (iter.hasNext()) {
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
-      if (!neighbour.isAvailable(DIFFUSION)){
-        canDiffuse = false;
-      }
-    }*/
     return canDiffuse;
   }
   
