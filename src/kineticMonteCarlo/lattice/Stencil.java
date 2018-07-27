@@ -70,6 +70,26 @@ public class Stencil {
   }
 
   /**
+   * Init the iteration for a diffusion check.
+   * 
+   * @param x
+   * @param y
+   * @param direction 
+   * @param rotated 
+   * @param shifted 
+   */
+  public void init(int x, int y, int direction, boolean rotated, int shifted) {
+    xIndex = x;
+    yIndex = y;
+    centre = new int[]{x, y};
+    this.direction = direction;
+    this.rotated = rotated;
+    this.shifted = shifted;
+    add = true;
+    iIndex = 0;
+  }
+  
+  /**
    * 
    * @param x
    * @param y

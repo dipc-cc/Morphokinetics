@@ -155,8 +155,53 @@ public class BdaLattice extends AbstractGrowthLattice {
               stencil.getXIndex(x + addCoords[i][0]), stencil.getYIndex(y + addCoords[i][1]), 0);
       neighbour.setAvailable(DIFFUSION, false);
     }
-  }  
+  }
   
+  /**
+   * Checks certain positions and if the conditions are fulfilled neighbours are set.
+   * 
+   * @param origin 
+   */
+  public void setNeighbours(BdaAgSurfaceSite origin) {
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
+    BdaMoleculeSite bdaSite = (BdaMoleculeSite) bdaUc.getSite(0);
+    switch (bdaSite.getType()) {
+      case ALPHA:
+        break; // does nothing
+      case BETA:
+        int[][] possibleNeighbours = {{-3,-1},{2,-2},{3,2},{-2,3},{5,-1},{-5,1}};
+        if (bdaSite.isShifted())
+          possibleNeighbours = new int[][]{{-3,-2},{2,-3},{3,1},{-2,2},{5,-1},{-5,1}};
+        setNeighboursBeta(origin, bdaSite, possibleNeighbours);
+    }
+  }
+  
+  private void setNeighboursBeta(BdaAgSurfaceSite origin, BdaMoleculeSite bdaSite, int[][] pos) {
+    boolean rotated = bdaSite.isRotated();
+    boolean shifted = bdaSite.isShifted();
+    int x = (int) origin.getCartesianPosition().getX();
+    int y = (int) origin.getCartesianPosition().getY();
+    for (int i = 0; i < pos.length; i++) {
+      if (rotated) {
+        pos[i] = rotateAngle(pos[i][0], pos[i][1], 90);
+      }
+      BdaAgSurfaceSite neighbour = lh.agArray(x + pos[i][0], y + pos[i][1]);
+      if (neighbour.isOccupied()) {
+        BdaMoleculeSite neighbourSite = (BdaMoleculeSite) neighbour.getBdaUc().getSite(0);
+        if (neighbourSite.isRotated() != rotated) {
+          continue; // only the same rotation molecules can be neighbours
+        }
+        if (neighbourSite.isShifted() != shifted) { // set neighbour
+          origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), 1);
+          neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), 1);
+        }
+      }
+      if (i == 3) {
+        shifted = !shifted; // the last two neighbour should have the same shift than the origin
+      }
+    }
+  }
+
   /**
    * 
    * @param origin must be occupied.
@@ -213,32 +258,28 @@ public class BdaLattice extends AbstractGrowthLattice {
   
   private boolean canDiffuseBeta(BdaAgSurfaceSite origin, int direction) {
     boolean canDiffuse = true;
-    boolean rotated = origin.getBdaUc().isRotated();
-    boolean shifted = origin.getBdaUc().isShifted();
-    AbstractGrowthSite startingSite = lh.getStartingNeighbour(origin, direction, rotated);
-    Set<AbstractGrowthSite> modifiedSites = lh.getNeighbourSites(startingSite, direction, false);
-    Iterator iter = modifiedSites.iterator();
-    int i = 0;
-    // Sets the neighbours
-    while (iter.hasNext()) { // check and set neighbourhood
-      BdaAgSurfaceSite neighbour = (BdaAgSurfaceSite) iter.next();
-      if (neighbour.isOccupied()) {
-        int neighbourCode = lh.getNeighbourCode(i, direction, false, BETA);
-        if (neighbourCode == 1 || neighbourCode == 7) {
-          if (rotated == neighbour.getBdaUc().isRotated() && shifted == !neighbour.getBdaUc().isShifted()){
-            origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
-            neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
-          }
-        }
-        if (neighbourCode == 3 || neighbourCode == 9) {
-          if (rotated == neighbour.getBdaUc().isRotated() && shifted == neighbour.getBdaUc().isShifted()) {
-            origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), neighbourCode);
-            neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), (neighbourCode + 6) % 12);
-          }
-        }
+    BdaMoleculeUc bdaUc = origin.getBdaUc();
+    boolean rotated = bdaUc.isRotated();
+    int shifted = bdaUc.isShifted() ? 1 : 0;
+    AbstractGrowthSite startingSite;
+    Set<AbstractGrowthSite> modifiedSites;
+    Iterator iter;
+
+    // Checks diffusion
+    int[] index;
+    int x = (int) origin.getCartesianPosition().getX();
+    int y = (int) origin.getCartesianPosition().getY();
+    stencil.init(x, y, direction, rotated, shifted);
+    while (stencil.hasNext()) {
+      index = stencil.getNextIndexClose();
+      BdaAgSurfaceSite neighbour = lh.agArray(index[0], index[1]);
+      if (!neighbour.isAvailable(DIFFUSION)) {
+        canDiffuse = false;
+        break;
       }
-      i++;
     }
+    
+    /*
     // Checks diffusion
     BdaMoleculeUc mUc = origin.getBdaUc();
     BdaMoleculeSite bdaSite = (BdaMoleculeSite) mUc.getSite(0);
@@ -251,7 +292,7 @@ public class BdaLattice extends AbstractGrowthLattice {
       if (!neighbour.isAvailable(DIFFUSION)){
         canDiffuse = false;
       }
-    }
+    }*/
     return canDiffuse;
   }
   

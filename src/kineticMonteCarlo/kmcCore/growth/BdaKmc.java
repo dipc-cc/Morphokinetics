@@ -389,6 +389,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       agSite.setRate(DIFFUSION, 0);
       agSite.getBdaUc().resetNeighbourhood();
       boolean[] canDiffuse = new boolean[4];
+      lattice.setNeighbours(agSite);
       // it needs a first check, to get all the neighbourhood occupancy
       for (int i = 0; i < agSite.getNumberOfNeighbours(); i++) {
         canDiffuse[i] = lattice.canDiffuse(agSite, i);
