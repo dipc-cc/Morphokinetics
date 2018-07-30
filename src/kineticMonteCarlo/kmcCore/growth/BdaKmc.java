@@ -82,7 +82,6 @@ public class BdaKmc extends AbstractGrowthKmc {
   private int intermediateWrites;
   private double adsorptionRatePerSite;
   private double[] desorptionRatePerMolecule;
-  private double[] diffusionRateMultiAtom;
   private AbstractBdaRates rates;
   private boolean[] doP;
   private boolean adsorptionStopped;
@@ -302,7 +301,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   
   private void transformMolecule() {
     BdaAgSurfaceSite origin = (BdaAgSurfaceSite) sites[TRANSFORM].randomElement();
-    origin.getBdaUc().getSite(0).setType((byte) BETA);    
+    lattice.transform(origin);  
     updateRates(lattice.getModifiedSitesRotation(origin));
   }
   
@@ -624,6 +623,8 @@ public class BdaKmc extends AbstractGrowthKmc {
             getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
             surfaceNumber);
     restart.writeSvg(surfaceNumber, getLattice());
-   restart.flushExtra();
+
+    restart.writeExtraOutput(150, getTime(), ((BdaLattice)getLattice()).getCoverages(), null, null, null);
+    restart.flushExtra();
   }
 }
