@@ -149,15 +149,9 @@ public class BdaKmc extends AbstractGrowthKmc {
         }
       } else {
         //updatePossibles();
-        if (extraOutput && getCoverage() * limit >= coverageThreshold) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
-            if (coverageThreshold == 10 && limit > 100) { // change the interval of printing
-              limit = limit / 10;
-              coverageThreshold = 1;
-            }
-            //printData();
-            //mergeIslands(); // recompute island's rate, after island counting have been deleted in previous islands counting.
-            coverageThreshold++;
-          }
+        if (extraOutput && simulatedSteps % outputEvery == 0) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+          printData();
+        }
         if (performSimulationStep()) {
           break;
         }
@@ -619,5 +613,17 @@ public class BdaKmc extends AbstractGrowthKmc {
       return true;
     }
     return false;
+  }
+  
+  /**
+   * Print current information to extra file.
+   */
+  private void printData() {
+    int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
+    restart.writeSurfaceBinary2D(
+            getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
+            surfaceNumber);
+    restart.writeSvg(surfaceNumber, getLattice());
+   restart.flushExtra();
   }
 }
