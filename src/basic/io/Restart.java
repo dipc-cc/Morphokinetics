@@ -465,8 +465,8 @@ public class Restart {
       outData.flush();
     }
     if (extraOutput2) {
-    outDeltaAttachments.flush();
-    outPerAtom.flush();
+      outDeltaAttachments.flush();
+      outPerAtom.flush();
     }
   }
   
