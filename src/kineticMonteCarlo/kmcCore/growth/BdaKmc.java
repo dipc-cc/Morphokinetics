@@ -611,7 +611,8 @@ public class BdaKmc extends AbstractGrowthKmc {
    * Print current information to extra file.
    */
   private void printData() {
-    int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
+    int surfaceNumber = 10000* simulationNumber+intermediateWrites;
+    intermediateWrites++;
     restart.writeSurfaceBinary2D(
             getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
             surfaceNumber);
