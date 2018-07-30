@@ -29,16 +29,14 @@ import static utils.MathUtils.rotateAngle;
  */
 public class BdaMoleculeSite extends AbstractGrowthSite {
   
-  public static final int ALPHA = 1; // 2⁰
-  public static final int BETA = 2; // 2¹
-  public static final int GAMMA = 4; // 2²
-  public static final int DELTA = 8; // 2³
-  
-  public static final int BETA_2 = 2;
+  public static final int ALPHA = 0;
+  public static final int BETA = 1;
+  public static final int GAMMA = 2;
+  public static final int DELTA = 3;
   
   private final BdaAtomSite[] atoms;
   private final BdaProcess[] processes;
-  /** Alpha, Beta (1 or 2), Gamma or Delta. */
+  /** Alpha, Beta, Gamma or Delta. */
   private byte type;
   private boolean rotated;
   private boolean shifted;
