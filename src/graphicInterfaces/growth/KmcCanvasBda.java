@@ -157,6 +157,6 @@ public class KmcCanvasBda extends KmcCanvas {
   
   @Override
   void writeSvg() {
-    restart.writeSvg(1, getLattice());
+    restart.writeSvg(1, getLattice(), false);
   }
 }

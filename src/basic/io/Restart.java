@@ -331,7 +331,7 @@ public class Restart {
     RestartLow.writeXyz(fileName, lattice);
   }
   
-  public void writeSvg(int simulationNumber, AbstractLattice lattice) {
+  public void writeSvg(int simulationNumber, AbstractLattice lattice, boolean complete) {
     String fileName = format("%ssurface%03d.svg", folder, simulationNumber);
     RestartLow.writeSvg(fileName, lattice);
   }

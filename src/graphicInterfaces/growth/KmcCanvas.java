@@ -272,7 +272,7 @@ public abstract class KmcCanvas extends Canvas {
   }
   
   void writeSvg() {
-    restart.writeSvg(1, lattice);
+    restart.writeSvg(1, lattice, true);
   }
 
   abstract void changeBlackAndWhite();

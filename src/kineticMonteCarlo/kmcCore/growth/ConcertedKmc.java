@@ -793,7 +793,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
       restart.writeSurfaceBinary2D(
               getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
               surfaceNumber);
-      restart.writeSvg(surfaceNumber, getLattice());
+      restart.writeSvg(surfaceNumber, getLattice(), true);
     }
     restart.writeExtraOutput(getLattice(), getCoverage(), 0, getTime(), totalRate[ADSORB],
 			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);

@@ -208,7 +208,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       int[] sizes = new int[2];
       sizes[0] = getLattice().getHexaSizeI();
       sizes[1] = getLattice().getHexaSizeJ();
-      restart.writeSvg(simulationNumber * 10000 + intermediateWrites, lattice);
+      restart.writeSvg(simulationNumber * 10000 + intermediateWrites, lattice, false);
     }
     return simulatedSteps == maxSteps;
   }
@@ -622,7 +622,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     restart.writeSurfaceBinary2D(
             getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
             surfaceNumber);
-    restart.writeSvg(surfaceNumber, getLattice());
+    restart.writeSvg(surfaceNumber, getLattice(), false);
 
     restart.writeExtraOutput(150, getTime(), ((BdaLattice)getLattice()).getCoverages(), null, null, null);
     restart.flushExtra();

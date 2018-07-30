@@ -477,7 +477,7 @@ class RestartLow {
    * @param fileName
    * @param lattice 
    */
-  static void writeSvgBda(String fileName, AbstractLattice lattice) {
+  static void writeSvgBda(String fileName, AbstractLattice lattice, boolean complete) {
     // Check that is growth simulation, in etching are missing getUc in AbstractLattice and getPos and isOccupied in AbstractAtom
     String[] colours = {"white", "indianred", "blueviolet", "gray", "cornflowerblue", "darkblue", "gold", "green"};
     double scale = 2.89; // default distance from Ag to Ag
@@ -485,8 +485,8 @@ class RestartLow {
     // create file descriptor. It will be automatically closed.
     try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))){
       String s = format("<svg height=\"%f\" width=\"%f\">",
-          ((AbstractGrowthLattice) lattice).getCartSizeX() * scale,
-          ((AbstractGrowthLattice) lattice).getCartSizeY() * scale);
+          ((AbstractGrowthLattice) lattice).getCartSizeY() * scale,
+          ((AbstractGrowthLattice) lattice).getCartSizeX() * scale);
       printWriter.write(s +"\n");
       IUc uc;
       double posX;
@@ -495,13 +495,15 @@ class RestartLow {
       // for each atom in the uc
       for (int i = 0; i < lattice.size(); i++) {
         uc = lattice.getUc(i);
-        for (int j = 0; j < uc.size(); j++) {
-          ISite agAtom = uc.getSite(j);
-          posX = (uc.getPos().getX() + agAtom.getPos().getX()) * scale;
-          posY = (uc.getPos().getY() + agAtom.getPos().getY()) * scale;
-          String colour = "white";
-          s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"1.44\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
-          printWriter.write(s + "\n");
+        if (complete) {
+          for (int j = 0; j < uc.size(); j++) {
+            ISite agAtom = uc.getSite(j);
+            posX = (uc.getPos().getX() + agAtom.getPos().getX()) * scale;
+            posY = (uc.getPos().getY() + agAtom.getPos().getY()) * scale;
+            String colour = "white";
+            s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"1.44\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
+            printWriter.write(s + "\n");
+          }
         }
         if (uc.getSite(0).isOccupied()) {
           moleculeList.add(((BdaSurfaceUc)uc));
