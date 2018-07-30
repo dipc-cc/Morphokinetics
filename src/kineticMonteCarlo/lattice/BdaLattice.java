@@ -49,6 +49,10 @@ public class BdaLattice extends AbstractGrowthLattice {
   private final BdaLatticeHelper lh;
   private int depositions;
   Stencil stencil;  
+  /**
+   * Current species coverages, alpha or beta.
+   */
+  private final int[] coverage;
 
   public BdaLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ, null);
@@ -57,6 +61,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     lh = new BdaLatticeHelper(hexaSizeI, hexaSizeJ, agUcArray);
     depositions = 0;
     stencil = new Stencil(hexaSizeI, hexaSizeJ);
+    coverage = new int[2];
   }
   
   public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
@@ -66,6 +71,10 @@ public class BdaLattice extends AbstractGrowthLattice {
   @Override
   public float getCoverage() {
     return 10 * (float) getOccupied() / (float) (getHexaSizeI() * getHexaSizeJ());
+  }
+  
+  public int[] getCoverages() {
+    return coverage;
   }
 
   @Override
@@ -85,12 +94,14 @@ public class BdaLattice extends AbstractGrowthLattice {
     lh.changeAvailability(agUc, false);
     addOccupied();
     depositions++;
+    coverage[bdaUc.getSite(0).getType()]++;
   }
   
   @Override
   public double extract(AbstractSurfaceSite m) {
     BdaAgSurfaceSite agSite = (BdaAgSurfaceSite) m;
     BdaSurfaceUc agUc = getAgUc(agSite);
+    coverage[agUc.getSite(0).getType()]--;
     agUc.getSite(0).setOccupied(false);
     lh.changeAvailability(agUc, true);
     subtractOccupied();
@@ -114,6 +125,12 @@ public class BdaLattice extends AbstractGrowthLattice {
     
     BdaSurfaceUc agUc = getAgUc(agSiteOrigin);
     changeAvailabilityRotation(bdaUc.isShifted(), rotated, agUc);
+  }
+  
+  public void transform(BdaAgSurfaceSite agSiteOrigin){
+    coverage[agSiteOrigin.getBdaUc().getSite(0).getType()]--;
+    agSiteOrigin.getBdaUc().getSite(0).setType((byte) BETA);
+    coverage[BETA]++;
   }
   
   /**
