@@ -142,8 +142,12 @@ public class Restart {
       isConcerted = true;
       extraOutput = true;
     }
-  }//*/
-
+  }
+  
+  public String getFolder() {
+    return folder;
+  }
+  
   public int getIteration() {
     return iteration;
   }

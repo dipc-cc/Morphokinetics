@@ -24,14 +24,12 @@ package basic.io;
  */
 public abstract class AbstractCatalysisRestart extends Restart {
   
-  private String folder;
   private final boolean output;
   
   public AbstractCatalysisRestart(boolean catalysisOutput, String restartFolder){
     if (catalysisOutput) {
-      folder = restartFolder;
-      if (!folder.endsWith("/")) {
-        folder += "/";
+      if (!restartFolder.endsWith("/")) {
+        restartFolder += "/";
       }
       createFolder(restartFolder);
     }
@@ -41,10 +39,6 @@ public abstract class AbstractCatalysisRestart extends Restart {
   abstract public void resetCatalysis();
   abstract public void flushCatalysis();
   abstract void initCatalysis(int simulationNumber);
-
-  public String getFolder() {
-    return folder;
-  }
 
   public boolean isOutput() {
     return output;
