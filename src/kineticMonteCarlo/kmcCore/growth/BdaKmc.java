@@ -203,13 +203,6 @@ public class BdaKmc extends AbstractGrowthKmc {
     }
             
     simulatedSteps++;
-    if (outputData && simulatedSteps % outputEvery == 0) {
-      intermediateWrites++;
-      int[] sizes = new int[2];
-      sizes[0] = getLattice().getHexaSizeI();
-      sizes[1] = getLattice().getHexaSizeJ();
-      restart.writeSvg(simulationNumber * 10000 + intermediateWrites, lattice, false);
-    }
     return simulatedSteps == maxSteps;
   }
   
