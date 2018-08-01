@@ -132,7 +132,7 @@ public class BasicGrowthPsdEvaluator extends AbstractPsdEvaluator {
           if (kmc.getCoverage() < 0.05) {
             continue;
           }
-          if (kmc.getIterations() < getMeasureInterval()) {
+          if (kmc.getSimulatedSteps() < getMeasureInterval()) {
             time += kmc.getTime();
             break;
           }

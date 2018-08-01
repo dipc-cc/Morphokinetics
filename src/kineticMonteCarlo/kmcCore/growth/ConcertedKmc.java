@@ -136,6 +136,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     initRates();
     simulatedSteps = 0;
   }
+  
+  @Override
+  public long getSimulatedSteps() {
+    return simulatedSteps;
+  }
 
   @Override
   public int simulate() {

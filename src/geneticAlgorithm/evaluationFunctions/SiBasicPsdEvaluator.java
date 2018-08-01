@@ -57,7 +57,7 @@ public class SiBasicPsdEvaluator extends AbstractPsdEvaluator {
         kmc.simulate(getMeasureInterval());
         sampledSurface = kmc.getSampledSurface(getPsdSizeY(), getPsdSizeX());
         psd.addSurfaceSample(sampledSurface);
-        if (kmc.getIterations() < getMeasureInterval()) {
+        if (kmc.getSimulatedSteps() < getMeasureInterval()) {
           break;
         }
       }

@@ -60,8 +60,8 @@ public class KmcWorker extends Thread {
     return kmc.getTime();
   }
 
-  public int getIterations() {
-    return kmc.getIterations();
+  public long getIterations() {
+    return kmc.getSimulatedSteps();
   }
 
   public float[][] getSampledSurface(int binX, int binY) {
@@ -117,7 +117,7 @@ public class KmcWorker extends Thread {
             kmc.depositSeed();
             kmc.simulate(intervalSteps);
             intervalListener.handleSimulationIntervalFinish(workerId, workId);
-          } while (kmc.getIterations() == intervalSteps);
+          } while (kmc.getSimulatedSteps()== intervalSteps);
           break;
         default:
           break;

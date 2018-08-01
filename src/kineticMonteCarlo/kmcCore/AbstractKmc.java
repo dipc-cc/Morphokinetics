@@ -53,19 +53,11 @@ public abstract class AbstractKmc implements IKmc {
     }
   }
   
-  public long getSimulatedSteps() {
-    return 0;
-  }
-
   @Override
-  public int getIterations() {
+  public long getSimulatedSteps() {
     return iterationsForLastSimulation;
   }
   
-  public void setIterations(int iterations) {
-    iterationsForLastSimulation = iterations;
-  }
-
   @Override
   public double getTime() {
     return list.getTime();

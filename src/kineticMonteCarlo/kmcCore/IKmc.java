@@ -27,7 +27,7 @@ import utils.list.AbstractList;
  */
 public interface IKmc {
 
-  public int getIterations();
+  public long getSimulatedSteps();
 
   public double getTime();
 

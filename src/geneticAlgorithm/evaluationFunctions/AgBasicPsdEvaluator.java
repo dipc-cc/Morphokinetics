@@ -97,7 +97,7 @@ public class AgBasicPsdEvaluator extends AbstractPsdEvaluator {
           break;
         }
         if (kmc.getCoverage() < 0.05) continue;
-        if (kmc.getIterations() < getMeasureInterval()) {
+        if (kmc.getSimulatedSteps() < getMeasureInterval()) {
           time += kmc.getTime();
           break;
         }
