@@ -185,9 +185,9 @@ public class BdaLattice extends AbstractGrowthLattice {
       case ALPHA:
         break; // does nothing
       case BETA:
-        int[][] possibleNeighbours = {{-3,-1},{2,-2},{3,2},{-2,3},{5,-1},{-5,1}};
+        int[][] possibleNeighbours = {{2,-2},{-2,3},{-3,-1},{3,2},{5,-1},{-5,1}};
         if (bdaSite.isShifted())
-          possibleNeighbours = new int[][]{{-3,-2},{2,-3},{3,1},{-2,2},{5,-1},{-5,1}};
+          possibleNeighbours = new int[][]{{2,-3},{-2,2},{-3,-2},{3,1},{5,-1},{-5,1}};
         setNeighboursBeta(origin, bdaSite, possibleNeighbours);
     }
   }
@@ -208,8 +208,8 @@ public class BdaLattice extends AbstractGrowthLattice {
           continue; // only the same rotation molecules can be neighbours
         }
         if (neighbourSite.isShifted() != shifted) { // set neighbour
-          origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), 1);
-          neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), 1);
+          origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), i);
+          neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), i);
         }
       }
       if (i == 3) {
