@@ -68,7 +68,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
           case 2:
           case 6:
           case 8:
-            energy -= 0.05;
+            energy -= 0.09;
             break;
           case 1:
           case 7:
@@ -82,7 +82,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
             break;
           case 4:
           case 10:
-            energy -= 0.1;
+            energy -= 0.14;
             break;
         }
       }

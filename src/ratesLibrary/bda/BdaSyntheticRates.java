@@ -31,15 +31,19 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   private final double rotationEnergy;
   private final double shiftEnergy;
   private final double transformEnergy;
+  private final double factor;
+  private final double depositionEnergy;
   
   public BdaSyntheticRates(float temperature) {
     super(temperature);
+    factor = 0.3;
     diffusionEnergy = new double[3];
-    diffusionEnergy[ALPHA] = 0.3; // alpha diffusion
-    diffusionEnergy[BETA] = 0.2; // beta diffusion
-    rotationEnergy = 0.2; // 90 º
-    shiftEnergy = 0.2; // 22.5 º
-    transformEnergy = 0.55; // from alpha to beta
+    diffusionEnergy[ALPHA] = factor + 0.25; // alpha diffusion
+    diffusionEnergy[BETA] = factor + 0.3; // beta diffusion
+    rotationEnergy = factor + 0.2; // 90 º
+    shiftEnergy = factor + 0.35; // 22.5 º
+    transformEnergy = factor + 0.55; // from alpha to beta
+    depositionEnergy = factor + 0.675;
   }
 
   @Override
@@ -75,5 +79,10 @@ public class BdaSyntheticRates extends AbstractBdaRates {
   @Override
   double getTransformEnergy() {
     return transformEnergy;
+  }
+  
+  @Override
+  double getDepositionEnergy() {
+    return depositionEnergy;
   }
 }

@@ -54,8 +54,10 @@ public abstract class AbstractBdaRates implements IRates {
    */
   @Override
   public double getDepositionRatePerSite() {
-    return diffusionMl;
+    return getRate(getDepositionEnergy());
   }
+  
+  abstract double getDepositionEnergy();
   
 
   public double[] getDesorptionRates() {
