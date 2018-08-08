@@ -135,6 +135,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     simulationNumber++;
     int coverageThreshold = 1;
     int limit = 100000;
+    double timeLimit = 0.1;
     int returnValue = 0;
     intermediateWrites = 0;
 
@@ -148,7 +149,8 @@ public class BdaKmc extends AbstractGrowthKmc {
         }
       } else {
         //updatePossibles();
-        if (extraOutput && simulatedSteps % outputEvery == 0) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+        if (extraOutput && timeLimit < getTime()) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
+          timeLimit += 0.1;
           printData();
         }
         if (performSimulationStep()) {
