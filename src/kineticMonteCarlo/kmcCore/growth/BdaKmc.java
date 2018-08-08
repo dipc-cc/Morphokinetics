@@ -475,7 +475,7 @@ public class BdaKmc extends AbstractGrowthKmc {
         } else { // rate is the same as it was.
           //do nothing.
         }
-      } else { // atom it was not in the list
+      } else { // atom was not in the list
         sites[process].addRate(site);
       }
       site.setOnList(process, true);
