@@ -1,0 +1,33 @@
+reset
+#set term postscript enhanced color "Arial" 20
+#set output "contour_OUTPUT.eps"
+set term pngcairo
+set output "psd.png"
+
+set zrange[-6:-1]; # After change should be -10:2 set xrange[0:127]; set yrange[0:127]
+set isosample 500,500
+set table "imagePsdAvgFil.dat"
+splot "INPUT" u 1:2:3
+unset table
+
+set contour
+set cntrparam level incremental -5, 0.25, -0
+set dgrid3d 128,128
+unset surface
+set view 0,0
+set table "contourPsdAvgFil.dat"
+splot "INPUT" u 1:2:3 w l lt -1 notitle
+unset table
+
+reset
+#set xrange[0:127]; set yrange[0:127]
+set palette rgbformulae 33,13,10
+unset key
+unset box
+unset border
+unset colorbox
+unset xtics
+unset ytics
+set size square
+set cbrange[-6:-1] #After change should be -10:2
+plot "<sort -n -k1,1 -k2 imagePsdAvgFil.dat" with image, "contourPsdAvgFil.dat" w l lt -1 lw 1.5
