@@ -77,14 +77,10 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
   public void updatePossibles(double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy()) {
       if (previousProbability != totalAndDepositionProbability) {
-        histogramPossibleTmp = initDouble();
-        histogramPossibleCounterTmp = initDouble();
         for (int i = 0; i < transitionsHistogram.length; i++) {
           for (int j = 0; j < transitionsHistogram[0].length; j++) {
             for (int k = 0; k < transitionsHistogram[i][j]; k++) {
               updatePossible(i, j, elapsedTime);
-              histogramPossibleTmp[i][j] += elapsedTime;
-              histogramPossibleCounterTmp[i][j]++;
               updateCounter(i, j);
             }
           }
