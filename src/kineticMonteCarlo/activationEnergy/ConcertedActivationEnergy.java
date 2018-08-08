@@ -33,9 +33,6 @@ import kineticMonteCarlo.site.AbstractGrowthSite;
 public class ConcertedActivationEnergy extends ActivationEnergy {
   
   private int[][] transitionsHistogram;
-  private Double[][] histogramPossibleTmp;
-  private Double[][] histogramPossibleCounterTmp;
-  private double previousProbability;
   private Double[] histogramPossibleIsland;
   private Double[] histogramPossibleMultiAtom;
 
@@ -76,21 +73,11 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
   
   public void updatePossibles(double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy()) {
-      if (previousProbability != totalAndDepositionProbability) {
-        for (int i = 0; i < transitionsHistogram.length; i++) {
-          for (int j = 0; j < transitionsHistogram[0].length; j++) {
-            for (int k = 0; k < transitionsHistogram[i][j]; k++) {
-              updatePossible(i, j, elapsedTime);
-              updateCounter(i, j);
-            }
-          }
-          //previousProbability = totalAndDepositionProbability;
-        }
-      } else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
-        for (int i = 0; i < 2; i++) {
-          for (int j = 0; j < 2; j++) {
-            updatePossible(histogramPossibleTmp);
-            updateCounter(histogramPossibleCounterTmp);
+      for (int i = 0; i < transitionsHistogram.length; i++) {
+        for (int j = 0; j < transitionsHistogram[0].length; j++) {
+          for (int k = 0; k < transitionsHistogram[i][j]; k++) {
+            updatePossible(i, j, elapsedTime);
+            updateCounter(i, j);
           }
         }
       }
@@ -146,5 +133,4 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
       print.print(histogramPossibleMultiAtom[i] + "\t");
     }
   }
-    
 }
