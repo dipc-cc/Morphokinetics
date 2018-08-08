@@ -45,6 +45,7 @@ import kineticMonteCarlo.lattice.SiLattice;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
 import kineticMonteCarlo.site.BdaAtomSite;
 import kineticMonteCarlo.site.BdaMoleculeSite;
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
 import kineticMonteCarlo.unitCell.BdaMoleculeUc;
 import kineticMonteCarlo.unitCell.BdaSurfaceUc;
 import kineticMonteCarlo.unitCell.IUc;
@@ -526,7 +527,12 @@ class RestartLow {
   static private void paintBdaMolecule(PrintWriter printWriter, BdaSurfaceUc sUc) {
     double distanceAg = 2.89;
     BdaMoleculeUc muc = ((BdaAgSurfaceSite) sUc.getSite(0)).getBdaUc();
-    String colour = "black";
+    String colour;
+    if (muc.getSite(0).getType() == ALPHA) {
+      colour = "black";
+    } else {
+      colour = "blue";
+    }
     printWriter.write("<g>\n");
     BdaMoleculeSite bdaMolecule = (BdaMoleculeSite) muc.getSite(-1);
     for (int j = 0; j < bdaMolecule.size() - 1; j++) {
