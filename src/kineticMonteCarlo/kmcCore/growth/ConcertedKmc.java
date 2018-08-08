@@ -793,7 +793,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    * @param coverage used to have exactly the coverage and to be easily greppable.
    */
   private void printData() {
-    if ((int) (getCoverage() * 100) % 5 == 0) {
+    if (getCoverage() > 0.01 && (int) (getCoverage() * 100) % 5 == 0) { //only write when is bigger than 1% and multiple of %5
       int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
       restart.writeSurfaceBinary2D(
               getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
