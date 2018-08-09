@@ -36,11 +36,11 @@ for i,t in enumerate(temperatures):
         os.chdir(runFolder[-1])
         os.chdir("results")
         sh.copy("psd"+str(cov)+".png","psd"+str(cov)+str(t)+".png")
-        print(os.getcwd())
+        #print(os.getcwd())
     except FileNotFoundError:
         continue
     
-    sh.copy("psd"+str(10)+str(t)+".png",workingPath)
+    sh.copy("psd10"+str(t)+".png",workingPath)
 
 os.chdir(workingPath)
 #os.system("montage $(ls *svg | sort -n) allSurfaces.png")
