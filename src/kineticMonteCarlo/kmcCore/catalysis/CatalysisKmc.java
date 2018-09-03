@@ -295,7 +295,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage && maxProduction()) {
+    while (getLattice().getCoverage() < maxCoverage && maxProduction() && simulatedSteps < maxSteps) {
       if (outputAeTotal) {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
