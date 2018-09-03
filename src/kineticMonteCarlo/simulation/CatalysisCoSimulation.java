@@ -20,6 +20,7 @@ package kineticMonteCarlo.simulation;
 
 import basic.Parser;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisCoKmc;
+import kineticMonteCarlo.kmcCore.catalysis.CatalysisCoKmcHoffmann;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisFarkasKmc;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
 import static kineticMonteCarlo.site.CatalysisSite.CO;
@@ -74,7 +75,11 @@ public class CatalysisCoSimulation extends CatalysisSimulation {
     if (getParser().getRatesLibrary().equals("farkas")) {
       setKmc(new CatalysisFarkasKmc(getParser(), getRestartFolderName()));
     } else {
-      setKmc(new CatalysisCoKmc(getParser(), getRestartFolderName()));
+      if (getParser().getListType().equals("hoffmann")) {
+        setKmc(new CatalysisCoKmcHoffmann(getParser(), getRestartFolderName()));
+      } else {
+        setKmc(new CatalysisCoKmc(getParser(), getRestartFolderName()));
+      }
     }
     initialiseRates(getRates(), getParser());
   }
