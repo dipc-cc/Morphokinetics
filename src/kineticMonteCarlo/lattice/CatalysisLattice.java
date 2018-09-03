@@ -141,31 +141,31 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
   @Override
   public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
-    CatalysisSite atom = (CatalysisSite) a;
-    atom.setOccupied(true);
+    CatalysisSite site = (CatalysisSite) a;
+    site.setOccupied(true);
 
-    updateCoCus(atom);
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = atom.getNeighbour(i);
-      atom.getNeighbour(i).addOccupiedNeighbour(1);
+    updateCoCus(site);
+    for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
+      CatalysisSite neighbour = site.getNeighbour(i);
+      site.getNeighbour(i).addOccupiedNeighbour(1);
       updateCoCus(neighbour);
     }
     addOccupied();
-    setCoverage(a.getType(), atom.getLatticeSite(), 1);
+    setCoverage(a.getType(), site.getLatticeSite(), 1);
   }
   
   @Override
   public double extract(AbstractSurfaceSite a) {
-    CatalysisSite atom = (CatalysisSite) a;
-    atom.setOccupied(false);
-    atom.cleanCoCusNeighbours();
-    for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = atom.getNeighbour(i);
-      atom.getNeighbour(i).addOccupiedNeighbour(-1);
+    CatalysisSite site = (CatalysisSite) a;
+    site.setOccupied(false);
+    site.cleanCoCusNeighbours();
+    for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
+      CatalysisSite neighbour = site.getNeighbour(i);
+      site.getNeighbour(i).addOccupiedNeighbour(-1);
       updateCoCus(neighbour);
     }
     subtractOccupied();
-    setCoverage(a.getType(), atom.getLatticeSite(), -1);
+    setCoverage(a.getType(), site.getLatticeSite(), -1);
     return 0;
   }
   
