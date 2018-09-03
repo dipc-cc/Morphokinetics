@@ -287,6 +287,11 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   abstract boolean maxProduction();
   
   @Override
+  public long getSimulatedSteps() {
+    return simulatedSteps;
+  }
+  
+  @Override
   public int simulate() {
     int returnValue = 0;
 
