@@ -446,6 +446,12 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     super.reset();
     co2 = new long[getNumberOfReactions()];
     co2sum = 0;
+    
+    totalRateKTot = 0.0;
+    for (int i = 0; i < accumRates.length; i++) {
+      accumRates[i] = 0;
+      numberOfSites[i] = 0;
+    }
   }
   
   /**

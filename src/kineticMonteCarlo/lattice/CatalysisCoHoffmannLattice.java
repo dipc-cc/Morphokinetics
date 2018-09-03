@@ -76,4 +76,18 @@ public class CatalysisCoHoffmannLattice extends CatalysisCoLattice {
   CatalysisCoHoffmannSite newAtom(int i, int j) {
     return new CatalysisCoHoffmannSite(createId(i, j), (short) i, (short) j);
   }
+  
+  @Override
+  public void reset() {
+    super.reset();
+    for (int i = 0; i < availableSitesA.length; i++) {
+      for (int j = 0; j < availableSitesA[0].length; j++) {
+        availableSitesA[i][j] = -1;
+        inverseAvailableSitesI[i][j] = -1;
+      }
+    }
+    for (int i = 0; i < N_REACT; i++) {
+      numberOfSites[i] = 0;
+    }
+  }
 }
