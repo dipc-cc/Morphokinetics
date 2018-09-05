@@ -313,14 +313,13 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
     lattice.extract(site);
     
-    CatalysisSite neighbour = null;
     int startI;
     if (process == 4 || process == 7) startI = 0;
     else  startI = 1;
     if (StaticRandom.raw() < 0.5) {
       startI += 2;
     }
-    neighbour = site.getNeighbour(startI);
+    CatalysisSite neighbour = site.getNeighbour(startI);
     if (neighbour.getType() == O && neighbour.isOccupied()) {
       lattice.extract(neighbour);
     } else {
@@ -337,14 +336,13 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
     lattice.extract(site);
     
-    CatalysisSite neighbour = null;
     int startI;
     if (process == 8 || process == 11) startI = 0;
     else  startI = 1;
     if (StaticRandom.raw() < 0.5) {
       startI += 2;
     }
-    neighbour = site.getNeighbour(startI);
+    CatalysisSite neighbour = site.getNeighbour(startI);
     if (neighbour.getType() == O && neighbour.isOccupied()) {
       lattice.extract(neighbour);
     } else {
@@ -360,7 +358,6 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
     lattice.extract(site);
     
-    CatalysisSite neighbour = null;
     int startI;
     if (process == 12 || process == 15 || process == 16 || process == 19) startI = 0;
     else  startI = 1;
@@ -368,7 +365,7 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     if (rand < 0.5) {
       startI += 2;
     }
-    neighbour = site.getNeighbour(startI);
+    CatalysisSite neighbour = site.getNeighbour(startI);
     if (!neighbour.isOccupied()) {
       lattice.deposit(neighbour, false);
     } else {
