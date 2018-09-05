@@ -21,8 +21,6 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
-import java.util.LinkedHashSet;
-import java.util.Set;
 import kineticMonteCarlo.activationEnergy.CatalysisCoActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisCoHoffmannLattice;
 import static kineticMonteCarlo.lattice.CatalysisCoHoffmannLattice.N_REACT;
@@ -64,17 +62,18 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
   private long co2sum;
   /** Previous instant co2sum. For output */
   private long co2prv;
+  private final long maxSteps;
   private final int co2max;
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   /** For previous rates. It is a local variable, but this way, garbage collector works better.*/
   double[] previousRate;
   /// Hoffmann 
   private final double[] rateConstant;
-  private int[] numberOfSites; // same as the numberOfSites of lattice // Nr. of sites N^avail_a
-  private double[] accumRates; // rateConstant * numberOfSites
+  private final int[] numberOfSites; // same as the numberOfSites of lattice // Nr. of sites N^avail_a
+  private final double[] accumRates; // rateConstant * numberOfSites
   private double totalRateKTot;
   
-  private CatalysisCoUpdate update;
+  private final CatalysisCoUpdate update;
   
   private CatalysisCoHoffmannLattice lattice;
   
@@ -95,6 +94,7 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     numberOfSites = new int[N_REACT];
     accumRates = new double[N_REACT];
     update = new CatalysisCoUpdate();
+    maxSteps = parser.getNumberOfSteps();
   }
   
   @Override
@@ -162,6 +162,19 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     rateConstant[17] = diffusionRateO[1];
     rateConstant[18] = diffusionRateO[2];
     rateConstant[19] = diffusionRateO[3];
+  }
+  
+  @Override
+  public int simulate() {
+    int returnValue = 0;
+
+    while (maxProduction() && simulatedSteps < maxSteps) {     
+      if (performSimulationStep()) {
+        break;
+      }
+    }
+    
+    return returnValue;
   }
   
   /**
@@ -374,20 +387,15 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
    * @param sites
    */
   private void updateRates(CatalysisSite[] sites) {
-    Set<CatalysisSite> modifiedSites = new LinkedHashSet<>();
-    // Hide duplicates
-    for (int i = 0; i < sites.length; i++) {
+    int length = sites.length;
+    for (int i = 0; i < length; i++) {
       CatalysisSite site = sites[i];
-      modifiedSites.add(site);
-      CatalysisSite neighbour;
-      for (int j = 0; j < sites[i].getNumberOfNeighbours(); j++) {
-        neighbour = site.getNeighbour(j);
-        modifiedSites.add(neighbour);
+      if (length == 1) {
+        updateOneRate(site);
       }
-    }
-    
-    for (CatalysisSite site : modifiedSites) {
-      updateOneRate(site);
+      for (int j = 0; j < sites[i].getNumberOfNeighbours(); j++) {
+        updateOneRate(site.getNeighbour(j));
+      }
     }
     
     totalRateKTot = 0.0;
