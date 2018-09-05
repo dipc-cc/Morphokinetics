@@ -77,6 +77,9 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
   
   private CatalysisCoHoffmannLattice lattice;
   
+  private final CatalysisSite[] affectedSites;
+  private int affectedSitesLength;
+  
   public CatalysisCoKmcHoffmann(Parser parser, String restartFolder) {
     super(parser, restartFolder);
     doAdsorption = parser.doCatalysisAdsorption();
@@ -95,6 +98,8 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     accumRates = new double[N_REACT];
     update = new CatalysisCoUpdate();
     maxSteps = parser.getNumberOfSteps();
+    affectedSites = new CatalysisSite[2];
+    affectedSitesLength = 0;
   }
   
   @Override
@@ -185,31 +190,30 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
   @Override
   protected boolean performSimulationStep() {
     int reaction = nextEvent(StaticRandom.raw());
-    CatalysisSite[] affectedSites = null;
     switch (reaction) {
       case -1:
         return true;
       case 0:
-        affectedSites = adsorbCo();
+        adsorbCo();
         break;
       case 1:
-        affectedSites = adsorbO();
+        adsorbO();
         break;
       case 2:
       case 3:
-        affectedSites = desorbCo(reaction);
+        desorbCo(reaction);
         break;
       case 4:
       case 5:
       case 6:
       case 7:
-        affectedSites = desorbO2(reaction);
+        desorbO2(reaction);
         break;
       case 8:
       case 9:
       case 10:
       case 11:
-        affectedSites = react(reaction);
+        react(reaction);
         break;
       case 12:
       case 13:
@@ -219,10 +223,10 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
       case 17:
       case 18:
       case 19:
-        affectedSites = diffuse(reaction);
+        diffuse(reaction);
         break;
     }
-    updateRates(affectedSites);
+    updateRates();
     simulatedSteps++;
     return false;
   }
@@ -270,7 +274,7 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     //getList().setRates(totalRate);
   }
   
-  private CatalysisSite[] adsorbCo() {
+  private void adsorbCo() {
     byte atomType = CO;
     int randomNumber = StaticRandom.rawInteger(numberOfSites[0]);
     CatalysisSite site = lattice.getAvailableSite(0, randomNumber);
@@ -279,10 +283,11 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
       System.out.println("ERROR!! "+site.getId());
     }
     lattice.deposit(site, false);
-    return new CatalysisSite[]{site};
+    affectedSites[0] = site;
+    affectedSitesLength = 1; 
   }
   
-  private CatalysisSite[] adsorbO() {
+  private void adsorbO() {
     byte atomType = O;
     int randomNumber = StaticRandom.rawInteger(numberOfSites[1]);
     CatalysisSite site = lattice.getAvailableSite(1, randomNumber);
@@ -297,18 +302,21 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     }
     neighbour.setType(O);
     lattice.deposit(neighbour, false);
-    return new CatalysisSite[]{site, neighbour};
+    affectedSites[0] = site;
+    affectedSites[1] = neighbour;
+    affectedSitesLength = 2;
   }
 
-  private CatalysisSite[] desorbCo(int process) {
+  private void desorbCo(int process) {
     int randomNumber = StaticRandom.rawInteger(numberOfSites[process]);
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
    
     lattice.extract(site);
-    return new CatalysisSite[]{site};    
+    affectedSites[0] = site;
+    affectedSitesLength = 1;  
   }
   
-  private CatalysisSite[] desorbO2(int process) {
+  private void desorbO2(int process) {
     int randomNumber = StaticRandom.rawInteger(numberOfSites[process]);
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
     lattice.extract(site);
@@ -328,10 +336,12 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
       lattice.extract(neighbour);
     }
     
-    return new CatalysisSite[]{site, neighbour};
+    affectedSites[0] = site;
+    affectedSites[1] = neighbour;
+    affectedSitesLength = 2;
   }
   
-  private CatalysisSite[] react(int process) {
+  private void react(int process) {
     int randomNumber = StaticRandom.rawInteger(numberOfSites[process]);
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
     lattice.extract(site);
@@ -350,10 +360,12 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
       neighbour = site.getNeighbour(startI);
       lattice.extract(neighbour);
     }
-    return new CatalysisSite[]{site, neighbour};
+    affectedSites[0] = site;
+    affectedSites[1] = neighbour;
+    affectedSitesLength = 2;
   }
   
-  private CatalysisSite[] diffuse(int process) {
+  private void diffuse(int process) {
     int randomNumber = StaticRandom.rawInteger(numberOfSites[process]);
     CatalysisSite site = lattice.getAvailableSite(process, randomNumber);
     lattice.extract(site);
@@ -375,7 +387,9 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     }
     neighbour.setType(site.getType());
     neighbour.swapAttributes(site);
-    return new CatalysisSite[]{site, neighbour};
+    affectedSites[0] = site;
+    affectedSites[1] = neighbour;
+    affectedSitesLength = 2;
   }
   
   /**
@@ -383,14 +397,14 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
    *
    * @param sites
    */
-  private void updateRates(CatalysisSite[] sites) {
-    int length = sites.length;
+  private void updateRates() {
+    int length = affectedSitesLength;
     for (int i = 0; i < length; i++) {
-      CatalysisSite site = sites[i];
+      CatalysisSite site = affectedSites[i];
       if (length == 1) {
         updateOneRate(site);
       }
-      for (int j = 0; j < sites[i].getNumberOfNeighbours(); j++) {
+      for (int j = 0; j < affectedSites[i].getNumberOfNeighbours(); j++) {
         updateOneRate(site.getNeighbour(j));
       }
     }
