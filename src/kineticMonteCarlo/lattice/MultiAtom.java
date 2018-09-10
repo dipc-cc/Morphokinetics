@@ -62,7 +62,7 @@ public class MultiAtom extends Island {
    * @return random direction out of 2 possible directions.
    */
   public int getRandomMultiAtomDirection() {
-     double randomNumber = StaticRandom.raw() * getRate(MULTI);
+    double randomNumber = StaticRandom.raw() * getRate(MULTI);
     if (randomNumber < getEdgeRate(0)) {
       return (direction + 3) % 6;
     }
