@@ -43,7 +43,6 @@ public class CatalysisSite extends AbstractSurfaceSite {
    * Bridge or CUS.
    */
   private final byte latticeSite;
-  private final CatalysisProcess[] processes;
   
   private CatalysisSiteAttributes attributes;
   
@@ -58,7 +57,7 @@ public class CatalysisSite extends AbstractSurfaceSite {
       latticeSite = CUS;
     }
     attributes = new CatalysisSiteAttributes();
-    processes = new CatalysisProcess[4];
+    CatalysisProcess[]processes = new CatalysisProcess[4];
     processes[ADSORPTION] = new CatalysisProcess();
     processes[DESORPTION] = new CatalysisProcess();
     processes[REACTION] = new CatalysisProcess();
@@ -101,19 +100,9 @@ public class CatalysisSite extends AbstractSurfaceSite {
     return neighbours[pos];
   }
   
+  @Override
   public CatalysisSite getRandomNeighbour(byte process) {
-    CatalysisSite neighbour;
-    double randomNumber = StaticRandom.raw() * getRate(process);
-    double sum = 0.0;
-    for (int j = 0; j < getNumberOfNeighbours(); j++) {
-      sum += processes[process].getEdgeRate(j);
-      if (sum > randomNumber) {
-        neighbour = getNeighbour(j);
-        return neighbour;
-      }
-    }
-    // raise an error
-    return null;
+    return (CatalysisSite) super.getRandomNeighbour(process);
   }
 
   public void addCoCusNeighbours(int value) {
@@ -140,13 +129,6 @@ public class CatalysisSite extends AbstractSurfaceSite {
   public void clear() {
     super.clear();
     setType(TERRACE);
-    
-    /*for (int i = 0; i < getNumberOfNeighbours(); i++) {
-      setBondsProbability(0, i);
-    }*/
-    for (int i = 0; i < 4; i++) {
-      processes[i].clear();
-    }
   }
   
   @Override
@@ -160,7 +142,7 @@ public class CatalysisSite extends AbstractSurfaceSite {
   
   @Override
   public String toString() {
-    String returnString = "Atom Id " + getId() + " desorptionRate " + processes[DESORPTION].getRate() + " " + processes[DESORPTION].getSumRate();
+    String returnString = "Atom Id " + getId();
     return returnString;
   }
 
