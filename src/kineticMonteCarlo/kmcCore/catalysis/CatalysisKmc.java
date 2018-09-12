@@ -222,7 +222,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   public int simulate() {
     int returnValue = 0;
 
-    while (getLattice().getCoverage() < maxCoverage && maxProduction() && simulatedSteps < maxSteps) {
+    while (notEnd()) {
       if (outputAeTotal) {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
@@ -276,6 +276,14 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       updatePrevious();
     }
     return returnValue;
+  }
+  
+  private boolean notEnd() {
+    boolean shouldEnd = getLattice().getCoverage() < maxCoverage && maxProduction();
+    if (!shouldEnd && maxSteps > 0) {
+      shouldEnd = simulatedSteps < maxSteps;
+    }
+    return shouldEnd;
   }
 
   abstract void depositNewAtom();
