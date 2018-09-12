@@ -42,8 +42,9 @@ public abstract class AbstractCatalysisSite extends AbstractSurfaceSite {
     } else {
       latticeSite = CUS;
     }
+    attributes = new CatalysisSiteAttributes();
   }
-  
+
   @Override
   public GrowthAtomAttributes getAttributes() {
     return attributes;
