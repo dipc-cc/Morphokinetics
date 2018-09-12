@@ -32,10 +32,6 @@ import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisCoSite.CO;
 import static kineticMonteCarlo.site.CatalysisCoSite.O;
-import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
-import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
-import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
-import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
 import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import ratesLibrary.CatalysisRates;
@@ -279,11 +275,11 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   }
   
   private boolean notEnd() {
-    boolean shouldEnd = getLattice().getCoverage() < maxCoverage && maxProduction();
-    if (!shouldEnd && maxSteps > 0) {
-      shouldEnd = simulatedSteps < maxSteps;
+    boolean shouldContinue = getLattice().getCoverage() < maxCoverage && maxProduction();
+    if (shouldContinue && maxSteps > 0) {
+      shouldContinue = simulatedSteps < maxSteps;
     }
-    return shouldEnd;
+    return shouldContinue;
   }
 
   abstract void depositNewAtom();
