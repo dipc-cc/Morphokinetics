@@ -19,7 +19,6 @@
 package kineticMonteCarlo.site;
 
 import kineticMonteCarlo.process.CatalysisProcess;
-import utils.StaticRandom;
 
 /**
  *
@@ -27,7 +26,7 @@ import utils.StaticRandom;
  */
 
 
-public class CatalysisAmmoniaSite extends CatalysisSite  {
+public class CatalysisAmmoniaSite extends AbstractCatalysisSite  {
 
   public static final byte NH3 = 0;
   public static final byte NH2 = 1;
@@ -67,25 +66,10 @@ public class CatalysisAmmoniaSite extends CatalysisSite  {
       return false;
     }
   }
+  
   @Override
   public CatalysisAmmoniaSite getNeighbour(int pos) {
     return (CatalysisAmmoniaSite) super.getNeighbour(pos);
-  }
-  
-  @Override
-  public CatalysisSite getRandomNeighbour(byte process) {
-    CatalysisSite neighbour;
-    double randomNumber = StaticRandom.raw() * getRate(process);
-    double sum = 0.0;
-    for (int j = 0; j < getNumberOfNeighbours(); j++) {
-      sum += processes[process].getEdgeRate(j);
-      if (sum > randomNumber) {
-        neighbour = getNeighbour(j);
-        return neighbour;
-      }
-    }
-    // raise an error
-    return null;
   }
   
   /**
@@ -97,5 +81,16 @@ public class CatalysisAmmoniaSite extends CatalysisSite  {
     for (int i = 0; i < 13; i++) {
       processes[i].clear();
     }
+  }
+
+  /**
+   * They do nothing.
+   */
+  @Override
+  public void cleanCoCusNeighbours() {
+  }
+
+  @Override
+  public void addCoCusNeighbours(int value) {
   }
 }

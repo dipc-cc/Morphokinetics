@@ -18,24 +18,49 @@
  */
 package kineticMonteCarlo.site;
 
-import kineticMonteCarlo.process.CatalysisProcess;
+import static kineticMonteCarlo.lattice.CatalysisCoHoffmannLattice.N_REACT;
 
 /**
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoHoffmannSite extends CatalysisSite {
+public class CatalysisCoHoffmannSite extends AbstractCatalysisSite {
   
-  private final CatalysisProcess[] processes;
+  //private final CatalysisProcess[] processes;
+  private final boolean[] activeProcesses;
   
   public CatalysisCoHoffmannSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa);
     
-    processes = new CatalysisProcess[20];
-    for (int i = 0; i < processes.length; i++) {
-      processes[i] = new CatalysisProcess();
+    //processes = new CatalysisProcess[20];
+    activeProcesses = new boolean[N_REACT];
+    for (int i = 0; i < activeProcesses.length; i++) {
+      //processes[i] = new CatalysisProcess();
+      activeProcesses[i] = false;
     }
     
-    setProcceses(processes);
+    //setProcceses(null);
+  }
+
+  /**
+   * They do nothing.
+   */
+  @Override
+  public void cleanCoCusNeighbours() {
+  }
+
+  @Override
+  public void addCoCusNeighbours(int value) {
+  }
+  
+  @Override
+  public void setOnList(byte process, boolean onList) {
+    activeProcesses[process] = onList;
+    //processes[process].setActive(onList);
+  }
+  
+  @Override
+  public boolean isOnList(byte process) {
+    return activeProcesses[process];//processes[process].isActive();
   }
 }

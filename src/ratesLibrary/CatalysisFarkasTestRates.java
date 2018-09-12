@@ -18,7 +18,8 @@
  */
 package ratesLibrary;
 
-import static kineticMonteCarlo.site.CatalysisSite.CO;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+
 
 /**
  * Farkas, Hess, Over J Phys. Chem C (2011). Supporting Information.

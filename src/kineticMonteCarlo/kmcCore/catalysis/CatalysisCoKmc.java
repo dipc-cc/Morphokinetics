@@ -21,17 +21,20 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
+import java.util.Iterator;
 import kineticMonteCarlo.activationEnergy.CatalysisCoActivationEnergy;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
 import static kineticMonteCarlo.process.CatalysisProcess.REACTION;
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.O;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.CatalysisCoSite.O;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
+import utils.list.sites.ISitesCollection;
+import utils.list.sites.SitesCollection;
 
 /**
  *
@@ -68,6 +71,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
   private long[] co2; // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
   /** For previous rates. It is a local variable, but this way, garbage collector works better.*/
   double[] previousRate; 
+  private final ISitesCollection[] sites;
   
   public CatalysisCoKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
@@ -87,6 +91,14 @@ public class CatalysisCoKmc extends CatalysisKmc {
     co2sum = 0;
     previousRate = new double[4];
     setActivationEnergy(new CatalysisCoActivationEnergy(parser));
+    
+    sites = new ISitesCollection[4];
+    col = new SitesCollection(getLattice(), "catalysis");
+    // Either a tree or array 
+    sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
+    sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
+    sites[REACTION] = col.getCollection(parser.useCatalysisTree(REACTION), REACTION);
+    sites[DIFFUSION] = col.getCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
   }
   
   @Override
@@ -133,6 +145,39 @@ public class CatalysisCoKmc extends CatalysisKmc {
     numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
   
+
+  /**
+   * Performs a simulation step.
+   *
+   * @return true if a stop condition happened (all atom etched, all surface covered).
+   */
+  @Override
+  protected boolean performSimulationStep() {
+    if (getList().getGlobalProbability() == 0) {
+      return true; // there is nothing more we can do
+    }
+    byte reaction = getList().nextReaction();
+    steps[reaction]++;
+    switch (reaction) {
+      case ADSORPTION:
+        depositNewAtom();
+        break;
+      case DESORPTION:
+        desorbAtom(); 
+        break;
+      case REACTION:
+        reactAtom();
+        break;
+      case DIFFUSION:
+        diffuseAtom();
+        break;
+      default:
+        System.out.println("Error");
+    }
+    checkSizes(sites);
+    return false;
+  }
+  
   /**
    * Start with fully covered surface.
    * 
@@ -143,7 +188,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = uc.getSite(j);
+        AbstractCatalysisSite a = uc.getSite(j);
         switch (start) {
           case "O":
             a.setType(O);
@@ -163,7 +208,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = uc.getSite(j);
+        AbstractCatalysisSite a = uc.getSite(j);
         a.setOnList(ADSORPTION, false);
         sites[ADSORPTION].insert(a);
         sites[DIFFUSION].insert(a);
@@ -172,7 +217,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
           totalRate[DESORPTION] += a.getRate(DESORPTION);
         } else { //O
           for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
-            CatalysisSite neighbour = a.getNeighbour(k);
+            AbstractCatalysisSite neighbour = a.getNeighbour(k);
             if (neighbour.getType() == O) {
               int index = 2 * a.getLatticeSite() + neighbour.getLatticeSite();
               double rate = desorptionRateOPerSite[index];
@@ -194,10 +239,10 @@ public class CatalysisCoKmc extends CatalysisKmc {
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = uc.getSite(j);
+        AbstractCatalysisSite a = uc.getSite(j);
         if (a.getType() == CO) {
           for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
-            CatalysisSite neighbour = a.getNeighbour(k);
+            AbstractCatalysisSite neighbour = a.getNeighbour(k);
             if (neighbour.getType() == O) {
               //               CO                   +         O
               int index = 2 * a.getLatticeSite() + neighbour.getLatticeSite();
@@ -207,7 +252,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
           }
         } else { // O
           for (int k = 0; k < a.getNumberOfNeighbours(); k++) {
-            CatalysisSite neighbour = a.getNeighbour(k);
+            AbstractCatalysisSite neighbour = a.getNeighbour(k);
             if (neighbour.getType() == CO) {
               //               CO                   +         O
               int index = 2 * neighbour.getLatticeSite() + a.getLatticeSite();
@@ -237,7 +282,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = uc.getSite(j);
+        AbstractCatalysisSite a = uc.getSite(j);
         a.setRate(ADSORPTION, adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
         a.setOnList(ADSORPTION, true);
         totalRate[ADSORPTION] += a.getRate(ADSORPTION);
@@ -256,10 +301,10 @@ public class CatalysisCoKmc extends CatalysisKmc {
   
   @Override
   void depositNewAtom() {
-    CatalysisSite destinationAtom;
+    AbstractCatalysisSite destinationAtom;
     byte atomType;
       
-    CatalysisSite neighbourAtom = null;
+    AbstractCatalysisSite neighbourAtom = null;
     int random;
     
     if (sites[ADSORPTION].isEmpty()) {
@@ -267,7 +312,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
       return;
     }
 
-    destinationAtom = (CatalysisSite) sites[ADSORPTION].randomElement();
+    destinationAtom = (AbstractCatalysisSite) sites[ADSORPTION].randomElement();
 
     if (destinationAtom == null || destinationAtom.getRate(ADSORPTION) == 0 || destinationAtom.isOccupied()) {
       boolean isThereAnAtom = destinationAtom == null;
@@ -302,9 +347,9 @@ public class CatalysisCoKmc extends CatalysisKmc {
   
   @Override
   void desorbAtom() {    
-    CatalysisSite atom = (CatalysisSite) sites[DESORPTION].randomElement();
+    AbstractCatalysisSite atom = (AbstractCatalysisSite) sites[DESORPTION].randomElement();
     int atomsToDesorp = 1;
-    CatalysisSite neighbour = null;
+    AbstractCatalysisSite neighbour = null;
     if (atom.getType() == O) { // it has to desorp with another O to create O2
       neighbour = atom.getRandomNeighbour(DESORPTION);
       atomsToDesorp = 2;
@@ -321,9 +366,9 @@ public class CatalysisCoKmc extends CatalysisKmc {
   
   @Override
   void reactAtom() {
-    CatalysisSite atom = (CatalysisSite) sites[REACTION].randomElement();
+    AbstractCatalysisSite atom = (AbstractCatalysisSite) sites[REACTION].randomElement();
     // it has to react with another atom
-    CatalysisSite neighbour = atom.getRandomNeighbour(REACTION);
+    AbstractCatalysisSite neighbour = atom.getRandomNeighbour(REACTION);
     getLattice().extract(neighbour);
     getLattice().extract(atom);
     numGaps = numGaps-2;
@@ -347,8 +392,8 @@ public class CatalysisCoKmc extends CatalysisKmc {
    */
   @Override
   void diffuseAtom() {
-    CatalysisSite originAtom = (CatalysisSite) sites[DIFFUSION].randomElement();
-    CatalysisSite destinationAtom = originAtom.getRandomNeighbour(DIFFUSION);
+    AbstractCatalysisSite originAtom = (AbstractCatalysisSite) sites[DIFFUSION].randomElement();
+    AbstractCatalysisSite destinationAtom = originAtom.getRandomNeighbour(DIFFUSION);
     destinationAtom.setType(originAtom.getType());
     getLattice().extract(originAtom);    
     getLattice().deposit(destinationAtom, false);
@@ -358,7 +403,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     updateRates(destinationAtom);
   }
 
-  private boolean depositAtom(CatalysisSite atom) {
+  private boolean depositAtom(AbstractCatalysisSite atom) {
     if (atom.isOccupied()) {
       return false;
     }
@@ -373,7 +418,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
    *
    * @param atom
    */
-  private void updateRates(CatalysisSite atom) {
+  private void updateRates(AbstractCatalysisSite atom) {
     // save previous rates
     System.arraycopy(totalRate, 0, previousRate, 0, previousRate.length);
     
@@ -384,7 +429,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     if (doDiffusion) recomputeDiffusionRate(atom);
     // recompute the probability of the neighbour atoms
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = atom.getNeighbour(i);
+      AbstractCatalysisSite neighbour = atom.getNeighbour(i);
       if (doAdsorption) recomputeAdsorptionRate(neighbour);
       if (doDesorption) recomputeDesorptionRate(neighbour);
       if (doReaction) recomputeReactionRate(neighbour);
@@ -393,24 +438,24 @@ public class CatalysisCoKmc extends CatalysisKmc {
     
     // recalculate total rate, if needed
     if (totalRate[ADSORPTION] / previousRate[ADSORPTION] < 1e-1) {
-      updateRateFromList(ADSORPTION);
+      updateRateFromList(sites[ADSORPTION], ADSORPTION);
     }
-    if (totalRate[DESORPTION] / previousRate[DESORPTION] < 1e-1 || 1.0 - totalRate[DESORPTION] / sites[DESORPTION].getTotalRate(DESORPTION) > 1e-3 || simulatedSteps % 10000000 == 0) {
+    if (totalRate[DESORPTION] / previousRate[DESORPTION] < 1e-1 || 1.0 - totalRate[DESORPTION] / sites[DESORPTION].getTotalRate(DESORPTION) > 1e-3 || getSimulatedSteps() % 10000000 == 0) {
       //System.out.println(simulatedSteps+" "+previousDesorptionRate + " " + totalDesorptionRate + " " + sites[DESORPTION].getDesorptionRate());
-      updateRateFromList(DESORPTION);
+      updateRateFromList(sites[DESORPTION], DESORPTION);
     }
     if (totalRate[REACTION] / previousRate[REACTION] < 1e-1) {
-      updateRateFromList(REACTION);
+      updateRateFromList(sites[REACTION], REACTION);
     }
     if (totalRate[DIFFUSION] / previousRate[DIFFUSION] < 1e-1) {
-      updateRateFromList(DIFFUSION);
+      updateRateFromList(sites[DIFFUSION], DIFFUSION);
     }
     
     // tell to the list new rates
     getList().setRates(totalRate);
   }
   
-  private void recomputeAdsorptionRate(CatalysisSite atom) {
+  private void recomputeAdsorptionRate(AbstractCatalysisSite atom) {
     double oldAdsorptionRate = atom.getRate(ADSORPTION);
     totalRate[ADSORPTION] -= oldAdsorptionRate;
     if (atom.isOccupied()) {
@@ -422,10 +467,10 @@ public class CatalysisCoKmc extends CatalysisKmc {
         counterSitesWith4OccupiedNeighbours++;
       }
     }
-    recomputeCollection(ADSORPTION, atom, oldAdsorptionRate);
+    recomputeCollection(sites[ADSORPTION], ADSORPTION, atom, oldAdsorptionRate);
   }
   
-  private void recomputeDesorptionRate(CatalysisSite atom) {
+  private void recomputeDesorptionRate(AbstractCatalysisSite atom) {
     totalRate[DESORPTION] -= atom.getRate(DESORPTION);
     if (!atom.isOccupied()) {
       if (atom.isOnList(DESORPTION)) {
@@ -441,17 +486,17 @@ public class CatalysisCoKmc extends CatalysisKmc {
       atom.setRate(DESORPTION, rate);
     } else { // O
       for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-        CatalysisSite neighbour = atom.getNeighbour(i);
+        AbstractCatalysisSite neighbour = atom.getNeighbour(i);
         if (neighbour.isOccupied() && neighbour.getType() == O) {
           double rate = getDesorptionRate(atom, neighbour);
           atom.addRate(DESORPTION, rate, i);
         }
       }
     }
-    recomputeCollection(DESORPTION, atom, oldDesorptionRate);
+    recomputeCollection(sites[DESORPTION], DESORPTION, atom, oldDesorptionRate);
   }
   
-  private void recomputeReactionRate(CatalysisSite atom) {
+  private void recomputeReactionRate(AbstractCatalysisSite atom) {
     totalRate[REACTION] -= atom.getRate(REACTION);
     double oldReactionRate = atom.getRate(REACTION);
     if (!atom.isOccupied()) {
@@ -464,16 +509,16 @@ public class CatalysisCoKmc extends CatalysisKmc {
     atom.setRate(REACTION, 0);
     byte otherType = (byte) ((atom.getType() + 1) % 2);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = atom.getNeighbour(i);
+      AbstractCatalysisSite neighbour = atom.getNeighbour(i);
       if (neighbour.isOccupied() && neighbour.getType() == otherType) {
         double rate = getReactionRate(atom, neighbour); 
         atom.addRate(REACTION, rate/2.0, i);
       }
     }
-    recomputeCollection(REACTION, atom, oldReactionRate);
+    recomputeCollection(sites[REACTION], REACTION, atom, oldReactionRate);
   }
 
-  private void recomputeDiffusionRate(CatalysisSite atom) {
+  private void recomputeDiffusionRate(AbstractCatalysisSite atom) {
     totalRate[DIFFUSION] -= atom.getRate(DIFFUSION);
     double oldDiffusionRate = atom.getRate(DIFFUSION);
     if (!atom.isOccupied()) {
@@ -485,13 +530,13 @@ public class CatalysisCoKmc extends CatalysisKmc {
     }
     atom.setRate(DIFFUSION, 0);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = atom.getNeighbour(i);
+      AbstractCatalysisSite neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied()) {
         double rate = getDiffusionRate(atom, neighbour);
         atom.addRate(DIFFUSION, rate, i);
       }
     }
-    recomputeCollection(DIFFUSION, atom, oldDiffusionRate);
+    recomputeCollection(sites[DIFFUSION], DIFFUSION, atom, oldDiffusionRate);
   }
   
   /**
@@ -501,7 +546,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
    * @param neighbour O atom.
    * @return 
    */
-  private double getDesorptionRate(CatalysisSite atom, CatalysisSite neighbour) {
+  private double getDesorptionRate(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     return desorptionRateOPerSite[index];
   }
@@ -512,7 +557,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
    * @param atom CO molecule.
    * @return 
    */
-  double getDesorptionRate(CatalysisSite atom) {
+  double getDesorptionRate(AbstractCatalysisSite atom) {
     return desorptionRateCOPerSite[atom.getLatticeSite()];
   }
   
@@ -523,7 +568,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
    * @param neighbour
    * @return 
    */
-  double getReactionRate(CatalysisSite atom, CatalysisSite neighbour) {
+  double getReactionRate(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     int index;
     if (atom.getType() == CO) {
       index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
@@ -533,7 +578,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
     return reactionRateCoO[index];
   }
   
-  double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
+  double getDiffusionRate(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     int index = 2 * atom.getLatticeSite() + neighbour.getLatticeSite();
     double rate;
     if (atom.getType() == CO) {
@@ -576,10 +621,29 @@ public class CatalysisCoKmc extends CatalysisKmc {
   }
   
   @Override
+  int[] getSiteSizes() {
+    int[] sizes = new int[4];
+    sizes[ADSORPTION] = sites[ADSORPTION].size();
+    sizes[DESORPTION] = sites[DESORPTION].size();
+    sizes[REACTION] = sites[REACTION].size();
+    sizes[DIFFUSION] = sites[DIFFUSION].size();
+    return sizes;
+  }
+ 
+  @Override
+  Iterator<AbstractCatalysisSite> getReactionIterator() {
+    return sites[REACTION].iterator();
+  }
+  
+  @Override
   public void reset() {
     super.reset();
     co2 = new long[getNumberOfReactions()];
     co2sum = 0;
+    sites[ADSORPTION].clear();
+    sites[DESORPTION].clear();
+    sites[REACTION].clear();
+    sites[DIFFUSION].clear();
   }
   
   /**

@@ -18,7 +18,7 @@
  */
 package kineticMonteCarlo.unitCell;
 
-import kineticMonteCarlo.site.CatalysisSite;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
 
 /**
  * Really simple unit cell, which will contain only one atom.
@@ -27,7 +27,7 @@ import kineticMonteCarlo.site.CatalysisSite;
  */
 public class CatalysisUc extends AbstractSurfaceUc implements IUc {
 
-  public CatalysisUc(int posI, int posJ, CatalysisSite atom) {
+  public CatalysisUc(int posI, int posJ, AbstractCatalysisSite atom) {
     super(posI, posJ, atom);
   }
 
@@ -38,7 +38,7 @@ public class CatalysisUc extends AbstractSurfaceUc implements IUc {
    * @return current atom
    */
   @Override
-  public CatalysisSite getSite(int pos) {
-    return (CatalysisSite) super.getSite(pos);
+  public AbstractCatalysisSite getSite(int pos) {
+    return (AbstractCatalysisSite) super.getSite(pos);
   }
 }

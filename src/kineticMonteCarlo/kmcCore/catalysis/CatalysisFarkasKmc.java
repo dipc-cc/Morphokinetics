@@ -21,9 +21,9 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import kineticMonteCarlo.lattice.CatalysisCoFarkasLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.CUS;
 import ratesLibrary.CatalysisRates;
 
 /**
@@ -65,7 +65,7 @@ public class CatalysisFarkasKmc extends CatalysisCoKmc {
   }
   
   @Override
-  double getDesorptionRate(CatalysisSite atom) {
+  double getDesorptionRate(AbstractCatalysisSite atom) {
     double rate = super.getDesorptionRate(atom);
     if (atom.getLatticeSite() == CUS) {
       if (atom.getCoCusNeighbours() > 0) {
@@ -83,8 +83,8 @@ public class CatalysisFarkasKmc extends CatalysisCoKmc {
    * @return
    */
   @Override
-  double getReactionRate(CatalysisSite atom, CatalysisSite neighbour) {
-    CatalysisSite atomCo;
+  double getReactionRate(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
+    AbstractCatalysisSite atomCo;
     if (atom.getType() == CO) {
       atomCo = atom;
     } else {
@@ -100,7 +100,7 @@ public class CatalysisFarkasKmc extends CatalysisCoKmc {
   }
 
   @Override
-  double getDiffusionRate(CatalysisSite atom, CatalysisSite neighbour) {
+  double getDiffusionRate(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == CO) {
       if (atom.getCoCusNeighbours() == 1) { // repulsion
         // C -> B, with one CO neighbour

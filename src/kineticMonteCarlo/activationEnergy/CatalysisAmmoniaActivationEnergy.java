@@ -22,6 +22,7 @@ import basic.Parser;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.N;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH2;
@@ -29,7 +30,6 @@ import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH3;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NO;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.O;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.OH;
-import kineticMonteCarlo.site.CatalysisSite;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 
 /**
@@ -63,7 +63,7 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
       for (int i = 0; i < lattice.size(); i++) {
         CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          CatalysisSite atom = (CatalysisSite) uc.getSite(j);
+          AbstractCatalysisSite atom = (AbstractCatalysisSite) uc.getSite(j);
           // Adsorption
           if (!atom.isOccupied()) {
             histogramPossibles[1] += elapsedTime; // P1
@@ -72,7 +72,7 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
             }
           } else {
             for (int pos = 0; pos < numberOfNeighbours; pos += 2) {
-              CatalysisSite neighbour = atom.getNeighbour(pos);
+              AbstractCatalysisSite neighbour = atom.getNeighbour(pos);
               // Desorption
               switch (atom.getType()) {
                 case NH3:
@@ -152,7 +152,7 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
   }
   
   @Override
-  public void updatePossibles(Iterator<CatalysisSite> surface, double elapsedTime, boolean stationary) {
+  public void updatePossibles(Iterator<AbstractCatalysisSite> surface, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
       System.out.println("This method should not be called");
       System.out.println("Call instead public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary)");

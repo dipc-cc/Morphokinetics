@@ -23,7 +23,7 @@ import java.util.Queue;
 import java.util.function.Consumer;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.site.BdaAgSurfaceSite;
-import kineticMonteCarlo.site.CatalysisSite;
+import kineticMonteCarlo.site.CatalysisCoSite;
 import kineticMonteCarlo.site.ConcertedSite;
 import utils.list.Node;
 
@@ -241,7 +241,7 @@ public class AvlTree<T extends Comparable<T>> {
       T a;
       switch (type) {
         case "catalysis":
-          a = (T) new CatalysisSite(i, (short)-1, (short)-1);
+          a = (T) new CatalysisCoSite(i, (short)-1, (short)-1);
           break;
         case "concerted":
           a = (T) new ConcertedSite(i, -1);

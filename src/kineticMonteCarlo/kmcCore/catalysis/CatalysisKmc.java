@@ -26,12 +26,12 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 import kineticMonteCarlo.activationEnergy.AbstractCatalysisActivationEnergy;
-import kineticMonteCarlo.site.CatalysisSite;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
 import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.CatalysisLattice;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.O;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.CatalysisCoSite.O;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
@@ -51,14 +51,13 @@ import utils.list.sites.ISitesCollection;
 abstract public class CatalysisKmc extends AbstractSurfaceKmc {
 
   private final boolean outputData;
-  long simulatedSteps;
-  private long[] steps;
+  private long simulatedSteps;
+  long[] steps;
   private final long maxSteps;
   private int outputEvery;
   private ArrayList<CatalysisData> adsorptionData;
   // Total rates
   double[] totalRate;
-  final ISitesCollection[] sites;
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -95,13 +94,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       outputEvery = parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
-    sites = new ISitesCollection[4];
-    col = new SitesCollection(getLattice(), "catalysis");
-    // Either a tree or array 
-    sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
-    sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
-    sites[REACTION] = col.getCollection(parser.useCatalysisTree(REACTION), REACTION);
-    sites[DIFFUSION] = col.getCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
     doDiffusion = parser.doCatalysisDiffusion();
     doAdsorption = parser.doCatalysisAdsorption();
     doDesorption = parser.doCatalysisDesorption();
@@ -214,71 +206,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     return ((CatalysisLattice) getLattice()).getGapCoverage();
   }
 
-  /**
-   * Performs a simulation step.
-   *
-   * @return true if a stop condition happened (all atom etched, all surface covered).
-   */
-  @Override
-  protected boolean performSimulationStep() {
-    if (getList().getGlobalProbability() == 0) {
-      return true; // there is nothing more we can do
-    }
-    byte reaction = getList().nextReaction();
-    steps[reaction]++;
-    switch (reaction) {
-      case ADSORPTION:
-        depositNewAtom();
-        break;
-      case DESORPTION:
-        desorbAtom(); 
-        break;
-      case REACTION:
-        reactAtom();
-        break;
-      case DIFFUSION:
-        diffuseAtom();
-        break;
-      default:
-        System.out.println("Error");
-    }
-    simulatedSteps++;
-    if (outputData && simulatedSteps % outputEvery == 0) {
-      if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
-        System.out.println("stationary in step " + simulatedSteps);
-        stationary = true;
-        stationaryStep = simulatedSteps;
-        getList().resetTime();
-        restart.resetCatalysis();
-        initStationary();
-        int[] sizes = new int[2];
-        sizes[0] = getLattice().getHexaSizeI();
-        sizes[1] = getLattice().getHexaSizeJ();
-        restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));//*/
-      }
-    }
-    if ((stationary && writeNow()) || (doPrintAllIterations && simulatedSteps % outputEvery == 0)) {
-      if (outputData) {
-        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
-                (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
-                getGapCoverage()));
-        int[] sizes = new int[4];
-        sizes[ADSORPTION] = sites[ADSORPTION].size();
-        sizes[DESORPTION] = sites[DESORPTION].size();
-        sizes[REACTION] = sites[REACTION].size();
-        sizes[DIFFUSION] = sites[DIFFUSION].size();
-        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, getProduction(), sizes);
-        restart.flushCatalysis();
-      }
-
-      if (outputAe || outputAeTotal) {
-        activationEnergy.printAe(restart.getExtraWriters(), getTime());
-      }
-      updatePrevious();
-    }
-    return simulatedSteps == maxSteps;
-  }
-  
   abstract void initStationary();
   abstract long[] getProduction();
   abstract long getSumProduction();
@@ -299,12 +226,12 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       if (outputAeTotal) {
         activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
-        activationEnergy.updatePossibles(sites[REACTION].iterator(), getList().getDeltaTime(true), stationary);
+        activationEnergy.updatePossibles(getReactionIterator(), getList().getDeltaTime(true), stationary);
       }      
       if (performSimulationStep()) {
         break;
       }
-      checkSizes();
+      simulatedSteps++;
     }
     
     if (outputData) {
@@ -312,14 +239,41 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
               (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
                 getGapCoverage()));
       if (stationary) {
-        int[] sizes = new int[4];
-        sizes[ADSORPTION] = sites[ADSORPTION].size();
-        sizes[DESORPTION] = sites[DESORPTION].size();
-        sizes[REACTION] = sites[REACTION].size();
-        sizes[DIFFUSION] = sites[DIFFUSION].size();
+        int[] sizes = getSiteSizes();
         restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, getProduction(), sizes);
         restart.flushCatalysis();
       }
+    }
+    
+    if (outputData && simulatedSteps % outputEvery == 0) {
+      if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
+        System.out.println("stationary in step " + simulatedSteps);
+        stationary = true;
+        stationaryStep = simulatedSteps;
+        getList().resetTime();
+        restart.resetCatalysis();
+        initStationary();
+        int[] sizes = new int[2];
+        sizes[0] = getLattice().getHexaSizeI();
+        sizes[1] = getLattice().getHexaSizeJ();
+        restart.writeSurfaceStationary(getSampledSurface(sizes[0], sizes[1]));//*/
+      }
+    }
+    
+    if ((stationary && writeNow()) || (doPrintAllIterations && simulatedSteps % outputEvery == 0)) {
+      if (outputData) {
+        adsorptionData.add(new CatalysisData(getCoverage(), getTime(), getCoverage(CO), getCoverage(O),
+                (float) (counterSitesWith4OccupiedNeighbours / (float) getLattice().size()),
+                getGapCoverage()));
+        int[] sizes = getSiteSizes();
+        restart.writeExtraCatalysisOutput(getTime(), getCoverages(), steps, getProduction(), sizes);
+        restart.flushCatalysis();
+      }
+
+      if (outputAe || outputAeTotal) {
+        activationEnergy.printAe(restart.getExtraWriters(), getTime());
+      }
+      updatePrevious();
     }
     return returnValue;
   }
@@ -328,6 +282,8 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   abstract void desorbAtom(); 
   abstract void reactAtom();
   abstract void diffuseAtom();
+  abstract int[] getSiteSizes();
+  abstract Iterator<AbstractCatalysisSite> getReactionIterator();
   
   @Override
   public void depositSeed() {
@@ -355,7 +311,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     activationEnergy.reset();
     Iterator iter = getList().getIterator();
     while (iter.hasNext()) {
-      CatalysisSite atom = (CatalysisSite) iter.next();
+      AbstractCatalysisSite atom = (AbstractCatalysisSite) iter.next();
       atom.clear();
     }
     getLattice().reset();
@@ -365,10 +321,6 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
       adsorptionData = new ArrayList<>();
     }
     steps = new long[getNumberOfReactions()];
-    sites[ADSORPTION].clear();
-    sites[DESORPTION].clear();
-    sites[REACTION].clear();
-    sites[DIFFUSION].clear();
     counterSitesWith4OccupiedNeighbours = 0;
     stationary = false;
     stationaryStep = -1;
@@ -388,17 +340,17 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
    * If a process is stored in a array and it is too big, change to be a tree. If a tree is too
    * small, change it to be an array.
    */
-  private void checkSizes() {
+  void checkSizes(ISitesCollection[] sites) {
     if (automaticCollections) {
       // ADSORPTION, DESORPTION, REACTION, DIFFUSION
       for (byte i = 0; i < sites.length; i++) {
         long startTime = System.currentTimeMillis();
         if ((sites[i].size() > 1000) && sites[i] instanceof SitesArrayList) {
-          changeCollection(i, true);
+          changeCollection(sites[i], i, true);
           System.out.println("Changed to Tree " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
         if ((sites[i].size() < 500) && sites[i] instanceof SitesAvlTree) {
-          changeCollection(i, false);
+          changeCollection(sites[i], i, false);
           System.out.println("Changed to Array " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
       }
@@ -411,16 +363,16 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
    * @param process ADSORPTION, DESORPTION, REACTION, DIFFUSION.
    * @param toTree if true from array to tree, otherwise from tree to array.
    */
-  private void changeCollection(byte process, boolean toTree) {
-    sites[process] = col.getCollection(toTree, process);
+  private void changeCollection(ISitesCollection site, byte process, boolean toTree) {
+    site = col.getCollection(toTree, process);
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite a = uc.getSite(j);
-        sites[process].insert(a);
+        AbstractCatalysisSite a = uc.getSite(j);
+        site.insert(a);
       }
     }
-    sites[process].populate();
+    site.populate();
   }
   
   /**
@@ -436,29 +388,29 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     System.out.format("\t%d", stationaryStep);
   }
   
-  void updateRateFromList(byte process) {
-    sites[process].recomputeTotalRate(process);
-    totalRate[process] = sites[process].getTotalRate(process);
+  void updateRateFromList(ISitesCollection site, byte process) {
+    site.recomputeTotalRate(process);
+    totalRate[process] = site.getTotalRate(process);
   }
   
-  void recomputeCollection(byte process, CatalysisSite atom, double oldRate) {
+  void recomputeCollection(ISitesCollection site, byte process, AbstractCatalysisSite atom, double oldRate) {
     totalRate[process] += atom.getRate(process);
     if (atom.getRate(process) > 0) {
       if (atom.isOnList(process)) {
         if (oldRate != atom.getRate(process)) {
-          sites[process].updateRate(atom, -(oldRate - atom.getRate(process)));
+          site.updateRate(atom, -(oldRate - atom.getRate(process)));
         } else { // rate is the same as it was.
           //do nothing.
         }
       } else { // atom was not in the list
-        sites[process].addRate(atom);
+        site.addRate(atom);
       }
       atom.setOnList(process, true);
     } else { // reaction == 0
       if (atom.isOnList(process)) {
         if (oldRate > 0) {
-          sites[process].updateRate(atom, -oldRate);
-          sites[process].removeAtomRate(atom);
+          site.updateRate(atom, -oldRate);
+          site.removeAtomRate(atom);
         }
       } else { // not on list
         // do nothing

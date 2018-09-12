@@ -20,11 +20,12 @@ package kineticMonteCarlo.lattice;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.BR;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
-import static kineticMonteCarlo.site.CatalysisSite.O;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import kineticMonteCarlo.site.CatalysisCoSite;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.BR;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.CUS;
+import static kineticMonteCarlo.site.CatalysisCoSite.O;
 import utils.LinearRegression;
 
 /**
@@ -152,6 +153,11 @@ public class CatalysisCoLattice extends CatalysisLattice {
    * @param atom
    */
   @Override
-  void updateCoCus(CatalysisSite atom) {
+  void updateCoCus(AbstractCatalysisSite atom) {
+  }
+
+  @Override
+  AbstractCatalysisSite newAtom(int i, int j) {
+    return new CatalysisCoSite(createId(i, j), (short) i, (short) j);
   }
 }

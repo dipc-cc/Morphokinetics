@@ -20,7 +20,7 @@ package kineticMonteCarlo.lattice;
 
 import java.util.Iterator;
 import kineticMonteCarlo.site.CatalysisAmmoniaSite;
-import kineticMonteCarlo.site.CatalysisSite;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
 
 /**
  *
@@ -88,7 +88,7 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
    * @param atom
    */
   @Override
-  void updateCoCus(CatalysisSite atom) {
+  void updateCoCus(AbstractCatalysisSite atom) {
   }
   
   @Override
@@ -101,7 +101,7 @@ public class CatalysisAmmoniaLattice extends CatalysisLattice {
     return new CatalysisAmmoniaSite(createId(i, j), (short) i, (short) j);
   }
   
-  public void transformTo(CatalysisSite specie, byte type) {
+  public void transformTo(AbstractCatalysisSite specie, byte type) {
     coverage[specie.getType()]--;
     coverage[type]++;
     specie.setType(type);

@@ -25,7 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractSurfaceSite;
-import kineticMonteCarlo.site.CatalysisSite;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import utils.LinearRegression;
 
@@ -66,7 +66,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
         AbstractSurfaceSite atom = atoms[i][j];
-        ucArray[i][j] = new CatalysisUc(i, j, (CatalysisSite) atom);
+        ucArray[i][j] = new CatalysisUc(i, j, (AbstractCatalysisSite) atom);
 
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
@@ -141,12 +141,12 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
 
   @Override
   public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
-    CatalysisSite site = (CatalysisSite) a;
+    AbstractCatalysisSite site = (AbstractCatalysisSite) a;
     site.setOccupied(true);
 
     updateCoCus(site);
     for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = site.getNeighbour(i);
+      AbstractCatalysisSite neighbour = site.getNeighbour(i);
       site.getNeighbour(i).addOccupiedNeighbour(1);
       updateCoCus(neighbour);
     }
@@ -156,11 +156,11 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
   
   @Override
   public double extract(AbstractSurfaceSite a) {
-    CatalysisSite site = (CatalysisSite) a;
+    AbstractCatalysisSite site = (AbstractCatalysisSite) a;
     site.setOccupied(false);
     site.cleanCoCusNeighbours();
     for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
-      CatalysisSite neighbour = site.getNeighbour(i);
+      AbstractCatalysisSite neighbour = site.getNeighbour(i);
       site.getNeighbour(i).addOccupiedNeighbour(-1);
       updateCoCus(neighbour);
     }
@@ -218,17 +218,15 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
     return j * getHexaSizeI() + i;
   }
   
-  CatalysisSite[][] instantiateAtoms() {
-    return new CatalysisSite[getHexaSizeI()][getHexaSizeJ()];
+  AbstractCatalysisSite[][] instantiateAtoms() {
+    return new AbstractCatalysisSite[getHexaSizeI()][getHexaSizeJ()];
   }
   
-  CatalysisSite newAtom(int i, int j) {
-    return new CatalysisSite(createId(i, j), (short) i, (short) j);
-  }
+  abstract AbstractCatalysisSite newAtom(int i, int j);
   
-  private CatalysisSite[][] createAtoms() {
+  private AbstractCatalysisSite[][] createAtoms() {
     //Instantiate atoms
-    CatalysisSite[][] atoms = instantiateAtoms();
+    AbstractCatalysisSite[][] atoms = instantiateAtoms();
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
         atoms[i][j] = newAtom(i, j);
@@ -239,7 +237,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
-        CatalysisSite atom = atoms[iHexa][jHexa];
+        AbstractCatalysisSite atom = atoms[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
@@ -274,7 +272,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    * 
    * @param atom
    */
-  abstract void updateCoCus(CatalysisSite atom);
+  abstract void updateCoCus(AbstractCatalysisSite atom);
 
   @Override
   public AbstractSite getSite(int i, int j, int k, int unitCellPos) {

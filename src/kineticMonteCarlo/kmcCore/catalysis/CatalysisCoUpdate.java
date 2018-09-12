@@ -18,11 +18,11 @@
  */
 package kineticMonteCarlo.kmcCore.catalysis;
 
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.BR;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
-import static kineticMonteCarlo.site.CatalysisSite.O;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.BR;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.CUS;
+import static kineticMonteCarlo.site.CatalysisCoSite.O;
 
 /**
  *
@@ -36,7 +36,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return -1, 0 or +1 (delete, maintain or add the process).
    */
-  public int check(int process, CatalysisSite site) {
+  public int check(int process, AbstractCatalysisSite site) {
     switch (process) {
       case 0:
         return check0(site);
@@ -88,7 +88,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check0(CatalysisSite site) {
+  private int check0(AbstractCatalysisSite site) {
     byte process = 0;
     int returnSize = 0;
 
@@ -111,7 +111,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check1(CatalysisSite site) {
+  private int check1(AbstractCatalysisSite site) {
     byte process = 1;
     int returnSize = 0;
     
@@ -141,7 +141,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  public int check2(CatalysisSite site) {
+  public int check2(AbstractCatalysisSite site) {
     byte process = 2;
     byte type = BR;
     return checkCoDesorbtion(site, process, type);
@@ -152,13 +152,13 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  public int check3(CatalysisSite site) {
+  public int check3(AbstractCatalysisSite site) {
     byte process = 3;
     byte type = CUS;
     return checkCoDesorbtion(site, process, type);
   }
   
-  private int checkCoDesorbtion(CatalysisSite site, byte process, byte type) {
+  private int checkCoDesorbtion(AbstractCatalysisSite site, byte process, byte type) {
     int returnSize = 0;
     if (!site.isOccupied()) {
       if (site.isOnList(process)) {
@@ -181,7 +181,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check4(CatalysisSite site) {
+  private int check4(AbstractCatalysisSite site) {
     byte process = 4;
     byte type = BR;
     byte otherSite = BR;
@@ -193,7 +193,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check5(CatalysisSite site) {
+  private int check5(AbstractCatalysisSite site) {
     byte process = 5;
     byte type = BR;
     byte otherSite = CUS;
@@ -205,7 +205,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check6(CatalysisSite site) {
+  private int check6(AbstractCatalysisSite site) {
     byte process = 6;
     byte type = CUS;
     byte otherSite = BR;
@@ -217,14 +217,14 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check7(CatalysisSite site) {
+  private int check7(AbstractCatalysisSite site) {
     byte process = 7;
     byte type = CUS;
     byte otherSite = CUS;
     return checkO2Desorption(site, process, type, otherSite);
   }
   
-  private int checkO2Desorption(CatalysisSite site, byte process, byte type, byte otherSite) {
+  private int checkO2Desorption(AbstractCatalysisSite site, byte process, byte type, byte otherSite) {
     int returnSize = 0;
     if (!site.isOccupied()) {
       if (site.isOnList(process)) {
@@ -235,7 +235,7 @@ public class CatalysisCoUpdate {
       if (site.getType() == O && site.getLatticeSite() == type) {
         int counter = 0;
         for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
-          CatalysisSite neighbour = site.getNeighbour(i);
+          AbstractCatalysisSite neighbour = site.getNeighbour(i);
           if (neighbour.isOccupied()
                   && neighbour.getType() == O
                   && neighbour.getLatticeSite() == otherSite) {
@@ -260,7 +260,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check8(CatalysisSite site) {
+  private int check8(AbstractCatalysisSite site) {
     byte process = 8;
     byte type = BR;
     byte otherSite = BR;
@@ -272,7 +272,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check9(CatalysisSite site) {
+  private int check9(AbstractCatalysisSite site) {
     byte process = 9;
     byte type = BR;
     byte otherSite = CUS;
@@ -284,7 +284,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check10(CatalysisSite site) {
+  private int check10(AbstractCatalysisSite site) {
     byte process = 10;
     byte type = CUS;
     byte otherSite = BR;
@@ -296,14 +296,14 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check11(CatalysisSite site) {
+  private int check11(AbstractCatalysisSite site) {
     byte process = 11;
     byte type = CUS;
     byte otherSite = CUS;
     return checkReaction(site, process, type, otherSite);
   }
   
-  private int checkReaction(CatalysisSite site, byte process, byte type, byte otherSite) {      
+  private int checkReaction(AbstractCatalysisSite site, byte process, byte type, byte otherSite) {      
     int returnSize = 0;
     if (!site.isOccupied()) {
       if (site.isOnList(process)) {
@@ -314,7 +314,7 @@ public class CatalysisCoUpdate {
       if (site.getType() == CO && site.getLatticeSite() == type) {
         int counter = 0;
         for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
-          CatalysisSite neighbour = site.getNeighbour(i);
+          AbstractCatalysisSite neighbour = site.getNeighbour(i);
           if (neighbour.isOccupied()
                   && neighbour.getType() == O
                   && neighbour.getLatticeSite() == otherSite) {
@@ -339,7 +339,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check12(CatalysisSite site) {
+  private int check12(AbstractCatalysisSite site) {
     byte process = 12;
     byte type = CO;
     byte siteType = BR;
@@ -352,7 +352,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check13(CatalysisSite site) {
+  private int check13(AbstractCatalysisSite site) {
     byte process = 13;
     byte type = CO;
     byte siteType = BR;
@@ -365,7 +365,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check14(CatalysisSite site) {
+  private int check14(AbstractCatalysisSite site) {
     byte process = 14;
     byte type = CO;
     byte siteType = CUS;
@@ -378,7 +378,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check15(CatalysisSite site) {
+  private int check15(AbstractCatalysisSite site) {
     byte process = 15;
     byte type = CO;
     byte siteType = CUS;
@@ -391,7 +391,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check16(CatalysisSite site) {
+  private int check16(AbstractCatalysisSite site) {
     byte process = 16;
     byte type = O;
     byte siteType = BR;
@@ -404,7 +404,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check17(CatalysisSite site) {
+  private int check17(AbstractCatalysisSite site) {
     byte process = 17;
     byte type = O;
     byte siteType = BR;
@@ -417,7 +417,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check18(CatalysisSite site) {
+  private int check18(AbstractCatalysisSite site) {
     byte process = 18;
     byte type = O;
     byte siteType = CUS;
@@ -430,7 +430,7 @@ public class CatalysisCoUpdate {
    * @param site
    * @return 
    */
-  private int check19(CatalysisSite site) {
+  private int check19(AbstractCatalysisSite site) {
     byte process = 19;
     byte type = O;
     byte siteType = CUS;
@@ -438,8 +438,8 @@ public class CatalysisCoUpdate {
     return checkDiffusion(site, process, type, siteType, otherSite);
   }
    
-  private int checkDiffusion(CatalysisSite site, byte process, byte type, byte siteType, byte otherSite) {      
-   int returnSize = 0;
+  private int checkDiffusion(AbstractCatalysisSite site, byte process, byte type, byte siteType, byte otherSite) {      
+    int returnSize = 0;
     if (!site.isOccupied()) {
       if (site.isOnList(process)) {
         returnSize = -1;
@@ -449,7 +449,7 @@ public class CatalysisCoUpdate {
       if (site.getType() == type && site.getLatticeSite() == siteType) {
         int counter = 0;
         for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
-          CatalysisSite neighbour = site.getNeighbour(i);
+          AbstractCatalysisSite neighbour = site.getNeighbour(i);
           if (!neighbour.isOccupied()
                   && neighbour.getLatticeSite() == otherSite) {
             counter++;

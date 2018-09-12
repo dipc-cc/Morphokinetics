@@ -22,11 +22,11 @@ import basic.Parser;
 import java.io.PrintWriter;
 import java.util.Iterator;
 import kineticMonteCarlo.lattice.CatalysisLattice;
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.BR;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
-import static kineticMonteCarlo.site.CatalysisSite.O;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.BR;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.CUS;
+import static kineticMonteCarlo.site.CatalysisCoSite.O;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 
 /**
@@ -80,7 +80,7 @@ public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEner
       for (int i = 0; i < lattice.size(); i++) {
         CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          CatalysisSite atom = (CatalysisSite) uc.getSite(j);
+          AbstractCatalysisSite atom = (AbstractCatalysisSite) uc.getSite(j);
           int numberOfCoNeighbours = 0;
           if (atom.getLatticeSite() == CUS) {
             numberOfCoNeighbours = atom.getCoCusNeighbours();
@@ -93,7 +93,7 @@ public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEner
             }
           } else {
             for (int pos = 0; pos < numberOfNeighbours; pos++) {
-              CatalysisSite neighbour = atom.getNeighbour(pos);
+              AbstractCatalysisSite neighbour = atom.getNeighbour(pos);
               // Desorption
               if (atom.getType() == CO) {
                 histogramPossibleDesorption[CO][atom.getLatticeSite()][numberOfCoNeighbours] += elapsedTime / 4.0; // it goes throw 4 times
@@ -145,14 +145,14 @@ public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEner
    * @param stationary
    */
   @Override
-  public void updatePossibles(Iterator<CatalysisSite> surface, double elapsedTime, boolean stationary) {
+  public void updatePossibles(Iterator<AbstractCatalysisSite> surface, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
       // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
       Double[][] histogramPossibleTmp = initDouble();
       while (surface.hasNext()) {
-        CatalysisSite atom = surface.next();
+        AbstractCatalysisSite atom = surface.next();
         for (int pos = 0; pos < numberOfNeighbours; pos++) {
-          CatalysisSite neighbour = atom.getNeighbour(pos);
+          AbstractCatalysisSite neighbour = atom.getNeighbour(pos);
           if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
             continue;
           }
