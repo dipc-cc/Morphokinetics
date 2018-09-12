@@ -18,9 +18,9 @@
  */
 package kineticMonteCarlo.lattice;
 
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.CO;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import static kineticMonteCarlo.site.CatalysisCoSite.CO;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.CUS;
 
 /**
  *
@@ -38,11 +38,11 @@ public class CatalysisCoFarkasLattice extends CatalysisCoLattice {
    * @param atom
    */
   @Override
-  void updateCoCus(CatalysisSite atom) {
+  void updateCoCus(AbstractCatalysisSite atom) {
     if (atom.isOccupied() && atom.getLatticeSite() == CUS && atom.getType() == CO) {
       atom.cleanCoCusNeighbours();
       for (int i = 0; i < atom.getNumberOfNeighbours(); i += 2) { // Only up and down neighbours
-        CatalysisSite neighbour = atom.getNeighbour(i);
+        AbstractCatalysisSite neighbour = atom.getNeighbour(i);
         if (neighbour.isOccupied() && neighbour.getType() == CO) {
           atom.addCoCusNeighbours(1);
         }

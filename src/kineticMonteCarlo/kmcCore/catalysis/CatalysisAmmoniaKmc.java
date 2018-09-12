@@ -21,6 +21,7 @@ package kineticMonteCarlo.kmcCore.catalysis;
 import basic.Parser;
 import basic.io.CatalysisAmmoniaRestart;
 import java.util.Arrays;
+import java.util.Iterator;
 import kineticMonteCarlo.activationEnergy.CatalysisAmmoniaActivationEnergy;
 import kineticMonteCarlo.lattice.CatalysisAmmoniaLattice;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
@@ -35,12 +36,13 @@ import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH3;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NO;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.O;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.OH;
-import kineticMonteCarlo.site.CatalysisSite;
-import static kineticMonteCarlo.site.CatalysisSite.CUS;
+import kineticMonteCarlo.site.AbstractCatalysisSite;
+import static kineticMonteCarlo.site.AbstractCatalysisSite.CUS;
 import kineticMonteCarlo.unitCell.CatalysisUc;
 import ratesLibrary.CatalysisHongRates;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
+import utils.list.sites.ISitesCollection;
 
 /**
  * Catalysis simulation of ammonia oxidation based on S. Hong et atl. Journal of Catalysis 276
@@ -81,12 +83,14 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   private final long[] productionCounter; // [NO], [N2], [H2O]
   
   private CatalysisHongRates rates;
+  private final ISitesCollection[] sites;
 
   public CatalysisAmmoniaKmc(Parser parser, String restartFolder) {
     super(parser, restartFolder);
     desorptionRatePerSite = new double[11];
     diffusionRates = new double[11];
     boolean useTree = parser.useCatalysisTree(REACTION);
+    sites = new ISitesCollection[4];
     sites[P5] = col.getCollection(useTree, P5);
     sites[P6] = col.getCollection(useTree, P6);
     sites[P7] = col.getCollection(useTree, P7);
@@ -104,9 +108,56 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     productionCounter = new long[3];
   }
   
+  /**
+   * Performs a simulation step.
+   *
+   * @return true if a stop condition happened (all atom etched, all surface covered).
+   */
+  @Override
+  protected boolean performSimulationStep() {
+    if (getList().getGlobalProbability() == 0) {
+      return true; // there is nothing more we can do
+    }
+    byte reaction = getList().nextReaction();
+    steps[reaction]++;
+    switch (reaction) {
+      case ADSORPTION:
+        depositNewAtom();
+        break;
+      case DESORPTION:
+        desorbAtom(); 
+        break;
+      case REACTION:
+        reactAtom();
+        break;
+      case DIFFUSION:
+        diffuseAtom();
+        break;
+      default:
+        System.out.println("Error");
+    }
+    checkSizes(sites);
+    return false;
+  }
+  
   @Override
   int getNumberOfReactions() {
     return P18 + 1;
+  }
+  
+  @Override
+  int[] getSiteSizes() {
+    int[] sizes = new int[4];
+    sizes[ADSORPTION] = sites[ADSORPTION].size();
+    sizes[DESORPTION] = sites[DESORPTION].size();
+    sizes[REACTION] = sites[REACTION].size();
+    sizes[DIFFUSION] = sites[DIFFUSION].size();
+    return sizes;
+  }
+
+  @Override
+  Iterator<AbstractCatalysisSite> getReactionIterator() {
+    return sites[REACTION].iterator();
   }
   
   @Override
@@ -157,10 +208,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   
   @Override
   void depositNewAtom() {
-    CatalysisSite destinationAtom;
+    AbstractCatalysisSite destinationAtom;
     byte atomType;
       
-    CatalysisSite neighbourAtom = null;
+    AbstractCatalysisSite neighbourAtom = null;
     int random;
     
     if (sites[ADSORPTION].isEmpty()) {
@@ -168,7 +219,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       return;
     }
 
-    destinationAtom = (CatalysisSite) sites[ADSORPTION].randomElement();
+    destinationAtom = (AbstractCatalysisSite) sites[ADSORPTION].randomElement();
 
     if (destinationAtom == null || destinationAtom.getRate(ADSORPTION) == 0 || destinationAtom.isOccupied()) {
       boolean isThereAnAtom = destinationAtom == null;
@@ -201,7 +252,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       updateRates(neighbourAtom);
     }
   }
-  private boolean depositAtom(CatalysisSite atom) {
+  private boolean depositAtom(AbstractCatalysisSite atom) {
     if (atom.isOccupied()) {
       return false;
     }
@@ -212,8 +263,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
 
   @Override
   void desorbAtom() { 
-    CatalysisSite atom = (CatalysisSite) sites[DESORPTION].randomElement();
-    CatalysisSite neighbour = null;
+    AbstractCatalysisSite atom = (AbstractCatalysisSite) sites[DESORPTION].randomElement();
+    AbstractCatalysisSite neighbour = null;
     if (atom.getType() == O || atom.getType() == N) { // it has to desorp with another O to create O2
       neighbour = atom.getRandomNeighbour(DESORPTION);
       getLattice().extract(neighbour);
@@ -248,9 +299,9 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
       }
     }
     
-    CatalysisSite atom = (CatalysisSite) sites[i].randomElement();
+    AbstractCatalysisSite atom = (AbstractCatalysisSite) sites[i].randomElement();
     // it has to react with another atom
-    CatalysisSite neighbour = atom.getRandomNeighbour(i);
+    AbstractCatalysisSite neighbour = atom.getRandomNeighbour(i);
     switch (i) {
       case P5:
         reactP5(atom, neighbour);
@@ -289,7 +340,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH3 + O -> NH2 + OH.
    */
-  private void reactP5(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP5(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH3) {
       getLattice().transformTo(atom, NH2);
       getLattice().transformTo(neighbour, OH);
@@ -302,7 +353,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH2 + OH -> NH + H2O (g)
    */
-  private void reactP6(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP6(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH2) {
       getLattice().transformTo(atom, NH);
       getLattice().extract(neighbour); // H2O
@@ -318,7 +369,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH + OH -> N + H2O (g).
    */
-  private void reactP7(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP7(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH) {
       getLattice().transformTo(atom, N);
       getLattice().extract(neighbour); // H2O
@@ -334,7 +385,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH + O -> N + OH.
    */
-  private void reactP8(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP8(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH) {
       getLattice().transformTo(atom, N);
       getLattice().transformTo(neighbour, OH);
@@ -346,7 +397,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * N + O -> NO.
    */
-  private void reactP9(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP9(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == N) {
       getLattice().transformTo(atom, NO);
       getLattice().extract(neighbour);
@@ -358,7 +409,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH2 + O -> NH + OH.
    */
-  private void reactP15(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP15(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH2) {
       getLattice().transformTo(atom, NH);
       getLattice().transformTo(neighbour, OH);
@@ -370,7 +421,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH + OH -> NH2 + O.
    */
-  private void reactP16(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP16(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH) {
       getLattice().transformTo(atom, NH2);
       getLattice().transformTo(neighbour, O);
@@ -382,7 +433,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * NH2 + OH -> NH3 + O.
    */
-  private void reactP17(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP17(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == NH2) {
       getLattice().transformTo(atom, NH3);
       getLattice().transformTo(neighbour, O);
@@ -394,7 +445,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   /**
    * N + OH -> NH + O.
    */
-  private void reactP18(CatalysisSite atom, CatalysisSite neighbour) {
+  private void reactP18(AbstractCatalysisSite atom, AbstractCatalysisSite neighbour) {
     if (atom.getType() == N) {
       getLattice().transformTo(atom, NH);
       getLattice().transformTo(neighbour, O);
@@ -406,8 +457,8 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     
   @Override
   void diffuseAtom() {
-    CatalysisSite originAtom = (CatalysisSite) sites[DIFFUSION].randomElement();
-    CatalysisSite destinationAtom = originAtom.getRandomNeighbour(DIFFUSION);
+    AbstractCatalysisSite originAtom = (AbstractCatalysisSite) sites[DIFFUSION].randomElement();
+    AbstractCatalysisSite destinationAtom = originAtom.getRandomNeighbour(DIFFUSION);
     destinationAtom.setType(originAtom.getType());
     getLattice().extract(originAtom);    
     getLattice().deposit(destinationAtom, false);
@@ -460,7 +511,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
-        CatalysisSite s = uc.getSite(j);
+        AbstractCatalysisSite s = uc.getSite(j);
         if (s.getLatticeSite() == CUS) {
           s.setRate(ADSORPTION, adsorptionRateNH3PerSite + adsorptionRateOPerSite); // there is no neighbour
           s.setOnList(ADSORPTION, true);
@@ -490,7 +541,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
    *
    * @param atom
    */
-  private void updateRates(CatalysisSite site) {
+  private void updateRates(AbstractCatalysisSite site) {
     // save previous rates
     double[] previousRate = totalRate.clone();
     
@@ -512,7 +563,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     // recalculate total rate, if needed
     for (byte i = 0; i <= P18; i++) {
       if (totalRate[i] / previousRate[i] < 1e-1) {
-        updateRateFromList(i);
+        updateRateFromList(sites[i], i);
       }
     }
     // tell to the list new rates. But only adsorption, desorption, (all) reaction (together) and diffusion.
@@ -530,10 +581,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
         site.setRate(ADSORPTION, adsorptionRateNH3PerSite + canAdsorbO2 * adsorptionRateOPerSite);
       }
     }
-    recomputeCollection(ADSORPTION, site, oldAdsorptionRate);
+    recomputeCollection(sites[ADSORPTION], ADSORPTION, site, oldAdsorptionRate);
   }
   
-  private void recomputeDesorptionRate(CatalysisSite atom) {
+  private void recomputeDesorptionRate(AbstractCatalysisSite atom) {
     totalRate[DESORPTION] -= atom.getRate(DESORPTION);
     if (!atom.isOccupied()) {
       if (atom.isOnList(DESORPTION)) {
@@ -552,14 +603,14 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     } else { // O or N
       if (type == O || type == N) {
         for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
-          CatalysisSite neighbour = atom.getNeighbour(i);
+          AbstractCatalysisSite neighbour = atom.getNeighbour(i);
           if (neighbour.isOccupied() && neighbour.getType() == type) {
             atom.addRate(DESORPTION, rate, i);
           }
         }
       }
     }
-    recomputeCollection(DESORPTION, atom, oldDesorptionRate);
+    recomputeCollection(sites[DESORPTION], DESORPTION, atom, oldDesorptionRate);
   }
   
   private void recomputeReactionRate(CatalysisAmmoniaSite atom) {
@@ -603,10 +654,10 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     recomputeReactionP(atom, P17, NH2_OH_reaction_NH3_O, NH2, OH);
     recomputeReactionP(atom, P18, N_OH_reaction_NH_O, N, OH);//*/
     
-    recomputeCollection(REACTION, atom, oldReactionRate);
+    recomputeCollection(sites[REACTION], REACTION, atom, oldReactionRate);
     double batura = 0.0;
     for (byte i = P5; i <= P18; i++) {
-      recomputeCollection(i, atom, oldReactionRates[i]);
+      recomputeCollection(sites[i], i, atom, oldReactionRates[i]);
       batura += totalRate[i];
       if (totalRate[i] < -1e-3) {
         System.out.println(i+" "+totalRate[REACTION] + totalRate[i] + " Error "+oldReactionRates[i] + " "+sites[i].getTotalRate(i));
@@ -639,7 +690,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
   }
   
-  private void recomputeDiffusionRate(CatalysisSite atom) {
+  private void recomputeDiffusionRate(AbstractCatalysisSite atom) {
     totalRate[DIFFUSION] -= atom.getRate(DIFFUSION);
     double oldDiffusionRate = atom.getRate(DIFFUSION);
     if (!atom.isOccupied()) {
@@ -651,13 +702,13 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     }
     atom.setRate(DIFFUSION, 0);
     for (int i = 0; i < atom.getNumberOfNeighbours(); i+=2) {
-      CatalysisSite neighbour = atom.getNeighbour(i);
+      AbstractCatalysisSite neighbour = atom.getNeighbour(i);
       if (!neighbour.isOccupied() && neighbour.getLatticeSite() == CUS) {
         double rate = diffusionRates[atom.getType()];
         atom.addRate(DIFFUSION, rate, i);
       }
     }
-    recomputeCollection(DIFFUSION, atom, oldDiffusionRate);
+    recomputeCollection(sites[DIFFUSION], DIFFUSION, atom, oldDiffusionRate);
   }
 
   @Override

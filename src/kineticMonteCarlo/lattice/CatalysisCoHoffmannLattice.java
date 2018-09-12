@@ -18,8 +18,8 @@
  */
 package kineticMonteCarlo.lattice;
 
+import kineticMonteCarlo.site.AbstractCatalysisSite;
 import kineticMonteCarlo.site.CatalysisCoHoffmannSite;
-import kineticMonteCarlo.site.CatalysisSite;
 
 /**
  * Algorithm from "kmos: A lattice kinetic Monte Carlo framework". M.J.
@@ -67,13 +67,13 @@ public class CatalysisCoHoffmannLattice extends CatalysisCoLattice {
     inverseAvailableSitesI[proc][idI] = posA;
   }
   
-  public CatalysisSite getAvailableSite(int proc, int random) {
+  public AbstractCatalysisSite getAvailableSite(int proc, int random) {
     int id = availableSitesA[proc][random];
     return getUc(id).getSite(0);
   }
   
   @Override
-  CatalysisCoHoffmannSite newAtom(int i, int j) {
+  AbstractCatalysisSite newAtom(int i, int j) {
     return new CatalysisCoHoffmannSite(createId(i, j), (short) i, (short) j);
   }
   
