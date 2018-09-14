@@ -75,12 +75,11 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   boolean stationary;
   private long stationaryStep;
   /** Stores all collections of atoms; either in a tree or an array. */
-  SitesCollection col;
+  private SitesCollection col;
   private final boolean automaticCollections;
   
   public CatalysisKmc(Parser parser, String restartFolder) {
     super(parser);
-    init(parser);
     totalRate = new double[13]; // adsorption, desorption, reaction, diffusion
 
     simulatedSteps = 0;
@@ -110,11 +109,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     automaticCollections = parser.areCollectionsAutomatic();
   }
   
-  void init(Parser parser) {
-    CatalysisLattice catalysisLattice = new CatalysisCoLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
-    catalysisLattice.init();
-    setLattice(catalysisLattice);
-  }
+  abstract public void init(Parser parser);
   
   @Override
   public CatalysisLattice getLattice() {
@@ -127,6 +122,10 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   
   AbstractCatalysisActivationEnergy getActivationEnergy() {
     return activationEnergy;
+  }
+
+  public void setCollection(SitesCollection col) {
+    this.col = col;
   }
   
   public abstract void setRates(CatalysisRates rates);

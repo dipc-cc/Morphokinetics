@@ -39,6 +39,7 @@ public class CatalysisAmmoniaSimulation extends CatalysisSimulation {
     setRates(new CatalysisHongRates(getParser().getTemperature()));
     setKmc(new CatalysisAmmoniaKmc(getParser(), getRestartFolderName()));
     initialiseRates(getRates(), getParser());
+    getKmc().init(getParser());
   }
   
   @Override

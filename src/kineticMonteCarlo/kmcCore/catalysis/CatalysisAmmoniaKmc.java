@@ -43,6 +43,7 @@ import ratesLibrary.CatalysisHongRates;
 import ratesLibrary.CatalysisRates;
 import utils.StaticRandom;
 import utils.list.sites.ISitesCollection;
+import utils.list.sites.SitesCollection;
 
 /**
  * Catalysis simulation of ammonia oxidation based on S. Hong et atl. Journal of Catalysis 276
@@ -89,17 +90,7 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
     super(parser, restartFolder);
     desorptionRatePerSite = new double[11];
     diffusionRates = new double[11];
-    boolean useTree = parser.useCatalysisTree(REACTION);
-    sites = new ISitesCollection[4];
-    sites[P5] = col.getCollection(useTree, P5);
-    sites[P6] = col.getCollection(useTree, P6);
-    sites[P7] = col.getCollection(useTree, P7);
-    sites[P8] = col.getCollection(useTree, P8);
-    sites[P9] = col.getCollection(useTree, P9);
-    sites[P15] = col.getCollection(useTree, P15);
-    sites[P16] = col.getCollection(useTree, P16);
-    sites[P17] = col.getCollection(useTree, P17);
-    sites[P18] = col.getCollection(useTree, P18);
+    sites = new ISitesCollection[P18+1];
     boolean outputData = parser.outputData();
     CatalysisAmmoniaRestart restart = new CatalysisAmmoniaRestart(outputData, restartFolder);
     setRestart(restart);
@@ -166,10 +157,30 @@ public class CatalysisAmmoniaKmc extends CatalysisKmc {
   }
 
   @Override
-  void init(Parser parser) {
-    CatalysisAmmoniaLattice catalysisLattice = new CatalysisAmmoniaLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
-    catalysisLattice.init();
-    setLattice(catalysisLattice);
+  public void init(Parser parser) {
+    CatalysisAmmoniaLattice lattice = new CatalysisAmmoniaLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
+    lattice.init();
+    setLattice(lattice);
+    SitesCollection col = new SitesCollection(lattice, "catalysis");
+    // Either a tree or array 
+    sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
+    sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
+    sites[REACTION] = col.getCollection(parser.useCatalysisTree(REACTION), REACTION);
+    sites[DIFFUSION] = col.getCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
+    
+    boolean useTree = parser.useCatalysisTree(REACTION);
+    //sites = new ISitesCollection[4];
+    sites[P5] = col.getCollection(useTree, P5);
+    sites[P6] = col.getCollection(useTree, P6);
+    sites[P7] = col.getCollection(useTree, P7);
+    sites[P8] = col.getCollection(useTree, P8);
+    sites[P9] = col.getCollection(useTree, P9);
+    sites[P15] = col.getCollection(useTree, P15);
+    sites[P16] = col.getCollection(useTree, P16);
+    sites[P17] = col.getCollection(useTree, P17);
+    sites[P18] = col.getCollection(useTree, P18);
+
+    setCollection(col);
   }
   
   @Override

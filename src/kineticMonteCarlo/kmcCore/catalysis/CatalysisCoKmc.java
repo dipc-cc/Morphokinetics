@@ -23,6 +23,7 @@ import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
 import java.util.Iterator;
 import kineticMonteCarlo.activationEnergy.CatalysisCoActivationEnergy;
+import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import static kineticMonteCarlo.process.CatalysisProcess.ADSORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DESORPTION;
 import static kineticMonteCarlo.process.CatalysisProcess.DIFFUSION;
@@ -93,17 +94,25 @@ public class CatalysisCoKmc extends CatalysisKmc {
     setActivationEnergy(new CatalysisCoActivationEnergy(parser));
     
     sites = new ISitesCollection[4];
-    col = new SitesCollection(getLattice(), "catalysis");
-    // Either a tree or array 
-    sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
-    sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
-    sites[REACTION] = col.getCollection(parser.useCatalysisTree(REACTION), REACTION);
-    sites[DIFFUSION] = col.getCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
   }
   
   @Override
   int getNumberOfReactions() {
     return 4;
+  }
+  
+  @Override
+  public void init(Parser parser) {
+    CatalysisCoLattice lattice = new CatalysisCoLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
+    lattice.init();
+    setLattice(lattice);
+    SitesCollection col = new SitesCollection(lattice, "catalysis");
+    // Either a tree or array 
+    sites[ADSORPTION] = col.getCollection(parser.useCatalysisTree(ADSORPTION), ADSORPTION);
+    sites[DESORPTION] = col.getCollection(parser.useCatalysisTree(DESORPTION), DESORPTION);
+    sites[REACTION] = col.getCollection(parser.useCatalysisTree(REACTION), REACTION);
+    sites[DIFFUSION] = col.getCollection(parser.useCatalysisTree(DIFFUSION), DIFFUSION);
+    setCollection(col);
   }
   
   @Override
@@ -142,7 +151,7 @@ public class CatalysisCoKmc extends CatalysisKmc {
       }
       getActivationEnergy().setRates(processProbs2D);
     }
-    numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
+    //numGaps = getLattice().getHexaSizeI() * getLattice().getHexaSizeJ();
   }
   
 

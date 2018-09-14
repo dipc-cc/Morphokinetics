@@ -42,7 +42,7 @@ public class CatalysisFarkasKmc extends CatalysisCoKmc {
   }
   
   @Override
-  void init(Parser parser) {
+  public void init(Parser parser) {
     CatalysisLattice catalysisLattice = new CatalysisCoFarkasLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
     catalysisLattice.init();
     setLattice(catalysisLattice);

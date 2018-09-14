@@ -82,6 +82,7 @@ public class CatalysisCoSimulation extends CatalysisSimulation {
       }
     }
     initialiseRates(getRates(), getParser());
+    getKmc().init(getParser());
   }
   
   @Override

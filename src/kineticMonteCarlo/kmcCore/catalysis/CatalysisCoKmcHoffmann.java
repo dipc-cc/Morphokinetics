@@ -106,7 +106,7 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
   }
   
   @Override
-  void init(Parser parser) {
+  public void init(Parser parser) {
     lattice = new CatalysisCoHoffmannLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), parser.getRatesLibrary());
     lattice.init();
     setLattice(lattice);
