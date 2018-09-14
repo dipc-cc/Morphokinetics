@@ -32,14 +32,10 @@ public class CatalysisCoHoffmannSite extends AbstractCatalysisSite {
   public CatalysisCoHoffmannSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa);
     
-    //processes = new CatalysisProcess[20];
     activeProcesses = new boolean[N_REACT];
     for (int i = 0; i < activeProcesses.length; i++) {
-      //processes[i] = new CatalysisProcess();
       activeProcesses[i] = false;
     }
-    
-    //setProcceses(null);
   }
 
   /**
@@ -56,11 +52,10 @@ public class CatalysisCoHoffmannSite extends AbstractCatalysisSite {
   @Override
   public void setOnList(byte process, boolean onList) {
     activeProcesses[process] = onList;
-    //processes[process].setActive(onList);
   }
   
   @Override
   public boolean isOnList(byte process) {
-    return activeProcesses[process];//processes[process].isActive();
+    return activeProcesses[process];
   }
 }
