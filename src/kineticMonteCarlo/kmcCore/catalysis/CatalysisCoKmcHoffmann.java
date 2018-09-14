@@ -238,18 +238,16 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
    */
   @Override
   void initAdsorptionRates() {
-    //private int[] numberOfSites; // Nr. of sites N^avail_a
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = (CatalysisUc) getLattice().getUc(i);
       for (int j = 0; j < uc.size(); j++) { // it will be always 0
         CatalysisCoHoffmannSite a = (CatalysisCoHoffmannSite) uc.getSite(j);
-        //a.setRate(ADSORPTION, adsorptionRateCOPerSite + adsorptionRateOPerSite); // there is no neighbour
         a.setOnList((byte) 0, true);
         a.setOnList((byte) 1, true);
-        //totalRate[ADSORPTION] += a.getRate(ADSORPTION);
-        //((CatalysisCoLattice) getLattice()).insert(100-i-1, 0);//
+        for (byte k = 2; k < N_REACT; k++) {
+          a.setOnList(k, false);
+        }
         lattice.insert(a.getId(), 0);
-        //((CatalysisCoLattice) getLattice()).insert(100-i-1, 1);//
         lattice.insert(a.getId(), 1);
         numberOfSites[0]++;
         numberOfSites[1]++;
@@ -259,8 +257,6 @@ public class CatalysisCoKmcHoffmann extends CatalysisKmc {
     accumRates[1] = numberOfSites[1] * rateConstant[1];
     totalRateKTot = accumRates[0];
     totalRateKTot += accumRates[1];
-    
-    //getList().setRates(totalRate);
   }
   
   private void adsorbCo() {
