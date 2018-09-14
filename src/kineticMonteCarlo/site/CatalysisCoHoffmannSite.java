@@ -26,7 +26,6 @@ import static kineticMonteCarlo.lattice.CatalysisCoHoffmannLattice.N_REACT;
  */
 public class CatalysisCoHoffmannSite extends AbstractCatalysisSite {
   
-  //private final CatalysisProcess[] processes;
   private final boolean[] activeProcesses;
   
   public CatalysisCoHoffmannSite(int id, short iHexa, short jHexa) {
