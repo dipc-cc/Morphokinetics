@@ -1,0 +1,24 @@
+{
+  "automaticCollections": true,
+  "calculationMode": "ammonia",
+  "cartSizeX": 30,
+  "cartSizeY": 40,
+  "catalysisStart": "empty",
+  "coverage": 200,
+  "numberOfCo2": 1,
+  "numberOfSimulations": 1,
+  "numberOfSteps": 5e4,
+  "outputData": true,
+  "outputDataFormat": [
+    {
+      "type": "mko"
+    },
+  ],
+  "outputEvery": 100000.0,
+  "pressureCO": 9.869233e-11,
+  "pressureO2": 1.48038495e-09,
+  "printAllIterations": false,
+  "randomSeed": false,
+  "temperature": 455,
+  "withGui": true
+}
