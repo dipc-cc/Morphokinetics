@@ -18,8 +18,11 @@
  */
 package kineticMonteCarlo.site;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import kineticMonteCarlo.process.BdaProcess;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
@@ -41,6 +44,9 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
 
   /** Whether an atom can deposit on top (at any position) of this Ag site. */
   private final boolean[] available;
+  /** It saves the sites in the neighbourhood for a given size. */
+  private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
+  private final Map<Integer,List<ISite>> spiralSites;
   
   public BdaAgSurfaceSite(int id, short iHexa, short jHexa) {
     super(id, iHexa, jHexa, 4, 5);
@@ -53,6 +59,12 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     setProcceses(processes);
     bdaUcSet = new HashSet<>();
     available = new boolean[processSize];
+    spiralSitesPos = new int[6];
+    spiralSitesPos[0] = 1;
+    for (int i = 1; i < spiralSitesPos.length; i++) {
+      spiralSitesPos[i] = (int) 8 * i + spiralSitesPos[i - 1];
+    }
+    spiralSites = new HashMap<>();
   }
 
   /**
@@ -155,6 +167,18 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
   }
 
   @Override
+  public List<ISite> getSpiralSites(int size) {
+    return spiralSites.get(size);
+  }
+  
+  @Override
+  public void setSpiralSites(List<ISite> sites, int size) {
+    for (int i = 1; i < 6 ; i++) {
+      spiralSites.put(i, copySublist(sites, 0, spiralSitesPos[i]));
+    }
+  }
+  
+  @Override
   public boolean isEligible() {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
@@ -172,4 +196,11 @@ public class BdaAgSurfaceSite extends AbstractGrowthSite {
     }
   }
   
+  private List<ISite> copySublist(List inputList, int init, int end) {
+    List resultList = new ArrayList<>();
+    for (int i = init; i < end; i++) {
+      resultList.add(inputList.get(i));
+    }
+    return resultList;
+  }  
 }

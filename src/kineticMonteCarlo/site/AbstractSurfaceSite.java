@@ -18,10 +18,6 @@
  */
 package kineticMonteCarlo.site;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import kineticMonteCarlo.process.AbstractProcess;
 import kineticMonteCarlo.process.IElement;
 import utils.StaticRandom;
@@ -54,9 +50,6 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
   private AbstractProcess[] processes;
   private int processSize;
   
-  /** It saves the sites in the neighbourhood for a given size. */
-  private final int[] spiralSitesPos; // 1, 9, 25, 49, 81, 121
-  private final Map<Integer,List<ISite>> spiralSites;
   private int chosenNeighbourPosition;
   
   public AbstractSurfaceSite(int id, short iHexa, short jHexa, int numberOfNeighbours, int numberOfProcesses) {
@@ -67,12 +60,6 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
     visited = false;
     processSize = 0;
     
-    spiralSitesPos = new int[6];
-    spiralSitesPos[0] = 1;
-    for (int i = 1; i < spiralSitesPos.length; i++) {
-      spiralSitesPos[i] = (int) 8 * i + spiralSitesPos[i - 1];
-    }
-    spiralSites = new HashMap<>();
     chosenNeighbourPosition = -1;
   }
   
@@ -302,26 +289,6 @@ public abstract class AbstractSurfaceSite extends AbstractSite implements Compar
    */
   public int getRandomNeighbourDirection() {
     return chosenNeighbourPosition;
-  }
-  
-  private List<ISite> copySublist(List inputList, int init, int end) {
-    List resultList = new ArrayList<>();
-    for (int i = init; i < end; i++) {
-      resultList.add(inputList.get(i));
-    }
-    return resultList;
-  }
-  
-  @Override
-  public List<ISite> getSpiralSites(int size) {
-    return spiralSites.get(size);
-  }
-  
-  @Override
-  public void setSpiralSites(List<ISite> sites, int size) {
-    for (int i = 1; i < 6 ; i++) {
-      spiralSites.put(i, copySublist(sites, 0, spiralSitesPos[i]));
-    }
   }
   
   /**
