@@ -42,7 +42,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public BasicGrowthSite getCentralAtom() {
+  public BasicGrowthSite getCentralSite() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
     return (BasicGrowthSite) getSite(iCentre, jCentre, 0);
@@ -119,7 +119,7 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   }
   
   public void init() {
-    setAtoms(createAtoms());
+    setSites(generateSites());
     setAngles();
   }    
 
@@ -204,20 +204,20 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     return j * getHexaSizeI() + i;
   }
   
-  private BasicGrowthSite[][] createAtoms() {
-    BasicGrowthSite[][] atoms;
+  private BasicGrowthSite[][] generateSites() {
+    BasicGrowthSite[][] sites;
     //Instantiate atoms
     if (simple) {
-      atoms = new BasicGrowthSimpleSite[getHexaSizeI()][getHexaSizeJ()];
+      sites = new BasicGrowthSimpleSite[getHexaSizeI()][getHexaSizeJ()];
     } else {
-      atoms = new BasicGrowthSite[getHexaSizeI()][getHexaSizeJ()];
+      sites = new BasicGrowthSite[getHexaSizeI()][getHexaSizeJ()];
     }
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
         if (simple) {
-          atoms[i][j] = new BasicGrowthSimpleSite(createId(i, j), (short) i, (short) j);
+          sites[i][j] = new BasicGrowthSimpleSite(createId(i, j), (short) i, (short) j);
         } else {
-          atoms[i][j] = new BasicGrowthSite(createId(i, j), (short) i, (short) j);
+          sites[i][j] = new BasicGrowthSite(createId(i, j), (short) i, (short) j);
         }
       }
     }
@@ -226,34 +226,34 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
         // get current atom
-        BasicGrowthSite atom = (BasicGrowthSite) atoms[iHexa][jHexa];
+        BasicGrowthSite site = (BasicGrowthSite) sites[iHexa][jHexa];
         
         // north neighbour
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
-        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 0);
+        site.setNeighbour((BasicGrowthSite) sites[i][j], 0);
 
         // east neighbour
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
-        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 1);
+        site.setNeighbour((BasicGrowthSite) sites[i][j], 1);
 
         // south neighbour
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
-        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 2);
+        site.setNeighbour((BasicGrowthSite) sites[i][j], 2);
         
         // west neighbour
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((BasicGrowthSite) atoms[i][j], 3);
+        site.setNeighbour((BasicGrowthSite) sites[i][j], 3);
       }
     }
-    return atoms;
+    return sites;
   }
   
   /**
@@ -398,31 +398,31 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
    * A new occupied atom was added before calling this method, here, updating the first and the
    * second neighbourhood.
    *
-   * @param neighbourAtom current atom.
+   * @paramneighbourSiteneighbourAtom current site.
    * @param neighbourPosition the position of the neighbour.
    * @param forceNucleation
    */
-  private void addNeighbour(BasicGrowthSite neighbourAtom, int neighbourPosition, boolean forceNucleation) {
+  private void addNeighbour(BasicGrowthSite neighbourSite, int neighbourPosition, boolean forceNucleation) {
     byte newType;
 
-    newType = neighbourAtom.getNewType(1); 
-    neighbourAtom.addOccupiedNeighbour(1);
+    newType = neighbourSite.getNewType(1); 
+    neighbourSite.addOccupiedNeighbour(1);
     
-    if (forceNucleation && neighbourAtom.isOccupied()) {
+    if (forceNucleation && neighbourSite.isOccupied()) {
       newType = ISLAND;
     }
 
-    if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
-      neighbourAtom.setType(newType);
-      addAtom(neighbourAtom);
-      if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
-        addBondAtom(neighbourAtom);
+    if (neighbourSite.getType() != newType) { // the type of neighbour has changed
+      neighbourSite.setType(newType);
+      addAtom(neighbourSite);
+      if (neighbourSite.getOccupiedNeighbours() > 0 && !neighbourSite.isOccupied()) {
+        addBondAtom(neighbourSite);
       }
       // update second neighbours 
-      for (int pos = 0; pos < neighbourAtom.getNumberOfNeighbours(); pos++) {
+      for (int pos = 0; pos < neighbourSite.getNumberOfNeighbours(); pos++) {
         // skip if the neighbour is the original atom or it is an island.
-        if (neighbourPosition != pos && !neighbourAtom.getNeighbour(pos).isPartOfImmobilSubstrate()) {
-          updateSecondNeighbour(neighbourAtom.getNeighbour(pos));
+        if (neighbourPosition != pos && !neighbourSite.getNeighbour(pos).isPartOfImmobilSubstrate()) {
+          updateSecondNeighbour(neighbourSite.getNeighbour(pos));
         }
       }
     }
@@ -437,24 +437,24 @@ public class BasicGrowthLattice extends AbstractGrowthLattice {
   /**
    * Computes the removal of one atom.
    * 
-   * @param neighbourAtom neighbour atom of the original atom.
+   * @param neighbourSite neighbour atom of the original atom.
    */
-  private void removeNeighbour(BasicGrowthSite neighbourAtom, int neighbourPosition) {
-    byte newType = neighbourAtom.getNewType(-1); // one less atom
-    neighbourAtom.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
+  private void removeNeighbour(BasicGrowthSite neighbourSite, int neighbourPosition) {
+    byte newType = neighbourSite.getNewType(-1); // one less atom
+    neighbourSite.addOccupiedNeighbour(-1); // remove one atom (original atom has been extracted)
 
-    if (neighbourAtom.getType() != newType) {
-      neighbourAtom.setType(newType);
-      addAtom(neighbourAtom);
-      if (neighbourAtom.getOccupiedNeighbours() > 0 && !neighbourAtom.isOccupied()) {
-        addBondAtom(neighbourAtom);
+    if (neighbourSite.getType() != newType) {
+      neighbourSite.setType(newType);
+      addAtom(neighbourSite);
+      if (neighbourSite.getOccupiedNeighbours() > 0 && !neighbourSite.isOccupied()) {
+        addBondAtom(neighbourSite);
       }
       
       // update second neighbours 
-      for (int pos = 0; pos < neighbourAtom.getNumberOfNeighbours(); pos++) {
+      for (int pos = 0; pos < neighbourSite.getNumberOfNeighbours(); pos++) {
         // skip if the neighbour is the original atom or is an island.
-        if (neighbourPosition != pos && !neighbourAtom.getNeighbour(pos).isPartOfImmobilSubstrate()) {
-          updateSecondNeighbour(neighbourAtom.getNeighbour(pos));
+        if (neighbourPosition != pos && !neighbourSite.getNeighbour(pos).isPartOfImmobilSubstrate()) {
+          updateSecondNeighbour(neighbourSite.getNeighbour(pos));
         }
       }
     }

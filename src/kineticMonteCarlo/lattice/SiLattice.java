@@ -29,7 +29,7 @@ import kineticMonteCarlo.unitCell.Simple3dUc;
 public class SiLattice extends AbstractLattice {
 
   private SiUnitCell unitCell;
-  private SiSite[] atoms;
+  private SiSite[] sites;
   private Simple3dUc[] ucList;
 
   public SiLattice(int millerX, int millerY, int millerZ, int sizeX, int sizeY, int sizeZ) {
@@ -70,17 +70,17 @@ public class SiLattice extends AbstractLattice {
       setHexaSizeJ((int) Math.round((int) sizeY * tamX / tamY));
     }
 
-    atoms = new SiSite[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
+    sites = new SiSite[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
     ucList = new Simple3dUc[getHexaSizeI() * getHexaSizeJ() * getHexaSizeK() * getUnitCellSize()];
 
-    createAtoms(coords, unitCell);
-    interconnectAtoms(ucNeighbours, block);
+    createSites(coords, unitCell);
+    interconnectSites(ucNeighbours, block);
   }
 
   @Override
   public void setProbabilities(double[] probabilities) {
-    for (int i = 0; i < atoms.length; i++) {
-      atoms[i].setProbabilities(probabilities);
+    for (int i = 0; i < sites.length; i++) {
+      sites[i].setProbabilities(probabilities);
     }
   }
 
@@ -90,7 +90,7 @@ public class SiLattice extends AbstractLattice {
 
   @Override
   public SiSite getSite(int unitCellX, int unitCellY, int unitCellZ, int unitCellPos) {
-    return atoms[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
+    return sites[((unitCellZ * getHexaSizeJ() + unitCellY) * getHexaSizeI() + unitCellX) * getUnitCellSize() + unitCellPos];
   }
 
   @Override
@@ -104,44 +104,44 @@ public class SiLattice extends AbstractLattice {
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
         for (int a = 0; a < getUnitCellSize(); a++) {
-          atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].setList(null);
-          atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].unRemove();
+          sites[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].setList(null);
+          sites[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].unRemove();
         }
       }
     }
 
     for (int k = 0; k < (getHexaSizeK() - 1) * getHexaSizeJ() * getHexaSizeI() * getUnitCellSize(); k++) {
-      atoms[k].setList(null);
-      atoms[k].unRemove();
-      atoms[k].setAsBulk();
+      sites[k].setList(null);
+      sites[k].unRemove();
+      sites[k].setAsBulk();
     }
 
     // Update neighbourhood of top atoms
     for (int k = (getHexaSizeK() - 1) * getHexaSizeJ() * getHexaSizeI() * getUnitCellSize(); k < getHexaSizeK() * getHexaSizeJ() * getHexaSizeI() * getUnitCellSize(); k++) {
-      atoms[k].updateN1FromScratch();
+      sites[k].updateN1FromScratch();
     }
 
     for (int k = (getHexaSizeK() - 1) * getHexaSizeJ() * getHexaSizeI() * getUnitCellSize(); k < getHexaSizeK() * getHexaSizeJ() * getHexaSizeI() * getUnitCellSize(); k++) {
-      atoms[k].updateN2FromScratch();
+      sites[k].updateN2FromScratch();
     }
 
     // Remove top layer atoms
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
         for (int a = 0; a < getUnitCellSize(); a++) {
-          atoms[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].remove();
+          sites[(((getHexaSizeK() - 1) * getHexaSizeJ() + i) * getHexaSizeI() + j) * getUnitCellSize() + a].remove();
         }
       }
     }
   }
 
   /**
-   * Atoms creation.
+   * Sites creation.
    * 
    * @param coords
    * @param uc 
    */
-  private void createAtoms(float[] coords, SiUnitCell uc) {
+  private void createSites(float[] coords, SiUnitCell uc) {
     int cont = 0;
     for (int a = 0; a < getHexaSizeK(); a++) {
       for (int b = 0; b < getHexaSizeJ(); b++) {
@@ -151,8 +151,8 @@ public class SiLattice extends AbstractLattice {
             float y = coords[j * 3 + 1] + b * (float) uc.getLimitY();
             float z = -coords[j * 3 + 2] + (a + 1) * (float) uc.getLimitZ();
 
-            atoms[cont] = new SiSite(x, y, z);
-            ucList[cont] = new Simple3dUc(a, b, c, atoms[cont]);
+            sites[cont] = new SiSite(x, y, z);
+            ucList[cont] = new Simple3dUc(a, b, c, sites[cont]);
             ucList[cont].setPosX(x);
             ucList[cont].setPosY(y);
             ucList[cont].setPosZ(z);
@@ -164,12 +164,12 @@ public class SiLattice extends AbstractLattice {
   }
 
   /**
-   * Atoms inter-connection.
+   * Sites inter-connection.
    * 
    * @param neihbourUnitCell
    * @param block 
    */
-  private void interconnectAtoms(short[] neihbourUnitCell, byte[] block) {
+  private void interconnectSites(short[] neihbourUnitCell, byte[] block) {
     for (int z = 0; z < getHexaSizeK(); z++) {
       for (int y = 0; y < getHexaSizeJ(); y++) {
         for (int x = 0; x < getHexaSizeI(); x++) {
@@ -219,10 +219,10 @@ public class SiLattice extends AbstractLattice {
                 posNeighbour = j;
               }
               if (zNeighbour < getHexaSizeK()) {
-                atoms[((z * getHexaSizeJ() + y) * getHexaSizeI() + x) * getUnitCellSize() + j].
-                        setNeighbour((SiSite)atoms[((zNeighbour * getHexaSizeJ() + yNeighbour) * getHexaSizeI() + xNeighbour) * getUnitCellSize() + posNeighbour], i);
+                sites[((z * getHexaSizeJ() + y) * getHexaSizeI() + x) * getUnitCellSize() + j].
+                        setNeighbour((SiSite)sites[((zNeighbour * getHexaSizeJ() + yNeighbour) * getHexaSizeI() + xNeighbour) * getUnitCellSize() + posNeighbour], i);
               } else {
-                atoms[((z * getHexaSizeJ() + y) * getHexaSizeI() + x) * getUnitCellSize() + j].setNeighbour(null, i);
+                sites[((z * getHexaSizeJ() + y) * getHexaSizeI() + x) * getUnitCellSize() + j].setNeighbour(null, i);
               }
             }
           }

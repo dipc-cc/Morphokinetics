@@ -62,11 +62,11 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
     return ucArray[iLattice][jLattice];
   }
   
-  public final void setAtoms(AbstractSurfaceSite[][] atoms) {
+  public final void setSites(AbstractSurfaceSite[][] sites) {
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        AbstractSurfaceSite atom = atoms[i][j];
-        ucArray[i][j] = new CatalysisUc(i, j, (AbstractCatalysisSite) atom);
+        AbstractSurfaceSite site = sites[i][j];
+        ucArray[i][j] = new CatalysisUc(i, j, (AbstractCatalysisSite) site);
 
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
@@ -136,7 +136,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
   abstract double getCoverage(int type, int site);
   
   public void init() {
-    setAtoms(createAtoms());
+    setSites(generateSites());
   }    
 
   @Override
@@ -224,7 +224,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
   
   abstract AbstractCatalysisSite newAtom(int i, int j);
   
-  private AbstractCatalysisSite[][] createAtoms() {
+  private AbstractCatalysisSite[][] generateSites() {
     //Instantiate atoms
     AbstractCatalysisSite[][] atoms = instantiateAtoms();
     for (int i = 0; i < getHexaSizeI(); i++) {

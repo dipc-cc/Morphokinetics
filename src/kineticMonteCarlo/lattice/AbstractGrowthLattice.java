@@ -99,7 +99,7 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
   public abstract AbstractGrowthSite getNeighbour(int iHexa, int jHexa, int neighbour);
   
   /**
-   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * Knowing the X and Y Cartesian location, returns closest site hexagonal coordinate.
    * 
    * @param xCart Cartesian X coordinate.
    * @param yCart Cartesian Y coordinate.
@@ -108,7 +108,7 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
   public abstract int getiHexa(double xCart, double yCart);
 
   /**
-   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * Knowing the X and Y Cartesian location, returns closest site hexagonal coordinate.
    * 
    * @param yCart Cartesian Y coordinate.
    * @return j hexagonal position.
@@ -121,11 +121,11 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
   }
   
   /**
-   * Returns the atom that it is in the middle of single flake simulation.
+   * Returns the site that it is in the middle of single flake simulation.
    * 
-   * @return central atom.
+   * @return central site.
    */
-  public abstract AbstractGrowthSite getCentralAtom();
+  public abstract AbstractGrowthSite getCentralSite();
 
   @Override
   public AbstractGrowthUc getUc(int pos) {
@@ -148,15 +148,15 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
   }
   
   
-  public final void setAtoms(AbstractGrowthSite[][] atoms) {
+  public final void setSites(AbstractGrowthSite[][] sites) {
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        AbstractGrowthSite atom = atoms[i][j];
-        ucArray[i][j] = new SimpleUc(i, j, atom);
+        AbstractGrowthSite site = sites[i][j];
+        ucArray[i][j] = new SimpleUc(i, j, site);
 
         ucArray[i][j].setPosX(getCartX(i, j));
         ucArray[i][j].setPosY(getCartY(j));
-        atoms[i][j].setCartesianPosition(ucArray[i][j].getPos());
+        sites[i][j].setCartesianPosition(ucArray[i][j].getPos());
       }
     }
   }

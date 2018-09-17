@@ -74,7 +74,7 @@ public class AgUcLattice extends AgLattice {
     super(hexaSizeI, hexaSizeJ, modified, distancePerStep);
     setUnitCellSize(2);
     ucList = new ArrayList<>();
-    createAtoms(type);
+    generateSites(type);
     
     // We assume that central unit cell, position 0 is the centre
     centralCartesianLocation = new Point2D.Float(getHexaSizeI() / 2.0f, (float) (getHexaSizeJ() / 2.0f) * (Y_RATIO * 2));
@@ -117,12 +117,12 @@ public class AgUcLattice extends AgLattice {
   }
   
   /**
-   * Returns an atom of given unit cell and lattice position.
+   * Returns a site of given unit cell and lattice position.
    *
    * @param iHexa
    * @param jHexa
    * @param pos
-   * @return an atom.
+   * @return a site.
    */
   @Override
   public AgSite getSite(int iHexa, int jHexa, int pos) {
@@ -130,7 +130,7 @@ public class AgUcLattice extends AgLattice {
   }
   
   @Override
-  public AgSite getCentralAtom() {
+  public AgSite getCentralSite() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
     return getSite(iCentre, jCentre, 0);
@@ -192,7 +192,7 @@ public class AgUcLattice extends AgLattice {
     double j = yCanvas / (2.0 * Y_RATIO);
     double i;
     int pos = 0;
-    // choose the atom within the lattice
+    // choose the site within the lattice
     if (j - jLattice > 0.5) {
       pos = 1;
       i = (double) xCanvas;
@@ -201,129 +201,129 @@ public class AgUcLattice extends AgLattice {
       }
     }
 
-    AbstractGrowthSite atom = getUc(iLattice, jLattice).getSite(pos);
+    AbstractGrowthSite site = getUc(iLattice, jLattice).getSite(pos);
 
-    if (atom.isOccupied()) {
-      extract(atom);
+    if (site.isOccupied()) {
+      extract(site);
     } else {
-      deposit(atom, false);
+      deposit(site, false);
     }
   }
   
   /**
-   * Creates all atoms and assigns it neighbours. How are computed the neighbours is documented here:
+   * Creates all sites and assigns it neighbours. How are computed the neighbours is documented here:
    * https://bitbucket.org/Nesferjo/ekmc-project/wiki/Relationship%20between%20Cartesian%20and%20hexagonal%20representations
    *  
-   * @param type 0 = AgAtomSimple, type 1 = AgAtom, type 2 = ConcertedAtom.
+   * @param type 0 = AgSiteSimple, type 1 = AgSite, type 2 = ConcertedSite.
    */
-  private void createAtoms(int type) {
+  private void generateSites(int type) {
     AgUc dummyAgUc = new AgUc(-1, -1, null);
     sizeI = Math.round(getCartSizeX() / dummyAgUc.getSizeX());
     sizeJ = Math.round(getCartSizeY() / dummyAgUc.getSizeY());
-    // Initialise unit cells (with atoms)
+    // Initialise unit cells (with sites)
     ucArray = new AgUc[sizeI][sizeJ];
     int id = 0;
     for (int i = 0; i < sizeI; i++) {
       for (int j = 0; j < sizeJ; j++) {
-        List<AgSite> atomsList = new ArrayList<>(2);
-        AgSite atom0;
-        AgSite atom1;
+        List<AgSite> sitesList = new ArrayList<>(2);
+        AgSite site0;
+        AgSite site1;
         switch (type) {
           case 0:
-            atom0 = new AgSiteSimple(id++, 0);
-            atom1 = new AgSiteSimple(id++, 1);
+            site0 = new AgSiteSimple(id++, 0);
+            site1 = new AgSiteSimple(id++, 1);
             break;
           case 1:
-            atom0 = new AgSite(id++, 0);
-            atom1 = new AgSite(id++, 1);
+            site0 = new AgSite(id++, 0);
+            site1 = new AgSite(id++, 1);
             break;
           case 2:
-            atom0 = new ConcertedSite(id++, 0);
-            atom1 = new ConcertedSite(id++, 1);
+            site0 = new ConcertedSite(id++, 0);
+            site1 = new ConcertedSite(id++, 1);
             break;
           default:
-            atom0 = null;
-            atom1 = null; // it should not happen!
+            site0 = null;
+            site1 = null; // it should not happen!
         }
-        atomsList.add(atom0);
-        atomsList.add(atom1);
-        AgUc uc = new AgUc(i, j, atomsList);
+        sitesList.add(site0);
+        sitesList.add(site1);
+        AgUc uc = new AgUc(i, j, sitesList);
         ucList.add(uc);
         ucArray[i][j] = uc;
         // set Cartesian position
         Point3D ucPos = uc.getPos();
-        Point3D atom0Pos = atom0.getPos();
-        Point3D atom1Pos = atom1.getPos();
-        atom0.setCartesianPosition(ucPos.add(atom0Pos));
-        atom1.setCartesianPosition(ucPos.add(atom1Pos));
+        Point3D site0Pos = site0.getPos();
+        Point3D site1Pos = site1.getPos();
+        site0.setCartesianPosition(ucPos.add(site0Pos));
+        site1.setCartesianPosition(ucPos.add(site1Pos));
       }
     }
     
-    //Interconect atoms (go through all unit cells)
+    //Interconect sites (go through all unit cells)
     for (int k = 0; k < size(); k++) {
       AgUc uc = ucList.get(k);
 
-      // First atom of unit cell
-      AgSite atom = uc.getSite(0);
+      // First site of unit cell
+      AgSite site = uc.getSite(0);
 
       int i = uc.getPosI() - 1;
       int j = uc.getPosJ() - 1;
       if (i < 0) i = sizeI - 1;
       if (j < 0) j = sizeJ - 1;
-      atom.setNeighbour(ucArray[i][j].getSite(1), 0);
+      site.setNeighbour(ucArray[i][j].getSite(1), 0);
 
       i = uc.getPosI();
       j = uc.getPosJ() - 1;
       if (j < 0) j = sizeJ - 1;
-      atom.setNeighbour(ucArray[i][j].getSite(1), 1);
+      site.setNeighbour(ucArray[i][j].getSite(1), 1);
 
       i = uc.getPosI() + 1;
       j = uc.getPosJ();
       if (i == sizeI) i = 0;
-      atom.setNeighbour(ucArray[i][j].getSite(0), 2);
+      site.setNeighbour(ucArray[i][j].getSite(0), 2);
 
       i = uc.getPosI();
       j = uc.getPosJ();
-      atom.setNeighbour(ucArray[i][j].getSite(1), 3);
+      site.setNeighbour(ucArray[i][j].getSite(1), 3);
 
       i = uc.getPosI() - 1;
       j = uc.getPosJ();
       if (i < 0) i = sizeI - 1;
-      atom.setNeighbour(ucArray[i][j].getSite(1), 4);
+      site.setNeighbour(ucArray[i][j].getSite(1), 4);
 
       i = uc.getPosI() - 1;
       j = uc.getPosJ();
       if (i < 0) i = sizeI - 1;
-      atom.setNeighbour(ucArray[i][j].getSite(0), 5);
+      site.setNeighbour(ucArray[i][j].getSite(0), 5);
 
-      // Second atom of unit cell
-      atom = uc.getSite(1);
+      // Second site of unit cell
+      site = uc.getSite(1);
 
       i = uc.getPosI();
       j = uc.getPosJ();
-      atom.setNeighbour(ucArray[i][j].getSite(0), 0);
+      site.setNeighbour(ucArray[i][j].getSite(0), 0);
 
       i = uc.getPosI() + 1;
       j = uc.getPosJ();
       if (i == sizeI) i = 0;
-      atom.setNeighbour(ucArray[i][j].getSite(0), 1);
-      atom.setNeighbour(ucArray[i][j].getSite(1), 2);
+      site.setNeighbour(ucArray[i][j].getSite(0), 1);
+      site.setNeighbour(ucArray[i][j].getSite(1), 2);
 
       i = uc.getPosI() + 1;
       j = uc.getPosJ() + 1;
       if (i == sizeI) i = 0;
       if (j == sizeJ) j = 0;
-      atom.setNeighbour(ucArray[i][j].getSite(0), 3);
+      site.setNeighbour(ucArray[i][j].getSite(0), 3);
 
       i = uc.getPosI();
       j = uc.getPosJ() + 1;
       if (j == sizeJ) j = 0;
-      atom.setNeighbour(ucArray[i][j].getSite(0), 4);
+      site.setNeighbour(ucArray[i][j].getSite(0), 4);
 
       i = uc.getPosI() - 1;
       j = uc.getPosJ();
       if (i < 0) i = sizeI - 1;
-      atom.setNeighbour(ucArray[i][j].getSite(1), 5);
+      site.setNeighbour(ucArray[i][j].getSite(1), 5);
     }
 
   }

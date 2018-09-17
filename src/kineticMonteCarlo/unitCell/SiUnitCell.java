@@ -440,7 +440,7 @@ public class SiUnitCell {
     //-------------------------------------------------------------------------
     // Creamos los atomos
     //-------------------------------------------------------------------------
-    int cuantos = createAtoms();
+    int cuantos = generateSites();
     //-----------------------------------------------------------------------
     // Por ultimo, interconectamos las celulas
     //-----------------------------------------------------------------------
@@ -552,7 +552,7 @@ public class SiUnitCell {
     return (((double) temp) / desp);
   }
 
-  private int createAtoms() {
+  private int generateSites() {
     int cont = 0;
     //celula tipo 0 (abajo del todo)
     for (int i = iInit; i < iSize; i++) { //Eje Z

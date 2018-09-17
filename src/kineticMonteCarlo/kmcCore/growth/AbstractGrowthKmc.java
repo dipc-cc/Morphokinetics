@@ -313,7 +313,7 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
       setAtomPerimeter();
       setCurrentOccupiedArea(8); // Seed will have 8 atoms
       int depositedAtoms = 1;
-      AbstractGrowthSite centralAtom = lattice.getCentralAtom();
+      AbstractGrowthSite centralAtom = lattice.getCentralSite();
       centralAtom.setDepositionPosition(new Point3D(0, 0, 0));
       deposition:
       while (true) {

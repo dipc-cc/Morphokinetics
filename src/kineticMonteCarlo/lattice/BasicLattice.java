@@ -28,8 +28,8 @@ import kineticMonteCarlo.unitCell.Simple3dUc;
  */
 public class BasicLattice extends AbstractLattice {
 
-  private BasicSite[] atoms;
-  private Simple3dUc[] ucList;
+  private final BasicSite[] sites;
+  private final Simple3dUc[] ucList;
   
   public BasicLattice(int hexaSizeI, int hexaSizeJ) {
     setHexaSizeI(hexaSizeI);
@@ -37,21 +37,21 @@ public class BasicLattice extends AbstractLattice {
     setHexaSizeK(1);
     setUnitCellSize(1);
     
-    atoms = new BasicSite[hexaSizeI * hexaSizeJ];
+    sites = new BasicSite[hexaSizeI * hexaSizeJ];
     ucList = new Simple3dUc[hexaSizeI * hexaSizeJ];
-    createAtoms(hexaSizeI, hexaSizeJ);
-    interconnectAtoms();
+    generateSites(hexaSizeI, hexaSizeJ);
+    interconnectSites();
   }
 
   @Override
   public BasicSite getSite(int iHexa, int jHexa, int kHexa, int unitCellPos) {
-    return atoms[((jHexa) * getHexaSizeI() + iHexa) * getUnitCellSize() + unitCellPos];
+    return sites[((jHexa) * getHexaSizeI() + iHexa) * getUnitCellSize() + unitCellPos];
   }
 
   @Override
   public void setProbabilities(double[] probabilities) {
-    for (int i = 0; i < atoms.length; i++) {
-      atoms[i].setProbabilities(probabilities);
+    for (int i = 0; i < sites.length; i++) {
+      sites[i].setProbabilities(probabilities);
     }
   }
 
@@ -64,48 +64,48 @@ public class BasicLattice extends AbstractLattice {
   public void reset() {
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
-        atoms[i * getHexaSizeI() + j].setList(null);
-        atoms[i * getHexaSizeI() + j].unRemove();
+        sites[i * getHexaSizeI() + j].setList(null);
+        sites[i * getHexaSizeI() + j].unRemove();
       }
     }
 
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
-        atoms[i * getHexaSizeI() + j].updateN1FromScratch();
+        sites[i * getHexaSizeI() + j].updateN1FromScratch();
       }
     }
 
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
         if (i < 4) {
-          atoms[i * getHexaSizeI() + j].remove();
+          sites[i * getHexaSizeI() + j].remove();
         }
       }
     }
   }
 
-  private void createAtoms(int hexaSizeI, int hexaSizeJ) {
+  private void generateSites(int hexaSizeI, int hexaSizeJ) {
     for (short i = 0; i < hexaSizeJ; i++) {
       for (short j = 0; j < hexaSizeI; j++) {
-        atoms[i * hexaSizeI + j] = new BasicSite(j, i);
-        ucList[i * hexaSizeI + j] = new Simple3dUc(j, i, atoms[i * hexaSizeI + j]);
+        sites[i * hexaSizeI + j] = new BasicSite(j, i);
+        ucList[i * hexaSizeI + j] = new Simple3dUc(j, i, sites[i * hexaSizeI + j]);
       }
     }
   }
 
-  private void interconnectAtoms() {
+  private void interconnectSites() {
     for (int i = 0; i < getHexaSizeJ(); i++) {
       for (int j = 0; j < getHexaSizeI(); j++) {
         if (i - 1 >= 0) {
-          atoms[i * getHexaSizeI() + j].setNeighbour(atoms[(i - 1) * getHexaSizeI() + j], 0);                      //up        
+          sites[i * getHexaSizeI() + j].setNeighbour(sites[(i - 1) * getHexaSizeI() + j], 0);                      //up        
         }
-        atoms[i * getHexaSizeI() + j].setNeighbour(atoms[Math.min(i + 1, getHexaSizeJ() - 1) * getHexaSizeI() + j], 1); //down        
+        sites[i * getHexaSizeI() + j].setNeighbour(sites[Math.min(i + 1, getHexaSizeJ() - 1) * getHexaSizeI() + j], 1); //down        
         int izq = j - 1;
         if (izq < 0) {
           izq = getHexaSizeI() - 1;
         }
-        atoms[i * getHexaSizeI() + j].setNeighbour(atoms[i * getHexaSizeI() + izq], 2);                   //left        
-        atoms[i * getHexaSizeI() + j].setNeighbour(atoms[i * getHexaSizeI() + ((j + 1) % getHexaSizeI())], 3); //right       
+        sites[i * getHexaSizeI() + j].setNeighbour(sites[i * getHexaSizeI() + izq], 2);                   //left        
+        sites[i * getHexaSizeI() + j].setNeighbour(sites[i * getHexaSizeI() + ((j + 1) % getHexaSizeI())], 3); //right       
       }
     }
   }

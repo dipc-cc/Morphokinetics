@@ -404,7 +404,7 @@ public class BdaLattice extends AbstractGrowthLattice {
   }
 
   @Override
-  public AbstractGrowthSite getCentralAtom() {
+  public AbstractGrowthSite getCentralSite() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
     return (BdaAgSurfaceSite) getSite(iCentre, jCentre, 0);

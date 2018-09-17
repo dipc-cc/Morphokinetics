@@ -44,7 +44,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public AgSite getCentralAtom() {
+  public AgSite getCentralSite() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2) - (getHexaSizeJ() / 4);
     
@@ -87,7 +87,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
     
   /**
-   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * Knowing the X and Y Cartesian location, returns closest site hexagonal coordinate.
    * 
    * @param xCart Cartesian X coordinate
    * @param yCart Cartesian Y coordinate
@@ -113,7 +113,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
   
   /**
-   * Knowing the X and Y Cartesian location, returns closest atom hexagonal coordinate.
+   * Knowing the X and Y Cartesian location, returns closest site hexagonal coordinate.
    * 
    * @param yCart Cartesian Y coordinate.
    * @return j hexagonal position.
@@ -191,7 +191,7 @@ public class AgLattice extends AbstractGrowthLattice {
   }
 
   public void init() {
-    setAtoms(createAtoms());
+    setSites(generateSites());
     setAngles();
   }    
 
@@ -272,53 +272,53 @@ public class AgLattice extends AbstractGrowthLattice {
     }
   }
       
-  private AgSite[][] createAtoms() {
+  private AgSite[][] generateSites() {
     //Instantiate atoms
-    AgSite[][] atoms = new AgSite[getHexaSizeI()][getHexaSizeJ()];
+    AgSite[][] sites = new AgSite[getHexaSizeI()][getHexaSizeJ()];
     for (int i = 0; i < getHexaSizeI(); i++) {
       for (int j = 0; j < getHexaSizeJ(); j++) {
-        atoms[i][j] = new AgSite(createId(i, j), (short) i, (short) j);
+        sites[i][j] = new AgSite(createId(i, j), (short) i, (short) j);
       }
     }
     
     //Interconect atoms
     for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
-        AgSite atom = (AgSite) atoms[iHexa][jHexa];
+        AgSite site = (AgSite) sites[iHexa][jHexa];
         int i = iHexa;
         int j = jHexa - 1;
         if (j < 0) j = getHexaSizeJ() - 1;
 
-        atom.setNeighbour((AgSite) atoms[i][j], 0);
+        site.setNeighbour((AgSite) sites[i][j], 0);
         i = iHexa + 1;
         j = jHexa - 1;
         if (i == getHexaSizeI()) i = 0;
         if (j < 0) j = getHexaSizeJ() - 1;
 
-        atom.setNeighbour((AgSite) atoms[i][j], 1);
+        site.setNeighbour((AgSite) sites[i][j], 1);
         i = iHexa + 1;
         j = jHexa;
         if (i == getHexaSizeI()) i = 0;
 
-        atom.setNeighbour((AgSite) atoms[i][j], 2);
+        site.setNeighbour((AgSite) sites[i][j], 2);
         i = iHexa;
         j = jHexa + 1;
         if (j == getHexaSizeJ()) j = 0;
 
-        atom.setNeighbour((AgSite) atoms[i][j], 3);
+        site.setNeighbour((AgSite) sites[i][j], 3);
         i = iHexa - 1;
         j = jHexa + 1;
         if (i < 0) i = getHexaSizeI() - 1;
         if (j == getHexaSizeJ()) j = 0;
 
-        atom.setNeighbour((AgSite) atoms[i][j], 4);
+        site.setNeighbour((AgSite) sites[i][j], 4);
         i = iHexa - 1;
         j = jHexa;
         if (i < 0) i = getHexaSizeI() - 1;
-        atom.setNeighbour((AgSite) atoms[i][j], 5);
+        site.setNeighbour((AgSite) sites[i][j], 5);
       }
     }
-    return atoms;
+    return sites;
   }
   
   private int createId(int i, int j) {
@@ -597,61 +597,61 @@ public class AgLattice extends AbstractGrowthLattice {
     return null;
   }
   
-  private void removeImmobilAddMobile(AgSite atom) {
-    if (atom.getNImmobile() == 0) {  //estado de transición
-      atom.addNMobile(1); // nMobile++;
-      atom.addNImmobile(-1); // nImmobile--;
+  private void removeImmobilAddMobile(AgSite site) {
+    if (site.getNImmobile() == 0) {  //estado de transición
+      site.addNMobile(1); // nMobile++;
+      site.addNImmobile(-1); // nImmobile--;
       return;
     }
 
-    byte newType = atom.getNewType(-1, +1); // --nImmobile, ++nMobile
-    atom.addNImmobile(-1);
-    atom.addNMobile(1);
+    byte newType = site.getNewType(-1, +1); // --nImmobile, ++nMobile
+    site.addNImmobile(-1);
+    site.addNMobile(1);
 
-    if (atom.getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean immobileToMobile = (atom.getType() >= KINK_A && newType < KINK_A);
-      atom.setType(newType);
-      addAtom(atom);
-      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
-        addBondAtom(atom);
+    if (site.getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean immobileToMobile = (site.getType() >= KINK_A && newType < KINK_A);
+      site.setType(newType);
+      addAtom(site);
+      if (site.getNMobile() > 0 && !site.isOccupied()) {
+        addBondAtom(site);
       }
 
-      if (immobileToMobile && atom.isOccupied()) {
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeImmobilAddMobile(atom.getNeighbour(i));
+      if (immobileToMobile && site.isOccupied()) {
+        for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
+          if (!site.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeImmobilAddMobile(site.getNeighbour(i));
           }
         }
       }
     }
   }
   
-  private void removeMobileAddImmobile(AgSite atom, boolean forceNucleation) {
-    if (atom.getNMobile() == 0) {
-      atom.addNMobile(-1); // nMobile--
-      atom.addNImmobile(1); // nImmobile++
+  private void removeMobileAddImmobile(AgSite site, boolean forceNucleation) {
+    if (site.getNMobile() == 0) {
+      site.addNMobile(-1); // nMobile--
+      site.addNImmobile(1); // nImmobile++
       return;
     }
 
-    byte newType = atom.getNewType(1, -1); //++nImmobile, --nMobile
-    atom.addNMobile(-1);
-    atom.addNImmobile(1);
+    byte newType = site.getNewType(1, -1); //++nImmobile, --nMobile
+    site.addNMobile(-1);
+    site.addNImmobile(1);
 
-    if (forceNucleation && atom.isOccupied()) {
+    if (forceNucleation && site.isOccupied()) {
       newType = ISLAND;
     }
 
-    if (atom.getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
-      boolean mobileToImmobile = (atom.getType() < KINK_A && newType >= KINK_A);
-      atom.setType(newType);
-      addAtom(atom);
-      if (atom.getNMobile() > 0 && !atom.isOccupied()) {
-        addBondAtom(atom);
+    if (site.getType() != newType) { // ha cambiado el tipo, hay que actualizar ligaduras
+      boolean mobileToImmobile = (site.getType() < KINK_A && newType >= KINK_A);
+      site.setType(newType);
+      addAtom(site);
+      if (site.getNMobile() > 0 && !site.isOccupied()) {
+        addBondAtom(site);
       }
-      if (mobileToImmobile && atom.isOccupied()) {
-        for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-          if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeMobileAddImmobile(atom.getNeighbour(i), forceNucleation);
+      if (mobileToImmobile && site.isOccupied()) {
+        for (int i = 0; i < site.getNumberOfNeighbours(); i++) {
+          if (!site.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeMobileAddImmobile(site.getNeighbour(i), forceNucleation);
           }
         }
       }
@@ -661,67 +661,67 @@ public class AgLattice extends AbstractGrowthLattice {
   /**
    * Éste lo ejecutan los primeros vecinos.
    * 
-   * @param neighbourAtom neighbour atom of the original atom.
-   * @param originType type of the original atom.
+   * @param neighbourSite neighbour site of the original site.
+   * @param originType type of the original site.
    * @param forceNucleation
    */
-  private void addOccupiedNeighbour(AgSite neighbourAtom, byte originType, boolean forceNucleation) {
+  private void addOccupiedNeighbour(AgSite neighbourSite, byte originType, boolean forceNucleation) {
     byte newType;
 
     if (originType < KINK_A) { // was a TERRACE, CORNER or EDGE
-      newType = neighbourAtom.getNewType(0, 1); //nImmobile, ++nMobile
-      neighbourAtom.addNMobile(1);
+      newType = neighbourSite.getNewType(0, 1); //nImmobile, ++nMobile
+      neighbourSite.addNMobile(1);
     } else { // was a KINK or ISLAND
-      newType = neighbourAtom.getNewType(1, 0); //++nImmobile, nMobile
-      neighbourAtom.addNImmobile(1);
+      newType = neighbourSite.getNewType(1, 0); //++nImmobile, nMobile
+      neighbourSite.addNImmobile(1);
     }
 
     if (forceNucleation) {
       newType = ISLAND;
     }
 
-    if (neighbourAtom.getType() != newType) { // the type of neighbour has changed
-      boolean mobileToImmobile = (neighbourAtom.getType() < KINK_A && newType >= KINK_A);
-      neighbourAtom.setType(newType);
+    if (neighbourSite.getType() != newType) { // the type of neighbour has changed
+      boolean mobileToImmobile = (neighbourSite.getType() < KINK_A && newType >= KINK_A);
+      neighbourSite.setType(newType);
       //addAtom(neighbourAtom); // always has to be checked, its neighbours has changed.
-      if (neighbourAtom.getNMobile() > 0 && !neighbourAtom.isOccupied()) {
-        addBondAtom(neighbourAtom);
+      if (neighbourSite.getNMobile() > 0 && !neighbourSite.isOccupied()) {
+        addBondAtom(neighbourSite);
       }
-      if (mobileToImmobile && neighbourAtom.isOccupied()) {
-        for (int i = 0; i < neighbourAtom.getNumberOfNeighbours(); i++) {
-          if (!neighbourAtom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeMobileAddImmobile(neighbourAtom.getNeighbour(i), forceNucleation);
+      if (mobileToImmobile && neighbourSite.isOccupied()) {
+        for (int i = 0; i < neighbourSite.getNumberOfNeighbours(); i++) {
+          if (!neighbourSite.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeMobileAddImmobile(neighbourSite.getNeighbour(i), forceNucleation);
           }
         }
       }
     }
-    if (neighbourAtom.isOccupied()) { // the type of neighbour does not change, but it has a mew neighbour (caller one)
-      addAtom(neighbourAtom);
+    if (neighbourSite.isOccupied()) { // the type of neighbour does not change, but it has a mew neighbour (caller one)
+      addAtom(neighbourSite);
     }
       
   }
    
   /**
-   * Computes the removal of one mobile atom.
+   * Computes the removal of one mobile site.
    * 
-   * @param neighbourAtom neighbour atom of the original atom.
+   * @param neighbourSite neighbour site of the original site.
    */
-  private void removeMobileOccupied(AgSite neighbourAtom) {
+  private void removeMobileOccupied(AgSite neighbourSite) {
 
-    byte newType = neighbourAtom.getNewType(0, -1); //nImmobile, --nMobile
-    neighbourAtom.addNMobile(-1); // remove one mobile atom (original atom has been extracted)
+    byte newType = neighbourSite.getNewType(0, -1); //nImmobile, --nMobile
+    neighbourSite.addNMobile(-1); // remove one mobile atom (original atom has been extracted)
 
-    if (neighbourAtom.getType() != newType) {
-      boolean immobileToMobile = (neighbourAtom.getType() >= KINK_A && newType < KINK_A);
-      neighbourAtom.setType(newType);
-      addAtom(neighbourAtom);
-      if (neighbourAtom.getNMobile() > 0 && !neighbourAtom.isOccupied()) {
-        addBondAtom(neighbourAtom);
+    if (neighbourSite.getType() != newType) {
+      boolean immobileToMobile = (neighbourSite.getType() >= KINK_A && newType < KINK_A);
+      neighbourSite.setType(newType);
+      addAtom(neighbourSite);
+      if (neighbourSite.getNMobile() > 0 && !neighbourSite.isOccupied()) {
+        addBondAtom(neighbourSite);
       }
-      if (immobileToMobile && neighbourAtom.isOccupied()) {
-        for (int i = 0; i < neighbourAtom.getNumberOfNeighbours(); i++) {
-          if (!neighbourAtom.getNeighbour(i).isPartOfImmobilSubstrate()) {
-            removeImmobilAddMobile(neighbourAtom.getNeighbour(i));
+      if (immobileToMobile && neighbourSite.isOccupied()) {
+        for (int i = 0; i < neighbourSite.getNumberOfNeighbours(); i++) {
+          if (!neighbourSite.getNeighbour(i).isPartOfImmobilSubstrate()) {
+            removeImmobilAddMobile(neighbourSite.getNeighbour(i));
           }
         }
       }

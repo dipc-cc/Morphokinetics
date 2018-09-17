@@ -54,12 +54,12 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     }
     
     centralCartesianLocation = getCartesianLocation(getHexaSizeI() / 2, getHexaSizeJ() / 2);
-    createAtoms(hexaSizeI, hexaSizeJ, distancePerStep, inputClass);
+    generateSites(hexaSizeI, hexaSizeJ, distancePerStep, inputClass);
     setAngles();
   }
 
   @Override
-  public GrapheneSite getCentralAtom() {
+  public GrapheneSite getCentralSite() {
     int jCentre = (getHexaSizeJ() / 2);
     int iCentre = (getHexaSizeI() / 2);
     return (GrapheneSite) getSite(iCentre, jCentre, 0);
@@ -209,66 +209,66 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
   
   @Override
-  public void deposit(AbstractSurfaceSite a, boolean forceNucleation) {
-    GrapheneSite atom = (GrapheneSite) a;
-    atom.setOccupied(true);
+  public void deposit(AbstractSurfaceSite s, boolean forceNucleation) {
+    GrapheneSite site = (GrapheneSite) s;
+    site.setOccupied(true);
     if (forceNucleation) {
-      atom.setType(BULK);
+      site.setType(BULK);
     }
     int i = 0;
 
     for (; i < 3; i++) {
-      add1stNeighbour(atom.getNeighbour(i), forceNucleation);
+      add1stNeighbour(site.getNeighbour(i), forceNucleation);
     }
     for (; i < 9; i++) {
-      add2ndNeighbour(atom.getNeighbour(i));
+      add2ndNeighbour(site.getNeighbour(i));
     }
-    for (; i < atom.getNumberOfNeighbours(); i++) {
-      add3rdNeighbour(atom.getNeighbour(i));
+    for (; i < site.getNumberOfNeighbours(); i++) {
+      add3rdNeighbour(site.getNeighbour(i));
     }
 
-    addAtom(atom);
-    if (atom.getNeighbourCount() > 0) {
-      addBondAtom(atom);
+    addAtom(site);
+    if (site.getNeighbourCount() > 0) {
+      addBondAtom(site);
     }
-    atom.resetProbability();
+    site.resetProbability();
   }
     
   /**
    * Extrae el átomo de este lugar (pásalo a no occupied y reduce la vecindad de los átomos vecinos,
    * si cambia algún tipo, recalcula probabilidades)
    * 
-   * @param a atom to be extracted.
+   * @param s atom to be extracted.
    * @return the previous probability of the extracted atom (in positive).
    */
   @Override
-  public double extract(AbstractSurfaceSite a) {
-    GrapheneSite atom = (GrapheneSite) a;
-    atom.setOccupied(false);
-    double probabilityChange = atom.getProbability();
+  public double extract(AbstractSurfaceSite s) {
+    GrapheneSite site = (GrapheneSite) s;
+    site.setOccupied(false);
+    double probabilityChange = site.getProbability();
 
     int i = 0;
     for (; i < 3; i++) {
-      remove1stNeighbour(atom.getNeighbour(i));
+      remove1stNeighbour(site.getNeighbour(i));
     }
     for (; i < 9; i++) {
-      remove2ndNeighbour(atom.getNeighbour(i));
+      remove2ndNeighbour(site.getNeighbour(i));
     }
-    for (; i < atom.getNumberOfNeighbours(); i++) {
-      remove3rdNeighbour(atom.getNeighbour(i));
-    }
-
-    if (atom.getNeighbourCount() > 0) {
-      addBondAtom(atom);
+    for (; i < site.getNumberOfNeighbours(); i++) {
+      remove3rdNeighbour(site.getNeighbour(i));
     }
 
-    atom.setList(false);
-    atom.resetProbability();
+    if (site.getNeighbourCount() > 0) {
+      addBondAtom(site);
+    }
+
+    site.setList(false);
+    site.resetProbability();
     return probabilityChange;
   }
   
   /**
-   * Changes the occupation of the clicked atom from unoccupied to occupied, or vice versa. It is
+   * Changes the occupation of the clicked site from unoccupied to occupied, or vice versa. It is
    * experimental. If fails, the execution continues normally.
    *
    * @param xMouse absolute X location of the pressed point
@@ -291,12 +291,12 @@ public class GrapheneLattice extends AbstractGrowthLattice {
     // for debugging
     System.out.println("scale " + scale + " " + (jLattice - j));
     System.out.println("x y " + xMouse + " " + yMouse + " | " + xCanvas + " " + yCanvas + " | " + iLattice + " " + jLattice + " | ");
-    AbstractGrowthSite atom = (AbstractGrowthSite) getUc(iLattice, jLattice).getSite(pos);
+    AbstractGrowthSite site = (AbstractGrowthSite) getUc(iLattice, jLattice).getSite(pos);
 
-    if (atom.isOccupied()) {
-      extract(atom);
+    if (site.isOccupied()) {
+      extract(site);
     } else {
-      deposit(atom, false);
+      deposit(site, false);
     }
   }
   
@@ -323,39 +323,39 @@ public class GrapheneLattice extends AbstractGrowthLattice {
   }
     
   /**
-   * Creates the atom array for graphene. It only allows even parameters.
+   * Creates the site array for graphene. It only allows even parameters.
    *
    * @param hexaSizeI even number of the size in hexagonal lattice points. Currently it is
    * represented vertically starting from the top
    * @param hexaSizeJ even number of the size in hexagonal lattice points. Currently it is
    * represented horizontally starting from the left
    * @param distancePerStep
-   * @return just created atoms in a 2D matrix.
+   * @return just created sitess in a 2D matrix.
    */
-  private GrapheneSite[][] createAtoms(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep, Class<?> inputClass) {
-    GrapheneSite[][] atoms = new GrapheneSite[hexaSizeI][hexaSizeJ];
+  private GrapheneSite[][] generateSites(int hexaSizeI, int hexaSizeJ, HopsPerStep distancePerStep, Class<?> inputClass) {
+    GrapheneSite[][] sites = new GrapheneSite[hexaSizeI][hexaSizeJ];
     try{
       Constructor<?>[] constructor = inputClass.getConstructors();
-      //Instantiate atoms
+      //Instantiate sites
       for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa += 2) {
         for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa += 2) {
           //para cada unit cell
 
           //atomo 0 de la unit cell, tipo 0
-          atoms[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+          sites[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
           iHexa++;
           //atomo 1 de la unit cell, tipo 1
-          atoms[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+          sites[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
           iHexa--;
           jHexa++;
           //atomo 2 de la unit cell, tipo 1   
-          atoms[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+          sites[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
           iHexa++;
           //atomo 3 de la unit cell, tipo 0
-          atoms[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
+          sites[iHexa][jHexa] = (GrapheneSite) constructor[0].newInstance(createId(iHexa, jHexa), (short) iHexa, (short) jHexa, distancePerStep);
 
           iHexa--;
           jHexa--;
@@ -365,20 +365,20 @@ public class GrapheneLattice extends AbstractGrowthLattice {
       Logger.getLogger(GrapheneLattice.class.getName()).log(Level.SEVERE, null, ex);
     }
     
-    setAtoms(atoms);
+    setSites(sites);
     
-    //Interconect atoms
+    //Interconect sites
     for (int iHexa = 0; iHexa < getHexaSizeI(); iHexa++) {
       for (int jHexa = 0; jHexa < getHexaSizeJ(); jHexa++) {
-        // Get and all 12 neighbours of current graphene atom
+        // Get and all 12 neighbours of current graphene site
         GrapheneSite[] neighbours = new GrapheneSite[12];
         for (int i = 0; i < 12; i++) {
           neighbours[i] = getNeighbour(iHexa, jHexa, i);
         }
-        atoms[iHexa][jHexa].setNeighbours(neighbours);
+        sites[iHexa][jHexa].setNeighbours(neighbours);
       }
     }
-    return atoms;
+    return sites;
   }
 
   private AbstractGrowthSite chooseClearAreaTerrace(short iHexaOrigin, short jHexaOrigin, int thresholdDistance, double raw) {
