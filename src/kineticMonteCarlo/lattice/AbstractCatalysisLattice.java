@@ -33,7 +33,7 @@ import utils.LinearRegression;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-abstract public class CatalysisLattice extends AbstractSurfaceLattice {
+abstract public class AbstractCatalysisLattice extends AbstractSurfaceLattice {
 
   final List<float[]> last1000events;
   final List<Double> last1000eventsTime;
@@ -43,7 +43,7 @@ abstract public class CatalysisLattice extends AbstractSurfaceLattice {
    */
   private final CatalysisUc[][] ucArray;
 
-  public CatalysisLattice(int hexaSizeI, int hexaSizeJ) {
+  public AbstractCatalysisLattice(int hexaSizeI, int hexaSizeJ) {
     super(hexaSizeI, hexaSizeJ);
     last1000events = new LinkedList<>();
     last1000eventsTime = new LinkedList<>();

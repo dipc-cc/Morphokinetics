@@ -20,7 +20,7 @@ package kineticMonteCarlo.activationEnergy;
 
 import basic.Parser;
 import java.util.Iterator;
-import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.lattice.AbstractCatalysisLattice;
 import kineticMonteCarlo.site.AbstractCatalysisSite;
 
 /**
@@ -34,7 +34,7 @@ public class CatalysisCoHoffmannActivationEnergy extends AbstractCatalysisActiva
   }
 
   @Override
-  public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary) {
+  public void updatePossibles(AbstractCatalysisLattice lattice, double elapsedTime, boolean stationary) {
     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 

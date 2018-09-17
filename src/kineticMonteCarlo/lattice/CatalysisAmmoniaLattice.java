@@ -26,7 +26,7 @@ import kineticMonteCarlo.site.AbstractCatalysisSite;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisAmmoniaLattice extends CatalysisLattice {
+public class CatalysisAmmoniaLattice extends AbstractCatalysisLattice {
   
   /**
    * Current species coverages, for sites CUS.

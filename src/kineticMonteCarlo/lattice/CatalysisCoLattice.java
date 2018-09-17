@@ -32,7 +32,7 @@ import utils.LinearRegression;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoLattice extends CatalysisLattice {
+public class CatalysisCoLattice extends AbstractCatalysisLattice {
   
   /**
    * Current CO and O coverages, for sites BR, CUS.

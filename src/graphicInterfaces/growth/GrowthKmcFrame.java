@@ -62,7 +62,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import kineticMonteCarlo.kmcCore.growth.RoundPerimeter;
 import kineticMonteCarlo.lattice.AbstractSurfaceLattice;
 import kineticMonteCarlo.lattice.BdaLattice;
-import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.lattice.AbstractCatalysisLattice;
 
 public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
 
@@ -106,7 +106,7 @@ public class GrowthKmcFrame extends JFrame implements IGrowthKmcFrame{
     initComponents();
     if (perimeter instanceof RoundPerimeter)
       canvas = new KmcCanvasGrowth(lattice, (RoundPerimeter) perimeter);
-    else if (lattice instanceof CatalysisLattice) {
+    else if (lattice instanceof AbstractCatalysisLattice) {
       canvas = new KmcCanvasCatalysis(lattice);
     } else if (lattice instanceof BdaLattice) {
       canvas = new KmcCanvasBda(lattice);

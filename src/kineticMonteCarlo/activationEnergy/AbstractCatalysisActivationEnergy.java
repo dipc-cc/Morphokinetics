@@ -20,7 +20,7 @@ package kineticMonteCarlo.activationEnergy;
 
 import basic.Parser;
 import java.util.Iterator;
-import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.lattice.AbstractCatalysisLattice;
 import kineticMonteCarlo.site.AbstractCatalysisSite;
 
 /**
@@ -33,6 +33,6 @@ public abstract class AbstractCatalysisActivationEnergy extends ActivationEnergy
     super(parser);
   }
   
-  abstract public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary);
+  abstract public void updatePossibles(AbstractCatalysisLattice lattice, double elapsedTime, boolean stationary);
   abstract public void updatePossibles(Iterator<AbstractCatalysisSite> surface, double elapsedTime, boolean stationary);
 }

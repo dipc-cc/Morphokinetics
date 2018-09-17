@@ -29,7 +29,7 @@ import kineticMonteCarlo.activationEnergy.AbstractCatalysisActivationEnergy;
 import kineticMonteCarlo.site.AbstractCatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
 import kineticMonteCarlo.lattice.CatalysisCoLattice;
-import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.lattice.AbstractCatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisCoSite.CO;
 import static kineticMonteCarlo.site.CatalysisCoSite.O;
 import kineticMonteCarlo.unitCell.AbstractSurfaceUc;
@@ -112,8 +112,8 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   abstract public void init(Parser parser);
   
   @Override
-  public CatalysisLattice getLattice() {
-    return (CatalysisLattice) super.getLattice();
+  public AbstractCatalysisLattice getLattice() {
+    return (AbstractCatalysisLattice) super.getLattice();
   }
   
   final void setActivationEnergy(AbstractCatalysisActivationEnergy ae) {
@@ -185,20 +185,20 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   }
   
   public float getCoverage(byte type) {
-    return ((CatalysisLattice) getLattice()).getCoverage(type);
+    return ((AbstractCatalysisLattice) getLattice()).getCoverage(type);
   }
   
   @Override
   public float getCoverage() {
-    return ((CatalysisLattice) getLattice()).getCoverage();
+    return ((AbstractCatalysisLattice) getLattice()).getCoverage();
   }
   
   public float[] getCoverages() {
-    return ((CatalysisLattice) getLattice()).getCoverages();
+    return ((AbstractCatalysisLattice) getLattice()).getCoverages();
   }
   
   public float getGapCoverage() {
-    return ((CatalysisLattice) getLattice()).getGapCoverage();
+    return ((AbstractCatalysisLattice) getLattice()).getGapCoverage();
   }
 
   abstract void initStationary();
@@ -219,7 +219,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
 
     while (notEnd()) {
       if (outputAeTotal) {
-        activationEnergy.updatePossibles((CatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
+        activationEnergy.updatePossibles((AbstractCatalysisLattice) getLattice(), getList().getDeltaTime(true), stationary);
       } else {
         activationEnergy.updatePossibles(getReactionIterator(), getList().getDeltaTime(true), stationary);
       }      
@@ -241,7 +241,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
     }
     
     if (outputData && simulatedSteps % outputEvery == 0) {
-      if (!stationary && ((CatalysisLattice) getLattice()).isStationary(getTime())) {
+      if (!stationary && ((AbstractCatalysisLattice) getLattice()).isStationary(getTime())) {
         System.out.println("stationary in step " + simulatedSteps);
         stationary = true;
         stationaryStep = simulatedSteps;

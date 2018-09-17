@@ -21,7 +21,7 @@ package kineticMonteCarlo.activationEnergy;
 import basic.Parser;
 import java.io.PrintWriter;
 import java.util.Iterator;
-import kineticMonteCarlo.lattice.CatalysisLattice;
+import kineticMonteCarlo.lattice.AbstractCatalysisLattice;
 import kineticMonteCarlo.site.AbstractCatalysisSite;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.N;
 import static kineticMonteCarlo.site.CatalysisAmmoniaSite.NH;
@@ -57,7 +57,7 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
    * @param stationary
    */
   @Override
-  public void updatePossibles(CatalysisLattice lattice, double elapsedTime, boolean stationary) {
+  public void updatePossibles(AbstractCatalysisLattice lattice, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
       Double[][] histogramCounterTmp = initDouble();
       for (int i = 0; i < lattice.size(); i++) {
