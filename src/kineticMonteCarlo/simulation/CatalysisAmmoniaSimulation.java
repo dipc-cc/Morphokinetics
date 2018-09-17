@@ -27,7 +27,7 @@ import ratesLibrary.IRates;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisAmmoniaSimulation extends CatalysisSimulation {
+public class CatalysisAmmoniaSimulation extends AbstractCatalysisSimulation {
 
   public CatalysisAmmoniaSimulation(Parser parser) {
     super(parser);

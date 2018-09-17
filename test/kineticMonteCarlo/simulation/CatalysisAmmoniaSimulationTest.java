@@ -21,7 +21,6 @@ package kineticMonteCarlo.simulation;
 import basic.Parser;
 import basic.io.Restart;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;

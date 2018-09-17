@@ -25,10 +25,10 @@ import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-public abstract class CatalysisSimulation extends AbstractSurfaceSimulation {
+public abstract class AbstractCatalysisSimulation extends AbstractSurfaceSimulation {
     
     
-  public CatalysisSimulation(Parser parser) {
+  public AbstractCatalysisSimulation(Parser parser) {
     super(parser);
   } 
   

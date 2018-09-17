@@ -38,7 +38,7 @@ import ratesLibrary.IRates;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoSimulation extends CatalysisSimulation {
+public class CatalysisCoSimulation extends AbstractCatalysisSimulation {
   
   private final float[] coverage;
   
