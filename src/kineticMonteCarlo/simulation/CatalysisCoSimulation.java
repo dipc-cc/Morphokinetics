@@ -22,7 +22,7 @@ import basic.Parser;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisCoKmc;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisCoKmcHoffmann;
 import kineticMonteCarlo.kmcCore.catalysis.CatalysisFarkasKmc;
-import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
+import kineticMonteCarlo.kmcCore.catalysis.AbstractCatalysisKmc;
 import static kineticMonteCarlo.site.CatalysisCoSite.CO;
 import static kineticMonteCarlo.site.CatalysisCoSite.O;
 import ratesLibrary.CatalysisKiejnaRates;
@@ -102,7 +102,7 @@ public class CatalysisCoSimulation extends AbstractCatalysisSimulation {
   
   @Override
   float[] getCoverage() {
-    CatalysisKmc kmc = (CatalysisKmc) getKmc();
+    AbstractCatalysisKmc kmc = (AbstractCatalysisKmc) getKmc();
     coverage[0] = kmc.getCoverage();
     coverage[CO+1] += kmc.getCoverage(CO);
     coverage[O+1] += kmc.getCoverage(O);

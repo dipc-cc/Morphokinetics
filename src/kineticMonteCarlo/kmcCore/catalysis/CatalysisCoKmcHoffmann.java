@@ -43,7 +43,7 @@ import utils.StaticRandom;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoKmcHoffmann extends CatalysisKmc {
+public class CatalysisCoKmcHoffmann extends AbstractCatalysisKmc {
   
   private final boolean doAdsorption;
   // Adsorption

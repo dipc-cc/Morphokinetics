@@ -19,7 +19,7 @@
 package kineticMonteCarlo.simulation;
 
 import basic.Parser;
-import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
+import kineticMonteCarlo.kmcCore.catalysis.AbstractCatalysisKmc;
 
 /**
  *
@@ -33,8 +33,8 @@ public abstract class AbstractCatalysisSimulation extends AbstractSurfaceSimulat
   } 
   
   @Override
-  public CatalysisKmc getKmc() {
-    return (CatalysisKmc) super.getKmc();
+  public AbstractCatalysisKmc getKmc() {
+    return (AbstractCatalysisKmc) super.getKmc();
   }
   
   @Override

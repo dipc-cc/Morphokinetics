@@ -51,7 +51,7 @@ import utils.list.sites.SitesCollection;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisAmmoniaKmc extends CatalysisKmc {
+public class CatalysisAmmoniaKmc extends AbstractCatalysisKmc {
 
   private static final byte P5 = 4;
   private static final byte P6 = 5;

@@ -41,7 +41,7 @@ import utils.list.sites.SitesCollection;
  *
  * @author J. Alberdi-Rodriguez
  */
-public class CatalysisCoKmc extends CatalysisKmc {
+public class CatalysisCoKmc extends AbstractCatalysisKmc {
   
   private final boolean doAdsorption;
   /*final boolean doDesorption;

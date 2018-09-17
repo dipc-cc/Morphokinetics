@@ -31,7 +31,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
-import kineticMonteCarlo.kmcCore.catalysis.CatalysisKmc;
+import kineticMonteCarlo.kmcCore.catalysis.AbstractCatalysisKmc;
 import ratesLibrary.IRates;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -296,7 +296,7 @@ public abstract class AbstractSimulation {
       float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
       if (parser.outputData()) {
         if (parser.getOutputFormats().contains(formatFlag.CAT)) {
-          double[][] data = ((CatalysisKmc) kmc).getOutputAdsorptionData();
+          double[][] data = ((AbstractCatalysisKmc) kmc).getOutputAdsorptionData();
           restart.writeCatalysisAdsorptionDataText(simulations, data);
         }
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
@@ -370,7 +370,7 @@ public abstract class AbstractSimulation {
     String kmcResult = "";
     kmcResult += "\n\t__________________________________________________\n";
     kmcResult += "\tAverage\n";
-    if (kmc instanceof CatalysisKmc) {
+    if (kmc instanceof AbstractCatalysisKmc) {
       kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tCove CO\tCove O\n";
     } else {
       kmcResult += "\tSimulation time\t\tCoverage\tCPU time\tIsland avg.\tGyradius\n";

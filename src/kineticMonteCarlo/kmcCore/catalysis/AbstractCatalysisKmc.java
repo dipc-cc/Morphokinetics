@@ -28,7 +28,6 @@ import java.util.Iterator;
 import kineticMonteCarlo.activationEnergy.AbstractCatalysisActivationEnergy;
 import kineticMonteCarlo.site.AbstractCatalysisSite;
 import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
-import kineticMonteCarlo.lattice.CatalysisCoLattice;
 import kineticMonteCarlo.lattice.AbstractCatalysisLattice;
 import static kineticMonteCarlo.site.CatalysisCoSite.CO;
 import static kineticMonteCarlo.site.CatalysisCoSite.O;
@@ -44,7 +43,7 @@ import utils.list.sites.ISitesCollection;
  *
  * @author K. Valencia, J. Alberdi-Rodriguez
  */
-abstract public class CatalysisKmc extends AbstractSurfaceKmc {
+abstract public class AbstractCatalysisKmc extends AbstractSurfaceKmc {
 
   private final boolean outputData;
   private long simulatedSteps;
@@ -78,7 +77,7 @@ abstract public class CatalysisKmc extends AbstractSurfaceKmc {
   private SitesCollection col;
   private final boolean automaticCollections;
   
-  public CatalysisKmc(Parser parser, String restartFolder) {
+  public AbstractCatalysisKmc(Parser parser, String restartFolder) {
     super(parser);
     totalRate = new double[13]; // adsorption, desorption, reaction, diffusion
 
