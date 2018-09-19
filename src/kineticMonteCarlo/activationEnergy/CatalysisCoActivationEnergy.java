@@ -40,7 +40,6 @@ public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEner
   private Double[][][] histogramPossibleDesorption;
   /** CO|O, from BR|CUS to BR|CUS. For Farkas, number of CO^C with CO^C neighbours */
   private Double[][][][] histogramPossibleDiffusion;
-  
   private final int numberOfNeighbours;
   
   public CatalysisCoActivationEnergy(Parser parser) {
@@ -80,53 +79,51 @@ public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEner
       for (int i = 0; i < lattice.size(); i++) {
         CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          AbstractCatalysisSite atom = (AbstractCatalysisSite) uc.getSite(j);
+          AbstractCatalysisSite site = (AbstractCatalysisSite) uc.getSite(j);
           int numberOfCoNeighbours = 0;
-          if (atom.getLatticeSite() == CUS) {
-            numberOfCoNeighbours = atom.getCoCusNeighbours();
+          if (site.getLatticeSite() == CUS) {
+            numberOfCoNeighbours = site.getCoCusNeighbours();
           }
           // Adsorption
-          if (!atom.isOccupied()) {
+          if (!site.isOccupied()) {
             histogramPossibleAdsorption[CO] += elapsedTime;
-            if (!atom.isIsolated()) {
+            if (!site.isIsolated()) {
               histogramPossibleAdsorption[O] += elapsedTime;
             }
           } else {
             for (int pos = 0; pos < numberOfNeighbours; pos++) {
-              AbstractCatalysisSite neighbour = atom.getNeighbour(pos);
+              AbstractCatalysisSite neighbour = site.getNeighbour(pos);
               // Desorption
-              if (atom.getType() == CO) {
-                histogramPossibleDesorption[CO][atom.getLatticeSite()][numberOfCoNeighbours] += elapsedTime / 4.0; // it goes throw 4 times
+              if (site.getType() == CO) {
+                histogramPossibleDesorption[CO][site.getLatticeSite()][numberOfCoNeighbours] += elapsedTime / 4.0; // it goes throw 4 times
               } else if (neighbour.getType() == O && neighbour.isOccupied()) { // Two O together
-                histogramPossibleDesorption[O][atom.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
+                histogramPossibleDesorption[O][site.getLatticeSite()][neighbour.getLatticeSite()] += elapsedTime * 0.5; // it will be visited twice
               }
-
               // Diffusion
               if (!neighbour.isOccupied()) {
-                histogramPossibleDiffusion[atom.getType()][atom.getLatticeSite()][neighbour.getLatticeSite()][numberOfCoNeighbours] += elapsedTime;
+                histogramPossibleDiffusion[site.getType()][site.getLatticeSite()][neighbour.getLatticeSite()][numberOfCoNeighbours] += elapsedTime;
               }
-
               // Reaction
-              if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+              if (site.getType() == neighbour.getType() || !neighbour.isOccupied()) {
                 continue;
               }
               // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-              if (atom.getType() == CO) {
+              if (site.getType() == CO) {
                 if (numberOfCoNeighbours > 0) {
                   int index = 2 * neighbour.getLatticeSite() + numberOfCoNeighbours - 1;
                   histogramPossibleReactionCoCus[index] += elapsedTime / 2.0;
                 } else {
-                  updatePossible(atom.getLatticeSite(), neighbour.getLatticeSite(), elapsedTime / 2.0);
-                  histogramCounterTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
+                  updatePossible(site.getLatticeSite(), neighbour.getLatticeSite(), elapsedTime / 2.0);
+                  histogramCounterTmp[site.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
                 }
               } else {
                 numberOfCoNeighbours = neighbour.getCoCusNeighbours();
                 if (numberOfCoNeighbours > 0) {
-                  int index = 2 * atom.getLatticeSite() + numberOfCoNeighbours - 1;
+                  int index = 2 * site.getLatticeSite() + numberOfCoNeighbours - 1;
                   histogramPossibleReactionCoCus[index] += elapsedTime / 2.0;
                 } else {
-                  updatePossible(neighbour.getLatticeSite(), atom.getLatticeSite(), elapsedTime / 2.0);
-                  histogramCounterTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
+                  updatePossible(neighbour.getLatticeSite(), site.getLatticeSite(), elapsedTime / 2.0);
+                  histogramCounterTmp[neighbour.getLatticeSite()][site.getLatticeSite()] += 0.5;
                 }
               }
             }
@@ -147,22 +144,22 @@ public class CatalysisCoActivationEnergy extends AbstractCatalysisActivationEner
   @Override
   public void updatePossibles(Iterator<AbstractCatalysisSite> surface, double elapsedTime, boolean stationary) {
     if (doActivationEnergyStudy() && stationary) {
-      // iterate over all atoms of the surface to get all possible hops (only to compute multiplicity)
+      // iterate over all sites of the surface to get all possible hops (only to compute multiplicity)
       Double[][] histogramPossibleTmp = initDouble();
       while (surface.hasNext()) {
-        AbstractCatalysisSite atom = surface.next();
+        AbstractCatalysisSite site = surface.next();
         for (int pos = 0; pos < numberOfNeighbours; pos++) {
-          AbstractCatalysisSite neighbour = atom.getNeighbour(pos);
-          if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+          AbstractCatalysisSite neighbour = site.getNeighbour(pos);
+          if (site.getType() == neighbour.getType() || !neighbour.isOccupied()) {
             continue;
           }
           // [CO^BR][O^BR], [CO^BR][O^CUS], [CO^CUS][O^BR], [CO^CUS][O^CUS]
-          if (atom.getType() == CO) {
-            updatePossible(atom.getLatticeSite(), neighbour.getLatticeSite(), elapsedTime / 2.0);
-            histogramPossibleTmp[atom.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
+          if (site.getType() == CO) {
+            updatePossible(site.getLatticeSite(), neighbour.getLatticeSite(), elapsedTime / 2.0);
+            histogramPossibleTmp[site.getLatticeSite()][neighbour.getLatticeSite()] += 0.5;
           } else {
-            updatePossible(neighbour.getLatticeSite(), atom.getLatticeSite(), elapsedTime / 2.0);
-            histogramPossibleTmp[neighbour.getLatticeSite()][atom.getLatticeSite()] += 0.5;
+            updatePossible(neighbour.getLatticeSite(), site.getLatticeSite(), elapsedTime / 2.0);
+            histogramPossibleTmp[neighbour.getLatticeSite()][site.getLatticeSite()] += 0.5;
           }
         }
       }

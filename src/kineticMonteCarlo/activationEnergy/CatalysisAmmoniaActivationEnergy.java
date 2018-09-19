@@ -37,8 +37,8 @@ import kineticMonteCarlo.unitCell.CatalysisUc;
  * @author J. Alberdi-Rodriguez
  */
 public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivationEnergy {
+ 
   private Double[] histogramPossibles;
-
   private final int numberOfNeighbours;
   
   public CatalysisAmmoniaActivationEnergy(Parser parser) {
@@ -63,18 +63,18 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
       for (int i = 0; i < lattice.size(); i++) {
         CatalysisUc uc = (CatalysisUc) lattice.getUc(i);
         for (int j = 0; j < uc.size(); j++) {
-          AbstractCatalysisSite atom = (AbstractCatalysisSite) uc.getSite(j);
+          AbstractCatalysisSite site = (AbstractCatalysisSite) uc.getSite(j);
           // Adsorption
-          if (!atom.isOccupied()) {
+          if (!site.isOccupied()) {
             histogramPossibles[1] += elapsedTime; // P1
-            if (!atom.isIsolated()) {
+            if (!site.isIsolated()) {
               histogramPossibles[3] += elapsedTime; // P3
             }
           } else {
             for (int pos = 0; pos < numberOfNeighbours; pos += 2) {
-              AbstractCatalysisSite neighbour = atom.getNeighbour(pos);
+              AbstractCatalysisSite neighbour = site.getNeighbour(pos);
               // Desorption
-              switch (atom.getType()) {
+              switch (site.getType()) {
                 case NH3:
                   histogramPossibles[2] += elapsedTime; // P2
                   break;
@@ -92,11 +92,9 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
                   }
                   break;
               }
-              
-              
               // Diffusion
               if (!neighbour.isOccupied()) {
-                switch (atom.getType()) {
+                switch (site.getType()) {
                   case N:
                     histogramPossibles[12] += elapsedTime; // P12
                     break;
@@ -108,39 +106,38 @@ public class CatalysisAmmoniaActivationEnergy extends AbstractCatalysisActivatio
                     break;
                 }
               }
-
               // Reaction
-              if (atom.getType() == neighbour.getType() || !neighbour.isOccupied()) {
+              if (site.getType() == neighbour.getType() || !neighbour.isOccupied()) {
                 continue;
               }
-              if ((atom.getType() == NH3 && neighbour.getType() == O)
-                      || (atom.getType() == O && neighbour.getType() == NH3)) {
+              if ((site.getType() == NH3 && neighbour.getType() == O)
+                      || (site.getType() == O && neighbour.getType() == NH3)) {
                 histogramPossibles[5] += elapsedTime / 2.0; // P5
               }
-              if ((atom.getType() == NH2 && neighbour.getType() == OH)
-                      || (atom.getType() == OH && neighbour.getType() == NH2)) {
+              if ((site.getType() == NH2 && neighbour.getType() == OH)
+                      || (site.getType() == OH && neighbour.getType() == NH2)) {
                 histogramPossibles[6] += elapsedTime / 2.0; // P6
                 histogramPossibles[17] += elapsedTime / 2.0; // P17
               }
-              if ((atom.getType() == NH && neighbour.getType() == OH)
-                      || (atom.getType() == OH && neighbour.getType() == NH)) {
+              if ((site.getType() == NH && neighbour.getType() == OH)
+                      || (site.getType() == OH && neighbour.getType() == NH)) {
                 histogramPossibles[7] += elapsedTime / 2.0; // P7
                 histogramPossibles[16] += elapsedTime / 2.0; // P16
               }
-              if ((atom.getType() == NH && neighbour.getType() == O)
-                      || (atom.getType() == O && neighbour.getType() == NH)) {
+              if ((site.getType() == NH && neighbour.getType() == O)
+                      || (site.getType() == O && neighbour.getType() == NH)) {
                 histogramPossibles[8] += elapsedTime / 2.0; // P8
               }
-              if ((atom.getType() == N && neighbour.getType() == O)
-                      || (atom.getType() == O && neighbour.getType() == N)) {
+              if ((site.getType() == N && neighbour.getType() == O)
+                      || (site.getType() == O && neighbour.getType() == N)) {
                 histogramPossibles[9] += elapsedTime / 2.0; // P9
               }
-              if ((atom.getType() == NH2 && neighbour.getType() == O)
-                      || (atom.getType() == O && neighbour.getType() == NH2)) {
+              if ((site.getType() == NH2 && neighbour.getType() == O)
+                      || (site.getType() == O && neighbour.getType() == NH2)) {
                 histogramPossibles[15] += elapsedTime / 2.0; // P15
               }
-              if ((atom.getType() == N && neighbour.getType() == OH)
-                      || (atom.getType() == OH && neighbour.getType() == N)) {
+              if ((site.getType() == N && neighbour.getType() == OH)
+                      || (site.getType() == OH && neighbour.getType() == N)) {
                 histogramPossibles[18] += elapsedTime / 2.0; // P18
               }
             }
