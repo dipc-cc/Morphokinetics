@@ -321,6 +321,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       if (doP[TRANSFORM])  recomputeTransformRate(site);
       if (doP[SHIFT])      recomputeShiftRate(site);
     }
+    lattice.setMonomerCount(sites[TRANSFORM].size());
     
     // recalculate total rate, if needed
     if (totalRate[ADSORPTION] / previousRate[ADSORPTION] < 1e-1) {

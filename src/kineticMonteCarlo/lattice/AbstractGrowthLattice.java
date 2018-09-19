@@ -312,6 +312,16 @@ public abstract class AbstractGrowthLattice extends AbstractSurfaceLattice imple
   }
   
   /**
+   * Sets the number of monomers, valid for instance for counting BDA monomer
+   * molecules.
+   *
+   * @param monomerCount
+   */
+  public void setMonomerCount(int monomerCount) {
+    this.monomerCount = -monomerCount;
+  }
+  
+  /**
    * Monomers are atoms without neighbours. After have counted them with
    * {@link #countIslands(java.io.PrintWriter)}, the number of monomers is available.
    *

@@ -22,7 +22,8 @@ import java.util.List;
 import javafx.geometry.Point3D;
 
 /**
- *
+ * This object is used to represent each of the atoms of the BDA molecule.
+ * 
  * @author J. Alberdi-Rodriguez
  */
 public class BdaAtomSite extends AbstractGrowthSite {
