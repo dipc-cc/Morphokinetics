@@ -23,7 +23,6 @@ import basic.io.CatalysisCoRestart;
 import basic.io.OutputType;
 import java.util.Iterator;
 import kineticMonteCarlo.activationEnergy.CatalysisCoHoffmannActivationEnergy;
-import kineticMonteCarlo.kmcCore.growth.AbstractSurfaceKmc;
 import kineticMonteCarlo.lattice.CatalysisCoHoffmannLattice;
 import static kineticMonteCarlo.lattice.CatalysisCoHoffmannLattice.N_REACT;
 import kineticMonteCarlo.site.AbstractCatalysisSite;
