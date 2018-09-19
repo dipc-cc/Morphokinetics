@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import kineticMonteCarlo.activationEnergy.BdaActivationEnergy;
 import kineticMonteCarlo.lattice.BdaLattice;
 import static kineticMonteCarlo.process.BdaProcess.ADSORPTION;
 import static kineticMonteCarlo.process.BdaProcess.DESORPTION;
@@ -85,6 +86,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private AbstractBdaRates rates;
   private boolean[] doP;
   private boolean adsorptionStopped;
+  private BdaActivationEnergy ae;
 
   public BdaKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -123,6 +125,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       doP[i] = parser.doBdaProcess(processes[i]);
     }
     adsorptionStopped = false;
+    ae = new BdaActivationEnergy(parser);
   }
   
   @Override
@@ -140,7 +143,8 @@ public class BdaKmc extends AbstractGrowthKmc {
     intermediateWrites = 0;
 
     while (true) {
-      getList().getDeltaTime(true);
+      boolean stationary = false;
+      ae.updatePossibles(lattice, getList().getDeltaTime(true), stationary);
       if (getLattice().isPaused()) {
         try {
           Thread.sleep(250);
