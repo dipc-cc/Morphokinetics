@@ -35,9 +35,17 @@ import kineticMonteCarlo.lattice.AbstractLattice;
 public class BdaRestart extends Restart {
   
   private PrintWriter outData;
+  private PrintWriter outDataAe[];
   
   public BdaRestart(String restartFolder) {
     super(restartFolder);
+    outDataAe = new PrintWriter[1];
+
+  }
+  
+  @Override
+  public PrintWriter[] getExtraWriters() {
+    return outDataAe;
   }
   
   @Override
@@ -65,6 +73,10 @@ public class BdaRestart extends Restart {
       String fileName = format("%sdataBda%03d.txt", getFolder(), simulationNumber);
       outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
       outData.println("# File " + fileName);
+      String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList",
+          "PossibleDiscrete", "RatioTimesPossible", "Multiplicity", "All"};
+      fileName = format("%sdataAe%s%03d.txt", getFolder(), names[2], simulationNumber);
+      outDataAe[0] = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
     } catch (IOException e) {
       Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
     }

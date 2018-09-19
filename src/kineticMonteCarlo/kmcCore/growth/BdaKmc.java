@@ -619,7 +619,7 @@ public class BdaKmc extends AbstractGrowthKmc {
    * Print current information to extra file.
    */
   private void printData() {
-    int surfaceNumber = 10000* simulationNumber+intermediateWrites;
+    int surfaceNumber = 10000 * simulationNumber + intermediateWrites;
     intermediateWrites++;
     restart.writeSurfaceBinary2D(
             getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
@@ -628,5 +628,6 @@ public class BdaKmc extends AbstractGrowthKmc {
 
     restart.writeExtraOutput(150, getTime(), ((BdaLattice)getLattice()).getCoverages(), null, null, null);
     restart.flushExtra();
+    ae.printAe(restart.getExtraWriters(), getTime());
   }
 }

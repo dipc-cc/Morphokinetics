@@ -58,4 +58,12 @@ public class BdaActivationEnergy extends ActivationEnergy {
     print.print(time + "\t");
     print.print(histogramPossibles + "\t");
   }
+  
+  @Override
+  public void printAe(PrintWriter print[], double time) {
+    print[0].print(time + "\t");
+    print[0].print(histogramPossibles);
+    print[0].println();
+    print[0].flush();
+  }
 }
