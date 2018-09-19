@@ -149,8 +149,8 @@ public class BdaKmc extends AbstractGrowthKmc {
         }
       } else {
         //updatePossibles();
-        if (extraOutput && timeLimit < getTime()) { // print extra data every 1% of coverage, previously every 1/1000 and 1/10000
-          timeLimit += 0.1;
+        if (extraOutput && timeLimit < getTime()) { // print extra data every timeLimit interval (0.1 s for instance)
+          timeLimit += 0.01;
           printData();
         }
         if (performSimulationStep()) {
