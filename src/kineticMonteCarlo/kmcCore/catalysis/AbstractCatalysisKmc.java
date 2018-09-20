@@ -348,11 +348,11 @@ abstract public class AbstractCatalysisKmc extends AbstractSurfaceKmc {
       for (byte i = 0; i < sites.length; i++) {
         long startTime = System.currentTimeMillis();
         if ((sites[i].size() > 1000) && sites[i] instanceof SitesArrayList) {
-          changeCollection(sites[i], i, true);
+          sites[i] = changeCollection(sites[i], i, true);
           System.out.println("Changed to Tree " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
         if ((sites[i].size() < 500) && sites[i] instanceof SitesAvlTree) {
-          changeCollection(sites[i], i, false);
+          sites[i] = changeCollection(sites[i], i, false);
           System.out.println("Changed to Array " + i + " in " + (System.currentTimeMillis() - startTime) + " ms");
         }
       }
@@ -365,7 +365,7 @@ abstract public class AbstractCatalysisKmc extends AbstractSurfaceKmc {
    * @param process ADSORPTION, DESORPTION, REACTION, DIFFUSION.
    * @param toTree if true from array to tree, otherwise from tree to array.
    */
-  private void changeCollection(ISitesCollection site, byte process, boolean toTree) {
+  private ISitesCollection changeCollection(ISitesCollection site, byte process, boolean toTree) {
     site = col.getCollection(toTree, process);
     for (int i = 0; i < getLattice().size(); i++) {
       CatalysisUc uc = getLattice().getUc(i);
@@ -375,6 +375,7 @@ abstract public class AbstractCatalysisKmc extends AbstractSurfaceKmc {
       }
     }
     site.populate();
+    return site;
   }
   
   /**
