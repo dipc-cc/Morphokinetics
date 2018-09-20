@@ -170,6 +170,11 @@ public class BdaKmc extends AbstractGrowthKmc {
         if (getLattice().getCoverage() > maxCoverage) {
           stopAdsorption();
         }
+        if (adsorptionStopped && ae.doActivationEnergyStudy()) {
+          if (allBeta()) {
+            break;
+          }
+        }
       }
     }
     if (aeOutput) {
@@ -602,6 +607,15 @@ public class BdaKmc extends AbstractGrowthKmc {
     sites[ADSORPTION].populate();
     adsorptionStopped = true;
     doP[ADSORPTION] = false;
+  }
+  
+  /**
+   * All deposited atoms has become BDA beta molecule.
+   * 
+   * @return 
+   */
+  private boolean allBeta() {
+    return steps[TRANSFORM] == steps[ADSORPTION];
   }
     
   public void setRates(AbstractBdaRates rates) {
