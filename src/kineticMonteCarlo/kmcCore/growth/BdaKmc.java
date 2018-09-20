@@ -21,6 +21,8 @@ package kineticMonteCarlo.kmcCore.growth;
 import basic.Parser;
 import basic.io.BdaRestart;
 import basic.io.OutputType;
+import static basic.io.OutputType.formatFlag.MKO;
+import static basic.io.OutputType.formatFlag.SVG;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -87,6 +89,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private boolean[] doP;
   private boolean adsorptionStopped;
   private BdaActivationEnergy ae;
+  private final boolean[] write;
 
   public BdaKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -126,6 +129,9 @@ public class BdaKmc extends AbstractGrowthKmc {
     }
     adsorptionStopped = false;
     ae = new BdaActivationEnergy(parser);
+    write = new boolean[2];
+    write[0] = parser.getOutputFormats().contains(MKO);
+    write[0] = parser.getOutputFormats().contains(SVG);
   }
   
   @Override
@@ -621,10 +627,12 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void printData() {
     int surfaceNumber = 10000 * simulationNumber + intermediateWrites;
     intermediateWrites++;
-    restart.writeSurfaceBinary2D(
-            getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
-            surfaceNumber);
-    restart.writeSvg(surfaceNumber, getLattice(), false);
+    if (write[0])
+      restart.writeSurfaceBinary2D(
+              getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
+              surfaceNumber);
+    if (write[1])
+      restart.writeSvg(surfaceNumber, getLattice(), false);
 
     restart.writeExtraOutput(150, getTime(), ((BdaLattice)getLattice()).getCoverages(), null, null, null);
     restart.flushExtra();
