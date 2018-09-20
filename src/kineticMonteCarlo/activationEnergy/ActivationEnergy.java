@@ -101,7 +101,7 @@ public class ActivationEnergy {
     previousProbability = 0;
   }
   
-  boolean doActivationEnergyStudy() {
+  public boolean doActivationEnergyStudy() {
     return doActivationEnergyStudy;
   }
 
