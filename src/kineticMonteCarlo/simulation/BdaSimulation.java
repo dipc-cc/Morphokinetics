@@ -24,6 +24,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.growth.BdaKmc;
+import kineticMonteCarlo.lattice.BdaLattice;
+import static kineticMonteCarlo.site.BdaMoleculeSite.ALPHA;
+import static kineticMonteCarlo.site.BdaMoleculeSite.BETA;
 import ratesLibrary.IRates;
 import ratesLibrary.bda.AbstractBdaRates;
 
@@ -95,5 +98,24 @@ public class BdaSimulation extends AbstractGrowthSimulation {
   @Override
   public int getCurrentProgress() {
     return (int) (getKmc().getCoverage()*100);
+  }
+  
+  @Override
+  String secondLine() {
+    System.out.println("    I\tSimul time\tCover. a\tCPU\tCover. ß\tSteps");
+    return "";
+  }
+  
+  @Override
+  float[] getCoverage() {
+    float[] cov = new float[1];
+    cov[0] = ((BdaLattice)getKmc().getLattice()).getCoverage(ALPHA);
+    return cov;
+  }
+  
+  @Override
+  void printBottom() {
+    System.out.format("\t%.4f", ((BdaLattice)getKmc().getLattice()).getCoverage(BETA));
+    System.out.format("\t%1.1e", (double) getKmc().getSimulatedSteps());
   }
 }
