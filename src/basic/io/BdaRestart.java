@@ -86,6 +86,7 @@ public class BdaRestart extends Restart {
   public void reset() {
     super.reset();
     initBdaRestart(getIteration());
+    setIteration(getIteration()+1);
   }
   
   @Override
