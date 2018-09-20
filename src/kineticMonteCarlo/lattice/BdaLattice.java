@@ -207,13 +207,15 @@ public class BdaLattice extends AbstractGrowthLattice {
       }
       BdaAgSurfaceSite neighbour = lh.agArray(x + pos[i][0], y + pos[i][1]);
       if (neighbour.isOccupied()) {
-        BdaMoleculeSite neighbourSite = (BdaMoleculeSite) neighbour.getBdaUc().getSite(0);
-        if (neighbourSite.isRotated() != rotated) {
-          continue; // only the same rotation molecules can be neighbours
-        }
-        if (neighbourSite.isShifted() != shifted) { // set neighbour
-          origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), i);
-          neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), i);
+        if (neighbour.getBdaUc().getSite(0).getType() == BETA) {
+          BdaMoleculeSite neighbourSite = (BdaMoleculeSite) neighbour.getBdaUc().getSite(0);
+          if (neighbourSite.isRotated() != rotated) {
+            continue; // only the same rotation molecules can be neighbours
+          }
+          if (neighbourSite.isShifted() != shifted) { // set neighbour
+            origin.getBdaUc().setNeighbour(neighbour.getBdaUc(), i);
+            neighbour.getBdaUc().setNeighbour(origin.getBdaUc(), i);
+          }
         }
       }
       if (i == 3) {
