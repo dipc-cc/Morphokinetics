@@ -50,7 +50,8 @@ public class BdaLattice extends AbstractGrowthLattice {
   private int depositions;
   Stencil stencil;  
   /**
-   * Current species coverages, alpha or beta.
+   * Current species coverages, [0] alpha, [1] beta, [2] alpha monomers, [3]
+   * beta monomers.
    */
   private final int[] coverage;
 
@@ -61,7 +62,7 @@ public class BdaLattice extends AbstractGrowthLattice {
     lh = new BdaLatticeHelper(hexaSizeI, hexaSizeJ, agUcArray);
     depositions = 0;
     stencil = new Stencil(hexaSizeI, hexaSizeJ);
-    coverage = new int[2];
+    coverage = new int[4];
   }
   
   public BdaSurfaceUc getAgUc(BdaAgSurfaceSite agSite) {
@@ -135,6 +136,8 @@ public class BdaLattice extends AbstractGrowthLattice {
     coverage[agSiteOrigin.getBdaUc().getSite(0).getType()]--;
     agSiteOrigin.getBdaUc().getSite(0).setType((byte) BETA);
     coverage[BETA]++;
+    coverage[2]--; // ALPHA monomers
+    coverage[3]++; // BETA  monomers
   }
   
   /**
@@ -347,6 +350,24 @@ public class BdaLattice extends AbstractGrowthLattice {
     BdaMoleculeUc bdaUc = origin.getBdaUc();
     return bdaUc.getOccupiedNeighbours() == 0;
   }
+  
+  public void checkMonomer(BdaAgSurfaceSite agSite) {
+    BdaSurfaceUc agUc = getAgUc(agSite);
+    agUc.getSite(0).getType();
+    if (agSite.isOccupied()) {
+      BdaMoleculeUc bdaUc = agSite.getBdaUc();
+      if (bdaUc.getOccupiedNeighbours() == 0 && !bdaUc.isMonomer()) {
+        byte type = ((BdaAgSurfaceSite) agUc.getSite(0)).getBdaUc().getSite(0).getType();
+        coverage[2 + type]++;
+        bdaUc.setMonomer(true);
+      }
+      if (bdaUc.getOccupiedNeighbours() != 0 && bdaUc.isMonomer()) {
+        byte type = ((BdaAgSurfaceSite) agUc.getSite(0)).getBdaUc().getSite(0).getType();
+        coverage[2 + type]--;
+        bdaUc.setMonomer(false);
+      }
+    }
+  }
 
   /**
    * Includes all -2, +2 in main molecule axis and -1,+1 in the other axis of the current site in a
@@ -558,5 +579,8 @@ public class BdaLattice extends AbstractGrowthLattice {
       }
     }
     depositions = 0;
+    for (int i = 0; i < coverage.length; i++) {
+      coverage[i] = 0;
+    }
   }
 }

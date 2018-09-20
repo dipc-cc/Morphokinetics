@@ -335,6 +335,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       if (doP[ROTATION])   recomputeRotationRate(site);
       if (doP[TRANSFORM])  recomputeTransformRate(site);
       if (doP[SHIFT])      recomputeShiftRate(site);
+      recomputeMonomers(site);
     }
     lattice.setMonomerCount(sites[TRANSFORM].size());
     
@@ -448,6 +449,10 @@ public class BdaKmc extends AbstractGrowthKmc {
       }
       recomputeCollection(TRANSFORM, agSite, oldRotationRate);
     }
+  }
+  
+  private void recomputeMonomers(BdaAgSurfaceSite agSite) {
+    lattice.checkMonomer(agSite);
   }
   
   private double getTransformRate() {

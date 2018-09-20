@@ -43,6 +43,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
   private final int numberOfNeighbours;
   private int occupiedNeighbours;
   private final int id;
+  private boolean isMonomer;
   
   public BdaMoleculeUc(int id, Byte type) {
     super(-1, -1, null);
@@ -53,6 +54,7 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
     neighbours = new BdaMoleculeUc[numberOfNeighbours];
     energy = 0;
     occupiedNeighbours = 0;
+    isMonomer = false;
   }
    
   public void setNeighbour(BdaMoleculeUc uc, int neighbourCode) {
@@ -186,6 +188,14 @@ public class BdaMoleculeUc extends AbstractGrowthUc implements IUc {
 
   public void setShifted(boolean shifted) {
     bdaMolecule.setShifted(shifted);
+  }
+
+  public boolean isMonomer() {
+    return isMonomer;
+  }
+
+  public void setMonomer(boolean isMonomer) {
+    this.isMonomer = isMonomer;
   }
   
   @Override
