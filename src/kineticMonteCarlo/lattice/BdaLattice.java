@@ -76,6 +76,10 @@ public class BdaLattice extends AbstractGrowthLattice {
   public int[] getCoverages() {
     return coverage;
   }
+  
+  public float getCoverage(int type) {
+    return 10 * (float) coverage[type] / (float) (getHexaSizeI() * getHexaSizeJ());
+  }
 
   @Override
   public void deposit(AbstractSurfaceSite agSite, boolean rotated) {
