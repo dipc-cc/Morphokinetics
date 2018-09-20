@@ -41,7 +41,7 @@ public class BdaSimulation extends AbstractGrowthSimulation {
     restart = new BdaRestart(getRestartFolderName());
     setRestart(restart);
     if (parser.outputData()){
-      outputEvery = parser.getOutputEvery();
+      outputEvery = (int) parser.getOutputEvery();
     } else {
       outputEvery = -1;
     }

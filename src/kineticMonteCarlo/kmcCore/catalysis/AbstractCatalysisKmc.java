@@ -85,7 +85,7 @@ abstract public class AbstractCatalysisKmc extends AbstractSurfaceKmc {
     outputData = parser.outputData();
     maxSteps = parser.getNumberOfSteps();
     if (outputData) {
-      outputEvery = parser.getOutputEvery();
+      outputEvery = (int) parser.getOutputEvery();
       adsorptionData = new ArrayList<>();
     }
     doDiffusion = parser.doCatalysisDiffusion();

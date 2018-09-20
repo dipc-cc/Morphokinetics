@@ -125,7 +125,6 @@ public class Parser {
     mapInt.put("millerZ", 1);
     mapInt.put("binsLevels", 100);
     mapInt.put("extraLevels", 0);
-    mapInt.put("outputEvery", 10);
     mapBoolean = new LinkedHashMap<>();
     mapBoolean.put("multithreaded", true);
     mapBoolean.put("visualise", true);
@@ -155,6 +154,7 @@ public class Parser {
     mapDouble.put("minValueGene", 0.1);
     mapDouble.put("maxValueGene", 1e11);
     mapDouble.put("goMultiplier", 1.0);
+    mapDouble.put("outputEvery", 1e5);
     mapInt.put("populationSize", 5);
     mapInt.put("offspringSize", 32);
     mapInt.put("populationReplacement", 5);
@@ -928,12 +928,14 @@ public class Parser {
   }
   
   /**
-   * How frequently should be printed extra file of catalysis.
-   * 
-   * @return output frequency.
+   * How frequently should be printed extra file of catalysis or BDA
+   * simulations.
+   *
+   * @return output frequency. In number of events for catalysis. In simulated
+   * time in BDA.
    */
-  public int getOutputEvery() {
-    return mapInt.get("outputEvery");
+  public double getOutputEvery() {
+    return mapDouble.get("outputEvery");
   }
   
   /**

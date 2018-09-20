@@ -81,7 +81,7 @@ public class BdaKmc extends AbstractGrowthKmc {
   private final boolean aeOutput;
   private final long maxSteps;
   private final boolean outputData;
-  private int outputEvery;
+  private double outputEvery;
   private int intermediateWrites;
   private double adsorptionRatePerSite;
   private double[] desorptionRatePerMolecule;
@@ -131,7 +131,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     ae = new BdaActivationEnergy(parser);
     write = new boolean[2];
     write[0] = parser.getOutputFormats().contains(MKO);
-    write[0] = parser.getOutputFormats().contains(SVG);
+    write[1] = parser.getOutputFormats().contains(SVG);
   }
   
   @Override
@@ -144,7 +144,7 @@ public class BdaKmc extends AbstractGrowthKmc {
     simulationNumber++;
     int coverageThreshold = 1;
     int limit = 100000;
-    double timeLimit = 0.1;
+    double timeLimit = outputEvery;
     int returnValue = 0;
     intermediateWrites = 0;
 
@@ -160,7 +160,7 @@ public class BdaKmc extends AbstractGrowthKmc {
       } else {
         //updatePossibles();
         if (extraOutput && timeLimit < getTime()) { // print extra data every timeLimit interval (0.1 s for instance)
-          timeLimit += 0.01;
+          timeLimit += outputEvery;
           printData();
         }
         if (performSimulationStep()) {
@@ -627,12 +627,14 @@ public class BdaKmc extends AbstractGrowthKmc {
   private void printData() {
     int surfaceNumber = 10000 * simulationNumber + intermediateWrites;
     intermediateWrites++;
-    if (write[0])
+    if (write[0]) {
       restart.writeSurfaceBinary2D(
               getSampledSurface((int) getLattice().getCartSizeX(), (int) getLattice().getCartSizeY()),
               surfaceNumber);
-    if (write[1])
+    }
+    if (write[1]) {
       restart.writeSvg(surfaceNumber, getLattice(), false);
+    }
 
     restart.writeExtraOutput(150, getTime(), ((BdaLattice)getLattice()).getCoverages(), null, null, null);
     restart.flushExtra();
