@@ -40,6 +40,7 @@ class Info:
         self.mMsr = -1       # place to gather p.mCov and p.nCo2
         self.minA = 0 # min alfa: possible transition types (i.e. different energies)
         self.corr = 1 # corrections for rates
+        self.energies = Energy.Energy(self)
 
     def getInformationFromFile(self, fileName = ""):
         if fileName == "":
@@ -120,10 +121,12 @@ class Info:
         return ratios
 
     def getRatiosTotal(self):
-        self.energies = Energy.Energy()
         self.ratios = Ratio.Ratio(self.energies, self.temp, [self.prCO, self.prO2])
 
         return self.ratios.getRatios()
+
+    def getEnergies(self):
+        return self.energies.getEnergies()
     
     def getTemperatures(self,*types):
         temperatures = glob.glob("[1-9]*")

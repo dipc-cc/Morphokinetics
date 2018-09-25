@@ -14,7 +14,6 @@ class Concerted:
 
     def __init__(self):
         self.cPlot = ConcertedPlot.ConcertedPlot()
-        self.energy = Energy.Energy()
         self.info = inf.Info()
         self.total = False
         self.sp = False
@@ -82,7 +81,7 @@ class Concerted:
         self.info.mCov = len(matrix)
         self.cov = matrix[:,0]
         self.multi.setInfo(self.info, self.cov)
-                
+
         if self.lmbdas:
             self.multiL.setInfo(self.info)
 
@@ -91,7 +90,7 @@ class Concerted:
         if not self.total:
             self.totalRateEvents = np.copy(self.rates[:,:,self.ratesI]) # it is a inner rate
         self.activationEnergy, self.multiplicityEa = self.multi.getMultiplicityEa(self.temperatures,self.labelAlfa,self.sp,self.tempMavg,self.omega,self.totalRateEvents,self.ext,self.one)
-        energies = self.energy.getEnergies()
+        energies = self.info.getEnergies()
         self.ratioEa = np.zeros(shape=(self.info.mCov,self.maxRanges,self.info.maxA-self.info.minA))
         for i,a in enumerate(range(self.minAlfa,self.maxAlfa)):
             self.ratioEa[:,:,i] = energies[a]

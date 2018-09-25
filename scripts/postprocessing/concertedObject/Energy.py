@@ -2,6 +2,7 @@ import numpy as np
 import concertedEnergies as c
 import EnergyCuNi
 import EnergyNiCu
+import pdb
 
 class Energy:
     kJtoeV = 96.485
@@ -20,9 +21,13 @@ class Energy:
     sigma[1] = 1.32;
     h = 6.6260695729e-34 #Planck constant (J·s).
 
-    def __init__(self):
+    def __init__(self, info):
         """ Must choose from an energy library """
-        library = EnergyNiCu.EnergyNiCu()
+        if info.rLib == "\"NiCu\"":
+            library = EnergyNiCu.EnergyNiCu()
+        else:
+            library = EnergyCuNi.EnergyCuNi()
+        
         self.energies = library.energies
         self.concertedEnergies = library.concertedEnergies
         self.multiAtomEnergies = library.multiAtomEnergies
