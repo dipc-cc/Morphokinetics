@@ -103,14 +103,13 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
     }
   }
 
-  public void updatePossiblesMultiAtoms(Iterator<MultiAtom> islands, double totalAndDepositionProbability, double elapsedTime) {
+  public void updatePossiblesMultiAtoms(Iterator<MultiAtom> multiAtoms, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy()) {
       // iterate over all MultiAtom of the surface to get all possible hops (only to compute multiplicity)
-      while (islands.hasNext()) {
-        Island island = (Island) islands.next();
-        if (island.getNumberOfAtoms() < 9) {
-          histogramPossibleMultiAtom[island.getNumberOfAtoms()] += elapsedTime;
-        }
+      while (multiAtoms.hasNext()) {
+        MultiAtom multiAtom = (MultiAtom) multiAtoms.next();
+        histogramPossibleMultiAtom[multiAtom.getEdgeType(0)] += elapsedTime; // for atom 0
+        histogramPossibleMultiAtom[multiAtom.getEdgeType(1)] += elapsedTime; // for atom 1
       }
     }
   }
