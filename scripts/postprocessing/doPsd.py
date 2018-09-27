@@ -22,6 +22,8 @@ from configurator import Configurator
 import os
 
 cf = Configurator()
+filtered = "Fil" # Available options are: "Fil" and "Raw"
+
 for j in cf.generateParams():
     cf.createFolder(j)
     print(os.getcwd())
@@ -29,7 +31,7 @@ for j in cf.generateParams():
         psd = PsdPreparator()
         for i in psd.generateParams():
             psd.writeParameters(i)
-            psd.runPsd()
-            psd.plotPsd()
+            psd.runPsd(filtered)
+            psd.plotPsd(filtered)
     except FileNotFoundError:
         continue

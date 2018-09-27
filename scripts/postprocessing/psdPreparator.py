@@ -22,6 +22,8 @@ import shutil as sh
 import glob
 from pathlib import Path
 
+import pdb
+
 class PsdPreparator:
     """ Creates simple parameter files"""
     coverages = [10,20,30]#np.arange(1,100)
@@ -54,21 +56,24 @@ class PsdPreparator:
                             "withGui": self.withGui,
                             "coverage": self.cov,
                     }, sort_keys=True, indent=2)) 
-    def runPsd(self):
+    def runPsd(self, filtered="Raw", skip=False):
+        if skip:
+            return
         cmd = "java -jar $HOME/ownCloud/ekmc-project/dist/morphokinetics.jar 2>&1 >/dev/null"
-        fname = "results/psd"+str(self.cov).zfill(2)+".txt"
+        fname = "results/psd"+str(self.cov).zfill(2)+filtered+".txt"
         resultFile = Path(fname)
         if not resultFile.is_file(): #run only if it is not done
             print("Running Morphokinetics...")
             os.system(cmd)
 
-    def plotPsd(self):
+    def plotPsd(self, filtered="Raw"):
         os.chdir("results")
-        sh.copy("psdAvgRaw.txt", "psd"+str(self.cov).zfill(2)+".txt")
-        cmd = "plot_psd.sh"
+        inputFile = "psdAvg"+filtered+".txt"
+        sh.copy(inputFile, "psd"+str(self.cov).zfill(2)+filtered+".txt")
+        cmd = "plot_psd.sh "+inputFile
         fname = "psd"+str(self.cov).zfill(2)+".png"
         resultFile = Path(fname)
         if not resultFile.is_file(): #run only if it is not done
-            print("Running GNUplot")
+            print("Running GNUplot "+cmd)
             os.system(cmd)
             sh.copy("psd.png", fname)

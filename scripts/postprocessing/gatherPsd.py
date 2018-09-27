@@ -18,12 +18,18 @@
 # along with Morphokinetics.  If not, see <http://www.gnu.org/licenses/>.
 
 import os
+import sys
 import glob
 import info as inf
 import shutil as sh
 
+import pdb
+
 temperatures = inf.getTemperatures()
-cov = 10
+cov = 20
+if len(sys.argv) > 1:
+    cov = int(sys.argv[1])
+
 surfaces = ' '.join("psd"+str(cov)+str(t)+".png" for t in temperatures)
 workingPath = os.getcwd()
 for i,t in enumerate(temperatures):
@@ -40,9 +46,9 @@ for i,t in enumerate(temperatures):
     except FileNotFoundError:
         continue
     
-    sh.copy("psd10"+str(t)+".png",workingPath)
+    sh.copy("psd"+str(cov)+str(t)+".png",workingPath)
 
 os.chdir(workingPath)
 #os.system("montage $(ls *svg | sort -n) allSurfaces.png")
-os.system("montage -tile x1 "+surfaces+" allPsds.png")
+os.system("montage -tile x1 "+surfaces+" allPsds"+str(cov)+".png")
 #os.system("convert allSurfaces.png -pointsize 10 -gravity south -annotate 0 "+workingPath+" -resize %70 labelSurfaces.png")
