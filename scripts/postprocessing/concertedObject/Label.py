@@ -30,7 +30,7 @@ class Label:
         for i in range(0,9):
             labelAlfa.append(r"$I_{"+str(i)+"}$")
         for i in range(0,4):
-            labelAlfa.append(r"$M_{"+str(i)+"}$")
+            labelAlfa.append(r"$M_{"+str(i+1)+"}$")
         return labelAlfa
 
     def __getLabel(self, i, j):
