@@ -15,20 +15,22 @@ class ConcertedPlot:
     cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p"]
 
-    def plotTotalRate(self, concerted):
+    def plotTotalRate(self, concerted, cov=0.2):
         if not concerted.total:
             concerted.totalRateEvents = np.copy(concerted.rates[:,:,concerted.ratesI]) # it is a inner rate
-        
-        latSize = concerted.info.sizI * concerted.info.sizJ
+        index = concerted.cov.tolist().index(cov)
+
+        latSize = concerted.info.sizI * int(concerted.info.sizJ/np.sqrt(3)*2)
         fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
         fig.subplots_adjust(wspace=0.1)
-        axarr.plot(1/self.kb/concerted.temperatures, concerted.totalRateEvents[-1]/latSize, "x", label="Total rate from events")
-        axarr.plot(1/self.kb/concerted.temperatures, concerted.totalRate[-1], "+",label="Total rate from M")
-        axarr.plot(1/self.kb/concerted.temperatures, abs(concerted.totalRateEvents[-1]/latSize-concerted.totalRate[-1]), label="Error abs")
-        axarr.plot(1/self.kb/concerted.temperatures, abs(concerted.totalRateEvents[-1]/latSize-concerted.totalRate[-1])/(concerted.totalRateEvents[-1]/latSize), label="Error rel")
+        y = (concerted.totalRateEvents[index]  )/latSize #- latSize*cov
+        axarr.plot(1/self.kb/concerted.temperatures, y, "x", label="Total rate from events")
+        axarr.plot(1/self.kb/concerted.temperatures, concerted.totalRate[index], "+",label="Total rate from M")
+        axarr.plot(1/self.kb/concerted.temperatures, abs(concerted.totalRateEvents[index]/latSize-concerted.totalRate[index]), label="Error abs")
+        axarr.plot(1/self.kb/concerted.temperatures, abs(concerted.totalRateEvents[index]/latSize-concerted.totalRate[index])/(concerted.totalRateEvents[index]/latSize), label="Error rel")
         axarr.set_yscale("log")
         axarr.legend(loc="best", prop={'size':6})
-        fig.savefig("totalRates"+self.out,  bbox_inches='tight')
+        fig.savefig("totalRates"+str(cov)+self.out,  bbox_inches='tight')
 
 
     def allSlopes(self,x,y):

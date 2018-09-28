@@ -133,7 +133,8 @@ class Concerted:
 
     def plotTotalRate(self):
         os.chdir(self.workingPath)
-        self.cPlot.plotTotalRate(self)
+        for i in self.cov[-101::10][1:]: # get coverages 0.1, 0.2, 0.3.... 1
+            self.cPlot.plotTotalRate(self, i)
 
     def plotMultiplicities(self):
         self.cPlot.plotMultiplicities(self)
