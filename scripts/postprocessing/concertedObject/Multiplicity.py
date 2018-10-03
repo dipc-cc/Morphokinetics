@@ -70,7 +70,7 @@ class Multiplicity:
         sumOmega = np.zeros(shape=(p.mMsr,p.maxA-p.minA)) # [time|CO2, alfa]
         sumRate = np.zeros(p.mMsr)
         #iterating over runs
-        for i in range(0,filesNumber-1):
+        for i in range(0,filesNumber):
             try:
                 tmpMavg, tmpOmega, tmpRate, ratios = self.computeMavgAndOmega(i)
                 sumMavg = sumMavg + tmpMavg
