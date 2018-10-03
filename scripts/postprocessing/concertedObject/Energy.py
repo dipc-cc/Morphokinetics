@@ -33,7 +33,7 @@ class Energy:
         self.multiAtomEnergies = library.multiAtomEnergies
         
     def getEnergies(self):
-        return np.concatenate([self.energies.flatten(),self.concertedEnergies, self.multiAtomEnergies])
+        return np.concatenate([self.energies.flatten(),self.concertedEnergies, self.multiAtomEnergies, [0]]) # the last 0 is for the adsorption energy
         
     def catalysisEnergies(self):
         libSwitcher = {

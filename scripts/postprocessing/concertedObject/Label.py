@@ -31,6 +31,7 @@ class Label:
             labelAlfa.append(r"$I_{"+str(i)+"}$")
         for i in range(0,4):
             labelAlfa.append(r"$M_{"+str(i+1)+"}$")
+        labelAlfa.append(r"Adsorption")
         return labelAlfa
 
     def __getLabel(self, i, j):

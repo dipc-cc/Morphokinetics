@@ -15,10 +15,13 @@ class ConcertedPlot:
     cm = plt.get_cmap('tab20')
     markers=["o", "s","D","^","d","h","p"]
 
+    def getIndexFromCov(self, concerted, cov):
+        return concerted.cov.tolist().index(cov)
+
     def plotTotalRate(self, concerted, cov=0.2):
         if not concerted.total:
             concerted.totalRateEvents = np.copy(concerted.rates[:,:,concerted.ratesI]) # it is a inner rate
-        index = concerted.cov.tolist().index(cov)
+        index = self.getIndexFromCov(concerted, cov)
 
         latSize = concerted.info.sizI * int(concerted.info.sizJ/np.sqrt(3)*2)
         fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
@@ -26,8 +29,8 @@ class ConcertedPlot:
         y = (concerted.totalRateEvents[index]  )/latSize #- latSize*cov
         axarr.plot(1/self.kb/concerted.temperatures, y, "x", label="Total rate from events")
         axarr.plot(1/self.kb/concerted.temperatures, concerted.totalRate[index], "+",label="Total rate from M")
-        axarr.plot(1/self.kb/concerted.temperatures, abs(concerted.totalRateEvents[index]/latSize-concerted.totalRate[index]), label="Error abs")
-        axarr.plot(1/self.kb/concerted.temperatures, abs(concerted.totalRateEvents[index]/latSize-concerted.totalRate[index])/(concerted.totalRateEvents[index]/latSize), label="Error rel")
+        axarr.plot(1/self.kb/concerted.temperatures, abs(y-concerted.totalRate[index]), label="Error abs")
+        axarr.plot(1/self.kb/concerted.temperatures, abs(y-concerted.totalRate[index])/y, label="Error rel")
         axarr.set_yscale("log")
         axarr.legend(loc="best", prop={'size':6})
         fig.savefig("totalRates"+str(cov)+self.out,  bbox_inches='tight')
@@ -55,18 +58,21 @@ class ConcertedPlot:
         minCov = 0
         #cov = list(range(minCov,concerted.info.mCov-1))
         cov = concerted.cov[:concerted.info.mCov]
-        concerted.tgt = []
-        concerted.rct = []
-        concerted.err = []
+        concerted.tgt = np.zeros([maxR, 10])
+        concerted.rct = np.zeros([maxR, 10])
+        concerted.err = np.zeros([maxR, 10])
+        covIndex = self.getIndexFromCov(concerted, 0.2)
         for i in range(0,maxR): # different temperature ranges (low, medium, high)
             rcmpt = concerted.activationEnergyC[minCov:,maxR-1-i]
             targt = concerted.activationEnergy[minCov:,maxR-1-i]
             error = abs(1-concerted.activationEnergyC[minCov:,maxR-1-i]/concerted.activationEnergy[minCov:,maxR-1-i])
             handles = self.__plotSimple(cov, targt, rcmpt, error, axarr[i],
                                      maxR, i, not concerted.rAndM and not concerted.omegas)
-            concerted.tgt.append(targt[-1])
-            concerted.rct.append(rcmpt[-1])
-            concerted.err.append(error[-1])
+            for n,j in enumerate(np.linspace(0.1,1,10)):
+                covIndex = self.getIndexFromCov(concerted, np.around(j,1))
+                concerted.tgt[i,n] = targt[covIndex]
+                concerted.rct[i,n] = rcmpt[covIndex]
+                concerted.err[i,n] = error[covIndex]
 
         plt.savefig("multiplicities"+concerted.ext+self.out)#, bbox_inches='tight')
         if concerted.omegas:
@@ -82,7 +88,7 @@ class ConcertedPlot:
         
 
 
-    def plotResume(self, concerted):
+    def plotResume(self, concerted, covIndex):
         x = list(reversed(1/self.kb/concerted.temperatures))
         figR, ax = plt.subplots(1, figsize=(5,3))
         if concerted.total:
@@ -90,27 +96,32 @@ class ConcertedPlot:
         else:
             rl = "TOF"
         figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.15)
-        ax.plot(x, concerted.tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
-        ax.plot(x, concerted.rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$")
+        tgt = concerted.tgt[:,covIndex]
+        rct = concerted.rct[:,covIndex]
+        ax.plot(x, tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
+        ax.plot(x, rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$", color="green")
         for i,a in enumerate(range(concerted.minAlfa,concerted.maxAlfa)):
             if any(abs(concerted.epsilon[-1,::-1,i]) > 0.005):
                 #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
-                ax.fill_between(x, concerted.lastOmegas[:,i], label=concerted.labelAlfa[a], color=self.cm(a%20/(19)))
+                ax.fill_between(x, concerted.lastOmegas[covIndex,:,i], label=concerted.labelAlfa[a], color=self.cm(a%20/(19)))
         # ax2 = ax.twinx()
         # ax2.plot(x, err, label="Relative error")
         #ax.set_ylim(0,3.2)
         #ax.set_xlim(20,30)
         labels = [item for item in ax.get_xticklabels()]
-        ax.plot(x, abs(np.array(concerted.tgt)-np.array(concerted.rct)), label="Absolute error", color="black")
+        ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error", color="black")
         ax.legend(loc="best", prop={'size':6})
         #ax.set_xticklabels(labels)
         ax.set_xlabel(r"$1/k_BT$")
         ax.set_ylabel(r"Energy $(eV)$")
         #ax.set_yscale("log")
+        #ax.set_xscale("log")
         #mp.setY2TemperatureLabels(ax,self.kb)
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
+
+        plt.savefig("multiplicitiesResume"+concerted.ext+str(covIndex)+self.out)#, bbox_inches='tight')
         ax.set_xlim(18,100)
-        plt.savefig("multiplicitiesResume"+concerted.ext+self.out)#, bbox_inches='tight')
+        plt.savefig("multiplicitiesResume"+concerted.ext+str(covIndex)+"small"+self.out)#, bbox_inches='tight')
 
     def __plotSimple(self, x, targt, rcmpt, error, ax, maxRanges, i, legend):
         #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))

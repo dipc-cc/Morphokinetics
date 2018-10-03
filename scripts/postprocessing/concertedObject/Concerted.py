@@ -47,8 +47,8 @@ class Concerted:
             self.one = "1" in argv[1]
         if self.total:
             self.minAlfa = 0
-            self.maxAlfa = 205
-            self.info.maxA = 205
+            self.maxAlfa = 206
+            self.info.maxA = 206
             if len(argv) > 3:
                 self.minAlfa = int(argv[2])
                 self.maxAlfa = int(argv[3])
@@ -105,13 +105,15 @@ class Concerted:
 
         
     def __computeOmegas(self):
-        self.lastOmegas = np.zeros(shape=(self.maxRanges,self.maxAlfa-self.minAlfa))
+        self.lastOmegas = np.zeros(shape=(10, self.maxRanges,self.maxAlfa-self.minAlfa)) # 10 sample coverages: 0.1, 0.2, 0.3 .. 0.9, 1.0
         self.epsilon = np.zeros(shape=(self.info.mCov,self.maxRanges,self.maxAlfa-self.minAlfa))
         if self.omegas:
             for j in range(0,self.maxRanges): # different temperature ranges (low, medium, high)
                 partialSum = np.sum(self.omega[:,j,:]*(self.ratioEa[:,j,:]-self.multiplicityEa[:,j,:]), axis=1)
                 for i,a in enumerate(range(self.minAlfa, self.maxAlfa)): #alfa
-                    self.lastOmegas[self.maxRanges-1-j,i] = partialSum[-1]
+                    for n,k  in enumerate(np.linspace(0.1,1,10)):
+                        covIndex = self.cPlot.getIndexFromCov(self, np.around(k,1))
+                        self.lastOmegas[n, self.maxRanges-1-j,i] = partialSum[covIndex]
                     partialSum    -= self.omega[:,j,i]*(self.ratioEa[:,j,i]-self.multiplicityEa[:,j,i])
                     self.epsilon[:,j,i] = self.omega[:,j,i]*(self.ratioEa[:,j,i]-self.multiplicityEa[:,j,i])
 
@@ -140,7 +142,8 @@ class Concerted:
         self.cPlot.plotMultiplicities(self)
         
     def plotResume(self):
-        self.cPlot.plotResume(self)
+        for i in range(0,10):
+            self.cPlot.plotResume(self,i)
 
 
 

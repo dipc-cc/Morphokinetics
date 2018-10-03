@@ -18,6 +18,7 @@ class Ratio:
     def getRatios(self):
         p = 1e13
         allRatios = p * np.exp(-self.energy.getEnergies()/self.kb/self.temperature)
+        allRatios[-1] = 1.5e4 # add deposition flux
         return allRatios
 
     # Adsorption rate for CO molecule and for O2 molecule 

@@ -35,7 +35,18 @@ class Multiplicity:
         for i in range(201,205):
             print("%1.3E"% (ratios[i]), end="\t")
         print()
-    
+
+    def adsorptionCorrection(self, fileNumber,latSize):
+        data = np.loadtxt(fname="dataAe{:03d}".format(fileNumber)+".txt",comments=['#', '[', 'h'])
+        coverage = data[:,0]
+        time = data[:,1]
+        events =  data[:,7]
+
+        deltaEvents = np.gradient(events)
+        deltaTime = np.gradient(time)
+        possibleAdsorption = np.cumsum(deltaTime *(latSize * (1-coverage)))
+        return possibleAdsorption
+        
     def computeMavgAndOmega(self, fileNumber):
         p = self.info
         name = "dataAePossibleFromList"#name = "dataAeAll"
@@ -48,9 +59,11 @@ class Multiplicity:
         possiblesFromList = possiblesFromList[:,1:] # remove time
    
         Mavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))
-        for i,a in enumerate(range(p.minA,p.maxA)): # iterate alfa
-            Mavg[:,i] = (possiblesFromList[:p.mMsr,a])/time/p.sizI/p.sizJ
-    
+        latSize = p.sizI * int(p.sizJ/np.sqrt(3)*2)
+        for i,a in enumerate(range(p.minA,p.maxA-1)): # iterate alfa
+            Mavg[:,i] = (possiblesFromList[:p.mMsr,a])/latSize#/time/latSize#p.sizI/p.sizJ
+
+        Mavg[:,205] = self.adsorptionCorrection(fileNumber, latSize)/latSize
         totalRate = np.array(ratios.dot(np.transpose(Mavg)))#/time/p.sizI/p.sizJ
         #totalRate = (totalRate+occupied)/time/p.sizI/p.sizJ
         # define omegas 
@@ -173,7 +186,7 @@ class Multiplicity:
             data = np.loadtxt(t,comments=['#', '[', 'h'])
             events = data[:self.info.mMsr,7] # column number 8 is "number of events"
             try:
-                totalRate += events / data[:self.info.mMsr,1] # last time, column 2
+                totalRate += events #/ data[:self.info.mMsr,1] # last time, column 2
             except ValueError:
                 continue
         
