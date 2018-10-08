@@ -23,8 +23,11 @@ fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,4))
 fig.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.15)
 for color,i in enumerate(coverages[-101::10][1:]):
     index = getIndexFromCov(coverages, i)
-    axarr.plot(1/kb/temperatures, totalRateE[index], "--", label=r"Ni on Cu: $E^{R}_{app}$ at "+str(coverages[index])+r"$\theta$", color="C"+str(color+1))
-    axarr.plot(1/kb/temperatures, totalRateM[index], marker=markers[color+1], ms=5, ls="", label=r"Ni on Cu: $\sum \epsilon^{R}_\alpha$  at "+str(coverages[index])+r"$\theta$", color="C"+str(color+1))
+    color = cm(0/20)
+    axarr.plot(1/kb/temperatures, totalRateM[index], marker="o", ms=5, ls="", label=r"Cu on Ni: $\sum_\alpha \epsilon^{R}_\alpha$  at "+str(coverages[index])+r"$\theta$", color=color)
+    color = cm(1/20)
+    axarr.plot(1/kb/temperatures, totalRateE[index], ":", marker="2", ms=7, label=r"Cu on NI: $N_e^{R}/L$ at "+str(coverages[index])+r"$\theta$", color=color)
+
     break # exits in the first loop
 
 axarr.annotate(r"$\epsilon^{R}_\alpha=\omega^{R}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.7,0.4), xycoords="axes fraction")
