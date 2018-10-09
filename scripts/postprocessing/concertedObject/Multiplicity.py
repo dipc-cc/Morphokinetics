@@ -145,9 +145,8 @@ class Multiplicity:
             omegaSumTof = np.zeros(shape=(len(temperatures)))
             for i,a in enumerate(range(p.minA,p.maxA)): # alfa
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
-                if i == 9 or i == 10:
-                    omegaSumTof += y # NO eta N2
                 self.api.plotOmegas(y, a, labelAlfa)
+                self.api.saveOmegas(y, a, co2)
 
                 y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
                 multiplicityEa[co2,:,i] = self.getSlopes(x, y, i)
