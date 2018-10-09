@@ -18,6 +18,7 @@ kb = 8.6173324e-5
 
 def getTotalRate():
     files = glob.glob("dataAe0*.txt")
+    files.sort()
     totalRate = 0
     rates = np.zeros(4)
     indexes = list(range(8,12)) + [21, 22]
@@ -26,7 +27,7 @@ def getTotalRate():
         data = np.loadtxt(t,comments=['#', '[', 'h'])
         events = data[:,7] # column number 8 is "number of events"
         try:
-            totalRate += events / data[:,1] # last time, column 2
+            totalRate += events #/ data[:,1] # last time, column 2
         except ValueError:
             continue
 
