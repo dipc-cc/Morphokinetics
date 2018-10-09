@@ -58,18 +58,17 @@ class ConcertedPlot:
         minCov = 0
         #cov = list(range(minCov,concerted.info.mCov-1))
         cov = concerted.cov[:concerted.info.mCov]
-        concerted.tgt = np.zeros([maxR, 10])
-        concerted.rct = np.zeros([maxR, 10])
-        concerted.err = np.zeros([maxR, 10])
-        covIndex = self.getIndexFromCov(concerted, 0.2)
+        concerted.tgt = np.zeros([maxR, p.mMsr])
+        concerted.rct = np.zeros([maxR, p.mMsr])
+        concerted.err = np.zeros([maxR, p.mMsr])
         for i in range(0,maxR): # different temperature ranges (low, medium, high)
             rcmpt = concerted.activationEnergyC[minCov:,maxR-1-i]
             targt = concerted.activationEnergy[minCov:,maxR-1-i]
             error = abs(1-concerted.activationEnergyC[minCov:,maxR-1-i]/concerted.activationEnergy[minCov:,maxR-1-i])
             handles = self.__plotSimple(cov, targt, rcmpt, error, axarr[i],
                                      maxR, i, not concerted.rAndM and not concerted.omegas)
-            for n,j in enumerate(np.linspace(0.1,1,10)):
-                covIndex = self.getIndexFromCov(concerted, np.around(j,1))
+            for n,j in enumerate(range(0,p.mMsr)):
+                covIndex = n #self.getIndexFromCov(concerted, np.around(j,1))
                 concerted.tgt[i,n] = targt[covIndex]
                 concerted.rct[i,n] = rcmpt[covIndex]
                 concerted.err[i,n] = error[covIndex]
@@ -81,14 +80,15 @@ class ConcertedPlot:
                 for i,a in enumerate(range(p.minA,p.maxA)): #alfa
                     mk = concerted.omega[minCov:,t,a]*(concerted.ratioEa[minCov:,t,a]-concerted.multiplicityEa[minCov:,t,a])
                     if any(concerted.omega[:,t,a] > 1e-2):
-                        axarr[maxR-1-t].scatter(cov[31::10], mk[31::10], label=concerted.labelAlfa[a],color=self.cm(abs((a%20)/20)), alpha=0.75, marker=self.markers[a%7], s=10, edgecolors=self.getMec(a))
+                        axarr[maxR-1-t].scatter(cov, mk, label=concerted.labelAlfa[a],color=self.cm(abs((a%20)/20)), alpha=0.75, marker=self.markers[a%7], s=10, edgecolors=self.getMec(a))
                     axarr[maxR-1-t].legend(loc="best",  prop={'size':4})
                     
-            plt.savefig("multiplicitiesOmegas"+concerted.ext+"2"+self.out)#, bbox_inches='tight')
+            plt.savefig("multiplicitiesOmegas"+concerted.ext+"2"+self.out, bbox_inches='tight')
+            plt.close(fig)
         
 
 
-    def plotResume(self, concerted, covIndex):
+    def plotResume(self, concerted, covIndex, cov):
         x = list(reversed(1/self.kb/concerted.temperatures))
         figR, ax = plt.subplots(1, figsize=(5,3))
         if concerted.total:
@@ -98,15 +98,15 @@ class ConcertedPlot:
         figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.15)
         tgt = concerted.tgt[:,covIndex]
         rct = concerted.rct[:,covIndex]
-        ax.plot(x, tgt, label=r"$E^{"+rl+r"}_{app}$", color="red")
+        ax.plot(x, tgt, marker="o",label=r"$E^{"+rl+r"}_{app}$", color="red")
         ax.plot(x, rct, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$", color="green")
         for i,a in enumerate(range(concerted.minAlfa,concerted.maxAlfa)):
-            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.005):
+            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.0005):
                 #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
                 ax.fill_between(x, concerted.lastOmegas[covIndex,:,i], label=concerted.labelAlfa[a], color=self.cm(a%20/(19)))
         # ax2 = ax.twinx()
         # ax2.plot(x, err, label="Relative error")
-        #ax.set_ylim(0,3.2)
+        #ax.set_ylim(0,0.03)
         #ax.set_xlim(20,30)
         labels = [item for item in ax.get_xticklabels()]
         ax.plot(x, abs(np.array(tgt)-np.array(rct)), label="Absolute error", color="black")
@@ -119,9 +119,11 @@ class ConcertedPlot:
         #mp.setY2TemperatureLabels(ax,self.kb)
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
 
-        plt.savefig("multiplicitiesResume"+concerted.ext+str(covIndex)+self.out)#, bbox_inches='tight')
+        plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+self.out)#, bbox_inches='tight')
         ax.set_xlim(18,100)
-        plt.savefig("multiplicitiesResume"+concerted.ext+str(covIndex)+"small"+self.out)#, bbox_inches='tight')
+        #ax.set_ylim(-0.02,0.43)
+        plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+"small"+self.out)#, bbox_inches='tight')
+        plt.close(figR)
 
     def __plotSimple(self, x, targt, rcmpt, error, ax, maxRanges, i, legend):
         #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))
@@ -136,6 +138,8 @@ class ConcertedPlot:
                            "-",  solid_capstyle="round", lw=5,
                            alpha=0.6, color=cm(2/3),
                            label="Activation energy")
+        ax.set_yscale("log")
+        ax.set_xscale("log")
         ax2 = ax.twinx()
         lgError, = ax2.plot(x, error,
                             ls="dotted", solid_capstyle="round", lw=5,
@@ -154,18 +158,18 @@ class ConcertedPlot:
             ax2.set_ylabel("Relative error")
     
         # Annotate last energies and absolute error
-        font = FontProperties()
-        font.set_size(6)
-        label = "{:03.4f}".format(rcmpt[-1])
-        bbox_props = dict(boxstyle="round", fc=cm(1/3), ec=cm(1/3), alpha=0.7)
-        ax.text(30,rcmpt[-1]+1,label, bbox=bbox_props, fontproperties=font)
-        label = "{:03.4f}".format(targt[-1])
-        bbox_props = dict(boxstyle="round", fc=cm(2/3), ec=cm(2/3), alpha=0.7)
-        ax.text(30,targt[-1]-1,label, bbox=bbox_props, fontproperties=font)
-        label = "{:03.4f}".format(abs(rcmpt[-1]-targt[-1]))
-        bbox_props = dict(boxstyle="round", fc=cm(3/3), ec=cm(3/3), alpha=0.7)
-        ax.text(30,targt[-1]-0.5,label, bbox=bbox_props, fontproperties=font)
-        bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
+        # font = FontProperties()
+        # font.set_size(6)
+        # label = "{:03.4f}".format(rcmpt[-1])
+        # bbox_props = dict(boxstyle="round", fc=cm(1/3), ec=cm(1/3), alpha=0.7)
+        # ax.text(30,rcmpt[-1]+1,label, bbox=bbox_props, fontproperties=font)
+        # label = "{:03.4f}".format(targt[-1])
+        # bbox_props = dict(boxstyle="round", fc=cm(2/3), ec=cm(2/3), alpha=0.7)
+        # ax.text(30,targt[-1]-1,label, bbox=bbox_props, fontproperties=font)
+        # label = "{:03.4f}".format(abs(rcmpt[-1]-targt[-1]))
+        # bbox_props = dict(boxstyle="round", fc=cm(3/3), ec=cm(3/3), alpha=0.7)
+        # ax.text(30,targt[-1]-0.5,label, bbox=bbox_props, fontproperties=font)
+        # bbox_props = dict(boxstyle="round", fc="w", ec="1", alpha=0.8)
         #ax2.text(0.65, maxY, maxYlabel, bbox=bbox_props)
     
         handles = [lgTargt, lgRcmpt, lgError]

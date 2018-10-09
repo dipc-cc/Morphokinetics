@@ -43,6 +43,7 @@ class Concerted:
             self.sensibility = "s" in argv[1]
             self.tofSensibility = "f" in argv[1]
             self.kindOfSensibility = "k" in argv[1]
+            self.cacheTotalRate = "c" in argv[1]
             self.lmbdas = "l" in argv[1]
             self.one = "1" in argv[1]
         if self.total:
@@ -105,14 +106,14 @@ class Concerted:
 
         
     def __computeOmegas(self):
-        self.lastOmegas = np.zeros(shape=(10, self.maxRanges,self.maxAlfa-self.minAlfa)) # 10 sample coverages: 0.1, 0.2, 0.3 .. 0.9, 1.0
+        self.lastOmegas = np.zeros(shape=(self.info.mMsr, self.maxRanges,self.maxAlfa-self.minAlfa)) # 10 sample coverages: 0.1, 0.2, 0.3 .. 0.9, 1.0
         self.epsilon = np.zeros(shape=(self.info.mCov,self.maxRanges,self.maxAlfa-self.minAlfa))
         if self.omegas:
             for j in range(0,self.maxRanges): # different temperature ranges (low, medium, high)
                 partialSum = np.sum(self.omega[:,j,:]*(self.ratioEa[:,j,:]-self.multiplicityEa[:,j,:]), axis=1)
                 for i,a in enumerate(range(self.minAlfa, self.maxAlfa)): #alfa
-                    for n,k  in enumerate(np.linspace(0.1,1,10)):
-                        covIndex = self.cPlot.getIndexFromCov(self, np.around(k,1))
+                    for n,k  in enumerate(range(0,self.info.mMsr)): #enumerate(np.linspace(0.1,1,10)):
+                        covIndex = n #self.cPlot.getIndexFromCov(self, np.around(k,1))
                         self.lastOmegas[n, self.maxRanges-1-j,i] = partialSum[covIndex]
                     partialSum    -= self.omega[:,j,i]*(self.ratioEa[:,j,i]-self.multiplicityEa[:,j,i])
                     self.epsilon[:,j,i] = self.omega[:,j,i]*(self.ratioEa[:,j,i]-self.multiplicityEa[:,j,i])
@@ -135,6 +136,8 @@ class Concerted:
 
     def plotTotalRate(self):
         os.chdir(self.workingPath)
+        if self.cacheTotalRate:
+            self.saveTotalRate()
         for i in self.cov[-101::10][1:]: # get coverages 0.1, 0.2, 0.3.... 1
             self.cPlot.plotTotalRate(self, i)
 
@@ -142,8 +145,15 @@ class Concerted:
         self.cPlot.plotMultiplicities(self)
         
     def plotResume(self):
-        for i in range(0,10):
-            self.cPlot.plotResume(self,i)
+        np.savetxt("slopes.txt", self.tgt)
+        for i in range(0,self.info.mMsr):
+            self.cPlot.plotResume(self,i, self.cov[i])
 
+    def saveTotalRate(self):
+        np.savetxt("totalRate.txt", self.totalRate)
+        latSize = self.info.sizI * int(self.info.sizJ/np.sqrt(3)*2)
+        np.savetxt("totalRateEvents.txt", self.totalRateEvents/latSize)
+        np.savetxt("coverages.txt", self.cov)
+        np.savetxt("temperatures.txt", self.temperatures)
 
 

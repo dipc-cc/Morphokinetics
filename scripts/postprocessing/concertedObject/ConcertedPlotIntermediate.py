@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import ConcertedPlot as cp
+import numpy as np
 
 import pdb
 
@@ -21,7 +22,7 @@ class ConcertedPlotIntermediate:
         self.one = one
         if total and one:
             self.out = "T1.svg"
-            self.ymin = 1e-10
+            self.ymin = 1e-4
             self.fig, ax = plt.subplots(1, sharex=True, figsize=(5,4))
             self.axarr.append(0); self.axarr.append(ax)
         else:
@@ -59,9 +60,6 @@ class ConcertedPlotIntermediate:
         if not self.showPlot:
             return
         if self.one:
-            self.axarr[1].plot(self.x,omegaSumTof,ls="-", label=r"TOF/R", color="C2")
-            self.axarr[1].plot(self.x,2*omegaSumTof, ls=":", label=r"2 $\times$ TOF/R", color="C2")
-            self.axarr[1].plot(self.x,0.05*omegaSumTof, ls="--", label=r" 0.05$ \times $ TOF/R", color="C2")
             self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
         else:
             self.__smallerFont(self.axarr[0], 8)
@@ -70,6 +68,9 @@ class ConcertedPlotIntermediate:
         self.fig.savefig("../../../plot"+str(self.moment)+"_"+str(self.prod)+self.out)
         plt.close(self.fig)
 
+    def saveOmegas(self, y, i, cov):
+        np.savetxt("../../../omegas/omegas_"+"{:03d}".format(i)+"_{:03d}".format(cov)+".txt", y)
+        
     def __smallerFont(self, ax, size=10):
         ax.tick_params(axis='both', which='major', labelsize=size)
         for tick in ax.xaxis.get_major_ticks():
