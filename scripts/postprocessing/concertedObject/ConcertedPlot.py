@@ -1,5 +1,6 @@
 import functions as fun
 import Concerted
+import multiplicitiesPlot as mp
 import matplotlib.pyplot as plt
 import matplotlib.ticker as plticker
 from matplotlib.font_manager import FontProperties
@@ -89,13 +90,14 @@ class ConcertedPlot:
 
 
     def plotResume(self, concerted, covIndex, cov):
+        #cm = plt.get_cmap('prism')
         x = list(reversed(1/self.kb/concerted.temperatures))
-        figR, ax = plt.subplots(1, figsize=(5,3))
+        figR, ax = plt.subplots(1, figsize=(5,3.5))
         if concerted.total:
             rl = "R"
         else:
             rl = "TOF"
-        figR.subplots_adjust(top=0.95,left=0.15,right=0.95,bottom=0.15)
+        figR.subplots_adjust(top=0.88,left=0.15,right=0.95,bottom=0.15)
         tgt = concerted.tgt[:,covIndex]
         rct = concerted.rct[:,covIndex]
         ax.plot(x, tgt, marker="o",label=r"$E^{"+rl+r"}_{app}$", color="red")
@@ -116,15 +118,16 @@ class ConcertedPlot:
         ax.set_ylabel(r"Energy $(eV)$")
         #ax.set_yscale("log")
         #ax.set_xscale("log")
-        #mp.setY2TemperatureLabels(ax,self.kb)
+        mp.setY2TemperatureLabels(ax,self.kb)
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
 
         plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+self.out)#, bbox_inches='tight')
         ax.set_xlim(18,100)
         #ax.set_ylim(-0.02,0.43)
-        plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+"small"+self.out)#, bbox_inches='tight')
+        #plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+"small"+self.out)#, bbox_inches='tight')
         plt.close(figR)
 
+        
     def __plotSimple(self, x, targt, rcmpt, error, ax, maxRanges, i, legend):
         #print(maxRanges-i, targt[-1],"\t", rcmpt[-1], "\t", error[-1],"\t", abs(targt[-1]-rcmpt[-1]))
         cm = plt.get_cmap('gist_earth')
