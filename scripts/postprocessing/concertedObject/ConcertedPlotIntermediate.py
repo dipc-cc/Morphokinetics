@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import multiplicitiesPlot as mp
 import ConcertedPlot as cp
 import numpy as np
 
@@ -22,11 +23,12 @@ class ConcertedPlotIntermediate:
         self.one = one
         if total and one:
             self.out = "T1.svg"
-            self.ymin = 1e-4
-            self.fig, ax = plt.subplots(1, sharex=True, figsize=(5,4))
+            self.ymin = 1e-3
+            self.fig, ax = plt.subplots(1, sharex=True, figsize=(5,3.5))
+            self.fig.subplots_adjust(top=0.88,left=0.15,right=0.95,bottom=0.15)
             self.axarr.append(0); self.axarr.append(ax)
         else:
-            self.minM = 1e4
+            self.minM = 1e3
             self.out = ".svg"
             if total:
                 self.out = "T.svg"
@@ -61,6 +63,7 @@ class ConcertedPlotIntermediate:
             return
         if self.one:
             self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
+            mp.setY2TemperatureLabels(self.axarr[1],8.617332e-5)
         else:
             self.__smallerFont(self.axarr[0], 8)
         self.__smallerFont(self.axarr[1], 8)
