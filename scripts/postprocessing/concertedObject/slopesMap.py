@@ -34,7 +34,7 @@ def myPlot(f):
     
 fig = plt.figure()
 ax = fig.add_subplot(111)
-myPlot(lambda x:np.clip(x, 0,0.10))
+myPlot(lambda x:np.clip(x, 0, 0.10))
 
     
 ax.set_xlabel(r"$1/k_BT$")

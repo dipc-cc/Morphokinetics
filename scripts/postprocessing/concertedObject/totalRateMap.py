@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-#import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib import cm
 from matplotlib import ticker
 from matplotlib.colors import LogNorm
 import multiplicitiesPlot as mp
@@ -31,28 +28,16 @@ for i in range(0,len(coverages)):
 
 def myPlot(f):
     levels=np.array([[10**i,2*10**i] for i in range(-1,5)]).flatten()
-    #cs = ax.pcolor(x, y, f(totalRateM), cmap="RdBu_r", norm=LogNorm(vmin=1e-1, vmax=1e4))
     cs = ax.contourf(x, y, f(totalRateM), 50, cmap="RdBu_r", norm=LogNorm(vmin=1e-1, vmax=1e4), vmin=1e-1, vmax=1e4, locator=ticker.LogLocator(), levels=levels)
     cbar = plt.colorbar(cs)
     cbar.set_label("Total rate per site")
-    #ax.contour(x, y, f(totalRateM), levels=[0], cmap="RdBu_r", norm=LogNorm(vmin=1e-1, vmax=1e4), vmin=1e-1, vmax=1e4, locator=ticker.LogLocator())
 
 fig = plt.figure()
 ax = fig.add_subplot(111)
-#cs = ax.contourf(x, y, np.log(totalRateM)/np.log(10), 50, cmap="plasma",
-#                   extend='both', locator=ticker.LogLocator())
-#cs = ax.contourf(x, y, totalRateM, 50, cmap="plasma", locator=ticker.LogLocator(), vmin=1e-1, vmax=1e5)
 myPlot(lambda x:np.clip(x, 1e-1, 1e5))
 
 ax.set_ylabel(r"coverage $\theta$")
 ax.set_xlabel(r"$1/k_BT$")
-#ax.set_zlabel("Total rate (log)")
-#ax.set_zscale("log")
-#ax.set_cbscale("log")
-#ax.zaxis.set_scale('log')
-#ax.view_init(15, 160)
-#ax.set_zlim(0.1,1e3)
-
 
 mp.setY2TemperatureLabels(ax,kb)
 fig.savefig("totalRateMap.svg")
