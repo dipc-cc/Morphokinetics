@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib import ticker
 from matplotlib.colors import LogNorm
+import multiplicitiesPlot as mp
 import pdb
 
 kb = 8.617332e-5
@@ -33,6 +34,7 @@ def myPlot(f):
     #cs = ax.pcolor(x, y, f(totalRateM), cmap="RdBu_r", norm=LogNorm(vmin=1e-1, vmax=1e4))
     cs = ax.contourf(x, y, f(totalRateM), 50, cmap="RdBu_r", norm=LogNorm(vmin=1e-1, vmax=1e4), vmin=1e-1, vmax=1e4, locator=ticker.LogLocator(), levels=levels)
     cbar = plt.colorbar(cs)
+    cbar.set_label("Total rate per site")
     #ax.contour(x, y, f(totalRateM), levels=[0], cmap="RdBu_r", norm=LogNorm(vmin=1e-1, vmax=1e4), vmin=1e-1, vmax=1e4, locator=ticker.LogLocator())
 
 fig = plt.figure()
@@ -52,5 +54,6 @@ ax.set_xlabel(r"$1/k_BT$")
 #ax.set_zlim(0.1,1e3)
 
 
+mp.setY2TemperatureLabels(ax,kb)
 fig.savefig("totalRateMap.svg")
 

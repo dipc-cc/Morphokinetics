@@ -5,6 +5,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
+import multiplicitiesPlot as mp
 
 kb = 8.617332e-5
 
@@ -29,6 +30,7 @@ for i in range(0,len(temperatures)):
 def myPlot(f):
     cs = ax.contourf(x, y, f(slopes), 10, vmin=0, vmax=0.1, cmap="RdBu_r")
     cbar = plt.colorbar(cs)
+    cbar.set_label("Activation energy (eV)")
     
 fig = plt.figure()
 ax = fig.add_subplot(111)
@@ -39,6 +41,7 @@ ax.set_xlabel(r"$1/k_BT$")
 ax.set_ylabel(r"coverage $\theta$")
 
 
+mp.setY2TemperatureLabels(ax,kb)
 fig.savefig("slopesMap.svg")
 
 
