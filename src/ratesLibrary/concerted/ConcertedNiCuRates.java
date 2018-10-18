@@ -155,9 +155,9 @@ public class ConcertedNiCuRates extends AbstractConcertedRates {
     double[] concertedEnergies = new double[9]; // up to 8 atom islands
     concertedEnergies[0] = eImpossible; 
     concertedEnergies[1] = eImpossible; 
-    concertedEnergies[2] = 0.031; // dimer
-    concertedEnergies[3] = 0.021; 
-    concertedEnergies[4] = 0.148; 
+    concertedEnergies[2] = 0.021; // dimer
+    concertedEnergies[3] = 0.148; 
+    concertedEnergies[4] = 0.157; 
     concertedEnergies[5] = 0.220; 
     concertedEnergies[6] = 0.199; 
     concertedEnergies[7] = 0.369; 
