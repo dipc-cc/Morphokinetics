@@ -1,18 +1,20 @@
 #!/usr/bin/env python3
 
-#import matplotlib as mpl
-from mpl_toolkits.mplot3d import Axes3D
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import multiplicitiesPlot as mp
+import pdb
 
 kb = 8.617332e-5
+
+vmin = 0.0
+vmax = 0.099
 
 # read data
 totalRateM = np.loadtxt("totalRate.txt")
 totalRateE = np.loadtxt("totalRateEvents.txt")
-temperatures = np.loadtxt("temperatures.txt")
+temperatures = np.loadtxt("temperatures.txt")[::-1]
 coverages = np.loadtxt("coverages.txt")
 slopes = np.loadtxt("slopes.txt")
 
@@ -24,17 +26,18 @@ l = len(temperatures)
 
 for i in range(0,len(temperatures)):
     for j in range(0,len(coverages)):
-        x[i,j] = 1/kb/temperatures[i]#[l-j-1]
+        x[i,j] = 1/kb/temperatures[i]#[l-i-1]
+        #x[i,j] = 1/kb/temperatures[l-i-1]
         y[i,j] = coverages[j]
 
 def myPlot(f):
-    cs = ax.contourf(x, y, f(slopes), 10, vmin=0, vmax=0.1, cmap="RdBu_r")
+    cs = ax.contourf(x, y, f(slopes), 100, vmin=vmin, vmax=vmax, cmap="RdBu_r")
     cbar = plt.colorbar(cs)
     cbar.set_label("Activation energy (eV)")
     
 fig = plt.figure()
 ax = fig.add_subplot(111)
-myPlot(lambda x:np.clip(x, 0, 0.10))
+myPlot(lambda x:np.clip(x, vmin, vmax))
 
     
 ax.set_xlabel(r"$1/k_BT$")
