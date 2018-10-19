@@ -129,9 +129,9 @@ class EnergyNiCu:
         self.concertedEnergies = 99999999*np.ones(9,dtype=float)
         self.concertedEnergies[0] = eImpossible; 
         self.concertedEnergies[1] = eImpossible; 
-        self.concertedEnergies[2] = 0.031; # dimer
-        self.concertedEnergies[3] = 0.021; 
-        self.concertedEnergies[4] = 0.148; 
+        self.concertedEnergies[2] = 0.021; # dimer
+        self.concertedEnergies[3] = 0.148;
+        self.concertedEnergies[4] = 0.157;
         self.concertedEnergies[5] = 0.220; 
         self.concertedEnergies[6] = 0.199; 
         self.concertedEnergies[7] = 0.369; 
