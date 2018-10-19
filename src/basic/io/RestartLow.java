@@ -440,10 +440,11 @@ class RestartLow {
     double scale = 5; // default distance to big enough picture
     // create file descriptor. It will be automatically closed.
     try (PrintWriter printWriter = new PrintWriter(new FileWriter(fileName))){
-      String s = format("<svg height=\"%f\" width=\"%f\">",
-          ((AbstractGrowthLattice) lattice).getCartSizeX() * scale,
-          ((AbstractGrowthLattice) lattice).getCartSizeY() * scale);
+      double sizeX = ((AbstractGrowthLattice) lattice).getCartSizeX() * scale;
+      double sizeY = ((AbstractGrowthLattice) lattice).getCartSizeY() * scale;
+      String s = format("<svg height=\"%f\" width=\"%f\">", sizeX, sizeY);
       printWriter.write(s +"\n");
+      writeHexagonalLatticeSvg(printWriter, sizeX, sizeY);
       IUc uc;
       double posX;
       double posY;
@@ -454,12 +455,11 @@ class RestartLow {
           ISite atom = uc.getSite(j);
           posX = (uc.getPos().getX() + atom.getPos().getX()) * scale;
           posY = (uc.getPos().getY() + atom.getPos().getY()) * scale;
-          String colour = "white";
           if (atom.isOccupied()) {
-            colour = colours[(int) atom.getType()];
+            String colour = colours[(int) atom.getType()];
+            s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"2.5\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
+            printWriter.write(s + "\n");
           }
-          s = format("<circle cx=\"%.3f\" cy=\"%.3f\" r=\"2.5\" stroke=\"black\" stroke-width=\"0.2\" fill=\"%s\" />", posX, posY, colour);
-          printWriter.write(s + "\n");
         }
       }
       
@@ -472,6 +472,30 @@ class RestartLow {
     }
   }
   
+  private static void writeHexagonalLatticeSvg(PrintWriter printWriter, double latticeSizeX, double latticeSizeY) {
+    double ratioY = Math.sqrt(3) / 2.0;
+    double ucSizeX = 5.0;
+    double ucSizeY = 10 * ratioY;
+    double numberUcX = ucSizeX / latticeSizeX;
+    double numberUcY = ucSizeY / latticeSizeY;
+    String s;
+    printWriter.write("  <defs>\n");
+    s = format("    <pattern id=\"Pattern\" x=\"0\" y=\"0\" width=\"%f\" height=\"%f\">", numberUcX, numberUcY);
+    printWriter.write(s + "\n");
+    s = format("      <circle cx=\"2.5\" cy=\"%f\" r=\"2.5\" fill=\"white\" stroke-width=\"0.2\" stroke=\"black\"/> ", ratioY * 5.0);
+    printWriter.write(s + "\n");
+    printWriter.write("      <circle cx=\"0\" cy=\"0\" r=\"2.5\" fill=\"white\" stroke-width=\"0.2\" stroke=\"black\"/>\n");
+    printWriter.write("      <circle cx=\"5\" cy=\"0\" r=\"2.5\" fill=\"white\" stroke-width=\"0.2\" stroke=\"black\"/>\n");
+    s = format("      <circle cx=\"0\" cy=\"%f\" r=\"2.5\" fill=\"white\" stroke-width=\"0.2\" stroke=\"black\"/>", ucSizeY);
+    printWriter.write(s + "\n");
+    s = format("      <circle cx=\"5\" cy=\"%f\" r=\"2.5\" fill=\"white\" stroke-width=\"0.2\" stroke=\"black\"/>", ucSizeY);
+    printWriter.write(s + "\n");
+    printWriter.write("    </pattern>\n");
+    printWriter.write("  </defs>\n");
+    s = format("  <rect fill=\"url(#Pattern)\" stroke=\"\" width=\"%f\" height=\"%f\"/>", latticeSizeX, latticeSizeY);
+    printWriter.write(s + "\n");
+  }
+
   /**
    * Writes a double lattice (for BDA) SVG format file.
    * 
