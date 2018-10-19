@@ -10,15 +10,16 @@ class Ratio:
     Na = 6.022e26 #Avogadro constant (1/mol) * 1000 (g -> kg). 6.022e23·1000.
     mass = [(14.006 + 1.007 * 3) / Na, 2*15.9994 / Na] #Mass of molecule (kg/molecule). NH3, O2
     
-    def __init__(self, energy, temperature, pressures):
+    def __init__(self, energy, temperature, pressures, flux):
         self.energy = energy
         self.temperature = temperature
         self.pressures = pressures
+        self.flux = flux
 
     def getRatios(self):
         p = 1e13
         allRatios = p * np.exp(-self.energy.getEnergies()/self.kb/self.temperature)
-        allRatios[-1] = 1.5e4 # add deposition flux
+        allRatios[-1] = self.flux # add deposition flux
         return allRatios
 
     # Adsorption rate for CO molecule and for O2 molecule 

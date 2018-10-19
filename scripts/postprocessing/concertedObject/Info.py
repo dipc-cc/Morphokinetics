@@ -121,7 +121,7 @@ class Info:
         return ratios
 
     def getRatiosTotal(self):
-        self.ratios = Ratio.Ratio(self.energies, self.temp, [self.prCO, self.prO2])
+        self.ratios = Ratio.Ratio(self.energies, self.temp, [self.prCO, self.prO2], self.flux)
 
         return self.ratios.getRatios()
 
