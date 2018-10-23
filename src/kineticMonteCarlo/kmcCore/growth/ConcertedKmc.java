@@ -21,6 +21,8 @@ package kineticMonteCarlo.kmcCore.growth;
 import kineticMonteCarlo.activationEnergy.ConcertedActivationEnergy;
 import basic.Parser;
 import basic.io.OutputType;
+import static basic.io.OutputType.formatFlag.MKO;
+import static basic.io.OutputType.formatFlag.SVG;
 import basic.io.Restart;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -82,6 +84,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private final Restart restart;
   private final boolean doIslandDiffusion;
   private final boolean doMultiAtomDiffusion;
+  private final boolean[] write;
  
   public ConcertedKmc(Parser parser, String restartFolder) {
     super(parser);
@@ -110,6 +113,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     restart = new Restart(false, restartFolder);
     doIslandDiffusion = parser.doIslandDiffusion();
     doMultiAtomDiffusion = parser.doMultiAtomDiffusion();
+    write = new boolean[2];
+    write[0] = parser.getOutputFormats().contains(MKO);
+    write[1] = parser.getOutputFormats().contains(SVG);
   }
 
   public void setRates(AbstractConcertedRates rates) {
@@ -795,10 +801,14 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private void printData() {
     if (getCoverage() > 0.01 && (int) (getCoverage() * 100) % 5 == 0) { //only write when is bigger than 1% and multiple of %5
       int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
-      restart.writeSurfaceBinary2D(
-              getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
-              surfaceNumber);
-      restart.writeSvg(surfaceNumber, getLattice(), true);
+      if (write[0]) {
+        restart.writeSurfaceBinary2D(
+                getSampledSurface((int) getLattice().getCartSizeX(),(int) getLattice().getCartSizeY()),
+                surfaceNumber);
+      }
+      if (write[1]) {
+        restart.writeSvg(surfaceNumber, getLattice(), true);
+      }
     }
     restart.writeExtraOutput(getLattice(), getCoverage(), 0, getTime(), totalRate[ADSORB],
 			     getList().getDiffusionProbability(), simulatedSteps, totalRate[SINGLE]);
