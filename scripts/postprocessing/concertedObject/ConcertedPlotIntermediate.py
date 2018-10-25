@@ -63,10 +63,11 @@ class ConcertedPlotIntermediate:
             return
         if self.one:
             self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
-            mp.setY2TemperatureLabels(self.axarr[1],8.617332e-5)
+            ax2 = mp.setY2TemperatureLabels(self.axarr[1],8.617332e-5)
+            self.__smallerFont(ax2, 12)
         else:
             self.__smallerFont(self.axarr[0], 8)
-        self.__smallerFont(self.axarr[1], 8)
+        self.__smallerFont(self.axarr[1], 14)
         self.__putLabels()
         self.fig.savefig("../../../plot"+str(self.moment)+"_"+str(self.prod)+self.out)
         plt.close(self.fig)
@@ -91,7 +92,7 @@ class ConcertedPlotIntermediate:
             self.axarr[0].set_ylim(self.minM,10)
             self.axarr[0].set_ylabel(r"$M^{"+rl+r"}_\alpha$")
         self.axarr[1].set_ylim(self.ymin,2)
-        self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"}_\alpha$")
-        self.axarr[1].set_xlabel(r"$1/k_BT$")
+        self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"}_\alpha$", size=14)
+        self.axarr[1].set_xlabel(r"$1/k_BT$", size=14)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)

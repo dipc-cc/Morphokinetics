@@ -366,4 +366,5 @@ def setY2TemperatureLabels(ax,kb):
     majors = np.array([25, 50, 75, 100, 150, 350])
     majors = 1/kb/majors
     ax2.xaxis.set_major_locator(plticker.FixedLocator(majors))
-    ax2.set_xlabel("temperature (T)")
+    ax2.set_xlabel("temperature (T)", size=13)
+    return ax2
