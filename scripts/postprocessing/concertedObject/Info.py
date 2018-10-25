@@ -246,6 +246,9 @@ def getInformationFromFile(fileName):
         if re.match("These", line):
             hit = True
 
+def getIndexFromCov(coverages, cov):
+    return coverages.tolist().index(cov)
+
 class avgData:
     def __init__(self, data):
         self.cove = data[0] # coverage

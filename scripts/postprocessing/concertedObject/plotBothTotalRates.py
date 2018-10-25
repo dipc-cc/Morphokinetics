@@ -2,6 +2,7 @@
 
 import totalRates as tr
 import matplotlib.pyplot as plt
+import Info as inf
 import os
 import pdb
 
@@ -13,7 +14,7 @@ d2 = tr.readData(cwd="../CuNi")
 coverages = d1[3]
 # plot it
 for i in coverages[-101::10][1:]:
-    index = tr.getIndexFromCov(coverages, i)
+    index = inf.getIndexFromCov(coverages, i)
     fig, axarr = plt.subplots(1, 1, sharey=True, figsize=(5,3.5))
     fig.subplots_adjust(top=0.88,left=0.15,right=0.95,bottom=0.15)
     os.chdir(niCuPwd)

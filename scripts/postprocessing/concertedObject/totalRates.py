@@ -3,11 +3,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import multiplicitiesPlot as mp
+import Info as inf
 import os
 import pdb
-
-def getIndexFromCov(coverages, cov):
-    return coverages.tolist().index(cov)
 
 def readData(cwd="."):
     os.chdir(cwd)
@@ -20,7 +18,7 @@ def readData(cwd="."):
     
     #Remove adsorption events
     for i in coverages:
-        index = getIndexFromCov(coverages, i)
+        index = inf.getIndexFromCov(coverages, i)
         totalRateH[index,:] = totalRateE[index,:] - i
     return totalRateM, totalRateE, temperatures, coverages, totalRateH
 
@@ -40,16 +38,17 @@ def plotManyTotalRates(axarr, index, d, annotate=True):
         marker = ["d", "+", "<"]
         label = "Ni/Cu"
     
-    axarr.plot(1/kb/temperatures, totalRateM[index], marker=marker[0], ms=7, ls="", label=label+r": $\sum_\alpha \epsilon^{R}_\alpha$  at "+str(coverages[index])+r"$\theta$", color=color[1])
-    axarr.plot(1/kb/temperatures, totalRateH[index], "-", marker=marker[2], ms=7, label=label+r": $N_h^{R}/L$ at "+str(coverages[index])+r"$\theta$ (hops)", color=color[2],markerfacecolor="None")
-    axarr.plot(1/kb/temperatures, totalRateE[index], ":", marker=marker[1], ms=7, label=label+r": $N_e^{R}/L$ at "+str(coverages[index])+r"$\theta$ (events)", color=color[0])
+    axarr.plot(1/kb/temperatures, totalRateM[index], marker=marker[0], ms=7, ls="", label=label+r": $\sum_\alpha \epsilon^{R}_\alpha$", color=color[1])
+    axarr.plot(1/kb/temperatures, totalRateE[index], ":", marker=marker[1], ms=7, label=label+r": $N_e^{R}/L$ (events)", color=color[0])
+    axarr.plot(1/kb/temperatures, totalRateH[index], "-", marker=marker[2], ms=7, label=label+r": $N_d^{R}/L$ (diffusion)", color=color[2],markerfacecolor="None")
     
     if annotate:
-        axarr.annotate(r"$\epsilon^{R}_\alpha=\omega^{R}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.4,0.1), xycoords="axes fraction")
+        axarr.annotate(r"$\epsilon^{R}_\alpha=\omega^{R}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.47,0.1), xycoords="axes fraction")
+        axarr.annotate(str(coverages[index])+r"$\theta$", xy=(0.1,0.57), xycoords="axes fraction")
         axarr.set_ylabel("Total rate per site")
         axarr.set_xlabel(r"$1/k_BT$")
         mp.setY2TemperatureLabels(axarr,kb)
     axarr.set_yscale("log")
     #axarr.set_ylim(3e-2,1e3)
-    axarr.legend(loc="best", prop={'size':6})
+    axarr.legend(loc="best", prop={'size':8})
 
