@@ -190,6 +190,13 @@ public class Parser {
       try {
         mapString.put(key, json.getString(key));
       } catch (JSONException e) {
+        try {
+          if (e.getMessage().endsWith("string.")) { // it should be reading a boolean instead of a String, give it a try.
+            Boolean value = json.getBoolean(key);
+            mapString.put(key, value.toString());
+          }
+        } catch (JSONException e1) { // give up.
+        }
       }
     }
     keys = new HashSet<>(mapDouble.keySet()); // copy the keys
