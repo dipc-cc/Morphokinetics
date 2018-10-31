@@ -11,28 +11,36 @@ import matplotlib.ticker as ticker
 import info as inf
 import math
 import multiplicitiesPlot as mp
+from  Info import getIndexFromCov
 
 import pdb
         
 kb = 8.6173324e-5
+mMsr = 127
 
 def getTotalRate():
     files = glob.glob("dataAe0*.txt")
     files.sort()
     totalRate = 0
+    #allRates = np.zeros((20,mMsr))
+    allRates = np.full((20,mMsr), np.nan)
     rates = np.zeros(4)
     indexes = list(range(8,12)) + [21, 22]
+    filesLenght = 0
 
-    for t in files:
+    for i,t in enumerate(files):
         data = np.loadtxt(t,comments=['#', '[', 'h'])
         events = data[:,7] # column number 8 is "number of events"
         try:
             totalRate += events #/ data[:,1] # last time, column 2
+            allRates[i] = events
+            coverages = data[:,0]
+            filesLenght += 1
         except ValueError:
             continue
 
-    totalRate = totalRate / len(files)
-    return totalRate
+    totalRate = totalRate / filesLenght
+    return totalRate, allRates, coverages
 
 def plot(x,y,p,ax,label="",marker="o"):
     # Labels
@@ -63,23 +71,33 @@ def plot(x,y,p,ax,label="",marker="o"):
     ax.set_yscale("log")
     ax.legend(loc="best", prop={'size':6})
 
-    
+def plotSome(x, y, p, ax, i):
+    cm = plt.get_cmap('tab20')
+    x = 1 / kb / x
+    y = y / (p.sizI * p.sizJ)
+    ax.plot(x, y,marker=".", color=cm(i/20))
+    ax.set_yscale("log")
+
+def plotError(x, y, p, ax):
+    ax.boxplot(y)
 
 workingPath = os.getcwd()
 x = []
 y = []
 temperatures = True
 try:
-    iter = inf.getTemperatures()
+    mIter = inf.getTemperatures()
 except ValueError:
-    iter = inf.getPressures()
+    mIter = inf.getPressures()
 
-y2 = np.zeros(shape=(len(iter),7))
+y2 = np.zeros(shape=(len(mIter),7))
 print(np.shape(y2))
-if iter[0] < 15:
+if mIter[0] < 15:
     temperatures = False
 i = 0
-for f in iter:
+
+allRates = np.zeros((len(mIter), 20, mMsr))
+for i,f in enumerate(mIter):
     try:
         os.chdir(str(f)+"/results")
         runFolder = glob.glob("*/");
@@ -90,12 +108,15 @@ for f in iter:
     os.getcwd()
     rate = 0
     try:
-        totalRate = getTotalRate()
+        totalRate, allRatesT, coverages = getTotalRate()
+        allRates[i] = allRatesT
     except ZeroDivisionError:
         totalRate = 0
-    print(f,totalRate[-1])
+    cov = 0.1
+    index = getIndexFromCov(coverages, 0.01)
+    print(f,totalRate[index])
     x.append(f)
-    y.append(totalRate[-100])
+    y.append(totalRate[index])
     os.chdir(workingPath)
     i += 1
 
@@ -110,4 +131,36 @@ plot(x,y,p,ax,"total rate","x")
 #for i in range(0,len(y2[0])):
 #    plot(x, y2[:,i], p, ax, labels[i], markers[i+1])
 mp.setY2TemperatureLabels(ax,kb)
-fig.savefig("totalRate.pdf")#, bbox_inches='tight')
+fig.savefig("totalRate.svg")#, bbox_inches='tight')
+plt.close(fig)
+
+fig, ax = plt.subplots(1, 1, sharey=True, figsize=(8.8,12))
+fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
+                    wspace=0.35)
+for i,f in enumerate(mIter):
+    y = allRates[i,:,index]
+    for j,value in enumerate(y):
+        plotSome(f,value,p,ax,j)
+
+#ax.set_xlim(37,100)
+#ax.set_ylim(1e2,2e5)
+mp.setY2TemperatureLabels(ax,kb)
+fig.savefig("allTotalRate.svg")#, bbox_inches='tight')
+plt.close(fig)
+    
+fig, ax = plt.subplots(1, 1, sharey=True, figsize=(6,4))
+fig.subplots_adjust(top=0.85, bottom=0.15, left=0.15, right=0.95, hspace=0.25,
+                    wspace=0.35)
+
+y = allRates[::-1,:,index] / (p.sizI * p.sizJ)
+y2 = []
+for i in range(0,len(y)): # filters NaN values
+    y2.append(y[i][~np.isnan(y[i])])
+
+ax.boxplot(np.transpose(y2), showmeans=True, meanline=True, showfliers=False)
+ax.set_xticklabels(mIter[::-1],rotation=45, fontsize=8)
+ax.set_yscale("log")
+ax.set_xlabel("Temperature (K)")
+fig.savefig("allTotalRateErrorBars.svg")#, bbox_inches='tight')
+plt.close(fig)
+    
