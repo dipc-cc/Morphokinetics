@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 import multiplicitiesPlot as mp
+import Info as inf
 import pdb
 
 kb = 8.617332e-5
@@ -33,18 +34,20 @@ for i in range(0,len(temperatures)):
 def myPlot(f):
     cs = ax.contourf(x, y, f(slopes), 100, vmin=vmin, vmax=vmax, cmap="RdBu_r")
     cbar = plt.colorbar(cs)
-    cbar.set_label("Activation energy (eV)")
+    cbar.set_label("Activation energy (eV)", size=14)
     
 fig = plt.figure()
 ax = fig.add_subplot(111)
 myPlot(lambda x:np.clip(x, vmin, vmax))
 
     
-ax.set_xlabel(r"$1/k_BT$")
-ax.set_ylabel(r"coverage $\theta$")
+ax.set_xlabel(r"$1/k_BT$", size=14)
+ax.set_ylabel(r"coverage $\theta$", size=14)
 
 
-mp.setY2TemperatureLabels(ax,kb)
+ax2 = mp.setY2TemperatureLabels(ax,kb)
+inf.smallerFont(ax2, 12)
+inf.smallerFont(ax, 14)
 fig.savefig("slopesMap.svg")
 
 
