@@ -36,12 +36,11 @@ import ratesLibrary.bda.AbstractBdaRates;
  */
 public class BdaSimulation extends AbstractGrowthSimulation {
   
-  BdaRestart restart;
   private final int outputEvery;
   
   public BdaSimulation(Parser parser) {
     super(parser);
-    restart = new BdaRestart(getRestartFolderName());
+    BdaRestart restart = new BdaRestart(getRestartFolderName());
     setRestart(restart);
     if (parser.outputData()){
       outputEvery = (int) parser.getOutputEvery();
@@ -97,7 +96,7 @@ public class BdaSimulation extends AbstractGrowthSimulation {
   
   @Override
   public int getCurrentProgress() {
-    return (int) (getKmc().getCoverage()*100);
+    return (int) (getKmc().getCoverage() * 100);
   }
   
   @Override
