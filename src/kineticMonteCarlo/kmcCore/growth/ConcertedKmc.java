@@ -20,6 +20,7 @@ package kineticMonteCarlo.kmcCore.growth;
 
 import kineticMonteCarlo.activationEnergy.ConcertedActivationEnergy;
 import basic.Parser;
+import basic.io.ConcertedRestart;
 import basic.io.OutputType;
 import static basic.io.OutputType.formatFlag.MKO;
 import static basic.io.OutputType.formatFlag.SVG;
@@ -110,7 +111,7 @@ public class ConcertedKmc extends AbstractGrowthKmc {
     extraOutput = parser.getOutputFormats().contains(OutputType.formatFlag.EXTRA);
     aeOutput = parser.getOutputFormats().contains(OutputType.formatFlag.AE);
     activationEnergy = new ConcertedActivationEnergy(parser);
-    restart = new Restart(false, restartFolder);
+    restart = new ConcertedRestart(false, restartFolder);
     doIslandDiffusion = parser.doIslandDiffusion();
     doMultiAtomDiffusion = parser.doMultiAtomDiffusion();
     write = new boolean[2];

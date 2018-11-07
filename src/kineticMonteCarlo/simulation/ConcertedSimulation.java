@@ -19,6 +19,7 @@
 package kineticMonteCarlo.simulation;
 
 import basic.Parser;
+import basic.io.ConcertedRestart;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,12 @@ public class ConcertedSimulation  extends AbstractGrowthSimulation {
 
   public ConcertedSimulation(Parser parser) {
     super(parser);
+    String ratesLibrary = parser.getRatesLibrary();
+    String element = ratesLibrary.substring(0, 2);
+    String surface = ratesLibrary.substring(2,4);
+    
+    ConcertedRestart restart = new ConcertedRestart(element, surface,getRestartFolderName());
+    setRestart(restart);
   }
   
  @Override

@@ -60,8 +60,6 @@ public class Restart {
    * an atom is deposited and attached to an island.
    */
   private boolean extraOutput2;
-  private final boolean isCatalysis;
-  private final boolean isConcerted;
   private String outDataFormat;
   private PrintWriter outData;
   private PrintWriter outDataAe[];
@@ -74,8 +72,6 @@ public class Restart {
   public Restart() {
     folder = "results/";
     createFolder(folder);
-    isCatalysis = false;
-    isConcerted = false;
   }
 
   public Restart(String restartFolder) {
@@ -84,8 +80,6 @@ public class Restart {
       folder += "/";
     }
     createFolder(restartFolder);
-    isCatalysis = false;
-    isConcerted = false;
   }
   
   /**
@@ -123,8 +117,6 @@ public class Restart {
         Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
       }
     }
-    isCatalysis = false;
-    isConcerted = false;
   }
   
   public Restart(boolean catalysisOutput, String restartFolder) {
@@ -134,12 +126,7 @@ public class Restart {
     }
     createFolder(restartFolder);
     iteration = 0;
-    if (catalysisOutput) {
-      isCatalysis = true;
-      isConcerted = false;
-    } else {
-      isCatalysis = false;
-      isConcerted = true;
+    if (!catalysisOutput) {
       extraOutput = true;
     }
   }
@@ -383,13 +370,25 @@ public class Restart {
 
   public void writeExtraCatalysisOutput(double time, float[] coverages, long[] steps, long[] co2, int[] sizes) {
   }
+  
+  void setExtraWriter(PrintWriter outData) {
+    this.outData = outData;
+  }
 
   public PrintWriter getExtraWriter() {
     return outData;
   }
   
+  void setExtraWriters(PrintWriter outDataAe[]) {
+    this.outDataAe = outDataAe;
+  }
+  
   public PrintWriter[] getExtraWriters() {
     return outDataAe;
+  }
+  
+  void setFormat(String outDataFormat) {
+    this.outDataFormat = outDataFormat;
   }
   
   /**
@@ -476,35 +475,6 @@ public class Restart {
       deltaTimePerAtom.clear();
     }
     previousTime = 0;
-    /*if (isCatalysis) {
-      initCatalysis(iteration++);
-    }*/
-    if (isConcerted) {
-      initConcerted(iteration++);
-    }
-  }
-
-  private void initConcerted(int simulationNumber) {
-    // new files
-    try {
-      String fileName = format("%sdataAe%03d.txt", folder, simulationNumber);
-      outData = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-      outData.println("# File " + fileName);
-      outData.println("# Information about the system every 1% of coverage and every deposition\n[1. coverage, 2. time, 3. nucleations, 4. islands, 5. depositionProbability, 6. totalProbability, 7. numberOfMonomers, 8. numberOfEvents, 9. sumOfProbabilities, 10. avgRadiusOfGyration, 11. innerPerimeter, 12. outerPerimeter, 13. tracer diffusivity distance 14. centre of mass diffusivity distance 15. numberOfAtomsFirstIsland 16. TotalHops 17. and so on, different atom types] ");
-      outDataFormat = "\t%g\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d\t%f\t%f\t%d\t%d%s%s\n";
-      outDataAe = new PrintWriter[6];
-      
-      String names[] = new String[]{"InstantaneousDiscrete", "Success", "PossibleFromList", 
-        "PossibleDiscrete", "RatioTimesPossible", "Multiplicity"};
-      for (int i = 0; i < names.length; i++) {
-        fileName = format("%sdataAe%s%03d.txt", folder, names[i], simulationNumber);
-        PrintWriter outDataTmp = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
-        outDataTmp.println("# File " + fileName);
-        outDataAe[i] = outDataTmp;
-      }
-    } catch (IOException e) {
-      Logger.getLogger(Restart.class.getName()).log(Level.SEVERE, null, e);
-    }
   }
   
   final void createFolder(String restartFolder) {
