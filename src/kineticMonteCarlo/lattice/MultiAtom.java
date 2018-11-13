@@ -83,7 +83,7 @@ public class MultiAtom extends Island {
    * edge 1 is the neighbour of atom 1.
    * 
    * @param pos edge 0 or 1
-   * @return type of the possible diffusion: 0 or 1.
+   * @return type of the possible diffusion: [0-3].
    */
   public int getEdgeType(int pos) {
     AbstractGrowthSite atom;
