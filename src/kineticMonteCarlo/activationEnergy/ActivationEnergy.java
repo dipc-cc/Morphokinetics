@@ -24,6 +24,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
+import kineticMonteCarlo.lattice.MultiAtom;
 import kineticMonteCarlo.site.AbstractSite;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 
@@ -36,6 +37,8 @@ public class ActivationEnergy {
    * Attribute to count processes that happened. Used to compute activation energy per each rate.
    */
   private Integer[][] histogramSuccess;
+  private Integer[] histogramSuccessIsland;
+  private Integer[] histogramSuccessMultiAtom;
   private Double[][] histogramPossible;
   private Long[][] histogramPossibleCounter;
   private Double[][] histogramPossibleTmp;
@@ -48,6 +51,20 @@ public class ActivationEnergy {
   private int lengthJ;
   private int numberOfNeighbours;
   private double[][] rates;
+  
+  public ActivationEnergy(Parser parser, boolean isConcerted) {
+    this(parser);
+    if (isConcerted) {
+      histogramSuccessIsland = new Integer[9];
+      for (int i = 0; i < histogramSuccessIsland.length; i++) {
+        histogramSuccessIsland[i] = new Integer(0);
+      }
+      histogramSuccessMultiAtom = new Integer[4];
+      for (int i = 0; i < histogramSuccessMultiAtom.length; i++) {
+        histogramSuccessMultiAtom[i] = new Integer(0);
+      }
+    }
+  }
   
 
   public ActivationEnergy(Parser parser) {
@@ -97,6 +114,8 @@ public class ActivationEnergy {
           histogramSuccess[i][j] = new Integer(0);
         }
       }
+      histogramSuccessIsland = new Integer[0]; // empty
+      histogramSuccessMultiAtom = new Integer[0]; // empty
     }
     previousProbability = 0;
   }
@@ -153,6 +172,25 @@ public class ActivationEnergy {
     histogramSuccess[oldType][newType]++;
   }
   
+  /**
+   * Updates succeeded island diffusions, valid for ConcertedKmc.
+   * 
+   * @param islandSize 
+   */
+  public void updateSuccess(int islandSize) {
+    histogramSuccessIsland[islandSize]++;
+  }
+  
+  public void updateSuccess(MultiAtom originMultiAtom, int direction) {
+    AbstractGrowthSite atom = originMultiAtom.getAtomAt(0);
+    if (atom.getNeighbour(direction).isOccupied()) {
+      atom = originMultiAtom.getAtomAt(1);
+    }
+    atom = atom.getNeighbour(direction);
+    int type = originMultiAtom.getEdgeType(atom);
+    histogramSuccessMultiAtom[type]++;
+  }
+  
   public void update(ArrayList<AbstractSite> surface)  {
     
   }
@@ -166,6 +204,8 @@ public class ActivationEnergy {
       histogramPossibleTmp = initDouble();
       histogramPossibleCounterTmp = initLong();
       histogramSuccess = initInt();
+      histogramSuccessIsland = initIsland(histogramSuccessIsland.length);
+      histogramSuccessMultiAtom = initIsland(histogramSuccessMultiAtom.length);
     }
   }
   
@@ -217,6 +257,13 @@ public class ActivationEnergy {
     printAeLow(print[0], "", printLineBreak, histogramPossibleCounterTmp); //AeInstantaneousDiscrete
     print[1].print(time + "\t");
     printAeLow(print[1], "", printLineBreak, histogramSuccess); //AeSuccess 
+    for (int i = 0; i < histogramSuccessIsland.length; i++) {
+      print[1].print(histogramSuccessIsland[i] + "\t");
+    }
+    for (int i = 0; i < histogramSuccessMultiAtom.length; i++) {
+      print[1].print(histogramSuccessMultiAtom[i] + "\t");
+    }
+
     printPossibles(print[2], time); //AePossibleFromList
     print[3].print(time + "\t");
     printAeLow(print[3], "", printLineBreak, histogramPossibleCounter); //AePossibleDiscrete
@@ -325,6 +372,14 @@ public class ActivationEnergy {
       for (int j = 0; j < lengthJ; j++) {
         histogram[i][j] = new Integer(0);
       }
+    }
+    return histogram;
+  }
+  
+  private Integer[] initIsland(int length) {
+    Integer[] histogram = new Integer[length];
+    for (int i = 0; i < length; i++) {
+      histogram[i] = new Integer(0);
     }
     return histogram;
   }

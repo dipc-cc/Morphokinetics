@@ -38,7 +38,7 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
 
   
   public ConcertedActivationEnergy(Parser parser) {
-    super(parser);
+    super(parser, true);
     transitionsHistogram = new int[12][16];
     setLengthI(12);
     setLengthJ(16);

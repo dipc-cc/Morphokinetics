@@ -308,6 +308,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
    */
   private void diffuseIsland() {
     Island originIsland = getRandomIsland();
+    if (aeOutput) {
+      activationEnergy.updateSuccess(originIsland.getNumberOfAtoms());
+    }
     int direction = originIsland.getRandomDirection();
     Island destinationIsland = moveIsland(originIsland, direction);
     getLattice().swapIsland(originIsland, destinationIsland);
@@ -317,6 +320,9 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   private void diffuseMultiAtom() {
     MultiAtom multiAtom = getRandomMultiAtom();
     int direction = multiAtom.getRandomMultiAtomDirection();
+    if (aeOutput) {
+      activationEnergy.updateSuccess(multiAtom, direction);
+    }
     moveMultiAtom(multiAtom, direction);
   }
 	
