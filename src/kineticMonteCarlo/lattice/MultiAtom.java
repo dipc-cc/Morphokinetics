@@ -87,11 +87,15 @@ public class MultiAtom extends Island {
    */
   public int getEdgeType(int pos) {
     AbstractGrowthSite atom;
-    if (pos == 0) { // get neighbour of atom 0
+    if (pos == 0) { // get the empty neighbour of atom 0
       atom = getAtomAt(0).getNeighbour((direction + 3) % 6);
-    } else { // get neighbour of atom 1
+    } else { // get the empty neighbour of atom 1
       atom = getAtomAt(1).getNeighbour(direction);
     }
+    return getEdgeType(atom);
+  }
+  
+  public int getEdgeType(AbstractGrowthSite atom) {
     if (atom.getType() == 2) 
       return 0;
     if (atom.getType() == 3)
