@@ -1,5 +1,4 @@
 import matplotlib
-matplotlib.use("Agg")
 import Info
 import glob as glob
 import numpy as np
