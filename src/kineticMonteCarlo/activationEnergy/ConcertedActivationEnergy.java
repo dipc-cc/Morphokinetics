@@ -84,20 +84,12 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
   
   public void updatePossiblesIslands(Iterator<Island> islands, double totalAndDepositionProbability, double elapsedTime) {
     if (doActivationEnergyStudy()) {
-      //if (previousProbability != totalAndDepositionProbability) {
-        //histogramPossibleIslandTmp = new Double[9];
-        // iterate over all islands of the surface to get all possible hops (only to compute multiplicity)
-        while (islands.hasNext()) {
-          Island island = (Island) islands.next();
-          if (island.getNumberOfAtoms() < 9) {
-            histogramPossibleIsland[island.getNumberOfAtoms()] += elapsedTime;
-          }
+      while (islands.hasNext()) {
+        Island island = (Island) islands.next();
+        if (island.getNumberOfAtoms() < 9) {
+          histogramPossibleIsland[island.getNumberOfAtoms()] += elapsedTime;
         }
-      /*} else { // Total probability is the same as at the previous instant, so multiplicities are the same and we can use cached data
-        for (int i = 0; i < 9; i++) {
-          histogramPossibleConcerted[i] += histogramPossibleConcertedTmp[i];
-        }
-      }*/
+      }
     }
   }
 
