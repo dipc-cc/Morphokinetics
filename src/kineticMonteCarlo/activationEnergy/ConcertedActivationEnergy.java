@@ -75,10 +75,8 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
     if (doActivationEnergyStudy()) {
       for (int i = 0; i < transitionsHistogram.length; i++) {
         for (int j = 0; j < transitionsHistogram[0].length; j++) {
-          for (int k = 0; k < transitionsHistogram[i][j]; k++) {
-            updatePossible(i, j, elapsedTime);
-            updateCounter(i, j);
-          }
+          updatePossible(i, j, elapsedTime, transitionsHistogram[i][j]);
+          updateCounter(i, j, transitionsHistogram[i][j]);
         }
       }
     }

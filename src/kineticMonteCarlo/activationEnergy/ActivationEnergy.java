@@ -306,6 +306,10 @@ public class ActivationEnergy {
     histogramPossible[i][j] += elapsedTime;
   }
   
+  void updatePossible(int i, int j, double elapsedTime, int times) {
+    histogramPossible[i][j] += elapsedTime * times;
+  }
+  
   void updatePossible(Double[][] tmp) {
     for (int i = 0; i < histogramPossible.length; i++) {
       for (int j = 0; j < histogramPossible[0].length; j++) {
@@ -316,6 +320,10 @@ public class ActivationEnergy {
   
   void updateCounter(int i, int j) {
     histogramPossibleCounter[i][j]++;
+  }
+  
+  void updateCounter(int i, int j, int times) {
+    histogramPossibleCounter[i][j] += times;
   }
   
   void updateCounter(Double[][] tmp) {
