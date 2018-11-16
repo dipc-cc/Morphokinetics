@@ -35,12 +35,12 @@ def plotManyTotalRates(axarr, index, d, annotate=True):
         label = "Cu/Ni"
     else:
         color = [cm(4/20),cm(5/20),cm(6/20)]
-        marker = ["d", "+", "<"]
+        marker = ["d", "+", "s"]
         label = "Ni/Cu"
     
-    axarr.plot(1/kb/temperatures, totalRateM[index], marker=marker[0], ms=7, ls="", label=label+r": $\sum_\alpha \epsilon^{R}_\alpha$", color=color[1])
-    axarr.plot(1/kb/temperatures, totalRateE[index], ":", marker=marker[1], ms=7, label=label+r": $N_e^{R}/L$ (events)", color=color[0])
+    axarr.plot(1/kb/temperatures, totalRateM[index], marker=marker[0], ms=7, ls="", label=label+r": $\sum_\alpha \epsilon^{R}_\alpha$ (multiplicity)", color=color[1])
     axarr.plot(1/kb/temperatures, totalRateH[index], "-", marker=marker[2], ms=7, label=label+r": $N_d^{R}/L$ (diffusion)", color=color[2],markerfacecolor="None")
+    axarr.plot(1/kb/temperatures, totalRateE[index], ":", marker=marker[1], ms=7, label=label+r": $N_e^{R}/L$ (events)", color=color[0])
     
     if annotate:
         axarr.annotate(r"$\epsilon^{R}_\alpha=\omega^{R}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.47,0.1), xycoords="axes fraction")
