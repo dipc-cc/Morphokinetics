@@ -24,8 +24,8 @@ class ConcertedPlotIntermediate:
         if total and one:
             self.out = "T1.svg"
             self.ymin = 1e-3
-            self.fig, ax = plt.subplots(1, sharex=True, figsize=(5,3.5))
-            self.fig.subplots_adjust(top=0.88,left=0.15,right=0.95,bottom=0.15)
+            self.fig, ax = plt.subplots(1, sharex=True, figsize=(6,3.5))
+            self.fig.subplots_adjust(top=0.88,left=0.15,right=0.8,bottom=0.15)
             self.axarr.append(0); self.axarr.append(ax)
         else:
             self.minM = 1e3
@@ -56,15 +56,17 @@ class ConcertedPlotIntermediate:
             return
         self.omega = y
         if any(abs(y) >= self.ymin):
+            if self.moment == 36 and y[22] > self.ymin:
+                print(labelAlfa[i],y[22]*100)
             self.axarr[1].semilogy(self.x, y, ls="",color=self.cm(abs((i%20)/20)), label=labelAlfa[i], marker=self.markers[i%7], mec=self.cp.getMec(i), alpha=0.75)
 
     def flush(self, omegaSumTof):
         if not self.showPlot:
             return
         if self.one:
-            self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1) 
+            self.axarr[1].legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
             ax2 = mp.setY2TemperatureLabels(self.axarr[1],8.617332e-5)
-            self.__smallerFont(ax2, 12)
+            self.__smallerFont(ax2, 10)
         else:
             self.__smallerFont(self.axarr[0], 8)
         self.__smallerFont(self.axarr[1], 14)
@@ -95,4 +97,5 @@ class ConcertedPlotIntermediate:
         self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"}_\alpha$", size=14)
         self.axarr[1].set_xlabel(r"$1/k_BT$", size=14)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
-        self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)
+        #self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)
+        self.axarr[1].legend(prop={'size': 7},bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
