@@ -36,6 +36,9 @@ class ConcertedPlot:
         axarr.set_yscale("log")
         axarr.legend(loc="best", prop={'size':6})
         fig.savefig("totalRates"+str(cov)+self.out,  bbox_inches='tight')
+        axarr.set_xlim(38,60)
+        axarr.set_ylim(1e3,2e4)
+        plt.savefig("totalRates"+str(cov)+"high"+self.out)#, bbox_inches='tight')
 
 
     def allSlopes(self,x,y):
@@ -104,7 +107,7 @@ class ConcertedPlot:
         ax.plot(x, tgt*1000, marker="o",label=r"$E^{"+rl+r"}_{app}$", color="red")
         ax.plot(x, rct*1000, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$", color="green")
         for i,a in enumerate(range(concerted.minAlfa,concerted.maxAlfa)):
-            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.0005):
+            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.003): # 3meV
                 #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
                 ax.fill_between(x, concerted.lastOmegas[covIndex,:,i]*1000, label=concerted.labelAlfa[a], color=self.cm(a%20/(19)))
         # ax2 = ax.twinx()
@@ -114,22 +117,26 @@ class ConcertedPlot:
         labels = [item for item in ax.get_xticklabels()]
         ax.plot(x, abs(np.array(tgt)-np.array(rct))*1000, label="Absolute error", color="black")
         if cov == 0.1:
-            print("Maximum error at 0.1:",max(abs(np.array(tgt)-np.array(rct))*1000))
-        ax.legend(loc="best", prop={'size':6})
+            maxIndex = np.argmax(abs(np.array(tgt)-np.array(rct)))
+            
+            print("Maximum error at 0.1:",max(abs(np.array(tgt)-np.array(rct))*1000),"at temperature",1/self.kb/x[maxIndex] )
+        ax.legend(loc="best", prop={'size':9})
         #ax.set_xticklabels(labels)
         ax.set_xlabel(r"$1/k_BT$", size=14)
-        ax.set_ylabel(r"Energy $(meV)$", size=14)
+        ax.set_ylabel(r"Activation Energy $(meV)$", size=14)
         #ax.set_yscale("log")
         #ax.set_xscale("log")
         ax2 = mp.setY2TemperatureLabels(ax,self.kb)
         inf.smallerFont(ax2, 12)
-        ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.45,0.2), xycoords="axes fraction")
+        ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.2,0.4), xycoords="axes fraction")
 
         inf.smallerFont(ax, 14)
+        #ax.set_ylim(0,40)
         plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+self.out)#, bbox_inches='tight')
-        ax.set_xlim(18,100)
+        ax.set_xlim(38,60)
         #ax.set_ylim(-0.02,0.43)
-        #plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+"small"+self.out)#, bbox_inches='tight')
+        ax2 = mp.setY2TemperatureLabels(ax,self.kb)
+        plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+"high"+self.out)#, bbox_inches='tight')
         plt.close(figR)
 
         
