@@ -11,13 +11,14 @@ import pdb
 kb = 8.617332e-5
 maxA = 206
 minCov = 18
+minLog = -3
 
 def plot(x,y,z,a, log):
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     if log:
         zz = np.log(omegas[a])/np.log(10)
-        z = np.ma.masked_where(zz<-4, zz).filled(np.nan)#.compressed()
+        z = np.ma.masked_where(zz<minLog, zz).filled(np.nan)#.compressed()
     else:
         z = omegas[a]
     x = x[minCov:,]
@@ -32,7 +33,7 @@ def plot(x,y,z,a, log):
     ax.view_init(15, 15)
     ax.legend(loc="best", prop={'size':16})
     if log:
-        ax.set_zlim(-4,0.1)
+        ax.set_zlim(minLog,0.1)
         logN = "_log"
         ax.set_zlabel(r"$\log(\omega)$")
     else:
@@ -47,7 +48,7 @@ def delete(a,cov):
         for cov in range(0,127):
             os.remove("omegas/omegas_{:03d}".format(a)+"_{:03d}".format(cov)+".txt")
     except FileNotFoundError:
-        pass
+        pass    
 # read data
 temperatures = np.loadtxt("temperatures.txt")
 coverages = np.loadtxt("coverages.txt")
@@ -71,10 +72,10 @@ for a in range(0,maxA):
             omegas[a,cov] = np.loadtxt("omegas/omegas_{:03d}".format(a)+"_{:03d}".format(cov)+".txt")
         except IOError:
             break
-        
+     
 label = Label.Label().getLabels()
 for a in range(0,maxA):
-    if np.any(omegas[a] > 0.01):
+    if np.any(omegas[a] > 10**minLog):
         plot(x,y,omegas,a, True)
     else:
         delete(a,cov)
