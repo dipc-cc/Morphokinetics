@@ -85,6 +85,7 @@ public class ConcertedCuNiRates extends AbstractConcertedRates {
     energies[4][1] = 0.403; // to type 1
     energies[4][2] = 0.198; // to type 2, subtype 0
     energies[4][3] = 0.223; // to type 2, subtype 1
+    energies[4][4] = 0.807; // to type 2, subtype 2
     energies[4][5] = 0.13; // to type 3, subtype 0
     energies[4][6] = 0.022; // to type 3, subtype 1
     energies[4][8] = 0.0063; // to type 4, subtype 0
@@ -123,12 +124,15 @@ public class ConcertedCuNiRates extends AbstractConcertedRates {
     // From  type 4, subtype 0
     energies[8][1] = 0.947; // to type 1
     energies[8][2] = 0.748; // to type 2, subtype 0
+    energies[8][3] = 0.957; // to type 2, subtype 1
+    energies[8][4] = 0.851; // to type 2, subtype 2
     energies[8][5] = 0.627; // to type 3, subtype 0
     energies[8][6] = 0.468; // to type 3, subtype 1
     energies[8][8] = 0.397; // to type 4, subtype 0
     // From  type 4, subtype 1
     energies[9][3] = 1.01; // to type 2, subtype 1
     energies[9][6] = 0.895; // to type 3, subtype 1
+    energies[9][7] = 1.107; // to type 3, subtype 2
     energies[9][8] = 0.727; // to type 4, subtype 0
     energies[9][9] = 0.938; // to type 4, subtype 1
     energies[9][10] = 0.956; // to type 4, subtype 2

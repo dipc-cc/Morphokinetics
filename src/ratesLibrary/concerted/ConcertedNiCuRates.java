@@ -125,12 +125,15 @@ public class ConcertedNiCuRates extends AbstractConcertedRates {
     // From  type 4, subtype 0
     energies[8][1] = 1.145; // to type 1
     energies[8][2] = 0.959; // to type 2, subtype 0
+    energies[8][3] = 1.220; // to type 2, subtype 1
+    energies[8][4] = 1.157; // to type 2, subtype 2
     energies[8][5] = 0.858; // to type 3, subtype 0
     energies[8][6] = 0.839; // to type 3, subtype 1
     energies[8][8] = 0.726; // to type 4, subtype 0
     // From  type 4, subtype 1
     energies[9][3] = 1.33; // to type 2, subtype 1
     energies[9][6] = 1.384; // to type 3, subtype 1
+    energies[9][7] = 1.209; // to type 3, subtype 2
     energies[9][8] = 1.225; // to type 4, subtype 0
     energies[9][9] = 1.4; // to type 4, subtype 1
     energies[9][10] = 1.226; // to type 4, subtype 2
