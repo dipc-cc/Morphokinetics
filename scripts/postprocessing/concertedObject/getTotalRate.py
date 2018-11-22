@@ -33,8 +33,11 @@ def getTotalRate():
         events = data[:,7] # column number 8 is "number of events"
         try:
             totalRate += events #/ data[:,1] # last time, column 2
-            allRates[i] = events
-            coverages = data[:,0]
+            allRates[i,0:len(events)] = events
+            try:
+                coverages
+            except NameError:
+                coverages = data[:,0]
             filesLenght += 1
         except ValueError:
             continue
