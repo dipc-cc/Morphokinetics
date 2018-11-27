@@ -65,27 +65,22 @@ public class SitesAvlTree<T extends Comparable<T>> implements ISitesCollection<T
    * Method to update rates from root to an site.
    * 
    * @param data site that has a delta in rate.
-   * @param diff rate to be added.
+   * @param diff ignored. It is recomputed from leave to parent.
    */
   @Override
   public void updateRate(T data, double diff){
-    updateRate(tree.getRoot(), data, diff);
+    updateRate(tree.getRoot(), data);
   }
   
-  private void updateRate(Node<T> n, T data, double diff) {
+  private void updateRate(Node<T> n, T data) {
     if (n == null) {
       return;
     }
-    IElement elem = ((IElement) n.getData());
-    ((IElement) n.getData()).addToSumRate(process, diff);
     if (n.getData().compareTo(data) > 0) {
-      updateRate(n.getLeft(), data, diff);
+      updateRate(n.getLeft(), data);
     }
     if (n.getData().compareTo(data) < 0) {
-      updateRate(n.getRight(), data, diff);
-    }
-    if (n.getData().compareTo(data) == 0) {
-      ((IElement) data).getRate(process);
+      updateRate(n.getRight(), data);
     }
     updateSumRate(n);
   }    
