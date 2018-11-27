@@ -719,11 +719,11 @@ public class ConcertedKmc extends AbstractGrowthKmc {
   }
   
   private double getDiffusionRate(ConcertedSite atom, ConcertedSite neighbour, int position) {
-    double probability;
+    double rate;
     int origType = atom. getRealType();
     int destType = neighbour.getTypeWithoutNeighbour(position);
-    probability = diffusionRatePerAtom[origType][destType];
-    return probability;
+    rate = diffusionRatePerAtom[origType][destType];
+    return rate;
   }
   
   private double getConcertedDiffusionRate(int islandNumber) {
