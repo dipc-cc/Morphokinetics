@@ -41,6 +41,9 @@ public abstract class AbstractProcess {
   }
   
   public void setSumRate(double rate) {
+    if (rate < 0.0) {
+      System.err.println("Rate must be > 0 [setSumRate] " + rate);
+    }
     sumRate = rate;
   }
 
@@ -50,6 +53,9 @@ public abstract class AbstractProcess {
 
   public void addSumRate(double rate) {
     sumRate += rate;
+    if (sumRate < 0.0) {
+      System.err.println("sumRate must be > 0 [addSumRate]" + rate);
+    }
   }
 
   public double getRate() {
@@ -73,6 +79,9 @@ public abstract class AbstractProcess {
    */
   public void addRate(double rate, int neighbourPos) {
     //this.rate += rate; // it creates numerical error
+    if (rate < 0.0) {
+      System.err.println("Rate must be > 0 [addRate] " + rate);
+    }
     edgeRate[neighbourPos] += rate; // TODO, I don't know why is += and not just =
     this.rate = 0;
     for (int i = 0; i < numberOfProcesses; i++) { // to avoid numerical error. Recompute
