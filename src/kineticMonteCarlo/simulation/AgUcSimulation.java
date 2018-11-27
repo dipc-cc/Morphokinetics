@@ -21,6 +21,9 @@ package kineticMonteCarlo.simulation;
 import basic.Parser;
 import kineticMonteCarlo.kmcCore.growth.AgUcKmc;
 import ratesLibrary.AgRatesFromPrbCox;
+import ratesLibrary.AgRatesFromSsBruneAgAg;
+import ratesLibrary.AgRatesFromSsBruneAgAgPt;
+import ratesLibrary.AgRatesFromSsBruneAgPt;
 import ratesLibrary.AgSimpleRates;
 
 /**
@@ -40,6 +43,15 @@ public class AgUcSimulation  extends AbstractGrowthSimulation {
     switch (getParser().getRatesLibrary()) {
       case "simple":
         setRates(new AgSimpleRates());
+        break;
+      case "bruneAgAg":
+        setRates(new AgRatesFromSsBruneAgAg());
+        break;
+      case "bruneAgPt":
+        setRates(new AgRatesFromSsBruneAgPt(getParser().getTemperature()));
+        break;
+      case "bruneAgAgPt":
+        setRates(new AgRatesFromSsBruneAgAgPt(getParser().getTemperature()));
         break;
       default:
         setRates(new AgRatesFromPrbCox());

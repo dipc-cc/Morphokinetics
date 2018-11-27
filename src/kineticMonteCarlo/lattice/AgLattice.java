@@ -205,10 +205,11 @@ public class AgLattice extends AbstractGrowthLattice {
 
     byte originalType = atom.getType();
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+      //if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         addOccupiedNeighbour(atom.getNeighbour(i), originalType, forceNucleation);
-      }
+      //}
     }
+    checkRealEdge(atom);
 
     addAtom(atom);
     if (atom.getNMobile() > 0) {
@@ -224,9 +225,9 @@ public class AgLattice extends AbstractGrowthLattice {
     double probabilityChange = atom.getProbability();
     
     for (int i = 0; i < atom.getNumberOfNeighbours(); i++) {
-      if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
+      //if (!atom.getNeighbour(i).isPartOfImmobilSubstrate()) {
         removeMobileOccupied(atom.getNeighbour(i));
-      }
+      //}
     }
 
     if (atom.getNMobile() > 0) {
@@ -698,7 +699,8 @@ public class AgLattice extends AbstractGrowthLattice {
     if (neighbourSite.isOccupied()) { // the type of neighbour does not change, but it has a mew neighbour (caller one)
       addAtom(neighbourSite);
     }
-      
+    
+    checkRealEdge(neighbourSite);
   }
    
   /**
@@ -724,6 +726,53 @@ public class AgLattice extends AbstractGrowthLattice {
             removeImmobilAddMobile(neighbourSite.getNeighbour(i));
           }
         }
+      }
+    }
+    checkRealEdge(neighbourSite);
+  }
+  
+  public void checkRealEdge(AbstractSurfaceSite a) {
+    if (a.getType() == EDGE) {
+      int firstNeighour = -1;
+      int secondNeighbour = -1;
+      for (int i = 0; i < a.getNumberOfNeighbours(); i++) {
+        AbstractSurfaceSite n = a.getNeighbour(i);
+        if (n.isOccupied()) {
+          if (firstNeighour == -1) {
+            firstNeighour = i;
+          } else {
+            secondNeighbour = i;
+          }
+        }
+      }
+      if (Math.abs(firstNeighour - secondNeighbour) == 1) {
+        // it is an actual edge
+      } else {
+        a.setType(ISLAND);
+      }
+    }
+    if (a.getType() == KINK_A) {
+      int firstNeighour = -1;
+      int secondNeighbour = -1;
+      int thirdNeighbour = -1;
+      for (int i = 0; i < a.getNumberOfNeighbours(); i++) {
+        AbstractSurfaceSite n = a.getNeighbour(i);
+        if (n.isOccupied()) {
+          if (firstNeighour == -1) {
+            firstNeighour = i;
+          } else if (secondNeighbour == -1) {
+            secondNeighbour = i;
+          } else {
+            thirdNeighbour = i;
+          }
+        }
+      }
+      if (Math.abs(firstNeighour - secondNeighbour) == 1 &&
+             Math.abs(thirdNeighbour - secondNeighbour) == 1 ) {
+        // it is an actual edge
+      } else {
+        a.setType(ISLAND);
+        //System.out.println("island");
       }
     }
   }

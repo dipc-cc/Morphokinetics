@@ -40,7 +40,7 @@ public class AgUcKmc extends AbstractGrowthKmc {
 
     HopsPerStep distancePerStep = new HopsPerStep();
     AgUcLattice agLattice;
-    if (parser.getRatesLibrary().equals("simple")) {
+    if (parser.getRatesLibrary().equals("simple")) {// || parser.getRatesLibrary().equals("bruneAgPt")) {
       agLattice = new AgUcLatticeSimple(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, 0);
     } else {
       agLattice = new AgUcLattice(parser.getHexaSizeI(), parser.getHexaSizeJ(), getModifiedBuffer(), distancePerStep, 1);

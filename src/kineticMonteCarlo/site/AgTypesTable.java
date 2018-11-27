@@ -171,7 +171,7 @@ public class AgTypesTable {
     if (immobile + mobile > 6) {
       throw new ArrayIndexOutOfBoundsException("The sum of mobile and immobile neighbours is >6, which is in practice impossible");
     }
-    try {
+    /*try {
       type = tablePresent[immobile][mobile];
     } catch (ArrayIndexOutOfBoundsException exception) {
       System.err.println("Catched error getting type of Ag atom " + exception);
@@ -181,6 +181,10 @@ public class AgTypesTable {
       } else {
         type = TERRACE;
       }
+    }//*/
+    type = (byte) (immobile + mobile);
+    if (type > ISLAND) {
+      type = ISLAND;
     }
     return type;
   }
