@@ -76,16 +76,18 @@ public class SitesAvlTree<T extends Comparable<T>> implements ISitesCollection<T
     if (n == null) {
       return;
     }
+    IElement elem = ((IElement) n.getData());
     ((IElement) n.getData()).addToSumRate(process, diff);
-    if (n.getData().compareTo(data) == 0) {
-      return;
-    }
     if (n.getData().compareTo(data) > 0) {
       updateRate(n.getLeft(), data, diff);
     }
     if (n.getData().compareTo(data) < 0) {
       updateRate(n.getRight(), data, diff);
     }
+    if (n.getData().compareTo(data) == 0) {
+      ((IElement) data).getRate(process);
+    }
+    updateSumRate(n);
   }    
   
   /**
@@ -103,17 +105,30 @@ public class SitesAvlTree<T extends Comparable<T>> implements ISitesCollection<T
     if (n == null) {
       return;
     }
-    ((IElement) n.getData()).addToSumRate(process, -((IElement) data).getRate(process));
-    if (n.getData().compareTo(data) == 0) {
-      ((IElement) data).setRate(process, 0.0);
-      return;
-    }
+    IElement currentNode = ((IElement) n.getData());
     if (n.getData().compareTo(data) > 0) {
       removeAtomRate(n.getLeft(), data);
     }
     if (n.getData().compareTo(data) < 0) {
       removeAtomRate(n.getRight(), data);
     }
+    if (n.getData().compareTo(data) == 0) {
+      currentNode.setRate(process, 0.0);
+    }
+    updateSumRate(n);
+  }
+  
+  private void updateSumRate(Node<T> n) {
+    IElement elem = ((IElement) n.getData());
+    double sumRate = 0.0;
+    if (n.getLeft() != null) {
+      sumRate += ((IElement) n.getLeft().getData()).getSumRate(process);
+    }
+    if (n.getRight()!= null) {
+      sumRate += ((IElement) n.getRight().getData()).getSumRate(process);
+    }
+    sumRate += elem.getRate(process);
+    elem.setSumRate(process, sumRate);
   }
   
   @Override
