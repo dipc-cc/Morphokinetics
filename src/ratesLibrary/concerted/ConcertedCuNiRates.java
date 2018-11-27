@@ -32,7 +32,8 @@ public class ConcertedCuNiRates extends AbstractConcertedRates {
       for (int j = 0; j < 16; j++) {
         energies[i][j] = eImpossible;
       }
-    }    // From  type 0
+    }
+    // From  type 0
     energies[0][0] = 0.052; // to type 0
     energies[0][1] = 0.035; // to type 1
     energies[0][2] = 0.031; // to type 2, subtype 0
