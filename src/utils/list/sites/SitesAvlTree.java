@@ -235,7 +235,8 @@ public class SitesAvlTree<T extends Comparable<T>> implements ISitesCollection<T
     double randomNumber = StaticRandom.raw() * getTotalRate(process);
     IElement site = (IElement) randomAtom(tree.getRoot(), randomNumber).getData();
     while (site.getRate(process) == 0) {
-      //System.out.println("Something is not going perfectly "+counter+++" "+localCounter++);
+      System.err.println("Something is not going perfectly ");//+counter+++" "+localCounter++);
+      System.err.println("Selected atom must have > 0 rate [randomElement]");
       randomNumber = StaticRandom.raw() * getTotalRate(process);
       site = (IElement) randomAtom(tree.getRoot(), randomNumber).getData();
     }
