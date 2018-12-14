@@ -12,10 +12,11 @@ import pdb
 
 class Multiplicity:
 
-    def setInfo(self, info, cov):
+    def setInfo(self, info, cov, cache):
         self.info = info
         self.cPlot = ConcertedPlot.ConcertedPlot()
         self.cov = cov
+        self.cache = cache
         
     def printRatios(self, ratios):
         rows = 12
@@ -145,7 +146,8 @@ class Multiplicity:
             for i,a in enumerate(range(p.minA,p.maxA)): # alfa
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
                 self.api.plotOmegas(y, a, labelAlfa)
-                self.api.saveOmegas(y, a, co2)
+                if self.cache:
+                    self.api.saveOmegas(y, a, co2)
 
                 y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
                 multiplicityEa[co2,:,i] = self.getSlopes(x, y, i)
