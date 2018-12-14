@@ -74,14 +74,14 @@ class Concerted:
         self.info.setParams()
         self.info.minA = self.minAlfa # agian kentzeko
         self.info.maxA = self.maxAlfa # agian kentzeko
-        self.temperatures = self.info.getTemperatures()
+        self.temperatures = np.array([i for i in self.info.getTemperatures() if i <= 900]) #filter temperatures higher than 500
         self.maxRanges = len(self.temperatures)
         files = glob.glob("*/results/run*/dataAe000.txt")
         files.sort()
         matrix = np.loadtxt(fname=files[0],comments=['#', '[', 'h'])
         self.info.mCov = len(matrix)
         self.cov = matrix[:,0]
-        self.multi.setInfo(self.info, self.cov)
+        self.multi.setInfo(self.info, self.cov, self.cacheTotalRate)
 
         if self.lmbdas:
             self.multiL.setInfo(self.info)

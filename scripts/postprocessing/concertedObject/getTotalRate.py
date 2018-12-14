@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 import matplotlib
-matplotlib.use("Agg")
 import glob
 import os
 import sys
@@ -89,7 +88,7 @@ x = []
 y = []
 temperatures = True
 try:
-    mIter = inf.getTemperatures()
+    mIter = np.array([i for i in inf.getTemperatures() if i <= 900]) #filter temperatures higher than 500
 except ValueError:
     mIter = inf.getPressures()
 
@@ -116,7 +115,7 @@ for i,f in enumerate(mIter):
     except ZeroDivisionError:
         totalRate = 0
     cov = 0.1
-    index = getIndexFromCov(coverages, 0.01)
+    index = getIndexFromCov(coverages, 0.100002)
     print(f,totalRate[index])
     x.append(f)
     y.append(totalRate[index])
