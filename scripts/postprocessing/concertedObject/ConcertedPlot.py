@@ -116,7 +116,7 @@ class ConcertedPlot:
         #ax.set_xlim(20,30)
         labels = [item for item in ax.get_xticklabels()]
         ax.plot(x, abs(np.array(tgt)-np.array(rct))*1000, label="Absolute error", color="black")
-        if cov == 0.1:
+        if cov == 0.100002:
             maxIndex = np.argmax(abs(np.array(tgt)-np.array(rct)))
             
             print("Maximum error at 0.1:",max(abs(np.array(tgt)-np.array(rct))*1000),"at temperature",1/self.kb/x[maxIndex] )
@@ -131,11 +131,13 @@ class ConcertedPlot:
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.2,0.4), xycoords="axes fraction")
 
         inf.smallerFont(ax, 14)
-        #ax.set_ylim(0,40)
+        ax.set_ylim(0,30)
+        ax.set_xlim(30,510)
         plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+self.out)#, bbox_inches='tight')
-        ax.set_xlim(38,60)
-        #ax.set_ylim(-0.02,0.43)
-        ax2 = mp.setY2TemperatureLabels(ax,self.kb)
+        ax.set_xlim(12,30)
+        ax.set_ylim(1e-1,210)
+        #ax.set_yscale("log")
+        #ax2 = mp.setY2TemperatureLabels(ax,self.kb)
         plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+"high"+self.out)#, bbox_inches='tight')
         plt.close(figR)
 
