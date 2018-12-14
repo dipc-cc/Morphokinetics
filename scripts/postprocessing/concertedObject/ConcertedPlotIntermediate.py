@@ -56,8 +56,6 @@ class ConcertedPlotIntermediate:
             return
         self.omega = y
         if any(abs(y) >= self.ymin):
-            if self.moment == 36 and y[22] > self.ymin:
-                print(labelAlfa[i],y[22]*100)
             self.axarr[1].semilogy(self.x, y, ls="",color=self.cm(abs((i%20)/20)), label=labelAlfa[i], marker=self.markers[i%7], mec=self.cp.getMec(i), alpha=0.75)
 
     def flush(self, omegaSumTof):
@@ -94,7 +92,7 @@ class ConcertedPlotIntermediate:
             self.axarr[0].set_ylim(self.minM,10)
             self.axarr[0].set_ylabel(r"$M^{"+rl+r"}_\alpha$")
         self.axarr[1].set_ylim(self.ymin,2)
-        self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"}_\alpha$", size=14)
+        self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"_e}_\alpha$", size=14)
         self.axarr[1].set_xlabel(r"$1/k_BT$", size=14)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         #self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)
