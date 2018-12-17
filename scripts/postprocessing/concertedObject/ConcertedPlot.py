@@ -96,6 +96,14 @@ class ConcertedPlot:
     def plotResume(self, concerted, covIndex, cov):
         #cm = plt.get_cmap('prism')
         x = list(reversed(1/self.kb/concerted.temperatures))
+        if covIndex == 0: # save temporary data
+            shape = np.shape(concerted.epsilon)
+            np.savetxt("shape.txt", shape)
+            np.savetxt("x_index.txt", x)
+            np.savetxt("epsilon.txt", concerted.epsilon.reshape(shape[0]*shape[1]*shape[2]))
+            np.savetxt("lastOmegas.txt", concerted.lastOmegas.reshape(shape[0]*shape[1]*shape[2]))
+            np.savetxt("targetE.txt", concerted.tgt.reshape(shape[1]*shape[0]))
+            np.savetxt("rcomptE.txt", concerted.rct.reshape(shape[1]*shape[0]))
         figR, ax = plt.subplots(1, figsize=(5,3.5))
         if concerted.total:
             rl = "R"
@@ -107,7 +115,7 @@ class ConcertedPlot:
         ax.plot(x, tgt*1000, marker="o",label=r"$E^{"+rl+r"}_{app}$", color="red")
         ax.plot(x, rct*1000, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$", color="green")
         for i,a in enumerate(range(concerted.minAlfa,concerted.maxAlfa)):
-            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.003): # 3meV
+            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.0001): # 0.1meV
                 #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
                 ax.fill_between(x, concerted.lastOmegas[covIndex,:,i]*1000, label=concerted.labelAlfa[a], color=self.cm(a%20/(19)))
         # ax2 = ax.twinx()
