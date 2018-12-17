@@ -355,16 +355,14 @@ def plotTotalRates(x, y1, y2,i):
     fig.savefig("totalRates"+str(i)+".svg",  bbox_inches='tight')
     plt.close(fig)
 
-def setY2TemperatureLabels(ax,kb):
+def setY2TemperatureLabels(ax,kb, majors=np.array([25, 50, 75, 100, 150, 350])):
     ax2 = ax.twiny()
     ax2.set_xlim(1/kb/ax.get_xlim()[0],1/kb/ax.get_xlim()[1])
     ax2.set_xlim(ax.get_xlim()[0],ax.get_xlim()[1])
     #ax2.set_xscale("log")
     ticks_x = plticker.FuncFormatter(lambda x, pos: '${0:d}$'.format(int(1/kb/x)))
     ax2.xaxis.set_major_formatter(ticks_x)
-    majors = np.array(list(np.arange(200,400,20))+list(np.arange(400,760,50)))
-    majors = np.array([25, 50, 75, 100, 150, 350])
     majors = 1/kb/majors
     ax2.xaxis.set_major_locator(plticker.FixedLocator(majors))
-    ax2.set_xlabel("temperature (T)", size=13)
+    ax2.set_xlabel("temperature (T)")#, size=13)
     return ax2
