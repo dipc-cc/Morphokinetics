@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import sys
 import numpy as np
 
 table = np.loadtxt("input.txt")
@@ -25,8 +26,15 @@ a = table[1:,0] # row index
 b = table[0,1:] # column index
 table = table[:,1:] # remove index row
 table = table[1:,:] # remove index column
+spaces = "    "
+comment = "//"
+obj = ""
+if len(sys.argv) == 2:
+    spaces = "        "
+    comment = "#"
+    obj = "self."
 for i in range(0,len(table)):
-    print("    // From ", types[i])
+    print(spaces+comment+" From ", types[i])
     for j in range(0,len(table[0])):
         if table[i][j] < 100:
-            print("    energies["+str(int(a[i]))+"]["+str(int(b[j]))+"] = "+str(table[i][j])+"; // to "+types[int(b[j])])
+            print(spaces+obj+"energies["+str(int(a[i]))+"]["+str(int(b[j]))+"] = "+str(table[i][j])+"; "+comment+" to "+types[int(b[j])])
