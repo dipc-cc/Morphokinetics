@@ -544,6 +544,25 @@ class BdaLatticeHelper<T> {
     return (List<T>) originSite.getSpiralSites(thresholdDistance);
   }
 
+  /**
+   * Computes the relative position of the neighbour. The code is (in ALPHA case) 
+   * 0 north-west up, 1 north, 2 north-east up
+   * 3 north-east bottom, 4 east, 5 south-east up
+   * 6 south-east bottom, 7 south, 8 south-west bottom
+   * 9 south-west up, 10 west, 11 north-west bottom
+   * 
+   *   0 1 2
+   * 11     3
+   * 10     4
+   * 9      5
+   *  8 7 6
+   * 
+   * @param pos number of modified Ag sites, from 0 (inclusive) to 8 (inclusive). It can be until 3 as well.
+   * @param direction direction of the possible movement, from 0 (inclusive) to 3 (inclusive).
+   * @param rotated if the current BDA molecule is rotated by 90º.
+   * @param type ALPHA or BETA.
+   * @return a code from 0 (inclusive) to 11 (inclusive) with the information of the location of the neighbour. 
+   */
   int getNeighbourCode(int pos, int direction, boolean rotated, int type) {
     int upDown = -1;
     switch (type) {
