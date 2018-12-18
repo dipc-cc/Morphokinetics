@@ -21,7 +21,7 @@ class EnergyCuNi:
         self.energies[1][13] = 0.258; # to type 2, subtype 0, detach
         self.energies[1][3] = 0.033; # to type 2, subtype 1
         self.energies[1][14] = 0.183; # to type 2, subtype 1, detach
-        self.energies[1][4] = 0.0023; # to type 2, subtype 2
+        self.energies[1][4] = 0.0027; # to type 2, subtype 2
         self.energies[1][5] = 0.01; # to type 3, subtype 0
         self.energies[1][15] = 0.184; # to type 3, subtype 0, detach
         self.energies[1][6] = 0.0012; # to type 3, subtype 1
@@ -81,7 +81,7 @@ class EnergyCuNi:
         self.energies[6][1] = 0.697; # to type 1
         self.energies[6][2] = 0.502; # to type 2, subtype 0
         self.energies[6][3] = 0.479; # to type 2, subtype 1
-        self.energies[6][4] = 0.215; # to type 2, subtype 2
+        self.energies[6][4] = 0.360; # to type 2, subtype 2
         self.energies[6][5] = 0.386; # to type 3, subtype 0
         self.energies[6][6] = 0.188; # to type 3, subtype 1
         self.energies[6][7] = 0.905; # to type 3, subtype 2
