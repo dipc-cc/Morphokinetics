@@ -46,6 +46,8 @@ def plotManyTotalRates(axarr, index, d, latSize, annotate=True):
         axarr.set_ylabel("Total rate per site")
         axarr.set_xlabel(r"$1/k_BT$")
         mp.setY2TemperatureLabels(axarr,kb)
+    else:
+        axarr.plot(1/kb/temperatures, np.ones(len(temperatures))*coverages[index], "--", label=r"$R_a$"+" "+r"$(R = R_a + R_d)$", color=cm(9/20))
     axarr.set_yscale("log")
     #axarr.set_ylim(3e-2,1e3)
     axarr.legend(loc="best", prop={'size':8})
