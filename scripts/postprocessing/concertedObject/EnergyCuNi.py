@@ -61,7 +61,7 @@ class EnergyCuNi:
         self.energies[4][2] = 0.198; # to type 2, subtype 0
         self.energies[4][3] = 0.189; # to type 2, subtype 1
         self.energies[4][4] = 0.373; # to type 2, subtype 2
-        self.energies[4][5] = 0.102; # to type 3, subtype 0
+        self.energies[4][5] = 0.413; # to type 3, subtype 0
         self.energies[4][6] = 0.328; # to type 3, subtype 1
         self.energies[4][8] = 0.292; # to type 4, subtype 0
         # From  type 3, subtype 0
