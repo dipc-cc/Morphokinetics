@@ -89,7 +89,7 @@ public class ConcertedActivationEnergy extends ActivationEnergy {
       while (islands.hasNext()) {
         Island island = (Island) islands.next();
         if (island.getNumberOfAtoms() < 9) {
-          histogramPossibleIsland[island.getNumberOfAtoms()] += elapsedTime;
+          histogramPossibleIsland[island.getNumberOfAtoms()] += (6.0 * elapsedTime);
         }
       }
     }
