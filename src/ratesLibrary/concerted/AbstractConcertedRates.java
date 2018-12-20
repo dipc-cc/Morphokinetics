@@ -150,10 +150,15 @@ public class AbstractConcertedRates implements IRates {
     return rates;
   }
   
+  /**
+   * The energy of the island diffusion had been calculated for one direction, so multiply the rate by 6 directions.
+   * 
+   * @return total island diffusion rate.
+   */
   public double[] getIslandDiffusionRates() {
     double[] rates = new double[concertedEnergies.length];
     for (int i = 0; i < concertedEnergies.length; i++) {
-      rates[i] = getRate(i, temperature);
+      rates[i] = getRate(i, temperature) * 6.0;
     }
     return rates;
   }
