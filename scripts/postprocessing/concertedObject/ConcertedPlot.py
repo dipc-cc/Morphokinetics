@@ -21,8 +21,6 @@ class ConcertedPlot:
         return concerted.cov.tolist().index(cov)
 
     def plotTotalRate(self, concerted, cov=0.2):
-        if not concerted.total:
-            concerted.totalRateEvents = np.copy(concerted.rates[:,:,concerted.ratesI]) # it is a inner rate
         index = self.getIndexFromCov(concerted, cov)
 
         latSize = concerted.info.sizI * int(concerted.info.sizJ/np.sqrt(3)*2)
@@ -114,8 +112,9 @@ class ConcertedPlot:
         rct = concerted.rct[:,covIndex]
         ax.plot(x, tgt*1000, marker="o",label=r"$E^{"+rl+r"}_{app}$", color="red")
         ax.plot(x, rct*1000, "--", label=r"$\sum \epsilon^{"+rl+r"}_\alpha$", color="green")
-        for i,a in enumerate(range(concerted.minAlfa,concerted.maxAlfa)):
-            if any(abs(concerted.epsilon[-1,::-1,i]) > 0.0001): # 0.1meV
+        for i,a in enumerate(range(concerted.minAlfa,concerted.maxAlfa-1)):
+            #if any(abs(concerted.epsilon[-1,::-1,i]) > 0.0001): # 0.1meV
+            if any(concerted.omega[covIndex,:,i] > 0.01):
                 #ax.plot(x, epsilon[-1,::-1,i], label=labelAlfa[a], color=cm(abs(i/20)), marker=markers[i%8])
                 ax.fill_between(x, concerted.lastOmegas[covIndex,:,i]*1000, label=concerted.labelAlfa[a], color=self.cm(a%20/(19)))
         # ax2 = ax.twinx()
@@ -131,7 +130,7 @@ class ConcertedPlot:
         ax.legend(loc="best", prop={'size':9})
         #ax.set_xticklabels(labels)
         ax.set_xlabel(r"$1/k_BT$", size=14)
-        ax.set_ylabel(r"Activation Energy $(meV)$", size=14)
+        ax.set_ylabel(r"Energy $(meV)$", size=14)
         #ax.set_yscale("log")
         #ax.set_xscale("log")
         ax2 = mp.setY2TemperatureLabels(ax,self.kb)
@@ -139,8 +138,9 @@ class ConcertedPlot:
         ax.annotate(r"$\epsilon^{"+rl+r"}_\alpha=\omega^{"+rl+r"}_\alpha(E^k_\alpha+E^M_\alpha)$", xy=(0.2,0.4), xycoords="axes fraction")
 
         inf.smallerFont(ax, 14)
-        ax.set_ylim(0,30)
-        ax.set_xlim(30,510)
+        ax.set_ylim(1e-2,100)
+        #ax.set_xlim(30,510)
+        #ax.set_yscale("log")
         plt.savefig("multiplicitiesResume"+concerted.ext+"{:5f}".format(cov)+self.out)#, bbox_inches='tight')
         ax.set_xlim(12,30)
         ax.set_ylim(1e-1,210)

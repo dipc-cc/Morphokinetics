@@ -21,7 +21,7 @@ class ConcertedPlotIntermediate:
         self.total = total
         self.axarr = list()
         self.one = one
-        if total and one:
+        if total or one:
             self.out = "T1.svg"
             self.ymin = 1e-3
             self.fig, ax = plt.subplots(1, sharex=True, figsize=(6,3.5))
@@ -63,7 +63,7 @@ class ConcertedPlotIntermediate:
             return
         if self.one:
             self.axarr[1].legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-            ax2 = mp.setY2TemperatureLabels(self.axarr[1],8.617332e-5)
+            ax2 = mp.setY2TemperatureLabels(self.axarr[1],8.617332e-5, majors=np.array([25, 50, 75, 100, 200, 1000]))
             self.__smallerFont(ax2, 10)
         else:
             self.__smallerFont(self.axarr[0], 8)
@@ -92,7 +92,7 @@ class ConcertedPlotIntermediate:
             self.axarr[0].set_ylim(self.minM,10)
             self.axarr[0].set_ylabel(r"$M^{"+rl+r"}_\alpha$")
         self.axarr[1].set_ylim(self.ymin,2)
-        self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"_e}_\alpha$", size=14)
+        self.axarr[1].set_ylabel(r"$\omega^{"+rl+r"}_\alpha$", size=14)
         self.axarr[1].set_xlabel(r"$1/k_BT$", size=14)
         arrow = dict(arrowstyle="-", connectionstyle="arc3", ls="--", color="gray")
         #self.axarr[1].legend(prop={'size': 5}, loc="best", scatterpoints=1)

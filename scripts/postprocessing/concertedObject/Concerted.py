@@ -58,8 +58,8 @@ class Concerted:
             self.info.maxA = 10#maxAlfa
             self.ext = "T"
         else:
-            self.minAlfa = 9
-            self.maxAlfa = 11
+            self.minAlfa = 0
+            self.maxAlfa = 205
             if len(argv) > 3:
                 self.minAlfa = int(argv[2])
                 self.maxAlfa = int(argv[3])
@@ -87,9 +87,10 @@ class Concerted:
             self.multiL.setInfo(self.info)
 
     def compute(self):
-        self.tempMavg, self.omega, self.totalRate, self.totalRateEvents, self.rates, self.ratios = self.multi.getMavgAndOmega(self.temperatures,self.workingPath)
+        self.tempMavg, self.omega, self.totalRate, self.totalRateEvents, self.rates, self.ratios, self.totalRateHops = self.multi.getMavgAndOmega(self.temperatures,self.workingPath)
         if not self.total:
-            self.totalRateEvents = np.copy(self.rates[:,:,self.ratesI]) # it is a inner rate
+            #self.totalRateEvents = np.copy(self.rates[:,:,self.ratesI]) # it is a inner rate
+            self.totalRateEvents = self.totalRateHops
         self.activationEnergy, self.multiplicityEa = self.multi.getMultiplicityEa(self.temperatures,self.labelAlfa,self.sp,self.tempMavg,self.omega,self.totalRateEvents,self.ext,self.one)
         energies = self.info.getEnergies()
         self.ratioEa = np.zeros(shape=(self.info.mCov,self.maxRanges,self.info.maxA-self.info.minA))
@@ -153,7 +154,12 @@ class Concerted:
         np.savetxt("totalRate.txt", self.totalRate)
         latSize = self.info.sizI * int(self.info.sizJ/np.sqrt(3)*2)
         np.savetxt("totalRateEvents.txt", self.totalRateEvents/latSize)
+        np.savetxt("totalRateHops.txt", self.totalRateHops/latSize)
         np.savetxt("coverages.txt", self.cov)
         np.savetxt("temperatures.txt", self.temperatures)
+        shape = np.array(np.shape(self.omega))
+        np.savetxt("omegas.txt", self.omega.reshape(shape.prod()))
+        np.savetxt("Mavg.txt", self.tempMavg.reshape(shape.prod()))
+        
 
 

@@ -61,9 +61,10 @@ class Multiplicity:
         Mavg = np.zeros(shape=(p.mMsr,p.maxA-p.minA))
         latSize = p.sizI * int(p.sizJ/np.sqrt(3)*2)
         for i,a in enumerate(range(p.minA,p.maxA-1)): # iterate alfa
-            Mavg[:,i] = (possiblesFromList[:p.mMsr,a])/latSize#/time/latSize#p.sizI/p.sizJ
+            Mavg[:,i] = (possiblesFromList[:p.mMsr,a])/latSize/time#/latSize#p.sizI/p.sizJ
 
-        Mavg[:,205] = self.adsorptionCorrection(fileNumber, latSize)/latSize
+        if self.info.maxA > 205:
+            Mavg[:,205] = self.adsorptionCorrection(fileNumber, latSize)/latSize/time
         totalRate = np.array(ratios.dot(np.transpose(Mavg)))#/time/p.sizI/p.sizJ
         #totalRate = (totalRate+occupied)/time/p.sizI/p.sizJ
         # define omegas 
@@ -97,8 +98,8 @@ class Multiplicity:
         runOavg = sumOmega / filesNumber
         totalRate = sumRate / filesNumber
     
-        totalRateEvents, rates = self.getTotalRate()
-        return runMavg, runOavg, totalRate, totalRateEvents, rates, ratios
+        totalRateEvents, rates, totalRateHops = self.getTotalRate()
+        return runMavg, runOavg, totalRate, totalRateEvents, rates, ratios, totalRateHops
     
     
     def getMavgAndOmega(self, temperatures, workingPath):
@@ -110,6 +111,7 @@ class Multiplicity:
         totalRate = np.zeros(shape=(p.mMsr,maxTemp))
         ratios = np.zeros(shape=(maxTemp,p.maxA-p.minA)) # Used ratios for simulation
         totalRateEvents = np.zeros(shape=(p.mMsr,maxTemp))
+        totalRateHops = np.zeros(shape=(p.mMsr, maxTemp))
         rates = np.zeros(shape=(p.mMsr,maxTemp)) # last index NOT USED! adsorption, desorption, reaction, diffusion, NO, N2 and TOF (NO+N2) rates
         for i,t in enumerate(temperatures):
             print(t)
@@ -121,9 +123,9 @@ class Multiplicity:
                 os.chdir(runFolder[-1])
             except FileNotFoundError:
                 continue
-            tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i], rates[:,i], ratios[i,:] = self.computeMavgAndOmegaOverRuns()
+            tempMavg[:,i,:], tempOavg[:,i,:], totalRate[:,i], totalRateEvents[:,i], rates[:,i], ratios[i,:], totalRateHops[:,i] = self.computeMavgAndOmegaOverRuns()
             
-        return tempMavg, tempOavg, totalRate, totalRateEvents, rates, ratios
+        return tempMavg, tempOavg, totalRate, totalRateEvents, rates, ratios, totalRateHops
     
     def getMultiplicityEa(self,temperatures,labelAlfa,sp,tempMavg,omega,totalRate,ext="",one=False):
         p = self.info
@@ -146,8 +148,6 @@ class Multiplicity:
             for i,a in enumerate(range(p.minA,p.maxA)): # alfa
                 y = np.sum(omega[co2,:,i:i+1], axis=1)
                 self.api.plotOmegas(y, a, labelAlfa)
-                if self.cache:
-                    self.api.saveOmegas(y, a, co2)
 
                 y = np.sum(tempMavg[co2,:,i:i+1], axis=1)
                 multiplicityEa[co2,:,i] = self.getSlopes(x, y, i)
@@ -179,6 +179,7 @@ class Multiplicity:
     def getTotalRate(self):
         files = glob.glob("dataAe0*.txt")
         totalRate = 0
+        totalRateH = 0
         rates = np.zeros(4)
         indexes = list(range(8,12)) + [21, 22]
         
@@ -186,12 +187,15 @@ class Multiplicity:
             data = np.loadtxt(t,comments=['#', '[', 'h'])
             events = data[:self.info.mMsr,7] # column number 8 is "number of events"
             try:
-                totalRate += events #/ data[:self.info.mMsr,1] # last time, column 2
+                totalRate += events / data[:self.info.mMsr,1] # last time, column 2
+                sizJ = int(self.info.sizJ/np.sqrt(3)*2)
+                totalRateH += (events - (self.cov*self.info.sizI*sizJ)) / data[:self.info.mMsr,1] 
             except ValueError:
                 continue
         
         totalRate = totalRate / len(files) #/ self.info.sizI / self.info.sizJ / 2
-        return totalRate, np.zeros(len(totalRate))
+        totalRateH = totalRateH / len(files)
+        return totalRate, np.zeros(len(totalRate)), totalRateH
     
     def getSlopes(self, x, y, alfa, verbose=False):
         slopes = []
