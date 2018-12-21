@@ -16,7 +16,7 @@ class EnergyNiCu:
         self.energies[0][5] = 0.0077; # to type 3, subtype 0
         # From  type 1
         self.energies[1][0] = 0.568; # to type 0
-        self.energies[1][1] = 0.016; # to type 1
+        self.energies[1][1] = 0.016; # to type 1 #playing from 16 (right) and 25 (wrong)
         self.energies[1][12] = 0.505; # to type 1, detach
         self.energies[1][2] = 0.014; # to type 2, subtype 0
         self.energies[1][13] = 0.159; # to type 2, subtype 0, detach
