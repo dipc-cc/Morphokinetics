@@ -12,7 +12,7 @@ oFolder = "runs"
 fileBase = ["dataAe", "dataAeInstantaneousDiscrete", "dataAeMultiplicity", "dataAePossibleDiscrete", "dataAePossibleFromList", "dataAeRatioTimesPossible", "dataAeSuccess"]
 
 
-mIter = np.array([i for i in inf.getTemperatures() if i <= 900]) #filter temperatures higher than 500
+mIter = np.array([i for i in inf.getTemperatures() if i <= 1000]) #filter temperatures higher than 500
 
 cwd = os.getcwd()
 for t in mIter:
@@ -27,12 +27,20 @@ for t in mIter:
         #    print("merge folder was already there")
         runFolder = glob.glob("run1*/");
         runFolder.sort()
-        os.chdir(oFolder)
+        #os.chdir(oFolder)
+        index = 0
         for i,f in enumerate(runFolder):
-            number = str(i).zfill(3)
-            dataFiles = glob.glob("dataAe*")
-            print("\t",number)
-            for d in fileBase:
-                filename = d
-                os.symlink(os.getcwd()+"/../"+f+filename+"000.txt", filename+number+".txt")
+            os.chdir(cwd+"/"+str(t)+"/results/"+f)
+            dataFiles = glob.glob("dataAe???.txt")
+            dataFiles.sort()
+            for j,cfile in enumerate(dataFiles):
+                number = str(index).zfill(3)
+                print("\t",number)
+                for k in range(0,10):
+                    os.symlink(os.getcwd()+"/surface10"+str(k)+"0.mko", os.getcwd()+"/../runs/surface"+str(index)+"0"+str(k)+"0.mko")
+                for d in fileBase:
+                    filename = d
+                    #os.symlink(os.getcwd()+"/../"+f+filename+"000.txt", filename+number+".txt")
+                    os.symlink(os.getcwd()+"/"+filename+str(j).zfill(3)+".txt", os.getcwd()+"/../runs/"+filename+number+".txt")
+                index += 1
     os.chdir(cwd)
