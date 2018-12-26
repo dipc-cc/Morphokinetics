@@ -34,9 +34,6 @@ class ConcertedPlot:
         axarr.set_yscale("log")
         axarr.legend(loc="best", prop={'size':6})
         fig.savefig("totalRates"+str(cov)+self.out,  bbox_inches='tight')
-        axarr.set_xlim(38,60)
-        axarr.set_ylim(1e3,2e4)
-        plt.savefig("totalRates"+str(cov)+"high"+self.out)#, bbox_inches='tight')
 
 
     def allSlopes(self,x,y):
