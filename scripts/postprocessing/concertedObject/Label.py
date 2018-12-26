@@ -22,18 +22,18 @@ class Label:
         self.types.append(r"D_{2,1}'")
         self.types.append(r"D_{3,0}'")
 
-    def getLabels(self):
+    def getLabels(self, units="\epsilon"):
         labelAlfa = []
         for i in range(0,12):
             for j in range(0,16):
-                labelAlfa.append(self.__getLabel(i,j))
+                labelAlfa.append(self.__getLabel(i,j,units))
         for i in range(0,9):
-            labelAlfa.append(r"$\epsilon^R_{I"+str(i)+"}$")
+            labelAlfa.append(r"$"+units+r"^R_{I"+str(i)+"}$")
         for i in range(0,4):
-            labelAlfa.append(r"$\epsilon^R_{C"+str(i+1)+"}$")
+            labelAlfa.append(r"$"+units+r"^R_{C"+str(i+1)+"}$")
         labelAlfa.append(r"Adsorption")
         return labelAlfa
 
-    def __getLabel(self, i, j):
-        label = r"$\epsilon^R_{D" + self.types[i] + r"\rightarrow " + self.types[j] + r"}$"
+    def __getLabel(self, i, j, units):
+        label = r"$"+units+r"^R_{D" + self.types[i] + r"\rightarrow " + self.types[j] + r"}$"
         return label
