@@ -38,9 +38,9 @@ is divided into following sections:
         <!-- You can override this target in the ../build.xml file. -->
     </target>
     <target depends="-pre-init" name="-init-private">
-        <property file="nbproject/private/config.properties"/>
-        <property file="nbproject/private/configs/${config}.properties"/>
-        <property file="nbproject/private/private.properties"/>
+        <property file="ant/private/config.properties"/>
+        <property file="ant/private/configs/${config}.properties"/>
+        <property file="ant/private/private.properties"/>
     </target>
     <target depends="-pre-init,-init-private" name="-init-user">
         <property file="${user.properties.file}"/>
@@ -50,8 +50,8 @@ is divided into following sections:
         <property name="default.javac.target" value="1.6"/>
     </target>
     <target depends="-pre-init,-init-private,-init-user" name="-init-project">
-        <property file="nbproject/configs/${config}.properties"/>
-        <property file="nbproject/project.properties"/>
+        <property file="ant/configs/${config}.properties"/>
+        <property file="ant/project.properties"/>
     </target>
     <target name="-init-modules-supported">
         <condition property="modules.supported.internal" value="true">
