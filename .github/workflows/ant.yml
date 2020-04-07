@@ -32,6 +32,17 @@ jobs:
       with:
         java-version: 1.8
     - name: Test without Ant
+      run: ant -noinput -buildfile build.xml test
+  test-no-ant:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Test without Ant
       run: |
         cd test
         javac -encoding "UTF-8" -cp .:../lib/colt.jar:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/junit-4.13.jar:../src TestRunner.java
