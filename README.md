@@ -44,7 +44,7 @@ If you want to move the JAR file to another folder, you have to also move the li
 
 ## TESTING
 ```bash
-ant -Dnb.internal.action.name=test -Dignore.failing.tests=true test
+ant test
 ```
 or
 ```bash
