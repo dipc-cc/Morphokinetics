@@ -49,9 +49,9 @@ ant -Dnb.internal.action.name=test -Dignore.failing.tests=true test
 or
 ```bash
 cd test/
-javac -encoding "UTF-8" -cp .:../lib/colt.jar:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:$JUNIT_DIR/junit-4.12.jar:../src TestRunner.java
+javac -encoding "UTF-8" -cp .:../lib/colt.jar:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/junit-4.13.jar:../src TestRunner.java
 
-java -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:$JUNIT_DIR/junit-4.12.jar:$HAMCREST_DIR/hamcrest-core-1.3.jar:../src TestRunner
+java -cp .:../lib/json-20141113.jar:../lib/j3dcore.jar:../lib/j3dutils.jar:../lib/jtransforms-2.4.jar:../lib/vecmath.jar:../lib/junit-4.13.jar:../lib/hamcrest-core-1.3.jar:../src TestRunner
 ```
 
 ## PROFILING
