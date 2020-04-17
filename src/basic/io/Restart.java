@@ -502,4 +502,11 @@ public class Restart {
     }
     return fileName;
   }
+  
+  public void setResartFolderName(String folderName) {
+	  if (!folderName.endsWith("/")) {
+		  folderName += "/";
+	  }
+	  folder = folderName;
+  }
 }

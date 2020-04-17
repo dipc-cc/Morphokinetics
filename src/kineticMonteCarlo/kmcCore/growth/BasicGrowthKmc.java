@@ -32,9 +32,9 @@ import kineticMonteCarlo.lattice.BasicGrowthLattice;
  */
 public class BasicGrowthKmc extends AbstractGrowthKmc {
 
-  public BasicGrowthKmc(Parser parser) {
+  public BasicGrowthKmc(Parser parser, String folderName) {
     super(parser);
-     
+    this.setRestartFolderName(folderName);
     HopsPerStep distancePerStep = new HopsPerStep();
     BasicGrowthLattice basicLattice;
      
