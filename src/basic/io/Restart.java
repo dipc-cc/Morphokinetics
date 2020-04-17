@@ -504,9 +504,9 @@ public class Restart {
   }
   
   public void setResartFolderName(String folderName) {
-	  if (!folderName.endsWith("/")) {
-		  folderName += "/";
-	  }
-	  folder = folderName;
+    if (!folderName.endsWith("/")) {
+      folderName += "/";
+    }
+    folder = folderName;
   }
 }
