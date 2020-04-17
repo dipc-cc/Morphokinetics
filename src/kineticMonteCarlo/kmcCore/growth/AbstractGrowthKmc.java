@@ -52,6 +52,7 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
   private final short perimeterType;
   private DevitaAccelerator accelerator;
   
+  
   /**
    * This attribute defines which is the maximum coverage for a multi-flake simulation.
    */
@@ -88,12 +89,14 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
   
   private double terraceToTerraceProbability;
   
+  private int simulationNumber;
   private long simulatedSteps;
   private double sumProbabilities;
   private Restart restart;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
+    simulationNumber = 0;
     justCentralFlake = parser.justCentralFlake();
     periodicSingleFlake = parser.isPeriodicSingleFlake();
     float coverage = (float) parser.getCoverage() / 100;
@@ -250,6 +253,7 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
   
   @Override
   public int simulate() {
+    simulationNumber++;
     int coverageThreshold = 1;
     int limit = 100000;
     int returnValue = 0;
@@ -407,6 +411,10 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
       perimeter.setCurrentPerimeter(lattice.setInsideSquare(perimeter.getCurrentRadius()));
     }
   }
+  
+  public void setRestartFolderName(String folderName) {
+    restart.setResartFolderName(folderName);
+  }
 
   private boolean depositAtom(AbstractGrowthSite atom) {
     if (atom.isOccupied()) {
@@ -465,6 +473,10 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
       printCoverage = (float) (coverage) / 100;
     } else {
       printCoverage = getCoverage();
+    }
+    if (printCoverage > 0.01 && (int) (printCoverage * 100) % 5 == 0) { //only write when is bigger than 1% and multiple of %5
+      int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
+      restart.writeSvg(surfaceNumber, getLattice(), true);
     }
     restart.writeExtraOutput(lattice, printCoverage, nucleations, getTime(), 
             (double) (depositionRatePerSite * freeArea), getList().getDiffusionProbability(), simulatedSteps, sumProbabilities);

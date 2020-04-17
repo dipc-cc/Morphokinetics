@@ -52,7 +52,7 @@ public class BasicGrowthSimulation extends AbstractGrowthSimulation{
       default:
         setRates(new BasicGrowthSyntheticRates());
     }
-    setKmc(new BasicGrowthKmc(getParser()));
+    setKmc(new BasicGrowthKmc(getParser(), getRestartFolderName()));
     initialiseRates(getRates(), getParser());
   }
 }
