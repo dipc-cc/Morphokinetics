@@ -300,7 +300,7 @@ public abstract class AbstractSimulation {
           restart.writeCatalysisAdsorptionDataText(simulations, data);
         }
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-          restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
+          restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations,(int) (coverage[0] * 100));
         }
         if (parser.getOutputFormats().contains(formatFlag.TXT)) {
           restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);
