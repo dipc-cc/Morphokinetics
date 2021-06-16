@@ -32,6 +32,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import kineticMonteCarlo.kmcCore.AbstractKmc;
 import kineticMonteCarlo.kmcCore.catalysis.AbstractCatalysisKmc;
+import main.PsdFromSurfaces;
 import ratesLibrary.IRates;
 import utils.MathUtils;
 import utils.StaticRandom;
@@ -175,13 +176,12 @@ public abstract class AbstractSimulation {
       } else { // simulate until a given coverage or size (single flake)
         kmc.simulate();
       }
-      
       printOutput();
       totalTime += kmc.getTime();
       islands += countIslands();
       gyradius += getGyradius();
     }
-
+    PsdFromSurfaces pfs = new PsdFromSurfaces(parser, restart.getFolder());
     printFooter();
     doPsd();
   }
@@ -300,7 +300,7 @@ public abstract class AbstractSimulation {
           restart.writeCatalysisAdsorptionDataText(simulations, data);
         }
         if (parser.getOutputFormats().contains(formatFlag.MKO)) {
-          restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations);
+          restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulations,(int) (coverage[0] * 100));
         }
         if (parser.getOutputFormats().contains(formatFlag.TXT)) {
           restart.writeSurfaceText2D(2, extentSizes, extentSurface, simulations);

@@ -22,6 +22,7 @@ import kineticMonteCarlo.activationEnergy.ActivationEnergy;
 import basic.Parser;
 import basic.io.OutputType;
 import basic.io.Restart;
+import basic.io.OutputType.formatFlag;
 import kineticMonteCarlo.site.AbstractGrowthSite;
 import kineticMonteCarlo.kmcCore.growth.devitaAccelerator.DevitaAccelerator;
 import kineticMonteCarlo.site.ModifiedBuffer;
@@ -34,6 +35,7 @@ import java.util.logging.Logger;
 import javafx.geometry.Point3D;
 import static kineticMonteCarlo.site.AbstractSite.TERRACE;
 import kineticMonteCarlo.unitCell.AbstractGrowthUc;
+import utils.MathUtils;
 import utils.StaticRandom;
 import utils.list.LinearList;
 
@@ -93,9 +95,11 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
   private long simulatedSteps;
   private double sumProbabilities;
   private Restart restart;
+  private Parser parser;
 
   public AbstractGrowthKmc(Parser parser) {
     super(parser);
+    this.parser = parser;
     simulationNumber = 0;
     justCentralFlake = parser.justCentralFlake();
     periodicSingleFlake = parser.isPeriodicSingleFlake();
@@ -475,8 +479,24 @@ public abstract class AbstractGrowthKmc extends AbstractSurfaceKmc {
       printCoverage = getCoverage();
     }
     if (printCoverage > 0.01 && (int) (printCoverage * 100) % 5 == 0) { //only write when is bigger than 1% and multiple of %5
-      int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);
-      restart.writeSvg(surfaceNumber, getLattice(), true);
+      int surfaceNumber = 1000 * simulationNumber + (int) (getCoverage() * 100);  
+      if (parser.getOutputFormats().contains(formatFlag.SVG)) {
+        restart.writeSvg(surfaceNumber, getLattice(), true);
+      }
+      if (parser.getOutputFormats().contains(formatFlag.MKO) && parser.doPsd()) {
+        
+        int[] surfaceSizes = new int[2];
+        // More precise (more points) the PSD better precision we get
+        surfaceSizes[0] = (int) (parser.getCartSizeX() * parser.getPsdScale());
+        surfaceSizes[1] = (int) (parser.getCartSizeY() * parser.getPsdScale());
+        int[] extentSizes = new int[2];
+        extentSizes[0] = (int) (surfaceSizes[0] * parser.getPsdExtend());
+        extentSizes[1] = (int) (surfaceSizes[1] * parser.getPsdExtend());
+        float[][] sampledSurface = getSampledSurface(surfaceSizes[0], surfaceSizes[1]);
+        float[][] extentSurface = MathUtils.increaseEmptyArea(sampledSurface, parser.getPsdExtend());
+        restart.writeSurfaceBinary(2, extentSizes, extentSurface, simulationNumber, (int) (printCoverage * 100));
+      }
+      
     }
     restart.writeExtraOutput(lattice, printCoverage, nucleations, getTime(), 
             (double) (depositionRatePerSite * freeArea), getList().getDiffusionProbability(), simulatedSteps, sumProbabilities);

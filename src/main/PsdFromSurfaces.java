@@ -33,7 +33,7 @@ import utils.psdAnalysis.PsdSignature2D;
  */
 public class PsdFromSurfaces {
 
-  public PsdFromSurfaces(Parser parser) {
+  public PsdFromSurfaces(Parser parser, String restartFolderName) {
     System.out.println("This is a utility of morphokinetics program");
     String surfaceFileName;
     boolean showGui;
@@ -47,7 +47,7 @@ public class PsdFromSurfaces {
     showGui = parser.withGui() && parser.visualise();
     doTent = !parser.getSurfaceType().equals("plane");
 
-    Restart restart = new Restart("./");
+    Restart restart = new Restart(restartFolderName);
     int[] sizes = null;
     float[][] surface = null;
     PsdSignature2D psd = null;
